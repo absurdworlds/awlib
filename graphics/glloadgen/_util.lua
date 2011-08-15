@@ -69,19 +69,19 @@ function WriteForm(hFile, strFormat, ...)
 end
 
 function GetIncludePath()
-	return "..\\include\\glloader\\";
+	return "../include/glload/";
 end
 
 function GetSourcePath()
-	return "..\\source\\";
+	return "../source/";
 end
 
 function GetSpecFilePath()
-	return "glspecs\\";
+	return "glspecs/";
 end
 
 function GetDataFilePath()
-	return "data\\";
+	return "data/";
 end
 
 --This returns the starting part of a header's includeguard. Takes the name of the define.
