@@ -151,7 +151,7 @@ function group:value(optName, tblName, desc, default, optional)
 		optional = optional,
 		 --self is the destination table, where the data goes
 		proc = function(self, param, iter)
-			assert(param, "This option needs a parameter")
+			assert(param, "This option needs a single parameter")
 			assert(not self[tblName], "Cannot specify the option twice")
 			self[tblName] = param
 			return 1
@@ -241,6 +241,32 @@ function group:array(optName, tblName, desc, modifier, optional)
 		
 		document = function(self)
 			local docs = ExtractDescArray(self.desc)
+			return docs
+		end,
+	}
+end
+
+--Stores its data in an array, but it only takes one parameter.
+function group:array_single(optName, tblName, desc, modifier, optional)
+	table.insert(self._doc_order, optName)
+	self._procs[optName] = {
+		desc = desc,
+		tableName = tblName,
+		optional = optional,
+		proc = function(self, param, iter)
+			assert(param, "This option needs a single parameter")
+			self[tblName] = self[tblName] or {}
+
+			if(modifier) then
+				param = modifier(param)
+			end
+			table.insert(self[tblName], param)
+			return 1
+		end,
+		
+		document = function(self)
+			local docs = ExtractDescArray(self.desc)
+			docs[#docs + 1] = "Can be used multiple times."
 			return docs
 		end,
 	}
@@ -363,10 +389,5 @@ function modTbl.CreateOptionGroup()
 	
 	return optGroup
 end
-
-
-
-
-
 
 return modTbl

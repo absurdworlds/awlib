@@ -13,7 +13,6 @@ It returns a table containing the following entries:
 -		core:
 -		compatibility:
 - extensions: A list of OpenGL extensions to export.
-- extfiles: A list of files to load extensions from.
 - outname: The base filename of the file to create.
 - style: A string containing the particular style of binding. This can be:
 -		pointer_c: The default. The functions will be stored in pointers exposed to the user. #defines will be used to rename the pointers to the core GL function names.
@@ -59,10 +58,16 @@ parseOpts:array(
 	{"A list of extensions to export."},
 	FixupExtensionName,
 	true)
-parseOpts:array(
+parseOpts:array_single(
+	"ext",
+	"extensions",
+	{"A single extension name to export."},
+	FixupExtensionName,
+	true)
+parseOpts:array_single(
+	"extfile",
 	"extfiles",
-	"extfiles",
-	{"A list of files to load extensions from."},
+	{"A file to load extensions from."},
 	nil,
 	true)
 parseOpts:value(
@@ -77,11 +82,32 @@ parseOpts:pos_opt(
 	1,
 	"outname",
 	"Base filename (sans extension",
-	"outname",
-	nil,
-	true)
+	"outname")
 	
-function GetOptions(cmd_line)
+local function LoadExtFile(extensions, extfilename)
+	hFile = assert(io.open(extfilename, "rt"), "Could not find the file " .. extfilename)
+	
+	for line in hFile:lines() do
+		local ext = line:match("(%S+)")
+		if(ext) then
+			table.insert(extensions, ext)
+		end
+	end
+	
+	hFile:close()
+end
+
+local function FixupExtname(ext)
+	--Cull the (W)GL(X)_ part of the name, if any.
+	
+	local bareName = ext:match("W?GLX?_(.+)")
+	
+	return bareName or ext
+end
+
+local optTbl = {}
+
+function optTbl.GetOptions(cmd_line)
 	local options, pos_args = parseOpts:ProcessCmdLine(cmd_line)
 	
 	if(options.spec == "gl") then
@@ -91,24 +117,29 @@ function GetOptions(cmd_line)
 		parseOpts:AssertParse(not options.version, "Versions cannot be specified for wgl/glX")
 		parseOpts:AssertParse(not options.profile, "Profiles cannot be specified for wgl/glX")
 	end
+	
+	options.extensions = options.extensions or {}
+	options.extfiles = options.extfiles or {}
+	
+	for _, file in ipairs(options.extfiles) do
+		LoadExtFile(options.extensions, file)
+	end
+	
+	--Fixup names and remove duplicates.
+	local dups = {}
+	local exts = {}
+	for _, ext in ipairs(options.extensions) do
+		local fixExt = FixupExtname(ext)
+		if(not dups[fixExt]) then
+			exts[#exts + 1] = fixExt
+			dups[fixExt] = true
+		end
+	end
+	
+	options.extensions = exts
+	options.extfiles = nil
 
 	return options
-
---[[
-	local options = {}
-	
-	local status, posOpts = 
-		pcall(cmd.CmdLineOptions, cmd_line, procs, options)
-		
-	AssertParse(status, posOpts)
-
-	AssertParse(posOpts[1], "You did not specify an output filename.")
-	
-	options.spec = options.spec or "gl"
-	options.func_style = options.func_style or "pointer"
-	options.language = options.language or "c"
-	
-	
-	return options
-	]]
 end
+
+return optTbl
