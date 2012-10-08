@@ -82,13 +82,15 @@ end
 local function CallProcessor(func, option, value, param, iter)
 	local status, nargs = pcall(func, value, param, iter)
 	if(not status) then
-		error("The option " .. option .. "' had an error:\n" .. nargs)
+		error("The option '" .. option .. "' had an error:\n" .. nargs)
 	end
 	
 	return nargs or CountNumOptions(iter)
 end
 
-function CmdLineOptions(cmd_line, processors, value)
+local modTbl = {}
+
+function modTbl.CmdLineOptions(cmd_line, processors, value)
 	local posArgs = {}
 	local optIx = 1
 	local numOpts = #cmd_line
@@ -123,6 +125,244 @@ function CmdLineOptions(cmd_line, processors, value)
 	return posArgs
 end
 
+local group = {}
+
+local function ExtractDescArray(desc)
+	if(type(desc) == "table") then
+		local descArray = {}
+		for i, val in ipairs(desc) do
+			descArray[#descArray + 1] = val
+		end
+		return descArray
+	else
+		return { desc }
+	end
+end
+
+function group:value(optName, tblName, desc, default, optional)
+	table.insert(self._doc_order, optName)
+	self._procs[optName] = {
+		desc = desc,
+		tableName = tblName,
+		default = default,
+		optional = optional,
+		 --self is the destination table, where the data goes
+		proc = function(self, param, iter)
+			assert(param, "This option needs a parameter")
+			assert(not self[tblName], "Cannot specify the option twice")
+			self[tblName] = param
+			return 1
+		end,
+		
+		document = function(self)
+			local docs = ExtractDescArray(self.desc)
+			if(self.default) then
+				docs[#docs + 1] = "Default value: " .. self.default
+			else
+				if(self.optional) then
+					docs[#docs + 1] = "This option is not required."
+				end
+			end
+			
+			return docs
+		end,
+	}
+end
+
+local function InvertTable(tbl)
+	local ret = {}
+	for i, val in ipairs(tbl) do
+		ret[val] = true
+	end
+	return ret
+end
+
+function group:enum(optName, tblName, desc, values, defaultIx, optional)
+	table.insert(self._doc_order, optName)
+	local valuesInv = InvertTable(values)
+	self._procs[optName] = {
+		desc = desc,
+		tableName = tblName,
+		values = values,
+		valuesInv = valuesInv,
+		optional = optional,
+		proc = function(self, param, iter)
+			assert(param, "This option needs a parameter")
+			assert(valuesInv[param], param .. " is not a valid value.")
+			assert(not self[tblName], "Cannot specify this option twice.");
+			self[tblName] = param
+			return 1
+		end,
+		
+		document = function(self)
+			local docs = ExtractDescArray(self.desc)
+			docs[#docs + 1] = "Allowed values:"
+			docs[#docs + 1] = table.concat(self.values, ", ")
+			if(self.default) then
+				docs[#docs + 1] = "Default value: " .. self.default
+			else
+				if(self.optional) then
+					docs[#docs + 1] = "This option is not required."
+				end
+			end
+			
+			return docs
+		end,
+	}
+	
+	if(defaultIx) then
+		self._procs[optName].default = values[defaultIx]
+	end
+end
+
+function group:array(optName, tblName, desc, modifier)
+	table.insert(self._doc_order, optName)
+	self._procs[optName] = {
+		desc = desc,
+		tableName = tblName,
+		proc = function(self, param, iter)
+			self[tblName] = self[tblName] or {}
+			
+			local bFound = false
+			for ext in iter() do
+				if(modifier) then
+					ext = modifier(ext)
+				end
+				table.insert(self[tblName], ext)
+				bFound = true
+			end
+			
+			assert(bFound, "Must provide at least one value.");
+		end,
+		
+		document = function(self)
+			local docs = ExtractDescArray(self.desc)
+			return docs
+		end,
+	}
+end
+
+function group:pos_opt(index, tblName, desc, optName, default, optional)
+	assert(not self._pos_opts[index],
+		"Positional argument " .. index .. " is already in use")
+
+	self._pos_opts[index] = {
+		desc = desc,
+		tableName = tblName,
+		optName = optName,
+		default = default,
+		optional = optional,
+	}
+end
+
+function group:AssertParse(test, msg)
+	if(not test) then
+		io.stdout:write(msg, "\n")
+		self:DisplayHelp()
+		error("")
+	end
+end
+
+function group:ProcessCmdLine(cmd_line)
+	local procs = {}
+	
+	for option, data in pairs(self._procs) do
+		procs[option] = data.proc
+	end
+	
+	local options = {}
+	
+	local status, posOpts = 
+		pcall(modTbl.CmdLineOptions, cmd_line, procs, options)
+
+	self:AssertParse(status, posOpts)
+	
+	--Apply positional arguments.
+	for ix, pos_arg in pairs(self._pos_opts) do
+		if(posOpts[ix]) then
+			options[pos_arg.tableName] = posOpts[ix]
+		elseif(pos_arg.default) then
+			options[pos_arg.tableName] = default
+		else
+			self:AssertParse(pos_arg.optional,
+				"Missing positional argument " .. pos_arg.optName)
+		end
+	end
+
+	--Apply defaults.
+	for option, data in pairs(self._procs) do
+		if(not options[data.tableName]) then
+			if(data.default) then
+				options[data.tableName] = data.default
+			else
+				self:AssertParse(data.optional,
+					"Option " .. option .. " was not specified.")
+			end
+		end
+	end
+	
+	return options, posOpts
+end
+
+function group:DisplayHelp()
+	local hFile = io.stdout
+	
+	local function MaxVal(tbl)
+		local maxval = 0
+		for ix, val in pairs(tbl) do
+			if(ix > maxval) then
+				maxval = ix
+			end
+		end
+		
+		return maxval
+	end
+
+	--Write the command-line, including positional arguments.
+	hFile:write("Command Line:")
+	local maxPosArg = MaxVal(self._pos_opts)
+	
+	for i = 1, maxPosArg do
+		if(self._pos_opts[i]) then
+			hFile:write(" <", self._pos_opts[i].optName, ">")
+		else
+			hFile:write(" <something>")
+		end
+	end
+	
+	hFile:write(" <options>\n")
+	
+	--Write each option.
+	hFile:write("Options:\n")
+	for _, option in ipairs(self._doc_order) do
+		local data = self._procs[option]
+		hFile:write("-", option, ":\n")
+		
+		local docs = data:document()
+		
+		for _, str in ipairs(docs) do
+			hFile:write("\t", str, "\n")
+		end
+	end
+end
+
+function modTbl.CreateOptionGroup()
+	local optGroup = {}
+	
+	for key, func in pairs(group) do
+		optGroup[key] = func
+	end
+	
+	optGroup._procs = {}
+	optGroup._pos_opts = {}
+	optGroup._doc_order = {}
+	
+	return optGroup
+end
 
 
 
+
+
+
+return modTbl
