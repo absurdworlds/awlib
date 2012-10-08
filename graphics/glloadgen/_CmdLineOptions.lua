@@ -125,6 +125,9 @@ function modTbl.CmdLineOptions(cmd_line, processors, value)
 	return posArgs
 end
 
+
+--------------------------------------------------
+-- Option group logic.
 local group = {}
 
 local function ExtractDescArray(desc)
@@ -215,11 +218,12 @@ function group:enum(optName, tblName, desc, values, defaultIx, optional)
 	end
 end
 
-function group:array(optName, tblName, desc, modifier)
+function group:array(optName, tblName, desc, modifier, optional)
 	table.insert(self._doc_order, optName)
 	self._procs[optName] = {
 		desc = desc,
 		tableName = tblName,
+		optional = optional,
 		proc = function(self, param, iter)
 			self[tblName] = self[tblName] or {}
 			

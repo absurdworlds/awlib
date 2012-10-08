@@ -12,11 +12,12 @@ It returns a table containing the following entries:
 - profile: OpenGL profile to use. Default is chosen based on GL version. One of the following:
 -		core:
 -		compatibility:
-- extensions: A table of OpenGL extensions to export.
+- extensions: A list of OpenGL extensions to export.
+- extfiles: A list of files to load extensions from.
 - outname: The base filename of the file to create.
 - style: A string containing the particular style of binding. This can be:
--		pointer-c: The default. The functions will be stored in pointers exposed to the user. #defines will be used to rename the pointers to the core GL function names.
--		pointer-c++: The functions will be stored in pointers, but the pointers and enumerators will be placed in the namespace "gl".
+-		pointer_c: The default. The functions will be stored in pointers exposed to the user. #defines will be used to rename the pointers to the core GL function names.
+-		pointer_cpp: The functions will be stored in pointers, but the pointers and enumerators will be placed in the namespace "gl".
 - prefix: A prefix to be added to the names of identifiers that must be global, while avoiding name clashes. This is useful if you want to have different sets of bindings to different APIs (like a GL 3.3 and 2.1 binding). Defaults to the empty string.
 ]]
 
@@ -50,13 +51,20 @@ parseOpts:enum(
 	"style",
 	"style",
 	{"Export style."},
-	{"pointer-c", "pointer-c++"},
+	{"pointer_c", "pointer_c++"},
 	1)
 parseOpts:array(
 	"exts",
 	"extensions",
 	{"A list of extensions to export."},
-	FixupExtensionName)
+	FixupExtensionName,
+	true)
+parseOpts:array(
+	"extfiles",
+	"extfiles",
+	{"A list of files to load extensions from."},
+	nil,
+	true)
 parseOpts:value(
 	"prefix",
 	"prefix",
