@@ -50,7 +50,7 @@ parseOpts:enum(
 	"style",
 	"style",
 	{"Export style."},
-	{"pointer_c", "pointer_c++"},
+	{"pointer_c", "pointer_cpp"},
 	1)
 parseOpts:array(
 	"exts",
@@ -81,7 +81,7 @@ parseOpts:value(
 parseOpts:pos_opt(
 	1,
 	"outname",
-	"Base filename (sans extension",
+	"Base filename (sans extension)",
 	"outname")
 	
 local function LoadExtFile(extensions, extfilename)
