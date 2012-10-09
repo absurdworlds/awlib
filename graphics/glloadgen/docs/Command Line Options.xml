@@ -93,7 +93,24 @@
                         <para><literal>pointer_cpp</literal></para>
                     </listitem>
                 </itemizedlist>
-                <para>The specific meaning of these parameters is explained elsewhere.</para>
+                <para>The specific meaning of these parameters is explained elsewhere. Note that the
+                    system is extensible; new styles can be added by modifying an appropriate script
+                    and hooking it into the right place in <filename>_Styles.lua</filename>.</para>
+            </glossdef>
+        </glossentry>
+        <glossentry>
+            <glossterm>-indent</glossterm>
+            <glossdef>
+                <para>The indentation style for the output text. It must be one of the
+                    following:</para>
+                <itemizedlist>
+                    <listitem>
+                        <para><literal>tab</literal>: default</para>
+                    </listitem>
+                    <listitem>
+                        <para><literal>space</literal>: Will use 2 spaces to indent.</para>
+                    </listitem>
+                </itemizedlist>
             </glossdef>
         </glossentry>
         <glossentry>

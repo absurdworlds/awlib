@@ -10,17 +10,21 @@ It returns a table containing the following entries:
 -		wgl: Uses the WGL "spec".
 - version: OpenGL version to export. All core features from that version and below will be exported. Will only be present when exporting "gl" loaders.
 - profile: OpenGL profile to use. Default is chosen based on GL version. One of the following:
--		core:
+-		core: Default
 -		compatibility:
 - extensions: A list of OpenGL extensions to export.
 - outname: The base filename of the file to create.
 - style: A string containing the particular style of binding. This can be:
 -		pointer_c: The default. The functions will be stored in pointers exposed to the user. #defines will be used to rename the pointers to the core GL function names.
 -		pointer_cpp: The functions will be stored in pointers, but the pointers and enumerators will be placed in the namespace "gl".
+- indent: A string that defines the indentation style for the output.
+-		tab: Uses tabs. Default.
+-		space: Uses 2 spaces.
 - prefix: A prefix to be added to the names of identifiers that must be global, while avoiding name clashes. This is useful if you want to have different sets of bindings to different APIs (like a GL 3.3 and 2.1 binding). Defaults to the empty string.
 ]]
 
 local cmd = require "_CmdLineOptions"
+local styles = require "_Styles"
 
 local function FixupExtensionName(ext)
 	return ext
@@ -50,7 +54,13 @@ parseOpts:enum(
 	"style",
 	"style",
 	{"Export style."},
-	{"pointer_c", "pointer_cpp"},
+	styles.GetStyleList(),
+	1)
+parseOpts:enum(
+	"indent",
+	"indent",
+	{"Indentation style."},
+	{"tab", "space"},
 	1)
 parseOpts:array(
 	"exts",
