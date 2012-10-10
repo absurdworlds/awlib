@@ -95,12 +95,23 @@ parseOpts:pos_opt(
 	"outname")
 	
 local function LoadExtFile(extensions, extfilename)
-	hFile = assert(io.open(extfilename, "rt"), "Could not find the file " .. extfilename)
+	local hFile = assert(io.open(extfilename, "rt"), "Could not find the file " .. extfilename)
 	
 	for line in hFile:lines() do
 		local ext = line:match("(%S+)")
 		if(ext) then
-			table.insert(extensions, ext)
+			if(ext == "#include") then
+				local file = line:match('%#include [%"%<](.+)[%"%>]')
+				assert(file, "Bad #include statement in extension file " ..
+					extfilename)
+				if(file) then
+					--Probably should provide a way to make this
+					--prevent loops. And to use directories.
+					LoadExtFile(extensions, file)
+				end
+			else
+				table.insert(extensions, ext)
+			end
 		end
 	end
 	
@@ -125,7 +136,6 @@ function optTbl.GetOptions(cmd_line)
 		parseOpts:AssertParse(options.version, "You must specify an OpenGL version to export.")
 	else
 		parseOpts:AssertParse(not options.version, "Versions cannot be specified for wgl/glX")
-		parseOpts:AssertParse(not options.profile, "Profiles cannot be specified for wgl/glX")
 	end
 	
 	options.extensions = options.extensions or {}

@@ -2,6 +2,8 @@
 
 - inc: Increments the tab count by the number given, or by 1 if nothing is given.
 - dec: Decrements the tab count by the number given, or by 1 if nothing is given.
+- push: Preserves the current tab count.
+- pop: Restores the previously preserved tab count.
 - fmt: As string.format followed by an indented write
 - write: An indented write; everything is written after the indent.
 - rawfmt: As string.format followed by a NON-indented write.
@@ -20,6 +22,18 @@ end
 function members:dec(count)
 	count = count or 1
 	rawset(self, "_indent", self._indent - count)
+end
+
+function members:push()
+	local stack = rawget(self, "_indentStack")
+	stack[#stack + 1] = rawget(self, "_indent")
+end
+
+function members:pop()
+	local stack = rawget(self, "_indentStack")
+	assert(#stack > 0, "Tab stack underflow.")
+	rawset(self, "_indent", stack[#stack])
+	stack[#stack] = nil
 end
 
 function members:fmt(fmt, ...)
@@ -84,6 +98,7 @@ local function TabbedFile(hFile, style, numSpaces)
 		_hFile = hFile,
 		_indent = 0,
 		_Indent = IndentFunc,
+		_indentStack = {}
 	}
 	
 	if(style == "tab") then

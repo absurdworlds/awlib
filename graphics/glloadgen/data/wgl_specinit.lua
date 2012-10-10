@@ -17,7 +17,7 @@ return [[
 
 #ifdef GLE_FUNCPTR
 #undef GLE_FUNCPTR
-#endif //GLE_FUNCPTR
+#endif /*GLE_FUNCPTR*/
 #define GLE_FUNCPTR WINAPI
 
 ]]

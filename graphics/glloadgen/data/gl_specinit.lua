@@ -37,7 +37,7 @@ return [[
 	#else
 		#define APIENTRY
 	#endif
-#endif //APIENTRY
+#endif /*APIENTRY*/
 
 #ifndef GLE_FUNCPTR
 	#define GLE_REMOVE_FUNCPTR
@@ -46,7 +46,7 @@ return [[
 	#else
 		#define GLE_FUNCPTR
 	#endif
-#endif //GLE_FUNCPTR
+#endif /*GLE_FUNCPTR*/
 
 #ifndef GLAPI
 	#define GLAPI extern
