@@ -67,11 +67,22 @@ function gl_spec.GetLoaderParams() return "" end
 function wgl_spec.GetLoaderParams() return "HDC *hdc" end
 function glx_spec.GetLoaderParams() return "Display *display, int screen" end
 
+--CodeGen function pointer type. For APIFUNC and so forth.
+function gl_spec.GetCodegenPtrType() return "CODEGEN_FUNCPTR" end
+function wgl_spec.GetCodegenPtrType() return "CODEGEN_FUNCPTR" end
+function glx_spec.GetCodegenPtrType() return "CODEGEN_FUNCPTR" end
+
+--Name of the function that loads pointers
+function gl_spec.GetPtrLoaderFuncName() return "IntGetProcAddress" end
+function wgl_spec.GetPtrLoaderFuncName() return "IntGetProcAddress" end
+function glx_spec.GetPtrLoaderFuncName() return "IntGetProcAddress" end
+
 local fileProps =
 {
 	{"GetHeaderInit", "init"},
 	{"GetVersions", "versions"},
 	{"GetCoreExts", "coreexts"},
+	{"GetLoaderFunc", "loaderfunc"},
 }
 
 --Header initialization.
@@ -83,8 +94,6 @@ for key, spec in pairs(specTbl) do
 		end
 	end
 end
-
---Get version numbers
 
 
 --------------------------------------------------

@@ -10,6 +10,9 @@ return [[
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include <GL/glx.h>
-#define GLE_FUNCPTR
+#ifdef CODEGEN_FUNCPTR
+#undef CODEGEN_FUNCPTR
+#endif /*CODEGEN_FUNCPTR*/
+#define CODEGEN_FUNCPTR
 
 ]]

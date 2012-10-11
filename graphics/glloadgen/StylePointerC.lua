@@ -15,6 +15,9 @@ function my_style.WriteSmallHeading(hFile, headingName)
 	hFile:write("/*", headingName, "*/\n")
 end
 
+----------------------------------------------------------------
+-- Header file construction
+
 function my_style.header.CreateFile(basename, options)
 	local filename = basename .. ".h"
 	return common.CreateFile(filename, options.indent), filename
@@ -69,11 +72,9 @@ function my_style.header.WriteExtVariableDecl(hFile, ext, specData, spec, option
 	hFile:write("extern int ", GetExtVariableName(ext, spec, options), ";\n");
 end
 
-function my_style.header.WriteBeginEnumDeclBlock(hFile, specData, options)
-end
+function my_style.header.WriteBeginEnumDeclBlock(hFile, specData, options) end
 
-function my_style.header.WriteEndEnumDeclBlock(hFile, specData, options)
-end
+function my_style.header.WriteEndEnumDeclBlock(hFile, specData, options) end
 
 function my_style.header.WriteEnumDecl(hFile, enum, enumTable, spec, options)
 	hFile:fmt("#define %s%s = %s\n",
@@ -97,8 +98,9 @@ local function GetFuncPtrName(func, spec, options)
 end
 
 local function GetFuncPtrDef(hFile, func, typemap, spec, options)
-	return string.format("%s (*%s)(%s)",
+	return string.format("%s (%s *%s)(%s)",
 		common.GetFuncReturnType(func, typemap),
+		spec.GetCodegenPtrType(),
 		GetFuncPtrName(func, spec, options),
 		common.GetFuncParamList(func, typemap))
 end
@@ -175,11 +177,126 @@ function my_style.header.WriteVersioningDecls(hFile, spec, options)
 		DecorateFuncName("IsVersionGEQ", spec, options))
 end
 
-
 function my_style.header.WriteEndDecl(hFile, specData, options)
 	common.WriteExternCEnd(hFile)
 end
 
+--------------------------------------------------
+-- Source file construction functions.
+
+function my_style.source.CreateFile(basename, options)
+	local filename = basename .. ".c"
+	return common.CreateFile(filename, options.indent), filename
+end
+
+function my_style.source.WriteIncludes(hFile, spec, options)
+	hFile:write("#include <stdlib.h>\n")
+	hFile:write("#include <string.h>\n")
+end
+
+local function GetMapTableStructName(spec, options)
+	return string.format("%s%sStrToExtMap", options.prefix, spec.DeclPrefix())
+end
+
+function my_style.source.WriteMapTableDefs(hFile, spec, options)
+	hFile:write("typedef int (*PFN_LOADEXTENSION)()\n")
+	hFile:fmt("typedef struct %s%sStrToExtMap_s\n",
+		options.prefix, spec.DeclPrefix())
+	hFile:write("{\n")
+	hFile:inc()
+	hFile:write("char *strExtensionName;\n")
+	hFile:write("int *pExtensionVariable;\n")
+	hFile:write("PFN_LOADEXTENSION LoadExtension;\n")
+	hFile:dec()
+	hFile:fmt("} %s\n", GetMapTableStructName(spec, options))
+end
+
+function my_style.source.WriteBeginDef(hFile, spec, options) end
+function my_style.source.WriteEndDef(hFile, spec, options) end
+
+function my_style.source.WriteExtVariableDef(hFile, ext, specData, spec, options)
+	hFile:fmt("int %s = %s;\n", GetExtVariableName(ext, spec, options),
+		GetStatusCodeName("LOAD_FAILED", spec, options));
+end
+
+function my_style.source.WriteBeginExtFuncDefBlock(hFile, extName, spec, options)
+end
+
+function my_style.source.WriteEndExtFuncDefBlock(hFile, extName, spec, options)
+end
+
+function my_style.source.WriteFuncDef(hFile, func, typemap, spec, options)
+	--Declare the function pointer.
+	hFile:fmt("%s = NULL;\n",
+		GetFuncPtrDef(hFile, func, typemap, spec, options))
+end
+
+local function GetExtLoaderFuncName(extName, spec, options)
+	return "Load_" .. extName;
+end
+
+function my_style.source.WriteBeginExtLoaderBlock(hFile, extName, spec, options)
+	hFile:fmt("static int %s()\n", GetExtLoaderFuncName(extName, spec, options))
+	hFile:write("{\n")
+	hFile:inc()
+	hFile:write("int numFailed = 0;\n")
+end
+
+function my_style.source.WriteEndExtLoaderBlock(hFile, extName, spec, options)
+	hFile:write("return numFailed;\n")
+	hFile:dec()
+	hFile:write("}\n")
+end
+
+function my_style.source.WriteExtFuncLoader(hFile, func, typemap, spec, options)
+	hFile:fmt('%s = %s("%s%s");\n',
+		GetFuncPtrName(func, spec, options),
+		common.GetProcAddressName(spec),
+		spec.FuncNamePrefix(), func.name)
+	hFile:fmt('if(!%s) numFailed++;\n', GetFuncPtrName(func, spec, options))
+end
+
+function my_style.source.WriteBeginCoreFuncDefBlock(hFile, version, spec, options)
+end
+
+function my_style.source.WriteEndCoreFuncDefBlock(hFile, version, spec, options)
+end
+
+local function GetCoreLoaderFuncName(version, spec, options)
+	return "Load_Version_" .. version:gsub("%.", "_")
+end
+
+function my_style.source.WriteBeginCoreLoaderBlock(hFile, version, spec, options)
+	hFile:fmt("static int %s()\n", GetCoreLoaderFuncName(version, spec, options))
+	hFile:write("{\n")
+	hFile:inc()
+	hFile:write("int numFailed = 0;\n")
+end
+
+function my_style.source.WriteEndCoreLoaderBlock(hFile, version, spec, options)
+	hFile:write("return numFailed;\n")
+	hFile:dec()
+	hFile:write("}\n")
+end
+
+function my_style.source.WriteCoreFuncLoader(hFile, func, typemap, spec, options)
+	hFile:fmt('%s = %s("%s%s");\n',
+		GetFuncPtrName(func, spec, options),
+		common.GetProcAddressName(spec),
+		spec.FuncNamePrefix(), func.name)
+
+	--Special hack for DSA_EXT functions in core functions.
+	--They do not count against the loaded count.
+	if(func.name:match("EXT$")) then
+		hFile:write("/*An EXT_direct_state_access-based function. Don't count it.*/")
+	else
+		hFile:fmt('if(!%s) numFailed++;\n', GetFuncPtrName(func, spec, options))
+	end
+end
+
+function my_style.source.WriteUtilityDefs(hFile, specData, spec, options)
+	hFile:write("Utilities\n")
+end
 
 --------------------------------------------------
 -- Style retrieval machinery

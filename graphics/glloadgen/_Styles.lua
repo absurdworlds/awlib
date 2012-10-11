@@ -19,26 +19,26 @@ This module has a function called GetStyle, which is given a style name. It will
 - header.MakeIncludeGuard(prefix, specIncl)
 --		specIncl is an include-guard string from the spec. It returns a string that includes the two strings, which is appropriate for use as an include-guard.
 
-- header.WriteStdTypedefs(hFile, specData, options)
+- header.WriteStdTypedefs(hFile, specData, spec, options)
 --		Writes the standard typedefs.
 
-- header.WriteSpecTypedefs(hFile, specData, options)
+- header.WriteSpecTypedefs(hFile, specData, spec, options)
 --		Writes the typedefs from the spec. The "funcData.passthru" section.
 
-- header.WriteBeginDecl(hFile, specData, options)
+- header.WriteBeginDecl(hFile, spec, options)
 --		Writes any style-specific scoping stuff that begins the declaration section. This is useful for things like 'extern "C"' and so forth.
 --	
 
-- header.WriteEndDecl(hFile, specData, options)
+- header.WriteEndDecl(hFile, spec, options)
 --		Writes any style-specific scoping stuff that ends the declaration section. This is useful for things like 'extern "C"' and so forth.
 
 - header.WriteExtVariableDecl(hFile, ext, specData, spec, options)
 --		Writes the variable declaration for a single extension variable. These are the variables that are exposed so that the user can test to see if an extension loaded.
 
-- header.WriteBeginEnumDeclBlock(hFile, specData, options)
+- header.WriteBeginEnumDeclBlock(hFile, spec, options)
 --		Writes any style-specific scoping stuff that starts the enumerator block. This is for *all* enumerators. This is useful for wrapping all enumerators in an enum declaration.
 
-- header.WriteEndEnumDeclBlock(hFile, specData, options)
+- header.WriteEndEnumDeclBlock(hFile, spec, options)
 --		Writes any style-specific scoping stuff that ends the enumerator block.
 
 - header.WriteEnumDecl(hFile, enum, enumTable, spec, options)
@@ -47,10 +47,10 @@ This module has a function called GetStyle, which is given a style name. It will
 - header.WriteEnumPrevDecl(hFile, enum, enumTable, spec, options, extName)
 --		Writes an enumerator that was written previously. Should be written as a comment, as it could conflict. extName is the name of the extension where it was originally written.
 
-- header.WriteBeginFuncDeclBlock(hFile, specData, options)
+- header.WriteBeginFuncDeclBlock(hFile, spec, options)
 --	Write any style-specific scoping stuff that starts the function declaration block.
 
-- header.WriteEndFuncDeclBlock(hFile, specData, options)
+- header.WriteEndFuncDeclBlock(hFile, spec, options)
 --	Write any style-specific scoping stuff that ends the function declaration block.
 
 - header.WriteBeginExtFuncDeclBlock(hFile, extName, spec, options)
@@ -71,6 +71,57 @@ This module has a function called GetStyle, which is given a style name. It will
 - header.WriteVersioningDecls(hFile, spec, options)
 --	Writes the declarations for any functions used to help the user get versioning info. Will only be called if the spec has versions.
 
+
+- source.CreateFile(basename, options)
+--		basename is the filename sans extension. It opens a TabbedFile from it, using the options in options. It returns two values: a TabbedFile, and the actual filename used.
+
+- source.WriteIncludes(hFile, spec, options)
+--	Writes the include files for standard library stuff.
+
+- source.WriteBeginDef(hFile, spec, options)
+--	Writes any scoping for the block of definitions.
+
+- source.WriteEndDef(hFile, spec, options)
+--	Ends any scoping for the block of definitions.
+
+- source.WriteExtVariableDef(hFile, ext, specData, spec, options)
+--	Writes the extension variable definition for `ext`.
+
+- source.WriteBeginExtFuncDefBlock(hFile, extName, spec, options)
+--	Writes the beginning of an extension's block that contains function pointer definitions and the loader function for this extension.
+
+- source.WriteEndExtFuncDefBlock(hFile, extName, spec, options)
+--	Writes the ending of an extension's block that contains function pointer definitions and the loader function for this extension.
+
+- source.WriteFuncDef(hFile, func, typemap, spec, options)
+--	Writes a function pointer definition for the given function.
+
+- source.WriteBeginExtLoaderBlock(hFile, extName, spec, options)
+--	Writes the beginning of an extension loader function.
+
+- source.WriteEndExtLoaderBlock(hFile, extName, spec, options)
+--	Writes the ending of an extension loader function.
+
+- source.WriteExtFuncLoader(hFile, func, typemap, spec, options)
+--	Writes the code that goes inside an extension loader function that loads and tests a single extension function pointer.
+
+- source.WriteBeginCoreFuncDefBlock(hFile, version, spec, options)
+--	Writes the beginning of the core loader's block that contains function pointer definitions and the loader function for `version`.
+
+- source.WriteEndCoreFuncDefBlock(hFile, version, spec, options)
+--	Writes the end of the core loader's block that contains function pointer definitions and the loader function for `version`.
+
+- source.WriteBeginCoreLoaderBlock(hFile, version, spec, options)
+--	Writes the start of the actual function that loads the function pointers for `version`.
+
+- source.WriteEndCoreLoaderBlock(hFile, version, spec, options)
+--	Writes the end of the actual function that loads the function pointers for `version`.
+
+- source.WriteCoreFuncLoader(hFile, func, typemap, spec, options)
+--	Writes the code that goes inside the core loader function that loads and tests a single extension function pointer.
+
+- source.WriteUtilityDefs(hFile, specData, spec, options)
+--	A place for writing utilities that will be needed by the function loader code. This can be a mapping table for mapping from extension name to loader funcs and extension variables or whatever you need to do the loading.
 
 If you want to extend this to new styles, then add a module for your style, import it, and register it's module table with the registry. Your module should export a function `Create` which takes no parameters and returns a table as defined above.
 ]]

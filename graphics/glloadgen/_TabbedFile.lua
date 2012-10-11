@@ -6,6 +6,7 @@
 - pop: Restores the previously preserved tab count.
 - fmt: As string.format followed by an indented write
 - write: An indented write; everything is written after the indent.
+- writeblock: Takes a single string, breaks it down into multiple lines, and writes each line indented.
 - rawfmt: As string.format followed by a NON-indented write.
 - rawwrite: hFile:write.
 
@@ -50,6 +51,18 @@ end
 function members:write(...)
 	self:_Indent()
 	rawget(self, "_hFile"):write(...)
+end
+
+function members:writeblock(block, ...)
+	assert(#{...} == 0, "writeblock takes one argument")
+	for line in block:gmatch("([^\n]+)\n") do
+		self:write(line, "\n")
+	end
+	
+	local last = block:match("\n([^\n]*)$")
+	if(#last ~= 0) then
+--		self:write(last)
+	end
 end
 
 function members:rawwrite(...)

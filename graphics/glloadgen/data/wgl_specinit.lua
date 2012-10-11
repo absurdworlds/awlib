@@ -15,9 +15,9 @@ return [[
 #endif
 #include <windows.h>
 
-#ifdef GLE_FUNCPTR
-#undef GLE_FUNCPTR
-#endif /*GLE_FUNCPTR*/
-#define GLE_FUNCPTR WINAPI
+#ifdef CODEGEN_FUNCPTR
+#undef CODEGEN_FUNCPTR
+#endif /*CODEGEN_FUNCPTR*/
+#define CODEGEN_FUNCPTR WINAPI
 
 ]]

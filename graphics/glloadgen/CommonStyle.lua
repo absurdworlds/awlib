@@ -106,5 +106,9 @@ function common.GetOpenGLFuncName(func, spec)
 	return spec.FuncNamePrefix() .. func.name
 end
 
+function common.GetProcAddressName(spec)
+	return "IntGetProcAddress"
+end
+
 
 return common

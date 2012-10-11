@@ -39,14 +39,14 @@ return [[
 	#endif
 #endif /*APIENTRY*/
 
-#ifndef GLE_FUNCPTR
-	#define GLE_REMOVE_FUNCPTR
+#ifndef CODEGEN_FUNCPTR
+	#define CODEGEN_REMOVE_FUNCPTR
 	#if defined(_WIN32)
-		#define GLE_FUNCPTR APIENTRY
+		#define CODEGEN_FUNCPTR APIENTRY
 	#else
-		#define GLE_FUNCPTR
+		#define CODEGEN_FUNCPTR
 	#endif
-#endif /*GLE_FUNCPTR*/
+#endif /*CODEGEN_FUNCPTR*/
 
 #ifndef GLAPI
 	#define GLAPI extern
