@@ -1,4 +1,15 @@
 
+local util = {}
+
+function util.GetSpecFilePath()
+	return FixupPath("glspecs/");
+end
+
+function util.GetDataFilePath()
+	return FixupPath("data/");
+end
+
+
 --Works like the regular pairs, but returns the key/value pairs in a key-sorted order.
 --sortFunc is the function used to compare them.
 function sortPairs(theTable, sortFunc)
@@ -74,14 +85,6 @@ end
 
 function GetSourcePath()
 	return "../source/";
-end
-
-function GetSpecFilePath()
-	return "glspecs/";
-end
-
-function GetDataFilePath()
-	return "data/";
 end
 
 --This returns the starting part of a header's includeguard. Takes the name of the define.

@@ -1,7 +1,7 @@
 --[[Useful style utility functions. This file will contain commonly useful strings and functions that generate useful data.]]
 
 local TabbedFile = require "_TabbedFile"
-require "_util"
+local util = require "util"
 
 local common = {}
 
@@ -12,7 +12,7 @@ function common.CreateFile(filename, indent)
 end
 
 function common.GetStdTypedefs()
-	return dofile(GetDataFilePath() .. "style_commontypedefs.lua")
+	return dofile(util.GetDataFilePath() .. "style_commontypedefs.lua")
 end
 
 function common.WritePassthruData(hFile, strArray)

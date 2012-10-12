@@ -11,7 +11,9 @@ This module has a function called GetSpec which is given the spec name and retur
 - DeclPrefix: nullary function that returns the name of a prefix string for declarations.
 ]]
 
-require "_util"
+local util = require "util"
+local LoadSpec = require "LoadLuaSpec"
+
 
 local gl_spec = {}
 local wgl_spec = {}
@@ -28,14 +30,14 @@ local specTbl =
 -- Spec-specific functions.
 
 
+function gl_spec.LoadSpec() return LoadSpec(util.GetSpecFilePath() .. "glspec.lua") end
+function wgl_spec.LoadSpec() return LoadSpec(util.GetSpecFilePath() .. "wglspec.lua") end
+function glx_spec.LoadSpec() return LoadSpec(util.GetSpecFilePath() .. "glxspec.lua") end
+
 ---FilePrefix
 function gl_spec.FilePrefix() return "gl_" end
 function wgl_spec.FilePrefix() return "wgl_" end
 function glx_spec.FilePrefix() return "glx_" end
-
-local function LoadRun(spec, name)
-	return dofile(GetDataFilePath() .. spec.FilePrefix() .. name .. ".lua")
-end
 
 --Include-guard string.
 function gl_spec.GetIncludeGuardString() return "OPENGL" end

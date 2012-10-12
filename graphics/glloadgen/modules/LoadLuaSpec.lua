@@ -29,7 +29,10 @@ Other changes are:
 	have no suffixes as if they were core.
 ]]
 
-local listOfCoreVersions = dofile("data/listOfCoreVersions.lua");
+local util = require "util"
+
+
+local listOfCoreVersions = dofile(util.GetDataFilePath() .. "listOfCoreVersions.lua");
 
 local listOfNonCoreFixes = 
 {
@@ -45,7 +48,9 @@ local listOfExtensionsToRemove =
     "SGIX_hyperpipe",
 };
 
-function LoadLuaSpec(luaFilename)
+local load = {}
+
+function load.LoadLuaSpec(luaFilename)
 	local specData = dofile(luaFilename);
 
 	specData.extdefs = {};
@@ -192,8 +197,10 @@ function LoadLuaSpec(luaFilename)
 		end
 	end
 	
-	specData.coreexts = dofile(GetDataFilePath() .. "coreExtList.lua");
+	specData.coreexts = dofile(util.GetDataFilePath() .. "coreExtList.lua");
 
 	return specData;
 end
+
+return load
 
