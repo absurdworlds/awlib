@@ -55,13 +55,13 @@ end
 
 function members:writeblock(block, ...)
 	assert(#{...} == 0, "writeblock takes one argument")
-	for line in block:gmatch("([^\n]+)\n") do
+	for line in block:gmatch("([^\n]*)\n") do
 		self:write(line, "\n")
 	end
 	
 	local last = block:match("\n([^\n]*)$")
 	if(#last ~= 0) then
---		self:write(last)
+		self:write(last)
 	end
 end
 
