@@ -77,6 +77,33 @@ function gl_spec.GetPtrLoaderFuncName() return "IntGetProcAddress" end
 function wgl_spec.GetPtrLoaderFuncName() return "IntGetProcAddress" end
 function glx_spec.GetPtrLoaderFuncName() return "IntGetProcAddress" end
 
+--Name of extension string function. Also returns true if this function needs to be loaded. If false is returned, then use the string name *exactly as is*.
+function gl_spec.GetExtStringFuncName() return "GetString", true end
+function wgl_spec.GetExtStringFuncName() return "GetExtensionsStringARB", true end
+function glx_spec.GetExtStringFuncName() return "glXQueryExtensionsString", false end
+
+--Gets the list of parameters that the extension string function will use. No (), just the internals. Pass a function used to resolve enumerator names into actual enumerator identifiers.
+function gl_spec.GetExtStringParamList(enumResolve)
+	return enumResolve("EXTENSIONS")
+end
+function wgl_spec.GetExtStringParamList(enumResolve) return "hdc" end
+function glx_spec.GetExtStringParamList(enumResolve) return "display, screen" end
+
+--Returns a table if it should use the indexed extension string functions. Returns false/nil otherwise.
+-- The table is an array of:
+--	Function name used to get the number of extensions.
+--	Enumerator name used to get the number of extensions.
+--	Function name used to get an extension string.
+--	Enumerator name used to get an extension string.
+function gl_spec.GetIndexedExtStringFunc(options)
+	if(tonumber(options.version) >= 3.0) then
+		return {"GetIntegerv", "NUM_EXTENSIONS", "GetStringi", "EXTENSIONS"}
+	end
+	return nil
+end
+function wgl_spec.GetIndexedExtStringFunc(options) return nil end
+function glx_spec.GetIndexedExtStringFunc(options) return nil end
+
 local fileProps =
 {
 	{"GetHeaderInit", "init"},

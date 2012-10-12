@@ -76,10 +76,13 @@ function my_style.header.WriteBeginEnumDeclBlock(hFile, specData, options) end
 
 function my_style.header.WriteEndEnumDeclBlock(hFile, specData, options) end
 
+local function GetEnumName(enum, spec, options)
+	return spec.EnumNamePrefix() .. enum.name
+end
+
 function my_style.header.WriteEnumDecl(hFile, enum, enumTable, spec, options)
-	hFile:fmt("#define %s%s = %s\n",
-		spec.EnumNamePrefix(),
-		enum.name,
+	hFile:fmt("#define %s = %s\n",
+		GetEnumName(enum, spec, options),
 		common.ResolveEnumValue(enum, enumTable))
 end
 
@@ -145,7 +148,7 @@ function my_style.header.WriteStatusCodeDecl(hFile, spec, options)
 	hFile:inc()
 		hFile:write(GetStatusCodeName("LOAD_FAILED", spec, options), " = 0,\n")
 		hFile:write(GetStatusCodeName("LOAD_SUCCEEDED", spec, options), " = 1,\n")
-		hFile:write(GetStatusCodeName("LOAD_PARTIAL", spec, options), " = 2,\n")
+--		hFile:write(GetStatusCodeName("LOAD_PARTIAL", spec, options), " = 2,\n")
 	hFile:dec()
 	hFile:write("};\n")
 end
@@ -159,8 +162,7 @@ local function GetLoaderFuncName(spec, options)
 end
 
 function my_style.header.WriteMainLoaderFuncDecl(hFile, spec, options)
-	hFile:fmt("%s %s(%s);\n",
-		GetStatusCodeEnumName(spec, options),
+	hFile:fmt("int %s(%s);\n",
 		GetLoaderFuncName(spec, options),
 		spec.GetLoaderParams())
 end
@@ -173,7 +175,7 @@ function my_style.header.WriteVersioningFuncDecls(hFile, spec, options)
 	
 	hFile:fmt("int %s();\n", DecorateFuncName("GetMinorVersion", spec, options))
 	hFile:fmt("int %s();\n", DecorateFuncName("GetMajorVersion", spec, options))
-	hFile:fmt("int %s(int iMajorVersion, int iMinorVersion);\n",
+	hFile:fmt("int %s(int majorVersion, int minorVersion);\n",
 		DecorateFuncName("IsVersionGEQ", spec, options))
 end
 
@@ -275,6 +277,10 @@ function my_style.source.WriteCoreFuncLoader(hFile, func, typemap, spec, options
 	else
 		hFile:fmt('if(!%s) numFailed++;\n', GetFuncPtrName(func, spec, options))
 	end
+end
+
+function my_style.source.WriteGetExtStringFuncDef(hFile, func, typemap, spec, options)
+	my_style.source.WriteFuncDef(hFile, func, typemap, spec, options)
 end
 
 local function GetMapTableStructName(spec, options)
@@ -385,7 +391,7 @@ static void LoadExtByName(const char *extensionName)
 			else
 			{
 				*(entry->extensionVariable) = ]] ..
-				GetStatusCodeName("LOAD_PARTIAL", spec, options) ..
+				GetStatusCodeName("LOAD_SUCCEEDED", spec, options) ..
 				[[ + numFailed;
 			}
 		}
@@ -403,63 +409,196 @@ static void LoadExtByName(const char *extensionName)
 	
 end
 
-function my_style.source.WriteMainLoaderFunc(hFile, specData, spec, options)
-	--Write our ancillary extension function, per the spec/options
-
-	--Write a function that walks the extension string and processes each one.
-	hFile:writeblock(common.GetProcessExtsFromStringFunc("LoadExtByName"))
-end
-
-function my_style.source.WriteVersioningFuncs(hFile, specData, spec, options)
-end
-
---[=[
-
-[[
+local function WriteAncillaryFuncs(hFile, specData, spec, options)
+	local indexed = spec.GetIndexedExtStringFunc(options);
+	if(indexed) then
+		for _, func in ipairs(specData.funcData.functions) do
+			if(indexed[1] == func.name) then
+				indexed[1] = func
+			end
+			if(indexed[3] == func.name) then
+				indexed[3] = func
+			end
+		end
+		for _, enum in ipairs(specData.enumerations) do
+			if(indexed[2] == enum.name) then
+				indexed[2] = enum
+			end
+			if(indexed[4] == enum.name) then
+				indexed[4] = enum
+			end
+		end
+	
+		hFile:writeblock([[
 static void ProcExtsFromExtList()
 {
 	GLint iLoop;
 	GLint iNumExtensions = 0;
-	_ptrc_glGetIntegerv(GL_NUM_EXTENSIONS, &iNumExtensions);
+	]] .. GetFuncPtrName(indexed[1], spec, options)
+	.. [[(]] .. GetEnumName(indexed[2], spec, options)
+	.. [[, &iNumExtensions);
 
 	for(iLoop = 0; iLoop < iNumExtensions; iLoop++)
 	{
-		const char *strExtensionName = (const char *)_ptrc_glGetStringi(GL_EXTENSIONS, iLoop);
+		const char *strExtensionName = (const char *)]] ..
+		GetFuncPtrName(indexed[3], spec, options) ..
+		[[(]] .. GetEnumName(indexed[4], spec, options) .. [[, iLoop);
 		LoadExtByName(strExtensionName)
 	}
 }
-]];
-
-[[
-int LoaderFunction()
-{
-	int numFailed = 0;
-	ClearExtensionVars();
+]])
+	elseif(options.version) then
+		hFile:writeblock(common.GetProcessExtsFromStringFunc("LoadExtByName"))
+	end
 	
-	{
-		_ptrc_glGetString = IntGetProcAddress("glGetString");
-		if(!_ptrc_glGetString) return ogl_LOAD_FAILED;	
+	hFile:write "\n"
+
+	return indexed
+end
+
+local function WriteInMainFuncLoader(hFile, func, spec, options)
+	hFile:fmt('%s = %s("%s%s");\n',
+		GetFuncPtrName(func, spec, options),
+		common.GetProcAddressName(spec),
+		spec.FuncNamePrefix(), func.name)
+	hFile:fmt('if(!%s) return %s;\n',
+		GetFuncPtrName(func, spec, options),
+		GetStatusCodeName("LOAD_FAILED", spec, options))
+end
+
+
+function my_style.source.WriteMainLoaderFunc(hFile, specData, spec, options)
+	local indexed = WriteAncillaryFuncs(hFile, specData, spec, options)
+
+	--Write the function that calls the extension and core loaders.
+	hFile:fmt("int %s(%s)\n",
+		GetLoaderFuncName(spec, options),
+		spec.GetLoaderParams())
+	hFile:write("{\n")
+	hFile:inc()
+	
+	hFile:writeblock([[
+int numFailed = 0;
+ClearExtensionVars();
+	
+]])
+
+	--Load the extension, using runtime-facilities to tell what is available.
+	if(indexed) then
+		WriteInMainFuncLoader(hFile, indexed[1], spec, options)
+		WriteInMainFuncLoader(hFile, indexed[3], spec, options)
+		hFile:write("\n")
+		hFile:write("ProcExtsFromExtList();\n")
+	else
+		local extListName, needLoad = spec.GetExtStringFuncName()
+		if(needLoad) then
+			for _, func in ipairs(specData.funcData.functions) do
+				if(extListName == func.name) then
+					extListName = func
+				end
+			end
+			
+			WriteInMainFuncLoader(hFile, extListName, spec, options)
+			
+			extListName = GetFuncPtrName(extListName, spec, options);
+		end
+
+		local function EnumResolve(enumName)
+			return GetEnumName(specData.enumtable[enumName], spec, options)
+		end
 		
-		ProcExtFromExtString((const char *)_ptrc_glGetString(GL_EXTENSIONS));
-	}
-	else
-	{
-		_ptrc_glGetStringi = IntGetProcAddress("glGetStringi");
-		if(!_ptrc_glGetStringi) return ogl_LOAD_FAILED;	
-		_ptrc_glGetIntegerv = IntGetProcAddress("glGetIntegerv");
-		if(!_ptrc_glGetIntegerv) return ogl_LOAD_FAILED;	
-	}
+		hFile:write "\n"
+		hFile:fmt("ProcExtFromExtString((const char *)%s(%s));\n",
+			extListName,
+			spec.GetExtStringParamList(EnumResolve))
+	end
 	
-	numFailed = Load_Version_3_3()
+	hFile:fmt("numFailed = %s();\n",
+		GetCoreLoaderFuncName(options.version, spec, options))
+	hFile:write "\n"
 	
-	if(numFailed == 0)
-		return ogl_LOAD_SUCCEEDED;
-	else
-		return ogl_LOAD_PARTIAL + numFailed;
-}
-]];
+	hFile:fmtblock([[
+if(numFailed == 0)
+	return %s;
+else
+	return %s + numFailed;
+]],
+		GetStatusCodeName("LOAD_SUCCEEDED", spec, options),
+		GetStatusCodeName("LOAD_SUCCEEDED", spec, options))
+	
+	hFile:dec()
+	hFile:write("}\n")
+end
 
-]=]
+function my_style.source.WriteVersioningFuncs(hFile, specData, spec, options)
+	--Only for GL
+	if(options.spec ~= "gl") then
+		return
+	end
+	
+	hFile:fmt("static int g_major_version = 0;\n")
+	hFile:fmt("static int g_minor_version = 0;\n")
+	hFile:write "\n"
+	
+	if(tonumber(options.version) >= 3.0) then
+		hFile:writeblock([[
+static void GetGLVersion()
+{
+	glGetIntegerv(GL_MAJOR_VERSION, &g_major_version);
+	glGetIntegerv(GL_MINOR_VERSION, &g_minor_version);
+}
+]])
+	else
+		hFile:writeblock(common.GetParseVersionFromString())
+		hFile:write "\n"
+		
+		hFile:writeblock([[
+static void GetGLVersion()
+{
+	ParseVersionFromString(&g_major_version, &g_minor_version, glGetString(GL_VERSION));
+}
+]])
+	end
+	
+	hFile:write "\n"
+	hFile:fmt("int %s()\n", DecorateFuncName("GetMinorVersion", spec, options))
+	hFile:writeblock([[
+{
+	if(g_major_version == 0)
+		GetGLVersion();
+	return g_major_version
+}
+]])
+	hFile:write "\n"
+
+	hFile:fmt("int %s()\n", DecorateFuncName("GetMajorVersion", spec, options))
+	hFile:writeblock([[
+{
+	if(g_major_version == 0) //Yes, check the major version to get the minor one.
+		GetGLVersion();
+	return g_minor_version
+}
+]])
+	hFile:write "\n"
+	
+	hFile:fmt("int %s(int majorVersion, int minorVersion)\n",
+		DecorateFuncName("IsVersionGEQ", spec, options))
+	hFile:writeblock([[
+{
+	if(g_major_version == 0)
+		GetGLVersion();
+		
+	if(majorVersion > g_major_version) return 1;
+	if(majorVersion < g_major_version) return 0;
+	if(minorVersion >= g_minor_version) return 1;
+	return 0;
+}
+]])
+
+end
+
+
+
 --------------------------------------------------
 -- Style retrieval machinery
 

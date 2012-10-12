@@ -111,6 +111,9 @@ This module has a function called GetStyle, which is given a style name. It will
 - source.WriteEndCoreFuncDefBlock(hFile, version, spec, options)
 --	Writes the end of the core loader's block that contains function pointer definitions and the loader function for `version`.
 
+- source.WriteGetExtStringFuncDef(hFile, func, typemap, spec, options)
+--	Writes a function definition for the function that gets the extension string list. It is written outside of ALL block definitions, so if you need scoping, scope it internally. Will only be called if the function's definition was not previously written.
+
 - source.WriteBeginCoreLoaderBlock(hFile, version, spec, options)
 --	Writes the start of the actual function that loads the function pointers for `version`.
 

@@ -7,8 +7,10 @@
 - fmt: As string.format followed by an indented write
 - write: An indented write; everything is written after the indent.
 - writeblock: Takes a single string, breaks it down into multiple lines, and writes each line indented.
+- fmtblock: As string.format, followed by calling `writeblock`.
 - rawfmt: As string.format followed by a NON-indented write.
 - rawwrite: hFile:write.
+
 
 Each call to one of the non-raw writing functions will indent the text.
 ]]
@@ -60,9 +62,13 @@ function members:writeblock(block, ...)
 	end
 	
 	local last = block:match("\n([^\n]*)$")
-	if(#last ~= 0) then
+	if(last and #last ~= 0) then
 		self:write(last)
 	end
+end
+
+function members:fmtblock(block, ...)
+	self:writeblock(block:format(...))
 end
 
 function members:rawwrite(...)
