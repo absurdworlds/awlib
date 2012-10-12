@@ -9,7 +9,9 @@ function util.GetDataFilePath()
 	return FixupPath("data/");
 end
 
+return util
 
+--[====[
 --Works like the regular pairs, but returns the key/value pairs in a key-sorted order.
 --sortFunc is the function used to compare them.
 function sortPairs(theTable, sortFunc)
@@ -133,3 +135,4 @@ function GetSectionHeading(headingName)
 ]], headingName);
 end
 
+]====]

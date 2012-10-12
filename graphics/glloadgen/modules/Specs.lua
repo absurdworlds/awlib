@@ -29,10 +29,10 @@ local specTbl =
 -------------------------------------------------
 -- Spec-specific functions.
 
-
-function gl_spec.LoadSpec() return LoadSpec(util.GetSpecFilePath() .. "glspec.lua") end
-function wgl_spec.LoadSpec() return LoadSpec(util.GetSpecFilePath() .. "wglspec.lua") end
-function glx_spec.LoadSpec() return LoadSpec(util.GetSpecFilePath() .. "glxspec.lua") end
+--Loads the appropriate Lua .spec file.
+function gl_spec.LoadSpec() return LoadSpec.LoadLuaSpec(util.GetSpecFilePath() .. "glspec.lua") end
+function wgl_spec.LoadSpec() return LoadSpec.LoadLuaSpec(util.GetSpecFilePath() .. "wglspec.lua") end
+function glx_spec.LoadSpec() return LoadSpec.LoadLuaSpec(util.GetSpecFilePath() .. "glxspec.lua") end
 
 ---FilePrefix
 function gl_spec.FilePrefix() return "gl_" end
@@ -118,7 +118,7 @@ local fileProps =
 for key, spec in pairs(specTbl) do
 	for _, props in ipairs(fileProps) do
 		spec[props[1]] = function()
-			return dofile(GetDataFilePath() .. spec:FilePrefix() ..
+			return dofile(util.GetDataFilePath() .. spec:FilePrefix() ..
 				"spec" .. props[2] .. ".lua")
 		end
 	end

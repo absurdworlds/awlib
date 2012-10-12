@@ -12,3 +12,22 @@ package.path = baseDir .. "modules/?.lua;" .. package.path
 function FixupPath(relativePath)
 	return baseDir .. relativePath
 end
+
+local opts = require "GetOptions"
+local gen = require "Generate"
+
+local options = opts.GetOptions {
+	"test",
+	"-spec=gl",
+	"-extfile=exts.txt",
+	"-version=3.3",
+	"-profile=core",
+}
+
+gen.Generate(options)
+
+
+--[[
+local writer = require "tablewriter"
+writer.WriteTable(io.stdout, options)
+]]

@@ -23,8 +23,8 @@ It returns a table containing the following entries:
 - prefix: A prefix to be added to the names of identifiers that must be global, while avoiding name clashes. This is useful if you want to have different sets of bindings to different APIs (like a GL 3.3 and 2.1 binding). Defaults to the empty string.
 ]]
 
-local cmd = require "_CmdLineOptions"
-local styles = require "_Styles"
+local cmd = require "CmdLineOptions"
+local styles = require "Styles"
 
 local function FixupExtensionName(ext)
 	return ext
@@ -95,7 +95,7 @@ parseOpts:pos_opt(
 	"outname")
 	
 local function LoadExtFile(extensions, extfilename)
-	local hFile = assert(io.open(extfilename, "rt"), "Could not find the file " .. extfilename)
+	local hFile = assert(io.open(FixupPath(extfilename), "rt"), "Could not find the file " .. extfilename)
 	
 	for line in hFile:lines() do
 		local ext = line:match("(%S+)")

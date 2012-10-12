@@ -1,6 +1,6 @@
 --[[Useful style utility functions. This file will contain commonly useful strings and functions that generate useful data.]]
 
-local TabbedFile = require "_TabbedFile"
+local TabbedFile = require "TabbedFile"
 local util = require "util"
 
 local common = {}

@@ -133,7 +133,6 @@ This module has a function called GetStyle, which is given a style name. It will
 --	Writes the implementation of any versioning functions.
 
 
-
 If you want to extend this to new styles, then add a module for your style, import it, and register it's module table with the registry. Your module should export a function `Create` which takes no parameters and returns a table as defined above.
 ]]
 
