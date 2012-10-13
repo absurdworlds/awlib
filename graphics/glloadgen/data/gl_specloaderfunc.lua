@@ -87,7 +87,7 @@ static void *WinGetProcAddress(const char *name)
 		#else /* GLX */
 		    #include <GL/glx.h>
 
-			#define IntGetProcAddress(name) (*glXGetProcAddressARB)(name)
+			#define IntGetProcAddress(name) (*glXGetProcAddressARB)((const GLubyte*)name)
 		#endif
 	#endif
 #endif
