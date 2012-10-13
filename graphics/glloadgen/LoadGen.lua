@@ -16,13 +16,15 @@ end
 local opts = require "GetOptions"
 local gen = require "Generate"
 
-local options = opts.GetOptions {
+local options = opts.GetOptions(arg)
+
+--[[{
 	"test",
 	"-spec=gl",
 	"-extfile=exts.txt",
 	"-version=3.3",
 	"-profile=core",
-}
+}]]
 
 gen.Generate(options)
 

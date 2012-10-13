@@ -81,7 +81,7 @@ local function GetEnumName(enum, spec, options)
 end
 
 function my_style.header.WriteEnumDecl(hFile, enum, enumTable, spec, options)
-	hFile:fmt("#define %s = %s\n",
+	hFile:fmt("#define %s %s\n",
 		GetEnumName(enum, spec, options),
 		common.ResolveEnumValue(enum, enumTable))
 end
@@ -192,8 +192,15 @@ function my_style.source.CreateFile(basename, options)
 end
 
 function my_style.source.WriteIncludes(hFile, spec, options)
-	hFile:write("#include <stdlib.h>\n")
-	hFile:write("#include <string.h>\n")
+	hFile:writeblock([[
+#include <stdlib.h>
+#include <string.h>
+#ifdef WIN32
+#define strcasecmp(lhs, rhs) _stricmp((lhs), (rhs))
+#endif
+]])
+	hFile:write("\n")
+	
 end
 
 function my_style.source.WriteBeginDef(hFile, spec, options) end
@@ -293,7 +300,7 @@ end
 
 function my_style.source.WriteUtilityDefs(hFile, specData, spec, options)
 	--Write the struct for the mapping table.
-	hFile:write("typedef int (*PFN_LOADEXTENSION)()\n")
+	hFile:write("typedef int (*PFN_LOADEXTENSION)();\n")
 	hFile:fmt("typedef struct %s%sStrToExtMap_s\n",
 		options.prefix, spec.DeclPrefix())
 	hFile:write("{\n")
@@ -302,7 +309,7 @@ function my_style.source.WriteUtilityDefs(hFile, specData, spec, options)
 	hFile:write("int *extensionVariable;\n")
 	hFile:write("PFN_LOADEXTENSION LoadExtension;\n")
 	hFile:dec()
-	hFile:fmt("} %s\n", GetMapTableStructName(spec, options))
+	hFile:fmt("} %s;\n", GetMapTableStructName(spec, options))
 	hFile:write "\n"
 	
 	--Write the mapping table itself.
@@ -323,7 +330,7 @@ function my_style.source.WriteUtilityDefs(hFile, specData, spec, options)
 		end
 	end
 	hFile:dec()
-	hFile:write("}\n")
+	hFile:write("};\n")
 	hFile:write "\n"
 	
 	hFile:fmt("static int g_extensionMapSize = %i;\n", #options.extensions);
@@ -334,15 +341,15 @@ function my_style.source.WriteUtilityDefs(hFile, specData, spec, options)
 		GetMapTableStructName(spec, options))
 	hFile:write("{\n")
 	hFile:inc()
-	hFile:write("int loop;")
-	hFile:fmt("%s *currLoc = %s",
+	hFile:write("int loop;\n")
+	hFile:fmt("%s *currLoc = %s;\n",
 		GetMapTableStructName(spec, options),
 		GetMapTableVarName())
 	hFile:writeblock([[
 for(loop = 0; loop < g_extensionMapSize; ++loop, ++currLoc)
 {
 	if(strcasecmp(extensionName, currLoc->extensionName) == 0)
-		return pCurrLoc;
+		return currLoc;
 }
 
 return NULL;
@@ -364,12 +371,6 @@ return NULL;
 	hFile:write("}\n")
 	hFile:write "\n"
 	
-	--Write a function to get the version number from a string.
-	if(options.version) then
-		hFile:writeblock(common.GetGLVersionQueryFunc())
-		hFile:write "\n"
-	end
-
 	--Write a function that loads an extension by name. It is called when
 	--processing, so it should also set the extension variable based on the load.
 	hFile:writeblock([[
@@ -443,11 +444,11 @@ static void ProcExtsFromExtList()
 		const char *strExtensionName = (const char *)]] ..
 		GetFuncPtrName(indexed[3], spec, options) ..
 		[[(]] .. GetEnumName(indexed[4], spec, options) .. [[, iLoop);
-		LoadExtByName(strExtensionName)
+		LoadExtByName(strExtensionName);
 	}
 }
 ]])
-	elseif(options.version) then
+	else
 		hFile:writeblock(common.GetProcessExtsFromStringFunc("LoadExtByName"))
 	end
 	
@@ -476,12 +477,13 @@ function my_style.source.WriteMainLoaderFunc(hFile, specData, spec, options)
 		spec.GetLoaderParams())
 	hFile:write("{\n")
 	hFile:inc()
-	
-	hFile:writeblock([[
-int numFailed = 0;
-ClearExtensionVars();
-	
-]])
+
+	if(options.version) then
+		hFile:write("int numFailed = 0;\n")
+	end
+
+	hFile:write("ClearExtensionVars();\n")
+	hFile:write("\n")
 
 	--Load the extension, using runtime-facilities to tell what is available.
 	if(indexed) then
@@ -508,23 +510,28 @@ ClearExtensionVars();
 		end
 		
 		hFile:write "\n"
-		hFile:fmt("ProcExtFromExtString((const char *)%s(%s));\n",
+		hFile:fmt("ProcExtsFromExtString((const char *)%s(%s));\n",
 			extListName,
 			spec.GetExtStringParamList(EnumResolve))
 	end
 	
-	hFile:fmt("numFailed = %s();\n",
-		GetCoreLoaderFuncName(options.version, spec, options))
-	hFile:write "\n"
-	
-	hFile:fmtblock([[
+	if(options.version) then
+		hFile:fmt("numFailed = %s();\n",
+			GetCoreLoaderFuncName(options.version, spec, options))
+		hFile:write "\n"
+		
+		hFile:fmtblock([[
 if(numFailed == 0)
 	return %s;
 else
 	return %s + numFailed;
 ]],
-		GetStatusCodeName("LOAD_SUCCEEDED", spec, options),
-		GetStatusCodeName("LOAD_SUCCEEDED", spec, options))
+			GetStatusCodeName("LOAD_SUCCEEDED", spec, options),
+			GetStatusCodeName("LOAD_SUCCEEDED", spec, options))
+	else
+		hFile:fmt("return %s;\n",
+			GetStatusCodeName("LOAD_SUCCEEDED", spec, options))
+	end
 	
 	hFile:dec()
 	hFile:write("}\n")
@@ -566,7 +573,7 @@ static void GetGLVersion()
 {
 	if(g_major_version == 0)
 		GetGLVersion();
-	return g_major_version
+	return g_major_version;
 }
 ]])
 	hFile:write "\n"
@@ -576,7 +583,7 @@ static void GetGLVersion()
 {
 	if(g_major_version == 0) //Yes, check the major version to get the minor one.
 		GetGLVersion();
-	return g_minor_version
+	return g_minor_version;
 }
 ]])
 	hFile:write "\n"

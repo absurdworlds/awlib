@@ -110,44 +110,6 @@ function common.GetProcAddressName(spec)
 	return "IntGetProcAddress"
 end
 
-function common.GetGLVersionQueryFunc()
-	return [[
-static void GetGLVersion(int *pOutMajor, int *pOutMinor, const char *strVersion)
-{
-	const char *strDotPos = NULL;
-	int iLength = 0;
-	char strWorkBuff[10];
-	*pOutMinor = 0;
-	*pOutMajor = 0;
-
-	strDotPos = strchr(strVersion, '.');
-	if(!strDotPos)
-		return;
-
-	iLength = (int)((ptrdiff_t)strDotPos - (ptrdiff_t)strVersion);
-	strncpy(strWorkBuff, strVersion, iLength);
-	strWorkBuff[iLength] = '\0';
-
-	*pOutMajor = atoi(strWorkBuff);
-	strDotPos = strchr(strVersion + iLength + 1, ' ');
-	if(!strDotPos)
-	{
-		//No extra data. Take the whole rest of the string.
-		strcpy(strWorkBuff, strVersion + iLength + 1);
-	}
-	else
-	{
-		//Copy only up until the space.
-		int iLengthMinor = (int)((ptrdiff_t)strDotPos - (ptrdiff_t)strVersion);
-		iLengthMinor = iLengthMinor - (iLength + 1);
-		strncpy(strWorkBuff, strVersion + iLength + 1, iLengthMinor);
-		strWorkBuff[iLengthMinor] = '\0';
-	}
-
-	*pOutMinor = atoi(strWorkBuff);
-}
-]]
-end
 
 --You give it a function that takes a const char*.
 function common.GetProcessExtsFromStringFunc(funcToCall)

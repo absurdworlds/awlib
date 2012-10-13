@@ -64,13 +64,13 @@ function glx_spec.DeclPrefix() return "glx_" end
 
 --Extension name prefix.
 function gl_spec.ExtNamePrefix() return "GL_" end
-function wgl_spec.ExtNamePrefix() return "WGL" end
-function glx_spec.ExtNamePrefix() return "GLX" end
+function wgl_spec.ExtNamePrefix() return "WGL_" end
+function glx_spec.ExtNamePrefix() return "GLX_" end
 
 --Enumerator name prefix. This is for defining "proper" GL enumerators.
 function gl_spec.EnumNamePrefix() return "GL_" end
-function wgl_spec.EnumNamePrefix() return "WGL" end
-function glx_spec.EnumNamePrefix() return "GLX" end
+function wgl_spec.EnumNamePrefix() return "WGL_" end
+function glx_spec.EnumNamePrefix() return "GLX_" end
 
 --Function name prefix. This is for defining "proper" GL function names.
 function gl_spec.FuncNamePrefix() return "gl" end
@@ -79,7 +79,7 @@ function glx_spec.FuncNamePrefix() return "glX" end
 
 --Parameters given to the loader. No (), just the internals.
 function gl_spec.GetLoaderParams() return "" end
-function wgl_spec.GetLoaderParams() return "HDC *hdc" end
+function wgl_spec.GetLoaderParams() return "HDC hdc" end
 function glx_spec.GetLoaderParams() return "Display *display, int screen" end
 
 --CodeGen function pointer type. For APIFUNC and so forth.
