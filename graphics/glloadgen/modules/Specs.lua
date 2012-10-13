@@ -31,7 +31,7 @@ local specTbl =
 --Validate the options.
 function gl_spec.VerifyOptions(options, parseOpts)
 	if(options.profile == "compatibility") then
-		parseOpts:AssertParse(options.version >= 3.0, "The OpenGL compatibility profile cannot be used with version " .. options.version)
+		parseOpts:AssertParse(tonumber(options.version) >= 3.0, "The OpenGL compatibility profile cannot be used with version " .. options.version)
 	end
 end
 
