@@ -9,9 +9,10 @@ assert(baseDir, arg[0] .. " No directory")
 package.path = baseDir .. "modules/?.lua;" .. package.path
 
 --Make a function to get the correct directory name.
-function FixupPath(relativePath)
+function SysRelPath(relativePath)
 	return baseDir .. relativePath
 end
+FixupPath = SysRelPath --Older name.
 
 local opts = require "GetOptions"
 local gen = require "Generate"

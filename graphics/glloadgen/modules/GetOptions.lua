@@ -36,7 +36,7 @@ local parseOpts = cmd.CreateOptionGroup()
 parseOpts:enum(
 	"spec",
 	"spec",
-	"Specification to use. One of the following:",
+	"Specification to use.",
 	{"gl", "glX", "wgl"},
 	1)
 parseOpts:value(
@@ -82,6 +82,12 @@ parseOpts:array_single(
 	{"A file to load extensions from.", "Files are always relative to the current directory."},
 	nil,
 	true)
+parseOpts:array_single(
+	"stdext",
+	"stdexts",
+	{"A file to load extensions from.", "These file paths are relative to the distribution directory."},
+	nil,
+	true)
 parseOpts:value(
 	"prefix",
 	"prefix",
@@ -95,7 +101,9 @@ parseOpts:pos_opt(
 	"outname",
 	"Base filename (sans extension)",
 	"outname")
-	
+
+local extFileLines;
+
 local function LoadExtFile(extensions, extfilename, baseDir)
 	if(baseDir) then
 		extfilename = baseDir .. extfilename
@@ -103,32 +111,62 @@ local function LoadExtFile(extensions, extfilename, baseDir)
 	local hFile = assert(io.open(extfilename, "rt"), "Could not find the file " .. extfilename)
 	
 	for line in hFile:lines() do
-		local ext = line:match("(%S+)")
-		if(ext) then
-			if(ext == "#include") then
-				local file = line:match('%#include [%"](.+)[%"]')
-				assert(file, "Bad #include statement in extension file " ..
-					extfilename)
-				if(file) then
-					local name, dir = util.ParsePath(file)
-					if(baseDir and dir) then
-						dir = baseDir .. dir
-					elseif(baseDir) then
-						dir = baseDir
-					end
-					
-					file = name
-					
-					LoadExtFile(extensions, file, dir)
-				end
-			else
-				table.insert(extensions, ext)
+		for _, test in ipairs(extFileLines) do
+			local matches = {line:match(test.pttrn)}
+			if(#matches ~= 0) then
+				test.proc(extensions, baseDir, unpack(matches))
+				break
 			end
 		end
 	end
 	
 	hFile:close()
 end
+
+--Function gets the list of extensions, the base directory of the currently
+--processing file, and whatever matches came from the pattern.
+extFileLines =
+{
+	{
+		pttrn = '^%s*%#include [%"](.+)[%"]',
+		proc = function(extensions, basedir, file)
+			local name, dir = util.ParsePath(file)
+			if(baseDir and dir) then
+				dir = baseDir .. dir
+			elseif(baseDir) then
+				dir = baseDir
+			end
+			
+			file = name
+			
+			LoadExtFile(extensions, file, dir)
+		end,
+	},
+	{
+		pttrn = '^%s*%#include [%<](.+)[%>]',
+		proc = function(extensions, basedir, file)
+			local name, dir = util.ParsePath(SysRelPath(file))
+			--Ignore the base directory; we start with the system directory.
+			
+			LoadExtFile(extensions, name, dir)
+		end,
+	},
+	{
+		pttrn = '^%s*%-%-',
+		proc = function(extensions, basedir) --[[Ignore the line. Comment]] end,
+	},
+	{
+		pttrn = '^%s*%/%/',
+		proc = function(extensions, basedir) --[[Ignore the line. Comment]] end,
+	},
+	{
+		pttrn = '(%S+)',
+		proc = function(extensions, basedir, ext)
+			table.insert(extensions, ext)
+		end,
+	},
+}
+
 
 local function FixupExtname(ext)
 	--Cull the (W)GL(X)_ part of the name, if any.
@@ -162,6 +200,11 @@ function optTbl.GetOptions(cmd_line)
 	
 	for _, file in ipairs(options.extfiles) do
 		LoadExtFile(options.extensions, util.ParsePath(file)) --vararg
+	end
+	
+	--Standard extension files.
+	for _, file in ipairs(options.stdexts) do
+		LoadExtFile(options.extensions, util.ParsePath(SysRelPath(file))) --vararg
 	end
 	
 	--Fixup names and remove duplicates.
