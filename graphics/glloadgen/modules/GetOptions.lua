@@ -79,7 +79,7 @@ parseOpts:array_single(
 parseOpts:array_single(
 	"extfile",
 	"extfiles",
-	{"A file to load extensions from."},
+	{"A file to load extensions from.", "Files are always relative to the current directory."},
 	nil,
 	true)
 parseOpts:value(
@@ -97,7 +97,7 @@ parseOpts:pos_opt(
 	"outname")
 	
 local function LoadExtFile(extensions, extfilename)
-	local hFile = assert(io.open(FixupPath(extfilename), "rt"), "Could not find the file " .. extfilename)
+	local hFile = assert(io.open(extfilename, "rt"), "Could not find the file " .. extfilename)
 	
 	for line in hFile:lines() do
 		local ext = line:match("(%S+)")
