@@ -24,7 +24,9 @@ It returns a table containing the following entries:
 ]]
 
 local cmd = require "CmdLineOptions"
-local styles = require "Styles"
+local util = require "util"
+local Styles = require "Styles"
+local Specs = require "Specs"
 
 local function FixupExtensionName(ext)
 	return ext
@@ -54,7 +56,7 @@ parseOpts:enum(
 	"style",
 	"style",
 	{"Export style."},
-	styles.GetStyleList(),
+	Styles.GetStyleList(),
 	1)
 parseOpts:enum(
 	"indent",
@@ -131,13 +133,20 @@ local optTbl = {}
 function optTbl.GetOptions(cmd_line)
 	local options, pos_args = parseOpts:ProcessCmdLine(cmd_line)
 	
-	if(options.spec == "gl") then
-		--Check version/profile.
-		parseOpts:AssertParse(options.version, "You must specify an OpenGL version to export.")
+	local spec = Specs.GetSpec(options.spec)
+	
+	if(options.version) then
+		--Check the version against the allowed versions.
+		local versionTest = util.InvertTable(spec.GetCoreVersions())
+		parseOpts:AssertParse(versionTest[options.version], "The version " .. options.version .. " is not a legal version number.")
 	else
-		parseOpts:AssertParse(not options.version, "Versions cannot be specified for wgl/glX")
+		--Check to see that no versions are offered.
+		parseOpts:AssertParse(#spec.GetCoreVersions() == 0, "You cannot specify a version for the specification " .. options.spec)
 	end
 	
+	spec.VerifyOptions(options, parseOpts)
+	
+	--Load and collate the extensions.
 	options.extensions = options.extensions or {}
 	options.extfiles = options.extfiles or {}
 	

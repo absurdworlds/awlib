@@ -25,6 +25,8 @@ The processor assumes that strings that begin with a `-` character is an option.
 Any "options" that do not conform to option syntax are assumed to be positional arguments. They are stored in an array and returned by the function.
 ]]
 
+local util = require "util"
+
 --Returns nil if not an option. Otherwise returns the option and a possible
 --parameter name if it is of the form "--option=foo".
 local function GetOptionName(option)
@@ -172,17 +174,9 @@ function group:value(optName, tblName, desc, default, optional)
 	}
 end
 
-local function InvertTable(tbl)
-	local ret = {}
-	for i, val in ipairs(tbl) do
-		ret[val] = true
-	end
-	return ret
-end
-
 function group:enum(optName, tblName, desc, values, defaultIx, optional)
 	table.insert(self._doc_order, optName)
-	local valuesInv = InvertTable(values)
+	local valuesInv = util.InvertTable(values)
 	self._procs[optName] = {
 		desc = desc,
 		tableName = tblName,

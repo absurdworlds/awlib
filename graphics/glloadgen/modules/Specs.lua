@@ -28,6 +28,19 @@ local specTbl =
 
 -------------------------------------------------
 -- Spec-specific functions.
+--Validate the options.
+function gl_spec.VerifyOptions(options, parseOpts)
+	if(options.profile == "compatibility") then
+		parseOpts:AssertParse(options.version >= 3.0, "The OpenGL compatibility profile cannot be used with version " .. options.version)
+	end
+end
+
+function wgl_spec.VerifyOptions(options, parseOpts)
+	return "wgl_"
+end
+function glx_spec.VerifyOptions(options, parseOpts)
+	return "glx_"
+end
 
 --Loads the appropriate Lua .spec file.
 function gl_spec.LoadSpec() return LoadSpec.LoadLuaSpec(util.GetSpecFilePath() .. "glspec.lua", gl_spec) end
