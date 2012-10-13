@@ -17,4 +17,14 @@ function util.InvertTable(tbl)
 	return ret
 end
 
+--Returns two values: the base filename and the directory.
+--If the base filename is nil, it doesn't have a pathname.
+--If the directory is nil, then there was no directory.
+function util.ParsePath(pathname)
+	local base = pathname:match("([^\\/]+)$")
+	local dir = pathname:match("^(.*[\\/])")
+	
+	return base, dir
+end
+
 return util

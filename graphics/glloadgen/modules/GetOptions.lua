@@ -96,20 +96,30 @@ parseOpts:pos_opt(
 	"Base filename (sans extension)",
 	"outname")
 	
-local function LoadExtFile(extensions, extfilename)
+local function LoadExtFile(extensions, extfilename, baseDir)
+	if(baseDir) then
+		extfilename = baseDir .. extfilename
+	end
 	local hFile = assert(io.open(extfilename, "rt"), "Could not find the file " .. extfilename)
 	
 	for line in hFile:lines() do
 		local ext = line:match("(%S+)")
 		if(ext) then
 			if(ext == "#include") then
-				local file = line:match('%#include [%"%<](.+)[%"%>]')
+				local file = line:match('%#include [%"](.+)[%"]')
 				assert(file, "Bad #include statement in extension file " ..
 					extfilename)
 				if(file) then
-					--Probably should provide a way to make this
-					--prevent loops. And to use directories.
-					LoadExtFile(extensions, file)
+					local name, dir = util.ParsePath(file)
+					if(baseDir and dir) then
+						dir = baseDir .. dir
+					elseif(baseDir) then
+						dir = baseDir
+					end
+					
+					file = name
+					
+					LoadExtFile(extensions, file, dir)
 				end
 			else
 				table.insert(extensions, ext)
@@ -151,7 +161,7 @@ function optTbl.GetOptions(cmd_line)
 	options.extfiles = options.extfiles or {}
 	
 	for _, file in ipairs(options.extfiles) do
-		LoadExtFile(options.extensions, file)
+		LoadExtFile(options.extensions, util.ParsePath(file)) --vararg
 	end
 	
 	--Fixup names and remove duplicates.
