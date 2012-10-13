@@ -30,9 +30,9 @@ local specTbl =
 -- Spec-specific functions.
 
 --Loads the appropriate Lua .spec file.
-function gl_spec.LoadSpec() return LoadSpec.LoadLuaSpec(util.GetSpecFilePath() .. "glspec.lua") end
-function wgl_spec.LoadSpec() return LoadSpec.LoadLuaSpec(util.GetSpecFilePath() .. "wglspec.lua") end
-function glx_spec.LoadSpec() return LoadSpec.LoadLuaSpec(util.GetSpecFilePath() .. "glxspec.lua") end
+function gl_spec.LoadSpec() return LoadSpec.LoadLuaSpec(util.GetSpecFilePath() .. "glspec.lua", gl_spec) end
+function wgl_spec.LoadSpec() return LoadSpec.LoadLuaSpec(util.GetSpecFilePath() .. "wglspec.lua", wgl_spec) end
+function glx_spec.LoadSpec() return LoadSpec.LoadLuaSpec(util.GetSpecFilePath() .. "glxspec.lua", glX_spec) end
 
 ---FilePrefix
 function gl_spec.FilePrefix() return "gl_" end
@@ -110,6 +110,7 @@ local fileProps =
 {
 	{"GetHeaderInit", "init"},
 	{"GetVersions", "versions"},
+	{"GetCoreVersions", "coreversions"},
 	{"GetCoreExts", "coreexts"},
 	{"GetLoaderFunc", "loaderfunc"},
 }

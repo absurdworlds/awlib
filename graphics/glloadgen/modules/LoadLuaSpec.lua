@@ -32,8 +32,6 @@ Other changes are:
 local util = require "util"
 
 
-local listOfCoreVersions = dofile(util.GetDataFilePath() .. "listOfCoreVersions.lua");
-
 local listOfNonCoreFixes = 
 {
 --	"ARB_sample_shading",
@@ -50,7 +48,10 @@ local listOfExtensionsToRemove =
 
 local load = {}
 
-function load.LoadLuaSpec(luaFilename)
+function load.LoadLuaSpec(luaFilename, spec)
+
+	local listOfCoreVersions = spec.GetCoreVersions()
+
 	local specData = dofile(luaFilename);
 
 	specData.extdefs = {};
@@ -197,9 +198,17 @@ function load.LoadLuaSpec(luaFilename)
 		end
 	end
 	
-	specData.coreexts = dofile(util.GetDataFilePath() .. "coreExtList.lua");
+	local coreextsByVersion = spec.GetCoreExts()
+	
+	local coreexts = {}
+	specData.coreexts = coreexts
+	for coreVersion, coreExtList in pairs(coreextsByVersion) do
+		for i, coreExt in pairs(coreExtList) do
+			coreexts[coreExt] = {name = coreExt, version = coreVersion};
+		end
+	end
 
-	return specData;
+	return specData
 end
 
 return load
