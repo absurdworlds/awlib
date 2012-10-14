@@ -7,7 +7,7 @@ local common = {}
 
 --Creates a tabbed file.
 function common.CreateFile(filename, indent)
-	local hFile = io.open(filename, "wt")
+	local hFile = io.open(filename, "w")
 	return TabbedFile.TabbedFile(hFile, indent)
 end
 

@@ -190,7 +190,7 @@ function load.LoadLuaSpec(luaFilename, spec)
 	
 		if(func.version) then
 			if(not func.category or string.match(func.category, "^VERSION")) then
-				local versionVal = string.gsub(func.category, "VERSION_(%d+)_(%d+).*", "%1%.%2");
+				local versionVal = string.gsub(func.category, "VERSION_(%d+)_(%d+).*", "%1.%2");
 				--HACK!
 				if(versionVal == "1.0") then versionVal = "1.1" end;
 				table.insert(GetCore(versionVal).funcs, func);

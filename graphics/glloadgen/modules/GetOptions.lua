@@ -108,7 +108,7 @@ local function LoadExtFile(extensions, extfilename, baseDir)
 	if(baseDir) then
 		extfilename = baseDir .. extfilename
 	end
-	local hFile = assert(io.open(extfilename, "rt"), "Could not find the file " .. extfilename)
+	local hFile = assert(io.open(extfilename, "r"), "Could not find the file " .. extfilename)
 	
 	for line in hFile:lines() do
 		for _, test in ipairs(extFileLines) do
