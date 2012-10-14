@@ -17,20 +17,12 @@ FixupPath = SysRelPath --Older name.
 local opts = require "GetOptions"
 local gen = require "Generate"
 
-local options = opts.GetOptions(arg)
+local status, options = pcall(opts.GetOptions, arg)
 
---[[{
-	"test",
-	"-spec=gl",
-	"-extfile=exts.txt",
-	"-version=3.3",
-	"-profile=core",
-}]]
+if(not status) then
+	return
+end
 
 gen.Generate(options)
 
 
---[[
-local writer = require "tablewriter"
-writer.WriteTable(io.stdout, options)
-]]
