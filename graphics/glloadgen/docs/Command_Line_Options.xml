@@ -86,17 +86,18 @@
             <glossdef>
                 <para>The code generation suite has a number of different ways of outputting the
                     functions and enumerators that define OpenGL. This option allows the user to
-                    select between these particular mechanisms. It must be one of the following
-                    values:</para>
+                    select between these particular mechanisms.</para>
+                <para>The specific meaning of these parameters is <link xlink:href="Styles"
+                        >explained elsewhere.</link> Note that the system is designed to be
+                    user-extensible; new styles can be added by creating an appropriate script and
+                    hooking it into the right place in
+                    <filename>modules/Styles.lua</filename>.</para>
+                <para>It must be one of the following values:</para>
                 <itemizedlist>
                     <listitem>
                         <para><literal>pointer_c</literal>: default.</para>
                     </listitem>
                 </itemizedlist>
-                <para>The specific meaning of these parameters is explained elsewhere. Note that the
-                    system is designed to be extensible; new styles can be added by modifying an
-                    appropriate script and hooking it into the right place in
-                        <filename>modules/Styles.lua</filename>.</para>
             </glossdef>
         </glossentry>
         <glossentry>

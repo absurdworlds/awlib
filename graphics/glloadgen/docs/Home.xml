@@ -33,6 +33,9 @@
                 <filename>gl_core_3_3.c</filename> files. Simply include them in your project; there
             is no library to build, no unresolved extenals to filter through. They just work (Well,
             that's the plan ;) ).</para>
+        <para>The <link xlink:href="Command_Line_Options">full command-line syntax
+                documentation</link> is available. The <literal>-style</literal> parameter's <link
+                xlink:href="Styles">meaning is defined here</link>.</para>
         <section>
             <title>Extensions</title>
             <para>Note that the above command line will <emphasis>only</emphasis> generate
@@ -51,6 +54,9 @@
                     <literal>#include</literal> directives, which will include another extension
                 file (relative pathing only). Please don't infinitely recurse your inclusions;
                 there's no protection in the system to check for it.</para>
+            <para>The system has a number of <link xlink:href="Common_Extension_Files">common
+                    extension files</link> that store useful sets of extensions. You may use these
+                as you wish.</para>
         </section>
     </section>
 </article>

@@ -5,8 +5,9 @@
     xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0">
     <title>Styles</title>
     <para>The <literal>-style</literal> command line option defines how the header and source files
-        are generated. While the styles will have some differences, every style provides a common
-        set of functionality (though exactly how it is exposed differs). Styles provide:</para>
+        are generated. They will always generate the same information (more or less); the difference
+        between styles explains the form that this information takes. The information generated
+        is:</para>
     <itemizedlist>
         <listitem>
             <para>Typedefs for OpenGL concepts (GLenum, etc).</para>
@@ -26,10 +27,10 @@
                 versions/profiles (where applicable).</para>
         </listitem>
         <listitem>
-            <para>A function that will load all function pointers. Even if the style requires static
-                linking, it will still provide a special function to do this. Until this function is
-                called, you cannot use any of the mechanisms to test whether an extension is loaded,
-                nor can you call any other functions.</para>
+            <para>A function that will load all function pointers. Even if the style uses static
+                linking, a function will still be provided. Until this function is called, you
+                cannot use any of the mechanisms to test whether an extension is loaded, nor can you
+                call any other functions.</para>
             <para>The function's return value will be a status code saying whether it succeeded.
                 Success is defined solely in terms of loading the specified core OpenGL version;
                 therefore, WGL or GLX loader functions will always <quote>succeed</quote>. Test for
@@ -96,5 +97,25 @@
             it is considered to have never <emphasis>left</emphasis> core OpenGL. Thus, if you ask
             the system for 3.1, core profiles, you will see <literal>GL_QUADS</literal>, as well as
             a few others. The number of these are rather few, so it should not be a problem.</para>
+    </section>
+    <section>
+        <title>Available styles</title>
+        <para>There are a number of styles available, with documentation explaining exactly what
+            they generate:</para>
+        <itemizedlist>
+            <listitem>
+                <para><literal><link xlink:href="Style_Pointer_C">pointer_c</link></literal>: Used
+                    for C-style header generation.</para>
+            </listitem>
+        </itemizedlist>
+    </section>
+    <section>
+        <title>User-created styles</title>
+        <para>The style mechanism is designed to be extensible. You should be able to write new
+            styles relatively painlessly. This system is <link xlink:href="Style_Creation">covered
+                in some detail</link>. The general idea is that you write a Lua script that exposes
+            a number of functions. Then you hook this script into the build system by adding a line
+            of code to one of the files. At which point, you're done. Making the style script is the
+            hard part.</para>
     </section>
 </article>

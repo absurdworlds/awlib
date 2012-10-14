@@ -38,5 +38,7 @@
                 prefixes.</para>
         </listitem>
     </itemizedlist>
-    <para>The inclusion mechanism is quite powerful.</para>
+    <para>Note that the system will cull out duplicates, so don't worry too much about putting the
+        same name in multiple times. The system will also error out if type an extension that
+        doesn't exist.</para>
 </article>
