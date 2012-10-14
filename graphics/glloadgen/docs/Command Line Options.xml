@@ -8,11 +8,15 @@
         or less like the standard command-line options for typical Linux/Windows programs. Options
         that have a single value can take their parameters as either
             <literal>-opt_name=parameter</literal> or <literal>-opt_name parameter</literal>.</para>
-    <para>You must specify an output filename, which will be used as the base filename for
-        generating the output. It can have arbitrary path information, but it should not have an
-        extension. The generated files will take the base filename and append an appropriate suffix
-        and extension to it. You can give the system the same basename for the different
-        specifications (WGL, GLX, OpenGL) without issue.</para>
+    <para>With Lua on the path, the command-line should be specified as follows:</para>
+    <programlisting>lua pathToLoadgen/LoadGen.lua &lt;output filename> &lt;options></programlisting>
+    <para>The <literal>&lt;output filename></literal> must be specified. The path provided is
+        relative to the current directory. The base filename of the path (everything after the last
+        directory separator) will be decorated as appropriate for generating the output files. You
+        should not provide an extension; the system will provide those as needed. The generated
+        files will append an appropriate prefix, depending on which specifications you are
+        generating (OpenGL, WGL, or GLX), so you can provide the same base filename for all of
+        these.</para>
     <para>The output filename should be specified before any of the options. You can specify it
         after the options or even between options, but if you specify it after the
             <literal>-exts</literal> option (but before any subsequent options), the system will
@@ -39,14 +43,13 @@
         <glossentry>
             <glossterm>-prefix</glossterm>
             <glossdef>
-                <para>The code generation system will try to minimize the number of global variables
-                    as much as possible. However, it will have to use some non-static variables for
-                    various things.</para>
-                <para>While each individual specification is guaranteed not to have variable name
-                    collisions, it may be useful to have an application use multiple independent
-                    loaders for the same specification. For example, you could have a GL 2.1 set of
-                    functions and a GL 3.3 set (obviously each file must decide for itself which to
-                    use). Their global variables would conflict, making this unworkable.</para>
+                <para>The code generation system will try to minimize the number of non-static
+                    global variables it defines as much as possible. However, it will have to use
+                    some non-static variables for various things.</para>
+                <para>Code generated from the different specifications are guaranteed not to have
+                    name collisions. However, if you generate code from the
+                        <emphasis>same</emphasis> specification, with different sets of extensions
+                    or versions, collisions will occur.</para>
                 <para>The prefix option allows you to define a string that will be prepended to any
                     non-static (or otherwise hidden) global variables, where possible. As such, the
                     prefix should start with characters that are valid for C/C++ identifiers.</para>
@@ -56,24 +59,23 @@
         <glossentry>
             <glossterm>-version</glossterm>
             <glossdef>
-                <para>The highest version of OpenGL to export. You must use this
-                        <emphasis>only</emphasis> when <literal>-spec</literal> is
-                        <literal>gl</literal>. And you must use it when the specification is
-                        <literal>gl</literal>.</para>
+                <para>The highest version of OpenGL to export. You may <emphasis>only</emphasis> use
+                    this when <literal>-spec</literal> is <literal>gl</literal>. And you must use it
+                    when the specification is <literal>gl</literal>.</para>
             </glossdef>
         </glossentry>
         <glossentry>
             <glossterm>-profile</glossterm>
             <glossdef>
-                <para>The OpenGL profile to export. For OpenGL versions that don't have the
-                    core/compatibility distinction, the option is ignored. It must be one of the
-                    following values:</para>
+                <para>The OpenGL profile to export. It must be one of the following values:</para>
                 <itemizedlist>
                     <listitem>
                         <para><literal>core</literal>: default</para>
                     </listitem>
                     <listitem>
-                        <para><literal>compatibility</literal></para>
+                        <para><literal>compatibility</literal>: It is an error to specify this for
+                            OpenGL versions that do not have the core/compatibility
+                            distinction.</para>
                     </listitem>
                 </itemizedlist>
             </glossdef>
@@ -89,13 +91,11 @@
                     <listitem>
                         <para><literal>pointer_c</literal>: default.</para>
                     </listitem>
-                    <listitem>
-                        <para><literal>pointer_cpp</literal></para>
-                    </listitem>
                 </itemizedlist>
                 <para>The specific meaning of these parameters is explained elsewhere. Note that the
-                    system is extensible; new styles can be added by modifying an appropriate script
-                    and hooking it into the right place in <filename>_Styles.lua</filename>.</para>
+                    system is designed to be extensible; new styles can be added by modifying an
+                    appropriate script and hooking it into the right place in
+                        <filename>modules/Styles.lua</filename>.</para>
             </glossdef>
         </glossentry>
         <glossentry>
@@ -142,11 +142,22 @@
                     extension is specified on a single line.</para>
                 <para>This argument can be specified multiple times. It is fine to specify an
                     extension name more than once, either in the file or on the command line.</para>
+                <para>The file's directory is relative to the path where the command line was
+                    invoked.</para>
+            </glossdef>
+        </glossentry>
+        <glossentry>
+            <glossterm>-stdext</glossterm>
+            <glossdef>
+                <para>Works like <literal>extfile</literal>, except that the directory for the file
+                    is relative to the place where the <filename>LoadGen.lua</filename> file
+                    is.</para>
             </glossdef>
         </glossentry>
     </glosslist>
     <section>
         <title>Styles</title>
+        <para>Styles define how the system </para>
         <para>The different styles have specific meaning for how code is generated by the system.
             These styles are:</para>
         <section>
