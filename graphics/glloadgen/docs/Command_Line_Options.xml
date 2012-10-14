@@ -140,8 +140,9 @@
             <glossdef>
                 <para>Specifying dozens of extensions on the command line can be exceedingly
                     tedious. Therefore, the system can be instructed to read a list of extensions
-                    from a file with this option. The file should be a plain text file, where each
-                    extension is specified on a single line.</para>
+                    from a file with this option. <link xlink:href="Extension Files">The format is
+                        fairly simple</link>, but it does have an inclusion mechanism to include
+                    other extension files.</para>
                 <para>This argument can be specified multiple times. It is fine to specify an
                     extension name more than once, either in the file or on the command line.</para>
                 <para>The file's directory is relative to the path where the command line was
@@ -152,8 +153,10 @@
             <glossterm>-stdext</glossterm>
             <glossdef>
                 <para>Works like <literal>extfile</literal>, except that the directory for the file
-                    is relative to the place where the <filename>LoadGen.lua</filename> file
-                    is.</para>
+                    is relative to the place where the <filename>LoadGen.lua</filename> file is.
+                    These are used primarily for working with <link
+                        xlink:href="Common_Extension_Files">the library of common extension
+                        files</link>.</para>
             </glossdef>
         </glossentry>
     </glosslist>

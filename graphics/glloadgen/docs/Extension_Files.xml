@@ -23,8 +23,9 @@
             <para>A <literal>#include &lt;></literal> statement. This will cause the loading of
                 another extension file named in the <literal>&lt;></literal>s. The location of the
                 glLoadGen will be used for the base directory of any relative paths. This is mostly
-                intended to allow easy inclusion of the standard extension files, located in the
-                    <filename>extfiles</filename> directory. Therefore, </para>
+                intended to allow easy inclusion of the <link xlink:href="Common_Extension_Files"
+                    >standard extension files</link>, located in the <filename>extfiles</filename>
+                directory.</para>
         </listitem>
         <listitem>
             <para>Anything starting with <literal>//</literal> will be ignored as a comment.</para>
@@ -41,4 +42,8 @@
     <para>Note that the system will cull out duplicates, so don't worry too much about putting the
         same name in multiple times. The system will also error out if type an extension that
         doesn't exist.</para>
+    <para>What the system will not do is handle <emphasis>infinite recursion.</emphasis> You could
+        include a file that includes itself ad-infinitum, and the system will just stack-overflow.
+        And there are no include-guards to cover this case; you are expected to deal with such
+        inclusion yourself.</para>
 </article>
