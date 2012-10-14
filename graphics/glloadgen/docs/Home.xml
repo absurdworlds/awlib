@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?oxygen RNGSchema="http://docbook.org/xml/5.0/rng/docbookxi.rng" type="xml"?>
+<?oxygen SCHSchema="http://docbook.org/xml/5.0/rng/docbookxi.rng"?>
+<article xmlns="http://docbook.org/ns/docbook" xmlns:xi="http://www.w3.org/2001/XInclude"
+    xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0">
+    <title>Home</title>
+    <section>
+        <title>OpenGL Loader Generator</title>
+        <para>This loader generation system is used to create OpenGL headers and loading code for
+            your specific needs. Rather than getting every extension and core enumerator/function
+            all in one massive header, you get only what you actually want and ask for.</para>
+        <para>This is still very experimental; little testing has been done on it yet. <link
+                xlink:href="https://bitbucket.org/alfonse/glloadgen/downloads">Download it
+                here;</link> you will need to have the Lua runtime installed on your machine to use
+            the code generation scripts. It's pretty tiny, so it shouldn't be a problem. Windows
+            users can install <link xlink:href="http://code.google.com/p/luaforwindows/">Lua For
+                Windows</link>, or just <link xlink:href="http://luabinaries.sourceforge.net/">the
+                Lua binaries packages</link>. The code should be compatible with Lua 5.1 and 5.2,
+            but it has only been tested on 5.1.</para>
+        <para>To use the code generator, with Lua in your path (assuming that <literal>lua</literal>
+            is the name of your Lua executable), type this:</para>
+        <programlisting>lua LoadGen.lua -style=pointer_c -spec=gl -version=3.3 -profile=core core_3_3</programlisting>
+        <para>This tells the system to generate a header/source pair for OpenGL
+                (<literal>-spec=gl</literal>, as opposed to WGL or GLX), for version 3.3, the core
+            profile. It will generate it in the <literal>pointer_c</literal> style, which means that
+            it will use function pointer-style, with C linkage and source. Such code is usable from
+            C and C++, or other languages that can interface with C.</para>
+        <para>The option <filename>core_3_3</filename> is the basic component of the filename that
+            will be used for the generation. Since it is generating OpenGL loaders (again, as
+            opposed to WGL or GLX), it will generate files named <filename>gl_core_3_3.*</filename>,
+            where * is the extension used by the particular style.</para>
+        <para>The above command line will generate <filename>gl_core_3_3.h</filename> and
+                <filename>gl_core_3_3.c</filename> files. Simply include them in your project; there
+            is no library to build, no unresolved extenals to filter through. They just work (Well,
+            that's the plan ;) ).</para>
+        <section>
+            <title>Extensions</title>
+            <para>Note that the above command line will <emphasis>only</emphasis> generate
+                enumerators and functions for core OpenGL 3.3. It doesn't offer any extensions. To
+                use extensions, you must ask for them with command line parameters, as
+                follows:</para>
+            <programlisting>lua LoadGen.lua -style=pointer_c -spec=gl -version=3.3 -profile=core core_3_3 -exts ARB_texture_view ARB_vertex_attrib_binding EXT_texture_filter_anisotropic -ext=EXT_texture_compression_s3tc -extfile=SomeFile.txt</programlisting>
+            <para>The <literal>-exts</literal> option starts a list of space-separated extension
+                names (note: don't try to put the output filename after <literal>-exts</literal>;
+                the system can't tell the difference between a filename and an extension). The
+                    <literal>-ext</literal> option only specifies a single name.</para>
+            <para><literal>-extfile</literal> specifies a <emphasis>filename</emphasis> to load
+                extensions from. The format of this file is fairly simple; it is <link
+                    xlink:href="Extension Files">explained here on this site</link>. The file is
+                expected to contain extension names, one on each line. Extension files can also have
+                    <literal>#include</literal> directives, which will include another extension
+                file (relative pathing only). Please don't infinitely recurse your inclusions;
+                there's no protection in the system to check for it.</para>
+        </section>
+    </section>
+</article>
