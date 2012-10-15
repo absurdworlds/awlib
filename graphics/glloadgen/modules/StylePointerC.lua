@@ -80,6 +80,12 @@ function my_style.header.WriteBeginDecl(hFile, specData, options)
 	common.WriteExternCStart(hFile)
 end
 
+function my_style.header.WriteBeginExtVarDeclBlock(hFile, spec, options)
+end
+
+function my_style.header.WriteEndExtVarDeclBlock(hFile, spec, options)
+end
+
 local function GetExtVariableName(extName, spec, options)
 	return options.prefix .. spec.DeclPrefix() .. "ext_" .. extName
 end
@@ -148,6 +154,12 @@ end
 function my_style.header.WriteEndExtFuncDeclBlock(hFile, extName,
 	spec, options)
 	hFile:fmt("#endif /*%s*/ \n", spec.ExtNamePrefix() .. extName)
+end
+
+function my_style.header.WriteBeginSysDeclBlock(hFile, spec, options)
+end
+
+function my_style.header.WriteEndSysDeclBlock(hFile, spec, options)
 end
 
 local function GetStatusCodeEnumName(spec, options)
@@ -220,6 +232,12 @@ end
 
 function my_style.source.WriteBeginDef(hFile, spec, options) end
 function my_style.source.WriteEndDef(hFile, spec, options) end
+
+function my_style.source.WriteBeginExtVarDefBlock(hFile, spec, options)
+end
+
+function my_style.source.WriteEndExtVarDefBlock(hFile, spec, options)
+end
 
 function my_style.source.WriteExtVariableDef(hFile, extName, specData, spec, options)
 	hFile:fmt("int %s = %s;\n", GetExtVariableName(extName, spec, options),
@@ -311,6 +329,12 @@ end
 
 local function GetMapTableVarName()
 	return "ExtensionMap"
+end
+
+function my_style.source.WriteBeginSysDefBlock(hFile, spec, options)
+end
+
+function my_style.source.WriteEndSysDefBlock(hFile, spec, options)
 end
 
 function my_style.source.WriteUtilityDefs(hFile, specData, spec, options)

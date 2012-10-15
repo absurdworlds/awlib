@@ -2,7 +2,11 @@
 
 The module has a function called GetStyleList, which returns a list of all available styles.
 
-This module has a function called GetStyle, which is given a style name. It will return a table of functions that can be evaluated to do different code generation tasks. This table contains:
+This module has a function called GetStyle, which is given a style name. It will return a table of functions that can be evaluated to do different code generation tasks.
+
+SampleStyle.lua contains an example, with documentation for what's going on. Every function you need to define will be there, with comments. Just copy and use as needed.
+
+This table contains:
 
 
 - WriteLargeHeading(hFile, headingName)

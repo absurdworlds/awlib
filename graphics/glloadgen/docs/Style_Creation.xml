@@ -237,53 +237,49 @@ header.WriteBeginIncludeGuard(hFile, spec, options)
 
   header.WriteBeginDecl(hFile, spec, options)
 
-    //For each user-specified extension
-    header.WriteExtVariableDecl(hFile, extName, specData, spec, options)
-    header.WriteExtVariableDecl(hFile, ..., specData, spec, options)
-    ...
+    header.WriteBeginExtVarDeclBlock(hFile, spec, options)
+      //For each user-specified extension
+      header.WriteExtVariableDecl(hFile, extName, specData, spec, options)
+      header.WriteExtVariableDecl(hFile, ..., specData, spec, options)
+      ...
+    header.WriteEndExtVarDeclBlock(hFile, spec, options)
 
     header.WriteBeginEnumDeclBlock(hFile, spec, options)
-
       //For each enum to be written, in order of extensions/core
       //Will call one or the other.
       header.WriteEnumDecl(hFile, enum, enumTable, spec, options)
       header.WriteEnumPrevDecl(hFile, enum, enumTable, spec, options, extName)
-
     header.WriteEndEnumDeclBlock(hFile, spec, options)
 
 
     header.WriteBeginFuncDeclBlock(hFile, spec, options)
-    
       //For each user-specified extension:
       header.WriteBeginExtFuncDeclBlock(hFile, extName, spec, options)
-      
         //For each function in that extension
         header.WriteFuncDecl(hFile, func, typemap, spec, options)
         header.WriteFuncDecl(hFile, ..., typemap, spec, options)
         ...
-      
       header.WriteEndExtFuncDeclBlock(hFile, extName, spec, options)
       
       //For each version, where applicable:
         //For each core extension that was not user-specified:
         header.WriteBeginExtFuncDeclBlock(hFile, extName, spec, options)
-          
           header.WriteFuncDecl(hFile, func, typemap, spec, options)
           header.WriteFuncDecl(hFile, ..., typemap, spec, options)
           ...
-          
         header.WriteEndExtFuncDeclBlock(hFile, extName, spec, options)
 
         //For each core function from this version *not* in a core extension.
         header.WriteFuncDecl(hFile, func, typemap, spec, options)
         header.WriteFuncDecl(hFile, ..., typemap, spec, options)
         ...
-
-    header.WriteBeginFuncDeclBlock(hFile, spec, options)
+    header.WriteEndFuncDeclBlock(hFile, spec, options)
     
-    header.WriteUtilityDecls(hFile, spec, options)
-    header.WriteMainLoaderFuncDecl(hFile, spec, options)
-    header.WriteVersioningFuncDecls(hFile, spec, options) //Only if the spec has versions.
+    header.WriteBeginSysDeclBlock(hFile, spec, options)
+      header.WriteUtilityDecls(hFile, spec, options)
+      header.WriteMainLoaderFuncDecl(hFile, spec, options)
+      header.WriteVersioningFuncDecls(hFile, spec, options) //Only if the spec has versions.
+    header.WriteEndSysDeclBlock(hFile, spec, options)
 
   header.WriteEndDecl(hFile, spec, options)
   
@@ -296,10 +292,12 @@ source.WriteIncludes(hFile, spec, options)
 
 source.WriteBeginDef(hFile, spec, options)
 
-  //For each user-specified extension
-  source.WriteExtVariableDef(hFile, extName, specData, spec, options)
-  source.WriteExtVariableDef(hFile, ..., specData, spec, options)
-  ...
+  source.WriteBeginExtVarDefBlock(hFile, spec, options)
+    //For each user-specified extension
+    source.WriteExtVariableDef(hFile, extName, specData, spec, options)
+    source.WriteExtVariableDef(hFile, ..., specData, spec, options)
+    ...
+  source.WriteEndExtVarDefBlock(hFile, spec, options)
   
   //For each user-specified extension:
   source.WriteBeginExtFuncDefBlock(hFile, extName, spec, options)
@@ -312,7 +310,6 @@ source.WriteBeginDef(hFile, spec, options)
       //For each function in the extension
       source.WriteCoreFuncLoader(hFile, func, typemap, spec, options)
     source.WriteEndExtLoaderBlock(hFile, extName, spec, options)
-    
   source.WriteEndExtFuncDefBlock(hFile, extName, spec, options)
   
   source.WriteBeginCoreFuncDefBlock(hFile, version, spec, options)
@@ -344,14 +341,19 @@ source.WriteBeginDef(hFile, spec, options)
   source.WriteEndCoreFuncDefBlock(hFile, version, spec, options)
   
 
-  source.WriteUtilityDefs(hFile, specData, spec, options)
-  source.WriteMainLoaderFunc(hFile, specData, spec, options)
-  source.WriteVersioningFuncs(hFile, specData, spec, options) //Only if the spec has versions.
+  source.WriteBeginSysDefBlock(hFile, spec, options)
+    source.WriteUtilityDefs(hFile, specData, spec, options)
+    source.WriteMainLoaderFunc(hFile, specData, spec, options)
+    source.WriteVersioningFuncs(hFile, specData, spec, options) //Only if the spec has versions.
+  source.WriteEndSysDefBlock(hFile, spec, options)
 
 source.WriteEndDef(hFile, spec, options)</programlisting>
     </section>
     <section>
         <title>Style function reference</title>
-        <para>The reference documentation for style functions is available here.</para>
+        <para>The file <filename>modules/SampleStyle.lua</filename> contains a file that you can
+            simply copy and paste to start making a style. Every function you need to define is
+            listed, as well as comments explaining exactly what they should do. Coupled with this
+            documentation, you should be well on your way to getting a style working.</para>
     </section>
 </article>
