@@ -226,7 +226,7 @@ end
 			common.GetFuncReturnType(func, typemap),
 			spec.GetCodegenPtrType(),
 			GenFuncPtrName(func, spec, options),
-			common.GetFuncParamList(func, typemap))
+			common.GetFuncParamList(func, typemap, true))
 	end
 
 	local function GenFuncPtrDefTypedef(func, typemap, spec, options)
@@ -349,7 +349,7 @@ function my_style.source.WriteExtFuncLoader(hFile, func, typemap, spec, options)
 		GenFuncPtrTypedefName(func, spec, options),
 		common.GetProcAddressName(spec),
 		spec.FuncNamePrefix(), func.name)
-	hFile:fmt('if(!%s) numFailed++;\n', GenFuncPtrName(func, spec, options))
+	hFile:fmt('if(!%s) ++numFailed;\n', GenFuncPtrName(func, spec, options))
 end
 
 function my_style.source.WriteBeginCoreFuncDefBlock(hFile, version, spec, options)
@@ -396,9 +396,9 @@ function my_style.source.WriteCoreFuncLoader(hFile, func, typemap, spec, options
 	--Special hack for DSA_EXT functions in core functions.
 	--They do not count against the loaded count.
 	if(func.name:match("EXT$")) then
-		hFile:write("//An EXT_direct_state_access-based function. Don't count it if it fails to load.")
+		hFile:write("//An EXT_direct_state_access-based function. Don't count it if it fails to load.\n")
 	else
-		hFile:fmt('if(!%s) numFailed++;\n', GenFuncPtrName(func, spec, options))
+		hFile:fmt('if(!%s) ++numFailed;\n', GenFuncPtrName(func, spec, options))
 	end
 end
 

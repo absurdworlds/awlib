@@ -107,6 +107,11 @@
                 <para><literal><link xlink:href="Style_Pointer_C">pointer_c</link></literal>: Used
                     for C-style header generation.</para>
             </listitem>
+            <listitem>
+                <para><literal><link xlink:href="Style_Pointer_CPP">pointer_cpp</link></literal>:
+                    Used for creating C++-style loaders, wrapping as much as possible in
+                    namespaces.</para>
+            </listitem>
         </itemizedlist>
     </section>
     <section>
