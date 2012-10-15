@@ -264,9 +264,6 @@ end
 --------------------------------------------------
 -- Source code styling functions.
 function my_style.source.CreateFile(basename, options)
-	--Create a source file. Use:
-	--common.CreateFile(filename, options.indent)
-	--To create it. You don't need to return the filename, just the hFile.
 	return common.CreateFile(basename .. ".cpp", options.indent)
 end
 
