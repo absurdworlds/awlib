@@ -24,11 +24,18 @@
         function pointers accounted for). Otherwise, some number of function pointers failed to
         load. To get the number of functions that failed to load for the extension, take the integer
         value and subtract <literal>LOAD_SUCCEEDED</literal> from it.</para>
-    <para>The return value for the function loader works the same way. It refers to the success or
-        failure to load the core functions (obviously for WGL/GLX, there are no core functions, so
-        it will always be successful). The attempt will always be made to load the core functions,
-        so <literal>LOAD_FAILED</literal> is not a possibility.</para>
-    <para>Also, this style will generate functions to query version availability for core OpenGL. </para>
+    <para>The return value for the function loader works mostly the same way.
+            <literal>LOAD_FAILED</literal> does not signal the failure to load the core functions or
+        some extensions. It signals the failure of the process to work <emphasis>at all.</emphasis>
+        This is for something very basic, like the failure to get the function pointers needed to
+        get the extension string. Without the extension string, we cannot detect what should and
+        shouldn't be loaded. Therefore, if this is returned, <emphasis>nothing</emphasis> was
+        loaded.</para>
+    <para>For non-fail states, the value works like for the individual extension variables, except
+        that the number that failed to load refer to core functions. So for specs that don't load
+        core functions, it will always return <literal>LOAD_SUCCEEDED</literal>.</para>
+    <para>Also, this style will generate functions to query the version of the OpenGL
+        context.</para>
     <section>
         <title>Compatibility</title>
         <para>This style is intended to be maximally compatible with regular OpenGL programs. You

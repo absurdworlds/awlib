@@ -23,13 +23,29 @@ function my_style.header.CreateFile(basename, options)
 	return common.CreateFile(filename, options.indent), filename
 end
 
-function my_style.header.MakeIncludeGuard(prefix, specIncl)
-	local str = "POINTER_C_GENERATED_HEADER_" .. specIncl .. "_H"
-	if(#prefix > 0) then
-		return prefix:upper() .. "_" .. str
+
+local function GetIncludeGuard(hFile, spec, options)
+	local str = "POINTER_C_GENERATED_HEADER_" ..
+		spec.GetIncludeGuardString() .. "_H"
+
+	if(#options.prefix > 0) then
+		return options.prefix:upper() .. "_" .. str
 	end
 	
 	return str
+end
+
+function my_style.header.WriteBeginIncludeGuard(hFile, spec, options)
+	local inclGuard = GetIncludeGuard(hFile, spec, options)
+	
+	hFile:fmt("#ifndef %s\n", inclGuard)
+	hFile:fmt("#define %s\n", inclGuard)
+end
+
+function my_style.header.WriteEndIncludeGuard(hFile, spec, options)
+	local inclGuard = GetIncludeGuard(hFile, spec, options)
+	
+	hFile:fmt("#endif //%s\n", inclGuard)
 end
 
 function my_style.header.WriteStdTypedefs(hFile, specData, options)
@@ -142,13 +158,12 @@ local function GetStatusCodeName(name, spec, options)
 	return string.format("%s%s%s", options.prefix, spec.DeclPrefix(), name)
 end
 
-function my_style.header.WriteStatusCodeDecl(hFile, spec, options)
+function my_style.header.WriteUtilityDecls(hFile, spec, options)
 	hFile:fmt("enum %s\n", GetStatusCodeEnumName(spec, options))
 	hFile:write("{\n")
 	hFile:inc()
 		hFile:write(GetStatusCodeName("LOAD_FAILED", spec, options), " = 0,\n")
 		hFile:write(GetStatusCodeName("LOAD_SUCCEEDED", spec, options), " = 1,\n")
---		hFile:write(GetStatusCodeName("LOAD_PARTIAL", spec, options), " = 2,\n")
 	hFile:dec()
 	hFile:write("};\n")
 end
@@ -206,8 +221,8 @@ end
 function my_style.source.WriteBeginDef(hFile, spec, options) end
 function my_style.source.WriteEndDef(hFile, spec, options) end
 
-function my_style.source.WriteExtVariableDef(hFile, ext, specData, spec, options)
-	hFile:fmt("int %s = %s;\n", GetExtVariableName(ext, spec, options),
+function my_style.source.WriteExtVariableDef(hFile, extName, specData, spec, options)
+	hFile:fmt("int %s = %s;\n", GetExtVariableName(extName, spec, options),
 		GetStatusCodeName("LOAD_FAILED", spec, options));
 end
 

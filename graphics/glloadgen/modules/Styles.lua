@@ -16,8 +16,11 @@ This module has a function called GetStyle, which is given a style name. It will
 - header.CreateFile(basename, options)
 --		basename is the filename sans extension. It opens a TabbedFile from it, using the options in options. It returns two values: a TabbedFile, and the actual filename used.
 
-- header.MakeIncludeGuard(prefix, specIncl)
---		specIncl is an include-guard string from the spec. It returns a string that includes the two strings, which is appropriate for use as an include-guard.
+- header.WriteBeginIncludeGuard(hFile, spec, options)
+--		Writes the opening include-guard, if any.
+
+- header.WriteEndIncludeGuard(hFile, spec, options)
+--		Ends the opening include-guard, if any.
 
 - header.WriteStdTypedefs(hFile, specData, spec, options)
 --		Writes the standard typedefs.
@@ -62,8 +65,8 @@ This module has a function called GetStyle, which is given a style name. It will
 - header.WriteFuncDecl(hFile, func, typemap, spec, options)
 --	Writes a function declaration. This can include multiple statements, such as a typedef, an extern function pointer declaration, and a #define or whatever.
 
-- header.WriteStatusCodeDecl(hFile, spec, options)
---	Writes any declarations for status codes as returned from the loader and so forth.
+- header.WriteUtilityDecls(hFile, spec, options)
+--	Writes any declarations needed for utility bits, like status codes of return values, etc.
 
 - header.WriteMainLoaderFuncDecl(hFile, spec, options)
 --	Writes the declaration for the main loading function.
@@ -84,8 +87,8 @@ This module has a function called GetStyle, which is given a style name. It will
 - source.WriteEndDef(hFile, spec, options)
 --	Ends any scoping for the block of definitions.
 
-- source.WriteExtVariableDef(hFile, ext, specData, spec, options)
---	Writes the extension variable definition for `ext`.
+- source.WriteExtVariableDef(hFile, extName, specData, spec, options)
+--	Writes the extension variable definition for `extName`.
 
 - source.WriteBeginExtFuncDefBlock(hFile, extName, spec, options)
 --	Writes the beginning of an extension's block that contains function pointer definitions and the loader function for this extension.

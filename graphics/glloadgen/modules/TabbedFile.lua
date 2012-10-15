@@ -4,9 +4,9 @@
 - dec: Decrements the tab count by the number given, or by 1 if nothing is given.
 - push: Preserves the current tab count.
 - pop: Restores the previously preserved tab count.
-- fmt: As string.format followed by an indented write
 - write: An indented write; everything is written after the indent.
 - writeblock: Takes a single string, breaks it down into multiple lines, and writes each line indented.
+- fmt: As string.format followed by an indented write
 - fmtblock: As string.format, followed by calling `writeblock`.
 - rawfmt: As string.format followed by a NON-indented write.
 - rawwrite: hFile:write.

@@ -11,10 +11,12 @@ function common.CreateFile(filename, indent)
 	return TabbedFile.TabbedFile(hFile, indent)
 end
 
+--Retrieves the common typedefs used by OpenGL 1.1.
 function common.GetStdTypedefs()
 	return dofile(util.GetDataFilePath() .. "style_commontypedefs.lua")
 end
 
+--Writes passthru data from the specData, with proper indentation.
 function common.WritePassthruData(hFile, strArray)
 	for _, str in ipairs(strArray) do
 		--unindent after #endif
@@ -45,6 +47,7 @@ function common.WriteExternCEnd(hFile)
 	hFile:write("\n")
 end
 
+--Determines the value of the enumeration.
 local function ResolveEnumValue(enum, enumTable)
 	if(enum.copy) then
 		return common.ResolveEnumValue(enumTable[enum.value], enumTable),
@@ -55,6 +58,7 @@ local function ResolveEnumValue(enum, enumTable)
 end
 common.ResolveEnumValue = ResolveEnumValue
 
+--Gets the return type for a function.
 function common.GetFuncReturnType(func, typemap)
 	return typemap[func["return"]] or func["return"]
 end
