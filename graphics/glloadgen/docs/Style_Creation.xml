@@ -188,18 +188,6 @@
                     declaration/definitions of things that can conflict at link time.</para>
             </listitem>
             <listitem>
-                <para>The user should be able to #include the standard headers for OpenGL/GLX/WGL
-                        <emphasis>after</emphasis> your generated header without incident. So you
-                    need to #define various values to prevent the inclusion of standard headers (or
-                    include them yourself).</para>
-            </listitem>
-            <listitem>
-                <para>If the user tries to #include the standard spec headers
-                        <emphasis>before</emphasis> your generated header, you should provide an
-                    appropriate compile-time error. So you need to test to see if standard variables
-                    are included, and fail with a <literal>#error</literal> if they are.</para>
-            </listitem>
-            <listitem>
                 <para>The user should be able to supply a prefix with the <literal>-prefix</literal>
                     option. The user should be able to generate two separate source/header files
                     with the <emphasis>exact same options</emphasis> with the exception of the

@@ -72,7 +72,6 @@ end
 function my_style.header.WriteSpecTypedefs(hFile, specData, options)
 	hFile:push()
 	common.WritePassthruData(hFile, specData.funcData.passthru)
-	hFile:write("\n")
 	hFile:pop()
 end
 

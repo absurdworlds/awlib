@@ -8,67 +8,46 @@ my_style.source = {}
 ----------------------------------------------------
 -- Global styling functions.
 function my_style.WriteLargeHeading(hFile, headingName)
-	--Write a comment with headingName in it
-	--It should be large and noticable.
+	hFile:write(string.rep("/", 6 + #headingName), "\n")
+	hFile:write("// ", headingName, "\n")
+	hFile:write(string.rep("/", 6 + #headingName), "\n")
 end
 
 function my_style.WriteSmallHeading(hFile, headingName)
-	--Write a comment with headingName in it
-	--It should ideally take only one line.
+	hFile:write("// ", headingName, "\n")
 end
 
 ------------------------------------------------------
 -- Header styling functions
 
 function my_style.header.CreateFile(basename, options)
-	--Append an extension to `basename` and use
-	-- common.CreateFile(filename, options.indent)
-	-- to create it. Don't forget to return BOTH the hFile and the filename,
-	-- in that order.
---[[
-	local filename = basename .. ".h"
+	local filename = basename .. ".hpp"
 	return common.CreateFile(filename, options.indent), filename
-]]
 end
 
 local function GenIncludeGuardName(hFile, spec, options)
-	--Attach spec.GetIncludeGuardString() to the include guard name.
-	--Attach options.prefix to the include guard name too.
---[[
-	local str = "REPLACE_WITH_STYLE_SPECIFIC_NAME" ..
-		spec.GetIncludeGuardString() .. "_H"
+	local str = "POINTER_CPP_GENERATED_HEADER" ..
+		spec.GetIncludeGuardString() .. "_HPP"
 
 	if(#options.prefix > 0) then
 		return options.prefix:upper() .. "_" .. str
 	end
 	
 	return str
-]]
 end
 
 function my_style.header.WriteBeginIncludeGuard(hFile, spec, options)
-	--Write an include-guard, if needed.
---[[
 	local inclGuard = GenIncludeGuardName(hFile, spec, options)
 	
 	hFile:fmt("#ifndef %s\n", inclGuard)
 	hFile:fmt("#define %s\n", inclGuard)
-]]
 end
 
 function my_style.header.WriteEndIncludeGuard(hFile, spec, options)
-	--End any written include-guard.
---[[
 	hFile:fmt("#endif //%s\n", GenIncludeGuardName(hFile, spec, options))
-]]
 end
 
 function my_style.header.WriteStdTypedefs(hFile, specData, spec, options)
-	--Write the standard OpenGL typedefs. For C/C++, these come from
-	--common.GetStdTypedefs()
-	--You may want to use include-guards around the standard typedefs, as
-	--they're used in many places and redefining them is bad.
---[[
 	local defArray = common.GetStdTypedefs()
 	hFile:write("#ifndef GL_LOAD_GEN_BASIC_OPENGL_TYPEDEFS\n")
 	hFile:write("#define GL_LOAD_GEN_BASIC_OPENGL_TYPEDEFS\n")
@@ -80,64 +59,129 @@ function my_style.header.WriteStdTypedefs(hFile, specData, spec, options)
 	hFile:dec()
 	hFile:write("\n")
 	hFile:write("#endif /*GL_LOAD_GEN_BASIC_OPENGL_TYPEDEFS*/\n")
-	hFile:write("\n")
-]]
 end
 
 function my_style.header.WriteSpecTypedefs(hFile, specData, spec, options)
-	--The goal here is to write the pass-thru data.
-	--This is best done with
-	--common.WritePassthruData(hFile, specData.funcData.passthru)
+	hFile:push()
+	common.WritePassthruData(hFile, specData.funcData.passthru)
+	hFile:pop()
+end
+
+local function StartNamespace(hFile, namespaceName)
+	hFile:fmt("namespace %s\n", namespaceName)
+	hFile:write("{\n")
+	hFile:inc()
+end
+
+local function EndNamespace(hFile, namespaceName)
+	hFile:dec()
+	hFile:fmt("} //namespace %s\n", namespaceName)
 end
 
 function my_style.header.WriteBeginDecl(hFile, spec, options)
-	--This block encompasses all definitions.
-	--A good place for an `extern "C"` or namespace if needed
-	--You can indent hFile.
+	if(#options.prefix > 0) then
+		StartNamespace(hFile, options.prefix)
+	end
+	StartNamespace(hFile, spec.FuncNamePrefix())
 end
 
 function my_style.header.WriteEndDecl(hFile, spec, options)
-	--This block encompasses all definitions.
+	EndNamespace(hFile, spec.FuncNamePrefix())
+	if(#options.prefix > 0) then
+		EndNamespace(hFile, options.prefix)
+	end
 end
 
+local extBlockNamespace = "exts"
+local extVariableTypeDefinition = [[
+class LoadTest
+{
+private:
+	//Safe bool idiom. Joy!
+	typedef void (LoadTest::*bool_type)() const;
+	void big_long_name_that_really_doesnt_matter() const {}
+	
+public:
+	operator bool_type() const
+	{
+		return m_isLoaded ? &LoadTest::big_long_name_that_really_doesnt_matter : 0;
+	}
+	
+	int GetNumMissing() const {return m_numMissing;}
+	
+	void IgnoreThis(bool isLoaded, int numMissing)
+	{
+		m_isLoaded = isLoaded;
+		m_numMissing = numMissing;
+	}
+	
+	LoadTest() : m_isLoaded(false), m_numMissing(0) {}
+private:
+	bool m_isLoaded;
+	int m_numMissing;
+};
+]]
+
 function my_style.header.WriteBeginExtVarDeclBlock(hFile, spec, options)
-	--This block encompasses all extension variable declarations.
-	--A place for wrapping then in a namespace or whatever.
+	StartNamespace(hFile, extBlockNamespace)
+	hFile:writeblock(extVariableTypeDefinition)
+	hFile:write("\n")
 end
 
 function my_style.header.WriteEndExtVarDeclBlock(hFile, spec, options)
-	--This block encompasses all extension variable declarations.
+	EndNamespace(hFile, extBlockNamespace)
+end
+
+local function GenExtensionVarName(extName, spec, options)
+	return "var_" .. extName;
 end
 
 function my_style.header.WriteExtVariableDecl(hFile, extName,
 	specData, spec, options)
-	--Write a variable declaration for extName. Use:
-	--spec.DeclPrefix() to get a good spec prefix for these.
+	hFile:fmt("extern LoadTest %s;\n",
+		GenExtensionVarName(extName, spec, options));
 end
 
 function my_style.header.WriteBeginEnumDeclBlock(hFile, spec, options)
-	--Block containing every enumerator.
-	--A good place for an `enum\n{\n` block.
-	--You can indent hFile afterwards.
+	hFile:write("enum\n")
+	hFile:write("{\n")
+	hFile:inc()
 end
 
 function my_style.header.WriteEndEnumDeclBlock(hFile, spec, options)
-	--Block containing every enumerator.
+	hFile:dec()
+	hFile:write("}\n")
+end
+
+local function GenEnumName(enum)
+	--Note: some enumerators start with characters C++ forbids as initial
+	--identifiers. If we detect such an enum, prefix it with `_`.
+	local enumName = enum.name
+	if(not enumName:match("^[a-zA-Z_]")) then
+		enumName = "_" .. enumName
+	end
+	
+	return enumName
 end
 
 function my_style.header.WriteEnumDecl(hFile, enum, enumTable, spec, options)
-	--Writes an active enumerator from enum and enumTable.
-	--common.ResolveEnumValue(enum, enumTable) can be used to
-	--get the enumerator's value. Don't rely on enum.value.
-	--Remember: the system needs to be defined such that name
-	--conflicts can't happen with different prefixes. So a prefix has
-	--to be used somewhere.
+	local enumName = GenEnumName(enum)
+	local lenEnum = #enumName
+	local numIndent = 33
+	
+	local numSpaces = numIndent - lenEnum
+	if(numSpaces < 1) then
+		numSpaces = 1
+	end
+
+	hFile:fmt("%s%s= %s,\n",
+		enumName,
+		string.rep(" ", numSpaces),
+		common.ResolveEnumValue(enum, enumTable))
 end
 
 function my_style.header.WriteEnumPrevDecl(hFile, enum, enumTable, spec, options, extName)
-	--Writes an inactive enumerator which was written into the extension extName.
-	--You should write this as a comment if you can't have different enums
-	--with the same value.
+	hFile:fmt("//%s taken from ext: %s\n", enum.name, extName)
 end
 
 function my_style.header.WriteBeginFuncDeclBlock(hFile, spec, options)
@@ -157,25 +201,48 @@ function my_style.header.WriteEndExtFuncDeclBlock(hFile, extName, spec, options)
 	--Block containing all spec function declarations for a particular extension.
 end
 
+local function GenFuncPtrName(func, spec, options)
+	return func.name
+end
+
+local function GenFuncPtrTypedefName(func, spec, options)
+	return "PFN" .. GenFuncPtrName(func, spec, options):upper()
+end
+
+local function WriteFuncPtrTypedefStmt(hFile, func, typemap, spec, options)
+	hFile:fmt("typedef %s (%s *%s)(%s);\n",
+		common.GetFuncReturnType(func, typemap),
+		spec.GetCodegenPtrType(),
+		GenFuncPtrTypedefName(func, spec, options),
+		common.GetFuncParamList(func, typemap))
+end
+
+local function GenFuncPtrDefDirect(func, typemap, spec, options)
+	return string.format("%s (%s *%s)(%s)",
+		common.GetFuncReturnType(func, typemap),
+		spec.GetCodegenPtrType(),
+		GenFuncPtrName(func, spec, options),
+		common.GetFuncParamList(func, typemap))
+end
+
+local function GenFuncPtrDefTypedef(func, typemap, spec, options)
+	return string.format("%s %s",
+		GenFuncPtrTypedefName(func, spec, options),
+		GenFuncPtrName(func, spec, options))
+end
+
 function my_style.header.WriteFuncDecl(hFile, func, typemap, spec, options)
-	--Write a function declaration for `func`.
-	--Function pointers should be declared with spec.GetCodegenPtrType().
-	--common.GetFuncReturnType(func, typemap) and
-	--common.GetFuncParamList(func, typemap) can get the function types.
-	--A third parameter passed to GetFuncParamList can tell it to provide
-	--parameter names.
-	--common.GetOpenGLFuncName(func, spec) can be used to get the
-	--proper OpenGL name of the function.
+	hFile:write("extern ",
+		GenFuncPtrDefDirect(func, typemap, spec, options),
+		";\n")
 end
 
 function my_style.header.WriteBeginSysDeclBlock(hFile, spec, options)
-	--Block containing the declarations of the system functions.
-	--IE: the functions (and other declarations) used to actually load things.
-	--Useful for wrapping it in a namespace.
+	StartNamespace(hFile, "sys")
 end
 
 function my_style.header.WriteEndSysDeclBlock(hFile, spec, options)
-	--Block containing the declarations of the system functions.
+	EndNamespace(hFile, "sys")
 end
 
 function my_style.header.WriteUtilityDecls(hFile, spec, options)
@@ -183,15 +250,15 @@ function my_style.header.WriteUtilityDecls(hFile, spec, options)
 end
 
 function my_style.header.WriteMainLoaderFuncDecl(hFile, spec, options)
-	--Write declaration for the main loader function that loads extensions and
-	--core stuff.
-	--The parameters to this function are provided by
-	--spec.GetLoaderParams().
+	hFile:write("LoadTest LoadFunctions(%s);\n", spec.GetLoaderParams())
 end
 
 function my_style.header.WriteVersioningFuncDecls(hFile, spec, options)
-	--Write declarations for versioning functions.
-	--Will only be called if using a spec that has a version (ie: OpenGL).
+	hFile:writeblock([[
+int GetMinorVersion();
+int GetMajorVersion();
+bool IsVersionGEQ(int majorVersion, int minorVersion);
+]])
 end
 
 --------------------------------------------------
@@ -200,9 +267,7 @@ function my_style.source.CreateFile(basename, options)
 	--Create a source file. Use:
 	--common.CreateFile(filename, options.indent)
 	--To create it. You don't need to return the filename, just the hFile.
---[[
-	return common.CreateFile(basename .. ".c", options.indent)
-]]
+	return common.CreateFile(basename .. ".cpp", options.indent)
 end
 
 function my_style.source.WriteIncludes(hFile, spec, options)
@@ -333,8 +398,6 @@ end
 function my_style.source.WriteMainLoaderFunc(hFile, specData, spec, options)
 	--Writes the actual loader function. Possibly also some utilities used
 	--by it.
-	--The parameters to this function are provided by
-	--spec.GetLoaderParams().
 end
 
 function my_style.source.WriteVersioningFuncs(hFile, specData, spec, options)

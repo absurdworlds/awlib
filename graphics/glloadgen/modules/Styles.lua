@@ -12,6 +12,7 @@ If you want to extend this to new styles, then add a module for your style, impo
 local style_registry =
 {
 	pointer_c = require("StylePointerC"),
+	pointer_cpp = require("StylePointerCPP"),
 }
 
 local default_style = "pointer_c"
