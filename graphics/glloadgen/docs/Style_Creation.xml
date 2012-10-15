@@ -10,9 +10,11 @@
         These functions will be called by the system to do specific things at specific times.</para>
     <para>You should not need to keep state between function invocations (the
             <literal>pointer_c</literal> style works completely statelessly, relying only on
-        function arguments). However, you can use local variables to store state if you wish. The
-        system will never ask your style to run twice (at least, not without a process
-        restart).</para>
+        function arguments). However, if you need state, you can create it by using the
+            <literal>Create</literal> function to associate actual state with each instance. The
+        system guarantees that the particular table returned by your style's
+            <literal>Create</literal> function will only be used to generate a single header/source
+        pair.</para>
     <para>The <literal>style</literal> table will need two sub-tables named
             <literal>source</literal> and <literal>header</literal>. They contain functions for
         generating material for source and header files, respectively. Most of the functions are in
@@ -277,6 +279,8 @@ header.WriteEndIncludeGuard(hFile, spec, options)</programlisting>
 
 source.WriteIncludes(hFile, spec, options)
 #include "HEADER_FILENAME"
+
+//Function pointer loader func from spec.loaderFunc()
 
 source.WriteBeginDef(hFile, spec, options)
 

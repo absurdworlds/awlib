@@ -21,9 +21,10 @@
     <para>If the value is <literal>LOAD_FAILED</literal>, then the extension was not found in the
         extension string, so no attempt was made to load it. If the value is
             <literal>LOAD_SUCCEEDED</literal>, then the extension was loaded in its entirety (all
-        function pointers accounted for). Otherwise, some number of function pointers failed to
-        load. To get the number of functions that failed to load for the extension, take the integer
-        value and subtract <literal>LOAD_SUCCEEDED</literal> from it.</para>
+        function pointers accounted for, if it has some). Otherwise, some number of function
+        pointers failed to load. To get the number of functions that failed to load for the
+        extension, take the integer value and subtract <literal>LOAD_SUCCEEDED</literal> from
+        it.</para>
     <para>The return value for the function loader works mostly the same way.
             <literal>LOAD_FAILED</literal> does not signal the failure to load the core functions or
         some extensions. It signals the failure of the process to work <emphasis>at all.</emphasis>

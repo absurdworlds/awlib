@@ -319,7 +319,8 @@ function my_style.source.WriteCoreFuncLoader(hFile, func, typemap, spec, options
 end
 
 function my_style.source.WriteGetExtStringFuncDef(hFile, func, typemap, spec, options)
-	my_style.source.WriteFuncDef(hFile, func, typemap, spec, options)
+	hFile:fmt("static %s = NULL;\n",
+		GetFuncPtrDef(hFile, func, typemap, spec, options))
 end
 
 local function GetMapTableStructName(spec, options)
@@ -487,7 +488,7 @@ static void ProcExtsFromExtList()
 }
 ]])
 	else
-		hFile:writeblock(common.GetProcessExtsFromStringFunc("LoadExtByName"))
+		hFile:writeblock(common.GetProcessExtsFromStringFunc("LoadExtByName(%s)"))
 	end
 	
 	hFile:write "\n"

@@ -116,9 +116,9 @@ end
 
 
 --You give it a function that takes a const char*.
-function common.GetProcessExtsFromStringFunc(funcToCall)
+function common.GetProcessExtsFromStringFunc(funcFormat, arguments)
 	return [[
-static void ProcExtsFromExtString(const char *strExtList)
+static void ProcExtsFromExtString(const char *strExtList]] .. (arguments or "") .. [[)
 {
 	size_t iExtListLen = strlen(strExtList);
 	const char *strExtListEnd = strExtList + iExtListLen;
@@ -145,7 +145,7 @@ static void ProcExtsFromExtString(const char *strExtList)
 		strncpy(strWorkBuff, strCurrPos, iStrLen);
 		strWorkBuff[iStrLen] = '\0';
 
-		]] .. funcToCall ..[[(strWorkBuff);
+		]] .. funcFormat:format("strWorkBuff") ..[[;
 
 		strCurrPos = strEndStr + 1;
 		if(iStop) break;
