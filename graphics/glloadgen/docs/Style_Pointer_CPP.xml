@@ -10,7 +10,8 @@
         about making it easy for intellisense and the like to find the function definitions for easy
         work.</para>
     <para>With the exception of the typedefs, everything lives in a C++ namespace based on each
-        spec: <literal>gl</literal>, <literal>wgl</literal>, and <literal>glx</literal>. If the
+        spec: <literal>gl</literal>, <literal>wgl</literal>, and <literal>glX</literal> (the same
+        names that would have gone on the front of the function names). If the
             <literal>-prefix</literal> option was provided, then the spec namespace will itself be
         within a namespace named for the prefix.</para>
     <para>The extension variables are in their own namespace:

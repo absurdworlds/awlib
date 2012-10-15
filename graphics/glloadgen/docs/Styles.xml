@@ -4,6 +4,7 @@
 <article xmlns="http://docbook.org/ns/docbook" xmlns:xi="http://www.w3.org/2001/XInclude"
     xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0">
     <title>Styles</title>
+    <para><phrase role="toc"/></para>
     <para>The <literal>-style</literal> command line option defines how the header and source files
         are generated. They will always generate the same information (more or less); the difference
         between styles explains the form that this information takes. The information generated
@@ -104,11 +105,11 @@
             they generate:</para>
         <itemizedlist>
             <listitem>
-                <para><literal><link xlink:href="Style_Pointer_C">pointer_c</link></literal>: Used
+                <para><link xlink:href="Style_Pointer_C"><literal>pointer_c</literal></link>: Used
                     for C-style header generation.</para>
             </listitem>
             <listitem>
-                <para><literal><link xlink:href="Style_Pointer_CPP">pointer_cpp</link></literal>:
+                <para><link xlink:href="Style_Pointer_CPP"><literal>pointer_cpp</literal></link>:
                     Used for creating C++-style loaders, wrapping as much as possible in
                     namespaces.</para>
             </listitem>
