@@ -58,5 +58,19 @@
                     extension files</link> that store useful sets of extensions. You may use these
                 as you wish.</para>
         </section>
+        <section>
+            <title>Examples</title>
+            <para>Here are some example command lines. This command-line generates loaders for core
+                OpenGL 3.3, without proprietary extensions, but with non-hardware features that were
+                added to OpenGL in later versions:</para>
+            <programlisting>lua LoadGen.lua core_3_3 -style=pointer_c -spec=gl -version=3.3 -profile=core -stdext=extfiles/gl_ubiquitous.txt -stdext=extfiles/gl_core_post_3_3.txt</programlisting>
+            <para>This command-line is for OpenGL 4.3, but with certain commonly-provided extensions
+                that are generally useful.</para>
+            <programlisting>lua LoadGen.lua core_4_3 -style=pointer_c -spec=gl -version=4.3 -profile=core -stdext=extfiles/gl_ubiquitous.txt -stdext=extfiles/gl_plat_3_3.txt</programlisting>
+            <para>This command-line generates a header that exposes OpenGL 3.2 for what MacOSX 10.8
+                uses (note: the loader generator files have not been tested with MacOSX of any
+                kind):</para>
+            <programlisting>lua LoadGen.lua core_3_2 -style=pointer_c -spec=gl -version=3.2 -profile=core -stdext=extfiles/gl_ubiquitous.txt -stdext=extfiles/gl_macosx_3_2.txt</programlisting>
+        </section>
     </section>
 </article>

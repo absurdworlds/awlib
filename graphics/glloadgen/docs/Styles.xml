@@ -48,6 +48,22 @@
             <literal>#define</literal>s, for example). But each style must provide this set of
         information.</para>
     <section>
+        <title>Available styles</title>
+        <para>There are a number of styles available, with documentation explaining exactly what
+            they generate:</para>
+        <itemizedlist>
+            <listitem>
+                <para><link xlink:href="Style_Pointer_C"><literal>pointer_c</literal></link>: Used
+                    for C-style header generation.</para>
+            </listitem>
+            <listitem>
+                <para><link xlink:href="Style_Pointer_CPP"><literal>pointer_cpp</literal></link>:
+                    Used for creating C++-style loaders, wrapping as much as possible in
+                    namespaces.</para>
+            </listitem>
+        </itemizedlist>
+    </section>
+    <section>
         <title>Core Extensions</title>
         <para>OpenGL 3.0 introduced the concept of <quote>core extensions.</quote> Normally with
             extensions, even ARB extensions, the enumerators, functions and typedefs end in the
@@ -63,18 +79,17 @@
             defines are part of GL 3.1 as well as the extension.</para>
         <para>Because of this, it is possible to ask for GL 3.1 (which will provide those
             functions/enums) <emphasis>and</emphasis> ARB_uniform_buffer_object at the same time. Or
-            to ask for GL 3.0 (which won't provide them) and ARB_uniform_buffer_object. Or to ask
-            for GL 3.1 <emphasis>without</emphasis> explicitly asking for
-            ARB_uniform_buffer_object.</para>
-        <para>The way this works is as follows. If you ask for an extension, no matter what, the
-            system will provide you a way to query whether that extension is loaded. If you don't
-            ask for the extension, but the version number effectively requires that extension
-            (asking for GL 3.1+ requires ARB_uniform_buffer_object), you'll still get the enums and
-            functions, but you <emphasis>won't</emphasis> get a way to query whether that extension
-            specifically is loaded.</para>
+            to ask for GL 3.0 (where it isn't core) and ARB_uniform_buffer_object. Or to ask for GL
+            3.1 <emphasis>without</emphasis> explicitly asking for ARB_uniform_buffer_object.</para>
+        <para>The way this works is as follows. If you explicitly ask for an extension, the system
+            will <emphasis>always</emphasis> provide you a way to query whether that extension is
+            loaded. If you don't ask for the extension, but the version number effectively requires
+            that extension (asking for GL 3.1+ requires ARB_uniform_buffer_object), you'll still get
+            the enums and functions, but you <emphasis>won't</emphasis> get a way to query whether
+            that extension specifically is loaded.</para>
         <para>In short, if you want GL 4.2, but you want to verify whether particular parts are
-                <quote>available,</quote> (if you only get GL 4.1, but there are 4.2 features
-            exposed via extensions), you must explicitly request that extension.</para>
+                <quote>available,</quote> (ie: if you only get GL version 4.1, but there are 4.2
+            features exposed via extensions), you must explicitly request each extension.</para>
     </section>
     <section>
         <title>Compatibility profile</title>
@@ -98,22 +113,6 @@
             it is considered to have never <emphasis>left</emphasis> core OpenGL. Thus, if you ask
             the system for 3.1, core profiles, you will see <literal>GL_QUADS</literal>, as well as
             a few others. The number of these are rather few, so it should not be a problem.</para>
-    </section>
-    <section>
-        <title>Available styles</title>
-        <para>There are a number of styles available, with documentation explaining exactly what
-            they generate:</para>
-        <itemizedlist>
-            <listitem>
-                <para><link xlink:href="Style_Pointer_C"><literal>pointer_c</literal></link>: Used
-                    for C-style header generation.</para>
-            </listitem>
-            <listitem>
-                <para><link xlink:href="Style_Pointer_CPP"><literal>pointer_cpp</literal></link>:
-                    Used for creating C++-style loaders, wrapping as much as possible in
-                    namespaces.</para>
-            </listitem>
-        </itemizedlist>
     </section>
     <section>
         <title>User-created styles</title>
