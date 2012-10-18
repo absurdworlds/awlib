@@ -220,6 +220,7 @@ function optTbl.GetOptions(cmd_line)
 	
 	options.extensions = exts
 	options.extfiles = nil
+	options.stdexts = nil
 
 	return options
 end

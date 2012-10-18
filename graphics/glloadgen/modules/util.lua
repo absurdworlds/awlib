@@ -27,4 +27,22 @@ function util.ParsePath(pathname)
 	return base, dir
 end
 
+local function DeepCopyTable(tbl, destTbl)
+	local ret = destTbl or {}
+	for key, value in pairs(tbl) do
+		if(type(value) == "table") then
+			if(type(ret[key]) == "table") then
+				ret[key] = DeepCopyTable(value, ret[key])
+			else
+				ret[key] = DeepCopyTable(value)
+			end
+		else
+			ret[key] = value
+		end
+	end
+	return ret
+end
+
+util.DeepCopyTable = DeepCopyTable
+
 return util
