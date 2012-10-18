@@ -114,13 +114,31 @@ local function CreateAction(data, actionType)
 	assert(actionType, "No name given for action type")
 	
 	--Create custom param list.
-	if(data.params) then
+	if(data.name) then
+		local name, params = data.name:match("([_%w]+)%s*%((.*)%)")
+		if(name) then
+			local paramList = {}
+			for param in params:gmatch("([_%a][_%w]*)") do
+				paramList[#paramList + 1] = param
+			end
+			params = paramList
+		else
+			name = data.name
+		end
+		
+		act.name = name
+		act.params = params
+	end
+
+--[[	
+	if(data.params and not act.params) then
 		local paramList = {}
 		for param in data.params:gmatch("([_%a][_%w]*)") do
 			paramList[#paramList + 1] = param
 		end
 		act.params = paramList
 	end
+	]]
 	
 	--Make child actions recursively.
 	for _, child in ipairs(data) do
@@ -177,9 +195,9 @@ end
 
 MakeActionType("file", fileAction, function(self, data)
 	assert(data.style, "File actions must have a `style`")
+	assert(data.name, "File actions need a name to call.")
 
 	self.file_style = data.style
-	self.name = "GetFilename"
 	self.params = self.params or {"basename", "options"}
 end)
 
@@ -200,7 +218,6 @@ end
 MakeActionType("block", blockAction, function(self, data)
 	assert(data.name, "Block actions must have a `name`")
 
-	self.name = data.name
 	self.params = self.params or {"hFile", "spec", "options"}
 end)
 
@@ -219,7 +236,7 @@ end
 
 MakeActionType("write", writeAction, function(self, data)
 	assert(data.name, "Write actions must have a `name`")
-	self.name = "Write" .. data.name
+	self.name = "Write" .. self.name
 	self.params = self.params or {"hFile", "specData", "spec", "options"}
 end)
 
