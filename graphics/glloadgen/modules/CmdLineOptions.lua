@@ -283,7 +283,7 @@ function group:AssertParse(test, msg)
 	if(not test) then
 		io.stdout:write(msg, "\n")
 		self:DisplayHelp()
-		error("")
+		error("", 0)
 	end
 end
 

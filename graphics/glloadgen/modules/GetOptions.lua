@@ -189,7 +189,7 @@ function optTbl.GetOptions(cmd_line)
 		parseOpts:AssertParse(versionTest[options.version], "The version " .. options.version .. " is not a legal version number.")
 	else
 		--Check to see that no versions are offered.
-		parseOpts:AssertParse(#spec.GetCoreVersions() == 0, "You cannot specify a version for the specification " .. options.spec)
+		parseOpts:AssertParse(#spec.GetCoreVersions() == 0, "You must specify a version for the specification " .. options.spec)
 	end
 	
 	spec.VerifyOptions(options, parseOpts)
@@ -197,6 +197,7 @@ function optTbl.GetOptions(cmd_line)
 	--Load and collate the extensions.
 	options.extensions = options.extensions or {}
 	options.extfiles = options.extfiles or {}
+	options.stdexts = options.stdexts or {}
 	
 	for _, file in ipairs(options.extfiles) do
 		LoadExtFile(options.extensions, util.ParsePath(file)) --vararg

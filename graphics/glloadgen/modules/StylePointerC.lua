@@ -1,6 +1,7 @@
 
 local common = require "CommonStyle"
 local struct = require "Structure"
+local util = require "util"
 
 
 local my_style = {}
@@ -46,6 +47,10 @@ function my_style.header.WriteBlockEndIncludeGuard(hFile, spec, options)
 	local inclGuard = GetIncludeGuard(hFile, spec, options)
 	
 	hFile:fmt("#endif //%s\n", inclGuard)
+end
+
+function my_style.header.WriteInit(hFile, spec, options)
+	hFile:rawwrite(spec.GetHeaderInit())
 end
 
 function my_style.header.WriteStdTypedefs(hFile, specData, options)
@@ -231,8 +236,13 @@ function my_style.source.WriteIncludes(hFile, basename, spec, options)
 #define strcasecmp(lhs, rhs) _stricmp((lhs), (rhs))
 #endif
 ]])
-	hFile:fmt('#include "%s"\n', my_style.source.GetFilename(basename, options))
-	
+	local base = util.ParsePath(my_style.header.GetFilename(basename, options))
+	hFile:fmt('#include "%s"\n', base)
+end
+
+function my_style.source.WriteLoaderData(hFile, spec, options)
+	hFile:writeblock(spec.GetLoaderFunc())
+	hFile:write("\n")
 end
 
 function my_style.source.WriteBlockBeginDef(hFile, spec, options) end
@@ -327,8 +337,34 @@ function my_style.source.WriteCoreFuncLoader(hFile, func, typemap, spec, options
 end
 
 function my_style.source.WriteGetExtStringFuncDef(hFile, func, typemap, spec, options)
-	hFile:fmt("static %s = NULL;\n",
-		GetFuncPtrDef(hFile, func, typemap, spec, options))
+end
+
+
+
+function my_style.source.WriteExtStringFuncDef(hFile, specData, spec, options, funcSeen)
+	if(funcSeen[spec.GetExtStringFuncName()]) then
+		return
+	end
+	
+	--Check to see if its something we have to load.
+	local function FindFuncName(funcName)
+		for _, func in ipairs(specData.funcData.functions) do
+			if(func.name == funcName) then
+				return func
+			end
+		end
+		
+		return nil
+	end
+	
+	local extStringFunc = FindFuncName(spec.GetExtStringFuncName())
+
+	if(extStringFunc) then
+		hFile:write("\n")
+		hFile:fmt("static %s = NULL;\n",
+			GetFuncPtrDef(hFile, extStringFunc, specData.typemap, spec, options))
+		hFile:write("\n")
+	end
 end
 
 local function GetMapTableStructName(spec, options)

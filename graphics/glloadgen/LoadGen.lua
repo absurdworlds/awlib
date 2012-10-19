@@ -20,6 +20,7 @@ local gen = require "Generate"
 local status, options = pcall(opts.GetOptions, arg)
 
 if(not status) then
+	io.write(options, "\n")
 	return
 end
 
