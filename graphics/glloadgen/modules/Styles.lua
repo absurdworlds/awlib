@@ -13,7 +13,6 @@ local style_registry =
 {
 	pointer_c = require("StylePointerC"),
 	pointer_cpp = require("StylePointerCPP"),
-	pointer_c_struct = require "StylePointerC_Struct",
 }
 
 local default_style = "pointer_c"
