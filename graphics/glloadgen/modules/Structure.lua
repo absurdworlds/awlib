@@ -20,11 +20,48 @@ Directory of used context names:
 - func			Provided by function iterators.
 - typemap		Provided by function iterators.
 - funcSeen		Provided by func seen blocks.
+
+Structure actions:
+
+- file: Creates a TabbedFile.
+-		name: The style function to call. It should return a filename. The defualt parameters are (basename, options)
+-		style: This represents a scoping for the style for all children of the file. So if your style has a "header" subtable with functions for creating header files, you set `style` to "header".
+
+- block: Represents a block. Must be in a file scope.
+-		name: Part of the function name to call. When starting the block, it will call "WriteBlockBegin"..name. To end it, it will call "WriteBlockEnd"..name. The default parameters are (hFile, spec, options)
+
+- write: Simply calls a given writing function. Must be in a file scope.
+-		name: Part of the function name to call. The complete function name is "Write"..name. The default parameters are (hFile, specData, spec, options).
+
+- blank: Writes an empty line.
+
+- ext-iter: Iterates over all of the extensions explicitly requested by the user. Cannot nest. Children can access the `extName` parameter, the name of the current extension.
+
+- version-iter: Iterates over each version in the spec, where applicable. Cannot nest. Children can access the `version` parameter, the current version as a *string*.
+
+- core-ext-iter: Iterates over all core extensions of the current version. Cannot nest. Must be done within a context that provides the `version` parameter. Children can access the `extName` parameter, the name of the current core extension.
+
+- core-ext-cull-iter: Iterates over all core extensions that were *not* explicitly asked for. Cannot nest. Must be done within a context that provides the `version` parameter. Children can access the `extName` parameter, the name of the current core extension.
+
+- enum-seen: Children can access the `enumSeen` parameter. This is a mapping between enumerator names and where that enumerator was first seen. If it is not in this list, then this enumerator was not processed before (within the scope of the `enum-seen`). The `enum-iter` works in tandem with this to keep the `enumSeen` table up-to-date. The value for an enum may be an extension name or a core version number.
+
+- enum-iter: Iterates over all of the enumerators within scope. The "scope" is defined by whether `extName` or `version` is available. So if `extName` is available, then it iterates over all enums within that extension. If `version` is available, then it iterates over enums within *just* that version (the options.profile also applies). If both are visible, `extName` wins. Children can access the `enum` and `enumTable` parameters, which are the current enum and a name-table of all enums in the system. The latter is used to determine the value of the enum.
+
+- func-seen: Children can access the `funcSeen` parameter. This works like `enum-seen` but for functions and `func-iter`.
+
+- func-iter: Iterates over all of the functions within scope, using the same scoping rules as `enum-iter`. Children can access the `func` and `typemap` parameters, which are the current function and a typemap used to compute parameters and return-values (primarily for C).
+
+Common properties:
+
+- name: The name of a function to call, or part of a name. This can also include a parenthesized list of parameters. The parameter names much match those in the above list of parameters, and those parameters must be available in this particular scope (different actions create different scopes. If a particular parameter is not available in a context, a runtime error will occur.
+
+- first: When set, this particular action (and any of its child actions) will only be executed the first time through the most recent iteration loop. Note that this only works for the most recent iteration loop. And it only works within an interation loop, since they are the only ones who execute their children multiple times.
+
+- last: Like first, except for the last time through a block. Usually for inserting blank space.
 ]]
 
-local actionTypes =
-{
-}
+local actionTypes = {}
+local conditionals = {}
 
 -------------------------------
 -- Action base-class
@@ -43,6 +80,13 @@ function action:Process(context)
 	if(self.last) then
 		--Note that it's *specifically* equal to false. Being 'nil' isn't enough.
 		if(context._last == false) then
+			return
+		end
+	end
+	
+	--Conditional
+	if(self._cond) then
+		if(not conditionals[self._cond](context)) then
 			return
 		end
 	end
@@ -129,17 +173,12 @@ local function CreateAction(data, actionType)
 		act.name = name
 		act.params = params
 	end
-
---[[	
-	if(data.params and not act.params) then
-		local paramList = {}
-		for param in data.params:gmatch("([_%a][_%w]*)") do
-			paramList[#paramList + 1] = param
-		end
-		act.params = paramList
-	end
-	]]
 	
+	if(data.cond) then
+		assert(conditionals[data.cond], "Unknown conditional " .. data.cond)
+		act._cond = data.cond
+	end
+
 	--Make child actions recursively.
 	for _, child in ipairs(data) do
 		assert(actionTypes[child.type], "Unknown command type " .. child.type)
@@ -267,6 +306,10 @@ end
 MakeActionType("ext-iter", extIterAction, function(self, data)
 end)
 
+conditionals["ext-iter"] = function(context)
+	return #context.options.extensions ~= 0
+end
+
 
 -----------------------------------------------
 -- Version Iterator
@@ -289,6 +332,11 @@ end
 MakeActionType("version-iter", versionIterAction, function(self, data)
 end)
 
+conditionals["version-iter"] = function(context)
+	assert(context.version, "Cannot have a version-iter conditional outside of a version.")
+	return context.version ~= nil
+end
+
 
 ---------------------------------------------
 -- Core Extension Iterator Action
@@ -297,7 +345,7 @@ local coreExtIterAction = {}
 function coreExtIterAction:PreProcess(context)
 	self:Assert(context.version, "Must put this in a version iterator")
 	self:Assert(context.extName == nil, "Cannot nest core-ext-iter actions.")
-	local coreExts = context.spec.GetCoreExts()
+	local coreExts = context._coreExts
 	if(coreExts[context.version]) then
 		self:IterateChildren(context, coreExts[context.version], "extName")
 	end
@@ -307,15 +355,18 @@ end
 MakeActionType("core-ext-iter", coreExtIterAction, function(self, data)
 end)
 
+conditionals["core-ext-iter"] = function(context)
+	assert(context.version, "Cannot have a core-ext-iter conditional outside of a version.")
+	return context._coreExts[context.version] ~= nil
+end
+
 
 ---------------------------------------------
 -- Core Extension Iterator Action, culled against the requested extensions.
 local coreExtCullIterAction = {}
 
-function coreExtCullIterAction:PreProcess(context)
-	self:Assert(context.version, "Must put this in a version iterator")
-	self:Assert(context.extName == nil, "Cannot nest core-ext-iter actions.")
-	local coreExts = context.spec.GetCoreExts()
+local function BuildCulledExtList(context)
+	local coreExts = context._coreExts
 	if(coreExts[context.version]) then
 		local extList = {}
 		for _, ext in ipairs(coreExts[context.version]) do
@@ -323,16 +374,29 @@ function coreExtCullIterAction:PreProcess(context)
 				extList[#extList + 1] = ext
 			end
 		end
+		return extList
+	else
+		return {}
+	end
+end
 
-		if(#extList > 0) then
-			self:IterateChildren(context, extList, "extName")
-		end
+function coreExtCullIterAction:PreProcess(context)
+	self:Assert(context.version, "Must put this in a version iterator")
+	self:Assert(context.extName == nil, "Cannot nest core-ext-iter actions.")
+	local extList = BuildCulledExtList(context)
+	if(#extList > 0) then
+		self:IterateChildren(context, extList, "extName")
 	end
 	return true --Stops regular child processing.
 end
 
 MakeActionType("core-ext-cull-iter", coreExtCullIterAction, function(self, data)
 end)
+
+conditionals["core-ext-cull-iter"] = function(context)
+	assert(context.version, "Cannot have a core-ext-cull-iter conditional outside of a version.")
+	return #BuildCulledExtList(context) > 0
+end
 
 
 ----------------------------------------------
@@ -418,6 +482,11 @@ end
 MakeActionType("enum-iter", enumIterAction, function(self, data)
 end)
 
+conditionals["enum-iter"] = function(context)
+	self:Assert(context.version or context.extName, "Cannot have an enum-iter conditional outside of a version or extension iterator.")
+
+	return #GetEnumList(context) > 0
+end
 
 ----------------------------------------------
 -- Func Seen Action
@@ -493,6 +562,15 @@ end
 MakeActionType("func-iter", funcIterAction, function(self, data)
 end)
 
+conditionals["func-iter"] = function(context)
+	assert(context.version or context.extName, "Cannot have a func-iter conditional outside of a version or extension iterator.")
+
+	return #GetFuncList(context) > 0
+end
+
+conditionals["core-funcs"] = function(context)
+	return context.options.spec == "gl"
+end
 
 
 
