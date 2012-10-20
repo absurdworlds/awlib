@@ -14,6 +14,7 @@ Directory of used context names:
 - file_style	Provided by file blocks. A file-specific subsection of `style`.
 - extName		Provided by extension iterators.
 - version		Provided by version iterators.
+- sub_version	Provided by sub-version iterators.
 - enum			Provided by enum iterators.
 - enumTable		Provided by enum iterators.
 - enumSeen		Provided by enum seen blocks.
@@ -28,16 +29,21 @@ Structure actions:
 -		style: This represents a scoping for the style for all children of the file. So if your style has a "header" subtable with functions for creating header files, you set `style` to "header".
 
 - block: Represents a block. Must be in a file scope.
--		name: Part of the function name to call. When starting the block, it will call "WriteBlockBegin"..name. To end it, it will call "WriteBlockEnd"..name. The default parameters are (hFile, spec, options)
+-		name: Part of the function name to call. When starting the block, it will call "WriteBlockBegin"..name. To end it, it will call "WriteBlockEnd"..name. The default parameters are (hFile, spec, options).
 
 - write: Simply calls a given writing function. Must be in a file scope.
 -		name: Part of the function name to call. The complete function name is "Write"..name. The default parameters are (hFile, specData, spec, options).
 
-- blank: Writes an empty line.
+- blank: Writes an empty line. Must be in a file scope.
+
+- filter: Contains a group of actions. If the named function returns false, then the children will not be processed.
+-		name: Part of the function name to call. The complete function name is "Filter"..name. The default parameters are () (ie: none).
 
 - ext-iter: Iterates over all of the extensions explicitly requested by the user. Cannot nest. Children can access the `extName` parameter, the name of the current extension.
 
-- version-iter: Iterates over each version in the spec, where applicable. Cannot nest. Children can access the `version` parameter, the current version as a *string*.
+- version-iter: Iterates over each version in the spec, which is less than or equal to the requested version, where applicable. Cannot nest. Children can access the `version` parameter, the current version as a *string*.
+
+- sub-version-iter: Iterates over each version that is less than or equal to the current version. Cannot nest. Must be done within a context that provides the `version` parameter. Children can access the `sub_version` parameter, the current sub-version as a *string*.
 
 - core-ext-iter: Iterates over all core extensions of the current version. Cannot nest. Must be done within a context that provides the `version` parameter. Children can access the `extName` parameter, the name of the current core extension.
 
@@ -270,9 +276,6 @@ function writeAction:PreProcess(context)
 	self:CallFunction(context.file_style, context)
 end
 
-function writeAction:PostProcess(context)
-end
-
 MakeActionType("write", writeAction, function(self, data)
 	assert(data.name, "Write actions must have a `name`")
 	self.name = "Write" .. self.name
@@ -285,11 +288,26 @@ end)
 local blankAction = {}
 
 function blankAction:PreProcess(context)
-	self:Assert(context.hFile, "Spaces must be in files.")
+	self:Assert(context.hFile, "Blanks must be in files.")
 	context.hFile:write("\n")
 end
 
 MakeActionType("blank", blankAction, function(self, data)
+end)
+
+
+-------------------------------------------
+-- Filter Action
+local filterAction = {}
+
+function filterAction:PreProcess(context)
+	return not self:CallFunction(context:GetStyle(), context, self.name)
+end
+
+MakeActionType("filter", filterAction, function(self, data)
+	assert(data.name, "Filter actions must have a `name`")
+	self.name = "Filter" .. self.name
+	self.params = self.params or {}
 end)
 
 
@@ -338,6 +356,29 @@ conditionals["version-iter"] = function(context)
 end
 
 
+-----------------------------------------------
+-- Sub-Version Iterator
+local subVersionIterAction = {}
+
+function subVersionIterAction:PreProcess(context)
+	self:Assert(context.sub_version == nil, "Cannot nest sub-version-iter actions.")
+	self:Assert(context.version, "Must put sub-version-iter inside versions.")
+	local rawVersionList = context.spec.GetVersions()
+	local versionList = {}
+	for _, version in ipairs(rawVersionList) do
+		if(tonumber(version) <= tonumber(context.version)) then
+			versionList[#versionList + 1] = version
+		end
+	end
+
+	self:IterateChildren(context, versionList, "sub_version")
+	return true --Stops regular child processing.
+end
+
+MakeActionType("sub-version-iter", subVersionIterAction, function(self, data)
+end)
+
+
 ---------------------------------------------
 -- Core Extension Iterator Action
 local coreExtIterAction = {}
@@ -381,8 +422,8 @@ local function BuildCulledExtList(context)
 end
 
 function coreExtCullIterAction:PreProcess(context)
-	self:Assert(context.version, "Must put this in a version iterator")
-	self:Assert(context.extName == nil, "Cannot nest core-ext-iter actions.")
+	self:Assert(context.version, "Must put core-ext-cull-iters in a version")
+	self:Assert(context.extName == nil, "Cannot nest core-ext-cull-iter actions.")
 	local extList = BuildCulledExtList(context)
 	if(#extList > 0) then
 		self:IterateChildren(context, extList, "extName")
@@ -592,6 +633,10 @@ function struct.BuildStructure(structure)
 		
 		context._coreExts = spec.GetCoreExts()
 		context._extTbl = util.InvertTable(options.extensions)
+		
+		function context:GetStyle()
+			return context.file_style or self.style
+		end
 		
 		for _, action in ipairs(actions) do
 			action:Process(context)
