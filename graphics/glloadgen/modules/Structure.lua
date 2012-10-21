@@ -31,6 +31,8 @@ Structure actions:
 - block: Represents a block. Must be in a file scope.
 -		name: Part of the function name to call. When starting the block, it will call "WriteBlockBegin"..name. To end it, it will call "WriteBlockEnd"..name. The default parameters are (hFile, spec, options).
 
+- group: Represents a collection of stuff. Has no particular semantics (though it can have conditionals and such.
+
 - write: Simply calls a given writing function. Must be in a file scope.
 -		name: Part of the function name to call. The complete function name is "Write"..name. The default parameters are (hFile, specData, spec, options).
 
@@ -64,6 +66,18 @@ Common properties:
 - first: When set, this particular action (and any of its child actions) will only be executed the first time through the most recent iteration loop. Note that this only works for the most recent iteration loop. And it only works within an interation loop, since they are the only ones who execute their children multiple times.
 
 - last: Like first, except for the last time through a block. Usually for inserting blank space.
+
+- cond: Only processes the node and its children if the condition is "true". Available conditions:
+	- ext-iter
+	- version-iter
+	- core-ext-iter
+	- core-ext-cull-iter
+	- enum-iter
+	- func-iter
+	- core-funcs: True if the spec has core functions. IE: is OpenGL.
+
+All of the iterator-based conditions will be true iff performing that iterator in this context would result in at least one match. They can only be used in the same context where the equivalent iterator could.
+
 ]]
 
 local actionTypes = {}
@@ -264,6 +278,14 @@ MakeActionType("block", blockAction, function(self, data)
 	assert(data.name, "Block actions must have a `name`")
 
 	self.params = self.params or {"hFile", "spec", "options"}
+end)
+
+
+-------------------------------------
+-- Group Action
+local groupAction = {}
+
+MakeActionType("group", groupAction, function(self, data)
 end)
 
 
@@ -524,7 +546,7 @@ MakeActionType("enum-iter", enumIterAction, function(self, data)
 end)
 
 conditionals["enum-iter"] = function(context)
-	self:Assert(context.version or context.extName, "Cannot have an enum-iter conditional outside of a version or extension iterator.")
+	assert(context.version or context.extName, "Cannot have an enum-iter conditional outside of a version or extension iterator.")
 
 	return #GetEnumList(context) > 0
 end
