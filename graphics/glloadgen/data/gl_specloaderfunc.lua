@@ -56,7 +56,7 @@ static void* SunGetProcAddress (const GLubyte* name)
 #pragma warning(disable: 4054)
 #endif
 
-static int TestPointer(const void *pTest)
+static int TestPointer(const PROC pTest)
 {
 	ptrdiff_t iTest;
 	if(!pTest) return 0;
@@ -67,16 +67,16 @@ static int TestPointer(const void *pTest)
 	return 1;
 }
 
-static void *WinGetProcAddress(const char *name)
+static PROC WinGetProcAddress(const char *name)
 {
 	HMODULE glMod = NULL;
-	void *pFunc = (void*)wglGetProcAddress((LPCSTR)name);
+	PROC pFunc = wglGetProcAddress((LPCSTR)name);
 	if(TestPointer(pFunc))
 	{
 		return pFunc;
 	}
 	glMod = GetModuleHandleA("OpenGL32.dll");
-	return (void*)GetProcAddress(glMod, (LPCSTR)name);
+	return (PROC)GetProcAddress(glMod, (LPCSTR)name);
 }
 	
 #define IntGetProcAddress(name) WinGetProcAddress(name)

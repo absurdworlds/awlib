@@ -222,7 +222,6 @@ function my_style.source.WriteIncludes(hFile, spec, options)
 #include <stdlib.h>
 #include <string.h>
 #ifdef _MSC_VER
-#define strcasecmp(lhs, rhs) _stricmp((lhs), (rhs))
 #endif
 ]])
 	hFile:write("\n")
@@ -387,7 +386,7 @@ function my_style.source.WriteUtilityDefs(hFile, specData, spec, options)
 	hFile:writeblock([[
 for(loop = 0; loop < g_extensionMapSize; ++loop, ++currLoc)
 {
-	if(strcasecmp(extensionName, currLoc->extensionName) == 0)
+	if(strcmp(extensionName, currLoc->extensionName) == 0)
 		return currLoc;
 }
 
