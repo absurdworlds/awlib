@@ -11,7 +11,6 @@ Directory of used context names:
 - options
 - basename
 - hFile			Provided by file blocks
-- file_style	Provided by file blocks. A file-specific subsection of `style`.
 - extName		Provided by extension iterators.
 - version		Provided by version iterators.
 - sub_version	Provided by sub-version iterators.
@@ -111,6 +110,11 @@ function action:Process(context)
 		end
 	end
 	
+	--NO MORE RETURNS FROM THIS POINT FORWARD!
+	if(self.newStyle) then
+		context:PushStyle(self.newStyle)
+	end
+	
 	local noChildren = nil
 	if(self.PreProcess) then
 		noChildren = self:PreProcess(context)
@@ -122,6 +126,10 @@ function action:Process(context)
 
 	if(self.PostProcess) then
 		self:PostProcess(context)
+	end
+	
+	if(self.newStyle) then
+		context:PopStyle()
 	end
 end
 
@@ -136,10 +144,11 @@ function action:ProcessChildren(context)
 	end
 end
 
-function action:CallFunction(style, context, name)
+function action:CallFunction(context, name)
 	name = name or self.name
 	self:Assert(name, "Unknown function name.")
-	self:Assert(style[name], "The style does not have a function " .. name)
+	local style = context:FindStyleForFunc(name)
+	self:Assert(style, "The style does not have a function " .. name)
 	
 	local paramList = {}
 	for _, param in ipairs(self.params) do
@@ -198,6 +207,8 @@ local function CreateAction(data, actionType)
 		assert(conditionals[data.cond], "Unknown conditional " .. data.cond)
 		act._cond = data.cond
 	end
+	
+	act.newStyle = data.style
 
 	--Make child actions recursively.
 	for _, child in ipairs(data) do
@@ -235,12 +246,9 @@ end
 local fileAction = {}
 
 function fileAction:PreProcess(context)
-	assert(context.style[self.file_style],
-		"The style does not have a sub-section named " .. self.file_style)
 	assert(context.hFile == nil, "You cannot nest `file` blocks.")
 
-	context.file_style = context.style[self.file_style]
-	local filename = self:CallFunction(context.file_style, context)
+	local filename = self:CallFunction(context)
 	
 	local hFile = io.open(filename, "w")
 	context.hFile = TabbedFile.TabbedFile(hFile, context.options.indent)
@@ -249,14 +257,12 @@ end
 function fileAction:PostProcess(context)
 	context.hFile:close()
 	context.hFile = nil
-	context.file_style = nil
 end
 
 MakeActionType("file", fileAction, function(self, data)
 	assert(data.style, "File actions must have a `style`")
 	assert(data.name, "File actions need a name to call.")
 
-	self.file_style = data.style
 	self.params = self.params or {"basename", "options"}
 end)
 
@@ -266,12 +272,12 @@ end)
 local blockAction = {}
 
 function blockAction:PreProcess(context)
-	assert(context.file_style, "Cannot write a block outside of a file.")
-	self:CallFunction(context.file_style, context, "WriteBlockBegin" .. self.name)
+	assert(context.hFile, "Cannot write a block outside of a file.")
+	self:CallFunction(context, "WriteBlockBegin" .. self.name)
 end
 
 function blockAction:PostProcess(context)
-	self:CallFunction(context.file_style, context, "WriteBlockEnd" .. self.name)
+	self:CallFunction(context, "WriteBlockEnd" .. self.name)
 end
 
 MakeActionType("block", blockAction, function(self, data)
@@ -294,8 +300,8 @@ end)
 local writeAction = {}
 
 function writeAction:PreProcess(context)
-	assert(context.file_style, "Cannot write data outside of a file.")
-	self:CallFunction(context.file_style, context)
+	assert(context.hFile, "Cannot write data outside of a file.")
+	self:CallFunction(context)
 end
 
 MakeActionType("write", writeAction, function(self, data)
@@ -323,7 +329,7 @@ end)
 local filterAction = {}
 
 function filterAction:PreProcess(context)
-	return not self:CallFunction(context:GetStyle(), context, self.name)
+	return not self:CallFunction(context, self.name)
 end
 
 MakeActionType("filter", filterAction, function(self, data)
@@ -655,9 +661,33 @@ function struct.BuildStructure(structure)
 		
 		context._coreExts = spec.GetCoreExts()
 		context._extTbl = util.InvertTable(options.extensions)
+		context._styles = { style }
 		
 		function context:GetStyle()
-			return context.file_style or self.style
+			return context._styles[#context._styles]
+		end
+		
+		function context:FindStyleForFunc(funcName)
+			for i = #context._styles, 1, -1 do
+				if(context._styles[i][funcName]) then
+					return context._styles[i]
+				end
+			end
+			
+			return nil
+		end
+		
+		function context:PushStyle(newStyleName)
+			assert(context._styles[1][newStyleName], "There is no style named " .. newStyleName)
+			table.insert(context._styles, context._styles[1][newStyleName])
+			context.style = context._styles[#context._styles]
+		end
+		
+		function context:PopStyle()
+			local ret = context._styles[#context._styles]
+			context._styles[#context._styles] = nil
+			context.style = context._styles[#context._styles]
+			return ret
 		end
 		
 		for _, action in ipairs(actions) do
