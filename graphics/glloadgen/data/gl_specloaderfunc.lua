@@ -51,8 +51,10 @@ static void* SunGetProcAddress (const GLubyte* name)
 
 #if defined(_WIN32)
 
+#ifdef _MSC_VER
 #pragma warning(disable: 4055)
 #pragma warning(disable: 4054)
+#endif
 
 static int TestPointer(const void *pTest)
 {

@@ -221,7 +221,7 @@ function my_style.source.WriteIncludes(hFile, spec, options)
 	hFile:writeblock([[
 #include <stdlib.h>
 #include <string.h>
-#ifdef WIN32
+#ifdef _MSC_VER
 #define strcasecmp(lhs, rhs) _stricmp((lhs), (rhs))
 #endif
 ]])
