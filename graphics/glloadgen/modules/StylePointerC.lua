@@ -383,154 +383,40 @@ end
 
 function my_style.source.WriteUtilityDefs(hFile, specData, spec, options)
 	--Write the struct for the mapping table.
-	hFile:write("typedef int (*PFN_LOADEXTENSION)();\n")
-	hFile:fmt("typedef struct %s%sStrToExtMap_s\n",
-		options.prefix, spec.DeclPrefix())
-	hFile:write("{\n")
-	hFile:inc()
-	hFile:write("char *extensionName;\n")
-	hFile:write("int *extensionVariable;\n")
-	hFile:write("PFN_LOADEXTENSION LoadExtension;\n")
-	hFile:dec()
-	hFile:fmt("} %s;\n", GetMapTableStructName(spec, options))
-	hFile:write "\n"
-	
-	--Write the mapping table itself.
-	hFile:fmt("static %s %s[] = {\n",
+	local mapStructName = string.format("%s%sStrToExtMap_s", options.prefix, spec.DeclPrefix())
+	common.WriteCMappingTable(hFile, specData, spec, options,
 		GetMapTableStructName(spec, options),
-		GetMapTableVarName())
-	hFile:inc()
-	for _, extName in ipairs(options.extensions) do
-		if(#specData.extdefs[extName].funcs > 0) then
-			hFile:fmt('{"%s", &%s, %s},\n',
-				spec.ExtNamePrefix() .. extName,
-				GetExtVariableName(extName, spec, options),
-				GetExtLoaderFuncName(extName, spec, options))
-		else
-			hFile:fmt('{"%s", &%s, NULL},\n',
-				spec.ExtNamePrefix() .. extName,
-				GetExtVariableName(extName, spec, options))
-		end
-	end
-	hFile:dec()
-	hFile:write("};\n")
-	hFile:write "\n"
-	
-	hFile:fmt("static int g_extensionMapSize = %i;\n", #options.extensions);
+		GetMapTableVarName(),
+		GetExtVariableName,
+		GetExtLoaderFuncName)
 	hFile:write "\n"
 	
 	--Write function to find map entry by name.
-	hFile:fmt("static %s *FindExtEntry(const char *extensionName)\n",
-		GetMapTableStructName(spec, options))
-	hFile:write("{\n")
-	hFile:inc()
-	hFile:write("int loop;\n")
-	hFile:fmt("%s *currLoc = %s;\n",
+	common.WriteCFindExtEntryFunc(hFile, specData, spec, options,
 		GetMapTableStructName(spec, options),
 		GetMapTableVarName())
-	hFile:writeblock([[
-for(loop = 0; loop < g_extensionMapSize; ++loop, ++currLoc)
-{
-	if(strcasecmp(extensionName, currLoc->extensionName) == 0)
-		return currLoc;
-}
-
-return NULL;
-]])
-	hFile:dec()
-	hFile:write("}\n")
 	hFile:write "\n"
 
 	--Write the function to clear the extension variables.
-	hFile:fmt("static void ClearExtensionVars()\n")
-	hFile:write("{\n")
-	hFile:inc()
-	for _, extName in ipairs(options.extensions) do
-		hFile:fmt('%s = %s;\n',
-			GetExtVariableName(extName, spec, options),
-			GetStatusCodeName("LOAD_FAILED", spec, options))
-	end
-	hFile:dec()
-	hFile:write("}\n")
+	common.WriteCClearExtensionVarsFunc(hFile, specData, spec, options,
+		GetExtVariableName,
+		GetStatusCodeName("LOAD_FAILED", spec, options))
 	hFile:write "\n"
 	
-	--Write a function that loads an extension by name. It is called when
-	--processing, so it should also set the extension variable based on the load.
-	hFile:writeblock([[
-static void LoadExtByName(const char *extensionName)
-{
-	]] .. GetMapTableStructName(spec, options) .. [[ *entry = NULL;
-	entry = FindExtEntry(extensionName);
-	if(entry)
-	{
-		if(entry->LoadExtension)
-		{
-			int numFailed = entry->LoadExtension();
-			if(numFailed == 0)
-			{
-				*(entry->extensionVariable) = ]] ..
-				GetStatusCodeName("LOAD_SUCCEEDED", spec, options) ..
-				[[;
-			}
-			else
-			{
-				*(entry->extensionVariable) = ]] ..
-				GetStatusCodeName("LOAD_SUCCEEDED", spec, options) ..
-				[[ + numFailed;
-			}
-		}
-		else
-		{
-			*(entry->extensionVariable) = ]] ..
-			GetStatusCodeName("LOAD_SUCCEEDED", spec, options) ..
-			[[;
-		}
-	}
-}
-]])
-
+	--Write a function that loads an extension by name.
+	common.WriteCLoadExtByNameFunc(hFile, specData, spec, options,
+		GetMapTableStructName(spec, options),
+		GetStatusCodeName("LOAD_SUCCEEDED", spec, options))
 	hFile:write "\n"
-	
 end
 
 local function WriteAncillaryFuncs(hFile, specData, spec, options)
 	local indexed = spec.GetIndexedExtStringFunc(options);
 	if(indexed) then
-		for _, func in ipairs(specData.funcData.functions) do
-			if(indexed[1] == func.name) then
-				indexed[1] = func
-			end
-			if(indexed[3] == func.name) then
-				indexed[3] = func
-			end
-		end
-		for _, enum in ipairs(specData.enumerations) do
-			if(indexed[2] == enum.name) then
-				indexed[2] = enum
-			end
-			if(indexed[4] == enum.name) then
-				indexed[4] = enum
-			end
-		end
-	
-		hFile:writeblock([[
-static void ProcExtsFromExtList()
-{
-	GLint iLoop;
-	GLint iNumExtensions = 0;
-	]] .. GetFuncPtrName(indexed[1], spec, options)
-	.. [[(]] .. GetEnumName(indexed[2], spec, options)
-	.. [[, &iNumExtensions);
-
-	for(iLoop = 0; iLoop < iNumExtensions; iLoop++)
-	{
-		const char *strExtensionName = (const char *)]] ..
-		GetFuncPtrName(indexed[3], spec, options) ..
-		[[(]] .. GetEnumName(indexed[4], spec, options) .. [[, iLoop);
-		LoadExtByName(strExtensionName);
-	}
-}
-]])
+		common.FixupIndexedList(specData, indexed)
+		hFile:writeblock(common.GetProcExtsFromExtListFunc(
+			hFile, specData, spec, options,
+			indexed, GetFuncPtrName, GetEnumName))
 	else
 		hFile:writeblock(common.GetProcessExtsFromStringFunc("LoadExtByName(%s)"))
 	end

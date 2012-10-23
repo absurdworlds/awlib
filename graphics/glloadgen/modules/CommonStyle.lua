@@ -115,6 +115,47 @@ function common.GetProcAddressName(spec)
 	return "IntGetProcAddress"
 end
 
+function common.FixupIndexedList(specData, indexed)
+	assert(indexed)
+	for _, func in ipairs(specData.funcData.functions) do
+		if(indexed[1] == func.name) then
+			indexed[1] = func
+		end
+		if(indexed[3] == func.name) then
+			indexed[3] = func
+		end
+	end
+	for _, enum in ipairs(specData.enumerations) do
+		if(indexed[2] == enum.name) then
+			indexed[2] = enum
+		end
+		if(indexed[4] == enum.name) then
+			indexed[4] = enum
+		end
+	end
+end
+
+function common.GetProcExtsFromExtListFunc(hFile, specData, spec, options,
+							indexed, GetFuncPtrName, GetEnumName)
+	return [[
+static void ProcExtsFromExtList()
+{
+	GLint iLoop;
+	GLint iNumExtensions = 0;
+	]] .. GetFuncPtrName(indexed[1], spec, options)
+	.. [[(]] .. GetEnumName(indexed[2], spec, options)
+	.. [[, &iNumExtensions);
+
+	for(iLoop = 0; iLoop < iNumExtensions; iLoop++)
+	{
+		const char *strExtensionName = (const char *)]] ..
+		GetFuncPtrName(indexed[3], spec, options) ..
+		[[(]] .. GetEnumName(indexed[4], spec, options) .. [[, iLoop);
+		LoadExtByName(strExtensionName);
+	}
+}
+]]
+end
 
 --You give it a function that takes a const char*.
 function common.GetProcessExtsFromStringFunc(funcFormat, arguments)
@@ -204,6 +245,121 @@ local function DeepCopyTable(tbl)
 		end
 	end
 	return ret
+end
+
+function common.WriteCMappingTable(hFile, specData, spec,
+							options, structName, varName, GetExtVariableName, GetExtLoaderFuncName)
+	--Write the struct for the mapping table.
+	hFile:write("typedef int (*PFN_LOADFUNCPOINTERS)();\n")
+	hFile:fmt("typedef struct %s%sStrToExtMap_s\n",
+		options.prefix, spec.DeclPrefix())
+	hFile:write("{\n")
+	hFile:inc()
+	hFile:write("char *extensionName;\n")
+	hFile:write("int *extensionVariable;\n")
+	hFile:write("PFN_LOADFUNCPOINTERS LoadExtension;\n")
+	hFile:dec()
+	hFile:fmt("} %s;\n", structName)
+	hFile:write "\n"
+	
+	--Write the mapping table itself.
+	hFile:fmt("static %s %s[] = {\n",
+		structName,
+		varName)
+	hFile:inc()
+	for _, extName in ipairs(options.extensions) do
+		if(#specData.extdefs[extName].funcs > 0) then
+			hFile:fmt('{"%s", &%s, %s},\n',
+				spec.ExtNamePrefix() .. extName,
+				GetExtVariableName(extName, spec, options),
+				GetExtLoaderFuncName(extName, spec, options))
+		else
+			hFile:fmt('{"%s", &%s, NULL},\n',
+				spec.ExtNamePrefix() .. extName,
+				GetExtVariableName(extName, spec, options))
+		end
+	end
+	hFile:dec()
+	hFile:write("};\n")
+
+	hFile:write "\n"
+	hFile:fmt("static int g_extensionMapSize = %i;\n", #options.extensions);
+end
+
+function common.WriteCFindExtEntryFunc(hFile, specData, spec,
+							options, structName, varName, sizeName)
+	hFile:fmt("static %s *FindExtEntry(const char *extensionName)\n",
+		structName)
+	hFile:write("{\n")
+	hFile:inc()
+	hFile:write("int loop;\n")
+	hFile:fmt("%s *currLoc = %s;\n",
+		structName,
+		varName)
+	hFile:writeblock([[
+for(loop = 0; loop < g_extensionMapSize; ++loop, ++currLoc)
+{
+	if(strcmp(extensionName, currLoc->extensionName) == 0)
+		return currLoc;
+}
+
+return NULL;
+]])
+	hFile:dec()
+	hFile:write("}\n")
+end
+
+function common.WriteCClearExtensionVarsFunc(hFile, specData, spec,
+							options, GetExtVariableName, clearValue)
+	hFile:fmt("static void ClearExtensionVars()\n")
+	hFile:write("{\n")
+	hFile:inc()
+	for _, extName in ipairs(options.extensions) do
+		hFile:fmt('%s = %s;\n',
+			GetExtVariableName(extName, spec, options),
+			clearValue)
+	end
+	hFile:dec()
+	hFile:write("}\n")
+	hFile:write "\n"
+end
+
+--Write a function that loads an extension by name. It is called when
+--processing, so it should also set the extension variable based on the load.
+function common.WriteCLoadExtByNameFunc(hFile, specData, spec,
+							options, structName, successValue)
+	hFile:writeblock([[
+static void LoadExtByName(const char *extensionName)
+{
+	]] .. structName .. [[ *entry = NULL;
+	entry = FindExtEntry(extensionName);
+	if(entry)
+	{
+		if(entry->LoadExtension)
+		{
+			int numFailed = entry->LoadExtension();
+			if(numFailed == 0)
+			{
+				*(entry->extensionVariable) = ]] ..
+				successValue ..
+				[[;
+			}
+			else
+			{
+				*(entry->extensionVariable) = ]] ..
+				successValue ..
+				[[ + numFailed;
+			}
+		}
+		else
+		{
+			*(entry->extensionVariable) = ]] ..
+			successValue ..
+			[[;
+		}
+	}
+}
+]])
 end
 
 common.DeepCopyTable = DeepCopyTable
