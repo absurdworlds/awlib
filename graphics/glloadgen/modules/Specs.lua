@@ -47,6 +47,11 @@ function gl_spec.LoadSpec() return LoadSpec.LoadLuaSpec(util.GetSpecFilePath() .
 function wgl_spec.LoadSpec() return LoadSpec.LoadLuaSpec(util.GetSpecFilePath() .. "wglspec.lua", wgl_spec) end
 function glx_spec.LoadSpec() return LoadSpec.LoadLuaSpec(util.GetSpecFilePath() .. "glxspec.lua", glX_spec) end
 
+--Name for displaying.
+function gl_spec.DisplayName() return "OpenGL" end
+function wgl_spec.DisplayName() return "WGL" end
+function glx_spec.DisplayName() return "GLX" end
+
 ---FilePrefix
 function gl_spec.FilePrefix() return "gl_" end
 function wgl_spec.FilePrefix() return "wgl_" end

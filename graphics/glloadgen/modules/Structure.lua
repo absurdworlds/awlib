@@ -25,7 +25,6 @@ Structure actions:
 
 - file: Creates a TabbedFile.
 -		name: The style function to call. It should return a filename. The defualt parameters are (basename, options)
--		style: This represents a scoping for the style for all children of the file. So if your style has a "header" subtable with functions for creating header files, you set `style` to "header".
 
 - block: Represents a block. Must be in a file scope.
 -		name: Part of the function name to call. When starting the block, it will call "WriteBlockBegin"..name. To end it, it will call "WriteBlockEnd"..name. The default parameters are (hFile, spec, options).
@@ -61,6 +60,8 @@ Structure actions:
 Common properties:
 
 - name: The name of a function to call, or part of a name. This can also include a parenthesized list of parameters. The parameter names much match those in the above list of parameters, and those parameters must be available in this particular scope (different actions create different scopes. If a particular parameter is not available in a context, a runtime error will occur.
+
+- style: This represents a scoping for the style for all children of this action. It will access the main style using the given string, and it expects a table of functions. All names within this action will be expected to be in that style; if they are not, they'll check the previous style, on down until the first style. These can be nested, but note that the fetching of the table is always done in the *main* style, not the "current" style.
 
 - first: When set, this particular action (and any of its child actions) will only be executed the first time through the most recent iteration loop. Note that this only works for the most recent iteration loop. And it only works within an interation loop, since they are the only ones who execute their children multiple times.
 
@@ -329,12 +330,17 @@ end)
 local filterAction = {}
 
 function filterAction:PreProcess(context)
-	return not self:CallFunction(context, self.name)
+	local shouldFilter = self:CallFunction(context, self.name)
+	if(self.neg) then
+		shouldFilter = not shouldFilter
+	end
+	return not shouldFilter
 end
 
 MakeActionType("filter", filterAction, function(self, data)
 	assert(data.name, "Filter actions must have a `name`")
 	self.name = "Filter" .. self.name
+	self.neg = data.neg
 	self.params = self.params or {}
 end)
 
@@ -379,8 +385,7 @@ MakeActionType("version-iter", versionIterAction, function(self, data)
 end)
 
 conditionals["version-iter"] = function(context)
-	assert(context.version, "Cannot have a version-iter conditional outside of a version.")
-	return context.version ~= nil
+	return #context.spec.GetVersions() ~= 0
 end
 
 
