@@ -276,8 +276,7 @@ function my_style.source.WriteIncludes(hFile, spec, options)
 #include <algorithm>
 #include <vector>
 #include <string.h>
-#ifdef WIN32
-#define strcasecmp(lhs, rhs) _stricmp((lhs), (rhs))
+#ifdef _MSC_VER
 #endif
 ]])
 end
@@ -437,7 +436,7 @@ struct MapEntry
 struct MapCompare
 {
 	MapCompare(const char *test_) : test(test_) {}
-	bool operator()(const MapEntry &other) { return strcasecmp(test, other.extName) == 0; }
+	bool operator()(const MapEntry &other) { return strcmp(test, other.extName) == 0; }
 	const char *test;
 };
 
