@@ -251,8 +251,7 @@ function fileAction:PreProcess(context)
 
 	local filename = self:CallFunction(context)
 	
-	local hFile = io.open(filename, "w")
-	context.hFile = TabbedFile.TabbedFile(hFile, context.options.indent)
+	context.hFile = util.CreateFile(filename, context.options.indent)
 end
 
 function fileAction:PostProcess(context)
@@ -273,7 +272,7 @@ end)
 local blockAction = {}
 
 function blockAction:PreProcess(context)
-	assert(context.hFile, "Cannot write a block outside of a file.")
+	assert(context.hFile, "Cannot write a block outside of a file. " .. self.name)
 	self:CallFunction(context, "WriteBlockBegin" .. self.name)
 end
 

@@ -1,4 +1,6 @@
 
+local TabbedFile = require "TabbedFile"
+
 local util = {}
 
 function util.GetSpecFilePath()
@@ -44,5 +46,39 @@ local function DeepCopyTable(tbl, destTbl)
 end
 
 util.DeepCopyTable = DeepCopyTable
+
+--Ensures the given path exists. Creates the directories when they don't.
+--Note: Only works if LFS is available.
+--`path` should end in a directory separator.
+function util.EnsurePath(path)
+	local status, lfs = pcall(require, "lfs")
+	
+	if(not status) then return end
+	
+	local mode = lfs.attributes(path, "mode")
+	if(not mode) then
+		local creates = {}
+		local currPath = path
+		repeat
+			table.insert(creates, 1, currPath)
+			currPath = currPath:match("(.*[/\\])[^/\\]*[/\\]$")
+			if(currPath) then
+				mode = lfs.attributes(currPath, "mode")
+			end
+		until(mode or currPath == nil)
+		
+		for _, newDir in ipairs(creates) do
+			assert(lfs.mkdir(newDir))
+		end
+	end
+end
+
+function util.CreateFile(filename, indent)
+	local base, dir = util.ParsePath(filename)
+	util.EnsurePath(dir)
+	local hFile = assert(io.open(filename, "w"))
+	return TabbedFile.TabbedFile(hFile, indent)
+end
+
 
 return util

@@ -1,6 +1,5 @@
 --[[Useful style utility functions. This file will contain commonly useful strings and functions that generate useful data.]]
 
-local TabbedFile = require "TabbedFile"
 local util = require "util"
 local struct = require "Structure"
 
@@ -8,8 +7,7 @@ local common = {}
 
 --Creates a tabbed file.
 function common.CreateFile(filename, indent)
-	local hFile = io.open(filename, "w")
-	return TabbedFile.TabbedFile(hFile, indent)
+	return util.CreateFile(filename, indent)
 end
 
 --Retrieves the common typedefs used by OpenGL 1.1.
