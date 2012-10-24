@@ -37,14 +37,14 @@ end
 function common.WriteExternCStart(hFile)
 	hFile:write("#ifdef __cplusplus\n")
 	hFile:write('extern "C" {\n')
-	hFile:write("#endif //__cplusplus\n")
+	hFile:write("#endif /*__cplusplus*/\n")
 	hFile:write("\n")
 end
 
 function common.WriteExternCEnd(hFile)
 	hFile:write("#ifdef __cplusplus\n")
 	hFile:write('}\n')
-	hFile:write("#endif //__cplusplus\n")
+	hFile:write("#endif /*__cplusplus*/\n")
 	hFile:write("\n")
 end
 
@@ -169,7 +169,7 @@ static void ProcExtsFromExtString(const char *strExtList]] .. (arguments or "") 
 
 	while(*strCurrPos)
 	{
-		//Get the extension at our position.
+		/*Get the extension at our position.*/
 		int iStrLen = 0;
 		const char *strEndStr = strchr(strCurrPos, ' ');
 		int iStop = 0;
@@ -218,12 +218,12 @@ static void ParseVersionFromString(int *pOutMajor, int *pOutMinor, const char *s
 	strDotPos = strchr(strVersion + iLength + 1, ' ');
 	if(!strDotPos)
 	{
-		//No extra data. Take the whole rest of the string.
+		/*No extra data. Take the whole rest of the string.*/
 		strcpy(strWorkBuff, strVersion + iLength + 1);
 	}
 	else
 	{
-		//Copy only up until the space.
+		/*Copy only up until the space.*/
 		int iLengthMinor = (int)((ptrdiff_t)strDotPos - (ptrdiff_t)strVersion);
 		iLengthMinor = iLengthMinor - (iLength + 1);
 		strncpy(strWorkBuff, strVersion + iLength + 1, iLengthMinor);
