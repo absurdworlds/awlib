@@ -232,9 +232,6 @@ function my_style.source.WriteIncludes(hFile, basename, spec, options)
 	hFile:writeblock([[
 #include <stdlib.h>
 #include <string.h>
-#ifdef WIN32
-#define strcasecmp(lhs, rhs) _stricmp((lhs), (rhs))
-#endif
 ]])
 	local base = util.ParsePath(my_style.header.GetFilename(basename, options))
 	hFile:fmt('#include "%s"\n', base)
