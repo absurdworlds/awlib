@@ -61,7 +61,7 @@ Common properties:
 
 - name: The name of a function to call, or part of a name. This can also include a parenthesized list of parameters. The parameter names much match those in the above list of parameters, and those parameters must be available in this particular scope (different actions create different scopes. If a particular parameter is not available in a context, a runtime error will occur.
 
-- style: This represents a scoping for the style for all children of this action. It will access the main style using the given string, and it expects a table of functions. All names within this action will be expected to be in that style; if they are not, they'll check the previous style, on down until the first style. These can be nested, but note that the fetching of the table is always done in the *main* style, not the "current" style.
+- style: All `name`d functions must be within one of the tables in scope. The `style` command adds an additional scope of the given name. What this means is that the system will check each style within scope for a table with the given name. That table then becomes the most recent style scope that names are looked through. Thus, all names below this node (*including* this node's name) will search through this style and every previous style for their names.
 
 - first: When set, this particular action (and any of its child actions) will only be executed the first time through the most recent iteration loop. Note that this only works for the most recent iteration loop. And it only works within an interation loop, since they are the only ones who execute their children multiple times.
 
@@ -149,7 +149,14 @@ function action:CallFunction(context, name)
 	name = name or self.name
 	self:Assert(name, "Unknown function name.")
 	local style = context:FindStyleForFunc(name)
-	self:Assert(style, "The style does not have a function " .. name)
+	
+	if(not style) then
+		if(self.optional) then
+			return
+		else
+			self:Assert(nil, "The style does not have a function " .. name)
+		end
+	end
 	
 	local paramList = {}
 	for _, param in ipairs(self.params) do
@@ -162,7 +169,15 @@ function action:CallFunction(context, name)
 end
 
 function action:Assert(test, text)
-	assert(test, self._actionType .. ": " .. text)
+	if(not test) then
+		local msg = ": " .. text
+		if(self.name) then
+			msg = self._actionType .. "." .. self.name .. msg
+		else
+			msg = self._actionType .. msg
+		end
+		assert(test, msg)
+	end
 end
 
 --Iterates over the list, setting the second element returned from the iterator
@@ -210,6 +225,7 @@ local function CreateAction(data, actionType)
 	end
 	
 	act.newStyle = data.style
+	act.optional = data.optional
 
 	--Make child actions recursively.
 	for _, child in ipairs(data) do
@@ -682,8 +698,17 @@ function struct.BuildStructure(structure)
 		end
 		
 		function context:PushStyle(newStyleName)
-			assert(context._styles[1][newStyleName], "There is no style named " .. newStyleName)
-			table.insert(context._styles, context._styles[1][newStyleName])
+			--Find the style in the stack, from top to bottom.
+			local ix = nil
+			for styleIx = #context._styles, 1, -1 do
+				if(context._styles[styleIx][newStyleName]) then
+					ix = styleIx
+					break;
+				end
+			end
+			assert(ix, "Could not find a style named " .. newStyleName)
+			
+			table.insert(context._styles, context._styles[ix][newStyleName])
 			context.style = context._styles[#context._styles]
 		end
 		
