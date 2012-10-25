@@ -2,14 +2,14 @@
 
 local tests =
 {
-	[[lua $<dir>LoadGen.lua -spec=gl -version=3.3 -profile=core -style=pointer_cpp -stdext=extfiles/gl_ubiquitous.txt $<dir>test/pointer_cpp/test]],
+	[[lua $<dir>LoadGen.lua -spec=gl -version=3.3 -profile=core -style=pointer_cpp -stdext=extfiles/gl_ubiquitous.txt $<dir>test/ptr_cpp/test]],
 }
 
 local platTests =
 {
 	wgl =
 	{
-		[[lua $<dir>LoadGen.lua -spec=wgl -style=pointer_cpp -stdext=extfiles/wgl_common.txt $<dir>test/pointer_cpp/test]],
+		[[lua $<dir>LoadGen.lua -spec=wgl -style=pointer_cpp -stdext=extfiles/wgl_common.txt $<dir>test/ptr_cpp/test]],
 	},
 	
 	glX =
