@@ -1,5 +1,6 @@
 
 local common = require "CommonStyle"
+local util = require "util"
 
 local my_style = {}
 my_style.header = {}
@@ -20,9 +21,8 @@ end
 ------------------------------------------------------
 -- Header styling functions
 
-function my_style.header.CreateFile(basename, options)
-	local filename = basename .. ".hpp"
-	return common.CreateFile(filename, options.indent), filename
+function my_style.header.GetFilename(basename, options)
+	return basename .. ".hpp"
 end
 
 	local function GenIncludeGuardName(hFile, spec, options)
@@ -36,15 +36,19 @@ end
 		return str
 	end
 
-function my_style.header.WriteBeginIncludeGuard(hFile, spec, options)
+function my_style.header.WriteBlockBeginIncludeGuard(hFile, spec, options)
 	local inclGuard = GenIncludeGuardName(hFile, spec, options)
 	
 	hFile:fmt("#ifndef %s\n", inclGuard)
 	hFile:fmt("#define %s\n", inclGuard)
 end
 
-function my_style.header.WriteEndIncludeGuard(hFile, spec, options)
+function my_style.header.WriteBlockEndIncludeGuard(hFile, spec, options)
 	hFile:fmt("#endif //%s\n", GenIncludeGuardName(hFile, spec, options))
+end
+
+function my_style.header.WriteInit(hFile, spec, options)
+	hFile:rawwrite(spec.GetHeaderInit())
 end
 
 function my_style.header.WriteStdTypedefs(hFile, specData, spec, options)
@@ -78,14 +82,14 @@ end
 		hFile:fmt("} //namespace %s\n", namespaceName or "")
 	end
 
-function my_style.header.WriteBeginDecl(hFile, spec, options)
+function my_style.header.WriteBlockBeginDecl(hFile, spec, options)
 	if(#options.prefix > 0) then
 		StartNamespace(hFile, options.prefix)
 	end
 	StartNamespace(hFile, spec.FuncNamePrefix())
 end
 
-function my_style.header.WriteEndDecl(hFile, spec, options)
+function my_style.header.WriteBlockEndDecl(hFile, spec, options)
 	EndNamespace(hFile, spec.FuncNamePrefix())
 	if(#options.prefix > 0) then
 		EndNamespace(hFile, options.prefix)
@@ -117,13 +121,13 @@ private:
 };
 ]]
 
-function my_style.header.WriteBeginExtVarDeclBlock(hFile, spec, options)
+function my_style.header.WriteBlockBeginExtVarDecl(hFile, spec, options)
 	StartNamespace(hFile, extBlockNamespace)
 	hFile:writeblock(extVariableTypeDefinition)
 	hFile:write("\n")
 end
 
-function my_style.header.WriteEndExtVarDeclBlock(hFile, spec, options)
+function my_style.header.WriteBlockEndExtVarDecl(hFile, spec, options)
 	EndNamespace(hFile, extBlockNamespace)
 end
 
@@ -137,13 +141,13 @@ function my_style.header.WriteExtVariableDecl(hFile, extName,
 		GenExtensionVarName(extName, spec, options));
 end
 
-function my_style.header.WriteBeginEnumDeclBlock(hFile, spec, options)
+function my_style.header.WriteBlockBeginEnumDecl(hFile, spec, options)
 	hFile:write("enum\n")
 	hFile:write("{\n")
 	hFile:inc()
 end
 
-function my_style.header.WriteEndEnumDeclBlock(hFile, spec, options)
+function my_style.header.WriteBlockEndEnumDecl(hFile, spec, options)
 	hFile:dec()
 	hFile:write("};\n")
 end
@@ -168,40 +172,42 @@ end
 		return enumName
 	end
 
-function my_style.header.WriteEnumDecl(hFile, enum, enumTable, spec, options)
-	local enumName = GenEnumName(enum)
-	local lenEnum = #enumName
-	local numIndent = 33
+function my_style.header.WriteEnumDecl(hFile, enum, enumTable, spec, options,
+	enumSeen)
+	if(enumSeen[enum.name]) then
+		hFile:fmt("//%s taken from ext: %s\n", enum.name, extName)
+	else
 	
-	local numSpaces = numIndent - lenEnum
-	if(numSpaces < 1) then
-		numSpaces = 1
+		local enumName = GenEnumName(enum)
+		local lenEnum = #enumName
+		local numIndent = 33
+		
+		local numSpaces = numIndent - lenEnum
+		if(numSpaces < 1) then
+			numSpaces = 1
+		end
+
+		hFile:fmt("%s%s= %s,\n",
+			enumName,
+			string.rep(" ", numSpaces),
+			common.ResolveEnumValue(enum, enumTable))
 	end
-
-	hFile:fmt("%s%s= %s,\n",
-		enumName,
-		string.rep(" ", numSpaces),
-		common.ResolveEnumValue(enum, enumTable))
 end
 
-function my_style.header.WriteEnumPrevDecl(hFile, enum, enumTable, spec, options, extName)
-	hFile:fmt("//%s taken from ext: %s\n", enum.name, extName)
-end
-
-function my_style.header.WriteBeginFuncDeclBlock(hFile, spec, options)
+function my_style.header.WriteBlockBeginFuncDecl(hFile, spec, options)
 	--Block containing all spec function declarations.
 end
 
-function my_style.header.WriteEndFuncDeclBlock(hFile, spec, options)
+function my_style.header.WriteBlockEndFuncDecl(hFile, spec, options)
 	--Block containing all spec function declarations.
 end
 
-function my_style.header.WriteBeginExtFuncDeclBlock(hFile, extName, spec, options)
+function my_style.header.WriteBlockBeginExtFuncDecl(hFile, extName, spec, options)
 	--Block containing all spec function declarations for a particular extension.
 	--Useful for include-guards around extension function pointers.
 end
 
-function my_style.header.WriteEndExtFuncDeclBlock(hFile, extName, spec, options)
+function my_style.header.WriteBlockEndExtFuncDecl(hFile, extName, spec, options)
 	--Block containing all spec function declarations for a particular extension.
 end
 
@@ -241,11 +247,11 @@ function my_style.header.WriteFuncDecl(hFile, func, typemap, spec, options)
 		";\n")
 end
 
-function my_style.header.WriteBeginSysDeclBlock(hFile, spec, options)
+function my_style.header.WriteBlockBeginSysDecl(hFile, spec, options)
 	StartNamespace(hFile, "sys")
 end
 
-function my_style.header.WriteEndSysDeclBlock(hFile, spec, options)
+function my_style.header.WriteBlockEndSysDecl(hFile, spec, options)
 	EndNamespace(hFile, "sys")
 end
 
@@ -267,39 +273,44 @@ end
 
 --------------------------------------------------
 -- Source code styling functions.
-function my_style.source.CreateFile(basename, options)
-	return common.CreateFile(basename .. ".cpp", options.indent)
+function my_style.source.GetFilename(basename, options)
+	return basename .. ".cpp"
 end
 
-function my_style.source.WriteIncludes(hFile, spec, options)
+function my_style.source.WriteIncludes(hFile, basename, spec, options)
 	hFile:writeblock([[
 #include <algorithm>
 #include <vector>
 #include <string.h>
-#ifdef _MSC_VER
-#endif
 ]])
+
+	local base = util.ParsePath(my_style.header.GetFilename(basename, options))
+	hFile:fmt('#include "%s"\n', base)
 end
 
-function my_style.source.WriteBeginDef(hFile, spec, options)
+function my_style.source.WriteLoaderData(hFile, spec, options)
+	hFile:writeblock(spec.GetLoaderFunc())
+end
+
+function my_style.source.WriteBlockBeginDef(hFile, spec, options)
 	if(#options.prefix > 0) then
 		StartNamespace(hFile, options.prefix)
 	end
 	StartNamespace(hFile, spec.FuncNamePrefix())
 end
 
-function my_style.source.WriteEndDef(hFile, spec, options)
+function my_style.source.WriteBlockEndDef(hFile, spec, options)
 	EndNamespace(hFile, spec.FuncNamePrefix())
 	if(#options.prefix > 0) then
 		EndNamespace(hFile, options.prefix)
 	end
 end
 
-function my_style.source.WriteBeginExtVarDefBlock(hFile, spec, options)
+function my_style.source.WriteBlockBeginExtVarDef(hFile, spec, options)
 	StartNamespace(hFile, extBlockNamespace)
 end
 
-function my_style.source.WriteEndExtVarDefBlock(hFile, spec, options)
+function my_style.source.WriteBlockEndExtVarDef(hFile, spec, options)
 	EndNamespace(hFile, extBlockNamespace)
 end
 
@@ -309,12 +320,12 @@ function my_style.source.WriteExtVariableDef(hFile, extName,
 		GenExtensionVarName(extName, spec, options));
 end
 
-function my_style.source.WriteBeginExtFuncDefBlock(hFile, extName, spec, options)
+function my_style.source.WriteBlockBeginExtFuncDef(hFile, extName, spec, options)
 	--Block containing the extension function definitions and load function
 	--for the functions in the extension `extName`.
 end
 
-function my_style.source.WriteEndExtFuncDefBlock(hFile, extName, spec, options)
+function my_style.source.WriteBlockEndExtFuncDef(hFile, extName, spec, options)
 	--Block containing the extension function definitions and load function
 	--for the functions in the extension `extName`.
 end
@@ -329,14 +340,14 @@ end
 		return "Load_" .. extName;
 	end
 
-function my_style.source.WriteBeginExtLoaderBlock(hFile, extName, spec, options)
+function my_style.source.WriteBlockBeginExtLoader(hFile, extName, spec, options)
 	hFile:fmt("static int %s()\n", GenExtLoaderFuncName(extName, spec, options))
 	hFile:write("{\n")
 	hFile:inc()
 	hFile:write("int numFailed = 0;\n")
 end
 
-function my_style.source.WriteEndExtLoaderBlock(hFile, extName, spec, options)
+function my_style.source.WriteBlockEndExtLoader(hFile, extName, spec, options)
 	hFile:write "return numFailed;\n"
 	hFile:dec()
 	hFile:write("}\n")
@@ -351,27 +362,20 @@ function my_style.source.WriteExtFuncLoader(hFile, func, typemap, spec, options)
 	hFile:fmt('if(!%s) ++numFailed;\n', GenFuncPtrName(func, spec, options))
 end
 
-function my_style.source.WriteBeginCoreFuncDefBlock(hFile, version, spec, options)
+function my_style.source.WriteBlockBeginCoreFuncDef(hFile, version, spec, options)
 	--Block containing the core functions for `version`.
 	--The block also contains the loading function for this version.
 end
 
-function my_style.source.WriteEndCoreFuncDefBlock(hFile, version, spec, options)
+function my_style.source.WriteBlockEndCoreFuncDef(hFile, version, spec, options)
 	--Block containing the core functions for `version`.
-end
-
-function my_style.source.WriteGetExtStringFuncDef(hFile, func, typemap,
-	spec, options)
-	WriteFuncPtrTypedefStmt(hFile, func, typemap, spec, options)
-	hFile:write("static ", GenFuncPtrDefTypedef(func, typemap, spec, options),
-		" = 0;\n")
 end
 
 	local function GenCoreLoaderFuncName(version, spec, options)
 		return "LoadCoreFunctions"
 	end
 
-function my_style.source.WriteBeginCoreLoaderBlock(hFile, version, spec, options)
+function my_style.source.WriteBlockBeginCoreLoader(hFile, version, spec, options)
 	hFile:fmt("static int %s()\n", GenCoreLoaderFuncName(version, spec, options))
 	hFile:write("{\n")
 	hFile:inc()
@@ -379,7 +383,7 @@ function my_style.source.WriteBeginCoreLoaderBlock(hFile, version, spec, options
 
 end
 
-function my_style.source.WriteEndCoreLoaderBlock(hFile, version, spec, options)
+function my_style.source.WriteBlockEndCoreLoader(hFile, version, spec, options)
 	hFile:write "return numFailed;\n"
 	hFile:dec()
 	hFile:write("}\n")
@@ -401,11 +405,39 @@ function my_style.source.WriteCoreFuncLoader(hFile, func, typemap, spec, options
 	end
 end
 
-function my_style.source.WriteBeginSysDefBlock(hFile, spec, options)
+function my_style.source.WriteExtStringFuncDef(hFile, specData, spec, options, funcSeen)
+	if(funcSeen[spec.GetExtStringFuncName()]) then
+		return
+	end
+	
+	--Check to see if its something we have to load.
+	local function FindFuncName(funcName)
+		for _, func in ipairs(specData.funcData.functions) do
+			if(func.name == funcName) then
+				return func
+			end
+		end
+		
+		return nil
+	end
+	
+	local extStringFunc = FindFuncName(spec.GetExtStringFuncName())
+
+	if(extStringFunc) then
+		hFile:write("\n")
+		local typemap = specData.typemap
+		WriteFuncPtrTypedefStmt(hFile, extStringFunc, typemap, spec, options)
+		hFile:write("static ", GenFuncPtrDefTypedef(extStringFunc, typemap, spec, options),
+			" = 0;\n")
+		hFile:write("\n")
+	end
+end
+
+function my_style.source.WriteBlockBeginSysDef(hFile, spec, options)
 	StartNamespace(hFile, "sys")
 end
 
-function my_style.source.WriteEndSysDefBlock(hFile, spec, options)
+function my_style.source.WriteBlockEndSysDef(hFile, spec, options)
 	EndNamespace(hFile, "sys")
 end
 
@@ -699,7 +731,7 @@ end
 -- Style retrieval machinery
 
 local function Create()
-	return common.DeepCopyTable(my_style)
+	return common.DeepCopyTable(my_style), common.GetStandardStructure()
 end
 
 return { Create = Create }

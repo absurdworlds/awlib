@@ -55,19 +55,26 @@ function util.EnsurePath(path)
 	
 	if(not status) then return end
 	
-	local mode = lfs.attributes(path, "mode")
+	--strip the last directory separator off.
+	path = path:match("^(.+)[/\\]$")
+	
+	local mode, err = lfs.attributes(path, "mode")
 	if(not mode) then
 		local creates = {}
 		local currPath = path
 		repeat
 			table.insert(creates, 1, currPath)
-			currPath = currPath:match("(.*[/\\])[^/\\]*[/\\]$")
+			currPath = currPath:match("(.*[/\\])[^/\\]*$")
+			print(currPath)
 			if(currPath) then
-				mode = lfs.attributes(currPath, "mode")
+				currPath = currPath:match("^(.+)[/\\]$")
+				print(currPath)
+				mode, err = lfs.attributes(currPath, "mode")
 			end
 		until(mode or currPath == nil)
 		
 		for _, newDir in ipairs(creates) do
+			print(newDir)
 			assert(lfs.mkdir(newDir))
 		end
 	end

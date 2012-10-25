@@ -119,13 +119,6 @@ function my_style.header.WriteEnumDecl(hFile, enum, enumTable, spec, options, en
 	end
 end
 
-function my_style.header.WriteEnumPrevDecl(hFile, enum, enumTable, spec, options, extName)
-	hFile:fmt("/*Copied %s%s From: %s*/\n",
-		spec.EnumNamePrefix(),
-		enum.name,
-		extName)
-end
-
 function my_style.header.WriteBlockBeginFuncDecl(hFile, specData, options)
 end
 
@@ -239,7 +232,6 @@ end
 
 function my_style.source.WriteLoaderData(hFile, spec, options)
 	hFile:writeblock(spec.GetLoaderFunc())
-	hFile:write("\n")
 end
 
 function my_style.source.WriteBlockBeginDef(hFile, spec, options) end
@@ -332,11 +324,6 @@ function my_style.source.WriteCoreFuncLoader(hFile, func, typemap, spec, options
 		hFile:fmt('if(!%s) numFailed++;\n', GetFuncPtrName(func, spec, options))
 	end
 end
-
-function my_style.source.WriteGetExtStringFuncDef(hFile, func, typemap, spec, options)
-end
-
-
 
 function my_style.source.WriteExtStringFuncDef(hFile, specData, spec, options, funcSeen)
 	if(funcSeen[spec.GetExtStringFuncName()]) then
@@ -504,11 +491,6 @@ else
 end
 
 function my_style.source.WriteVersioningFuncs(hFile, specData, spec, options)
-	--Only for GL
-	if(options.spec ~= "gl") then
-		return
-	end
-	
 	hFile:fmt("static int g_major_version = 0;\n")
 	hFile:fmt("static int g_minor_version = 0;\n")
 	hFile:write "\n"
