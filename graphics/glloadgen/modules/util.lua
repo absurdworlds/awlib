@@ -65,16 +65,13 @@ function util.EnsurePath(path)
 		repeat
 			table.insert(creates, 1, currPath)
 			currPath = currPath:match("(.*[/\\])[^/\\]*$")
-			print(currPath)
 			if(currPath) then
 				currPath = currPath:match("^(.+)[/\\]$")
-				print(currPath)
 				mode, err = lfs.attributes(currPath, "mode")
 			end
 		until(mode or currPath == nil)
 		
 		for _, newDir in ipairs(creates) do
-			print(newDir)
 			assert(lfs.mkdir(newDir))
 		end
 	end

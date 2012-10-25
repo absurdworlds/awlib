@@ -1,8 +1,17 @@
 
 
+local prelims =
+{
+	[[lua $<dir>MakeAllExts.lua -spec=gl $<dir>allgl.txt]],
+	[[lua $<dir>MakeAllExts.lua -spec=wgl $<dir>allwgl.txt]],
+	[[lua $<dir>MakeAllExts.lua -spec=glX $<dir>allglx.txt]],
+}
+
 local tests =
 {
 	[[lua $<dir>LoadGen.lua -spec=gl -version=3.3 -profile=core -style=pointer_cpp -stdext=extfiles/gl_ubiquitous.txt $<dir>test/ptr_cpp/test]],
+	[[lua $<dir>LoadGen.lua -spec=gl -version=4.3 -profile=compatibility -style=glload -extfile=$<dir>allgl.txt $<dir>test/glload_c/test]],
+	[[lua $<dir>LoadGen.lua -spec=gl -version=4.3 -profile=compatibility -style=glload -extfile=$<dir>allgl.txt $<dir>test/glload_cpp/test]],
 }
 
 local platTests =
@@ -10,6 +19,8 @@ local platTests =
 	wgl =
 	{
 		[[lua $<dir>LoadGen.lua -spec=wgl -style=pointer_cpp -stdext=extfiles/wgl_common.txt $<dir>test/ptr_cpp/test]],
+		[[lua $<dir>LoadGen.lua -spec=wgl -style=glload -extfile=$<dir>allwgl.txt $<dir>test/glload_c/test]],
+		[[lua $<dir>LoadGen.lua -spec=wgl -style=glload -extfile=$<dir>allwgl.txt $<dir>test/glload_cpp/test]],
 	},
 	
 	glX =
@@ -34,6 +45,7 @@ if(arg[1]) then
 	assert(platTests[arg[1]], "Invalid platform " .. arg[1])
 end
 
+ExecTests(prelims)
 ExecTests(tests)
 if(arg[1]) then
 	ExecTests(platTests[arg[1]])
