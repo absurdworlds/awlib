@@ -29,7 +29,7 @@ Structure actions:
 - block: Represents a block. Must be in a file scope.
 -		name: Part of the function name to call. When starting the block, it will call "WriteBlockBegin"..name. To end it, it will call "WriteBlockEnd"..name. The default parameters are (hFile, spec, options).
 
-- group: Represents a collection of stuff. Has no particular semantics (though it can have conditionals and such.
+- group: Represents a collection of stuff. Has no particular semantics (though it can have conditionals and such).
 
 - write: Simply calls a given writing function. Must be in a file scope.
 -		name: Part of the function name to call. The complete function name is "Write"..name. The default parameters are (hFile, specData, spec, options).
