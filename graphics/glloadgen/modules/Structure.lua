@@ -63,6 +63,8 @@ Common properties:
 
 - style: All `name`d functions must be within one of the tables in scope. The `style` command adds an additional scope of the given name. What this means is that the system will check each style within scope for a table with the given name. That table then becomes the most recent style scope that names are looked through. Thus, all names below this node (*including* this node's name) will search through this style and every previous style for their names.
 
+- optional: It is not an error for the `name`d function to be present. The action, and its children, will be processed as normal, ***except*** for `filter` actions. For them, if the function is not present, everything is filtered out; the children will not be processed.
+
 - first: When set, this particular action (and any of its child actions) will only be executed the first time through the most recent iteration loop. Note that this only works for the most recent iteration loop. And it only works within an interation loop, since they are the only ones who execute their children multiple times.
 
 - last: Like first, except for the last time through a block. Usually for inserting blank space.
@@ -668,6 +670,7 @@ local struct = {}
 function struct.BuildStructure(structure)
 	local actions = {}
 	for _, data in ipairs(structure) do
+		assert(actionTypes[data.type], "Unknown command type " .. data.type)
 		actions[#actions + 1] = actionTypes[data.type](data)
 	end
 	
@@ -710,12 +713,20 @@ function struct.BuildStructure(structure)
 			
 			table.insert(context._styles, context._styles[ix][newStyleName])
 			context.style = context._styles[#context._styles]
+			
+			if(context.style._init) then
+				context.style._init()
+			end
 		end
 		
 		function context:PopStyle()
 			local ret = context._styles[#context._styles]
 			context._styles[#context._styles] = nil
 			context.style = context._styles[#context._styles]
+
+			if(ret._exit) then
+				ret._exit()
+			end
 			return ret
 		end
 		

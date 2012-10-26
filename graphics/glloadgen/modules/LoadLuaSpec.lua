@@ -15,6 +15,7 @@ The format will be as defined in ConvertAllSpecFilesToLua, except for the follow
 -- enums: An array of enumerators. These enumerators are the entries in the main enum array.
 -- funcs: An array of functions. These functions are the entries in the main funcData array.
 - enumtable: A table of enumerators, indexed by their names.
+- functable: A table of functions, indexed by their names.
 - coreexts: A table of core extensions, indexed by extension name. The value of these entries are:
 -- name: The core extension's name.
 -- version: the version that extension became core in. The version is a string.
@@ -57,9 +58,11 @@ function load.LoadLuaSpec(luaFilename, spec)
 	specData.extdefs = {};
 	specData.coredefs = {};
 	specData.enumtable = {};
+	specData.functable = {}
 	local extdefs = specData.extdefs;
 	local coredefs = specData.coredefs;
 	local enumtable = specData.enumtable;
+	local functable = specData.functable
 	
 	--HACK! Change 1.0 version in functions to 1.1, to match enums.
 	for i, func in ipairs(specData.funcData.functions) do
@@ -182,6 +185,8 @@ function load.LoadLuaSpec(luaFilename, spec)
 	end
 
 	for i, func in ipairs(specData.funcData.functions) do
+		functable[func.name] = func;
+	
 		--This is here to make sure that the category is an actual extension,
 		--not a verison number.
 		if(extdefs[func.category]) then
