@@ -4,10 +4,23 @@
 <article xmlns="http://docbook.org/ns/docbook" xmlns:xi="http://www.w3.org/2001/XInclude"
     xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0">
     <title>Style Creation</title>
-    <para>The style system is designed to be extensible and as simple as possible. That doesn't mean
-        it's not somewhat complex.</para>
-    <para>A <literal>style</literal> is a Lua table that contains a number of functions and tables.
-        These functions will be called by the system to do specific things at specific times.</para>
+    <para>The style system is designed to be extensible. But it is also somewhat complex. There are
+        two concepts that are important: a style and a structure.</para>
+    <para>A <literal>structure</literal> is a Lua table that effectively defines the basic layout of
+        where information goes in the generated files. It also defines which files are generated. In
+        a structure, you can do things like loop over all the extensions and/or versions. The
+        structure system is very flexible, allowing you to create virtually any kind of output you
+        could imagine.</para>
+    <para>The structure defines the basic layout of everything, but it doesn't define the actual
+        words and characters that get written. This is defined by the <literal>style</literal>.
+        Styles and structures interact; structures can say things like, <quote>Loop over all
+            extensions and call this style function for each.</quote> The particular style function
+        will decide what to do with the extension it is given. Because of this, different styles can
+            <emphasis>share</emphasis> the same structure. <literal>pointer_c</literal> and
+            <literal>pointer_cpp</literal> both use the style defined in
+            <literal>StyleCommon</literal>, even though they do very different things.</para>
+    <para/>
+    <para/>
     <para>You should not need to keep state between function invocations (the
             <literal>pointer_c</literal> style works completely statelessly, relying only on
         function arguments). However, if you need state, you can create it by using the
