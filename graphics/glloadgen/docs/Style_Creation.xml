@@ -19,168 +19,60 @@
             <emphasis>share</emphasis> the same structure. <literal>pointer_c</literal> and
             <literal>pointer_cpp</literal> both use the style defined in
             <literal>StyleCommon</literal>, even though they do very different things.</para>
-    <para/>
-    <para/>
-    <para>You should not need to keep state between function invocations (the
-            <literal>pointer_c</literal> style works completely statelessly, relying only on
-        function arguments). However, if you need state, you can create it by using the
-            <literal>Create</literal> function to associate actual state with each instance. The
-        system guarantees that the particular table returned by your style's
-            <literal>Create</literal> function will only be used to generate a single header/source
-        pair.</para>
-    <para>The <literal>style</literal> table will need two sub-tables named
-            <literal>source</literal> and <literal>header</literal>. They contain functions for
-        generating material for source and header files, respectively. Most of the functions are in
-        these two sub-tables.</para>
+    <para>For example, let's say you have part of a code generation system, where you need to
+        iterate over each extension and create a function for it. In that function, you iterate over
+        all of the function pointers within that extension, writing loading code for each one. The
+        part of the structure that provides this would look like this:</para>
+    <programlisting>{ type="ext-iter",
+  { type="block", name="ExtensionFunctionDef(hFile, extName, spec, options),
+    { type="func-iter",
+      { type="write", name="LoadFunctionPtr(hFile, func, typemap, spec, options)", },
+    },
+  },
+},</programlisting>
+    <para>The first section has an <literal>ext-iter</literal>, which iterates all of the extensions
+        the user asked for. It will perform all of the contents once for each extension. Within that
+        is a user-written <literal>block</literal> that defines the beginning and end of the
+        function. Inside of the block is a <literal>func-iter</literal>, which iterates over all of
+        the functions inside of the current extension. So it's like a nested for-loop. Inside of the
+        function iterator is a <literal>write</literal> statement that writes something for each
+        function.</para>
+    <para>The stuff in the <literal>name</literal> tags represent (part of) the name of functions
+        stored within the <emphasis>style</emphasis>. Exactly how this is interpreted depends on the
+        particular statement. For example, the <literal>write</literal> statement above will call a
+        function named <literal><emphasis>Write</emphasis>LoadFunctionPtr</literal>, because the
+        write statement always appends <literal>Write</literal> to its statements.</para>
+    <para>The <literal>block</literal> statement is a bit more complex, as it will call two separate
+        functions: <literal>WriteBlockBeginExtensionFunctionDef</literal> and
+            <literal>WriteBlockEndExtensionFunctionDef</literal>. It calls the first one before
+        executing any of its containing statements, and it calls the second after executing its
+        contents. Thus the block's contents are bound.</para>
+    <para>The style should have functions with the appropriate names; if it does not, a runtime
+        error will occur, providing information that the function name couldn't be called.</para>
+    <para>The parameter list is actually quite special. Each parameter name has a very specific
+        meaning and stores very specific data (which you must <emphasis>never modify</emphasis>).
+        But different parameters are available at different times. For example,
+            <literal>extName</literal> represents the name of the current extension. But there can
+        only be a <quote>current extension</quote> when you are iterating over a group of
+        extensions. Likewise, <literal>func</literal> is a function loaded from the appropriate spec
+        file, but it is only available while iterating over a set of functions.</para>
+    <para>As with function names, if a parameter is specified in a place where it is not made
+        available (such as providing <literal>func</literal> to
+            <literal>ExtensionFunctionDef</literal>), a runtime error explaining the problem will
+        occur.</para>
+    <para>This is a simple overview of the process. There is a rather lot more complexity than
+        that.</para>
+    <para>In general, a style and a structure are created in tandem; if a structure is to be used in
+        multiple styles, then the structure can be created first. But it's much easier to make part
+        of a structure, implement enough style functions to use it, then expand on it.</para>
     <para><phrase role="toc"/></para>
     <section>
-        <title>Naming convention</title>
-        <para>The system follows a strict naming convention for its parameters. Each name refers to
-            an object or value with specific data. Here are the possibilities:</para>
-        <glosslist>
-            <glossentry>
-                <glossterm>options</glossterm>
-                <glossdef>
-                    <para>The options data structure. It contains the options processed from the
-                        command-line. Among these is <literal>extensions</literal>, the list of
-                        extension names that are being explicitly written. You can tell which spec
-                        is being used with <literal>options.spec</literal>, but it's better to rely
-                        on the <literal>spec</literal> parameter as seen below.</para>
-                </glossdef>
-            </glossentry>
-            <glossentry>
-                <glossterm>hFile</glossterm>
-                <glossdef>
-                    <para>A <literal>TabbedFile</literal>. This is a special kind of Lua IO file. It
-                        supports all of the Lua IO methods (<emphasis>DO NOT CLOSE IT!</emphasis>),
-                        but it's designed to handle indentation. As such, it extends the Lua IO with
-                        specialized routines to auto-indent individual lines. This allows the system
-                        to determine the indention to use based on command-line options. The
-                        assumption with almost all of the writing functions is that each write is an
-                        individual line.</para>
-                    <para>Note that you must use it with Lua's member calling conventions
-                            (<literal>hFile:write</literal>, for example). If you try to use
-                            <literal>io.write</literal>, things will break.</para>
-                    <para><literal>hFile:inc</literal> and <literal>hFile:dec</literal> are
-                        functions that increment/decrement the current indention level. The
-                        indention can be preserved with <literal>hFile:push</literal> and restored
-                        with <literal>hFile:pop</literal>.</para>
-                    <para>The <literal>TabbedFile</literal> also offers the ability to do string
-                        formatting directly into the write. <literal>hFile:fmt</literal> takes a
-                        format string and some parameters, forwards the parameters to
-                            <literal>string.format</literal>, then writes that string as a
-                        line.</para>
-                    <para>There are block writing functions, <literal>hFile:writeblock</literal> and
-                            <literal>hFile:fmtblock</literal>. These functions will split the
-                        written string into individual lines and indent each one.</para>
-                    <para>If you don't want indented writes, then use
-                            <literal>hFile:rawwrite</literal> and
-                        <literal>hFile:rawfmt</literal>.</para>
-                </glossdef>
-            </glossentry>
-            <glossentry>
-                <glossterm>specData</glossterm>
-                <glossdef>
-                    <para>This is the entire data containing every enumeration, typedef, function,
-                        etc for the specification (OpenGL, WGL, GLX). It is a massive struct, and
-                        it's format is complex.</para>
-                    <para>You can see what specData looks like by reading
-                            <filename>glspecs/glspec.lua</filename>. <literal>specData</literal> is
-                        derived from this table, but with some modifications. The modifications are
-                        detailed in the comments at the top of
-                            <filename>modules/LoadLuaSpec.lua</filename>. They're primarily
-                        convenience stuff, to make it easier to find an enum by its enumeration name
-                        and so forth.</para>
-                </glossdef>
-            </glossentry>
-            <glossentry>
-                <glossterm>spec</glossterm>
-                <glossdef>
-                    <para>This is a struct containing functions used to get specification-specific
-                        strings. This allows the style of writing to be mostly independent of things
-                        like whether it is writing to OpenGL or WGL. For example, if you have the
-                        base name of an enumeration, and you want to prefix it with the spec-defined
-                        prefix for enumerations, you do this:</para>
-                    <programlisting>spec.EnumNamePrefix() .. enumName</programlisting>
-                    <para>There are a number of spec functions that return prefix strings or other
-                        spec-based strings. You can find these in the
-                            <filename>modules/Specs.lua</filename> file, with a comment stating what
-                        each one returns.</para>
-                    <para>There are also some functions that provide general information: list of
-                        versions, list of core extensions, a string containing the definitions for
-                        the OpenGL function to load function pointers, etc. These lists are all
-                        stored in the <filename>data</filename> directory, using the file format
-                            <literal>data/&lt;specName>_spec&lt;data>.lua</literal>. </para>
-                </glossdef>
-            </glossentry>
-            <glossentry>
-                <glossterm>extName</glossterm>
-                <glossdef>
-                    <para>The base name of an extension. Usually paired with
-                            <literal>specData</literal>, as the name alone isn't terribly useful.
-                        You can get the list of enumerators and functions defined by this extension
-                        with <literal>specData[extName].enums/funcs</literal>. These are not named
-                        of enumerators and functions; they're the actual part of the
-                            <literal>specData</literal> that defines everything about that
-                        enum/func.</para>
-                </glossdef>
-            </glossentry>
-            <glossentry>
-                <glossterm>enum</glossterm>
-                <glossdef>
-                    <para>This is an enumeration. Not the <emphasis>name</emphasis> of an
-                        enumeration; the enumeration itself. It contains the name
-                            <literal>enum.name</literal>, but it also contains versioning
-                        information and so forth. It is an entry from the
-                            <literal>specData.enumerations</literal> table.</para>
-                    <para>If you want to get the value of an enumerator, you cannot simply use
-                            <literal>enum.value</literal>. You need the <literal>enum</literal> and
-                        the <literal>enumTable</literal> (see below). Then, you use
-                            <literal>common.ResolveEnumValue</literal>, where
-                            <literal>common</literal> is the <literal>CommonStyle</literal> module
-                        table.</para>
-                </glossdef>
-            </glossentry>
-            <glossentry>
-                <glossterm>enumTable</glossterm>
-                <glossdef>
-                    <para>A table of <literal>enum</literal>s, indexed by enumeration name. It comes
-                        from <literal>specData.enumtable</literal>.</para>
-                </glossdef>
-            </glossentry>
-            <glossentry>
-                <glossterm>func</glossterm>
-                <glossdef>
-                    <para>This is a function. As with <literal>enum</literal>, it is not merely the
-                        name of a function (that's <literal>func.name</literal>); it is the function
-                        itself. It is an element taken from the
-                            <literal>specData.funcData.functions</literal> array. It contains many
-                        properties of a function.</para>
-                    <para>If you want to get the parameters (C-style) in a function, you can use
-                            <literal>common.GetFuncParamList</literal>, which requires a
-                            <literal>typename</literal> (see below). Otherwise, you would have to
-                        deal with the many difficulties of pulling a viable parameter list from a
-                            <literal>func</literal>.</para>
-                </glossdef>
-            </glossentry>
-            <glossentry>
-                <glossterm>typemap</glossterm>
-                <glossdef>
-                    <para>This is a mapping between types as defined in <literal>func</literal> (for
-                        parameters and values) and types as defined by C/C++, as well as the
-                        standard OpenGL/system typedefs and such. It is from
-                            <literal>specData.typemap</literal>.</para>
-                </glossdef>
-            </glossentry>
-            <glossentry>
-                <glossterm>version</glossterm>
-                <glossdef>
-                    <para>A <emphasis>string</emphasis> (remember this) that contains the version of
-                        interest. Since it's a string, you need to apply <literal>tonumber</literal>
-                        to it to get a proper number.</para>
-                </glossdef>
-            </glossentry>
-        </glosslist>
+        <title>Making the Structure</title>
+        <para>This page will provide a basic overview for making a simple structure. <link
+                xlink:href="Structure_Reference">The reference page</link> has more in-depth
+            documentation about all aspects of structure creation.</para>
+        <para/>
+        <para/>
     </section>
     <section>
         <title>Library functions</title>
@@ -224,135 +116,6 @@
         </itemizedlist>
         <para>So prefix names that can conflict with the user-prefix <emphasis>and</emphasis> the
             spec's prefix.</para>
-    </section>
-    <section>
-        <title>File structure</title>
-        <para>A good way to understand the nature of the functions is to show how the functions will
-            be called by the system to build the header/source file. Here is the structure of a
-            header file, as far as the system is concerned. Each function call represents the system
-            calling that function with those parameters one or more times.</para>
-        <programlisting>header.CreateFile(basename, options) //Return the name of the file.
-
-header.WriteBeginIncludeGuard(hFile, spec, options)
-  header.WriteStdTypedefs(hFile, specData, spec, options)
-  header.WriteSpecTypedefs(hFile, specData, spec, options)
-
-
-  header.WriteBeginDecl(hFile, spec, options)
-
-    header.WriteBeginExtVarDeclBlock(hFile, spec, options)
-      //For each user-specified extension
-      header.WriteExtVariableDecl(hFile, extName, specData, spec, options)
-      header.WriteExtVariableDecl(hFile, ..., specData, spec, options)
-      ...
-    header.WriteEndExtVarDeclBlock(hFile, spec, options)
-
-    header.WriteBeginEnumDeclBlock(hFile, spec, options)
-      //For each enum to be written, in order of extensions/core
-      //Will call one or the other.
-      header.WriteEnumDecl(hFile, enum, enumTable, spec, options)
-      header.WriteEnumPrevDecl(hFile, enum, enumTable, spec, options, extName)
-    header.WriteEndEnumDeclBlock(hFile, spec, options)
-
-
-    header.WriteBeginFuncDeclBlock(hFile, spec, options)
-      //For each user-specified extension:
-      header.WriteBeginExtFuncDeclBlock(hFile, extName, spec, options)
-        //For each function in that extension
-        header.WriteFuncDecl(hFile, func, typemap, spec, options)
-        header.WriteFuncDecl(hFile, ..., typemap, spec, options)
-        ...
-      header.WriteEndExtFuncDeclBlock(hFile, extName, spec, options)
-      
-      //For each version, where applicable:
-        //For each core extension that was not user-specified:
-        header.WriteBeginExtFuncDeclBlock(hFile, extName, spec, options)
-          header.WriteFuncDecl(hFile, func, typemap, spec, options)
-          header.WriteFuncDecl(hFile, ..., typemap, spec, options)
-          ...
-        header.WriteEndExtFuncDeclBlock(hFile, extName, spec, options)
-
-        //For each core function from this version *not* in a core extension.
-        header.WriteFuncDecl(hFile, func, typemap, spec, options)
-        header.WriteFuncDecl(hFile, ..., typemap, spec, options)
-        ...
-    header.WriteEndFuncDeclBlock(hFile, spec, options)
-    
-    header.WriteBeginSysDeclBlock(hFile, spec, options)
-      header.WriteUtilityDecls(hFile, spec, options)
-      header.WriteMainLoaderFuncDecl(hFile, spec, options)
-      header.WriteVersioningFuncDecls(hFile, spec, options) //Only if the spec has versions.
-    header.WriteEndSysDeclBlock(hFile, spec, options)
-
-  header.WriteEndDecl(hFile, spec, options)
-  
-header.WriteEndIncludeGuard(hFile, spec, options)</programlisting>
-        <para>And here is the equivalent structure for the source files:</para>
-        <programlisting>source.CreateFile(basename, options) //Name of the file.
-
-source.WriteIncludes(hFile, spec, options)
-#include "HEADER_FILENAME"
-
-//Function pointer loader func from spec.loaderFunc()
-
-source.WriteBeginDef(hFile, spec, options)
-
-  source.WriteBeginExtVarDefBlock(hFile, spec, options)
-    //For each user-specified extension
-    source.WriteExtVariableDef(hFile, extName, specData, spec, options)
-    source.WriteExtVariableDef(hFile, ..., specData, spec, options)
-    ...
-  source.WriteEndExtVarDefBlock(hFile, spec, options)
-  
-  //For each user-specified extension:
-  source.WriteBeginExtFuncDefBlock(hFile, extName, spec, options)
-    //For each function in the extension:
-    source.WriteFuncDef(hFile, func, typemap, spec, options)
-    source.WriteFuncDef(hFile, ..., typemap, spec, options)
-    ...
-    
-    source.WriteBeginExtLoaderBlock(hFile, extName, spec, options)
-      //For each function in the extension
-      source.WriteCoreFuncLoader(hFile, func, typemap, spec, options)
-    source.WriteEndExtLoaderBlock(hFile, extName, spec, options)
-  source.WriteEndExtFuncDefBlock(hFile, extName, spec, options)
-  
-  source.WriteBeginCoreFuncDefBlock(hFile, version, spec, options)
-    //For each version, where applicable
-      //For each core extension in that version which was not user-specified
-      source.WriteBeginExtFuncDefBlock(hFile, extName, spec, options)
-        //For each function in that core extension:
-        source.WriteCoreFuncLoader(hFile, func, typemap, spec, options)
-        source.WriteCoreFuncLoader(hFile, .., typemap, spec, options)
-        ...
-      source.WriteEndExtFuncDefBlock(hFile, extName, spec, options)
-      
-      //For each function from that version not in a core extension:
-      source.WriteCoreFuncLoader(hFile, func, typemap, spec, options)
-      source.WriteCoreFuncLoader(hFile, .., typemap, spec, options)
-      ...
-
-    source.WriteBeginCoreLoaderBlock(hFile, version, spec, options)
-      //For each version, where applicable
-        //For each core extension in that version which was not user-specified
-        {
-          //For each function in that core extension:
-          source.WriteCoreFuncLoader(hFile, func, typemap, spec, options)
-        }
-          
-        //For each function from that version *not* in a core extension:
-        source.WriteCoreFuncLoader(hFile, func, typemap, spec, options)
-    source.WriteEndCoreLoaderBlock(hFile, version, spec, options)
-  source.WriteEndCoreFuncDefBlock(hFile, version, spec, options)
-  
-
-  source.WriteBeginSysDefBlock(hFile, spec, options)
-    source.WriteUtilityDefs(hFile, specData, spec, options)
-    source.WriteMainLoaderFunc(hFile, specData, spec, options)
-    source.WriteVersioningFuncs(hFile, specData, spec, options) //Only if the spec has versions.
-  source.WriteEndSysDefBlock(hFile, spec, options)
-
-source.WriteEndDef(hFile, spec, options)</programlisting>
     </section>
     <section>
         <title>Style function reference</title>

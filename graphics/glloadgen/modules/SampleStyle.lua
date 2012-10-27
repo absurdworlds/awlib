@@ -347,7 +347,7 @@ end
 -- Style retrieval machinery
 
 local function Create()
-	return common.DeepCopyTable(my_style)
+	return common.DeepCopyTable(my_style), common.GetStandardStructure()
 end
 
 return { Create = Create }

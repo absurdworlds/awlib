@@ -38,9 +38,11 @@
             <para>Certain enumerators use widely used by OS's for various things. Windows for
                 example <literal>#define</literal>s <literal>TRUE</literal> and
                     <literal>FALSE</literal>, among others. There's no automated way to detect this,
-                so there's just a list of the known ones. These known enumerators will be suffixed
-                with an <quote><literal>_</literal></quote> character. So <literal>TRUE</literal>
-                becomes <literal>TRUE_</literal>.</para>
+                so there's just a list of the known ones. The C++ standard states that all
+                identifiers that begin with an underscore followed by a capital letter are reserved
+                for the standard library. So we cannot prefix them with an underscore; instead, we
+                suffix them with one. So <literal>TRUE</literal> becomes
+                <literal>TRUE_</literal>.</para>
         </listitem>
     </orderedlist>
     <para>The functions are function pointers, but their names are not hidden behind a
