@@ -1,5 +1,4 @@
 
-
 local prelims =
 {
 	[[lua $<dir>MakeAllExts.lua -spec=gl $<dir>allgl.txt]],
@@ -25,6 +24,9 @@ local platTests =
 	
 	glX =
 	{
+		[[lua $<dir>LoadGen.lua -spec=glX -style=pointer_cpp -stdext=extfiles/glx_common.txt $<dir>test/ptr_cpp/test]],
+		[[lua $<dir>LoadGen.lua -spec=glX -style=glload -extfile=$<dir>allglx.txt $<dir>test/glload_c/test]],
+		[[lua $<dir>LoadGen.lua -spec=glX -style=glload -extfile=$<dir>allglx.txt $<dir>test/glload_cpp/test]],
 	},
 }
 
