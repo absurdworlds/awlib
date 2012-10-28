@@ -9,14 +9,14 @@
         <para>This loader generation system is used to create OpenGL headers and loading code for
             your specific needs. Rather than getting every extension and core enumerator/function
             all in one massive header, you get only what you actually want and ask for.</para>
-        <para>This is still very experimental; little testing has been done on it yet. <link
-                xlink:href="https://bitbucket.org/alfonse/glloadgen/downloads">Download it
+        <para><link xlink:href="https://bitbucket.org/alfonse/glloadgen/downloads">Download it
                 here;</link> you will need to have the Lua runtime installed on your machine to use
             the code generation scripts. It's pretty tiny, so it shouldn't be a problem. Windows
             users can install <link xlink:href="http://code.google.com/p/luaforwindows/">Lua For
                 Windows</link>, or just <link xlink:href="http://luabinaries.sourceforge.net/">the
                 Lua binaries packages</link>. The code should be compatible with Lua 5.1 and 5.2,
             but it has only been tested on 5.1.</para>
+        <para>The scripts in this package are licensed under the terms of the MIT License.</para>
         <para>To use the code generator, with Lua in your path (assuming that <literal>lua</literal>
             is the name of your Lua executable), type this:</para>
         <programlisting>lua LoadGen.lua -style=pointer_c -spec=gl -version=3.3 -profile=core core_3_3</programlisting>
