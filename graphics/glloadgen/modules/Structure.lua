@@ -2,86 +2,6 @@
 local util = require "util"
 local TabbedFile = require "TabbedFile"
 
---[[
-Directory of used context names:
-
-- style
-- spec
-- specData
-- options
-- basename
-- hFile			Provided by file blocks
-- extName		Provided by extension iterators.
-- version		Provided by version iterators.
-- sub_version	Provided by sub-version iterators.
-- enum			Provided by enum iterators.
-- enumTable		Provided by enum iterators.
-- enumSeen		Provided by enum seen blocks.
-- func			Provided by function iterators.
-- typemap		Provided by function iterators.
-- funcSeen		Provided by func seen blocks.
-
-Structure actions:
-
-- file: Creates a TabbedFile.
--		name: The style function to call. It should return a filename. The defualt parameters are (basename, options)
-
-- block: Represents a block. Must be in a file scope.
--		name: Part of the function name to call. When starting the block, it will call "WriteBlockBegin"..name. To end it, it will call "WriteBlockEnd"..name. The default parameters are (hFile, spec, options).
-
-- group: Represents a collection of stuff. Has no particular semantics (though it can have conditionals and such).
-
-- write: Simply calls a given writing function. Must be in a file scope.
--		name: Part of the function name to call. The complete function name is "Write"..name. The default parameters are (hFile, specData, spec, options).
-
-- blank: Writes an empty line. Must be in a file scope.
-
-- filter: Contains a group of actions. If the named function returns false, then the children will not be processed.
--		name: Part of the function name to call. The complete function name is "Filter"..name. The default parameters are () (ie: none).
-
-- ext-iter: Iterates over all of the extensions explicitly requested by the user. Cannot nest. Children can access the `extName` parameter, the name of the current extension.
-
-- version-iter: Iterates over each version in the spec, which is less than or equal to the requested version, where applicable. Cannot nest. Children can access the `version` parameter, the current version as a *string*.
-
-- sub-version-iter: Iterates over each version that is less than or equal to the current version. Cannot nest. Must be done within a context that provides the `version` parameter. Children can access the `sub_version` parameter, the current sub-version as a *string*.
-
-- core-ext-iter: Iterates over all core extensions of the current version. Cannot nest. Must be done within a context that provides the `version` parameter. Children can access the `extName` parameter, the name of the current core extension.
-
-- core-ext-cull-iter: Iterates over all core extensions that were *not* explicitly asked for. Cannot nest. Must be done within a context that provides the `version` parameter. Children can access the `extName` parameter, the name of the current core extension.
-
-- enum-seen: Children can access the `enumSeen` parameter. This is a mapping between enumerator names and where that enumerator was first seen. If it is not in this list, then this enumerator was not processed before (within the scope of the `enum-seen`). The `enum-iter` works in tandem with this to keep the `enumSeen` table up-to-date. The value for an enum may be an extension name or a core version number.
-
-- enum-iter: Iterates over all of the enumerators within scope. The "scope" is defined by whether `extName` or `version` is available. So if `extName` is available, then it iterates over all enums within that extension. If `version` is available, then it iterates over enums within *just* that version (the options.profile also applies). If both are visible, `extName` wins. Children can access the `enum` and `enumTable` parameters, which are the current enum and a name-table of all enums in the system. The latter is used to determine the value of the enum.
-
-- func-seen: Children can access the `funcSeen` parameter. This works like `enum-seen` but for functions and `func-iter`.
-
-- func-iter: Iterates over all of the functions within scope, using the same scoping rules as `enum-iter`. Children can access the `func` and `typemap` parameters, which are the current function and a typemap used to compute parameters and return-values (primarily for C).
-
-Common properties:
-
-- name: The name of a function to call, or part of a name. This can also include a parenthesized list of parameters. The parameter names much match those in the above list of parameters, and those parameters must be available in this particular scope (different actions create different scopes. If a particular parameter is not available in a context, a runtime error will occur.
-
-- style: All `name`d functions must be within one of the tables in scope. The `style` command adds an additional scope of the given name. What this means is that the system will check each style within scope for a table with the given name. That table then becomes the most recent style scope that names are looked through. Thus, all names below this node (*including* this node's name) will search through this style and every previous style for their names.
-
-- optional: It is not an error for the `name`d function to be present. The action, and its children, will be processed as normal, ***except*** for `filter` actions. For them, if the function is not present, everything is filtered out; the children will not be processed.
-
-- first: When set, this particular action (and any of its child actions) will only be executed the first time through the most recent iteration loop. Note that this only works for the most recent iteration loop. And it only works within an interation loop, since they are the only ones who execute their children multiple times.
-
-- last: Like first, except for the last time through a block. Usually for inserting blank space.
-
-- cond: Only processes the node and its children if the condition is "true". Available conditions:
-	- ext-iter
-	- version-iter
-	- core-ext-iter
-	- core-ext-cull-iter
-	- enum-iter
-	- func-iter
-	- core-funcs: True if the spec has core functions. IE: is OpenGL.
-
-All of the iterator-based conditions will be true iff performing that iterator in this context would result in at least one match. They can only be used in the same context where the equivalent iterator could.
-
-]]
-
 local actionTypes = {}
 local conditionals = {}
 
@@ -160,6 +80,10 @@ function action:CallFunction(context, name)
 		end
 	end
 	
+	if(self.value) then
+		context.value = self.value
+	end
+	
 	local paramList = {}
 	for _, param in ipairs(self.params) do
 		assert(context[param], "The function " .. name ..
@@ -167,7 +91,13 @@ function action:CallFunction(context, name)
 		paramList[#paramList + 1] = context[param]
 	end
 	
-	return style[name](unpack(paramList))
+	local rets = { style[name](unpack(paramList)) }
+
+	if(self.value) then
+		context.value = nil
+	end
+
+	return unpack(rets)
 end
 
 function action:Assert(test, text)
@@ -228,6 +158,7 @@ local function CreateAction(data, actionType)
 	
 	act.newStyle = data.style
 	act.optional = data.optional
+	act.value = data.value
 
 	--Make child actions recursively.
 	for _, child in ipairs(data) do
@@ -260,12 +191,96 @@ local function MakeActionType(typeName, typeTable, PostInitFunc)
 end
 
 
+-------------------------------------
+-- Group Action
+local groupAction = {}
+
+MakeActionType("group", groupAction, function(self, data)
+end)
+
+
+-------------------------------------
+-- Call Action
+local callAction = {}
+
+function callAction:PreProcess(context)
+	self:CallFunction(context, self.name)
+end
+
+MakeActionType("call", callAction, function(self, data)
+	self.params = self.params or {}
+end)
+
+
+-------------------------------------
+-- Context Action
+local contextAction = {}
+
+function contextAction:PreProcess(context)
+	self:Assert(context[self.key] == nil,
+		"Attempt to nest the context variable " .. self.key)
+
+	if(self.data) then
+		context[self.key] = self.data
+	else
+		context[self.key] = self:CallFunction(context, self.name)
+	end
+end
+
+function contextAction:PostProcess(context)
+	local style = context:FindStyleForFunc(self.dispose)
+	self:Assert(style,
+		string.format("Could not find the disposal function %s for %s.",
+		self.dispose, self.key))
+		
+	style[self.dispose](context[self.key])
+	context[self.key] = nil
+end
+
+MakeActionType("context", contextAction, function(self, data)
+	assert(data.key, "Context actions must have a `key`")
+	self.key = data.key .. "_"
+	self.data = data.data
+	if(self.name) then
+		self.name = "State" .. self.name
+	end
+	self.dispose = data.dispose
+	if(self.dispose) then
+		self.dispose = "Dispose" .. self.dispose
+	end
+
+	assert(self.data or self.name, "Context actions must have either `data` or `name`.")
+
+	self.params = self.params or {}
+end)
+
+
+-------------------------------------------
+-- Filter Action
+local filterAction = {}
+
+function filterAction:PreProcess(context)
+	local shouldFilter = self:CallFunction(context, self.name)
+	if(self.neg) then
+		shouldFilter = not shouldFilter
+	end
+	return not shouldFilter
+end
+
+MakeActionType("filter", filterAction, function(self, data)
+	assert(data.name, "Filter actions must have a `name`")
+	self.name = "Filter" .. self.name
+	self.neg = data.neg
+	self.params = self.params or {}
+end)
+
+
 ----------------------------
 -- File Action
 local fileAction = {}
 
 function fileAction:PreProcess(context)
-	assert(context.hFile == nil, "You cannot nest `file` blocks.")
+	self:Assert(context.hFile == nil, "You cannot nest `file` blocks.")
 
 	local filename = self:CallFunction(context)
 	
@@ -305,14 +320,6 @@ MakeActionType("block", blockAction, function(self, data)
 end)
 
 
--------------------------------------
--- Group Action
-local groupAction = {}
-
-MakeActionType("group", groupAction, function(self, data)
-end)
-
-
 ------------------------------------------
 -- Write Action
 local writeAction = {}
@@ -339,26 +346,6 @@ function blankAction:PreProcess(context)
 end
 
 MakeActionType("blank", blankAction, function(self, data)
-end)
-
-
--------------------------------------------
--- Filter Action
-local filterAction = {}
-
-function filterAction:PreProcess(context)
-	local shouldFilter = self:CallFunction(context, self.name)
-	if(self.neg) then
-		shouldFilter = not shouldFilter
-	end
-	return not shouldFilter
-end
-
-MakeActionType("filter", filterAction, function(self, data)
-	assert(data.name, "Filter actions must have a `name`")
-	self.name = "Filter" .. self.name
-	self.neg = data.neg
-	self.params = self.params or {}
 end)
 
 
