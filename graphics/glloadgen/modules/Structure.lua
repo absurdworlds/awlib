@@ -67,6 +67,47 @@ function action:ProcessChildren(context)
 	end
 end
 
+local valueResolvers =
+{
+	enum = function(enum) return enum.name end,
+	func = function(func) return func.name end,
+	spec = function(spec) return spec.FuncNamePrefix() end,
+}
+
+local function ResolveValue(context, value)
+	--Find every occurrance of %chars, and try to turn that into a context variable.
+	local possibleVars = {}
+	for var in value:gmatch("%%([_%a][_%w]*)") do
+		possibleVars[var] = true
+	end
+	
+	for var, _ in pairs(possibleVars) do
+		if(not context[var]) then
+			return nil, "The variable " .. var .. " from the value string was not found.\n" .. value
+		end
+		
+		local replace = context[var]
+		if(type(replace) ~= "string") then
+			local str = tostring(replace)
+			if(str) then
+				replace = str
+			elseif(valueResolvers[var]) then
+				replace = valueResolvers[var](replace)
+			elseif(type(replace) == "table" and replace._ValueResolve) then
+				replace = replace:_ValueResolve()
+			end
+		end
+		
+		if(type(replace) ~= "string") then
+			return nil, "Could not convert the variable " .. var .. " into a string."
+		end
+		
+		value = value:gsub("%%" .. var, replace)
+	end
+	
+	return value
+end
+
 function action:CallFunction(context, name)
 	name = name or self.name
 	self:Assert(name, "Unknown function name.")
@@ -81,7 +122,7 @@ function action:CallFunction(context, name)
 	end
 	
 	if(self.value) then
-		context.value = self.value
+		context.value = self:Assert(ResolveValue(context, self.value))
 	end
 	
 	local paramList = {}
@@ -100,7 +141,8 @@ function action:CallFunction(context, name)
 	return unpack(rets)
 end
 
-function action:Assert(test, text)
+function action:Assert(...)
+	local test, text = ...
 	if(not test) then
 		local msg = ": " .. text
 		if(self.name) then
@@ -110,6 +152,8 @@ function action:Assert(test, text)
 		end
 		assert(test, msg)
 	end
+	
+	return ...
 end
 
 --Iterates over the list, setting the second element returned from the iterator
@@ -159,7 +203,7 @@ local function CreateAction(data, actionType)
 	act.newStyle = data.style
 	act.optional = data.optional
 	act.value = data.value
-
+	
 	--Make child actions recursively.
 	for _, child in ipairs(data) do
 		assert(actionTypes[child.type], "Unknown command type " .. child.type)

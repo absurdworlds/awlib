@@ -14,6 +14,7 @@ local style_registry =
 	pointer_c = require("StylePointerC"),
 	pointer_cpp = require("StylePointerCPP"),
 	glload = require("StyleGLLoad"),
+	glee_cpp = require("StyleGleeCpp"),
 }
 
 local default_style = "pointer_c"

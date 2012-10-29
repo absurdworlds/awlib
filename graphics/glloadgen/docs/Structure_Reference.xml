@@ -477,6 +477,29 @@ end</programlisting>
                                 inherited</emphasis>. This parameter is not given to any child
                             actions; only the action this value is set on will have access to this
                             value.</para>
+                        <para>The value must be a string. However, to allow the string to use
+                            various names defined by the system, the string can have special codes
+                            in it. Any use of <quote>%</quote> in the string will denote the
+                            beginning of a special name. Thus, you shouldn't do things like this:
+                                    <quote><literal>some%string</literal>,</quote> this will make
+                            the system think that <literal>%string</literal> is a special name. If
+                            you use <quote>%</quote> by itself, with a space or non-identifier
+                            characters after it, then it will remain a % sign. So
+                                    <quote><literal>some% string</literal></quote> is fine, as is
+                                    <quote><literal>some%-string</literal></quote>.</para>
+                        <para>The special names are just context variable names, only a limited
+                            subset of them. Of the standard context variables, the only ones you can
+                            use are those which are naturally strings (like
+                                <literal>version</literal> and <literal>extName</literal>) or those
+                            which are reasonably convertible to strings (<literal>enum</literal>
+                            would return it's basic string name, with no prefixing).</para>
+                        <para>The main purpose of this is to be able to print messages easily, like
+                            comments that say that extension X's declarations begin here.</para>
+                        <para>User-defined context variables can also be used, but they must be
+                            either strings or tables. If they are tables, then they either must have
+                            a <literal>__tostring</literal> metamethod, or they must have a member
+                            function called <literal>_ValueResolve</literal> function. This function
+                            only takes the table as a parameter.</para>
                     </glossdef>
                 </glossentry>
                 <glossentry>

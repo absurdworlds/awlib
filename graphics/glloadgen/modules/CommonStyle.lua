@@ -57,9 +57,43 @@ local function ResolveEnumValue(enum, enumTable)
 end
 common.ResolveEnumValue = ResolveEnumValue
 
+function common.GetCppEnumName(enum)
+	--Note: some enumerators start with characters C++ forbids as initial
+	--identifiers. If we detect such an enum, prefix it with `_`.
+	local enumName = enum.name
+	if(not enumName:match("^[a-zA-Z_]")) then
+		enumName = "_" .. enumName
+	end
+	
+	--Also, certain identifiers can need it because they conflict.
+	local badIdent = {"TRUE", "FALSE", "NO_ERROR", "WAIT_FAILED"}
+	for _, ident in ipairs(badIdent) do
+		if(enumName == ident) then
+			enumName = enumName .. "_"
+			break
+		end
+	end
+	
+	return enumName
+end
+
+function common.GetNameLengthPadding(name, length)
+	local numSpaces = length - #name
+	if(numSpaces < 1) then
+		numSpaces = 1
+	end
+	
+	return string.rep(" ", numSpaces)
+end
+
 --Gets the return type for a function.
 function common.GetFuncReturnType(func, typemap)
 	return typemap[func["return"]] or func["return"]
+end
+
+function common.DoesFuncReturnSomething(func, typemap)
+	local returnType = typemap[func["return"]] or func["return"]
+	return (returnType == "void") or (returnType == "GLvoid")
 end
 
 local bIsKindPtr ={
@@ -99,6 +133,16 @@ function common.GetFuncParamList(func, typemap, bWriteVarNames)
 				paramType, paramName);
 		end
 		paramList[#paramList + 1] = parameter
+	end
+	
+	return table.concat(paramList, ", ");
+end
+
+--Get the list of parameter names, as a string ready to be put into ().
+function common.GetFuncParamCallList(func, typemap)
+	local paramList = {}
+	for i, param in ipairs(func.params) do
+		paramList[#paramList + 1] = param.name
 	end
 	
 	return table.concat(paramList, ", ");
@@ -359,6 +403,18 @@ static void LoadExtByName(const char *extensionName)
 }
 ]])
 end
+
+function common.WriteNamespaceBegin(hFile, namespace)
+	hFile:fmt("namespace %s\n", namespace)
+	hFile:write("{\n")
+	hFile:inc()
+end
+
+function common.WriteNamespaceEnd(hFile)
+	hFile:dec()
+	hFile:write("}\n")
+end
+
 
 common.DeepCopyTable = DeepCopyTable
 
