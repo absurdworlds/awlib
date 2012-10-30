@@ -435,7 +435,7 @@ local my_struct =
 			{ type="write", name="SpecTypedefs(hFile, specData, options)",},
 			{ type="blank"},
 			{ type="block", name="Decl(hFile, spec, options)",
-				{ type="block", name="ExtVarDecl(hFile, spec, options)", cond="ext-iter",
+				{ type="block", name="ExtVarDecl(hFile, spec, options)",
 					{ type="ext-iter",
 						{ type="write", name="ExtVariableDecl(hFile, extName, specData, spec, options)" },
 						{ type="blank", last=true },
