@@ -119,7 +119,7 @@ function common.GetFuncParamList(func, typemap, bWriteVarNames)
 		local paramType = typemap[param.type] or param.type;
 		local paramName = "";
 		if(bWriteVarNames) then paramName = param.name end
-		if(paramNameRemap[paramName]) then paramName = paramNameRemap[paramName] end
+		if(paramNameRemap[paramName]) then paramName = paramNameRemap[paramName]end
 		
 		if(bIsKindPtr[param.kind]) then
 			if(param.input) then
@@ -142,7 +142,12 @@ end
 function common.GetFuncParamCallList(func, typemap)
 	local paramList = {}
 	for i, param in ipairs(func.params) do
-		paramList[#paramList + 1] = param.name
+		local paramName = param.name
+		if(paramNameRemap[paramName]) then
+			paramName = paramNameRemap[paramName]
+		end
+
+		paramList[#paramList + 1] = paramName
 	end
 	
 	return table.concat(paramList, ", ");

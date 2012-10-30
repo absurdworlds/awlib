@@ -551,7 +551,7 @@ local function GetEnumList(context)
 		local core = context.specData.coredefs[context.version];
 		
 		if(context.options.profile ~= "core") then
-			return core.enums
+			return core.enums, context.version
 		end
 
 		local targetVersion = tonumber(context.options.version)
@@ -589,6 +589,10 @@ function enumIterAction:PreProcess(context)
 	self:Assert(context.version or context.extName, "Enumeration iterators must go within a version or extension iterator.")
 
 	local enumList, source = GetEnumList(context)
+	
+	if(not source) then
+		print(context.version, context.extName)
+	end
 
 	context.enumTable = context.specData.enumtable
 	self:IterateChildren(context, enumList, "enum",
