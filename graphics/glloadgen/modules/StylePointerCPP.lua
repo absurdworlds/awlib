@@ -153,23 +153,7 @@ function my_style.header.WriteBlockEndEnumDecl(hFile, spec, options)
 end
 
 	local function GenEnumName(enum)
-		--Note: some enumerators start with characters C++ forbids as initial
-		--identifiers. If we detect such an enum, prefix it with `_`.
-		--Also, certain identifiers can need it.
-		local enumName = enum.name
-		if(not enumName:match("^[a-zA-Z_]")) then
-			enumName = "_" .. enumName
-		end
-		
-		local badIdent = {"TRUE", "FALSE", "NO_ERROR", "WAIT_FAILED"}
-		for _, ident in ipairs(badIdent) do
-			if(enumName == ident) then
-				enumName = enumName .. "_"
-				break
-			end
-		end
-		
-		return enumName
+		return common.GetCppEnumName(enum)
 	end
 
 function my_style.header.WriteEnumDecl(hFile, enum, enumTable, spec, options,

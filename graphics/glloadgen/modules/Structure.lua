@@ -272,12 +272,14 @@ function contextAction:PreProcess(context)
 end
 
 function contextAction:PostProcess(context)
-	local style = context:FindStyleForFunc(self.dispose)
-	self:Assert(style,
-		string.format("Could not find the disposal function %s for %s.",
-		self.dispose, self.key))
-		
-	style[self.dispose](context[self.key])
+	if(self.dispose) then
+		local style = context:FindStyleForFunc(self.dispose)
+		self:Assert(style,
+			string.format("Could not find the disposal function %s for %s.",
+			self.dispose, self.key))
+			
+		style[self.dispose](context[self.key])
+	end
 	context[self.key] = nil
 end
 

@@ -66,7 +66,7 @@ function common.GetCppEnumName(enum)
 	end
 	
 	--Also, certain identifiers can need it because they conflict.
-	local badIdent = {"TRUE", "FALSE", "NO_ERROR", "WAIT_FAILED"}
+	local badIdent = {"TRUE", "FALSE", "NO_ERROR", "WAIT_FAILED", "DOMAIN"}
 	for _, ident in ipairs(badIdent) do
 		if(enumName == ident) then
 			enumName = enumName .. "_"
