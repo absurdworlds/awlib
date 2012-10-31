@@ -95,7 +95,24 @@
                 <para>It must be one of the following values:</para>
                 <itemizedlist>
                     <listitem>
-                        <para><literal>pointer_c</literal>: default.</para>
+                        <para><link xlink:href="Style_Pointer_C"
+                            ><literal>pointer_c</literal></link>: Used for C-style header
+                            generation.</para>
+                    </listitem>
+                    <listitem>
+                        <para><link xlink:href="Style_Pointer_CPP"
+                                ><literal>pointer_cpp</literal></link>: Used for creating C++-style
+                            loaders, wrapping as much as possible in namespaces.</para>
+                    </listitem>
+                    <listitem>
+                        <para><link xlink:href="Style_No_Load_CPP"
+                                ><literal>noload_cpp</literal></link>: Used for creating C++-style
+                            loaders that you don't need to call an initialization function on to get
+                            function pointers.</para>
+                    </listitem>
+                    <listitem>
+                        <para><link><literal xlink:href="Style_GL_Load">glload</literal></link>: Do
+                            not use.</para>
                     </listitem>
                 </itemizedlist>
             </glossdef>

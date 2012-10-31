@@ -61,6 +61,11 @@
                     Used for creating C++-style loaders, wrapping as much as possible in
                     namespaces.</para>
             </listitem>
+            <listitem>
+                <para><link xlink:href="Style_No_Load_CPP"><literal>noload_cpp</literal></link>:
+                    Used for creating C++-style loaders that you don't need to call an
+                    initialization function on to get function pointers.</para>
+            </listitem>
         </itemizedlist>
     </section>
     <section>
