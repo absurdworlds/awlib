@@ -165,7 +165,9 @@ local my_struct =
                         <itemizedlist>
                             <listitem>
                                 <para><literal>key</literal>: The string name of the new context
-                                    variable. Required.</para>
+                                    variable. Required. Must end in the
+                                        <quote><literal>_</literal></quote> character, to ensure
+                                    that it doesn't conflict with other variables.</para>
                             </listitem>
                             <listitem>
                                 <para><literal>data</literal>: A Lua value that represents the new
@@ -187,11 +189,9 @@ local my_struct =
                         </itemizedlist>
                         <para>Either <literal>name</literal> or <literal>data</literal> must be
                             defined. <literal>data</literal> takes priority.</para>
-                        <para>The actual context variable created by this will be suffixed with the
-                                <literal>_</literal> character, to ensure that it does not conflict
-                            with system-defined context variables. Just as with other context
-                            variables, attempting to define the same one twice will result in an
-                            error.</para>
+                        <para>Provides access to the parameter named by <literal>key</literal>. Note
+                            that this means you can't nest <literal>context</literal>'s that provide
+                            the same variable.</para>
                     </glossdef>
                 </glossentry>
                 <glossentry>
@@ -395,6 +395,12 @@ end</programlisting>
                                 <literal>enumSeen</literal> will be updated. It doesn't matter if
                             nothing was written; the enumerator being iterated over is
                             enough.</para>
+                        <para>If that's not good enough, if you need the filter mechanism to be
+                            respected, you can use <literal>context</literal> and
+                                <literal>call</literal> actions to create the equivalent. The
+                                <literal>context</literal> would create some key as a new table, and
+                            the <literal>call</literal> would be used to update the table with an
+                            enumerator.</para>
                     </glossdef>
                 </glossentry>
                 <glossentry>
@@ -441,9 +447,10 @@ end</programlisting>
                             children are processed as though the function had been called normally,
                                 <emphasis>UNLESS</emphasis> it is a filter action. In that case, the
                             filter will be assumed to have returned false, meaning that children
-                            will not be processed (unless <literal>neg</literal> is set, in which
-                            case it will flip that into <literal>true</literal>, thus always
-                            processing children if the function isn't present).</para>
+                            will not be processed (unless <literal>neg</literal> is
+                                <emphasis>also</emphasis> set, in which case it will flip that into
+                                <literal>true</literal>, thus always processing children if the
+                            function isn't present).</para>
                     </glossdef>
                 </glossentry>
                 <glossentry>
@@ -550,7 +557,9 @@ end</programlisting>
         <title>Function Parameters</title>
         <para>Here are a list of the various function parameters, with references to the actions
             that provide them.</para>
-        <para>Again, <emphasis>DO NOT MODIFY THEM!</emphasis></para>
+        <para>Again, <emphasis>DO NOT MODIFY THEM!</emphasis> You can call member functions on them
+            and inspect them. But unless they're user-defined parameters, do not change their
+            tables.</para>
         <glosslist>
             <glossentry>
                 <glossterm>specData</glossterm>

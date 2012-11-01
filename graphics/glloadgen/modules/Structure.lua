@@ -284,8 +284,9 @@ function contextAction:PostProcess(context)
 end
 
 MakeActionType("context", contextAction, function(self, data)
-	assert(data.key, "Context actions must have a `key`")
-	self.key = data.key .. "_"
+	assert(data.key, "Context actions must have a `key`.")
+	assert(data.key:match("%_$"), "Context action keys must end in `_`.")
+	self.key = data.key
 	self.data = data.data
 	if(self.name) then
 		self.name = "State" .. self.name

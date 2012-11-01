@@ -12,9 +12,15 @@
                 xlink:href="Style_Pointer_CPP">pointer_cpp</literal></link> style. Everything is
         scoped into namespaces. The enumerators don't have the <literal>GL_</literal> prefix on
         them, and so forth.</para>
-    <para>The main difference is this. <literal>noload_cpp</literal> does have a system function
-        called <literal>sys::CheckExtensions</literal>. This function walks through the list of
-        advertised extensions and sets up the extension variables. It does not load anything, so
-        there is no way to tell if all of the function pointers that are advertised are actually
-        available.</para>
+    <para>The system is designed to be automatic, responding to your application's needs. However,
+        calling a function that the implementation does not provide will result in a crash, just as
+        it would for the previous system.</para>
+    <para>To help alleviate this, the system does have variables to tell you which extensions are
+        available (at least, according to the extension strings). They are located in the
+            <literal>exts</literal> namespace, using the <literal>var_&lt;extension name></literal>
+        syntax, and they are C++ <literal>bool</literal> types. However, unlike the magic function
+        pointers, you have to actually initialize them. You can call
+            <literal>sys::CheckExtensions</literal> to initialize them. This function only
+        initializes the extension variables, so it cannot report on the number of functions that
+        failed to load.</para>
 </article>
