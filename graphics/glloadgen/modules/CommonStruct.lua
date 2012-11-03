@@ -3,12 +3,14 @@ local common = {}
 
 --Iterates over all requested extensions
 --Calls Extension(hFile, extName, spec, options)
-common.extensions = 
+local extensions = 
 { type="group",
 	{ type="ext-iter",
 		{ type="write", name="Extension(hFile, extName, spec, options)", },
 	},
 }
+
+function common.Extensions() return extensions end
 
 --Iterates over every enumerator, in order:
 -- Requested extension enums.
@@ -17,7 +19,7 @@ common.extensions =
 --  Core enumerators from version X
 -- Calls Enumerator(hFile, enum, enumTable, spec, options, enumSeen)
 -- Optional small headers
-common.enumerators =
+local enumerators =
 { type="group",
 { type="enum-seen",
 	{ type="ext-iter",
@@ -44,6 +46,8 @@ common.enumerators =
 },
 }
 
+function common.Enumerators() return enumerators end
+
 --Iterates over each function, in order:
 -- Requested extension functions.
 -- For each version:
@@ -51,31 +55,35 @@ common.enumerators =
 --  Core functions from version X
 -- Calls Function(hFile, func, typemap, spec, options, funcSeen)
 -- Optional small headers.
-common.functions =
-{ type="group",
-{ type="func-seen",
-	{ type="ext-iter",
-		{type="func-iter",
-			{ type="write", name="SmallHeader(hFile, value, options)", value="Extension: %extName", first=true, optional=true},
-			{ type="write", name="Function(hFile, func, typemap, spec, options, funcSeen)", },
-			{ type="blank", last=true },
-		},
-	},
-	{ type="version-iter",
-		{ type="core-ext-cull-iter",
+-- Can provide an optional ending table, that will be placed within
+-- the "func-seen" block.
+function common.Functions(ending)
+	ending = ending or { type="group" }
+	return
+	{ type="func-seen",
+		{ type="ext-iter",
 			{type="func-iter",
 				{ type="write", name="SmallHeader(hFile, value, options)", value="Extension: %extName", first=true, optional=true},
 				{ type="write", name="Function(hFile, func, typemap, spec, options, funcSeen)", },
 				{ type="blank", last=true },
 			},
 		},
-		{type="func-iter",
-			{ type="write", name="SmallHeader(hFile, value, options)", value="Extension: %version", first=true, optional=true},
-			{ type="write", name="Function(hFile, func, typemap, spec, options, funcSeen)", },
-			{ type="blank", last=true },
+		{ type="version-iter",
+			{ type="core-ext-cull-iter",
+				{type="func-iter",
+					{ type="write", name="SmallHeader(hFile, value, options)", value="Extension: %extName", first=true, optional=true},
+					{ type="write", name="Function(hFile, func, typemap, spec, options, funcSeen)", },
+					{ type="blank", last=true },
+				},
+			},
+			{type="func-iter",
+				{ type="write", name="SmallHeader(hFile, value, options)", value="Extension: %version", first=true, optional=true},
+				{ type="write", name="Function(hFile, func, typemap, spec, options, funcSeen)", },
+				{ type="blank", last=true },
+			},
 		},
-	},
-},
-}
+		ending,
+	}
+end
 
 return common
