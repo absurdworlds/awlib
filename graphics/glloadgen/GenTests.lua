@@ -29,6 +29,7 @@ local platTests =
 		[[lua $<dir>LoadGen.lua -spec=glX -style=pointer_cpp -stdext=extfiles/glx_common.txt $<dir>test/ptr_cpp/test]],
 		[[lua $<dir>LoadGen.lua -spec=glX -style=glload -extfile=$<dir>allglx.txt $<dir>test/glload_c/test]],
 		[[lua $<dir>LoadGen.lua -spec=glX -style=glload -extfile=$<dir>allglx.txt $<dir>test/glload_cpp/test]],
+		[[lua $<dir>LoadGen.lua -spec=glX -style=noload_cpp -stdext=extfiles/glx_common.txt $<dir>test/noload_cpp/test]],
 	},
 }
 
