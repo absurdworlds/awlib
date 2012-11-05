@@ -565,8 +565,8 @@ end</programlisting>
                 particular generator.</para>
             <para>The usual method of writing function pointers would involve creating typedefs for
                 the function pointer types. You may have seen some
-                    <quote>PFNGLVERTEXATTRIBPOINTERPROC</quote>-kind of things. We won't be doing
-                that.</para>
+                        <quote><literal>PFNGLVERTEXATTRIBPOINTERPROC</literal></quote>-kind of
+                things. We won't be doing that.</para>
             <para>We still need a function to build a string containing the full function pointer
                 definition.</para>
             <programlisting>local function GetFuncPtrDef(hFile, func, typemap, spec, options)
@@ -605,7 +605,7 @@ end</programlisting>
                 name. That's what <literal>common.GetOpenGLFuncName</literal> returns.</para>
         </section>
         <section>
-            <title>Loaders</title>
+            <title>Main loader</title>
             <para/>
         </section>
     </section>
@@ -621,7 +621,11 @@ end</programlisting>
             <para/>
         </section>
         <section>
-            <title>Loaders</title>
+            <title>Function loaders</title>
+            <para/>
+        </section>
+        <section>
+            <title>Main loader</title>
             <para/>
         </section>
     </section>
