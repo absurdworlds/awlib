@@ -38,6 +38,20 @@
     <para>Also, this style will generate functions to query the version of the OpenGL
         context.</para>
     <section>
+        <title>Versions</title>
+        <para>When you use this system and provide a version number of OpenGL,
+                <literal>pointer_c</literal> will assume that you are <emphasis>serious</emphasis>
+            about that version number. Which means that if you create a 3.3 header, and you do not
+            supply a context that claims support for at least OpenGL version 3.3, loading failure
+            may occur.</para>
+        <para>In particular, OpenGL changed the mechanism to check for the presence/absence of
+            extensions in version 3.0. Therefore, <literal>pointer_c</literal> will also change how
+            it checks for the presence/absence of extensions based on that. If you provide a version
+            3.0 or greater, it will use the new style. Thus, if your context is only version 2.1,
+            then this style will be unable to function and will return
+                <literal>LOAD_FAILED</literal>.</para>
+    </section>
+    <section>
         <title>Compatibility</title>
         <para>This style is intended to be maximally compatible with regular OpenGL programs. You
             should be able to take this header and include it into a standard GL program and use it

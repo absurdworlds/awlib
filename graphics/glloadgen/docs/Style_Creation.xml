@@ -65,25 +65,15 @@
     <para>In general, a style and a structure are created in tandem; if a structure is to be used in
         multiple styles, then the structure can be created first. But it's much easier to make part
         of a structure, implement enough style functions to use it, then expand on it.</para>
-    <para><phrase role="toc"/></para>
+    <para>There are two documents available to help you learn about making styles. The first is a
+        step-by-step guide to making a new style and structure. The second is a <link
+            xlink:href="Structure_Reference">reference manual for the structure
+        system</link>.</para>
     <section>
-        <title>Making the Structure</title>
-        <para>This page will provide a basic overview for making a simple structure. <link
-                xlink:href="Structure_Reference">The reference page</link> has more in-depth
-            documentation about all aspects of structure creation.</para>
-        <para/>
-        <para/>
-    </section>
-    <section>
-        <title>Library functions</title>
-        <para>There are a number of common operations that different styles will share. The
-                <literal>CommonStyle</literal> module returns a table containing these operations.
-            They are defined as follows:</para>
-    </section>
-    <section>
-        <title>Resolving conflicts</title>
-        <para>Your style may create global definitions and so forth that come into conflict with
-            other things. Here are the rules you need to follow:</para>
+        <title>Responsibilities</title>
+        <para>Your style may create global definitions and so forth. In C/C++, definitions in one
+            source file can come into conflict with definitions in another. Here are the rules that
+            the system expects new styles to follow when creating such definitions:</para>
         <itemizedlist>
             <listitem>
                 <para>The user should be able to use different specs with the same style and link
@@ -91,7 +81,7 @@
                     should coexist. This effectively means that you need to make sure that your
                     names are prefixed with something spec-specific. The <literal>spec</literal>
                     table has functions to get an appropriate prefix; the
-                        <literal>spec.DeclPrefix</literal> is the general prefix for
+                        <literal>spec.DeclPrefix()</literal> function is the general prefix for
                     declaration/definitions of things that can conflict at link time.</para>
             </listitem>
             <listitem>
@@ -114,14 +104,7 @@
                     against the empty string.</para>
             </listitem>
         </itemizedlist>
-        <para>So prefix names that can conflict with the user-prefix <emphasis>and</emphasis> the
-            spec's prefix.</para>
-    </section>
-    <section>
-        <title>Style function reference</title>
-        <para>The file <filename>modules/SampleStyle.lua</filename> contains a file that you can
-            simply copy and paste to start making a style. Every function you need to define is
-            listed, as well as comments explaining exactly what they should do. Coupled with this
-            documentation, you should be well on your way to getting a style working.</para>
+        <para>So decorate names that can conflict with the user-prefix <emphasis>and</emphasis> the
+            spec's prefix. In C, you'll have to prefix the actual names.</para>
     </section>
 </article>

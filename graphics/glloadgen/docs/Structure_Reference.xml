@@ -770,4 +770,69 @@ end</programlisting>
             </glossentry>
         </glosslist>
     </section>
+    <section>
+        <title>Common Structure</title>
+        <para>The module <literal>CommonStruct</literal> represents reuseable components for your
+            structure. You can use them as you see fit. Each of the following is a function within
+            the <literal>CommonStruct</literal> table. These are useful for more complex iteration
+            mechanism than what the standard structure iterators provide. They call functions with
+            specific names, but you can use the style scoping mechanism to put the right styles into
+            position to make them work.</para>
+        <glosslist>
+            <glossentry>
+                <glossterm>Extensions</glossterm>
+                <glossdef>
+                    <para>This function takes no arguments and returns a group of actions will
+                        iterate over every extension the user asked to export. For each extension,
+                        it will call a function named <literal>WriteExtension(hFile, extName, spec,
+                            options)</literal> to write each component.</para>
+                    <para>Obviously, since it is writing things, it needs to be used within a
+                            <literal>file</literal> action. Also, since it uses the
+                            <literal>ext-iter</literal> action, it cannot be used
+                            <emphasis>within</emphasis> an <literal>ext-iter</literal>
+                        action.</para>
+                </glossdef>
+            </glossentry>
+            <glossentry>
+                <glossterm>Enumerators</glossterm>
+                <glossdef>
+                    <para>This function takes no arguments and returns a group of actions that will
+                        iterate over every enumerator in every extension and version that the user
+                        asked to export. This will respect core/compatibility. For each enumerator,
+                        it will call a function named <literal>WriteEnumerator(hFile, enum,
+                            enumTable, spec, options, enumSeen)</literal> to write each
+                        enumerator.</para>
+                    <para>It will first iterate over the enumerators in extensions that the user
+                        asked for. Each extension will be in its own group, optionally writing a
+                        header for each using <literal>WriteSmallHeader(hFile, value,
+                            options)</literal> (so if you wish to suppress the header, make this an
+                        empty function on the current style). Then it will iterate over all of the
+                        versions. For each version, it will iterate over any core extension enums
+                        that were <emphasis>not</emphasis> explicitly requested (writing a header
+                        for each). Then it will iterate over that version's non-core-extension
+                        enums.</para>
+                    <para>This must be used within the scope of <literal>hFile</literal>, and since
+                        it uses extension, version, and enumerator iterators, it can't be in scope
+                        of any of those. It also uses <literal>enum-seen</literal>.</para>
+                </glossdef>
+            </glossentry>
+            <glossentry>
+                <glossterm>Functions</glossterm>
+                <glossdef>
+                    <para>This function optionally takes one argument and returns a group of actions
+                        that will iterate over every function in every extension and version that
+                        the user asked to export. This will respect core/compatibility. For each
+                        function, it will call a function named <literal>WriteFunction(hFile, func,
+                            typemap, spec, options, funcSeen)</literal> to write each
+                        function.</para>
+                    <para>It will iterate over functions in the same group order as with
+                        enumerators. It will write headers where appropriate, which can be
+                        omitted.</para>
+                    <para>This must be used within the scope of <literal>hFile</literal>, and since
+                        it uses extension, version, and function iterators, it can't be in scope of
+                        any of those. It also uses <literal>func-seen</literal>.</para>
+                </glossdef>
+            </glossentry>
+        </glosslist>
+    </section>
 </article>
