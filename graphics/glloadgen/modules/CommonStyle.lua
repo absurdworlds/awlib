@@ -159,7 +159,7 @@ function common.GetOpenGLFuncName(func, spec)
 end
 
 function common.GetProcAddressName(spec)
-	return "IntGetProcAddress"
+	return spec.GetPtrLoaderFuncName()
 end
 
 function common.FixupIndexedList(specData, indexed)
