@@ -126,6 +126,13 @@ local function GetFuncPtrName(func, spec, options)
 	return options.prefix .. "_ptrc_".. spec.FuncNamePrefix() .. func.name
 end
 
+local function GetFuncPtrType(hFile, func, typemap, spec, options)
+	return string.format("%s (%s *)(%s)",
+		common.GetFuncReturnType(func, typemap),
+		spec.GetCodegenPtrType(),
+		common.GetFuncParamList(func, typemap))
+end
+
 local function GetFuncPtrDef(hFile, func, typemap, spec, options)
 	return string.format("%s (%s *%s)(%s)",
 		common.GetFuncReturnType(func, typemap),
@@ -280,8 +287,9 @@ function my_style.source.WriteBlockEndExtLoader(hFile, extName, spec, options)
 end
 
 function my_style.source.WriteExtFuncLoader(hFile, func, typemap, spec, options)
-	hFile:fmt('%s = %s("%s%s");\n',
+	hFile:fmt('%s = (%s)%s("%s%s");\n',
 		GetFuncPtrName(func, spec, options),
+		GetFuncPtrType(hFile, func, typemap, spec, options),
 		common.GetProcAddressName(spec),
 		spec.FuncNamePrefix(), func.name)
 	hFile:fmt('if(!%s) numFailed++;\n', GetFuncPtrName(func, spec, options))
@@ -311,8 +319,9 @@ function my_style.source.WriteBlockEndCoreLoader(hFile, version, spec, options)
 end
 
 function my_style.source.WriteCoreFuncLoader(hFile, func, typemap, spec, options)
-	hFile:fmt('%s = %s("%s%s");\n',
+	hFile:fmt('%s = (%s)%s("%s%s");\n',
 		GetFuncPtrName(func, spec, options),
+		GetFuncPtrType(hFile, func, typemap, spec, options),
 		common.GetProcAddressName(spec),
 		spec.FuncNamePrefix(), func.name)
 
