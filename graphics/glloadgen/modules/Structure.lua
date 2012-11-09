@@ -647,7 +647,7 @@ local function GetFuncList(context)
 		local core = context.specData.coredefs[context.version];
 		
 		if(context.options.profile ~= "core") then
-			return core.funcs
+			return core.funcs, context.version
 		end
 
 		local targetVersion = tonumber(context.options.version)
