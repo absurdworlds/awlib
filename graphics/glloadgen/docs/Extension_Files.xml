@@ -25,7 +25,9 @@
                 glLoadGen will be used for the base directory of any relative paths. This is mostly
                 intended to allow easy inclusion of the <link xlink:href="Common_Extension_Files"
                     >standard extension files</link>, located in the <filename>extfiles</filename>
-                directory.</para>
+                directory. Note that here, you will need to prefix the filename with
+                    <filename>extfiles/</filename>; you don't do that with the
+                    <literal>-stdext</literal> option.</para>
         </listitem>
         <listitem>
             <para>Anything starting with <literal>//</literal> will be ignored as a comment.</para>
