@@ -16,6 +16,14 @@
                 Windows</link>, or just <link xlink:href="http://luabinaries.sourceforge.net/">the
                 Lua binaries packages</link>. The code should be compatible with Lua 5.1 and 5.2,
             but it has only been tested on 5.1.</para>
+        <para>Note: this script is designed to be stand-alone. There is a caveat: Lua lacks any real
+            filesystem commands, so the script cannot create directories for the destination files.
+            However, if you have installed the <link
+                xlink:href="http://keplerproject.github.com/luafilesystem/">Lua FileSystem</link>
+            Lua module (such that Lua can detect it), then this script will access and use it to
+            create directories. It comes with Lua For Windows, but you can use <link
+                xlink:href="http://www.luarocks.org/">LuaRocks</link> to install it on any platform
+            as well.</para>
         <para>The scripts in this package are licensed under the terms of the MIT License.</para>
         <para>To use the code generator, with Lua in your path (assuming that <literal>lua</literal>
             is the name of your Lua executable), type this:</para>
@@ -62,14 +70,14 @@
             <para>Here are some example command lines. This command-line generates loaders for core
                 OpenGL 3.3, without proprietary extensions, but with non-hardware features that were
                 added to OpenGL in later versions:</para>
-            <programlisting>lua LoadGen.lua core_3_3 -style=pointer_c -spec=gl -version=3.3 -profile=core -stdext=extfiles/gl_ubiquitous.txt -stdext=extfiles/gl_core_post_3_3.txt</programlisting>
+            <programlisting>lua LoadGen.lua core_3_3 -style=pointer_c -spec=gl -version=3.3 -profile=core -stdext=gl_ubiquitous.txt -stdext=gl_core_post_3_3.txt</programlisting>
             <para>This command-line is for OpenGL 4.3, but with certain commonly-provided extensions
                 that are generally useful.</para>
-            <programlisting>lua LoadGen.lua core_4_3 -style=pointer_c -spec=gl -version=4.3 -profile=core -stdext=extfiles/gl_ubiquitous.txt -stdext=extfiles/gl_plat_3_3.txt</programlisting>
+            <programlisting>lua LoadGen.lua core_4_3 -style=pointer_c -spec=gl -version=4.3 -profile=core -stdext=gl_ubiquitous.txt -stdext=gl_plat_3_3.txt</programlisting>
             <para>This command-line generates a header that exposes OpenGL 3.2 for what MacOSX 10.8
                 uses (note: the loader generator files have not been tested with MacOSX of any
                 kind):</para>
-            <programlisting>lua LoadGen.lua core_3_2 -style=pointer_c -spec=gl -version=3.2 -profile=core -stdext=extfiles/gl_ubiquitous.txt -stdext=extfiles/gl_macosx_3_2.txt</programlisting>
+            <programlisting>lua LoadGen.lua core_3_2 -style=pointer_c -spec=gl -version=3.2 -profile=core -stdext=gl_ubiquitous.txt -stdext=gl_macosx_3_2.txt</programlisting>
         </section>
     </section>
 </article>

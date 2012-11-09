@@ -53,7 +53,9 @@
                     or versions, collisions will occur.</para>
                 <para>The prefix option allows you to define a string that will be prepended to any
                     non-static (or otherwise hidden) global variables, where possible. As such, the
-                    prefix should start with characters that are valid for C/C++ identifiers.</para>
+                    prefix should start with characters that are valid for C/C++ identifiers. The
+                    prefix will be used as the style decides, so a prefix could just as well be a
+                    namespace as an actual name prefix.</para>
                 <para>If the option is not specified, no prefix will be used.</para>
             </glossdef>
         </glossentry>
@@ -111,8 +113,7 @@
                             function pointers.</para>
                     </listitem>
                     <listitem>
-                        <para><link><literal xlink:href="Style_GL_Load">glload</literal></link>: Do
-                            not use.</para>
+                        <para><literal>glload</literal>: For internal use only.</para>
                     </listitem>
                 </itemizedlist>
             </glossdef>
@@ -170,10 +171,10 @@
             <glossterm>-stdext</glossterm>
             <glossdef>
                 <para>Works like <literal>extfile</literal>, except that the directory for the file
-                    is relative to the place where the <filename>LoadGen.lua</filename> file is.
-                    These are used primarily for working with <link
-                        xlink:href="Common_Extension_Files">the library of common extension
-                        files</link>.</para>
+                    is relative to the <filename>extfiles</filename> directory, just under the
+                    directory where the <filename>LoadGen.lua</filename> file is. These are used
+                    primarily for working with <link xlink:href="Common_Extension_Files">the library
+                        of common extension files</link>.</para>
             </glossdef>
         </glossentry>
     </glosslist>

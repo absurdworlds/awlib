@@ -85,7 +85,7 @@ parseOpts:array_single(
 parseOpts:array_single(
 	"stdext",
 	"stdexts",
-	{"A file to load extensions from.", "These file paths are relative to the distribution directory."},
+	{"A file to load extensions from, within the ./extfiles directory.", "These are the standard extension files."},
 	nil,
 	true)
 parseOpts:value(
@@ -203,9 +203,9 @@ function optTbl.GetOptions(cmd_line)
 		LoadExtFile(options.extensions, util.ParsePath(file)) --vararg
 	end
 	
-	--Standard extension files.
+	--Local extension files.
 	for _, file in ipairs(options.stdexts) do
-		LoadExtFile(options.extensions, util.ParsePath(SysRelPath(file))) --vararg
+		LoadExtFile(options.extensions, util.ParsePath(SysRelPath("extfiles/" .. file))) --vararg
 	end
 	
 	--Fixup names and remove duplicates.
