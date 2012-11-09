@@ -159,7 +159,7 @@ end
 function my_style.header.WriteEnumDecl(hFile, enum, enumTable, spec, options,
 	enumSeen)
 	if(enumSeen[enum.name]) then
-		hFile:fmt("//%s taken from ext: %s\n", enum.name, enumSeen[enum.name])
+		hFile:fmt("//%s taken from ext: %s\n", enum.name, extName)
 	else
 	
 		local enumName = GenEnumName(enum)
