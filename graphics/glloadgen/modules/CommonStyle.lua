@@ -243,6 +243,10 @@ static void ProcExtsFromExtString(const char *strExtList]] .. (arguments or "") 
 ]]
 end
 
+function common.WriteProcessExtsFromStringFunc(hFile, ...)
+	hFile:writeblock(common.GetProcessExtsFromStringFunc(...))
+end
+
 function common.GetParseVersionFromString()
 	return [[
 static void ParseVersionFromString(int *pOutMajor, int *pOutMinor, const char *strVersion)

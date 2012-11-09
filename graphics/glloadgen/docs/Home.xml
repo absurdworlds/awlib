@@ -31,8 +31,7 @@
             where * is the extension used by the particular style.</para>
         <para>The above command line will generate <filename>gl_core_3_3.h</filename> and
                 <filename>gl_core_3_3.c</filename> files. Simply include them in your project; there
-            is no library to build, no unresolved extenals to filter through. They just work (Well,
-            that's the plan ;) ).</para>
+            is no library to build, no unresolved extenals to filter through. They just work.</para>
         <para>The <link xlink:href="Command_Line_Options">full command-line syntax
                 documentation</link> is available. The <literal>-style</literal> parameter's <link
                 xlink:href="Styles">meaning is defined here</link>.</para>
