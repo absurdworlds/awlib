@@ -520,7 +520,7 @@ local function GetEnumList(context)
 		local core = context.specData.coredefs[context.version];
 		
 		if(context.options.profile ~= "core") then
-			return core.enums
+			return core.enums, context.version
 		end
 
 		local targetVersion = tonumber(context.options.version)
@@ -609,7 +609,7 @@ local function GetFuncList(context)
 		local core = context.specData.coredefs[context.version];
 		
 		if(context.options.profile ~= "core") then
-			return core.funcs
+			return core.funcs, context.version
 		end
 
 		local targetVersion = tonumber(context.options.version)
