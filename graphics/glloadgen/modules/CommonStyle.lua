@@ -314,9 +314,12 @@ function common.WriteCMappingTable(hFile, specData, spec,
 	hFile:write "\n"
 	
 	--Write the mapping table itself.
-	hFile:fmt("static %s %s[] = {\n",
+	local arrayLength = #options.extensions
+	if(arrayLength == 0) then arrayLength = 1 end
+	hFile:fmt("static %s %s[%i] = {\n",
 		structName,
-		varName)
+		varName,
+		arrayLength)
 	hFile:inc()
 	for _, extName in ipairs(options.extensions) do
 		if(#specData.extdefs[extName].funcs > 0) then
