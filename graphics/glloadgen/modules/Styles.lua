@@ -19,6 +19,18 @@ local style_registry =
 
 local default_style = "pointer_c"
 
+local status, userStyles = pcall(require, "UserStyles")
+
+if(status and type(userStyles) == "table") then
+	for styleName, style in pairs(userStyles) do
+		if(style_registry[styleName] ~= nil) then
+			print("User-defined style name " .. styleName .. " conflicts with an existing style.")
+		else
+			style_registry[styleName] = style
+		end
+	end
+end
+
 local function GetStyleList()
 	--Make sure the default is first.
 	local list = {default_style}
