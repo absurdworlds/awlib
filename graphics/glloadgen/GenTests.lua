@@ -15,6 +15,7 @@ local tests =
 	[[lua $<dir>LoadGen.lua -spec=gl -version=4.3 -profile=compatibility -style=glload -extfile=$<dir>allgl.txt $<dir>test/glload_c/test]],
 	[[lua $<dir>LoadGen.lua -spec=gl -version=4.3 -profile=compatibility -style=glload -extfile=$<dir>allgl.txt $<dir>test/glload_cpp/test]],
 	[[lua $<dir>LoadGen.lua -spec=gl -version=3.3 -profile=compatibility -style=noload_cpp  -stdext=gl_ubiquitous.txt $<dir>test/noload_cpp/test]],
+	[[lua $<dir>LoadGen.lua -spec=gl -version=3.3 -profile=compatibility -style=noload_cpp $<dir>test/noload_cpp_noext/test]],
 }
 
 local platTests =
@@ -28,6 +29,7 @@ local platTests =
 		[[lua $<dir>LoadGen.lua -spec=wgl -style=glload -extfile=$<dir>allwgl.txt $<dir>test/glload_c/test]],
 		[[lua $<dir>LoadGen.lua -spec=wgl -style=glload -extfile=$<dir>allwgl.txt $<dir>test/glload_cpp/test]],
 		[[lua $<dir>LoadGen.lua -spec=wgl -style=noload_cpp  -stdext=wgl_common.txt $<dir>test/noload_cpp/test]],
+		[[lua $<dir>LoadGen.lua -spec=wgl -style=noload_cpp  -stdext=wgl_common.txt $<dir>test/noload_cpp_noext/test]],
 	},
 	
 	glX =
@@ -39,6 +41,7 @@ local platTests =
 		[[lua $<dir>LoadGen.lua -spec=glX -style=glload -extfile=$<dir>allglx.txt $<dir>test/glload_c/test]],
 		[[lua $<dir>LoadGen.lua -spec=glX -style=glload -extfile=$<dir>allglx.txt $<dir>test/glload_cpp/test]],
 		[[lua $<dir>LoadGen.lua -spec=glX -style=noload_cpp -stdext=glx_common.txt $<dir>test/noload_cpp/test]],
+		[[lua $<dir>LoadGen.lua -spec=glX -style=noload_cpp -stdext=glx_common.txt $<dir>test/noload_cpp_noext/test]],
 	},
 }
 
