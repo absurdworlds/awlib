@@ -333,6 +333,10 @@ function common.WriteCMappingTable(hFile, specData, spec,
 				GetExtVariableName(extName, spec, options))
 		end
 	end
+	--Because C is stupid, write bogus entry.
+	if(#options.extensions == 0) then
+		hFile:fmt('{"", NULL, NULL},\n')
+	end
 	hFile:dec()
 	hFile:write("};\n")
 
