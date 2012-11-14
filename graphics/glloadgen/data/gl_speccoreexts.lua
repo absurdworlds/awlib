@@ -5,6 +5,9 @@ The table is indexed by version number (as a string). In each version is an arra
 This list must be manually updated, as there is no equivalent in the spec files. Just add to the list. When a new version comes out with new core extensions, add a new list and add the local variable name to the master table as shown below.
 ]]
 
+local coreExts1_2 = {
+	"ARB_imaging",
+};
 
 local coreExts3_0 = {
 	"ARB_vertex_array_object",
@@ -100,6 +103,7 @@ local coreExts4_3 = {
 };
 
 return {
+	["1.2"] = coreExts1_2,
 	["3.0"] = coreExts3_0,
 	["3.1"] = coreExts3_1,
 	["3.2"] = coreExts3_2,
