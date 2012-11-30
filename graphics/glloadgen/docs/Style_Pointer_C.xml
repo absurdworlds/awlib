@@ -7,14 +7,14 @@
     <para>The <literal>pointer_c</literal> style is the default style. It is also the one that most
         mimics the way common OpenGL loaders work. This style generates a <filename>.h</filename>
         and <filename>.c</filename> file. The header file can be included by C and C++; the source
-        file should be compiled as C.</para>
+        file should be compiled as C. The generated source is compatible with C89.</para>
     <para>Since these are compatible with C, all of the typedefs, enumerations, extension variables,
         and function pointers are global. The extension variables are of type
         <literal>int</literal>. Enumerations are <literal>#define</literal>s. The functions are
         function pointers with mangled names that have been <literal>#define</literal>d into the
         real OpenGL function name. The latter is done to avoid name conflicts with static linking of
         certain core OpenGL function names.</para>
-    <para>The loading function that loads the extensions and OpenGL version is called
+    <para>The function that loads the extensions and OpenGL version is called
             <literal>LoadFunction</literal>, prefixed by a specification-specific prefix. The return
         value of this function, as well as the value stored in the extension variables, is special.
         There is an enumeration, prefixed again by the spec-specific prefix.</para>
@@ -37,6 +37,41 @@
         core functions, it will always return <literal>LOAD_SUCCEEDED</literal>.</para>
     <para>Also, this style will generate functions to query the version of the OpenGL
         context.</para>
+    <section>
+        <title>Example</title>
+        <para>This example is for loading the OpenGL functions; it expects the OpenGL header to be
+            included. For loading WGL/GLX functions, include their headers and change the
+                <quote>ogl</quote>s to <quote>wgl</quote> or <quote>glx</quote> as
+            appropriate.</para>
+        <programlisting>//Create OpenGL context and make it current.
+
+int loaded = ogl_LoadFunctions();
+if(loaded == ogl_LOAD_FAILED)
+{
+  //The context cannot work with the generated headers for some reason. Abort.
+  //Destroy the context
+  return;
+}
+
+int num_failed = loaded - ogl_LOAD_SUCCEEDED;
+printf("Number of functions that failed to load: %i.\n", num_failed);</programlisting>
+        <para>The presence of extensions can be checked as follows:</para>
+        <programlisting>if(ogl_ext_EXT_texture_compression_s3tc != ogl_LOAD_FAILED)
+  glCompressedTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 256, 256,
+    GL_COMPRESSED_RGBA_S3TC_DXT5_EXT, compressedSize, compressedPixels);
+else
+{
+  void *decompressedPixels = DecompressPixels(256, 256,
+    compressedSize, compressedPixels);
+
+  glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 256, 256,
+    GL_RGBA, GL_UNSIGNED_BYTE, decompressedPixels);
+  free(decompressedPixels);
+}</programlisting>
+        <para>Of course, this requires asking for the
+                <literal>EXT_texture_compression_s3tc</literal> extension on the command-line (or in
+            a referenced file).</para>
+    </section>
     <section>
         <title>Versions</title>
         <para>When you use this system and provide a version number of OpenGL,

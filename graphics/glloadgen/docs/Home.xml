@@ -44,8 +44,9 @@
                     <filename>gl_core_3_3.c</filename> files. Simply include them in your project;
                 there is no library to build, no unresolved extenals to filter through.</para>
             <para>You will need to call <literal>ogl_LoadFunctions</literal> to initialize the
-                library. And you must call it <emphasis>after</emphasis> OpenGL context creation.
-                For example, if you are using FreeGLUT, your code looks like this:</para>
+                library if you use the <literal>pointer_c</literal> style. And you must call it
+                    <emphasis>after</emphasis> OpenGL context creation. For example, if you are
+                using FreeGLUT, your code looks like this:</para>
             <programlisting>//Pre-window creation.
 int windowID = glutCreateWindow("Name");
 
@@ -54,6 +55,8 @@ if(ogl_LoadFunctions() == ogl_LOAD_FAILED)
   glutDestroyWindow(windowID);
 }
 //Call functions here.</programlisting>
+            <para>Replace the "Pre-window creation" and <literal>glutCreateWindow</literal> call with
+                your usual OpenGL context creation code.</para>
             <para>The <link xlink:href="Command_Line_Options">full command-line syntax
                     documentation</link> is available. Of particular note is the
                     <literal>-style</literal> parameter, which defines how the loader is generated.
@@ -62,7 +65,7 @@ if(ogl_LoadFunctions() == ogl_LOAD_FAILED)
             <itemizedlist>
                 <listitem>
                     <para><link xlink:href="Style_Pointer_C"><literal>pointer_c</literal></link>:
-                        Used for C-style header generation.</para>
+                        Used for C-style loader generation.</para>
                 </listitem>
                 <listitem>
                     <para><link xlink:href="Style_Pointer_CPP"
@@ -75,6 +78,7 @@ if(ogl_LoadFunctions() == ogl_LOAD_FAILED)
                         initialization function on to get function pointers.</para>
                 </listitem>
             </itemizedlist>
+            <para>Each linked page has instructions on how to use the generated interface.</para>
             <para>More about styles can be found on the <link xlink:href="Styles">style
                 page</link>.</para>
         </section>

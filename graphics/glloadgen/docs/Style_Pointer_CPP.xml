@@ -57,6 +57,37 @@
         The number of functions that failed to load refers to the core functions (and core extension
         functions).</para>
     <section>
+        <title>Example</title>
+        <para>This example is for loading the OpenGL functions; it expects the OpenGL header to be
+            included. For loading WGL/GLX functions, include their headers and change the
+                <quote>gl</quote> namespaces to <quote>wgl</quote> or <quote>glx</quote> as
+            appropriate.</para>
+        <programlisting>//Create OpenGL context and make it current.
+
+gl::exts::LoadTest didLoad = gl::sys::LoadFunctions();
+if(!didLoad)
+{
+  //The context cannot work with the generated headers for some reason. Abort.
+  //Destroy the context
+  return;
+}
+
+printf("Number of functions that failed to load: %i.\n", didLoad.GetNumMissing());</programlisting>
+        <para>The presence of extensions can be checked as follows:</para>
+        <programlisting>if(gl::exts::var_EXT_texture_compression_s3tc)
+  gl::CompressedTexSubImage2D(gl::TEXTURE_2D, 0, 0, 0, 256, 256,
+    gl::COMPRESSED_RGBA_S3TC_DXT5_EXT, compressedSize, compressedPixels);
+else
+{
+  void *decompressedPixels = DecompressPixels(256, 256,
+    compressedSize, compressedPixels);
+
+  gl::TexSubImage2D(gl::TEXTURE_2D, 0, 0, 0, 256, 256,
+    gl::RGBA, gl::UNSIGNED_BYTE, decompressedPixels);
+  free(decompressedPixels);
+}</programlisting>
+    </section>
+    <section>
         <title>Versions</title>
         <para>When you use this system and provide a version number of OpenGL,
                 <literal>pointer_cpp</literal> will assume that you are <emphasis>serious</emphasis>
