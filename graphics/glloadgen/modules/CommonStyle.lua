@@ -437,6 +437,7 @@ common.DeepCopyTable = DeepCopyTable
 local my_struct =
 {
 	{ type="file", style="header", name="GetFilename",
+		{ type="write", name="FilePreamble", optional=true} ,
 		{ type="block", name="IncludeGuard(hFile, spec, options)",
 			{ type="blank"},
 			{ type="write", name="Init(hFile, spec, options)", },
@@ -512,6 +513,7 @@ local my_struct =
 		},
 	},
 	{ type="file", style="source", name="GetFilename",
+		{ type="write", name="FilePreamble", optional=true} ,
 		{ type="write", name="Includes(hFile, basename, spec, options)",},
 		{ type="blank"},
 		{ type="write", name="LoaderData(hFile, spec, options)",},
