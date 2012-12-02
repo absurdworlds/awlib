@@ -13,7 +13,6 @@ local style_registry =
 {
 	pointer_c = require("StylePointerC"),
 	pointer_cpp = require("StylePointerCPP"),
-	glload = require("StyleGLLoad"),
 	noload_cpp = require("StyleNoloadCpp"),
 }
 
