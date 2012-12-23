@@ -180,11 +180,12 @@ local my_struct =
                             </listitem>
                             <listitem>
                                 <para><literal>dispose</literal>: The base name of a function that
-                                    takes the state (and <emphasis>only</emphasis> the context
-                                    variable, so no parameter selection). This will be called when
-                                    the variable is disposed of. This would be for clean-up work,
-                                    like for file closing and such. The full name will be prefixed
-                                    by <quote><literal>Dispose</literal></quote>.</para>
+                                    takes the context variable (and <emphasis>only</emphasis> the
+                                    context variable, so no parameter selection). This will be
+                                    called when the variable is disposed of. This would be for
+                                    clean-up work, like for file closing and such. The full name
+                                    will be prefixed by
+                                    <quote><literal>Dispose</literal></quote>.</para>
                             </listitem>
                         </itemizedlist>
                         <para>Either <literal>name</literal> or <literal>data</literal> must be
@@ -555,8 +556,8 @@ end</programlisting>
     </section>
     <section>
         <title>Function Parameters</title>
-        <para>Here are a list of the various function parameters, with references to the actions
-            that provide them.</para>
+        <para>Here are a list of the various standard function parameters, with references to the
+            actions that provide them.</para>
         <para>Again, <emphasis>DO NOT MODIFY THEM!</emphasis> You can call member functions on them
             and inspect them. But unless they're user-defined parameters, do not change their
             tables.</para>
