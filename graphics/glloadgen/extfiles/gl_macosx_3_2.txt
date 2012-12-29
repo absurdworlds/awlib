@@ -11,7 +11,7 @@ EXT_texture_filter_anisotropic
 EXT_texture_mirror_clamp
 EXT_texture_sRGB_decode
 APPLE_client_storage
-APPLE_container_object_shareable
+--APPLE_container_object_shareable
 APPLE_object_purgeable
 APPLE_rgb_422
 APPLE_row_bytes
