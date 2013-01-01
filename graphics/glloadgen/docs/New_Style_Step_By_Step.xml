@@ -1048,7 +1048,7 @@ end</programlisting>
                         extensions in GL 3.0.</para>
                 </listitem>
             </orderedlist>
-            <para>That last problem is the most devious (we will solve #1 by just loading the
+            <para>That last problem is the most devious (we will solve #1 by just trying to load the
                 function. If it's not there, we exit with a failure). Let's investigate
                 further.</para>
             <para>In OpenGL 2.1 and below, you use <literal>glGetString(GL_EXTENSIONS)</literal> to
@@ -1076,8 +1076,8 @@ end</programlisting>
             <para>Therefore, if the user asks for OpenGL 3.0 or above, we will use the new-style
                 functions; if the user asks for a lower version, we use the old style. Oh, and while
                 we're doing this, remember that this code generator needs to work with WGL and GLX,
-                which only use old-style. So we only use the new-style if we're writing OpenGL
-                    <emphasis>and</emphasis> version 3.0 or above is requested.</para>
+                which <emphasis>only</emphasis> use old-style. So we only use the new-style if we're
+                writing OpenGL <emphasis>and</emphasis> version 3.0 or above is requested.</para>
             <para>Is that complicated enough?</para>
             <section>
                 <title>Extension Mapping Table</title>
