@@ -66,9 +66,9 @@
         multiple styles, then the structure can be created first. But it's much easier to make part
         of a structure, implement enough style functions to use it, then expand on it.</para>
     <para>There are two documents available to help you learn about making styles. The first is a
-        step-by-step guide to making a new style and structure. The second is a <link
-            xlink:href="Structure_Reference">reference manual for the structure
-        system</link>.</para>
+            <link xlink:href="New_Style_Step_By_Step">step-by-step guide to making a new style and
+            structure</link>. The second is a <link xlink:href="Structure_Reference">reference
+            manual for the structure system</link>.</para>
     <section>
         <title>Responsibilities</title>
         <para>Your style may create global definitions and so forth. In C/C++, definitions in one

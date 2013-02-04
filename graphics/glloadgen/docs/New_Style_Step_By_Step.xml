@@ -54,28 +54,24 @@ return { Create = Create }</programlisting>
             structure. So we perform a table copy of our style and return the structure as
             presented.</para>
         <para>There is one final step before we begin: we must hook our style into the glLoadGen
-            system. To do this, open up the <literal>Styles.lua</literal> file. You will see a
-            declaration of the <literal>style_registry</literal> variable as a table, with several
-            different styles already in that table. Simply add your own to this table; the string
-            name you use will be the name you use on the command line.</para>
+            system. To do this, we create a file called <filename>UserStyle.lua</filename>. This
+            file should go in the <filename>modules</filename> directory with the rest. All it does
+            is return a table containing any additional styles.</para>
         <para>In our case, we will do this:</para>
-        <programlisting>local style_registry =
+        <programlisting>return
 {
-	pointer_c = require("StylePointerC"),
-	pointer_cpp = require("StylePointerCPP"),
-	glload = require("StyleGLLoad"),
-	noload_cpp = require("StyleNoloadCpp"),
-	test = require("StyleTest"),
+	test = require("StyleTest")
 }</programlisting>
-        <para>On the command line, to execute our style, simply use <literal>-style=test</literal>
-            with an appropriate set of other options.</para>
+        <para>The key name "test" here is the command-line name for the style. So to execute our
+            style, we use the <literal>-style=test</literal> parameter, with an appropriate set of
+            other options.</para>
     </section>
     <section>
         <title>Header</title>
         <para>Our C-style loader will generate two files: a header and a source file. So our first
             major step is to generate the header file.</para>
         <para>The header file and source files will have to do two very different things. The header
-            file will generate function pointers, extension variables and #defines for enumerators
+            file will contain function pointers, extension variables and #defines for enumerators
             that the user will use. But since this is C, variables in headers must be declared with
                 <literal>extern</literal>. So the declaration in the headers has to be different
             from the definitions in the source files.</para>
@@ -134,7 +130,8 @@ end</programlisting>
   },
 }</programlisting>
         <para>Here, we don't provide a parameter list, so the block's default parameter list is
-            used. Which amounts to <literal>(hFile, spec, options)</literal>.</para>
+            used. The default for <literal>block</literal> actions is <literal>(hFile, spec,
+                options)</literal>.</para>
         <para><literal>block</literal> actions will call two different functions. In our case, it
             will call <literal>WriteBlockBeginIncludeGuard</literal> before executing any child
             actions, and <literal>WriteBlockEndIncludeGuard</literal> after writing all child
@@ -182,11 +179,10 @@ end</programlisting>
             <para>First, we need to recognize the intent of our loading system. Like most <link
                     xlink:href="http://www.opengl.org/wiki/OpenGL_Loading_Library">OpenGL loading
                     libraries,</link> we expect our header to <emphasis>completely
-                    replace</emphasis>
-                <filename>gl.h</filename> (though not WGL or GLX's headers). Because of that, we
-                need to make sure that the user has not included them <filename>gl.h</filename>
-                first. Also, if they try to include <filename>gl.h</filename> afterwards, we want it
-                to not be included correctly.</para>
+                    replace</emphasis> all uses of <filename>gl.h</filename> (though not WGL or
+                GLX's headers). Because of that, we need to make sure that the user has not included
+                    <filename>gl.h</filename> or other similar files first. Also, if they try to
+                include <filename>gl.h</filename> afterwards, we want it to not be included.</para>
             <para>Similarly, there are <filename>wglext.h</filename> and
                     <filename>glxext.h</filename> files (available from the OpenGL.org registry)
                 that do the same job as our loaders. We want to stop users from including them
@@ -273,9 +269,9 @@ end</programlisting>
 end</programlisting>
             <para>This is a bit complicated. <literal>common.GetStdTypedefs()</literal> is where the
                 standard typedefs for the OpenGL 1.1 types live. We wrap them in their own set of
-                include guards to ensure that they never get defined multiple times; this will be
-                used for our OpenGL, WGL, and GLX headers, which need to co-exist with one
-                another.</para>
+                include guards to ensure that they never get defined multiple times; all of these
+                definitions will be used for our OpenGL, WGL, and GLX headers, which need to
+                co-exist with one another.</para>
             <para>Once we have that, we use the function <literal>common.WritePassthruData</literal>
                 to write the spec-specific typedefs, passing it the <literal>passthru</literal>
                 table loaded from the specification files.</para>
@@ -319,7 +315,7 @@ end</programlisting>
             <programlisting>hdr.WriteBlockBeginExtern = common.WriteExternCStart
 hdr.WriteBlockEndExtern = common.WriteExternCEnd</programlisting>
             <para>Now that we have an extern block, we need to write an extension variable for every
-                extension that we were told to export. Since this is plain C, we don't have access
+                extension that we were told to export. Since this is plain C89, we don't have access
                 to <literal>bool</literal>, so we'll use <literal>int</literal> for the type instead
                 with the usual boolean semantics.</para>
             <para>To iterate over extensions and write them, we use the <literal>ext-iter</literal>
@@ -332,7 +328,7 @@ hdr.WriteBlockEndExtern = common.WriteExternCEnd</programlisting>
             <para>For each extension, we will call <literal>WriteExtension</literal> in the style,
                 passing it the name of the extension via <literal>extName</literal>.</para>
             <para>To write the extension variable declaration, we first need a function to compute
-                the name of the extension variable. We need this as a separate function because we
+                the name of the extension variable. We'll make this a separate function because we
                 will need to write the variable definitions in the source file, and it would be best
                 not to copy-and-paste code. So we need a <literal>local</literal> function to
                 generate this:</para>
@@ -419,8 +415,7 @@ end</programlisting>
                 the user-specified prefix <literal>options.prefix</literal>. This is a concession to
                 the purpose of this loader: it's trying to emulate the common OpenGL style as much
                 as possible. Furthermore, multiply-defined enums are usually a warning, not an
-                error, so it isn't too big of a problem. Of course, it <emphasis>could</emphasis>
-                prefix them if we so desired.</para>
+                error, so it isn't too big of a problem.</para>
             <para>To write the enumerator, we use this function:</para>
             <programlisting>function hdr.WriteEnumerator(hFile, enum, enumTable, spec, options, enumSeen)
   if(enumSeen[enum.name]) then return end
@@ -441,10 +436,11 @@ end</programlisting>
             <para>You can run this code, and you will get a file that contains enumerator
                 definitions for the requested extensions. But not for any core versions.</para>
             <para>To get them, we need to augment our structure a bit. The user asked for a specific
-                version and profile (assume we're talking about OpenGL). This means that the user
-                wants the enums for that particular version/profile. To do this, we have to iterate
-                over all of the versions between the first version (1.1) and the one the user asked
-                for, writing out the appropriate enumerators for each version.</para>
+                version and profile (assume we're talking about OpenGL, rather than WGL/GLX). This
+                means that the user wants the enums for that particular version/profile. To do this,
+                we have to iterate over all of the versions between the first version (1.1) and the
+                one the user asked for, writing out the appropriate enumerators for each
+                version.</para>
             <para>We do that with a <literal>version-iter</literal> action:</para>
             <programlisting>{ type="enum-seen",
   { type="ext-iter",
@@ -526,13 +522,13 @@ end</programlisting>
         </section>
         <section>
             <title>Functions</title>
-            <para>Functions work more or less like enumerators, and you have to iterate over them
-                like enumerators. In fact, they work <emphasis>so much</emphasis> like enumerators
-                that the only difference between the final version of the structure for enums and
-                for functions is the use of <literal>func-seen</literal>,
+            <para>Functions work more or less like enumerators, in that you have to iterate over
+                them like enumerators. In fact, they work <emphasis>so much</emphasis> like
+                enumerators that the only difference between the final version of the structure for
+                enums and for functions is the use of <literal>func-seen</literal>,
                     <literal>func-iter</literal>, and writing with a call to
                     <literal>Function(hFile, func, typemap, spec, options, funcSeen)</literal>. So
-                let's not waste time and skip to the end:</para>
+                let's not waste time and skip right to the end:</para>
             <programlisting>{ type="func-seen",
   { type="ext-iter",
     {type="func-iter",
@@ -555,7 +551,7 @@ end</programlisting>
 },</programlisting>
             <para>As before, there is a common structural element to replace this:
                     <literal>common.Functions()</literal>. And as before, it calls the same
-                    <literal>Function</literal> with the same arguments.</para>
+                    <literal>Function</literal> we defined with the same arguments.</para>
             <para>The biggest issue here is the writing of the actual functions. First, we need a
                 function to compute the name of the function pointer variable we want to
                 declare:</para>
