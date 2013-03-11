@@ -525,7 +525,7 @@ static void GetGLVersion()
 	end
 	
 	hFile:write "\n"
-	hFile:fmt("int %s()\n", DecorateFuncName("GetMinorVersion", spec, options))
+	hFile:fmt("int %s()\n", DecorateFuncName("GetMajorVersion", spec, options))
 	hFile:writeblock([[
 {
 	if(g_major_version == 0)
@@ -535,7 +535,7 @@ static void GetGLVersion()
 ]])
 	hFile:write "\n"
 
-	hFile:fmt("int %s()\n", DecorateFuncName("GetMajorVersion", spec, options))
+	hFile:fmt("int %s()\n", DecorateFuncName("GetMinorVersion", spec, options))
 	hFile:writeblock([[
 {
 	if(g_major_version == 0) //Yes, check the major version to get the minor one.
