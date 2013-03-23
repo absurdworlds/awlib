@@ -6,13 +6,14 @@ This module has a function called GetStyle, which is given a style name. It will
 
 SampleStyle.lua contains an example, with documentation for what's going on. Every function you need to define will be there, with comments. Just copy and use as needed.
 
-If you want to extend this to new styles, then add a module for your style, import it, and register it's module table with the style_registry. Your module should export a function `Create` which takes no parameters and returns a table as defined above.
+If you want to extend this to new styles, then create a file in this directory called "UserStyles.lua". In that file, return a table, where the keys in that table are string names for the command-line style name, and the value is the style data itself. The style data is a table containing a Create function, which takes no parameters and returns a style and a structure (two return values).
 ]]
 
 local style_registry =
 {
 	pointer_c = require("StylePointerC"),
 	pointer_cpp = require("StylePointerCPP"),
+	func_cpp = require("FuncCpp_Style"),
 	noload_cpp = require("StyleNoloadCpp"),
 }
 
