@@ -232,6 +232,7 @@ function my_style.source.WriteIncludes(hFile, basename, spec, options)
 	hFile:writeblock([[
 #include <stdlib.h>
 #include <string.h>
+#include <stddef.h>
 ]])
 	local base = util.ParsePath(my_style.header.GetFilename(basename, options))
 	hFile:fmt('#include "%s"\n', base)
@@ -419,9 +420,10 @@ local function WriteAncillaryFuncs(hFile, specData, spec, options)
 	return indexed
 end
 
-local function WriteInMainFuncLoader(hFile, func, spec, options)
-	hFile:fmt('%s = %s("%s%s");\n',
+local function WriteInMainFuncLoader(hFile, func, typemap, spec, options)
+	hFile:fmt('%s = (%s)%s("%s%s");\n',
 		GetFuncPtrName(func, spec, options),
+		GetFuncPtrType(hFile, func, typemap, spec, options),
 		common.GetProcAddressName(spec),
 		spec.FuncNamePrefix(), func.name)
 	hFile:fmt('if(!%s) return %s;\n',
@@ -449,8 +451,8 @@ function my_style.source.WriteMainLoaderFunc(hFile, specData, spec, options)
 
 	--Load the extension, using runtime-facilities to tell what is available.
 	if(indexed) then
-		WriteInMainFuncLoader(hFile, indexed[1], spec, options)
-		WriteInMainFuncLoader(hFile, indexed[3], spec, options)
+		WriteInMainFuncLoader(hFile, indexed[1], specData.typemap, spec, options)
+		WriteInMainFuncLoader(hFile, indexed[3], specData.typemap, spec, options)
 		hFile:write("\n")
 		hFile:write("ProcExtsFromExtList();\n")
 	else
@@ -462,7 +464,7 @@ function my_style.source.WriteMainLoaderFunc(hFile, specData, spec, options)
 				end
 			end
 			
-			WriteInMainFuncLoader(hFile, extListName, spec, options)
+			WriteInMainFuncLoader(hFile, extListName, specData.typemap, spec, options)
 			
 			extListName = GetFuncPtrName(extListName, spec, options);
 		end

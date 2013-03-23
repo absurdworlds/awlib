@@ -266,6 +266,7 @@ function my_style.source.WriteIncludes(hFile, basename, spec, options)
 #include <algorithm>
 #include <vector>
 #include <string.h>
+#include <stddef.h>
 ]])
 
 	local base = util.ParsePath(my_style.header.GetFilename(basename, options))
