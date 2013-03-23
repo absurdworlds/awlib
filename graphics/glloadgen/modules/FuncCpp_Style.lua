@@ -179,24 +179,28 @@ function my_style.header.WriteEnumDecl(hFile, enum, enumTable, spec, options,
 	end
 end
 
-function my_style.header.WriteBlockBeginFuncDecl(hFile, spec, options)
-	--Block containing all spec function declarations.
+function my_style.header.WriteBlockBeginFuncPtrDecl(hFile, spec, options)
+	StartNamespace(hFile, "_detail")
 end
 
-function my_style.header.WriteBlockEndFuncDecl(hFile, spec, options)
-	--Block containing all spec function declarations.
+function my_style.header.WriteBlockEndFuncPtrDecl(hFile, spec, options)
+	EndNamespace(hFile, "_detail")
 end
 
-function my_style.header.WriteBlockBeginExtFuncDecl(hFile, extName, spec, options)
+function my_style.header.WriteBlockBeginExtFuncPtrDecl(hFile, extName, spec, options)
 	--Block containing all spec function declarations for a particular extension.
 	--Useful for include-guards around extension function pointers.
 end
 
-function my_style.header.WriteBlockEndExtFuncDecl(hFile, extName, spec, options)
+function my_style.header.WriteBlockEndExtFuncPtrDecl(hFile, extName, spec, options)
 	--Block containing all spec function declarations for a particular extension.
 end
 
 	local function GenFuncPtrName(func, spec, options)
+		return func.name
+	end
+
+	local function GenFuncName(func, spec, options)
 		return func.name
 	end
 
@@ -226,11 +230,48 @@ end
 			GenFuncPtrName(func, spec, options))
 	end
 
-function my_style.header.WriteFuncDecl(hFile, func, typemap, spec, options)
+function my_style.header.WriteFuncPtrDecl(hFile, func, typemap, spec, options)
 	hFile:write("extern ",
 		GenFuncPtrDefDirect(func, typemap, spec, options),
 		";\n")
 end
+
+function my_style.header.WriteBlockBeginFuncDecl(hFile, spec, options)
+end
+
+function my_style.header.WriteBlockEndFuncDecl(hFile, spec, options)
+end
+
+function my_style.header.WriteBlockBeginExtFuncDecl(hFile, extName, spec, options)
+	--Block containing all spec function declarations for a particular extension.
+	--Useful for include-guards around extension function pointers.
+end
+
+function my_style.header.WriteBlockEndExtFuncDecl(hFile, extName, spec, options)
+	--Block containing all spec function declarations for a particular extension.
+end
+
+function my_style.header.WriteFuncDecl(hFile, func, typemap, spec, options)
+	hFile:fmt("inline %s %s(%s){",
+			common.GetFuncReturnType(func, typemap),
+			GenFuncName(func, spec, options),
+			common.GetFuncParamList(func, typemap, true))
+
+	if(common.DoesFuncReturnSomething(func, typemap)) then
+		hFile:rawfmt('_detail::%s(%s);',
+			GenFuncPtrName(func, spec, options),
+			common.GetFuncParamCallList(func, typemap))
+	else
+		hFile:rawfmt('return _detail::%s(%s);',
+			GenFuncPtrName(func, spec, options),
+			common.GetFuncParamCallList(func, typemap))
+	end
+
+		
+	hFile:rawwrite("}\n")
+end
+
+
 
 function my_style.header.WriteBlockBeginSysDecl(hFile, spec, options)
 	StartNamespace(hFile, "sys")
@@ -306,24 +347,28 @@ function my_style.source.WriteExtVariableDef(hFile, extName,
 		GenExtensionVarName(extName, spec, options));
 end
 
-function my_style.source.WriteBlockBeginExtFuncDef(hFile, extName, spec, options)
-	--Block containing the extension function definitions and load function
-	--for the functions in the extension `extName`.
+function my_style.source.WriteBlockBeginPtrDefs(hFile, spec, options)
+	StartNamespace(hFile, "_detail")
 end
 
-function my_style.source.WriteBlockEndExtFuncDef(hFile, extName, spec, options)
-	--Block containing the extension function definitions and load function
-	--for the functions in the extension `extName`.
+function my_style.source.WriteBlockEndPtrDefs(hFile, spec, options)
+	EndNamespace(hFile, "_detail")
 end
 
-function my_style.source.WriteFuncDef(hFile, func, typemap, spec, options)
+function my_style.source.WriteBlockBeginExtFuncPtrDef(hFile, extName, spec, options)
+end
+
+function my_style.source.WriteBlockEndExtFuncPtrDef(hFile, extName, spec, options)
+end
+
+function my_style.source.WriteFuncPtrDef(hFile, func, typemap, spec, options)
 	WriteFuncPtrTypedefStmt(hFile, func, typemap, spec, options)
 	hFile:write(GenFuncPtrDefTypedef(func, typemap, spec, options),
 		" = 0;\n")
 end
 
 	local function GenExtLoaderFuncName(extName, spec, options)
-		return "Load_" .. extName;
+		return "_detail::Load_" .. extName;
 	end
 
 function my_style.source.WriteBlockBeginExtLoader(hFile, extName, spec, options)
@@ -348,13 +393,10 @@ function my_style.source.WriteExtFuncLoader(hFile, func, typemap, spec, options)
 	hFile:fmt('if(!%s) ++numFailed;\n', GenFuncPtrName(func, spec, options))
 end
 
-function my_style.source.WriteBlockBeginCoreFuncDef(hFile, version, spec, options)
-	--Block containing the core functions for `version`.
-	--The block also contains the loading function for this version.
+function my_style.source.WriteBlockBeginCoreFuncPtrDef(hFile, version, spec, options)
 end
 
-function my_style.source.WriteBlockEndCoreFuncDef(hFile, version, spec, options)
-	--Block containing the core functions for `version`.
+function my_style.source.WriteBlockEndCoreFuncPtrDef(hFile, version, spec, options)
 end
 
 	local function GenCoreLoaderFuncName(version, spec, options)
@@ -527,7 +569,8 @@ end
 	end
 	
 	local function GenQualifiedFuncPtrName(func, spec, options)
-		return GenQualifier(spec, options) .. GenFuncPtrName(func, spec, options)
+		return GenQualifier(spec, options) .. "_detail::"
+			.. GenFuncPtrName(func, spec, options)
 	end
 	
 	local function WriteAncillaryFuncs(hFile, specData, spec, options)
@@ -580,12 +623,12 @@ static void ProcExtsFromExtList(std::vector<MapEntry> &table)
 
 	
 	local function WriteInMainFuncLoader(hFile, func, spec, options)
-		hFile:fmt('%s = reinterpret_cast<%s>(%s("%s%s"));\n',
+		hFile:fmt('_detail::%s = reinterpret_cast<_detail::%s>(%s("%s%s"));\n',
 			GenFuncPtrName(func, spec, options),
 			GenFuncPtrTypedefName(func, spec, options),
 			common.GetProcAddressName(spec),
 			spec.FuncNamePrefix(), func.name)
-		hFile:fmt('if(!%s) return exts::LoadTest();\n',
+		hFile:fmt('if(!_detail::%s) return exts::LoadTest();\n',
 			GenFuncPtrName(func, spec, options))
 	end
 
@@ -638,7 +681,7 @@ InitializeMappingTable(table);
 	
 	if(options.version) then
 		hFile:write "\n"
-		hFile:fmt("int numFailed = %s();\n",
+		hFile:fmt("int numFailed = _detail::%s();\n",
 			GenCoreLoaderFuncName(options.version, spec, options))
 		
 		hFile:write("return exts::LoadTest(true, numFailed);\n")
@@ -660,8 +703,8 @@ function my_style.source.WriteVersioningFuncs(hFile, specData, spec, options)
 		hFile:writeblock([[
 static void GetGLVersion()
 {
-	GetIntegerv(MAJOR_VERSION, &g_major_version);
-	GetIntegerv(MINOR_VERSION, &g_minor_version);
+	_detail::GetIntegerv(MAJOR_VERSION, &g_major_version);
+	_detail::GetIntegerv(MINOR_VERSION, &g_minor_version);
 }
 ]])
 	else
@@ -671,7 +714,7 @@ static void GetGLVersion()
 		hFile:writeblock([[
 static void GetGLVersion()
 {
-	ParseVersionFromString(&g_major_version, &g_minor_version, GetString(VERSION));
+	ParseVersionFromString(&g_major_version, &g_minor_version, (const char *)_detail::GetString(VERSION));
 }
 ]])
 	end

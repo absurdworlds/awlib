@@ -10,7 +10,9 @@ local tests =
 {
 	[[lua $<dir>LoadGen.lua -spec=gl -version=3.3 -profile=core -style=pointer_cpp -stdext=gl_ubiquitous.txt $<dir>test/ptr_cpp/test]],
 	[[lua $<dir>LoadGen.lua -spec=gl -version=3.3 -profile=core -style=pointer_c -stdext=gl_ubiquitous.txt $<dir>test/ptr_c/test]],
+	[[lua $<dir>LoadGen.lua -spec=gl -version=3.3 -profile=core -style=func_cpp -stdext=gl_ubiquitous.txt $<dir>test/func_cpp/test]],
 	[[lua $<dir>LoadGen.lua -spec=gl -version=3.3 -profile=compatibility -style=pointer_cpp -stdext=gl_ubiquitous.txt $<dir>test/ptr_cpp_comp/test]],
+	[[lua $<dir>LoadGen.lua -spec=gl -version=2.1 -style=func_cpp -stdext=gl_ubiquitous.txt $<dir>test/func_cpp_comp/test]],
 	[[lua $<dir>LoadGen.lua -spec=gl -version=3.3 -profile=compatibility -style=pointer_c -stdext=gl_ubiquitous.txt $<dir>test/ptr_c_comp/test]],
 	[[lua $<dir>LoadGen.lua -spec=gl -version=3.3 -profile=compatibility -style=noload_cpp  -stdext=gl_ubiquitous.txt $<dir>test/noload_cpp/test]],
 	[[lua $<dir>LoadGen.lua -spec=gl -version=3.3 -profile=compatibility -style=noload_cpp $<dir>test/noload_cpp_noext/test]],
@@ -22,7 +24,9 @@ local platTests =
 	{
 		[[lua $<dir>LoadGen.lua -spec=wgl -style=pointer_cpp -stdext=wgl_common.txt $<dir>test/ptr_cpp/test]],
 		[[lua $<dir>LoadGen.lua -spec=wgl -style=pointer_c -stdext=wgl_common.txt $<dir>test/ptr_c/test]],
+		[[lua $<dir>LoadGen.lua -spec=wgl -style=func_cpp -stdext=wgl_common.txt $<dir>test/func_cpp/test]],
 		[[lua $<dir>LoadGen.lua -spec=wgl -style=pointer_cpp -stdext=wgl_common.txt $<dir>test/ptr_cpp_comp/test]],
+		[[lua $<dir>LoadGen.lua -spec=wgl -style=func_cpp -stdext=wgl_common.txt $<dir>test/func_cpp_comp/test]],
 		[[lua $<dir>LoadGen.lua -spec=wgl -style=pointer_c -stdext=wgl_common.txt $<dir>test/ptr_c_comp/test]],
 		[[lua $<dir>LoadGen.lua -spec=wgl -style=noload_cpp  -stdext=wgl_common.txt $<dir>test/noload_cpp/test]],
 		[[lua $<dir>LoadGen.lua -spec=wgl -style=noload_cpp  -stdext=wgl_common.txt $<dir>test/noload_cpp_noext/test]],
@@ -32,7 +36,9 @@ local platTests =
 	{
 		[[lua $<dir>LoadGen.lua -spec=glX -style=pointer_cpp -stdext=glx_common.txt $<dir>test/ptr_cpp/test]],
 		[[lua $<dir>LoadGen.lua -spec=glX -style=pointer_c -stdext=glx_common.txt $<dir>test/ptr_c/test]],
+		[[lua $<dir>LoadGen.lua -spec=glX -style=func_cpp -stdext=glx_common.txt $<dir>test/func_cpp/test]],
 		[[lua $<dir>LoadGen.lua -spec=glX -style=pointer_cpp -stdext=glx_common.txt $<dir>test/ptr_cpp_comp/test]],
+		[[lua $<dir>LoadGen.lua -spec=glX -style=func_cpp -stdext=glx_common.txt $<dir>test/func_cpp_comp/test]],
 		[[lua $<dir>LoadGen.lua -spec=glX -style=pointer_c -stdext=glx_common.txt $<dir>test/ptr_c_comp/test]],
 		[[lua $<dir>LoadGen.lua -spec=glX -style=noload_cpp -stdext=glx_common.txt $<dir>test/noload_cpp/test]],
 		[[lua $<dir>LoadGen.lua -spec=glX -style=noload_cpp -stdext=glx_common.txt $<dir>test/noload_cpp_noext/test]],
