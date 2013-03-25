@@ -11,7 +11,8 @@
         is:</para>
     <itemizedlist>
         <listitem>
-            <para>Typedefs for OpenGL concepts (GLenum, etc).</para>
+            <para>Typedefs for OpenGL types (<literal>GLenum</literal>, <literal>GLint</literal>,
+                etc).</para>
         </listitem>
         <listitem>
             <para>A means to tell whether each of the extensions specified by the user is loaded or
@@ -53,18 +54,47 @@
             they generate:</para>
         <itemizedlist>
             <listitem>
-                <para><link xlink:href="Style_Pointer_C"><literal>pointer_c</literal></link>: Used
-                    for C-style header generation.</para>
+                <para><link xlink:href="Style_Pointer_C"><literal>pointer_c</literal></link>:
+                    Function-pointer-based style for C. It is the most widely compatible, comparable
+                    to GLEW. It has variables to test whether an extension was loaded (and how many
+                    of its functions were loaded). Like GLEW, it requires calling an initialization
+                    function to set it up. This is best used for C or C++ users who need to be able
+                    to share the headers with other tools (note: usually, you don't need to do
+                    this).</para>
             </listitem>
             <listitem>
                 <para><link xlink:href="Style_Pointer_CPP"><literal>pointer_cpp</literal></link>:
-                    Used for creating C++-style loaders, wrapping as much as possible in
-                    namespaces.</para>
+                    Function-pointer-based style for C++. It wraps all function pointers, extension
+                    variables, and enumerators in a namespace (not the typedefs). It requires
+                    calling an initialization function to set it up. This is best used for C++ users
+                    who don't need compatibility, but would like OpenGL stuff to not pollute the
+                    global namespace so much.</para>
+            </listitem>
+            <listitem>
+                <para><link xlink:href="Style_Function_CPP"><literal>func_cpp</literal></link>:
+                    Inline-function-based style for C++. This means that the header contains actual
+                    inline functions, which forward their parameters to the actual function pointers
+                    internally. Like <literal>pointer_cpp</literal>, most of OpenGL is in a
+                    namespace. This is best used for C++ users who want the best possible
+                    autocompletion from their IDE or coding tool of choice.</para>
+            </listitem>
+            <listitem>
+                <para><link xlink:href="Style_No_Load_C"><literal>noload_c</literal></link>:
+                    Automatic loading style for C. This is similar to the old loading tool GLee.
+                    Unlike the other styles, it does not require an initialization function; you
+                    simply call whatever function you want to use. The first time a call is
+                    encountered, it will load that function. This is best used for C or C++ users
+                    who don't want to do explicit initialization, and also want header compatibility
+                    like <literal>pointer_c</literal>.</para>
             </listitem>
             <listitem>
                 <para><link xlink:href="Style_No_Load_CPP"><literal>noload_cpp</literal></link>:
-                    Used for creating C++-style loaders that you don't need to call an
-                    initialization function on to get function pointers.</para>
+                    Automatic loading style for C++. This is similar to the old loading tool GLee.
+                    Unlike the other styles, it does not require an initialization function; you
+                    simply call whatever function you want to use. The first time a call is
+                    encountered, it will load that function. It will wrap most of OpenGL in a
+                    namespace. This is best used for C++ users who don't want to do explicit
+                    initialization.</para>
             </listitem>
         </itemizedlist>
     </section>
