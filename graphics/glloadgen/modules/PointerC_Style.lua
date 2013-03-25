@@ -521,7 +521,7 @@ static void GetGLVersion()
 		hFile:writeblock([[
 static void GetGLVersion()
 {
-	ParseVersionFromString(&g_major_version, &g_minor_version, glGetString(GL_VERSION));
+	ParseVersionFromString(&g_major_version, &g_minor_version, (const char*)glGetString(GL_VERSION));
 }
 ]])
 	end
