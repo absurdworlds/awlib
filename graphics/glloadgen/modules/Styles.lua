@@ -15,6 +15,7 @@ local style_registry =
 	pointer_cpp = require("PointerCPP_Style"),
 	func_cpp = require("FuncCpp_Style"),
 	noload_cpp = require("NoloadCpp_Style"),
+	noload_c = require("NoloadC_Style"),
 }
 
 local default_style = "pointer_c"

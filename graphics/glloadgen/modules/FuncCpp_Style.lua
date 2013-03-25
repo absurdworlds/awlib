@@ -27,7 +27,7 @@ function my_style.header.GetFilename(basename, options)
 end
 
 	local function GenIncludeGuardName(hFile, spec, options)
-		local str = "POINTER_CPP_GENERATED_HEADER" ..
+		local str = "FUNCTION_CPP_GENERATED_HEADER" ..
 			spec.GetIncludeGuardString() .. "_HPP"
 
 		if(#options.prefix > 0) then
@@ -368,7 +368,7 @@ function my_style.source.WriteFuncPtrDef(hFile, func, typemap, spec, options)
 end
 
 	local function GenExtLoaderFuncName(extName, spec, options)
-		return "_detail::Load_" .. extName;
+		return "Load_" .. extName;
 	end
 
 function my_style.source.WriteBlockBeginExtLoader(hFile, extName, spec, options)
@@ -509,7 +509,7 @@ struct MapCompare
 	hFile:fmt("table.reserve(%i);\n", #options.extensions)
 	for _, extName in ipairs(options.extensions) do
 		if(#specData.extdefs[extName].funcs > 0) then
-			hFile:fmt('table.push_back(MapEntry("%s", &exts::%s, %s));\n',
+			hFile:fmt('table.push_back(MapEntry("%s", &exts::%s, _detail::%s));\n',
 				spec.ExtNamePrefix() .. extName,
 				GenExtensionVarName(extName, spec, options),
 				GenExtLoaderFuncName(extName, spec, options))
