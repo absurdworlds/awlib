@@ -42,7 +42,7 @@
                 particular style.</para>
             <para>The above command line will generate <filename>gl_core_3_3.h</filename> and
                     <filename>gl_core_3_3.c</filename> files. Simply include them in your project;
-                there is no library to build, no unresolved extenals to filter through.</para>
+                there is no library to build, no unresolved externals to filter through.</para>
             <para>You will need to call <literal>ogl_LoadFunctions</literal> to initialize the
                 library if you use the <literal>pointer_c</literal> style. And you must call it
                     <emphasis>after</emphasis> OpenGL context creation. For example, if you are
