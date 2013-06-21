@@ -30,17 +30,15 @@ local function InitData()
 	function data:AddText(text)
 		--Ignore stuff before/after the root.
 		if(self._curr) then
-			if(text:match("%S")) then
+			--if(text:match("%S")) then
 				table.insert(self._curr, text)
-			end
+			--end
 		end
 	end
 	
 	function data:AddComment(comment)
 		local node = {}
 		node._comment = comment
-		
-		print(comment)
 		
 		--Ignore stuff before/after the root.
 		if(self._curr) then
