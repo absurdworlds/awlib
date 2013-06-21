@@ -37,7 +37,7 @@ local function WriteTabs(hFile, iRecursion)
 end
 
 function WriteTable(hFile, outTable, iRecursion)
-	if(iRecursion == nil) then iRecursion = 1; end
+	iRecursion = iRecursion or 1
 	
 	hFile:write("{\n");
 	
