@@ -335,7 +335,6 @@ local function BuildPassthruData(typeRefs, allTypes)
 		for _, typeName in ipairs(lastTypes) do
 			if(allTypes[typeName].requires) then
 				reqTypes[#reqTypes + 1] = allTypes[typeName].requires
---				print(allTypes[typeName].requires)
 			end
 		end
 		
@@ -344,13 +343,11 @@ local function BuildPassthruData(typeRefs, allTypes)
 	
 	local inList = {}
 	
-	print(#typeHierarchy)
 	for i = #typeHierarchy, 1, -1 do
 		local reqTypes = typeHierarchy[i]
 		for _, typeName in ipairs(reqTypes) do
 			if(not inList[typeName]) then
 				inList[typeName] = true
-				print(typeName)
 			end
 		end
 	end
