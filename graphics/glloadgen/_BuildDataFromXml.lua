@@ -19,6 +19,7 @@ end
 
 local function BuildAllLists(xmlData, api)
 	local allTypes = {}
+	allTypes._order = {}
 	
 	local typesNode = FindElementByName(xmlData, "types")
 	assert(typesNode, "Could not find the `types` node.")
@@ -28,6 +29,7 @@ local function BuildAllLists(xmlData, api)
 				if(typeNode.name) then
 					assert(allTypes[typeNode.name] == nil, "Multiply defined type " .. typeNode.name)
 					allTypes[typeNode.name] = typeNode
+					table.insert(allTypes._order, typeNode.name)
 				else
 					--Get the node name.
 					local nameElem = FindElementByName(typeNode, "name")
@@ -35,6 +37,7 @@ local function BuildAllLists(xmlData, api)
 					assert(type(nameElem[1]) == "string", "Name element of `type` is irregular.")
 					assert(allTypes[nameElem[1]] == nil, "Multiply defined type " .. nameElem[1])
 					allTypes[nameElem[1]] = typeNode
+					table.insert(allTypes._order, nameElem[1])
 				end
 			end
 		end
@@ -332,6 +335,7 @@ local function BuildPassthruData(typeRefs, allTypes)
 		for _, typeName in ipairs(lastTypes) do
 			if(allTypes[typeName].requires) then
 				reqTypes[#reqTypes + 1] = allTypes[typeName].requires
+--				print(allTypes[typeName].requires)
 			end
 		end
 		
@@ -340,27 +344,36 @@ local function BuildPassthruData(typeRefs, allTypes)
 	
 	local inList = {}
 	
+	print(#typeHierarchy)
 	for i = #typeHierarchy, 1, -1 do
 		local reqTypes = typeHierarchy[i]
 		for _, typeName in ipairs(reqTypes) do
 			if(not inList[typeName]) then
 				inList[typeName] = true
-				local str = ""
-				for _, node in ipairs(allTypes[typeName]) do
-					if(type(node) == "string") then
-						str = str .. node
+				print(typeName)
+			end
+		end
+	end
+	
+	--Print them in the order specified in the XML file.
+	for _, typeName in ipairs(allTypes._order) do
+		if(inList[typeName]) then
+			--Build the string from the different text pieces.
+			local str = ""
+			for _, node in ipairs(allTypes[typeName]) do
+				if(type(node) == "string") then
+					str = str .. node
+				else
+					if(node._elem == "apientry") then
+						str = str .. "APIENTRY"
 					else
-						if(node._elem == "apientry") then
-							str = str .. "APIENTRY"
-						else
-							str = str .. node[1]
-						end
+						str = str .. node[1]
 					end
 				end
-				
-				if(#str > 0) then
-					passthru[#passthru + 1] = str
-				end
+			end
+			
+			if(#str > 0) then
+				passthru[#passthru + 1] = str
 			end
 		end
 	end
