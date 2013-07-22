@@ -16,7 +16,9 @@ for _, spec in ipairs(specs) do
 		spec.support, spec.enumPrefix, spec.funcPrefix)
 
 	local hFile = io.open("newglspecs/" .. spec.out, "w")
+	hFile:write("return ")
 	WriteTable(hFile, data)
+	hFile:write(";\n")
 	hFile:close()
 end
 
