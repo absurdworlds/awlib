@@ -103,6 +103,17 @@ function load.LoadLuaSpec(luaFilename, spec)
 			end
 		end
 	end
+	
+	--Sort functions and enums by name. Just for nicer presentation.
+	for extName, data in pairs(extdefs) do
+		table.sort(data.enums, function(lhs, rhs) return lhs.name < rhs.name end)
+		table.sort(data.funcs, function(lhs, rhs) return lhs.name < rhs.name end)
+	end
+
+	for version, data in pairs(coredefs) do
+		table.sort(data.enums, function(lhs, rhs) return lhs.name < rhs.name end)
+		table.sort(data.funcs, function(lhs, rhs) return lhs.name < rhs.name end)
+	end
 
 --[[	
 	local coreextsByVersion = spec.GetCoreExts()
