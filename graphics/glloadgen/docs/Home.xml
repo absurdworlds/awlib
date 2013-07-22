@@ -8,7 +8,8 @@
         <title>OpenGL Loader Generator</title>
         <para>This loader generation system is used to create OpenGL headers and loading code for
             your specific needs. Rather than getting every extension and core enumerator/function
-            all in one massive header, you get only what you actually want and ask for.</para>
+            all in one massive header, you get only what you actually want and ask for. This tool
+            supports OpenGL 4.4 and the recent crop of OpenGL extensions.</para>
         <para><link xlink:href="https://bitbucket.org/alfonse/glloadgen/downloads">Download it
                 here;</link> you will need to have the Lua runtime installed on your machine to use
             the code generation scripts. It's pretty tiny, so it shouldn't be a problem. Windows
@@ -140,9 +141,9 @@ if(ogl_LoadFunctions() == ogl_LOAD_FAILED)
                 OpenGL 3.3, without proprietary extensions, but with non-hardware features that were
                 added to OpenGL in later versions:</para>
             <programlisting>lua LoadGen.lua core_3_3 -style=pointer_c -spec=gl -version=3.3 -profile=core -stdext=gl_ubiquitous.txt -stdext=gl_core_post_3_3.txt</programlisting>
-            <para>This command-line is for OpenGL 4.3, but with certain commonly-provided extensions
+            <para>This command-line is for OpenGL 4.4, but with certain commonly-provided extensions
                 that are generally useful.</para>
-            <programlisting>lua LoadGen.lua core_4_3 -style=pointer_c -spec=gl -version=4.3 -profile=core -stdext=gl_ubiquitous.txt -stdext=gl_plat_3_3.txt</programlisting>
+            <programlisting>lua LoadGen.lua core_4_4 -style=pointer_c -spec=gl -version=4.4 -profile=core -stdext=gl_ubiquitous.txt -stdext=gl_plat_3_3.txt</programlisting>
             <para>This command-line generates a header that exposes OpenGL 3.2 for what MacOSX 10.8
                 uses (note: the loader generator files have not been tested with MacOSX of any
                 kind):</para>
