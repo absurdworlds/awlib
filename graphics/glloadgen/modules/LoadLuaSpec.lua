@@ -83,7 +83,10 @@ function load.LoadLuaSpec(luaFilename, spec)
 		
 		if(enum.core) then
 			for _, coreSpec in ipairs(enum.core) do
-				table.insert(GetCore(coreSpec[1]).enums, enum)
+				if(coreSpec[2] == "core") then
+					table.insert(GetCore(coreSpec[1]).enums, enum)
+					break
+				end
 			end
 		end
 	end
@@ -99,7 +102,10 @@ function load.LoadLuaSpec(luaFilename, spec)
 	
 		if(func.core) then
 			for _, coreSpec in ipairs(func.core) do
-				table.insert(GetCore(coreSpec[1]).funcs, func)
+				if(coreSpec[2] == "core") then
+					table.insert(GetCore(coreSpec[1]).funcs, func)
+					break
+				end
 			end
 		end
 	end
