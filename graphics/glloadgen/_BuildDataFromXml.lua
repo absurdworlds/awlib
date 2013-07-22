@@ -399,7 +399,7 @@ function Build.BuildData(xmlData, feature_api, ext_support, enum_prefix, func_pr
 	CollateEnumerators(ret.enumerators, allEnums, features,
 		extensions, feature_api, ext_support)
 	for _, enum in ipairs(ret.enumerators) do
-		enum.name = RemovePrefix(enum.name, enum_prefix)
+		enum.name = assert(RemovePrefix(enum.name, enum_prefix), enum.name .. " No prefix found")
 		if(enum.extensions) then
 			for ix, extName in ipairs(enum.extensions) do
 				enum.extensions[ix] = RemovePrefix(extName, enum_prefix)
@@ -413,7 +413,7 @@ function Build.BuildData(xmlData, feature_api, ext_support, enum_prefix, func_pr
 	local typeRefs = CollateFunctions(ret.funcData.functions, allFuncs, features,
 		extensions, feature_api, ext_support)
 	for _, func in ipairs(ret.funcData.functions) do
-		func.name = RemovePrefix(func.name, func_prefix)
+		func.name = assert(RemovePrefix(func.name, func_prefix), func.name .. " no prefix found.")
 		if(func.extensions) then
 			for ix, extName in ipairs(func.extensions) do
 				func.extensions[ix] = RemovePrefix(extName, enum_prefix)
