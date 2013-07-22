@@ -38,7 +38,7 @@ local specData = spec.LoadSpec()
 
 local coreExts = spec.GetCoreExts()
 
-for _, version in ipairs(spec.GetVersions()) do
+for _, version in ipairs(specData.versions or {}) do
 	if(coreExts[version]) then
 		for _, extName in ipairs(coreExts[version]) do
 			if(not dups[extName]) then

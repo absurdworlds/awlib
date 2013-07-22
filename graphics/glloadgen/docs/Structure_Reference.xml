@@ -22,7 +22,7 @@
   { type="bar", },
 }</programlisting>
         <para>The contents of the base structure is an array of values. Once you have created the
-            table, the actual datastructure is created as follows:</para>
+            table, the actual data structure is created as follows:</para>
         <programlisting>local Structure = require "Structure"
 
 Structure.BuildStructure(my_struct)</programlisting>
@@ -32,29 +32,32 @@ Structure.BuildStructure(my_struct)</programlisting>
             action is defined by the <literal>type</literal> field. Using an invalid type will
             result in a build-time error (ie: <literal>BuildStructure</literal> will error). This
             makes it easy to do some basic verification by simply executing your structure's script.
-            It won't verify things like function existence or parameter correctness, but at least
-            you know you've spelled your action type correctly.</para>
+            That won't verify things like whether a function exists or the correctness of
+            parameters, but at least you know you've spelled your action types correctly.</para>
         <para>Each type can have a number of attributes. Some attributes are specific to certain
             types, while others can be used anywhere.</para>
         <para>Actions can be nested within other actions. For some actions, it generally does not
-            make sense to nest them, while others are designed for nesting. How the actions nested
-            within an action are processed depends on the type of actions. Actions that iterate over
-            something will execute their contents once per iteration. There are actions that can
-            will execute their contents only if a style-provided function returns true. And so
+            make sense to nest them, while others only make sense if they contain other actions. The
+            outer action can influence how inner actions are processed. For example, actions that
+            iterate over something will execute their contents once per iteration. There are actions
+            that will execute their contents only if a style-provided function returns true. And so
             forth.</para>
         <para>When a structure is processed, each action will be executed in the order provided. Do
             note that no steps are taken to prevent infinite recursion/iteration; if your structure
-            uses a variable which uses another variable which uses the original, that is a legal
-            table in Lua. Attempting to process with <literal>BuildStructure</literal> will halt
-            with a stack overflow (or execute infinitely).</para>
+            uses a table which uses another table which itself contains the first table, that is a
+            legal table in Lua. Attempting to process such a structure with
+                <literal>BuildStructure</literal> will halt with a Lua stack overflow or execute
+            infinitely.</para>
         <section>
             <title>Context</title>
             <para>There is a notion of a current <glossterm>context</glossterm>. The context
                 represents all of the information currently available to an action (and therefore
-                whatever style code it calls). Some actions will augment the current context with
-                new information. These take the form of parameters passed to style functions.</para>
+                whatever style functions it calls). Some actions will augment the current context
+                with new information. These take the form of parameters passed to style
+                functions.</para>
             <para>If an action provides some new context variable(s), then all child actions may
-                access that.</para>
+                access them. Actions that provide new context variables will provide them to all
+                child actions contained within that action.</para>
             <para>Some actions <emphasis>require</emphasis> certain context variables to be
                 available. If they are not, then a runtime error will result. For example, the
                 function iterator action iterates over all of the functions within the current
@@ -63,8 +66,8 @@ Structure.BuildStructure(my_struct)</programlisting>
             <para>Similarly, actions cannot modify already existing context variables. So you cannot
                 nest actions that provide the same context variable(s).</para>
             <para>In the reference table below, there will be text that says, <quote>must be within
-                    the scope of.</quote> This means that the action needs to be inside something
-                that provides this context variable.</para>
+                    the scope of X.</quote> This means that the action needs to be inside an action
+                that provides the context variable(s) X.</para>
         </section>
         <section>
             <title>Current Style</title>
@@ -116,9 +119,9 @@ local my_struct =
     <section>
         <title>Action Reference</title>
         <para>This is a list of all of the actions and their associated attributes.</para>
-        <para>When an action says, <quote>Provides access to the X parameter,</quote> this also
-            means that the action <emphasis>cannot nest</emphasis> with any action that provides
-            this parameter. Including itself.</para>
+        <para>When an action says, <quote>Provides access to the X variable,</quote> this also means
+            that the action <emphasis>cannot nest</emphasis> with any action that provides the X
+            variable. Including itself.</para>
         <section>
             <title>System</title>
             <para>These actions are system-level actions. They can be used in any context, and they
@@ -137,9 +140,9 @@ local my_struct =
                 <glossentry>
                     <glossterm>filter</glossterm>
                     <glossdef>
-                        <para>Will execute its child actions only if the given function returns
-                            true. The default parameters are <literal>()</literal> (ie:
-                            none).</para>
+                        <para>Will execute its child actions only if the named style function
+                            returns true. The default parameters are <literal>()</literal> (ie: no
+                            parameters).</para>
                         <itemizedlist>
                             <listitem>
                                 <para><literal>name</literal>: The base name of the function that
@@ -167,7 +170,7 @@ local my_struct =
                                 <para><literal>key</literal>: The string name of the new context
                                     variable. Required. Must end in the
                                         <quote><literal>_</literal></quote> character, to ensure
-                                    that it doesn't conflict with other variables.</para>
+                                    that it doesn't conflict with system context variables.</para>
                             </listitem>
                             <listitem>
                                 <para><literal>data</literal>: A Lua value that represents the new
@@ -189,7 +192,8 @@ local my_struct =
                             </listitem>
                         </itemizedlist>
                         <para>Either <literal>name</literal> or <literal>data</literal> must be
-                            defined. <literal>data</literal> takes priority.</para>
+                            defined. <literal>data</literal> takes priority if both are
+                            defined.</para>
                         <para>Provides access to the parameter named by <literal>key</literal>. Note
                             that this means you can't nest <literal>context</literal>'s that provide
                             the same variable.</para>
@@ -198,12 +202,12 @@ local my_struct =
                 <glossentry>
                     <glossterm>call</glossterm>
                     <glossdef>
-                        <para>Calls a given function. The default parameter list is
+                        <para>Calls a given style function. The default parameter list is
                                 <literal>()</literal>.</para>
                         <itemizedlist>
                             <listitem>
-                                <para><literal>name</literal>: The name of the function to
-                                    call.</para>
+                                <para><literal>name</literal>: The name of the function to call. The
+                                    name will be exactly as specified.</para>
                             </listitem>
                         </itemizedlist>
                     </glossdef>
@@ -223,16 +227,17 @@ local my_struct =
                                 options)</literal></para>
                         <itemizedlist>
                             <listitem>
-                                <para><literal>name</literal>: The exact name of a function to call
-                                    that returns the full pathname of the file to create</para>
+                                <para><literal>name</literal>: The exact name of the style function
+                                    to call that returns the full pathname of the file to
+                                    create</para>
                             </listitem>
                         </itemizedlist>
-                        <para>Provides access to the <literal>hFile</literal> parameter.</para>
+                        <para>Provides access to the <literal>hFile</literal> variable.</para>
                         <para>Note that you really need the <literal>basename</literal> variable. At
-                            the very least, you should extract the directory name from it, as you
-                            will need to attach that to the front of the return value from this
-                            function. You can use <literal>util.ParsePath</literal> for this. Thus,
-                            your code should look like:</para>
+                            the very least, you should extract the directory name from it, so that
+                            the user can provide a proper directory name. You can use
+                                <literal>util.ParsePath</literal> for this. Thus, your code should
+                            look like:</para>
                         <programlisting>function style_name.GetFilenameFunc(basename, ...)
   local base, dir = util.ParsePath(basename)
   local filename = --compute filename here.
@@ -292,7 +297,7 @@ end</programlisting>
                 <glossentry>
                     <glossterm>ext-iter</glossterm>
                     <glossdef>
-                        <para>Executes its children once for every extension that the user
+                        <para>Executes its children once for every extension that the user has
                             explicitly asked to generate code for.</para>
                         <para>Provides access to the <literal>extName</literal> parameter.</para>
                     </glossdef>
@@ -324,30 +329,6 @@ end</programlisting>
                     </glossdef>
                 </glossentry>
                 <glossentry>
-                    <glossterm>core-ext-iter</glossterm>
-                    <glossdef>
-                        <para>Executes its children once for every core extension of the current
-                                <literal>version</literal> parameter. Note that this will iterate
-                            over the core extensions introduced in version
-                                <emphasis>only.</emphasis></para>
-                        <para>Must be within the scope of <literal>version</literal>. Provides
-                            access to the <literal>extName</literal> parameter.</para>
-                    </glossdef>
-                </glossentry>
-                <glossentry>
-                    <glossterm>core-ext-cull-iter</glossterm>
-                    <glossdef>
-                        <para>Executes its children once for every core extension of the current
-                                <literal>version</literal> parameter which <emphasis>was not
-                                requested</emphasis> by the user to be exported. That is, these are
-                            the extensions that you need to look at because they are core extensions
-                            (and thus part of the current version) and won't have looked at already
-                            as part of the regular extension iteration process.</para>
-                        <para>Must be within the scope of <literal>version</literal>. Provides
-                            access to the <literal>extName</literal> parameter.</para>
-                    </glossdef>
-                </glossentry>
-                <glossentry>
                     <glossterm>enum-iter</glossterm>
                     <glossdef>
                         <para>Executes its children once for every enumerator within scope.
@@ -371,8 +352,7 @@ end</programlisting>
                             defined as for <literal>enum-iter</literal>.</para>
                         <para>Must be within the scope of <literal>extName</literal> or
                                 <literal>version</literal>. Provides access to the
-                                <literal>func</literal> and <literal>typemap</literal>
-                            parameters.</para>
+                                <literal>func</literal> parameters.</para>
                     </glossdef>
                 </glossentry>
                 <glossentry>
@@ -443,12 +423,12 @@ end</programlisting>
                     <glossterm>optional</glossterm>
                     <glossdef>
                         <para>Normally, the inability to resolve a function name to a function will
-                            result in an error. If this is set to true, then the failure to resolve
-                            a function will simply mean that the function is not called. All
-                            children are processed as though the function had been called normally,
-                                <emphasis>UNLESS</emphasis> it is a filter action. In that case, the
-                            filter will be assumed to have returned false, meaning that children
-                            will not be processed (unless <literal>neg</literal> is
+                            result in an error. If this attribute is set to true however, then the
+                            failure to resolve a function will simply mean that the function is not
+                            called. All children are processed as though the function had been
+                            called normally, <emphasis>UNLESS</emphasis> it is a filter action. In
+                            that case, the filter will be assumed to have returned false, meaning
+                            that children will not be processed (unless <literal>neg</literal> is
                                 <emphasis>also</emphasis> set, in which case it will flip that into
                                 <literal>true</literal>, thus always processing children if the
                             function isn't present).</para>
@@ -555,12 +535,12 @@ end</programlisting>
         </section>
     </section>
     <section>
-        <title>Function Parameters</title>
-        <para>Here are a list of the various standard function parameters, with references to the
+        <title>Standard Context Variables</title>
+        <para>Here are a list of the various standard context variables, with references to the
             actions that provide them.</para>
         <para>Again, <emphasis>DO NOT MODIFY THEM!</emphasis> You can call member functions on them
-            and inspect them. But unless they're user-defined parameters, do not change their
-            tables.</para>
+            and inspect them. But unless they're user-defined parameters, do not directly change
+            their tables.</para>
         <glosslist>
             <glossentry>
                 <glossterm>specData</glossterm>
@@ -741,17 +721,6 @@ end</programlisting>
                 </glossdef>
             </glossentry>
             <glossentry>
-                <glossterm>typemap</glossterm>
-                <glossdef>
-                    <para>This is a mapping between types as defined in <literal>func</literal> (for
-                        parameters and values) and types as defined by C/C++, as well as the
-                        standard OpenGL/system typedefs and such. It is from
-                            <literal>specData.typemap</literal>.</para>
-                    <para>This parameter is provided by the <literal>func-iter</literal>
-                        action.</para>
-                </glossdef>
-            </glossentry>
-            <glossentry>
                 <glossterm>enumSeen</glossterm>
                 <glossdef>
                     <para>A table indexed by enumerator name. If an entry is present, then the
@@ -824,8 +793,7 @@ end</programlisting>
                         that will iterate over every function in every extension and version that
                         the user asked to export. This will respect core/compatibility. For each
                         function, it will call a function named <literal>WriteFunction(hFile, func,
-                            typemap, spec, options, funcSeen)</literal> to write each
-                        function.</para>
+                            spec, options, funcSeen)</literal> to write each function.</para>
                     <para>It will iterate over functions in the same group order as with
                         enumerators. It will write headers where appropriate, which can be
                         omitted.</para>

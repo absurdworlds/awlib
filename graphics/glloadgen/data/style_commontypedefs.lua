@@ -1,6 +1,7 @@
 -- Returns an array of strings, for proper indenting and such.
 
 return {
+--[[
 	"typedef unsigned int GLenum;\n",
 	"typedef unsigned char GLboolean;\n",
 	"typedef unsigned int GLbitfield;\n",
@@ -16,4 +17,5 @@ return {
 	"typedef double GLdouble;\n",
 	"typedef double GLclampd;\n",
 	"#define GLvoid void\n",
+]]
 }

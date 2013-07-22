@@ -127,7 +127,7 @@ function glx_spec.GetIndexedExtStringFunc(options) return nil end
 local fileProps =
 {
 	{"GetHeaderInit", "init"},
-	{"GetVersions", "versions"},
+--	{"GetVersions", "versions"},
 	{"GetCoreVersions", "coreversions"},
 	{"GetCoreExts", "coreexts"},
 	{"GetLoaderFunc", "loaderfunc"},

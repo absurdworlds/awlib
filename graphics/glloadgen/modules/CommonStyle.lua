@@ -87,12 +87,12 @@ function common.GetNameLengthPadding(name, length)
 end
 
 --Gets the return type for a function.
-function common.GetFuncReturnType(func, typemap)
-	return typemap[func["return"]] or func["return"]
+function common.GetFuncReturnType(func)
+	return func["return_ctype"]
 end
 
-function common.DoesFuncReturnSomething(func, typemap)
-	local returnType = typemap[func["return"]] or func["return"]
+function common.DoesFuncReturnSomething(func)
+	local returnType = func["return_ctype"]
 	return (returnType == "void") or (returnType == "GLvoid")
 end
 
@@ -112,36 +112,26 @@ local paramNameRemap = {
 
 --Returns the parameter list as a string.
 --Parameter list does not include parenthesis.
-function common.GetFuncParamList(func, typemap, bWriteVarNames)
+function common.GetFuncParamList(func, bWriteVarNames)
 	local paramList = {}
-	for i, param in ipairs(func.params) do
-		local parameter = ""
-		local paramType = typemap[param.type] or param.type;
-		local paramName = "";
-		if(bWriteVarNames) then paramName = param.name end
-		if(paramNameRemap[paramName]) then paramName = paramNameRemap[paramName]end
-		
-		if(bIsKindPtr[param.kind]) then
-			if(param.input) then
-				--Input arrays are ALWAYS const.
-				parameter = parameter .. "const ";
-			end
-			parameter = parameter .. string.format("%s *%s",
-				paramType, paramName);
+	for i, param in ipairs(func.parameters) do
+		local paramType = param.ctype;
+		if(bWriteVarNames) then
+			local paramName = param.name
+			if(paramNameRemap[paramName]) then paramName = paramNameRemap[paramName]end
+			paramList[#paramList + 1] = string.format("%s %s", paramType, paramName)
 		else
-			parameter = parameter .. string.format("%s %s",
-				paramType, paramName);
+			paramList[#paramList + 1] = paramType
 		end
-		paramList[#paramList + 1] = parameter
 	end
 	
 	return table.concat(paramList, ", ");
 end
 
 --Get the list of parameter names, as a string ready to be put into ().
-function common.GetFuncParamCallList(func, typemap)
+function common.GetFuncParamCallList(func)
 	local paramList = {}
-	for i, param in ipairs(func.params) do
+	for i, param in ipairs(func.parameters) do
 		local paramName = param.name
 		if(paramNameRemap[paramName]) then
 			paramName = paramNameRemap[paramName]
@@ -172,7 +162,7 @@ function common.FixupIndexedList(specData, indexed)
 			indexed[3] = func
 		end
 	end
-	for _, enum in ipairs(specData.enumerations) do
+	for _, enum in ipairs(specData.enumerators) do
 		if(indexed[2] == enum.name) then
 			indexed[2] = enum
 		end
@@ -462,12 +452,6 @@ local my_struct =
 							},
 						},
 						{ type="version-iter",
-							{ type="core-ext-cull-iter",
-								{type="enum-iter",
-									{ type="write", name="EnumDecl(hFile, enum, enumTable, spec, options, enumSeen)", },
-									{ type="blank", last=true },
-								},
-							},
 							{type="enum-iter",
 								{ type="write", name="EnumDecl(hFile, enum, enumTable, spec, options, enumSeen)", },
 								{ type="blank", last=true },
@@ -480,22 +464,14 @@ local my_struct =
 						{ type="ext-iter",
 							{ type="block", name="ExtFuncDecl(hFile, extName, spec, options)", cond="func-iter",
 								{type="func-iter",
-									{ type="write", name="FuncDecl(hFile, func, typemap, spec, options, funcSeen)", },
+									{ type="write", name="FuncDecl(hFile, func, spec, options, funcSeen)", },
 								},
 							},
 							{ type="blank"},
 						},
 						{ type="version-iter",
-							{ type="core-ext-cull-iter",
-								{ type="block", name="ExtFuncDecl(hFile, extName, spec, options)", cond="func-iter",
-									{type="func-iter",
-										{ type="write", name="FuncDecl(hFile, func, typemap, spec, options, funcSeen)", },
-									},
-								},
-								{ type="blank"},
-							},
 							{type="func-iter",
-								{ type="write", name="FuncDecl(hFile, func, typemap, spec, options, funcSeen)", },
+								{ type="write", name="FuncDecl(hFile, func, spec, options, funcSeen)", },
 								{ type="blank", last=true },
 							},
 						},
@@ -529,12 +505,12 @@ local my_struct =
 				{ type="ext-iter",
 					{ type="block", name="ExtFuncDef(hFile, extName, spec, options)", cond="func-iter",
 						{ type="func-iter",
-							{ type="write", name="FuncDef(hFile, func, typemap, spec, options, funcSeen)", },
+							{ type="write", name="FuncDef(hFile, func, spec, options, funcSeen)", },
 						},
 						{ type="blank"},
 						{ type="block", name="ExtLoader(hFile, extName, spec, options)",
 							{ type="func-iter",
-								{ type="write", name="ExtFuncLoader(hFile, func, typemap, spec, options)", }
+								{ type="write", name="ExtFuncLoader(hFile, func, spec, options)", }
 							}
 						},
 						{ type="blank"},
@@ -543,28 +519,15 @@ local my_struct =
 				{ type="block", name="CoreFuncDef(hFile, spec, options)",
 					cond="core-funcs",
 					{ type="version-iter",
-						{ type="core-ext-cull-iter",
-							{ type="block", name="ExtFuncDef(hFile, extName, spec, options)", cond="func-iter",
-								{type="func-iter",
-									{ type="write", name="FuncDef(hFile, func, typemap, spec, options, funcSeen)", },
-								},
-							},
-							{ type="blank"},
-						},
 						{type="func-iter",
-							{ type="write", name="FuncDef(hFile, func, typemap, spec, options, funcSeen)", },
+							{ type="write", name="FuncDef(hFile, func, spec, options, funcSeen)", },
 							{ type="blank", last=true },
 						},
 					},
 					{ type="block", name="CoreLoader(hFile, spec, options)",
 						{ type="version-iter",
-							{ type="core-ext-iter",
-								{type="func-iter",
-									{ type="write", name="CoreFuncLoader(hFile, func, typemap, spec, options)", },
-								},
-							},
 							{type="func-iter",
-								{ type="write", name="CoreFuncLoader(hFile, func, typemap, spec, options)", },
+								{ type="write", name="CoreFuncLoader(hFile, func, spec, options)", },
 							},
 						},
 					},

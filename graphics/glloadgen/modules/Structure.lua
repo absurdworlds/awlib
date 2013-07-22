@@ -420,7 +420,7 @@ local versionIterAction = {}
 
 function versionIterAction:PreProcess(context)
 	self:Assert(context.version == nil, "Cannot nest version-iter actions.")
-	local rawVersionList = context.spec.GetVersions()
+	local rawVersionList = context.specData.versions or {}
 	local versionList = {}
 	for _, version in ipairs(rawVersionList) do
 		if(tonumber(version) <= tonumber(context.options.version)) then
@@ -436,7 +436,7 @@ MakeActionType("version-iter", versionIterAction, function(self, data)
 end)
 
 conditionals["version-iter"] = function(context)
-	return #context.spec.GetVersions() ~= 0
+	return context.specData.versions ~= nil
 end
 
 
@@ -447,7 +447,7 @@ local subVersionIterAction = {}
 function subVersionIterAction:PreProcess(context)
 	self:Assert(context.sub_version == nil, "Cannot nest sub-version-iter actions.")
 	self:Assert(context.version, "Must put sub-version-iter inside versions.")
-	local rawVersionList = context.spec.GetVersions()
+	local rawVersionList = context.specData.versions or {}
 	local versionList = {}
 	for _, version in ipairs(rawVersionList) do
 		if(tonumber(version) <= tonumber(context.version)) then
@@ -462,7 +462,7 @@ end
 MakeActionType("sub-version-iter", subVersionIterAction, function(self, data)
 end)
 
-
+--[==[
 ---------------------------------------------
 -- Core Extension Iterator Action
 local coreExtIterAction = {}
@@ -523,7 +523,7 @@ conditionals["core-ext-cull-iter"] = function(context)
 	return #BuildCulledExtList(context) > 0
 end
 
-
+]==]
 ----------------------------------------------
 -- Enum Seen Action
 local enumSeenAction = {}
@@ -550,41 +550,26 @@ local function GetEnumList(context)
 		--Get enum list for the extension.
 		return context.specData.extdefs[context.extName].enums, context.extName
 	else
-		--Build list from core version.
-		local core = context.specData.coredefs[context.version];
-		
+		--Get enum list from core version.
 		if(context.options.profile ~= "core") then
-			return core.enums, context.version
+			return context.specData.coredefs[context.version].enums, context.version
 		end
-
+		
+		local defList = {}
 		local targetVersion = tonumber(context.options.version)
-		local enumList = {};
-		for i, enum in ipairs(core.enums) do
-			local bShouldWrite = true;
-			
-			if(enum.removed and tonumber(enum.removed) <= targetVersion) then
-				bShouldWrite = false
-			end
-
-			--Very oddball logic to handle ARB_tessellation_shader's
-			--ability to bring back GL_QUADS.
-			--Remove the enumeration if all of the following
-			--	The enum is from a core extension
-			--	That extension is not core for the version we're writing
-			if(enum.extensions) then
-				for _, ext in ipairs(enum.extensions) do
-					if(context.specData.coreexts[ext] and
-						tonumber(context.specData.coreexts[ext].version) <= targetVersion) then
-						bShouldWrite = false
+		
+		for _, def in ipairs(context.specData.coredefs[context.version].enums) do
+			for ix = #def.core, 1, -1 do
+				if(tonumber(def.core[ix][1]) <= targetVersion) then
+					if(def.core[ix][2] == "core") then
+						table.insert(defList, def)
 					end
+					break;
 				end
 			end
-
-			if(bShouldWrite) then
-				enumList[#enumList + 1] = enum;
-			end
 		end
-		return enumList, context.version
+		
+		return defList, context.version
 	end
 end
 
@@ -643,32 +628,27 @@ local function GetFuncList(context)
 		--Get function list for the extension.
 		return context.specData.extdefs[context.extName].funcs, context.extName
 	else
-		--Build list from core version.
-		local core = context.specData.coredefs[context.version];
-		
+		--Get function list from core version.
 		if(context.options.profile ~= "core") then
-			return core.funcs, context.version
+			return context.specData.coredefs[context.version].funcs, context.version
 		end
-
+		
+		local defList = {}
 		local targetVersion = tonumber(context.options.version)
-		local funcList = {};
-		for i, func in ipairs(core.funcs) do
-			local bShouldWrite = true;
-			
-			if(func.deprecated and tonumber(func.deprecated) <= targetVersion) then
-				bShouldWrite = false
-			end
-
-			--Fortuantely, a function can't be both from a version and an extension
-			if(func.category and not string.match(func.category, "^VERSION")) then
-				bShouldWrite = false
-			end
-
-			if(bShouldWrite) then
-				funcList[#funcList + 1] = func;
+		
+		for _, def in ipairs(context.specData.coredefs[context.version].funcs) do
+			for ix = #def.core, 1, -1 do
+				if(tonumber(def.core[ix][1]) <= targetVersion) then
+					if(def.core[ix][2] == "core") then
+						table.insert(defList, def)
+					end
+					break;
+				end
 			end
 		end
-		return funcList, context.version
+		
+		return defList, context.version
+
 	end
 end
 
@@ -677,14 +657,12 @@ function funcIterAction:PreProcess(context)
 
 	local funcList, source = GetFuncList(context)
 
-	context.typemap = context.specData.typemap
 	self:IterateChildren(context, funcList, "func",
 		function(context, func)
 			if(context.funcSeen) then
 				context.funcSeen[func.name] = source
 			end
 		end)
-	context.typemap = nil
 	return true --Stops regular child processing.
 end
 

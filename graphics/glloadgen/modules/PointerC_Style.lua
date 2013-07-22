@@ -126,25 +126,25 @@ local function GetFuncPtrName(func, spec, options)
 	return options.prefix .. "_ptrc_".. spec.FuncNamePrefix() .. func.name
 end
 
-local function GetFuncPtrType(hFile, func, typemap, spec, options)
+local function GetFuncPtrType(hFile, func, spec, options)
 	return string.format("%s (%s *)(%s)",
-		common.GetFuncReturnType(func, typemap),
+		common.GetFuncReturnType(func),
 		spec.GetCodegenPtrType(),
-		common.GetFuncParamList(func, typemap))
+		common.GetFuncParamList(func))
 end
 
-local function GetFuncPtrDef(hFile, func, typemap, spec, options)
+local function GetFuncPtrDef(hFile, func, spec, options)
 	return string.format("%s (%s *%s)(%s)",
-		common.GetFuncReturnType(func, typemap),
+		common.GetFuncReturnType(func),
 		spec.GetCodegenPtrType(),
 		GetFuncPtrName(func, spec, options),
-		common.GetFuncParamList(func, typemap))
+		common.GetFuncParamList(func))
 end
 
-function my_style.header.WriteFuncDecl(hFile, func, typemap, spec, options)
+function my_style.header.WriteFuncDecl(hFile, func, spec, options)
 	--Declare the function pointer.
 	hFile:write("extern ",
-		GetFuncPtrDef(hFile, func, typemap, spec, options),
+		GetFuncPtrDef(hFile, func, spec, options),
 		";\n")
 	
 	--#define it to the proper OpenGL name.
@@ -262,12 +262,12 @@ end
 function my_style.source.WriteBlockEndExtFuncDef(hFile, extName, spec, options)
 end
 
-function my_style.source.WriteFuncDef(hFile, func, typemap, spec, options, funcSeen)
+function my_style.source.WriteFuncDef(hFile, func, spec, options, funcSeen)
 	--Declare the function pointer, if not already declared.
 	if(funcSeen[func.name]) then return end
 	
 	hFile:fmt("%s = NULL;\n",
-		GetFuncPtrDef(hFile, func, typemap, spec, options))
+		GetFuncPtrDef(hFile, func, spec, options))
 end
 
 local function GetExtLoaderFuncName(extName, spec, options)
@@ -287,10 +287,10 @@ function my_style.source.WriteBlockEndExtLoader(hFile, extName, spec, options)
 	hFile:write("}\n")
 end
 
-function my_style.source.WriteExtFuncLoader(hFile, func, typemap, spec, options)
+function my_style.source.WriteExtFuncLoader(hFile, func, spec, options)
 	hFile:fmt('%s = (%s)%s("%s%s");\n',
 		GetFuncPtrName(func, spec, options),
-		GetFuncPtrType(hFile, func, typemap, spec, options),
+		GetFuncPtrType(hFile, func, spec, options),
 		common.GetProcAddressName(spec),
 		spec.FuncNamePrefix(), func.name)
 	hFile:fmt('if(!%s) numFailed++;\n', GetFuncPtrName(func, spec, options))
@@ -319,10 +319,10 @@ function my_style.source.WriteBlockEndCoreLoader(hFile, version, spec, options)
 	hFile:write("}\n")
 end
 
-function my_style.source.WriteCoreFuncLoader(hFile, func, typemap, spec, options)
+function my_style.source.WriteCoreFuncLoader(hFile, func, spec, options)
 	hFile:fmt('%s = (%s)%s("%s%s");\n',
 		GetFuncPtrName(func, spec, options),
-		GetFuncPtrType(hFile, func, typemap, spec, options),
+		GetFuncPtrType(hFile, func, spec, options),
 		common.GetProcAddressName(spec),
 		spec.FuncNamePrefix(), func.name)
 
@@ -356,7 +356,7 @@ function my_style.source.WriteExtStringFuncDef(hFile, specData, spec, options, f
 	if(extStringFunc) then
 		hFile:write("\n")
 		hFile:fmt("static %s = NULL;\n",
-			GetFuncPtrDef(hFile, extStringFunc, specData.typemap, spec, options))
+			GetFuncPtrDef(hFile, extStringFunc, spec, options))
 		hFile:write("\n")
 	end
 end
@@ -420,10 +420,10 @@ local function WriteAncillaryFuncs(hFile, specData, spec, options)
 	return indexed
 end
 
-local function WriteInMainFuncLoader(hFile, func, typemap, spec, options)
+local function WriteInMainFuncLoader(hFile, func, spec, options)
 	hFile:fmt('%s = (%s)%s("%s%s");\n',
 		GetFuncPtrName(func, spec, options),
-		GetFuncPtrType(hFile, func, typemap, spec, options),
+		GetFuncPtrType(hFile, func, spec, options),
 		common.GetProcAddressName(spec),
 		spec.FuncNamePrefix(), func.name)
 	hFile:fmt('if(!%s) return %s;\n',
@@ -451,8 +451,8 @@ function my_style.source.WriteMainLoaderFunc(hFile, specData, spec, options)
 
 	--Load the extension, using runtime-facilities to tell what is available.
 	if(indexed) then
-		WriteInMainFuncLoader(hFile, indexed[1], specData.typemap, spec, options)
-		WriteInMainFuncLoader(hFile, indexed[3], specData.typemap, spec, options)
+		WriteInMainFuncLoader(hFile, indexed[1], spec, options)
+		WriteInMainFuncLoader(hFile, indexed[3], spec, options)
 		hFile:write("\n")
 		hFile:write("ProcExtsFromExtList();\n")
 	else
@@ -464,7 +464,7 @@ function my_style.source.WriteMainLoaderFunc(hFile, specData, spec, options)
 				end
 			end
 			
-			WriteInMainFuncLoader(hFile, extListName, specData.typemap, spec, options)
+			WriteInMainFuncLoader(hFile, extListName, spec, options)
 			
 			extListName = GetFuncPtrName(extListName, spec, options);
 		end
