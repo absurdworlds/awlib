@@ -225,7 +225,9 @@ local function ExtractFeaturesFromList(featureType, map, allFeat,
 						elseif(parentNode._elem == "feature") then
 							featData.core = featData.core or {}
 							local profile = "core"
-							if(parentNode.profile == "compatibility" or
+							if(listNode.profile and listNode.profile == "compatibility") then
+								profile = listNode.profile
+							elseif(parentNode.profile == "compatibility" or
 								listNode._elem == "remove") then
 
 								profile = "compatibility"
