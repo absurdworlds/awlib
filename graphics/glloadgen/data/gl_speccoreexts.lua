@@ -111,8 +111,6 @@ local coreExts4_4 = {
 	"ARB_texture_mirror_clamp_to_edge",
 	"ARB_texture_stencil8",
 	"ARB_vertex_type_10f_11f_11f_rev",
-	"ARB_seamless_cubemap_per_texture",
-	
 };
 
 return {
