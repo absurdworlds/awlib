@@ -40,7 +40,7 @@ local platTests =
 	
 	glX =
 	{
-		[[lua $<dir>LoadGen.lua -spec=glX -style=pointer_cpp -stdext=glx_common.txt $<dir>test/ptr_cpp/test]],
+		[[lua $<dir>LoadGen.lua -spec=glX -style=pointer_cpp -extfile=allglx.txt $<dir>test/ptr_cpp/test]],
 		[[lua $<dir>LoadGen.lua -spec=glX -style=pointer_c -stdext=glx_common.txt $<dir>test/ptr_c/test]],
 		[[lua $<dir>LoadGen.lua -spec=glX -style=func_cpp -stdext=glx_common.txt $<dir>test/func_cpp/test]],
 		[[lua $<dir>LoadGen.lua -spec=glX -style=pointer_cpp -stdext=glx_common.txt $<dir>test/ptr_cpp_comp/test]],
