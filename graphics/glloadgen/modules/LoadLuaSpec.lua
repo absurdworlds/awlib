@@ -48,7 +48,6 @@ function load.LoadLuaSpec(luaFilename, spec)
 	for i, ext in ipairs(specData.extensions) do
 	    for j, test in ipairs(listOfExtensionsToRemove) do
 	        if(ext == test) then
-	        	print(ext)
 	            table.insert(toRemove, 1, i);
 	            break;
 	        end
