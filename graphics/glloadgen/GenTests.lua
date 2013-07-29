@@ -8,7 +8,7 @@ local prelims =
 
 local tests =
 {
-	[[lua $<dir>LoadGen.lua -spec=gl -version=4.4 -profile=core -style=pointer_cpp -stdext=gl_ubiquitous.txt $<dir>test/ptr_cpp/test]],
+	[[lua $<dir>LoadGen.lua -spec=gl -version=max -profile=core -style=pointer_cpp -stdext=gl_ubiquitous.txt $<dir>test/ptr_cpp/test]],
 	[[lua $<dir>LoadGen.lua -spec=gl -version=3.3 -profile=core -style=pointer_c -stdext=gl_ubiquitous.txt $<dir>test/ptr_c/test]],
 	[[lua $<dir>LoadGen.lua -spec=gl -version=3.3 -profile=core -style=func_cpp -stdext=gl_ubiquitous.txt $<dir>test/func_cpp/test]],
 	[[lua $<dir>LoadGen.lua -spec=gl -version=3.3 -profile=compatibility -style=pointer_cpp -stdext=gl_ubiquitous.txt $<dir>test/ptr_cpp_comp/test]],
