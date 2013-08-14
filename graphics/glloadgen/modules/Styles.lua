@@ -33,8 +33,8 @@ if(status and type(userStyles) == "table") then
 else
 	if(not status) then
 		--Error out, but only if the file is there found.
-		local lfs = pcall(require, "lfs")
-		if(lfs and lfs.attributes("modules/UserStyles.lua", "mode") == "file") then
+		local status, lfs = pcall(require, "lfs")
+		if(status and lfs.attributes("modules/UserStyles.lua", "mode") == "file") then
 			error(userStyles);
 		end
 	end
