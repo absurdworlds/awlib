@@ -27,6 +27,14 @@ Other changes are:
 local util = require "util"
 
 
+local listOfExtensionsToRemove =
+{
+    "SGIX_video_source",
+    "SGIX_dmbuffer",
+    "SGIX_hyperpipe",
+}
+
+
 local load = {}
 
 function load.LoadLuaSpec(luaFilename, spec)
@@ -34,6 +42,63 @@ function load.LoadLuaSpec(luaFilename, spec)
 	local listOfCoreVersions = spec.GetCoreVersions()
 
 	local specData = dofile(luaFilename)
+	
+	--HACK! Remove certain offensive extensions.
+	local toRemove = {}
+	for i, ext in ipairs(specData.extensions) do
+	    for j, test in ipairs(listOfExtensionsToRemove) do
+	        if(ext == test) then
+	            table.insert(toRemove, 1, i);
+	            break;
+	        end
+	    end
+	end
+
+	for i, index in ipairs(toRemove) do
+	    table.remove(specData.extensions, index);
+	end
+	
+	toRemove = {}
+	for i, enum in ipairs(specData.enumerators) do
+		if(enum.extensions) then
+		    for j, enumExt in ipairs(enum.extensions) do
+		        local bBreak = false;
+	            for _, test in ipairs(listOfExtensionsToRemove) do
+	                if(enumExt == test) then
+	                    table.insert(toRemove, 1, i);
+	                    bBreak = true;
+	                    break;
+	                end
+	            end
+	            if(bBreak) then break; end
+		    end
+		end
+	end
+	
+	for i, index in ipairs(toRemove) do
+	    table.remove(specData.enumerators, index);
+	end
+	
+	toRemove = {}
+    for i, func in ipairs(specData.funcData.functions) do
+    	if(func.extensions) then
+    		for j, funcExt in ipairs(func.extensions) do
+    			local bBreak = false;
+				for _, test in ipairs(listOfExtensionsToRemove) do
+					if(funcExt == test) then
+					    table.insert(toRemove, 1, i);
+					    bBreak = true;
+					    break;
+					end
+				end
+    		end
+		end
+    end
+
+	for i, index in ipairs(toRemove) do
+	    table.remove(specData.funcData.functions, index);
+	end
+
 
 	specData.extdefs = {}
 	specData.coredefs = {}
