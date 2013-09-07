@@ -331,7 +331,7 @@ function fileAction:PreProcess(context)
 
 	local filename = self:CallFunction(context)
 	
-	context.hFile = util.CreateFile(filename, context.options.indent)
+	context.hFile = util.CreateFile(filename, context.options.indent, context.options.lineends)
 end
 
 function fileAction:PostProcess(context)

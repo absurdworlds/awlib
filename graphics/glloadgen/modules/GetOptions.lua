@@ -64,6 +64,12 @@ parseOpts:enum(
 	{"Indentation style."},
 	{"tab", "space"},
 	1)
+parseOpts:enum(
+	"lineends",
+	"lineends",
+	{"Line ending styles.","'plat' means the platform-specific one, while 'unix' means '\\n'."},
+	{"plat", "unix"},
+	1)
 parseOpts:array(
 	"exts",
 	"extensions",

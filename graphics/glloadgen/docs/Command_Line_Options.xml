@@ -136,6 +136,23 @@
             </glossdef>
         </glossentry>
         <glossentry>
+            <glossterm>-lineends</glossterm>
+            <glossdef>
+                <para>The line ending style for the output text. It must be one of the
+                    following:</para>
+                <itemizedlist>
+                    <listitem>
+                        <para><code>plat</code>: default. This writes the platform-native line
+                            endings.</para>
+                    </listitem>
+                    <listitem>
+                        <para><code>unix</code>: Uses the Unix default of using the "\n" character
+                            for text file line ending.</para>
+                    </listitem>
+                </itemizedlist>
+            </glossdef>
+        </glossentry>
+        <glossentry>
             <glossterm>-exts</glossterm>
             <glossdef>
                 <para>Defines a list of extensions to the given specification to export. Every

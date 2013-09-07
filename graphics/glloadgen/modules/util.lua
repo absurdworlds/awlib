@@ -77,10 +77,12 @@ function util.EnsurePath(path)
 	end
 end
 
-function util.CreateFile(filename, indent)
+function util.CreateFile(filename, indent, lineends)
 	local base, dir = util.ParsePath(filename)
 	util.EnsurePath(dir)
-	local hFile = assert(io.open(filename, "w"))
+	local mode = "w"
+	if(lineends == "unix") then mode = "wb" end
+	local hFile = assert(io.open(filename, mode))
 	return TabbedFile.TabbedFile(hFile, indent)
 end
 

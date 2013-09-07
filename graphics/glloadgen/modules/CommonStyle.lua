@@ -6,8 +6,8 @@ local struct = require "Structure"
 local common = {}
 
 --Creates a tabbed file.
-function common.CreateFile(filename, indent)
-	return util.CreateFile(filename, indent)
+function common.CreateFile(filename, indent, lineends)
+	return util.CreateFile(filename, indent, lineends)
 end
 
 --Retrieves the common typedefs used by OpenGL 1.1.
