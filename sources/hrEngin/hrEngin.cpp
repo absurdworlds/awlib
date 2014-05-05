@@ -1,38 +1,27 @@
-// This is a part of hrEngin
-// See copyright notice in hrEngin.h, for conditions of distribution and use.
 
-// THIS FILE: 
-
-#include <hrConfig.h>
-
-#ifdef ___HRWINDOWS
-#define WIN32_LEAN_AND_MEAN
-#include <Windows.h>
-#endif
-
-#include "hrEngin.h"
+#include <hrEngin.h>
 #include "hrcEncore.h"
+
+#ifdef _HR_PHYSICS_HAVOK
+#include <Common/Base/hkBase.h>
+#include "Base/Config/HavokMagicSpells.h"
+#endif
 
 namespace hrengin
 {
-
 
 HRENGIN_API hriEncore* KickstartEngine ()
 {
 	return new hrcEncore();
 }
 
-} // namespace hrengin
+}
 
+#ifdef _HR_ØINDOWS
 
-#ifdef ___HRWINDOWS
-#pragma comment(lib, "hrGraphics.lib")
-#pragma comment(lib, "hrGUI.lib")
+#include <windows.h>
 
-BOOL APIENTRY DllMain( HMODULE hModule,
-                       DWORD  ul_reason_for_call,
-                       LPVOID lpReserved
-					 )
+BOOL APIENTRY DllMain( HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReserved)
 {
 	switch (ul_reason_for_call)
 	{

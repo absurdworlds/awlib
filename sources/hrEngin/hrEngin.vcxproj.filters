@@ -1,93 +1,165 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
-    <Filter Include="Include">
-      <UniqueIdentifier>{df74a1f2-cf6b-4d7b-8cc4-e6f35b872cb2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source">
-      <UniqueIdentifier>{31749418-4f84-43b5-b770-70cb5fc0e469}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\Core">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="Source\Global">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
-    </Filter>
-    <Filter Include="Include\interfaces">
-      <UniqueIdentifier>{2ea77021-d016-4591-9b85-41ae8d73b53f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Include\typefunc">
-      <UniqueIdentifier>{35212036-78e5-40f9-9694-174a06713663}</UniqueIdentifier>
-    </Filter>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="todolist.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="hrcEncore.h">
-      <Filter>Source\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="hrcPFStraightLine.h">
-      <Filter>Source\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\hrEngin\hrConfig.h">
-      <Filter>Include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\hrEngin\hriPathfinder.h">
-      <Filter>Include\interfaces</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\hrEngin\hriEncore.h">
-      <Filter>Include\interfaces</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\hrEngin\hriNavAgent.h">
-      <Filter>Include\interfaces</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\hrEngin\hriUnit.h">
-      <Filter>Include\interfaces</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\hrEngin\hrtype.h">
-      <Filter>Include\typefunc</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\hrEngin\hrfMath.h">
-      <Filter>Include\typefunc</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\hrEngin\hrtVector2d.h">
-      <Filter>Include\typefunc</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\hrEngin\hrtpath.h">
-      <Filter>Include\typefunc</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\hrEngin\hrEngin.h">
-      <Filter>Include</Filter>
-    </ClInclude>
-    <ClInclude Include="hrcUnit.h">
-      <Filter>Source\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\hrEngin\hriUnitManager.h">
-      <Filter>Include\interfaces</Filter>
-    </ClInclude>
-    <ClInclude Include="hrcUnitManager.h">
-      <Filter>Source\Core</Filter>
-    </ClInclude>
+    <Filter Include="Include">
+      <UniqueIdentifier>{752df3a9-e411-4fbd-9306-eb170f75499e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source">
+      <UniqueIdentifier>{6b1b5ef3-275c-46e7-98c1-52a31d26463a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Include\Base">
+      <UniqueIdentifier>{939ecb4e-5268-48cd-a02c-14c42945011d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Base">
+      <UniqueIdentifier>{1abbf53d-cb28-418a-9122-061c8b600a34}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Graphics">
+      <UniqueIdentifier>{b2f24e1b-beb8-4cf2-9e44-e7062fcb187a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Graphics\IrrExt">
+      <UniqueIdentifier>{4d3c570b-7a60-4c03-b093-f59574dc6abd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Include\Graphics">
+      <UniqueIdentifier>{d1fd8c12-f5ce-4808-bc1b-1e97b9fdaabe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Include\Graphics\IrrExt">
+      <UniqueIdentifier>{1cfb70d2-01fe-4d24-9217-cb3435eb4f36}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Include\Base\Config">
+      <UniqueIdentifier>{5faedb19-0576-4882-bf1b-a00f6c49e88f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Include\Base\Math">
+      <UniqueIdentifier>{bb938a4e-2992-4ddf-9c3e-b9e5be07bb33}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Include\Base\Entities">
+      <UniqueIdentifier>{8355fa31-e8a1-40bf-b391-931ba225be34}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Include\Graphics\Base">
+      <UniqueIdentifier>{6c391bcd-b53b-4c28-ba9c-a5ac2028e943}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Internal">
+      <UniqueIdentifier>{a88f5a14-2b65-4d73-9ec7-e1f5093a2717}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Include\Graphics\Nodes">
+      <UniqueIdentifier>{ac6ede74-50bc-4bb5-89bc-5cf819e9368f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Include\GUI">
+      <UniqueIdentifier>{e2031358-1771-4f5d-8298-003cea1372d9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Graphics\Nodes">
+      <UniqueIdentifier>{499aab5d-5370-4749-b2ee-26e77943dd70}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Include\AI">
+      <UniqueIdentifier>{d420c61f-8931-4b6d-ab20-c2630e4ef00b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Include\Physics">
+      <UniqueIdentifier>{68504724-6af1-424f-96ce-72f5961195cf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Include\Physics\Base">
+      <UniqueIdentifier>{9c9fb47c-e1a6-4021-8ce4-b00f51e56dea}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="hrEngin.cpp">
-      <Filter>Source\Core</Filter>
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Base\hrcWorld.cpp">
+      <Filter>Source\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\IrrExt\CSceneNodeAnimatorCameraRTS.cpp">
+      <Filter>Source\Graphics\IrrExt</Filter>
     </ClCompile>
     <ClCompile Include="hrcEncore.cpp">
-      <Filter>Source\Core</Filter>
+      <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="hrcPFStraightLine.cpp">
-      <Filter>Source\Core</Filter>
+    <ClCompile Include="Internal\hrcVideoManager.cpp">
+      <Filter>Source\Internal</Filter>
     </ClCompile>
-    <ClCompile Include="hrcUnitManager.cpp">
-      <Filter>Source\Core</Filter>
+    <ClCompile Include="Graphics\Nodes\hrcVisNode.cpp">
+      <Filter>Source\Graphics\Nodes</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\include\hrEngin.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Base\hrcWorld.h">
+      <Filter>Source\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Graphics\IrrExt\ISceneNodeAnimatorCameraRTS.h">
+      <Filter>Include\Graphics\IrrExt</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\IrrExt\CSceneNodeAnimatorCameraRTS.h">
+      <Filter>Source\Graphics\IrrExt</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Base\Config\hrConfig.h">
+      <Filter>Include\Base\Config</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Base\Config\hrVersions.h">
+      <Filter>Include\Base\Config</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Base\Math\hrMath.h">
+      <Filter>Include\Base\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Base\hrTypes.h">
+      <Filter>Include\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Base\Entities\hriWorld.h">
+      <Filter>Include\Base\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="hrcEncore.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Base\hriEncore.h">
+      <Filter>Include\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="Internal\hrcVideoManager.h">
+      <Filter>Source\Internal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Graphics\Base\hriSceneNode.h">
+      <Filter>Include\Graphics\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Graphics\Base\hriVideoManager.h">
+      <Filter>Include\Graphics\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Graphics\Nodes\hriCameraNode.h">
+      <Filter>Include\Graphics\Nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Graphics\Nodes\hriVisNode.h">
+      <Filter>Include\Graphics\Nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Graphics\Nodes\hriLightNode.h">
+      <Filter>Include\Graphics\Nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\GUI\hriGUIManager.h">
+      <Filter>Include\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Base\hriEntityManager.h">
+      <Filter>Include\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Nodes\hrcVisNode.h">
+      <Filter>Source\Graphics\Nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Base\Entities\hriBaseEntity.h">
+      <Filter>Include\Base\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\AI\hriBaseNavigator.h">
+      <Filter>Include\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\AI\hriBasePathfinder.h">
+      <Filter>Include\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Base\hrVector2d.h">
+      <Filter>Include\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Base\Config\HavokMagicSpells.h">
+      <Filter>Include\Base\Config</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Physics\Base\hriPhysicsManager.h">
+      <Filter>Include\Physics\Base</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

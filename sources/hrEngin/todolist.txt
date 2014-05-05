@@ -9,7 +9,6 @@ v. Storm in a bottle
 		о написать рейкастинг для юнитселекшна
 
 	In version+1:
-		o Make include paths relative to root include folder
 		o Write sound wrapper
 		o Write weapon class
 		o Write players

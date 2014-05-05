@@ -41,6 +41,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>false</LinkIncremental>
+    <IncludePath>E:\SDK\hk2011_2_0_r1\Source;E:\SDK\irrlicht-1.8.1\include;$(IncludePath)</IncludePath>
+    <LibraryPath>E:\SDK\hk2011_2_0_r1\Lib\debug_multithreaded;E:\SDK\irrlicht-1.8.1\lib\Win32-visualstudio;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -55,6 +57,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>hkBase.lib;hkSerialize.lib;hkSceneData.lib;hkInternal.lib;hkGeometryUtilities.lib;hkVisualize.lib;hkCompat.lib;hkpCollide.lib;hkpConstraintSolver.lib;hkpDynamics.lib;hkpInternal.lib;hkpUtilities.lib;hkpVehicle.lib;hkgCommon.lib;hkcdInternal.lib;Irrlicht.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -77,27 +80,40 @@
     <None Include="todolist.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\include\hrEngin\hrConfig.h" />
-    <ClInclude Include="..\..\include\hrEngin\hrEngin.h" />
-    <ClInclude Include="..\..\include\hrEngin\hrfMath.h" />
-    <ClInclude Include="..\..\include\hrEngin\hriEncore.h" />
-    <ClInclude Include="..\..\include\hrEngin\hriNavAgent.h" />
-    <ClInclude Include="..\..\include\hrEngin\hriPathfinder.h" />
-    <ClInclude Include="..\..\include\hrEngin\hriUnit.h" />
-    <ClInclude Include="..\..\include\hrEngin\hriUnitManager.h" />
-    <ClInclude Include="..\..\include\hrEngin\hrtpath.h" />
-    <ClInclude Include="..\..\include\hrEngin\hrtype.h" />
-    <ClInclude Include="..\..\include\hrEngin\hrtVector2d.h" />
+    <ClInclude Include="..\..\include\AI\hriBaseNavigator.h" />
+    <ClInclude Include="..\..\include\AI\hriBasePathfinder.h" />
+    <ClInclude Include="..\..\include\Base\Config\HavokMagicSpells.h" />
+    <ClInclude Include="..\..\include\Base\Config\hrConfig.h" />
+    <ClInclude Include="..\..\include\Base\Config\hrVersions.h" />
+    <ClInclude Include="..\..\include\Base\Entities\hriBaseEntity.h" />
+    <ClInclude Include="..\..\include\Base\Entities\hriWorld.h" />
+    <ClInclude Include="..\..\include\Base\hriEncore.h" />
+    <ClInclude Include="..\..\include\Base\hriEntityManager.h" />
+    <ClInclude Include="..\..\include\Base\hrTypes.h" />
+    <ClInclude Include="..\..\include\Base\hrVector2d.h" />
+    <ClInclude Include="..\..\include\Base\Math\hrMath.h" />
+    <ClInclude Include="..\..\include\Graphics\Base\hriSceneNode.h" />
+    <ClInclude Include="..\..\include\Graphics\Base\hriVideoManager.h" />
+    <ClInclude Include="..\..\include\Graphics\IrrExt\ISceneNodeAnimatorCameraRTS.h" />
+    <ClInclude Include="..\..\include\Graphics\Nodes\hriCameraNode.h" />
+    <ClInclude Include="..\..\include\Graphics\Nodes\hriLightNode.h" />
+    <ClInclude Include="..\..\include\Graphics\Nodes\hriVisNode.h" />
+    <ClInclude Include="..\..\include\GUI\hriGUIManager.h" />
+    <ClInclude Include="..\..\include\hrEngin.h" />
+    <ClInclude Include="..\..\include\Physics\Base\hriPhysicsManager.h" />
+    <ClInclude Include="Base\hrcWorld.h" />
+    <ClInclude Include="Graphics\IrrExt\CSceneNodeAnimatorCameraRTS.h" />
+    <ClInclude Include="Graphics\Nodes\hrcVisNode.h" />
     <ClInclude Include="hrcEncore.h" />
-    <ClInclude Include="hrcPFStraightLine.h" />
-    <ClInclude Include="hrcUnit.h" />
-    <ClInclude Include="hrcUnitManager.h" />
+    <ClInclude Include="Internal\hrcVideoManager.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Base\hrcWorld.cpp" />
+    <ClCompile Include="Graphics\IrrExt\CSceneNodeAnimatorCameraRTS.cpp" />
+    <ClCompile Include="Graphics\Nodes\hrcVisNode.cpp" />
     <ClCompile Include="hrcEncore.cpp" />
-    <ClCompile Include="hrcPFStraightLine.cpp" />
-    <ClCompile Include="hrcUnitManager.cpp" />
     <ClCompile Include="hrEngin.cpp" />
+    <ClCompile Include="Internal\hrcVideoManager.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

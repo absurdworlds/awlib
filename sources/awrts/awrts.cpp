@@ -1,7 +1,9 @@
+
 #define WIN32_LEAN_AND_MEAN
 #include <hrEngin.h>
 #pragma comment(lib, "hrEngin.lib")
 #pragma comment(lib, "hrGraphics.lib")
+#include <stdio.h>
 
 int main()
 {
