@@ -1,0 +1,32 @@
+
+v. Storm in a bottle
+--A test version, unplayable in general sense
+	In currently developed version:
+		о написать логику юнита
+		о имплементировать юнит мовемент эйджент
+		о сделать мап менеджер (плоский рельеф пока что)
+		о создать враппер для физики
+		о написать рейкастинг для юнитселекшна
+
+	In version+1:
+		o Make include paths relative to root include folder
+		o Write sound wrapper
+		o Write weapon class
+		o Write players
+		o remove guienv from graphics
+
+	In version+2:
+		o Main menu
+		o Basic ai
+		o Buildings
+		o Animation
+
+
+
+v. Srantonwars
+--The first playable version, will partially (only first two tiers) feature two races (sotm and buprof), 
+
+
+
+	Later, involves total rewriting and refactoring:
+		o Add reference-counters
