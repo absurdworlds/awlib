@@ -23,6 +23,7 @@ namespace irr
 	namespace scene
 	{
 		class ISceneManager;
+		class IAnimatedMesh;
 	}
 
 	namespace gui
@@ -33,8 +34,16 @@ namespace irr
 
 namespace hrengin
 {
+
+namespace gui
+{
+	class hrcGUIManager;
+}
+
 namespace graphics
 {
+
+class hrcVisNode;
 
 class hrcVideoManager : public hriVideoManager
 {
@@ -45,11 +54,15 @@ class hrcVideoManager : public hriVideoManager
 		virtual void CreateScene();
 		virtual bool Draw();
 		
-		virtual hriVisNode* CreateModel(const char* modelname);
+		virtual hriVisNode* CreateVisObject();
 		virtual hriCameraNode* CreateCamera();
 		virtual hriLightNode* CreateLight();
 
 		virtual void AddNode(hriSceneNode& node);
+		
+	//protected:
+		virtual irr::scene::ISceneManager* GetSceneMgr() const;
+		virtual irr::scene::IAnimatedMesh* LoadMesh(const char * modelname);
 
 	private:
 		std::vector<hriSceneNode*> NodeList;

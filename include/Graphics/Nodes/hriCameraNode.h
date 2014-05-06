@@ -14,6 +14,10 @@ namespace graphics
 class hriCameraNode : public hriSceneNode
 {
 	public:
+		virtual void AttachToEntity(hriBaseEntity* attach) = 0;
+
+		virtual void SetTargetPosition(Vectorf3d pos) = 0;
+		virtual void SetCameraPosition(Vectorf3d pos) = 0;
 
 };
 

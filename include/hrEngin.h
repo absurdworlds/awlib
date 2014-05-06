@@ -6,8 +6,11 @@
 #include "Base/hrTypes.h"
 #include "Base/hriEncore.h"
 #include "Base/hriEntityManager.h"
+/**/
 #include "Graphics/Base/hriVideoManager.h"
-#include "GUI/Base/hriVideoManager.h"
+#include "Graphics/Nodes/hriVisNode.h"
+
+#include "GUI/Base/hriGUIManager.h"
 #include "Physics/Base/hriPhysicsManager.h"
 
 namespace hrengin

@@ -1,7 +1,10 @@
 
 #include "hrcVideoManager.h"
+#include "../Graphics/Nodes/hrcVisNode.h"
+#include "hrFilesystem.h"
 
 #include <Irrlicht.h>
+
 
 namespace hrengin
 {
@@ -69,23 +72,7 @@ bool hrcVideoManager::Draw()
 			driver->beginScene(true, true, irr::video::SColor(255,100,101,140));
 
 			scnmgr->drawAll();
-			guienv->drawAll();	// TODO: give this to gui:: library
-
-			//TODO: later move t set caption func
-			static int lastFPS = -1;
-			int fps = driver->getFPS();
-
-			if (lastFPS != fps)  
-			{
-				irr::core::stringw str = L"hEengin - Irrlicht 1.8.1 DEBUG ["; //later move tosrt caption func
-				str += driver->getName();
-				str += "] FPS:";
-				str += fps;
-
-				device->setWindowCaption(str.c_str());
-				lastFPS = fps;
-			}
-			// end todo
+			guienv->drawAll();	
 
 			driver->endScene();
 		}
@@ -108,9 +95,9 @@ void hrcVideoManager::AddNode(hriSceneNode& node)
 
 }
 
-hriVisNode* hrcVideoManager::CreateModel(const char* modelname)
+hriVisNode* hrcVideoManager::CreateVisObject()
 {
-	return nullptr;
+	return new hrcVisNode(this);
 
 }
 
@@ -123,6 +110,16 @@ hriCameraNode* hrcVideoManager::CreateCamera()
 {
 	return nullptr;
 
+}
+ 
+irr::scene::IAnimatedMesh* hrcVideoManager::LoadMesh(const char* modelname)
+{
+	return scnmgr->getMesh(filesystem::modelpath + modelname);
+}
+
+irr::scene::ISceneManager* hrcVideoManager::GetSceneMgr() const
+{
+	return scnmgr;
 }
 
 } // namespace graphics

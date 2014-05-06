@@ -15,6 +15,39 @@ HRENGIN_API hriEncore* KickstartEngine ()
 	return new hrcEncore();
 }
 
+HRENGIN_API hriEntityManager* GetManager ()
+{
+	return 0;
+}
+
+
+namespace graphics
+{
+HRENGIN_API hriVideoManager* GetManager ()
+{
+	return new hrcVideoManager;
+}
+
+}
+
+namespace physics
+{
+HRENGIN_API hriPhysicsManager* GetManager ()
+{
+	return 0;
+}
+
+} 
+
+namespace gui
+{
+HRENGIN_API hriGUIManager* Startup()
+{
+	return 0;
+}
+
+} 
+
 }
 
 #ifdef _HR_ØINDOWS

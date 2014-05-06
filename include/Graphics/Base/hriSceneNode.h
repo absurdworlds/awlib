@@ -2,6 +2,7 @@
 #ifndef __HG_hriSceneNode__
 #define __HG_hriSceneNode__
 
+#include <Base/hrVector3d.h>
 
 namespace hrengin
 {
@@ -16,6 +17,9 @@ class hriSceneNode
 {
 	public:
 		virtual void AttachToEntity(hriBaseEntity* attach) = 0;
+
+		virtual void SetPosition(Vectorf3d pos) = 0;
+		virtual void SetRotation(Vectorf3d rot) = 0;
 };
 
 	

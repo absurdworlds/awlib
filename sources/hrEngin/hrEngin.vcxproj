@@ -32,7 +32,7 @@
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="..\visualstudio\global_debug.props" />
+    <Import Project="..\global_debug.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
@@ -91,6 +91,7 @@
     <ClInclude Include="..\..\include\Base\hriEntityManager.h" />
     <ClInclude Include="..\..\include\Base\hrTypes.h" />
     <ClInclude Include="..\..\include\Base\hrVector2d.h" />
+    <ClInclude Include="..\..\include\Base\hrVector3d.h" />
     <ClInclude Include="..\..\include\Base\Math\hrMath.h" />
     <ClInclude Include="..\..\include\Graphics\Base\hriSceneNode.h" />
     <ClInclude Include="..\..\include\Graphics\Base\hriVideoManager.h" />
@@ -98,14 +99,16 @@
     <ClInclude Include="..\..\include\Graphics\Nodes\hriCameraNode.h" />
     <ClInclude Include="..\..\include\Graphics\Nodes\hriLightNode.h" />
     <ClInclude Include="..\..\include\Graphics\Nodes\hriVisNode.h" />
-    <ClInclude Include="..\..\include\GUI\hriGUIManager.h" />
+    <ClInclude Include="..\..\include\GUI\Base\hriGUIManager.h" />
     <ClInclude Include="..\..\include\hrEngin.h" />
     <ClInclude Include="..\..\include\Physics\Base\hriPhysicsManager.h" />
     <ClInclude Include="Base\hrcWorld.h" />
     <ClInclude Include="Graphics\IrrExt\CSceneNodeAnimatorCameraRTS.h" />
     <ClInclude Include="Graphics\Nodes\hrcVisNode.h" />
     <ClInclude Include="hrcEncore.h" />
+    <ClInclude Include="Internal\hrcPhysicsCoreHavok.h" />
     <ClInclude Include="Internal\hrcVideoManager.h" />
+    <ClInclude Include="Internal\hrFilesystem.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Base\hrcWorld.cpp" />
@@ -113,6 +116,8 @@
     <ClCompile Include="Graphics\Nodes\hrcVisNode.cpp" />
     <ClCompile Include="hrcEncore.cpp" />
     <ClCompile Include="hrEngin.cpp" />
+    <ClCompile Include="Internal\hrcGuiManager.cpp" />
+    <ClCompile Include="Internal\hrcPhysicsCoreHavok.cpp" />
     <ClCompile Include="Internal\hrcVideoManager.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

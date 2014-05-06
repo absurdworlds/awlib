@@ -6,7 +6,7 @@
     <IncludePath>E:\RTSGame\Code\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup>
-    <LibraryPath>E:\RTSGame\Code\lib\msvc-win32-debug;$(LibraryPath)</LibraryPath>
+    <LibraryPath>E:\RTSGame\Code\lib\win32-msvc-debug;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup />
   <ItemGroup />

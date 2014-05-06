@@ -61,6 +61,18 @@
     <Filter Include="Include\Physics\Base">
       <UniqueIdentifier>{9c9fb47c-e1a6-4021-8ce4-b00f51e56dea}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Include\GUI\Base">
+      <UniqueIdentifier>{ad9ed011-d13d-434a-b5c0-c653dbc273c9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Graphics\Base">
+      <UniqueIdentifier>{aed2cd3b-0fc8-4046-8240-948b3c9f53bc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\PhysicsHavok">
+      <UniqueIdentifier>{0adbb987-1adf-4016-aa25-55d6a3a0895c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\PhysicsHavok\Base">
+      <UniqueIdentifier>{589d4ef3-675d-4257-9898-79469260e0a1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="hrEngin.cpp">
@@ -80,6 +92,12 @@
     </ClCompile>
     <ClCompile Include="Graphics\Nodes\hrcVisNode.cpp">
       <Filter>Source\Graphics\Nodes</Filter>
+    </ClCompile>
+    <ClCompile Include="Internal\hrcPhysicsCoreHavok.cpp">
+      <Filter>Source\Internal</Filter>
+    </ClCompile>
+    <ClCompile Include="Internal\hrcGuiManager.cpp">
+      <Filter>Source\Internal</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -134,9 +152,6 @@
     <ClInclude Include="..\..\include\Graphics\Nodes\hriLightNode.h">
       <Filter>Include\Graphics\Nodes</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\GUI\hriGUIManager.h">
-      <Filter>Include\GUI</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\Base\hriEntityManager.h">
       <Filter>Include\Base</Filter>
     </ClInclude>
@@ -160,6 +175,18 @@
     </ClInclude>
     <ClInclude Include="..\..\include\Physics\Base\hriPhysicsManager.h">
       <Filter>Include\Physics\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\GUI\Base\hriGUIManager.h">
+      <Filter>Include\GUI\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Base\hrVector3d.h">
+      <Filter>Include\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="Internal\hrcPhysicsCoreHavok.h">
+      <Filter>Source\Internal</Filter>
+    </ClInclude>
+    <ClInclude Include="Internal\hrFilesystem.h">
+      <Filter>Source\Internal</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
