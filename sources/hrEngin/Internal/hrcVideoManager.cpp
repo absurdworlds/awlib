@@ -1,6 +1,7 @@
 
 #include "hrcVideoManager.h"
 #include "../Graphics/Nodes/hrcVisNode.h"
+#include "../Graphics/Nodes/hrcCameraNode.h"
 #include "hrFilesystem.h"
 
 #include <Irrlicht.h>
@@ -37,9 +38,8 @@ hrcVideoManager::~hrcVideoManager()
 // currently unused
 void hrcVideoManager::CreateScene()
 {
-	/*irr::scene::ICameraSceneNode* node = scnmgr->addCameraSceneNode(0, irr::core::vector3df(0,20,30), irr::core::vector3df(0,0,0));
-	irr::scene::ISceneNodeAnimatorCameraRTS* animator = new irr::scene::CSceneNodeAnimatorCameraRTS(device->getCursorControl(),device->getTimer()); 
-	node->addAnimator(animator);
+	/*irr::scene::ICameraSceneNode* node = 
+	irr::scene::ISceneNodeAnimatorCameraRTS* animator 
 	animator->drop();
 	
 
@@ -98,12 +98,11 @@ void hrcVideoManager::AddNode(hriSceneNode& node)
 hriVisNode* hrcVideoManager::CreateVisObject()
 {
 	return new hrcVisNode(this);
-
 }
 
 hriCameraNode* hrcVideoManager::CreateCamera()
 {
-	return nullptr;
+	return new hrcCameraNode(this);
 }
 
  hriLightNode* hrcVideoManager::CreateLight()
@@ -122,5 +121,9 @@ irr::scene::ISceneManager* hrcVideoManager::GetSceneMgr() const
 	return scnmgr;
 }
 
+irr::IrrlichtDevice*  hrcVideoManager::GetDeviceTemporary() const
+{
+	return device;
+}
 } // namespace graphics
 } // namespace hrengin

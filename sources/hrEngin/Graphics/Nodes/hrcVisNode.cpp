@@ -8,7 +8,7 @@ namespace hrengin
 namespace graphics
 {
 	
-//! default constructor
+//! constructor
 //!
 hrcVisNode::hrcVisNode(hriVideoManager* Vmgr)
 	: videomgr(Vmgr), lastFreeSlot(0)
@@ -16,7 +16,7 @@ hrcVisNode::hrcVisNode(hriVideoManager* Vmgr)
 
 }
 
-//! default constructor
+//! constructor
 //! Attaches node to entity
 hrcVisNode::hrcVisNode(hriVideoManager* Vmgr, hriBaseEntity* attach)
 	: videomgr(Vmgr), attachedTo(attach), lastFreeSlot(0)
@@ -25,6 +25,19 @@ hrcVisNode::hrcVisNode(hriVideoManager* Vmgr, hriBaseEntity* attach)
 }
 
 void hrcVisNode::AttachToEntity(hriBaseEntity* attach)
+{
+
+}
+
+void hrcVisNode::SetPosition(Vectorf3d pos)
+{
+
+}
+void hrcVisNode::SetRotation(Vectorf3d rot)
+{
+
+}
+void hrcVisNode::SetScale(Vectorf3d scale)
 {
 
 }

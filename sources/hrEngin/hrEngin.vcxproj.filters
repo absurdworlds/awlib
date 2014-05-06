@@ -73,6 +73,15 @@
     <Filter Include="Source\PhysicsHavok\Base">
       <UniqueIdentifier>{589d4ef3-675d-4257-9898-79469260e0a1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Include\GUI\Input">
+      <UniqueIdentifier>{ad6b8575-7bf2-4f1a-be03-65cd6a25046d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\GUI">
+      <UniqueIdentifier>{bae2e20b-1b6d-4c39-b657-1b93e92c6b63}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\GUI\Input">
+      <UniqueIdentifier>{9790971a-294b-471c-8a78-d80b5c62a249}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="hrEngin.cpp">
@@ -98,6 +107,12 @@
     </ClCompile>
     <ClCompile Include="Internal\hrcGuiManager.cpp">
       <Filter>Source\Internal</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Nodes\hrcCameraNode.cpp">
+      <Filter>Source\Graphics\Nodes</Filter>
+    </ClCompile>
+    <ClCompile Include="Input\hrcInputManager.cpp">
+      <Filter>Source\GUI\Input</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -187,6 +202,15 @@
     </ClInclude>
     <ClInclude Include="Internal\hrFilesystem.h">
       <Filter>Source\Internal</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Nodes\hrcCameraNode.h">
+      <Filter>Source\Graphics\Nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\GUI\Input\hriInputManager.h">
+      <Filter>Include\GUI\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Input\hrcInputManager.h">
+      <Filter>Source\GUI\Input</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -27,9 +27,6 @@ public:
 			(*it)->OnParentRemove();
 		}
 	}
-
-	//! sync all attached nodes and entities
-	virtual bool Sync() = 0;
 	
 	//! get the entity type identifier
 	virtual u32 GetEntityIdentifier()
@@ -95,11 +92,21 @@ public:
 		return parent->DetachChild(this);
 	}
 
+	/* Virtual methods */
 
-protected:
-	virtual void EnterDeleteQueue() = 0;
+	//! callback: do some action on parent remove
 	virtual void OnParentRemove() = 0;
 
+	//! sync all attached nodes and entities
+	virtual bool Sync() = 0;
+
+	//! Set position
+	virtual bool SetPosition() = 0;
+	virtual bool SetRotation() = 0;
+	
+protected: /* Methods */
+	virtual void EnterDeleteQueue() = 0;
+protected: /* Data */
 	hriBaseEntity*				parent;
 	std::vector<hriBaseEntity*>	children;
 

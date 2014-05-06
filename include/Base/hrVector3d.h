@@ -2,7 +2,7 @@
 #ifndef __HR_T_VECTOR_3D_H__
 #define __HR_T_VECTOR_3D_H__
 
-#include "hrEngin/Math/hrMath.h"
+#include "Base/Math/hrMath.h"
 
 namespace hrengin
 {
@@ -510,13 +510,13 @@ public:
 
 //! partial specialization for integer vectors
 template <>
-inline hrVector3d<s32> hrVector3d<s32>::operator /(s32 val) const 
+inline hrVector3d<i32> hrVector3d<i32>::operator /(i32 val) const 
 {
-	return core::hrVector3d<s32>(X/val,Y/val,Z/val);
+	return hrVector3d<i32>(X/val,Y/val,Z/val);
 }
 
 template <>
-inline hrVector3d<s32>& hrVector3d<s32>::operator /=(s32 val) 
+inline hrVector3d<i32>& hrVector3d<i32>::operator /=(i32 val) 
 {
 	X/=val;
 	Y/=val;
@@ -549,10 +549,10 @@ inline hrVector3d<s32> hrVector3d<s32>::getSphericalCoordinateAngles() const
 template<class S, class T>
 hrVector3d<T> operator*(const S scalar, const hrVector3d<T>& vector) { return vector*scalar; }*/
 
-typedef hrVector3d<float32> Vectorf3d;
-typedef hrVector3d<float64> Vectord3d;
-typedef hrVector3d<int32> Vectori3d;
-typedef hrVector3d<int32> Vector3d;
+typedef hrVector3d<f32> Vectorf3d;
+typedef hrVector3d<f64> Vectord3d;
+typedef hrVector3d<i32> Vectori3d;
+typedef hrVector3d<i32> Vector3d;
 
 } // end namespace hrengin
 

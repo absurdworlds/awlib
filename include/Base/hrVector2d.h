@@ -148,12 +148,12 @@ public: /* Functions */
 
 	bool operator < (const hrVector2d<T>&other) const
 	{
-		return SquareLength() < other.SquareLength();
+		return SquareLength() < other.SquareLength() && !math::equals(SquareLength(), other.SquareLength());
 	}
 
 	bool operator > (const hrVector2d<T>&other) const
 	{
-		return SquareLength() > other.SquareLength();
+		return SquareLength() > other.SquareLength() && !math::equals(SquareLength(), other.SquareLength());
 	}
 
 	bool operator == (const hrVector2d<T>& other) const 
@@ -178,140 +178,39 @@ public: /* Functions */
 	T SquareLength() const 
 	{ 
 		return X*X + Y*Y; 
-	}
-};
-
-typedef hrVector2d<float32>	Vectorf2d;
-typedef hrVector2d<float64>	Vectord2d;
-typedef hrVector2d<int32>		Vectori2d;
-typedef hrVector2d<int32>	Vector2d;
-}
-
-#endif //__HR_T_VECTOR_2D_H__
-
-/*
-	//! Default constructor (null vector)
-	vector2d() : X(0), Y(0) {}
-	//! Constructor with two different values
-	vector2d(T nx, T ny) : X(nx), Y(ny) {}
-	//! Constructor with the same value for both members
-	explicit vector2d(T n) : X(n), Y(n) {}
-	//! Copy constructor
-	vector2d(const vector2d<T>& other) : X(other.X), Y(other.Y) {}
-
-	vector2d(const dimension2d<T>& other) : X(other.Width), Y(other.Height) {}
-
-	// operators
-
-	vector2d<T> operator-() const { return vector2d<T>(-X, -Y); }
-
-	vector2d<T>& operator=(const vector2d<T>& other) { X = other.X; Y = other.Y; return *this; }
-
-	vector2d<T>& operator=(const dimension2d<T>& other) { X = other.Width; Y = other.Height; return *this; }
-
-	vector2d<T> operator+(const vector2d<T>& other) const { return vector2d<T>(X + other.X, Y + other.Y); }
-	vector2d<T> operator+(const dimension2d<T>& other) const { return vector2d<T>(X + other.Width, Y + other.Height); }
-	vector2d<T>& operator+=(const vector2d<T>& other) { X+=other.X; Y+=other.Y; return *this; }
-	vector2d<T> operator+(const T v) const { return vector2d<T>(X + v, Y + v); }
-	vector2d<T>& operator+=(const T v) { X+=v; Y+=v; return *this; }
-	vector2d<T>& operator+=(const dimension2d<T>& other) { X += other.Width; Y += other.Height; return *this;  }
-
-	vector2d<T> operator-(const vector2d<T>& other) const { return vector2d<T>(X - other.X, Y - other.Y); }
-	vector2d<T> operator-(const dimension2d<T>& other) const { return vector2d<T>(X - other.Width, Y - other.Height); }
-	vector2d<T>& operator-=(const vector2d<T>& other) { X-=other.X; Y-=other.Y; return *this; }
-	vector2d<T> operator-(const T v) const { return vector2d<T>(X - v, Y - v); }
-	vector2d<T>& operator-=(const T v) { X-=v; Y-=v; return *this; }
-	vector2d<T>& operator-=(const dimension2d<T>& other) { X -= other.Width; Y -= other.Height; return *this;  }
-
-	vector2d<T> operator*(const vector2d<T>& other) const { return vector2d<T>(X * other.X, Y * other.Y); }
-	vector2d<T>& operator*=(const vector2d<T>& other) { X*=other.X; Y*=other.Y; return *this; }
-	vector2d<T> operator*(const T v) const { return vector2d<T>(X * v, Y * v); }
-	vector2d<T>& operator*=(const T v) { X*=v; Y*=v; return *this; }
-
-	vector2d<T> operator/(const vector2d<T>& other) const { return vector2d<T>(X / other.X, Y / other.Y); }
-	vector2d<T>& operator/=(const vector2d<T>& other) { X/=other.X; Y/=other.Y; return *this; }
-	vector2d<T> operator/(const T v) const { return vector2d<T>(X / v, Y / v); }
-	vector2d<T>& operator/=(const T v) { X/=v; Y/=v; return *this; }
-
-	//! sort in order X, Y. Equality with rounding tolerance.
-	bool operator<=(const vector2d<T>&other) const
+	}	
+	
+	//! Gets distance from another point. 
+	T GetDistance(const vector2d<T>& other) const
 	{
-		return 	(X<other.X || core::equals(X, other.X)) ||
-				(core::equals(X, other.X) && (Y<other.Y || core::equals(Y, other.Y)));
+		return vector2d<T>(X - other.X, Y - other.Y).Length();
 	}
 
-	//! sort in order X, Y. Equality with rounding tolerance.
-	bool operator>=(const vector2d<T>&other) const
+	//! Get squared distance from another point.
+	T GetSquaredDistance(const vector2d<T>& other) const
 	{
-		return 	(X>other.X || core::equals(X, other.X)) ||
-				(core::equals(X, other.X) && (Y>other.Y || core::equals(Y, other.Y)));
+		return vector2d<T>(X - other.X, Y - other.Y).SquareLength();
 	}
-
-	//! sort in order X, Y. Difference must be above rounding tolerance.
-	bool operator<(const vector2d<T>&other) const
-	{
-		return 	(X<other.X && !core::equals(X, other.X)) ||
-				(core::equals(X, other.X) && Y<other.Y && !core::equals(Y, other.Y));
-	}
-
-	//! sort in order X, Y. Difference must be above rounding tolerance.
-	bool operator>(const vector2d<T>&other) const
-	{
-		return 	(X>other.X && !core::equals(X, other.X)) ||
-				(core::equals(X, other.X) && Y>other.Y && !core::equals(Y, other.Y));
-	}
-
-	bool operator==(const vector2d<T>& other) const { return equals(other); }
-	bool operator!=(const vector2d<T>& other) const { return !equals(other); }
-
-	// functions
-
-	//! Checks if this vector equals the other one.
-	/** Takes floating point rounding errors into account.
-	\param other Vector to compare with.
-	\return True if the two vector are (almost) equal, else false. 
-	bool equals(const vector2d<T>& other) const
-	{
-		return core::equals(X, other.X) && core::equals(Y, other.Y);
-	}
-
-	vector2d<T>& set(T nx, T ny) {X=nx; Y=ny; return *this; }
-	vector2d<T>& set(const vector2d<T>& p) { X=p.X; Y=p.Y; return *this; }
-
-	//! Gets the length of the vector.
-	/** \return The length of the vector. 
-	T getLength() const { return core::squareroot( X*X + Y*Y ); }
-
-	//! Get the squared length of this vector
-	/** This is useful because it is much faster than getLength().
-	\return The squared length of the vector. 
-	T getLengthSQ() const { return X*X + Y*Y; }
 
 	//! Get the dot product of this vector with another.
-	/** \param other Other vector to take dot product with.
-	\return The dot product of the two vectors. 
 	T dotProduct(const vector2d<T>& other) const
 	{
 		return X*other.X + Y*other.Y;
 	}
 
-	//! Gets distance from another point.
-	/** Here, the vector is interpreted as a point in 2-dimensional space.
-	\param other Other vector to measure from.
-	\return Distance from other point. 
-	T getDistanceFrom(const vector2d<T>& other) const
-	{
-		return vector2d<T>(X - other.X, Y - other.Y).getLength();
-	}
+};
 
-	//! Returns squared distance from another point.
-	/** Here, the vector is interpreted as a point in 2-dimensional space.
-	\param other Other vector to measure from.
-	\return Squared distance from other point. 
-	T getDistanceFromSQ(const vector2d<T>& other) const
-	{
-		return vector2d<T>(X - other.X, Y - other.Y).getLengthSQ();
-	}
+typedef hrVector2d<f32>	Vectorf2d;
+typedef hrVector2d<f64>	Vectord2d;
+typedef hrVector2d<i32>	Vectori2d;
+typedef hrVector2d<i32>	Vector2d;
+}
+
+#endif //__HR_T_VECTOR_2D_H__
+
+/*
+	// functions	
+
 
 	//! rotates the point anticlockwise around a center by an amount of degrees.
 	/** \param degrees Amount of degrees to rotate by, anticlockwise.

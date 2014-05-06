@@ -24,6 +24,10 @@ class hrcVisNode : public hriVisNode
 		
 		virtual void AttachToEntity(hriBaseEntity* attach);
 
+		virtual void SetPosition(Vectorf3d pos);
+		virtual void SetRotation(Vectorf3d rot);
+		virtual void SetScale(Vectorf3d scale);
+
 		virtual i8 AddMesh(char * meshname);
 		virtual void RemoveMesh(i8 meshslot);
 		virtual void ReplaceMesh(i8 meshslot, char * meshname);

@@ -2,6 +2,7 @@
 #ifndef __HG_hriSceneNode__
 #define __HG_hriSceneNode__
 
+#include <Base/hrTypes.h>
 #include <Base/hrVector3d.h>
 
 namespace hrengin
@@ -20,6 +21,8 @@ class hriSceneNode
 
 		virtual void SetPosition(Vectorf3d pos) = 0;
 		virtual void SetRotation(Vectorf3d rot) = 0;
+		virtual void SetScale(Vectorf3d scale) = 0;
+	protected:
 };
 
 	

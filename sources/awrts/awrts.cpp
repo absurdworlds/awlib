@@ -13,7 +13,11 @@ int main()
 	hrengin::graphics::hriVideoManager* videomgr = hrengin::graphics::GetManager();
 
 	hrengin::graphics::hriVisNode* node = videomgr->CreateVisObject();
+	hrengin::graphics::hriCameraNode* camera = videomgr->CreateCamera();
+	camera->SetBehavior(hrengin::graphics::hriCameraNode::CAM_STRATEGIC);
+
 	node->AddMesh("sotank.obj");
+	//node->AddMesh("ground.obj");
 
 	do
 	{

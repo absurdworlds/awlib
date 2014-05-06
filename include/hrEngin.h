@@ -9,6 +9,7 @@
 /**/
 #include "Graphics/Base/hriVideoManager.h"
 #include "Graphics/Nodes/hriVisNode.h"
+#include "Graphics/Nodes/hriCameraNode.h"
 
 #include "GUI/Base/hriGUIManager.h"
 #include "Physics/Base/hriPhysicsManager.h"

@@ -4,6 +4,9 @@
 
 #include "CSceneNodeAnimatorCameraRTS.h"
 #include "math.h"
+#include <Base/Config/hrConfig.h>
+
+#define _HR_STR(arg) #arg
 
 namespace irr
 {
@@ -19,6 +22,10 @@ namespace scene
 	distance(distance), angle(angle), angle_close(angle_close), FirstUpdateReceived(false)
 
 	{
+		#ifdef _DEBUG
+			fprintf(stderr, "DEBUG: function call %s\n", __FUNCTION_NAME__);
+		#endif //_DEBUG
+
 		if (CursorControl)
 		{
 			CursorControl->grab();
@@ -116,6 +123,9 @@ namespace scene
 	//! OnAnimate() is called just before rendering the whole scene.
 	void CSceneNodeAnimatorCameraRTS::animateNode(ISceneNode *node, u32 timeMs)
 	{
+		#ifdef _DEBUG
+			fprintf(stderr, "DEBUG: function call %s\n", __FUNCTION_NAME__);
+		#endif //_DEBUG
 		// Controls :
 		// Alt + WSAD = move camera
 		// Mouse middle + Mouse move = move camera

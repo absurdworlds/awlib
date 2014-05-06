@@ -4,10 +4,17 @@
 
 namespace irr
 {
+	class IrrlichtDevice;
+
 	namespace scene
 	{
 		class ISceneManager;
 		class IAnimatedMesh;
+	}
+
+	namespace core
+	{
+		class ICursorControl;
 	}
 }
 
@@ -37,6 +44,7 @@ class hriVideoManager
 
 	//protected:
 		virtual irr::scene::ISceneManager* GetSceneMgr() const = 0;
+		virtual irr::IrrlichtDevice* GetDeviceTemporary() const = 0;
 		virtual irr::scene::IAnimatedMesh* LoadMesh(const char * modelname) = 0;
 
 };

@@ -62,6 +62,7 @@ class hrcVideoManager : public hriVideoManager
 		
 	//protected:
 		virtual irr::scene::ISceneManager* GetSceneMgr() const;
+		virtual irr::IrrlichtDevice* GetDeviceTemporary() const;
 		virtual irr::scene::IAnimatedMesh* LoadMesh(const char * modelname);
 
 	private:
