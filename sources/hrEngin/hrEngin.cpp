@@ -1,10 +1,12 @@
 
 #include <hrEngin.h>
+#include "Internal/hrcInternalsManager.h"
+#include "Internal/hrFilesystem.h"
 #include "hrcEncore.h"
 
 #ifdef _HR_PHYSICS_HAVOK
-#include <Common/Base/hkBase.h>
 #include "Base/Config/HavokMagicSpells.h"
+#elif defined(_HR_PHYSICS_NEWTON)
 #endif
 
 namespace hrengin
@@ -25,7 +27,11 @@ namespace graphics
 {
 HRENGIN_API hriVideoManager* GetManager ()
 {
-	return new hrcVideoManager;
+	if(!__HRIM.videomgr)
+	{
+		__HRIM.videomgr = new hrcVideoManager;
+	}
+	return __HRIM.videomgr;
 }
 
 }
@@ -34,7 +40,16 @@ namespace physics
 {
 HRENGIN_API hriPhysicsManager* GetManager ()
 {
-	return 0;
+	if(!__HRIM.physmgr)
+	{
+		#ifdef _HR_PHYSICS_HAVOK
+		__HRIM.physmgr = new hrcHavokPhysics();
+		#elif defined(_HR_PHYSICS_NEWTON)
+		__HRIM.physmgr = new hrcNewtonPhysics();
+		#endif
+	}
+
+	return __HRIM.physmgr;
 }
 
 } 

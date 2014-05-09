@@ -1,4 +1,8 @@
-set dir=%cd%\Debug
-for %%f in (%dir%\*.exe %dir%\*.dll) do move /y %%f E:\RTSGame\Game\system\
-for %%f in (%dir%\*.lib %dir%\*.exp) do move /y %%f E:\RTSGame\Code\lib\msvc-win32-debug\
+set sourcedir=E:\RTSGame\Code\sources\%1
+set gamedir=E:\RTSGame\Code\sources\%1
+set targetdir=E:\RTSGame\Code\sources\%1
+for %%f in (%sourcedir%\*.exe %sourcedir%\*.dll) do xcopy /y %%f E:\RTSGame\Game\system\
+IF "%1" == "Debug" for %%f in (%sourcedir%\*.lib %sourcedir%\*.exp) do xcopy /y %%f E:\RTSGame\Code\lib\win32-msvc-debug\
+IF "%1" == "Release" for %%f in (%sourcedir%\*.lib %sourcedir%\*.exp) do xcopy /y %%f E:\RTSGame\Code\lib\win32-msvc-release\
+
 exit

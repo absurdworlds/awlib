@@ -15,13 +15,22 @@ int main()
 	hrengin::graphics::hriVisNode* node = videomgr->CreateVisObject();
 	hrengin::graphics::hriCameraNode* camera = videomgr->CreateCamera();
 	camera->SetBehavior(hrengin::graphics::hriCameraNode::CAM_STRATEGIC);
+	videomgr->CreateLight();
+	hrengin::physics::hriPhysicsManager* phymgr = hrengin::physics::GetManager ();
+	
+
 
 	node->AddMesh("sotank.obj");
-	//node->AddMesh("ground.obj");
+	node->AddMesh("ground.obj");
 
 	do
 	{
 		if(!videomgr->Draw())
+		{
+			b_runEngine = false;
+		}
+		
+		if(!phymgr->Step())
 		{
 			b_runEngine = false;
 		}

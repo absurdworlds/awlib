@@ -19,8 +19,8 @@ namespace graphics
 class hrcVisNode : public hriVisNode
 {
 	public:
-		hrcVisNode(hriVideoManager* Vmgr);
-		hrcVisNode(hriVideoManager* Vmgr, hriBaseEntity* attach);
+		hrcVisNode();
+		hrcVisNode(hriBaseEntity* attach);
 		
 		virtual void AttachToEntity(hriBaseEntity* attach);
 
@@ -33,7 +33,6 @@ class hrcVisNode : public hriVisNode
 		virtual void ReplaceMesh(i8 meshslot, char * meshname);
 
 	private:
-		hriVideoManager* videomgr;
 		hriBaseEntity* attachedTo;
 
 		i8 lastFreeSlot;

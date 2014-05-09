@@ -19,7 +19,6 @@ namespace gui
 class hriInputManager
 {
 	public:
-		virtual irr::gui::ICursorControl* GetCursorControl();
 };
 
 } // namespace io

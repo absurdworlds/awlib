@@ -2,22 +2,6 @@
 #ifndef __HG_hriVideoManager_h__
 #define __HG_hriVideoManager_h__
 
-namespace irr
-{
-	class IrrlichtDevice;
-
-	namespace scene
-	{
-		class ISceneManager;
-		class IAnimatedMesh;
-	}
-
-	namespace core
-	{
-		class ICursorControl;
-	}
-}
-
 namespace hrengin
 {
 namespace graphics
@@ -39,14 +23,6 @@ class hriVideoManager
 		virtual hriLightNode* CreateLight() = 0;
 
 		virtual void AddNode(hriSceneNode& node) = 0;
-
-		//virtual IAnimatedMeshSceneNode* LoadModel(const char* modelname) = 0;
-
-	//protected:
-		virtual irr::scene::ISceneManager* GetSceneMgr() const = 0;
-		virtual irr::IrrlichtDevice* GetDeviceTemporary() const = 0;
-		virtual irr::scene::IAnimatedMesh* LoadMesh(const char * modelname) = 0;
-
 };
 
 	

@@ -181,19 +181,19 @@ public: /* Functions */
 	}	
 	
 	//! Gets distance from another point. 
-	T GetDistance(const vector2d<T>& other) const
+	T GetDistance(const hrVector2d<T>& other) const
 	{
-		return vector2d<T>(X - other.X, Y - other.Y).Length();
+		return hrVector2d<T>(X - other.X, Y - other.Y).Length();
 	}
 
 	//! Get squared distance from another point.
-	T GetSquaredDistance(const vector2d<T>& other) const
+	T GetSquaredDistance(const hrVector2d<T>& other) const
 	{
-		return vector2d<T>(X - other.X, Y - other.Y).SquareLength();
+		return hrVector2d<T>(X - other.X, Y - other.Y).SquareLength();
 	}
 
 	//! Get the dot product of this vector with another.
-	T dotProduct(const vector2d<T>& other) const
+	T dotProduct(const hrVector2d<T>& other) const
 	{
 		return X*other.X + Y*other.Y;
 	}

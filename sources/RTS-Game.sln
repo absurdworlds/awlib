@@ -8,15 +8,25 @@ EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
+		DebugHavok|Win32 = DebugHavok|Win32
+		DebugNewton|Win32 = DebugNewton|Win32
 		Release|Win32 = Release|Win32
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{08391406-CA28-417B-A8F4-4FCF6E5CDF17}.Debug|Win32.ActiveCfg = Debug|Win32
 		{08391406-CA28-417B-A8F4-4FCF6E5CDF17}.Debug|Win32.Build.0 = Debug|Win32
+		{08391406-CA28-417B-A8F4-4FCF6E5CDF17}.DebugHavok|Win32.ActiveCfg = Debug|Win32
+		{08391406-CA28-417B-A8F4-4FCF6E5CDF17}.DebugHavok|Win32.Build.0 = Debug|Win32
+		{08391406-CA28-417B-A8F4-4FCF6E5CDF17}.DebugNewton|Win32.ActiveCfg = Debug|Win32
+		{08391406-CA28-417B-A8F4-4FCF6E5CDF17}.DebugNewton|Win32.Build.0 = Debug|Win32
 		{08391406-CA28-417B-A8F4-4FCF6E5CDF17}.Release|Win32.ActiveCfg = Release|Win32
 		{08391406-CA28-417B-A8F4-4FCF6E5CDF17}.Release|Win32.Build.0 = Release|Win32
 		{02D3814A-D061-48A3-B808-F43DC5D642F2}.Debug|Win32.ActiveCfg = Debug|Win32
 		{02D3814A-D061-48A3-B808-F43DC5D642F2}.Debug|Win32.Build.0 = Debug|Win32
+		{02D3814A-D061-48A3-B808-F43DC5D642F2}.DebugHavok|Win32.ActiveCfg = Release|Win32
+		{02D3814A-D061-48A3-B808-F43DC5D642F2}.DebugHavok|Win32.Build.0 = Release|Win32
+		{02D3814A-D061-48A3-B808-F43DC5D642F2}.DebugNewton|Win32.ActiveCfg = Debug|Win32
+		{02D3814A-D061-48A3-B808-F43DC5D642F2}.DebugNewton|Win32.Build.0 = Debug|Win32
 		{02D3814A-D061-48A3-B808-F43DC5D642F2}.Release|Win32.ActiveCfg = Release|Win32
 		{02D3814A-D061-48A3-B808-F43DC5D642F2}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection

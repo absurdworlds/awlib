@@ -1,5 +1,6 @@
 
 #include "hrcVisNode.h"
+#include "../../Internal/hrcInternalsManager.h"
 
 #include <algorithm>
 
@@ -10,16 +11,16 @@ namespace graphics
 	
 //! constructor
 //!
-hrcVisNode::hrcVisNode(hriVideoManager* Vmgr)
-	: videomgr(Vmgr), lastFreeSlot(0)
+hrcVisNode::hrcVisNode()
+	: lastFreeSlot(0)
 {
 
 }
 
 //! constructor
 //! Attaches node to entity
-hrcVisNode::hrcVisNode(hriVideoManager* Vmgr, hriBaseEntity* attach)
-	: videomgr(Vmgr), attachedTo(attach), lastFreeSlot(0)
+hrcVisNode::hrcVisNode(hriBaseEntity* attach)
+	: attachedTo(attach), lastFreeSlot(0)
 {
 	
 }
@@ -46,8 +47,8 @@ i8 hrcVisNode::AddMesh(char * meshname)
 {
 	if(lastFreeSlot < maxFreeSlot)
 	{
-		irr::scene::IAnimatedMesh* mesh = videomgr->LoadMesh(meshname);
-		meshSlots[lastFreeSlot] = videomgr->GetSceneMgr()->addAnimatedMeshSceneNode(mesh);
+		irr::scene::IAnimatedMesh* mesh = __HRIM.videomgr->LoadMesh(meshname);
+		meshSlots[lastFreeSlot] = __HRIM.videomgr->GetSceneMgr()->addAnimatedMeshSceneNode(mesh);
 		lastFreeSlot++;
 		return lastFreeSlot-1;
 	}
@@ -79,8 +80,8 @@ void hrcVisNode::ReplaceMesh(i8 meshslot, char * meshname)
 	{
 		if(meshSlots[meshslot])
 		{
-			irr::scene::IAnimatedMesh* mesh = videomgr->LoadMesh(meshname);
-			meshSlots[meshslot] = videomgr->GetSceneMgr()->addAnimatedMeshSceneNode(mesh);
+			irr::scene::IAnimatedMesh* mesh = __HRIM.videomgr->LoadMesh(meshname);
+			meshSlots[meshslot] = __HRIM.videomgr->GetSceneMgr()->addAnimatedMeshSceneNode(mesh);
 		}
 	}
 }

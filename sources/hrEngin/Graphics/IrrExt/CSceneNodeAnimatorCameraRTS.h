@@ -6,7 +6,7 @@
 #define __C_SCENE_NODE_ANIMATOR_CAMERA_RTS_H_INCLUDED__
 
 #include "irrlicht.h"
-#include "Graphics/IrrExt/ISceneNodeAnimatorCameraRTS.h"
+#include "ISceneNodeAnimatorCameraRTS.h"
 
 namespace irr
 {
@@ -26,7 +26,7 @@ namespace scene
 
 		//! Constructor
 		CSceneNodeAnimatorCameraRTS(gui::ICursorControl* cursor, ITimer* timer, f32 distance=36.055, f32 angle=0.9828, f32 angle_close=0.5880, 
-		f32 translateSpeed = 0.05f, f32 rotateSpeed = 0.1f, f32 zoomSpeed=0.1f);
+		f32 translateSpeed = 0.1f, f32 rotateSpeed = 0.1f, f32 zoomSpeed=0.1f);
 
 		//! Destructor
 		virtual ~CSceneNodeAnimatorCameraRTS();
@@ -139,7 +139,9 @@ namespace scene
 		f32 distance;
 		f32 angle;
 		f32 angle_close;
-
+		
+		core::vector2di MousePos2;
+		core::vector2di MousePos2_old;
 		core::position2df MousePos;
 		core::position2df MousePos_old;
 

@@ -6,8 +6,6 @@
 #include "math.h"
 #include <Base/Config/hrConfig.h>
 
-#define _HR_STR(arg) #arg
-
 namespace irr
 {
 namespace scene
@@ -55,7 +53,8 @@ namespace scene
 	{
 		//if (event.EventType != EET_MOUSE_INPUT_EVENT)
 		//	return false;
-		
+
+
 		switch(event.EventType)
 		{
 		case EET_MOUSE_INPUT_EVENT:
@@ -69,11 +68,13 @@ namespace scene
 				break;
 			case EMIE_MOUSE_MOVED:
 				MousePos = CursorControl->getRelativePosition();
+				MousePos2 = CursorControl->getPosition();
 				break;
 			case EMIE_MOUSE_WHEEL:
 				NewZoom -= event.MouseInput.Wheel * ZoomSpeed * (CurrentZoom / (MaxZoom * MinZoom));
 				break;
 			/*case EMIE_LMOUSE_PRESSED_DOWN:
+				break;
 			case EMIE_RMOUSE_PRESSED_DOWN:
 			case EMIE_LMOUSE_LEFT_UP:
 			case EMIE_RMOUSE_LEFT_UP:
@@ -123,9 +124,6 @@ namespace scene
 	//! OnAnimate() is called just before rendering the whole scene.
 	void CSceneNodeAnimatorCameraRTS::animateNode(ISceneNode *node, u32 timeMs)
 	{
-		#ifdef _DEBUG
-			fprintf(stderr, "DEBUG: function call %s\n", __FUNCTION_NAME__);
-		#endif //_DEBUG
 		// Controls :
 		// Alt + WSAD = move camera
 		// Mouse middle + Mouse move = move camera
@@ -136,7 +134,7 @@ namespace scene
 			return;
 		
 		ICameraSceneNode* camera = static_cast<ICameraSceneNode*>(node);
-		
+
 		// If the camera isn't the active camera, and receiving input, then don't process it.
 		if (!camera->isInputReceiverEnabled())
 		{
@@ -148,6 +146,8 @@ namespace scene
 		{
 			return;
 		}
+
+		scene::ISceneCollisionManager* colman = scnmgr->getSceneCollisionManager();
 
 		/*if (OldCamera != camera)
 		{
@@ -176,10 +176,14 @@ namespace scene
 
 
 
+
 		// Camera movement
 		core::vector3df pos = camera->getPosition();
 		core::vector3df target = camera->getTarget();
 		core::vector3df translate(0,0,0);
+		core::vector3df translate_origin(0,0,0);
+		core::vector3df translate2(0,0,0);
+		core::vector3df translate3(0,0,0);
 
 		core::vector3df zoom_vector(0,distance*sin(angle),distance*cos(angle));
 		core::vector3df zoom_close(0,distance*sin(angle_close),distance*cos(angle_close));
@@ -193,9 +197,30 @@ namespace scene
 
 			if(MousePos != MousePos_old)
 			{
-				translate.X += TranslateSpeed*(MousePos.X - MousePos_old.X)*scnmgr->getVideoDriver()->getScreenSize().Width   * (CurrentZoom / (MaxZoom * MinZoom));
-				translate.Z += TranslateSpeed*(MousePos_old.Y - MousePos.Y)*scnmgr->getVideoDriver()->getScreenSize().Height  * (CurrentZoom / (MaxZoom * MinZoom));
+				core::line3df line = colman->getRayFromScreenCoordinates(MousePos2, camera);
+				core::plane3df plane;
+
+				plane.getIntersectionWithLine(line.start, line.getVector(), translate_origin);
+
+				line = colman->getRayFromScreenCoordinates(MousePos2_old, camera);
+				plane.getIntersectionWithLine(line.start, line.getVector(), translate2);
+
+				//translate.X += TranslateSpeed*(MousePos.X - MousePos_old.X)*scnmgr->getVideoDriver()->getScreenSize().Width   * (CurrentZoom / (MaxZoom * MinZoom));
+				//translate.Z += TranslateSpeed*(MousePos_old.Y - MousePos.Y)*scnmgr->getVideoDriver()->getScreenSize().Height  * (CurrentZoom / (MaxZoom * MinZoom));
+			fprintf(stderr, "DEBUG: \n");
+				translate.X -= (translate_origin.X - translate2.X);
+			fprintf(stderr, "DEBUG: COLL1X %f\n", translate_origin.X);
+			fprintf(stderr, "DEBUG: COLL2X %f\n", translate2.X);
+			fprintf(stderr, "DEBUG: TRANX %f\n", translate_origin.X - translate2.X);
+				translate.Z += (translate2.Z - translate_origin.Z);
+			fprintf(stderr, "DEBUG: COLL1Z %f\n", translate_origin.Z);
+			fprintf(stderr, "DEBUG: COLL2Z %f\n", translate2.Z);
+			fprintf(stderr, "DEBUG: TRANZ %f\n", translate2.Z - translate_origin.Z);
+			fprintf(stderr, "DEBUG: COLL1Y %f\n", translate_origin.Z);
+			fprintf(stderr, "DEBUG: COLL2Y %f\n", translate2.Z);
+			fprintf(stderr, "DEBUG: \n");
 				MousePos_old = MousePos;
+				MousePos2_old = MousePos2;
 			}
 
 			if ((MousePos.X < 0.005) || (MousePos.X > 0.995) || (MousePos.Y < 0.005) || (MousePos.Y > 0.995))
@@ -206,15 +231,31 @@ namespace scene
 		else
 		{
 			MousePos_old = MousePos;
+			MousePos2_old = MousePos2;
 			Dragging = false;
 			if((MousePos.X > 0.005) && (MousePos.X < 0.995) && (MousePos.Y > 0.005) && (MousePos.Y < 0.995))
 			{
 				Scroll_lock = false;
 			}
 		}
-
+		
 		if(CurrentZoom != NewZoom && !Dragging && !Scrolling)
 		{
+			//(zoom_vector * ((CurrentZoom - MinZoom)/(1.f - MinZoom)) + zoom_close * (1-(CurrentZoom - MinZoom)/(1.f - MinZoom)))*CurrentZoom;
+
+			core::line3df line = colman->getRayFromScreenCoordinates(MousePos2, camera);
+			core::plane3df plane;
+
+			plane.getIntersectionWithLine(line.start, line.getVector(), translate3);
+				
+
+			const scene::SViewFrustum* f = camera->getViewFrustum();
+			
+			core::vector3df farLeftUp = f->getFarLeftUp();
+			core::vector3df lefttoright = f->getFarRightUp() - farLeftUp;
+			core::vector3df uptodown = f->getFarLeftDown() - farLeftUp;
+
+
 			if(NewZoom >= MaxZoom)
 			{
 				NewZoom = MaxZoom;
@@ -224,6 +265,18 @@ namespace scene
 				NewZoom = MinZoom;
 			}
 			
+			
+			/*if(CurrentZoom-NewZoom > 0)
+			{
+			}
+			else
+			{
+				if(CurrentZoom >= 1.f)
+				{
+					translate.X = -(translate_origin.Z - translate2.Z)*(translate_origin.X - pos.X) * 1.f/CurrentZoom;
+					translate.Z = -(translate_origin.Z - translate2.Z)*(translate_origin.Z - pos.Z) * 1.f/CurrentZoom;
+				}
+			}*/
 
 			//zoom_point.X = -(MousePos.X)*NewZoom;
 			//zoom_point.Z = (MousePos.Y)*NewZoom;
@@ -278,14 +331,14 @@ namespace scene
 
 			if (MousePos.X < 0.005)   //Up
 			{	
-				translate.X +=  TranslateSpeed * static_cast<irr::f32>(TimeDelta);
+				translate.X +=  TranslateSpeed * CurrentZoom * static_cast<irr::f32>(TimeDelta);
 			#ifdef _DEBUG
 				fprintf(stderr, "DEBUG: MousePos.X %f\n", MousePos.X);
 			#endif //_DEBUG
 			}
 			else if (MousePos.X > 0.995) //Down
 			{
-				translate.X -=  TranslateSpeed * static_cast<irr::f32>(TimeDelta);
+				translate.X -=  TranslateSpeed * CurrentZoom * static_cast<irr::f32>(TimeDelta);
 			#ifdef _DEBUG
 				fprintf(stderr, "DEBUG: MousePos.X %f\n", MousePos.X);
 			#endif //_DEBUG
@@ -293,14 +346,14 @@ namespace scene
 
 			if (MousePos.Y < 0.005)   //Up
 			{
-				translate.Z -= TranslateSpeed * static_cast<irr::f32>(TimeDelta);
+				translate.Z -= TranslateSpeed * CurrentZoom * static_cast<irr::f32>(TimeDelta);
 			#ifdef _DEBUG
 				fprintf(stderr, "DEBUG: MousePos.Y %f\n", MousePos.Y);
 			#endif //_DEBUG
 			}
 			else if (MousePos.Y > 0.995) //Down
 			{
-				translate.Z += TranslateSpeed * static_cast<irr::f32>(TimeDelta);
+				translate.Z += TranslateSpeed * CurrentZoom * static_cast<irr::f32>(TimeDelta);
 			#ifdef _DEBUG
 				fprintf(stderr, "DEBUG: MousePos.Y %f\n", MousePos.Y);
 			#endif //_DEBUG
@@ -319,6 +372,12 @@ namespace scene
 
 		target += translate; // + zoom_point;
 		pos = target;
+		/*pos += translate3 - target;
+		pos *= CurrentZoom;*/
+		
+		/*zoom_vector.X += translate_origin.X - target.X;
+		zoom_vector.Y += translate_origin.Y - target.Y;
+		zoom_vector.Z += translate_origin.Z - target.Z;*/
 
 		if(CurrentZoom < 1.f)
 		{

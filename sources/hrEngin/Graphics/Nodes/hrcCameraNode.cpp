@@ -1,6 +1,7 @@
 
 #include "hrcCameraNode.h"
 #include "../IrrExt/CSceneNodeAnimatorCameraRTS.h"
+#include "../../Internal/hrcInternalsManager.h"
 
 namespace hrengin
 {
@@ -9,18 +10,18 @@ namespace graphics
 	
 //! constructor
 //!
-hrcCameraNode::hrcCameraNode(hriVideoManager* Vmgr)
-	: videomgr(Vmgr), controlBehavior(CAM_NONE)
+hrcCameraNode::hrcCameraNode()
+	:controlBehavior(CAM_NONE)
 {
-	node = videomgr->GetSceneMgr()->addCameraSceneNode(0, irr::core::vector3df(0,0,0), irr::core::vector3df(0,0,0));
+	node = __HRIM.videomgr->GetSceneMgr()->addCameraSceneNode(0, irr::core::vector3df(0,0,0), irr::core::vector3df(0,0,0));
 }
 
 //! constructor
 //! Attaches node to entity
-hrcCameraNode::hrcCameraNode(hriVideoManager* Vmgr, hriBaseEntity* attach)
-	: videomgr(Vmgr), attachedTo(attach), controlBehavior(CAM_NONE)
+hrcCameraNode::hrcCameraNode(hriBaseEntity* attach)
+	: attachedTo(attach), controlBehavior(CAM_NONE)
 {
-	node = videomgr->GetSceneMgr()->addCameraSceneNode(0, irr::core::vector3df(0,0,0), irr::core::vector3df(0,0,0));	
+	node = __HRIM.videomgr->GetSceneMgr()->addCameraSceneNode(0, irr::core::vector3df(0,0,0), irr::core::vector3df(0,0,0));	
 }
 
 void hrcCameraNode::AttachToEntity(hriBaseEntity* attach)
@@ -78,20 +79,26 @@ void hrcCameraNode::SetBehavior(CAM_Behavior beh)
 	#ifdef _DEBUG
 		fprintf(stderr, "DEBUG: function call %s\n", __FUNCTION_NAME__);
 	#endif //_DEBUG
+
 	controlBehavior = beh;
+	
+	/* reset camera animator */
+	if(animator)
+	{
+		node->removeAnimator(animator);
+		//animator->drop();
+		animator = 0;
+
+	}
+
 	switch(controlBehavior)
 	{
 		case CAM_STRATEGIC:
-			animator = new irr::scene::CSceneNodeAnimatorCameraRTS(videomgr->GetDeviceTemporary()->getCursorControl(),videomgr->GetDeviceTemporary()->getTimer()); 
+			animator = new irr::scene::CSceneNodeAnimatorCameraRTS(__HRIM.videomgr->GetDevice()->getCursorControl(),__HRIM.videomgr->GetDevice()->getTimer()); 
 			node->addAnimator(animator);
 		break;
 		default:
 		case CAM_NONE:
-			if(animator)
-			{
-				node->removeAnimator(animator);
-				animator = 0;
-			}
 			break;
 	}
 }

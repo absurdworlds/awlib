@@ -1,8 +1,9 @@
 
 #include "hrcVideoManager.h"
-#include "../Graphics/Nodes/hrcVisNode.h"
-#include "../Graphics/Nodes/hrcCameraNode.h"
-#include "hrFilesystem.h"
+#include "Nodes/hrcVisNode.h"
+#include "Nodes/hrcCameraNode.h"
+#include "Nodes/hrcLightNode.h"
+#include "../Internal/hrFilesystem.h"
 
 #include <Irrlicht.h>
 
@@ -28,6 +29,7 @@ hrcVideoManager::hrcVideoManager()
 	driver = device->getVideoDriver();
 	scnmgr = device->getSceneManager();
 	guienv = device->getGUIEnvironment();
+	colman = scnmgr->getSceneCollisionManager();
 }
 
 hrcVideoManager::~hrcVideoManager() 
@@ -43,12 +45,9 @@ void hrcVideoManager::CreateScene()
 	animator->drop();
 	
 
-	irr::scene::ILightSceneNode* light1 =	scnmgr->addLightSceneNode(0, irr::core::vector3df(100,1000,100), irr::video::SColorf(0.95f, 0.95f, 1.00f, 0.0f), 2800.0f);
 	irr::scene::IAnimatedMesh* mesh = scnmgr->getMesh(irr::io::path("..\\data\\models\\ground.obj"));
 	scnmgr->setAmbientLight(irr::video::SColorf(0.35f,0.35f,0.35f,0.35f));
-
-	irr::scene::IAnimatedMeshSceneNode* nodu = scnmgr->addAnimatedMeshSceneNode( mesh );
-
+	
 	// cleanup later
 	irr::video::IImage *teal = device->getVideoDriver()->createImage(irr::video::ECF_A8R8G8B8, irr::core::dimension2d<irr::u32>(128, 128));
 	irr::video::IImage *blue = device->getVideoDriver()->createImage(irr::video::ECF_A8R8G8B8, irr::core::dimension2d<irr::u32>(128, 128));
@@ -78,7 +77,7 @@ bool hrcVideoManager::Draw()
 		}
 		else
 		{
-			device->yield();
+			//device->yield();
 		}
 
 		return true;
@@ -97,17 +96,17 @@ void hrcVideoManager::AddNode(hriSceneNode& node)
 
 hriVisNode* hrcVideoManager::CreateVisObject()
 {
-	return new hrcVisNode(this);
+	return new hrcVisNode();
 }
 
 hriCameraNode* hrcVideoManager::CreateCamera()
 {
-	return new hrcCameraNode(this);
+	return new hrcCameraNode();
 }
 
  hriLightNode* hrcVideoManager::CreateLight()
 {
-	return nullptr;
+	return new hrcLightNode();
 
 }
  
@@ -121,7 +120,7 @@ irr::scene::ISceneManager* hrcVideoManager::GetSceneMgr() const
 	return scnmgr;
 }
 
-irr::IrrlichtDevice*  hrcVideoManager::GetDeviceTemporary() const
+irr::IrrlichtDevice*  hrcVideoManager::GetDevice() const
 {
 	return device;
 }

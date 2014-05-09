@@ -2,27 +2,25 @@
 v. Storm in a bottle
 --A test version, unplayable in general sense
 	In currently developed version:
-		о написать лайтноуд
-		о написать логику юнита
-		о имплементировать юнит мовемент эйджент
-		о сделать мап менеджер (плоский рельеф пока что)
-		о создать враппер дл€ физики
-		о написать рейкастинг дл€ юнитселекшна, алсо оболочку дл€ курсорконтрол
-		о написать юнитселекшн
+о написать логику юнита
+о имплементировать юнит мовемент эйджент
+о сделать мап менеджер (плоский рельеф пока что)
+о написать рейкастинг дл€ юнитселекшна, алсо оболочку дл€ курсорконтрол
+о написать юнитселекшн
 
 	In version+1:
-		o Write sound wrapper
-		o Write weapon class
-		o Write players
-		o remove guienv from graphics //don't need it to do anymore Ч hrcGUIManager now is a friend of hrcVideoManager
-		o Add hrcInternalManager Ч†controls spice, controls the universe
+o Write sound wrapper
+o Write weapon class
+o Write players
+o remove guienv from graphics //don't need to do it anymore Ч hrcGUIManager now is a friend of hrcVideoManager
+o rewrite camera
 
 
 	In version+2:
-		o Main menu
-		o Basic ai
-		o Buildings
-		o Animation
+o Main menu
+o Basic ai
+o Buildings
+o Animation
 
 
 

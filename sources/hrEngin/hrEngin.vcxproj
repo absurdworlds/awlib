@@ -41,8 +41,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>E:\SDK\hk2011_2_0_r1\Source;E:\SDK\irrlicht-1.8.1\include;$(IncludePath)</IncludePath>
-    <LibraryPath>E:\SDK\hk2011_2_0_r1\Lib\debug_multithreaded;E:\SDK\irrlicht-1.8.1\lib\Win32-visualstudio;$(LibraryPath)</LibraryPath>
+    <IncludePath>E:\SDK\hk2011_2_0_r1\Source;E:\SDK\irrlicht-1.8.1\include;E:\RTSGame\External\include;$(IncludePath)</IncludePath>
+    <LibraryPath>E:\RTSGame\External\lib\win32-msvc-release;E:\SDK\hk2011_2_0_r1\Lib\debug_multithreaded;E:\SDK\irrlicht-1.8.1\lib\Win32-visualstudio;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -60,7 +60,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>hkBase.lib;hkSerialize.lib;hkSceneData.lib;hkInternal.lib;hkGeometryUtilities.lib;hkVisualize.lib;hkCompat.lib;hkpCollide.lib;hkpConstraintSolver.lib;hkpDynamics.lib;hkpInternal.lib;hkpUtilities.lib;hkpVehicle.lib;hkgCommon.lib;hkcdInternal.lib;Irrlicht.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Newton.lib;Irrlicht.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <CustomBuildStep>
       <Command>
@@ -72,7 +72,7 @@
       </Inputs>
     </CustomBuildStep>
     <PostBuildEvent>
-      <Command>start $(SolutionDir)movebinaries.bat</Command>
+      <Command>start $(SolutionDir)movebinaries.bat  $(Configuration)</Command>
     </PostBuildEvent>
     <PostBuildEvent>
       <Message>MOVING BUNURIS</Message>
@@ -113,7 +113,6 @@
     <ClInclude Include="..\..\include\Base\Math\hrMath.h" />
     <ClInclude Include="..\..\include\Graphics\Base\hriSceneNode.h" />
     <ClInclude Include="..\..\include\Graphics\Base\hriVideoManager.h" />
-    <ClInclude Include="..\..\include\Graphics\IrrExt\ISceneNodeAnimatorCameraRTS.h" />
     <ClInclude Include="..\..\include\Graphics\Nodes\hriCameraNode.h" />
     <ClInclude Include="..\..\include\Graphics\Nodes\hriLightNode.h" />
     <ClInclude Include="..\..\include\Graphics\Nodes\hriVisNode.h" />
@@ -122,26 +121,33 @@
     <ClInclude Include="..\..\include\hrEngin.h" />
     <ClInclude Include="..\..\include\Physics\Base\hriPhysicsManager.h" />
     <ClInclude Include="Base\hrcWorld.h" />
+    <ClInclude Include="Graphics\hrcVideoManager.h" />
     <ClInclude Include="Graphics\IrrExt\CSceneNodeAnimatorCameraRTS.h" />
+    <ClInclude Include="Graphics\IrrExt\ISceneNodeAnimatorCameraRTS.h" />
     <ClInclude Include="Graphics\Nodes\hrcCameraNode.h" />
     <ClInclude Include="Graphics\Nodes\hrcVisNode.h" />
+    <ClInclude Include="Graphics\Nodes\hrcLightNode.h" />
+    <ClInclude Include="GUI\hrcGuiManager.h" />
+    <ClInclude Include="GUI\Input\hrcInputManager.h" />
     <ClInclude Include="hrcEncore.h" />
-    <ClInclude Include="Input\hrcInputManager.h" />
-    <ClInclude Include="Internal\hrcPhysicsCoreHavok.h" />
-    <ClInclude Include="Internal\hrcVideoManager.h" />
+    <ClInclude Include="Internal\hrcInternalsManager.h" />
     <ClInclude Include="Internal\hrFilesystem.h" />
+    <ClInclude Include="PhysicsHavok\hrcHavokPhysics.h" />
+    <ClInclude Include="PhysicsNewton\hrcNewtonPhysics.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Base\hrcWorld.cpp" />
+    <ClCompile Include="Graphics\hrcVideoManager.cpp" />
     <ClCompile Include="Graphics\IrrExt\CSceneNodeAnimatorCameraRTS.cpp" />
     <ClCompile Include="Graphics\Nodes\hrcCameraNode.cpp" />
     <ClCompile Include="Graphics\Nodes\hrcVisNode.cpp" />
+    <ClCompile Include="Graphics\Nodes\hrcLightNode.cpp" />
+    <ClCompile Include="GUI\hrcGuiManager.cpp" />
+    <ClCompile Include="GUI\Input\hrcInputManager.cpp" />
     <ClCompile Include="hrcEncore.cpp" />
     <ClCompile Include="hrEngin.cpp" />
-    <ClCompile Include="Input\hrcInputManager.cpp" />
-    <ClCompile Include="Internal\hrcGuiManager.cpp" />
-    <ClCompile Include="Internal\hrcPhysicsCoreHavok.cpp" />
-    <ClCompile Include="Internal\hrcVideoManager.cpp" />
+    <ClCompile Include="PhysicsHavok\hrcHavokPhysics.cpp" />
+    <ClCompile Include="PhysicsNewton\hrcNewtonPhysics.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

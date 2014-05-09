@@ -24,6 +24,7 @@ namespace irr
 	{
 		class ISceneManager;
 		class IAnimatedMesh;
+		class ISceneCollisionManager;
 	}
 
 	namespace gui
@@ -60,18 +61,28 @@ class hrcVideoManager : public hriVideoManager
 
 		virtual void AddNode(hriSceneNode& node);
 		
-	//protected:
-		virtual irr::scene::ISceneManager* GetSceneMgr() const;
-		virtual irr::IrrlichtDevice* GetDeviceTemporary() const;
 		virtual irr::scene::IAnimatedMesh* LoadMesh(const char * modelname);
+
+	// irrlicht access
+		virtual irr::IrrlichtDevice* GetDevice() const;
+
+		virtual irr::scene::ISceneManager* GetSceneMgr() const;
+		virtual irr::scene::ISceneCollisionManager* getCollManager() const {return 0;}
 
 	private:
 		std::vector<hriSceneNode*> NodeList;
 
-		irr::IrrlichtDevice*		device;
-		irr::video::IVideoDriver*	driver;
-		irr::scene::ISceneManager*	scnmgr;
-		irr::gui::IGUIEnvironment*	guienv;
+		irr::IrrlichtDevice*				device;
+		irr::video::IVideoDriver*			driver;
+		irr::gui::IGUIEnvironment*			guienv;
+		irr::scene::ISceneManager*			scnmgr;
+		irr::scene::ISceneCollisionManager* colman;
+
+	/*// DEBUG:
+	#ifdef _DEBUG
+		bool __HRDEBUG_sceneCreated;
+	#endif*/
+
 };
 
 	

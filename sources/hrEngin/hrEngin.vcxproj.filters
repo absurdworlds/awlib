@@ -25,9 +25,6 @@
     <Filter Include="Include\Graphics">
       <UniqueIdentifier>{d1fd8c12-f5ce-4808-bc1b-1e97b9fdaabe}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Include\Graphics\IrrExt">
-      <UniqueIdentifier>{1cfb70d2-01fe-4d24-9217-cb3435eb4f36}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Include\Base\Config">
       <UniqueIdentifier>{5faedb19-0576-4882-bf1b-a00f6c49e88f}</UniqueIdentifier>
     </Filter>
@@ -67,12 +64,6 @@
     <Filter Include="Source\Graphics\Base">
       <UniqueIdentifier>{aed2cd3b-0fc8-4046-8240-948b3c9f53bc}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\PhysicsHavok">
-      <UniqueIdentifier>{0adbb987-1adf-4016-aa25-55d6a3a0895c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\PhysicsHavok\Base">
-      <UniqueIdentifier>{589d4ef3-675d-4257-9898-79469260e0a1}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Include\GUI\Input">
       <UniqueIdentifier>{ad6b8575-7bf2-4f1a-be03-65cd6a25046d}</UniqueIdentifier>
     </Filter>
@@ -81,6 +72,21 @@
     </Filter>
     <Filter Include="Source\GUI\Input">
       <UniqueIdentifier>{9790971a-294b-471c-8a78-d80b5c62a249}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Physics">
+      <UniqueIdentifier>{090b697a-91dc-450c-abae-52a8f3946a21}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Physics\PhysicsNewton">
+      <UniqueIdentifier>{fa9f9150-43e5-4c88-9427-21ffecfc6405}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Physics\PhysicsHavok">
+      <UniqueIdentifier>{0adbb987-1adf-4016-aa25-55d6a3a0895c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Physics\PhysicsHavok\Base">
+      <UniqueIdentifier>{589d4ef3-675d-4257-9898-79469260e0a1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Include\Physics\Nodes">
+      <UniqueIdentifier>{4bd730be-7e65-45c3-aa21-a35ed338ef5b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -96,23 +102,29 @@
     <ClCompile Include="hrcEncore.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Internal\hrcVideoManager.cpp">
-      <Filter>Source\Internal</Filter>
-    </ClCompile>
     <ClCompile Include="Graphics\Nodes\hrcVisNode.cpp">
       <Filter>Source\Graphics\Nodes</Filter>
-    </ClCompile>
-    <ClCompile Include="Internal\hrcPhysicsCoreHavok.cpp">
-      <Filter>Source\Internal</Filter>
-    </ClCompile>
-    <ClCompile Include="Internal\hrcGuiManager.cpp">
-      <Filter>Source\Internal</Filter>
     </ClCompile>
     <ClCompile Include="Graphics\Nodes\hrcCameraNode.cpp">
       <Filter>Source\Graphics\Nodes</Filter>
     </ClCompile>
-    <ClCompile Include="Input\hrcInputManager.cpp">
+    <ClCompile Include="Graphics\Nodes\hrcLightNode.cpp">
+      <Filter>Source\Graphics\Nodes</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\hrcGuiManager.cpp">
+      <Filter>Source\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\hrcVideoManager.cpp">
+      <Filter>Source\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="GUI\Input\hrcInputManager.cpp">
       <Filter>Source\GUI\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="PhysicsHavok\hrcHavokPhysics.cpp">
+      <Filter>Source\Physics\PhysicsHavok</Filter>
+    </ClCompile>
+    <ClCompile Include="PhysicsNewton\hrcNewtonPhysics.cpp">
+      <Filter>Source\Physics\PhysicsNewton</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -121,9 +133,6 @@
     </ClInclude>
     <ClInclude Include="Base\hrcWorld.h">
       <Filter>Source\Base</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\Graphics\IrrExt\ISceneNodeAnimatorCameraRTS.h">
-      <Filter>Include\Graphics\IrrExt</Filter>
     </ClInclude>
     <ClInclude Include="Graphics\IrrExt\CSceneNodeAnimatorCameraRTS.h">
       <Filter>Source\Graphics\IrrExt</Filter>
@@ -148,9 +157,6 @@
     </ClInclude>
     <ClInclude Include="..\..\include\Base\hriEncore.h">
       <Filter>Include\Base</Filter>
-    </ClInclude>
-    <ClInclude Include="Internal\hrcVideoManager.h">
-      <Filter>Source\Internal</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\Graphics\Base\hriSceneNode.h">
       <Filter>Include\Graphics\Base</Filter>
@@ -197,9 +203,6 @@
     <ClInclude Include="..\..\include\Base\hrVector3d.h">
       <Filter>Include\Base</Filter>
     </ClInclude>
-    <ClInclude Include="Internal\hrcPhysicsCoreHavok.h">
-      <Filter>Source\Internal</Filter>
-    </ClInclude>
     <ClInclude Include="Internal\hrFilesystem.h">
       <Filter>Source\Internal</Filter>
     </ClInclude>
@@ -209,8 +212,29 @@
     <ClInclude Include="..\..\include\GUI\Input\hriInputManager.h">
       <Filter>Include\GUI\Input</Filter>
     </ClInclude>
-    <ClInclude Include="Input\hrcInputManager.h">
+    <ClInclude Include="Graphics\Nodes\hrcLightNode.h">
+      <Filter>Source\Graphics\Nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\hrcVideoManager.h">
+      <Filter>Source\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\Input\hrcInputManager.h">
       <Filter>Source\GUI\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\hrcGuiManager.h">
+      <Filter>Source\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Internal\hrcInternalsManager.h">
+      <Filter>Source\Internal</Filter>
+    </ClInclude>
+    <ClInclude Include="PhysicsHavok\hrcHavokPhysics.h">
+      <Filter>Source\Physics\PhysicsHavok</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\IrrExt\ISceneNodeAnimatorCameraRTS.h">
+      <Filter>Source\Graphics\IrrExt</Filter>
+    </ClInclude>
+    <ClInclude Include="PhysicsNewton\hrcNewtonPhysics.h">
+      <Filter>Source\Physics\PhysicsNewton</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

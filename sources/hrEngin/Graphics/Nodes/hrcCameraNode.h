@@ -18,8 +18,8 @@ namespace graphics
 class hrcCameraNode : public hriCameraNode
 {
 	public:
-		hrcCameraNode(hriVideoManager* Vmgr);
-		hrcCameraNode(hriVideoManager* Vmgr, hriBaseEntity* attach);
+		hrcCameraNode();
+		hrcCameraNode(hriBaseEntity* attach);
 
 		virtual void AttachToEntity(hriBaseEntity* attach);
 
@@ -40,7 +40,6 @@ class hrcCameraNode : public hriCameraNode
 
 		virtual void SetBehavior(CAM_Behavior beh);
 	private:
-		hriVideoManager* videomgr;
 		hriBaseEntity* attachedTo;
 
 		CAM_Behavior controlBehavior;

@@ -3,7 +3,8 @@
 #define __HG_hrcEncore_h__
 
 #include <hrEngin.h> 
-#include "Internal/hrcVideoManager.h" 
+#include "Graphics/hrcVideoManager.h" 
+#include "PhysicsHavok/hrcHavokPhysics.h" 
 
 
 namespace hrengin

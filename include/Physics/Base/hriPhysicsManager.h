@@ -10,7 +10,7 @@ namespace physics
 class hriPhysicsManager
 {
 	public:
-
+		virtual bool Step() = 0;
 };
 
 }	
