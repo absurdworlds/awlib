@@ -5,7 +5,7 @@ v. Storm in a bottle
 о написать логику юнита
 о имплементировать юнит мовемент эйджент
 о сделать мап менеджер (плоский рельеф пока что)
-о написать рейкастинг дл€ юнитселекшна, алсо оболочку дл€ курсорконтрол
+о написать оболочку дл€ курсорконтрол, перевод кликов в лучи
 о написать юнитселекшн
 
 	In version+1:
@@ -13,7 +13,9 @@ o Write sound wrapper
 o Write weapon class
 o Write players
 o remove guienv from graphics //don't need to do it anymore Ч hrcGUIManager now is a friend of hrcVideoManager
+o Write logger
 o rewrite camera
+o prettify code
 
 
 	In version+2:
@@ -21,6 +23,10 @@ o Main menu
 o Basic ai
 o Buildings
 o Animation
+o Start navmesh navigation
+
+	In version+3
+o Add non-flat world
 
 
 

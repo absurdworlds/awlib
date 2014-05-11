@@ -4,7 +4,7 @@
 
 #include <Base/hrTypes.h>
 #include "../GUI/Input/hrcInputManager.h"
-#include "../Graphics/hrcVideoManager.h
+#include "../Graphics/hrcVideoManager.h"
 #include "../Physics/hrcBulletPhysics.h"
 
 #include <Irrlicht.h>

@@ -552,7 +552,7 @@ hrVector3d<T> operator*(const S scalar, const hrVector3d<T>& vector) { return ve
 typedef hrVector3d<f32> Vectorf3d;
 typedef hrVector3d<f64> Vectord3d;
 typedef hrVector3d<i32> Vectori3d;
-typedef hrVector3d<i32> Vector3d;
+typedef hrVector3d<f64> Vector3d;
 
 } // end namespace hrengin
 

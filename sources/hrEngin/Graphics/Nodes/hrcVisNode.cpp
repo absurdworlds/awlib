@@ -32,12 +32,14 @@ void hrcVisNode::AttachToEntity(hriBaseEntity* attach)
 
 void hrcVisNode::SetPosition(Vectorf3d pos)
 {
-
+	meshSlots[lastFreeSlot-1]->setPosition(irr::core::vector3df(pos.Y,pos.Z,pos.X));
 }
+
 void hrcVisNode::SetRotation(Vectorf3d rot)
-{
-
+{	
+	meshSlots[lastFreeSlot-1]->setRotation(irr::core::vector3df(rot.X,rot.Y,rot.Z));
 }
+
 void hrcVisNode::SetScale(Vectorf3d scale)
 {
 

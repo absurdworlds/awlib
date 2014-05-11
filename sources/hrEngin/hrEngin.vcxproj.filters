@@ -76,17 +76,11 @@
     <Filter Include="Source\Physics">
       <UniqueIdentifier>{090b697a-91dc-450c-abae-52a8f3946a21}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\Physics\PhysicsNewton">
-      <UniqueIdentifier>{fa9f9150-43e5-4c88-9427-21ffecfc6405}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\Physics\PhysicsHavok">
-      <UniqueIdentifier>{0adbb987-1adf-4016-aa25-55d6a3a0895c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\Physics\PhysicsHavok\Base">
-      <UniqueIdentifier>{589d4ef3-675d-4257-9898-79469260e0a1}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Include\Physics\Nodes">
       <UniqueIdentifier>{4bd730be-7e65-45c3-aa21-a35ed338ef5b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Debug">
+      <UniqueIdentifier>{57f82bce-e6f2-4aed-8e08-67c9e0dafab5}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -120,11 +114,11 @@
     <ClCompile Include="GUI\Input\hrcInputManager.cpp">
       <Filter>Source\GUI\Input</Filter>
     </ClCompile>
-    <ClCompile Include="PhysicsHavok\hrcHavokPhysics.cpp">
-      <Filter>Source\Physics\PhysicsHavok</Filter>
+    <ClCompile Include="Physics\hrcBulletPhysics.cpp">
+      <Filter>Source\Physics</Filter>
     </ClCompile>
-    <ClCompile Include="PhysicsNewton\hrcNewtonPhysics.cpp">
-      <Filter>Source\Physics\PhysicsNewton</Filter>
+    <ClCompile Include="Physics\hrcPhysicsPhantom.cpp">
+      <Filter>Source\Physics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -191,9 +185,6 @@
     <ClInclude Include="..\..\include\Base\hrVector2d.h">
       <Filter>Include\Base</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\Base\Config\HavokMagicSpells.h">
-      <Filter>Include\Base\Config</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\Physics\Base\hriPhysicsManager.h">
       <Filter>Include\Physics\Base</Filter>
     </ClInclude>
@@ -227,14 +218,26 @@
     <ClInclude Include="Internal\hrcInternalsManager.h">
       <Filter>Source\Internal</Filter>
     </ClInclude>
-    <ClInclude Include="PhysicsHavok\hrcHavokPhysics.h">
-      <Filter>Source\Physics\PhysicsHavok</Filter>
-    </ClInclude>
     <ClInclude Include="Graphics\IrrExt\ISceneNodeAnimatorCameraRTS.h">
       <Filter>Source\Graphics\IrrExt</Filter>
     </ClInclude>
-    <ClInclude Include="PhysicsNewton\hrcNewtonPhysics.h">
-      <Filter>Source\Physics\PhysicsNewton</Filter>
+    <ClInclude Include="Physics\hrcBulletPhysics.h">
+      <Filter>Source\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Physics\Base\hriPhysicsObject.h">
+      <Filter>Include\Physics\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Physics\hriPhysicsBody.h">
+      <Filter>Include\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Physics\hriPhysicsPhantom.h">
+      <Filter>Include\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Physics\hrcPhysicsPhantom.h">
+      <Filter>Source\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\GUI\Input\hrInputEvent.h">
+      <Filter>Include\GUI\Input</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

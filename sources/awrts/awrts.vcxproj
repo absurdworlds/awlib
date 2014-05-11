@@ -81,7 +81,8 @@
     <ClCompile Include="awrts.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\include\hrVersions.h" />
+    <ClInclude Include="awMapManager.h" />
+    <ClInclude Include="Units\awUnit.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

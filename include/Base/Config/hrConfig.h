@@ -66,7 +66,7 @@
 #endif
 
 //#define _HR_PHYSICS_HAVOK
-#define _HR_PHYSICS_NEWTON
+//#define _HR_PHYSICS_NEWTON
 
 #define _HR_STR(arg) #arg
 

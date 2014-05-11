@@ -42,11 +42,16 @@ HRENGIN_API hriPhysicsManager* GetManager ()
 {
 	if(!__HRIM.physmgr)
 	{
-		#ifdef _HR_PHYSICS_HAVOK
+		/*#ifdef _HR_PHYSICS_HAVOK
 		__HRIM.physmgr = new hrcHavokPhysics();
 		#elif defined(_HR_PHYSICS_NEWTON)
 		__HRIM.physmgr = new hrcNewtonPhysics();
-		#endif
+		#endif*/
+		__HRIM.physmgr = new hrcBulletPhysics();
+		/*u32 shape = __HRIM.physmgr->MakeShape(hriPhysicsManager::PHYS_SHAPE_SPHERE,5.);
+		hriPhysicsPhantom* Phantom = __HRIM.physmgr->CreatePhantom(shape);
+		fprintf(stderr, "Object is: %d\n", Phantom);
+		fprintf(stderr, "Ray hit: %d\n", __HRIM.physmgr->CastRay(Vector3d(10.,10.,10.), Vector3d(0.,-10.,-10.)));*/
 	}
 
 	return __HRIM.physmgr;

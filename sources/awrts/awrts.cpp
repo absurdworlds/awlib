@@ -12,16 +12,45 @@ int main()
 
 	hrengin::graphics::hriVideoManager* videomgr = hrengin::graphics::GetManager();
 
-	hrengin::graphics::hriVisNode* node = videomgr->CreateVisObject();
 	hrengin::graphics::hriCameraNode* camera = videomgr->CreateCamera();
 	camera->SetBehavior(hrengin::graphics::hriCameraNode::CAM_STRATEGIC);
 	videomgr->CreateLight();
 	hrengin::physics::hriPhysicsManager* phymgr = hrengin::physics::GetManager ();
 	
-
-
-	node->AddMesh("sotank.obj");
+	hrengin::graphics::hriVisNode* node = videomgr->CreateVisObject();
 	node->AddMesh("ground.obj");
+
+	node = videomgr->CreateVisObject();
+	node->AddMesh("sotank.obj");
+	node->SetPosition(hrengin::Vectorf3d(0, 0, 0.635));
+
+	node = videomgr->CreateVisObject();
+	node->AddMesh("sotank.obj");
+	node->SetPosition(hrengin::Vectorf3d(0, 10, 0.635));
+
+	node = videomgr->CreateVisObject();
+	node->AddMesh("sotank.obj");	
+	node->SetPosition(hrengin::Vectorf3d(0, -10, 0.635));
+	
+	node = videomgr->CreateVisObject();
+	node->AddMesh("butank.obj");
+	node->SetPosition(hrengin::Vectorf3d(-20,10,0));
+	node->SetRotation(hrengin::Vectorf3d(0,135,0));
+
+	node = videomgr->CreateVisObject();
+	node->AddMesh("butruck.obj");
+	node->SetPosition(hrengin::Vectorf3d(-20,0,0));
+	node->SetRotation(hrengin::Vectorf3d(0,1180,0));
+
+	node = videomgr->CreateVisObject();
+	node->AddMesh("butransport.obj");
+	node->SetPosition(hrengin::Vectorf3d(-30,-5,0));
+	node->SetRotation(hrengin::Vectorf3d(0,-135,0));
+
+	node = videomgr->CreateVisObject();
+	node->AddMesh("butransport.obj");
+	node->SetPosition(hrengin::Vectorf3d(-30,-11,0));
+	node->SetRotation(hrengin::Vectorf3d(0,-135,0));
 
 	do
 	{

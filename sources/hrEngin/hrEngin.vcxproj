@@ -41,8 +41,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>E:\SDK\hk2011_2_0_r1\Source;E:\SDK\irrlicht-1.8.1\include;E:\RTSGame\External\include;$(IncludePath)</IncludePath>
-    <LibraryPath>E:\RTSGame\External\lib\win32-msvc-release;E:\SDK\hk2011_2_0_r1\Lib\debug_multithreaded;E:\SDK\irrlicht-1.8.1\lib\Win32-visualstudio;$(LibraryPath)</LibraryPath>
+    <IncludePath>E:\SDK\irrlicht-1.8.1\include;E:\SDK\gles_sdk\include;E:\RTSGame\External\include;$(IncludePath)</IncludePath>
+    <LibraryPath>E:\RTSGame\External\lib\win32-msvc-debug;E:\SDK\bullet-2.82-r2704\lib;E:\SDK\irrlicht-1.8.1\lib\Win32-visualstudio;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -60,7 +60,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>Newton.lib;Irrlicht.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>BulletCollision_vs2010_debug.lib;BulletDynamics_vs2010_debug.lib;HACD_vs2010_debug.lib;LinearMath_vs2010_debug.lib;OpenGLSupport_vs2010.lib;Irrlicht.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <CustomBuildStep>
       <Command>
@@ -100,7 +100,6 @@
   <ItemGroup>
     <ClInclude Include="..\..\include\AI\hriBaseNavigator.h" />
     <ClInclude Include="..\..\include\AI\hriBasePathfinder.h" />
-    <ClInclude Include="..\..\include\Base\Config\HavokMagicSpells.h" />
     <ClInclude Include="..\..\include\Base\Config\hrConfig.h" />
     <ClInclude Include="..\..\include\Base\Config\hrVersions.h" />
     <ClInclude Include="..\..\include\Base\Entities\hriBaseEntity.h" />
@@ -117,9 +116,13 @@
     <ClInclude Include="..\..\include\Graphics\Nodes\hriLightNode.h" />
     <ClInclude Include="..\..\include\Graphics\Nodes\hriVisNode.h" />
     <ClInclude Include="..\..\include\GUI\Base\hriGUIManager.h" />
+    <ClInclude Include="..\..\include\GUI\Input\hrInputEvent.h" />
     <ClInclude Include="..\..\include\GUI\Input\hriInputManager.h" />
     <ClInclude Include="..\..\include\hrEngin.h" />
     <ClInclude Include="..\..\include\Physics\Base\hriPhysicsManager.h" />
+    <ClInclude Include="..\..\include\Physics\Base\hriPhysicsObject.h" />
+    <ClInclude Include="..\..\include\Physics\hriPhysicsBody.h" />
+    <ClInclude Include="..\..\include\Physics\hriPhysicsPhantom.h" />
     <ClInclude Include="Base\hrcWorld.h" />
     <ClInclude Include="Graphics\hrcVideoManager.h" />
     <ClInclude Include="Graphics\IrrExt\CSceneNodeAnimatorCameraRTS.h" />
@@ -132,8 +135,8 @@
     <ClInclude Include="hrcEncore.h" />
     <ClInclude Include="Internal\hrcInternalsManager.h" />
     <ClInclude Include="Internal\hrFilesystem.h" />
-    <ClInclude Include="PhysicsHavok\hrcHavokPhysics.h" />
-    <ClInclude Include="PhysicsNewton\hrcNewtonPhysics.h" />
+    <ClInclude Include="Physics\hrcBulletPhysics.h" />
+    <ClInclude Include="Physics\hrcPhysicsPhantom.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Base\hrcWorld.cpp" />
@@ -146,8 +149,8 @@
     <ClCompile Include="GUI\Input\hrcInputManager.cpp" />
     <ClCompile Include="hrcEncore.cpp" />
     <ClCompile Include="hrEngin.cpp" />
-    <ClCompile Include="PhysicsHavok\hrcHavokPhysics.cpp" />
-    <ClCompile Include="PhysicsNewton\hrcNewtonPhysics.cpp" />
+    <ClCompile Include="Physics\hrcBulletPhysics.cpp" />
+    <ClCompile Include="Physics\hrcPhysicsPhantom.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

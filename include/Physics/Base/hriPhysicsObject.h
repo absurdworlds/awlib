@@ -1,8 +1,7 @@
 
-#ifndef __HG_hriSceneNode__
-#define __HG_hriSceneNode__
+#ifndef __HG_hriPhysicsObject__
+#define __HG_hriPhysicsObject__
 
-#include <Base/hrTypes.h>
 #include <Base/hrVector3d.h>
 
 namespace hrengin
@@ -10,25 +9,23 @@ namespace hrengin
 
 class hriBaseEntity;
 
-namespace graphics
+namespace physics
 {
-	
 
-class hriSceneNode
+class hriCollisionShape;
+
+class hriPhysicsObject
 {
 	public:
 		virtual void AttachToEntity(hriBaseEntity* attach) = 0;
 
 		virtual void SetPosition(Vectorf3d pos) = 0;
 		virtual void SetRotation(Vectorf3d rot) = 0;
-		virtual void SetScale(Vectorf3d scale) = 0;
+		//virtual void SetScale(Vectorf3d scale) = 0;
 	protected:
-		Vector3d mPosition;
-		Vector3d mRotation;
 };
 
-	
-} // namespace graphics
+}	
 } // namespace hrengin
 
-#endif//__HG_hriSceneNode__
+#endif//__HG_hriPhysicsObject__

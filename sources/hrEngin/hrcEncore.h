@@ -4,7 +4,7 @@
 
 #include <hrEngin.h> 
 #include "Graphics/hrcVideoManager.h" 
-#include "PhysicsHavok/hrcHavokPhysics.h" 
+#include "Physics/hrcBulletPhysics.h" 
 
 
 namespace hrengin
