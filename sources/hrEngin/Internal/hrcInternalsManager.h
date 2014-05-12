@@ -7,7 +7,7 @@
 #include "../Graphics/hrcVideoManager.h"
 #include "../Physics/hrcBulletPhysics.h"
 
-#include <Irrlicht.h>
+#include <Irrlicht/Irrlicht.h>
 /*
 #if defined(_HR_PHYSICS_HAVOK)
 	#include "../PhysicsHavok/hrcHavokPhysics.h"

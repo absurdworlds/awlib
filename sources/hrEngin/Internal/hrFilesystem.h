@@ -2,7 +2,7 @@
 #ifndef __HG_Filesystem__
 #define __HG_Filesystem__
 
-#include <path.h>
+#include <Irrlicht/path.h>
 
 namespace hrengin
 {

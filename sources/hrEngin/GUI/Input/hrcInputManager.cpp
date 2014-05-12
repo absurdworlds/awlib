@@ -1,7 +1,7 @@
 
 #include "hrcInputManager.h"
 
-#include <Irrlicht.h>
+#include <Irrlicht/Irrlicht.h>
 
 namespace hrengin
 {

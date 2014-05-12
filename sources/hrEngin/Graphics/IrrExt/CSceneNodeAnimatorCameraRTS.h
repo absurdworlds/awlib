@@ -5,7 +5,7 @@
 #ifndef __C_SCENE_NODE_ANIMATOR_CAMERA_RTS_H_INCLUDED__
 #define __C_SCENE_NODE_ANIMATOR_CAMERA_RTS_H_INCLUDED__
 
-#include "irrlicht.h"
+#include "Irrlicht/irrlicht.h"
 #include "ISceneNodeAnimatorCameraRTS.h"
 
 namespace irr

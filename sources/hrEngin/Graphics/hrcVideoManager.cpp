@@ -5,7 +5,7 @@
 #include "Nodes/hrcLightNode.h"
 #include "../Internal/hrFilesystem.h"
 
-#include <Irrlicht.h>
+#include <Irrlicht/Irrlicht.h>
 
 
 namespace hrengin
