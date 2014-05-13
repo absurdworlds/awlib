@@ -7,7 +7,7 @@
 #include <Graphics/Nodes/hriVisNode.h>
 #include <Graphics/Base/hriVideoManager.h>
 
-#include <Irrlicht.h>
+#include <Irrlicht/Irrlicht.h>
 
 #include <array>
 

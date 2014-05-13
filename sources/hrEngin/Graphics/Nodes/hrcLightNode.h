@@ -6,7 +6,7 @@
 #include <Graphics/Base/hriVideoManager.h>
 #include <Base/Entities/hriBaseEntity.h>
 
-#include <Irrlicht.h>
+#include <Irrlicht/Irrlicht.h>
 
 namespace hrengin
 {

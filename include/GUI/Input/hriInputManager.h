@@ -19,14 +19,15 @@ namespace hrengin
 {
 namespace gui
 {
-
-typedef void (*OnInputCallback)(u32 Event);
 //class hriRayPicker;
 
 class hriInputManager
 {
 	public:
-		virtual u32 AddMouseEvent(u32 Button, OnInputCallback callback) = 0;
+		virtual u32 RegisterInputEvent(u32 Event, OnInputCallback callback) = 0;
+		virtual u32 RegisterMouseEvent(u32 Event, OnMouseEventCallback callback) = 0;
+		//don't see the need in this
+		//virtual u32 AddMouseEvent(u32 Event, OnInputCallback callback) = 0;
 
 };
 

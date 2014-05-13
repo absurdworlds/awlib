@@ -41,8 +41,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>E:\SDK\irrlicht-1.8.1\include;E:\SDK\gles_sdk\include;E:\RTSGame\External\include;$(IncludePath)</IncludePath>
-    <LibraryPath>E:\RTSGame\External\lib\win32-msvc-debug;E:\SDK\bullet-2.82-r2704\lib;E:\SDK\irrlicht-1.8.1\lib\Win32-visualstudio;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)..\..\External\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)..\..\External\lib\win32-msvc-debug;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -60,7 +60,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>BulletCollision_vs2010_debug.lib;BulletDynamics_vs2010_debug.lib;HACD_vs2010_debug.lib;LinearMath_vs2010_debug.lib;OpenGLSupport_vs2010.lib;Irrlicht.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>BulletCollision_vs2010_debug.lib;BulletDynamics_vs2010_debug.lib;HACD_vs2010_debug.lib;LinearMath_vs2010_debug.lib;OpenGLSupport_vs2010_debug.lib;Irrlicht.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <CustomBuildStep>
       <Command>

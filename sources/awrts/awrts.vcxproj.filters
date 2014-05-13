@@ -13,12 +13,21 @@
     <ClCompile Include="awrts.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Units\awUnit.cpp">
+      <Filter>Source Files\Unit</Filter>
+    </ClCompile>
+    <ClCompile Include="Units\awUnitType.cpp">
+      <Filter>Source Files\Unit</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="awMapManager.h">
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="Units\awUnit.h">
+      <Filter>Source Files\Unit</Filter>
+    </ClInclude>
+    <ClInclude Include="Units\awUnitType.h">
       <Filter>Source Files\Unit</Filter>
     </ClInclude>
   </ItemGroup>
