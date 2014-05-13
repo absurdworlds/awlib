@@ -79,10 +79,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="awrts.cpp" />
+    <ClCompile Include="Units\awUnit.cpp" />
+    <ClCompile Include="Units\awUnitType.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="awMapManager.h" />
     <ClInclude Include="Units\awUnit.h" />
+    <ClInclude Include="Units\awUnitType.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

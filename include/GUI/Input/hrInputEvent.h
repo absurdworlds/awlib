@@ -10,13 +10,19 @@ namespace gui
 {
 
 typedef void (*OnInputCallback)(u32 Event);
+typedef void (*OnMouseEventCallback)(u32 Event, i32 X, i32 Y);
 
 struct hrInputEvent
 {
-	OnInputCallback callback;
-	u32				inputEvent;
+	union
+	{
+		OnInputCallback			OnInput;
+		OnMouseEventCallback	OnMouseEvent;
+	};
+	
+	u32	inputEvent;
 
-	hrInputEvent(u32 pInputEvent, OnInputCallback pCallback) : callback(pCallback), inputEvent(pInputEvent) {}
+	//hrInputEvent(u32 pInputEvent, OnInputCallback pCallback) : OnInput(pCallback), inputEvent(pInputEvent) {}
 };
 
 } // namespace io

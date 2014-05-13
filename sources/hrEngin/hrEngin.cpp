@@ -17,7 +17,7 @@ HRENGIN_API hriEncore* KickstartEngine ()
 	return new hrcEncore();
 }
 
-HRENGIN_API hriEntityManager* GetManager ()
+HRENGIN_API hriEntityManager* GetEntManager ()
 {
 	return 0;
 }
@@ -61,9 +61,19 @@ HRENGIN_API hriPhysicsManager* GetManager ()
 
 namespace gui
 {
-HRENGIN_API hriGUIManager* Startup()
+HRENGIN_API hriGUIManager* GetManager ()
 {
 	return 0;
+}
+
+HRENGIN_API hriInputManager* GetInputManager ()
+{
+	if(!__HRIM.inputmgr)
+	{
+		__HRIM.inputmgr = new hrcInputManager();
+	}
+
+	return __HRIM.inputmgr;
 }
 
 } 

@@ -12,6 +12,7 @@
 #include "Graphics/Nodes/hriCameraNode.h"
 
 #include "GUI/Base/hriGUIManager.h"
+#include "GUI/Input/hriInputManager.h"
 #include "Physics/Base/hriPhysicsManager.h"
 
 namespace hrengin
@@ -36,8 +37,10 @@ HRENGIN_API hriPhysicsManager* GetManager ();
 
 namespace gui
 {
-HRENGIN_API hriGUIManager* Startup();
-} 
+HRENGIN_API hriGUIManager* GetManager ();
+
+HRENGIN_API hriInputManager* GetInputManager ();
+}
 
 } // namespace hrengin
 

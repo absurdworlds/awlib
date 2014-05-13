@@ -38,6 +38,8 @@ int main()
 	node->SetPosition(hrengin::Vectorf3d(-30,-11,0));
 	node->SetRotation(hrengin::Vectorf3d(0,-135,0));
 
+	//hrengin::gui::hriInputManager* InputMgr = hrengin::gui::GetInputManager();
+
 	do
 	{
 		if(!videomgr->Draw())
