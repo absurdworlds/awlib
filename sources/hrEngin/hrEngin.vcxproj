@@ -123,6 +123,7 @@
     <ClInclude Include="..\..\include\Physics\Base\hriPhysicsObject.h" />
     <ClInclude Include="..\..\include\Physics\hriPhysicsBody.h" />
     <ClInclude Include="..\..\include\Physics\hriPhysicsPhantom.h" />
+    <ClInclude Include="Base\hrcEncore.h" />
     <ClInclude Include="Base\hrcWorld.h" />
     <ClInclude Include="Graphics\hrcVideoManager.h" />
     <ClInclude Include="Graphics\IrrExt\CSceneNodeAnimatorCameraRTS.h" />
@@ -132,13 +133,13 @@
     <ClInclude Include="Graphics\Nodes\hrcLightNode.h" />
     <ClInclude Include="GUI\hrcGuiManager.h" />
     <ClInclude Include="GUI\Input\hrcInputManager.h" />
-    <ClInclude Include="hrcEncore.h" />
     <ClInclude Include="Internal\hrcInternalsManager.h" />
     <ClInclude Include="Internal\hrFilesystem.h" />
     <ClInclude Include="Physics\hrcBulletPhysics.h" />
     <ClInclude Include="Physics\hrcPhysicsPhantom.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Base\hrcEncore.cpp" />
     <ClCompile Include="Base\hrcWorld.cpp" />
     <ClCompile Include="Graphics\hrcVideoManager.cpp" />
     <ClCompile Include="Graphics\IrrExt\CSceneNodeAnimatorCameraRTS.cpp" />
@@ -147,7 +148,6 @@
     <ClCompile Include="Graphics\Nodes\hrcLightNode.cpp" />
     <ClCompile Include="GUI\hrcGuiManager.cpp" />
     <ClCompile Include="GUI\Input\hrcInputManager.cpp" />
-    <ClCompile Include="hrcEncore.cpp" />
     <ClCompile Include="hrEngin.cpp" />
     <ClCompile Include="Physics\hrcBulletPhysics.cpp" />
     <ClCompile Include="Physics\hrcPhysicsPhantom.cpp" />

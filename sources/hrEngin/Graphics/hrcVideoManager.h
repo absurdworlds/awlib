@@ -36,6 +36,8 @@ namespace irr
 namespace hrengin
 {
 
+	class hrcEncore;
+
 namespace gui
 {
 	class hrcGUIManager;
@@ -48,6 +50,7 @@ class hrcVisNode;
 
 class hrcVideoManager : public hriVideoManager
 {
+	friend class hrcEncore;
 	friend class hrcGUIManager;
 	public:
 		hrcVideoManager();

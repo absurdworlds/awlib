@@ -2,7 +2,7 @@
 #include <hrEngin.h>
 #include "Internal/hrcInternalsManager.h"
 #include "Internal/hrFilesystem.h"
-#include "hrcEncore.h"
+#include "Base/hrcEncore.h"
 
 #ifdef _HR_PHYSICS_HAVOK
 #include "Base/Config/HavokMagicSpells.h"
