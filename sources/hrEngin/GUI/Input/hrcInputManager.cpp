@@ -20,22 +20,27 @@ hrcInputManager::hrcInputManager()
 
 bool hrcInputManager::OnEvent(const irr::SEvent& event)
 {
-	u32 temporary_budlocod;
+	hrInputEvent inEvent;
 	if(event.EventType == irr::EET_MOUSE_INPUT_EVENT)
 	{
+		inEvent.type = inEvent.INPUT_MOUSE_EVENT;
+
 		switch(event.MouseInput.Event)
 		{
 		case irr::EMIE_LMOUSE_PRESSED_DOWN:
-			temporary_budlocod = 1;
+			inEvent.MouseInput.type = inEvent.MouseInput.MINPUT_LMB_PRESSED;
+			break;
+		default:
+			break;
 		}
 	}
 
 	
-	for(std::vector<hrInputEvent>::iterator it = mEvents.begin(); it != mEvents.end(); ++it)
+	for(std::vector<hriInputReceiver*>::iterator it = mReceivers.begin(); it != mReceivers.end(); ++it)
 	{
-		if((*it).inputEvent == temporary_budlocod)
+		if((*it)->IsEnabled())
 		{
-			(*it).OnMouseEvent(temporary_budlocod,event.MouseInput.X,event.MouseInput.Y);
+			(*it)->ReceiveInput(inEvent);
 		}
 	}
 
@@ -48,25 +53,17 @@ irr::gui::ICursorControl* hrcInputManager::GetCursorControl()
 	return CursorControl;
 }
 
-u32 hrcInputManager::RegisterInputEvent(u32 Event, OnInputCallback callback)
+bool hrcInputManager::RegisterReceiver(hriInputReceiver& receiver)
 {
-	hrInputEvent event;
-	event.OnInput = callback;
-	event.inputEvent = Event;
-	mEvents.push_back(event);
-	return mEvents.size()-1;
+	mReceivers.push_back(&receiver);
+	return true;
 }
 
-u32 hrcInputManager::RegisterMouseEvent(u32 Event, OnMouseEventCallback callback)
+bool hrcInputManager::UnregisterReceiver(hriInputReceiver& receiver)
 {
-	hrInputEvent event;
-	event.OnMouseEvent = callback;
-	event.inputEvent = Event;
-	mEvents.push_back(event);
-	return mEvents.size()-1;
+	//remove from mReceivers
+	return true;
 }
-
-
 
 } // namespace io
 } // namespace hrengin

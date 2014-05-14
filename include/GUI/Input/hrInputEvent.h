@@ -9,18 +9,35 @@ namespace hrengin
 namespace gui
 {
 
+/*
 typedef void (*OnInputCallback)(u32 Event);
 typedef void (*OnMouseEventCallback)(u32 Event, i32 X, i32 Y);
+*/
 
 struct hrInputEvent
 {
 	union
 	{
-		OnInputCallback			OnInput;
-		OnMouseEventCallback	OnMouseEvent;
+		struct MouseInput
+		{
+			enum MINPUT_TYPE
+			{
+				MINPUT_LMB_PRESSED = 0,
+				MINPUT_LMB_RELEASED,
+				MINPUT_COUNT
+			} type;
+
+			//MINPUT_TYPE type;
+			i32 X;
+			i32 Y;
+		} MouseInput;
 	};
 	
-	u32	inputEvent;
+	enum INPUTEVENT_TYPE
+	{
+		INPUT_MOUSE_EVENT = 0,
+		INPUT_EVENT_COUNT
+	} type;
 
 	//hrInputEvent(u32 pInputEvent, OnInputCallback pCallback) : OnInput(pCallback), inputEvent(pInputEvent) {}
 };

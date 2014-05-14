@@ -58,9 +58,6 @@
     <Filter Include="Include\Physics\Base">
       <UniqueIdentifier>{9c9fb47c-e1a6-4021-8ce4-b00f51e56dea}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Include\GUI\Base">
-      <UniqueIdentifier>{ad9ed011-d13d-434a-b5c0-c653dbc273c9}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source\Graphics\Base">
       <UniqueIdentifier>{aed2cd3b-0fc8-4046-8240-948b3c9f53bc}</UniqueIdentifier>
     </Filter>
@@ -81,6 +78,9 @@
     </Filter>
     <Filter Include="Source\Debug">
       <UniqueIdentifier>{57f82bce-e6f2-4aed-8e08-67c9e0dafab5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Example">
+      <UniqueIdentifier>{7742512e-3925-4ce2-b610-64c7ff54e918}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -130,9 +130,6 @@
     </ClInclude>
     <ClInclude Include="Graphics\IrrExt\CSceneNodeAnimatorCameraRTS.h">
       <Filter>Source\Graphics\IrrExt</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\Base\Config\hrConfig.h">
-      <Filter>Include\Base\Config</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\Base\Config\hrVersions.h">
       <Filter>Include\Base\Config</Filter>
@@ -188,9 +185,6 @@
     <ClInclude Include="..\..\include\Physics\Base\hriPhysicsManager.h">
       <Filter>Include\Physics\Base</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\GUI\Base\hriGUIManager.h">
-      <Filter>Include\GUI\Base</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\Base\hrVector3d.h">
       <Filter>Include\Base</Filter>
     </ClInclude>
@@ -238,6 +232,18 @@
     </ClInclude>
     <ClInclude Include="..\..\include\GUI\Input\hrInputEvent.h">
       <Filter>Include\GUI\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Base\Config\hrConfig.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\example\hrSampleProgramloop.h">
+      <Filter>Example</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Base\Entities\hriInputReceiver.h">
+      <Filter>Include\Base\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\GUI\Base\hriGUIManager.h">
+      <Filter>Include\GUI</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

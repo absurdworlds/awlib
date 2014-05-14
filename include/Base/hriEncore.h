@@ -5,7 +5,13 @@
 namespace hrengin
 {
 
-//The main class. Controls the spice, controls the universe.
+/*
+	Controls the spice, controls the universe.
+
+	This class was used to run the program loop, but now it handles
+	some of internal operations.
+
+*/
 class hriEncore
 {
 	public:

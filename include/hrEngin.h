@@ -11,7 +11,7 @@
 #include "Graphics/Nodes/hriVisNode.h"
 #include "Graphics/Nodes/hriCameraNode.h"
 
-#include "GUI/Base/hriGUIManager.h"
+#include "GUI/hriGUIManager.h"
 #include "GUI/Input/hriInputManager.h"
 #include "Physics/Base/hriPhysicsManager.h"
 

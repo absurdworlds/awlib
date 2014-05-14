@@ -27,14 +27,14 @@ class hrcInputManager : public hriInputManager, public irr::IEventReceiver
 {
 	public:
 		hrcInputManager();
-		u32 RegisterInputEvent(u32 Button, OnInputCallback callback);
-		u32 RegisterMouseEvent(u32 Event, OnMouseEventCallback callback);
+		virtual bool RegisterReceiver(hriInputReceiver& receiver);		
+		virtual bool UnregisterReceiver(hriInputReceiver& receiver);
 	public:
 		virtual irr::gui::ICursorControl* GetCursorControl();
 		virtual bool OnEvent(const irr::SEvent& event);
 	protected:
 		irr::gui::ICursorControl* CursorControl;
-		std::vector<hrInputEvent> mEvents;
+		std::vector<hriInputReceiver*> mReceivers;
 };
 
 

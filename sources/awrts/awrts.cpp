@@ -1,9 +1,11 @@
 
+#include <stdio.h>
+
 #define WIN32_LEAN_AND_MEAN
 #include <hrEngin.h>
 #pragma comment(lib, "hrEngin.lib")
-#include <stdio.h>
 
+#include "Players/CPlayerHuman.h"
 
 int main()
 {
@@ -12,8 +14,9 @@ int main()
 
 	hrengin::graphics::hriVideoManager* videomgr = hrengin::graphics::GetManager();
 
-	hrengin::graphics::hriCameraNode* camera = videomgr->CreateCamera();
-	camera->SetBehavior(hrengin::graphics::hriCameraNode::CAM_STRATEGIC);
+	//hrengin::graphics::hriCameraNode* camera = videomgr->CreateCamera();
+	awrts::IPlayer* TestPlayer = new awrts::CPlayerHuman(videomgr->CreateCamera());
+
 	videomgr->CreateLight();
 	hrengin::physics::hriPhysicsManager* phymgr = hrengin::physics::GetManager ();
 	

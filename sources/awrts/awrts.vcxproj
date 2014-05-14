@@ -32,7 +32,7 @@
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="..\RTS-Game-Debug.props" />
+    <!-- <Import Project="..\RTS-Game-Debug.props" /> -->
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
@@ -40,6 +40,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>false</LinkIncremental>
+    <IncludePath>$(SolutionDir)\..\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)\..\lib\win32-msvc-debug;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -79,13 +81,17 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="awrts.cpp" />
-    <ClCompile Include="Units\awUnit.cpp" />
-    <ClCompile Include="Units\awUnitType.cpp" />
+    <ClCompile Include="Players\CPlayerHuman.cpp" />
+    <ClCompile Include="Units\CUnit.cpp" />
+    <ClCompile Include="Units\CUnitType.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="awMapManager.h" />
-    <ClInclude Include="Units\awUnit.h" />
-    <ClInclude Include="Units\awUnitType.h" />
+    <ClInclude Include="awrts.h" />
+    <ClInclude Include="CMapManager.h" />
+    <ClInclude Include="Players\CPlayerHuman.h" />
+    <ClInclude Include="Players\IPlayer.h" />
+    <ClInclude Include="Units\CUnit.h" />
+    <ClInclude Include="Units\CUnitType.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

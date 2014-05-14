@@ -32,7 +32,7 @@
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="..\RTS-Game-Debug.props" />
+    <!-- <Import Project="..\RTS-Game-Debug.props" /> -->
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
@@ -98,11 +98,13 @@
     <None Include="todolist.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\example\hrSampleProgramloop.h" />
     <ClInclude Include="..\..\include\AI\hriBaseNavigator.h" />
     <ClInclude Include="..\..\include\AI\hriBasePathfinder.h" />
     <ClInclude Include="..\..\include\Base\Config\hrConfig.h" />
     <ClInclude Include="..\..\include\Base\Config\hrVersions.h" />
     <ClInclude Include="..\..\include\Base\Entities\hriBaseEntity.h" />
+    <ClInclude Include="..\..\include\Base\Entities\hriInputReceiver.h" />
     <ClInclude Include="..\..\include\Base\Entities\hriWorld.h" />
     <ClInclude Include="..\..\include\Base\hriEncore.h" />
     <ClInclude Include="..\..\include\Base\hriEntityManager.h" />

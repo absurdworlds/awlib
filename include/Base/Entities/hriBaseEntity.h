@@ -2,9 +2,11 @@
 #ifndef __HG_hriBaseEntity__
 #define __HG_hriBaseEntity__
 
-#include "Base/hrTypes.h"
 #include <vector>
 #include <algorithm>
+
+#include "Base/hrTypes.h"
+//#include "Base/IVirtualObject.h"
 
 namespace hrengin
 {
@@ -100,9 +102,10 @@ public:
 	//! sync all attached nodes and entities
 	virtual bool Sync() = 0;
 
-	//! Set position
-	virtual bool SetPosition() = 0;
-	virtual bool SetRotation() = 0;
+	// Methods to set entity's position and rotation.
+	// If entity has no position, use class hrengin::IAbstractEnity as it's base;
+	//virtual bool SetPosition() = 0;
+	//virtual bool SetRotation() = 0;
 	
 protected: /* Methods */
 	virtual void EnterDeleteQueue() = 0;
