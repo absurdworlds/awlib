@@ -3,6 +3,7 @@
 #define __HG_hriInputManager__
 
 #include <Base/hrTypes.h>
+#include <Base/Entities/hriInputReceiver.h>
 
 #include "hrInputEvent.h"
 
@@ -24,8 +25,8 @@ namespace gui
 class hriInputManager
 {
 	public:
-		virtual u32 RegisterInputEvent(u32 Event, OnInputCallback callback) = 0;
-		virtual u32 RegisterMouseEvent(u32 Event, OnMouseEventCallback callback) = 0;
+		virtual bool RegisterReceiver(hriInputReceiver& receiver) = 0;
+		virtual bool UnregisterReceiver(hriInputReceiver& receiver) = 0;
 		//don't see the need in this
 		//virtual u32 AddMouseEvent(u32 Event, OnInputCallback callback) = 0;
 
