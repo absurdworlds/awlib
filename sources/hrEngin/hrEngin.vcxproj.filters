@@ -93,8 +93,8 @@
     <ClCompile Include="Graphics\IrrExt\CSceneNodeAnimatorCameraRTS.cpp">
       <Filter>Source\Graphics\IrrExt</Filter>
     </ClCompile>
-    <ClCompile Include="hrcEncore.cpp">
-      <Filter>Source</Filter>
+    <ClCompile Include="Base\hrcEncore.cpp">
+      <Filter>Source\Base</Filter>
     </ClCompile>
     <ClCompile Include="Graphics\Nodes\hrcVisNode.cpp">
       <Filter>Source\Graphics\Nodes</Filter>
@@ -143,8 +143,8 @@
     <ClInclude Include="..\..\include\Base\Entities\hriWorld.h">
       <Filter>Include\Base\Entities</Filter>
     </ClInclude>
-    <ClInclude Include="hrcEncore.h">
-      <Filter>Source</Filter>
+    <ClInclude Include="Base\hrcEncore.h">
+      <Filter>Source\Base</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\Base\hriEncore.h">
       <Filter>Include\Base</Filter>

@@ -1,4 +1,8 @@
 
+#include <Irrlicht/irrlicht.h>
+
+#include "../Internal/hrcInternalsManager.h"
+
 #include "hrcEncore.h"
 
 namespace hrengin
@@ -12,8 +16,9 @@ hrcEncore::hrcEncore()
 
 u32 hrcEncore::GetTime()
 {
-	return 0;
+	return __HRIM.GetTime();
 }
+
 
 bool hrcEncore::Roar()
 {

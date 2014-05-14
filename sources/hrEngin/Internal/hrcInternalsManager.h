@@ -3,6 +3,7 @@
 #define __HG_hrcInternalsManager__
 
 #include <Base/hrTypes.h>
+#include "../Base/hrcEncore.h"
 #include "../GUI/Input/hrcInputManager.h"
 #include "../Graphics/hrcVideoManager.h"
 #include "../Physics/hrcBulletPhysics.h"
@@ -35,24 +36,26 @@ class hrcInternalsManager
 			return instance;
 		}
 
-		void Initialize()
+		/*void Initialize()
 		{
 			if(!timer)
 			{
 				timer = videomgr->GetDevice()->getTimer();
 			}
-		}
+		}*/
 		
 		u32 GetTime()
-		{
+		{			
+			static irr::ITimer* timer(videomgr->GetDevice()->getTimer());
 			return timer->getTime();
 		}
 		
 	public: /* data */
-		gui::hrcInputManager*		inputmgr;
+		hrengin::hrcEncore			encore; 
 		graphics::hrcVideoManager*	videomgr; 
+		gui::hrcInputManager*		inputmgr;
 		physics::hrcBulletPhysics*	physmgr;
-		irr::ITimer*			timer;
+		//irr::ITimer*				timer;
 
 	private:
 		hrcInternalsManager() {};
