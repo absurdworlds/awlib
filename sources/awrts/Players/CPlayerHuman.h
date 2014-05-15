@@ -12,7 +12,7 @@ namespace awrts
 
 // human-controlled human
 
-class CPlayerHuman : public IPlayer, public hrengin::hriInputReceiver
+class CPlayerHuman : public IPlayer, public hrengin::IControllable
 {
 public:
 	CPlayerHuman(hrengin::graphics::hriCameraNode* pPlayerCam);
