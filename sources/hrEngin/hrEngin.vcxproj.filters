@@ -239,11 +239,11 @@
     <ClInclude Include="..\..\example\hrSampleProgramloop.h">
       <Filter>Example</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\Base\Entities\hriInputReceiver.h">
-      <Filter>Include\Base\Entities</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\GUI\Base\hriGUIManager.h">
       <Filter>Include\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Base\Entities\IControllable.h">
+      <Filter>Include\Base\Entities</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -36,7 +36,7 @@ bool hrcInputManager::OnEvent(const irr::SEvent& event)
 	}
 
 	
-	for(std::vector<hriInputReceiver*>::iterator it = mReceivers.begin(); it != mReceivers.end(); ++it)
+	for(std::vector<IControllable*>::iterator it = mReceivers.begin(); it != mReceivers.end(); ++it)
 	{
 		if((*it)->IsEnabled())
 		{
@@ -53,13 +53,13 @@ irr::gui::ICursorControl* hrcInputManager::GetCursorControl()
 	return CursorControl;
 }
 
-bool hrcInputManager::RegisterReceiver(hriInputReceiver& receiver)
+bool hrcInputManager::RegisterReceiver(IControllable& receiver)
 {
 	mReceivers.push_back(&receiver);
 	return true;
 }
 
-bool hrcInputManager::UnregisterReceiver(hriInputReceiver& receiver)
+bool hrcInputManager::UnregisterReceiver(IControllable& receiver)
 {
 	//remove from mReceivers
 	return true;
