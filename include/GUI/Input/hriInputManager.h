@@ -25,8 +25,8 @@ namespace gui
 class hriInputManager
 {
 	public:
-		virtual bool RegisterReceiver(hriInputReceiver& receiver) = 0;
-		virtual bool UnregisterReceiver(hriInputReceiver& receiver) = 0;
+		virtual bool RegisterReceiver(IControllable& receiver) = 0;
+		virtual bool UnregisterReceiver(IControllable& receiver) = 0;
 		//don't see the need in this
 		//virtual u32 AddMouseEvent(u32 Event, OnInputCallback callback) = 0;
 
