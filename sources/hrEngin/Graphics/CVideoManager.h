@@ -1,0 +1,95 @@
+
+#ifndef __HG_CVideoManager_h__
+#define __HG_CVideoManager_h__
+
+#include <Graphics/Base/IVideoManager.h>
+#include <GUI/IGUIManager.h>
+#include <Graphics/Base/ISceneNode.h>
+#include <Graphics/Nodes/IVisNode.h>
+#include <Graphics/Nodes/ICameraNode.h>
+#include <Graphics/Nodes/ILightNode.h>
+
+#include <vector>
+
+namespace irr
+{
+	class IrrlichtDevice;
+
+	namespace video
+	{
+		class IVideoDriver;
+	}
+
+	namespace scene
+	{
+		class ISceneManager;
+		class IAnimatedMesh;
+		class ISceneCollisionManager;
+	}
+
+	namespace gui
+	{
+		class IGUIEnvironment;
+	}
+}
+
+namespace hrengin
+{
+
+	class CEncore;
+
+namespace gui
+{
+	class CGUIManager;
+}
+
+namespace graphics
+{
+
+class CVisNode;
+
+class CVideoManager : public IVideoManager
+{
+	friend class CEncore;
+	friend class CGUIManager;
+	public:
+		CVideoManager();
+		virtual ~CVideoManager();
+		virtual void CreateScene();
+		virtual bool Draw();
+		
+		virtual IVisNode* CreateVisObject();
+		virtual ICameraNode* CreateCamera();
+		virtual ILightNode* CreateLight();
+
+		virtual void AddNode(ISceneNode& node);
+		
+		virtual irr::scene::IAnimatedMesh* LoadMesh(const char * modelname);
+
+	// irrlicht access
+		virtual irr::IrrlichtDevice* GetDevice() const;
+
+		virtual irr::scene::ISceneManager* GetSceneMgr() const;
+		virtual irr::scene::ISceneCollisionManager* getCollManager() const {return 0;}
+
+	private:
+		std::vector<ISceneNode*> NodeList;
+
+		irr::IrrlichtDevice*				device;
+		irr::video::IVideoDriver*			driver;
+		irr::gui::IGUIEnvironment*			guienv;
+		irr::scene::ISceneManager*			scnmgr;
+		irr::scene::ISceneCollisionManager* colman;
+
+	/*// DEBUG:
+	#ifdef _DEBUG
+		bool __HRDEBUG_sceneCreated;
+	#endif*/
+
+};
+
+	
+} // namespace graphics
+} // namespace hrengin
+
+#endif//__HG_CVideoManager_h__

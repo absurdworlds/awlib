@@ -12,7 +12,7 @@ v. Storm in a bottle
 o Write sound wrapper
 o Write weapon class
 o Write players
-o remove guienv from graphics //don't need to do it anymore — hrcGUIManager now is a friend of hrcVideoManager
+o remove guienv from graphics //don't need to do it anymore — CGUIManager now is a friend of CVideoManager
 o Write logger
 o rewrite camera
 o prettify code

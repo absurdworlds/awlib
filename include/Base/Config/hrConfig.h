@@ -1,6 +1,5 @@
-
-#ifndef __HG_CONFIG_H__
-#define __HG_CONFIG_H__
+#ifndef __H_INCLUDED__HRENGIN_hrConfig
+#define __H_INCLUDED__HRENGIN_hrConfig
 
 #include "Base/Config/hrVersions.h"
 
@@ -70,4 +69,4 @@
 
 #define _HR_STR(arg) #arg
 
-#endif //__HG_CONFIG_H__
+#endif //__H_INCLUDED__HRENGIN_hrConfig

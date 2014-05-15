@@ -1,8 +1,8 @@
 
 #include <hrEngin.h>
-#include "Internal/hrcInternalsManager.h"
+#include "Internal/CInternalsManager.h"
 #include "Internal/hrFilesystem.h"
-#include "Base/hrcEncore.h"
+#include "Base/CEncore.h"
 
 #ifdef _HR_PHYSICS_HAVOK
 #include "Base/Config/HavokMagicSpells.h"
@@ -12,12 +12,12 @@
 namespace hrengin
 {
 
-HRENGIN_API hriEncore* KickstartEngine ()
+HRENGIN_API IEncore* KickstartEngine ()
 {
-	return new hrcEncore();
+	return new CEncore();
 }
 
-HRENGIN_API hriEntityManager* GetEntManager ()
+HRENGIN_API IEntityManager* GetEntManager ()
 {
 	return 0;
 }
@@ -25,11 +25,11 @@ HRENGIN_API hriEntityManager* GetEntManager ()
 
 namespace graphics
 {
-HRENGIN_API hriVideoManager* GetManager ()
+HRENGIN_API IVideoManager* GetManager ()
 {
 	if(!__HRIM.videomgr)
 	{
-		__HRIM.videomgr = new hrcVideoManager;
+		__HRIM.videomgr = new CVideoManager;
 	}
 	return __HRIM.videomgr;
 }
@@ -38,18 +38,18 @@ HRENGIN_API hriVideoManager* GetManager ()
 
 namespace physics
 {
-HRENGIN_API hriPhysicsManager* GetManager ()
+HRENGIN_API IPhysicsManager* GetManager ()
 {
 	if(!__HRIM.physmgr)
 	{
 		/*#ifdef _HR_PHYSICS_HAVOK
-		__HRIM.physmgr = new hrcHavokPhysics();
+		__HRIM.physmgr = new CHavokPhysics();
 		#elif defined(_HR_PHYSICS_NEWTON)
-		__HRIM.physmgr = new hrcNewtonPhysics();
+		__HRIM.physmgr = new CNewtonPhysics();
 		#endif*/
-		__HRIM.physmgr = new hrcBulletPhysics();
-		/*u32 shape = __HRIM.physmgr->MakeShape(hriPhysicsManager::PHYS_SHAPE_SPHERE,5.);
-		hriPhysicsPhantom* Phantom = __HRIM.physmgr->CreatePhantom(shape);
+		__HRIM.physmgr = new CBulletPhysics();
+		/*u32 shape = __HRIM.physmgr->MakeShape(IPhysicsManager::PHYS_SHAPE_SPHERE,5.);
+		IPhysicsPhantom* Phantom = __HRIM.physmgr->CreatePhantom(shape);
 		fprintf(stderr, "Object is: %d\n", Phantom);
 		fprintf(stderr, "Ray hit: %d\n", __HRIM.physmgr->CastRay(Vector3d(10.,10.,10.), Vector3d(0.,-10.,-10.)));*/
 	}
@@ -61,16 +61,16 @@ HRENGIN_API hriPhysicsManager* GetManager ()
 
 namespace gui
 {
-HRENGIN_API hriGUIManager* GetManager ()
+HRENGIN_API IGUIManager* GetManager ()
 {
 	return 0;
 }
 
-HRENGIN_API hriInputManager* GetInputManager ()
+HRENGIN_API IInputManager* GetInputManager ()
 {
 	if(!__HRIM.inputmgr)
 	{
-		__HRIM.inputmgr = new hrcInputManager();
+		__HRIM.inputmgr = new CInputManager();
 	}
 
 	return __HRIM.inputmgr;

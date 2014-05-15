@@ -1,8 +1,7 @@
-
 #ifndef __H_INCLUDED__HRENGIN_IControllable
 #define __H_INCLUDED__HRENGIN_IControllable
 
-#include "GUI/Input/hrInputEvent.h"
+#include "GUI/Input/InputEvent.h"
 
 namespace hrengin
 {
@@ -10,7 +9,7 @@ namespace hrengin
 class IControllable
 {
 public:
-	virtual bool ReceiveInput(gui::hrInputEvent input) = 0;
+	virtual bool ReceiveInput(gui::InputEvent input) = 0;
 	virtual bool IsEnabled() = 0;
 };
 

@@ -81,12 +81,15 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="awrts.cpp" />
+    <ClCompile Include="CApplication.cpp" />
+    <ClCompile Include="CMapManager.cpp" />
     <ClCompile Include="Players\CPlayerHuman.cpp" />
     <ClCompile Include="Units\CUnit.cpp" />
     <ClCompile Include="Units\CUnitType.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="awrts.h" />
+    <ClInclude Include="CApplication.h" />
     <ClInclude Include="CMapManager.h" />
     <ClInclude Include="Players\CPlayerHuman.h" />
     <ClInclude Include="Players\IPlayer.h" />

@@ -1,19 +1,18 @@
-
-#ifndef __HG_hrEngin_h__
-#define __HG_hrEngin_h__
+#ifndef __H_INCLUDED__HRENGIN_hrengin
+#define __H_INCLUDED__HRENGIN_hrengin
 
 #include "Base/Config/hrConfig.h" // the configuration file
 #include "Base/hrTypes.h"
-#include "Base/hriEncore.h"
-#include "Base/hriEntityManager.h"
+#include "Base/IEncore.h"
+#include "Base/IEntityManager.h"
 /**/
-#include "Graphics/Base/hriVideoManager.h"
-#include "Graphics/Nodes/hriVisNode.h"
-#include "Graphics/Nodes/hriCameraNode.h"
+#include "Graphics/Base/IVideoManager.h"
+#include "Graphics/Nodes/IVisNode.h"
+#include "Graphics/Nodes/ICameraNode.h"
 
-#include "GUI/hriGUIManager.h"
-#include "GUI/Input/hriInputManager.h"
-#include "Physics/Base/hriPhysicsManager.h"
+#include "GUI/IGUIManager.h"
+#include "GUI/Input/IInputManager.h"
+#include "Physics/Base/IPhysicsManager.h"
 
 namespace hrengin
 {
@@ -21,28 +20,28 @@ namespace hrengin
 /*Starters*/
 
 //! Stattup all
-HRENGIN_API hriEncore* KickstartEngine ();
+HRENGIN_API IEncore* KickstartEngine ();
 
-HRENGIN_API hriEntityManager* GetManager ();
+HRENGIN_API IEntityManager* GetManager ();
 
 namespace graphics
 {
-HRENGIN_API hriVideoManager* GetManager ();
+HRENGIN_API IVideoManager* GetManager ();
 }
 
 namespace physics
 {
-HRENGIN_API hriPhysicsManager* GetManager ();
+HRENGIN_API IPhysicsManager* GetManager ();
 } 
 
 namespace gui
 {
-HRENGIN_API hriGUIManager* GetManager ();
+HRENGIN_API IGUIManager* GetManager ();
 
-HRENGIN_API hriInputManager* GetInputManager ();
+HRENGIN_API IInputManager* GetInputManager ();
 }
 
 } // namespace hrengin
 
 
-#endif//__HG_hrEngin_h__
+#endif//__H_INCLUDED__HRENGIN_hrengin

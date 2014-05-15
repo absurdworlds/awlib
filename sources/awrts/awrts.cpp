@@ -2,25 +2,25 @@
 #include <stdio.h>
 
 #define WIN32_LEAN_AND_MEAN
-#include <hrEngin.h>
 #pragma comment(lib, "hrEngin.lib")
 
 #include "Players/CPlayerHuman.h"
 
+#include "awrts.h"
+
 int main()
 {
-	//hrengin::hriEncore* hrEngin = hrengin::KickstartEngine();
+	//hrengin::IEncore* hrEngin = hrengin::KickstartEngine();
 	bool b_runEngine = true;
-
-	hrengin::graphics::hriVideoManager* videomgr = hrengin::graphics::GetManager();
-
-	//hrengin::graphics::hriCameraNode* camera = videomgr->CreateCamera();
-	awrts::IPlayer* TestPlayer = new awrts::CPlayerHuman(videomgr->CreateCamera());
-
-	videomgr->CreateLight();
-	hrengin::physics::hriPhysicsManager* phymgr = hrengin::physics::GetManager ();
 	
-	hrengin::graphics::hriVisNode* node = videomgr->CreateVisObject();
+	awrts::CApplication app;
+
+	//hrengin::graphics::ICameraNode* camera = videomgr->CreateCamera();
+	awrts::IPlayer* TestPlayer = new awrts::CPlayerHuman(app.videomgr->CreateCamera());
+
+	app.videomgr->CreateLight();
+	
+	hrengin::graphics::IVisNode* node = app.videomgr->CreateVisObject();
 	node->AddMesh("ground.obj");
 	node->AddMesh("sotank.obj");
 	node->SetPosition(hrengin::Vectorf3d(0, 0, 0.635));
@@ -41,16 +41,16 @@ int main()
 	node->SetPosition(hrengin::Vectorf3d(-30,-11,0));
 	node->SetRotation(hrengin::Vectorf3d(0,-135,0));
 
-	//hrengin::gui::hriInputManager* InputMgr = hrengin::gui::GetInputManager();
+	//hrengin::gui::IInputManager* InputMgr = hrengin::gui::GetInputManager();
 
 	do
 	{
-		if(!videomgr->Draw())
+		if(!app.videomgr->Draw())
 		{
 			b_runEngine = false;
 		}
 		
-		if(!phymgr->Step())
+		if(!app.phymgr->Step())
 		{
 			b_runEngine = false;
 		}
@@ -58,6 +58,6 @@ int main()
 	while(b_runEngine);
 
 	//while (hrEngin->Roar());
-
+	
 	return 0;
 }

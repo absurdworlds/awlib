@@ -1,15 +1,15 @@
 #ifndef __H_INCLUDED__AWRTS_IPlayer
 #define __H_INCLUDED__AWRTS_IPlayer
 
-//#include <Base/Entities/hriInputReceiver.h>
-#include <Base/Entities/hriBaseEntity.h>
+//#include <Base/Entities/IInputReceiver.h>
+#include <Base/Entities/IBaseEntity.h>
 
 namespace awrts
 {
 
 // base player class
 
-class IPlayer : public hrengin::hriBaseEntity
+class IPlayer : public hrengin::IBaseEntity
 {
 	virtual void OnParentRemove()
 	{
@@ -22,6 +22,10 @@ protected:
 	{
 
 	}
+
+private:
+	virtual bool SetPosition() {return false;};
+	virtual bool SetRotation() {return false;};
 };
 
 }

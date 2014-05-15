@@ -1,11 +1,10 @@
+#ifndef __H_INCLUDED__HRENGIN_hrVersions
+#define __H_INCLUDED__HRENGIN_hrVersions
 
-#ifndef __HG_VERSIONS_H__
-#define __HG_VERSIONS_H__
-
-#define VER_storm_in_a_bottle 1
-#define VER_srantonwars 2
-
-#define _HR_CURRENTVER 01000
+#define VER_HRENGIN_A 01000
 
 
-#endif __HG_VERSIONS_H__
+#define _HR_CURRENTVER 00001
+
+
+#endif __H_INCLUDED__HRENGIN_hrVersions

@@ -31,9 +31,6 @@
     <Filter Include="Include\Base\Math">
       <UniqueIdentifier>{bb938a4e-2992-4ddf-9c3e-b9e5be07bb33}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Include\Base\Entities">
-      <UniqueIdentifier>{8355fa31-e8a1-40bf-b391-931ba225be34}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Include\Graphics\Base">
       <UniqueIdentifier>{6c391bcd-b53b-4c28-ba9c-a5ac2028e943}</UniqueIdentifier>
     </Filter>
@@ -58,9 +55,6 @@
     <Filter Include="Include\Physics\Base">
       <UniqueIdentifier>{9c9fb47c-e1a6-4021-8ce4-b00f51e56dea}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\Graphics\Base">
-      <UniqueIdentifier>{aed2cd3b-0fc8-4046-8240-948b3c9f53bc}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Include\GUI\Input">
       <UniqueIdentifier>{ad6b8575-7bf2-4f1a-be03-65cd6a25046d}</UniqueIdentifier>
     </Filter>
@@ -82,42 +76,48 @@
     <Filter Include="Example">
       <UniqueIdentifier>{7742512e-3925-4ce2-b610-64c7ff54e918}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Include\Base\Entities">
+      <UniqueIdentifier>{8355fa31-e8a1-40bf-b391-931ba225be34}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Include\Base\Filesystem">
+      <UniqueIdentifier>{159bea4d-7c71-44c5-ab83-42d7712f534f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="hrEngin.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Base\hrcWorld.cpp">
-      <Filter>Source\Base</Filter>
-    </ClCompile>
     <ClCompile Include="Graphics\IrrExt\CSceneNodeAnimatorCameraRTS.cpp">
       <Filter>Source\Graphics\IrrExt</Filter>
     </ClCompile>
-    <ClCompile Include="Base\hrcEncore.cpp">
+    <ClCompile Include="Base\CEncore.cpp">
       <Filter>Source\Base</Filter>
     </ClCompile>
-    <ClCompile Include="Graphics\Nodes\hrcVisNode.cpp">
+    <ClCompile Include="Base\CWorld.cpp">
+      <Filter>Source\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Nodes\CCameraNode.cpp">
       <Filter>Source\Graphics\Nodes</Filter>
     </ClCompile>
-    <ClCompile Include="Graphics\Nodes\hrcCameraNode.cpp">
+    <ClCompile Include="Graphics\Nodes\CLightNode.cpp">
       <Filter>Source\Graphics\Nodes</Filter>
     </ClCompile>
-    <ClCompile Include="Graphics\Nodes\hrcLightNode.cpp">
+    <ClCompile Include="Graphics\Nodes\CVisNode.cpp">
       <Filter>Source\Graphics\Nodes</Filter>
     </ClCompile>
-    <ClCompile Include="GUI\hrcGuiManager.cpp">
-      <Filter>Source\GUI</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics\hrcVideoManager.cpp">
+    <ClCompile Include="Graphics\CVideoManager.cpp">
       <Filter>Source\Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="GUI\Input\hrcInputManager.cpp">
+    <ClCompile Include="GUI\Input\CInputManager.cpp">
       <Filter>Source\GUI\Input</Filter>
     </ClCompile>
-    <ClCompile Include="Physics\hrcBulletPhysics.cpp">
+    <ClCompile Include="GUI\CGuiManager.cpp">
+      <Filter>Source\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Physics\CBulletPhysics.cpp">
       <Filter>Source\Physics</Filter>
     </ClCompile>
-    <ClCompile Include="Physics\hrcPhysicsPhantom.cpp">
+    <ClCompile Include="Physics\CPhysicsPhantom.cpp">
       <Filter>Source\Physics</Filter>
     </ClCompile>
   </ItemGroup>
@@ -125,125 +125,128 @@
     <ClInclude Include="..\..\include\hrEngin.h">
       <Filter>Include</Filter>
     </ClInclude>
-    <ClInclude Include="Base\hrcWorld.h">
-      <Filter>Source\Base</Filter>
-    </ClInclude>
     <ClInclude Include="Graphics\IrrExt\CSceneNodeAnimatorCameraRTS.h">
       <Filter>Source\Graphics\IrrExt</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\Base\Config\hrVersions.h">
-      <Filter>Include\Base\Config</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\Base\Math\hrMath.h">
       <Filter>Include\Base\Math</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\Base\hrTypes.h">
-      <Filter>Include\Base</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\Base\Entities\hriWorld.h">
-      <Filter>Include\Base\Entities</Filter>
-    </ClInclude>
-    <ClInclude Include="Base\hrcEncore.h">
-      <Filter>Source\Base</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\Base\hriEncore.h">
-      <Filter>Include\Base</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\Graphics\Base\hriSceneNode.h">
-      <Filter>Include\Graphics\Base</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\Graphics\Base\hriVideoManager.h">
-      <Filter>Include\Graphics\Base</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\Graphics\Nodes\hriCameraNode.h">
-      <Filter>Include\Graphics\Nodes</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\Graphics\Nodes\hriVisNode.h">
-      <Filter>Include\Graphics\Nodes</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\Graphics\Nodes\hriLightNode.h">
-      <Filter>Include\Graphics\Nodes</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\Base\hriEntityManager.h">
-      <Filter>Include\Base</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\Nodes\hrcVisNode.h">
-      <Filter>Source\Graphics\Nodes</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\Base\Entities\hriBaseEntity.h">
-      <Filter>Include\Base\Entities</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\AI\hriBaseNavigator.h">
-      <Filter>Include\AI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\AI\hriBasePathfinder.h">
-      <Filter>Include\AI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\Base\hrVector2d.h">
-      <Filter>Include\Base</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\Physics\Base\hriPhysicsManager.h">
-      <Filter>Include\Physics\Base</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\Base\hrVector3d.h">
-      <Filter>Include\Base</Filter>
-    </ClInclude>
     <ClInclude Include="Internal\hrFilesystem.h">
-      <Filter>Source\Internal</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\Nodes\hrcCameraNode.h">
-      <Filter>Source\Graphics\Nodes</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\GUI\Input\hriInputManager.h">
-      <Filter>Include\GUI\Input</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\Nodes\hrcLightNode.h">
-      <Filter>Source\Graphics\Nodes</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\hrcVideoManager.h">
-      <Filter>Source\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="GUI\Input\hrcInputManager.h">
-      <Filter>Source\GUI\Input</Filter>
-    </ClInclude>
-    <ClInclude Include="GUI\hrcGuiManager.h">
-      <Filter>Source\GUI</Filter>
-    </ClInclude>
-    <ClInclude Include="Internal\hrcInternalsManager.h">
       <Filter>Source\Internal</Filter>
     </ClInclude>
     <ClInclude Include="Graphics\IrrExt\ISceneNodeAnimatorCameraRTS.h">
       <Filter>Source\Graphics\IrrExt</Filter>
     </ClInclude>
-    <ClInclude Include="Physics\hrcBulletPhysics.h">
-      <Filter>Source\Physics</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\Physics\Base\hriPhysicsObject.h">
-      <Filter>Include\Physics\Base</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\Physics\hriPhysicsBody.h">
-      <Filter>Include\Physics</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\Physics\hriPhysicsPhantom.h">
-      <Filter>Include\Physics</Filter>
-    </ClInclude>
-    <ClInclude Include="Physics\hrcPhysicsPhantom.h">
-      <Filter>Source\Physics</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\GUI\Input\hrInputEvent.h">
-      <Filter>Include\GUI\Input</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\Base\Config\hrConfig.h">
-      <Filter>Include</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\example\hrSampleProgramloop.h">
       <Filter>Example</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\GUI\Base\hriGUIManager.h">
-      <Filter>Include\GUI</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\Base\Entities\IControllable.h">
       <Filter>Include\Base\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\gui\IGUIManager.h">
+      <Filter>Include\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Graphics\Base\ISceneNode.h">
+      <Filter>Include\Graphics\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Graphics\Base\IVideoManager.h">
+      <Filter>Include\Graphics\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Physics\IPhysicsBody.h">
+      <Filter>Include\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Physics\IPhysicsPhantom.h">
+      <Filter>Include\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Base\Vector3d.h">
+      <Filter>Include\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Base\Vector2d.h">
+      <Filter>Include\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Base\Entities\IWorld.h">
+      <Filter>Include\Base\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Base\Entities\IBaseEntity.h">
+      <Filter>Include\Base\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\AI\IBaseNavigator.h">
+      <Filter>Include\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\AI\IBasePathfinder.h">
+      <Filter>Include\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Physics\Base\IPhysicsManager.h">
+      <Filter>Include\Physics\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Physics\Base\IPhysicsObject.h">
+      <Filter>Include\Physics\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Base\Config\hrVersions.h">
+      <Filter>Include\Base\Config</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Base\Config\hrConfig.h">
+      <Filter>Include\Base\Config</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Base\hrTypes.h">
+      <Filter>Include\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Base\IEntityManager.h">
+      <Filter>Include\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Base\IEncore.h">
+      <Filter>Include\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\GUI\Input\IInputManager.h">
+      <Filter>Include\GUI\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\GUI\Input\InputEvent.h">
+      <Filter>Include\GUI\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Graphics\Nodes\ICameraNode.h">
+      <Filter>Include\Graphics\Nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Graphics\Nodes\ILightNode.h">
+      <Filter>Include\Graphics\Nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Graphics\Nodes\IVisNode.h">
+      <Filter>Include\Graphics\Nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Base\Filesystem\IFileReader.h">
+      <Filter>Include\Base\Filesystem</Filter>
+    </ClInclude>
+    <ClInclude Include="Base\CEncore.h">
+      <Filter>Source\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="Base\CWorld.h">
+      <Filter>Source\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Nodes\CCameraNode.h">
+      <Filter>Source\Graphics\Nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Nodes\CLightNode.h">
+      <Filter>Source\Graphics\Nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Nodes\CVisNode.h">
+      <Filter>Source\Graphics\Nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\CVideoManager.h">
+      <Filter>Source\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\Input\CInputManager.h">
+      <Filter>Source\GUI\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI\CGuiManager.h">
+      <Filter>Source\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Internal\CInternalsManager.h">
+      <Filter>Source\Internal</Filter>
+    </ClInclude>
+    <ClInclude Include="Physics\CBulletPhysics.h">
+      <Filter>Source\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Physics\CPhysicsPhantom.h">
+      <Filter>Source\Physics</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

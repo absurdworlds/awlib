@@ -25,11 +25,14 @@
     <ClCompile Include="Players\CPlayerHuman.cpp">
       <Filter>Source Files\Player</Filter>
     </ClCompile>
+    <ClCompile Include="CApplication.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CMapManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Units\CUnit.h">
-      <Filter>Source Files\Units</Filter>
-    </ClInclude>
     <ClInclude Include="Units\CUnitType.h">
       <Filter>Source Files\Units</Filter>
     </ClInclude>
@@ -43,6 +46,12 @@
       <Filter>Source Files\Player</Filter>
     </ClInclude>
     <ClInclude Include="awrts.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Units\CUnit.h">
+      <Filter>Source Files\Units</Filter>
+    </ClInclude>
+    <ClInclude Include="CApplication.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
