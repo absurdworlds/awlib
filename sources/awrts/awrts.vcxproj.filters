@@ -31,6 +31,9 @@
     <ClCompile Include="CMapManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Units\CUnitManager.cpp">
+      <Filter>Source Files\Units</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Units\CUnitType.h">
@@ -53,6 +56,12 @@
     </ClInclude>
     <ClInclude Include="CApplication.h">
       <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Units\CUnitManager.h">
+      <Filter>Source Files\Units</Filter>
+    </ClInclude>
+    <ClInclude Include="Units\CUnitGroup.h">
+      <Filter>Source Files\Units</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

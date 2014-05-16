@@ -5,6 +5,7 @@
 #pragma comment(lib, "hrEngin.lib")
 
 #include "Players/CPlayerHuman.h"
+#include "CApplication.h"
 
 #include "awrts.h"
 
@@ -13,7 +14,7 @@ int main()
 	//hrengin::IEncore* hrEngin = hrengin::KickstartEngine();
 	bool b_runEngine = true;
 	
-	awrts::CApplication app;
+	awrts::CApplication& app = awrts::CApplication::getInstance();
 
 	//hrengin::graphics::ICameraNode* camera = videomgr->CreateCamera();
 	awrts::IPlayer* TestPlayer = new awrts::CPlayerHuman(app.videomgr->CreateCamera());

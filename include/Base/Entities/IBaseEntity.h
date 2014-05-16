@@ -116,6 +116,9 @@ protected: /* Data */
 protected:	
 	//! make this class uninstanciable
 	IBaseEntity() {}
+
+	/// EntID is stored 
+	u32 mEntID; 
 };
 
 } // namespace hrengin

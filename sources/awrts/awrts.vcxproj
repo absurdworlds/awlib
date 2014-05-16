@@ -85,6 +85,7 @@
     <ClCompile Include="CMapManager.cpp" />
     <ClCompile Include="Players\CPlayerHuman.cpp" />
     <ClCompile Include="Units\CUnit.cpp" />
+    <ClCompile Include="Units\CUnitManager.cpp" />
     <ClCompile Include="Units\CUnitType.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -94,6 +95,8 @@
     <ClInclude Include="Players\CPlayerHuman.h" />
     <ClInclude Include="Players\IPlayer.h" />
     <ClInclude Include="Units\CUnit.h" />
+    <ClInclude Include="Units\CUnitGroup.h" />
+    <ClInclude Include="Units\CUnitManager.h" />
     <ClInclude Include="Units\CUnitType.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
