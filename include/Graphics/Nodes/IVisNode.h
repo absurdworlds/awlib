@@ -1,7 +1,7 @@
 #ifndef __H_INCLUDED__HRENGIN_IVisNode
 #define __H_INCLUDED__HRENGIN_IVisNode
 
-#include <Base/hrTypes.h>
+#include <Common/hrTypes.h>
 #include <Base/Entities/IBaseEntity.h>
 #include <Graphics/Base/ISceneNode.h>
 

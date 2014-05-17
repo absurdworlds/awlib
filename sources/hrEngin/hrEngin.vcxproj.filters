@@ -10,12 +10,6 @@
     <Filter Include="Source">
       <UniqueIdentifier>{6b1b5ef3-275c-46e7-98c1-52a31d26463a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Include\Base">
-      <UniqueIdentifier>{939ecb4e-5268-48cd-a02c-14c42945011d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\Base">
-      <UniqueIdentifier>{1abbf53d-cb28-418a-9122-061c8b600a34}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source\Graphics">
       <UniqueIdentifier>{b2f24e1b-beb8-4cf2-9e44-e7062fcb187a}</UniqueIdentifier>
     </Filter>
@@ -25,17 +19,8 @@
     <Filter Include="Include\Graphics">
       <UniqueIdentifier>{d1fd8c12-f5ce-4808-bc1b-1e97b9fdaabe}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Include\Base\Config">
-      <UniqueIdentifier>{5faedb19-0576-4882-bf1b-a00f6c49e88f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Include\Base\Math">
-      <UniqueIdentifier>{bb938a4e-2992-4ddf-9c3e-b9e5be07bb33}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Include\Graphics\Base">
       <UniqueIdentifier>{6c391bcd-b53b-4c28-ba9c-a5ac2028e943}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\Internal">
-      <UniqueIdentifier>{a88f5a14-2b65-4d73-9ec7-e1f5093a2717}</UniqueIdentifier>
     </Filter>
     <Filter Include="Include\Graphics\Nodes">
       <UniqueIdentifier>{ac6ede74-50bc-4bb5-89bc-5cf819e9368f}</UniqueIdentifier>
@@ -76,10 +61,22 @@
     <Filter Include="Example">
       <UniqueIdentifier>{7742512e-3925-4ce2-b610-64c7ff54e918}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Include\Base\Entities">
+    <Filter Include="Source\Common">
+      <UniqueIdentifier>{1abbf53d-cb28-418a-9122-061c8b600a34}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Include\Common">
+      <UniqueIdentifier>{939ecb4e-5268-48cd-a02c-14c42945011d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Include\Common\Config">
+      <UniqueIdentifier>{5faedb19-0576-4882-bf1b-a00f6c49e88f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Include\Common\Math">
+      <UniqueIdentifier>{bb938a4e-2992-4ddf-9c3e-b9e5be07bb33}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Include\Common\Entities">
       <UniqueIdentifier>{8355fa31-e8a1-40bf-b391-931ba225be34}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Include\Base\Filesystem">
+    <Filter Include="Include\Common\Filesystem">
       <UniqueIdentifier>{159bea4d-7c71-44c5-ab83-42d7712f534f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -89,12 +86,6 @@
     </ClCompile>
     <ClCompile Include="Graphics\IrrExt\CSceneNodeAnimatorCameraRTS.cpp">
       <Filter>Source\Graphics\IrrExt</Filter>
-    </ClCompile>
-    <ClCompile Include="Base\CEncore.cpp">
-      <Filter>Source\Base</Filter>
-    </ClCompile>
-    <ClCompile Include="Base\CWorld.cpp">
-      <Filter>Source\Base</Filter>
     </ClCompile>
     <ClCompile Include="Graphics\Nodes\CCameraNode.cpp">
       <Filter>Source\Graphics\Nodes</Filter>
@@ -120,6 +111,12 @@
     <ClCompile Include="Physics\CPhysicsPhantom.cpp">
       <Filter>Source\Physics</Filter>
     </ClCompile>
+    <ClCompile Include="Common\CEncore.cpp">
+      <Filter>Source\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Common\CWorld.cpp">
+      <Filter>Source\Common</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\hrEngin.h">
@@ -129,10 +126,7 @@
       <Filter>Source\Graphics\IrrExt</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\Base\Math\hrMath.h">
-      <Filter>Include\Base\Math</Filter>
-    </ClInclude>
-    <ClInclude Include="Internal\hrFilesystem.h">
-      <Filter>Source\Internal</Filter>
+      <Filter>Include\Common\Math</Filter>
     </ClInclude>
     <ClInclude Include="Graphics\IrrExt\ISceneNodeAnimatorCameraRTS.h">
       <Filter>Source\Graphics\IrrExt</Filter>
@@ -141,7 +135,7 @@
       <Filter>Example</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\Base\Entities\IControllable.h">
-      <Filter>Include\Base\Entities</Filter>
+      <Filter>Include\Common\Entities</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\gui\IGUIManager.h">
       <Filter>Include\GUI</Filter>
@@ -159,16 +153,16 @@
       <Filter>Include\Physics</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\Base\Vector3d.h">
-      <Filter>Include\Base</Filter>
+      <Filter>Include\Common</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\Base\Vector2d.h">
-      <Filter>Include\Base</Filter>
+      <Filter>Include\Common</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\Base\Entities\IWorld.h">
-      <Filter>Include\Base\Entities</Filter>
+      <Filter>Include\Common\Entities</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\Base\Entities\IBaseEntity.h">
-      <Filter>Include\Base\Entities</Filter>
+      <Filter>Include\Common\Entities</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\AI\IBaseNavigator.h">
       <Filter>Include\AI</Filter>
@@ -183,19 +177,16 @@
       <Filter>Include\Physics\Base</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\Base\Config\hrVersions.h">
-      <Filter>Include\Base\Config</Filter>
+      <Filter>Include\Common\Config</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\Base\Config\hrConfig.h">
-      <Filter>Include\Base\Config</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\Base\hrTypes.h">
-      <Filter>Include\Base</Filter>
+      <Filter>Include\Common\Config</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\Base\IEntityManager.h">
-      <Filter>Include\Base</Filter>
+      <Filter>Include\Common</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\Base\IEncore.h">
-      <Filter>Include\Base</Filter>
+      <Filter>Include\Common</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\GUI\Input\IInputManager.h">
       <Filter>Include\GUI\Input</Filter>
@@ -211,15 +202,6 @@
     </ClInclude>
     <ClInclude Include="..\..\include\Graphics\Nodes\IVisNode.h">
       <Filter>Include\Graphics\Nodes</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\Base\Filesystem\IFileReader.h">
-      <Filter>Include\Base\Filesystem</Filter>
-    </ClInclude>
-    <ClInclude Include="Base\CEncore.h">
-      <Filter>Source\Base</Filter>
-    </ClInclude>
-    <ClInclude Include="Base\CWorld.h">
-      <Filter>Source\Base</Filter>
     </ClInclude>
     <ClInclude Include="Graphics\Nodes\CCameraNode.h">
       <Filter>Source\Graphics\Nodes</Filter>
@@ -239,14 +221,38 @@
     <ClInclude Include="GUI\CGuiManager.h">
       <Filter>Source\GUI</Filter>
     </ClInclude>
-    <ClInclude Include="Internal\CInternalsManager.h">
-      <Filter>Source\Internal</Filter>
-    </ClInclude>
     <ClInclude Include="Physics\CBulletPhysics.h">
       <Filter>Source\Physics</Filter>
     </ClInclude>
     <ClInclude Include="Physics\CPhysicsPhantom.h">
       <Filter>Source\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\CEncore.h">
+      <Filter>Source\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\CInternalsManager.h">
+      <Filter>Source\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\CWorld.h">
+      <Filter>Source\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\hrFilesystem.h">
+      <Filter>Source\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Common\hrTypes.h">
+      <Filter>Include\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Base\Filesystem\IFileSystem.h">
+      <Filter>Include\Common\Filesystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Base\Filesystem\IFileParser.h">
+      <Filter>Include\Common\Filesystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Base\Filesystem\IReadFile.h">
+      <Filter>Include\Common\Filesystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\Base\Filesystem\IWriteFile.h">
+      <Filter>Include\Common\Filesystem</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

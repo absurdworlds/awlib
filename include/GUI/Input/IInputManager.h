@@ -1,7 +1,7 @@
 #ifndef __H_INCLUDED__HRENGIN_IInputManager
 #define __H_INCLUDED__HRENGIN_IInputManager
 
-#include <Base/hrTypes.h>
+#include <Common/hrTypes.h>
 #include <Base/Entities/IControllable.h>
 
 #include "InputEvent.h"

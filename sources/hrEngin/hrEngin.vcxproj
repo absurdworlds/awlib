@@ -106,13 +106,16 @@
     <ClInclude Include="..\..\include\Base\Entities\IBaseEntity.h" />
     <ClInclude Include="..\..\include\Base\Entities\IControllable.h" />
     <ClInclude Include="..\..\include\Base\Entities\IWorld.h" />
-    <ClInclude Include="..\..\include\Base\Filesystem\IFileReader.h" />
+    <ClInclude Include="..\..\include\Base\Filesystem\IFileParser.h" />
+    <ClInclude Include="..\..\include\Base\Filesystem\IFileSystem.h" />
+    <ClInclude Include="..\..\include\Base\Filesystem\IReadFile.h" />
+    <ClInclude Include="..\..\include\Base\Filesystem\IWriteFile.h" />
     <ClInclude Include="..\..\include\Base\IEncore.h" />
     <ClInclude Include="..\..\include\Base\IEntityManager.h" />
-    <ClInclude Include="..\..\include\Base\hrTypes.h" />
     <ClInclude Include="..\..\include\Base\Vector2d.h" />
     <ClInclude Include="..\..\include\Base\Vector3d.h" />
     <ClInclude Include="..\..\include\Base\Math\hrMath.h" />
+    <ClInclude Include="..\..\include\Common\hrTypes.h" />
     <ClInclude Include="..\..\include\Graphics\Base\ISceneNode.h" />
     <ClInclude Include="..\..\include\Graphics\Base\IVideoManager.h" />
     <ClInclude Include="..\..\include\Graphics\Nodes\ICameraNode.h" />
@@ -126,8 +129,10 @@
     <ClInclude Include="..\..\include\Physics\Base\IPhysicsObject.h" />
     <ClInclude Include="..\..\include\Physics\IPhysicsBody.h" />
     <ClInclude Include="..\..\include\Physics\IPhysicsPhantom.h" />
-    <ClInclude Include="Base\CEncore.h" />
-    <ClInclude Include="Base\CWorld.h" />
+    <ClInclude Include="Common\CEncore.h" />
+    <ClInclude Include="Common\CInternalsManager.h" />
+    <ClInclude Include="Common\CWorld.h" />
+    <ClInclude Include="Common\hrFilesystem.h" />
     <ClInclude Include="Graphics\CVideoManager.h" />
     <ClInclude Include="Graphics\IrrExt\CSceneNodeAnimatorCameraRTS.h" />
     <ClInclude Include="Graphics\IrrExt\ISceneNodeAnimatorCameraRTS.h" />
@@ -136,14 +141,12 @@
     <ClInclude Include="Graphics\Nodes\CLightNode.h" />
     <ClInclude Include="GUI\CGuiManager.h" />
     <ClInclude Include="GUI\Input\CInputManager.h" />
-    <ClInclude Include="Internal\CInternalsManager.h" />
-    <ClInclude Include="Internal\hrFilesystem.h" />
     <ClInclude Include="Physics\CBulletPhysics.h" />
     <ClInclude Include="Physics\CPhysicsPhantom.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Base\CEncore.cpp" />
-    <ClCompile Include="Base\CWorld.cpp" />
+    <ClCompile Include="Common\CEncore.cpp" />
+    <ClCompile Include="Common\CWorld.cpp" />
     <ClCompile Include="Graphics\CVideoManager.cpp" />
     <ClCompile Include="Graphics\IrrExt\CSceneNodeAnimatorCameraRTS.cpp" />
     <ClCompile Include="Graphics\Nodes\CCameraNode.cpp" />

@@ -9,7 +9,7 @@
 #include <limits.h>
 #include <float.h>
 
-#include "Base/hrTypes.h"
+#include "Common/hrTypes.h"
 
 
 namespace hrengin

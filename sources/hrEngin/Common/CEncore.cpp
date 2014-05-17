@@ -1,7 +1,7 @@
 
 #include <Irrlicht/irrlicht.h>
 
-#include "../Internal/CInternalsManager.h"
+#include "../Common/CInternalsManager.h"
 
 #include "CEncore.h"
 

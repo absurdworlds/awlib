@@ -6,6 +6,9 @@
 
 #include "Players/CPlayerHuman.h"
 #include "CApplication.h"
+#include "CMapManager.h"
+#include "Units/CUnitType.h"
+#include "Units/CUnitManager.h"
 
 #include "awrts.h"
 
@@ -18,12 +21,19 @@ int main()
 
 	//hrengin::graphics::ICameraNode* camera = videomgr->CreateCamera();
 	awrts::IPlayer* TestPlayer = new awrts::CPlayerHuman(app.videomgr->CreateCamera());
-
-	app.videomgr->CreateLight();
 	
-	hrengin::graphics::IVisNode* node = app.videomgr->CreateVisObject();
-	node->AddMesh("ground.obj");
-	node->AddMesh("sotank.obj");
+	app.mapmgr->loadMap("ground.obj");
+
+	awrts::CUnitType SOTank;	
+
+	SOTank.mID = 'Stnk';
+	SOTank.mVisualModelName = "sotank.obj";
+
+	app.unitmgr->addType(SOTank);
+	app.unitmgr->createUnit('Stnk');
+
+
+	/*node->AddMesh("sotank.obj");
 	node->SetPosition(hrengin::Vectorf3d(0, 0, 0.635));
 	node->AddMesh("sotank.obj");
 	node->SetPosition(hrengin::Vectorf3d(0, 10, 0.635));
@@ -40,7 +50,7 @@ int main()
 	node->SetRotation(hrengin::Vectorf3d(0,-135,0));
 	node->AddMesh("butransport.obj");
 	node->SetPosition(hrengin::Vectorf3d(-30,-11,0));
-	node->SetRotation(hrengin::Vectorf3d(0,-135,0));
+	node->SetRotation(hrengin::Vectorf3d(0,-135,0));*/
 
 	//hrengin::gui::IInputManager* InputMgr = hrengin::gui::GetInputManager();
 

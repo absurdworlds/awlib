@@ -5,8 +5,12 @@
 #include <hrEngin.h>
 
 
+
 namespace awrts
 {
+
+class CUnitManager;
+class CMapManager;
 
 class CApplication
 {
@@ -19,9 +23,11 @@ public:
 
 	void SetupTestScene();
 
-	hrengin::graphics::IVideoManager* videomgr;
 	hrengin::physics::IPhysicsManager* phymgr;
+	hrengin::graphics::IVideoManager* videomgr;
 	hrengin::IEntityManager* entmgr;
+	awrts::CUnitManager* unitmgr;
+	awrts::CMapManager* mapmgr;
 
 private:	
 	CApplication();

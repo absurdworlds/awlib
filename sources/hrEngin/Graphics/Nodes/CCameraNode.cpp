@@ -1,7 +1,7 @@
 
 #include "CCameraNode.h"
 #include "../IrrExt/CSceneNodeAnimatorCameraRTS.h"
-#include "../../Internal/CInternalsManager.h"
+#include "../../Common/CInternalsManager.h"
 
 namespace hrengin
 {

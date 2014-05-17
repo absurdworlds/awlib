@@ -1,6 +1,6 @@
 
 #include "CVisNode.h"
-#include "../../Internal/CInternalsManager.h"
+#include "../../Common/CInternalsManager.h"
 
 #include <algorithm>
 

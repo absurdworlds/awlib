@@ -1,7 +1,7 @@
 
 #include <stdio.h>
 
-#include "../Internal/CInternalsManager.h"
+#include "../Common/CInternalsManager.h"
 
 #include "CBulletPhysics.h"
 

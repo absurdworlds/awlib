@@ -1,9 +1,10 @@
 #ifndef __H_INCLUDED__AWRTS_CUnit
 #define __H_INCLUDED__AWRTS_CUnit
 
-#include <Base/hrTypes.h>
+#include <Common/hrTypes.h>
+#include <Base/Entities/IBaseEntity.h>
 
-#include "CUnitManager.h"
+//#include "CUnitManager.h"
 
 namespace hrengin
 {
@@ -22,17 +23,26 @@ namespace hrengin
 namespace awrts
 {
 	class CUnitType;
+	class CUnitManager;
 
-class CUnit
+class CUnit : public hrengin::IBaseEntity
 {
-	friend CUnit& CUnitManager::createUnit(CUnitType& pType);
+	friend class CUnitManager;
+	//friend CUnit& CUnitManager::createUnit(hrengin::u32 id);
 public:
+	CUnit(CUnitType& pType);
 	CUnitType& getUnitType();
 	hrengin::u32 getUnitTypeID();
 
-private:
-	CUnit(CUnitType& pType);
+	virtual void OnParentRemove() {};
 
+	virtual bool Sync() {return 0;};
+
+	virtual bool SetPosition() {return 0;};
+	virtual bool SetRotation() {return 0;};
+	virtual void EnterDeleteQueue() {};
+
+private:
 	CUnitType& mType;
 	hrengin::graphics::IVisNode*		mVisual;
 	hrengin::physics::IPhysicsPhantom*	mSelectionShape;

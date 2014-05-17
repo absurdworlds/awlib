@@ -2,9 +2,7 @@
 v. Storm in a bottle
 --A test version, unplayable in general sense
 	In currently developed version:
-о написать логику юнита
 о имплементировать юнит мовемент эйджент
-о сделать мап менеджер (плоский рельеф пока что)
 о написать оболочку дл€ курсорконтрол, перевод кликов в лучи
 о написать юнитселекшн
 
@@ -16,6 +14,9 @@ o remove guienv from graphics //don't need to do it anymore Ч CGUIManager now is
 o Write logger
 o rewrite camera
 o prettify code
+o write hrengin data file loader
+o write proper map manager
+o Make units attack each other
 
 
 	In version+2:
@@ -23,6 +24,7 @@ o Main menu
 o Basic ai
 o Buildings
 o Animation
+o Start write map landscape
 o Start navmesh navigation
 
 	In version+3

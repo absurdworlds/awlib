@@ -4,7 +4,7 @@
 #include <vector>
 #include <algorithm>
 
-#include "Base/hrTypes.h"
+#include "Common/hrTypes.h"
 //#include "Base/IVirtualObject.h"
 
 namespace hrengin

@@ -1,5 +1,9 @@
 
+#include "Units/CUnitManager.h"
+#include "CMapManager.h"
+
 #include "CApplication.h"
+
 
 namespace awrts
 {
@@ -7,8 +11,12 @@ namespace awrts
 CApplication::CApplication()
 {		
 	videomgr = hrengin::graphics::GetManager();
-		
+	videomgr->CreateLight();
+
 	phymgr = hrengin::physics::GetManager ();
+
+	unitmgr = new CUnitManager();
+	mapmgr = new CMapManager();
 }
 
 void CApplication::SetupTestScene()

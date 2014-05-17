@@ -2,7 +2,7 @@
 #ifndef __HG_hrInputEvent__
 #define __HG_hrInputEvent__
 
-#include <Base/hrTypes.h>
+#include <Common/hrTypes.h>
 
 namespace hrengin
 {

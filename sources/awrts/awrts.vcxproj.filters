@@ -16,9 +16,6 @@
     <ClCompile Include="Units\CUnit.cpp">
       <Filter>Source Files\Units</Filter>
     </ClCompile>
-    <ClCompile Include="Units\CUnitType.cpp">
-      <Filter>Source Files\Units</Filter>
-    </ClCompile>
     <ClCompile Include="awrts.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

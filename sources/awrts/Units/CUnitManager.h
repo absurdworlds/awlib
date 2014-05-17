@@ -2,8 +2,13 @@
 #define __H_INCLUDED__AWRTS_CUnitManager
 
 #include <vector>
+#include <unordered_map>
 
-//#include "CUnit.h"
+#include <Common/hrTypes.h>
+
+#include "CUnitType.h"
+#include "CUnit.h"
+
 
 namespace awrts
 {
@@ -11,12 +16,15 @@ namespace awrts
 class CUnit;
 class CUnitType;
 
-class 
+class CUnitManager
 {
 public:
-	CUnit& CUnitManager(CUnitType& pType);
+	CUnit& createUnit(hrengin::u32 id);
+	void addType(CUnitType type);
 private:
 	std::vector<CUnit> mUnits;
+	//std::vector<CUnitType> mUnitTypes;
+	std::unordered_map<hrengin::u32,CUnitType> mUnitTypes;
 
 };
 

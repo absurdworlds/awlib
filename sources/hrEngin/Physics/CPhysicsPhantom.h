@@ -7,7 +7,7 @@
 #include <Bullet/btBulletDynamicsCommon.h>
 #include <Bullet/btBulletCollisionCommon.h>
 
-#include <Base/hrTypes.h>
+#include <Common/hrTypes.h>
 #include <Physics/IPhysicsPhantom.h>
 
 namespace hrengin

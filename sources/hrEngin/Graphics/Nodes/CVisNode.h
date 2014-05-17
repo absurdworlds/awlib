@@ -2,7 +2,7 @@
 #ifndef __HG_CVisNode__
 #define __HG_CVisNode__
 
-#include <Base/hrTypes.h>
+#include <Common/hrTypes.h>
 #include <Base/Entities/IBaseEntity.h>
 #include <Graphics/Nodes/IVisNode.h>
 #include <Graphics/Base/IVideoManager.h>

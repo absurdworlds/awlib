@@ -2,7 +2,7 @@
 #define __H_INCLUDED__HRENGIN_hrengin
 
 #include "Base/Config/hrConfig.h" // the configuration file
-#include "Base/hrTypes.h"
+#include "Common/hrTypes.h"
 #include "Base/IEncore.h"
 #include "Base/IEntityManager.h"
 /**/

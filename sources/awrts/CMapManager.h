@@ -1,6 +1,7 @@
 #ifndef __H_INCLUDED__AWRTS_CMapManager
 #define __H_INCLUDED__AWRTS_CMapManager
 
+
 namespace awrts 
 {
 	class CMapManager
@@ -10,7 +11,7 @@ namespace awrts
 
 	private:
 
-	}
+	};
 
 }
 

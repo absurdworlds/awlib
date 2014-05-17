@@ -3,7 +3,7 @@
 #include "Nodes/CVisNode.h"
 #include "Nodes/CCameraNode.h"
 #include "Nodes/CLightNode.h"
-#include "../Internal/hrFilesystem.h"
+#include "../Common/hrFilesystem.h"
 
 #include <Irrlicht/Irrlicht.h>
 
@@ -25,7 +25,6 @@ CVideoManager::CVideoManager()
 	}*/
 
 	device->setWindowCaption(L"hrEngine - Irrlicht 1.8.1");
-	
 	driver = device->getVideoDriver();
 	scnmgr = device->getSceneManager();
 	guienv = device->getGUIEnvironment();
@@ -77,7 +76,7 @@ bool CVideoManager::Draw()
 		}
 		else
 		{
-			//device->yield();
+			device->yield();
 		}
 
 		return true;

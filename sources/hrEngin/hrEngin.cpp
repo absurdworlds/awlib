@@ -1,8 +1,8 @@
 
 #include <hrEngin.h>
-#include "Internal/CInternalsManager.h"
-#include "Internal/hrFilesystem.h"
-#include "Base/CEncore.h"
+#include "Common/CInternalsManager.h"
+#include "Common/hrFilesystem.h"
+#include "Common/CEncore.h"
 
 #ifdef _HR_PHYSICS_HAVOK
 #include "Base/Config/HavokMagicSpells.h"

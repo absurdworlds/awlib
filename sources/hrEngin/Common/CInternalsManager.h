@@ -2,8 +2,8 @@
 #ifndef __HG_CInternalsManager__
 #define __HG_CInternalsManager__
 
-#include <Base/hrTypes.h>
-#include "../Base/CEncore.h"
+#include <Common/hrTypes.h>
+#include "../Common/CEncore.h"
 #include "../GUI/Input/CInputManager.h"
 #include "../Graphics/CVideoManager.h"
 #include "../Physics/CBulletPhysics.h"

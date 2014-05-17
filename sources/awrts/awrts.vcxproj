@@ -86,7 +86,6 @@
     <ClCompile Include="Players\CPlayerHuman.cpp" />
     <ClCompile Include="Units\CUnit.cpp" />
     <ClCompile Include="Units\CUnitManager.cpp" />
-    <ClCompile Include="Units\CUnitType.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="awrts.h" />
