@@ -29,15 +29,50 @@ void CCameraNode::AttachToEntity(IBaseEntity* attach)
 
 }
 
-void CCameraNode::SetPosition(Vectorf3d pos)
+IBaseEntity* CCameraNode::castRayFromScreen(hrengin::i32 x, hrengin::i32 y)
+{
+	irr::scene::ISceneCollisionManager* colman = __HRIM.videomgr->getCollManager();
+	irr::core::line3df line = colman->getRayFromScreenCoordinates(irr::core::vector2di(x,y), node);
+	irr::core::plane3df plane(node->getViewFrustum()->planes[irr::scene::SViewFrustum::VF_FAR_PLANE]);
+	irr::core::vector3df vec;
+	
+	plane.getIntersectionWithLine(line.start, line.getVector(), vec);
+	Vectorf3d end(vec.X,
+				  vec.Y,
+				  vec.Z);
+	Vectorf3d start(end.X,
+				   50.,
+				   end.Z);
+	/*printf("--mous--\n");
+	printf("%d\n",x);
+	printf("%d\n",y);
+	printf("--line--\n");
+	printf("%.5f\n",start.X);
+	printf("%.5f\n",start.Y);
+	printf("%.5f\n",start.Z);
+	printf("--end--\n");
+	printf("%.5f\n",end.X);
+	printf("%.5f\n",end.Y);
+	printf("%.5f\n",end.Z);*/
+
+	if(__HRIM.physmgr->castRay(start, end))
+	{
+		printf("!\n");
+		/*
+		printf("%d\n",__HRIM.physmgr);
+		printf("%d\n",__HRIM.physmgr->castRay(start, end));*/
+		return __HRIM.physmgr->castRay(start, end)->getEntity();
+	};
+	
+	return 0;
+	
+}
+
+void CCameraNode::setPosition(Vector3d pos)
 {
 
 }
-void CCameraNode::SetRotation(Vectorf3d rot)
-{
-
-}
-void CCameraNode::SetScale(Vectorf3d scale)
+void CCameraNode::setRotation(Vector3d rot)
 {
 
 }
@@ -47,11 +82,11 @@ void CCameraNode::SetDistance(f64 dist)
 
 }
 
-void CCameraNode::SetTargetPosition(Vectorf3d pos)
+void CCameraNode::SetTargetPosition(Vector3d pos)
 {
 
 }
-void CCameraNode::SetCameraPosition(Vectorf3d pos)
+void CCameraNode::SetCameraPosition(Vector3d pos)
 {
 
 }

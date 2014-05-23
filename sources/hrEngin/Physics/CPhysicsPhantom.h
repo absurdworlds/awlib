@@ -1,6 +1,5 @@
-
-#ifndef __HG_CPhysicsPhantom__
-#define __HG_CPhysicsPhantom__
+#ifndef __H_INCLUDED__HRENGIN_CPhysicsPhantom
+#define __H_INCLUDED__HRENGIN_CPhysicsPhantom
 
 #include <stdio.h>
 
@@ -21,10 +20,11 @@ class CPhysicsPhantom : public IPhysicsPhantom
 		CPhysicsPhantom(btCollisionObject* pCollObject);
 		CPhysicsPhantom(btCollisionObject* pCollObject, IBaseEntity* pAttach);
 
-		virtual void AttachToEntity(IBaseEntity* pAttach) {};
+		virtual void attachToEntity(IBaseEntity* pAttach) {AttachedTo = pAttach;};
+		virtual IBaseEntity* getEntity();;
 
-		virtual void SetPosition(Vectorf3d pos) {};
-		virtual void SetRotation(Vectorf3d rot) {};
+		virtual void setPosition(Vector3d pos);
+		virtual void setRotation(Vector3d rot) {};
 
 	protected:
 		IBaseEntity* AttachedTo;
@@ -34,4 +34,4 @@ class CPhysicsPhantom : public IPhysicsPhantom
 }	
 } // namespace hrengin
 
-#endif//__HG_CPhysicsPhantom__
+#endif//__H_INCLUDED__HRENGIN_CPhysicsPhantom

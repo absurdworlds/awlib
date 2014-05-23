@@ -119,6 +119,11 @@ irr::scene::ISceneManager* CVideoManager::GetSceneMgr() const
 	return scnmgr;
 }
 
+irr::scene::ISceneCollisionManager* CVideoManager::getCollManager() const
+{
+	return scnmgr->getSceneCollisionManager();
+}
+
 irr::IrrlichtDevice*  CVideoManager::GetDevice() const
 {
 	return device;

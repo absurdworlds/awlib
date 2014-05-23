@@ -20,7 +20,7 @@ CInputManager::CInputManager()
 
 bool CInputManager::OnEvent(const irr::SEvent& event)
 {
-	InputEvent inEvent;
+	InputEvent inEvent = InputEvent();
 	if(event.EventType == irr::EET_MOUSE_INPUT_EVENT)
 	{
 		inEvent.type = inEvent.INPUT_MOUSE_EVENT;
@@ -28,14 +28,11 @@ bool CInputManager::OnEvent(const irr::SEvent& event)
 		switch(event.MouseInput.Event)
 		{
 		case irr::EMIE_LMOUSE_PRESSED_DOWN:
-			inEvent.MouseInput.type = inEvent.MouseInput.MINPUT_LMB_PRESSED;
-			break;
-		default:
-			break;
-		}
-	}
+			inEvent.MouseInput.type = InputEvent::MINPUT_LMB_PRESSED;
+			inEvent.MouseInput.X = event.MouseInput.X;
+			inEvent.MouseInput.Y = event.MouseInput.Y;
 
-	
+
 	for(std::vector<IControllable*>::iterator it = mReceivers.begin(); it != mReceivers.end(); ++it)
 	{
 		if((*it)->IsEnabled())
@@ -43,6 +40,13 @@ bool CInputManager::OnEvent(const irr::SEvent& event)
 			(*it)->ReceiveInput(inEvent);
 		}
 	}
+			break;
+		default:
+			inEvent.MouseInput.type = static_cast<InputEvent::MINPUT_TYPE>(999999);
+			break;
+		}
+	}
+
 
 	return false;
 }

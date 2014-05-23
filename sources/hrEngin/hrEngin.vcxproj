@@ -40,7 +40,6 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <LinkIncremental>false</LinkIncremental>
     <IncludePath>$(SolutionDir)\..\include;$(SolutionDir)..\..\External\include;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)..\..\External\lib\win32-msvc-debug;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
@@ -103,7 +102,6 @@
     <ClInclude Include="..\..\include\AI\IBasePathfinder.h" />
     <ClInclude Include="..\..\include\Base\Config\hrConfig.h" />
     <ClInclude Include="..\..\include\Base\Config\hrVersions.h" />
-    <ClInclude Include="..\..\include\Base\Entities\IBaseEntity.h" />
     <ClInclude Include="..\..\include\Base\Entities\IControllable.h" />
     <ClInclude Include="..\..\include\Base\Entities\IWorld.h" />
     <ClInclude Include="..\..\include\Base\Filesystem\IFileParser.h" />
@@ -116,6 +114,8 @@
     <ClInclude Include="..\..\include\Base\Vector3d.h" />
     <ClInclude Include="..\..\include\Base\Math\hrMath.h" />
     <ClInclude Include="..\..\include\Common\hrTypes.h" />
+    <ClInclude Include="..\..\include\Entities\IBaseEntity.h" />
+    <ClInclude Include="..\..\include\Entities\IParentable.h" />
     <ClInclude Include="..\..\include\Graphics\Base\ISceneNode.h" />
     <ClInclude Include="..\..\include\Graphics\Base\IVideoManager.h" />
     <ClInclude Include="..\..\include\Graphics\Nodes\ICameraNode.h" />
@@ -133,6 +133,7 @@
     <ClInclude Include="Common\CInternalsManager.h" />
     <ClInclude Include="Common\CWorld.h" />
     <ClInclude Include="Common\hrFilesystem.h" />
+    <ClInclude Include="Entities\CEntityManager.h" />
     <ClInclude Include="Graphics\CVideoManager.h" />
     <ClInclude Include="Graphics\IrrExt\CSceneNodeAnimatorCameraRTS.h" />
     <ClInclude Include="Graphics\IrrExt\ISceneNodeAnimatorCameraRTS.h" />
@@ -147,6 +148,7 @@
   <ItemGroup>
     <ClCompile Include="Common\CEncore.cpp" />
     <ClCompile Include="Common\CWorld.cpp" />
+    <ClCompile Include="Entities\CEntityManager.cpp" />
     <ClCompile Include="Graphics\CVideoManager.cpp" />
     <ClCompile Include="Graphics\IrrExt\CSceneNodeAnimatorCameraRTS.cpp" />
     <ClCompile Include="Graphics\Nodes\CCameraNode.cpp" />

@@ -64,7 +64,7 @@ CBulletPhysics::~CBulletPhysics()
 	delete m_collisionConfiguration;	
 }
 
-u32 CBulletPhysics::MakeShape(IPhysicsManager::PHYS_BUILTIN_SHAPES type, f32 x, f32 y, f32 z)
+u32 CBulletPhysics::makeShape(IPhysicsManager::PhysShape type, f32 x, f32 y, f32 z)
 {
 	//rewrite to switch
 	if(type == PHYS_SHAPE_BOX)
@@ -99,7 +99,7 @@ u32 CBulletPhysics::MakeShape(IPhysicsManager::PHYS_BUILTIN_SHAPES type, f32 x, 
 	return m_collisionShapes.size()-1;
 }
 
-IPhysicsPhantom* CBulletPhysics::CreatePhantom(const u32 shapeid) 
+IPhysicsPhantom* CBulletPhysics::createPhantom(const u32 shapeid) 
 {
 	btTransform defaultTransform;
 	defaultTransform.setIdentity();
@@ -116,7 +116,7 @@ IPhysicsPhantom* CBulletPhysics::CreatePhantom(const u32 shapeid)
 	return new CPhysicsPhantom(collObject);
 };
 
-IPhysicsObject* CBulletPhysics::CastRay(Vectorf3d from, Vectorf3d to)
+IPhysicsObject* CBulletPhysics::castRay(Vectorf3d from, Vectorf3d to)
 {
 	btVector3 btfrom = btVector3(from.X,from.Y,from.Z);
 	btVector3 btto = btVector3(to.X,to.Y,to.Z);
@@ -131,7 +131,7 @@ IPhysicsObject* CBulletPhysics::CastRay(Vectorf3d from, Vectorf3d to)
 	return 0;
 }
 
-bool CBulletPhysics::Step()
+bool CBulletPhysics::step()
 {
 	//simple dynamics world doesn't handle fixed-time-stepping
 	float ms = getDeltaTime();

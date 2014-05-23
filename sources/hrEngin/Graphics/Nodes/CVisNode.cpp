@@ -30,19 +30,20 @@ void CVisNode::AttachToEntity(IBaseEntity* attach)
 
 }
 
-void CVisNode::SetPosition(Vectorf3d pos)
+void CVisNode::setPosition(Vector3d pos)
 {
-	meshSlots[lastFreeSlot-1]->setPosition(irr::core::vector3df(pos.Y,pos.Z,pos.X));
+	for(i8 idx = 0; idx < lastFreeSlot; idx++)
+	{
+		meshSlots[idx]->setPosition(irr::core::vector3df(pos.X,pos.Y,pos.Z));
+	}
 }
 
-void CVisNode::SetRotation(Vectorf3d rot)
+void CVisNode::setRotation(Vector3d rot)
 {	
-	meshSlots[lastFreeSlot-1]->setRotation(irr::core::vector3df(rot.X,rot.Y,rot.Z));
-}
-
-void CVisNode::SetScale(Vectorf3d scale)
-{
-
+	for(i8 idx = 0; idx < lastFreeSlot; idx++)
+	{
+		meshSlots[idx]->setRotation(irr::core::vector3df(rot.X,rot.Y,rot.Z));
+	}
 }
 
 i8 CVisNode::AddMesh(char * meshname)
@@ -51,7 +52,7 @@ i8 CVisNode::AddMesh(char * meshname)
 	{
 		irr::scene::IAnimatedMesh* mesh = __HRIM.videomgr->LoadMesh(meshname);
 		meshSlots[lastFreeSlot] = __HRIM.videomgr->GetSceneMgr()->addAnimatedMeshSceneNode(mesh);
-		lastFreeSlot++;
+		++lastFreeSlot;
 		return lastFreeSlot-1;
 	}
 	else

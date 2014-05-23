@@ -18,15 +18,11 @@ namespace graphics
 
 	}
 
-	void CLightNode::SetPosition(Vectorf3d pos)
+	void CLightNode::setPosition(Vector3d pos)
 	{
 
 	}
-	void CLightNode::SetRotation(Vectorf3d rot)
-	{
-
-	}
-	void CLightNode::SetScale(Vectorf3d scale)
+	void CLightNode::setRotation(Vector3d rot)
 	{
 
 	}

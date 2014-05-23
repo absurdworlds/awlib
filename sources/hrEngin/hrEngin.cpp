@@ -17,9 +17,13 @@ HRENGIN_API IEncore* KickstartEngine ()
 	return new CEncore();
 }
 
-HRENGIN_API IEntityManager* GetEntManager ()
+HRENGIN_API IEntityManager* GetManager ()
 {
-	return 0;
+	if(!__HRIM.entmgr)
+	{
+		__HRIM.entmgr = new CEntityManager();
+	}
+	return __HRIM.entmgr;
 }
 
 
@@ -50,8 +54,7 @@ HRENGIN_API IPhysicsManager* GetManager ()
 		__HRIM.physmgr = new CBulletPhysics();
 		/*u32 shape = __HRIM.physmgr->MakeShape(IPhysicsManager::PHYS_SHAPE_SPHERE,5.);
 		IPhysicsPhantom* Phantom = __HRIM.physmgr->CreatePhantom(shape);
-		fprintf(stderr, "Object is: %d\n", Phantom);
-		fprintf(stderr, "Ray hit: %d\n", __HRIM.physmgr->CastRay(Vector3d(10.,10.,10.), Vector3d(0.,-10.,-10.)));*/
+		fprintf(stderr, "Object is: %d\n", Phantom);*/
 	}
 
 	return __HRIM.physmgr;
@@ -76,7 +79,7 @@ HRENGIN_API IInputManager* GetInputManager ()
 	return __HRIM.inputmgr;
 }
 
-} 
+} //end namespace gui
 
 }
 

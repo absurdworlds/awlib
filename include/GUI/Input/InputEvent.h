@@ -16,16 +16,17 @@ typedef void (*OnMouseEventCallback)(u32 Event, i32 X, i32 Y);
 
 struct InputEvent
 {
-	union
-	{
-		struct MouseInput
-		{
-			enum MINPUT_TYPE
+	enum MINPUT_TYPE
 			{
 				MINPUT_LMB_PRESSED = 0,
 				MINPUT_LMB_RELEASED,
 				MINPUT_COUNT
-			} type;
+			};
+	union
+	{
+		struct MouseInput
+		{
+			MINPUT_TYPE type;
 
 			//MINPUT_TYPE type;
 			i32 X;

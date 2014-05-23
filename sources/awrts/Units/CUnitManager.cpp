@@ -1,30 +1,41 @@
 
+#include <Physics/IPhysicsPhantom.h>
+
 #include "CUnit.h"
-#include "CUnitType.h"
+#include "UnitType.h"
 #include "CUnitManager.h"
 #include "../CApplication.h"
 
 namespace awrts
 {
 
-CUnit& CUnitManager::createUnit(hrengin::u32 id)
+CUnit& CUnitManager::createUnit(hrengin::u32 id, hrengin::Vector3d position, hrengin::f32 facing)
 {
-	CUnitType unit_type = mUnitTypes[id];
-	CUnit unit(unit_type);
+	UnitType unitType = unitTypes_[id];
+
+	CUnit* unit = new CUnit(unitType, position, facing);
+	
+	units_.push_back(unit);
+
 	CApplication& app = CApplication::getInstance();
 
-	unit.mVisual = app.videomgr->CreateVisObject();
-	unit.mVisual->AddMesh(unit_type.mVisualModelName);
+	unit->visual_ = app.videomgr->CreateVisObject();
+	unit->visual_->AddMesh(unitType.visualModelName);
 
-	mUnits.push_back(unit);
-	return mUnits.back();
+	unit->selectionShape_ = app.phymgr->createPhantom(unitType.guiSelectionShapeId);
+	unit->selectionShape_->attachToEntity(unit);
+	unit->selectionShape_->setPosition(position);
+
+	app.entmgr->addEntity(unit);
+
+	return *unit;
 };
 
-void CUnitManager::addType(CUnitType type)
+void CUnitManager::addType(UnitType type)
 {
-	if(mUnitTypes.find(type.mID) == mUnitTypes.end())
+	if(unitTypes_.find(type.id) == unitTypes_.end())
 	{
-		mUnitTypes[type.mID] = type;
+		unitTypes_[type.id] = type;
 	}
 }
 

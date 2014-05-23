@@ -15,8 +15,8 @@ class ICameraNode : public ISceneNode
 	public:
 		virtual void AttachToEntity(IBaseEntity* attach) = 0;
 
-		virtual void SetTargetPosition(Vectorf3d pos) = 0;
-		virtual void SetCameraPosition(Vectorf3d pos) = 0;
+		virtual void SetTargetPosition(Vector3d pos) = 0;
+		virtual void SetCameraPosition(Vector3d pos) = 0;
 
 		virtual void BindTargetToCamera(bool bind) = 0;
 
@@ -25,6 +25,8 @@ class ICameraNode : public ISceneNode
 		virtual void SetFarPlane(f64 dist) = 0;
 
 		virtual void SetDistance(f64 dist) = 0;
+
+		virtual hrengin::base::line3df castRayFromScreen(hrengin::i32 x, hrengin::i32 y) = 0;
 
 		enum CAM_Behavior
 		{

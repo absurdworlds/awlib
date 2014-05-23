@@ -4,7 +4,7 @@
 
 #include <Graphics/Nodes/ICameraNode.h>
 #include <Graphics/Base/IVideoManager.h>
-#include <Base/Entities/IBaseEntity.h>
+#include <Entities/IBaseEntity.h>
 
 #include <Irrlicht/Irrlicht.h>
 
@@ -22,13 +22,15 @@ class CCameraNode : public ICameraNode
 		CCameraNode(IBaseEntity* attach);
 
 		virtual void AttachToEntity(IBaseEntity* attach);
+		
+		virtual hrengin::base::line3df castRayFromScreen(hrengin::i32 x, hrengin::i32 y);
 
-		virtual void SetPosition(Vectorf3d pos);
-		virtual void SetRotation(Vectorf3d rot);
-		virtual void SetScale(Vectorf3d scale);
+		virtual void setPosition(Vector3d pos);
+		virtual void setRotation(Vector3d rot);
+		//virtual void SetScale(Vector3d scale);
 
-		virtual void SetTargetPosition(Vectorf3d pos);
-		virtual void SetCameraPosition(Vectorf3d pos);
+		virtual void SetTargetPosition(Vector3d pos);
+		virtual void SetCameraPosition(Vector3d pos);
 
 		virtual void BindTargetToCamera(bool bind);
 

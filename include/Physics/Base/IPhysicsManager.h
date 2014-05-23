@@ -18,7 +18,7 @@ class IPhysicsPhantom; //: IPhysicsObject;
 class IPhysicsManager
 {
 	public:
-		enum PHYS_BUILTIN_SHAPES
+		enum PhysShape
 		{
 			PHYS_SHAPE_SPHERE,
 			PHYS_SHAPE_BOX,
@@ -27,15 +27,15 @@ class IPhysicsManager
 			PHYS_SHAPE_CONE
 		};
 
-		virtual u32 MakeShape(PHYS_BUILTIN_SHAPES type, f32 x, f32 y, f32 z) = 0;
-		virtual u32 AddShape(const char * modelname) = 0;
+		virtual u32 makeShape(PhysShape type, f32 x, f32 y=0., f32 z=0.) = 0;
+		virtual u32 addShape(const char * modelname) = 0;
 
-		virtual IPhysicsBody* CreateBody(const u32 shapeid) = 0;
-		virtual IPhysicsPhantom* CreatePhantom(const u32 shapeid) = 0;
+		virtual IPhysicsBody* createBody(const u32 shapeid) = 0;
+		virtual IPhysicsPhantom* createPhantom(const u32 shapeid) = 0;
 
-		virtual IPhysicsObject* CastRay(Vectorf3d from, Vectorf3d to) = 0;
+		virtual IPhysicsObject* castRay(Vectorf3d from, Vectorf3d to) = 0;
 
-		virtual bool Step() = 0;
+		virtual bool step() = 0;
 };
 
 }	

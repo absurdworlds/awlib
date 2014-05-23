@@ -9,11 +9,12 @@ namespace awrts
 {
 
 CApplication::CApplication()
-{		
+{
 	videomgr = hrengin::graphics::GetManager();
 	videomgr->CreateLight();
 
 	phymgr = hrengin::physics::GetManager ();
+	entmgr = hrengin::GetManager();
 
 	unitmgr = new CUnitManager();
 	mapmgr = new CMapManager();

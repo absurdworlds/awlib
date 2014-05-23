@@ -70,7 +70,7 @@ class CVideoManager : public IVideoManager
 		virtual irr::IrrlichtDevice* GetDevice() const;
 
 		virtual irr::scene::ISceneManager* GetSceneMgr() const;
-		virtual irr::scene::ISceneCollisionManager* getCollManager() const {return 0;}
+		virtual irr::scene::ISceneCollisionManager* getCollManager() const;
 
 	private:
 		std::vector<ISceneNode*> NodeList;

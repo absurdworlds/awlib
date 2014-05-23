@@ -16,10 +16,11 @@ class ICollisionShape;
 class IPhysicsObject
 {
 	public:
-		virtual void AttachToEntity(IBaseEntity* attach) = 0;
+		virtual void attachToEntity(IBaseEntity* attach) = 0;
+		virtual IBaseEntity* getEntity() = 0;
 
-		virtual void SetPosition(Vectorf3d pos) = 0;
-		virtual void SetRotation(Vectorf3d rot) = 0;
+		virtual void setPosition(Vector3d pos) = 0;
+		virtual void setRotation(Vector3d rot) = 0;
 		//virtual void SetScale(Vectorf3d scale) = 0;
 	protected:
 };

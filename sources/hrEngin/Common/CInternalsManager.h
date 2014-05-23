@@ -4,6 +4,7 @@
 
 #include <Common/hrTypes.h>
 #include "../Common/CEncore.h"
+#include "../Entities/CEntityManager.h"
 #include "../GUI/Input/CInputManager.h"
 #include "../Graphics/CVideoManager.h"
 #include "../Physics/CBulletPhysics.h"
@@ -51,9 +52,10 @@ class CInternalsManager
 		}
 		
 	public: /* data */
-		hrengin::CEncore			encore; 
+		hrengin::CEncore*			encore;
+		hrengin::CEntityManager*	entmgr;
 		graphics::CVideoManager*	videomgr; 
-		gui::CInputManager*		inputmgr;
+		gui::CInputManager*			inputmgr;
 		physics::CBulletPhysics*	physmgr;
 		//irr::ITimer*				timer;
 

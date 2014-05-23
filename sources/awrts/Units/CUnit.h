@@ -2,7 +2,9 @@
 #define __H_INCLUDED__AWRTS_CUnit
 
 #include <Common/hrTypes.h>
-#include <Base/Entities/IBaseEntity.h>
+#include <Base/Vector3d.h>
+#include <Entities/IBaseEntity.h>
+#include "UnitType.h"
 
 //#include "CUnitManager.h"
 
@@ -22,30 +24,36 @@ namespace hrengin
 
 namespace awrts
 {
-	class CUnitType;
 	class CUnitManager;
 
 class CUnit : public hrengin::IBaseEntity
 {
-	friend class CUnitManager;
-	//friend CUnit& CUnitManager::createUnit(hrengin::u32 id);
-public:
-	CUnit(CUnitType& pType);
-	CUnitType& getUnitType();
-	hrengin::u32 getUnitTypeID();
+		friend class CUnitManager;
+		//friend CUnit& CUnitManager::createUnit(hrengin::u32 id);
+	private:
+		hrengin::u32 typeId;
+		hrengin::graphics::IVisNode*		visual_;
+		hrengin::physics::IPhysicsPhantom*	selectionShape_;
+		hrengin::Vector3d position_;
+		hrengin::Vector3d rotation_;
+	public:
+		//UnitType& getUnitType();
+		hrengin::u32 getUnitTypeID();
+		virtual hrengin::u32 getEntityIdentifier()
+		{
+			return 'unit';
+		}
 
-	virtual void OnParentRemove() {};
+		virtual void onParentRemove() {};
 
-	virtual bool Sync() {return 0;};
+		virtual void sync();
 
-	virtual bool SetPosition() {return 0;};
-	virtual bool SetRotation() {return 0;};
-	virtual void EnterDeleteQueue() {};
+		virtual void setPosition(hrengin::Vector3d position);
+		virtual void setRotation(hrengin::Vector3d rotation);
+		virtual void enterDeleteQueue() {};
 
-private:
-	CUnitType& mType;
-	hrengin::graphics::IVisNode*		mVisual;
-	hrengin::physics::IPhysicsPhantom*	mSelectionShape;
+	private:
+		CUnit(UnitType& type, hrengin::Vector3d position, hrengin::f32 facing);
 };
 
 }

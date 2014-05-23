@@ -3,7 +3,7 @@
 #define __HG_CVisNode__
 
 #include <Common/hrTypes.h>
-#include <Base/Entities/IBaseEntity.h>
+#include <Entities/IBaseEntity.h>
 #include <Graphics/Nodes/IVisNode.h>
 #include <Graphics/Base/IVideoManager.h>
 
@@ -24,9 +24,9 @@ class CVisNode : public IVisNode
 		
 		virtual void AttachToEntity(IBaseEntity* attach);
 
-		virtual void SetPosition(Vectorf3d pos);
-		virtual void SetRotation(Vectorf3d rot);
-		virtual void SetScale(Vectorf3d scale);
+		virtual void setPosition(Vector3d pos);
+		virtual void setRotation(Vector3d rot);
+		//virtual void SetScale(Vectorf3d scale);
 
 		virtual i8 AddMesh(char * meshname);
 		virtual void RemoveMesh(i8 meshslot);

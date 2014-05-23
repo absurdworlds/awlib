@@ -60,10 +60,10 @@ namespace scene
 		case EET_MOUSE_INPUT_EVENT:
 			switch(event.MouseInput.Event)
 			{
-			case EMIE_MMOUSE_PRESSED_DOWN:
+			case EMIE_RMOUSE_PRESSED_DOWN:
 				MouseKeys[1] = true;
 				break;
-			case EMIE_MMOUSE_LEFT_UP:
+			case EMIE_RMOUSE_LEFT_UP:
 				MouseKeys[1] = false;
 				break;
 			case EMIE_MOUSE_MOVED:
@@ -75,9 +75,9 @@ namespace scene
 				break;
 			/*case EMIE_LMOUSE_PRESSED_DOWN:
 				break;
-			case EMIE_RMOUSE_PRESSED_DOWN:
+			case EMIE_MMOUSE_PRESSED_DOWN
+			case EMIE_MMOUSE_LEFT_UP:
 			case EMIE_LMOUSE_LEFT_UP:
-			case EMIE_RMOUSE_LEFT_UP:
 			case EMIE_LMOUSE_DOUBLE_CLICK:
 			case EMIE_RMOUSE_DOUBLE_CLICK:
 			case EMIE_MMOUSE_DOUBLE_CLICK:

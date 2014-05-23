@@ -6,16 +6,17 @@
 namespace awrts
 {
 
-class CUnitType
+struct UnitType
 {
-public:
-	hrengin::u32 mID;
+	hrengin::u32 id;
 
-	char * mTextUnitName;
+	char * textUnitName;
 	
-	char * mVisualModelName;
+	char * visualModelName;
 
-	hrengin::u32 mStatsHitPointsMax;
+	hrengin::u32 guiSelectionShapeId;
+
+	hrengin::u32 statsHitPointsMax;
 };
 
 }

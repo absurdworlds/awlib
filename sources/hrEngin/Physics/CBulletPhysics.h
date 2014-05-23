@@ -27,15 +27,15 @@ class CBulletPhysics : public IPhysicsManager
 			return dt;
 		}
 
-		virtual IPhysicsBody* CreateBody(const u32 shapeid) {return 0;};
-		virtual IPhysicsPhantom* CreatePhantom(const u32 shapeid);
+		virtual IPhysicsBody* createBody(const u32 shapeid) {return 0;};
+		virtual IPhysicsPhantom* createPhantom(const u32 shapeid);
 
-		virtual u32 AddShape(const char * modelname) {return 0;};
-		virtual u32 MakeShape(IPhysicsManager::PHYS_BUILTIN_SHAPES type, f32 x, f32 y=1., f32 z=1.);
+		virtual u32 addShape(const char * modelname) {return 0;};
+		virtual u32 makeShape(IPhysicsManager::PhysShape type, f32 x, f32 y=1., f32 z=1.);
 
-		virtual IPhysicsObject* CastRay(Vectorf3d from, Vectorf3d to);
+		virtual IPhysicsObject* castRay(Vectorf3d from, Vectorf3d to);
 
-		virtual bool Step();
+		virtual bool step();
 
 	private:		
 		btClock	m_clock;

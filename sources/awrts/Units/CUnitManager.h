@@ -6,7 +6,7 @@
 
 #include <Common/hrTypes.h>
 
-#include "CUnitType.h"
+#include "UnitType.h"
 #include "CUnit.h"
 
 
@@ -18,14 +18,13 @@ class CUnitType;
 
 class CUnitManager
 {
-public:
-	CUnit& createUnit(hrengin::u32 id);
-	void addType(CUnitType type);
-private:
-	std::vector<CUnit> mUnits;
-	//std::vector<CUnitType> mUnitTypes;
-	std::unordered_map<hrengin::u32,CUnitType> mUnitTypes;
-
+	public:
+		CUnit& createUnit(hrengin::u32 id, hrengin::Vector3d position, hrengin::f32 facing=0.0f);
+		void addType(UnitType type);
+	private:
+		std::vector<CUnit*> units_;
+		std::unordered_map<hrengin::u32,UnitType> unitTypes_;
+		//std::vector<CUnitType> mUnitTypes;
 };
 
 }

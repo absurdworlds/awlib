@@ -18,9 +18,10 @@ class ISceneNode
 	public:
 		virtual void AttachToEntity(IBaseEntity* attach) = 0;
 
-		virtual void SetPosition(Vectorf3d pos) = 0;
-		virtual void SetRotation(Vectorf3d rot) = 0;
-		virtual void SetScale(Vectorf3d scale) = 0;
+		virtual void setPosition(Vector3d pos) = 0;
+		virtual void setRotation(Vector3d rot) = 0;
+		// not supported
+		//virtual void setScale(Vectorf3d scale) = 0;
 	protected:
 		Vector3d mPosition;
 		Vector3d mRotation;

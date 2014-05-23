@@ -16,9 +16,6 @@
     <ClCompile Include="Units\CUnit.cpp">
       <Filter>Source Files\Units</Filter>
     </ClCompile>
-    <ClCompile Include="awrts.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Players\CPlayerHuman.cpp">
       <Filter>Source Files\Player</Filter>
     </ClCompile>
@@ -31,11 +28,11 @@
     <ClCompile Include="Units\CUnitManager.cpp">
       <Filter>Source Files\Units</Filter>
     </ClCompile>
+    <ClCompile Include="awrts.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Units\CUnitType.h">
-      <Filter>Source Files\Units</Filter>
-    </ClInclude>
     <ClInclude Include="CMapManager.h">
       <Filter>Source Files</Filter>
     </ClInclude>
@@ -58,6 +55,9 @@
       <Filter>Source Files\Units</Filter>
     </ClInclude>
     <ClInclude Include="Units\CUnitGroup.h">
+      <Filter>Source Files\Units</Filter>
+    </ClInclude>
+    <ClInclude Include="Units\UnitType.h">
       <Filter>Source Files\Units</Filter>
     </ClInclude>
   </ItemGroup>

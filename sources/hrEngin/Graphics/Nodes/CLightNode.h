@@ -4,7 +4,7 @@
 
 #include <Graphics/Nodes/ILightNode.h>
 #include <Graphics/Base/IVideoManager.h>
-#include <Base/Entities/IBaseEntity.h>
+#include <Entities/IBaseEntity.h>
 
 #include <Irrlicht/Irrlicht.h>
 
@@ -21,9 +21,9 @@ class CLightNode : public ILightNode
 
 		virtual void AttachToEntity(IBaseEntity* attach);
 
-		virtual void SetPosition(Vectorf3d pos);
-		virtual void SetRotation(Vectorf3d rot);
-		virtual void SetScale(Vectorf3d scale);
+		virtual void setPosition(Vector3d pos);
+		virtual void setRotation(Vector3d rot);
+		//virtual void SetScale(Vectorf3d scale);
 	protected:
 		IBaseEntity* attachedTo;
 

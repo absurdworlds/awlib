@@ -2,7 +2,7 @@
 #define __H_INCLUDED__HRENGIN_IVisNode
 
 #include <Common/hrTypes.h>
-#include <Base/Entities/IBaseEntity.h>
+#include <Entities/IBaseEntity.h>
 #include <Graphics/Base/ISceneNode.h>
 
 namespace hrengin

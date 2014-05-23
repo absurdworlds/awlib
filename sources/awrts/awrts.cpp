@@ -4,13 +4,49 @@
 #define WIN32_LEAN_AND_MEAN
 #pragma comment(lib, "hrEngin.lib")
 
+//#include <Physics/IPhysicsPhantom.h>
+
 #include "Players/CPlayerHuman.h"
 #include "CApplication.h"
 #include "CMapManager.h"
-#include "Units/CUnitType.h"
+#include "Units/UnitType.h"
 #include "Units/CUnitManager.h"
 
 #include "awrts.h"
+
+namespace awrts
+{
+void setupUnitTypes(CUnitManager& unitmgr)
+{
+	awrts::CApplication& app = awrts::CApplication::getInstance();
+	hrengin::u32 shape = app.phymgr->makeShape(hrengin::physics::IPhysicsManager::PHYS_SHAPE_SPHERE,5.);
+
+	awrts::UnitType SOTank;	
+	SOTank.id = 'Stnk';
+	SOTank.visualModelName = "sotank.obj";
+	SOTank.guiSelectionShapeId = shape;
+	
+	awrts::UnitType BuTank;
+	BuTank.id = 'Btnk';
+	BuTank.visualModelName = "butank.obj";
+	BuTank.guiSelectionShapeId = shape;
+
+	awrts::UnitType BuTruck;
+	BuTruck.id = 'Btrk';
+	BuTruck.visualModelName = "butruck.obj";
+	BuTruck.guiSelectionShapeId = shape;
+		
+	awrts::UnitType BuTransport;
+	BuTransport.id = 'Btsp';
+	BuTransport.visualModelName = "butransport.obj";
+	BuTransport.guiSelectionShapeId = shape;
+	
+	unitmgr.addType(SOTank);
+	unitmgr.addType(BuTank);
+	unitmgr.addType(BuTruck);
+	unitmgr.addType(BuTransport);
+}
+}
 
 int main()
 {
@@ -19,38 +55,22 @@ int main()
 	
 	awrts::CApplication& app = awrts::CApplication::getInstance();
 
+	hrengin::gui::IInputManager* inputmgr = hrengin::gui::GetInputManager();
 	//hrengin::graphics::ICameraNode* camera = videomgr->CreateCamera();
-	awrts::IPlayer* TestPlayer = new awrts::CPlayerHuman(app.videomgr->CreateCamera());
+	awrts::CPlayerHuman* TestPlayer = new awrts::CPlayerHuman(app.videomgr->CreateCamera());
+	inputmgr->RegisterReceiver(*TestPlayer);
 	
 	app.mapmgr->loadMap("ground.obj");
 
-	awrts::CUnitType SOTank;	
+	awrts::setupUnitTypes(*app.unitmgr);
 
-	SOTank.mID = 'Stnk';
-	SOTank.mVisualModelName = "sotank.obj";
-
-	app.unitmgr->addType(SOTank);
-	app.unitmgr->createUnit('Stnk');
-
-
-	/*node->AddMesh("sotank.obj");
-	node->SetPosition(hrengin::Vectorf3d(0, 0, 0.635));
-	node->AddMesh("sotank.obj");
-	node->SetPosition(hrengin::Vectorf3d(0, 10, 0.635));
-	node->AddMesh("sotank.obj");	
-	node->SetPosition(hrengin::Vectorf3d(0, -10, 0.635));
-	node->AddMesh("butank.obj");
-	node->SetPosition(hrengin::Vectorf3d(-20,10,0));
-	node->SetRotation(hrengin::Vectorf3d(0,135,0));
-	node->AddMesh("butruck.obj");
-	node->SetPosition(hrengin::Vectorf3d(-20,0,0));
-	node->SetRotation(hrengin::Vectorf3d(0,1180,0));
-	node->AddMesh("butransport.obj");
-	node->SetPosition(hrengin::Vectorf3d(-30,-5,0));
-	node->SetRotation(hrengin::Vectorf3d(0,-135,0));
-	node->AddMesh("butransport.obj");
-	node->SetPosition(hrengin::Vectorf3d(-30,-11,0));
-	node->SetRotation(hrengin::Vectorf3d(0,-135,0));*/
+	app.unitmgr->createUnit('Stnk', hrengin::Vector3d(0,	0.635, 0));
+	app.unitmgr->createUnit('Stnk', hrengin::Vector3d(10,	0.635, 0));
+	app.unitmgr->createUnit('Stnk', hrengin::Vector3d(-10,	0.635, 0));
+	app.unitmgr->createUnit('Btnk', hrengin::Vector3d(10 ,	0, -20), 135);
+	app.unitmgr->createUnit('Btsp', hrengin::Vector3d(0  ,	0, -20), -135);
+	app.unitmgr->createUnit('Btrk', hrengin::Vector3d(-5 ,	0, -30), -135);
+	app.unitmgr->createUnit('Btsp', hrengin::Vector3d(-11,	0, -30), -135);
 
 	//hrengin::gui::IInputManager* InputMgr = hrengin::gui::GetInputManager();
 
@@ -61,10 +81,14 @@ int main()
 			b_runEngine = false;
 		}
 		
-		if(!app.phymgr->Step())
+		if(!app.phymgr->step())
 		{
 			b_runEngine = false;
 		}
+		
+		app.entmgr->doSync();
+		app.entmgr->doCleanup();
+
 	}
 	while(b_runEngine);
 
