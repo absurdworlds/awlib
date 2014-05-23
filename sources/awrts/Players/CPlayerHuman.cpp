@@ -1,7 +1,9 @@
 #include <Base/Vector3d.h>
-#include "../CApplication.h"
+#include <Physics/Base/IPhysicsObject.h>
 
+#include "../CApplication.h"
 #include "../Units/CUnit.h"
+
 #include "CPlayerHuman.h"
 
 #define VER_storm_in_a_bottle 01000
@@ -20,27 +22,72 @@ CPlayerHuman::CPlayerHuman(hrengin::graphics::ICameraNode* pPlayerCam)
 	
 }
 
+
+CUnit* CPlayerHuman::getUnitFromRay(hrengin::base::line3df ray)
+{
+	CApplication& app = CApplication::getInstance();
 	
+	hrengin::Vectorf3d start(ray.end.X,
+				             ray.end.Y,
+				             ray.end.Z);
+	hrengin::Vectorf3d end(ray.start.X,
+						   ray.start.Y,
+				           ray.start.Z);
+
+	hrengin::physics::IPhysicsObject* rayHit = app.phymgr->castRay(start,end);
+
+	if(!rayHit)
+	{
+		return 0;
+	}
+
+	hrengin::IBaseEntity* foundEntity = rayHit->getEntity();
+
+	if(foundEntity->getEntityIdentifier() != 'unit')
+	{
+		return 0;
+	}
+
+	return static_cast<CUnit*>(foundEntity);
+}
+
+	/*printf("--mous--\n");
+	printf("%d\n",x);
+	printf("%d\n",y);
+	printf("--line--\n");
+	printf("%.5f\n",start.X);
+	printf("%.5f\n",start.Y);
+	printf("%.5f\n",start.Z);
+	printf("--end--\n");
+	printf("%.5f\n",end.X);
+	printf("%.5f\n",end.Y);
+	printf("%.5f\n",end.Z);*/
+
+	/*if(__HRIM.physmgr->castRay(start, end))
+	{
+		printf("!\n");
+		
+		printf("%d\n",__HRIM.physmgr);
+		printf("%d\n",__HRIM.physmgr->castRay(start, end));
+		return __HRIM.physmgr->castRay(start, end)->getEntity();
+	};
+	
+	return 0;*/
+
 bool CPlayerHuman::ReceiveInput(hrengin::gui::InputEvent input)
 {
 	if(input.type == input.INPUT_MOUSE_EVENT)
 	{
 		if(input.MouseInput.type==0)
+		{
+			hrengin::base::line3df ray = povCamera_->castRayFromScreen(input.MouseInput.X,  input.MouseInput.Y);
+			CUnit* rayHit = getUnitFromRay(ray);
+			if(rayHit)
 			{
-			hrengin::IBaseEntity* bus = povCamera_->castRayFromScreen(input.MouseInput.X,  input.MouseInput.Y);
-			if(bus)
-			{
-				unsigned char bytes[4];
-				//unsigned long n = static_cast<CUnit*>(bus)->getUnitTypeID();
-				unsigned long n = (bus)->getEntityIdentifier();
-
-				bytes[0] = (n >> 24) & 0xFF;
-				bytes[1] = (n >> 16) & 0xFF;
-				bytes[2] = (n >> 8) & 0xFF;
-				bytes[3] = n & 0xFF;
-				fprintf(stderr, "Ray hit: %c%c%c%c\n", bytes[0],bytes[1],bytes[2],bytes[3]);
+				unsigned char unitId[5];
+				getStringFromUnitId(rayHit->getUnitTypeID(),unitId);
+				fprintf(stderr, "Ray hit: %s\n", unitId);
 			}
-			
 		}
 	}
 

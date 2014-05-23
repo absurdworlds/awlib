@@ -114,6 +114,7 @@
     <ClInclude Include="..\..\include\Base\Vector3d.h" />
     <ClInclude Include="..\..\include\Base\Math\hrMath.h" />
     <ClInclude Include="..\..\include\Common\hrTypes.h" />
+    <ClInclude Include="..\..\include\Common\line3d.h" />
     <ClInclude Include="..\..\include\Entities\IBaseEntity.h" />
     <ClInclude Include="..\..\include\Entities\IParentable.h" />
     <ClInclude Include="..\..\include\Graphics\Base\ISceneNode.h" />

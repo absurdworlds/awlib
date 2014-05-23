@@ -6,6 +6,8 @@
 #include <Base/Entities/IControllable.h>
 #include <Graphics/Nodes/ICameraNode.h>
 
+#include "../Units/CUnit.h"
+
 #include "IPlayer.h"
 
 namespace awrts

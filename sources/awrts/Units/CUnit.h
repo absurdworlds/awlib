@@ -56,6 +56,8 @@ class CUnit : public hrengin::IBaseEntity
 		CUnit(UnitType& type, hrengin::Vector3d position, hrengin::f32 facing);
 };
 
+void getStringFromUnitId(hrengin::u32 unitId, unsigned char* output);
 }
+
 
 #endif//__H_INCLUDED__AWRTS_CUnit

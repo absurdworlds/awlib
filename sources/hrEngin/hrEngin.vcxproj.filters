@@ -269,5 +269,8 @@
     <ClInclude Include="..\..\include\Entities\IBaseEntity.h">
       <Filter>Include\Entities</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\Common\line3d.h">
+      <Filter>Include\Common</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
