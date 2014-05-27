@@ -197,9 +197,6 @@
     <ClInclude Include="..\..\include\GUI\Input\IInputManager.h">
       <Filter>Include\GUI\Input</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\GUI\Input\InputEvent.h">
-      <Filter>Include\GUI\Input</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\Graphics\Nodes\ICameraNode.h">
       <Filter>Include\Graphics\Nodes</Filter>
     </ClInclude>
@@ -271,6 +268,12 @@
     </ClInclude>
     <ClInclude Include="..\..\include\Common\line3d.h">
       <Filter>Include\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\GUI\Input\Keycodes.h">
+      <Filter>Include\GUI\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\gui\input\InputEvent.h">
+      <Filter>Include\GUI\Input</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

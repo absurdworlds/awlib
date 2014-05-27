@@ -123,9 +123,10 @@
     <ClInclude Include="..\..\include\Graphics\Nodes\ILightNode.h" />
     <ClInclude Include="..\..\include\Graphics\Nodes\IVisNode.h" />
     <ClInclude Include="..\..\include\gui\IGUIManager.h" />
-    <ClInclude Include="..\..\include\GUI\Input\InputEvent.h" />
     <ClInclude Include="..\..\include\GUI\Input\IInputManager.h" />
+    <ClInclude Include="..\..\include\GUI\Input\Keycodes.h" />
     <ClInclude Include="..\..\include\hrEngin.h" />
+    <ClInclude Include="..\..\include\hrengin\gui\input\InputEvent.h" />
     <ClInclude Include="..\..\include\Physics\Base\IPhysicsManager.h" />
     <ClInclude Include="..\..\include\Physics\Base\IPhysicsObject.h" />
     <ClInclude Include="..\..\include\Physics\IPhysicsBody.h" />

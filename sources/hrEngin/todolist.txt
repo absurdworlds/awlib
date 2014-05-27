@@ -1,15 +1,17 @@
 
 v. Storm in a bottle
 --A test version, unplayable in general sense
-	In currently developed version:
+	v. Storm in a bottle+0
 о сделать вставку юнита в игру по нажатию какой-нибудь кнопки
 о дл€ этого написать другой рейкастинг Ч рейкастинг об землю
-о алсо дописать эвент манагер Ч добавить куйбоард эвентс
-о написать класс пути
+о заменить ноуколайд на колфильтр у физиксфантома
+о добавить граунд модел //поюх на него Ч в следующей версии напишу, а пока что Ч воспользуюсь услугами ирлича
+о юнитселекшон Ч подсветка выделенного юнита, приказы
+о написать класс пути 
 о мувемент эйджент
-о написать измерение отклонени€ от пути
+о хард таск Ч написать измерение отклонени€ от пути
 о хард таск Ч сделать зонд, которым юнит будет высматривать других юнитов
-о переводитель кликов мыши в лучи
+о хард таск Ч проверка, не вылетел ли юнит за навмеш
 о эвэнттаймер
 
 	In version+1:
@@ -19,11 +21,12 @@ o Write players
 o remove guienv from graphics //don't need to do it anymore Ч CGUIManager now is a friend of CVideoManager
 o Write logger
 o rewrite camera
+о добавить граунд модел
 o prettify code
 o write hrengin data file loader
+o start implementing file manager
 o write proper map manager
 o Make units attack each other
-
 
 	In version+2:
 o Main menu

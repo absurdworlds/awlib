@@ -4,7 +4,7 @@
 #include <Common/hrTypes.h>
 #include <Base/Entities/IControllable.h>
 
-#include "InputEvent.h"
+#include "hrengin/gui/input/InputEvent.h"
 
 namespace irr
 {

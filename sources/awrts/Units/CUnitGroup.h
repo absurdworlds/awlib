@@ -1,0 +1,5 @@
+#ifndef __H_INCLUDED__AWRTS_CUnitGroup
+#define __H_INCLUDED__AWRTS_CUnitGroup
+
+
+#endif //__H_INCLUDED__AWRTS_CUnitGroup

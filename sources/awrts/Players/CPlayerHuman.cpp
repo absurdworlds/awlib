@@ -76,9 +76,9 @@ CUnit* CPlayerHuman::getUnitFromRay(hrengin::base::line3df ray)
 
 bool CPlayerHuman::ReceiveInput(hrengin::gui::InputEvent input)
 {
-	if(input.type == input.INPUT_MOUSE_EVENT)
+	if(input.EventType == irr::EET_MOUSE_INPUT_EVENT)
 	{
-		if(input.MouseInput.type==0)
+		if(input.MouseInput.Event==irr::EMIE_LMOUSE_PRESSED_DOWN)
 		{
 			hrengin::base::line3df ray = povCamera_->castRayFromScreen(input.MouseInput.X,  input.MouseInput.Y);
 			CUnit* rayHit = getUnitFromRay(ray);
