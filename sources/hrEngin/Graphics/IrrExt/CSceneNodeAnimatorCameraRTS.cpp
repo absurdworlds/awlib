@@ -329,14 +329,14 @@ namespace scene
 			//fprintf(stderr, "DEBUG: TranslateSpeed %f\n",TranslateSpeed);
 			//fprintf(stderr, "DEBUG: 1000/fps %f\n", 3000.f/static_cast<irr::f32>(fps));
 
-			if (MousePos.X < 0.005)   //Up
+			if (MousePos.X < 0.005 && MousePos.X < 1.000)   //Up
 			{	
 				translate.X +=  TranslateSpeed * CurrentZoom * static_cast<irr::f32>(TimeDelta);
 			#ifdef _DEBUG
 				fprintf(stderr, "DEBUG: MousePos.X %f\n", MousePos.X);
 			#endif //_DEBUG
 			}
-			else if (MousePos.X > 0.995) //Down
+			else if (MousePos.X > 0.995 && MousePos.X > 0.000) //Down
 			{
 				translate.X -=  TranslateSpeed * CurrentZoom * static_cast<irr::f32>(TimeDelta);
 			#ifdef _DEBUG
@@ -344,14 +344,14 @@ namespace scene
 			#endif //_DEBUG
 			}
 
-			if (MousePos.Y < 0.005)   //Up
+			if (MousePos.Y < 0.005 && MousePos.Y > 0.000)   //Up
 			{
 				translate.Z -= TranslateSpeed * CurrentZoom * static_cast<irr::f32>(TimeDelta);
 			#ifdef _DEBUG
 				fprintf(stderr, "DEBUG: MousePos.Y %f\n", MousePos.Y);
 			#endif //_DEBUG
 			}
-			else if (MousePos.Y > 0.995) //Down
+			else if (MousePos.Y > 0.995 && MousePos.Y < 1.000) //Down
 			{
 				translate.Z += TranslateSpeed * CurrentZoom * static_cast<irr::f32>(TimeDelta);
 			#ifdef _DEBUG
