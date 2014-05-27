@@ -81,6 +81,8 @@ CUnit* CPlayerHuman::getUnitFromRay(hrengin::base::line3df ray)
 bool CPlayerHuman::ReceiveInput(hrengin::gui::InputEvent input)
 {
 	static hrengin::i32 X = 400, Y = 300;
+	static CApplication& app = CApplication::getInstance();
+
 	if(input.EventType == irr::EET_MOUSE_INPUT_EVENT)
 	{
 		X = input.MouseInput.X;
@@ -99,29 +101,35 @@ bool CPlayerHuman::ReceiveInput(hrengin::gui::InputEvent input)
 	}
 	else if (input.EventType == irr::EET_KEY_INPUT_EVENT)
 	{
+		static int numbers = 0;
+		printf("knopkodoska input %d; %d\n", ++numbers, app.encore->GetTime());
 		if(input.KeyInput.Key == irr::KEY_KEY_I && input.KeyInput.PressedDown)
 		{
-			static CApplication& app = CApplication::getInstance();
-			CUnitManager* umgr =  app.unitmgr;
-			static unsigned int lastId = 0;
-			unsigned int unitId;
-int i = 0;
-			for(std::unordered_map<hrengin::u32,UnitType>::iterator it = umgr->unitTypes_.begin();
-				it != umgr->unitTypes_.end();
-				++it,++i)
+			hrengin::base::line3df ray = povCamera_->castRayFromScreen(X,Y);
+			CUnit* rayHit = getUnitFromRay(ray);
+			if(!rayHit)
 			{
-				if(lastId % umgr->unitTypes_.size() == i) unitId = (*it).second.id;
-			}
+				CUnitManager* umgr =  app.unitmgr;
+				static unsigned int lastId = 0;
+				unsigned int unitId;
+				int i = 0;
+				for(std::unordered_map<hrengin::u32,UnitType>::iterator it = umgr->unitTypes_.begin();
+					it != umgr->unitTypes_.end();
+					++it,++i)
+				{
+					if(lastId % umgr->unitTypes_.size() == i) unitId = (*it).second.id;
+				}
 			
+			
+				hrengin::Vector3d pos = povCamera_->__tempGetRayHitPlaneCoords(X,Y);
+				app.unitmgr->createUnit(unitId,pos);
 
-			hrengin::Vector3d pos = povCamera_->__tempGetRayHitPlaneCoords(X,Y);
-
-			app.unitmgr->createUnit(unitId,pos);
-
-			++ lastId;
-
+				++ lastId;
+			}
 		}
 	}
+
+
 	return false;
 }
 

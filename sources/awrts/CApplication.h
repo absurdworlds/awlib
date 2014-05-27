@@ -22,7 +22,8 @@ public:
 	}
 
 	void SetupTestScene();
-
+	
+	hrengin::IEncore* encore;
 	hrengin::physics::IPhysicsManager* phymgr;
 	hrengin::graphics::IVideoManager* videomgr;
 	hrengin::IEntityManager* entmgr;

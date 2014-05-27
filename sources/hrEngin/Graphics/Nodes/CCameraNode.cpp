@@ -48,8 +48,8 @@ hrengin::Vector3d CCameraNode::__tempGetRayHitPlaneCoords(hrengin::i32 x, hrengi
 {
 	irr::scene::ISceneCollisionManager* colman = __HRIM.videomgr->getCollManager();
 	irr::core::line3df line = colman->getRayFromScreenCoordinates(irr::core::vector2di(x,y), node);
-	printf("%d\n",x);
-	printf("%f\n",line.start.X);
+	//printf("%d\n",x);
+	//printf("%f\n",line.start.X);
 	//irr::core::line3df line(10,50,10,10,-50,10);
 	irr::core::vector3df vec;
 	

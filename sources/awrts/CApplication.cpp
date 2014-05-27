@@ -18,6 +18,8 @@ CApplication::CApplication()
 
 	unitmgr = new CUnitManager();
 	mapmgr = new CMapManager();
+
+	encore = hrengin::KickstartEngine();
 }
 
 void CApplication::SetupTestScene()
