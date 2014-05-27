@@ -24,6 +24,7 @@ class CCameraNode : public ICameraNode
 		virtual void AttachToEntity(IBaseEntity* attach);
 		
 		virtual hrengin::base::line3df castRayFromScreen(hrengin::i32 x, hrengin::i32 y);
+		virtual hrengin::Vector3d __tempGetRayHitPlaneCoords(hrengin::i32 x, hrengin::i32 y);
 
 		virtual void setPosition(Vector3d pos);
 		virtual void setRotation(Vector3d rot);

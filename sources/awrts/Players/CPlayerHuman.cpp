@@ -1,8 +1,12 @@
 #include <Base/Vector3d.h>
+#include <Irrlicht/plane3d.h>
+#include <Irrlicht/Vector3d.h>
+
 #include <Physics/Base/IPhysicsObject.h>
 
 #include "../CApplication.h"
 #include "../Units/CUnit.h"
+#include "../Units/CUnitManager.h"
 
 #include "CPlayerHuman.h"
 
@@ -76,8 +80,11 @@ CUnit* CPlayerHuman::getUnitFromRay(hrengin::base::line3df ray)
 
 bool CPlayerHuman::ReceiveInput(hrengin::gui::InputEvent input)
 {
+	static hrengin::i32 X = 400, Y = 300;
 	if(input.EventType == irr::EET_MOUSE_INPUT_EVENT)
 	{
+		X = input.MouseInput.X;
+		Y = input.MouseInput.Y;
 		if(input.MouseInput.Event==irr::EMIE_LMOUSE_PRESSED_DOWN)
 		{
 			hrengin::base::line3df ray = povCamera_->castRayFromScreen(input.MouseInput.X,  input.MouseInput.Y);
@@ -90,7 +97,31 @@ bool CPlayerHuman::ReceiveInput(hrengin::gui::InputEvent input)
 			}
 		}
 	}
+	else if (input.EventType == irr::EET_KEY_INPUT_EVENT)
+	{
+		if(input.KeyInput.Key == irr::KEY_KEY_I && input.KeyInput.PressedDown)
+		{
+			static CApplication& app = CApplication::getInstance();
+			CUnitManager* umgr =  app.unitmgr;
+			static unsigned int lastId = 0;
+			unsigned int unitId;
+int i = 0;
+			for(std::unordered_map<hrengin::u32,UnitType>::iterator it = umgr->unitTypes_.begin();
+				it != umgr->unitTypes_.end();
+				++it,++i)
+			{
+				if(lastId % umgr->unitTypes_.size() == i) unitId = (*it).second.id;
+			}
+			
 
+			hrengin::Vector3d pos = povCamera_->__tempGetRayHitPlaneCoords(X,Y);
+
+			app.unitmgr->createUnit(unitId,pos);
+
+			++ lastId;
+
+		}
+	}
 	return false;
 }
 

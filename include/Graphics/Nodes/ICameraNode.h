@@ -28,6 +28,7 @@ class ICameraNode : public ISceneNode
 		virtual void SetDistance(f64 dist) = 0;
 
 		virtual hrengin::base::line3df castRayFromScreen(hrengin::i32 x, hrengin::i32 y) = 0;
+		virtual hrengin::Vector3d __tempGetRayHitPlaneCoords(hrengin::i32 x, hrengin::i32 y) = 0;
 
 		enum CAM_Behavior
 		{
