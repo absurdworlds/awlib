@@ -1,0 +1,14 @@
+01000  hrengin A:
+00000    v Storm in the bottle 
+00001      v 0.0.0.1
+             + base for entity creation
+             + partial Irrlicht integration
+             + partial Bullet physics integration
+             + base for unit types
+             + basic unit movement
+             + rudimentary entity manager & event timer
+             + rudimentary player input
+00002      v 0.0.x.x (future release)
+01000    v Sranton wars (future release)
+
+02000  hrengin B:

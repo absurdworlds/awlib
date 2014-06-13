@@ -64,6 +64,10 @@
 	#endif
 #endif
 
+#if defined(__HRCMP_MSC__)
+	#pragma warning(disable: 4244) 
+#endif
+
 //#define _HR_PHYSICS_HAVOK
 //#define _HR_PHYSICS_NEWTON
 

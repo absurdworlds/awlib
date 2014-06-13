@@ -2,7 +2,7 @@
 #ifndef __HR_T_VECTOR_3D_H__
 #define __HR_T_VECTOR_3D_H__
 
-#include "Base/Math/hrMath.h"
+#include <Base/Math/hrMath.h>
 
 namespace hrengin
 {
@@ -209,15 +209,47 @@ public:
 
 	hrVector3d<T>& set(const T nx, const T ny, const T nz) {X=nx; Y=ny; Z=nz; return *this;}
 	hrVector3d<T>& set(const hrVector3d<T>& p) {X=p.X; Y=p.Y; Z=p.Z;return *this;}*/
-		
+	
+	// Normalize the vector
+	hrVector3d<T>& normalize()
+	{
+		f64 length = squareLength();
+		if (length == 0 )
+		{
+			// don't normalize zero vector
+			return *this;
+		}
+
+		length = math::inverseSqrt(length);
+
+		X = (T)(X * length);
+		Y = (T)(Y * length);
+		Z = (T)(Z * length);
+		return *this;
+	}
+
+	// Returns normalized vector without modifying it
+	hrVector3d<T> normalized() const
+	{
+		f64 length = squareLength();
+		if (length == 0 )
+		{
+			// don't normalize zero vector
+			return hrVector3d<T>();
+		}
+		length = math::inverseSqrt(length);
+
+		return hrVector3d<T>((T)(X * length), (T)(Y * length), (T)(Z * length));
+	}
+
 	//! Get length of the vector.
-	T Length() const 
+	T length() const 
 	{ 
 		return math::sqrt( X*X + Y*Y + Z*Z ); 
 	}
 	
 	//! Get squared length of the vector.
-	T SquareLength() const 
+	T squareLength() const 
 	{ 
 		return X*X + Y*Y + Z*Z; 
 	}
@@ -264,22 +296,6 @@ public:
 			getDistanceFromSQ(end) <= f;
 	}
 
-	//! Normalizes the vector.
-	//** In case of the 0 vector the result is still 0, otherwise
-	the length of the vector will be 1.
-	\return Reference to this vector after normalization. *
-	hrVector3d<T>& normalize()
-	{
-		f64 length = X*X + Y*Y + Z*Z;
-		if (length == 0 ) // this check isn't an optimization but prevents getting NAN in the sqrt.
-			return *this;
-		length = core::reciprocal_squareroot(length);
-
-		X = (T)(X * length);
-		Y = (T)(Y * length);
-		Z = (T)(Z * length);
-		return *this;
-	}
 
 	//! Sets the length of the vector to a new value
 	hrVector3d<T>& setLength(T newlength)
@@ -384,11 +400,12 @@ public:
 		Y = (T)((f64)b.Y + ( ( a.Y - b.Y ) * d ));
 		Z = (T)((f64)b.Z + ( ( a.Z - b.Z ) * d ));
 		return *this;
-	}
+	}*/
 
+	// Took this from Irrlicht.
 
 	//! Get the rotations that would make a (0,0,1) direction vector point in the same direction as this direction vector.
-	//** Thanks to Arras on the Irrlicht forums for this method.  This utility method is very useful for
+	/** Thanks to Arras on the Irrlicht forums for this method.  This utility method is very useful for
 	orienting scene nodes towards specific targets.  For example, if this vector represents the difference
 	between two scene nodes, then applying the result of getHorizontalAngle() to one scene node will point
 	it at the other one.
@@ -400,31 +417,30 @@ public:
 
 	\return A rotation vector containing the X (pitch) and Y (raw) rotations (in degrees) that when applied to a
 	+Z (e.g. 0, 0, 1) direction vector would make it point in the same direction as this vector. The Z (roll) rotation
-	is always 0, since two Euler rotations are sufficient to point in any given direction. *
+	is always 0, since two Euler rotations are sufficient to point in any given direction. */
 	hrVector3d<T> getHorizontalAngle() const
 	{
 		hrVector3d<T> angle;
 
-		const f64 tmp = (atan2((f64)X, (f64)Z) * RADTODEG64);
-		angle.Y = (T)tmp;
+		angle.Y = (T) atan2((f64)X, (f64)Z);
 
 		if (angle.Y < 0)
-			angle.Y += 360;
-		if (angle.Y >= 360)
-			angle.Y -= 360;
+			angle.Y += math::DOUBLE_PI64;
+		if (angle.Y >= math::DOUBLE_PI64)
+			angle.Y -= math::DOUBLE_PI64;
 
-		const f64 z1 = core::squareroot(X*X + Z*Z);
+		const f64 z1 = math::sqrt(X*X + Z*Z);
 
-		angle.X = (T)(atan2((f64)z1, (f64)Y) * RADTODEG64 - 90.0);
+		angle.X = (T)(atan2((f64)z1, (f64)Y) - math::HALF_PI64);
 
 		if (angle.X < 0)
-			angle.X += 360;
-		if (angle.X >= 360)
-			angle.X -= 360;
+			angle.X += math::DOUBLE_PI64;
+		if (angle.X >= math::DOUBLE_PI64)
+			angle.X -= math::DOUBLE_PI64;
 
-		return angle;
+		return angle * math::RADTODEG64;
 	}
-
+	/*
 	//! Get the spherical coordinate angles
 	//** This returns Euler degrees for the point represented by
 	this vector.  The calculation assumes the pole at (0,1,0) and
@@ -543,11 +559,11 @@ inline hrVector3d<s32> hrVector3d<s32>::getSphericalCoordinateAngles() const
 		angle.X = round32((f32)(acos(Y * core::reciprocal_squareroot(length)) * RADTODEG64));
 	}
 	return angle;
-}
+}*/
 
-//! Function multiplying a scalar and a vector component-wise.
+// multiply scalar and vector
 template<class S, class T>
-hrVector3d<T> operator*(const S scalar, const hrVector3d<T>& vector) { return vector*scalar; }*/
+hrVector3d<T> operator*(const S scalar, const hrVector3d<T>& vector) { return vector*scalar; }
 
 typedef hrVector3d<f32> Vectorf3d;
 typedef hrVector3d<f64> Vectord3d;

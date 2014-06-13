@@ -38,17 +38,16 @@ void CUnit::think(hrengin::u32 time)
 		hrengin::Vector3d direction(order_.targetX,0,order_.targetY);
 		direction -= position_;
 
-		hrengin::Vector3d move = direction/direction.Length();
-
-		if(direction.SquareLength() < 0.5)
+		if(direction.squareLength() < 0.5)
 		{
 			order_.orderId = ORDER_STOP;
 		}
 		else
 		{
-			setPosition(position_ + move);
+			setRotation(hrengin::Vector3d(0,180,0) + direction.getHorizontalAngle());
+			setPosition(position_ + 0.5 * direction.normalized());
 		}
-		
+
 		break;
 	}
 	default:
