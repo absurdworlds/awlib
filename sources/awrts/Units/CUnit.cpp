@@ -34,27 +34,23 @@ void CUnit::think(hrengin::u32 time)
 	switch(order_.orderId)
 	{
 	case ORDER_MOVE:
-		if(position_.X < order_.targetX)
-		{
-			position_.X += 0.1;
-		}
-		else if(position_.X > order_.targetX)
-		{
-			position_.X -= 0.1;
-		}
-		if(position_.Z < order_.targetY)
-		{
-			position_.Z += 0.1;
-		}
-		else if(position_.Y > order_.targetY)
-		{
-			position_.Z -= 0.1;
-		}
-		if(abs(position_.X - order_.targetX) < 0.5 && abs(position_.Z - order_.targetY) < 0.5)
+	{
+		hrengin::Vector3d direction(order_.targetX,0,order_.targetY);
+		direction -= position_;
+
+		hrengin::Vector3d move = direction/direction.Length();
+
+		if(direction.SquareLength() < 0.5)
 		{
 			order_.orderId = ORDER_STOP;
 		}
+		else
+		{
+			setPosition(position_ + move);
+		}
+		
 		break;
+	}
 	default:
 		break;
 	}
