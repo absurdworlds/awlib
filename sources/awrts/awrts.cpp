@@ -60,17 +60,11 @@ int main()
 	awrts::CPlayerHuman* TestPlayer = new awrts::CPlayerHuman(app.videomgr->CreateCamera());
 	inputmgr->RegisterReceiver(*TestPlayer);
 	
-	app.mapmgr->loadMap("ground.obj");
-
 	awrts::setupUnitTypes(*app.unitmgr);
 
-	app.unitmgr->createUnit('Stnk', hrengin::Vector3d(0,	0.635, 0));
-	app.unitmgr->createUnit('Stnk', hrengin::Vector3d(10,	0.635, 0));
-	app.unitmgr->createUnit('Stnk', hrengin::Vector3d(-10,	0.635, 0));
-	app.unitmgr->createUnit('Btnk', hrengin::Vector3d(10 ,	0, -20), 135);
-	app.unitmgr->createUnit('Btsp', hrengin::Vector3d(0  ,	0, -20), -135);
-	app.unitmgr->createUnit('Btrk', hrengin::Vector3d(-5 ,	0, -30), -135);
-	app.unitmgr->createUnit('Btsp', hrengin::Vector3d(-11,	0, -30), -135);
+	app.mapmgr->loadMap("ground.obj");
+
+
 
 	//hrengin::gui::IInputManager* InputMgr = hrengin::gui::GetInputManager();
 
@@ -85,6 +79,8 @@ int main()
 		{
 			b_runEngine = false;
 		}
+
+		app.eventmgr->advance();
 		
 		app.entmgr->doSync();
 		app.entmgr->doCleanup();

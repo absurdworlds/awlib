@@ -1,5 +1,6 @@
 
 #include <Physics/IPhysicsPhantom.h>
+#include <hrengin/entities/IEventManager.h>
 
 #include "CUnit.h"
 #include "UnitType.h"
@@ -25,6 +26,14 @@ CUnit& CUnitManager::createUnit(hrengin::u32 id, hrengin::Vector3d position, hre
 	unit->selectionShape_ = app.phymgr->createPhantom(unitType.guiSelectionShapeId);
 	unit->selectionShape_->attachToEntity(unit);
 	unit->selectionShape_->setPosition(position);
+
+	hrengin::Event thinkEvent;
+	thinkEvent.owner = unit;
+	thinkEvent.isActive = true;
+	thinkEvent.nextFire = app.encore->GetTime() + 50;
+	thinkEvent.period = 50;
+
+	unit->eventId_ = app.eventmgr->addEvent(thinkEvent);
 
 	app.entmgr->addEntity(unit);
 

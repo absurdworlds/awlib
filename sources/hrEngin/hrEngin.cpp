@@ -3,6 +3,7 @@
 #include "Common/CInternalsManager.h"
 #include "Common/hrFilesystem.h"
 #include "Common/CEncore.h"
+#include "Entities/CEventManager.h"
 
 #ifdef _HR_PHYSICS_HAVOK
 #include "Base/Config/HavokMagicSpells.h"
@@ -26,6 +27,11 @@ HRENGIN_API IEntityManager* GetManager ()
 	return __HRIM.entmgr;
 }
 
+
+HRENGIN_API IEventManager* GetEventManager ()
+{
+	return new CEventManager();
+}
 
 namespace graphics
 {

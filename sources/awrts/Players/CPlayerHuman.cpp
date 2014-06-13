@@ -19,7 +19,8 @@ namespace awrts
 {
 
 CPlayerHuman::CPlayerHuman(hrengin::graphics::ICameraNode* pPlayerCam)
-	: PlayerInputDisabled(false), povCamera_(pPlayerCam)
+	: PlayerInputDisabled(false), povCamera_(pPlayerCam),
+	tmpSelUnit_(0)
 {
 	pPlayerCam->SetBehavior(hrengin::graphics::ICameraNode::CAM_STRATEGIC);
 	//mCurrentPOV = mDefaultPOV = pPlayerCam;
@@ -95,38 +96,47 @@ bool CPlayerHuman::ReceiveInput(hrengin::gui::InputEvent input)
 			{
 				unsigned char unitId[5];
 				getStringFromUnitId(rayHit->getUnitTypeID(),unitId);
-				fprintf(stderr, "Ray hit: %s\n", unitId);
+				fprintf(stderr, "%s: Standing by\n", unitId);
+				tmpSelUnit_ = rayHit;
+			}
+			else if(tmpSelUnit_)
+			{
+				unsigned char unitId[5];
+				getStringFromUnitId(tmpSelUnit_->getUnitTypeID(),unitId);
+				fprintf(stderr, "%s: Affirmative!\n", unitId);
+				hrengin::Vector3d pos = povCamera_->__tempGetRayHitPlaneCoords(X,Y);
+				tmpSelUnit_->issuePointOrder(ORDER_MOVE, pos);
 			}
 		}
 	}
-	else if (input.EventType == irr::EET_KEY_INPUT_EVENT)
+else if (input.EventType == irr::EET_KEY_INPUT_EVENT)
+{
+	static int numbers = 0;
+	printf("knopkodoska input %d; %d\n", ++numbers, app.encore->GetTime());
+	if(input.KeyInput.Key == irr::KEY_KEY_I && input.KeyInput.PressedDown)
 	{
-		static int numbers = 0;
-		printf("knopkodoska input %d; %d\n", ++numbers, app.encore->GetTime());
-		if(input.KeyInput.Key == irr::KEY_KEY_I && input.KeyInput.PressedDown)
+		hrengin::base::line3df ray = povCamera_->castRayFromScreen(X,Y);
+		CUnit* rayHit = getUnitFromRay(ray);
+		if(!rayHit)
 		{
-			hrengin::base::line3df ray = povCamera_->castRayFromScreen(X,Y);
-			CUnit* rayHit = getUnitFromRay(ray);
-			if(!rayHit)
+			CUnitManager* umgr =  app.unitmgr;
+			static unsigned int lastId = 0;
+			unsigned int unitId;
+			int i = 0;
+			for(std::unordered_map<hrengin::u32,UnitType>::iterator it = umgr->unitTypes_.begin();
+				it != umgr->unitTypes_.end();
+				++it,++i)
 			{
-				CUnitManager* umgr =  app.unitmgr;
-				static unsigned int lastId = 0;
-				unsigned int unitId;
-				int i = 0;
-				for(std::unordered_map<hrengin::u32,UnitType>::iterator it = umgr->unitTypes_.begin();
-					it != umgr->unitTypes_.end();
-					++it,++i)
-				{
-					if(lastId % umgr->unitTypes_.size() == i) unitId = (*it).second.id;
-				}
-			
-			
-				hrengin::Vector3d pos = povCamera_->__tempGetRayHitPlaneCoords(X,Y);
-				app.unitmgr->createUnit(unitId,pos);
-
-				++ lastId;
+				if(lastId % umgr->unitTypes_.size() == i) unitId = (*it).second.id;
 			}
+			
+			
+			hrengin::Vector3d pos = povCamera_->__tempGetRayHitPlaneCoords(X,Y);
+			app.unitmgr->createUnit(unitId,pos);
+
+			++ lastId;
 		}
+	}
 	}
 
 

@@ -1,0 +1,142 @@
+// 1. Basic constructs
+
+// statements separated by semicolons:
+statement1; statement2;
+
+// statements can be grouped in scopes as follows:
+{
+	statement1;
+	statement2;
+}
+
+// variable declaration
+var typename varName; 
+
+// constant
+const typename constantc_name;
+
+
+// progrmam flow control
+if(statement)
+{
+	...
+}
+elseif(pther_statement)
+{
+	...
+}
+else
+{
+	...
+}
+
+// loops
+loop 
+{
+
+}
+
+loop 
+{
+	//code
+	exitwhen(condition);
+	//code
+}
+
+loop
+{
+
+} while(statement)
+
+
+while(statement)
+{
+
+}
+
+for(range as var typename i)
+{
+	//do something
+}
+
+for(range -> var typename i)
+{
+	//do something
+}
+
+// 2. Primitive types
+// h.s supports several C-style types
+var int i;
+var float f;
+var double d;
+var char c;
+// but there is difference: sizes must be same on all platforms
+// additionally there is some different sizes for types:
+var int8 i8;
+var int16 i16;
+var int32 i32;
+var int64 i64;
+
+var wchar wc;
+
+var float64 f64;
+//those below are unsupported (currently)
+var float80 f80;
+var float128 f128;
+
+// also, there are some other types:
+
+var typename type;
+
+//future
+// nicer syntax with use of templates
+var int<16> 
+var int<32>
+var int<64>
+
+// 3. functions
+
+// function definition
+func typename functionName (typename arg, ...) 
+{
+	
+};
+//notice semicolon after the end of function definition
+
+// in future 
+func functionName (typename arg, ...) -> typename
+{
+	
+};
+
+// 4. structures and enums
+struct Structure
+{
+	var field;
+};
+
+struct Derived(Structure)
+{
+	var field;
+	var other_field;
+};
+
+// new concept — instances
+instance unit_stnk(UnitType)
+{
+	unitId : 'stnk';
+};
+
+// dem fruits... err, enums
+enum Fruit
+{
+	apple,
+	banana
+};
+
+// 5. Bindings
+// will resolve this function at runtime
+import func void AddUnitType(UnitType unitType);
+
+
+//delegate

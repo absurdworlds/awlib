@@ -1,30 +1,30 @@
-
+п»ї
 v. Storm in a bottle
 --A test version, unplayable in general sense
 	v. Storm in a bottle+0
-о заменить ноуколайд на колфильтр у физиксфантома
-о юнитселекшон — подсветка выделенного юнита, приказы
-о написать класс пути 
-о мувемент эйджент
-о хард таск — написать измерение отклонения от пути
-о хард таск — сделать зонд, которым юнит будет высматривать других юнитов
-о эвэнттаймер
+Рѕ СЌРІСЌРЅС‚С‚Р°Р№РјРµСЂ
+Рѕ Р·Р°РјРµРЅРёС‚СЊ РЅРѕСѓРєРѕР»Р°Р№Рґ РЅР° РєРѕР»С„РёР»СЊС‚СЂ Сѓ С„РёР·РёРєСЃС„Р°РЅС‚РѕРјР°
+Рѕ СЋРЅРёС‚СЃРµР»РµРєС€РѕРЅ вЂ” РїРѕРґСЃРІРµС‚РєР° РІС‹РґРµР»РµРЅРЅРѕРіРѕ СЋРЅРёС‚Р°
+Рѕ РЅР°РїРёСЃР°С‚СЊ РєР»Р°СЃСЃ РїСѓС‚Рё 
+Рѕ unit movement: РјСѓРІРµРјРµРЅС‚ СЌР№РґР¶РµРЅС‚
+Рѕ С…Р°СЂРґ С‚Р°СЃРє вЂ” РЅР°РїРёСЃР°С‚СЊ РёР·РјРµСЂРµРЅРёРµ РѕС‚РєР»РѕРЅРµРЅРёСЏ РѕС‚ РїСѓС‚Рё
+Рѕ С…Р°СЂРґ С‚Р°СЃРє вЂ” СЃРґРµР»Р°С‚СЊ Р·РѕРЅРґ, РєРѕС‚РѕСЂС‹Рј СЋРЅРёС‚ Р±СѓРґРµС‚ РІС‹СЃРјР°С‚СЂРёРІР°С‚СЊ РґСЂСѓРіРёС… СЋРЅРёС‚РѕРІ
 
 	In version+1:
 o Write sound wrapper
 o Write weapon class
 o Write players
-o remove guienv from graphics //don't need to do it anymore — CGUIManager now is a friend of CVideoManager
+o remove guienv from graphics //don't need to do it anymore вЂ” CGUIManager now is a friend of CVideoManager
 o Write logger
 o rewrite camera
-	— make code consistent (position relative to target instead of a bunch of vectors)
-	— scale around origin
-	— absolute mose position for scrolling; limit to a window + 5 px inside
+	вЂ” make code consistent (position relative to target instead of a bunch of vectors)
+	вЂ” scale around origin
+	вЂ” absolute mose position for scrolling; limit to a window + 5 px inside
 o prettify code
 o write hrengin data file loader
 o start implementing file manager
 o write proper map manager
-о добавить proper граунд модел, also raycasting
+Г® Г¤Г®ГЎГ ГўГЁГІГј proper ГЈГ°Г ГіГ­Г¤ Г¬Г®Г¤ГҐГ«, also raycasting
 o Make units attack each other
 
 	In version+2:
@@ -34,7 +34,7 @@ o Buildings
 o Animation
 o Start write map landscape
 o Start navmesh navigation
-о хард таск — проверка, не вылетел ли юнит за навмеш
+Г® ГµГ Г°Г¤ ГІГ Г±ГЄ вЂ” ГЇГ°Г®ГўГҐГ°ГЄГ , Г­ГҐ ГўГ»Г«ГҐГІГҐГ« Г«ГЁ ГѕГ­ГЁГІ Г§Г  Г­Г ГўГ¬ГҐГё
 
 	In version+3
 o Add non-flat world

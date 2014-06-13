@@ -126,6 +126,9 @@
     <ClCompile Include="Entities\CEntityManager.cpp">
       <Filter>Source\Entities</Filter>
     </ClCompile>
+    <ClCompile Include="Entities\CEventManager.cpp">
+      <Filter>Source\Entities</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\hrEngin.h">
@@ -274,6 +277,15 @@
     </ClInclude>
     <ClInclude Include="..\..\include\hrengin\gui\input\InputEvent.h">
       <Filter>Include\GUI\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\entities\IEventManager.h">
+      <Filter>Include\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\entities\IThinking.h">
+      <Filter>Include\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Entities\CEventManager.h">
+      <Filter>Source\Entities</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -25,6 +25,9 @@ private:
 	hrengin::u32 mSlot;
 	//hrengin::graphics::ICameraNode* mDefaultPOV;
 	hrengin::graphics::ICameraNode* povCamera_;
+
+	
+	CUnit* tmpSelUnit_;
 public:
 	CPlayerHuman(hrengin::graphics::ICameraNode* pPlayerCam);
 	//void ApplyCamera();

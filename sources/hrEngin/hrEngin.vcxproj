@@ -126,6 +126,8 @@
     <ClInclude Include="..\..\include\GUI\Input\IInputManager.h" />
     <ClInclude Include="..\..\include\GUI\Input\Keycodes.h" />
     <ClInclude Include="..\..\include\hrEngin.h" />
+    <ClInclude Include="..\..\include\hrengin\entities\IEventManager.h" />
+    <ClInclude Include="..\..\include\hrengin\entities\IThinking.h" />
     <ClInclude Include="..\..\include\hrengin\gui\input\InputEvent.h" />
     <ClInclude Include="..\..\include\Physics\Base\IPhysicsManager.h" />
     <ClInclude Include="..\..\include\Physics\Base\IPhysicsObject.h" />
@@ -136,6 +138,7 @@
     <ClInclude Include="Common\CWorld.h" />
     <ClInclude Include="Common\hrFilesystem.h" />
     <ClInclude Include="Entities\CEntityManager.h" />
+    <ClInclude Include="Entities\CEventManager.h" />
     <ClInclude Include="Graphics\CVideoManager.h" />
     <ClInclude Include="Graphics\IrrExt\CSceneNodeAnimatorCameraRTS.h" />
     <ClInclude Include="Graphics\IrrExt\ISceneNodeAnimatorCameraRTS.h" />
@@ -151,6 +154,7 @@
     <ClCompile Include="Common\CEncore.cpp" />
     <ClCompile Include="Common\CWorld.cpp" />
     <ClCompile Include="Entities\CEntityManager.cpp" />
+    <ClCompile Include="Entities\CEventManager.cpp" />
     <ClCompile Include="Graphics\CVideoManager.cpp" />
     <ClCompile Include="Graphics\IrrExt\CSceneNodeAnimatorCameraRTS.cpp" />
     <ClCompile Include="Graphics\Nodes\CCameraNode.cpp" />

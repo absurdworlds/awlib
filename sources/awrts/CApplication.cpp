@@ -14,7 +14,9 @@ CApplication::CApplication()
 	videomgr->CreateLight();
 
 	phymgr = hrengin::physics::GetManager ();
+
 	entmgr = hrengin::GetManager();
+	eventmgr = hrengin::GetEventManager();
 
 	unitmgr = new CUnitManager();
 	mapmgr = new CMapManager();

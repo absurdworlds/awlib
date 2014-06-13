@@ -51,6 +51,12 @@ class CInternalsManager
 			return timer->getTime();
 		}
 		
+		u32 getTime()
+		{			
+			static irr::ITimer* timer(videomgr->GetDevice()->getTimer());
+			return timer->getTime();
+		}
+		
 	public: /* data */
 		hrengin::CEncore*			encore;
 		hrengin::CEntityManager*	entmgr;

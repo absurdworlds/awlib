@@ -5,6 +5,9 @@
 #include "Common/hrTypes.h"
 #include "Base/IEncore.h"
 #include "Base/IEntityManager.h"
+//#include "entities/IEventManager.h"
+#include <hrengin/entities/IEventManager.h>
+
 /**/
 #include "Graphics/Base/IVideoManager.h"
 #include "Graphics/Nodes/IVisNode.h"
@@ -23,6 +26,7 @@ namespace hrengin
 HRENGIN_API IEncore* KickstartEngine ();
 
 HRENGIN_API IEntityManager* GetManager ();
+HRENGIN_API IEventManager* GetEventManager ();
 
 namespace graphics
 {

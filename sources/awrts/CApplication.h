@@ -27,6 +27,7 @@ public:
 	hrengin::physics::IPhysicsManager* phymgr;
 	hrengin::graphics::IVideoManager* videomgr;
 	hrengin::IEntityManager* entmgr;
+	hrengin::IEventManager* eventmgr;
 	awrts::CUnitManager* unitmgr;
 	awrts::CMapManager* mapmgr;
 
