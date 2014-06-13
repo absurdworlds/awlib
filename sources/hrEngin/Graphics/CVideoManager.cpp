@@ -17,7 +17,7 @@ namespace graphics
 //! inits all the requried 
 CVideoManager::CVideoManager()
 {
-	device = irr::createDevice( irr::video::EDT_OPENGL, irr::core::dimension2d<irr::u32>(800, 600), 32, false, false, true, 0);
+	device = irr::createDevice( irr::video::EDT_OPENGL, irr::core::dimension2d<irr::u32>(1066, 600), 32, false, false, true, 0);
 
 	/*if (device == 0)
 	{
