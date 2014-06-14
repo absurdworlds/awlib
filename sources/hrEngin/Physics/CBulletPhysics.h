@@ -5,7 +5,7 @@
 #include <Bullet/btBulletDynamicsCommon.h>
 #include <Bullet/btBulletCollisionCommon.h>
 
-#include <Physics/Base/IPhysicsManager.h>
+#include <hrengin/physics/IPhysicsManager.h>
 
 #include "CPhysicsPhantom.h"
 

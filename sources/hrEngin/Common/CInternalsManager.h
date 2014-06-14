@@ -2,14 +2,16 @@
 #ifndef __HG_CInternalsManager__
 #define __HG_CInternalsManager__
 
-#include <Common/hrTypes.h>
+#include <Irrlicht/Irrlicht.h>
+
+#include <hrengin/common/hrTypes.h>
+
 #include "../Common/CEncore.h"
 #include "../Entities/CEntityManager.h"
 #include "../GUI/Input/CInputManager.h"
 #include "../Graphics/CVideoManager.h"
 #include "../Physics/CBulletPhysics.h"
 
-#include <Irrlicht/Irrlicht.h>
 /*
 #if defined(_HR_PHYSICS_HAVOK)
 	#include "../PhysicsHavok/CHavokPhysics.h"

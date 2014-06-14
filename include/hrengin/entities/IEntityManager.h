@@ -1,7 +1,7 @@
 #ifndef __H_INCLUDED__HRENGIN_IEntManager
 #define __H_INCLUDED__HRENGIN_IEntManager
 
-#include "Common/hrTypes.h"
+#include <hrengin/common/hrTypes.h>
 
 namespace hrengin
 {

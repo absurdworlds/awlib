@@ -2,9 +2,11 @@
 // This is an extension for the "Irrlicht Engine".
 // See copyright notice in irrlicht.h
 
-#include "CSceneNodeAnimatorCameraRTS.h"
 #include "math.h"
-#include <Base/Config/hrConfig.h>
+
+#include <hrengin/config/hrConfig.h>
+
+#include "CSceneNodeAnimatorCameraRTS.h"
 
 namespace irr
 {

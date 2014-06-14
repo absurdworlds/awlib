@@ -2,11 +2,11 @@
 #ifndef __HG_hrñCameraNode__
 #define __HG_hrñCameraNode__
 
-#include <Graphics/Nodes/ICameraNode.h>
-#include <Graphics/Base/IVideoManager.h>
-#include <Entities/IBaseEntity.h>
-
 #include <Irrlicht/Irrlicht.h>
+
+#include <hrengin/graphics/ICameraNode.h>
+#include <hrengin/graphics/IVideoManager.h>
+#include <hrengin/entities/IBaseEntity.h>
 
 namespace hrengin
 {

@@ -1,8 +1,8 @@
 #ifndef __H_INCLUDED__HRENGIN_IPhysicsObject
 #define __H_INCLUDED__HRENGIN_IPhysicsObject
 
-#include <Base/Vector3d.h>
-
+#include <hrengin/common/Vector3d.h>
+		  
 namespace hrengin
 {
 

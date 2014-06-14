@@ -1,8 +1,10 @@
-#include <Base/Vector3d.h>
+
 #include <Irrlicht/plane3d.h>
 #include <Irrlicht/Vector3d.h>
 
-#include <Physics/Base/IPhysicsObject.h>
+#include <hrengin/common/Vector3d.h>
+
+#include <hrengin/physics/IPhysicsObject.h>
 
 #include "../CApplication.h"
 #include "../Units/CUnit.h"

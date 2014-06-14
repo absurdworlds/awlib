@@ -1,8 +1,8 @@
 #ifndef __H_INCLUDED__HRENGIN_ICameraNode
 #define __H_INCLUDED__HRENGIN_ICameraNode
 
-#include <Common/line3d.h>
-#include <Graphics/Base/ISceneNode.h>
+#include <hrengin/common/line3d.h>
+#include <hrengin/graphics/ISceneNode.h>
 
 namespace hrengin
 {

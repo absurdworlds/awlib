@@ -1,5 +1,5 @@
 
-#include <Physics/IPhysicsPhantom.h>
+#include <hrengin/physics/IPhysicsPhantom.h>
 #include <hrengin/entities/IEventManager.h>
 
 #include "CUnit.h"

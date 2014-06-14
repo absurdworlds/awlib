@@ -2,7 +2,7 @@
 #define __H_INCLUDED__AWRTS_IPlayer
 
 //#include <Base/Entities/IInputReceiver.h>
-#include <Entities/IBaseEntity.h>
+#include <hrengin/entities/IBaseEntity.h>
 
 namespace awrts
 {

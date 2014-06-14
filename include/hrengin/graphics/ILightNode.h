@@ -1,7 +1,7 @@
 #ifndef __H_INCLUDED__HRENGIN_ILightNode
 #define __H_INCLUDED__HRENGIN_ILightNode
 
-#include <Graphics/Base/ISceneNode.h>
+#include <hrengin/graphics/ISceneNode.h>
 
 namespace hrengin
 {

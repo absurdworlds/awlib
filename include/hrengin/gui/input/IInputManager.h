@@ -1,10 +1,10 @@
 #ifndef __H_INCLUDED__HRENGIN_IInputManager
 #define __H_INCLUDED__HRENGIN_IInputManager
 
-#include <Common/hrTypes.h>
-#include <Base/Entities/IControllable.h>
+#include <hrengin/common/hrTypes.h>
+#include <hrengin/entities/IControllable.h>
 
-#include "hrengin/gui/input/InputEvent.h"
+#include <hrengin/gui/input/InputEvent.h>
 
 namespace irr
 {

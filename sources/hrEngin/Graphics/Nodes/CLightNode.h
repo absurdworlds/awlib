@@ -2,11 +2,11 @@
 #ifndef __HG_CLightNode__
 #define __HG_CLightNode__
 
-#include <Graphics/Nodes/ILightNode.h>
-#include <Graphics/Base/IVideoManager.h>
-#include <Entities/IBaseEntity.h>
-
 #include <Irrlicht/Irrlicht.h>
+
+#include <hrengin/graphics/ILightNode.h>
+#include <hrengin/graphics/IVideoManager.h>
+#include <hrengin/entities/IBaseEntity.h>
 
 namespace hrengin
 {

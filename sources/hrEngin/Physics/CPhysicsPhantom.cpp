@@ -1,5 +1,6 @@
 
-#include <Entities/IBaseEntity.h>
+#include <hrengin/entities/IBaseEntity.h>
+
 #include "CPhysicsPhantom.h"
 
 namespace hrengin

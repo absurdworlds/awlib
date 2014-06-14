@@ -2,14 +2,14 @@
 #ifndef __HG_CVisNode__
 #define __HG_CVisNode__
 
-#include <Common/hrTypes.h>
-#include <Entities/IBaseEntity.h>
-#include <Graphics/Nodes/IVisNode.h>
-#include <Graphics/Base/IVideoManager.h>
+#include <array>
 
 #include <Irrlicht/Irrlicht.h>
 
-#include <array>
+#include <hrengin/common/hrTypes.h>
+#include <hrengin/entities/IBaseEntity.h>
+#include <hrengin/graphics/IVisNode.h>
+#include <hrengin/graphics/IVideoManager.h>
 
 namespace hrengin
 {

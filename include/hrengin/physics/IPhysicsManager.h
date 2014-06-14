@@ -2,8 +2,8 @@
 #ifndef __H_INCLUDED__HRENGIN_IPhysicsManager
 #define __H_INCLUDED__HRENGIN_IPhysicsManager
 
-#include <Common/hrTypes.h>
-#include <Base/Vector3d.h>
+#include <hrengin/common/hrTypes.h>
+#include <hrengin/common/Vector3d.h>
 
 namespace hrengin
 {

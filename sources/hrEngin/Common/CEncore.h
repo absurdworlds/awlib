@@ -2,7 +2,7 @@
 #ifndef __HG_CEncore_h__
 #define __HG_CEncore_h__
 
-#include <hrEngin.h> 
+#include <hrengin/hrengin.h> 
 #include "../Graphics/CVideoManager.h" 
 //#include "Physics/CBulletPhysics.h" 
 

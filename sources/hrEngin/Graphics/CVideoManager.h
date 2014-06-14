@@ -2,14 +2,14 @@
 #ifndef __HG_CVideoManager_h__
 #define __HG_CVideoManager_h__
 
-#include <Graphics/Base/IVideoManager.h>
-#include <GUI/IGUIManager.h>
-#include <Graphics/Base/ISceneNode.h>
-#include <Graphics/Nodes/IVisNode.h>
-#include <Graphics/Nodes/ICameraNode.h>
-#include <Graphics/Nodes/ILightNode.h>
-
 #include <vector>
+
+#include <hrengin/graphics/IVideoManager.h>
+#include <hrengin/gui/IGUIManager.h>
+#include <hrengin/graphics/ISceneNode.h>
+#include <hrengin/graphics/IVisNode.h>
+#include <hrengin/graphics/ICameraNode.h>
+#include <hrengin/graphics/ILightNode.h>
 
 namespace irr
 {

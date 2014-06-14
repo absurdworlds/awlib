@@ -1,7 +1,7 @@
 #ifndef __H_INCLUDED__HRENGIN_hrConfig
 #define __H_INCLUDED__HRENGIN_hrConfig
 
-#include "Base/Config/hrVersions.h"
+#include <hrengin/config/hrVersions.h>
 
 /* Windows platform */
 #if defined(_WIN32) || defined(_WIN64) || defined(WIN32) || defined(WIN64)

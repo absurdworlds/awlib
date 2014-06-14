@@ -61,17 +61,17 @@
     <Filter Include="Include\Base">
       <UniqueIdentifier>{3724bf5e-2370-4d90-a176-dada8183439b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Include\Base\Filesystem">
-      <UniqueIdentifier>{cf300e18-4f0b-4a64-a20d-3fa547f42fe7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Include\Base\Config">
-      <UniqueIdentifier>{03074a71-661c-41fc-a9f2-f451aced349e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Include\GUI">
       <UniqueIdentifier>{e2031358-1771-4f5d-8298-003cea1372d9}</UniqueIdentifier>
     </Filter>
     <Filter Include="Include\GUI\Input">
       <UniqueIdentifier>{ad6b8575-7bf2-4f1a-be03-65cd6a25046d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Include\Config">
+      <UniqueIdentifier>{03074a71-661c-41fc-a9f2-f451aced349e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Include\Filesystem">
+      <UniqueIdentifier>{cf300e18-4f0b-4a64-a20d-3fa547f42fe7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -233,24 +233,6 @@
     <ClInclude Include="..\..\include\hrengin\base\IEncore.h">
       <Filter>Include\Base</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\hrengin\base\Filesystem\IFileParser.h">
-      <Filter>Include\Base\Filesystem</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\hrengin\base\Filesystem\IFileSystem.h">
-      <Filter>Include\Base\Filesystem</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\hrengin\base\Filesystem\IReadFile.h">
-      <Filter>Include\Base\Filesystem</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\hrengin\base\Filesystem\IWriteFile.h">
-      <Filter>Include\Base\Filesystem</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\hrengin\base\Config\hrConfig.h">
-      <Filter>Include\Base\Config</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\hrengin\base\Config\hrVersions.h">
-      <Filter>Include\Base\Config</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\hrengin\graphics\ICameraNode.h">
       <Filter>Include\Graphics</Filter>
     </ClInclude>
@@ -277,6 +259,24 @@
     </ClInclude>
     <ClInclude Include="..\..\include\hrengin\gui\input\Keycodes.h">
       <Filter>Include\GUI\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\config\hrConfig.h">
+      <Filter>Include\Config</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\config\hrVersions.h">
+      <Filter>Include\Config</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\filesystem\IFileParser.h">
+      <Filter>Include\Filesystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\filesystem\IFileSystem.h">
+      <Filter>Include\Filesystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\filesystem\IReadFile.h">
+      <Filter>Include\Filesystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\filesystem\IWriteFile.h">
+      <Filter>Include\Filesystem</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

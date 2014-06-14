@@ -6,7 +6,7 @@
 
 #include <Irrlicht/Irrlicht.h>
 
-#include <GUI/Input/IInputManager.h>
+#include <hrengin/gui/input/IInputManager.h>
 
 namespace hrengin
 {

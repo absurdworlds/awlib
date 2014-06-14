@@ -4,8 +4,8 @@
 #include <vector>
 #include <algorithm>
 
-#include "Common/hrTypes.h"
-#include "Base/Vector3d.h"
+#include <hrengin/common/hrTypes.h>
+#include <hrengin/common/Vector3d.h>
 //#include "Base/IVirtualObject.h"
 
 namespace hrengin

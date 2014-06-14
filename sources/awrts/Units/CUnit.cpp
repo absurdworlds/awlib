@@ -1,7 +1,7 @@
 
-#include <Graphics/Nodes/IVisNode.h>
-#include <Physics/IPhysicsPhantom.h>
-#include <Base/Math/hrMath.h>
+#include <hrengin/graphics/IVisNode.h>
+#include <hrengin/physics/IPhysicsPhantom.h>
+#include <hrengin/common/math/hrMath.h>
 
 
 #include "CUnit.h"

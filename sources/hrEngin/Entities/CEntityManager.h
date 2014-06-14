@@ -4,8 +4,8 @@
 #include <vector>
 #include <deque>
 
-#include <Entities/IBaseEntity.h>
-#include <Base/IEntityManager.h>
+#include <hrengin/entities/IBaseEntity.h>
+#include <hrengin/entities/IEntityManager.h>
 
 namespace hrengin
 {

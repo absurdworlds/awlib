@@ -1,7 +1,7 @@
 #ifndef __H_INCLUDED__AWRTS_CUnitType
 #define __H_INCLUDED__AWRTS_CUnitType
 
-#include <Common/hrTypes.h>
+#include <hrengin/common/hrTypes.h>
 
 namespace awrts
 {

@@ -1,5 +1,6 @@
 
-#include <hrEngin.h>
+#include <hrengin/hrengin.h>
+
 #include "Common/CInternalsManager.h"
 #include "Common/hrFilesystem.h"
 #include "Common/CEncore.h"

@@ -1,7 +1,7 @@
 #ifndef __H_INCLUDED__HRENGIN_IThinking
 #define __H_INCLUDED__HRENGIN_IThinking
 
-#include <Common/hrTypes.h>
+#include <hrengin/common/hrTypes.h>
 
 namespace hrengin
 {

@@ -1,21 +1,21 @@
 #ifndef __H_INCLUDED__HRENGIN_hrengin
 #define __H_INCLUDED__HRENGIN_hrengin
 
-#include "Base/Config/hrConfig.h" // the configuration file
-#include "Common/hrTypes.h"
-#include "Base/IEncore.h"
-#include "Base/IEntityManager.h"
-//#include "entities/IEventManager.h"
+#include <hrengin/config/hrConfig.h>
+#include <hrengin/common/hrTypes.h>
+#include <hrengin/base/IEncore.h>
+
+#include <hrengin/entities/IEntityManager.h>
 #include <hrengin/entities/IEventManager.h>
 
-/**/
-#include "Graphics/Base/IVideoManager.h"
-#include "Graphics/Nodes/IVisNode.h"
-#include "Graphics/Nodes/ICameraNode.h"
+#include <hrengin/graphics/IVideoManager.h>
+#include <hrengin/graphics/IVisNode.h>
+#include <hrengin/graphics/ICameraNode.h>
 
-#include "GUI/IGUIManager.h"
-#include "GUI/Input/IInputManager.h"
-#include "Physics/Base/IPhysicsManager.h"
+#include <hrengin/gui/IGUIManager.h>
+#include <hrengin/gui/input/IInputManager.h>
+
+#include <hrengin/physics/IPhysicsManager.h>
 
 namespace hrengin
 {

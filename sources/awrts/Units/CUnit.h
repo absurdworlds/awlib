@@ -1,10 +1,10 @@
 #ifndef __H_INCLUDED__AWRTS_CUnit
 #define __H_INCLUDED__AWRTS_CUnit
 
-#include <Common/hrTypes.h>
-#include <Base/Vector3d.h>
-#include <Entities/IBaseEntity.h>
-#include <hrengin/Entities/IThinking.h>
+#include <hrengin/common/hrTypes.h>
+#include <hrengin/common/Vector3d.h>
+#include <hrengin/entities/IBaseEntity.h>
+#include <hrengin/entities/IThinking.h>
 #include "UnitType.h"
 
 //#include "CUnitManager.h"

@@ -1,7 +1,7 @@
 #ifndef __H_INCLUDED__HRENGIN_IPhysicsPhantom
 #define __H_INCLUDED__HRENGIN_IPhysicsPhantom
 
-#include <Physics/Base/IPhysicsObject.h>
+#include <hrengin/physics/IPhysicsObject.h>
 
 namespace hrengin
 {

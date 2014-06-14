@@ -2,14 +2,13 @@
 #ifndef __HG_hrMath_H__
 #define __HG_hrMath_H__
 
-#include "Base/Config/hrConfig.h"
-
 #include <math.h>
 #include <stdlib.h>
 #include <limits.h>
 #include <float.h>
 
-#include "Common/hrTypes.h"
+#include <hrengin/config/hrConfig.h>
+#include <hrengin/common/hrTypes.h>
 
 
 namespace hrengin

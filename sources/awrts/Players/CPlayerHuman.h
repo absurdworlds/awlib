@@ -1,10 +1,10 @@
 #ifndef __H_INCLUDED__AWRTS_CPlayerHuman
 #define __H_INCLUDED__AWRTS_CPlayerHuman
 
-#include <Base/Vector3d.h>
-#include <Common/line3d.h>
-#include <Base/Entities/IControllable.h>
-#include <Graphics/Nodes/ICameraNode.h>
+#include <hrengin/common/Vector3d.h>
+#include <hrengin/common/line3d.h>
+#include <hrengin/entities/IControllable.h>
+#include <hrengin/graphics/ICameraNode.h>
 
 #include "../Units/CUnit.h"
 

@@ -1,7 +1,7 @@
 #ifndef __H_INCLUDED__HRENGIN_IEventManager
 #define __H_INCLUDED__HRENGIN_IEventManager
 
-#include <Common/hrTypes.h>
+#include <hrengin/common/hrTypes.h>
 
 namespace hrengin
 {
