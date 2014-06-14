@@ -61,6 +61,7 @@ namespace scene
 		//! Set the camera angle
 		virtual void setAngleClose(f32 a) = 0;
 
+
 		//! Sets the keyboard mapping for this animator (old style)
 		//virtual void setKeyMap(SRTSKeyMap *map, u32 count) = 0;
 

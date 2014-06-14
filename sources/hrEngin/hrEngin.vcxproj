@@ -71,7 +71,7 @@
       </Inputs>
     </CustomBuildStep>
     <PostBuildEvent>
-      <Command>start $(SolutionDir)movebinaries.bat  $(Configuration)</Command>
+      <Command>start $(SolutionDir)movebinaries.bat  $(Configuration) $(SolutionDir)</Command>
     </PostBuildEvent>
     <PostBuildEvent>
       <Message>MOVING BUNURIS</Message>
@@ -101,6 +101,7 @@
     <ClInclude Include="..\..\include\hrengin\ai\IBaseNavigator.h" />
     <ClInclude Include="..\..\include\hrengin\ai\IBasePathfinder.h" />
     <ClInclude Include="..\..\include\hrengin\base\IEncore.h" />
+    <ClInclude Include="..\..\include\hrengin\base\ILogger.h" />
     <ClInclude Include="..\..\include\hrengin\common\hrTypes.h" />
     <ClInclude Include="..\..\include\hrengin\common\line3d.h" />
     <ClInclude Include="..\..\include\hrengin\common\Math\hrMath.h" />

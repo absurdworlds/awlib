@@ -15,21 +15,21 @@ namespace scene
 	
 	CSceneNodeAnimatorCameraRTS::CSceneNodeAnimatorCameraRTS(gui::ICursorControl* cursor, ITimer* timer, f32 distance, f32 angle, f32 angle_close, 
 		f32 translateSpeed, f32 rotateSpeed, f32 zoomSpeed) 
-		: CursorControl(cursor), MousePos(0.5f, 0.5f), MousePos_old(0.5f, 0.5f), Timer(timer),
-		ZoomSpeed(zoomSpeed), RotateSpeed(rotateSpeed), TranslateSpeed(translateSpeed),
-	Zooming(false), Rotating(false), Scrolling(false), Scroll_lock(false), Dragging(false), 
-	MinZoom(0.2f), MaxZoom(5.f), NewZoom(1.0f), CurrentZoom(1.0f), RotZ(0.0f),
-	distance(distance), angle(angle), angle_close(angle_close), FirstUpdateReceived(false)
+		: CursorControl(cursor), lasthit(0.0f, 0.0f, 0.0f), mousepos(0,0), mousepos_old(0,0),
+		  Timer(timer), ZoomSpeed(zoomSpeed), RotateSpeed(rotateSpeed), TranslateSpeed(translateSpeed),
+		  Zooming(false), Rotating(false), Scrolling(false), Scroll_lock(true), Dragging(false),
+		  MinZoom(0.2f), MaxZoom(5.f), NewZoom(1.0f), CurrentZoom(1.0f), RotZ(0.0f),
+		  distance(distance), angle(angle), angle_close(angle_close), FirstUpdateReceived(false)
 
 	{
 		#ifdef _DEBUG
-			fprintf(stderr, "DEBUG: function call %s\n", __FUNCTION_NAME__);
+			//fprintf(stderr, "DEBUG: function call %s\n", __FUNCTION_NAME__);
 		#endif //_DEBUG
 
 		if (CursorControl)
 		{
 			CursorControl->grab();
-			MousePos = CursorControl->getRelativePosition();
+			//MousePos = CursorControl->getRelativePosition();
 		}
 
 		allKeysUp();
@@ -69,8 +69,8 @@ namespace scene
 				MouseKeys[1] = false;
 				break;
 			case EMIE_MOUSE_MOVED:
-				MousePos = CursorControl->getRelativePosition();
-				MousePos2 = CursorControl->getPosition();
+				mousepos_old = mousepos;
+				mousepos = CursorControl->getPosition();
 				break;
 			case EMIE_MOUSE_WHEEL:
 				NewZoom -= event.MouseInput.Wheel * ZoomSpeed * (CurrentZoom / (MaxZoom * MinZoom));
@@ -122,7 +122,7 @@ namespace scene
 		for (s32 i=0; i<3; ++i)
 			MouseKeys[i] = false;
 	}
-
+	
 	//! OnAnimate() is called just before rendering the whole scene.
 	void CSceneNodeAnimatorCameraRTS::animateNode(ISceneNode *node, u32 timeMs)
 	{
@@ -133,7 +133,9 @@ namespace scene
 		// Mouse wheel up/down = zoom camera
 
 		if (!node || node->getType() != ESNT_CAMERA)
+		{
 			return;
+		}
 		
 		ICameraSceneNode* camera = static_cast<ICameraSceneNode*>(node);
 
@@ -151,153 +153,90 @@ namespace scene
 
 		scene::ISceneCollisionManager* colman = scnmgr->getSceneCollisionManager();
 
-		/*if (OldCamera != camera)
-		{
-			LastCameraTarget = OldTarget = camera->getTarget();
-			OldCamera = camera;
-		}
-		else
-		{
-			OldTarget += camera->getTarget() - LastCameraTarget;
-		}*/
-
-
 		if (!CursorControl)
 		{
 			return;
 		}
 		
+		core::dimension2d<u32> screen = scnmgr->getVideoDriver()->getScreenSize();
+
 		if(!FirstUpdateReceived)
 		{
 			LastUpdate = Timer->getTime();
 			FirstUpdateReceived = true;
+
+			core::line3df line = colman->getRayFromScreenCoordinates(mousepos, camera);				
+			core::plane3df plane;
+			plane.getIntersectionWithLine(line.start, line.getVector(), lasthit);
 		}
 		
-		u32 TimeDelta = Timer->getTime() - LastUpdate;
+		u32 TimeDelta = LastUpdate;
 		LastUpdate = Timer->getTime();
-
-
-
-
+		TimeDelta = LastUpdate - TimeDelta;
+		
 		// Camera movement
 		core::vector3df pos = camera->getPosition();
 		core::vector3df target = camera->getTarget();
-		core::vector3df translate(0,0,0);
-		core::vector3df translate_origin(0,0,0);
-		core::vector3df translate2(0,0,0);
-		core::vector3df translate3(0,0,0);
 
-		core::vector3df zoom_vector(0,distance*sin(angle),distance*cos(angle));
-		core::vector3df zoom_close(0,distance*sin(angle_close),distance*cos(angle_close));
+		core::vector3df translate(0,0,0);
+		
 
 		//core::vector3df zoom_close(0,20,30);
 		//core::vector3df zoom_point(0,0,0);
-			
+		
+		
+		core::plane3df plane;
+
+		core::line3df ray_new = colman->getRayFromScreenCoordinates(mousepos, camera);
+
+		core::vector3df pos_new;
+
+		plane.getIntersectionWithLine(ray_new.start, ray_new.getVector(), pos_new);
+
 		if(isMouseKeyDown(MOUSE_KEY_MIDDLE) && !Zooming) //&& !Translating)
 		{
 			Dragging = true;
-
-			if(MousePos != MousePos_old)
+			
+			if(mousepos_old != mousepos)
 			{
-				core::line3df line = colman->getRayFromScreenCoordinates(MousePos2, camera);
-				core::plane3df plane;
+				core::line3df ray_old = colman->getRayFromScreenCoordinates(mousepos_old, camera);
 
-				plane.getIntersectionWithLine(line.start, line.getVector(), translate_origin);
+				core::vector3df pos_old;
 
-				line = colman->getRayFromScreenCoordinates(MousePos2_old, camera);
-				plane.getIntersectionWithLine(line.start, line.getVector(), translate2);
+				plane.getIntersectionWithLine(ray_old.start, ray_old.getVector(), pos_old);
 
-				//translate.X += TranslateSpeed*(MousePos.X - MousePos_old.X)*scnmgr->getVideoDriver()->getScreenSize().Width   * (CurrentZoom / (MaxZoom * MinZoom));
-				//translate.Z += TranslateSpeed*(MousePos_old.Y - MousePos.Y)*scnmgr->getVideoDriver()->getScreenSize().Height  * (CurrentZoom / (MaxZoom * MinZoom));
-			fprintf(stderr, "DEBUG: \n");
-				translate.X -= (translate_origin.X - translate2.X);
-			fprintf(stderr, "DEBUG: COLL1X %f\n", translate_origin.X);
-			fprintf(stderr, "DEBUG: COLL2X %f\n", translate2.X);
-			fprintf(stderr, "DEBUG: TRANX %f\n", translate_origin.X - translate2.X);
-				translate.Z += (translate2.Z - translate_origin.Z);
-			fprintf(stderr, "DEBUG: COLL1Z %f\n", translate_origin.Z);
-			fprintf(stderr, "DEBUG: COLL2Z %f\n", translate2.Z);
-			fprintf(stderr, "DEBUG: TRANZ %f\n", translate2.Z - translate_origin.Z);
-			fprintf(stderr, "DEBUG: COLL1Y %f\n", translate_origin.Z);
-			fprintf(stderr, "DEBUG: COLL2Y %f\n", translate2.Z);
-			fprintf(stderr, "DEBUG: \n");
-				MousePos_old = MousePos;
-				MousePos2_old = MousePos2;
+				translate.X += pos_old.X - pos_new.X;
+				translate.Z += pos_old.Z - pos_new.Z;
 			}
-
-			if ((MousePos.X < 0.005) || (MousePos.X > 0.995) || (MousePos.Y < 0.005) || (MousePos.Y > 0.995))
+			
+			
+			if ((mousepos.X < 5) || (mousepos.X > (screen.Width - 5)) || (mousepos.Y < 5) || (mousepos.Y > (screen.Height - 5)))
 			{
 				Scroll_lock = true;
 			}
 		}
 		else
 		{
-			MousePos_old = MousePos;
-			MousePos2_old = MousePos2;
 			Dragging = false;
-			if((MousePos.X > 0.005) && (MousePos.X < 0.995) && (MousePos.Y > 0.005) && (MousePos.Y < 0.995))
+
+			if ((mousepos.X < 5) || (mousepos.X > (screen.Width - 5)) || (mousepos.Y < 5) || (mousepos.Y > (screen.Height - 5)))
 			{
 				Scroll_lock = false;
 			}
 		}
 		
+		if(NewZoom >= MaxZoom)
+		{
+			NewZoom = MaxZoom;
+		}
+		else if(NewZoom <= MinZoom)
+		{
+			NewZoom = MinZoom;
+		}
+
 		if(CurrentZoom != NewZoom && !Dragging && !Scrolling)
 		{
-			//(zoom_vector * ((CurrentZoom - MinZoom)/(1.f - MinZoom)) + zoom_close * (1-(CurrentZoom - MinZoom)/(1.f - MinZoom)))*CurrentZoom;
-
-			core::line3df line = colman->getRayFromScreenCoordinates(MousePos2, camera);
-			core::plane3df plane;
-
-			plane.getIntersectionWithLine(line.start, line.getVector(), translate3);
-				
-
-			const scene::SViewFrustum* f = camera->getViewFrustum();
-			
-			core::vector3df farLeftUp = f->getFarLeftUp();
-			core::vector3df lefttoright = f->getFarRightUp() - farLeftUp;
-			core::vector3df uptodown = f->getFarLeftDown() - farLeftUp;
-
-
-			if(NewZoom >= MaxZoom)
-			{
-				NewZoom = MaxZoom;
-			}
-			else if(NewZoom <= MinZoom)
-			{
-				NewZoom = MinZoom;
-			}
-			
-			
-			/*if(CurrentZoom-NewZoom > 0)
-			{
-			}
-			else
-			{
-				if(CurrentZoom >= 1.f)
-				{
-					translate.X = -(translate_origin.Z - translate2.Z)*(translate_origin.X - pos.X) * 1.f/CurrentZoom;
-					translate.Z = -(translate_origin.Z - translate2.Z)*(translate_origin.Z - pos.Z) * 1.f/CurrentZoom;
-				}
-			}*/
-
-			//zoom_point.X = -(MousePos.X)*NewZoom;
-			//zoom_point.Z = (MousePos.Y)*NewZoom;
-
 			CurrentZoom = NewZoom;
-			
-		#ifdef _DEBUG
-			fprintf(stderr, "DEBUG: CurrentZoom %f\n", CurrentZoom);
-		#endif //_DEBUG
-
-			/*if(CurrentZoom < 1.f)
-			{
-				//zoom_vector += zoom_close * (1.f - CurrentZoom - MinZoom*(CurrentZoom-1.f));
-
-				fprintf(stderr, "DEBUG: MousePos.1 %f\n", ((CurrentZoom - MinZoom)/(1.f - MinZoom)));
-				fprintf(stderr, "DEBUG: MousePos.2 %f\n", (1-(CurrentZoom - MinZoom)/(1.f - MinZoom)));
-			}
-			*/
-
 			Zooming = true;
 		}
 		else
@@ -305,62 +244,28 @@ namespace scene
 			NewZoom = CurrentZoom;
 			Zooming = false;
 		}
+		
 
 		if(!Scroll_lock && !Dragging && !Zooming)
 		{
-			/*const core::vector3df upVector(camera->getUpVector());*/
-
-			/*core::vector3df tvectX = pos - target;
-			tvectX = tvectX.crossProduct(upVector);
-			tvectX.normalize();
-
-			const SViewFrustum* const va = camera->getViewFrustum();
-			core::vector3df tvectY = (va->getFarLeftDown() - va->getFarRightDown());
-			tvectY = tvectY.crossProduct(upVector.Y > 0 ? pos - target : target - pos);
-			tvectY.normalize();*/
-				
-			// get current fps to make camera fps independent 
-			//int fps = scnmgr->getVideoDriver()->getFPS();
-
-			//if(fps == 1) fps = 1000; //  Œ—“€À‹
-
-			//fprintf(stderr, "DEBUG: fps %d\n", fps);
-
-			//Mouse Coordinates go from 0 to 1 on both axes
-
-			//fprintf(stderr, "DEBUG: TranslateSpeed %f\n",TranslateSpeed);
-			//fprintf(stderr, "DEBUG: 1000/fps %f\n", 3000.f/static_cast<irr::f32>(fps));
-
-			if (MousePos.X < 0.005 && MousePos.X < 1.000)   //Up
+			if ((mousepos.X < 5) && (mousepos.X >= 0))   //Up
 			{	
-				translate.X +=  TranslateSpeed * CurrentZoom * static_cast<irr::f32>(TimeDelta);
-			#ifdef _DEBUG
-				fprintf(stderr, "DEBUG: MousePos.X %f\n", MousePos.X);
-			#endif //_DEBUG
+				translate.X += TranslateSpeed * CurrentZoom * static_cast<irr::f32>(TimeDelta);
 			}
-			else if (MousePos.X > 0.995 && MousePos.X > 0.000) //Down
+			else if ((mousepos.X > (screen.Width - 5)) && (mousepos.X <= screen.Width)) //Down
 			{
-				translate.X -=  TranslateSpeed * CurrentZoom * static_cast<irr::f32>(TimeDelta);
-			#ifdef _DEBUG
-				fprintf(stderr, "DEBUG: MousePos.X %f\n", MousePos.X);
-			#endif //_DEBUG
+				translate.X -= TranslateSpeed * CurrentZoom * static_cast<irr::f32>(TimeDelta);
 			}
-
-			if (MousePos.Y < 0.005 && MousePos.Y > 0.000)   //Up
+			
+			if ((mousepos.Y < 5) && (mousepos.Y >= 0))   //Up
 			{
 				translate.Z -= TranslateSpeed * CurrentZoom * static_cast<irr::f32>(TimeDelta);
-			#ifdef _DEBUG
-				fprintf(stderr, "DEBUG: MousePos.Y %f\n", MousePos.Y);
-			#endif //_DEBUG
 			}
-			else if (MousePos.Y > 0.995 && MousePos.Y < 1.000) //Down
+			else if ((mousepos.Y > (screen.Height - 5)) && (mousepos.Y <= screen.Height)) //Down
 			{
 				translate.Z += TranslateSpeed * CurrentZoom * static_cast<irr::f32>(TimeDelta);
-			#ifdef _DEBUG
-				fprintf(stderr, "DEBUG: MousePos.Y %f\n", MousePos.Y);
-			#endif //_DEBUG
 			}
-
+			
 			if(translate.X + translate.Y == 0)
 			{
 				Scrolling = false;
@@ -371,33 +276,41 @@ namespace scene
 			}
 		}
 
-
-		target += translate; // + zoom_point;
-		pos = target;
-		/*pos += translate3 - target;
-		pos *= CurrentZoom;*/
-		
-		/*zoom_vector.X += translate_origin.X - target.X;
-		zoom_vector.Y += translate_origin.Y - target.Y;
-		zoom_vector.Z += translate_origin.Z - target.Z;*/
+		f32 cur_angle;
 
 		if(CurrentZoom < 1.f)
 		{
-			pos += (zoom_vector * ((CurrentZoom - MinZoom)/(1.f - MinZoom)) + zoom_close * (1-(CurrentZoom - MinZoom)/(1.f - MinZoom)))*CurrentZoom;
+			f32 relativeZoom = (CurrentZoom - MinZoom)/(1.f - MinZoom);
+			cur_angle = angle * relativeZoom + angle_close * (1-relativeZoom);
 		}
 		else
 		{
-			pos += zoom_vector*CurrentZoom;
+			cur_angle = angle;
 		}
 
-		//pos.X += nZoom;
+		cur_angle = angle;
+		
 
-		//pos.rotateXYBy(nRotY, translate);
-		//pos.rotateXZBy(-nRotX, translate);
+		target += translate; 
+
+		core::vector3df camera_offset(0,distance*sin(cur_angle),distance*cos(cur_angle));
+		pos = target + camera_offset * CurrentZoom;
+		
+		/*target -=pos_new;
+		pos -=pos_new;
+
+		if(Zooming)
+		{
+			target /= CurrentZoom;
+			pos /= CurrentZoom;
+		fprintf(stderr, "DEBUG: ˜˛˛Ï-˛˛˛Ï\n", target.X);
+		}
+
+		target +=pos_new;
+		pos +=pos_new;*/
 
 		camera->setPosition(pos);
 		camera->setTarget(target);
-		//camera->setTarget(translate);
 	}
 
 	//! Returns the speed of movement

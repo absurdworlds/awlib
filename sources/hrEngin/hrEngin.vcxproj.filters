@@ -278,5 +278,8 @@
     <ClInclude Include="..\..\include\hrengin\filesystem\IWriteFile.h">
       <Filter>Include\Filesystem</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\base\ILogger.h">
+      <Filter>Include\Base</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -100,7 +100,7 @@ namespace scene
 		{
 			return ESNAT_CAMERA_FPS;
 		}
-
+		
 		//! Creates a clone of this animator.
 		/** Please note that you will have to drop
 		(IReferenceCounted::drop()) the returned pointer once you're
@@ -140,10 +140,9 @@ namespace scene
 		f32 angle;
 		f32 angle_close;
 		
-		core::vector2di MousePos2;
-		core::vector2di MousePos2_old;
-		core::position2df MousePos;
-		core::position2df MousePos_old;
+		core::vector2di mousepos;
+		core::vector2di mousepos_old;
+		core::vector3df lasthit;
 
 		//bool CursorKeys[EKA_RTS_COUNT];
 
@@ -161,7 +160,7 @@ namespace scene
 
 		//s32 LastAnimationTime;
 
-		//bool firstUpdate;
+		bool firstUpdate;
 		//bool firstInput;
 
 		bool Zooming;
