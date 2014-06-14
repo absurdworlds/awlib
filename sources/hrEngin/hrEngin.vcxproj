@@ -13,7 +13,7 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{02D3814A-D061-48A3-B808-F43DC5D642F2}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>hrEngin</RootNamespace>
+    <RootNamespace>hrengin</RootNamespace>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -54,7 +54,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;HRENGIN_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;hrengin_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -71,7 +71,7 @@
       </Inputs>
     </CustomBuildStep>
     <PostBuildEvent>
-      <Command>start $(SolutionDir)movebinaries.bat  $(Configuration) $(SolutionDir)</Command>
+      <Command>start $(SolutionDir)movebinaries.bat $(Configuration) $(SolutionDir)</Command>
     </PostBuildEvent>
     <PostBuildEvent>
       <Message>MOVING BUNURIS</Message>
@@ -84,7 +84,7 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;HRENGIN_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;hrengin_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -164,7 +164,7 @@
     <ClCompile Include="Graphics\Nodes\CLightNode.cpp" />
     <ClCompile Include="GUI\CGuiManager.cpp" />
     <ClCompile Include="GUI\Input\CInputManager.cpp" />
-    <ClCompile Include="hrEngin.cpp" />
+    <ClCompile Include="hrengin.cpp" />
     <ClCompile Include="Physics\CBulletPhysics.cpp" />
     <ClCompile Include="Physics\CPhysicsPhantom.cpp" />
   </ItemGroup>
