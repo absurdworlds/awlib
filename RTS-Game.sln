@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "awrts", "awrts\awrts.vcxproj", "{08391406-CA28-417B-A8F4-4FCF6E5CDF17}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "awrts", "sources\awrts\awrts.vcxproj", "{08391406-CA28-417B-A8F4-4FCF6E5CDF17}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "hrEngin", "hrEngin\hrEngin.vcxproj", "{02D3814A-D061-48A3-B808-F43DC5D642F2}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "hrEngin", "sources\hrEngin\hrEngin.vcxproj", "{02D3814A-D061-48A3-B808-F43DC5D642F2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

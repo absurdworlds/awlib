@@ -1,4 +1,5 @@
 set sourcedir=E:\RTSGame\Code\sources\%1
+set libdir=E:\RTSGame\Code\lib\%1
 set gamedir=E:\RTSGame\Code\sources\%1
 set targetdir=E:\RTSGame\Code\sources\%1
 for %%f in (%sourcedir%\*.exe %sourcedir%\*.dll) do xcopy /y %%f E:\RTSGame\Game\system\

@@ -1,17 +1,15 @@
 ﻿
 v. Storm in a bottle
 --A test version, unplayable in general sense
-	v. Storm in a bottle+0
-о эвэнттаймер
-о заменить ноуколайд на колфильтр у физиксфантома
+	v. Storm in a bottle 0.002
+o more realistic unit movement
+o Write sound wrapper
 о юнитселекшон — подсветка выделенного юнита
+о заменить ноуколайд на колфильтр у физиксфантома
 о написать класс пути 
 о unit movement: мувемент эйджент
 о хард таск — написать измерение отклонения от пути
 о хард таск — сделать зонд, которым юнит будет высматривать других юнитов
-
-	In version+1:
-o Write sound wrapper
 o Write weapon class
 o Write players
 o remove guienv from graphics //don't need to do it anymore — CGUIManager now is a friend of CVideoManager
@@ -27,7 +25,7 @@ o write proper map manager
 î äîáàâèòü proper ãðàóíä ìîäåë, also raycasting
 o Make units attack each other
 
-	In version+2:
+	In future:
 o Main menu
 o Basic ai
 o Buildings
@@ -35,13 +33,11 @@ o Animation
 o Start write map landscape
 o Start navmesh navigation
 î õàðä òàñê — ïðîâåðêà, íå âûëåòåë ëè þíèò çà íàâìåø
-
-	In version+3
 o Add non-flat world
+o gamemodes (classic, exhaustion etc)
 
 
-
-v. Srantonwars
+v. Srantonwars 1.xxx
 --The first playable version, will partially (only first two tiers) feature two races (sotm and buprof), 
 
 

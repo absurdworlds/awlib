@@ -40,8 +40,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(SolutionDir)\..\include;$(SolutionDir)..\..\External\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)..\..\External\lib\win32-msvc-debug;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)include;$(SolutionDir)..\External\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)..\External\lib\win32-msvc-debug;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -98,41 +98,42 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\example\hrSampleProgramloop.h" />
-    <ClInclude Include="..\..\include\AI\IBaseNavigator.h" />
-    <ClInclude Include="..\..\include\AI\IBasePathfinder.h" />
-    <ClInclude Include="..\..\include\Base\Config\hrConfig.h" />
-    <ClInclude Include="..\..\include\Base\Config\hrVersions.h" />
-    <ClInclude Include="..\..\include\Base\Entities\IControllable.h" />
-    <ClInclude Include="..\..\include\Base\Entities\IWorld.h" />
-    <ClInclude Include="..\..\include\Base\Filesystem\IFileParser.h" />
-    <ClInclude Include="..\..\include\Base\Filesystem\IFileSystem.h" />
-    <ClInclude Include="..\..\include\Base\Filesystem\IReadFile.h" />
-    <ClInclude Include="..\..\include\Base\Filesystem\IWriteFile.h" />
-    <ClInclude Include="..\..\include\Base\IEncore.h" />
-    <ClInclude Include="..\..\include\Base\IEntityManager.h" />
-    <ClInclude Include="..\..\include\Base\Vector2d.h" />
-    <ClInclude Include="..\..\include\Base\Vector3d.h" />
-    <ClInclude Include="..\..\include\Base\Math\hrMath.h" />
-    <ClInclude Include="..\..\include\Common\hrTypes.h" />
-    <ClInclude Include="..\..\include\Common\line3d.h" />
-    <ClInclude Include="..\..\include\Entities\IBaseEntity.h" />
-    <ClInclude Include="..\..\include\Entities\IParentable.h" />
-    <ClInclude Include="..\..\include\Graphics\Base\ISceneNode.h" />
-    <ClInclude Include="..\..\include\Graphics\Base\IVideoManager.h" />
-    <ClInclude Include="..\..\include\Graphics\Nodes\ICameraNode.h" />
-    <ClInclude Include="..\..\include\Graphics\Nodes\ILightNode.h" />
-    <ClInclude Include="..\..\include\Graphics\Nodes\IVisNode.h" />
-    <ClInclude Include="..\..\include\gui\IGUIManager.h" />
-    <ClInclude Include="..\..\include\GUI\Input\IInputManager.h" />
-    <ClInclude Include="..\..\include\GUI\Input\Keycodes.h" />
-    <ClInclude Include="..\..\include\hrEngin.h" />
+    <ClInclude Include="..\..\include\hrengin\ai\IBaseNavigator.h" />
+    <ClInclude Include="..\..\include\hrengin\ai\IBasePathfinder.h" />
+    <ClInclude Include="..\..\include\hrengin\base\Config\hrConfig.h" />
+    <ClInclude Include="..\..\include\hrengin\base\Config\hrVersions.h" />
+    <ClInclude Include="..\..\include\hrengin\base\Filesystem\IFileParser.h" />
+    <ClInclude Include="..\..\include\hrengin\base\Filesystem\IFileSystem.h" />
+    <ClInclude Include="..\..\include\hrengin\base\Filesystem\IReadFile.h" />
+    <ClInclude Include="..\..\include\hrengin\base\Filesystem\IWriteFile.h" />
+    <ClInclude Include="..\..\include\hrengin\base\IEncore.h" />
+    <ClInclude Include="..\..\include\hrengin\common\hrTypes.h" />
+    <ClInclude Include="..\..\include\hrengin\common\line3d.h" />
+    <ClInclude Include="..\..\include\hrengin\common\Math\hrMath.h" />
+    <ClInclude Include="..\..\include\hrengin\common\Vector2d.h" />
+    <ClInclude Include="..\..\include\hrengin\common\Vector3d.h" />
+    <ClInclude Include="..\..\include\hrengin\entities\IBaseEntity.h" />
+    <ClInclude Include="..\..\include\hrengin\entities\IControllable.h" />
+    <ClInclude Include="..\..\include\hrengin\entities\IEntityManager.h" />
     <ClInclude Include="..\..\include\hrengin\entities\IEventManager.h" />
+    <ClInclude Include="..\..\include\hrengin\entities\IParentable.h" />
     <ClInclude Include="..\..\include\hrengin\entities\IThinking.h" />
+    <ClInclude Include="..\..\include\hrengin\entities\IWorld.h" />
+    <ClInclude Include="..\..\include\hrengin\graphics\ICameraNode.h" />
+    <ClInclude Include="..\..\include\hrengin\graphics\ILightNode.h" />
+    <ClInclude Include="..\..\include\hrengin\graphics\ISceneNode.h" />
+    <ClInclude Include="..\..\include\hrengin\graphics\IVideoManager.h" />
+    <ClInclude Include="..\..\include\hrengin\graphics\IVisNode.h" />
+    <ClInclude Include="..\..\include\hrengin\gui\IGUIManager.h" />
+    <ClInclude Include="..\..\include\hrengin\gui\input\IInputManager.h" />
     <ClInclude Include="..\..\include\hrengin\gui\input\InputEvent.h" />
-    <ClInclude Include="..\..\include\Physics\Base\IPhysicsManager.h" />
-    <ClInclude Include="..\..\include\Physics\Base\IPhysicsObject.h" />
-    <ClInclude Include="..\..\include\Physics\IPhysicsBody.h" />
-    <ClInclude Include="..\..\include\Physics\IPhysicsPhantom.h" />
+    <ClInclude Include="..\..\include\hrengin\gui\input\Keycodes.h" />
+    <ClInclude Include="..\..\include\hrengin\hrengin.h" />
+    <ClInclude Include="..\..\include\hrengin\physics\IPhysicsBody.h" />
+    <ClInclude Include="..\..\include\hrengin\physics\IPhysicsManager.h" />
+    <ClInclude Include="..\..\include\hrengin\physics\IPhysicsObject.h" />
+    <ClInclude Include="..\..\include\hrengin\physics\IPhysicsPhantom.h" />
+    <ClInclude Include="..\..\include\hrengin\sound\ISoundManager.h" />
     <ClInclude Include="Common\CEncore.h" />
     <ClInclude Include="Common\CInternalsManager.h" />
     <ClInclude Include="Common\CWorld.h" />
