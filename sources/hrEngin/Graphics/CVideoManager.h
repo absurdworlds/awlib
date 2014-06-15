@@ -68,6 +68,7 @@ class CVideoManager : public IVideoManager
 
 	// irrlicht access
 		virtual irr::IrrlichtDevice* GetDevice() const;
+		virtual irr::video::IVideoDriver* GetDriver() const {return driver;};
 
 		virtual irr::scene::ISceneManager* GetSceneMgr() const;
 		virtual irr::scene::ISceneCollisionManager* getCollManager() const;

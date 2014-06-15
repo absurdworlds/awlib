@@ -6,6 +6,8 @@
 
 #include <hrengin/physics/IPhysicsObject.h>
 
+#include <hrengin/hrengin.sound.h>
+
 #include "../CApplication.h"
 #include "../Units/CUnit.h"
 #include "../Units/CUnitManager.h"
@@ -99,6 +101,7 @@ bool CPlayerHuman::ReceiveInput(hrengin::gui::InputEvent input)
 				unsigned char unitId[5];
 				getStringFromUnitId(rayHit->getUnitTypeID(),unitId);
 				fprintf(stderr, "%s: Standing by\n", unitId);
+				hrengin::sound::CSoundManager::playSound("generic2_ready01.wav");
 				tmpSelUnit_ = rayHit;
 			}
 			else if(tmpSelUnit_)
@@ -106,6 +109,7 @@ bool CPlayerHuman::ReceiveInput(hrengin::gui::InputEvent input)
 				unsigned char unitId[5];
 				getStringFromUnitId(tmpSelUnit_->getUnitTypeID(),unitId);
 				fprintf(stderr, "%s: Affirmative!\n", unitId);
+				hrengin::sound::CSoundManager::playSound("generic2_yes01.wav");
 				hrengin::Vector3d pos = povCamera_->__tempGetRayHitPlaneCoords(X,Y);
 				tmpSelUnit_->issuePointOrder(ORDER_MOVE, pos);
 			}

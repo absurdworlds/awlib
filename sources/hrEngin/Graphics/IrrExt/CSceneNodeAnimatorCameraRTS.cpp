@@ -69,7 +69,6 @@ namespace scene
 				MouseKeys[1] = false;
 				break;
 			case EMIE_MOUSE_MOVED:
-				mousepos_old = mousepos;
 				mousepos = CursorControl->getPosition();
 				break;
 			case EMIE_MOUSE_WHEEL:
@@ -165,9 +164,7 @@ namespace scene
 			LastUpdate = Timer->getTime();
 			FirstUpdateReceived = true;
 
-			core::line3df line = colman->getRayFromScreenCoordinates(mousepos, camera);				
-			core::plane3df plane;
-			plane.getIntersectionWithLine(line.start, line.getVector(), lasthit);
+			return;
 		}
 		
 		u32 TimeDelta = LastUpdate;
@@ -199,14 +196,18 @@ namespace scene
 			
 			if(mousepos_old != mousepos)
 			{
+				core::line3df ray_new = colman->getRayFromScreenCoordinates(mousepos, camera);
 				core::line3df ray_old = colman->getRayFromScreenCoordinates(mousepos_old, camera);
 
 				core::vector3df pos_old;
+				core::vector3df pos_new;
 
 				plane.getIntersectionWithLine(ray_old.start, ray_old.getVector(), pos_old);
+				plane.getIntersectionWithLine(ray_new.start, ray_new.getVector(), pos_new);
 
 				translate.X += pos_old.X - pos_new.X;
 				translate.Z += pos_old.Z - pos_new.Z;
+				
 			}
 			
 			
@@ -224,6 +225,7 @@ namespace scene
 				Scroll_lock = false;
 			}
 		}
+		mousepos_old = mousepos;
 		
 		if(NewZoom >= MaxZoom)
 		{
@@ -248,20 +250,20 @@ namespace scene
 
 		if(!Scroll_lock && !Dragging && !Zooming)
 		{
-			if ((mousepos.X < 5) && (mousepos.X >= 0))   //Up
+			if ((mousepos.X < 5) && (mousepos.X > 0))   //Up
 			{	
 				translate.X += TranslateSpeed * CurrentZoom * static_cast<irr::f32>(TimeDelta);
 			}
-			else if ((mousepos.X > (screen.Width - 5)) && (mousepos.X <= screen.Width)) //Down
+			else if ((mousepos.X > (screen.Width - 5)) && (mousepos.X < screen.Width)) //Down
 			{
 				translate.X -= TranslateSpeed * CurrentZoom * static_cast<irr::f32>(TimeDelta);
 			}
 			
-			if ((mousepos.Y < 5) && (mousepos.Y >= 0))   //Up
+			if ((mousepos.Y < 5) && (mousepos.Y > 0))   //Up
 			{
 				translate.Z -= TranslateSpeed * CurrentZoom * static_cast<irr::f32>(TimeDelta);
 			}
-			else if ((mousepos.Y > (screen.Height - 5)) && (mousepos.Y <= screen.Height)) //Down
+			else if ((mousepos.Y > (screen.Height - 5)) && (mousepos.Y < screen.Height)) //Down
 			{
 				translate.Z += TranslateSpeed * CurrentZoom * static_cast<irr::f32>(TimeDelta);
 			}

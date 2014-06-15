@@ -90,9 +90,21 @@ HRENGIN_API IInputManager* GetInputManager ()
 
 }
 
-#ifdef _HR_�INDOWS
-
 #include <windows.h>
+
+namespace hrengin
+{
+HRENGIN_API HWND GetWindow ()
+{
+	hrengin::graphics::CVideoManager * vm = (graphics::CVideoManager*) graphics::GetManager();
+	irr::video::IVideoDriver * driv = vm->GetDriver();
+	irr::video::SExposedVideoData InternalData = driv->getExposedVideoData();
+	printf("coolacul");
+	return reinterpret_cast<HWND>(InternalData.OpenGLWin32.HWnd);
+}
+}
+
+#ifdef _HR_ØINDOWS
 
 BOOL APIENTRY DllMain( HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReserved)
 {

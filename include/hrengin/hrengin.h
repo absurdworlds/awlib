@@ -17,6 +17,7 @@
 
 #include <hrengin/physics/IPhysicsManager.h>
 
+#include <Windows.h>
 namespace hrengin
 {
 
@@ -27,6 +28,8 @@ HRENGIN_API IEncore* KickstartEngine ();
 
 HRENGIN_API IEntityManager* GetManager ();
 HRENGIN_API IEventManager* GetEventManager ();
+
+HRENGIN_API HWND GetWindow ();
 
 namespace graphics
 {

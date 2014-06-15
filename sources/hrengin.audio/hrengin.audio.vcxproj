@@ -10,19 +10,26 @@
       <Platform>Win32</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\include\hrengin\hrengin.sound.h" />
+    <ClInclude Include="..\..\include\hrengin\sound\ISound.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="hrengin.sound.cpp" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{08391406-CA28-417B-A8F4-4FCF6E5CDF17}</ProjectGuid>
+    <ProjectGuid>{D925C491-966D-4700-8D25-24411EEC9E07}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>awrts</RootNamespace>
+    <RootNamespace>hrengin</RootNamespace>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
@@ -36,71 +43,67 @@
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\visualstudio\global_debug.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <IncludePath>$(SolutionDir)include;$(SolutionDir)..\External\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)lib\win32-msvc-debug;$(LibraryPath)</LibraryPath>
-    <LinkIncremental>false</LinkIncremental>
-    <OutDir>$(SolutionDir)..\Game\system\</OutDir>
+    <LibraryPath>$(SolutionDir)\lib\win32-msvc-debug;$(SolutionDir)..\External\lib\win32-msvc-debug;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <PostBuildEvent>start movebinaries.bat</PostBuildEvent>
+    <OutDir>$(SolutionDir)..\Game\system\</OutDir>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <PrecompiledHeader>
-      </PrecompiledHeader>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;HRENGINSOUND_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>hrengin.audio.lib;hrengin.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>hrengin.lib;bass.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <ImportLibrary>$(SolutionDir)lib\win32-msvc-debug\$(TargetName).lib</ImportLibrary>
     </Link>
+    <CustomBuildStep>
+      <Command>
+      </Command>
+    </CustomBuildStep>
+    <CustomBuildStep>
+      <Message>Performing Custom Build Step</Message>
+      <Inputs>
+      </Inputs>
+    </CustomBuildStep>
     <PostBuildEvent>
       <Command>
       </Command>
+    </PostBuildEvent>
+    <PostBuildEvent>
+      <Message>
+      </Message>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
-      <PrecompiledHeader>
-      </PrecompiledHeader>
+      <PrecompiledHeader>Use</PrecompiledHeader>
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;hrengin_sound_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="awrts.cpp" />
-    <ClCompile Include="CApplication.cpp" />
-    <ClCompile Include="CMapManager.cpp" />
-    <ClCompile Include="Players\CPlayerHuman.cpp" />
-    <ClCompile Include="Units\CUnit.cpp" />
-    <ClCompile Include="Units\CUnitManager.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="awrts.h" />
-    <ClInclude Include="CApplication.h" />
-    <ClInclude Include="CMapManager.h" />
-    <ClInclude Include="Players\CPlayerHuman.h" />
-    <ClInclude Include="Players\IPlayer.h" />
-    <ClInclude Include="Units\CUnit.h" />
-    <ClInclude Include="Units\CUnitGroup.h" />
-    <ClInclude Include="Units\CUnitManager.h" />
-    <ClInclude Include="Units\UnitType.h" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

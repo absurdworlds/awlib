@@ -55,9 +55,6 @@
     <Filter Include="Include\Entities">
       <UniqueIdentifier>{58e3f6b3-001c-4a5c-bcfc-b6117c95ee46}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Include\Sound">
-      <UniqueIdentifier>{d2b56d66-beb2-426c-b1dc-6a3f281f549c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Include\Base">
       <UniqueIdentifier>{3724bf5e-2370-4d90-a176-dada8183439b}</UniqueIdentifier>
     </Filter>
@@ -176,9 +173,6 @@
     <ClInclude Include="Entities\CEventManager.h">
       <Filter>Source\Entities</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\hrengin\sound\ISoundManager.h">
-      <Filter>Include\Sound</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\hrengin\entities\IBaseEntity.h">
       <Filter>Include\Entities</Filter>
     </ClInclude>
@@ -278,5 +272,6 @@
     <ClInclude Include="..\..\include\hrengin\filesystem\IWriteFile.h">
       <Filter>Include\Filesystem</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\base\ILogger.h" />
   </ItemGroup>
 </Project>

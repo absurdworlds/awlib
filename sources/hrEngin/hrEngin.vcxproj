@@ -41,25 +41,27 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <IncludePath>$(SolutionDir)include;$(SolutionDir)..\External\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)..\External\lib\win32-msvc-debug;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(SolutionDir)\lib\win32-msvc-debug;$(SolutionDir)..\External\lib\win32-msvc-debug;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <PostBuildEvent>start movebinaries.bat</PostBuildEvent>
+    <OutDir>$(SolutionDir)..\Game\system\</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;hrengin_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;HRENGIN_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>BulletCollision_vs2010_debug.lib;BulletDynamics_vs2010_debug.lib;HACD_vs2010_debug.lib;LinearMath_vs2010_debug.lib;OpenGLSupport_vs2010_debug.lib;Irrlicht.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <ImportLibrary>$(SolutionDir)lib\win32-msvc-debug\$(TargetName).lib</ImportLibrary>
     </Link>
     <CustomBuildStep>
       <Command>
@@ -71,10 +73,12 @@
       </Inputs>
     </CustomBuildStep>
     <PostBuildEvent>
-      <Command>start $(SolutionDir)movebinaries.bat $(Configuration) $(SolutionDir)</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
     <PostBuildEvent>
-      <Message>MOVING BUNURIS</Message>
+      <Message>
+      </Message>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -134,7 +138,6 @@
     <ClInclude Include="..\..\include\hrengin\physics\IPhysicsManager.h" />
     <ClInclude Include="..\..\include\hrengin\physics\IPhysicsObject.h" />
     <ClInclude Include="..\..\include\hrengin\physics\IPhysicsPhantom.h" />
-    <ClInclude Include="..\..\include\hrengin\sound\ISoundManager.h" />
     <ClInclude Include="Common\CEncore.h" />
     <ClInclude Include="Common\CInternalsManager.h" />
     <ClInclude Include="Common\CWorld.h" />

@@ -2,7 +2,6 @@
 #include <stdio.h>
 
 #define WIN32_LEAN_AND_MEAN
-#pragma comment(lib, "hrEngin.lib")
 
 //#include <Physics/IPhysicsPhantom.h>
 
@@ -11,6 +10,7 @@
 #include "CMapManager.h"
 #include "Units/UnitType.h"
 #include "Units/CUnitManager.h"
+#include <hrengin/hrengin.sound.h>
 
 #include "awrts.h"
 
@@ -53,6 +53,8 @@ int main()
 	//hrengin::IEncore* hrEngin = hrengin::KickstartEngine();
 	bool b_runEngine = true;
 	
+	hrengin::sound::CSoundManager::initSounds();
+
 	awrts::CApplication& app = awrts::CApplication::getInstance();
 
 	hrengin::gui::IInputManager* inputmgr = hrengin::gui::GetInputManager();

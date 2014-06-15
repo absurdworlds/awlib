@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+# Visual C++ Express 2010
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "awrts", "sources\awrts\awrts.vcxproj", "{08391406-CA28-417B-A8F4-4FCF6E5CDF17}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "hrEngin", "sources\hrEngin\hrEngin.vcxproj", "{02D3814A-D061-48A3-B808-F43DC5D642F2}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "hrEngin", "sources\hrengin\hrEngin.vcxproj", "{02D3814A-D061-48A3-B808-F43DC5D642F2}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "hrengin.audio", "sources\hrengin.audio\hrengin.audio.vcxproj", "{D925C491-966D-4700-8D25-24411EEC9E07}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,6 +31,14 @@ Global
 		{02D3814A-D061-48A3-B808-F43DC5D642F2}.DebugNewton|Win32.Build.0 = Debug|Win32
 		{02D3814A-D061-48A3-B808-F43DC5D642F2}.Release|Win32.ActiveCfg = Release|Win32
 		{02D3814A-D061-48A3-B808-F43DC5D642F2}.Release|Win32.Build.0 = Release|Win32
+		{D925C491-966D-4700-8D25-24411EEC9E07}.Debug|Win32.ActiveCfg = Debug|Win32
+		{D925C491-966D-4700-8D25-24411EEC9E07}.Debug|Win32.Build.0 = Debug|Win32
+		{D925C491-966D-4700-8D25-24411EEC9E07}.DebugHavok|Win32.ActiveCfg = Debug|Win32
+		{D925C491-966D-4700-8D25-24411EEC9E07}.DebugHavok|Win32.Build.0 = Debug|Win32
+		{D925C491-966D-4700-8D25-24411EEC9E07}.DebugNewton|Win32.ActiveCfg = Debug|Win32
+		{D925C491-966D-4700-8D25-24411EEC9E07}.DebugNewton|Win32.Build.0 = Debug|Win32
+		{D925C491-966D-4700-8D25-24411EEC9E07}.Release|Win32.ActiveCfg = Release|Win32
+		{D925C491-966D-4700-8D25-24411EEC9E07}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
