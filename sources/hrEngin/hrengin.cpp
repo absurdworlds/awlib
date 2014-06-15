@@ -90,7 +90,7 @@ HRENGIN_API IInputManager* GetInputManager ()
 
 }
 
-#ifdef _HR_ØINDOWS
+#ifdef _HR_ï¿½INDOWS
 
 #include <windows.h>
 
