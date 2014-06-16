@@ -31,6 +31,7 @@ HRENGIN_API IEntityManager* GetManager ()
 
 HRENGIN_API IEventManager* GetEventManager ()
 {
+	CLogger::log(std::string("cyuul"));
 	return new CEventManager();
 }
 
@@ -99,7 +100,6 @@ HRENGIN_API HWND GetWindow ()
 	hrengin::graphics::CVideoManager * vm = (graphics::CVideoManager*) graphics::GetManager();
 	irr::video::IVideoDriver * driv = vm->GetDriver();
 	irr::video::SExposedVideoData InternalData = driv->getExposedVideoData();
-	printf("coolacul");
 	return reinterpret_cast<HWND>(InternalData.OpenGLWin32.HWnd);
 }
 }

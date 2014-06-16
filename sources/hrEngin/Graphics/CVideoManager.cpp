@@ -24,7 +24,7 @@ CVideoManager::CVideoManager()
 		throw something;
 	}*/
 
-	device->setWindowCaption(L"hrEngine - Irrlicht 1.8.1");
+	device->setWindowCaption(L"hrengin A - Irrlicht 1.8.1");
 	driver = device->getVideoDriver();
 	scnmgr = device->getSceneManager();
 	guienv = device->getGUIEnvironment();

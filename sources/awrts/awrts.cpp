@@ -1,6 +1,9 @@
 
 #include <stdio.h>
 
+#include <string>
+#include <hrengin/base/CLogger.h>
+
 #define WIN32_LEAN_AND_MEAN
 
 //#include <Physics/IPhysicsPhantom.h>
@@ -53,6 +56,7 @@ int main()
 	//hrengin::IEncore* hrEngin = hrengin::KickstartEngine();
 	bool b_runEngine = true;
 	
+	hrengin::CLogger::init();
 	hrengin::sound::CSoundManager::initSounds();
 
 	awrts::CApplication& app = awrts::CApplication::getInstance();
@@ -69,6 +73,7 @@ int main()
 
 
 	//hrengin::gui::IInputManager* InputMgr = hrengin::gui::GetInputManager();
+
 
 	do
 	{
@@ -91,6 +96,8 @@ int main()
 	while(b_runEngine);
 
 	//while (hrEngin->Roar());
-	
+
+	hrengin::CLogger::exit();
+
 	return 0;
 }

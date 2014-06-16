@@ -118,7 +118,7 @@ bool CPlayerHuman::ReceiveInput(hrengin::gui::InputEvent input)
 else if (input.EventType == irr::EET_KEY_INPUT_EVENT)
 {
 	static int numbers = 0;
-	printf("knopkodoska input %d; %d\n", ++numbers, app.encore->GetTime());
+	hrengin::CLogger::log("knopkodoska input " + std::to_string(app.encore->GetTime()) + "\n");
 	if(input.KeyInput.Key == irr::KEY_KEY_I && input.KeyInput.PressedDown)
 	{
 		hrengin::base::line3df ray = povCamera_->castRayFromScreen(X,Y);

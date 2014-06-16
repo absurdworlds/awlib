@@ -114,6 +114,9 @@
     <ClCompile Include="Entities\CEventManager.cpp">
       <Filter>Source\Entities</Filter>
     </ClCompile>
+    <ClCompile Include="Common\CLogger.cpp">
+      <Filter>Source\Common</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Graphics\IrrExt\CSceneNodeAnimatorCameraRTS.h">
@@ -272,6 +275,8 @@
     <ClInclude Include="..\..\include\hrengin\filesystem\IWriteFile.h">
       <Filter>Include\Filesystem</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\hrengin\base\ILogger.h" />
+    <ClInclude Include="..\..\include\hrengin\base\CLogger.h">
+      <Filter>Include\Base</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

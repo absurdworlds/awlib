@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -20,12 +20,14 @@
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v120</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v120</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -36,7 +38,6 @@
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="..\visualstudio\global_debug.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -56,6 +57,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;HRENGIN_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -104,8 +106,8 @@
     <ClInclude Include="..\..\example\hrSampleProgramloop.h" />
     <ClInclude Include="..\..\include\hrengin\ai\IBaseNavigator.h" />
     <ClInclude Include="..\..\include\hrengin\ai\IBasePathfinder.h" />
+    <ClInclude Include="..\..\include\hrengin\base\CLogger.h" />
     <ClInclude Include="..\..\include\hrengin\base\IEncore.h" />
-    <ClInclude Include="..\..\include\hrengin\base\ILogger.h" />
     <ClInclude Include="..\..\include\hrengin\common\hrTypes.h" />
     <ClInclude Include="..\..\include\hrengin\common\line3d.h" />
     <ClInclude Include="..\..\include\hrengin\common\Math\hrMath.h" />
@@ -157,6 +159,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Common\CEncore.cpp" />
+    <ClCompile Include="Common\CLogger.cpp" />
     <ClCompile Include="Common\CWorld.cpp" />
     <ClCompile Include="Entities\CEntityManager.cpp" />
     <ClCompile Include="Entities\CEventManager.cpp" />

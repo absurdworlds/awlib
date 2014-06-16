@@ -4,6 +4,7 @@
 #include <hrengin/config/hrConfig.h>
 #include <hrengin/common/hrTypes.h>
 #include <hrengin/base/IEncore.h>
+#include <hrengin/base/CLogger.h>
 
 #include <hrengin/entities/IEntityManager.h>
 #include <hrengin/entities/IEventManager.h>
