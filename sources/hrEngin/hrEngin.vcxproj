@@ -106,7 +106,7 @@
     <ClInclude Include="..\..\example\hrSampleProgramloop.h" />
     <ClInclude Include="..\..\include\hrengin\ai\IBaseNavigator.h" />
     <ClInclude Include="..\..\include\hrengin\ai\IBasePathfinder.h" />
-    <ClInclude Include="..\..\include\hrengin\base\CLogger.h" />
+    <ClInclude Include="..\..\include\hrengin\base\ILogger.h" />
     <ClInclude Include="..\..\include\hrengin\base\IEncore.h" />
     <ClInclude Include="..\..\include\hrengin\common\hrTypes.h" />
     <ClInclude Include="..\..\include\hrengin\common\line3d.h" />
@@ -144,6 +144,7 @@
     <ClInclude Include="Common\CInternalsManager.h" />
     <ClInclude Include="Common\CWorld.h" />
     <ClInclude Include="Common\hrFilesystem.h" />
+    <ClInclude Include="core\CLogger.h" />
     <ClInclude Include="Entities\CEntityManager.h" />
     <ClInclude Include="Entities\CEventManager.h" />
     <ClInclude Include="Graphics\CVideoManager.h" />
@@ -159,8 +160,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Common\CEncore.cpp" />
-    <ClCompile Include="Common\CLogger.cpp" />
     <ClCompile Include="Common\CWorld.cpp" />
+    <ClCompile Include="core\CLogger.cpp" />
     <ClCompile Include="Entities\CEntityManager.cpp" />
     <ClCompile Include="Entities\CEventManager.cpp" />
     <ClCompile Include="Graphics\CVideoManager.cpp" />

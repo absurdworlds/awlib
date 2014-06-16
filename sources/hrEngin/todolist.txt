@@ -2,23 +2,23 @@
 v. Storm in a bottle
 --A test version, unplayable in general sense
 	v. Storm in a bottle 0.002
-o more realistic unit movement
 о юнитселекшон — подсветка выделенного юнита
+o more realistic unit movement
 о заменить ноуколайд на колфильтр у физиксфантома
-о написать класс пути 
+о написать stub-класс пути 
 о unit movement: мувемент эйджент
 о хард таск — написать измерение отклонения от пути
 о хард таск — сделать зонд, которым юнит будет высматривать других юнитов
+o rewrite code to use logger instead of fprintf
+o prettify code
+
+
 o Write weapon class
 o Write players
-o remove guienv from graphics //don't need to do it anymore — CGUIManager now is a friend of CVideoManager
-o rewrite code to use logger instead of fprintf
-o rewrite logger and sound manager to be just normal classes
 o rewrite camera
 	— make code consistent (position relative to target instead of a bunch of vectors)
 	— scale around origin
 	— alimit to a window + 5 px inside, ignore if further
-o prettify code
 o write hrengin data file loader
 o start implementing file manager
 o write proper map manager

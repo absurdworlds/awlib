@@ -13,8 +13,11 @@
   <ItemGroup>
     <ClInclude Include="..\..\include\hrengin\hrengin.sound.h" />
     <ClInclude Include="..\..\include\hrengin\sound\ISound.h" />
+    <ClInclude Include="..\..\include\hrengin\sound\ISoundManager.h" />
+    <ClInclude Include="CSoundManager.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CSoundManager.cpp" />
     <ClCompile Include="hrengin.sound.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

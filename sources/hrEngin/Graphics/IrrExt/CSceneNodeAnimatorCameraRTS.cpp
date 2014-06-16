@@ -177,9 +177,10 @@ namespace scene
 
 		core::vector3df translate(0,0,0);
 		
-
-		//core::vector3df zoom_close(0,20,30);
-		//core::vector3df zoom_point(0,0,0);
+		bool outwindow = ((mousepos.X < 0)
+				|| (mousepos.X > (screen.Width - 0))
+				|| (mousepos.Y < 0)
+				|| (mousepos.Y > (screen.Height - 0)));
 		
 		
 		core::plane3df plane;
@@ -194,8 +195,7 @@ namespace scene
 		{
 			Dragging = true;
 			
-			if(mousepos_old != mousepos)
-			{
+			if(mousepos_old != mousepos) {
 				core::line3df ray_new = colman->getRayFromScreenCoordinates(mousepos, camera);
 				core::line3df ray_old = colman->getRayFromScreenCoordinates(mousepos_old, camera);
 
@@ -210,8 +210,7 @@ namespace scene
 				
 			}
 			
-			
-			if ((mousepos.X < 5) || (mousepos.X > (screen.Width - 5)) || (mousepos.Y < 5) || (mousepos.Y > (screen.Height - 5)))
+			if (outwindow)
 			{
 				Scroll_lock = true;
 			}
@@ -220,7 +219,7 @@ namespace scene
 		{
 			Dragging = false;
 
-			if ((mousepos.X < 5) || (mousepos.X > (screen.Width - 5)) || (mousepos.Y < 5) || (mousepos.Y > (screen.Height - 5)))
+			if (outwindow)
 			{
 				Scroll_lock = false;
 			}
@@ -248,34 +247,23 @@ namespace scene
 		}
 		
 
-		if(!Scroll_lock && !Dragging && !Zooming)
-		{
-			if ((mousepos.X < 5) && (mousepos.X > 0))   //Up
-			{	
-				translate.X += TranslateSpeed * CurrentZoom * static_cast<irr::f32>(TimeDelta);
-			}
-			else if ((mousepos.X > (screen.Width - 5)) && (mousepos.X < screen.Width)) //Down
-			{
-				translate.X -= TranslateSpeed * CurrentZoom * static_cast<irr::f32>(TimeDelta);
+		if (!Scroll_lock && !Dragging && !Zooming && !outwindow) {
+			f32 scrollstep = TranslateSpeed * CurrentZoom * static_cast<irr::f32>(TimeDelta);
+			if ((mousepos.X > 0) && (mousepos.X < 5)) {
+				translate.X += scrollstep;
+			} else if ((mousepos.X > (screen.Width - 5))
+				   && (mousepos.X < screen.Width)) {
+				translate.X -= scrollstep;
 			}
 			
-			if ((mousepos.Y < 5) && (mousepos.Y > 0))   //Up
-			{
-				translate.Z -= TranslateSpeed * CurrentZoom * static_cast<irr::f32>(TimeDelta);
-			}
-			else if ((mousepos.Y > (screen.Height - 5)) && (mousepos.Y < screen.Height)) //Down
-			{
-				translate.Z += TranslateSpeed * CurrentZoom * static_cast<irr::f32>(TimeDelta);
+			if ((mousepos.Y > 0) && (mousepos.Y < 5)) {
+				translate.Z -= scrollstep;
+			} else if ((mousepos.Y > (screen.Height - 5))
+				   && (mousepos.Y < screen.Height)) {
+				translate.Z += scrollstep;
 			}
 			
-			if(translate.X + translate.Y == 0)
-			{
-				Scrolling = false;
-			}
-			else
-			{
-				Scrolling = true;
-			}
+			Scrolling = !core::equals(translate.X + translate.Y,0.0f,core::ROUNDING_ERROR_f32);
 		}
 
 		f32 cur_angle;
@@ -289,9 +277,6 @@ namespace scene
 		{
 			cur_angle = angle;
 		}
-
-		cur_angle = angle;
-		
 
 		target += translate; 
 

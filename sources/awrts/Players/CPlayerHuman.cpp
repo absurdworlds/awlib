@@ -14,11 +14,6 @@
 
 #include "CPlayerHuman.h"
 
-#define VER_storm_in_a_bottle 01000
-#define VER_srantonwars 02000
-
-#define AWRTS_VER 00000
-
 namespace awrts
 {
 
@@ -35,13 +30,9 @@ CPlayerHuman::CPlayerHuman(hrengin::graphics::ICameraNode* pPlayerCam)
 CUnit* CPlayerHuman::getUnitFromRay(hrengin::base::line3df ray)
 {
 	CApplication& app = CApplication::getInstance();
-	
-	hrengin::Vectorf3d start(ray.end.X,
-				             ray.end.Y,
-				             ray.end.Z);
-	hrengin::Vectorf3d end(ray.start.X,
-						   ray.start.Y,
-				           ray.start.Z);
+	// todo: intentionally swap end and start to make funny bugs
+	hrengin::Vectorf3d start(ray.start.X, ray.start.Y, ray.start.Z);
+	hrengin::Vectorf3d end(ray.end.X, ray.end.Y, ray.end.Z);
 
 	hrengin::physics::IPhysicsObject* rayHit = app.phymgr->castRay(start,end);
 
@@ -101,7 +92,7 @@ bool CPlayerHuman::ReceiveInput(hrengin::gui::InputEvent input)
 				unsigned char unitId[5];
 				getStringFromUnitId(rayHit->getUnitTypeID(),unitId);
 				fprintf(stderr, "%s: Standing by\n", unitId);
-				hrengin::sound::CSoundManager::playSound("generic2_ready01.wav");
+				hrengin::sound::getSoundManager().playSound("generic2_ready01.wav");
 				tmpSelUnit_ = rayHit;
 			}
 			else if(tmpSelUnit_)
@@ -109,40 +100,40 @@ bool CPlayerHuman::ReceiveInput(hrengin::gui::InputEvent input)
 				unsigned char unitId[5];
 				getStringFromUnitId(tmpSelUnit_->getUnitTypeID(),unitId);
 				fprintf(stderr, "%s: Affirmative!\n", unitId);
-				hrengin::sound::CSoundManager::playSound("generic2_yes01.wav");
+				hrengin::sound::getSoundManager().playSound("generic2_yes01.wav");
 				hrengin::Vector3d pos = povCamera_->__tempGetRayHitPlaneCoords(X,Y);
 				tmpSelUnit_->issuePointOrder(ORDER_MOVE, pos);
 			}
 		}
 	}
-else if (input.EventType == irr::EET_KEY_INPUT_EVENT)
-{
-	static int numbers = 0;
-	hrengin::CLogger::log("knopkodoska input " + std::to_string(app.encore->GetTime()) + "\n");
-	if(input.KeyInput.Key == irr::KEY_KEY_I && input.KeyInput.PressedDown)
+	else if (input.EventType == irr::EET_KEY_INPUT_EVENT)
 	{
-		hrengin::base::line3df ray = povCamera_->castRayFromScreen(X,Y);
-		CUnit* rayHit = getUnitFromRay(ray);
-		if(!rayHit)
+		static int numbers = 0;
+		//hrengin::CLogger::log("knopkodoska input " + std::to_string(app.encore->GetTime()) + "\n");
+		if(input.KeyInput.Key == irr::KEY_KEY_I && input.KeyInput.PressedDown)
 		{
-			CUnitManager* umgr =  app.unitmgr;
-			static unsigned int lastId = 0;
-			unsigned int unitId;
-			int i = 0;
-			for(std::unordered_map<hrengin::u32,UnitType>::iterator it = umgr->unitTypes_.begin();
-				it != umgr->unitTypes_.end();
-				++it,++i)
+			hrengin::base::line3df ray = povCamera_->castRayFromScreen(X,Y);
+			CUnit* rayHit = getUnitFromRay(ray);
+			if(!rayHit)
 			{
-				if(lastId % umgr->unitTypes_.size() == i) unitId = (*it).second.id;
-			}
+				CUnitManager* umgr =  app.unitmgr;
+				static unsigned int lastId = 0;
+				unsigned int unitId;
+				int i = 0;
+				for(std::unordered_map<hrengin::u32,UnitType>::iterator it = umgr->unitTypes_.begin();
+					it != umgr->unitTypes_.end();
+					++it,++i)
+				{
+					if(lastId % umgr->unitTypes_.size() == i) unitId = (*it).second.id;
+				}
 			
 			
-			hrengin::Vector3d pos = povCamera_->__tempGetRayHitPlaneCoords(X,Y);
-			app.unitmgr->createUnit(unitId,pos);
+				hrengin::Vector3d pos = povCamera_->__tempGetRayHitPlaneCoords(X,Y);
+				app.unitmgr->createUnit(unitId,pos);
 
-			++ lastId;
+				++ lastId;
+			}
 		}
-	}
 	}
 
 

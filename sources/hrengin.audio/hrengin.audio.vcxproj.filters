@@ -18,9 +18,18 @@
     <ClInclude Include="..\..\include\hrengin\sound\ISound.h">
       <Filter>include\sound</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\sound\ISoundManager.h">
+      <Filter>include\sound</Filter>
+    </ClInclude>
+    <ClInclude Include="CSoundManager.h">
+      <Filter>source</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="hrengin.sound.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="CSoundManager.cpp">
       <Filter>source</Filter>
     </ClCompile>
   </ItemGroup>

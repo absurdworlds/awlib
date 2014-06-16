@@ -70,6 +70,9 @@
     <Filter Include="Include\Filesystem">
       <UniqueIdentifier>{cf300e18-4f0b-4a64-a20d-3fa547f42fe7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\core">
+      <UniqueIdentifier>{0ce32415-ebce-42f2-9dc0-11ce571a8758}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="hrengin.cpp">
@@ -114,8 +117,8 @@
     <ClCompile Include="Entities\CEventManager.cpp">
       <Filter>Source\Entities</Filter>
     </ClCompile>
-    <ClCompile Include="Common\CLogger.cpp">
-      <Filter>Source\Common</Filter>
+    <ClCompile Include="core\CLogger.cpp">
+      <Filter>Source\core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -275,8 +278,11 @@
     <ClInclude Include="..\..\include\hrengin\filesystem\IWriteFile.h">
       <Filter>Include\Filesystem</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\hrengin\base\CLogger.h">
+    <ClInclude Include="..\..\include\hrengin\base\ILogger.h">
       <Filter>Include\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="core\CLogger.h">
+      <Filter>Source\core</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

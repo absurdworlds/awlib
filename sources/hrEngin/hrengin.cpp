@@ -31,7 +31,6 @@ HRENGIN_API IEntityManager* GetManager ()
 
 HRENGIN_API IEventManager* GetEventManager ()
 {
-	CLogger::log(std::string("cyuul"));
 	return new CEventManager();
 }
 

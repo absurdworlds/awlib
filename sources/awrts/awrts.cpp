@@ -2,7 +2,7 @@
 #include <stdio.h>
 
 #include <string>
-#include <hrengin/base/CLogger.h>
+#include <hrengin/base/ILogger.h>
 
 #define WIN32_LEAN_AND_MEAN
 
@@ -56,8 +56,15 @@ int main()
 	//hrengin::IEncore* hrEngin = hrengin::KickstartEngine();
 	bool b_runEngine = true;
 	
-	hrengin::CLogger::init();
-	hrengin::sound::CSoundManager::initSounds();
+	hrengin::ILogger& logger = hrengin::createLogger();
+	logger.init();
+	logger.push("DEBUG:");
+	logger.push("I");
+	logger.push("am");
+	logger.push("awesome!");
+	logger.push(logger.endl);
+
+	hrengin::sound::getSoundManager().initSounds();
 
 	awrts::CApplication& app = awrts::CApplication::getInstance();
 
@@ -97,7 +104,7 @@ int main()
 
 	//while (hrEngin->Roar());
 
-	hrengin::CLogger::exit();
+	logger.stop();
 
 	return 0;
 }
