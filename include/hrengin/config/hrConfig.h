@@ -43,17 +43,6 @@
 	#endif
 #endif
 
-#ifdef HRENGIN_EXPORTS
-	#define HRENGIN_API __declspec(dllexport)
-#else
-	#define HRENGIN_API __declspec(dllimport)
-#endif
-
-#ifdef HRENGINSOUND_EXPORTS
-	#define HRENGINSOUND_API __declspec(dllexport)
-#else
-	#define HRENGINSOUND_API __declspec(dllimport)
-#endif
 
 #ifndef __FUNCTION_NAME__
 	#ifdef __HRCMP_MSC__

@@ -1,11 +1,21 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual C++ Express 2010
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Express 2013 for Windows Desktop
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "awrts", "sources\awrts\awrts.vcxproj", "{08391406-CA28-417B-A8F4-4FCF6E5CDF17}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "hrEngin", "sources\hrengin\hrEngin.vcxproj", "{02D3814A-D061-48A3-B808-F43DC5D642F2}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "hrengin", "sources\hrengin\hrEngin.vcxproj", "{02D3814A-D061-48A3-B808-F43DC5D642F2}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "hrengin.audio", "sources\hrengin.audio\hrengin.audio.vcxproj", "{D925C491-966D-4700-8D25-24411EEC9E07}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "hrenginphysics", "sources\hrenginphysics\hrenginphysics.vcxproj", "{C793384E-45F2-4021-B9E0-1CB3D12DA78E}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "hrenginaudio", "sources\hrenginaudio\hrenginaudio.vcxproj", "{D925C491-966D-4700-8D25-24411EEC9E07}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "hrenginfilesys", "sources\hrenginfilesys\hrenginfilesys.vcxproj", "{74AD5236-2D65-440E-A517-4EF8B52EE555}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "hrengingraphics", "sources\hrengingraphics\hrengingraphics.vcxproj", "{20384754-19D0-4480-9EBC-1D326B7B9E60}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "hrenginscript", "sources\hrenginscript\hrenginscript.vcxproj", "{03971781-199E-4610-A13D-0F71721AFD5F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -31,6 +41,14 @@ Global
 		{02D3814A-D061-48A3-B808-F43DC5D642F2}.DebugNewton|Win32.Build.0 = Debug|Win32
 		{02D3814A-D061-48A3-B808-F43DC5D642F2}.Release|Win32.ActiveCfg = Release|Win32
 		{02D3814A-D061-48A3-B808-F43DC5D642F2}.Release|Win32.Build.0 = Release|Win32
+		{C793384E-45F2-4021-B9E0-1CB3D12DA78E}.Debug|Win32.ActiveCfg = Debug|Win32
+		{C793384E-45F2-4021-B9E0-1CB3D12DA78E}.Debug|Win32.Build.0 = Debug|Win32
+		{C793384E-45F2-4021-B9E0-1CB3D12DA78E}.DebugHavok|Win32.ActiveCfg = Debug|Win32
+		{C793384E-45F2-4021-B9E0-1CB3D12DA78E}.DebugHavok|Win32.Build.0 = Debug|Win32
+		{C793384E-45F2-4021-B9E0-1CB3D12DA78E}.DebugNewton|Win32.ActiveCfg = Debug|Win32
+		{C793384E-45F2-4021-B9E0-1CB3D12DA78E}.DebugNewton|Win32.Build.0 = Debug|Win32
+		{C793384E-45F2-4021-B9E0-1CB3D12DA78E}.Release|Win32.ActiveCfg = Release|Win32
+		{C793384E-45F2-4021-B9E0-1CB3D12DA78E}.Release|Win32.Build.0 = Release|Win32
 		{D925C491-966D-4700-8D25-24411EEC9E07}.Debug|Win32.ActiveCfg = Debug|Win32
 		{D925C491-966D-4700-8D25-24411EEC9E07}.Debug|Win32.Build.0 = Debug|Win32
 		{D925C491-966D-4700-8D25-24411EEC9E07}.DebugHavok|Win32.ActiveCfg = Debug|Win32
@@ -39,6 +57,30 @@ Global
 		{D925C491-966D-4700-8D25-24411EEC9E07}.DebugNewton|Win32.Build.0 = Debug|Win32
 		{D925C491-966D-4700-8D25-24411EEC9E07}.Release|Win32.ActiveCfg = Release|Win32
 		{D925C491-966D-4700-8D25-24411EEC9E07}.Release|Win32.Build.0 = Release|Win32
+		{74AD5236-2D65-440E-A517-4EF8B52EE555}.Debug|Win32.ActiveCfg = Debug|Win32
+		{74AD5236-2D65-440E-A517-4EF8B52EE555}.Debug|Win32.Build.0 = Debug|Win32
+		{74AD5236-2D65-440E-A517-4EF8B52EE555}.DebugHavok|Win32.ActiveCfg = Debug|Win32
+		{74AD5236-2D65-440E-A517-4EF8B52EE555}.DebugHavok|Win32.Build.0 = Debug|Win32
+		{74AD5236-2D65-440E-A517-4EF8B52EE555}.DebugNewton|Win32.ActiveCfg = Debug|Win32
+		{74AD5236-2D65-440E-A517-4EF8B52EE555}.DebugNewton|Win32.Build.0 = Debug|Win32
+		{74AD5236-2D65-440E-A517-4EF8B52EE555}.Release|Win32.ActiveCfg = Release|Win32
+		{74AD5236-2D65-440E-A517-4EF8B52EE555}.Release|Win32.Build.0 = Release|Win32
+		{20384754-19D0-4480-9EBC-1D326B7B9E60}.Debug|Win32.ActiveCfg = Debug|Win32
+		{20384754-19D0-4480-9EBC-1D326B7B9E60}.Debug|Win32.Build.0 = Debug|Win32
+		{20384754-19D0-4480-9EBC-1D326B7B9E60}.DebugHavok|Win32.ActiveCfg = Debug|Win32
+		{20384754-19D0-4480-9EBC-1D326B7B9E60}.DebugHavok|Win32.Build.0 = Debug|Win32
+		{20384754-19D0-4480-9EBC-1D326B7B9E60}.DebugNewton|Win32.ActiveCfg = Debug|Win32
+		{20384754-19D0-4480-9EBC-1D326B7B9E60}.DebugNewton|Win32.Build.0 = Debug|Win32
+		{20384754-19D0-4480-9EBC-1D326B7B9E60}.Release|Win32.ActiveCfg = Release|Win32
+		{20384754-19D0-4480-9EBC-1D326B7B9E60}.Release|Win32.Build.0 = Release|Win32
+		{03971781-199E-4610-A13D-0F71721AFD5F}.Debug|Win32.ActiveCfg = Debug|Win32
+		{03971781-199E-4610-A13D-0F71721AFD5F}.Debug|Win32.Build.0 = Debug|Win32
+		{03971781-199E-4610-A13D-0F71721AFD5F}.DebugHavok|Win32.ActiveCfg = Debug|Win32
+		{03971781-199E-4610-A13D-0F71721AFD5F}.DebugHavok|Win32.Build.0 = Debug|Win32
+		{03971781-199E-4610-A13D-0F71721AFD5F}.DebugNewton|Win32.ActiveCfg = Debug|Win32
+		{03971781-199E-4610-A13D-0F71721AFD5F}.DebugNewton|Win32.Build.0 = Debug|Win32
+		{03971781-199E-4610-A13D-0F71721AFD5F}.Release|Win32.ActiveCfg = Release|Win32
+		{03971781-199E-4610-A13D-0F71721AFD5F}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,6 +1,8 @@
 #ifndef __H_INCLUDED__HRENGIN_IEncore
 #define __H_INCLUDED__HRENGIN_IEncore
 
+#include <hrengin/common/hrTypes.h>
+
 namespace hrengin
 {
 
@@ -14,7 +16,7 @@ namespace hrengin
 class IEncore
 {
 public:
-	virtual u32 GetTime() = 0;
+	virtual u32 getTime() = 0;
 		
 	// Run the engine
 	virtual bool Roar() = 0;

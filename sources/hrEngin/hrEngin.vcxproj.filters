@@ -4,285 +4,129 @@
     <None Include="todolist.txt" />
   </ItemGroup>
   <ItemGroup>
-    <Filter Include="Include">
-      <UniqueIdentifier>{752df3a9-e411-4fbd-9306-eb170f75499e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source">
-      <UniqueIdentifier>{6b1b5ef3-275c-46e7-98c1-52a31d26463a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\Graphics">
-      <UniqueIdentifier>{b2f24e1b-beb8-4cf2-9e44-e7062fcb187a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\Graphics\IrrExt">
-      <UniqueIdentifier>{4d3c570b-7a60-4c03-b093-f59574dc6abd}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Include\Graphics">
-      <UniqueIdentifier>{d1fd8c12-f5ce-4808-bc1b-1e97b9fdaabe}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\Graphics\Nodes">
-      <UniqueIdentifier>{499aab5d-5370-4749-b2ee-26e77943dd70}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Include\AI">
-      <UniqueIdentifier>{d420c61f-8931-4b6d-ab20-c2630e4ef00b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Include\Physics">
-      <UniqueIdentifier>{68504724-6af1-424f-96ce-72f5961195cf}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\GUI">
-      <UniqueIdentifier>{bae2e20b-1b6d-4c39-b657-1b93e92c6b63}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\GUI\Input">
-      <UniqueIdentifier>{9790971a-294b-471c-8a78-d80b5c62a249}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\Physics">
-      <UniqueIdentifier>{090b697a-91dc-450c-abae-52a8f3946a21}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\Debug">
-      <UniqueIdentifier>{57f82bce-e6f2-4aed-8e08-67c9e0dafab5}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Example">
       <UniqueIdentifier>{7742512e-3925-4ce2-b610-64c7ff54e918}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\Common">
-      <UniqueIdentifier>{1abbf53d-cb28-418a-9122-061c8b600a34}</UniqueIdentifier>
+    <Filter Include="source">
+      <UniqueIdentifier>{6b1b5ef3-275c-46e7-98c1-52a31d26463a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\Entities">
-      <UniqueIdentifier>{da358dda-fe26-424d-9d93-1ce42077679f}</UniqueIdentifier>
+    <Filter Include="include">
+      <UniqueIdentifier>{752df3a9-e411-4fbd-9306-eb170f75499e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Include\Common">
+    <Filter Include="include\AI">
+      <UniqueIdentifier>{d420c61f-8931-4b6d-ab20-c2630e4ef00b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\Common">
       <UniqueIdentifier>{096c75b2-caa7-4b1e-8d06-eb9fba892254}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Include\Entities">
+    <Filter Include="include\Entities">
       <UniqueIdentifier>{58e3f6b3-001c-4a5c-bcfc-b6117c95ee46}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Include\Base">
+    <Filter Include="include\Base">
       <UniqueIdentifier>{3724bf5e-2370-4d90-a176-dada8183439b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Include\GUI">
-      <UniqueIdentifier>{e2031358-1771-4f5d-8298-003cea1372d9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Include\GUI\Input">
-      <UniqueIdentifier>{ad6b8575-7bf2-4f1a-be03-65cd6a25046d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Include\Config">
+    <Filter Include="include\Config">
       <UniqueIdentifier>{03074a71-661c-41fc-a9f2-f451aced349e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Include\Filesystem">
-      <UniqueIdentifier>{cf300e18-4f0b-4a64-a20d-3fa547f42fe7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\core">
-      <UniqueIdentifier>{0ce32415-ebce-42f2-9dc0-11ce571a8758}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="hrengin.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics\IrrExt\CSceneNodeAnimatorCameraRTS.cpp">
-      <Filter>Source\Graphics\IrrExt</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics\Nodes\CCameraNode.cpp">
-      <Filter>Source\Graphics\Nodes</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics\Nodes\CLightNode.cpp">
-      <Filter>Source\Graphics\Nodes</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics\Nodes\CVisNode.cpp">
-      <Filter>Source\Graphics\Nodes</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics\CVideoManager.cpp">
-      <Filter>Source\Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="GUI\Input\CInputManager.cpp">
-      <Filter>Source\GUI\Input</Filter>
-    </ClCompile>
-    <ClCompile Include="GUI\CGuiManager.cpp">
-      <Filter>Source\GUI</Filter>
-    </ClCompile>
-    <ClCompile Include="Physics\CBulletPhysics.cpp">
-      <Filter>Source\Physics</Filter>
-    </ClCompile>
-    <ClCompile Include="Physics\CPhysicsPhantom.cpp">
-      <Filter>Source\Physics</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\CEncore.cpp">
-      <Filter>Source\Common</Filter>
-    </ClCompile>
-    <ClCompile Include="Common\CWorld.cpp">
-      <Filter>Source\Common</Filter>
-    </ClCompile>
-    <ClCompile Include="Entities\CEntityManager.cpp">
-      <Filter>Source\Entities</Filter>
-    </ClCompile>
-    <ClCompile Include="Entities\CEventManager.cpp">
-      <Filter>Source\Entities</Filter>
-    </ClCompile>
-    <ClCompile Include="core\CLogger.cpp">
-      <Filter>Source\core</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Graphics\IrrExt\CSceneNodeAnimatorCameraRTS.h">
-      <Filter>Source\Graphics\IrrExt</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\IrrExt\ISceneNodeAnimatorCameraRTS.h">
-      <Filter>Source\Graphics\IrrExt</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\example\hrSampleProgramloop.h">
       <Filter>Example</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics\Nodes\CCameraNode.h">
-      <Filter>Source\Graphics\Nodes</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\Nodes\CLightNode.h">
-      <Filter>Source\Graphics\Nodes</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\Nodes\CVisNode.h">
-      <Filter>Source\Graphics\Nodes</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\CVideoManager.h">
-      <Filter>Source\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="GUI\Input\CInputManager.h">
-      <Filter>Source\GUI\Input</Filter>
-    </ClInclude>
-    <ClInclude Include="GUI\CGuiManager.h">
-      <Filter>Source\GUI</Filter>
-    </ClInclude>
-    <ClInclude Include="Physics\CBulletPhysics.h">
-      <Filter>Source\Physics</Filter>
-    </ClInclude>
-    <ClInclude Include="Physics\CPhysicsPhantom.h">
-      <Filter>Source\Physics</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\CEncore.h">
-      <Filter>Source\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\CInternalsManager.h">
-      <Filter>Source\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\CWorld.h">
-      <Filter>Source\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="Common\hrFilesystem.h">
-      <Filter>Source\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="Entities\CEntityManager.h">
-      <Filter>Source\Entities</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\hrengin\entities\IEventManager.h">
-      <Filter>Include\Entities</Filter>
+      <Filter>include\Entities</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\hrengin\entities\IThinking.h">
-      <Filter>Include\Entities</Filter>
-    </ClInclude>
-    <ClInclude Include="Entities\CEventManager.h">
-      <Filter>Source\Entities</Filter>
+      <Filter>include\Entities</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\hrengin\entities\IBaseEntity.h">
-      <Filter>Include\Entities</Filter>
+      <Filter>include\Entities</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\hrengin\entities\IParentable.h">
-      <Filter>Include\Entities</Filter>
+      <Filter>include\Entities</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\hrengin\entities\IControllable.h">
-      <Filter>Include\Entities</Filter>
+      <Filter>include\Entities</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\hrengin\entities\IWorld.h">
-      <Filter>Include\Entities</Filter>
+      <Filter>include\Entities</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\hrengin\ai\IBaseNavigator.h">
-      <Filter>Include\AI</Filter>
+      <Filter>include\AI</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\hrengin\ai\IBasePathfinder.h">
-      <Filter>Include\AI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\hrengin\physics\IPhysicsBody.h">
-      <Filter>Include\Physics</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\hrengin\physics\IPhysicsPhantom.h">
-      <Filter>Include\Physics</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\hrengin\physics\IPhysicsManager.h">
-      <Filter>Include\Physics</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\hrengin\physics\IPhysicsObject.h">
-      <Filter>Include\Physics</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\hrengin\hrengin.h">
-      <Filter>Include</Filter>
+      <Filter>include\AI</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\hrengin\common\hrTypes.h">
-      <Filter>Include\Common</Filter>
+      <Filter>include\Common</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\hrengin\common\line3d.h">
-      <Filter>Include\Common</Filter>
+      <Filter>include\Common</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\hrengin\common\Vector2d.h">
-      <Filter>Include\Common</Filter>
+      <Filter>include\Common</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\hrengin\common\Vector3d.h">
-      <Filter>Include\Common</Filter>
+      <Filter>include\Common</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\hrengin\common\Math\hrMath.h">
-      <Filter>Include\Common</Filter>
+      <Filter>include\Common</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\hrengin\entities\IEntityManager.h">
-      <Filter>Include\Entities</Filter>
+      <Filter>include\Entities</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\hrengin\base\IEncore.h">
-      <Filter>Include\Base</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\hrengin\graphics\ICameraNode.h">
-      <Filter>Include\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\hrengin\graphics\ILightNode.h">
-      <Filter>Include\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\hrengin\graphics\IVisNode.h">
-      <Filter>Include\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\hrengin\graphics\ISceneNode.h">
-      <Filter>Include\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\hrengin\graphics\IVideoManager.h">
-      <Filter>Include\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\hrengin\gui\IGUIManager.h">
-      <Filter>Include\GUI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\hrengin\gui\input\IInputManager.h">
-      <Filter>Include\GUI\Input</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\hrengin\gui\input\InputEvent.h">
-      <Filter>Include\GUI\Input</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\hrengin\gui\input\Keycodes.h">
-      <Filter>Include\GUI\Input</Filter>
+      <Filter>include\Base</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\hrengin\config\hrConfig.h">
-      <Filter>Include\Config</Filter>
+      <Filter>include\Config</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\hrengin\config\hrVersions.h">
-      <Filter>Include\Config</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\hrengin\filesystem\IFileParser.h">
-      <Filter>Include\Filesystem</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\hrengin\filesystem\IFileSystem.h">
-      <Filter>Include\Filesystem</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\hrengin\filesystem\IReadFile.h">
-      <Filter>Include\Filesystem</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\hrengin\filesystem\IWriteFile.h">
-      <Filter>Include\Filesystem</Filter>
+      <Filter>include\Config</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\hrengin\base\ILogger.h">
-      <Filter>Include\Base</Filter>
+      <Filter>include\Base</Filter>
     </ClInclude>
-    <ClInclude Include="core\CLogger.h">
-      <Filter>Source\core</Filter>
+    <ClInclude Include="..\..\include\hrengin\common\hrenginapi.h">
+      <Filter>include\Common</Filter>
     </ClInclude>
+    <ClInclude Include="CEncore.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="CEntityManager.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="CEventManager.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="CLogger.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="CWorld.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\common\hrengintime.h">
+      <Filter>include\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\common\hrengintypes.h">
+      <Filter>include\Common</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="CEncore.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="CEntityManager.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="CEventManager.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="CLogger.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="CWorld.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

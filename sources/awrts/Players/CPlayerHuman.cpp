@@ -6,7 +6,7 @@
 
 #include <hrengin/physics/IPhysicsObject.h>
 
-#include <hrengin/hrengin.sound.h>
+#include <hrengin/sound/ISoundManager.h>
 
 #include "../CApplication.h"
 #include "../Units/CUnit.h"
@@ -34,7 +34,7 @@ CUnit* CPlayerHuman::getUnitFromRay(hrengin::base::line3df ray)
 	hrengin::Vectorf3d start(ray.start.X, ray.start.Y, ray.start.Z);
 	hrengin::Vectorf3d end(ray.end.X, ray.end.Y, ray.end.Z);
 
-	hrengin::physics::IPhysicsObject* rayHit = app.phymgr->castRay(start,end);
+	hrengin::physics::IPhysicsObject* rayHit = app.phymgr.castRay(start,end);
 
 	if(!rayHit)
 	{
@@ -116,20 +116,20 @@ bool CPlayerHuman::ReceiveInput(hrengin::gui::InputEvent input)
 			CUnit* rayHit = getUnitFromRay(ray);
 			if(!rayHit)
 			{
-				CUnitManager* umgr =  app.unitmgr;
+				CUnitManager& umgr = app.unitmgr;
 				static unsigned int lastId = 0;
 				unsigned int unitId;
 				int i = 0;
-				for(std::unordered_map<hrengin::u32,UnitType>::iterator it = umgr->unitTypes_.begin();
-					it != umgr->unitTypes_.end();
-					++it,++i)
-				{
-					if(lastId % umgr->unitTypes_.size() == i) unitId = (*it).second.id;
+				for(std::unordered_map<hrengin::u32,UnitType>::iterator it = umgr.unitTypes_.begin();
+					it != umgr.unitTypes_.end();
+					++it,++i) {
+					if(lastId % umgr.unitTypes_.size() == i) {
+						unitId = (*it).second.id;
+					}
 				}
-			
-			
+
 				hrengin::Vector3d pos = povCamera_->__tempGetRayHitPlaneCoords(X,Y);
-				app.unitmgr->createUnit(unitId,pos);
+				app.unitmgr.createUnit(unitId,pos);
 
 				++ lastId;
 			}

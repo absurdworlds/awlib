@@ -9,17 +9,14 @@
 
 //#include "CUnitManager.h"
 
-namespace hrengin
-{
-	namespace physics
-	{
-		class IPhysicsPhantom;
-	}
+namespace hrengin {
+namespace physics {
+	class IPhysicsPhantom;
+}
 
-	namespace graphics
-	{
-		class IVisNode;
-	}
+namespace graphics {
+	class IVisNode;
+}
 }
 
 namespace awrts

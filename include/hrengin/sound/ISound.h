@@ -3,10 +3,8 @@
 
 #include <hrengin/common/hrTypes.h>
 
-namespace hrengin
-{
-namespace sound
-{
+namespace hrengin {
+namespace sound {
 
 class ISound
 {

@@ -1,11 +1,7 @@
 #ifndef __HRENGIN_SOUND_ISoundManager_H__
 #define __HRENGIN_SOUND_ISoundManager_H__
 
-#include <map>
-#include <string>
-
-#include <hrengin/config/hrConfig.h>
-#include <hrengin/common/hrTypes.h>
+#include <hrengin/common/hrenginapi.h>
 
 namespace hrengin
 {
@@ -22,6 +18,7 @@ public:
 	virtual void playSound(const char* fileName) = 0;
 };
 
+HRENGINSOUND_API ISoundManager& getSoundManager();
 
 } // namespace sound
 } // namespace hrengin

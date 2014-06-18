@@ -5,6 +5,7 @@
 #include <thread>
 
 #include <hrengin/config/hrConfig.h>
+#include <hrengin/common/hrenginapi.h>
 
 namespace hrengin {
 
@@ -18,7 +19,11 @@ public:
 	const std::string endl = std::string("\n");
 };
 
+// creates a new logger on heap
 HRENGIN_API ILogger& createLogger();
+
+// creates a singleton logger
+HRENGIN_API ILogger& getLogger();
 
 } // namespace hrengin
 
