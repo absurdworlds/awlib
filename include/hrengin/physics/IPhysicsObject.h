@@ -1,31 +1,29 @@
-#ifndef __H_INCLUDED__HRENGIN_IPhysicsObject
-#define __H_INCLUDED__HRENGIN_IPhysicsObject
+#ifndef __HRENGIN_PHYSICS_IPhysicsObject_H__
+#define __HRENGIN_PHYSICS_IPhysicsObject_H__
 
 #include <hrengin/common/Vector3d.h>
-		  
-namespace hrengin
-{
+
+namespace hrengin {
 
 class IBaseEntity;
 
-namespace physics
-{
+namespace physics {
 
 class ICollisionShape;
 
 class IPhysicsObject
 {
-	public:
-		virtual void attachToEntity(IBaseEntity* attach) = 0;
-		virtual IBaseEntity* getEntity() = 0;
+public:
+	virtual void attachToEntity(IBaseEntity* attach) = 0;
+	virtual IBaseEntity* getEntity() = 0;
 
-		virtual void setPosition(Vector3d pos) = 0;
-		virtual void setRotation(Vector3d rot) = 0;
-		//virtual void SetScale(Vectorf3d scale) = 0;
-	protected:
+	virtual void setPosition(Vector3d pos) = 0;
+	virtual void setRotation(Vector3d rot) = 0;
+	//virtual void SetScale(Vectorf3d scale) = 0;
+protected:
 };
 
-}	
-} // namespace hrengin
+} // end namespace physics
+} // end namespace hrengin
 
-#endif//__HG_IPhysicsObject__
+#endif//__HRENGIN_PHYSICS_IPhysicsObject_H__

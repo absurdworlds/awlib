@@ -4,8 +4,7 @@
 
 #include <hrengin/common/math/hrMath.h>
 
-namespace hrengin
-{
+namespace hrengin {
 
 template <class T>
 class hrVector3d

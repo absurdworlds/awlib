@@ -9,19 +9,19 @@ namespace awrts
 {
 
 CApplication::CApplication()
+: videomgr (hrengin::graphics::getVideoManager()),
+  phymgr (hrengin::physics::getPhysicsManager()),
+  entmgr (hrengin::getEntityManager()),
+  eventmgr (hrengin::getEventManager()) 
 {
-	videomgr = hrengin::graphics::GetManager();
-	videomgr->CreateLight();
+	videomgr.CreateLight();
 
-	phymgr = hrengin::physics::GetManager ();
 
-	entmgr = hrengin::GetManager();
-	eventmgr = hrengin::GetEventManager();
 
-	unitmgr = new CUnitManager();
-	mapmgr = new CMapManager();
+	//unitmgr = new CUnitManager();
+	//mapmgr = new CMapManager();
 
-	encore = hrengin::KickstartEngine();
+	//encore = hrengin::KickstartEngine();
 }
 
 void CApplication::SetupTestScene()

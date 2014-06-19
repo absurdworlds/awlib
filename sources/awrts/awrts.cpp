@@ -1,8 +1,12 @@
 
 #include <stdio.h>
 
+#include <string>
+#include <hrengin/base/ILogger.h>
+#include <hrengin/sound/ISoundManager.h>
+#include <hrengin/gui/IInputManager.h>
+
 #define WIN32_LEAN_AND_MEAN
-#pragma comment(lib, "hrEngin.lib")
 
 //#include <Physics/IPhysicsPhantom.h>
 
@@ -14,12 +18,11 @@
 
 #include "awrts.h"
 
-namespace awrts
-{
+namespace awrts {
 void setupUnitTypes(CUnitManager& unitmgr)
 {
 	awrts::CApplication& app = awrts::CApplication::getInstance();
-	hrengin::u32 shape = app.phymgr->makeShape(hrengin::physics::IPhysicsManager::PHYS_SHAPE_SPHERE,5.);
+	hrengin::u32 shape = app.phymgr.makeShape(hrengin::physics::IPhysicsManager::PHYS_SHAPE_SPHERE,5.);
 
 	awrts::UnitType SOTank;	
 	SOTank.id = 'Stnk';
@@ -51,44 +54,49 @@ void setupUnitTypes(CUnitManager& unitmgr)
 int main()
 {
 	//hrengin::IEncore* hrEngin = hrengin::KickstartEngine();
-	bool b_runEngine = true;
-	
+	bool runEngine = true;
+
+	hrengin::sound::getSoundManager().initSounds();
+
 	awrts::CApplication& app = awrts::CApplication::getInstance();
 
-	hrengin::gui::IInputManager* inputmgr = hrengin::gui::GetInputManager();
+	hrengin::gui::IInputManager& inputmgr = hrengin::gui::getInputManager();
 	//hrengin::graphics::ICameraNode* camera = videomgr->CreateCamera();
-	awrts::CPlayerHuman* TestPlayer = new awrts::CPlayerHuman(app.videomgr->CreateCamera());
-	inputmgr->RegisterReceiver(*TestPlayer);
+	awrts::CPlayerHuman* TestPlayer = new awrts::CPlayerHuman(app.videomgr.CreateCamera());
+	inputmgr.RegisterReceiver(*TestPlayer);
 	
-	awrts::setupUnitTypes(*app.unitmgr);
+	awrts::setupUnitTypes(app.unitmgr);
 
-	app.mapmgr->loadMap("ground.obj");
+	app.mapmgr.loadMap("ground.obj");
 
 
 
 	//hrengin::gui::IInputManager* InputMgr = hrengin::gui::GetInputManager();
 
+
 	do
 	{
-		if(!app.videomgr->Draw())
+		if(!app.videomgr.Draw())
 		{
-			b_runEngine = false;
+			runEngine = false;
 		}
 		
-		if(!app.phymgr->step())
+		if(!app.phymgr.step())
 		{
-			b_runEngine = false;
+			runEngine = false;
 		}
 
-		app.eventmgr->advance();
+		app.eventmgr.advance();
 		
-		app.entmgr->doSync();
-		app.entmgr->doCleanup();
+		app.entmgr.doSync();
+		app.entmgr.doCleanup();
 
 	}
-	while(b_runEngine);
+	while(runEngine);
 
 	//while (hrEngin->Roar());
 	
+	
+
 	return 0;
 }

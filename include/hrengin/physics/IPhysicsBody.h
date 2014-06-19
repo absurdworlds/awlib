@@ -1,20 +1,18 @@
-#ifndef __H_INCLUDED__HRENGIN_IPhysicsBody
-#define __H_INCLUDED__HRENGIN_IPhysicsBody
+#ifndef __HRENGIN_PHYSICS_IPhysicsBody_H__
+#define __HRENGIN_PHYSICS_IPhysicsBody_H__
 
-#include <Physics/Base/IPhysicsObject.h>
+#include <hrengin/physics/IPhysicsObject.h>
 
-namespace hrengin
-{
-namespace physics
-{
+namespace hrengin {
+namespace physics {
 
 class IPhysicsBody : IPhysicsObject
 {
-	public:
-	protected:
+public:
+protected:
 };
 
-}	
+}
 } // namespace hrengin
 
-#endif//__H_INCLUDED__HRENGIN_IPhysicsBody 
+#endif//__HRENGIN_PHYSICS_IPhysicsBody_H__ 

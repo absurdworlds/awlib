@@ -1,7 +1,7 @@
 #ifndef __H_INCLUDED__HRENGIN_IControllable
 #define __H_INCLUDED__HRENGIN_IControllable
 
-#include "hrengin/gui/input/InputEvent.h"
+#include "hrengin/gui/InputEvent.h"
 
 namespace hrengin
 {

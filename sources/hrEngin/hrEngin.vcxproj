@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -14,18 +14,21 @@
     <ProjectGuid>{02D3814A-D061-48A3-B808-F43DC5D642F2}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>hrengin</RootNamespace>
+    <ProjectName>hrengin</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v120_xp</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v120</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -36,30 +39,32 @@
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="..\visualstudio\global_debug.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <IncludePath>$(SolutionDir)include;$(SolutionDir)..\External\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)..\External\lib\win32-msvc-debug;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(SolutionDir)\lib\win32-msvc-debug;$(SolutionDir)..\External\lib\win32-msvc-debug;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <PostBuildEvent>start movebinaries.bat</PostBuildEvent>
+    <OutDir>$(SolutionDir)..\Game\system\</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;hrengin_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;HRENGIN_EXPORTS;HRENGIN_HRENGIN;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>BulletCollision_vs2010_debug.lib;BulletDynamics_vs2010_debug.lib;HACD_vs2010_debug.lib;LinearMath_vs2010_debug.lib;OpenGLSupport_vs2010_debug.lib;Irrlicht.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>hrengingraphics.lib;hrenginphysics.lib;hrenginaudio.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <ImportLibrary>$(SolutionDir)lib\win32-msvc-debug\$(TargetName).lib</ImportLibrary>
     </Link>
     <CustomBuildStep>
       <Command>
@@ -71,10 +76,12 @@
       </Inputs>
     </CustomBuildStep>
     <PostBuildEvent>
-      <Command>start $(SolutionDir)movebinaries.bat $(Configuration) $(SolutionDir)</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
     <PostBuildEvent>
-      <Message>MOVING BUNURIS</Message>
+      <Message>
+      </Message>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -100,8 +107,11 @@
     <ClInclude Include="..\..\example\hrSampleProgramloop.h" />
     <ClInclude Include="..\..\include\hrengin\ai\IBaseNavigator.h" />
     <ClInclude Include="..\..\include\hrengin\ai\IBasePathfinder.h" />
-    <ClInclude Include="..\..\include\hrengin\base\IEncore.h" />
     <ClInclude Include="..\..\include\hrengin\base\ILogger.h" />
+    <ClInclude Include="..\..\include\hrengin\base\IEncore.h" />
+    <ClInclude Include="..\..\include\hrengin\common\hrenginapi.h" />
+    <ClInclude Include="..\..\include\hrengin\common\hrengintime.h" />
+    <ClInclude Include="..\..\include\hrengin\common\hrengintypes.h" />
     <ClInclude Include="..\..\include\hrengin\common\hrTypes.h" />
     <ClInclude Include="..\..\include\hrengin\common\line3d.h" />
     <ClInclude Include="..\..\include\hrengin\common\Math\hrMath.h" />
@@ -116,57 +126,18 @@
     <ClInclude Include="..\..\include\hrengin\entities\IParentable.h" />
     <ClInclude Include="..\..\include\hrengin\entities\IThinking.h" />
     <ClInclude Include="..\..\include\hrengin\entities\IWorld.h" />
-    <ClInclude Include="..\..\include\hrengin\filesystem\IFileParser.h" />
-    <ClInclude Include="..\..\include\hrengin\filesystem\IFileSystem.h" />
-    <ClInclude Include="..\..\include\hrengin\filesystem\IReadFile.h" />
-    <ClInclude Include="..\..\include\hrengin\filesystem\IWriteFile.h" />
-    <ClInclude Include="..\..\include\hrengin\graphics\ICameraNode.h" />
-    <ClInclude Include="..\..\include\hrengin\graphics\ILightNode.h" />
-    <ClInclude Include="..\..\include\hrengin\graphics\ISceneNode.h" />
-    <ClInclude Include="..\..\include\hrengin\graphics\IVideoManager.h" />
-    <ClInclude Include="..\..\include\hrengin\graphics\IVisNode.h" />
-    <ClInclude Include="..\..\include\hrengin\gui\IGUIManager.h" />
-    <ClInclude Include="..\..\include\hrengin\gui\input\IInputManager.h" />
-    <ClInclude Include="..\..\include\hrengin\gui\input\InputEvent.h" />
-    <ClInclude Include="..\..\include\hrengin\gui\input\Keycodes.h" />
-    <ClInclude Include="..\..\include\hrengin\hrengin.h" />
-    <ClInclude Include="..\..\include\hrengin\physics\IPhysicsBody.h" />
-    <ClInclude Include="..\..\include\hrengin\physics\IPhysicsManager.h" />
-    <ClInclude Include="..\..\include\hrengin\physics\IPhysicsObject.h" />
-    <ClInclude Include="..\..\include\hrengin\physics\IPhysicsPhantom.h" />
-    <ClInclude Include="..\..\include\hrengin\sound\ISoundManager.h" />
-    <ClInclude Include="Common\CEncore.h" />
-    <ClInclude Include="Common\CInternalsManager.h" />
-    <ClInclude Include="Common\CWorld.h" />
-    <ClInclude Include="Common\hrFilesystem.h" />
-    <ClInclude Include="Entities\CEntityManager.h" />
-    <ClInclude Include="Entities\CEventManager.h" />
-    <ClInclude Include="Graphics\CVideoManager.h" />
-    <ClInclude Include="Graphics\IrrExt\CSceneNodeAnimatorCameraRTS.h" />
-    <ClInclude Include="Graphics\IrrExt\ISceneNodeAnimatorCameraRTS.h" />
-    <ClInclude Include="Graphics\Nodes\CCameraNode.h" />
-    <ClInclude Include="Graphics\Nodes\CVisNode.h" />
-    <ClInclude Include="Graphics\Nodes\CLightNode.h" />
-    <ClInclude Include="GUI\CGuiManager.h" />
-    <ClInclude Include="GUI\Input\CInputManager.h" />
-    <ClInclude Include="Physics\CBulletPhysics.h" />
-    <ClInclude Include="Physics\CPhysicsPhantom.h" />
+    <ClInclude Include="CEncore.h" />
+    <ClInclude Include="CEntityManager.h" />
+    <ClInclude Include="CEventManager.h" />
+    <ClInclude Include="CLogger.h" />
+    <ClInclude Include="CWorld.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Common\CEncore.cpp" />
-    <ClCompile Include="Common\CWorld.cpp" />
-    <ClCompile Include="Entities\CEntityManager.cpp" />
-    <ClCompile Include="Entities\CEventManager.cpp" />
-    <ClCompile Include="Graphics\CVideoManager.cpp" />
-    <ClCompile Include="Graphics\IrrExt\CSceneNodeAnimatorCameraRTS.cpp" />
-    <ClCompile Include="Graphics\Nodes\CCameraNode.cpp" />
-    <ClCompile Include="Graphics\Nodes\CVisNode.cpp" />
-    <ClCompile Include="Graphics\Nodes\CLightNode.cpp" />
-    <ClCompile Include="GUI\CGuiManager.cpp" />
-    <ClCompile Include="GUI\Input\CInputManager.cpp" />
-    <ClCompile Include="hrengin.cpp" />
-    <ClCompile Include="Physics\CBulletPhysics.cpp" />
-    <ClCompile Include="Physics\CPhysicsPhantom.cpp" />
+    <ClCompile Include="CEncore.cpp" />
+    <ClCompile Include="CEntityManager.cpp" />
+    <ClCompile Include="CEventManager.cpp" />
+    <ClCompile Include="CLogger.cpp" />
+    <ClCompile Include="CWorld.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
