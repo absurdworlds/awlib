@@ -2,6 +2,7 @@
 v. Storm in a bottle
 --A test version, unplayable in general sense
 	v. Storm in a bottle 0.002
+о добавить proper граунд модел, also raycasting
 о юнитселекшон — подсветка выделенного юнита
 o more realistic unit movement
 о заменить ноуколайд на колфильтр у физиксфантома
@@ -10,7 +11,6 @@ o more realistic unit movement
 о хард таск — написать измерение отклонения от пути
 о хард таск — сделать зонд, которым юнит будет высматривать других юнитов
 o rewrite code to use logger instead of fprintf
-o prettify code
 
 
 o Write weapon class
@@ -22,19 +22,20 @@ o rewrite camera
 o write hrengin data file loader
 o start implementing file manager
 o write proper map manager
-î äîáàâèòü proper ãðàóíä ìîäåë, also raycasting
 o Make units attack each other
+o prettify code
 
-	In future:
+
 o Main menu
 o Basic ai
 o Buildings
+o Tech tree, researches
 o Animation
 o Start write map landscape
 o Start navmesh navigation
-î õàðä òàñê — ïðîâåðêà, íå âûëåòåë ëè þíèò çà íàâìåø
 o Add non-flat world
 o gamemodes (classic, exhaustion etc)
+о хард таск проверка, не вылетел ли юнит за навмеш
 
 
 v. Srantonwars 1.xxx

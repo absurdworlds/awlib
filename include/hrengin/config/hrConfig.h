@@ -43,22 +43,6 @@
 	#endif
 #endif
 
-
-#ifndef __FUNCTION_NAME__
-	#ifdef __HRCMP_MSC__
-		#define __FUNCTION_NAME__   __FUNCTION__  
-	#else
-		#define __FUNCTION_NAME__   __func__ 
-	#endif
-#else
-	#if defined(__HRCMP_MSC__)
-		#pragma message("Macro __FUNCTION_NAME__ already defined, please undefine it :(")
-	#elif defined(__HRCMP_ICC__) || defined(__HRCMP_GNU__) || defined(__HRCMP_IBM__)
-		#warning "Macro __FUNCTION_NAME__ already defined, please undefine it :("
-	#else
-	#endif
-#endif
-
 #if defined(__HRCMP_MSC__)
 	#pragma warning(disable: 4244) 
 #endif

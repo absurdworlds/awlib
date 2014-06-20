@@ -16,10 +16,12 @@
     <ClInclude Include="..\..\include\hrengin\physics\IPhysicsObject.h" />
     <ClInclude Include="..\..\include\hrengin\physics\IPhysicsPhantom.h" />
     <ClInclude Include="CBulletPhysics.h" />
+    <ClInclude Include="CPhysicsBody.h" />
     <ClInclude Include="CPhysicsPhantom.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CBulletPhysics.cpp" />
+    <ClCompile Include="CPhysicsBody.cpp" />
     <ClCompile Include="CPhysicsPhantom.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
@@ -69,6 +71,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;HRENGINPHYSICS_EXPORTS;HRENGIN_PHYSICS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DisableLanguageExtensions>true</DisableLanguageExtensions>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

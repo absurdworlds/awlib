@@ -17,6 +17,7 @@
 #include "Units/CUnitManager.h"
 
 #include "awrts.h"
+#include <hrengin/base/ILogger.h>
 
 namespace awrts {
 void setupUnitTypes(CUnitManager& unitmgr)
@@ -53,12 +54,11 @@ void setupUnitTypes(CUnitManager& unitmgr)
 
 int main()
 {
+	awrts::CApplication& app = awrts::CApplication::getInstance();
 	//hrengin::IEncore* hrEngin = hrengin::KickstartEngine();
-	bool runEngine = true;
 
 	hrengin::sound::getSoundManager().initSounds();
 
-	awrts::CApplication& app = awrts::CApplication::getInstance();
 
 	hrengin::gui::IInputManager& inputmgr = hrengin::gui::getInputManager();
 	//hrengin::graphics::ICameraNode* camera = videomgr->CreateCamera();
@@ -70,9 +70,14 @@ int main()
 	app.mapmgr.loadMap("ground.obj");
 
 
+	hrengin::ILogger& logger = hrengin::getLogger();
+	logger.init();
+	TRACE("Starting up the engine")
+
 
 	//hrengin::gui::IInputManager* InputMgr = hrengin::gui::GetInputManager();
 
+	bool runEngine = true;
 
 	do
 	{
@@ -94,6 +99,7 @@ int main()
 	}
 	while(runEngine);
 
+	logger.stop();
 	//while (hrEngin->Roar());
 	
 	

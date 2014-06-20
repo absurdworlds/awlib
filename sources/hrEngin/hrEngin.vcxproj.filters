@@ -93,9 +93,6 @@
     <ClInclude Include="CEncore.h">
       <Filter>source</Filter>
     </ClInclude>
-    <ClInclude Include="CEntityManager.h">
-      <Filter>source</Filter>
-    </ClInclude>
     <ClInclude Include="CEventManager.h">
       <Filter>source</Filter>
     </ClInclude>
@@ -110,6 +107,12 @@
     </ClInclude>
     <ClInclude Include="..\..\include\hrengin\common\hrengintypes.h">
       <Filter>include\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\common\hrenginmacro.h">
+      <Filter>include\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="CEntityManager.h">
+      <Filter>source</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

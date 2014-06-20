@@ -32,7 +32,7 @@ CUnit& CUnitManager::createUnit(hrengin::u32 id, hrengin::Vector3d position, hre
 	thinkEvent.owner = unit;
 	thinkEvent.isActive = true;
 	thinkEvent.nextFire = hrengin::getTime() + 30;
-	thinkEvent.period = 30;
+	thinkEvent.period = 20;
 
 	unit->eventId_ = app.eventmgr.addEvent(thinkEvent);
 

@@ -59,6 +59,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;HRENGIN_EXPORTS;HRENGIN_HRENGIN;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <DisableLanguageExtensions>true</DisableLanguageExtensions>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -110,6 +111,7 @@
     <ClInclude Include="..\..\include\hrengin\base\ILogger.h" />
     <ClInclude Include="..\..\include\hrengin\base\IEncore.h" />
     <ClInclude Include="..\..\include\hrengin\common\hrenginapi.h" />
+    <ClInclude Include="..\..\include\hrengin\common\hrenginmacro.h" />
     <ClInclude Include="..\..\include\hrengin\common\hrengintime.h" />
     <ClInclude Include="..\..\include\hrengin\common\hrengintypes.h" />
     <ClInclude Include="..\..\include\hrengin\common\hrTypes.h" />

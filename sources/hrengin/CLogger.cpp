@@ -8,14 +8,23 @@ HRENGIN_API ILogger& createLogger()
 	return *(new CLogger());
 }
 
+HRENGIN_API ILogger& getLogger()
+{
+	static CLogger singleton;
+	return singleton;
+}
+
+
 CLogger::CLogger()
 {
-
 }
 
 CLogger::~CLogger()
 {
-	stop();
+	if (!stopped_)
+	{
+		stop();
+	}
 }
 
 void CLogger::init()
@@ -32,8 +41,8 @@ void CLogger::push(std::string msg)
 void CLogger::stop()
 {
 	stopped_ = true;
-	while (!finished_)
-	{
+	while (!finished_) {
+		//std::this_thread::yield();
 		std::this_thread::sleep_for(std::chrono::milliseconds(0));
 	}
 
@@ -59,8 +68,7 @@ void CLogger::log()
 
 void CLogger::write(std::string msg)
 {
-	if (msg != "\n")
-	{
+	if (msg != "\n") {
 		fprintf(stderr, "%s ", msg.c_str());
 	} else {
 		fprintf(stderr, "\n");

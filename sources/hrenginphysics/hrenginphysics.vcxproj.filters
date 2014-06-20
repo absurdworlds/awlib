@@ -27,12 +27,18 @@
     <ClInclude Include="..\..\include\hrengin\physics\IPhysicsPhantom.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="CPhysicsBody.h">
+      <Filter>source</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CBulletPhysics.cpp">
       <Filter>source</Filter>
     </ClCompile>
     <ClCompile Include="CPhysicsPhantom.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="CPhysicsBody.cpp">
       <Filter>source</Filter>
     </ClCompile>
   </ItemGroup>

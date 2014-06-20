@@ -113,9 +113,6 @@ void CCameraNode::SetFarPlane(f64 dist)
 
 void CCameraNode::SetBehavior(CAM_Behavior beh)
 {
-	#ifdef _DEBUG
-		fprintf(stderr, "DEBUG: function call %s\n", __FUNCTION_NAME__);
-	#endif //_DEBUG
 
 	controlBehavior = beh;
 	
