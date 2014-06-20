@@ -59,7 +59,7 @@
       <PreprocessToFile>false</PreprocessToFile>
       <IgnoreStandardIncludePath>false</IgnoreStandardIncludePath>
       <PreprocessSuppressLineNumbers>false</PreprocessSuppressLineNumbers>
-      <DisableLanguageExtensions>true</DisableLanguageExtensions>
+      <DisableLanguageExtensions>false</DisableLanguageExtensions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
