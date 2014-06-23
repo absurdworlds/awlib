@@ -30,6 +30,9 @@
     <ClInclude Include="CPhysicsBody.h">
       <Filter>source</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\physics\PhysModel.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CBulletPhysics.cpp">

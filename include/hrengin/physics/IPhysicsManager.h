@@ -6,6 +6,8 @@
 
 #include <hrengin/common/Vector3d.h>
 
+#include <hrengin/physics/PhysModel.h>
+
 namespace hrengin {
 namespace physics {
 
@@ -17,20 +19,18 @@ class IPhysicsPhantom; //: IPhysicsObject;
 class IPhysicsManager
 {
 public:
-	enum PhysShape
-	{
-		PHYS_SHAPE_SPHERE,
-		PHYS_SHAPE_BOX,
-		PHYS_SHAPE_CAPSULE,
-		PHYS_SHAPE_CYLINDER,
-		PHYS_SHAPE_CONE
-	};
+	//virtual u32 makeShape(PhysShape type, f32 x, f32 y=0., f32 z=0.) = 0;
+	//virtual u32 addShape(const char * modelname) = 0;
 
-	virtual u32 makeShape(PhysShape type, f32 x, f32 y=0., f32 z=0.) = 0;
-	virtual u32 addShape(const char * modelname) = 0;
+	virtual u32 validateModel(PhysModel * model) = 0;
+	virtual u32 loadModel(PhysModel * model) = 0;
+	virtual u32 loadProceduralModel(PhysModel::Procedural * model) = 0;
+	virtual u32 loadMeshModel(PhysModel::Mesh model) = 0;
 
-	virtual IPhysicsBody* createBody(const u32 shapeid) = 0;
-	virtual IPhysicsPhantom* createPhantom(const u32 shapeid) = 0;
+	virtual IPhysicsBody* createBody(const u32 modelId) = 0;
+	virtual IPhysicsBody* createBody(const char* modelName) = 0;
+	virtual IPhysicsPhantom* createPhantom(const u32 modelId) = 0;
+	virtual IPhysicsPhantom* createPhantom(const char* modelName) = 0;
 
 	virtual IPhysicsObject* castRay(Vectorf3d from, Vectorf3d to) = 0;
 
