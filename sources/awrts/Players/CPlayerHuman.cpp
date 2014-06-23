@@ -3,6 +3,7 @@
 #include <Irrlicht/Vector3d.h>
 
 #include <hrengin/common/Vector3d.h>
+#include <hrengin/base/ILogger.h>
 
 #include <hrengin/physics/IPhysicsObject.h>
 
@@ -133,6 +134,18 @@ bool CPlayerHuman::ReceiveInput(hrengin::gui::InputEvent input)
 
 				++ lastId;
 			}
+		}
+		else if (input.KeyInput.Key == irr::KEY_KEY_U && input.KeyInput.PressedDown)
+		{
+			hrengin::getLogger().push("DEBUG:");
+			hrengin::getLogger().push(std::to_string(app.unitmgr.getUnitCount()));
+			hrengin::getLogger().push(hrengin::endl);
+		} else if (input.KeyInput.Key == irr::KEY_KEY_P && input.KeyInput.PressedDown)
+		{
+			app.profiling = !app.profiling;
+			hrengin::getLogger().push("DEBUG: Profiling =");
+			hrengin::getLogger().push(std::to_string(app.profiling));
+			hrengin::getLogger().push(hrengin::endl);
 		}
 	}
 

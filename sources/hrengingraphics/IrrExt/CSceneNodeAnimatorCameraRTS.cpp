@@ -353,7 +353,7 @@ namespace scene
 		{
 			CurrentZoom = MinZoom;
 		}
-		else			
+		else
 		{
 			CurrentZoom = multiplier;
 		}

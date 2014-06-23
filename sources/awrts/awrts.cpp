@@ -2,9 +2,11 @@
 #include <stdio.h>
 
 #include <string>
+#include <thread>
 #include <hrengin/base/ILogger.h>
 #include <hrengin/sound/ISoundManager.h>
 #include <hrengin/gui/IInputManager.h>
+#include <hrengin/common/hrengintime.h>
 
 #define WIN32_LEAN_AND_MEAN
 
@@ -79,23 +81,42 @@ int main()
 
 	bool runEngine = true;
 
+	hrengin::u32 time = hrengin::getTime();
+	hrengin::u32 lastTime = time;
+	hrengin::u32 cycles = 0;
+	hrengin::u32 mean = 0;
 	do
 	{
-		if(!app.videomgr.Draw())
-		{
-			runEngine = false;
-		}
-		
-		if(!app.phymgr.step())
-		{
-			runEngine = false;
-		}
+		runEngine = app.videomgr.advance();
 
-		app.eventmgr.advance();
+		if (!runEngine) break;
+
+		lastTime = time;
+		time = hrengin::getTime();
 		
+		if (app.profiling)
+		{
+			if (((cycles + 1) % 100) == 0) {
+				hrengin::getLogger().push("DEBUG:");
+				hrengin::getLogger().push(std::to_string(mean/100.0));
+				hrengin::getLogger().push(hrengin::endl);
+				mean = 0;
+			} else {
+				mean += time - lastTime;
+			}
+		}
+		
+		
+		app.videomgr.draw();
+		
+		runEngine = app.phymgr.step();
+
+		
+		app.eventmgr.advance();
+
 		app.entmgr.doSync();
 		app.entmgr.doCleanup();
-
+		cycles++;
 	}
 	while(runEngine);
 

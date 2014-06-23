@@ -75,24 +75,27 @@ void CVideoManager::CreateScene()
 	device->getVideoDriver()->addTexture("red", red);*/
 }
 
-bool CVideoManager::Draw()
+bool CVideoManager::advance()
 {
-	if(device->run()) {
-		if (device->isWindowActive()) {
-			driver->beginScene(true, true, irr::video::SColor(255,100,101,140));
-
-			scnmgr->drawAll();
-			guienv->drawAll();
-
-			driver->endScene();
-		} else {
-			device->yield();
-		}
-
+	if (device->run()) {
+		device->yield();
 		return true;
-	}
-	else {
+	} else {
 		return false;
+	}
+}
+
+void CVideoManager::draw()
+{
+	if (device->isWindowActive()) {
+		driver->beginScene(true, true, irr::video::SColor(255, 100, 101, 140));
+
+		scnmgr->drawAll();
+		guienv->drawAll();
+
+		driver->endScene();
+	} else {
+		device->yield();
 	}
 }
 

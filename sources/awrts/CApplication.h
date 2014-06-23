@@ -31,6 +31,7 @@ public:
 	hrengin::IEventManager& eventmgr;
 	awrts::CUnitManager unitmgr;
 	awrts::CMapManager mapmgr;
+	bool profiling = 0;
 
 private:
 	CApplication();

@@ -47,8 +47,9 @@ friend class CGUIManager;
 public:
 	CVideoManager();
 	virtual ~CVideoManager();
-	virtual void CreateScene();
-	virtual bool Draw();
+	virtual void CreateScene(); 
+	virtual bool advance();
+	virtual void draw();
 
 	virtual PlatformData getPlatformSpecificData() const;
 

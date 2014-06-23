@@ -20,9 +20,9 @@
 #endif
 
 #ifdef HRENGIN_GRAPHICS
-#define HRENGINGRAPHICS_API __declspec(dllexport)
+	#define HRENGINGRAPHICS_API __declspec(dllexport)
 #else
-#define HRENGINGRAPHICS_API __declspec(dllimport)
+	#define HRENGINGRAPHICS_API __declspec(dllimport)
 #endif
 
 #endif//__HRENGIN_hrenginapi_H__

@@ -7,7 +7,7 @@
 namespace hrengin {
 namespace physics {
 
-IPhysicsManager& getPhysicsManager()
+HRENGINPHYSICS_API IPhysicsManager& getPhysicsManager()
 {
 	static CBulletPhysics singleton;
 	return singleton;

@@ -26,7 +26,9 @@ class IVideoManager
 {
 public:
 	virtual void CreateScene() = 0;
-	virtual bool Draw() = 0;
+	virtual bool advance() = 0;
+	// draw the scene
+	virtual void draw() = 0;
 
 	virtual PlatformData getPlatformSpecificData() const = 0;
 

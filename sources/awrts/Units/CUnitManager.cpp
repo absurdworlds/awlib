@@ -38,6 +38,8 @@ CUnit& CUnitManager::createUnit(hrengin::u32 id, hrengin::Vector3d position, hre
 
 	app.entmgr.addEntity(unit);
 
+	unit->sync();
+
 	return *unit;
 };
 
