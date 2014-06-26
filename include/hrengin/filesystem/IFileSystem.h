@@ -1,5 +1,5 @@
-#ifndef __H_INCLUDED__HRENGIN_IFileReader
-#define __H_INCLUDED__HRENGIN_IFileReader
+#ifndef __HRENGIN_FILESYSTEM_IFileSystem_H__
+#define __HRENGIN_FILESYSTEM_IFileSystem_H__
 
 namespace hrengin
 {
@@ -8,14 +8,13 @@ namespace filesystem
 
 class IFileParser;
 class IReadFile;
-class IOpenFile;
+class IWriteFile;
 
-class IFileReader
+class IFileSystem
 {
 public:
-	void addParser(IFileParser parser);
-	IReadFile* openReadFile(char * path);
-	IWriteFile* openWriteFile(char * path);
+	IReadFile* openFileRead(char * path);
+	IWriteFile* openFileWrite(char * path);
 }
 
 
@@ -23,4 +22,4 @@ public:
 }
 
 
-#endif
+#endif//__HRENGIN_FILESYSTEM_IFileSystem_H__

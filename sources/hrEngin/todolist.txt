@@ -2,6 +2,9 @@
 v. Storm in a bottle
 --A test version, unplayable in general sense
 	v. Storm in a bottle 0.002
+o write PMDL parser (only mkPrim command)
+o write mkPrim for physics manager 
+o hook loadModel with parser and mkPrim
 о добавить proper граунд модел, also raycasting
 о юнитселекшон — подсветка выделенного юнита
 o more realistic unit movement
@@ -10,6 +13,8 @@ o more realistic unit movement
 о unit movement: мувемент эйджент
 о хард таск — написать измерение отклонения от пути
 о хард таск — сделать зонд, которым юнит будет высматривать других юнитов
+
+
 o rewrite code to use logger instead of fprintf
 
 

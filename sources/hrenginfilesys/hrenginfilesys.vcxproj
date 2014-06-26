@@ -14,8 +14,10 @@
     <ClInclude Include="..\..\include\hrengin\filesystem\hrenginpaths.h" />
     <ClInclude Include="..\..\include\hrengin\filesystem\IFileParser.h" />
     <ClInclude Include="..\..\include\hrengin\filesystem\IFileSystem.h" />
+    <ClInclude Include="..\..\include\hrengin\filesystem\IModelParser.h" />
     <ClInclude Include="..\..\include\hrengin\filesystem\IReadFile.h" />
     <ClInclude Include="..\..\include\hrengin\filesystem\IWriteFile.h" />
+    <ClInclude Include="CHpmdParser.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{74AD5236-2D65-440E-A517-4EF8B52EE555}</ProjectGuid>
@@ -55,6 +57,8 @@
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(SolutionDir)..\Game\system\</OutDir>
     <IntDir>$(SolutionDir)..\_temp\$(Configuration)\$(ProjectName)\</IntDir>
+    <IncludePath>$(SolutionDir)include;$(SolutionDir)..\External\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)\lib\win32-msvc-release;$(SolutionDir)..\External\lib\win32-msvc-release;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <PostBuildEvent>start movebinaries.bat</PostBuildEvent>

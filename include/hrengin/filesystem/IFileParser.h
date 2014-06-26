@@ -1,15 +1,16 @@
-#ifndef __H_INCLUDED__HRENGIN_IFileParser
-#define __H_INCLUDED__HRENGIN_IFileParser
+#ifndef __HRENGIN_FILESYSTEM_IFileParser_H__
+#define __HRENGIN_FILESYSTEM_IFileParser_H__
 
-namespace hrengin
-{
-namespace filesystem
-{
+namespace hrengin {
+namespace filesystem {
+
+class IReadFile;
 
 class IFileParser
 {
 public:
-
+	bool validate(IReadFile& file);
+	bool parse(IReadFile& file);
 
 };
 
@@ -18,4 +19,4 @@ public:
 }
 
 
-#endif
+#endif//__HRENGIN_FILESYSTEM_IFileParser_H__

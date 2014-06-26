@@ -19,7 +19,8 @@ struct PhysModel {
 	union {
 		struct Procedural {
 			PhysShape shape;
-			f64 xl, xh, yl, yh, zl, zh;
+			f32 x, y, z;
+			f32 w, h, l;
 		};
 		struct Mesh {
 			f32* verts;
