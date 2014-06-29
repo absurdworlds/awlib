@@ -4,7 +4,7 @@ This is the core module of hrengin game engine.
 
 ### Current version ###
 
-hrengin A: 001000
+hrengin A: 001000 (1.0.0.0)
 
 ### TODO ###
 
