@@ -94,9 +94,9 @@ void CVideoManager::draw()
 		guienv->drawAll();
 
 		driver->endScene();
-	} else {
-		device->yield();
 	}
+	
+	device->yield();
 }
 
 

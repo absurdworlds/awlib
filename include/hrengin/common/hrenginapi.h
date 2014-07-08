@@ -25,4 +25,11 @@
 	#define HRENGINGRAPHICS_API __declspec(dllimport)
 #endif
 
+
+#ifdef HRENGIN_FILESYSTEM
+	#define HRENGINFILESYSTEM_API __declspec(dllexport)
+#else
+	#define HRENGINFILESYSTEM_API __declspec(dllimport)
+#endif
+
 #endif//__HRENGIN_hrenginapi_H__

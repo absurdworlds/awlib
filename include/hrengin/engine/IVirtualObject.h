@@ -1,0 +1,6 @@
+#ifndef __H_INCLUDED__HRENGIN_IVirtualObject
+#define __H_INCLUDED__HRENGIN_IVirtualObject
+
+
+
+#endif//__H_INCLUDED__HRENGIN_IVirtualObject

@@ -1,9 +1,13 @@
 #ifndef __HRENGIN_PHYSICS_CBulletPhysics_H__
 #define __HRENGIN_PHYSICS_CBulletPhysics_H__
 
+#include <map>
+#include <string>
+
 #include <Bullet/btBulletDynamicsCommon.h>
 #include <Bullet/btBulletCollisionCommon.h>
 
+#include <hrengin/core/hrenginmodels.h>
 #include <hrengin/physics/IPhysicsManager.h>
 
 #include "CPhysicsPhantom.h"
@@ -18,11 +22,8 @@ public:
 	~CBulletPhysics();
 
 	btScalar getDeltaTime();
-
-	virtual u32 validateModel(PhysModel * model);
-	virtual u32 loadModel(PhysModel * model);
-	virtual u32 loadProceduralModel(PhysModel::Procedural * model);
-	virtual u32 loadMeshModel(PhysModel::Mesh model);
+	
+	virtual u32 loadModel(const char* modelName);
 
 	virtual IPhysicsBody* createBody(const u32 modelId);
 	virtual IPhysicsBody* createBody(const char* modelName);
@@ -39,6 +40,7 @@ public:
 private:
 	btClock	m_clock;
 
+	std::map<std::string,u32> models_;
 	btAlignedObjectArray<btCollisionShape*>	m_collisionShapes;
 
 	btDefaultCollisionConfiguration*	m_collisionConfiguration;

@@ -1,6 +1,9 @@
 
 #include <stdio.h>
 
+#include <hrengin/filesystem/IFileSystem.h>
+#include <hrengin/filesystem/IReadFile.h>
+
 #include "CBulletPhysics.h"
 
 
@@ -52,7 +55,7 @@ CBulletPhysics::~CBulletPhysics()
 	}
 
 	//delete collision shapes
-	for (int j=0;j<m_collisionShapes.size();j++)
+	for (int j=0; j<m_collisionShapes.size(); j++)
 	{
 		btCollisionShape* shape = m_collisionShapes[j];
 		delete shape;
@@ -163,6 +166,13 @@ bool CBulletPhysics::step()
 	}
 
 	return true;
+}
+
+
+u32 CBulletPhysics::loadModel(const char* modelName)
+{
+	filesystem::IReadFile& = filesystem::createReadFile();
+
 }
 
 } // namespace physics

@@ -16,18 +16,18 @@ namespace graphics
 
 class CLightNode : public ILightNode
 {
-	public:
-		CLightNode();
+public:
+	CLightNode();
 
-		virtual void AttachToEntity(IBaseEntity* attach);
+	virtual void AttachToEntity(IBaseEntity* attach);
 
-		virtual void setPosition(Vector3d pos);
-		virtual void setRotation(Vector3d rot);
-		//virtual void SetScale(Vectorf3d scale);
-	protected:
-		IBaseEntity* attachedTo;
+	virtual void setPosition(Vector3d pos);
+	virtual void setRotation(Vector3d rot);
+	//virtual void SetScale(Vectorf3d scale);
+protected:
+	IBaseEntity* attachedTo;
 
-		irr::scene::ILightSceneNode* node;
+	irr::scene::ILightSceneNode* node;
 };
 
 	

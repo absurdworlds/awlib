@@ -117,7 +117,6 @@
     <ClInclude Include="..\..\include\hrengin\ai\IBaseNavigator.h" />
     <ClInclude Include="..\..\include\hrengin\ai\IBasePathfinder.h" />
     <ClInclude Include="..\..\include\hrengin\base\ILogger.h" />
-    <ClInclude Include="..\..\include\hrengin\base\IEncore.h" />
     <ClInclude Include="..\..\include\hrengin\common\hrenginapi.h" />
     <ClInclude Include="..\..\include\hrengin\common\hrenginmacro.h" />
     <ClInclude Include="..\..\include\hrengin\common\hrengintime.h" />
@@ -129,6 +128,7 @@
     <ClInclude Include="..\..\include\hrengin\common\Vector3d.h" />
     <ClInclude Include="..\..\include\hrengin\config\hrConfig.h" />
     <ClInclude Include="..\..\include\hrengin\config\hrVersions.h" />
+    <ClInclude Include="..\..\include\hrengin\core\IMesh.h" />
     <ClInclude Include="..\..\include\hrengin\entities\IBaseEntity.h" />
     <ClInclude Include="..\..\include\hrengin\entities\IControllable.h" />
     <ClInclude Include="..\..\include\hrengin\entities\IEntityManager.h" />
@@ -136,14 +136,12 @@
     <ClInclude Include="..\..\include\hrengin\entities\IParentable.h" />
     <ClInclude Include="..\..\include\hrengin\entities\IThinking.h" />
     <ClInclude Include="..\..\include\hrengin\entities\IWorld.h" />
-    <ClInclude Include="CEncore.h" />
     <ClInclude Include="CEntityManager.h" />
     <ClInclude Include="CEventManager.h" />
     <ClInclude Include="CLogger.h" />
     <ClInclude Include="CWorld.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="CEncore.cpp" />
     <ClCompile Include="CEntityManager.cpp" />
     <ClCompile Include="CEventManager.cpp" />
     <ClCompile Include="CLogger.cpp" />

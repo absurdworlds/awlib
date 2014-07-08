@@ -1,5 +1,5 @@
-#ifndef __HR_TYPE_H__
-#define __HR_TYPE_H__
+#ifndef __HRENGIN__TYPES_H__
+#define __HRENGIN__TYPES_H__
 
 namespace hrengin
 {
@@ -13,7 +13,7 @@ namespace hrengin
 #if defined(_MSC_VER)
 	typedef signed __int8		i8;
 #else
-	typedef signed char			i8;
+	typedef signed char		i8;
 #endif
 
 
@@ -48,4 +48,4 @@ typedef double				f64;
 
 }
 
-#endif //__HR_TYPE_H__
+#endif //__HRENGIN__TYPES_H__

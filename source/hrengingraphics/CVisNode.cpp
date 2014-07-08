@@ -51,6 +51,7 @@ i8 CVisNode::AddMesh(char * meshname)
 	if(lastFreeSlot < maxFreeSlot) {
 		irr::scene::IAnimatedMesh* mesh = getLocalManager().LoadMesh(meshname);
 		meshSlots[lastFreeSlot] = getLocalManager().GetSceneMgr()->addAnimatedMeshSceneNode(mesh);
+		meshSlots[lastFreeSlot]->setAutomaticCulling(irr::scene::EAC_FRUSTUM_BOX);
 		++lastFreeSlot;
 		return lastFreeSlot-1;
 	} else {
