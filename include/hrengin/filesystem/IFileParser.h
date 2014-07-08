@@ -9,8 +9,8 @@ class IReadFile;
 class IFileParser
 {
 public:
-	bool validate(IReadFile& file);
-	bool parse(IReadFile& file);
+	virtual bool validate(IReadFile& file) = 0;
+	virtual bool parse(IReadFile& file) = 0;
 
 };
 

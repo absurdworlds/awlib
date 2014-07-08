@@ -17,7 +17,14 @@
     <ClInclude Include="..\..\include\hrengin\filesystem\IModelParser.h" />
     <ClInclude Include="..\..\include\hrengin\filesystem\IReadFile.h" />
     <ClInclude Include="..\..\include\hrengin\filesystem\IWriteFile.h" />
-    <ClInclude Include="CHpmdParser.h" />
+    <ClInclude Include="CFileSystem.h" />
+    <ClInclude Include="CHndfParser.h" />
+    <ClInclude Include="CReadFile.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="CFileSystem.cpp" />
+    <ClCompile Include="CHndfParser.cpp" />
+    <ClCompile Include="CReadFile.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{74AD5236-2D65-440E-A517-4EF8B52EE555}</ProjectGuid>
@@ -103,7 +110,7 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;hrenginphysics_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;HRENGIN_FILESYSTEM;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

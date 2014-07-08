@@ -1,6 +1,7 @@
 #ifndef __HRENGIN_FILESYSTEM_IModelParser_H__
 #define __HRENGIN_FILESYSTEM_IModelParser_H__
 
+#include <hrengin/core/hrenginmodels.h>
 #include <hrengin/filesystem/IFileParser.h>
 
 namespace hrengin {
@@ -11,8 +12,8 @@ class IReadFile;
 class IModelParser : public IFileParser
 {
 public:
-	bool validate(IReadFile& file);
-	bool parse(IReadFile& file);
+	virtual bool validate(IReadFile& file);
+	virtual bool parse(IReadFile& file);
 
 };
 

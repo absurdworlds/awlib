@@ -12,9 +12,6 @@
     <ClInclude Include="..\..\include\hrengin\filesystem\hrenginpaths.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\hrengin\filesystem\IFileParser.h">
-      <Filter>include</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\hrengin\filesystem\IFileSystem.h">
       <Filter>include</Filter>
     </ClInclude>
@@ -24,11 +21,31 @@
     <ClInclude Include="..\..\include\hrengin\filesystem\IWriteFile.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="CHpmdParser.h">
-      <Filter>source</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\hrengin\filesystem\IModelParser.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="CReadFile.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="CFileSystem.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="CHndfParser.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\filesystem\IFileParser.h">
+      <Filter>include</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="CReadFile.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="CFileSystem.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="CHndfParser.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
