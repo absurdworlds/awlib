@@ -21,9 +21,6 @@
     <ClInclude Include="..\..\include\hrengin\filesystem\IWriteFile.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\hrengin\filesystem\IModelParser.h">
-      <Filter>include</Filter>
-    </ClInclude>
     <ClInclude Include="CReadFile.h">
       <Filter>source</Filter>
     </ClInclude>
@@ -36,6 +33,9 @@
     <ClInclude Include="..\..\include\hrengin\filesystem\IFileParser.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\filesystem\hrenginfsutil.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CReadFile.cpp">
@@ -45,6 +45,9 @@
       <Filter>source</Filter>
     </ClCompile>
     <ClCompile Include="CHndfParser.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="hrenginfsutil.cpp">
       <Filter>source</Filter>
     </ClCompile>
   </ItemGroup>

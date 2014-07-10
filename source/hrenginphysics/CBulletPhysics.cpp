@@ -1,8 +1,7 @@
 
 #include <stdio.h>
 
-#include <hrengin/filesystem/IFileSystem.h>
-#include <hrengin/filesystem/IReadFile.h>
+#include <hrengin/core/hrenginmodels.h>
 
 #include "CBulletPhysics.h"
 
@@ -171,9 +170,10 @@ bool CBulletPhysics::step()
 
 u32 CBulletPhysics::loadModel(const char* modelName)
 {
-	filesystem::IReadFile& = filesystem::createReadFile();
 
 }
+
+
 
 } // namespace physics
 } // namespace hrengin

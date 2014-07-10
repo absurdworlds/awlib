@@ -9,7 +9,7 @@ namespace filesystem {
 class IReadFile 
 {
 public:
-	virtual i32 read(byte* buffer, u32 size) = 0;
+	virtual i32 read(void* buffer, u32 size) = 0;
 	virtual i32 seek(i32 offset, bool relative = false) = 0;
 	virtual u32 tell() const = 0;
 
@@ -18,8 +18,9 @@ public:
 	virtual bool isOpen() const = 0;
 
 	virtual const std::string& getPath() const = 0;
-}
+};
 
+IReadFile* openReadFile(std::string path);
 
 }
 }

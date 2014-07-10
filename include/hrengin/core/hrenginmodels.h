@@ -14,15 +14,17 @@ enum Shape
 	SHAPE_CONE
 };
 
-struct ShapeModel {
+struct SPrimititve {
 	Shape shape;
-	f32 x, y, z;
-	f32 w, h, l;
+	f32 dimensions[3];
+	f32 offset[3];	
+	f32 rotation[3];
 };
 
-struct MeshModel {
+struct SMesh {
 	f32* verts;
 };
+
 
 } // namespace hrengin
 

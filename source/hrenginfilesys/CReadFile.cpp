@@ -76,6 +76,16 @@ const std::string& CReadFile::getPath() const
 	return path_;
 }
 
+IReadFile* openReadFile(std::string path)
+{
+	IReadFile* readFile = new CReadFile(path);
+	
+	if (readFile->isOpen()) {
+		return readFile;
+	}	
+
+	return 0;
+}
 
 }
 }

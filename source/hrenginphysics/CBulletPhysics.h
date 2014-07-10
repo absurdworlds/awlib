@@ -7,7 +7,7 @@
 #include <Bullet/btBulletDynamicsCommon.h>
 #include <Bullet/btBulletCollisionCommon.h>
 
-#include <hrengin/core/hrenginmodels.h>
+#include <hrengin/filesystem/IReadFile.h>
 #include <hrengin/physics/IPhysicsManager.h>
 
 #include "CPhysicsPhantom.h"
@@ -36,6 +36,9 @@ public:
 	virtual IPhysicsObject* castRay(Vectorf3d from, Vectorf3d to);
 
 	virtual bool step();
+
+private:
+	void parseHndf(filesystem::IReadFile* file);
 
 private:
 	btClock	m_clock;

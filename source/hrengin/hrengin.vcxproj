@@ -128,7 +128,9 @@
     <ClInclude Include="..\..\include\hrengin\common\Vector3d.h" />
     <ClInclude Include="..\..\include\hrengin\config\hrConfig.h" />
     <ClInclude Include="..\..\include\hrengin\config\hrVersions.h" />
-    <ClInclude Include="..\..\include\hrengin\core\IMesh.h" />
+    <ClInclude Include="..\..\include\hrengin\core\hrenginmodels.h" />
+    <ClInclude Include="..\..\include\hrengin\core\IModel.h" />
+    <ClInclude Include="..\..\include\hrengin\core\IModelMaker.h" />
     <ClInclude Include="..\..\include\hrengin\entities\IBaseEntity.h" />
     <ClInclude Include="..\..\include\hrengin\entities\IControllable.h" />
     <ClInclude Include="..\..\include\hrengin\entities\IEntityManager.h" />
@@ -139,12 +141,15 @@
     <ClInclude Include="CEntityManager.h" />
     <ClInclude Include="CEventManager.h" />
     <ClInclude Include="CLogger.h" />
+    <ClInclude Include="CModel.h" />
+    <ClInclude Include="CModelMaker.h" />
     <ClInclude Include="CWorld.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CEntityManager.cpp" />
     <ClCompile Include="CEventManager.cpp" />
     <ClCompile Include="CLogger.cpp" />
+    <ClCompile Include="CModelMaker.cpp" />
     <ClCompile Include="CWorld.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

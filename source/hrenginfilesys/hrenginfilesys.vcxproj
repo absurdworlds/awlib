@@ -12,9 +12,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\hrengin\filesystem\hrenginpaths.h" />
+    <ClInclude Include="..\..\include\hrengin\filesystem\hrenginfsutil.h" />
     <ClInclude Include="..\..\include\hrengin\filesystem\IFileParser.h" />
     <ClInclude Include="..\..\include\hrengin\filesystem\IFileSystem.h" />
-    <ClInclude Include="..\..\include\hrengin\filesystem\IModelParser.h" />
     <ClInclude Include="..\..\include\hrengin\filesystem\IReadFile.h" />
     <ClInclude Include="..\..\include\hrengin\filesystem\IWriteFile.h" />
     <ClInclude Include="CFileSystem.h" />
@@ -25,6 +25,7 @@
     <ClCompile Include="CFileSystem.cpp" />
     <ClCompile Include="CHndfParser.cpp" />
     <ClCompile Include="CReadFile.cpp" />
+    <ClCompile Include="hrenginfsutil.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{74AD5236-2D65-440E-A517-4EF8B52EE555}</ProjectGuid>
