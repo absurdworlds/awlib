@@ -7,7 +7,7 @@
 //#include <hrengin/filesystem/IFileParser.h>
 
 namespace hrengin {
-namespace filesystem {
+namespace io {
 
 class IReadFile;
 
