@@ -1,7 +1,7 @@
 #ifndef __HRENGIN_PHYSICS_IPhysicsManager_H__
 #define __HRENGIN_PHYSICS_IPhysicsManager_H__
 
-#include <hrengin/common/hrTypes.h>
+#include <hrengin/common/hrengintypes.h>
 #include <hrengin/common/hrenginapi.h>
 
 #include <hrengin/common/Vector3d.h>
