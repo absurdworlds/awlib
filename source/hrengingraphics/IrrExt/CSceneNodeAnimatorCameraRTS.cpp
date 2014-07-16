@@ -280,7 +280,7 @@ namespace scene
 
 		target += translate; 
 
-		core::vector3df camera_offset(0,distance*sin(cur_angle),distance*cos(cur_angle));
+		core::vector3df camera_offset(0,distance*sin(cur_angle),-distance*cos(cur_angle));
 		pos = target + camera_offset * CurrentZoom;
 		
 		/*target -=pos_new;
