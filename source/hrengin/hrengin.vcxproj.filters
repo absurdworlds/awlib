@@ -108,12 +108,6 @@
     <ClInclude Include="CEntityManager.h">
       <Filter>source</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\hrengin\core\IModelMaker.h">
-      <Filter>include\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="CModelMaker.h">
-      <Filter>source</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\hrengin\core\hrenginmodels.h">
       <Filter>include\Core</Filter>
     </ClInclude>
@@ -122,6 +116,12 @@
     </ClInclude>
     <ClInclude Include="CModel.h">
       <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="CModelLoader.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\core\IModelLoader.h">
+      <Filter>include\Core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -137,7 +137,7 @@
     <ClCompile Include="CWorld.cpp">
       <Filter>source</Filter>
     </ClCompile>
-    <ClCompile Include="CModelMaker.cpp">
+    <ClCompile Include="CModelLoader.cpp">
       <Filter>source</Filter>
     </ClCompile>
   </ItemGroup>

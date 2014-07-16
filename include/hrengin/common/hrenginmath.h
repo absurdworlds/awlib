@@ -8,7 +8,7 @@
 #include <float.h>
 
 #include <hrengin/config/hrConfig.h>
-#include <hrengin/common/hrTypes.h>
+#include <hrengin/common/hrengintypes.h>
 
 
 namespace hrengin

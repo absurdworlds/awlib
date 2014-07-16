@@ -106,7 +106,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <ImportLibrary>$(SolutionDir)lib\win32-msvc-release\$(TargetName).lib</ImportLibrary>
-      <AdditionalDependencies>hrengingraphics.lib;hrenginphysics.lib;hrenginaudio.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>hrengingraphics.lib;hrenginphysics.lib;hrenginaudio.lib;hrenginfilesys.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -130,7 +130,7 @@
     <ClInclude Include="..\..\include\hrengin\config\hrVersions.h" />
     <ClInclude Include="..\..\include\hrengin\core\hrenginmodels.h" />
     <ClInclude Include="..\..\include\hrengin\core\IModel.h" />
-    <ClInclude Include="..\..\include\hrengin\core\IModelMaker.h" />
+    <ClInclude Include="..\..\include\hrengin\core\IModelLoader.h" />
     <ClInclude Include="..\..\include\hrengin\entities\IBaseEntity.h" />
     <ClInclude Include="..\..\include\hrengin\entities\IControllable.h" />
     <ClInclude Include="..\..\include\hrengin\entities\IEntityManager.h" />
@@ -142,14 +142,14 @@
     <ClInclude Include="CEventManager.h" />
     <ClInclude Include="CLogger.h" />
     <ClInclude Include="CModel.h" />
-    <ClInclude Include="CModelMaker.h" />
+    <ClInclude Include="CModelLoader.h" />
     <ClInclude Include="CWorld.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CEntityManager.cpp" />
     <ClCompile Include="CEventManager.cpp" />
     <ClCompile Include="CLogger.cpp" />
-    <ClCompile Include="CModelMaker.cpp" />
+    <ClCompile Include="CModelLoader.cpp" />
     <ClCompile Include="CWorld.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

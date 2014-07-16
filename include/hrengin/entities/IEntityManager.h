@@ -14,7 +14,7 @@ class IEntityManager
 public:
 	// run entity syncronization, snaps all entity components to new positions
 	virtual void doSync() = 0;
-	virtual void doCleanup() = 0;
+	//virtual void doCleanup() = 0;
 
 	virtual void addEntity(IBaseEntity* entity) = 0;
 	virtual void deleteEntity(u32 entid) = 0;
