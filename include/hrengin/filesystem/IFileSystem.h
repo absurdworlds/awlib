@@ -3,10 +3,8 @@
 
 #include <hrengin/common/hrenginapi.h>
 
-namespace hrengin
-{
-namespace filesystem
-{
+namespace hrengin {
+namespace io {
 
 class IFileParser;
 class IReadFile;

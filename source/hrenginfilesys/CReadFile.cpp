@@ -5,7 +5,7 @@
 
 
 namespace hrengin {
-namespace filesystem {
+namespace io {
 
 CReadFile::CReadFile(const std::string& path)
 : file_(0), size_(0), path_(path)

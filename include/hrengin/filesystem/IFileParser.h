@@ -2,7 +2,7 @@
 #define __HRENGIN_FILESYSTEM_IFileParser_H__
 
 namespace hrengin {
-namespace filesystem {
+namespace io {
 
 class IReadFile;
 

@@ -8,7 +8,7 @@
 #include <hrengin/filesystem/IReadFile.h>
 
 namespace hrengin {
-namespace filesystem {
+namespace io {
 
 class CReadFile : public IReadFile 
 {

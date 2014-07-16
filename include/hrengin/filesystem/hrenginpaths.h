@@ -5,7 +5,7 @@
 //#include <Irrlicht/path.h>
 
 namespace hrengin {
-namespace filesystem {
+namespace io {
 
 const std::string modelpath("../data/models/");
 const std::string soundpath("../data/sound/");

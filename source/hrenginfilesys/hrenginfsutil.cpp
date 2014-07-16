@@ -5,7 +5,7 @@
 #include <hrengin/filesystem/hrenginfsutil.h>
 
 namespace hrengin {
-namespace filesystem {
+namespace io {
 
 std::string getFileExtension(std::string& dest, const std::string& path)
 {

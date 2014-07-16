@@ -4,7 +4,7 @@
 #include <hrengin/common/hrengintypes.h>
 
 namespace hrengin {
-namespace filesystem {
+namespace io {
 
 class IReadFile 
 {
