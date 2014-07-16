@@ -53,7 +53,7 @@ bool CModelLoader::hndfParseNode(io::IHndfParser* hndf, IModel* model)
 	std::string curNode = hndf->getObjectName();
 	//bool endreached = false;
 	while(hndf->readObject()) {
-		successful = hndfParseObject(hndf, model, curNode)
+		successful = hndfParseObject(hndf, model, curNode);
 	}
 
 	return successful;
@@ -106,7 +106,8 @@ bool CModelLoader::hndfParseShapeNode(io::IHndfParser* hndf, IModel* model)
 		std::string objectName = hndf->getObjectName();
 
 		if(objectName == "type") {
-			std::string type = hndf->getStringValue();
+			std::string type;
+			hndf->getStringValue(type);
 			if(type == "sphere") {
 				primitive.shape = SHAPE_SPHERE;
 			} else if(type == "box") {
@@ -122,15 +123,15 @@ bool CModelLoader::hndfParseShapeNode(io::IHndfParser* hndf, IModel* model)
 				return false;
 			}
 		} else if(objectName == "radius" || objectName == "width") {
-			primitive.dimensions[0] = hndf->getFloatValue();
+			 hndf->getFloatValue(primitive.dimensions[0]);
 		} else if(objectName == "height") {
-			primitive.dimensions[1] = hndf->getFloatValue();
+			hndf->getFloatValue(primitive.dimensions[1]);
 		} else if(objectName == "length") {
-			primitive.dimensions[2] = hndf->getFloatValue();
+			hndf->getFloatValue(primitive.dimensions[2]);
 		} else if(objectName == "rotation") {
-			primitive.rotation[0] = hndf->getFloatValue();
-			primitive.rotation[1] = hndf->getFloatValue();
-			primitive.rotation[2] = hndf->getFloatValue();
+			hndf->getFloatValue(primitive.rotation[0]);
+			hndf->getFloatValue(primitive.rotation[1]);
+			hndf->getFloatValue(primitive.rotation[2]);
 		} else {
 			hndf->skipObject();
 		}
@@ -139,6 +140,7 @@ bool CModelLoader::hndfParseShapeNode(io::IHndfParser* hndf, IModel* model)
 }
 
 /*
+!hndf_version "1.2"
 [model
 	[shape
 		type=capsule
@@ -148,4 +150,3 @@ bool CModelLoader::hndfParseShapeNode(io::IHndfParser* hndf, IModel* model)
 	]
 ]	
 	*/
-}

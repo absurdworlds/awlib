@@ -2,42 +2,88 @@
 #define __HRENGIN_FILESYSTEM_CHndfParser_H__
 
 #include <string>
-#include <map>
+#include <vector>
 
-//#include <hrengin/filesystem/IFileParser.h>
+#include <hrengin/common/hrengintypes.h>
+#include <hrengin/filesystem/IHndfParser.h>
+
 
 namespace hrengin {
 namespace io {
 
 class IReadFile;
 
-enum EHndfType {
-	HNDF_INT,
-	HNDF_STRING
-};
 
-class CHndfParser// : public IFileParser
+
+class CHndfParser : public IHndfParser
 {
 public:
-	bool parse(IReadFile& file);
+	CHndfParser(IReadFile* file);
+	~CHndfParser();
 
-	float getFloat(std::string key);
-	std::string getString(std::string key);
+	virtual bool readObject();
+	virtual void skipObject();
+	virtual HndfObjectType getObjectType();
+	virtual std::string getObjectName();
+
+	virtual bool getStringValue(std::string& val);
+	virtual bool getFloatValue(float& val);
+	virtual bool getIntegerValue(int& val);
+	virtual bool getBooleanValue(bool& val);
+
+	virtual void addError(std::string error);
 private:
-	std::string readToken();
-
-
-	enum EHndfState {
-		HNDF_START,
-		HNDF_OPEN_BRACE,
-		HNDF_CLOSE_BRACE,
-		HNDF_COLON,
-		HNDF_SEMICOLON,
-		HNDF_ASTERISK,
-		HNDF_NAME,
-		HNDF_TYPE,
-		HNDF_VALUE
+	enum TokenType {
+			TOKEN_EOF = 0,
+			TOKEN_OBJECT_BEGIN,
+			TOKEN_OBJECT_END,
+			TOKEN_ARRAY_ELEMENT,
+			TOKEN_LITERAL,
+			TOKEN_NUMERIC,
+			TOKEN_DIRECTIVE,
+			TOKEN_STRING,
+			TOKEN_COMMENT,
+			TOKEN_SEPARATOR,
+			TOKEN_TYPE_SEPARATOR,
+			TOKEN_VALUE,
+			TOKEN_INVALID,
 	};
+
+	struct Token {
+		TokenType type;
+		std::string value;
+	};
+
+	void readHead();
+	bool readDirective(Token& token);
+	void readToken(CHndfParser::Token& token);
+	char readChar();
+	char peekChar();
+
+	void readLiteral(std::string val);
+	void readString (std::string val);
+	void readNumeric(std::string val);
+	void skipComment();
+	//void skipWhitespace();
+
+	IReadFile* file_;
+	char* buffer_;
+	u32 pos_;
+
+	enum VariableType
+	{
+		TYPE_INT,
+		TYPE_FLOAT,
+		TYPE_STRING
+	};
+
+	HndfObjectType objectType_;
+	std::string objectName_;
+	std::string stringValue_;
+	u32 level_;
+
+	std::vector<std::string> errors_;
+
 };
 
 

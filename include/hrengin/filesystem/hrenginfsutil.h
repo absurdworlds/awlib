@@ -3,10 +3,12 @@
 
 #include <string>
 
+#include <hrengin/common/hrenginapi.h>
+
 namespace hrengin {
 namespace io {
 
-std::string getFileExtension(std::string& dest, const std::string& path);
+HRENGINFILESYSTEM_API std::string getFileExtension(std::string& dest, const std::string& path);
 
 }
 }

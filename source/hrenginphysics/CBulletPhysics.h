@@ -7,7 +7,7 @@
 #include <Bullet/btBulletDynamicsCommon.h>
 #include <Bullet/btBulletCollisionCommon.h>
 
-#include <hrengin/filesystem/IReadFile.h>
+#include <hrengin/core/IModelLoader.h>
 #include <hrengin/physics/IPhysicsManager.h>
 
 #include "CPhysicsPhantom.h"
@@ -38,11 +38,9 @@ public:
 	virtual bool step();
 
 private:
-	void parseHndf(filesystem::IReadFile* file);
-
-private:
 	btClock	m_clock;
 
+	IModelLoader* modelLoader_;
 	std::map<std::string,u32> models_;
 	btAlignedObjectArray<btCollisionShape*>	m_collisionShapes;
 

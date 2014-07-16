@@ -38,7 +38,7 @@ private:
 	FILE* file_;
 	u32 size_;
 	std::string path_;
-}
+};
 
 
 }

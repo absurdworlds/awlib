@@ -15,9 +15,6 @@
     <ClInclude Include="..\..\include\hrengin\filesystem\IFileSystem.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\hrengin\filesystem\IReadFile.h">
-      <Filter>include</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\hrengin\filesystem\IWriteFile.h">
       <Filter>include</Filter>
     </ClInclude>
@@ -34,6 +31,12 @@
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\hrengin\filesystem\hrenginfsutil.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\filesystem\IHndfParser.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\filesystem\IReadFile.h">
       <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>

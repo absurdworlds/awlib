@@ -1,12 +1,15 @@
 #ifndef __HRENGIN_FILESYSTEM_IReadFile_H__
 #define __HRENGIN_FILESYSTEM_IReadFile_H__
 
+#include <string>
+
+#include <hrengin/common/hrenginapi.h>
 #include <hrengin/common/hrengintypes.h>
 
 namespace hrengin {
 namespace io {
 
-class IReadFile 
+class IReadFile
 {
 public:
 	virtual i32 read(void* buffer, u32 size) = 0;
@@ -20,7 +23,7 @@ public:
 	virtual const std::string& getPath() const = 0;
 };
 
-IReadFile* openReadFile(std::string path);
+HRENGINFILESYSTEM_API IReadFile* openReadFile(std::string path);
 
 }
 }
