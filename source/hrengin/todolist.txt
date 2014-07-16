@@ -1,52 +1,32 @@
 ﻿
-v. Storm in a bottle
---A test version, unplayable in general sense
-	v. Storm in a bottle 0.002
-o write PMDL parser (only mkPrim command)
-o write mkPrim for physics manager 
-o hook loadModel with parser and mkPrim
+o write HNDF parser
+o write HNDF model parser (shapes only)
+o hook loadModel with parser
 о добавить proper граунд модел, also raycasting
-о юнитселекшон — подсветка выделенного юнита
-o more realistic unit movement
 о заменить ноуколайд на колфильтр у физиксфантома
 о написать stub-класс пути 
-о unit movement: мувемент эйджент
-о хард таск — написать измерение отклонения от пути
-о хард таск — сделать зонд, которым юнит будет высматривать других юнитов
 
 
 o rewrite code to use logger instead of fprintf
 
 
-o Write weapon class
-o Write players
 o rewrite camera
 	— make code consistent (position relative to target instead of a bunch of vectors)
 	— scale around origin
 	— alimit to a window + 5 px inside, ignore if further
 o write hrengin data file loader
 o start implementing file manager
-o write proper map manager
-o Make units attack each other
 o prettify code
 
 
 o Main menu
 o Basic ai
 o Buildings
-o Tech tree, researches
 o Animation
 o Start write map landscape
 o Start navmesh navigation
 o Add non-flat world
-o gamemodes (classic, exhaustion etc)
-о хард таск проверка, не вылетел ли юнит за навмеш
 
 
 v. Srantonwars 1.xxx
 --The first playable version, will partially (only first two tiers) feature two races (sotm and buprof), 
-
-
-
-	Later, involves total rewriting and refactoring:
-		o Add reference-counters
