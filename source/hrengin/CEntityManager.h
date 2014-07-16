@@ -23,14 +23,12 @@ class CEntityManager : public IEntityManager
 				void enterDeleteQueue() {};
 		} nullEntity;
 
-		std::vector<IBaseEntity*> entlist_;
-		std::deque<u32> deleteQueue_;
+		std::deque<IBaseEntity*> entlist_;
 		std::vector<u32> freelist_;
 	public:
 		CEntityManager();
 
 		virtual void doSync();
-		virtual void doCleanup();
 		
 		virtual void addEntity(IBaseEntity* entity);
 		virtual void deleteEntity(u32 entid);

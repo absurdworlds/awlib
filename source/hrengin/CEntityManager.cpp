@@ -19,14 +19,6 @@ void CEntityManager::doSync()
 	}
 }
 
-void CEntityManager::doCleanup()
-{
-	while(!deleteQueue_.empty()) {
-		deleteEntity(deleteQueue_.front());
-		deleteQueue_.pop_front();
-	}
-}
-
 void CEntityManager::addEntity(IBaseEntity* entity)
 {
 	if(freelist_.empty()) {
