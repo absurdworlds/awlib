@@ -1,7 +1,7 @@
 #ifndef __HRENGIN_SOUND_ISound_H__
 #define __HRENGIN_SOUND_ISound_H__
 
-#include <hrengin/common/hrTypes.h>
+#include <hrengin/common/hrengintypes.h>
 
 namespace hrengin {
 namespace sound {

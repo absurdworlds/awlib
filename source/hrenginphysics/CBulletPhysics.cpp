@@ -3,6 +3,7 @@
 
 #include <hrengin/core/hrenginmodels.h>
 #include <hrengin/core/IModel.h>
+#include <hrengin/core/IModelLoader.h>
 
 #include "CBulletPhysics.h"
 
@@ -36,8 +37,8 @@ CBulletPhysics::CBulletPhysics()
 	
 	modelLoader_ = createModelLoader();
 
-	btSphereShape* Shape = new btSphereShape(5.0);
-	m_collisionShapes.push_back(Shape);
+	btCollisionShape* Shape = new btEmptyShape;
+	collisionShapes_.push_back(Shape);
 }
 
 CBulletPhysics::~CBulletPhysics()
@@ -59,12 +60,12 @@ CBulletPhysics::~CBulletPhysics()
 	}
 
 	//delete collision shapes
-	for (int j=0; j<m_collisionShapes.size(); j++)
+	for (int j=0; j<collisionShapes_.size(); j++)
 	{
-		btCollisionShape* shape = m_collisionShapes[j];
+		btCollisionShape* shape = collisionShapes_[j];
 		delete shape;
 	}
-	m_collisionShapes.clear();
+	collisionShapes_.clear();
 
 	delete m_dynamicsWorld;
 	delete m_solver;
@@ -79,41 +80,37 @@ btScalar CBulletPhysics::getDeltaTime()
 	m_clock.reset();
 	return dt;
 }
-/*
-u32 makeShape(IPhysicsManager::PhysShape type, f32 x, f32 y, f32 z)
+
+bool CBulletPhysics::step()
 {
-	//rewrite to switch
-	if(type == PHYS_SHAPE_BOX)
+	//simple dynamics world doesn't handle fixed-time-stepping
+	float ms = getDeltaTime();
+	
+	//step the simulation
+	if (m_dynamicsWorld)
 	{
-		btBoxShape* Shape = new btBoxShape(btVector3(btScalar(x),btScalar(y),btScalar(z)));
-		m_collisionShapes.push_back(Shape);
+		m_dynamicsWorld->stepSimulation(ms / 1000000.f);
+		//optional but useful: debug drawing
+		//m_dynamicsWorld->debugDrawWorld();
+
+		//btVector3 aabbMin(1,1,1);
+		//btVector3 aabbMax(2,2,2);
+
+		//MyOverlapCallback aabbOverlap(aabbMin,aabbMax);
+		//m_dynamicsWorld->getBroadphase()->aabbTest(aabbMin,aabbMax,aabbOverlap);
+		
+		/*if (aabbOverlap.m_numOverlap)
+			printf("#aabb overlap = %d\n", aabbOverlap.m_numOverlap);*/
 	}
-	else if(type == PHYS_SHAPE_CYLINDER)
-	{
-		btCylinderShape* Shape = new btCylinderShape(btVector3(btScalar(x),btScalar(y),btScalar(z)));
-		m_collisionShapes.push_back(Shape);
-	}
-	else if(type == PHYS_SHAPE_SPHERE)
-	{
-		btSphereShape* Shape = new btSphereShape(x);
-		m_collisionShapes.push_back(Shape);
-	}
-	else if(type == PHYS_SHAPE_CAPSULE)
-	{
-		btCapsuleShape* Shape = new btCapsuleShape(x,y);
-		m_collisionShapes.push_back(Shape);
-	}
-	else if(type == PHYS_SHAPE_CONE)
-	{
-		btConeShape* Shape = new btConeShape(x,y);
-		m_collisionShapes.push_back(Shape);
-	}
-	else
-	{
-		return 1<<31;
-	}
-	return m_collisionShapes.size()-1;
-}*/
+
+	return true;
+}
+
+IPhysicsPhantom* CBulletPhysics::createPhantom(const char* modelName) 
+{
+	u32 shapeId = loadModel(modelName);
+	return createPhantom(shapeId); 
+};
 
 IPhysicsPhantom* CBulletPhysics::createPhantom(const u32 shapeid) 
 {
@@ -147,42 +144,88 @@ IPhysicsObject* CBulletPhysics::castRay(Vectorf3d from, Vectorf3d to)
 	return 0;
 }
 
-bool CBulletPhysics::step()
+btCollisionShape* CBulletPhysics::createPrimitiveShape(SPrimitive shape) 
 {
-	//simple dynamics world doesn't handle fixed-time-stepping
-	float ms = getDeltaTime();
-	
-	//step the simulation
-	if (m_dynamicsWorld)
-	{
-		m_dynamicsWorld->stepSimulation(ms / 1000000.f);
-		//optional but useful: debug drawing
-		//m_dynamicsWorld->debugDrawWorld();
+	btScalar x = shape.dimensions[0], 
+		y = shape.dimensions[1], 
+		z = shape.dimensions[2];
 
-		//btVector3 aabbMin(1,1,1);
-		//btVector3 aabbMax(2,2,2);
-
-		//MyOverlapCallback aabbOverlap(aabbMin,aabbMax);
-		//m_dynamicsWorld->getBroadphase()->aabbTest(aabbMin,aabbMax,aabbOverlap);
-		
-		/*if (aabbOverlap.m_numOverlap)
-			printf("#aabb overlap = %d\n", aabbOverlap.m_numOverlap);*/
+	if(shape.shape == PHYS_SHAPE_BOX) {
+		return new btBoxShape(btVector3(
+			btScalar(x),
+			btScalar(y),
+			btScalar(z)));
 	}
 
-	return true;
+	if(shape.shape == PHYS_SHAPE_CYLINDER) {
+		switch(shape.axis)
+		{
+		case AXIS_X:
+			return new btCylinderShapeX(btVector3(
+				btScalar(x),btScalar(y),btScalar(z)));
+		case AXIS_Y:
+			return new btCylinderShape(btVector3(
+				btScalar(x),btScalar(y),btScalar(z)));
+		case AXIS_Z:
+			return new btCylinderShapeZ(btVector3(
+				btScalar(x),btScalar(y),btScalar(z)));
+		}
+	}
+	
+	if(shape.shape == PHYS_SHAPE_SPHERE) {
+		return new btSphereShape(x);
+	}
+
+	if(shape.shape == PHYS_SHAPE_CAPSULE) {
+		switch(shape.axis)
+		{
+		case AXIS_X:
+			return new btCapsuleShapeX(x,y);
+		case AXIS_Y:
+			return new btCapsuleShape(x,y);
+		case AXIS_Z:
+			return new btCapsuleShapeZ(x,y);
+		}
+	}
+	
+	if(shape.shape == PHYS_SHAPE_CONE)
+	{
+		switch(shape.axis)
+		{
+		case AXIS_X:
+			return new btConeShapeX(x,y);
+		case AXIS_Y:
+			return new btConeShape(x,y);
+		case AXIS_Z:
+			return new btConeShapeZ(x,y);
+		}
+	}
+
+	return new btEmptyShape;
 }
 
 u32 CBulletPhysics::addShape(IModel* model)
 {
-	if(model->primitives.size() > 1) {
-		//make bt compound shape
-	} else if(model->primitives.size() > 0) {
+	if(model->primitives.size() > 0) {
+		btCompoundShape* compound = new btCompoundShape();
 	
-	
+		for(auto it = model->primitives.begin(); it != model->primitives.end(); it++)
+		{
+			SPrimitive primitive = *it;
+			btCollisionShape * shape = createPrimitiveShape(primitive);
+			btTransform localTransform;
+
+			localTransform.setIdentity();
+			localTransform.setOrigin(btVector3(primitive.offset[0],primitive.offset[1],primitive.offset[2]));
+			localTransform.setRotation(btQuaternion(primitive.rotation[0],primitive.rotation[1],primitive.rotation[2]));
+
+			compound->addChildShape(localTransform,shape);
+		}
+
+		collisionShapes_.push_back(compound);
 	} else {
 		return 0;
-	}
-	
+	}	
 
 	return collisionShapes_.size()-1;
 };

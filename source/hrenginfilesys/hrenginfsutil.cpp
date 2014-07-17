@@ -15,7 +15,7 @@ std::string getFileExtension(std::string& dest, const std::string& path)
 		dest = "";
 	}
 
-	dest = path.substr(extpos);
+	dest = path.substr(extpos+1);
 
 	std::transform(dest.begin(), dest.end(), dest.begin(), ::tolower);
 

@@ -7,6 +7,17 @@
 namespace hrengin {
 namespace io {
 
+IReadFile* openReadFile(std::string path)
+{
+	IReadFile* readFile = new CReadFile(path);
+	
+	if (readFile->isOpen()) {
+		return readFile;
+	}	
+
+	return 0;
+}
+
 CReadFile::CReadFile(const std::string& path)
 : file_(0), size_(0), path_(path)
 {
@@ -40,6 +51,8 @@ void CReadFile::open()
 		fseek(file_, 0, SEEK_END);
 		size_ = tell();
 		fseek(file_, 0, SEEK_SET);
+	} else {
+		TRACE("File not found:", path_)
 	}
 }
 
@@ -74,17 +87,6 @@ u32 CReadFile::getSize() const
 const std::string& CReadFile::getPath() const
 {
 	return path_;
-}
-
-IReadFile* openReadFile(std::string path)
-{
-	IReadFile* readFile = new CReadFile(path);
-	
-	if (readFile->isOpen()) {
-		return readFile;
-	}	
-
-	return 0;
 }
 
 }

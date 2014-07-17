@@ -5,8 +5,8 @@
 #include <hrengin/common/Vector3d.h>
 
 namespace hrengin {
-enum Shape
-{
+enum Shape {
+	SHAPE_EMPTY,
 	SHAPE_SPHERE,
 	SHAPE_BOX,
 	SHAPE_CAPSULE,
@@ -21,12 +21,17 @@ enum Axis
 	AXIS_Z
 };
 
-struct SPrimititve {
+struct SPrimitive {
 	Shape shape;
 	Axis axis;
 	f32 dimensions[3];
-	f32 offset[3];	
+	f32 offset[3];
 	f32 rotation[3];
+
+	SPrimitive () : shape(SHAPE_EMPTY), axis(AXIS_Y), dimensions(), offset(), rotation()
+	{
+
+	}
 };
 
 struct SMesh {

@@ -35,6 +35,8 @@ IModel* CModelLoader::loadModel(const char* filename)
 	if(ext == "hndf" || ext == "ndf") {
 		hndfParse(file, model);
 	}
+
+	return model;
 }
 
 bool CModelLoader::hndfParse(io::IReadFile* file, IModel* model)
@@ -49,7 +51,7 @@ bool CModelLoader::hndfParse(io::IReadFile* file, IModel* model)
 
 	hndf->readObject();
 
-	hndfParseNode(hndf,model);
+	return hndfParseNode(hndf,model);
 }
 
 bool CModelLoader::hndfParseNode(io::IHndfParser* hndf, IModel* model)
@@ -100,7 +102,7 @@ bool CModelLoader::hndfParseShapeNode(io::IHndfParser* hndf, IModel* model)
 	std::string curNode = hndf->getObjectName();
 	//bool endreached = false;
 
-	hrengin::SPrimititve primitive;
+	hrengin::SPrimitive primitive;
 
 	while(hndf->readObject()) {
 		if(hndf->getObjectType() != io::HNDF_VARIABLE) {
@@ -141,5 +143,6 @@ bool CModelLoader::hndfParseShapeNode(io::IHndfParser* hndf, IModel* model)
 			hndf->skipObject();
 		}
 	}
+	return true;
 }
 }

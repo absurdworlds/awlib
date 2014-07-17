@@ -6,6 +6,19 @@
 namespace hrengin {
 namespace io {
 
+
+
+inline bool cmp4(char c, char c1, char c2, char c3, char c4)
+{
+	return c == c1  ||  c == c2  ||  c == c3  ||  c == c4;
+}
+
+inline bool cmp5(char c, char c1, char c2, char c3, char c4, char c5)
+{
+	return c == c1  ||  c == c2  ||  c == c3  ||  c == c4  ||  c == c5;
+}
+
+
 IHndfParser* createHndfParser(IReadFile* file)
 {
 	if(!file->isOpen()) {
@@ -382,17 +395,17 @@ void CHndfParser::readToken(CHndfParser::Token& token) {
 	}
 }
 
-void CHndfParser::readLiteral(std::string val) {
+void CHndfParser::readLiteral(std::string& val) {
 	char c = readChar();
 	
 	while (c == '_' || (c > 'a' && c < 'z') || (c > 'A' && c < 'Z'))
 	{
-		c = readChar();
 		val += c;
+		c = readChar();
 	}
 }
 
-void CHndfParser::readString(std::string val) {
+void CHndfParser::readString(std::string& val) {
 	char c = readChar();
 	
 	while (c != '"') {
@@ -404,18 +417,7 @@ void CHndfParser::readString(std::string val) {
 	}
 }
 
-
-inline bool cmp4(char c, char c1, char c2, char c3, char c4)
-{
-	return c == c1  ||  c == c2  ||  c == c3  ||  c == c4;
-}
-
-inline bool cmp5(char c, char c1, char c2, char c3, char c4, char c5)
-{
-	return c == c1  ||  c == c2  ||  c == c3  ||  c == c4  ||  c == c5;
-}
-
-void CHndfParser::readNumeric(std::string val)
+void CHndfParser::readNumeric(std::string& val)
 {
 	char c  = readChar();
 	//bool e_encountered;

@@ -7,12 +7,15 @@
 #include <Bullet/btBulletDynamicsCommon.h>
 #include <Bullet/btBulletCollisionCommon.h>
 
-#include <hrengin/core/IModelLoader.h>
 #include <hrengin/physics/IPhysicsManager.h>
 
 #include "CPhysicsPhantom.h"
 
 namespace hrengin {
+
+struct SPrimitive;
+struct SMesh;
+
 namespace physics {
 
 class CBulletPhysics : public IPhysicsManager
@@ -28,9 +31,8 @@ public:
 	//virtual IPhysicsBody* createBody(const u32 modelId);
 	//virtual IPhysicsBody* createBody(const char* modelName);
 	virtual IPhysicsPhantom* createPhantom(const u32 modelId);
-	//virtual IPhysicsPhantom* createPhantom(const char* modelName);
+	virtual IPhysicsPhantom* createPhantom(const char* modelName);
 
-	//virtual u32 makeShape(PhysShape type, f32 x, f32 y=1., f32 z=1.);
 
 	virtual IPhysicsObject* castRay(Vectorf3d from, Vectorf3d to);
 
@@ -38,6 +40,8 @@ public:
 
 private:
 	virtual u32 addShape(IModel* model);
+	virtual btCollisionShape* createPrimitiveShape(SPrimitive shape);
+	//virtual btCollisionShape* createMeshShape(SMesh shape);
 
 	btClock	m_clock;
 
@@ -52,8 +56,6 @@ private:
 	btConstraintSolver*	m_solver;
 
 	btDynamicsWorld*	m_dynamicsWorld;
-
-	IModelLoader* modelLoader_;
 };
 
 } // namespace physics

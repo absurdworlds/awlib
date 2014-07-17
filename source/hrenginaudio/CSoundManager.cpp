@@ -18,7 +18,7 @@ HRENGINSOUND_API ISoundManager& getSoundManager()
 
 void CSoundManager::addSound(const char* fileName)
 {
-	std::string path(filesystem::soundpath + fileName);
+	std::string path(io::soundpath + fileName);
 	soundMap_[fileName] = BASS_SampleLoad(FALSE, path.c_str(), 0, 0, 10, BASS_SAMPLE_MONO);
 }
 

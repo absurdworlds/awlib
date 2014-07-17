@@ -9,6 +9,9 @@
 #include <hrengin/physics/PhysModel.h>
 
 namespace hrengin {
+
+class IModelLoader;
+
 namespace physics {
 
 class ICollisionShape;

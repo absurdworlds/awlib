@@ -60,9 +60,9 @@ private:
 	char readChar();
 	char peekChar();
 
-	void readLiteral(std::string val);
-	void readString (std::string val);
-	void readNumeric(std::string val);
+	void readLiteral(std::string& val);
+	void readString (std::string& val);
+	void readNumeric(std::string& val);
 	void skipComment();
 	//void skipWhitespace();
 
