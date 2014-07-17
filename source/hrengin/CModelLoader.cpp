@@ -12,6 +12,11 @@
 
 namespace hrengin {
 
+IModelLoader* createModelLoader()
+{
+	return new CModelLoader();
+}
+
 IModel* CModelLoader::loadModel(const char* filename)
 {
 	std::string path = io::modelpath + filename;
@@ -138,15 +143,3 @@ bool CModelLoader::hndfParseShapeNode(io::IHndfParser* hndf, IModel* model)
 	}
 }
 }
-
-/*
-!hndf_version "1.2"
-[model
-	[shape
-		type=capsule
-		height=float:8.911
-		radius=float:1.997
-		rotaion=float:0.0 0.0 90.0
-	]
-]	
-	*/

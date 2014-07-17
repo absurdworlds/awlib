@@ -1,7 +1,8 @@
 
-#include <stdio.h>
+#include <algorithm>
 
 #include <hrengin/core/hrenginmodels.h>
+#include <hrengin/core/IModel.h>
 
 #include "CBulletPhysics.h"
 
@@ -33,6 +34,10 @@ CBulletPhysics::CBulletPhysics()
 	m_dynamicsWorld->setGravity(btVector3(0,-10,0));
 	//m_dynamicsWorld->setDebugDrawer(&gDebugDraw);
 	
+	modelLoader_ = createModelLoader();
+
+	btSphereShape* Shape = new btSphereShape(5.0);
+	m_collisionShapes.push_back(Shape);
 }
 
 CBulletPhysics::~CBulletPhysics()
@@ -74,8 +79,8 @@ btScalar CBulletPhysics::getDeltaTime()
 	m_clock.reset();
 	return dt;
 }
-
-u32 CBulletPhysics::makeShape(IPhysicsManager::PhysShape type, f32 x, f32 y, f32 z)
+/*
+u32 makeShape(IPhysicsManager::PhysShape type, f32 x, f32 y, f32 z)
 {
 	//rewrite to switch
 	if(type == PHYS_SHAPE_BOX)
@@ -108,7 +113,7 @@ u32 CBulletPhysics::makeShape(IPhysicsManager::PhysShape type, f32 x, f32 y, f32
 		return 1<<31;
 	}
 	return m_collisionShapes.size()-1;
-}
+}*/
 
 IPhysicsPhantom* CBulletPhysics::createPhantom(const u32 shapeid) 
 {
@@ -118,7 +123,7 @@ IPhysicsPhantom* CBulletPhysics::createPhantom(const u32 shapeid)
 	
 	btCollisionObject *collObject = new btCollisionObject();
 
-	collObject->setCollisionShape(m_collisionShapes[shapeid]);
+	collObject->setCollisionShape(collisionShapes_[shapeid]);
 	collObject->setCollisionFlags (btCollisionObject::CF_NO_CONTACT_RESPONSE);
 	
 	m_dynamicsWorld->addCollisionObject(collObject);
@@ -167,10 +172,32 @@ bool CBulletPhysics::step()
 	return true;
 }
 
+u32 CBulletPhysics::addShape(IModel* model)
+{
+	if(model->primitives.size() > 1) {
+		//make bt compound shape
+	} else if(model->primitives.size() > 0) {
+	
+	
+	} else {
+		return 0;
+	}
+	
+
+	return collisionShapes_.size()-1;
+};
+
 
 u32 CBulletPhysics::loadModel(const char* modelName)
 {
+	auto modelId = models_.find(modelName);
+	if(modelId != models_.end()) {
+		return modelId->second;
+	}
 
+	IModel* model = modelLoader_->loadModel(modelName);
+
+	return addShape(model);
 }
 
 

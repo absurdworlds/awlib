@@ -25,24 +25,25 @@ public:
 	
 	virtual u32 loadModel(const char* modelName);
 
-	virtual IPhysicsBody* createBody(const u32 modelId);
-	virtual IPhysicsBody* createBody(const char* modelName);
+	//virtual IPhysicsBody* createBody(const u32 modelId);
+	//virtual IPhysicsBody* createBody(const char* modelName);
 	virtual IPhysicsPhantom* createPhantom(const u32 modelId);
-	virtual IPhysicsPhantom* createPhantom(const char* modelName);
+	//virtual IPhysicsPhantom* createPhantom(const char* modelName);
 
-	virtual u32 addShape(const char * modelname) {return 0;};
-	virtual u32 makeShape(PhysShape type, f32 x, f32 y=1., f32 z=1.);
+	//virtual u32 makeShape(PhysShape type, f32 x, f32 y=1., f32 z=1.);
 
 	virtual IPhysicsObject* castRay(Vectorf3d from, Vectorf3d to);
 
 	virtual bool step();
 
 private:
+	virtual u32 addShape(IModel* model);
+
 	btClock	m_clock;
 
 	IModelLoader* modelLoader_;
 	std::map<std::string,u32> models_;
-	btAlignedObjectArray<btCollisionShape*>	m_collisionShapes;
+	btAlignedObjectArray<btCollisionShape*>	collisionShapes_;
 
 	btDefaultCollisionConfiguration*	m_collisionConfiguration;
 
@@ -51,6 +52,8 @@ private:
 	btConstraintSolver*	m_solver;
 
 	btDynamicsWorld*	m_dynamicsWorld;
+
+	IModelLoader* modelLoader_;
 };
 
 } // namespace physics

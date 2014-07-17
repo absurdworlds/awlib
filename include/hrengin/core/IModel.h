@@ -9,6 +9,7 @@ namespace hrengin {
 
 class IModel
 {
+public:
 	std::vector<SPrimititve> primitives;
 };
 

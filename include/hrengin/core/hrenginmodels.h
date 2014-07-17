@@ -14,8 +14,16 @@ enum Shape
 	SHAPE_CONE
 };
 
+enum Axis
+{
+	AXIS_X,
+	AXIS_Y,
+	AXIS_Z
+};
+
 struct SPrimititve {
 	Shape shape;
+	Axis axis;
 	f32 dimensions[3];
 	f32 offset[3];	
 	f32 rotation[3];

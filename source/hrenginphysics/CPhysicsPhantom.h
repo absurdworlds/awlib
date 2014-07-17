@@ -6,7 +6,7 @@
 #include <Bullet/btBulletDynamicsCommon.h>
 #include <Bullet/btBulletCollisionCommon.h>
 
-#include <hrengin/common/hrTypes.h>
+#include <hrengin/common/hrengintypes.h>
 #include <hrengin/entities/IBaseEntity.h>
 #include <hrengin/physics/IPhysicsPhantom.h>
 //#include <hrengin/physics/IPhysicsManager.h>
