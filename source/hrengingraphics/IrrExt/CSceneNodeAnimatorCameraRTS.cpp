@@ -250,17 +250,17 @@ namespace scene
 		if (!Scroll_lock && !Dragging && !Zooming && !outwindow) {
 			f32 scrollstep = TranslateSpeed * CurrentZoom * static_cast<irr::f32>(TimeDelta);
 			if ((mousepos.X > 0) && (mousepos.X < 5)) {
-				translate.X += scrollstep;
+				translate.X -= scrollstep;
 			} else if ((mousepos.X > (screen.Width - 5))
 				   && (mousepos.X < screen.Width)) {
-				translate.X -= scrollstep;
+				translate.X += scrollstep;
 			}
 			
 			if ((mousepos.Y > 0) && (mousepos.Y < 5)) {
-				translate.Z -= scrollstep;
+				translate.Z += scrollstep;
 			} else if ((mousepos.Y > (screen.Height - 5))
 				   && (mousepos.Y < screen.Height)) {
-				translate.Z += scrollstep;
+				translate.Z -= scrollstep;
 			}
 			
 			Scrolling = !core::equals(translate.X + translate.Y,0.0f,core::ROUNDING_ERROR_f32);

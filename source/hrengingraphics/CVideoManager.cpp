@@ -123,7 +123,7 @@ ICameraNode* CVideoManager::CreateCamera()
  
 irr::scene::IAnimatedMesh* CVideoManager::LoadMesh(const char* modelname)
 {
-	std::string path = filesystem::modelpath + modelname;
+	std::string path = io::modelpath + modelname;
 	return scnmgr->getMesh(path.c_str());
 }
 
