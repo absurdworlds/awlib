@@ -69,7 +69,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>hrengingraphics.lib;hrenginphysics.lib;hrenginaudio.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>hrengingraphics.lib;hrenginphysics.lib;hrenginaudio.lib;hrenginfilesys.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ImportLibrary>$(SolutionDir)lib\win32-msvc-debug\$(TargetName).lib</ImportLibrary>
     </Link>
     <CustomBuildStep>

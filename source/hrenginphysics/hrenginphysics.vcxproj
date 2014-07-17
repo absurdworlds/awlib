@@ -118,7 +118,7 @@
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>BulletCollision_vs2010.lib;BulletDynamics_vs2010.lib;HACD_vs2010.lib;LinearMath_vs2010.lib;OpenGLSupport_vs2010.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>BulletCollision_vs2010.lib;BulletDynamics_vs2010.lib;HACD_vs2010.lib;LinearMath_vs2010.lib;OpenGLSupport_vs2010.lib;opengl32.lib;hrengin.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ImportLibrary>$(SolutionDir)lib\win32-msvc-release\$(TargetName).lib</ImportLibrary>
     </Link>
   </ItemDefinitionGroup>
