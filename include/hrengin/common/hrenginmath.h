@@ -1,4 +1,3 @@
-
 #ifndef __HG_hrMath_H__
 #define __HG_hrMath_H__
 
@@ -102,6 +101,19 @@ FORCEINLINE bool equals(const f32 a, const f32 b, const f32 tolerance = ROUNDING
 FORCEINLINE bool equals(const f64 a, const f64 b, const f64 tolerance = ROUNDING_ERROR_float64)
 {
 	return (a + tolerance >= b) && (a - tolerance <= b);
+}
+
+/*
+Normalizes angle between -180 and 180 degrees
+*/
+FORCEINLINE hrengin::f32 clamp_angle(hrengin::f32 angle)
+{
+	if(angle > 180.0f) {
+		angle = angle - 360.0f;
+	} else if(angle < -180.0f) {
+		angle = angle + 360.0f;
+	}
+	return angle;
 }
 
 } //namespace math
