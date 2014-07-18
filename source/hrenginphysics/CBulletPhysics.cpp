@@ -239,6 +239,11 @@ u32 CBulletPhysics::loadModel(const char* modelName)
 
 	IModel* model = modelLoader_->loadModel(modelName);
 
+	if(!model)
+	{
+		return 0;
+	}
+
 	return addShape(model);
 }
 
