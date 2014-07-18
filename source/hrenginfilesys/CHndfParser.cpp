@@ -43,25 +43,35 @@ CHndfParser::~CHndfParser()
 	delete[] buffer_;
 }
 
+void CHndfParser::skipSeparators()
+{
+	do {
+		readToken(token_);
+	} while(token_.type == TOKEN_SEPARATOR);
+}
 
 bool CHndfParser::readObject() 
 {
-	Token token;
+	bool success = readObjectContents(token_);
 
-	do {
-		readToken(token);
-	} while(token.type == TOKEN_SEPARATOR);
+	skipSeparators();
 
+	return success;
+}
+
+bool CHndfParser::readObjectContents(Token& token) 
+{
 	if(token.type == TOKEN_OBJECT_BEGIN) {
+		objectType_ = HNDF_NODE;
+		level_ ++;
+
+		readToken(token);
+
 		if(token.type == TOKEN_LITERAL) {
 			objectName_ = token.value;
-			objectType_ = HNDF_NODE;
-			level_ ++;
 			return true;
 		} else if(token.type == TOKEN_ARRAY_ELEMENT || token.type == TOKEN_SEPARATOR) {
 			objectName_ = "*";
-			objectType_ = HNDF_NODE;
-			level_ ++;
 			return true;
 		} else {
 			addError("expected node name");
@@ -71,8 +81,9 @@ bool CHndfParser::readObject()
 		addError("expected node");
 		return false;
 	}
-	
+	static int debugoga = 0;
 	if(token.type == TOKEN_OBJECT_END) {
+		debugoga++;
 		if (level_ == 0) {
 			addError("extra closing bracket");
 		} else {
@@ -98,81 +109,77 @@ bool CHndfParser::readObject()
 	return false;
 }
 
-
 void CHndfParser::skipObject() 
 {
-	Token token;
-
-	do {
-		readToken(token);
-	} while(token.type == TOKEN_SEPARATOR);
-
 	if(objectType_ == HNDF_VARIABLE) {
 		do {
-			readToken(token);
-		} while(token.type != TOKEN_SEPARATOR);
+			readToken(token_);
+		} while(token_.type != TOKEN_SEPARATOR);
 	} else {
 		/*if(token.type != TOKEN_OBJECT_BEGIN) {
 			return;
 		}*/
 	
 		do {
-			readToken(token);
-		} while(token.type != TOKEN_OBJECT_END);
-	
+			readToken(token_);
+		} while(token_.type != TOKEN_OBJECT_END);
 	
 		level_--;
 	}
+	
+	skipSeparators();
 }
 
 bool CHndfParser::getStringValue(std::string& val)
-{
-	Token token;
-	readToken(token);
-	
-	if(token.type == TOKEN_STRING) {
-		val = token.value;
+{	
+	if(token_.type == TOKEN_STRING) {
+		val = token_.value;
 		return true;
 	} 
 	
-	if (token.type != TOKEN_LITERAL) {
+	if (token_.type != TOKEN_LITERAL) {
 		addError("expected value or type");
 		return false;
 	}
 	
-	stringValue_ = token.value;
-	readToken(token);
+	stringValue_ = token_.value;
+	readToken(token_);
 
-	if(token.type == TOKEN_SEPARATOR) {
+	if(token_.type == TOKEN_SEPARATOR) {
 		val = stringValue_;
+		skipSeparators();
 		return true;
-	} else if(token.type == TOKEN_TYPE_SEPARATOR && stringValue_ != "string") {
+	} else if(token_.type == TOKEN_TYPE_SEPARATOR && stringValue_ != "string") {
 		addError("expected string value");
 		return false;
-	} else if(token.type == TOKEN_LITERAL) {
+	} else if(token_.type == TOKEN_LITERAL) {
 		do {
-			stringValue_ += " " + token.value;
-			readToken(token);
-		} while (token.type != TOKEN_SEPARATOR);
+			stringValue_ += " " + token_.value;
+			readToken(token_);
+		} while (token_.type != TOKEN_SEPARATOR);
 		val = stringValue_;
+		skipSeparators();
 		return true;
 	}
 			
-	readToken(token);
+	readToken(token_);
 
-	if(token.type == TOKEN_LITERAL) {
+	if(token_.type == TOKEN_LITERAL) {
 		stringValue_ = "";
 		do {
-			stringValue_ += " " + token.value;
-			readToken(token);
-		} while (token.type != TOKEN_SEPARATOR);
+			stringValue_ += " " + token_.value;
+			readToken(token_);
+		} while (token_.type != TOKEN_SEPARATOR);
 		val = stringValue_;
+		skipSeparators();
 		return true;
-	} else if(token.type == TOKEN_STRING) {
-		val = token.value;
+	} else if(token_.type == TOKEN_STRING) {
+		val = token_.value;
+		skipSeparators();
 		return true;
-	} else if(token.type == TOKEN_NUMERIC) {
-		val = token.value;
+	} else if(token_.type == TOKEN_NUMERIC) {
+		val = token_.value;
+		skipSeparators();
 		return true;
 	}
 	
@@ -182,69 +189,69 @@ bool CHndfParser::getStringValue(std::string& val)
 
 bool CHndfParser::getFloatValue(float& val)
 {
-	Token token;
-	readToken(token);
-
-	if (token.type != TOKEN_LITERAL) {
+	if (token_.type != TOKEN_LITERAL) {
 		addError("expected type");
 		return false;
 
 	}
 
-	if(token.value != "float") {
+	if(token_.value != "float") {
 		addError("expeted float");
 		return false;
 	}
 
-	readToken(token);
+	readToken(token_);
 	
-	if (token.type != TOKEN_TYPE_SEPARATOR) {
+	if (token_.type != TOKEN_TYPE_SEPARATOR) {
 		addError("expected ':'");
 		return false;
 	}
 	
-	readToken(token);
+	readToken(token_);
 
-	if (token.type != TOKEN_NUMERIC) {
+	if (token_.type != TOKEN_NUMERIC) {
 		addError("expected numeric value");
 		return false;
 	}
 
-	val = strtof(token.value.c_str(), 0);
+	val = strtof(token_.value.c_str(), 0);
+
+	skipSeparators();
+
 	return true;
 }
 
 bool CHndfParser::getIntegerValue(int& val)
 {
-	Token token;
-	readToken(token);
-
-	if (token.type != TOKEN_LITERAL) {
+	if (token_.type != TOKEN_LITERAL) {
 		addError("expected type");
 		return false;
 
 	}
 
-	if(token.value != "int") {
+	if(token_.value != "int") {
 		addError("expeted integer");
 		return false;
 	}
 
-	readToken(token);
+	readToken(token_);
 	
-	if (token.type != TOKEN_TYPE_SEPARATOR) {
+	if (token_.type != TOKEN_TYPE_SEPARATOR) {
 		addError("expected ':'");
 		return false;
 	}
 	
-	readToken(token);
+	readToken(token_);
 
-	if (token.type != TOKEN_NUMERIC) {
+	if (token_.type != TOKEN_NUMERIC) {
 		addError("expected numeric value");
 		return false;
 	}
 
-	val = strtol(token.value.c_str(), 0, 0);
+	val = strtol(token_.value.c_str(), 0, 0);
+
+	skipSeparators();
+
 	return true;
 }
 
@@ -277,9 +284,9 @@ char CHndfParser::readChar()
 
 	pos_++;
 	
-	if((pos_) == file_->getSize()) {
-		return 0;
-	}
+if((pos_) > file_->getSize()) {
+	return 0;
+}
 
 	if(pos_ % 1024 == 0) {
 		file_->read(buffer_, 1024);
@@ -296,7 +303,7 @@ char CHndfParser::peekChar()
 		return tmp;
 	}
 
-	if((pos_ + 1) == file_->getSize()) {
+	if((pos_ + 1) > file_->getSize()) {
 		return 0;
 	}
 	
@@ -306,16 +313,17 @@ char CHndfParser::peekChar()
 
 void CHndfParser::readHead()
 {
-	Token token;
-	readToken(token);
+	readToken(token_);
 	
-	while(token.type != TOKEN_OBJECT_BEGIN) {
-		if(token.type == TOKEN_EOF) {
+	while(token_.type != TOKEN_OBJECT_BEGIN) {
+		if(token_.type == TOKEN_EOF) {
 			addError("unexpected end of stream");
 			return;
 		}
-		readDirective(token);
-		readToken(token);
+		if(token_.type == TOKEN_DIRECTIVE) {
+			readDirective(token_);
+		}
+		readToken(token_);
 	}
 }
 
@@ -355,7 +363,7 @@ void CHndfParser::readToken(CHndfParser::Token& token) {
 	do {
 		c = readChar();
 	} while (c == ' ' || c == '\t');
-
+	
 	if(c == '[') {
 		token.type = TOKEN_OBJECT_BEGIN;
 	} else if(c == ']') {
@@ -366,21 +374,21 @@ void CHndfParser::readToken(CHndfParser::Token& token) {
 		token.type = TOKEN_ARRAY_ELEMENT;
 	} else if(c == ':') {
 		token.type = TOKEN_TYPE_SEPARATOR;
-	} else if(c == '\n' || c == ';') {
+	} else if(c == '\r' || c == '\n' || c == ';') {
 		token.type = TOKEN_SEPARATOR;
 	} else if((c > 'a' && c < 'z') || (c > 'A' && c < 'Z')) {
 		token.type = TOKEN_LITERAL;
-		token.value += c;
+		token.value = c;
 		readLiteral(token.value);
 	} else if(c == '"') {
 		token.type = TOKEN_STRING;
-		token.value += c;
+		token.value.clear();
 		readString(token.value);
 	} else if(c == '=') {
 		token.type = TOKEN_VALUE;
 	} else if(c == '-' || (c > '0' && c < '9')) {
 		token.type = TOKEN_NUMERIC;
-		token.value += c;
+		token.value = c;
 		readNumeric(token.value);
 	} else if(c == '/') {
 		if(peekChar() == '/') {
@@ -398,8 +406,7 @@ void CHndfParser::readToken(CHndfParser::Token& token) {
 void CHndfParser::readLiteral(std::string& val) {
 	char c = readChar();
 	
-	while (c == '_' || (c > 'a' && c < 'z') || (c > 'A' && c < 'Z'))
-	{
+	while (c == '_' || (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')) {
 		val += c;
 		c = readChar();
 	}
@@ -409,11 +416,11 @@ void CHndfParser::readString(std::string& val) {
 	char c = readChar();
 	
 	while (c != '"') {
-		c = readChar();
 		if ( c == '\\' ) {
 			c = readChar();
 		}
 		val += c;
+		c = readChar();
 	}
 }
 
@@ -424,11 +431,12 @@ void CHndfParser::readNumeric(std::string& val)
 	//bool m_encountered;
 	
 	while (c != '\n' && c != ' ' && c != ';') {
-		c = readChar();
 		if (!(c >= '0' && c <= '9') && !cmp5(c, '.', 'e', 'E', '+', '-' )) {
+			c = readChar();
 			break;
 		}
 		val += c;
+		c = readChar();
 	}
 }
 

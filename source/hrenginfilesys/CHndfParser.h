@@ -54,9 +54,12 @@ private:
 		std::string value;
 	};
 
+	Token token_;
+
+	bool readObjectContents(Token& token);
 	void readHead();
 	bool readDirective(Token& token);
-	void readToken(CHndfParser::Token& token);
+	void readToken(Token& token);
 	char readChar();
 	char peekChar();
 
@@ -64,6 +67,7 @@ private:
 	void readString (std::string& val);
 	void readNumeric(std::string& val);
 	void skipComment();
+	void skipSeparators();
 	//void skipWhitespace();
 
 	IReadFile* file_;

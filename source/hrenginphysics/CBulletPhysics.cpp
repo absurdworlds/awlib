@@ -150,14 +150,18 @@ btCollisionShape* CBulletPhysics::createPrimitiveShape(SPrimitive shape)
 		y = shape.dimensions[1], 
 		z = shape.dimensions[2];
 
-	if(shape.shape == PHYS_SHAPE_BOX) {
+	if(shape.shape == SHAPE_SPHERE) {
+		return new btSphereShape(x);
+	}
+
+	if(shape.shape == SHAPE_BOX) {
 		return new btBoxShape(btVector3(
 			btScalar(x),
 			btScalar(y),
 			btScalar(z)));
 	}
 
-	if(shape.shape == PHYS_SHAPE_CYLINDER) {
+	if(shape.shape == SHAPE_CYLINDER) {
 		switch(shape.axis)
 		{
 		case AXIS_X:
@@ -172,11 +176,7 @@ btCollisionShape* CBulletPhysics::createPrimitiveShape(SPrimitive shape)
 		}
 	}
 	
-	if(shape.shape == PHYS_SHAPE_SPHERE) {
-		return new btSphereShape(x);
-	}
-
-	if(shape.shape == PHYS_SHAPE_CAPSULE) {
+	if(shape.shape == SHAPE_CAPSULE) {
 		switch(shape.axis)
 		{
 		case AXIS_X:
@@ -188,7 +188,7 @@ btCollisionShape* CBulletPhysics::createPrimitiveShape(SPrimitive shape)
 		}
 	}
 	
-	if(shape.shape == PHYS_SHAPE_CONE)
+	if(shape.shape == SHAPE_CONE)
 	{
 		switch(shape.axis)
 		{
@@ -209,8 +209,7 @@ u32 CBulletPhysics::addShape(IModel* model)
 	if(model->primitives.size() > 0) {
 		btCompoundShape* compound = new btCompoundShape();
 	
-		for(auto it = model->primitives.begin(); it != model->primitives.end(); it++)
-		{
+		for(auto it = model->primitives.begin(); it != model->primitives.end(); it++) {
 			SPrimitive primitive = *it;
 			btCollisionShape * shape = createPrimitiveShape(primitive);
 			btTransform localTransform;

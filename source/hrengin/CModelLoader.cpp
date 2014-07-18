@@ -129,8 +129,18 @@ bool CModelLoader::hndfParseShapeNode(io::IHndfParser* hndf, IModel* model)
 				hndf->addError("unknown 'type' value");
 				return false;
 			}
+		} else if(objectName == "axis") {
+			std::string axis;
+			hndf->getStringValue(axis);
+			if(axis == "x") {
+				primitive.axis = AXIS_X;
+			} else if(axis == "z") {
+				primitive.axis = AXIS_Z;
+			} else {
+				primitive.axis = AXIS_Y;
+			}
 		} else if(objectName == "radius" || objectName == "width") {
-			 hndf->getFloatValue(primitive.dimensions[0]);
+			hndf->getFloatValue(primitive.dimensions[0]);
 		} else if(objectName == "height") {
 			hndf->getFloatValue(primitive.dimensions[1]);
 		} else if(objectName == "length") {
@@ -143,6 +153,9 @@ bool CModelLoader::hndfParseShapeNode(io::IHndfParser* hndf, IModel* model)
 			hndf->skipObject();
 		}
 	}
+
+	model->primitives.push_back(primitive);
+
 	return true;
 }
 }
