@@ -81,9 +81,8 @@ bool CHndfParser::readObjectContents(Token& token)
 		addError("expected node");
 		return false;
 	}
-	static int debugoga = 0;
+
 	if(token.type == TOKEN_OBJECT_END) {
-		debugoga++;
 		if (level_ == 0) {
 			addError("extra closing bracket");
 		} else {
