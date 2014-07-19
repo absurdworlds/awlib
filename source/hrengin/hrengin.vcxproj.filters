@@ -19,9 +19,6 @@
     <Filter Include="include\Entities">
       <UniqueIdentifier>{58e3f6b3-001c-4a5c-bcfc-b6117c95ee46}</UniqueIdentifier>
     </Filter>
-    <Filter Include="include\Config">
-      <UniqueIdentifier>{03074a71-661c-41fc-a9f2-f451aced349e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="include\Core">
       <UniqueIdentifier>{3724bf5e-2370-4d90-a176-dada8183439b}</UniqueIdentifier>
     </Filter>
@@ -72,12 +69,6 @@
     <ClInclude Include="..\..\include\hrengin\entities\IEntityManager.h">
       <Filter>include\Entities</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\hrengin\config\hrConfig.h">
-      <Filter>include\Config</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\hrengin\config\hrVersions.h">
-      <Filter>include\Config</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\hrengin\base\ILogger.h">
       <Filter>include\Core</Filter>
     </ClInclude>
@@ -119,6 +110,15 @@
     </ClInclude>
     <ClInclude Include="..\..\include\hrengin\core\IModelLoader.h">
       <Filter>include\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\ai\CPath.h">
+      <Filter>include\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\common\hrenginconfig.h">
+      <Filter>include\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\common\hrenginversions.h">
+      <Filter>include\Common</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
