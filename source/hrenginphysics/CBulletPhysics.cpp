@@ -156,9 +156,9 @@ btCollisionShape* CBulletPhysics::createPrimitiveShape(SPrimitive shape)
 
 	if(shape.shape == SHAPE_BOX) {
 		return new btBoxShape(btVector3(
-			btScalar(x),
-			btScalar(y),
-			btScalar(z)));
+			btScalar(x/2.0),
+			btScalar(y/2.0),
+			btScalar(z/2.0)));
 	}
 
 	if(shape.shape == SHAPE_CYLINDER) {
