@@ -30,7 +30,9 @@ void CSoundManager::initSounds()
 	BASS_Init(-1, 44100, 0, (HWND)wndHandle, 0);
 	BASS_Set3DFactors(1, 0.5, 1);
 
-	addSound("generic_ready03.wav");
+	addSound("generic_ready01.wav");
+	addSound("generic_ready02.wav");
+	addSound("generic_yes01.wav");
 	addSound("generic_yes02.wav");
 	addSound("generic2_ready01.wav");
 	addSound("generic2_yes01.wav");

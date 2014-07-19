@@ -1,9 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <None Include="todolist.txt" />
-  </ItemGroup>
-  <ItemGroup>
     <Filter Include="Example">
       <UniqueIdentifier>{7742512e-3925-4ce2-b610-64c7ff54e918}</UniqueIdentifier>
     </Filter>
@@ -21,9 +18,6 @@
     </Filter>
     <Filter Include="include\Entities">
       <UniqueIdentifier>{58e3f6b3-001c-4a5c-bcfc-b6117c95ee46}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="include\Config">
-      <UniqueIdentifier>{03074a71-661c-41fc-a9f2-f451aced349e}</UniqueIdentifier>
     </Filter>
     <Filter Include="include\Core">
       <UniqueIdentifier>{3724bf5e-2370-4d90-a176-dada8183439b}</UniqueIdentifier>
@@ -75,12 +69,6 @@
     <ClInclude Include="..\..\include\hrengin\entities\IEntityManager.h">
       <Filter>include\Entities</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\hrengin\config\hrConfig.h">
-      <Filter>include\Config</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\hrengin\config\hrVersions.h">
-      <Filter>include\Config</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\hrengin\base\ILogger.h">
       <Filter>include\Core</Filter>
     </ClInclude>
@@ -123,6 +111,15 @@
     <ClInclude Include="..\..\include\hrengin\core\IModelLoader.h">
       <Filter>include\Core</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\ai\CPath.h">
+      <Filter>include\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\common\hrenginconfig.h">
+      <Filter>include\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\common\hrenginversions.h">
+      <Filter>include\Common</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CEntityManager.cpp">
@@ -140,5 +137,8 @@
     <ClCompile Include="CModelLoader.cpp">
       <Filter>source</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\docs\todolist" />
   </ItemGroup>
 </Project>

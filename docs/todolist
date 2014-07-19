@@ -1,7 +1,7 @@
 ﻿
-o write HNDF parser
-o write HNDF model parser (shapes only)
-o hook loadModel with parser
+o rewrite HNDF parser to fix greediness issue
+
+
 о добавить proper граунд модел, also raycasting
 о заменить ноуколайд на колфильтр у физиксфантома
 о написать stub-класс пути 
@@ -21,12 +21,7 @@ o prettify code
 
 o Main menu
 o Basic ai
-o Buildings
 o Animation
 o Start write map landscape
 o Start navmesh navigation
 o Add non-flat world
-
-
-v. Srantonwars 1.xxx
---The first playable version, will partially (only first two tiers) feature two races (sotm and buprof), 
