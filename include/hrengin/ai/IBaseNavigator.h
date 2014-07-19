@@ -1,12 +1,10 @@
-#ifndef __H_INCLUDED__HRENGIN_IBaseNavigator
-#define __H_INCLUDED__HRENGIN_IBaseNavigator
+#ifndef __HRENGIN_IBaseNavigator__
+#define __HRENGIN_IBaseNavigator__
 
-#include <AI/IBasePathfinder.h>
+namespace hrengin {
+namespace ai {
 
-namespace hrengin
-{
-namespace ai
-{
+class IBasePathfinder;
 
 enum NAVState
 {
@@ -29,17 +27,17 @@ class IBaseNavigator
 		//virtual void SetPathfinder(IBasePathfinder* pathfinder) = 0;
 		
 		//
-		virtual bool CheckState(NAVState state) = 0;
-		virtual NAVState GetState() = 0;
+		virtual bool checkState(NAVState state) = 0;
+		virtual NAVState getState() = 0;
 
-		virtual void Move() = 0;
-		virtual void Stop() = 0;
-		virtual void Follow() = 0;
-		virtual void AttachToGroup() = 0;
+		virtual void move() = 0;
+		virtual void stop() = 0;
+		virtual void setFollow() = 0;
+		virtual void attachToGroup() = 0;
 	private:
 };
 
 } // namespace ai
 } // namespace hrengin
 
-#endif //__H_INCLUDED__HRENGIN_IBaseNavigator
+#endif //__HRENGIN_IBaseNavigator__
