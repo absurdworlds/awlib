@@ -1,5 +1,5 @@
-#ifndef __HRENGIN_PHYSICS_CPhysicsPhantom_H__
-#define __HRENGIN_PHYSICS_CPhysicsPhantom_H__
+#ifndef __HRENGIN_PHYSICS_CPhysicsPhantom__
+#define __HRENGIN_PHYSICS_CPhysicsPhantom__
 
 #include <stdio.h>
 
@@ -34,4 +34,4 @@ protected:
 }	
 } // namespace hrengin
 
-#endif//__HRENGIN_PHYSICS_CPhysicsPhantom_H__
+#endif//__HRENGIN_PHYSICS_CPhysicsPhantom__
