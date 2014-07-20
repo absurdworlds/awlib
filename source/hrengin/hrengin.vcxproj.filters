@@ -120,6 +120,9 @@
     <ClInclude Include="..\..\include\hrengin\common\hrenginversions.h">
       <Filter>include\Common</Filter>
     </ClInclude>
+    <ClInclude Include="CSimplePathfinder.h">
+      <Filter>source</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CEntityManager.cpp">
@@ -135,6 +138,9 @@
       <Filter>source</Filter>
     </ClCompile>
     <ClCompile Include="CModelLoader.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="CSimplePathfinder.cpp">
       <Filter>source</Filter>
     </ClCompile>
   </ItemGroup>

@@ -16,16 +16,11 @@ public:
 	virtual CPath findPath(Vector3d start, Vector3d end)
 	{
 		CPath path;
-		path.pathData_.push_back(start);
-		path.pathData_.push_back(end);
+		path.add(start);
+		path.add(end);
 		return path;
 	}
 };
-
-HRENGIN_API IBasePathfinder* createSimplePathfinder()
-{
-	return new CSimplePathfinder;
-}
 
 } // namespace ai
 } // namespace hrengin
