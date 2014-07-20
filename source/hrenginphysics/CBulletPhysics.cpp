@@ -216,7 +216,7 @@ u32 CBulletPhysics::addShape(IModel* model)
 
 			localTransform.setIdentity();
 			localTransform.setOrigin(btVector3(primitive.offset[0],primitive.offset[1],primitive.offset[2]));
-			localTransform.setRotation(btQuaternion(primitive.rotation[0],primitive.rotation[1],primitive.rotation[2]));
+			localTransform.setRotation(btQuaternion(primitive.rotation[1],primitive.rotation[0],primitive.rotation[2]));
 
 			compound->addChildShape(localTransform,shape);
 		}

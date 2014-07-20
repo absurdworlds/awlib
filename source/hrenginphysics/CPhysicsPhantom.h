@@ -24,7 +24,7 @@ public:
 	virtual IBaseEntity* getEntity();;
 
 	virtual void setPosition(Vector3d pos);
-	virtual void setRotation(Vector3d rot) {};
+	virtual void setRotation(Vector3d rot);
 
 protected:
 	IBaseEntity* AttachedTo;

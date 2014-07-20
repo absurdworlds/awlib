@@ -1,9 +1,7 @@
 #include "CPhysicsPhantom.h"
 
-namespace hrengin
-{
-namespace physics
-{
+namespace hrengin {
+namespace physics {
 
 CPhysicsPhantom::CPhysicsPhantom(btCollisionObject* pCollObject)
 	: CollObject(pCollObject)
@@ -19,11 +17,23 @@ CPhysicsPhantom::CPhysicsPhantom(btCollisionObject* pCollObject, IBaseEntity* pA
 
 void CPhysicsPhantom::setPosition(Vector3d pos) 
 {
-	btTransform defaultTransform;
-	defaultTransform.setIdentity();
-	defaultTransform.setOrigin(btVector3(pos.X,pos.Y,pos.Z));
+	btTransform localTransform;
+	localTransform.setIdentity();
+	localTransform.setOrigin(btVector3(pos.X,pos.Y,pos.Z));
+	localTransform.setRotation(CollObject->getWorldTransform().getRotation());
 	
-	CollObject->setWorldTransform(defaultTransform);
+	CollObject->setWorldTransform(localTransform);
+};
+
+
+void CPhysicsPhantom::setRotation(Vector3d rot) 
+{
+	btTransform localTransform;
+	localTransform.setIdentity();
+	localTransform.setOrigin(CollObject->getWorldTransform().getOrigin());
+	localTransform.setRotation(btQuaternion(rot.Y,rot.X,rot.Z));
+	
+	CollObject->setWorldTransform(localTransform);
 };
 
 
