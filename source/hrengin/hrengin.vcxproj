@@ -141,6 +141,7 @@
     <ClInclude Include="CLogger.h" />
     <ClInclude Include="CModel.h" />
     <ClInclude Include="CModelLoader.h" />
+    <ClInclude Include="CSimplePathfinder.h" />
     <ClInclude Include="CWorld.h" />
   </ItemGroup>
   <ItemGroup>
@@ -148,6 +149,7 @@
     <ClCompile Include="CEventManager.cpp" />
     <ClCompile Include="CLogger.cpp" />
     <ClCompile Include="CModelLoader.cpp" />
+    <ClCompile Include="CSimplePathfinder.cpp" />
     <ClCompile Include="CWorld.cpp" />
   </ItemGroup>
   <ItemGroup>

@@ -6,7 +6,7 @@
 #include <string>
 #include <deque>
 
-#include <hrengin/base/ILogger.h>
+#include <hrengin/core/ILogger.h>
 
 namespace hrengin {
 
