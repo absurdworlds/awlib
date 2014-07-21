@@ -109,7 +109,7 @@ public:
 protected: /* Methods */
 	virtual void enterDeleteQueue() = 0;
 protected: /* Data */
-	IBaseEntity*				parent_;
+	IBaseEntity*			parent_;
 	std::vector<IBaseEntity*>	children_;
 
 	u32 entflags;
