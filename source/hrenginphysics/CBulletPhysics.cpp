@@ -116,13 +116,13 @@ bool CBulletPhysics::step()
 	return true;
 }
 
-IPhysicsBody* CBulletPhysics::createBody(const char* modelName, Vector3d pos, u32 filters = 0) 
+IPhysicsBody* CBulletPhysics::createBody(const char* modelName, Vector3d pos, u32 group, u32 filters)
 {
 	u32 shapeId = loadModel(modelName);
 	return createBody(shapeId,pos); 
 };
 
-IPhysicsBody* CBulletPhysics::createBody(const u32 shapeid, Vector3d pos, u32 filters = 0) 
+IPhysicsBody* CBulletPhysics::createBody(const u32 shapeid, Vector3d pos, u32 group, u32 filters)
 {
 	btTransform defaultTransform;
 	defaultTransform.setIdentity();
@@ -146,19 +146,19 @@ IPhysicsBody* CBulletPhysics::createBody(const u32 shapeid, Vector3d pos, u32 fi
 
 	//rigidBody->setCollisionFlags (btCollisionObject::CF_NO_CONTACT_RESPONSE);
 
-	m_dynamicsWorld->addRigidBody(rigidBody);
+	m_dynamicsWorld->addRigidBody(rigidBody,group,filters);
 	m_dynamicsWorld->updateAabbs();
 
 	return new CPhysicsBody(rigidBody);
 };
 
-IPhysicsPhantom* CBulletPhysics::createPhantom(const char* modelName, u32 filters = 0) 
+IPhysicsPhantom* CBulletPhysics::createPhantom(const char* modelName, u32 group, u32 filters)
 {
 	u32 shapeId = loadModel(modelName);
 	return createPhantom(shapeId, filters); 
 };
 
-IPhysicsPhantom* CBulletPhysics::createPhantom(const u32 shapeid, u32 filters = 0) 
+IPhysicsPhantom* CBulletPhysics::createPhantom(const u32 shapeid, u32 group, u32 filters)
 {
 	btTransform defaultTransform;
 	defaultTransform.setIdentity();
@@ -170,13 +170,13 @@ IPhysicsPhantom* CBulletPhysics::createPhantom(const u32 shapeid, u32 filters = 
 	//collObject->setCollisionFlags (btCollisionObject::CF_NO_CONTACT_RESPONSE);
 	collObject->setCollisionFlags (btCollisionObject::CF_KINEMATIC_OBJECT);
 	
-	m_dynamicsWorld->addCollisionObject(collObject);
+	m_dynamicsWorld->addCollisionObject(collObject,group,filters);
 	//m_dynamicsWorld->updateAabbs();
 
 	return new CPhysicsPhantom(collObject);
 };
 
-IPhysicsObject* CBulletPhysics::castRay(Vectorf3d from, Vectorf3d to, u32 filters = 0)
+IPhysicsObject* CBulletPhysics::castRay(Vectorf3d from, Vectorf3d to, u32 filters)
 {
 	btVector3 btfrom = btVector3(from.X,from.Y,from.Z);
 	btVector3 btto = btVector3(to.X,to.Y,to.Z);
