@@ -30,11 +30,11 @@ public:
 
 	//virtual IPhysicsBody* createBody(const u32 modelId);
 	//virtual IPhysicsBody* createBody(const char* modelName);
-	virtual IPhysicsPhantom* createPhantom(const u32 modelId);
-	virtual IPhysicsPhantom* createPhantom(const char* modelName);
+	virtual IPhysicsPhantom* createPhantom(const u32 modelId, u32 filters);
+	virtual IPhysicsPhantom* createPhantom(const char* modelName, u32 filters);
 
 
-	virtual IPhysicsObject* castRay(Vectorf3d from, Vectorf3d to);
+	virtual IPhysicsObject* castRay(Vectorf3d from, Vectorf3d to, u32 filters);
 
 	virtual bool step();
 
