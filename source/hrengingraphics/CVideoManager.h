@@ -11,6 +11,9 @@
 #include <hrengin/graphics/ICameraNode.h>
 #include <hrengin/graphics/ILightNode.h>
 
+#include "CVisNode.h"
+#include <Irrlicht/SAnimatedMesh.h>
+
 namespace irr {
 	class IrrlichtDevice;
 
@@ -56,6 +59,19 @@ public:
 	virtual IVisNode* CreateVisObject();
 	virtual ICameraNode* CreateCamera();
 	virtual ILightNode* CreateLight();
+	IVisNode* CVideoManager::createOildrum()
+	{
+		CVisNode* povisnode = new CVisNode();
+
+		irr::scene::IMesh* mb = device->getSceneManager()->getGeometryCreator()->createCylinderMesh(0.572/2, 0.851, 16, irr::video::SColor(255,168,168,0));
+		irr::scene::IAnimatedMesh* ma = new irr::scene::SAnimatedMesh(mb);
+
+		irr::scene::IAnimatedMeshSceneNode* msh = device->getSceneManager()->addAnimatedMeshSceneNode(ma);
+	
+		povisnode->AddOildrum(msh);
+
+		return povisnode;
+	}
 
 	virtual void AddNode(ISceneNode& node);
 

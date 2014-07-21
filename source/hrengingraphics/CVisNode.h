@@ -30,6 +30,17 @@ class CVisNode : public IVisNode
 		//virtual void SetScale(Vectorf3d scale);
 
 		virtual i8 AddMesh(char * meshname);
+		virtual i8 AddOildrum(irr::scene::IAnimatedMeshSceneNode* mesh)
+		{
+			if(lastFreeSlot < maxFreeSlot) {
+				meshSlots[lastFreeSlot] = mesh;
+				meshSlots[lastFreeSlot]->setAutomaticCulling(irr::scene::EAC_FRUSTUM_BOX);
+				++lastFreeSlot;
+				return lastFreeSlot-1;
+			} else {
+				return -1;
+			}
+		}
 		virtual void RemoveMesh(i8 meshslot);
 		virtual void ReplaceMesh(i8 meshslot, char * meshname);
 

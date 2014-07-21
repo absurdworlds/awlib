@@ -35,6 +35,7 @@ public:
 	virtual IVisNode* CreateVisObject() = 0;
 	virtual ICameraNode* CreateCamera() = 0;
 	virtual ILightNode* CreateLight() = 0;
+	virtual IVisNode* createOildrum() = 0;
 
 	virtual void AddNode(ISceneNode& node) = 0;
 };

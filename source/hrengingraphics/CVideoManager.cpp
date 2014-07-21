@@ -24,7 +24,7 @@ CVideoManager& getLocalManager()
 
 CVideoManager::CVideoManager()
 {
-	device = irr::createDevice( irr::video::EDT_OPENGL, irr::core::dimension2d<irr::u32>(1066, 600), 32, false, false, true, 0);
+	device = irr::createDevice( irr::video::EDT_DIRECT3D9, irr::core::dimension2d<irr::u32>(1066, 600), 32, false, false, true, 0);
 
 	/*if (device == 0)
 	{
