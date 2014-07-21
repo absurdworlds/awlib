@@ -116,13 +116,13 @@ bool CBulletPhysics::step()
 	return true;
 }
 
-IPhysicsBody* CBulletPhysics::createBody(const char* modelName, Vector3d pos) 
+IPhysicsBody* CBulletPhysics::createBody(const char* modelName, Vector3d pos, u32 filters = 0) 
 {
 	u32 shapeId = loadModel(modelName);
 	return createBody(shapeId,pos); 
 };
 
-IPhysicsBody* CBulletPhysics::createBody(const u32 shapeid, Vector3d pos) 
+IPhysicsBody* CBulletPhysics::createBody(const u32 shapeid, Vector3d pos, u32 filters = 0) 
 {
 	btTransform defaultTransform;
 	defaultTransform.setIdentity();
@@ -152,13 +152,13 @@ IPhysicsBody* CBulletPhysics::createBody(const u32 shapeid, Vector3d pos)
 	return new CPhysicsBody(rigidBody);
 };
 
-IPhysicsPhantom* CBulletPhysics::createPhantom(const char* modelName) 
+IPhysicsPhantom* CBulletPhysics::createPhantom(const char* modelName, u32 filters = 0) 
 {
 	u32 shapeId = loadModel(modelName);
-	return createPhantom(shapeId); 
+	return createPhantom(shapeId, filters); 
 };
 
-IPhysicsPhantom* CBulletPhysics::createPhantom(const u32 shapeid) 
+IPhysicsPhantom* CBulletPhysics::createPhantom(const u32 shapeid, u32 filters = 0) 
 {
 	btTransform defaultTransform;
 	defaultTransform.setIdentity();
@@ -176,11 +176,15 @@ IPhysicsPhantom* CBulletPhysics::createPhantom(const u32 shapeid)
 	return new CPhysicsPhantom(collObject);
 };
 
-IPhysicsObject* CBulletPhysics::castRay(Vectorf3d from, Vectorf3d to)
+IPhysicsObject* CBulletPhysics::castRay(Vectorf3d from, Vectorf3d to, u32 filters = 0)
 {
 	btVector3 btfrom = btVector3(from.X,from.Y,from.Z);
 	btVector3 btto = btVector3(to.X,to.Y,to.Z);
 	btCollisionWorld::ClosestRayResultCallback resultCallback(btfrom, btto);
+	if(filters) {
+		resultCallback.m_collisionFilterMask = filters;
+	}
+
 	m_dynamicsWorld->rayTest(btfrom, btto, resultCallback);
 
 	if (resultCallback.hasHit())
