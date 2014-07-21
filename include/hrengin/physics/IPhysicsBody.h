@@ -6,9 +6,11 @@
 namespace hrengin {
 namespace physics {
 
-class IPhysicsBody : IPhysicsObject
+class IPhysicsBody : public IPhysicsObject
 {
 public:
+	virtual Vector3d getPosition() = 0;
+	virtual Vector3d getRotation() = 0;
 protected:
 };
 

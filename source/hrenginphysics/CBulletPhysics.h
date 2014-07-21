@@ -9,7 +9,6 @@
 
 #include <hrengin/physics/IPhysicsManager.h>
 
-#include "CPhysicsPhantom.h"
 
 namespace hrengin {
 
@@ -17,6 +16,9 @@ struct SPrimitive;
 struct SMesh;
 
 namespace physics {
+
+class CPhysicsPhantom;
+class CPhysicsBody;
 
 class CBulletPhysics : public IPhysicsManager
 {
@@ -28,8 +30,8 @@ public:
 	
 	virtual u32 loadModel(const char* modelName);
 
-	//virtual IPhysicsBody* createBody(const u32 modelId);
-	//virtual IPhysicsBody* createBody(const char* modelName);
+	virtual IPhysicsBody* createBody(const u32 modelId, Vector3d pos);
+	virtual IPhysicsBody* createBody(const char* modelName, Vector3d pos);
 	virtual IPhysicsPhantom* createPhantom(const u32 modelId);
 	virtual IPhysicsPhantom* createPhantom(const char* modelName);
 

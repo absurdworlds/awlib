@@ -1,5 +1,5 @@
-#ifndef __HRENGIN_PHYSICS_CPhysicsPhantom__
-#define __HRENGIN_PHYSICS_CPhysicsPhantom__
+#ifndef __HRENGIN_PHYSICS_CPhysicsBody__
+#define __HRENGIN_PHYSICS_CPhysicsBody__
 
 #include <stdio.h>
 
@@ -26,6 +26,9 @@ public:
 	virtual void setPosition(Vector3d pos);
 	virtual void setRotation(Vector3d rot);
 
+	virtual Vector3d getPosition();
+	virtual Vector3d getRotation();
+
 protected:
 	IBaseEntity* AttachedTo;
 	btCollisionObject* CollObject;
@@ -34,4 +37,4 @@ protected:
 }	
 } // namespace hrengin
 
-#endif//__HRENGIN_PHYSICS_CPhysicsPhantom__
+#endif//__HRENGIN_PHYSICS_CPhysicsBody__

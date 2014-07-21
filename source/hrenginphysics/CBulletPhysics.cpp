@@ -6,6 +6,8 @@
 #include <hrengin/core/IModelLoader.h>
 
 #include "CBulletPhysics.h"
+#include "CPhysicsPhantom.h"
+#include "CPhysicsBody.h"
 
 
 namespace hrengin {
@@ -36,6 +38,17 @@ CBulletPhysics::CBulletPhysics()
 	//m_dynamicsWorld->setDebugDrawer(&gDebugDraw);
 	
 	modelLoader_ = createModelLoader();
+
+	btTransform defaultTransform;
+	defaultTransform.setIdentity();
+	defaultTransform.setOrigin(btVector3(0,0,0));
+	
+	btCollisionObject *collObject = new btCollisionObject();
+
+	collObject->setCollisionShape(new btStaticPlaneShape(btVector3(0,1,0),0.0));
+	collObject->setCollisionFlags(btCollisionObject::CF_STATIC_OBJECT);
+	
+	m_dynamicsWorld->addCollisionObject(collObject);
 
 	btCollisionShape* Shape = new btEmptyShape;
 	collisionShapes_.push_back(Shape);
@@ -95,16 +108,49 @@ bool CBulletPhysics::step()
 
 		//btVector3 aabbMin(1,1,1);
 		//btVector3 aabbMax(2,2,2);
-
-		//MyOverlapCallback aabbOverlap(aabbMin,aabbMax);
-		//m_dynamicsWorld->getBroadphase()->aabbTest(aabbMin,aabbMax,aabbOverlap);
 		
-		/*if (aabbOverlap.m_numOverlap)
-			printf("#aabb overlap = %d\n", aabbOverlap.m_numOverlap);*/
+		btVector3 aabbMin(1,1,1);
+		btVector3 aabbMax(2,2,2);
 	}
 
 	return true;
 }
+
+IPhysicsBody* CBulletPhysics::createBody(const char* modelName, Vector3d pos) 
+{
+	u32 shapeId = loadModel(modelName);
+	return createBody(shapeId,pos); 
+};
+
+IPhysicsBody* CBulletPhysics::createBody(const u32 shapeid, Vector3d pos) 
+{
+	btTransform defaultTransform;
+	defaultTransform.setIdentity();
+	defaultTransform.setOrigin(btVector3(pos.X,pos.Y,pos.Z));
+		
+	btScalar mass(1.0f);
+	bool isDynamic = (mass != 0.f);
+	btVector3 localInertia(0,0,0);
+	//btCollisionShape* colShape = collisionShapes_[shapeid];
+	btCollisionShape* colShape = new btCylinderShape(btVector3(
+				btScalar(0.572/2),btScalar(0.851/2),btScalar(0.572/2)));
+	
+	if (isDynamic) {
+		colShape->calculateLocalInertia(mass,localInertia);
+	}
+
+	btDefaultMotionState* defaultMotionState = new btDefaultMotionState(defaultTransform);
+
+	btRigidBody::btRigidBodyConstructionInfo rbInfo(mass,defaultMotionState,colShape,localInertia);
+	btRigidBody *rigidBody = new btRigidBody(rbInfo);
+
+	//rigidBody->setCollisionFlags (btCollisionObject::CF_NO_CONTACT_RESPONSE);
+
+	m_dynamicsWorld->addRigidBody(rigidBody);
+	m_dynamicsWorld->updateAabbs();
+
+	return new CPhysicsBody(rigidBody);
+};
 
 IPhysicsPhantom* CBulletPhysics::createPhantom(const char* modelName) 
 {
@@ -121,7 +167,8 @@ IPhysicsPhantom* CBulletPhysics::createPhantom(const u32 shapeid)
 	btCollisionObject *collObject = new btCollisionObject();
 
 	collObject->setCollisionShape(collisionShapes_[shapeid]);
-	collObject->setCollisionFlags (btCollisionObject::CF_NO_CONTACT_RESPONSE);
+	//collObject->setCollisionFlags (btCollisionObject::CF_NO_CONTACT_RESPONSE);
+	collObject->setCollisionFlags (btCollisionObject::CF_KINEMATIC_OBJECT);
 	
 	m_dynamicsWorld->addCollisionObject(collObject);
 	//m_dynamicsWorld->updateAabbs();
@@ -162,6 +209,14 @@ btCollisionShape* CBulletPhysics::createPrimitiveShape(SPrimitive shape)
 	}
 
 	if(shape.shape == SHAPE_CYLINDER) {
+		if(z == 0.0) {
+		 z = x;
+		}
+
+		x /= 2.0;
+		y /= 2.0;
+		z /= 2.0;
+
 		switch(shape.axis)
 		{
 		case AXIS_X:
@@ -243,8 +298,10 @@ u32 CBulletPhysics::loadModel(const char* modelName)
 	{
 		return 0;
 	}
-
-	return addShape(model);
+	
+	u32 id = addShape(model);
+	models_[modelName] = id;
+	return id;
 }
 
 
