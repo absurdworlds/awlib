@@ -39,6 +39,12 @@ typedef u8 byte;
 #endif
 
 #if defined(_MSC_VER)
+	typedef unsigned __int64	u64;
+#else
+	typedef unsigned long long	u64;
+#endif
+
+#if defined(_MSC_VER)
 	typedef signed __int32		i32;
 #else
 	typedef signed int		i32;
