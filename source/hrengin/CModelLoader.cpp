@@ -36,6 +36,8 @@ IModel* CModelLoader::loadModel(const char* filename)
 		hndfParse(file, model);
 	}
 
+	delete file;
+
 	return model;
 }
 
