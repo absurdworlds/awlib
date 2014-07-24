@@ -87,16 +87,14 @@ bool CVideoManager::advance()
 
 void CVideoManager::draw()
 {
-	if (device->isWindowActive()) {
 		driver->beginScene(true, true, irr::video::SColor(255, 100, 101, 140));
+	//if (device->isWindowActive()) {
 
 		scnmgr->drawAll();
 		guienv->drawAll();
 
-		driver->endScene();
-	}
+	//}
 	
-	device->yield();
 }
 
 
@@ -141,5 +139,38 @@ irr::IrrlichtDevice*  CVideoManager::GetDevice() const
 {
 	return device;
 }
+
+void CVideoManager::ll1()
+{
+
+   irr::video::SMaterial debugMat;
+   debugMat.Lighting = false;
+
+         driver->setMaterial(debugMat);
+         driver->setTransform(irr::video::ETS_WORLD, irr::core::IdentityMatrix);
+	 }
+
+void CVideoManager::end()
+{
+
+   irr::video::SMaterial debugMat;
+   debugMat.Lighting = false;
+
+         driver->setMaterial(debugMat);
+         driver->setTransform(irr::video::ETS_WORLD, irr::core::IdentityMatrix);
+
+	 
+		driver->endScene();
+	device->yield();
+	 }
+void CVideoManager::drawLine(const Vector3d& from, const Vector3d& to, const Vector3d& color)
+{
+
+this->driver->draw3DLine(
+	irr::core::vector3df(from.X, from.Y, from.Z),
+	irr::core::vector3df(to.X, to.Y, to.Z),
+	irr::video::SColor(255, (irr::u32)color.X, (irr::u32)color.Y, (irr::u32)color.Z));
+}
+
 } // namespace graphics
 } // namespace hrengin

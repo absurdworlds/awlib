@@ -77,6 +77,13 @@ public:
 
 	virtual irr::scene::IAnimatedMesh* LoadMesh(const char * modelname);
 
+	
+	void drawLine(const Vector3d& from, const Vector3d& to, const Vector3d& color);
+
+	
+	void CVideoManager::ll1();
+	void CVideoManager::end();
+
 // irrlicht access
 	virtual irr::IrrlichtDevice* GetDevice() const;
 	virtual irr::video::IVideoDriver* GetDriver() const {return driver;};

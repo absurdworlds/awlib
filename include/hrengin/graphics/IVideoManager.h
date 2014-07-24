@@ -2,6 +2,7 @@
 #define __H_INCLUDED__HRENGIN_IVideoManager
 
 #include <hrengin/common/hrenginapi.h>
+#include <hrengin/common/Vector3d.h>
 
 namespace hrengin {
 namespace graphics {
@@ -38,6 +39,10 @@ public:
 	virtual IVisNode* createOildrum() = 0;
 
 	virtual void AddNode(ISceneNode& node) = 0;
+	virtual void drawLine(const Vector3d& from, const Vector3d& to, const Vector3d& color) = 0;
+	
+	virtual void ll1()=0;
+	virtual void end()=0;
 };
 
 HRENGINGRAPHICS_API IVideoManager& getVideoManager();

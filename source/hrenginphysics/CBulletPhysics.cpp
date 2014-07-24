@@ -5,6 +5,8 @@
 #include <hrengin/core/IModel.h>
 #include <hrengin/core/IModelLoader.h>
 
+#include <hrengin/graphics/IVideoManager.h>
+
 #include "CBulletPhysics.h"
 #include "CPhysicsPhantom.h"
 #include "CPhysicsBody.h"
@@ -12,6 +14,68 @@
 
 namespace hrengin {
 namespace physics {
+
+class DebugDraw : public btIDebugDraw
+{
+
+public:
+
+	DebugDraw(graphics::IVideoManager & vmgr) :
+	mode(DBG_NoDebug), vmgr_(&vmgr)
+	{
+
+	}
+
+	void drawLine(const btVector3& from, const btVector3& to, const btVector3& color)
+	{
+		//workaround to bullet's inconsistent debug colors which are either from 0.0 - 1.0 or from 0.0 - 255.0
+
+		Vector3d newColor;
+
+		if (color[0] <= 1.0 && color[0] > 0.0)
+			newColor.X = ((u32)(color[0]*255.0));
+		if (color[1] <= 1.0 && color[1] > 0.0)
+			newColor.Y = ((u32)(color[1]*255.0));
+		if (color[2] <= 1.0 && color[2] > 0.0)
+			newColor.Z = ((u32)(color[2]*255.0));
+
+		vmgr_->drawLine(
+		Vector3d(from[0], from[1], from[2]),
+		Vector3d(to[0], to[1], to[2]),
+		newColor);
+	}
+	
+
+	void drawContactPoint(const btVector3& PointOnB, const btVector3& normalOnB, btScalar distance, int lifeTime, const btVector3& color)
+	{
+
+		//   this->drawLine(PointOnB, PointOnB + normalOnB*distance, CONTACTPOINT_COLOR);
+
+		const btVector3 to(PointOnB + normalOnB*distance);
+
+		vmgr_->drawLine(
+			Vector3d(PointOnB[0], PointOnB[1], PointOnB[2]),
+			Vector3d(to[0], to[1], to[2]),
+			Vector3d(255.0,255.0,255.0));
+	}
+
+	void reportErrorWarning(const char* text)
+	{
+		//this->logger->log(text, irr::ELL_ERROR);
+	}
+
+	void draw3dText(const btVector3& location, const char* text) { }
+
+	void setDebugMode(int mode) { this->mode = mode; }
+
+	int getDebugMode() const { return this->mode; }
+
+private:
+
+	int mode;
+	graphics::IVideoManager * vmgr_;
+};
+
 
 HRENGINPHYSICS_API IPhysicsManager& getPhysicsManager()
 {
@@ -35,9 +99,20 @@ CBulletPhysics::CBulletPhysics()
 
 	m_dynamicsWorld = new btDiscreteDynamicsWorld(m_dispatcher,m_broadphase,m_solver,m_collisionConfiguration);
 	m_dynamicsWorld->setGravity(btVector3(0,-10,0));
-	//m_dynamicsWorld->setDebugDrawer(&gDebugDraw);
+	static DebugDraw debugDraw(hrengin::graphics::getVideoManager());
+	debugDraw.setDebugMode(
+		btIDebugDraw::DBG_DrawWireframe |
+		btIDebugDraw::DBG_DrawAabb |
+		btIDebugDraw::DBG_DrawContactPoints |
+		//btIDebugDraw::DBG_DrawText |
+		//btIDebugDraw::DBG_DrawConstraintLimits |
+		btIDebugDraw::DBG_DrawConstraints //|
+	);
+
+	m_dynamicsWorld->setDebugDrawer(&debugDraw);
 	
 	modelLoader_ = createModelLoader();
+
 
 	btTransform defaultTransform;
 	defaultTransform.setIdentity();
@@ -48,7 +123,7 @@ CBulletPhysics::CBulletPhysics()
 	collObject->setCollisionShape(new btStaticPlaneShape(btVector3(0,1,0),0.0));
 	collObject->setCollisionFlags(btCollisionObject::CF_STATIC_OBJECT);
 	
-	m_dynamicsWorld->addCollisionObject(collObject);
+	m_dynamicsWorld->addCollisionObject(collObject,COL_GROUND,COL_GROUND | COL_DEBRIS); // 0000 0111
 
 	btCollisionShape* Shape = new btEmptyShape;
 	collisionShapes_.push_back(Shape);
@@ -94,6 +169,11 @@ btScalar CBulletPhysics::getDeltaTime()
 	return dt;
 }
 
+void CBulletPhysics::debugDraw()
+{
+	m_dynamicsWorld->debugDrawWorld();
+}
+
 bool CBulletPhysics::step()
 {
 	//simple dynamics world doesn't handle fixed-time-stepping
@@ -104,7 +184,6 @@ bool CBulletPhysics::step()
 	{
 		m_dynamicsWorld->stepSimulation(ms / 1000000.f);
 		//optional but useful: debug drawing
-		//m_dynamicsWorld->debugDrawWorld();
 
 		//btVector3 aabbMin(1,1,1);
 		//btVector3 aabbMax(2,2,2);
@@ -116,13 +195,13 @@ bool CBulletPhysics::step()
 	return true;
 }
 
-IPhysicsBody* CBulletPhysics::createBody(const char* modelName, Vector3d pos, u32 group, u32 filters)
+IPhysicsBody* CBulletPhysics::createBody(const char* modelName, Vector3d pos, u16 group, u16 filters)
 {
 	u32 shapeId = loadModel(modelName);
-	return createBody(shapeId,pos); 
+	return createBody(shapeId,pos, group,  filters); 
 };
 
-IPhysicsBody* CBulletPhysics::createBody(const u32 shapeid, Vector3d pos, u32 group, u32 filters)
+IPhysicsBody* CBulletPhysics::createBody(const u32 shapeid, Vector3d pos, u16 group, u16 filters)
 {
 	btTransform defaultTransform;
 	defaultTransform.setIdentity();
@@ -146,19 +225,23 @@ IPhysicsBody* CBulletPhysics::createBody(const u32 shapeid, Vector3d pos, u32 gr
 
 	//rigidBody->setCollisionFlags (btCollisionObject::CF_NO_CONTACT_RESPONSE);
 
-	m_dynamicsWorld->addRigidBody(rigidBody,group,filters);
+	if(group && filters) {
+		m_dynamicsWorld->addRigidBody(rigidBody,group,filters);
+	} else {
+		m_dynamicsWorld->addRigidBody(rigidBody);
+	}
 	m_dynamicsWorld->updateAabbs();
 
 	return new CPhysicsBody(rigidBody);
 };
 
-IPhysicsPhantom* CBulletPhysics::createPhantom(const char* modelName, u32 group, u32 filters)
+IPhysicsPhantom* CBulletPhysics::createPhantom(const char* modelName, u16 group, u16 filters)
 {
 	u32 shapeId = loadModel(modelName);
 	return createPhantom(shapeId, filters); 
 };
 
-IPhysicsPhantom* CBulletPhysics::createPhantom(const u32 shapeid, u32 group, u32 filters)
+IPhysicsPhantom* CBulletPhysics::createPhantom(const u32 shapeid, u16 group, u16 filters)
 {
 	btTransform defaultTransform;
 	defaultTransform.setIdentity();
@@ -176,12 +259,13 @@ IPhysicsPhantom* CBulletPhysics::createPhantom(const u32 shapeid, u32 group, u32
 	return new CPhysicsPhantom(collObject);
 };
 
-IPhysicsObject* CBulletPhysics::castRay(Vectorf3d from, Vectorf3d to, u32 filters)
+IPhysicsObject* CBulletPhysics::castRay(Vectorf3d from, Vectorf3d to, u16 filters)
 {
 	btVector3 btfrom = btVector3(from.X,from.Y,from.Z);
 	btVector3 btto = btVector3(to.X,to.Y,to.Z);
 	btCollisionWorld::ClosestRayResultCallback resultCallback(btfrom, btto);
 	if(filters) {
+		resultCallback.m_collisionFilterGroup = COL_UNIT;
 		resultCallback.m_collisionFilterMask = filters;
 	}
 
@@ -208,7 +292,7 @@ btCollisionShape* CBulletPhysics::createPrimitiveShape(SPrimitive shape)
 	if(shape.shape == SHAPE_BOX) {
 		return new btBoxShape(btVector3(
 			btScalar(x/2.0),
-			btScalar(y/2.0),
+			btScalar(y),
 			btScalar(z/2.0)));
 	}
 
@@ -218,7 +302,7 @@ btCollisionShape* CBulletPhysics::createPrimitiveShape(SPrimitive shape)
 		}
 
 		x /= 2.0;
-		y /= 2.0;
+		//y /= 2.0;
 		z /= 2.0;
 
 		switch(shape.axis)
