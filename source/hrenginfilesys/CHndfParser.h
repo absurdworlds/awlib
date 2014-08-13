@@ -11,7 +11,7 @@
 namespace hrengin {
 namespace io {
 
-class IReadFile;
+class IBufferedStream;
 
 
 
@@ -60,8 +60,6 @@ private:
 	void readHead();
 	bool readDirective(Token& token);
 	void readToken(Token& token);
-	char readChar();
-	char peekChar();
 
 	void readLiteral(std::string& val);
 	void readString (std::string& val);
@@ -70,9 +68,6 @@ private:
 	void skipSeparators();
 	//void skipWhitespace();
 
-	IReadFile* file_;
-	char* buffer_;
-	u32 pos_;
 
 	enum VariableType
 	{
@@ -80,6 +75,8 @@ private:
 		TYPE_FLOAT,
 		TYPE_STRING
 	};
+
+	IBufferedStream* stream_;
 
 	HndfObjectType objectType_;
 	std::string objectName_;

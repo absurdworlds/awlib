@@ -1,5 +1,5 @@
-#ifndef __HRENGIN_FILESYSTEM_IReadFile_H__
-#define __HRENGIN_FILESYSTEM_IReadFile_H__
+#ifndef __HRENGIN_IReadFile__
+#define __HRENGIN_IReadFile__
 
 #include <string>
 
@@ -29,4 +29,4 @@ HRENGINFILESYSTEM_API IReadFile* openReadFile(std::string path);
 }
 
 
-#endif//__HRENGIN_FILESYSTEM_IReadFile_H__
+#endif//__HRENGIN_IReadFile__
