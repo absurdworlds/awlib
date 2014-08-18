@@ -1,5 +1,5 @@
-#ifndef __H_INCLUDED__HRENGIN_ILightNode
-#define __H_INCLUDED__HRENGIN_ILightNode
+#ifndef __HRENGIN_ILightNode__
+#define __HRENGIN_ILightNode__
 
 #include <hrengin/graphics/ISceneNode.h>
 
@@ -19,4 +19,4 @@ class ILightNode : public ISceneNode
 } // namespace graphics
 } // namespace hrengin
 
-#endif//__H_INCLUDED__HRENGIN_ILightNode
+#endif//__HRENGIN_ILightNode__

@@ -163,6 +163,8 @@ void CVideoManager::end()
 		driver->endScene();
 	device->yield();
 	 }
+
+
 void CVideoManager::drawLine(const Vector3d& from, const Vector3d& to, const Vector3d& color)
 {
 
@@ -171,6 +173,14 @@ this->driver->draw3DLine(
 	irr::core::vector3df(to.X, to.Y, to.Z),
 	irr::video::SColor(255, (irr::u32)color.X, (irr::u32)color.Y, (irr::u32)color.Z));
 }
+
+/*void CVideoManager::drawVertexListObject(std::vector<Vectorf3d>& vert, std::vector<u32>& idxs)
+{
+
+	this->driver->drawVertexPrimitiveList();
+
+}*/
+
 
 } // namespace graphics
 } // namespace hrengin

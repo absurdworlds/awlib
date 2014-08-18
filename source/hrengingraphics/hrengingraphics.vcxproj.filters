@@ -69,6 +69,24 @@
     <ClInclude Include="..\..\include\hrengin\gui\InputEvent.h">
       <Filter>include\gui</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\graphics\IRenderable.h">
+      <Filter>include\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\graphics\IRenderingDevice.h">
+      <Filter>include\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\graphics\IVertexBuffer.h">
+      <Filter>include\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\graphics\IVertexListPrimitive.h">
+      <Filter>include\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\graphics\SVertex.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="CVertexListPrimitive.h">
+      <Filter>source</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CCameraNode.cpp">

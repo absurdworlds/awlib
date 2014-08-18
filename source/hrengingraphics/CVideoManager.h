@@ -90,9 +90,12 @@ public:
 
 	virtual irr::scene::ISceneManager* GetSceneMgr() const;
 	virtual irr::scene::ISceneCollisionManager* getCollManager() const;
+	virtual void drawVertexPrimitives(video::IVertexBuffer* vb) {};
+	//virtual void drawIndexedVertexPrimitives(video::IVertexBuffer* vb, video::IIndexBuffer* ib);
 
 private:
 	std::vector<ISceneNode*> NodeList;
+	std::vector<video::IRenderable*> extraRenderables_;
 
 	irr::IrrlichtDevice*			device;
 	irr::video::IVideoDriver*		driver;

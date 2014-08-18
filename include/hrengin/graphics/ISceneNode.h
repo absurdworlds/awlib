@@ -1,16 +1,14 @@
-#ifndef __H_INCLUDED__HRENGIN_ISceneNode
-#define __H_INCLUDED__HRENGIN_ISceneNode
+#ifndef __hrengin_ISceneNode__
+#define __hrengin_ISceneNode__
 
 #include <hrengin/common/hrengintypes.h>
 #include <hrengin/common/Vector3d.h>
 
-namespace hrengin
-{
+namespace hrengin {
 
 class IBaseEntity;
 
-namespace graphics
-{
+namespace graphics {
 	
 
 class ISceneNode
@@ -31,4 +29,4 @@ class ISceneNode
 } // namespace graphics
 } // namespace hrengin
 
-#endif//__HG_ISceneNode__
+#endif //__hrengin_ISceneNode__

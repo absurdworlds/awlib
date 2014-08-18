@@ -5,6 +5,12 @@
 #include <hrengin/common/Vector3d.h>
 
 namespace hrengin {
+namespace video {
+class IRenderable;
+class IVertexBuffer;
+class IIndexBuffer;
+}
+
 namespace graphics {
 
 class ISceneNode;
@@ -40,6 +46,9 @@ public:
 
 	virtual void AddNode(ISceneNode& node) = 0;
 	virtual void drawLine(const Vector3d& from, const Vector3d& to, const Vector3d& color) = 0;
+
+	virtual void drawVertexPrimitives(video::IVertexBuffer* vb) = 0;
+	//virtual void drawIndexedVertexPrimitives(video::IVertexBuffer* vb, video::IIndexBuffer* ib) = 0;
 	
 	virtual void ll1()=0;
 	virtual void end()=0;
