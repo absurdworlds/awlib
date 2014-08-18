@@ -19,6 +19,7 @@
     <ClInclude Include="CBulletPhysics.h" />
     <ClInclude Include="CPhysicsBody.h" />
     <ClInclude Include="CPhysicsPhantom.h" />
+    <ClInclude Include="hrgToBullet.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CBulletPhysics.cpp" />

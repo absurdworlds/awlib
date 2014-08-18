@@ -27,9 +27,6 @@
     <ClInclude Include="CHndfParser.h">
       <Filter>source</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\hrengin\filesystem\IFileParser.h">
-      <Filter>include</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\hrengin\filesystem\hrenginfsutil.h">
       <Filter>include</Filter>
     </ClInclude>
@@ -37,6 +34,15 @@
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\hrengin\filesystem\IReadFile.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\filesystem\ICharacterStream.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="CBufferedStream.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\filesystem\IBufferedStream.h">
       <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>
@@ -51,6 +57,9 @@
       <Filter>source</Filter>
     </ClCompile>
     <ClCompile Include="hrenginfsutil.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="CBufferedStream.cpp">
       <Filter>source</Filter>
     </ClCompile>
   </ItemGroup>

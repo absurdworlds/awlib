@@ -13,16 +13,19 @@
   <ItemGroup>
     <ClInclude Include="..\..\include\hrengin\filesystem\hrenginpaths.h" />
     <ClInclude Include="..\..\include\hrengin\filesystem\hrenginfsutil.h" />
-    <ClInclude Include="..\..\include\hrengin\filesystem\IFileParser.h" />
+    <ClInclude Include="..\..\include\hrengin\filesystem\IBufferedStream.h" />
+    <ClInclude Include="..\..\include\hrengin\filesystem\ICharacterStream.h" />
     <ClInclude Include="..\..\include\hrengin\filesystem\IFileSystem.h" />
     <ClInclude Include="..\..\include\hrengin\filesystem\IHndfParser.h" />
     <ClInclude Include="..\..\include\hrengin\filesystem\IReadFile.h" />
     <ClInclude Include="..\..\include\hrengin\filesystem\IWriteFile.h" />
+    <ClInclude Include="CBufferedStream.h" />
     <ClInclude Include="CFileSystem.h" />
     <ClInclude Include="CHndfParser.h" />
     <ClInclude Include="CReadFile.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CBufferedStream.cpp" />
     <ClCompile Include="CFileSystem.cpp" />
     <ClCompile Include="CHndfParser.cpp" />
     <ClCompile Include="CReadFile.cpp" />

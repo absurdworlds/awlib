@@ -56,6 +56,8 @@ private:
 
 	Token token_;
 
+	void read();
+
 	bool readObjectContents(Token& token);
 	void readHead();
 	bool readDirective(Token& token);

@@ -4,6 +4,8 @@
 
 #include "CHndfParser.h"
 
+// TODO: add big endian handling
+
 namespace hrengin {
 namespace io {
 
