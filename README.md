@@ -1,27 +1,18 @@
 # README #
 
+## What is this?  ##
+
 This is the core module of hrengin game engine.
 
-### Current version ###
+Current version: hrengin A (1.0/1000)
 
-hrengin A: 001000 (1.0.0.0)
+## Dependencies ##
 
-### TODO ###
+* Bullet physics library
+* Irrlicht rendering engine
 
-* Summary of set up
-* Configuration
-* Dependencies
-* Database configuration
-* How to run tests
-* Deployment instructions
+## Compiling ##
 
-### Contribution guidelines ###
+Wish you luck!
 
-* Writing tests
-* Code review
-* Other guidelines
-
-### Who do I talk to? ###
-
-* Repo owner or admin
-* Other community or team contact
+### Configuration ###
