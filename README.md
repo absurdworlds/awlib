@@ -1,9 +1,9 @@
-hrengin
+hengine
 =======
 
 ## What is this?  ##
 
-This is the core of hrengin game engine. What does ‘hrengin’ mean? It was a funny accident.
+This is the core of hengine, which stands for ‘Hedede's engine’.
 
 Current version: hrengin A (1.0/1000)
 
