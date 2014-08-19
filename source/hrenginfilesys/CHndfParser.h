@@ -32,6 +32,10 @@ public:
 	virtual bool getBooleanValue(bool& val);
 
 	virtual void addError(std::string error);
+
+	template<typename T> 
+	void readValue(T& var);
+
 private:
 	enum TokenType {
 			TOKEN_EOF = 0,

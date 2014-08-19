@@ -32,7 +32,7 @@ bool CBufferedStream::getCurrent(char& c)
 
 bool CBufferedStream::getNext(char& c)
 {
-	char c = buffer_[pos_ % STREAM_BUFFER_SIZE];
+	c = buffer_[pos_ % STREAM_BUFFER_SIZE];
 
 	pos_++;
 	

@@ -2,7 +2,7 @@
 #ifndef __HR_T_VECTOR_2D_H__
 #define __HR_T_VECTOR_2D_H__
 
-#include <Base/Math/hrMath.h>
+#include <hrengin/common/hrenginmath.h>
 
 namespace hrengin
 {

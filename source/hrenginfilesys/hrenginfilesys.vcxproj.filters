@@ -45,6 +45,9 @@
     <ClInclude Include="..\..\include\hrengin\filesystem\IBufferedStream.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="HdfTypes.h">
+      <Filter>source</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CReadFile.cpp">
