@@ -1,4 +1,7 @@
+#include <hrengin/common/hrenginmath.h>
+
 #include "CPhysicsBody.h"
+
 
 namespace hrengin {
 namespace physics {
@@ -32,13 +35,13 @@ void CPhysicsBody::setRotation(Vector3d rot)
 	btTransform localTransform;
 	localTransform.setIdentity();
 	localTransform.setOrigin(CollObject->getWorldTransform().getOrigin());
-	localTransform.setRotation(btQuaternion(rot.Y,rot.X,rot.Z));
+	localTransform.setRotation(btQuaternion(rot.Y*math::DEGTORAD64,rot.X*math::DEGTORAD64,rot.Z*math::DEGTORAD64));
 	
 	//CollObject->setWorldTransform(localTransform);
 };
 
 
-void QuaternionToEuler(const btQuaternion &TQuat, btVector3 &TEuler) {
+void quaternionToEuler(const btQuaternion &TQuat, btVector3 &TEuler) {
 	btScalar W = TQuat.getW();
 	btScalar X = TQuat.getX();
 	btScalar Y = TQuat.getY();
@@ -66,7 +69,7 @@ Vector3d CPhysicsBody::getRotation()
 	btQuaternion rot = CollObject->getWorldTransform().getRotation();
 	
 	btVector3 pos;
-	QuaternionToEuler(rot,pos);
+	quaternionToEuler(rot,pos);
 
 	return Vector3d(pos.getX(),pos.getY(),pos.getZ());
 };

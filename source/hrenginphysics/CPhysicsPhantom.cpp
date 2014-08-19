@@ -31,7 +31,7 @@ void CPhysicsPhantom::setRotation(Vector3d rot)
 	btTransform localTransform;
 	localTransform.setIdentity();
 	localTransform.setOrigin(CollObject->getWorldTransform().getOrigin());
-	localTransform.setRotation(btQuaternion(rot.Y,rot.X,rot.Z));
+	localTransform.setRotation(btQuaternion(rot.Y*math::DEGTORAD64,rot.X*math::DEGTORAD64,rot.Z*math::DEGTORAD64));
 	
 	CollObject->setWorldTransform(localTransform);
 };

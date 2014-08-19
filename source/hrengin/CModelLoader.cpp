@@ -131,16 +131,17 @@ bool CModelLoader::hndfParseShapeNode(io::IHndfParser* hndf, IModel* model)
 				hndf->addError("unknown 'type' value");
 				return false;
 			}
-		} else if(objectName == "axis") {
+		} else if(objectName == "direction") {
 			std::string axis;
 			hndf->getStringValue(axis);
-			if(axis == "x") {
+			if(axis == "axisX" || axis == "axisx") {
 				primitive.axis = AXIS_X;
-			} else if(axis == "z") {
+			} else if(axis == "axisZ" || axis == "axisz") {
 				primitive.axis = AXIS_Z;
 			} else {
 				primitive.axis = AXIS_Y;
 			}
+			printf("%s", axis.c_str());
 		} else if(objectName == "radius" || objectName == "width") {
 			hndf->getFloatValue(primitive.dimensions[0]);
 		} else if(objectName == "height") {

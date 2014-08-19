@@ -1,10 +1,7 @@
 
 #include <hrengin/filesystem/IReadFile.h>
-#include <hrengin/filesystem/IBufferedStream.h>
 
 #include "CHndfParser.h"
-
-// TODO: add big endian handling
 
 namespace hrengin {
 namespace io {
@@ -32,9 +29,10 @@ IHndfParser* createHndfParser(IReadFile* file)
 }
 
 CHndfParser::CHndfParser(IReadFile* file)
-: level_(0)
+: file_(file), pos_(0), level_(0)
 {
-	stream_ = createBufferedStream(file);
+	buffer_ = new char[1024];
+	file_->read(buffer_, 1024);
 	
 	readHead();
 
@@ -42,7 +40,7 @@ CHndfParser::CHndfParser(IReadFile* file)
 
 CHndfParser::~CHndfParser()
 {
-	delete stream_;
+	delete[] buffer_;
 }
 
 void CHndfParser::skipSeparators()
@@ -280,6 +278,21 @@ void CHndfParser::addError(std::string error)
 }
 
 char CHndfParser::readChar()
+{
+	char c = buffer_[pos_ % 1024];
+
+	pos_++;
+	
+if((pos_) > file_->getSize()) {
+	return 0;
+}
+
+	if(pos_ % 1024 == 0) {
+		file_->read(buffer_, 1024);
+	}
+
+	return c;
+}
 
 char CHndfParser::peekChar()
 {
@@ -362,7 +375,7 @@ void CHndfParser::readToken(CHndfParser::Token& token) {
 		token.type = TOKEN_TYPE_SEPARATOR;
 	} else if(c == '\r' || c == '\n' || c == ';') {
 		token.type = TOKEN_SEPARATOR;
-	} else if((c > 'a' && c < 'z') || (c > 'A' && c < 'Z')) {
+	} else if((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')) {
 		token.type = TOKEN_LITERAL;
 		token.value = c;
 		readLiteral(token.value);
