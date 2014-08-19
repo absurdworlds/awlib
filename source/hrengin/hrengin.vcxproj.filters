@@ -1,0 +1,150 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Example">
+      <UniqueIdentifier>{7742512e-3925-4ce2-b610-64c7ff54e918}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source">
+      <UniqueIdentifier>{6b1b5ef3-275c-46e7-98c1-52a31d26463a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include">
+      <UniqueIdentifier>{752df3a9-e411-4fbd-9306-eb170f75499e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\AI">
+      <UniqueIdentifier>{d420c61f-8931-4b6d-ab20-c2630e4ef00b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\Common">
+      <UniqueIdentifier>{096c75b2-caa7-4b1e-8d06-eb9fba892254}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\Entities">
+      <UniqueIdentifier>{58e3f6b3-001c-4a5c-bcfc-b6117c95ee46}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\Core">
+      <UniqueIdentifier>{3724bf5e-2370-4d90-a176-dada8183439b}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\example\hrSampleProgramloop.h">
+      <Filter>Example</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\entities\IEventManager.h">
+      <Filter>include\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\entities\IThinking.h">
+      <Filter>include\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\entities\IBaseEntity.h">
+      <Filter>include\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\entities\IParentable.h">
+      <Filter>include\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\entities\IControllable.h">
+      <Filter>include\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\entities\IWorld.h">
+      <Filter>include\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\ai\IBaseNavigator.h">
+      <Filter>include\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\ai\IBasePathfinder.h">
+      <Filter>include\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\common\hrTypes.h">
+      <Filter>include\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\common\line3d.h">
+      <Filter>include\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\common\Vector2d.h">
+      <Filter>include\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\common\Vector3d.h">
+      <Filter>include\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\common\Math\hrMath.h">
+      <Filter>include\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\entities\IEntityManager.h">
+      <Filter>include\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\base\ILogger.h">
+      <Filter>include\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\common\hrenginapi.h">
+      <Filter>include\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="CEventManager.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="CLogger.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="CWorld.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\common\hrengintime.h">
+      <Filter>include\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\common\hrengintypes.h">
+      <Filter>include\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\common\hrenginmacro.h">
+      <Filter>include\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="CEntityManager.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\core\hrenginmodels.h">
+      <Filter>include\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\core\IModel.h">
+      <Filter>include\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="CModel.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="CModelLoader.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\core\IModelLoader.h">
+      <Filter>include\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\ai\CPath.h">
+      <Filter>include\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\common\hrenginconfig.h">
+      <Filter>include\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\common\hrenginversions.h">
+      <Filter>include\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="CSimplePathfinder.h">
+      <Filter>source</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="CEntityManager.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="CEventManager.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="CLogger.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="CWorld.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="CModelLoader.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="CSimplePathfinder.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\docs\todolist" />
+  </ItemGroup>
+</Project>

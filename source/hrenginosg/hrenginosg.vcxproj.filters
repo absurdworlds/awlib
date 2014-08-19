@@ -1,0 +1,87 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="source">
+      <UniqueIdentifier>{9fd2c142-2b74-406b-a3e7-0b8d1f5247af}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include">
+      <UniqueIdentifier>{d95413b0-2b44-43a4-b95a-3f45b8c0dcd1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\gui">
+      <UniqueIdentifier>{3f75f0c8-a0b7-4af4-a8bb-37350105a974}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\graphics">
+      <UniqueIdentifier>{cf0ebc7b-781e-4c1c-83bd-d1c659d33588}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="CCameraNode.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="CGuiManager.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="CInputManager.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="CLightNode.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="CVideoManager.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="CVisNode.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\gui\IGUIManager.h">
+      <Filter>include\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\gui\IInputManager.h">
+      <Filter>include\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\graphics\ICameraNode.h">
+      <Filter>include\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\graphics\ILightNode.h">
+      <Filter>include\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\graphics\ISceneNode.h">
+      <Filter>include\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\graphics\IVideoManager.h">
+      <Filter>include\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\graphics\IVisNode.h">
+      <Filter>include\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\gui\Keycodes.h">
+      <Filter>include\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\gui\InputEvent.h">
+      <Filter>include\gui</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="CCameraNode.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="CGuiManager.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="CInputManager.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="CLightNode.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="CVideoManager.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="CVisNode.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="hrengintime.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

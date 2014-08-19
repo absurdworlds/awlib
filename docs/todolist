@@ -1,0 +1,27 @@
+﻿
+o rewrite HNDF parser to fix greediness issue
+
+
+о добавить proper граунд модел, also raycasting
+о заменить ноуколайд на колфильтр у физиксфантома
+о написать stub-класс пути 
+
+
+o rewrite code to use logger instead of fprintf
+
+
+o rewrite camera
+	— make code consistent (position relative to target instead of a bunch of vectors)
+	— scale around origin
+	— alimit to a window + 5 px inside, ignore if further
+o write hrengin data file loader
+o start implementing file manager
+o prettify code
+
+
+o Main menu
+o Basic ai
+o Animation
+o Start write map landscape
+o Start navmesh navigation
+o Add non-flat world
