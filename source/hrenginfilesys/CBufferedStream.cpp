@@ -27,7 +27,8 @@ CBufferedStream::~CBufferedStream()
 
 bool CBufferedStream::getCurrent(char& c)
 {
-	return buffer_[pos_ % STREAM_BUFFER_SIZE];
+	c = buffer_[pos_ % STREAM_BUFFER_SIZE];
+	return true;
 }
 
 bool CBufferedStream::getNext(char& c)
@@ -44,7 +45,7 @@ bool CBufferedStream::getNext(char& c)
 		source_->read(buffer_, STREAM_BUFFER_SIZE);
 	}
 
-	return c;
+	return 1;
 }
 
 
