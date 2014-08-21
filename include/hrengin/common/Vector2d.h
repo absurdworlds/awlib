@@ -1,8 +1,8 @@
+#ifndef _hrengin_Vector2d_
+#define _hrengin_Vector2d_
 
-#ifndef __HR_T_VECTOR_2D_H__
-#define __HR_T_VECTOR_2D_H__
-
-#include <Base/Math/hrMath.h>
+#include <hrengin/common/hrengintypes.h>
+#include <hrengin/common/hrenginmath.h>
 
 namespace hrengin
 {
@@ -134,36 +134,48 @@ public: /* Functions */
 		return *this;
 	}
 
-	/* Comparison operators */
+	/* 
+	 * Comparison operators 
+	 * 
+	 * Thinking of deprecating those, since they are confusing,
+	 * and direct coparison of coordinates should be used instead,
+	 * depending on occasion.
+	 * 
+	 */
 
 	bool operator <= (const hrVector2d<T>&other) const
 	{
-		return SquareLength() < other.SquareLength() || math::equals(SquareLength(), other.SquareLength());
+		return (X + Y) < (other.X + other.Y) || this->equals(other);
 	}
 
 	bool operator >= (const hrVector2d<T>&other) const
 	{
-		return SquareLength() > other.SquareLength() || math::equals(SquareLength(), other.SquareLength());
+		return (X + Y) > (other.X + other.Y) || this->equals(other);
 	}
 
 	bool operator < (const hrVector2d<T>&other) const
 	{
-		return SquareLength() < other.SquareLength() && !math::equals(SquareLength(), other.SquareLength());
+		return (X + Y) < (other.X + other.Y) && !this->equals(other);
 	}
 
 	bool operator > (const hrVector2d<T>&other) const
 	{
-		return SquareLength() > other.SquareLength() && !math::equals(SquareLength(), other.SquareLength());
+		return (X + Y) > (other.X + other.Y) && !this->equals(other);
+	}
+
+	bool equals (const hrVector2d<T>& other) const 
+	{
+		return math::equals(X, other.X) && math::equals(Y, other.Y);
 	}
 
 	bool operator == (const hrVector2d<T>& other) const 
 	{ 
-		return math::equals(X, other.X) && math::equals(Y, other.Y); 
+		return this->equals(other); 
 	}
 
 	bool operator != (const hrVector2d<T>& other) const 
 	{ 
-		return !math::equals(X, other.X) && !math::equals(Y, other.Y); 
+		return !this->equals(other); 
 	}
 	
 	/* Functions */
@@ -206,9 +218,9 @@ typedef hrVector2d<i32>	Vectori2d;
 typedef hrVector2d<i32>	Vector2d;
 }
 
-#endif //__HR_T_VECTOR_2D_H__
+#endif // _hrengin_Vector2d_
 
-/*
+/* borrowed from Irrlicht:
 	// functions	
 
 
