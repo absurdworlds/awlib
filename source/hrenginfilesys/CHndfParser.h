@@ -8,6 +8,8 @@
 #include <hrengin/filesystem/IHndfParser.h>
 
 
+#include "HdfTypes.h"
+
 namespace hrengin {
 namespace io {
 
@@ -20,20 +22,20 @@ class IBufferedStream;
  *
  */
 enum HdfTokenType {
-	TOKEN_EOF = 0,
-	TOKEN_NAME,
-	TOKEN_NUMBER,
-	TOKEN_STRING,
-	TOKEN_WHITESPACE,
-	TOKEN_COMMENT,
-	TOKEN_OBJECT_BEGIN,
-	TOKEN_OBJECT_END,
-	TOKEN_SEPARATOR,
-	TOKEN_TYPE_SEPARATOR,
-	TOKEN_DIRECTIVE,
-	TOKEN_ARRAY_ELEMENT,
-	TOKEN_VALUE,
-	TOKEN_INVALID
+	HDF_TOKEN_EOF = 0,
+	HDF_TOKEN_NAME,
+	HDF_TOKEN_NUMBER,
+	HDF_TOKEN_STRING,
+	HDF_TOKEN_WHITESPACE,
+	HDF_TOKEN_COMMENT,
+	HDF_TOKEN_OBJECT_BEGIN,
+	HDF_TOKEN_OBJECT_END,
+	HDF_TOKEN_SEPARATOR,
+	HDF_TOKEN_TYPE_SEPARATOR,
+	HDF_TOKEN_DIRECTIVE,
+	HDF_TOKEN_ARRAY_ELEMENT,
+	HDF_TOKEN_VALUE,
+	HDF_TOKEN_INVALID
 };
 
 
@@ -53,14 +55,28 @@ public:
 	virtual void skipObject();
 	virtual HdfObjectType getObjectType();
 	virtual void getObjectName(std::string& name);
+	
+	template<typename T> 
+	void readValue(T& val);
 
-	virtual bool getStringValue(std::string& val);
-	virtual bool getFloatValue(float& val);
-	virtual bool getIntegerValue(int& val);
-	virtual bool getBooleanValue(bool& val);
+
 private:
-	virtual void readNodeName(std::string& name);
-	virtual void readValueName(std::string& name);
+	template<typename T> 
+	void convertValue(T& val);
+
+
+	void readToken(HdfToken& token);
+
+	void readString(std::string& val);
+	void readNumber(std::string& val);
+	void readName(std::string& name, char stop = 0);
+
+	void readValueName(std::string& name);
+	void readTypeName(std::string& name);
+
+	void fastForward();
+	void skipLine();
+	void skipWhitespace();
 
 	enum HdfParserState {
 		HDF_S_IDLE = 0,
@@ -80,20 +96,10 @@ private:
 	
 	std::vector<std::string> errors_;
 
-	virtual void error(HdfParserMessage type, std::string msg);
+	void error(HdfParserMessage type, std::string msg);
 
-	void fastForward();
-	void skipLine();
-	void skipWhitespace();
 
-	bool readObjectContents(Token& token);
-	void readHead();
-	bool readDirective(Token& token);
-	void readToken(Token& token);
-
-	void readLiteral(std::string& val);
-	void readString (std::string& val);
-	void readNumeric(std::string& val);
+	void readDirective();
 
 	//void skipWhitespace();
 
@@ -103,8 +109,9 @@ private:
 };
 
 
-}
-}
+
+} //namespace io
+} //namespace hrengin
 
 
 #endif//__HRENGIN_FILESYSTEM_CHndfParser_H__

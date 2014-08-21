@@ -20,17 +20,16 @@ enum HdfObjectType {
 class IHndfParser
 {
 public:
-	virtual bool readObject() = 0;
-	virtual void skipObject() = 0;
+	virtual bool read() = 0;
 	virtual HdfObjectType getObjectType() = 0;
-	virtual std::string getObjectName() = 0;
+	virtual void getObjectName(std::string& name) = 0;
+	
+	template<typename T> 
+	void readValue(T& val);
+	
+	virtual void skipObject() = 0;
 
-	virtual bool getStringValue(std::string& val) = 0;
-	virtual bool getFloatValue(float& val) = 0;
-	virtual bool getIntegerValue(int& val) = 0;
-	virtual bool getBooleanValue(bool& val) = 0;
-
-	virtual void addError(std::string error) = 0;
+	//virtual void addError(std::string error) = 0;
 };
 
 HRENGINFILESYSTEM_API IHndfParser* createHndfParser(IReadFile* file);
