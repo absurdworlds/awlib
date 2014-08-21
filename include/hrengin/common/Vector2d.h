@@ -133,50 +133,6 @@ public: /* Functions */
 		Y/=v; 
 		return *this;
 	}
-
-	/* 
-	 * Comparison operators 
-	 * 
-	 * Thinking of deprecating those, since they are confusing,
-	 * and direct coparison of coordinates should be used instead,
-	 * depending on occasion.
-	 * 
-	 */
-
-	bool operator <= (const hrVector2d<T>&other) const
-	{
-		return (X + Y) < (other.X + other.Y) || this->equals(other);
-	}
-
-	bool operator >= (const hrVector2d<T>&other) const
-	{
-		return (X + Y) > (other.X + other.Y) || this->equals(other);
-	}
-
-	bool operator < (const hrVector2d<T>&other) const
-	{
-		return (X + Y) < (other.X + other.Y) && !this->equals(other);
-	}
-
-	bool operator > (const hrVector2d<T>&other) const
-	{
-		return (X + Y) > (other.X + other.Y) && !this->equals(other);
-	}
-
-	bool equals (const hrVector2d<T>& other) const 
-	{
-		return math::equals(X, other.X) && math::equals(Y, other.Y);
-	}
-
-	bool operator == (const hrVector2d<T>& other) const 
-	{ 
-		return this->equals(other); 
-	}
-
-	bool operator != (const hrVector2d<T>& other) const 
-	{ 
-		return !this->equals(other); 
-	}
 	
 	/* Functions */
 
