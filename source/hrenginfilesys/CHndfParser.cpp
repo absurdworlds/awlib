@@ -1,23 +1,40 @@
 
 #include <hrengin/filesystem/IReadFile.h>
+#include <hrengin/filesystem/IBufferedStream.h>
 
 #include "CHndfParser.h"
+#include "HdfTypes.h"
 
 namespace hrengin {
 namespace io {
 
 
 
-inline bool cmp4(char c, char c1, char c2, char c3, char c4)
+inline bool in(char c, char c1, char c2, char c3, char c4)
 {
 	return c == c1  ||  c == c2  ||  c == c3  ||  c == c4;
 }
 
-inline bool cmp5(char c, char c1, char c2, char c3, char c4, char c5)
+inline bool in(char c, char c1, char c2, char c3, char c4, char c5)
 {
 	return c == c1  ||  c == c2  ||  c == c3  ||  c == c4  ||  c == c5;
 }
 
+inline bool isNameChar(char c) {
+	return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || c == '-' || c == '_';
+}
+
+inline bool isNameBeginChar(char c) {
+	return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z');
+}
+
+inline bool isWhitespace(char c) {
+	return (in(c, ' ', '\t', '\r', '\n'));
+}
+
+inline bool isInlineWhitespace(char c) {
+	return c == ' ' || c == '\t';
+}
 
 IHndfParser* createHndfParser(IReadFile* file)
 {
@@ -29,301 +46,315 @@ IHndfParser* createHndfParser(IReadFile* file)
 }
 
 CHndfParser::CHndfParser(IReadFile* file)
-: file_(file), pos_(0), level_(0)
+: level_(0)
 {
-	buffer_ = new char[1024];
-	file_->read(buffer_, 1024);
+	stream_ = createBufferedStream(file);
 	
 	readHead();
-
 }
 
 CHndfParser::~CHndfParser()
 {
-	delete[] buffer_;
+	delete stream_;
 }
 
-void CHndfParser::skipSeparators()
+template<typename T> 
+void CHndfParser::readValue(T& var)
 {
-	do {
-		readToken(token_);
-	} while(token_.type == TOKEN_SEPARATOR);
-}
+	HdfToken token;
 
-bool CHndfParser::readObject() 
-{
-	bool success = readObjectContents(token_);
+	bool hasType = parseType(token);
 
-	skipSeparators();
+	if(hasType) {
+		HdfType type = hdfTokenToType(token);
 
-	return success;
-}
-
-bool CHndfParser::readObjectContents(Token& token) 
-{
-	if(token.type == TOKEN_OBJECT_BEGIN) {
-		objectType_ = HNDF_NODE;
-		level_ ++;
-
-		readToken(token);
-
-		if(token.type == TOKEN_LITERAL) {
-			objectName_ = token.value;
-			return true;
-		} else if(token.type == TOKEN_ARRAY_ELEMENT || token.type == TOKEN_SEPARATOR) {
-			objectName_ = "*";
-			return true;
-		} else {
-			addError("expected node name");
-			return false;
-		}
-	} else if (level_ == 0) {
-		addError("expected node");
-		return false;
-	}
-
-	if(token.type == TOKEN_OBJECT_END) {
-		if (level_ == 0) {
-			addError("extra closing bracket");
-		} else {
-			level_--;
-		}
-		return false;
-	}
-	
-	if(token.type == TOKEN_LITERAL) {
-		objectName_ = token.value;
-		objectType_ = HNDF_VARIABLE;
-
-		readToken(token);
-
-		if(token.type != TOKEN_VALUE) {
-			addError("expected value");
-			return false;
-		}
-
-		return true;
-	}
-
-	return false;
-}
-
-void CHndfParser::skipObject() 
-{
-	if(objectType_ == HNDF_VARIABLE) {
-		do {
-			readToken(token_);
-		} while(token_.type != TOKEN_SEPARATOR);
 	} else {
-		/*if(token.type != TOKEN_OBJECT_BEGIN) {
-			return;
-		}*/
-	
-		do {
-			readToken(token_);
-		} while(token_.type != TOKEN_OBJECT_END);
-	
-		level_--;
+		HdfType = hdfConvertImpicitType(token);
 	}
 	
-	skipSeparators();
+	if(isValidHdfType<T>(type) == false) {
+		error(HDF_EL_ERROR, "type mismatch " + token);
+		skipValue(type);
+
+		return;
+	}
+	
+	parseValue<T>(T& var);
 }
 
-bool CHndfParser::getStringValue(std::string& val)
-{	
-	if(token_.type == TOKEN_STRING) {
-		val = token_.value;
-		return true;
-	} 
-	
-	if (token_.type != TOKEN_LITERAL) {
-		addError("expected value or type");
-		return false;
-	}
-	
-	stringValue_ = token_.value;
-	readToken(token_);
-
-	if(token_.type == TOKEN_SEPARATOR) {
-		val = stringValue_;
-		skipSeparators();
-		return true;
-	} else if(token_.type == TOKEN_TYPE_SEPARATOR && stringValue_ != "string") {
-		addError("expected string value");
-		return false;
-	} else if(token_.type == TOKEN_LITERAL) {
-		do {
-			stringValue_ += " " + token_.value;
-			readToken(token_);
-		} while (token_.type != TOKEN_SEPARATOR);
-		val = stringValue_;
-		skipSeparators();
-		return true;
-	}
-			
-	readToken(token_);
-
-	if(token_.type == TOKEN_LITERAL) {
-		stringValue_ = "";
-		do {
-			stringValue_ += " " + token_.value;
-			readToken(token_);
-		} while (token_.type != TOKEN_SEPARATOR);
-		val = stringValue_;
-		skipSeparators();
-		return true;
-	} else if(token_.type == TOKEN_STRING) {
-		val = token_.value;
-		skipSeparators();
-		return true;
-	} else if(token_.type == TOKEN_NUMERIC) {
-		val = token_.value;
-		skipSeparators();
-		return true;
-	}
-	
-	addError("expected string value");
-	return false;
-}
-
-bool CHndfParser::getFloatValue(float& val)
+template<typename T> 
+void CHndfParser::parseValue(T& val)
 {
-	if (token_.type != TOKEN_LITERAL) {
-		addError("expected type");
-		return false;
+	// should never get this error
+	error(HDF_EL_ERROR, "unknown type");
+}
 
-	}
-
-	if(token_.value != "float") {
-		addError("expeted float");
-		return false;
-	}
-
-	readToken(token_);
+template<> 
+void CHndfParser::parseValue(float& val)
+{
+	HdfToken token;
 	
-	if (token_.type != TOKEN_TYPE_SEPARATOR) {
-		addError("expected ':'");
-		return false;
-	}
+	readToken(token);
 	
-	readToken(token_);
-
-	if (token_.type != TOKEN_NUMERIC) {
-		addError("expected numeric value");
-		return false;
-	}
-
 	val = strtof(token_.value.c_str(), 0);
-
-	skipSeparators();
-
-	return true;
 }
 
-bool CHndfParser::getIntegerValue(int& val)
+template<> 
+void CHndfParser::parseValue(double& val)
 {
-	if (token_.type != TOKEN_LITERAL) {
-		addError("expected type");
-		return false;
-
-	}
-
-	if(token_.value != "int") {
-		addError("expeted integer");
-		return false;
-	}
-
-	readToken(token_);
+	HdfToken token;
 	
-	if (token_.type != TOKEN_TYPE_SEPARATOR) {
-		addError("expected ':'");
-		return false;
-	}
+	readToken(token);
 	
-	readToken(token_);
-
-	if (token_.type != TOKEN_NUMERIC) {
-		addError("expected numeric value");
-		return false;
-	}
-
-	val = strtol(token_.value.c_str(), 0, 0);
-
-	skipSeparators();
-
-	return true;
+	val = strtod(token_.value.c_str(), 0);
 }
+
+template<> 
+void CHndfParser::parseValue(Vector3d& val)
+{
+	HdfToken token;
+	
+	// would look nicer:
+	// repeat 3 {
+	readToken(token);
+	
+	val.x = strtod(token_.value.c_str(), 0);
+	//}
+	
+	readToken(token);
+	
+	val.y = strtod(token_.value.c_str(), 0);
+	
+	readToken(token);
+	
+	val.z = strtod(token_.value.c_str(), 0);
+}
+
+template<> 
+void CHndfParser::parseValue(std::string& val)
+{
+	HdfToken token;
+	
+	readToken(token);
+	
+	val = token.value;
+}
+
+template<> 
+void CHndfParser::parseValue(u32& val)
+{
+	HdfToken token;
+	
+	readToken(token);
+	
+	val = strtoul(token_.value.c_str(), 0);
+}
+
+template<> 
+void CHndfParser::parseValue(i32& val)
+{
+	HdfToken token;
+	
+	readToken(token);
+	
+	val = strtoul(token_.value.c_str(), 0);
+}
+
+template<> 
+void CHndfParser::parseValue(bool& val)
+{
+	HdfToken token;
+	
+	readToken(token);
+	
+	val = false;
+	 
+	if(token.value == "true" || token.value == "1") {
+		val = true;
+	} else if(token.value != "false" && token.value != "0") {
+		error(HDF_EL_WARNING, "invalid boolean value");
+	}
+}
+
+void CHndfParser::skipLine()
+{
+	char c;
+	
+	stream_->getCurrent(c);
+	
+	do {
+		stream_->getNext(c);
+	} while (c != '\n');
+}
+
+void CHndfParser::skipWhitespace()
+{
+	char c;
+
+	stream_->getCurrent(c);
+	
+	while(isWhitespace(c)) {
+		stream_->getNext(c);
+	}
+}
+
+void CHndfParser::fastForward() {
+	char c;
+
+	stream_->getCurrent(c);
+
+	bool end = false;
+
+	do {
+		if(isWhitespace(c)) {
+			skipWhitespace();
+		} else if(c == '/') {
+			stream_->getNext(c);
+
+			if(c == '/') {
+				//token.type = TOKEN_COMMENT;
+				skipLine();
+			} else {
+				error(HDF_ERR_WARNING,"unexpected token: /");
+			}
+		} else {
+			end = true;
+		}
+		
+		stream_->getNext(c);
+	} while (end == false);
+}
+
+
+void CHndfParser::readToken(HdfToken& token)
+{
+	fastForward();
+
+	char c;
+
+	stream_->getCurrent(c);
+
+	if(isNameBeginChar(c)) {
+	
+	} else if(c == '-' || (c > '0' && c < '9')) {
+		
+	} else if(c == '"') {
+	
+	} else if() {
+
+	}
+}
+
 
 std::string CHndfParser::getObjectName()
 {
 	return objectName_;
 }
 
-HndfObjectType CHndfParser::getObjectType()
+HdfObjectType CHndfParser::getObjectType()
 {
-	return objectType_;
-}
-
-
-bool CHndfParser::getBooleanValue(bool& val)
-{
-	return false;
-}
-
-
-void CHndfParser::addError(std::string error)
-{
-	errors_.push_back(error);
-	printf("HNDF: %s\n",error.c_str());
-}
-
-char CHndfParser::readChar()
-{
-	char c = buffer_[pos_ % 1024];
-
-	pos_++;
-	
-if((pos_) > file_->getSize()) {
-	return 0;
-}
-
-	if(pos_ % 1024 == 0) {
-		file_->read(buffer_, 1024);
+	if(state_ == HDF_S_PANIC) {
+		return HDF_OBJ_NULL;
 	}
 
-	return c;
-}
+	char c;
 
-char CHndfParser::peekChar()
-{
-	if((pos_ + 1) % 1024 == 0) {
-		char tmp;
-		file_->read(&tmp, 1);
-		return tmp;
-	}
+	stream_->getCurrent(c);
 
-	if((pos_ + 1) > file_->getSize()) {
-		return 0;
-	}
-	
-	//return *(buffer_ + ((pos_ + 1) % 1024));
-	return buffer_[(pos_ + 1) % 1024];
-}
-
-void CHndfParser::readHead()
-{
-	readToken(token_);
-	
-	while(token_.type != TOKEN_OBJECT_BEGIN) {
-		if(token_.type == TOKEN_EOF) {
-			addError("unexpected end of stream");
-			return;
+	if(state_ != HDF_S_OBJECT) {
+		error(HDF_ERR_ERROR, "there is no object");
+		return HDF_OBJ_NULL;
+	} else {
+		if(c == '[') {
+			// step forward - getObjectName expects a nameChar to
+			// be the first char
+			stream_->getNext(c); 
+			state_ = HDF_S_NODE_BEGIN;
+			return HDF_OBJ_NODE;
+		} else if (c == '!') {
+			if(depth_ > 0) {
+				error(HDF_ERR_ERROR, "unexpected token: '!'");
+				return HDF_OBJ_NULL;
+			}
+			state_ = HDF_S_CMD_BEGIN;
+			return HDF_OBJ_CMD;
+		} else if (isNameBeginChar(c)) {
+			if(depth_ == 0) {
+				error(HDF_ERR_ERROR, "unexpected name token");
+				return HDF_OBJ_NULL;
+			}
+			state_ = HDF_S_VALUE_BEGIN;
+			return HDF_OBJ_VAL;
+		} else {
+			error(HDF_ERR_ERROR, "invalid character: " + c);
+			return HDF_OBJ_NULL;
 		}
-		if(token_.type == TOKEN_DIRECTIVE) {
-			readDirective(token_);
-		}
-		readToken(token_);
 	}
+}
+
+
+void CHndfParser::getObjectName(std::string& name)
+{
+	if(state_ == HDF_S_PANIC) {
+		return;
+	}
+
+	if(state_ == HDF_S_NODE_BEGIN) {
+		state_ = HDF_S_IDLE;
+		readNodeName(name);
+	} else if(state_ == HDF_S_VALUE_BEGIN) {
+		state_ = HDF_S_VALUE_DATA;
+		readValueName(name);
+	}
+
+	error(HDF_ERR_ERROR, "must be called after getObjectType()");
+}
+
+inline CHndfParser::readNodeName(std::string& name)
+{
+	char c;
+
+	stream_->getCurrent(c);
+
+	while(!isWhitespace(c)) {
+		if(isNameChar(c)) {
+			name += c;
+		} else {
+			error(HDF_ERR_WARNING, "invalid name char");
+		}
+		stream_->getNext(c);
+	}
+}
+
+inline CHndfParser::readValueName(std::string& name)
+{
+	char c;
+
+	stream_->getCurrent(c);
+
+	// c == '=': make sure we don't 'eat' the '=' as it was in previous version
+	while(!(isInlineWhitespace(c) || c == '=')) {
+		if(isNameChar(c)) {
+			name += c;
+		} else {
+			error(HDF_ERR_WARNING, "invalid name char");
+		}
+		stream_->getNext(c);
+	}
+}
+
+
+
+void CHndfParser::skipObject() 
+{
+}
+
+
+
+void CHndfParser::error(HdfParserMessage type, std::string msg)
+{
+	errors_.push_back(msg);
+	printf("[HDF:%d]: %s\n",0,msg.c_str());
 }
 
 bool CHndfParser::readDirective(Token& token) {
@@ -356,60 +387,8 @@ bool CHndfParser::readDirective(Token& token) {
 	return true;
 }
 
-void CHndfParser::readToken(CHndfParser::Token& token) {
-	char c;
 
-	do {
-		c = readChar();
-	} while (c == ' ' || c == '\t');
-	
-	if(c == '[') {
-		token.type = TOKEN_OBJECT_BEGIN;
-	} else if(c == ']') {
-		token.type = TOKEN_OBJECT_END;
-	} else if(c == '!') {
-		token.type = TOKEN_DIRECTIVE;
-	} else if(c == '*') {
-		token.type = TOKEN_ARRAY_ELEMENT;
-	} else if(c == ':') {
-		token.type = TOKEN_TYPE_SEPARATOR;
-	} else if(c == '\r' || c == '\n' || c == ';') {
-		token.type = TOKEN_SEPARATOR;
-	} else if((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')) {
-		token.type = TOKEN_LITERAL;
-		token.value = c;
-		readLiteral(token.value);
-	} else if(c == '"') {
-		token.type = TOKEN_STRING;
-		token.value.clear();
-		readString(token.value);
-	} else if(c == '=') {
-		token.type = TOKEN_VALUE;
-	} else if(c == '-' || (c > '0' && c < '9')) {
-		token.type = TOKEN_NUMERIC;
-		token.value = c;
-		readNumeric(token.value);
-	} else if(c == '/') {
-		if(peekChar() == '/') {
-			token.type = TOKEN_COMMENT;
-			skipComment();
-		}
-	} else if (c == 0) {
-		token.type = TOKEN_EOF;
-	} else {
-		token.type = TOKEN_INVALID;
-		//success = false;
-	}
-}
 
-void CHndfParser::readLiteral(std::string& val) {
-	char c = readChar();
-	
-	while (c == '_' || (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')) {
-		val += c;
-		c = readChar();
-	}
-}
 
 void CHndfParser::readString(std::string& val) {
 	char c = readChar();
@@ -439,14 +418,6 @@ void CHndfParser::readNumeric(std::string& val)
 	}
 }
 
-void CHndfParser::skipComment()
-{
-	char c;
-	
-	do {
-		c = readChar();
-	} while (c != '\n' && c != ' ' && c != ';');
-}
 
 }
 }

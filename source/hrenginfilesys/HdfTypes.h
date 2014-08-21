@@ -16,15 +16,13 @@ enum HdfType {
 	HDF_VECTOR3
 };
 
-struct HdfToken {
-
-};
-
 template<typename T>
 bool isValidHdfType(HdfType type)
 {
 	return false;
 }
+
+#if 0
 
 template<typename T>
 bool isValidHdfType(HdfType type, typename std::enable_if<std::is_integral<T>::value,T>::type* t = 0) {
@@ -36,6 +34,28 @@ bool isValidHdfType(HdfType type, typename std::enable_if<std::is_floating_point
 	return HDF_FLOAT == type;
 }
 
+#else
+
+template<>
+bool isValidHdfType<i32>(HdfType type) {
+	return HDF_INTEGER == type;
+}
+
+template<>
+bool isValidHdfType<u32>(HdfType type) {
+	return HDF_INTEGER == type;
+}
+
+template<>
+bool isValidHdfType<f32>(HdfType type) {
+	return HDF_FLOAT == type;
+}
+
+template<>
+bool isValidHdfType<f64>(HdfType type) {
+	return HDF_FLOAT == type;
+}
+#endif
 
 template<>
 bool isValidHdfType<bool>(HdfType type) {
