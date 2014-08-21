@@ -3,7 +3,8 @@ hrengine
 
 ## What is this?  ##
 
-This is the core of hrengine, a genric purpose game engine.
+This is the core of hrengine, a gneric purpose game engine.
+hrengine is only a library, and can not be used alone.
 
 ### Status ###
 
