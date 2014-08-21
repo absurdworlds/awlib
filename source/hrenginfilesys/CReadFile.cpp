@@ -23,7 +23,7 @@ CReadFile::CReadFile(const std::string& path)
 {
 	TRACE("Opening file:", path)
 
-	open();
+	this->open();
 }
 
 
@@ -45,11 +45,14 @@ void CReadFile::open()
 		return;
 	}
 
+	//file_ = open(path_.c_str(), O_RDONLY);
 	file_ = fopen(path_.c_str(), "rb");
 
 	if (file_) {
+		//lseek(file_, 0, SEEK_END);
 		fseek(file_, 0, SEEK_END);
 		size_ = tell();
+		//seek(file_, 0, SEEK_SET);
 		fseek(file_, 0, SEEK_SET);
 	} else {
 		TRACE("File not found:", path_)
@@ -62,6 +65,7 @@ i32 CReadFile::read(void* buffer, u32 size)
 		return -1;
 	}
 
+	//return (i32)read(file_, buffer, size);
 	return (i32)fread(buffer, 1, size, file_);
 }
 
