@@ -164,8 +164,17 @@ bool CHndfParser::read() {
 
 	fastForward();
 
+	stream_->getCurrent(c);
+
 	if(depth_ == 0) {
-	
+		while(c == '!') {
+			processCommand();
+			fastForward();
+			stream_->getCurrent(c);
+		}
+		if(c == '[') {
+			state_ = HDF_S_OBJECT;
+		}
 	} else {
 		if(isNameBeginChar(c) || c == '[') {
 			state_ = HDF_S_OBJECT;
@@ -203,12 +212,12 @@ HdfObjectType CHndfParser::getObjectType()
 			depth_ ++;
 			return HDF_OBJ_NODE;
 		} else if (c == '!') {
-			if(depth_ > 0) {
-				error(HDF_ERR_ERROR, "unexpected token: '!'");
-				return HDF_OBJ_NULL;
-			}
-			state_ = HDF_S_CMD_BEGIN;
-			return HDF_OBJ_CMD;
+			//if(depth_ > 0) {
+			error(HDF_ERR_ERROR, "unexpected token: '!'");
+			return HDF_OBJ_NULL;
+			//}
+			//state_ = HDF_S_CMD_BEGIN;
+			//return HDF_OBJ_CMD;
 		} else if (isNameBeginChar(c)) {
 			if(depth_ == 0) {
 				error(HDF_ERR_ERROR, "unexpected name token");
@@ -572,7 +581,7 @@ void CHndfParser::convertValue(HdfToken& token, bool& val)
 
 
 // todo: rewrite
-void CHndfParser::readDirective() {
+void CHndfParser::processCommand() {
 	HdfToken token;
 	
 	char c;
@@ -581,6 +590,8 @@ void CHndfParser::readDirective() {
 
 	if (c == '!') {
 		stream_->getNext(c);
+	} else {
+		error(HDF_ERR_ERROR, "No command to process");
 	}
 
 	readToken(token);

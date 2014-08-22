@@ -110,7 +110,7 @@ private:
 
 
 
-	void readDirective();
+	void processCommand();
 
 	//void skipWhitespace();
 
