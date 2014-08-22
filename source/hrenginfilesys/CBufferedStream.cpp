@@ -15,7 +15,7 @@ IBufferedStream* createBufferedStream(IReadFile* source)
 }
 
 CBufferedStream::CBufferedStream(IReadFile* source)
-: source_(source), buffer_(new char(STREAM_BUFFER_SIZE))
+: pos_(0), source_(source), buffer_(new char[STREAM_BUFFER_SIZE])
 {
 	source_->read(buffer_, STREAM_BUFFER_SIZE);
 }
@@ -25,25 +25,31 @@ CBufferedStream::~CBufferedStream()
 	delete[] buffer_;
 }
 
-bool CBufferedStream::getCurrent(char& c)
+bool CBufferedStream::getCurrent(u8& c)
 {
+	if(pos_+1 > source_->getSize()) {
+		c = 0;
+		return 0;
+	}
+
 	c = buffer_[pos_ % STREAM_BUFFER_SIZE];
 	return true;
 }
 
-bool CBufferedStream::getNext(char& c)
+bool CBufferedStream::getNext(u8& c)
 {
-	c = buffer_[pos_ % STREAM_BUFFER_SIZE];
-
 	pos_++;
 	
 	if(pos_ > source_->getSize()) {
+		c = 0;
 		return 0;
 	}
 
 	if(pos_ % STREAM_BUFFER_SIZE == 0) {
 		source_->read(buffer_, STREAM_BUFFER_SIZE);
 	}
+
+	c = buffer_[pos_ % STREAM_BUFFER_SIZE];
 
 	return 1;
 }

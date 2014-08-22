@@ -11,29 +11,29 @@
 namespace hrengin {
 namespace io {
 
-inline bool in(char c, char c1, char c2, char c3, char c4)
+inline bool in(u8 c, u8 c1, u8 c2, u8 c3, u8 c4)
 {
 	return c == c1  ||  c == c2  ||  c == c3  ||  c == c4;
 }
 
-inline bool in(char c, char c1, char c2, char c3, char c4, char c5)
+inline bool in(u8 c, u8 c1, u8 c2, u8 c3, u8 c4, u8 c5)
 {
 	return c == c1  ||  c == c2  ||  c == c3  ||  c == c4  ||  c == c5;
 }
 
-inline bool isNameChar(char c) {
-	return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || c == '-' || c == '_';
+inline bool isNameChar(u8 c) {
+	return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || c == '-' || c == '_' || (c >= '0' && c <= '9');
 }
 
-inline bool isNameBeginChar(char c) {
+inline bool isNameBeginChar(u8 c) {
 	return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z');
 }
 
-inline bool isWhitespace(char c) {
+inline bool isWhitespace(u8 c) {
 	return (in(c, ' ', '\t', '\r', '\n'));
 }
 
-inline bool isInlineWhitespace(char c) {
+inline bool isInlineWhitespace(u8 c) {
 	return c == ' ' || c == '\t';
 }
 
@@ -121,7 +121,7 @@ HdfType hdfTokenToType(const HdfToken& token)
 
 HdfType hdfConvertImpicitType(const HdfToken& token) 
 {
-	char c = token.value.c_str()[0];
+	u8 c = token.value.c_str()[0];
 	if(isNameBeginChar(c) || c == '"') {
 		return HDF_STRING;
 	} else if(c == '-' || (c > '0' && c < '9')) {
@@ -142,7 +142,7 @@ IHndfParser* createHndfParser(IReadFile* file)
 }
 
 CHndfParser::CHndfParser(IReadFile* file)
-: depth_(0)
+: depth_(0), state_(HDF_S_IDLE)
 {
 	stream_ = createBufferedStream(file);
 	
@@ -154,7 +154,7 @@ CHndfParser::~CHndfParser()
 }
 
 bool CHndfParser::read() {
-	char c;
+	u8 c;
 
 	stream_->getCurrent(c);
 
@@ -176,14 +176,8 @@ bool CHndfParser::read() {
 			state_ = HDF_S_OBJECT;
 		}
 	} else {
-		if(isNameBeginChar(c) || c == '[') {
+		if(isNameBeginChar(c) || c == '[' || c == ']') {
 			state_ = HDF_S_OBJECT;
-		} else if(c == ']') {
-			if(state_ != HDF_S_IDLE) {
-				error(HDF_ERR_ERROR, "unexpected node-end");
-			} else {
-				depth_--;
-			}
 		}
 	}
 
@@ -196,7 +190,7 @@ HdfObjectType CHndfParser::getObjectType()
 		return HDF_OBJ_NULL;
 	}
 
-	char c;
+	u8 c;
 
 	stream_->getCurrent(c);
 
@@ -211,13 +205,6 @@ HdfObjectType CHndfParser::getObjectType()
 			state_ = HDF_S_NODE_BEGIN;
 			depth_ ++;
 			return HDF_OBJ_NODE;
-		} else if (c == '!') {
-			//if(depth_ > 0) {
-			error(HDF_ERR_ERROR, "unexpected token: '!'");
-			return HDF_OBJ_NULL;
-			//}
-			//state_ = HDF_S_CMD_BEGIN;
-			//return HDF_OBJ_CMD;
 		} else if (isNameBeginChar(c)) {
 			if(depth_ == 0) {
 				error(HDF_ERR_ERROR, "unexpected name token");
@@ -225,6 +212,24 @@ HdfObjectType CHndfParser::getObjectType()
 			}
 			state_ = HDF_S_VALUE_BEGIN;
 			return HDF_OBJ_VAL;
+		} else if(c == ']') {
+			stream_->getNext(c); 
+			depth_--;
+			state_ = HDF_S_IDLE;
+			return HDF_OBJ_NODE_END;
+
+			/*if(state_ != HDF_S_IDLE) {
+				error(HDF_ERR_ERROR, "unexpected node-end");
+			} else {
+				depth_--;
+			}*/
+		} else if (c == '!') {
+			//if(depth_ > 0) {
+			error(HDF_ERR_ERROR, "unexpected token: '!'");
+			return HDF_OBJ_NULL;
+			//}
+			//state_ = HDF_S_CMD_BEGIN;
+			//return HDF_OBJ_CMD;
 		} else {
 			error(HDF_ERR_ERROR, "invalid character: " + c);
 			return HDF_OBJ_NULL;
@@ -244,9 +249,9 @@ void CHndfParser::getObjectName(std::string& name)
 	} else if(state_ == HDF_S_VALUE_BEGIN) {
 		readValueName(name);
 		state_ = HDF_S_VALUE_DATA;
+	} else {
+		error(HDF_ERR_ERROR, "must be called after getObjectType()");
 	}
-
-	error(HDF_ERR_ERROR, "must be called after getObjectType()");
 }
 
 void CHndfParser::readFloat(float& val)
@@ -303,7 +308,7 @@ void CHndfParser::skipValue()
 
 void CHndfParser::skipNode() 
 {
-	char c;
+	u8 c;
 
 	stream_->getCurrent(c);
 
@@ -317,12 +322,16 @@ void CHndfParser::skipNode()
 void CHndfParser::error(HdfParserMessage type, std::string msg)
 {
 	errors_.push_back(msg);
-	printf("[HDF:%d]: %s\n",0,msg.c_str());
+	printf("[HDF:%u]: %s\n",stream_->getPos(),msg.c_str());
+
+	if(type == HDF_ERR_ERROR) {
+		state_ = HDF_S_PANIC;
+	}
 }
 
 void CHndfParser::skipLine()
 {
-	char c;
+	u8 c;
 	
 	stream_->getCurrent(c);
 	
@@ -333,7 +342,7 @@ void CHndfParser::skipLine()
 
 void CHndfParser::skipWhitespace()
 {
-	char c;
+	u8 c;
 
 	stream_->getCurrent(c);
 	
@@ -343,7 +352,7 @@ void CHndfParser::skipWhitespace()
 }
 void CHndfParser::skipInlineWhitespace()
 {
-	char c;
+	u8 c;
 
 	stream_->getCurrent(c);
 	
@@ -353,13 +362,13 @@ void CHndfParser::skipInlineWhitespace()
 }
 
 void CHndfParser::fastForward() {
-	char c;
+	u8 c;
 
 	stream_->getCurrent(c);
 
-	bool end = false;
+	bool needsFastForward = isWhitespace(c) || c == '/';
 
-	do {
+	while (needsFastForward) {
 		if(isWhitespace(c)) {
 			skipWhitespace();
 		} else if(c == '/') {
@@ -371,42 +380,47 @@ void CHndfParser::fastForward() {
 			} else {
 				error(HDF_ERR_WARNING,"unexpected token: /");
 			}
-		} else {
-			end = true;
-		}
+		}		
 		
-		stream_->getNext(c);
-	} while (end == false);
+		stream_->getCurrent(c);
+		needsFastForward = isWhitespace(c) || c == '/';
+		//stream_->getNext(c);
+	}
 }
 
 bool CHndfParser::parseType(HdfToken& token) {
 	skipInlineWhitespace();
 
-	char c;
+	u8 c;
 
 	stream_->getCurrent(c);
 
-	if(c != '=') {
-		error(HDF_ERR_ERROR, "illegal token");
-	} 
-	
+	if(c == '=') {
+		stream_->getNext(c);
+	} else {
+		error(HDF_ERR_ERROR, "illegal token, expected '='");
+	}
+
 	skipInlineWhitespace();
 	
 	stream_->getCurrent(c);
 
 	if(isNameBeginChar(c)) {
 		token.type = HDF_TOKEN_NAME;
-		readName(token.value);
+		readName(token.value, ':');
 	} else {
-		error(HDF_ERR_ERROR, "illegal token");	
+		error(HDF_ERR_ERROR, "illegal token, expected typename");	
 	}
-
+	
 	skipInlineWhitespace();
+	
+	stream_->getCurrent(c);
 
 	if(c == ':') {
 		stream_->getNext(c);
 		return true;
 	} else {
+		//stream_->getNext(c);
 		return false;
 	}
 }
@@ -415,14 +429,14 @@ void CHndfParser::readToken(HdfToken& token)
 {
 	fastForward();
 
-	char c;
+	u8 c;
 
 	stream_->getCurrent(c);
 
 	if(isNameBeginChar(c)) {
 		token.type = HDF_TOKEN_NAME;
 		readName(token.value);	
-	} else if(c == '-' || (c > '0' && c < '9')) {
+	} else if(c == '-' || (c >= '0' && c <= '9')) {
 		token.type = HDF_TOKEN_NUMBER;
 		readNumber(token.value);
 	} else if(c == '"') {
@@ -434,9 +448,17 @@ void CHndfParser::readToken(HdfToken& token)
 }
 
 void CHndfParser::readStringToken(std::string& val) {
-	char c;
+	val = "";
+	u8 c;
 
 	stream_->getCurrent(c);
+	
+	//if(c == '"') {
+	stream_->getNext(c);
+	/*} else {
+		// should not get this error
+		error(HDF_ERR_ERROR, "illegal string token");
+	}*/
 	
 	while (c != '"') {
 		if ( c == '\\' ) {
@@ -445,11 +467,14 @@ void CHndfParser::readStringToken(std::string& val) {
 		val += c;
 		stream_->getNext(c);
 	}
+	
+	stream_->getNext(c);
 }
 
 void CHndfParser::readNumber(std::string& val)
 {
-	char c;
+	val = "";
+	u8 c;
 
 	stream_->getCurrent(c);
 
@@ -464,7 +489,8 @@ void CHndfParser::readNumber(std::string& val)
 
 void CHndfParser::readName(std::string& name, char stop)
 {
-	char c;
+	name = "";
+	u8 c;
 	
 	stream_->getCurrent(c);
 
@@ -505,13 +531,14 @@ void CHndfParser::readValue(T& var)
 	}
 	
 	if(isValidHdfType<T>(type) == false) {
-		error(HDF_ERR_ERROR, "type mismatch " + token.value);
+		error(HDF_ERR_ERROR, "type mismatch: " + token.value);
 		//skipValue(type);
 
 		return;
 	}
 	
 	convertValue<T>(token, var);
+	state_ = HDF_S_IDLE;
 }
 
 // TODO: make helper class to reduce almost duplicate functions
@@ -584,7 +611,7 @@ void CHndfParser::convertValue(HdfToken& token, bool& val)
 void CHndfParser::processCommand() {
 	HdfToken token;
 	
-	char c;
+	u8 c;
 
 	stream_->getCurrent(c);
 
@@ -604,7 +631,22 @@ void CHndfParser::processCommand() {
 		} else if(token.value == "1.1") {
 			error(HDF_ERR_ERROR, "Version 1.1 is outdated.");
 			return;
-		} else if(token.value != "1.1.1") {
+		} else {
+			error(HDF_ERR_ERROR, "your version is bullshit!");
+			return;
+		}
+	} else if (token.value == "hdf_version") {
+		readToken(token);
+		if(token.type != HDF_TOKEN_STRING) {
+			error(HDF_ERR_ERROR,"expected string");
+			return ;
+		} else if(token.value == "1.1.1") {
+			error(HDF_ERR_NOTICE, "HDF version: 1.1.1");
+			return;
+		} else if(token.value == "1.1") {
+			error(HDF_ERR_ERROR, "Version 1.1 is outdated.");
+			return;
+		} else {
 			error(HDF_ERR_ERROR, "your version is bullshit!");
 			return;
 		}

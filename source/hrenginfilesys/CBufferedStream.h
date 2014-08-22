@@ -15,8 +15,8 @@ public:
 	CBufferedStream(IReadFile* source);
 	~CBufferedStream();
 
-	virtual bool getCurrent(char& c);
-	virtual bool getNext(char& c);
+	virtual bool getCurrent(u8& c);
+	virtual bool getNext(u8& c);
 	virtual u32 getPos() const;
 
 private:

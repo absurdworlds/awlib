@@ -15,6 +15,7 @@ class IReadFile;
 enum HdfObjectType {
 	HDF_OBJ_NULL = 0,
 	HDF_OBJ_NODE,
+	HDF_OBJ_NODE_END,
 	HDF_OBJ_VAL,
 	HDF_OBJ_CMD
 };
