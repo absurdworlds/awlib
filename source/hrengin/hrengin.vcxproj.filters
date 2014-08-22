@@ -51,9 +51,6 @@
     <ClInclude Include="..\..\include\hrengin\ai\IBasePathfinder.h">
       <Filter>include\AI</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\hrengin\common\hrTypes.h">
-      <Filter>include\Common</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\hrengin\common\line3d.h">
       <Filter>include\Common</Filter>
     </ClInclude>
@@ -63,14 +60,8 @@
     <ClInclude Include="..\..\include\hrengin\common\Vector3d.h">
       <Filter>include\Common</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\hrengin\common\Math\hrMath.h">
-      <Filter>include\Common</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\hrengin\entities\IEntityManager.h">
       <Filter>include\Entities</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\hrengin\base\ILogger.h">
-      <Filter>include\Core</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\hrengin\common\hrenginapi.h">
       <Filter>include\Common</Filter>
@@ -122,6 +113,9 @@
     </ClInclude>
     <ClInclude Include="CSimplePathfinder.h">
       <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\core\ILogger.h">
+      <Filter>include\Core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

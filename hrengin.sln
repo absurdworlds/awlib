@@ -7,13 +7,13 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "hrengin", "source\hrengin\h
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "hrenginfilesys", "source\hrenginfilesys\hrenginfilesys.vcxproj", "{74AD5236-2D65-440E-A517-4EF8B52EE555}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "hrengingraphics", "source\hrengingraphics\hrengingraphics.vcxproj", "{20384754-19D0-4480-9EBC-1D326B7B9E60}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "hrenginphysics", "source\hrenginphysics\hrenginphysics.vcxproj", "{C793384E-45F2-4021-B9E0-1CB3D12DA78E}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "hrenginscript", "source\hrenginscript\hrenginscript.vcxproj", "{03971781-199E-4610-A13D-0F71721AFD5F}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "hrenginaudio", "source\hrenginaudio.vcxproj", "{D925C491-966D-4700-8D25-24411EEC9E07}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "hrenginaudio", "..\hrenginaudio\hrenginaudio.vcxproj", "{D925C491-966D-4700-8D25-24411EEC9E07}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "hrengingraphics", "source\graphics-irr\hrengingraphics.vcxproj", "{20384754-19D0-4480-9EBC-1D326B7B9E60}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,10 +29,6 @@ Global
 		{74AD5236-2D65-440E-A517-4EF8B52EE555}.Debug|Win32.Build.0 = Debug|Win32
 		{74AD5236-2D65-440E-A517-4EF8B52EE555}.Release|Win32.ActiveCfg = Release|Win32
 		{74AD5236-2D65-440E-A517-4EF8B52EE555}.Release|Win32.Build.0 = Release|Win32
-		{20384754-19D0-4480-9EBC-1D326B7B9E60}.Debug|Win32.ActiveCfg = Debug|Win32
-		{20384754-19D0-4480-9EBC-1D326B7B9E60}.Debug|Win32.Build.0 = Debug|Win32
-		{20384754-19D0-4480-9EBC-1D326B7B9E60}.Release|Win32.ActiveCfg = Release|Win32
-		{20384754-19D0-4480-9EBC-1D326B7B9E60}.Release|Win32.Build.0 = Release|Win32
 		{C793384E-45F2-4021-B9E0-1CB3D12DA78E}.Debug|Win32.ActiveCfg = Debug|Win32
 		{C793384E-45F2-4021-B9E0-1CB3D12DA78E}.Debug|Win32.Build.0 = Debug|Win32
 		{C793384E-45F2-4021-B9E0-1CB3D12DA78E}.Release|Win32.ActiveCfg = Release|Win32
@@ -45,6 +41,10 @@ Global
 		{D925C491-966D-4700-8D25-24411EEC9E07}.Debug|Win32.Build.0 = Debug|Win32
 		{D925C491-966D-4700-8D25-24411EEC9E07}.Release|Win32.ActiveCfg = Release|Win32
 		{D925C491-966D-4700-8D25-24411EEC9E07}.Release|Win32.Build.0 = Release|Win32
+		{20384754-19D0-4480-9EBC-1D326B7B9E60}.Debug|Win32.ActiveCfg = Debug|Win32
+		{20384754-19D0-4480-9EBC-1D326B7B9E60}.Debug|Win32.Build.0 = Debug|Win32
+		{20384754-19D0-4480-9EBC-1D326B7B9E60}.Release|Win32.ActiveCfg = Release|Win32
+		{20384754-19D0-4480-9EBC-1D326B7B9E60}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
