@@ -21,12 +21,16 @@ inline bool in(u8 c, u8 c1, u8 c2, u8 c3, u8 c4, u8 c5)
 	return c == c1  ||  c == c2  ||  c == c3  ||  c == c4  ||  c == c5;
 }
 
-inline bool isNameChar(u8 c) {
-	return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || c == '-' || c == '_' || (c >= '0' && c <= '9');
+inline bool isDigit(u8 c) {
+	return (c >= '0' && c <= '9');
 }
 
 inline bool isNameBeginChar(u8 c) {
 	return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z');
+}
+
+inline bool isNameChar(u8 c) {
+	return isNameBeginChar(c) || isDigit(c) || c == '-' || c == '_';
 }
 
 inline bool isWhitespace(u8 c) {
@@ -132,7 +136,7 @@ HdfType hdfConvertImpicitType(const HdfToken& token)
 }
 
 
-IHndfParser* createHndfParser(IReadFile* file)
+IHDFParser* createHDFParser(IReadFile* file)
 {
 	if(!file->isOpen()) {
 		return 0;
@@ -312,8 +316,15 @@ void CHndfParser::skipNode()
 
 	stream_->getCurrent(c);
 
-	while (c != ']') {
+	u32 depth = 1;
+
+	while (depth > 0) {
 		stream_->getNext(c);
+		if(c == '[' ) {
+			depth++;
+		} else if(c == ']') {
+			depth--;
+		}
 	}
 
 	read();

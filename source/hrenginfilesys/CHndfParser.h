@@ -5,7 +5,7 @@
 #include <vector>
 
 #include <hrengin/common/hrengintypes.h>
-#include <hrengin/filesystem/IHndfParser.h>
+#include <hrengin/filesystem/IHDFParser.h>
 
 namespace hrengin {
 namespace io {
@@ -51,7 +51,7 @@ struct HdfToken {
 };
 
 
-class CHndfParser : public IHndfParser
+class CHndfParser : public IHDFParser
 {
 public:
 	CHndfParser(IReadFile* file);

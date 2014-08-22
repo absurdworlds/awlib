@@ -16,7 +16,7 @@
     <ClInclude Include="..\..\include\hrengin\filesystem\IBufferedStream.h" />
     <ClInclude Include="..\..\include\hrengin\filesystem\ICharacterStream.h" />
     <ClInclude Include="..\..\include\hrengin\filesystem\IFileSystem.h" />
-    <ClInclude Include="..\..\include\hrengin\filesystem\IHndfParser.h" />
+    <ClInclude Include="..\..\include\hrengin\filesystem\IHDFParser.h" />
     <ClInclude Include="..\..\include\hrengin\filesystem\IReadFile.h" />
     <ClInclude Include="..\..\include\hrengin\filesystem\IWriteFile.h" />
     <ClInclude Include="CBufferedStream.h" />

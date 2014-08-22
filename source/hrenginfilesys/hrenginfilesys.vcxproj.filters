@@ -30,9 +30,6 @@
     <ClInclude Include="..\..\include\hrengin\filesystem\hrenginfsutil.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\hrengin\filesystem\IHndfParser.h">
-      <Filter>include</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\hrengin\filesystem\IReadFile.h">
       <Filter>include</Filter>
     </ClInclude>
@@ -43,6 +40,9 @@
       <Filter>source</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\hrengin\filesystem\IBufferedStream.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\filesystem\IHDFParser.h">
       <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>
