@@ -154,7 +154,7 @@ public:
 	}
 	/*
 	hrVector3d<T>& set(const T nx, const T ny, const T nz) {X=nx; Y=ny; Z=nz; return *this;}
-	hrVector3d<T>& set(const hrVector3d<T>& p) {X=p.X; Y=p.Y; Z=p.Z;return *this;}-*
+	hrVector3d<T>& set(const hrVector3d<T>& p) {X=p.X; Y=p.Y; Z=p.Z;return *this;}-*/
 	
 	// Normalize the vector
 	hrVector3d<T>& normalize()
