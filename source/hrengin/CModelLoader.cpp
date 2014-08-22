@@ -39,7 +39,10 @@ IModel* CModelLoader::loadModel(const char* filename)
 		if(!hndf) {
 			return false;
 		}
-		hndfParse(file, model);
+
+		hndfParse(hndf, model);
+
+		delete hndf;
 	}
 
 	delete file;
@@ -109,11 +112,11 @@ bool CModelLoader::hndfParseObject(io::IHndfParser* hndf, IModel* model, std::st
 			successful = hndfParseShapeNode(hndf, model);
 		} else {
 			hndf->error(io::HDF_ERR_ERROR, "found unknown node");
-			hndf->skipObject();
+			hndf->skipNode();
 		}
 		break;
 	case io::HDF_OBJ_VAL:
-		hndf->skipObject();
+		hndf->skipValue();
 		break;
 	default:
 		return false;
@@ -143,7 +146,7 @@ bool CModelLoader::hndfParseShapeNode(io::IHndfParser* hndf, IModel* model)
 
 		if(objectName == "type") {
 			std::string type;
-			hndf->readValue<std::string>(type);
+			hndf->readString(type);
 			if(type == "sphere") {
 				primitive.shape = SHAPE_SPHERE;
 			} else if(type == "box") {
@@ -160,7 +163,7 @@ bool CModelLoader::hndfParseShapeNode(io::IHndfParser* hndf, IModel* model)
 			}
 		} else if(objectName == "direction") {
 			std::string axis;
-			hndf->readValue<std::string>(axis);
+			hndf->readString(axis);
 			if(axis == "axisX" || axis == "axisx") {
 				primitive.axis = AXIS_X;
 			} else if(axis == "axisZ" || axis == "axisz") {
@@ -170,20 +173,20 @@ bool CModelLoader::hndfParseShapeNode(io::IHndfParser* hndf, IModel* model)
 			}
 			printf("%s", axis.c_str());
 		} else if(objectName == "radius" || objectName == "width") {
-			hndf->readValue<float>(primitive.dimensions[0]);
+			hndf->readFloat(primitive.dimensions[0]);
 		} else if(objectName == "height") {
-			hndf->readValue<float>(primitive.dimensions[1]);
+			hndf->readFloat(primitive.dimensions[1]);
 		} else if(objectName == "length") {
-			hndf->readValue<float>(primitive.dimensions[2]);
+			hndf->readFloat(primitive.dimensions[2]);
 		} else if(objectName == "rotation") {
 			hrengin::Vector3d vec3;
-			hndf->readValue<Vector3d>(vec3);
+			hndf->readVector3d(vec3);
 			
 			primitive.rotation[0] = vec3.X;
 			primitive.rotation[1] = vec3.Y;
 			primitive.rotation[2] = vec3.Z;
 		} else {
-			hndf->skipObject();
+			hndf->skipValue();
 		}
 	}
 
