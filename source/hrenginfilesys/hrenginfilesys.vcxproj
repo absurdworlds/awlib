@@ -23,7 +23,6 @@
     <ClInclude Include="CFileSystem.h" />
     <ClInclude Include="CHndfParser.h" />
     <ClInclude Include="CReadFile.h" />
-    <ClInclude Include="HdfTypes.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CBufferedStream.cpp" />

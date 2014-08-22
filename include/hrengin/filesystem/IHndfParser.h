@@ -3,6 +3,8 @@
 
 #include <hrengin/common/hrenginapi.h>
 
+#include <hrengin/common/Vector3d.h>
+
 #include <string>
 
 namespace hrengin {
@@ -30,7 +32,7 @@ public:
 	virtual bool read() = 0;
 	virtual HdfObjectType getObjectType() = 0;
 	virtual void getObjectName(std::string& name) = 0;
-	
+
 	virtual void readFloat(float& val) = 0;
 	virtual void readFloat(double& val) = 0;
 	virtual void readInt(u32& val) = 0;
@@ -38,8 +40,9 @@ public:
 	virtual void readBool(bool& val) = 0;
 	virtual void readString(std::string& val) = 0;
 	virtual void readVector3d(Vector3d& val) = 0;
-	
-	virtual void skipObject() = 0;
+
+	virtual void skipValue() = 0;
+	virtual void skipNode() = 0;
 
 	virtual void error(HdfParserMessage type, std::string msg) = 0;
 };

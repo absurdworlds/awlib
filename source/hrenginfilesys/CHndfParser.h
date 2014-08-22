@@ -7,9 +7,6 @@
 #include <hrengin/common/hrengintypes.h>
 #include <hrengin/filesystem/IHndfParser.h>
 
-
-#include "HdfTypes.h"
-
 namespace hrengin {
 namespace io {
 
@@ -38,6 +35,15 @@ enum HdfTokenType {
 	HDF_TOKEN_INVALID
 };
 
+enum HdfType {
+	HDF_INTEGER,
+	HDF_FLOAT,
+	HDF_BOOLEAN,
+	HDF_STRING,
+	HDF_VECTOR2,
+	HDF_VECTOR3,
+	HDF_UNKNOWN_TYPE
+};
 
 struct HdfToken {
 	HdfTokenType type;
@@ -50,24 +56,35 @@ class CHndfParser : public IHndfParser
 public:
 	CHndfParser(IReadFile* file);
 	~CHndfParser();
+	
+	virtual void skipNode();
+	virtual void skipValue();
 
 	virtual bool read();
-	virtual void skipObject();
+
 	virtual HdfObjectType getObjectType();
 	virtual void getObjectName(std::string& name);
 	
-	template<typename T> 
-	void readValue(T& val);
+	virtual void readFloat(float& val);
+	virtual void readFloat(double& val);
+	virtual void readInt(u32& val);
+	virtual void readInt(i32& val);
+	virtual void readBool(bool& val);
+	virtual void readString(std::string& val);
+	virtual void readVector3d(Vector3d& val);
 
-
+	void error(HdfParserMessage type, std::string msg);
 private:
 	template<typename T> 
-	void convertValue(T& val);
-
+	void readValue(T& val);
+	template<typename T> 
+	void convertValue(HdfToken& token, T& val);
+	
+	bool parseType(HdfToken& token);
 
 	void readToken(HdfToken& token);
 
-	void readString(std::string& val);
+	void readStringToken(std::string& val);
 	void readNumber(std::string& val);
 	void readName(std::string& name, char stop = 0);
 
@@ -77,6 +94,7 @@ private:
 	void fastForward();
 	void skipLine();
 	void skipWhitespace();
+	void skipInlineWhitespace();
 
 	enum HdfParserState {
 		HDF_S_IDLE = 0,
@@ -87,16 +105,9 @@ private:
 		HDF_S_VALUE_DATA,
 		HDF_S_PANIC
 	} state_;
-	
-	enum HdfParserMessage {
-		HDF_ERR_NOTICE,
-		HDF_ERR_WARNING,
-		HDF_ERR_ERROR
-	};
-	
+
 	std::vector<std::string> errors_;
 
-	void error(HdfParserMessage type, std::string msg);
 
 
 	void readDirective();
