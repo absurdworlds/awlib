@@ -12,6 +12,10 @@
 
 namespace hrengin {
 
+bool hndfParseNode(io::IHndfParser* hndf, IModel* model, std::string curNode);
+bool hndfParseObject(io::IHndfParser* hndf, IModel* model, std::string curNode);
+bool hndfParseShapeNode(io::IHndfParser* hndf, IModel* model);
+
 IModelLoader* createModelLoader()
 {
 	return new CModelLoader();
@@ -59,8 +63,9 @@ bool CModelLoader::hndfParse(io::IHndfParser* hndf, IModel* model)
 		return false;
 	}
 
-	
-	return hndfParseNode(hndf, model);
+	hndf->getObjectName(curNode);
+
+	return hndfParseNode(hndf, model, curNode);
 }
 
 #if 0
@@ -77,13 +82,10 @@ bool CModelLoader::hndfParse(io::IHndfParser* hndf, IModel* model)
 	}
 #endif
 
-bool CModelLoader::hndfParseNode(io::IHndfParser* hndf, IModel* model)
+bool hndfParseNode(io::IHndfParser* hndf, IModel* model, std::string curNode)
 {
 	bool successful = true;
-	std::string curNode;
 
-	hndf->getObjectName(curNode);
-	
 	while(hndf->read()) {
 		successful = hndfParseObject(hndf, model, curNode);
 	}
@@ -91,22 +93,22 @@ bool CModelLoader::hndfParseNode(io::IHndfParser* hndf, IModel* model)
 	return successful;
 }
 
-bool CModelLoader::hndfParseObject(io::IHndfParser* hndf, IModel* model, std::string curNode)
+bool hndfParseObject(io::IHndfParser* hndf, IModel* model, std::string curNode)
 {
 	bool successful = true;
 	io::HdfObjectType type = hndf->getObjectType();
 	std::string objectName;
 
-	hndf->getObjectName(objectName);
-
 	switch(type) {
 	case io::HDF_OBJ_NODE:
+		hndf->getObjectName(objectName);
+
 		if(objectName == "shapes") {
 			if(curNode != "model") {
 				hndf->error(io::HDF_ERR_ERROR, "'shapes' node must be inside a 'model' node");
 				return false;
 			} else {
-				successful = hndfParseNode(hndf, model);
+				successful = hndfParseNode(hndf, model, objectName);
 			}
 		} else if((curNode == "shapes") && (objectName == "*" || objectName == "shape")) {
 			successful = hndfParseShapeNode(hndf, model);
@@ -118,6 +120,8 @@ bool CModelLoader::hndfParseObject(io::IHndfParser* hndf, IModel* model, std::st
 	case io::HDF_OBJ_VAL:
 		hndf->skipValue();
 		break;
+	case io::HDF_OBJ_NODE_END:
+		break;
 	default:
 		return false;
 		
@@ -128,14 +132,19 @@ bool CModelLoader::hndfParseObject(io::IHndfParser* hndf, IModel* model, std::st
 	return successful;
 }
 
-bool CModelLoader::hndfParseShapeNode(io::IHndfParser* hndf, IModel* model)
+bool hndfParseShapeNode(io::IHndfParser* hndf, IModel* model)
 {
 	hrengin::SPrimitive primitive;
-	io::HdfObjectType type = hndf->getObjectType();
+	//io::HdfObjectType type = hndf->getObjectType();
 
 
 	while(hndf->read()) {
-		if(hndf->getObjectType() != io::HDF_OBJ_VAL) {
+		io::HdfObjectType type = hndf->getObjectType();
+
+		if(type == io::HDF_OBJ_NODE_END) {
+			break;
+		}
+		if(type != io::HDF_OBJ_VAL) {
 			hndf->error(io::HDF_ERR_ERROR, "expected a variable in a 'shape' node, got node");
 			return false; 
 		}
@@ -164,14 +173,14 @@ bool CModelLoader::hndfParseShapeNode(io::IHndfParser* hndf, IModel* model)
 		} else if(objectName == "direction") {
 			std::string axis;
 			hndf->readString(axis);
-			if(axis == "axisX" || axis == "axisx") {
+			if(axis == "axisX" || axis == "axisx" || axis == "x" || axis == "X") {
 				primitive.axis = AXIS_X;
-			} else if(axis == "axisZ" || axis == "axisz") {
+			} else if(axis == "axisZ" || axis == "axisz" || axis == "z" || axis == "Z") {
 				primitive.axis = AXIS_Z;
 			} else {
 				primitive.axis = AXIS_Y;
 			}
-			printf("%s", axis.c_str());
+
 		} else if(objectName == "radius" || objectName == "width") {
 			hndf->readFloat(primitive.dimensions[0]);
 		} else if(objectName == "height") {
@@ -185,6 +194,13 @@ bool CModelLoader::hndfParseShapeNode(io::IHndfParser* hndf, IModel* model)
 			primitive.rotation[0] = vec3.X;
 			primitive.rotation[1] = vec3.Y;
 			primitive.rotation[2] = vec3.Z;
+		} else if(objectName == "offset") {
+			hrengin::Vector3d vec3;
+			hndf->readVector3d(vec3);
+			
+			primitive.offset[0] = vec3.X;
+			primitive.offset[1] = vec3.Y;
+			primitive.offset[2] = vec3.Z;
 		} else {
 			hndf->skipValue();
 		}

@@ -20,9 +20,9 @@ public:
 
 private:
 	bool hndfParse(io::IHndfParser* hndf, IModel* model);
-	bool hndfParseNode(io::IHndfParser* hndf, IModel* model);
-	bool hndfParseObject(io::IHndfParser* hndf, IModel* model, std::string curNode);
-	bool hndfParseShapeNode(io::IHndfParser* hndf, IModel* model);
+	//bool hndfParseNode(io::IHndfParser* hndf, IModel* model);
+	//bool hndfParseObject(io::IHndfParser* hndf, IModel* model, std::string curNode);
+	//bool hndfParseShapeNode(io::IHndfParser* hndf, IModel* model);
 };
 
 }
