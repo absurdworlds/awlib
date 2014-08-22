@@ -4,7 +4,7 @@
 #include <hrengin/filesystem/hrenginfsutil.h>
 #include <hrengin/filesystem/IFileSystem.h>
 #include <hrengin/filesystem/IReadFile.h>
-#include <hrengin/filesystem/IHndfParser.h>
+#include <hrengin/filesystem/IHDFParser.h>
 
 #include <hrengin/core/IModel.h>
 
@@ -12,9 +12,9 @@
 
 namespace hrengin {
 
-bool hndfParseNode(io::IHndfParser* hndf, IModel* model, std::string curNode);
-bool hndfParseObject(io::IHndfParser* hndf, IModel* model, std::string curNode);
-bool hndfParseShapeNode(io::IHndfParser* hndf, IModel* model);
+bool hndfParseNode(io::IHDFParser* hndf, IModel* model, std::string curNode);
+bool hndfParseObject(io::IHDFParser* hndf, IModel* model, std::string curNode);
+bool hndfParseShapeNode(io::IHDFParser* hndf, IModel* model);
 
 IModelLoader* createModelLoader()
 {
@@ -38,7 +38,7 @@ IModel* CModelLoader::loadModel(const char* filename)
 
 	if(ext == "hndf" || ext == "ndf") {
 	
-		io::IHndfParser* hndf = io::createHndfParser(file);
+		io::IHDFParser* hndf = io::createHndfParser(file);
 	
 		if(!hndf) {
 			return false;
@@ -54,7 +54,7 @@ IModel* CModelLoader::loadModel(const char* filename)
 	return model;
 }
 
-bool CModelLoader::hndfParse(io::IHndfParser* hndf, IModel* model)
+bool CModelLoader::hndfParse(io::IHDFParser* hndf, IModel* model)
 {
 	std::string curNode;
 
@@ -82,7 +82,7 @@ bool CModelLoader::hndfParse(io::IHndfParser* hndf, IModel* model)
 	}
 #endif
 
-bool hndfParseNode(io::IHndfParser* hndf, IModel* model, std::string curNode)
+bool hndfParseNode(io::IHDFParser* hndf, IModel* model, std::string curNode)
 {
 	bool successful = true;
 
@@ -93,7 +93,7 @@ bool hndfParseNode(io::IHndfParser* hndf, IModel* model, std::string curNode)
 	return successful;
 }
 
-bool hndfParseObject(io::IHndfParser* hndf, IModel* model, std::string curNode)
+bool hndfParseObject(io::IHDFParser* hndf, IModel* model, std::string curNode)
 {
 	bool successful = true;
 	io::HdfObjectType type = hndf->getObjectType();
@@ -132,7 +132,7 @@ bool hndfParseObject(io::IHndfParser* hndf, IModel* model, std::string curNode)
 	return successful;
 }
 
-bool hndfParseShapeNode(io::IHndfParser* hndf, IModel* model)
+bool hndfParseShapeNode(io::IHDFParser* hndf, IModel* model)
 {
 	hrengin::SPrimitive primitive;
 	//io::HdfObjectType type = hndf->getObjectType();

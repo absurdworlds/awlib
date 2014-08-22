@@ -1,5 +1,5 @@
-#ifndef __HRENGIN_CModelLoader_H__
-#define __HRENGIN_CModelLoader_H__
+#ifndef _hrengin_CModelLoader_
+#define _hrengin_CModelLoader_
 
 #include <string>
 
@@ -10,7 +10,7 @@ namespace hrengin {
 class IModel;
 
 namespace io {
-	class IHndfParser;
+	class IHDFParser;
 }
 
 class CModelLoader : public IModelLoader
@@ -19,12 +19,12 @@ public:
 	virtual IModel* loadModel(const char* filename);
 
 private:
-	bool hndfParse(io::IHndfParser* hndf, IModel* model);
-	//bool hndfParseNode(io::IHndfParser* hndf, IModel* model);
-	//bool hndfParseObject(io::IHndfParser* hndf, IModel* model, std::string curNode);
-	//bool hndfParseShapeNode(io::IHndfParser* hndf, IModel* model);
+	bool hndfParse(io::IHDFParser* hndf, IModel* model);
+	//bool hndfParseNode(io::IHDFParser* hndf, IModel* model);
+	//bool hndfParseObject(io::IHDFParser* hndf, IModel* model, std::string curNode);
+	//bool hndfParseShapeNode(io::IHDFParser* hndf, IModel* model);
 };
 
 }
 
-#endif//__HRENGIN_CModelLoader_H__
+#endif//_hrengin_CModelLoader_
