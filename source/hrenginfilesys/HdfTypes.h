@@ -1,11 +1,8 @@
 #ifndef _hrengin_HdfTypes_h_
 #define _hrengin_HdfTypes_h_
 
-#include <hrengin/common/hrengintypes.h>
-#include <hrengin/common/Vector2d.h>
-#include <hrengin/common/Vector3d.h>
-
 namespace hrengin {
+namespace io {
 
 enum HdfType {
 	HDF_INTEGER,
@@ -13,7 +10,8 @@ enum HdfType {
 	HDF_BOOLEAN,
 	HDF_STRING,
 	HDF_VECTOR2,
-	HDF_VECTOR3
+	HDF_VECTOR3,
+	HDF_UNKNOWN_TYPE
 };
 
 template<typename T>
@@ -77,6 +75,34 @@ bool isValidHdfType<Vector3d>(HdfType type) {
 	return HDF_VECTOR3 == type;
 }
 
+
+HdfType hdfTokenToType(HdfToken token) 
+{
+	if(token.value == "bool" || token.value == "b") {
+		return HDF_BOOLEAN;
+	} else if(token.value == "int" || token.value == "i") {
+		return HDF_INTEGER;
+	} else if(token.value == "float" || token.value == "f") {
+		return HDF_FLOAT;
+	} else if(token.value == "vec3" || token.value == "v3") {
+		return HDF_VECTOR3;
+	} else if(token.value == "vec2" || token.value == "v2") {
+		return HDF_VECTOR2;
+	} else if(token.value == "string" || token.value == "s") {
+		return HDF_STRING;
+	} else {
+		return HDF_UNKNOWN_TYPE;
+	}
+}
+
+HdfType hdfConvertImpicitType(HdfToken token) 
+{
+	return HDF_UNKNOWN_TYPE;
+}
+
+
+
+} //namespace io
 } // namespace hrengin
 
 #endif //_hrengin_HdfTypes_h_
