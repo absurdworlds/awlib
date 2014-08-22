@@ -17,6 +17,7 @@ public:
 
 	virtual bool getCurrent(char& c);
 	virtual bool getNext(char& c);
+	virtual u32 getPos() const;
 
 private:
 	IReadFile* source_;

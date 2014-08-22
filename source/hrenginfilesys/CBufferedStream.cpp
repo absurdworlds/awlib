@@ -48,6 +48,10 @@ bool CBufferedStream::getNext(char& c)
 	return 1;
 }
 
+u32 CBufferedStream::getPos() const 
+{
+	return pos_;
+}
 
 } //namespace io
 } //namespace hrg
