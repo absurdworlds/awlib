@@ -15,7 +15,7 @@ IBufferedStream* createBufferedStream(IReadFile* source)
 }
 
 CBufferedStream::CBufferedStream(IReadFile* source)
-: source_(source)
+: source_(source), buffer_(new char(STREAM_BUFFER_SIZE))
 {
 	source_->read(buffer_, STREAM_BUFFER_SIZE);
 }
