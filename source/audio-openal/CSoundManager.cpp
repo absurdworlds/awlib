@@ -62,13 +62,6 @@ void CSoundManager::initSounds()
 
 	context_ = alcCreateContext(device_, NULL);
 	logError();
-
-	addSound("generic_ready01.wav");
-	addSound("generic_ready02.wav");
-	addSound("generic_yes01.wav");
-	addSound("generic_yes02.wav");
-	addSound("generic2_ready01.wav");
-	addSound("generic2_yes01.wav");
 }
 
 void CSoundManager::playSound(const char* fileName)
