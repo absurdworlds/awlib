@@ -1,18 +1,20 @@
-#ifndef __HRENGIN_SOUND_ISound_H__
-#define __HRENGIN_SOUND_ISound_H__
-
-#include <hrengin/common/hrengintypes.h>
+#ifndef _hrengin_ISound_
+#define _hrengin_ISound_
 
 namespace hrengin {
-namespace sound {
+namespace audio {
 
-class ISound
-{
+class ISound {
+public:
+	/* play sound */
+	virtual bool play() = 0;
 
+	/* stop playing sound */
+	virtual bool stop() = 0;
 };
 
-	
-} // namespace sound
+
+} // namespace audio
 } // namespace hrengin
 
-#endif//__HRENGIN_SOUND_ISound_H__
+#endif//_hrengin_ISound_

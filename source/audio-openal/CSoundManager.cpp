@@ -12,10 +12,11 @@
 #include "ALutil.h"
 #include "RIFFReader.h"
 
+#include "CSound.h"
 #include "CSoundManager.h"
 
 namespace hrengin {
-namespace sound {
+namespace audio {
 
 
 HRENGINSOUND_API ISoundManager& getSoundManager()
@@ -24,15 +25,35 @@ HRENGINSOUND_API ISoundManager& getSoundManager()
 	return singleton;
 }
 
-void CSoundManager::addSound(const char* fileName)
+void CSoundManager::loadSound(const char* fileName)
 {
-	SoundSample sample;
+	if(soundMap_.find(fileName) != soundMap_.end()) {
+		return;
+	}
 
 	std::string path(io::soundpath + fileName);
-	readWAV(path, sample);
+	SoundSample wave;
 
-	soundMap_[fileName] = sample;
-	//soundMap_[fileName] = BASS_SampleLoad(FALSE, path.c_str(), 0, 0, 10, BASS_SAMPLE_MONO);
+	readWAV(path, wave);
+
+	ALuint buffer;
+	ALenum format = toAlEnum(wave.channels, wave.bitsPerSample);
+
+	alGenBuffers(1, &buffer);
+	alBufferData(buffer, format, wave.data, wave.size, wave.sampleRate);
+	
+	soundMap_[fileName] = buffer;
+}
+
+ISound3D* CSoundManager::createSound3D(const char* fileName)
+{
+	if(soundMap_.find(fileName) != soundMap_.end()) {
+		return 0;
+	}
+
+	ALuint buffer = soundMap_[fileName];
+
+	return new CSound(buffer)
 }
 
 
@@ -49,7 +70,7 @@ void CSoundManager::logError(std::string msg)
 	}
 }
 
-void CSoundManager::initSounds()
+CSoundManager::CSoundManager()
 {
 	//graphics::IVideoManager& videomgr = graphics::getVideoManager();
 	//void* wndHandle = videomgr.getPlatformSpecificData().win32.wndHandle;
@@ -59,9 +80,17 @@ void CSoundManager::initSounds()
 	if (!device_) {
 		printf("[OpenAL] unable to open sound device");
 	}
-
 	context_ = alcCreateContext(device_, NULL);
+	if (!alcMakeContextCurrent(context_)) {
+		printf("[OpenAL] unable to set current context");
+	}
 	logError();
+}
+
+#if 0
+CSoundManager::~CSoundManager()
+{
+	alDeleteBuffers(1, buffer);
 }
 
 void CSoundManager::playSound(const char* fileName)
@@ -70,71 +99,7 @@ void CSoundManager::playSound(const char* fileName)
 	std::thread threadPlay(&CSoundManager::threadedPlay, this, wave);
 	threadPlay.detach();
 }
+#endif
 
-void CSoundManager::threadedPlay(SoundSample* wave)
-{
-	if (!alcMakeContextCurrent(context_)) {
-		printf("[OpenAL] unable to set current context");
-	}
-
-	alcMakeContextCurrent(context_);
-	logError();
-
-	ALuint source;
-	ALuint buffer;
-
-	alGenBuffers(1, &buffer);
-	logError();
-	alGenSources(1, &source);
-	logError();
-
-	ALenum format = toAlEnum(wave->channels, wave->bitsPerSample);
-
-	alBufferData(buffer, format, wave->data, wave->size, wave->sampleRate);
-	logError();
-
-	ALfloat sourcePos[] = { 0.0, 0.0, 0.0 };
-	ALfloat sourceVel[] = { 0.0, 0.0, 0.0 };
-	ALfloat ListenerPos[] = { 0.0, 0.0, 0.0 };
-	ALfloat ListenerVel[] = { 0.0, 0.0, 0.0 };
-	ALfloat ListenerOri[] = { 0.0, 0.0, -1.0,  0.0, 1.0, 0.0 };
-
-	alListenerfv(AL_POSITION,    ListenerPos);
-	alListenerfv(AL_VELOCITY,    ListenerVel);
-	alListenerfv(AL_ORIENTATION, ListenerOri);
-	logError();
-
-	alSourcei (source, AL_BUFFER,   buffer);
-	logError();
-	alSourcef (source, AL_PITCH,    1.0f     );
-	alSourcef (source, AL_GAIN,     1.0f     );
-	alSourcefv(source, AL_POSITION, sourcePos);
-	alSourcefv(source, AL_VELOCITY, sourceVel);
-	alSourcei (source, AL_LOOPING,  AL_FALSE );
-	logError();
-
-	alSourcePlay(source);
-	
-	ALint source_state;
-
-	alGetSourcei(source, AL_SOURCE_STATE, &source_state);
-	logError("unable to get source state");
-	while (source_state == AL_PLAYING) {
-		alGetSourcei(source, AL_SOURCE_STATE, &source_state);
-		logError("unable to get source state");
-	}
-
-	//alDeleteSources(1, &source);
-	alDeleteBuffers(1, &buffer);
-	alcMakeContextCurrent(NULL);
-}
-
-
-    
-
-/*	alcMakeContextCurrent(context_);
-	
-	//alDeleteBuffers(1, buffer);*/
-
-} // namespace sound
+} // namespace audio
 } // namespace hrengin

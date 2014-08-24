@@ -9,7 +9,7 @@
 #include "SoundSample.h"
 
 namespace hrengin {
-namespace sound {
+namespace audio {
 
 // assuming Little Endian
 enum class WaveFields {

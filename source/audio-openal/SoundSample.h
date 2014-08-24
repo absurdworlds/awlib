@@ -4,7 +4,7 @@
 #include <hrengin/common/hrengintypes.h>
 
 namespace hrengin {
-namespace sound {
+namespace audio {
 
 struct SoundSample {
 	u32 channels;

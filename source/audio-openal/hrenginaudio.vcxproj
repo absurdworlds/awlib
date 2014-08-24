@@ -11,16 +11,24 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\include\hrengin\sound\IListener.h" />
     <ClInclude Include="..\..\include\hrengin\sound\ISound.h" />
+    <ClInclude Include="..\..\include\hrengin\sound\ISound3D.h" />
     <ClInclude Include="..\..\include\hrengin\sound\ISoundManager.h" />
     <ClInclude Include="ALutil.h" />
+    <ClInclude Include="ALVector.h" />
+    <ClInclude Include="CSound.h" />
     <ClInclude Include="CSoundManager.h" />
     <ClInclude Include="RIFFReader.h" />
     <ClInclude Include="SoundSample.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ALutil.cpp" />
+    <ClCompile Include="CSound.cpp" />
     <ClCompile Include="CSoundManager.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="todolist.md" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{D925C491-966D-4700-8D25-24411EEC9E07}</ProjectGuid>

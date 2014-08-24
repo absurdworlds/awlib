@@ -1,26 +1,23 @@
-#ifndef __HRENGIN_SOUND_ISoundManager_H__
-#define __HRENGIN_SOUND_ISoundManager_H__
+#ifndef _hrengin_ISoundManager_
+#define _hrengin_ISoundManager_
 
 #include <hrengin/common/hrenginapi.h>
 
-namespace hrengin
-{
-namespace sound
-{
+namespace hrengin {
+namespace audio {
 
 class ISound;
+class ISound3D;
 
-class ISoundManager
-{
+class ISoundManager {
 public:
-	virtual void addSound(const char* fileName) = 0;
-	virtual void initSounds() = 0;
-	virtual void playSound(const char* fileName) = 0;
+	virtual void loadSound(const char* fileName) = 0;
+	virtual ISound3D* createSound3D(const char* fileName) = 0;
 };
 
 HRENGINSOUND_API ISoundManager& getSoundManager();
 
-} // namespace sound
+} // namespace audio
 } // namespace hrengin
 
 #endif//__HRENGIN_SOUND_ISoundManager_H__

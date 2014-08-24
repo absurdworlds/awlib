@@ -12,9 +12,6 @@
     <ClInclude Include="CSoundManager.h">
       <Filter>source</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\hrengin\sound\ISound.h">
-      <Filter>include</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\hrengin\sound\ISoundManager.h">
       <Filter>include</Filter>
     </ClInclude>
@@ -27,6 +24,21 @@
     <ClInclude Include="RIFFReader.h">
       <Filter>source</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\sound\IListener.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="CSound.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="ALVector.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\sound\ISound3D.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\sound\ISound.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CSoundManager.cpp">
@@ -35,5 +47,11 @@
     <ClCompile Include="ALutil.cpp">
       <Filter>source</Filter>
     </ClCompile>
+    <ClCompile Include="CSound.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="todolist.md" />
   </ItemGroup>
 </Project>
