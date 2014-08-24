@@ -13,8 +13,10 @@ Current version: hrengin A (1.0/1000)
 
 ## Dependencies ##
 
-* Bullet physics library
-* Irrlicht rendering engine
+* Bullet physics
+* Irrlicht
+* OpenAL Soft
+* RakNet
 
 ## Compiling ##
 
