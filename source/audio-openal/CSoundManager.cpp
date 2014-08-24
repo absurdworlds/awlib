@@ -25,6 +25,21 @@ HRENGINSOUND_API ISoundManager& getSoundManager()
 	return singleton;
 }
 
+
+CSoundManager::CSoundManager()
+{
+	device_ = alcOpenDevice(NULL);
+	logError();
+	if (!device_) {
+		printf("[OpenAL] unable to open sound device");
+	}
+	context_ = alcCreateContext(device_, NULL);
+	if (!alcMakeContextCurrent(context_)) {
+		printf("[OpenAL] unable to set current context");
+	}
+	logError();
+}
+
 void CSoundManager::loadSound(const char* fileName)
 {
 	if(soundMap_.find(fileName) != soundMap_.end()) {
@@ -70,22 +85,6 @@ void CSoundManager::logError(std::string msg)
 	}
 }
 
-CSoundManager::CSoundManager()
-{
-	//graphics::IVideoManager& videomgr = graphics::getVideoManager();
-	//void* wndHandle = videomgr.getPlatformSpecificData().win32.wndHandle;
-
-	device_ = alcOpenDevice(NULL);
-	logError();
-	if (!device_) {
-		printf("[OpenAL] unable to open sound device");
-	}
-	context_ = alcCreateContext(device_, NULL);
-	if (!alcMakeContextCurrent(context_)) {
-		printf("[OpenAL] unable to set current context");
-	}
-	logError();
-}
 
 #if 0
 CSoundManager::~CSoundManager()

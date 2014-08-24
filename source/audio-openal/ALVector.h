@@ -1,5 +1,5 @@
-#ifndef _hrengin_ALutil_
-#define _hrengin_ALutil_
+#ifndef _hrengin_ALvector_
+#define _hrengin_ALvector_
 
 #include <AL/al.h>
 
@@ -23,4 +23,4 @@ ALVector3d HrgVectorToAL(Vector3d vec)
 } // namespace audio
 } // namespace hrengin
 
-#endif //_hrengin_ALutil_
+#endif //_hrengin_ALvector_
