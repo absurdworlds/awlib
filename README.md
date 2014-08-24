@@ -3,7 +3,7 @@ hrengin
 
 ## What is this?  ##
 
-This is the core of hrengin (formerly hrEngine), a gneric purpose game engine.
+This is the core of hrengin (formerly hrEngine), a general purpose game engine.
 hrengine is only a library, and can not be used alone.
 
 ### Status ###
