@@ -36,9 +36,9 @@ IModel* CModelLoader::loadModel(const char* filename)
 
 	io::getFileExtension(ext, filename);
 
-	if(ext == "hndf" || ext == "ndf") {
+	if(ext == "hndf" || ext == "hdf") {
 	
-		io::IHDFParser* hndf = io::createHndfParser(file);
+		io::IHDFParser* hndf = io::createHDFParser(file);
 	
 		if(!hndf) {
 			return false;

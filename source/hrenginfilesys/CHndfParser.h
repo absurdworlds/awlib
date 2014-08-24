@@ -95,6 +95,9 @@ private:
 	void skipLine();
 	void skipWhitespace();
 	void skipInlineWhitespace();
+	//void skip(bool (*condition)(u8));
+	template<bool (*condition)(u8)> 
+	void skip();
 
 	enum HdfParserState {
 		HDF_S_IDLE = 0,

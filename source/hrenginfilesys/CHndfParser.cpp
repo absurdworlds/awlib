@@ -340,36 +340,38 @@ void CHndfParser::error(HdfParserMessage type, std::string msg)
 	}
 }
 
-void CHndfParser::skipLine()
+
+//void CHndfParser::skip(bool (*condition)(u8))
+template<bool (*condition)(u8)>
+void CHndfParser::skip()
 {
 	u8 c;
-	
+
 	stream_->getCurrent(c);
 	
-	do {
+	while(condition(c)) {
 		stream_->getNext(c);
-	} while (c != '\n');
+	}
+}
+
+inline bool notLineBreak(u8 c)
+{
+	return c != '\n';
+}
+
+void CHndfParser::skipLine()
+{
+	skip<notLineBreak>();
 }
 
 void CHndfParser::skipWhitespace()
 {
-	u8 c;
-
-	stream_->getCurrent(c);
-	
-	while(isWhitespace(c)) {
-		stream_->getNext(c);
-	}
+	skip<isWhitespace>();
 }
+
 void CHndfParser::skipInlineWhitespace()
 {
-	u8 c;
-
-	stream_->getCurrent(c);
-	
-	while(isInlineWhitespace(c)) {
-		stream_->getNext(c);
-	}
+	skip<isInlineWhitespace>();
 }
 
 void CHndfParser::fastForward() {
@@ -464,9 +466,8 @@ void CHndfParser::readStringToken(std::string& val) {
 
 	stream_->getCurrent(c);
 	
-	//if(c == '"') {
 	stream_->getNext(c);
-	/*} else {
+	/*if(c != '"') {
 		// should not get this error
 		error(HDF_ERR_ERROR, "illegal string token");
 	}*/
