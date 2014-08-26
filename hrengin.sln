@@ -7,13 +7,13 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "hrengin", "source\hrengin\h
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "hrenginfilesys", "source\hrenginfilesys\hrenginfilesys.vcxproj", "{74AD5236-2D65-440E-A517-4EF8B52EE555}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "graphics-irr", "source\graphics-irr\graphics.vcxproj", "{20384754-19D0-4480-9EBC-1D326B7B9E60}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "graphics", "source\graphics-irr\graphics.vcxproj", "{20384754-19D0-4480-9EBC-1D326B7B9E60}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "hrenginphysics", "source\hrenginphysics\hrenginphysics.vcxproj", "{C793384E-45F2-4021-B9E0-1CB3D12DA78E}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "hrenginscript", "source\hrenginscript\hrenginscript.vcxproj", "{03971781-199E-4610-A13D-0F71721AFD5F}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "hrenginaudio", "source\hrenginaudio.vcxproj", "{D925C491-966D-4700-8D25-24411EEC9E07}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "hrenginaudio", "..\hrenginaudio\hrenginaudio.vcxproj", "{D925C491-966D-4700-8D25-24411EEC9E07}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

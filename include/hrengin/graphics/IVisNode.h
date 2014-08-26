@@ -1,15 +1,12 @@
-#ifndef __H_INCLUDED__HRENGIN_IVisNode
-#define __H_INCLUDED__HRENGIN_IVisNode
+#ifndef _hrengin_IVisNode_
+#define _hrengin_IVisNode_
 
 #include <hrengin/common/hrengintypes.h>
 #include <hrengin/entities/IBaseEntity.h>
 #include <hrengin/graphics/ISceneNode.h>
 
-namespace hrengin
-{
-namespace graphics
-{
-	
+namespace hrengin {
+namespace graphics {
 
 class IVisNode : public ISceneNode
 {
@@ -21,8 +18,7 @@ class IVisNode : public ISceneNode
 		virtual void ReplaceMesh(i8 meshslot, char * meshname) = 0;
 };
 
-	
 } // namespace graphics
 } // namespace hrengin
 
-#endif//__H_INCLUDED__HRENGIN_IVisNode
+#endif//_hrengin_IVisNode_

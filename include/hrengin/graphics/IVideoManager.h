@@ -1,5 +1,5 @@
-#ifndef __H_INCLUDED__HRENGIN_IVideoManager
-#define __H_INCLUDED__HRENGIN_IVideoManager
+#ifndef _hrengin_IVideoManager_
+#define _hrengin_IVideoManager_
 
 #include <hrengin/common/hrenginapi.h>
 #include <hrengin/common/Vector3d.h>
@@ -18,21 +18,16 @@ class IVisNode;
 class ICameraNode;
 class ILightNode;
 
-struct PlatformData
-{
-	union
-	{
-		struct
-		{
+struct PlatformData {
+	union {
+		struct {
 			void* wndHandle;
 		} win32;
 	};
 };
 
-class IVideoManager
-{
+class IVideoManager {
 public:
-	virtual void CreateScene() = 0;
 	virtual bool advance() = 0;
 	// draw the scene
 	virtual void draw() = 0;
@@ -54,9 +49,9 @@ public:
 	virtual void end()=0;
 };
 
-HRENGINGRAPHICS_API IVideoManager& getVideoManager();
+HRENGINGRAPHICS_API IVideoManager* createVideoManager();
 
 } // namespace graphics
 } // namespace hrengin
 
-#endif//__HG_IVideoManager_h__
+#endif//_hrengin_IVideoManager_

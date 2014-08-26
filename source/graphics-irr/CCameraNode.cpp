@@ -7,10 +7,8 @@
 
 #include "CCameraNode.h"
 
-namespace hrengin
-{
-namespace graphics
-{
+namespace hrengin {
+namespace graphics {
 	
 //! constructor
 //!

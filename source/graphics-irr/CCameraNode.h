@@ -1,6 +1,6 @@
 
-#ifndef __HG_hrñCameraNode__
-#define __HG_hrñCameraNode__
+#ifndef _hrengin_CCameraNode_
+#define _hrengin_CCameraNode_
 
 #include <Irrlicht/Irrlicht.h>
 
@@ -8,12 +8,8 @@
 #include <hrengin/graphics/IVideoManager.h>
 #include <hrengin/entities/IBaseEntity.h>
 
-namespace hrengin
-{
-namespace graphics
-{
-
-
+namespace hrengin {
+namespace graphics {
 
 class CCameraNode : public ICameraNode
 {
@@ -55,4 +51,4 @@ class CCameraNode : public ICameraNode
 } // namespace graphics
 } // namespace hrengin
 
-#endif//__HG_hrñVisNode__
+#endif//_hrengin_CCameraNode_

@@ -1,11 +1,10 @@
-#ifndef __hrengin_IRenderable__
-#define __hrengin_IRenderable__
+#ifndef _hrengin_IRenderable_
+#define _hrengin_IRenderable_
 
 namespace hrengin {
 namespace video {
 
-class IRenderable
-{
+class IRenderable {
 public:
 	virtual void render() = 0;
 

@@ -1,5 +1,5 @@
-#ifndef __hrengin_IVertexListPrimitive__
-#define __hrengin_IVertexListPrimitive__
+#ifndef _hrengin_IVertexListPrimitive_
+#define _hrengin_IVertexListPrimitive_
 
 #include <hrengin/common/hrengintypes.h>
 #include <hrengin/common/Vector3d.h>
@@ -19,4 +19,4 @@ public:
 } // namespace video
 } // namespace hrengin
 
-#endif//__hrengin_IVertexListPrimitive__
+#endif//_hrengin_IVertexListPrimitive_

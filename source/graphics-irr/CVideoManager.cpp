@@ -11,23 +11,16 @@
 namespace hrengin {
 namespace graphics {
 
-HRENGINGRAPHICS_API IVideoManager& getVideoManager()
+IVideoManager* createVideoManager()
 {
-	return getLocalManager();
-}
-
-CVideoManager& getLocalManager()
-{
-	static CVideoManager* singleton = new CVideoManager;
-	return *singleton;
+	return new CVideoManager();
 }
 
 CVideoManager::CVideoManager()
 {
-	device = irr::createDevice( irr::video::EDT_DIRECT3D9, irr::core::dimension2d<irr::u32>(1066, 600), 32, false, false, true, 0);
+	device = irr::createDevice( irr::video::EDT_OPENGL, irr::core::dimension2d<irr::u32>(1066, 600), 32, false, false, true, 0);
 
-	/*if (device == 0)
-	{
+	/*if (device == 0) {
 		throw something;
 	}*/
 
@@ -87,14 +80,11 @@ bool CVideoManager::advance()
 
 void CVideoManager::draw()
 {
-		driver->beginScene(true, true, irr::video::SColor(255, 100, 101, 140));
 	//if (device->isWindowActive()) {
 
 		scnmgr->drawAll();
 		guienv->drawAll();
-
 	//}
-	
 }
 
 
@@ -142,28 +132,24 @@ irr::IrrlichtDevice*  CVideoManager::GetDevice() const
 
 void CVideoManager::ll1()
 {
+	irr::video::SMaterial debugMat;
+	debugMat.Lighting = false;
 
-   irr::video::SMaterial debugMat;
-   debugMat.Lighting = false;
-
-         driver->setMaterial(debugMat);
-         driver->setTransform(irr::video::ETS_WORLD, irr::core::IdentityMatrix);
-	 }
+	driver->setMaterial(debugMat);
+	driver->setTransform(irr::video::ETS_WORLD, irr::core::IdentityMatrix);
+}
 
 void CVideoManager::end()
 {
+	irr::video::SMaterial debugMat;
+	debugMat.Lighting = false;
 
-   irr::video::SMaterial debugMat;
-   debugMat.Lighting = false;
-
-         driver->setMaterial(debugMat);
-         driver->setTransform(irr::video::ETS_WORLD, irr::core::IdentityMatrix);
+	driver->setMaterial(debugMat);
+	driver->setTransform(irr::video::ETS_WORLD, irr::core::IdentityMatrix);
 
 	 
-		driver->endScene();
 	device->yield();
-	 }
-
+}
 
 void CVideoManager::drawLine(const Vector3d& from, const Vector3d& to, const Vector3d& color)
 {

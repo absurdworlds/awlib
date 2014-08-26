@@ -1,5 +1,5 @@
-#ifndef __hrengin_IVertexBuffer__
-#define __hrengin_IVertexBuffer__
+#ifndef _hrengin_IVertexBuffer_
+#define _hrengin_IVertexBuffer_
 
 #include <hrengin/common/hrengintypes.h>
 
@@ -21,4 +21,4 @@ public:
 } // namespace video
 } // namespace hrengin
 
-#endif//__hrengin_IVertexBuffer__
+#endif//_hrengin_IVertexBuffer_

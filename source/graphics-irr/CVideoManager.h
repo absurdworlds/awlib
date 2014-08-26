@@ -1,6 +1,5 @@
-
-#ifndef __HG_CVideoManager_h__
-#define __HG_CVideoManager_h__
+#ifndef _hrengin_CVideoManager_
+#define _hrengin_CVideoManager_
 
 #include <vector>
 
@@ -105,16 +104,9 @@ private:
 
 	PlatformData platformdata_;
 
-/*// DEBUG:
-#ifdef _DEBUG
-	bool __HRDEBUG_sceneCreated;
-#endif*/
-
 };
-
-CVideoManager& getLocalManager();
 	
 } // namespace graphics
 } // namespace hrengin
 
-#endif//__HG_CVideoManager_h__
+#endif//_hrengin_CVideoManager_
