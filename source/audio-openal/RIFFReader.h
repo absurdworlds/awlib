@@ -19,6 +19,19 @@ enum class WaveFields {
 	DataTag = 'atad'
 };
 
+enum class WaveFormat {
+	PCM = 0x01,
+	IEEE = 0x03,
+	ALaw = 0x06,
+	MuLaw = 0x07,
+	IMAADPCM = 0x11,
+	YamahaITUG723ADPCM = 0x16,
+	GSM610 = 0x31,
+	ITUG721ADPCM = 0x40,
+	MPEG = 0x50,
+	Extensible = 0xFFFE
+};
+
 bool readWAV(std::string path, SoundSample& sample) 
 {
 	io::IReadFile* file = io::openReadFile(path);

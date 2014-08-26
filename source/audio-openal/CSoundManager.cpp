@@ -68,7 +68,7 @@ ISound3D* CSoundManager::createSound3D(const char* fileName)
 
 	ALuint buffer = soundMap_[fileName];
 
-	return new CSound(buffer)
+	return new CSound(buffer);
 }
 
 
