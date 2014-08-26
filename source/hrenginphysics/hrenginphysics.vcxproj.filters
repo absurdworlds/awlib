@@ -33,6 +33,7 @@
     <ClInclude Include="..\..\include\hrengin\physics\PhysModel.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="hrgToBullet.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CBulletPhysics.cpp">

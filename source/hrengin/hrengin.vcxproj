@@ -42,8 +42,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(SolutionDir)include;$(SolutionDir)..\External\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)\lib\win32-msvc-debug;$(SolutionDir)..\External\lib\win32-msvc-debug;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)include;$(SolutionDir)..\..\External\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)\lib\win32-msvc-debug;$(SolutionDir)..\..\External\lib\win32-msvc-debug;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
