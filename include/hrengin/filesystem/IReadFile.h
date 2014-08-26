@@ -9,9 +9,10 @@
 namespace hrengin {
 namespace io {
 
-class IReadFile
-{
+class IReadFile {
 public:
+	virtual ~IReadFile() {};
+
 	virtual i32 read(void* buffer, u32 size) = 0;
 	virtual i32 seek(i32 offset, bool relative = false) = 0;
 	virtual u32 tell() const = 0;
