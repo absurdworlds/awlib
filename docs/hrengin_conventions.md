@@ -15,6 +15,16 @@ If more then four levels of nesting present, function should be split.
 
 Everything inside a scope must be indented by one level, with exception to labels and namespace scopes.
 
+### Naming
+
+Class names should be written in CamelCase. Classes should have 'C' prefix, and interfaces should have 'I' prefix.
+
+Enums and structs should also named in CamelCase, without prefix.
+
+Precprocessor definitions and constants names should be writted in UPPER_CASE.
+
+Variables, functions and class members names should be written in camelCase, beginning with a lower case letter. Member variables should be suffixed with '_' (underscore).
+
 ### Header guards
 
 All header guards should have following format:
