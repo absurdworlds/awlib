@@ -90,6 +90,12 @@
     <ClInclude Include="..\..\include\hrengin\graphics\ISceneManager.h">
       <Filter>include\graphics</Filter>
     </ClInclude>
+    <ClInclude Include="CRenderingDevice.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="CSceneManager.h">
+      <Filter>source</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CCameraNode.cpp">
@@ -114,6 +120,9 @@
       <Filter>source\IrrExt</Filter>
     </ClCompile>
     <ClCompile Include="hrengintime.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="CRenderingDevice.cpp">
       <Filter>source</Filter>
     </ClCompile>
   </ItemGroup>

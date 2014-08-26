@@ -1,5 +1,5 @@
-#ifndef __H_INCLUDED__HRENGIN_IInputManager
-#define __H_INCLUDED__HRENGIN_IInputManager
+#ifndef _hrengin_IInputManager_
+#define _hrengin_IInputManager_
 
 #include <hrengin/common/hrengintypes.h>
 #include <hrengin/common/hrenginapi.h>

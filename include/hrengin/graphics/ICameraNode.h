@@ -7,8 +7,6 @@
 namespace hrengin {
 namespace graphics {
 
-
-
 class ICameraNode : public ISceneNode {
 public:
 	virtual void AttachToEntity(IBaseEntity* attach) = 0;
