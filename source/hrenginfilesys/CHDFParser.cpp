@@ -349,7 +349,7 @@ void CHndfParser::skip()
 
 	stream_->getCurrent(c);
 	
-	while(condition(c)) {
+	while(condition(c) && c != 0) {
 		stream_->getNext(c);
 	}
 }
@@ -555,26 +555,26 @@ void CHndfParser::readValue(T& var)
 
 // TODO: make helper class to reduce almost duplicate functions
 
-template<typename T> 
+template<typename T>
 void CHndfParser::convertValue(HdfToken& token, T& val)
 {
 	// should never get this error
 	error(HDF_ERR_ERROR, "unknown type");
 }
 
-template<> 
+template<>
 void CHndfParser::convertValue(HdfToken& token, f32& val)
 {	
 	val = strtof(token.value.c_str(), 0);
 }
 
-template<> 
+template<>
 void CHndfParser::convertValue(HdfToken& token, f64& val)
 {
 	val = strtod(token.value.c_str(), 0);
 }
 
-template<> 
+template<>
 void CHndfParser::convertValue(HdfToken& token, Vector3d& val)
 {
 	val.X = strtod(token.value.c_str(), 0);
@@ -588,25 +588,25 @@ void CHndfParser::convertValue(HdfToken& token, Vector3d& val)
 	val.Z = strtod(token.value.c_str(), 0);
 }
 
-template<> 
+template<>
 void CHndfParser::convertValue(HdfToken& token, std::string& val)
 {	
 	val = token.value;
 }
 
-template<> 
+template<>
 void CHndfParser::convertValue(HdfToken& token, u32& val)
 {	
 	val = strtoul(token.value.c_str(), 0, 10);
 }
 
-template<> 
+template<>
 void CHndfParser::convertValue(HdfToken& token, i32& val)
 {	
 	val = strtol(token.value.c_str(), 0, 10);
 }
 
-template<> 
+template<>
 void CHndfParser::convertValue(HdfToken& token, bool& val)
 {
 	if(token.value == "true" || token.value == "1") {

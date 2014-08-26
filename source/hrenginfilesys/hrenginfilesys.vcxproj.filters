@@ -53,13 +53,13 @@
     <ClCompile Include="CFileSystem.cpp">
       <Filter>source</Filter>
     </ClCompile>
-    <ClCompile Include="CHndfParser.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
     <ClCompile Include="hrenginfsutil.cpp">
       <Filter>source</Filter>
     </ClCompile>
     <ClCompile Include="CBufferedStream.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="CHDFParser.cpp">
       <Filter>source</Filter>
     </ClCompile>
   </ItemGroup>

@@ -79,16 +79,19 @@ The code below provides an example of reading this structure:
 	};
 
 	// function to for parsing a single node
-	void parseNode(IHDFParser* hdf, std::string node, Message& msg) 
+	void parseNode(IHDFParser* hdf, std::string node, Message& msg)
 	{
 		// any object must be read strictly in this order
 		while(hdf->read()) {
 			HdfObjectType type = hdf->getObjectType();
-			std::string name = hdf->getObjectName();
+			std::string name
+
+			hdf->getObjectName(name);
 
 			switch(type) {
 			case HDF_OBJ_NODE: // recursively parse a subnode
-				void parseNode(hdf, name, msg);
+				parseNode(hdf, name, msg);
+				break;
 			case HDF_OBJ_VAL: // parse and store a variable 
 				if(name == "red" && node == "color") {
 					hdf->readInt(msg.color.red);
@@ -101,8 +104,9 @@ The code below provides an example of reading this structure:
 				} else {
 					hdf->error(HDF_ERR_ERROR, "unknown object: " + name);
 				}
-			case HDF_OBJ_NODE_END: // reached an end of node - exit
 				break;
+			case HDF_OBJ_NODE_END: // reached an end of node - exit
+				return;
 			case HDF_OBJ_NULL:
 			default:
 				return;
@@ -122,18 +126,19 @@ The code below provides an example of reading this structure:
 
 		while(hdf->read()) {
 			if(hdf->getObjectType() == HDF_OBJ_NODE)) {
-				std::string name = hdf->getObjectName();
+				std::string name;
+				hdf->getObjectName(name);
 
 				// skip unknown node
 				if(name != "msg") {
-					hdf->warning(HDF_ERR_ERROR, "unknown node: " + name);
+					hdf->error(HDF_ERR_WARNING, "unknown node: " + name);
 					hdf->skipNode();
+				} else {
+					Message msg;
+					parseNode(hdf, name, msg);
+
+					msgLog.push_back(msg);
 				}
-
-				Message msg;
-				void parseNode(hdf, hdf->getObjectName(), msg);
-
-				msgLog.push_back(msg);
 			} else {
 				break;
 			}
@@ -143,9 +148,12 @@ The code below provides an example of reading this structure:
 		delete file;
 	}
 */
-class IHDFParser
-{
+
+/* Interface for reading hrengin's HDF files. This parser provides a read-only access to documents in HDF 1.1.1 format. */
+class IHDFParser {
 public:
+	virtual ~IHDFParser() {};
+
 	/* fast-forward to the next object */
 	virtual bool read() = 0;
 
@@ -167,6 +175,7 @@ public:
 	virtual void readInt(i32& val) = 0;
 	virtual void readBool(bool& val) = 0;
 	virtual void readString(std::string& val) = 0;
+	//virtual void readString(char* val) = 0;
 	virtual void readVector3d(Vector3d& val) = 0;
 
 	/* skip current value or node (with all subnodes) */

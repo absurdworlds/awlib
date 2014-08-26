@@ -55,7 +55,7 @@ class CHndfParser : public IHDFParser
 {
 public:
 	CHndfParser(IReadFile* file);
-	~CHndfParser();
+	virtual ~CHndfParser();
 	
 	virtual void skipNode();
 	virtual void skipValue();
