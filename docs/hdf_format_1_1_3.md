@@ -1,4 +1,4 @@
-HDF version 1.1.2 format description
+HDF version 1.1.3 format description
 ====================================
 
 ***
@@ -52,6 +52,8 @@ The HDF format was not based on any other document format, although it was inspi
     + removed separator characters
 - HDF 1.1.2
     + reintroduced separator characters, which don't serve any syntactic purpose, but are intended to be used as readability characters
+- HDF 1.1.3
+    + added node-values, alternative form for values: `[node-value = string:"val"]`
 
 ### 1.2 Termiology <a name="sec-terminology"/>
 *stub*
@@ -78,6 +80,8 @@ matches any character inside brackets;
 matches any character in range;
 	^symbol
 matches any symbol not matching a symbol;
+	A - B
+matches a symbol matching A, but not B;
 	(symbol)
 `symbol` is treated as a single expression;
 	symbol?
@@ -137,6 +141,8 @@ HDF document is composed of units referred here as 'objects', separated by white
 There are three types of objects: [`node`](#def-node), [`value`](#def-value) and [`command`](#def-command). `command` must have a [depth](#def-depth) of zero, and `value` must have a non-zero depth. `Nodes` may occur at any depth.
 
 	object ::= node | value | command
+	node-object ::= object - command
+	root-object ::= object - value
 
 ####2.3.1 Node <a name="sec-node"/>
 
