@@ -169,6 +169,10 @@ bool CHndfParser::read() {
 	fastForward();
 
 	stream_->getCurrent(c);
+	
+	if(c == 0) {
+		return false;
+	}
 
 	if(depth_ == 0) {
 		while(c == '!') {
