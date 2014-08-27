@@ -6,7 +6,7 @@
 #include <hrengin/common/Vector2d.h>
 #include <hrengin/common/Vector3d.h>
 
-#include "CHndfParser.h"
+#include "CHDFParser.h"
 
 namespace hrengin {
 namespace io {
@@ -490,7 +490,7 @@ void CHndfParser::readNumber(std::string& val)
 
 	stream_->getCurrent(c);
 
-	while (!isWhitespace(c)) {
+	while (!isWhitespace(c) && (c != ']')) {
 		if (!(c >= '0' && c <= '9') && !in(c, '.', 'e', 'E', '+', '-' )) {
 			error(HDF_ERR_WARNING, "invalid number");
 		}

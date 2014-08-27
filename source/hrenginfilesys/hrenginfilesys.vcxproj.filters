@@ -24,9 +24,6 @@
     <ClInclude Include="CFileSystem.h">
       <Filter>source</Filter>
     </ClInclude>
-    <ClInclude Include="CHndfParser.h">
-      <Filter>source</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\hrengin\filesystem\hrenginfsutil.h">
       <Filter>include</Filter>
     </ClInclude>
@@ -44,6 +41,9 @@
     </ClInclude>
     <ClInclude Include="..\..\include\hrengin\filesystem\IHDFParser.h">
       <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="CHDFParser.h">
+      <Filter>source</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

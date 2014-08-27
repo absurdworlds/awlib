@@ -21,7 +21,7 @@
     <ClInclude Include="..\..\include\hrengin\filesystem\IWriteFile.h" />
     <ClInclude Include="CBufferedStream.h" />
     <ClInclude Include="CFileSystem.h" />
-    <ClInclude Include="CHndfParser.h" />
+    <ClInclude Include="CHDFParser.h" />
     <ClInclude Include="CReadFile.h" />
   </ItemGroup>
   <ItemGroup>
