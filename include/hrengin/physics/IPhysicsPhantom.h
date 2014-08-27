@@ -1,13 +1,12 @@
-#ifndef __HRENGIN_PHYSICS_IPhysicsPhantom_H__
-#define __HRENGIN_PHYSICS_IPhysicsPhantom_H__
+#ifndef _physics_IPhysicsPhantom_
+#define _physics_IPhysicsPhantom_
 
 #include <hrengin/physics/IPhysicsObject.h>
 
 namespace hrengin {
 namespace physics {
 
-class IPhysicsPhantom : public IPhysicsObject
-{
+class IPhysicsPhantom : public IPhysicsObject {
 public:
 protected:
 };

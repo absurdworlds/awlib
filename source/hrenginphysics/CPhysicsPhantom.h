@@ -1,7 +1,5 @@
-#ifndef __HRENGIN_PHYSICS_CPhysicsPhantom__
-#define __HRENGIN_PHYSICS_CPhysicsPhantom__
-
-#include <stdio.h>
+#ifndef _hrengin_CPhysicsPhantom_
+#define _hrengin_CPhysicsPhantom_
 
 #include <Bullet/btBulletDynamicsCommon.h>
 #include <Bullet/btBulletCollisionCommon.h>
@@ -14,14 +12,13 @@
 namespace hrengin {
 namespace physics {
 
-class CPhysicsPhantom : public IPhysicsPhantom
-{
+class CPhysicsPhantom : public IPhysicsPhantom {
 public:
 	CPhysicsPhantom(btCollisionObject* pCollObject);
 	CPhysicsPhantom(btCollisionObject* pCollObject, IBaseEntity* pAttach);
 
 	virtual void attachToEntity(IBaseEntity* pAttach) {AttachedTo = pAttach;};
-	virtual IBaseEntity* getEntity();;
+	virtual IBaseEntity* getEntity();
 
 	virtual void setPosition(Vector3d pos);
 	virtual void setRotation(Vector3d rot);
@@ -34,4 +31,4 @@ protected:
 }	
 } // namespace hrengin
 
-#endif//__HRENGIN_PHYSICS_CPhysicsPhantom__
+#endif//_hrengin_CPhysicsPhantom_

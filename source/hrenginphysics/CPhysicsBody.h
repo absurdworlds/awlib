@@ -1,5 +1,5 @@
-#ifndef __HRENGIN_PHYSICS_CPhysicsBody__
-#define __HRENGIN_PHYSICS_CPhysicsBody__
+#ifndef _hrengin_CPhysicsBody_
+#define _hrengin_CPhysicsBody_
 
 #include <stdio.h>
 
@@ -14,8 +14,7 @@
 namespace hrengin {
 namespace physics {
 
-class CPhysicsBody : public IPhysicsBody
-{
+class CPhysicsBody : public IPhysicsBody {
 public:
 	CPhysicsBody(btCollisionObject* pCollObject);
 	CPhysicsBody(btCollisionObject* pCollObject, IBaseEntity* pAttach);
@@ -37,4 +36,4 @@ protected:
 }	
 } // namespace hrengin
 
-#endif//__HRENGIN_PHYSICS_CPhysicsBody__
+#endif//_hrengin_CPhysicsBody_

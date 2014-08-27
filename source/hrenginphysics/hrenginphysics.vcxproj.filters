@@ -30,9 +30,6 @@
     <ClInclude Include="CPhysicsBody.h">
       <Filter>source</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\hrengin\physics\PhysModel.h">
-      <Filter>include</Filter>
-    </ClInclude>
     <ClInclude Include="hrgToBullet.h" />
   </ItemGroup>
   <ItemGroup>

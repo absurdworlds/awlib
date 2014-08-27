@@ -15,7 +15,6 @@
     <ClInclude Include="..\..\include\hrengin\physics\IPhysicsManager.h" />
     <ClInclude Include="..\..\include\hrengin\physics\IPhysicsObject.h" />
     <ClInclude Include="..\..\include\hrengin\physics\IPhysicsPhantom.h" />
-    <ClInclude Include="..\..\include\hrengin\physics\PhysModel.h" />
     <ClInclude Include="CBulletPhysics.h" />
     <ClInclude Include="CPhysicsBody.h" />
     <ClInclude Include="CPhysicsPhantom.h" />

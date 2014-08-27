@@ -1,5 +1,5 @@
-#ifndef __HRENGIN_PHYSICS_CBulletPhysics_H__
-#define __HRENGIN_PHYSICS_CBulletPhysics_H__
+#ifndef _hrengin_CBulletPhysics_
+#define _hrengin_CBulletPhysics_
 
 #include <map>
 #include <string>
@@ -15,13 +15,14 @@ namespace hrengin {
 struct SPrimitive;
 struct SMesh;
 
+class IModel;
+
 namespace physics {
 
 class CPhysicsPhantom;
 class CPhysicsBody;
 
-class CBulletPhysics : public IPhysicsManager
-{
+class CBulletPhysics : public IPhysicsManager {
 public:
 	CBulletPhysics();
 	~CBulletPhysics();
