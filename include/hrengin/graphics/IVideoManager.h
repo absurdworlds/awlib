@@ -1,7 +1,7 @@
 #ifndef __H_INCLUDED__HRENGIN_IVideoManager
 #define __H_INCLUDED__HRENGIN_IVideoManager
 
-#include <hrengin/common/hrenginapi.h>
+#include <hrengin/common/api.h>
 #include <hrengin/common/Vector3d.h>
 
 namespace hrengin {

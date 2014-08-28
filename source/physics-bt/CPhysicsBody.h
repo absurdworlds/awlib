@@ -6,8 +6,8 @@
 #include <Bullet/btBulletDynamicsCommon.h>
 #include <Bullet/btBulletCollisionCommon.h>
 
-#include <hrengin/common/hrengintypes.h>
-#include <hrengin/entities/IBaseEntity.h>
+#include <hrengin/common/types.h>
+#include <hrengin/game/IBaseEntity.h>
 #include <hrengin/physics/IPhysicsBody.h>
 //#include <hrengin/physics/IPhysicsManager.h>
 

@@ -4,8 +4,8 @@
 #include <string>
 #include <vector>
 
-#include <hrengin/common/hrengintypes.h>
-#include <hrengin/filesystem/IHDFParser.h>
+#include <hrengin/common/types.h>
+#include <hrengin/core/IHDFParser.h>
 
 namespace hrengin {
 namespace io {

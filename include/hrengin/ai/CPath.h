@@ -1,16 +1,15 @@
-#ifndef __HRENGIN_CPath_H__
-#define __HRENGIN_CPath_H__
+#ifndef _hrengin_CPath_
+#define _hrengin_CPath_
 
 #include <vector>
 
-#include <hrengin/common/hrengintypes.h>
+#include <hrengin/common/types.h>
 #include <hrengin/common/Vector3d.h>
 
 namespace hrengin {
 namespace ai {
 
-class CPath
-{
+class CPath {
 public:
 	typedef u32 nodeId;
 
@@ -64,7 +63,7 @@ public:
 	}
 };
 
-}
-}
+} // namespace ai
+} // namespace hrengin
 
-#endif//__HRENGIN_CPath_H__
+#endif//_hrengin_CPath_

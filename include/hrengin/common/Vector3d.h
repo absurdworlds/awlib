@@ -1,8 +1,7 @@
+#ifndef _hrengin_Vector3d_
+#define _hrengin_Vector3d_
 
-#ifndef __HR_T_VECTOR_3D_H__
-#define __HR_T_VECTOR_3D_H__
-
-#include <hrengin/common/hrenginmath.h>
+#include <hrengin/common/math.h>
 
 namespace hrengin {
 
@@ -518,5 +517,4 @@ typedef hrVector3d<f64> Vector3d;
 
 } // end namespace hrengin
 
-#endif//__HR_T_VECTOR_3D_H__
-
+#endif//_hrengin_Vector3d_

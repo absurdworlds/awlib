@@ -1,7 +1,7 @@
-#ifndef __HRENGIN_SOUND_ISoundManager_H__
-#define __HRENGIN_SOUND_ISoundManager_H__
+#ifndef _hrengin_ISoundManager_
+#define _hrengin_ISoundManager_
 
-#include <hrengin/common/hrenginapi.h>
+#include <hrengin/common/api.h>
 
 namespace hrengin
 {
@@ -23,4 +23,4 @@ HRENGINSOUND_API ISoundManager& getSoundManager();
 } // namespace sound
 } // namespace hrengin
 
-#endif//__HRENGIN_SOUND_ISoundManager_H__
+#endif//_hrengin_ISoundManager_

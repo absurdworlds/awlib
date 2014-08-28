@@ -1,8 +1,8 @@
 
 #include <algorithm>
 
-#include <hrengin/common/hrengintypes.h>
-#include <hrengin/filesystem/hrenginfsutil.h>
+#include <hrengin/common/types.h>
+#include <hrengin/core/hrenginfsutil.h>
 
 namespace hrengin {
 namespace io {

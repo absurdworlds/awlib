@@ -1,8 +1,8 @@
 #ifndef __hrengin_CBufferedStream__
 #define __hrengin_CBufferedStream__
 
-#include <hrengin/common/hrengintypes.h>
-#include <hrengin/filesystem/IBufferedStream.h>
+#include <hrengin/common/types.h>
+#include <hrengin/core/IBufferedStream.h>
 
 namespace hrengin {
 namespace io {

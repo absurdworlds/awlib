@@ -1,7 +1,7 @@
 #ifndef _hrengin_IModelLoader_
 #define _hrengin_IModelLoader_
 
-#include <hrengin/common/hrenginapi.h>
+#include <hrengin/common/api.h>
 
 namespace hrengin {
 

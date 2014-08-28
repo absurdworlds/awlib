@@ -6,7 +6,7 @@
 
 #include <Irrlicht/Irrlicht.h>
 
-#include <hrengin/common/hrengintypes.h>
+#include <hrengin/common/types.h>
 
 #include <hrengin/graphics/IVisNode.h>
 

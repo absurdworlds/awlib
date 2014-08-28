@@ -1,4 +1,4 @@
-#include <hrengin/common/hrenginmath.h>
+#include <hrengin/common/math.h>
 
 #include "CPhysicsBody.h"
 

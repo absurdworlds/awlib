@@ -3,9 +3,9 @@
 
 #include <vector>
 
-#include <hrengin/common/hrengintime.h>
-#include <hrengin/entities/IEventManager.h>
-#include <hrengin/entities/IThinking.h>
+#include <hrengin/common/time.h>
+#include <hrengin/game/IEventManager.h>
+#include <hrengin/game/IThinking.h>
 
 namespace hrengin {
 class CEventManager : public IEventManager {

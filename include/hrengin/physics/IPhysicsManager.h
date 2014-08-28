@@ -1,9 +1,9 @@
 #ifndef _hrengin_IPhysicsManager_
 #define _hrengin_IPhysicsManager_
 
-#include <hrengin/common/hrengintypes.h>
-#include <hrengin/common/hrenginapi.h>
-#include <hrengin/common/hrenginmacro.h>
+#include <hrengin/common/types.h>
+#include <hrengin/common/api.h>
+#include <hrengin/common/macro.h>
 
 #include <hrengin/common/Vector3d.h>
 

@@ -1,6 +1,6 @@
 #include <Irrlicht/irrlicht.h>
 
-#include <hrengin/common/hrengintime.h>
+#include <hrengin/common/time.h>
 
 #include "CVideoManager.h"
 

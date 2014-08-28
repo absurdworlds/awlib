@@ -1,8 +1,8 @@
 #ifndef _hrengin_Vector2d_
 #define _hrengin_Vector2d_
 
-#include <hrengin/common/hrengintypes.h>
-#include <hrengin/common/hrenginmath.h>
+#include <hrengin/common/types.h>
+#include <hrengin/common/math.h>
 
 namespace hrengin
 {
@@ -374,6 +374,7 @@ typedef hrVector2d<i32>	Vector2d;
 } // end namespace core
 } // end namespace irr
 
-#endif
-
 */
+
+
+#endif//_hrengin_Vector2d_

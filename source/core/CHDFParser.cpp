@@ -1,8 +1,8 @@
 
-#include <hrengin/filesystem/IReadFile.h>
-#include <hrengin/filesystem/IBufferedStream.h>
+#include <hrengin/core/IReadFile.h>
+#include <hrengin/core/IBufferedStream.h>
 
-#include <hrengin/common/hrengintypes.h>
+#include <hrengin/common/types.h>
 #include <hrengin/common/Vector2d.h>
 #include <hrengin/common/Vector3d.h>
 

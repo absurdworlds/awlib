@@ -1,7 +1,7 @@
 #ifndef __hrengin_ISceneNode__
 #define __hrengin_ISceneNode__
 
-#include <hrengin/common/hrengintypes.h>
+#include <hrengin/common/types.h>
 #include <hrengin/common/Vector3d.h>
 
 namespace hrengin {
