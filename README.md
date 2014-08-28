@@ -3,7 +3,7 @@ hrengin
 
 ## What is this?  ##
 
-This is hrengin (formerly hrEngine), a general purpose game engine.
+hrengin (formerly hrEngine) is a general purpose game engine.
 
 hrengin is based on modular architecture, that is, hrengin consists of several dynamically linked modules, which are intended to be easily replaceable (ideally without recompiling other modules).
 
@@ -30,3 +30,11 @@ Wish you luck!
 ### Configuration ###
 
 ## Modules ##
+
+hrengin consists of following modules:
++ game
++ core
++ graphics
++ physics
++ audio
++ platform
