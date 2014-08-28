@@ -32,9 +32,10 @@
     <ClCompile Include="hrenginfsutil.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{74AD5236-2D65-440E-A517-4EF8B52EE555}</ProjectGuid>
+    <ProjectGuid>{8F167D9D-4089-4663-82E1-61480E68881C}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>hrengin</RootNamespace>
+    <ProjectName>hrplatfrom</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
