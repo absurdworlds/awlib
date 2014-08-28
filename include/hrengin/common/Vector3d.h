@@ -1,8 +1,7 @@
+#ifndef _hrengin_Vector3d_
+#define _hrengin_Vector3d_
 
-#ifndef __HR_T_VECTOR_3D_H__
-#define __HR_T_VECTOR_3D_H__
-
-#include <hrengin/common/hrenginmath.h>
+#include <hrengin/common/math.h>
 
 namespace hrengin {
 
@@ -152,62 +151,9 @@ public:
 		Z*=i; 
 		return *this; 
 	}
-
-	/*//! sort in order X, Y, Z. Equality with rounding tolerance.
-	bool operator<=(const hrVector3d<T>&other) const
-	{
-		return 	(X<other.X || core::equals(X, other.X)) ||
-				(core::equals(X, other.X) && (Y<other.Y || core::equals(Y, other.Y))) ||
-				(core::equals(X, other.X) && core::equals(Y, other.Y) && (Z<other.Z || core::equals(Z, other.Z)));
-	}
-
-	//! sort in order X, Y, Z. Equality with rounding tolerance.
-	bool operator>=(const hrVector3d<T>&other) const
-	{
-		return 	(X>other.X || core::equals(X, other.X)) ||
-				(core::equals(X, other.X) && (Y>other.Y || core::equals(Y, other.Y))) ||
-				(core::equals(X, other.X) && core::equals(Y, other.Y) && (Z>other.Z || core::equals(Z, other.Z)));
-	}
-
-	//! sort in order X, Y, Z. Difference must be above rounding tolerance.
-	bool operator<(const hrVector3d<T>&other) const
-	{
-		return 	(X<other.X && !core::equals(X, other.X)) ||
-				(core::equals(X, other.X) && Y<other.Y && !core::equals(Y, other.Y)) ||
-				(core::equals(X, other.X) && core::equals(Y, other.Y) && Z<other.Z && !core::equals(Z, other.Z));
-	}
-
-	//! sort in order X, Y, Z. Difference must be above rounding tolerance.
-	bool operator>(const hrVector3d<T>&other) const
-	{
-		return 	(X>other.X && !core::equals(X, other.X)) ||
-				(core::equals(X, other.X) && Y>other.Y && !core::equals(Y, other.Y)) ||
-				(core::equals(X, other.X) && core::equals(Y, other.Y) && Z>other.Z && !core::equals(Z, other.Z));
-	}
-
-	//! use weak float compare
-	bool operator==(const hrVector3d<T>& other) const
-	{
-		return this->equals(other);
-	}
-
-	bool operator!=(const hrVector3d<T>& other) const
-	{
-		return !this->equals(other);
-	}
-
-	// functions
-
-	//! returns if this vector equals the other one, taking floating point rounding errors into account
-	bool equals(const hrVector3d<T>& other, const T tolerance = (T)ROUNDING_ERROR_f32 ) const
-	{
-		return core::equals(X, other.X, tolerance) &&
-			core::equals(Y, other.Y, tolerance) &&
-			core::equals(Z, other.Z, tolerance);
-	}
-
+	/*
 	hrVector3d<T>& set(const T nx, const T ny, const T nz) {X=nx; Y=ny; Z=nz; return *this;}
-	hrVector3d<T>& set(const hrVector3d<T>& p) {X=p.X; Y=p.Y; Z=p.Z;return *this;}*/
+	hrVector3d<T>& set(const hrVector3d<T>& p) {X=p.X; Y=p.Y; Z=p.Z;return *this;}-*/
 	
 	// Normalize the vector
 	hrVector3d<T>& normalize()
@@ -571,5 +517,4 @@ typedef hrVector3d<f64> Vector3d;
 
 } // end namespace hrengin
 
-#endif//__HR_T_VECTOR_3D_H__
-
+#endif//_hrengin_Vector3d_

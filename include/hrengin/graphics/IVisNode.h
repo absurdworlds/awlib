@@ -1,8 +1,8 @@
 #ifndef _hrengin_IVisNode_
 #define _hrengin_IVisNode_
 
-#include <hrengin/common/hrengintypes.h>
-#include <hrengin/entities/IBaseEntity.h>
+#include <hrengin/common/types.h>
+#include <hrengin/game/IBaseEntity.h>
 #include <hrengin/graphics/ISceneNode.h>
 
 namespace hrengin {

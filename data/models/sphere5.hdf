@@ -1,0 +1,9 @@
+!hdf_version "1.1.1"
+[model
+	[shapes
+		[shape
+			type = sphere
+			radius = float : 5.0
+		]
+	]
+]

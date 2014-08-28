@@ -1,9 +1,9 @@
 #ifndef _hrengin_IInputManager_
 #define _hrengin_IInputManager_
 
-#include <hrengin/common/hrengintypes.h>
-#include <hrengin/common/hrenginapi.h>
-#include <hrengin/entities/IControllable.h>
+#include <hrengin/common/types.h>
+#include <hrengin/common/api.h>
+#include <hrengin/game/IControllable.h>
 
 #include <hrengin/gui/InputEvent.h>
 
@@ -33,4 +33,4 @@ HRENGINGRAPHICS_API IInputManager& getInputManager();
 } // namespace io
 } // namespace hrengin
 
-#endif//__H_INCLUDED__HRENGIN_IInputManager
+#endif//_hrengin_IInputManager_

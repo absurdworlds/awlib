@@ -1,7 +1,7 @@
-#ifndef __HRENGIN_hrenginmodels_H__
-#define __HRENGIN_hrenginmodels_H__
+#ifndef _hrengin_models_
+#define _hrengin_models_
 
-#include <hrengin/common/hrengintypes.h>
+#include <hrengin/common/types.h>
 #include <hrengin/common/Vector3d.h>
 
 namespace hrengin {
@@ -14,8 +14,7 @@ enum Shape {
 	SHAPE_CONE
 };
 
-enum Axis
-{
+enum Axis {
 	AXIS_X,
 	AXIS_Y,
 	AXIS_Z
@@ -41,4 +40,4 @@ struct SMesh {
 
 } // namespace hrengin
 
-#endif __HRENGIN_hrenginmodels_H__
+#endif _hrengin_models_

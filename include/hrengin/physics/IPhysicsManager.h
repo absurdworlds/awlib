@@ -1,19 +1,17 @@
-#ifndef __HRENGIN_PHYSICS_IPhysicsManager_H__
-#define __HRENGIN_PHYSICS_IPhysicsManager_H__
+#ifndef _hrengin_IPhysicsManager_
+#define _hrengin_IPhysicsManager_
 
-#include <hrengin/common/hrengintypes.h>
-#include <hrengin/common/hrenginapi.h>
+#include <hrengin/common/types.h>
+#include <hrengin/common/api.h>
+#include <hrengin/common/macro.h>
 
 #include <hrengin/common/Vector3d.h>
 
-#include <hrengin/physics/PhysModel.h>
-
-#define BIT(x) (1<<(x))
 enum collisiontypes {
-    COL_NOTHING = 0, //<Collide with nothing
-    COL_GROUND = BIT(0), //<Collide with ships
-    COL_UNIT = BIT(1), //<Collide with walls
-    COL_DEBRIS = BIT(2) //<Collide with powerups
+	COL_NOTHING = 0,
+	COL_GROUND = BIT(0),
+	COL_UNIT = BIT(1),
+	COL_DEBRIS = BIT(2)
 };
 
 namespace hrengin {
@@ -27,8 +25,7 @@ class IPhysicsObject;
 class IPhysicsBody; //: IPhysicsObject;
 class IPhysicsPhantom; //: IPhysicsObject;
 
-class IPhysicsManager
-{
+class IPhysicsManager {
 public:
 	//virtual u32 makeShape(PhysShape type, f32 x, f32 y=0., f32 z=0.) = 0;
 	//virtual u32 addShape(const char * modelname) = 0;
@@ -53,4 +50,4 @@ HRENGINPHYSICS_API IPhysicsManager& getPhysicsManager();
 } // namespace physics
 } // namespace hrengin
 
-#endif//__HRENGIN_PHYSICS_IPhysicsManager_H__
+#endif//_hrengin_IPhysicsManager_

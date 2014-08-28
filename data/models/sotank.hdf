@@ -1,0 +1,11 @@
+!hdf_version "1.1.1"
+[model
+	[shapes
+		[shape
+			type = capsule
+			direction = axisZ
+			height = float: 8.111
+			radius = float: 1.997
+		]
+	]
+]

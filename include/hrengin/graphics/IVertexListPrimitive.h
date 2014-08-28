@@ -1,7 +1,7 @@
 #ifndef _hrengin_IVertexListPrimitive_
 #define _hrengin_IVertexListPrimitive_
 
-#include <hrengin/common/hrengintypes.h>
+#include <hrengin/common/types.h>
 #include <hrengin/common/Vector3d.h>
 #include <hrengin/graphics/IRenderable.h>
 

@@ -1,13 +1,12 @@
-#ifndef __HRENGIN_PHYSICS_IPhysicsBody_H__
-#define __HRENGIN_PHYSICS_IPhysicsBody_H__
+#ifndef _hrengin_IPhysicsBody_
+#define _hrengin_IPhysicsBody_
 
 #include <hrengin/physics/IPhysicsObject.h>
 
 namespace hrengin {
 namespace physics {
 
-class IPhysicsBody : public IPhysicsObject
-{
+class IPhysicsBody : public IPhysicsObject {
 public:
 	virtual Vector3d getPosition() = 0;
 	virtual Vector3d getRotation() = 0;
@@ -17,4 +16,4 @@ protected:
 }
 } // namespace hrengin
 
-#endif//__HRENGIN_PHYSICS_IPhysicsBody_H__ 
+#endif//_hrengin_IPhysicsBody_ 

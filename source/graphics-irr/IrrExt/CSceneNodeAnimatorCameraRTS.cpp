@@ -4,14 +4,12 @@
 
 #include "math.h"
 
-#include <hrengin/config/hrConfig.h>
+#include <hrengin/common/config.h>
 
 #include "CSceneNodeAnimatorCameraRTS.h"
 
-namespace irr
-{
-namespace scene
-{
+namespace irr {
+namespace scene {
 	
 	CSceneNodeAnimatorCameraRTS::CSceneNodeAnimatorCameraRTS(gui::ICursorControl* cursor, ITimer* timer, f32 distance, f32 angle, f32 angle_close, 
 		f32 translateSpeed, f32 rotateSpeed, f32 zoomSpeed) 

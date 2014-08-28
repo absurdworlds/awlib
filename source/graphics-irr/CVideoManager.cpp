@@ -1,6 +1,6 @@
 #include <Irrlicht/Irrlicht.h>
 
-#include <hrengin/filesystem/hrenginpaths.h>
+#include <hrengin/core/hrenginpaths.h>
 
 #include "CVisNode.h"
 #include "CCameraNode.h"

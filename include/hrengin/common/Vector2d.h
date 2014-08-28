@@ -1,15 +1,13 @@
+#ifndef _hrengin_Vector2d_
+#define _hrengin_Vector2d_
 
-#ifndef __HR_T_VECTOR_2D_H__
-#define __HR_T_VECTOR_2D_H__
+#include <hrengin/common/types.h>
+#include <hrengin/common/math.h>
 
-#include <Base/Math/hrMath.h>
-
-namespace hrengin
-{
+namespace hrengin {
 
 template <class T>
-class hrVector2d
-{
+class hrVector2d {
 public: /* Data */
 	// Vector coordinates
 	T X;
@@ -133,38 +131,6 @@ public: /* Functions */
 		Y/=v; 
 		return *this;
 	}
-
-	/* Comparison operators */
-
-	bool operator <= (const hrVector2d<T>&other) const
-	{
-		return SquareLength() < other.SquareLength() || math::equals(SquareLength(), other.SquareLength());
-	}
-
-	bool operator >= (const hrVector2d<T>&other) const
-	{
-		return SquareLength() > other.SquareLength() || math::equals(SquareLength(), other.SquareLength());
-	}
-
-	bool operator < (const hrVector2d<T>&other) const
-	{
-		return SquareLength() < other.SquareLength() && !math::equals(SquareLength(), other.SquareLength());
-	}
-
-	bool operator > (const hrVector2d<T>&other) const
-	{
-		return SquareLength() > other.SquareLength() && !math::equals(SquareLength(), other.SquareLength());
-	}
-
-	bool operator == (const hrVector2d<T>& other) const 
-	{ 
-		return math::equals(X, other.X) && math::equals(Y, other.Y); 
-	}
-
-	bool operator != (const hrVector2d<T>& other) const 
-	{ 
-		return !math::equals(X, other.X) && !math::equals(Y, other.Y); 
-	}
 	
 	/* Functions */
 
@@ -206,9 +172,9 @@ typedef hrVector2d<i32>	Vectori2d;
 typedef hrVector2d<i32>	Vector2d;
 }
 
-#endif //__HR_T_VECTOR_2D_H__
+#endif // _hrengin_Vector2d_
 
-/*
+/* borrowed from Irrlicht:
 	// functions	
 
 
@@ -405,7 +371,5 @@ typedef hrVector2d<i32>	Vector2d;
 
 } // end namespace core
 } // end namespace irr
-
-#endif
 
 */

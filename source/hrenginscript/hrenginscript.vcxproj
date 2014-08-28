@@ -14,6 +14,7 @@
     <ProjectGuid>{03971781-199E-4610-A13D-0F71721AFD5F}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>hrengin</RootNamespace>
+    <ProjectName>hrscript</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

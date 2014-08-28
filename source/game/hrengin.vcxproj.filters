@@ -1,0 +1,99 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Example">
+      <UniqueIdentifier>{7742512e-3925-4ce2-b610-64c7ff54e918}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source">
+      <UniqueIdentifier>{6b1b5ef3-275c-46e7-98c1-52a31d26463a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include">
+      <UniqueIdentifier>{752df3a9-e411-4fbd-9306-eb170f75499e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\AI">
+      <UniqueIdentifier>{d420c61f-8931-4b6d-ab20-c2630e4ef00b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\game">
+      <UniqueIdentifier>{3e538fee-a799-4c37-80e1-5f4615a458b3}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\example\hrSampleProgramloop.h">
+      <Filter>Example</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\ai\IBaseNavigator.h">
+      <Filter>include\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\ai\IBasePathfinder.h">
+      <Filter>include\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="CEventManager.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="CLogger.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="CWorld.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="CEntityManager.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="CModel.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="CModelLoader.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\ai\CPath.h">
+      <Filter>include\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="CSimplePathfinder.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\game\IBaseEntity.h">
+      <Filter>include\game</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\game\IControllable.h">
+      <Filter>include\game</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\game\IEntityManager.h">
+      <Filter>include\game</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\game\IEventManager.h">
+      <Filter>include\game</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\game\IThinking.h">
+      <Filter>include\game</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\game\IVirtualObject.h">
+      <Filter>include\game</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\game\IWorld.h">
+      <Filter>include\game</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="CEntityManager.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="CEventManager.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="CLogger.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="CWorld.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="CModelLoader.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="CSimplePathfinder.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\docs\todolist" />
+  </ItemGroup>
+</Project>

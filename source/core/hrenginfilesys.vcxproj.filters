@@ -1,0 +1,120 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="include">
+      <UniqueIdentifier>{65dd7a06-1f7d-4e2e-a3e8-d56d9d2ce4b9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source">
+      <UniqueIdentifier>{6a883c0c-7422-4ff2-a62f-c8b78fd9f94b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\core">
+      <UniqueIdentifier>{5b9dbf72-d878-497d-b3b1-cc8c8e304e4a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\common">
+      <UniqueIdentifier>{3107c42a-44f2-436e-b20d-b31bf611fd69}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="CReadFile.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="CFileSystem.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="CBufferedStream.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="CHDFParser.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\core\hrenginfsutil.h">
+      <Filter>include\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\core\hrenginmodels.h">
+      <Filter>include\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\core\hrenginpaths.h">
+      <Filter>include\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\core\IBufferedStream.h">
+      <Filter>include\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\core\ICharacterStream.h">
+      <Filter>include\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\core\IFileSystem.h">
+      <Filter>include\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\core\IHDFParser.h">
+      <Filter>include\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\core\ILogger.h">
+      <Filter>include\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\core\IModel.h">
+      <Filter>include\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\core\IModelLoader.h">
+      <Filter>include\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\core\IModelParser.h">
+      <Filter>include\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\core\IntegerReader.h">
+      <Filter>include\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\core\IReadFile.h">
+      <Filter>include\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\core\IWriteFile.h">
+      <Filter>include\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\common\api.h">
+      <Filter>include\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\common\config.h">
+      <Filter>include\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\common\Line3d.h">
+      <Filter>include\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\common\macro.h">
+      <Filter>include\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\common\math.h">
+      <Filter>include\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\common\time.h">
+      <Filter>include\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\common\types.h">
+      <Filter>include\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\common\Vector2d.h">
+      <Filter>include\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\common\Vector3d.h">
+      <Filter>include\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\common\versions.h">
+      <Filter>include\common</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="CReadFile.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="CFileSystem.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="hrenginfsutil.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="CBufferedStream.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="CHDFParser.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

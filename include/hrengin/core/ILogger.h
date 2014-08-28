@@ -1,12 +1,12 @@
-#ifndef __HRENGIN_ILogger_H__
-#define __HRENGIN_ILogger_H__
+#ifndef _hrengin_ILogger_
+#define _hrengin_ILogger_
 
 #include <string>
 #include <thread>
 
-#include <hrengin/config/hrConfig.h>
-#include <hrengin/common/hrenginapi.h>
-#include <hrengin/common/hrenginmacro.h>
+#include <hrengin/common/config.h>
+#include <hrengin/common/api.h>
+#include <hrengin/common/macro.h>
 
 #define TRACE_FUNCTION() \
 do { \
@@ -46,4 +46,4 @@ HRENGIN_API ILogger& getLogger();
 } // namespace hrengin
 
 
-#endif//__HRENGIN_ILogger_H__
+#endif//_hrengin_ILogger_

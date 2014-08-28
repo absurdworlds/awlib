@@ -1,26 +1,20 @@
 #include <algorithm>
 
-#include <hrengin/entities/IBaseEntity.h>
+#include <hrengin/game/IBaseEntity.h>
 
 #include "CVideoManager.h"
 
 #include "CVisNode.h"
 
-namespace hrengin
-{
-namespace graphics
-{
-	
-//! constructor
-//!
+namespace hrengin {
+namespace graphics {
+
 CVisNode::CVisNode()
 	: lastFreeSlot(0)
 {
 
 }
 
-//! constructor
-//! Attaches node to entity
 CVisNode::CVisNode(IBaseEntity* attach)
 	: attachedTo(attach), lastFreeSlot(0)
 {
