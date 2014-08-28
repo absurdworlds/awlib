@@ -9,7 +9,7 @@ namespace ai {
 
 class CPath;
 
-class IBasePathfinde {
+class IBasePathfinder {
 	public:
 		virtual CPath findPath(Vector3d start, Vector3d end) = 0;
 };

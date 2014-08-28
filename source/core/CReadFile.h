@@ -1,17 +1,16 @@
-#ifndef __HRENGIN_FILESYSTEM_CReadFile_H__
-#define __HRENGIN_FILESYSTEM_CReadFile_H__
+#ifndef _hrengin_CReadFile_
+#define _hrengin_CReadFile_
 
 #include <stdio.h>
 
 #include <string>
 
-#include <hrengin/filesystem/IReadFile.h>
+#include <hrengin/core/IReadFile.h>
 
 namespace hrengin {
 namespace io {
 
-class CReadFile : public IReadFile 
-{
+class CReadFile : public IReadFile {
 public:
 	CReadFile(const std::string& path);
 
@@ -45,4 +44,4 @@ private:
 }
 
 
-#endif//__HRENGIN_FILESYSTEM_CReadFile_H__
+#endif//_hrengin_CReadFile_

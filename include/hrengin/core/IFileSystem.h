@@ -1,7 +1,7 @@
-#ifndef __HRENGIN_FILESYSTEM_IFileSystem_H__
-#define __HRENGIN_FILESYSTEM_IFileSystem_H__
+#ifndef _hrengin_IFileSystem_
+#define _hrengin_IFileSystem_
 
-#include <hrengin/common/hrenginapi.h>
+#include <hrengin/common/api.h>
 
 namespace hrengin {
 namespace io {
@@ -10,8 +10,7 @@ class IFileParser;
 class IReadFile;
 class IWriteFile;
 
-class IFileSystem
-{
+class IFileSystem {
 public:
 	IReadFile& openFileRead(char * path);
 	IWriteFile& openFileWrite(char * path);

@@ -10,9 +10,6 @@ class IPhysicsBody : public IPhysicsObject {
 public:
 	virtual Vector3d getPosition() = 0;
 	virtual Vector3d getRotation() = 0;
-
-	/* move body to a position */
-	virtual void move(Vector3d pos) = 0;
 protected:
 };
 

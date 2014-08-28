@@ -1,8 +1,8 @@
 #ifndef _hrengin_IEventManager_
 #define _hrengin_IEventManager_
 
-#include <hrengin/common/hrengintypes.h>
-#include <hrengin/common/hrenginapi.h>
+#include <hrengin/common/types.h>
+#include <hrengin/common/api.h>
 
 namespace hrengin {
 class IThinking;
@@ -19,8 +19,7 @@ typedef struct {
 	bool isCallback : 1;
 } Event;
 
-class IEventManager
-{
+class IEventManager {
 	//virtual u32 addEvent(EventCallback event, u32 period) = 0;
 	public:
 		virtual u32 addEvent(Event event) = 0;
@@ -31,4 +30,4 @@ class IEventManager
 HRENGIN_API IEventManager& getEventManager();
 } //end namespace hrengin
 
-#endif//__H_INCLUDED__HRENGIN_IEventManager
+#endif//_hrengin_IEventManager_

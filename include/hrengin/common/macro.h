@@ -1,7 +1,7 @@
 #ifndef _hrengin_hrenginmacro_
 #define _hrengin_hrenginmacro_
 
-#include <hrengin/common/hrenginconfig.h>
+#include <hrengin/common/config.h>
 
 /* Make a bit mask of a desired bit */
 #define BIT(x) (1<<(x))

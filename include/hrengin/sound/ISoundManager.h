@@ -3,15 +3,12 @@
 
 #include <hrengin/common/api.h>
 
-namespace hrengin
-{
-namespace sound
-{
+namespace hrengin {
+namespace sound {
 
 class ISound;
 
-class ISoundManager
-{
+class ISoundManager {
 public:
 	virtual void addSound(const char* fileName) = 0;
 	virtual void initSounds() = 0;

@@ -16,10 +16,6 @@ public:
 	virtual void attachToEntity(IBaseEntity* attach) = 0;
 	virtual IBaseEntity* getEntity() = 0;
 	
-	/* move object to a position with physics simulation */
-	virtual void move(Vector3d pos) = 0;
-	
-	/* set object position without running simulation */
 	virtual void setPosition(Vector3d pos) = 0;
 	virtual void setRotation(Vector3d rot) = 0;
 

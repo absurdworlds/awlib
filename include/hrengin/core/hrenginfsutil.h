@@ -1,9 +1,9 @@
-#ifndef __HRENGIN_FILESYSTEM__hrenginfsutil_H__
-#define __HRENGIN_FILESYSTEM__hrenginfsutil_H__
+#ifndef _hrengin_fsutil_
+#define _hrengin_fsutil_
 
 #include <string>
 
-#include <hrengin/common/hrenginapi.h>
+#include <hrengin/common/api.h>
 
 namespace hrengin {
 namespace io {
@@ -13,4 +13,4 @@ HRENGINFILESYSTEM_API std::string getFileExtension(std::string& dest, const std:
 }
 }
 
-#endif  __HRENGIN_FILESYSTEM__hrenginfsutil_H__
+#endif  _hrengin_fsutil_

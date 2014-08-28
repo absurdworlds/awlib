@@ -1,16 +1,14 @@
-#ifndef __H_INCLUDED__HRENGIN_IEntManager
-#define __H_INCLUDED__HRENGIN_IEntManager
+#ifndef _hrengin_IEntityManager_
+#define _hrengin_IEntityManager_
 
-#include <hrengin/common/hrengintypes.h>
-#include <hrengin/common/hrenginapi.h>
+#include <hrengin/common/types.h>
+#include <hrengin/common/api.h>
 
-namespace hrengin
-{
+namespace hrengin {
 
 class IBaseEntity;
 
-class IEntityManager
-{
+class IEntityManager {
 public:
 	// run entity syncronization, snaps all entity components to new positions
 	virtual void doSync() = 0;
@@ -24,4 +22,4 @@ HRENGIN_API IEntityManager& getEntityManager();
 	
 } // namespace hrengin
 
-#endif//__H_INCLUDED__HRENGIN_IEntManager
+#endif//_hrengin_IEntityManager_

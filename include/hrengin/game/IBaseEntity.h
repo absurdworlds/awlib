@@ -1,15 +1,14 @@
-#ifndef __H_INCLUDED__HRENGIN_IBaseEntity
-#define __H_INCLUDED__HRENGIN_IBaseEntity
+#ifndef _hrengin_IBaseEntity_
+#define _hrengin_IBaseEntity_
 
 #include <vector>
 #include <algorithm>
 
-#include <hrengin/common/hrengintypes.h>
+#include <hrengin/common/types.h>
 #include <hrengin/common/Vector3d.h>
 //#include "Base/IVirtualObject.h"
 
-namespace hrengin
-{
+namespace hrengin {
 	
 const u32 ENTID_Invalid = 0;
 const u32 ENTID_BaseEntity = 1;
@@ -19,8 +18,7 @@ enum ENT_FLAG
 	ENTFLAG_Someflag = 1,
 };
 
-class IBaseEntity
-{
+class IBaseEntity {
 public:
 	virtual ~IBaseEntity()
 	{
@@ -124,4 +122,4 @@ protected:
 
 } // namespace hrengin
 
-#endif//__H_INCLUDED__HRENGIN_IBaseEntity
+#endif//_hrengin_IBaseEntity_

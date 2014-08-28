@@ -50,6 +50,12 @@ typedef u8 byte;
 	typedef signed int		i32;
 #endif
 
+#if defined (HRENGIN_64BIT) 
+	typedef u64 hruint;
+#else
+	typedef u32 hruint;
+#endif
+
 typedef float				f32;
 
 typedef double				f64;

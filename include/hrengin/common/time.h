@@ -1,11 +1,11 @@
-#ifndef __HRENGIN_hrengintime_H__
-#define __HRENGIN_hrengintime_H__
+#ifndef _hrengin_time_
+#define _hrengin_time_
 
-#include <hrengin/common/hrenginapi.h>
-#include <hrengin/common/hrengintypes.h>
+#include <hrengin/common/api.h>
+#include <hrengin/common/types.h>
 
 namespace hrengin {
 HRENGINGRAPHICS_API u32 getTime();
 }
 
-#endif//__HRENGIN_hrengintime_H__
+#endif//_hrengin_time_

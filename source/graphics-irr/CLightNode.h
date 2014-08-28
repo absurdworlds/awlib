@@ -6,7 +6,7 @@
 
 #include <hrengin/graphics/ILightNode.h>
 #include <hrengin/graphics/IVideoManager.h>
-#include <hrengin/entities/IBaseEntity.h>
+#include <hrengin/game/IBaseEntity.h>
 
 namespace hrengin
 {

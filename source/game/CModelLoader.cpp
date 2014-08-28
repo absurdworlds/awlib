@@ -1,10 +1,10 @@
 
 #include <hrengin/core/hrenginmodels.h>
-#include <hrengin/filesystem/hrenginpaths.h>
-#include <hrengin/filesystem/hrenginfsutil.h>
-#include <hrengin/filesystem/IFileSystem.h>
-#include <hrengin/filesystem/IReadFile.h>
-#include <hrengin/filesystem/IHDFParser.h>
+#include <hrengin/core/hrenginpaths.h>
+#include <hrengin/core/hrenginfsutil.h>
+#include <hrengin/core/IFileSystem.h>
+#include <hrengin/core/IReadFile.h>
+#include <hrengin/core/IHDFParser.h>
 
 #include <hrengin/core/IModel.h>
 

@@ -1,10 +1,10 @@
-#ifndef __HRENGIN_IReadFile__
-#define __HRENGIN_IReadFile__
+#ifndef _hrengin_IReadFile_
+#define _hrengin_IReadFile_
 
 #include <string>
 
-#include <hrengin/common/hrenginapi.h>
-#include <hrengin/common/hrengintypes.h>
+#include <hrengin/common/api.h>
+#include <hrengin/common/types.h>
 
 namespace hrengin {
 namespace io {
@@ -26,8 +26,8 @@ public:
 
 HRENGINFILESYSTEM_API IReadFile* openReadFile(std::string path);
 
-}
-}
+} // namespace io
+} // namespace hrengin
 
 
-#endif//__HRENGIN_IReadFile__
+#endif//_hrengin_IReadFile_

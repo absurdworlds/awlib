@@ -1,9 +1,9 @@
 #ifndef _hrengin_IIntegerStream_
 #define _hrengin_IIntegerStream_
 
-#include <hrengin/common/hrengintypes.h>
+#include <hrengin/common/types.h>
 
-#include <hrengin/filesystem/IReadFile.h>
+#include <hrengin/core/IReadFile.h>
 
 namespace hrengin {
 namespace io {

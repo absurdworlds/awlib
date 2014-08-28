@@ -1,16 +1,16 @@
-#ifndef __H_INCLUDED__HRENGIN_IThinking
-#define __H_INCLUDED__HRENGIN_IThinking
+#ifndef _hrengin_IThinking_
+#define _hrengin_IThinking_
 
-#include <hrengin/common/hrengintypes.h>
-#include <hrengin/entities/IBaseEntity.h>
+#include <hrengin/common/types.h>
+#include <hrengin/game/IBaseEntity.h>
 
 namespace hrengin {
 
-class IThinking : public IBaseEntity
-{
+class IThinking : public IBaseEntity {
 public:
 	virtual void think(u32 time) = 0;
 };
-} //end namespace hrengin
 
-#endif//__H_INCLUDED__HRENGIN_IThinking
+} // namespace hrengin
+
+#endif//_hrengin_IThinking_

@@ -1,8 +1,8 @@
-#ifndef __HRENGIN_FILESYSTEM_IModelParser_H__
-#define __HRENGIN_FILESYSTEM_IModelParser_H__
+#ifndef _hrengin_IModelParser_H_
+#define _hrengin_IModelParser_H_
 
 #include <hrengin/core/hrenginmodels.h>
-#include <hrengin/filesystem/IFileParser.h>
+#include <hrengin/core/IFileParser.h>
 
 namespace hrengin {
 namespace filesystem {

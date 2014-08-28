@@ -1,5 +1,5 @@
 
-#include <hrengin/filesystem/IReadFile.h>
+#include <hrengin/core/IReadFile.h>
 
 #include "CBufferedStream.h"
 

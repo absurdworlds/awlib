@@ -1,7 +1,7 @@
-#ifndef _hrengin_IHndfParser_
-#define _hrengin_IHndfParser_
+#ifndef _hrengin_IHDFParser_
+#define _hrengin_IHDFParser_
 
-#include <hrengin/common/hrenginapi.h>
+#include <hrengin/common/api.h>
 
 #include <hrengin/common/Vector3d.h>
 

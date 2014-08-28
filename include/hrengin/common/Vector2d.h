@@ -4,12 +4,10 @@
 #include <hrengin/common/types.h>
 #include <hrengin/common/math.h>
 
-namespace hrengin
-{
+namespace hrengin {
 
 template <class T>
-class hrVector2d
-{
+class hrVector2d {
 public: /* Data */
 	// Vector coordinates
 	T X;
@@ -375,6 +373,3 @@ typedef hrVector2d<i32>	Vector2d;
 } // end namespace irr
 
 */
-
-
-#endif//_hrengin_Vector2d_

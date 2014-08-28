@@ -11,14 +11,30 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\include\hrengin\filesystem\hrenginpaths.h" />
-    <ClInclude Include="..\..\include\hrengin\filesystem\hrenginfsutil.h" />
-    <ClInclude Include="..\..\include\hrengin\filesystem\IBufferedStream.h" />
-    <ClInclude Include="..\..\include\hrengin\filesystem\ICharacterStream.h" />
-    <ClInclude Include="..\..\include\hrengin\filesystem\IFileSystem.h" />
-    <ClInclude Include="..\..\include\hrengin\filesystem\IHDFParser.h" />
-    <ClInclude Include="..\..\include\hrengin\filesystem\IReadFile.h" />
-    <ClInclude Include="..\..\include\hrengin\filesystem\IWriteFile.h" />
+    <ClInclude Include="..\..\include\hrengin\common\api.h" />
+    <ClInclude Include="..\..\include\hrengin\common\config.h" />
+    <ClInclude Include="..\..\include\hrengin\common\Line3d.h" />
+    <ClInclude Include="..\..\include\hrengin\common\macro.h" />
+    <ClInclude Include="..\..\include\hrengin\common\math.h" />
+    <ClInclude Include="..\..\include\hrengin\common\time.h" />
+    <ClInclude Include="..\..\include\hrengin\common\types.h" />
+    <ClInclude Include="..\..\include\hrengin\common\Vector2d.h" />
+    <ClInclude Include="..\..\include\hrengin\common\Vector3d.h" />
+    <ClInclude Include="..\..\include\hrengin\common\versions.h" />
+    <ClInclude Include="..\..\include\hrengin\core\hrenginfsutil.h" />
+    <ClInclude Include="..\..\include\hrengin\core\hrenginmodels.h" />
+    <ClInclude Include="..\..\include\hrengin\core\hrenginpaths.h" />
+    <ClInclude Include="..\..\include\hrengin\core\IBufferedStream.h" />
+    <ClInclude Include="..\..\include\hrengin\core\ICharacterStream.h" />
+    <ClInclude Include="..\..\include\hrengin\core\IFileSystem.h" />
+    <ClInclude Include="..\..\include\hrengin\core\IHDFParser.h" />
+    <ClInclude Include="..\..\include\hrengin\core\ILogger.h" />
+    <ClInclude Include="..\..\include\hrengin\core\IModel.h" />
+    <ClInclude Include="..\..\include\hrengin\core\IModelLoader.h" />
+    <ClInclude Include="..\..\include\hrengin\core\IModelParser.h" />
+    <ClInclude Include="..\..\include\hrengin\core\IntegerReader.h" />
+    <ClInclude Include="..\..\include\hrengin\core\IReadFile.h" />
+    <ClInclude Include="..\..\include\hrengin\core\IWriteFile.h" />
     <ClInclude Include="CBufferedStream.h" />
     <ClInclude Include="CFileSystem.h" />
     <ClInclude Include="CHDFParser.h" />
@@ -35,7 +51,7 @@
     <ProjectGuid>{74AD5236-2D65-440E-A517-4EF8B52EE555}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>hrengin</RootNamespace>
-    <ProjectName>hrfilesys</ProjectName>
+    <ProjectName>hrcore</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
