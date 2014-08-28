@@ -1,0 +1,152 @@
+
+2.2. Names
+
+name is a sequence of characters. The first character must be a name_first, and the following characters are name_char.
+
+[1] name ::= name_first name_char*
+
+[2] name_first ::= [A-Z] | [a-z]
+
+[3] name_char ::= [A-Z] | [a-z] | '-' | '_'
+
+2.3. White space
+
+White space consists of one or more spaces, tabs or line breaks.
+
+[3] line_break ::= #xA | (#xA #xD)
+
+[4] ws_char ::= #x9 | #x20
+
+[5] s ::= (ws_char | line_break)+
+
+Note: this definition does not yet account for the unicode range characters.
+
+Inline white space is white space without line breaks.
+
+[6] ws ::= ws_char+
+
+2.4. Strings
+
+string is a sequence of characters enclosed within '"' (quotation marks) characters.
+
+[8] string ::= '"' char* '"'
+
+2.4.1. Escape sequences
+
+To be decided yet.
+
+
+2.5. Numbers
+
+[9]	number = sign? int fraction? exponent?
+
+[10] digit = [0-9]
+
+[11] int = digit+
+
+[12] exponent = [Ee] sign? digit+
+
+[13] fraction = '.' digit+
+
+[14] sign = '+' | '-'
+
+[15] hex-digit = digit | [a-f] | [A-F]
+
+[16] hexadecimal = '0x' hex-digit+
+
+3. HDF document
+
+3.1. Structure
+
+HDF document is composed of units called 'node', and must contain at least one of those.
+
+Overall structure of a document can be defined as:
+
+document ::= header? node+
+
+This definition suggests following:
+
+Document may contain header, preceding all other data.
+Document contains one or more nodes.
+Example of a simplest document:
+
+[root-node]
+
+3.2. Nodes
+
+node is a basic unit of a document. Each node is delimited by node_start and node_end. Each node may have a node_type, followed by name or an empty name.
+
+node	::=	node_start node_content? node_end
+
+node_start ::= '[' node_type? name s
+node_end ::= s? ']' s?
+
+Each node may contain value or other nodes.
+
+node_content ::= (node | value s?) +
+
+Values must be separated from each other, however, it is not necessary to separate values from nodes, since node begins with a non-name char.
+
+value-value ::= value (separator value-value | value-node)? s?
+value-node ::= value (separator? node-value | node-node)? s?
+node-value ::= node (separator? value-value | value-node)? s?
+node-node ::= node (separator? node-value | node-value)? s?
+
+Vlueas are separated by either semicolon (';') or a line break.
+
+separator ::= ws? ';' | line_break s?
+
+An empty node is a node without node_content.
+
+An example HDF document.
+
+[node
+  [subnode
+    [subsubnode1] [subsubnode2 value1=0; value2=5.0]
+  ]
+]
+			
+3.3. Values
+
+Values represent actual data, they serve to store values of variables or constants, hence the name.
+
+value ::= name ws? '=' ws? type? ws? data
+
+Values have type, which can be defined explictily, or, for some types, implicitly  (see 4. Typing). Data representation depends on type.
+
+An example HDF document, describing a simple geometric model.
+
+[model 
+  [shapes 
+    [shape 
+      type = sphere 
+      radius = float:5.0 
+    ] 
+    [shape 
+      type = sphere 
+      radius = float:2.5 
+      offset = float:0.0 5.0 0.0 
+    ] 
+  ] 
+]
+
+4. Typing
+
+4.1. Explicit typing
+
+Type contains information about representation of data.
+
+type ::= name ws? ':'
+
+Known types are: string, int, float, bool, vec2, vec3, vec4, raw
+
+4.2. Implicit typing
+
+If type is omitted, then it is determined from the token: if token is string, or name, then type is string. If token is number, then type is float. 
+
+4.3. Data representation
+
+float and int types are represented as number. 
+Vectors (vec2-4) are represented as series of tokens, separated by inline white spaces.
+raw value is represented as hexadecimal.
+Boolean type can be either 'true', 'false', '0, or '1'.
