@@ -1,5 +1,5 @@
-#ifndef __H_INCLUDED__HRENGIN_IEventManager
-#define __H_INCLUDED__HRENGIN_IEventManager
+#ifndef _hrengin_IEventManager_
+#define _hrengin_IEventManager_
 
 #include <hrengin/common/hrengintypes.h>
 #include <hrengin/common/hrenginapi.h>
@@ -8,10 +8,8 @@ namespace hrengin {
 class IThinking;
 typedef void (*EventCallback) (u32);
 
-typedef struct 
-{
-	union
-	{
+typedef struct {
+	union {
 		IThinking* owner;
 		EventCallback callback;
 	};

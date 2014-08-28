@@ -1,10 +1,9 @@
-#ifndef __H_INCLUDED__HRENGIN_IControllable
-#define __H_INCLUDED__HRENGIN_IControllable
+#ifndef _hrengin_IControllable_
+#define _hrengin_IControllable_
 
 #include "hrengin/gui/InputEvent.h"
 
-namespace hrengin
-{
+namespace hrengin {
 
 class IControllable
 {
@@ -16,4 +15,4 @@ public:
 } // namespace hrengin
 
 
-#endif//__H_INCLUDED__HRENGIN_IControllable
+#endif//_hrengin_IControllable_
