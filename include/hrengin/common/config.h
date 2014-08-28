@@ -1,7 +1,7 @@
-#ifndef __H_INCLUDED__HRENGIN_hrConfig
-#define __H_INCLUDED__HRENGIN_hrConfig
+#ifndef _hrengin_config_
+#define _hrengin_config_
 
-#include <hrengin/config/hrVersions.h>
+#include <hrengin/common/versions.h>
 
 /* Windows platform */
 #if defined(_WIN32) || defined(_WIN64) || defined(WIN32) || defined(WIN64)
@@ -47,9 +47,7 @@
 	#pragma warning(disable: 4244) 
 #endif
 
-//#define _HR_PHYSICS_HAVOK
-//#define _HR_PHYSICS_NEWTON
 
 #define _HR_STR(arg) #arg
 
-#endif //__H_INCLUDED__HRENGIN_hrConfig
+#endif //_hrengin_config_

@@ -1,13 +1,13 @@
-#ifndef __HG_hrMath_H__
-#define __HG_hrMath_H__
+#ifndef _hrengin_math_
+#define _hrengin_math_
 
 #include <math.h>
 #include <stdlib.h>
 #include <limits.h>
 #include <float.h>
 
-#include <hrengin/config/hrConfig.h>
-#include <hrengin/common/hrengintypes.h>
+#include <hrengin/common/config.h>
+#include <hrengin/common/types.h>
 
 
 namespace hrengin
@@ -117,4 +117,4 @@ inline hrengin::f32 clamp_angle(hrengin::f32 angle)
 } //namespace math
 } //namespace hrengin
 
-#endif //__HG_hrMath_H__
+#endif //_hrengin_math_
