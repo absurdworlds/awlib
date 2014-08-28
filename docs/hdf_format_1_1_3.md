@@ -43,7 +43,7 @@ The design for HDF goals are:
 - minimalistic and lightweight;
 
 ### 1.1  History <a name="sec-history"/>
-The HDF format was not based on any other document format, although it was inspired by ZenGin Archive format (Gothic and Gothic II format for storing levels and serializing game objects).
+The HDF format was not based on any other document format, although it was inspired by ZenGin Archive format (Gothic and Gothic II format for storing levels and serializing game objects), INI format, Dwarf Fortress Raws and Lisp.
 
 - HNDF 1.1
     + the first revision
@@ -96,14 +96,13 @@ is a `symbol1` followed by `symbol2`;
 is a `symbol1` or a `symbol2`.
 
 One last expression, used only to define `value`. 
-	@symbol
-form of `symbol` depends on the form of previous expression
+	@symbol{A}
+form of `symbol` depends on the form of expression A
 
 ## 2 Documents <a name="sec-documents"/>
 
 ###2.1 Character set <a name="sec-charset"/>
-HDF uses ASCII character set. Which makes possible to use UTF-8 in [`strings`](#def-string), however manual post-processing of such strings is required.
-
+HDF uses ASCII character set, making possible to use UTF-8 in [`strings`](#def-string), however the application which will use such strings must be UTF-8 aware.
 
 	[1] name ::= name_first name_char*
 
@@ -116,44 +115,51 @@ HDF uses ASCII character set. Which makes possible to use UTF-8 in [`strings`](#
 
 	[5] ws-char ::= #x9 | #x20
 
-	[6] ws ::= (ws_char | line_break)+
+	[6] sp ::= ws_char+
+	[7] ws ::= (ws_char | line_break)+
 
 
-	[7] number = sign? integer fraction? exponent?
+	[8] number = sign? integer fraction? exponent?
 
-	[8] sign = '+' | '-'
+	[9] sign = '+' | '-'
 
-	[9] digit = [0-9]
+	[10] digit = [0-9]
 
-	[10] integer = digit+
+	[11] integer = digit+
 
-	[11] fraction = '.' digit+
+	[12] fraction = '.' digit+
 
-	[12] exponent = [Ee] sign? digit+
+	[13] exponent = [Ee] sign? digit+
 
 
 
 ###2.2 Document layout <a name="sec-layout"/>
 HDF document is composed of units referred here as 'objects', separated by white space.
-	<a name="sym-document">[1]</a>	document ::= object+
+	<a name="sym-document">[14]</a>	document ::= (object - value)+
 
 ###2.3 Objects <a name="sec-objects"/>
 There are three types of objects: [`node`](#def-node), [`value`](#def-value) and [`command`](#def-command). `command` must have a [depth](#def-depth) of zero, and `value` must have a non-zero depth. `Nodes` may occur at any depth.
 
 	object ::= node | value | command
-	node-object ::= object - command
-	root-object ::= object - value
 
 ####2.3.1 Node <a name="sec-node"/>
+Node is a main markup unit of a HDF document. Node may contain values or other nodes.
 
 	node	::=	node_start node-object* node_end
+	node-object ::= object - command
+
+Node starts with '[' followed by the name of this node, and ends with ']'. Name of a node is not necessary unique, and may repeat indefinitely.
 
 	node-start ::= '[' name ws
 	node-end ::= ws? ']' ws?
 
-	node-object ::= value | node
-
 ####2.3.2 Value <a name="sec-value"/>
+Values are used to store actual data. As described above, they must be contained within a node.
+
+	value ::= name sp? = sp? (type sp? ':')? sp? @data{type}
+
+Unlike nodes, name of a value must be unique. This rule may be neglected when implementing a program, however, it is strongly avised to follow this rule when constructing HDF documents.
+
 ##3 Values <a name="sec-values"/>
 ###3.1 Typing <a name="sec-typing"/>
 ####3.1.1 Implicit typing <a name="sec-implicit"/>
