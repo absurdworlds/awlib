@@ -1,7 +1,6 @@
 #ifndef _hrengin_ISceneManager_
 #define _hrengin_ISceneManager_
 
-#include <hrengin/common/hrenginapi.h>
 #include <hrengin/common/Vector3d.h>
 
 namespace hrengin {
@@ -13,14 +12,20 @@ class ILightNode;
 
 class ISceneManager {
 public:
-	/* Initialize a new scene, deleting an old scene */
+	virtual ~ISceneManager() {};
+
+	virtual bool step() = 0;
+
+	/* Initialize a new scene, clearing the current scene */
 	virtual void createScene() = 0;
+	virtual void drawScene() = 0;
 	virtual void update() = 0;
 
-	virtual ISceneNode* createSceneNode() = 0;
+	virtual IVisNode* createMeshSceneNode() = 0;
+	virtual ICameraNode* createCameraSceneNode() = 0;
+	virtual ILightNode* createLightSceneNode() = 0;
 };
 
-HRENGINGRAPHICS_API IVideoManager& getVideoManager();
 
 } // namespace graphics
 } // namespace hrengin

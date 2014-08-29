@@ -8,8 +8,7 @@ namespace video {
 
 class SVertex;
 
-class IVertexBuffer
-{
+class IVertexBuffer {
 public:
 	virtual SVertex& operator[] (const u32 index) = 0;
 

@@ -10,15 +10,12 @@
 
 #include <hrengin/graphics/IVisNode.h>
 
-namespace hrengin
-{
+namespace hrengin {
 class IBaseEntity;
 
-namespace graphics
-{
+namespace graphics {
 	
-class CVisNode : public IVisNode
-{
+class CVisNode : public IVisNode {
 	public:
 		CVisNode();
 		CVisNode(IBaseEntity* attach);

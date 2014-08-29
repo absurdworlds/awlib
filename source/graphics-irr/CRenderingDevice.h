@@ -19,6 +19,7 @@ namespace graphics {
 class CRenderingDevice : public IRenderingDevice {
 public:
 	virtual bool drawVertexPrimitive(const IVertexBuffer& vb, const IIndexBuffer& ib);
+	virtual void drawLine(const Vector3d& from, const Vector3d& to, const Vector3d& color);
 
 	virtual bool beginRender();
 	virtual bool endRender();

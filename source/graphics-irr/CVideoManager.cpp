@@ -43,32 +43,7 @@ PlatformData CVideoManager::getPlatformSpecificData() const
 	return platformdata_;
 }
 
-// currently unused
-void CVideoManager::CreateScene()
-{
-	/*irr::scene::ICameraSceneNode* node = 
-	irr::scene::ISceneNodeAnimatorCameraRTS* animator 
-	animator->drop();
-	
-
-	irr::scene::IAnimatedMesh* mesh = scnmgr->getMesh(irr::io::path("..\\data\\models\\ground.obj"));
-	scnmgr->setAmbientLight(irr::video::SColorf(0.35f,0.35f,0.35f,0.35f));
-	
-	// cleanup later
-	irr::video::IImage *teal = device->getVideoDriver()->createImage(irr::video::ECF_A8R8G8B8, irr::core::dimension2d<irr::u32>(128, 128));
-	irr::video::IImage *blue = device->getVideoDriver()->createImage(irr::video::ECF_A8R8G8B8, irr::core::dimension2d<irr::u32>(128, 128));
-	irr::video::IImage *red  = device->getVideoDriver()->createImage(irr::video::ECF_A8R8G8B8, irr::core::dimension2d<irr::u32>(128, 128));
-
-	teal->fill(irr::video::SColor(130, 0, 255, 255));
-	blue->fill(irr::video::SColor(130, 0, 0, 255));
-	red->fill(irr::video::SColor(64, 255, 0, 0));
-	
-	device->getVideoDriver()->addTexture("teal", teal);
-	device->getVideoDriver()->addTexture("blue", blue);
-	device->getVideoDriver()->addTexture("red", red);*/
-}
-
-bool CVideoManager::advance()
+bool CVideoManager::step()
 {
 	if (device->run()) {
 		device->yield();
@@ -78,65 +53,26 @@ bool CVideoManager::advance()
 	}
 }
 
-void CVideoManager::draw()
+bool CVideoManager::isWindowActive()
 {
-	//if (device->isWindowActive()) {
-
-		scnmgr->drawAll();
-		guienv->drawAll();
-	//}
+	return device->isWindowActive();
 }
 
-
-void CVideoManager::AddNode(ISceneNode& node)
-{
-
-}
-
-IVisNode* CVideoManager::CreateVisObject()
-{
-	return new CVisNode();
-}
-
-ICameraNode* CVideoManager::CreateCamera()
-{
-	return new CCameraNode();
-}
-
- ILightNode* CVideoManager::CreateLight()
-{
-	return new CLightNode();
-
-}
- 
+#if 0
 irr::scene::IAnimatedMesh* CVideoManager::LoadMesh(const char* modelname)
 {
 	std::string path = io::modelpath + modelname;
 	return scnmgr->getMesh(path.c_str());
 }
 
-irr::scene::ISceneManager* CVideoManager::GetSceneMgr() const
-{
-	return scnmgr;
-}
-
-irr::scene::ISceneCollisionManager* CVideoManager::getCollManager() const
-{
-	return scnmgr->getSceneCollisionManager();
-}
-
-irr::IrrlichtDevice*  CVideoManager::GetDevice() const
-{
-	return device;
-}
-
 void CVideoManager::ll1()
 {
-	irr::video::SMaterial debugMat;
+/*	irr::video::SMaterial debugMat;
 	debugMat.Lighting = false;
 
 	driver->setMaterial(debugMat);
 	driver->setTransform(irr::video::ETS_WORLD, irr::core::IdentityMatrix);
+*/
 }
 
 void CVideoManager::end()
@@ -150,15 +86,8 @@ void CVideoManager::end()
 	 
 	device->yield();
 }
+#endif
 
-void CVideoManager::drawLine(const Vector3d& from, const Vector3d& to, const Vector3d& color)
-{
-
-this->driver->draw3DLine(
-	irr::core::vector3df(from.X, from.Y, from.Z),
-	irr::core::vector3df(to.X, to.Y, to.Z),
-	irr::video::SColor(255, (irr::u32)color.X, (irr::u32)color.Y, (irr::u32)color.Z));
-}
 
 /*void CVideoManager::drawVertexListObject(std::vector<Vectorf3d>& vert, std::vector<u32>& idxs)
 {

@@ -4,6 +4,7 @@
 namespace hrengin {
 namespace gui {
 
+
 class IGUIManager {
 public:
 	virtual ~IGUIManager() {};

@@ -8,7 +8,7 @@ namespace graphics {
 	
 
 class ILightNode : public ISceneNode {
-	public:
+public:
 
 };
 

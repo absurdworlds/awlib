@@ -28,25 +28,12 @@ struct PlatformData {
 
 class IVideoManager {
 public:
-	virtual bool advance() = 0;
-	// draw the scene
-	virtual void draw() = 0;
+	virtual ~IVideoManager() {};
 
 	virtual PlatformData getPlatformSpecificData() const = 0;
-
-	virtual IVisNode* CreateVisObject() = 0;
-	virtual ICameraNode* CreateCamera() = 0;
-	virtual ILightNode* CreateLight() = 0;
-	virtual IVisNode* createOildrum() = 0;
-
-	virtual void AddNode(ISceneNode& node) = 0;
-	virtual void drawLine(const Vector3d& from, const Vector3d& to, const Vector3d& color) = 0;
-
-	virtual void drawVertexPrimitives(video::IVertexBuffer* vb) = 0;
-	//virtual void drawIndexedVertexPrimitives(video::IVertexBuffer* vb, video::IIndexBuffer* ib) = 0;
 	
-	virtual void ll1()=0;
-	virtual void end()=0;
+	virtual bool isWindowActive() = 0;
+
 };
 
 HRENGINGRAPHICS_API IVideoManager* createVideoManager();
