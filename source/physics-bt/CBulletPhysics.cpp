@@ -15,13 +15,10 @@
 namespace hrengin {
 namespace physics {
 
-class DebugDraw : public btIDebugDraw
-{
-
+class DebugDraw : public btIDebugDraw {
 public:
-
-	DebugDraw(graphics::IVideoManager & vmgr) :
-	mode(DBG_NoDebug), vmgr_(&vmgr)
+	DebugDraw(graphics::IRenderingDevice* renderer)
+	 : mode(DBG_NoDebug), vmgr_(renderer)
 	{
 
 	}
@@ -71,9 +68,10 @@ public:
 	int getDebugMode() const { return this->mode; }
 
 private:
+	DebugDraw(const DebugDraw& other) = delete;
 
 	int mode;
-	graphics::IVideoManager * vmgr_;
+	graphics::IRenderingDevice * vmgr_;
 };
 
 
@@ -99,17 +97,6 @@ CBulletPhysics::CBulletPhysics()
 
 	m_dynamicsWorld = new btDiscreteDynamicsWorld(m_dispatcher,m_broadphase,m_solver,m_collisionConfiguration);
 	m_dynamicsWorld->setGravity(btVector3(0,-10,0));
-	static DebugDraw debugDraw(hrengin::graphics::getVideoManager());
-	debugDraw.setDebugMode(
-		btIDebugDraw::DBG_DrawWireframe |
-		btIDebugDraw::DBG_DrawAabb |
-		btIDebugDraw::DBG_DrawContactPoints |
-		//btIDebugDraw::DBG_DrawText |
-		//btIDebugDraw::DBG_DrawConstraintLimits |
-		btIDebugDraw::DBG_DrawConstraints //|
-	);
-
-	m_dynamicsWorld->setDebugDrawer(&debugDraw);
 	
 	modelLoader_ = createModelLoader();
 
@@ -169,6 +156,23 @@ btScalar CBulletPhysics::getDeltaTime()
 	return dt;
 }
 
+IDebugDrawer* CBulletPhysics::createDebugDrawer(graphics::IRenderingDevice* renderer)
+{
+	//debugDrawer_ = new CDebugDrawer();
+
+	// temporary
+	DebugDraw* debugDraw = new DebugDraw(renderer);
+	debugDraw->setDebugMode(
+		btIDebugDraw::DBG_DrawWireframe |
+		btIDebugDraw::DBG_DrawAabb |
+		btIDebugDraw::DBG_DrawContactPoints |
+		//btIDebugDraw::DBG_DrawText |
+		//btIDebugDraw::DBG_DrawConstraintLimits |
+		btIDebugDraw::DBG_DrawConstraints //|
+	);
+	m_dynamicsWorld->setDebugDrawer(debugDraw);
+}
+
 void CBulletPhysics::debugDraw()
 {
 	m_dynamicsWorld->debugDrawWorld();
@@ -206,7 +210,7 @@ IPhysicsBody* CBulletPhysics::createBody(const u32 shapeid, Vector3d pos, u16 gr
 	btTransform defaultTransform;
 	defaultTransform.setIdentity();
 	defaultTransform.setOrigin(btVector3(pos.X,pos.Y,pos.Z));
-		
+
 	btScalar mass(1.0f);
 	bool isDynamic = (mass != 0.f);
 	btVector3 localInertia(0,0,0);
