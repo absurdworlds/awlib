@@ -1,15 +1,14 @@
-#ifndef __hrengin_IVertexBuffer__
-#define __hrengin_IVertexBuffer__
+#ifndef _hrengin_IVertexBuffer_
+#define _hrengin_IVertexBuffer_
 
 #include <hrengin/common/types.h>
 
 namespace hrengin {
-namespace video {
+namespace graphics {
 
 class SVertex;
 
-class IVertexBuffer
-{
+class IVertexBuffer {
 public:
 	virtual SVertex& operator[] (const u32 index) = 0;
 
@@ -21,4 +20,4 @@ public:
 } // namespace video
 } // namespace hrengin
 
-#endif//__hrengin_IVertexBuffer__
+#endif//_hrengin_IVertexBuffer_

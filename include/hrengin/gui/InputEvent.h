@@ -1,16 +1,14 @@
 
-#ifndef __H_INCLUDED__IRR_S_EVENT_
-#define __H_INCLUDED__IRR_S_EVENT_
+#ifndef _hrengin_InputEvent_
+#define _hrengin_InputEvent_
 
 #include <Irrlicht/IEventReceiver.h>
 
-namespace hrengin
-{
-namespace gui
-{
+namespace hrengin {
+namespace gui {
 	typedef irr::SEvent InputEvent;
 }
 } // end namespace hrengin
 
-#endif //__H_INCLUDED__IRR_S_EVENT_
+#endif //_hrengin_InputEvent_
 

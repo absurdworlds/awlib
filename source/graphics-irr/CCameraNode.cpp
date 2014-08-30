@@ -7,36 +7,27 @@
 
 #include "CCameraNode.h"
 
-namespace hrengin
+namespace hrengin {
+namespace graphics {
+
+CCameraNode::CCameraNode(CSceneManager* sceneManager,
+	irr::scene::ICameraSceneNode* camNode,
+	irr::scene::ISceneManager* irrScMgr,
+	irr::IrrlichtDevice* device)
+	: controlBehavior(CAM_NONE), node_(camNode), scmgr_(irrScMgr), device_(device)
 {
-namespace graphics
-{
-	
-//! constructor
-//!
-CCameraNode::CCameraNode()
-	:controlBehavior(CAM_NONE)
-{
-	node = getLocalManager().GetSceneMgr()->addCameraSceneNode(0, irr::core::vector3df(0, 0, 0), irr::core::vector3df(0, 0, 0));
+
 }
 
-//! constructor
-//! Attaches node to entity
-CCameraNode::CCameraNode(IBaseEntity* attach)
-	: attachedTo(attach), controlBehavior(CAM_NONE)
-{
-	node = getLocalManager().GetSceneMgr()->addCameraSceneNode(0, irr::core::vector3df(0, 0, 0), irr::core::vector3df(0, 0, 0));
-}
-
-void CCameraNode::AttachToEntity(IBaseEntity* attach)
+void CCameraNode::setParentEntity(IBaseEntity* parent)
 {
 
 }
 
 hrengin::base::line3df CCameraNode::castRayFromScreen(hrengin::i32 x, hrengin::i32 y)
 {
-	irr::scene::ISceneCollisionManager* colman = getLocalManager().getCollManager();
-	irr::core::line3df line = colman->getRayFromScreenCoordinates(irr::core::vector2di(x,y), node);
+	irr::scene::ISceneCollisionManager* colman = scmgr_->getSceneCollisionManager();
+	irr::core::line3df line = colman->getRayFromScreenCoordinates(irr::core::vector2di(x,y), node_);
 
 	//irr::core::plane3df plane(node->getViewFrustum()->planes[irr::scene::SViewFrustum::VF_FAR_PLANE]);
 	//irr::core::vector3df vec;
@@ -47,8 +38,8 @@ hrengin::base::line3df CCameraNode::castRayFromScreen(hrengin::i32 x, hrengin::i
 
 hrengin::Vector3d CCameraNode::__tempGetRayHitPlaneCoords(hrengin::i32 x, hrengin::i32 y)
 {
-	irr::scene::ISceneCollisionManager* colman = getLocalManager().getCollManager();
-	irr::core::line3df line = colman->getRayFromScreenCoordinates(irr::core::vector2di(x,y), node);
+	irr::scene::ISceneCollisionManager* colman = scmgr_->getSceneCollisionManager();
+	irr::core::line3df line = colman->getRayFromScreenCoordinates(irr::core::vector2di(x,y), node_);
 	//printf("%d\n",x);
 	//printf("%f\n",line.start.X);
 	//irr::core::line3df line(10,50,10,10,-50,10);
@@ -113,13 +104,12 @@ void CCameraNode::SetFarPlane(f64 dist)
 
 void CCameraNode::SetBehavior(CAM_Behavior beh)
 {
-
 	controlBehavior = beh;
 	
 	/* reset camera animator */
 	if(animator)
 	{
-		node->removeAnimator(animator);
+		node_->removeAnimator(animator);
 		//animator->drop();
 		animator = 0;
 
@@ -127,13 +117,14 @@ void CCameraNode::SetBehavior(CAM_Behavior beh)
 
 	switch(controlBehavior)
 	{
-		case CAM_STRATEGIC:
-			animator = new irr::scene::CSceneNodeAnimatorCameraRTS(getLocalManager().GetDevice()->getCursorControl(), getLocalManager().GetDevice()->getTimer());
-			node->addAnimator(animator);
+	case CAM_STRATEGIC:
+		animator = new irr::scene::CSceneNodeAnimatorCameraRTS(device_->getCursorControl(), device_->getTimer());
+		node_->addAnimator(animator);
+		animator->drop();
+	break;
+	default:
+	case CAM_NONE:
 		break;
-		default:
-		case CAM_NONE:
-			break;
 	}
 }
 

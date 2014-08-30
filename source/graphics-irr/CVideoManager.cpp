@@ -1,178 +1,89 @@
 #include <Irrlicht/Irrlicht.h>
+//#include <Irrlicht/SAnimatedMesh.h>
 
-#include <hrengin/core/hrenginpaths.h>
 
 #include "CVisNode.h"
 #include "CCameraNode.h"
 #include "CLightNode.h"
 
+#include "CSceneManager.h"
+#include "CRenderingDevice.h"
+
 #include "CVideoManager.h"
+
 
 namespace hrengin {
 namespace graphics {
 
-HRENGINGRAPHICS_API IVideoManager& getVideoManager()
+IVideoManager* createVideoManager()
 {
-	return getLocalManager();
-}
-
-CVideoManager& getLocalManager()
-{
-	static CVideoManager* singleton = new CVideoManager;
-	return *singleton;
+	return new CVideoManager();
 }
 
 CVideoManager::CVideoManager()
 {
-	device = irr::createDevice( irr::video::EDT_DIRECT3D9, irr::core::dimension2d<irr::u32>(1066, 600), 32, false, false, true, 0);
+	device_ = irr::createDevice( irr::video::EDT_OPENGL, irr::core::dimension2d<irr::u32>(1066, 600), 32, false, false, true, 0);
 
-	/*if (device == 0)
-	{
-		throw something;
-	}*/
+	device_->setWindowCaption(L"hrengin A - Irrlicht 1.8.1");
 
-	device->setWindowCaption(L"hrengin A - Irrlicht 1.8.1");
-	driver = device->getVideoDriver();
-	scnmgr = device->getSceneManager();
-	guienv = device->getGUIEnvironment();
-	colman = scnmgr->getSceneCollisionManager();
+	renderer_ = new CRenderingDevice(device_->getVideoDriver());
+	sceneManager_ = new CSceneManager(device_->getSceneManager(), renderer_, device_);
 
-	platformdata_.win32.wndHandle = driver->getExposedVideoData().OpenGLWin32.HWnd;
+	//guienv = device->getGUIEnvironment();
+
+	platformdata_.win32.wndHandle = device_->getVideoDriver()->getExposedVideoData().OpenGLWin32.HWnd;
 }
 
 CVideoManager::~CVideoManager() 
 {
-	device->drop();
+	device_->drop();
 };
+
+
+IRenderingDevice* CVideoManager::getRenderingDevice() const
+{
+	return renderer_;
+}
+
+ISceneManager* CVideoManager::getSceneManager() const
+{
+	return sceneManager_;
+}
 
 PlatformData CVideoManager::getPlatformSpecificData() const
 {
 	return platformdata_;
 }
 
-// currently unused
-void CVideoManager::CreateScene()
+bool CVideoManager::step()
 {
-	/*irr::scene::ICameraSceneNode* node = 
-	irr::scene::ISceneNodeAnimatorCameraRTS* animator 
-	animator->drop();
-	
-
-	irr::scene::IAnimatedMesh* mesh = scnmgr->getMesh(irr::io::path("..\\data\\models\\ground.obj"));
-	scnmgr->setAmbientLight(irr::video::SColorf(0.35f,0.35f,0.35f,0.35f));
-	
-	// cleanup later
-	irr::video::IImage *teal = device->getVideoDriver()->createImage(irr::video::ECF_A8R8G8B8, irr::core::dimension2d<irr::u32>(128, 128));
-	irr::video::IImage *blue = device->getVideoDriver()->createImage(irr::video::ECF_A8R8G8B8, irr::core::dimension2d<irr::u32>(128, 128));
-	irr::video::IImage *red  = device->getVideoDriver()->createImage(irr::video::ECF_A8R8G8B8, irr::core::dimension2d<irr::u32>(128, 128));
-
-	teal->fill(irr::video::SColor(130, 0, 255, 255));
-	blue->fill(irr::video::SColor(130, 0, 0, 255));
-	red->fill(irr::video::SColor(64, 255, 0, 0));
-	
-	device->getVideoDriver()->addTexture("teal", teal);
-	device->getVideoDriver()->addTexture("blue", blue);
-	device->getVideoDriver()->addTexture("red", red);*/
-}
-
-bool CVideoManager::advance()
-{
-	if (device->run()) {
-		device->yield();
+	if (device_->run()) {
 		return true;
 	} else {
 		return false;
 	}
 }
 
-void CVideoManager::draw()
+void CVideoManager::wait()
 {
-		driver->beginScene(true, true, irr::video::SColor(255, 100, 101, 140));
-	//if (device->isWindowActive()) {
-
-		scnmgr->drawAll();
-		guienv->drawAll();
-
-	//}
-	
+	device_->yield();
 }
 
-
-void CVideoManager::AddNode(ISceneNode& node)
+bool CVideoManager::isWindowActive()
 {
-
+	return device_->isWindowActive();
 }
 
-IVisNode* CVideoManager::CreateVisObject()
-{
-	return new CVisNode();
-}
-
-ICameraNode* CVideoManager::CreateCamera()
-{
-	return new CCameraNode();
-}
-
- ILightNode* CVideoManager::CreateLight()
-{
-	return new CLightNode();
-
-}
- 
-irr::scene::IAnimatedMesh* CVideoManager::LoadMesh(const char* modelname)
-{
-	std::string path = io::modelpath + modelname;
-	return scnmgr->getMesh(path.c_str());
-}
-
-irr::scene::ISceneManager* CVideoManager::GetSceneMgr() const
-{
-	return scnmgr;
-}
-
-irr::scene::ISceneCollisionManager* CVideoManager::getCollManager() const
-{
-	return scnmgr->getSceneCollisionManager();
-}
-
-irr::IrrlichtDevice*  CVideoManager::GetDevice() const
-{
-	return device;
-}
-
-void CVideoManager::ll1()
-{
-
-   irr::video::SMaterial debugMat;
-   debugMat.Lighting = false;
-
-         driver->setMaterial(debugMat);
-         driver->setTransform(irr::video::ETS_WORLD, irr::core::IdentityMatrix);
-	 }
+#if 0
 
 void CVideoManager::end()
 {
 
-   irr::video::SMaterial debugMat;
-   debugMat.Lighting = false;
-
-         driver->setMaterial(debugMat);
-         driver->setTransform(irr::video::ETS_WORLD, irr::core::IdentityMatrix);
-
 	 
-		driver->endScene();
 	device->yield();
-	 }
-
-
-void CVideoManager::drawLine(const Vector3d& from, const Vector3d& to, const Vector3d& color)
-{
-
-this->driver->draw3DLine(
-	irr::core::vector3df(from.X, from.Y, from.Z),
-	irr::core::vector3df(to.X, to.Y, to.Z),
-	irr::video::SColor(255, (irr::u32)color.X, (irr::u32)color.Y, (irr::u32)color.Z));
 }
+#endif
+
 
 /*void CVideoManager::drawVertexListObject(std::vector<Vectorf3d>& vert, std::vector<u32>& idxs)
 {

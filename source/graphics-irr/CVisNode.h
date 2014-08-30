@@ -1,60 +1,46 @@
-
-#ifndef __HG_CVisNode__
-#define __HG_CVisNode__
-
-#include <array>
-
-#include <Irrlicht/Irrlicht.h>
+#ifndef _hrengin_CVisNode_
+#define _hrengin_CVisNode_
 
 #include <hrengin/common/types.h>
 
+#include <hrengin/graphics/IMesh.h>
 #include <hrengin/graphics/IVisNode.h>
 
-namespace hrengin
-{
+namespace irr {
+namespace scene {
+class IAnimatedMeshSceneNode;
+}
+}
+
+namespace hrengin {
 class IBaseEntity;
 
-namespace graphics
-{
-	
-class CVisNode : public IVisNode
-{
-	public:
-		CVisNode();
-		CVisNode(IBaseEntity* attach);
-		
-		virtual void AttachToEntity(IBaseEntity* attach);
+namespace graphics {
+class CSceneManager;
 
-		virtual void setPosition(Vector3d pos);
-		virtual void setRotation(Vector3d rot);
-		//virtual void SetScale(Vectorf3d scale);
+class CVisNode : public IVisNode {
+public:
+	CVisNode(CSceneManager* sceneManager,
+		irr::scene::IAnimatedMeshSceneNode* meshNode);
 
-		virtual i8 AddMesh(char * meshname);
-		virtual i8 AddOildrum(irr::scene::IAnimatedMeshSceneNode* mesh)
-		{
-			if(lastFreeSlot < maxFreeSlot) {
-				meshSlots[lastFreeSlot] = mesh;
-				meshSlots[lastFreeSlot]->setAutomaticCulling(irr::scene::EAC_FRUSTUM_BOX);
-				++lastFreeSlot;
-				return lastFreeSlot-1;
-			} else {
-				return -1;
-			}
-		}
-		virtual void RemoveMesh(i8 meshslot);
-		virtual void ReplaceMesh(i8 meshslot, char * meshname);
+	virtual void setParentEntity(IBaseEntity* parent);
 
-	private:
-		IBaseEntity* attachedTo;
+	virtual void setPosition(Vector3d pos);
+	virtual void setRotation(Vector3d rot);
+	//virtual void SetScale(Vectorf3d scale);
 
-		i8 lastFreeSlot;
-		static const i8 maxFreeSlot = 16;
+	//virtual void setMesh(IMesh* mesh);
+	virtual void setMesh(const char* mesh);
 
-		std::array<irr::scene::IAnimatedMeshSceneNode*, maxFreeSlot> meshSlots;
+private:
+	CSceneManager* sceneManager_;
+	IBaseEntity* parent_;
+
+	irr::scene::IAnimatedMeshSceneNode* meshNode_;
 };
 
 	
 } // namespace graphics
 } // namespace hrengin
 
-#endif//__HG_CVisNode__
+#endif//_hrengin_CVisNode_

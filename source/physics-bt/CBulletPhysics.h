@@ -25,7 +25,7 @@ class CPhysicsBody;
 class CBulletPhysics : public IPhysicsManager {
 public:
 	CBulletPhysics();
-	~CBulletPhysics();
+	virtual ~CBulletPhysics();
 
 	btScalar getDeltaTime();
 	
@@ -39,6 +39,8 @@ public:
 
 	virtual IPhysicsObject* castRay(Vectorf3d from, Vectorf3d to, u16 filters = 0);
 
+	virtual IDebugDrawer* createDebugDrawer(graphics::IRenderingDevice* renderer);
+
 	virtual void debugDraw();
 
 	virtual bool step();
@@ -51,6 +53,7 @@ private:
 	btClock	m_clock;
 
 	IModelLoader* modelLoader_;
+	IDebugDrawer* debugDrawer_;
 	std::map<std::string,u32> models_;
 	btAlignedObjectArray<btCollisionShape*>	collisionShapes_;
 

@@ -1,17 +1,25 @@
+#ifndef _hrengin_CGUIManager_
+#define _hrengin_CGUIManager_
 
-/*
-			//TODO: later move t set caption func
-			static int lastFPS = -1;
-			int fps = driver->getFPS();
+#include <hrengin/gui/IGUIManager.h>
 
-			if (lastFPS != fps)  
-			{
-				irr::core::stringw str = L"hEengin - Irrlicht 1.8.1 DEBUG ["; //later move tosrt caption func
-				str += driver->getName();
-				str += "] FPS:";
-				str += fps;
+namespace irr {
+namespace gui {
+	class IGUIEnvironment;
+}
+}
 
-				device->setWindowCaption(str.c_str());
-				lastFPS = fps;
-			}
-			// end todo*/
+namespace hrengin {
+namespace gui {
+
+class CGUIManager : public IGUIManager {
+public:
+	virtual ~CGUIManager();
+private:
+	irr::gui::IGUIEnvironment* guienv;
+};
+
+} // namespace gui
+} // namespace hrengin
+
+#endif //_hrengin_CGUIManager_

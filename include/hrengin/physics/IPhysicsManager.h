@@ -7,6 +7,9 @@
 
 #include <hrengin/common/Vector3d.h>
 
+#include <hrengin/graphics/IRenderingDevice.h>
+#include <hrengin/physics/IDebugDrawer.h>
+
 enum collisiontypes {
 	COL_NOTHING = 0,
 	COL_GROUND = BIT(0),
@@ -27,6 +30,7 @@ class IPhysicsPhantom; //: IPhysicsObject;
 
 class IPhysicsManager {
 public:
+	virtual ~IPhysicsManager() {};
 	//virtual u32 makeShape(PhysShape type, f32 x, f32 y=0., f32 z=0.) = 0;
 	//virtual u32 addShape(const char * modelname) = 0;
 	
@@ -39,7 +43,9 @@ public:
 
 	virtual IPhysicsObject* castRay(Vectorf3d from, Vectorf3d to, u16 filters = 0) = 0;
 
-	
+	virtual IDebugDrawer* createDebugDrawer(graphics::IRenderingDevice* renderer) = 0;
+
+	/* temporary, until VertexBuffer class is complete */
 	virtual void debugDraw() = 0;
 
 	virtual bool step() = 0;

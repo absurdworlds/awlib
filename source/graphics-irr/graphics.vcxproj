@@ -13,11 +13,12 @@
   <ItemGroup>
     <ClInclude Include="..\..\include\hrengin\graphics\ICameraNode.h" />
     <ClInclude Include="..\..\include\hrengin\graphics\ILightNode.h" />
+    <ClInclude Include="..\..\include\hrengin\graphics\IMesh.h" />
     <ClInclude Include="..\..\include\hrengin\graphics\IRenderable.h" />
     <ClInclude Include="..\..\include\hrengin\graphics\IRenderingDevice.h" />
+    <ClInclude Include="..\..\include\hrengin\graphics\ISceneManager.h" />
     <ClInclude Include="..\..\include\hrengin\graphics\ISceneNode.h" />
     <ClInclude Include="..\..\include\hrengin\graphics\IVertexBuffer.h" />
-    <ClInclude Include="..\..\include\hrengin\graphics\IVertexListPrimitive.h" />
     <ClInclude Include="..\..\include\hrengin\graphics\IVideoManager.h" />
     <ClInclude Include="..\..\include\hrengin\graphics\IVisNode.h" />
     <ClInclude Include="..\..\include\hrengin\graphics\SVertex.h" />
@@ -29,9 +30,11 @@
     <ClInclude Include="CGuiManager.h" />
     <ClInclude Include="CInputManager.h" />
     <ClInclude Include="CLightNode.h" />
+    <ClInclude Include="CSceneManager.h" />
     <ClInclude Include="CVertexListPrimitive.h" />
     <ClInclude Include="CVideoManager.h" />
     <ClInclude Include="CVisNode.h" />
+    <ClInclude Include="CRenderingDevice.h" />
     <ClInclude Include="IrrExt\CSceneNodeAnimatorCameraRTS.h" />
     <ClInclude Include="IrrExt\ISceneNodeAnimatorCameraRTS.h" />
   </ItemGroup>
@@ -40,6 +43,8 @@
     <ClCompile Include="CGuiManager.cpp" />
     <ClCompile Include="CInputManager.cpp" />
     <ClCompile Include="CLightNode.cpp" />
+    <ClCompile Include="CRenderingDevice.cpp" />
+    <ClCompile Include="CSceneManager.cpp" />
     <ClCompile Include="CVideoManager.cpp" />
     <ClCompile Include="CVisNode.cpp" />
     <ClCompile Include="hrengintime.cpp" />

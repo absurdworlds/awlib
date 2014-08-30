@@ -15,3 +15,8 @@
 				lastFPS = fps;
 			}
 			// end todo*/
+/*
+void CGuiManager::draw()
+{
+	guienv->drawAll();
+}*/

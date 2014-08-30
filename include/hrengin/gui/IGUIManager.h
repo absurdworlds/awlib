@@ -1,18 +1,17 @@
-#ifndef __H_INCLUDED__HRENGIN_IGUIManager
-#define __H_INCLUDED__HRENGIN_IGUIManager
+#ifndef _hrengin_IGUIManager_
+#define _hrengin_IGUIManager_
 
-namespace hrengin
-{
-namespace gui
-{
+namespace hrengin {
+namespace gui {
 
-	class IGUIManager
-	{
-		public:
-			virtual ~IGUIManager() {};
-	};
+
+class IGUIManager {
+public:
+	virtual ~IGUIManager() {};
+
+};
 
 } // namespace gui
 } // namespace hrengin
 
-#endif //__H_INCLUDED__HRENGIN_IGUIManager
+#endif //_hrengin_IGUIManager_
