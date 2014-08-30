@@ -1,79 +1,44 @@
 #include <algorithm>
 
+#include <Irrlicht/IAnimatedMeshSceneNode.h>
+
 #include <hrengin/game/IBaseEntity.h>
 
-#include "CVideoManager.h"
+#include "CSceneManager.h"
 
 #include "CVisNode.h"
+
+
 
 namespace hrengin {
 namespace graphics {
 
-CVisNode::CVisNode()
-	: lastFreeSlot(0)
+
+CVisNode::CVisNode(CSceneManager* sceneManager, 
+	irr::scene::IAnimatedMeshSceneNode* meshNode)
 {
 
 }
 
-CVisNode::CVisNode(IBaseEntity* attach)
-	: attachedTo(attach), lastFreeSlot(0)
+void CVisNode::setParentEntity(IBaseEntity* parent)
 {
-	
-}
-
-void CVisNode::AttachToEntity(IBaseEntity* attach)
-{
-
+	parent_ = parent;
 }
 
 void CVisNode::setPosition(Vector3d pos)
 {
-	for(i8 idx = 0; idx < lastFreeSlot; idx++) {
-		meshSlots[idx]->setPosition(irr::core::vector3df(pos.X,pos.Y,pos.Z));
-	}
+	meshNode_->setPosition(irr::core::vector3df(pos.X,pos.Y,pos.Z));
 }
 
 void CVisNode::setRotation(Vector3d rot)
-{	
-	for(i8 idx = 0; idx < lastFreeSlot; idx++) {
-		meshSlots[idx]->setRotation(irr::core::vector3df(rot.X,rot.Y,rot.Z));
-	}
+{
+	meshNode_->setRotation(irr::core::vector3df(rot.X,rot.Y,rot.Z));
 }
 
-i8 CVisNode::AddMesh(char * meshname)
+void CVisNode::setMesh(IMesh* mesh)
 {
-	if(lastFreeSlot < maxFreeSlot) {
-		irr::scene::IAnimatedMesh* mesh = getLocalManager().LoadMesh(meshname);
-		meshSlots[lastFreeSlot] = getLocalManager().GetSceneMgr()->addAnimatedMeshSceneNode(mesh);
-		meshSlots[lastFreeSlot]->setAutomaticCulling(irr::scene::EAC_FRUSTUM_BOX);
-		++lastFreeSlot;
-		return lastFreeSlot-1;
-	} else {
-		return -1;
-	}
-}
-
-void CVisNode::RemoveMesh(i8 meshslot)
-{
-	if(meshslot < maxFreeSlot) {
-		if(meshSlots[meshslot]) {
-			meshSlots[meshslot] = 0;
-			if(lastFreeSlot-1 != 0) {
-				std::swap(meshSlots[meshslot], meshSlots[lastFreeSlot-1]);
-				lastFreeSlot = meshslot;
-			}
-		}
-	}
-}
-
-void CVisNode::ReplaceMesh(i8 meshslot, char * meshname)
-{
-	if(meshslot < maxFreeSlot) {
-		if(meshSlots[meshslot]) {
-			irr::scene::IAnimatedMesh* mesh = getLocalManager().LoadMesh(meshname);
-			meshSlots[meshslot] = getLocalManager().GetSceneMgr()->addAnimatedMeshSceneNode(mesh);
-		}
-	}
+	irr::scene::IAnimatedMesh* irrMesh = sceneManager_->convertMesh(mesh);
+	meshNode_->setMesh(irrMesh);
 }
 
 	

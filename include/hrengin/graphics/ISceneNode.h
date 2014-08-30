@@ -9,11 +9,11 @@ namespace hrengin {
 class IBaseEntity;
 
 namespace graphics {
-	
+
 
 class ISceneNode {
 public:
-	virtual void AttachToEntity(IBaseEntity* attach) = 0;
+	virtual void setParentEntity(IBaseEntity* parent) = 0;
 
 	virtual void setPosition(Vector3d pos) = 0;
 	virtual void setRotation(Vector3d rot) = 0;

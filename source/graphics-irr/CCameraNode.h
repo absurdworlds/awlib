@@ -1,4 +1,3 @@
-
 #ifndef _hrengin_CCameraNode_
 #define _hrengin_CCameraNode_
 
@@ -10,41 +9,45 @@
 
 namespace hrengin {
 namespace graphics {
+class CSceneManager;
 
-class CCameraNode : public ICameraNode
-{
-	public:
-		CCameraNode();
-		CCameraNode(IBaseEntity* attach);
+class CCameraNode : public ICameraNode {
+public:
+	CCameraNode(CSceneManager* sceneManager,
+		irr::scene::ICameraSceneNode* camNode,
+		irr::scene::ISceneManager* irrScMgr,
+		irr::IrrlichtDevice* device);
 
-		virtual void AttachToEntity(IBaseEntity* attach);
-		
-		virtual hrengin::base::line3df castRayFromScreen(hrengin::i32 x, hrengin::i32 y);
-		virtual hrengin::Vector3d __tempGetRayHitPlaneCoords(hrengin::i32 x, hrengin::i32 y);
+	virtual void setParentEntity(IBaseEntity* parent);
 
-		virtual void setPosition(Vector3d pos);
-		virtual void setRotation(Vector3d rot);
-		//virtual void SetScale(Vector3d scale);
+	virtual hrengin::base::line3df castRayFromScreen(hrengin::i32 x, hrengin::i32 y);
+	virtual hrengin::Vector3d __tempGetRayHitPlaneCoords(hrengin::i32 x, hrengin::i32 y);
 
-		virtual void SetTargetPosition(Vector3d pos);
-		virtual void SetCameraPosition(Vector3d pos);
+	virtual void setPosition(Vector3d pos);
+	virtual void setRotation(Vector3d rot);
+	//virtual void SetScale(Vector3d scale);
 
-		virtual void BindTargetToCamera(bool bind);
+	virtual void SetTargetPosition(Vector3d pos);
+	virtual void SetCameraPosition(Vector3d pos);
 
-		virtual void SetCameraFOV(f64 fov);
-		virtual void SetNearPlane(f64 dist);
-		virtual void SetFarPlane(f64 dist);
+	virtual void BindTargetToCamera(bool bind);
 
-		virtual void SetDistance(f64 dist);
+	virtual void SetCameraFOV(f64 fov);
+	virtual void SetNearPlane(f64 dist);
+	virtual void SetFarPlane(f64 dist);
 
-		virtual void SetBehavior(CAM_Behavior beh);
-	private:
-		IBaseEntity* attachedTo;
+	virtual void SetDistance(f64 dist);
 
-		CAM_Behavior controlBehavior;
-		
-		irr::scene::ICameraSceneNode* node;
-		irr::scene::ISceneNodeAnimator* animator;
+	virtual void SetBehavior(CAM_Behavior beh);
+private:
+	IBaseEntity* attachedTo;
+
+	CAM_Behavior controlBehavior;
+
+	irr::scene::ISceneManager* scmgr_;
+	irr::scene::ICameraSceneNode* node_;
+	irr::IrrlichtDevice* device_;
+	irr::scene::ISceneNodeAnimator* animator;
 };
 
 	

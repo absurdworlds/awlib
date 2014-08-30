@@ -9,7 +9,7 @@ namespace graphics {
 
 class ICameraNode : public ISceneNode {
 public:
-	virtual void AttachToEntity(IBaseEntity* attach) = 0;
+	virtual ~ICameraNode() {};
 
 	virtual void SetTargetPosition(Vector3d pos) = 0;
 	virtual void SetCameraPosition(Vector3d pos) = 0;

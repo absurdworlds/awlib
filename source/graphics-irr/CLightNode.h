@@ -1,4 +1,3 @@
-
 #ifndef __HG_CLightNode__
 #define __HG_CLightNode__
 
@@ -8,18 +7,16 @@
 #include <hrengin/graphics/IVideoManager.h>
 #include <hrengin/game/IBaseEntity.h>
 
-namespace hrengin
-{
-namespace graphics
-{
-	
+namespace hrengin {
+namespace graphics {
+class CSceneManager;
 
-class CLightNode : public ILightNode
-{
+class CLightNode : public ILightNode {
 public:
-	CLightNode();
-
-	virtual void AttachToEntity(IBaseEntity* attach);
+	CLightNode(CSceneManager* sceneManager,
+		irr::scene::ILightSceneNode* lightNode);
+		
+	virtual void setParentEntity(IBaseEntity* parent);
 
 	virtual void setPosition(Vector3d pos);
 	virtual void setRotation(Vector3d rot);
@@ -27,7 +24,7 @@ public:
 protected:
 	IBaseEntity* attachedTo;
 
-	irr::scene::ILightSceneNode* node;
+	irr::scene::ILightSceneNode* node_;
 };
 
 	
