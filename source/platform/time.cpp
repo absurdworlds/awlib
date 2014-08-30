@@ -28,4 +28,4 @@ HRG_PLATFORM_API u32 getTime()
 #endif
 }
 
-}
+} // namespace hrengin

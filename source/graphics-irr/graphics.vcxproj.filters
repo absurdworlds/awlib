@@ -119,9 +119,6 @@
     <ClCompile Include="IrrExt\CSceneNodeAnimatorCameraRTS.cpp">
       <Filter>source\IrrExt</Filter>
     </ClCompile>
-    <ClCompile Include="hrengintime.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
     <ClCompile Include="CRenderingDevice.cpp">
       <Filter>source</Filter>
     </ClCompile>

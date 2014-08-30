@@ -31,6 +31,7 @@ public:
 
 	virtual bool isWindowActive() = 0;
 
+	virtual u32 getTime() = 0;
 };
 
 HRENGINGRAPHICS_API IVideoManager* createVideoManager();

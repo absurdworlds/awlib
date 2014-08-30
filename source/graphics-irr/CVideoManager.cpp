@@ -50,6 +50,12 @@ ISceneManager* CVideoManager::getSceneManager() const
 	return sceneManager_;
 }
 
+u32 CVideoManager::getTime()
+{
+	static irr::ITimer* timer(device_->getTimer());
+	return timer->getTime();
+}
+
 PlatformData CVideoManager::getPlatformSpecificData() const
 {
 	return platformdata_;

@@ -40,6 +40,10 @@ void CSceneManager::createScene()
 	device->getVideoDriver()->addTexture("red", red);*/
 }
 
+void CSceneManager::update()
+{
+
+}
 
 //IVisNode* CSceneManager::createMeshSceneNode(IMesh* mesh)
 IVisNode* CSceneManager::createMeshSceneNode(const char* meshname)

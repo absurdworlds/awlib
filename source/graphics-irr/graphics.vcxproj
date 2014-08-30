@@ -47,7 +47,6 @@
     <ClCompile Include="CSceneManager.cpp" />
     <ClCompile Include="CVideoManager.cpp" />
     <ClCompile Include="CVisNode.cpp" />
-    <ClCompile Include="hrengintime.cpp" />
     <ClCompile Include="IrrExt\CSceneNodeAnimatorCameraRTS.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

@@ -73,7 +73,8 @@ public:
 
 	virtual PlatformData getPlatformSpecificData() const;
 
-	virtual IMesh* loadMesh(const char * modelname);
+	//virtual IMesh* loadMesh(const char * modelname);
+	virtual u32 getTime();
 
 
 private:
