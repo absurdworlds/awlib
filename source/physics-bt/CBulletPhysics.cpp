@@ -75,10 +75,9 @@ private:
 };
 
 
-HRENGINPHYSICS_API IPhysicsManager& getPhysicsManager()
+HRENGINPHYSICS_API IPhysicsManager* createPhysicsManager()
 {
-	static CBulletPhysics singleton;
-	return singleton;
+	return new CBulletPhysics();
 }
 
 CBulletPhysics::CBulletPhysics()

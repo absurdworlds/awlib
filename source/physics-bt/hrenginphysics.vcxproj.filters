@@ -30,11 +30,13 @@
     <ClInclude Include="CPhysicsBody.h">
       <Filter>source</Filter>
     </ClInclude>
-    <ClInclude Include="hrgToBullet.h" />
     <ClInclude Include="..\..\include\hrengin\physics\IDebugDrawer.h">
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="CDebugDrawer.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="hrgToBullet.h">
       <Filter>source</Filter>
     </ClInclude>
   </ItemGroup>

@@ -51,7 +51,7 @@ public:
 	virtual bool step() = 0;
 };
 
-HRENGINPHYSICS_API IPhysicsManager& getPhysicsManager();
+HRENGINPHYSICS_API IPhysicsManager* createPhysicsManager();
 
 } // namespace physics
 } // namespace hrengin
