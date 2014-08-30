@@ -3,14 +3,13 @@
 #include <Windows.h>
 
 #include <hrengin/common/time.h>
-
-#include "CVideoManager.h"
+#include <hrengin/common/api.h>
 
 namespace hrengin {
 
-//borrowed from Irrlicht, temporary
-HRENGINGRAPHICS_API u32 getTime()
+HRG_PLATFORM_API u32 getTime()
 {
+	//borrowed from Irrlicht, temporary
 	LARGE_INTEGER HighPerformanceFreq;
 	QueryPerformanceFrequency(&HighPerformanceFreq);
 
@@ -23,9 +22,10 @@ HRENGINGRAPHICS_API u32 getTime()
 
 	if(queriedOK)
 		return u32((ticks.QuadPart) * 1000 / HighPerformanceFreq.QuadPart);
-	/*static irr::ITimer* timer(graphics::getLocalManager().GetDevice()->getTimer());
-	return timer->getTime();*/
+
 	return 0;
+#if 0
+#endif
 }
 
 }

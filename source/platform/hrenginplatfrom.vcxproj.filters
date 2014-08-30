@@ -16,4 +16,9 @@
       <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="time.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+  </ItemGroup>
 </Project>
