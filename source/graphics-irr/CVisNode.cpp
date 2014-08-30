@@ -35,7 +35,8 @@ void CVisNode::setRotation(Vector3d rot)
 	meshNode_->setRotation(irr::core::vector3df(rot.X,rot.Y,rot.Z));
 }
 
-void CVisNode::setMesh(IMesh* mesh)
+//void CVisNode::setMesh(IMesh* mesh)
+void CVisNode::setMesh(const char* mesh)
 {
 	irr::scene::IAnimatedMesh* irrMesh = sceneManager_->convertMesh(mesh);
 	meshNode_->setMesh(irrMesh);

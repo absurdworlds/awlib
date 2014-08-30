@@ -14,6 +14,7 @@
 #include <hrengin/graphics/ILightNode.h>
 
 namespace irr {
+class IrrlichtDevice;
 namespace scene {
 class ISceneManager;
 class IAnimatedMesh;
@@ -26,7 +27,7 @@ namespace graphics {
 
 class CSceneManager : public ISceneManager {
 public:
-	CSceneManager(irr::scene::ISceneManager* irrSceneManager, IRenderingDevice* renderer);
+	CSceneManager(irr::scene::ISceneManager* irrSceneManager, IRenderingDevice* renderer, irr::IrrlichtDevice* device);
 
 	virtual void createScene();
 
@@ -34,7 +35,8 @@ public:
 
 	virtual void update();
 	
-	virtual IVisNode* createMeshSceneNode(IMesh* mesh);
+	virtual IVisNode* createMeshSceneNode(const char* meshname);
+	//virtual IVisNode* createMeshSceneNode(IMesh* mesh);
 	virtual ICameraNode* createCameraSceneNode();
 	virtual ILightNode* createLightSceneNode();
 private:
@@ -44,7 +46,8 @@ private:
 	irr::scene::ISceneManager*		scnmgr;
 	irr::scene::ISceneCollisionManager*	colman;
 public:
-	irr::scene::IAnimatedMesh* convertMesh(IMesh* mesh);
+	irr::scene::IAnimatedMesh* convertMesh(const char* meshname);
+	//irr::scene::IAnimatedMesh* convertMesh(IMesh* mesh);
 };
 
 ISceneManager* createSceneManager();

@@ -2,6 +2,9 @@
 #include <Irrlicht/ISceneManager.h>
 #include <Irrlicht/ISceneCollisionManager.h>
 
+
+#include <hrengin/core/hrenginpaths.h>
+
 #include "CCameraNode.h"
 #include "CLightNode.h"
 #include "CVisNode.h"
@@ -11,8 +14,8 @@
 namespace hrengin {
 namespace graphics {
 
-CSceneManager::CSceneManager(irr::scene::ISceneManager* irrSceneManager, IRenderingDevice* renderer)
-: scnmgr(irrSceneManager), colman(scnmgr->getSceneCollisionManager())
+CSceneManager::CSceneManager(irr::scene::ISceneManager* irrSceneManager, IRenderingDevice* renderer, irr::IrrlichtDevice* device)
+: scnmgr(irrSceneManager), colman(scnmgr->getSceneCollisionManager()), device_(device)
 {
 
 }
@@ -38,10 +41,11 @@ void CSceneManager::createScene()
 }
 
 
-IVisNode* CSceneManager::createMeshSceneNode(IMesh* mesh)
+//IVisNode* CSceneManager::createMeshSceneNode(IMesh* mesh)
+IVisNode* CSceneManager::createMeshSceneNode(const char* meshname)
 {
 	irr::scene::IAnimatedMeshSceneNode* node = 
-		scnmgr->addAnimatedMeshSceneNode(convertMesh(mesh));
+		scnmgr->addAnimatedMeshSceneNode(convertMesh(meshname));
 	return new CVisNode(this, node);
 }
 
@@ -66,6 +70,12 @@ void CSceneManager::drawScene()
 	scnmgr->drawAll();
 }
 
+//irr::scene::IAnimatedMesh* CVideoManager::LoadMesh(const char* modelname)
+irr::scene::IAnimatedMesh* CSceneManager::convertMesh(const char* modelname)
+{
+	std::string path = io::modelpath + modelname;
+	return scnmgr->getMesh(path.c_str());
+}
 
 } // namespace graphics
 } // namespace hrengin

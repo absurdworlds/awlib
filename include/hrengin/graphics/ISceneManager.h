@@ -22,7 +22,8 @@ public:
 	virtual void drawScene() = 0;
 	virtual void update() = 0;
 
-	virtual IVisNode* createMeshSceneNode(IMesh* mesh) = 0;
+	//virtual IVisNode* createMeshSceneNode(IMesh* mesh) = 0;
+	virtual IVisNode* createMeshSceneNode(const char* meshname) = 0;
 	virtual ICameraNode* createCameraSceneNode() = 0;
 	virtual ILightNode* createLightSceneNode() = 0;
 };

@@ -10,7 +10,7 @@ class IMesh;
 
 class IVisNode : public ISceneNode {
 public:
-	virtual void setMesh(IMesh* mesh) = 0;
+	virtual void setMesh(const char* mesh) = 0;
 };
 
 } // namespace graphics

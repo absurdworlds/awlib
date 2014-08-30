@@ -29,7 +29,7 @@ private:
 	irr::video::IVideoDriver* driver_;
 };
 
-	
+
 } // namespace video
 } // namespace hrengin
 

@@ -3,8 +3,6 @@
 
 #include "CRenderingDevice.h"
 
-
-
 namespace hrengin {
 namespace graphics {
 
@@ -16,7 +14,6 @@ CRenderingDevice::CRenderingDevice(irr::video::IVideoDriver* driver)
 
 bool CRenderingDevice::drawVertexPrimitive(const IVertexBuffer& vb, const IIndexBuffer& ib)
 {
-
 	return false;
 }
 
@@ -49,8 +46,5 @@ bool CRenderingDevice::endRender()
 	return driver_->endScene();
 }
 
-
-
-	
 } // namespace video
 } // namespace hrengin

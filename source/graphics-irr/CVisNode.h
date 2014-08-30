@@ -29,7 +29,8 @@ public:
 	virtual void setRotation(Vector3d rot);
 	//virtual void SetScale(Vectorf3d scale);
 
-	virtual void setMesh(IMesh* mesh);
+	//virtual void setMesh(IMesh* mesh);
+	virtual void setMesh(const char* mesh);
 
 private:
 	CSceneManager* sceneManager_;

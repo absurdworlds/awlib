@@ -1,7 +1,6 @@
 #include <Irrlicht/Irrlicht.h>
 //#include <Irrlicht/SAnimatedMesh.h>
 
-#include <hrengin/core/hrenginpaths.h>
 
 #include "CVisNode.h"
 #include "CCameraNode.h"
@@ -28,7 +27,7 @@ CVideoManager::CVideoManager()
 	device_->setWindowCaption(L"hrengin A - Irrlicht 1.8.1");
 
 	renderer_ = new CRenderingDevice(device_->getVideoDriver());
-	sceneManager_ = new CSceneManager(device_->getSceneManager(), renderer_);
+	sceneManager_ = new CSceneManager(device_->getSceneManager(), renderer_, device_);
 
 	//guienv = device->getGUIEnvironment();
 
@@ -76,11 +75,6 @@ bool CVideoManager::isWindowActive()
 }
 
 #if 0
-irr::scene::IAnimatedMesh* CVideoManager::LoadMesh(const char* modelname)
-{
-	std::string path = io::modelpath + modelname;
-	return scnmgr->getMesh(path.c_str());
-}
 
 void CVideoManager::end()
 {
