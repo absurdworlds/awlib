@@ -1,7 +1,10 @@
 #ifndef _hrengin_IRenderingDevice_
 #define _hrengin_IRenderingDevice_
 
-#include <hrengin/common/Vector3d.h>yt6dew
+#include <hrengin/common/Vector3d.h>
+/* yt6dew — I don't know what is that, propbably someone was playng with
+ keyboard. I decided to keep it.
+ */
 
 namespace hrengin {
 namespace graphics {
@@ -16,6 +19,9 @@ public:
 
 	/* end rendering the scene, */
 	virtual bool endRender() = 0;
+	
+	/* temporary */
+	virtual void drawDebug() = 0;
 
 
 	virtual bool drawVertexPrimitive(const IVertexBuffer& vb, const IIndexBuffer& ib) = 0;

@@ -9,19 +9,20 @@ class ISceneNode;
 class IVisNode;
 class ICameraNode;
 class ILightNode;
+class IMesh;
 
 class ISceneManager {
 public:
 	virtual ~ISceneManager() {};
 
-	virtual bool step() = 0;
+	//virtual bool step() = 0;
 
 	/* Initialize a new scene, clearing the current scene */
 	virtual void createScene() = 0;
 	virtual void drawScene() = 0;
 	virtual void update() = 0;
 
-	virtual IVisNode* createMeshSceneNode() = 0;
+	virtual IVisNode* createMeshSceneNode(IMesh* mesh) = 0;
 	virtual ICameraNode* createCameraSceneNode() = 0;
 	virtual ILightNode* createLightSceneNode() = 0;
 };

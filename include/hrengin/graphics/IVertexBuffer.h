@@ -4,7 +4,7 @@
 #include <hrengin/common/types.h>
 
 namespace hrengin {
-namespace video {
+namespace graphics {
 
 class SVertex;
 

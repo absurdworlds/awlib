@@ -8,11 +8,16 @@
 namespace hrengin {
 namespace graphics {
 
+CRenderingDevice::CRenderingDevice(irr::video::IVideoDriver* driver)
+: driver_(driver)
+{
+
+}
 
 bool CRenderingDevice::drawVertexPrimitive(const IVertexBuffer& vb, const IIndexBuffer& ib)
 {
 
-
+	return false;
 }
 
 void CRenderingDevice::drawLine(const Vector3d& from, const Vector3d& to, const Vector3d& color)
@@ -21,19 +26,29 @@ void CRenderingDevice::drawLine(const Vector3d& from, const Vector3d& to, const 
 	irr::core::vector3df irrto(to.X, to.Y, to.Z);
 	irr::video::SColor irrcolor(255, (irr::u32)color.X, (irr::u32)color.Y, (irr::u32)color.Z);
 
-	driver->draw3DLine(irrfrom, irrto, irrcolor);
+	driver_->draw3DLine(irrfrom, irrto, irrcolor);
 }
 
 
 bool CRenderingDevice::beginRender()
 {
-	driver->beginScene(true, true, irr::video::SColor(255, 100, 101, 140));
+	return driver_->beginScene(true, true, irr::video::SColor(255, 100, 101, 140));
+}
+
+void CRenderingDevice::drawDebug()
+{
+	irr::video::SMaterial debugMat;
+	debugMat.Lighting = false;
+
+	driver_->setMaterial(debugMat);
+	driver_->setTransform(irr::video::ETS_WORLD, irr::core::IdentityMatrix);
 }
 
 bool CRenderingDevice::endRender()
 {
-	driver->endScene();
+	return driver_->endScene();
 }
+
 
 
 	

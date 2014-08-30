@@ -7,12 +7,17 @@
 #include <hrengin/common/Vector3d.h>
 
 #include <hrengin/graphics/ISceneManager.h>
+#include <hrengin/graphics/IRenderingDevice.h>
+#include <hrengin/graphics/ISceneNode.h>
+#include <hrengin/graphics/IVisNode.h>
+#include <hrengin/graphics/ICameraNode.h>
+#include <hrengin/graphics/ILightNode.h>
 
 namespace irr {
 namespace scene {
-	class ISceneManager;
-	class IAnimatedMesh;
-	class ISceneCollisionManager;
+class ISceneManager;
+class IAnimatedMesh;
+class ISceneCollisionManager;
 }
 }
 
@@ -21,7 +26,7 @@ namespace graphics {
 
 class CSceneManager : public ISceneManager {
 public:
-	CSceneManager(irr::scene::ISceneManager* irrSceneManager);
+	CSceneManager(irr::scene::ISceneManager* irrSceneManager, IRenderingDevice* renderer);
 
 	virtual void createScene();
 
@@ -29,14 +34,17 @@ public:
 
 	virtual void update();
 	
-	virtual IVisNode* createMeshSceneNode();
+	virtual IVisNode* createMeshSceneNode(IMesh* mesh);
 	virtual ICameraNode* createCameraSceneNode();
 	virtual ILightNode* createLightSceneNode();
 private:
 	std::vector<ISceneNode*> NodeList;
-
+	
+	irr::IrrlichtDevice* device_;
 	irr::scene::ISceneManager*		scnmgr;
 	irr::scene::ISceneCollisionManager*	colman;
+public:
+	irr::scene::IAnimatedMesh* convertMesh(IMesh* mesh);
 };
 
 ISceneManager* createSceneManager();

@@ -1,4 +1,5 @@
 #include <Irrlicht/Irrlicht.h>
+//#include <Irrlicht/SAnimatedMesh.h>
 
 #include <hrengin/core/hrenginpaths.h>
 
@@ -6,7 +7,11 @@
 #include "CCameraNode.h"
 #include "CLightNode.h"
 
+#include "CSceneManager.h"
+#include "CRenderingDevice.h"
+
 #include "CVideoManager.h"
+
 
 namespace hrengin {
 namespace graphics {
@@ -18,25 +23,33 @@ IVideoManager* createVideoManager()
 
 CVideoManager::CVideoManager()
 {
-	device = irr::createDevice( irr::video::EDT_OPENGL, irr::core::dimension2d<irr::u32>(1066, 600), 32, false, false, true, 0);
+	device_ = irr::createDevice( irr::video::EDT_OPENGL, irr::core::dimension2d<irr::u32>(1066, 600), 32, false, false, true, 0);
 
-	/*if (device == 0) {
-		throw something;
-	}*/
+	device_->setWindowCaption(L"hrengin A - Irrlicht 1.8.1");
 
-	device->setWindowCaption(L"hrengin A - Irrlicht 1.8.1");
-	driver = device->getVideoDriver();
-	scnmgr = device->getSceneManager();
-	guienv = device->getGUIEnvironment();
-	colman = scnmgr->getSceneCollisionManager();
+	renderer_ = new CRenderingDevice(device_->getVideoDriver());
+	sceneManager_ = new CSceneManager(device_->getSceneManager(), renderer_);
 
-	platformdata_.win32.wndHandle = driver->getExposedVideoData().OpenGLWin32.HWnd;
+	//guienv = device->getGUIEnvironment();
+
+	platformdata_.win32.wndHandle = device_->getVideoDriver()->getExposedVideoData().OpenGLWin32.HWnd;
 }
 
 CVideoManager::~CVideoManager() 
 {
-	device->drop();
+	device_->drop();
 };
+
+
+IRenderingDevice* CVideoManager::getRenderingDevice() const
+{
+	return renderer_;
+}
+
+ISceneManager* CVideoManager::getSceneManager() const
+{
+	return sceneManager_;
+}
 
 PlatformData CVideoManager::getPlatformSpecificData() const
 {
@@ -45,17 +58,21 @@ PlatformData CVideoManager::getPlatformSpecificData() const
 
 bool CVideoManager::step()
 {
-	if (device->run()) {
-		device->yield();
+	if (device_->run()) {
 		return true;
 	} else {
 		return false;
 	}
 }
 
+void CVideoManager::wait()
+{
+	device_->yield();
+}
+
 bool CVideoManager::isWindowActive()
 {
-	return device->isWindowActive();
+	return device_->isWindowActive();
 }
 
 #if 0
@@ -65,23 +82,8 @@ irr::scene::IAnimatedMesh* CVideoManager::LoadMesh(const char* modelname)
 	return scnmgr->getMesh(path.c_str());
 }
 
-void CVideoManager::ll1()
-{
-/*	irr::video::SMaterial debugMat;
-	debugMat.Lighting = false;
-
-	driver->setMaterial(debugMat);
-	driver->setTransform(irr::video::ETS_WORLD, irr::core::IdentityMatrix);
-*/
-}
-
 void CVideoManager::end()
 {
-	irr::video::SMaterial debugMat;
-	debugMat.Lighting = false;
-
-	driver->setMaterial(debugMat);
-	driver->setTransform(irr::video::ETS_WORLD, irr::core::IdentityMatrix);
 
 	 
 	device->yield();

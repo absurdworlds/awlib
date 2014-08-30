@@ -16,12 +16,12 @@
     <Filter Include="include\graphics">
       <UniqueIdentifier>{cf0ebc7b-781e-4c1c-83bd-d1c659d33588}</UniqueIdentifier>
     </Filter>
+    <Filter Include="source\gui">
+      <UniqueIdentifier>{d474a6ac-44eb-4cb9-8585-bb62a4fd59d3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CCameraNode.h">
-      <Filter>source</Filter>
-    </ClInclude>
-    <ClInclude Include="CGuiManager.h">
       <Filter>source</Filter>
     </ClInclude>
     <ClInclude Include="CInputManager.h">
@@ -78,9 +78,6 @@
     <ClInclude Include="..\..\include\hrengin\graphics\IVertexBuffer.h">
       <Filter>include\graphics</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\hrengin\graphics\IVertexListPrimitive.h">
-      <Filter>include\graphics</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\hrengin\graphics\SVertex.h">
       <Filter>source</Filter>
     </ClInclude>
@@ -96,12 +93,15 @@
     <ClInclude Include="CSceneManager.h">
       <Filter>source</Filter>
     </ClInclude>
+    <ClInclude Include="CGuiManager.h">
+      <Filter>source\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\graphics\IMesh.h">
+      <Filter>include\graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CCameraNode.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="CGuiManager.cpp">
       <Filter>source</Filter>
     </ClCompile>
     <ClCompile Include="CInputManager.cpp">
@@ -123,6 +123,12 @@
       <Filter>source</Filter>
     </ClCompile>
     <ClCompile Include="CRenderingDevice.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="CGuiManager.cpp">
+      <Filter>source\gui</Filter>
+    </ClCompile>
+    <ClCompile Include="CSceneManager.cpp">
       <Filter>source</Filter>
     </ClCompile>
   </ItemGroup>
