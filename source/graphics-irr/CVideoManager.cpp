@@ -29,7 +29,7 @@ CVideoManager::CVideoManager()
 
 	renderer_ = new CRenderingDevice(device_->getVideoDriver());
 	sceneManager_ = new CSceneManager(device_->getSceneManager(), renderer_, device_);
-	guiManager_ = new gui::CGUIManager(device_->getGUIEnvironment());
+	guiManager_ = new gui::CGUIManager(device_->getGUIEnvironment(), device_);
 
 	//platformdata_.win32.wndHandle = device_->getVideoDriver()->getExposedVideoData().OpenGLWin32.HWnd;
 }

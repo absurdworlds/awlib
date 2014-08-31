@@ -1,5 +1,5 @@
 
-#include <Irrlicht/Irrlicht.h>
+#include <Irrlicht/IrrlichtDevice.h>
 
 #include "CVideoManager.h"
 
@@ -7,17 +7,11 @@
 
 
 namespace hrengin {
-namespace gui {
+namespace io {
 
-HRENGINGRAPHICS_API IInputManager& getInputManager()
+CInputManager::CInputManager(irr::IrrlichtDevice* device)
 {
-	static CInputManager singleton;
-	return singleton;
-}
-
-CInputManager::CInputManager()
-{
-	//videomgr->getIrrDevice()->setEventReceiver(this);
+	device->setEventReceiver(this);
 }
 
 bool CInputManager::OnEvent(const irr::SEvent& event)

@@ -8,6 +8,9 @@ namespace hrengin {
 namespace graphics {
 class IRenderingDevice;
 class ISceneManager;
+namespace gui {
+class IGUIManager;
+}
 
 struct PlatformData {
 	union {

@@ -11,11 +11,10 @@ namespace irr {
 namespace gui {
 	class ICursorControl;
 }
-
 }
 
 namespace hrengin {
-namespace gui {
+namespace io {
 //class IRayPicker;
 
 class IInputManager
