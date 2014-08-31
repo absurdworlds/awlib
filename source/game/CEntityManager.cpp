@@ -1,10 +1,9 @@
 #include "CEntityManager.h"
 
 namespace hrengin {
-HRENGIN_API IEntityManager& getEntityManager()
+HRENGIN_API IEntityManager* createEntityManager()
 {
-	static CEntityManager singleton;
-	return singleton;
+	return new CEntityManager();
 }
 
 CEntityManager::CEntityManager()

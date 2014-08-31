@@ -69,7 +69,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>hrgraphics.lib;hrphysics.lib;hraudio.lib;hrcore.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>hrgraphics.lib;hrphysics.lib;hraudio.lib;hrcore.lib;hrplatform.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ImportLibrary>$(SolutionDir)lib\win32-msvc-debug\$(TargetName).lib</ImportLibrary>
     </Link>
     <CustomBuildStep>
@@ -136,9 +136,6 @@
     <ClCompile Include="CModelLoader.cpp" />
     <ClCompile Include="CSimplePathfinder.cpp" />
     <ClCompile Include="CWorld.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\..\docs\todolist" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

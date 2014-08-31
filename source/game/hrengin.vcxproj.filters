@@ -93,7 +93,4 @@
       <Filter>source</Filter>
     </ClCompile>
   </ItemGroup>
-  <ItemGroup>
-    <None Include="..\..\docs\todolist" />
-  </ItemGroup>
 </Project>

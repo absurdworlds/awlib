@@ -27,7 +27,7 @@ class IEventManager {
 		virtual void advance() = 0;
 };
 
-HRENGIN_API IEventManager& getEventManager();
+HRENGIN_API IEventManager* createEventManager();
 } //end namespace hrengin
 
 #endif//_hrengin_IEventManager_

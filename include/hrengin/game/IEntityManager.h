@@ -18,7 +18,7 @@ public:
 	virtual void deleteEntity(u32 entid) = 0;
 };
 
-HRENGIN_API IEntityManager& getEntityManager();
+HRENGIN_API IEntityManager* createEntityManager();
 	
 } // namespace hrengin
 

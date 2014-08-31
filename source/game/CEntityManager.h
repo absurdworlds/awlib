@@ -12,12 +12,12 @@ namespace hrengin {
 class CEntityManager : public IEntityManager {
 private:
 	class CNullEnt : public IBaseEntity {
-		public:
-			void sync() {};
-			void setPosition(Vector3d position) {};
-			void setRotation(Vector3d position) {};
-			void onParentRemove() {};
-			void enterDeleteQueue() {};
+	public:
+		void sync() {};
+		void setPosition(Vector3d position) {};
+		void setRotation(Vector3d position) {};
+		void onParentRemove() {};
+		void enterDeleteQueue() {};
 	} nullEntity;
 
 	std::deque<IBaseEntity*> entlist_;

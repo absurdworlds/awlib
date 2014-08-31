@@ -2,9 +2,8 @@
 #include "CEventManager.h"
 
 namespace hrengin {
-HRENGIN_API IEventManager& getEventManager()
+HRENGIN_API IEventManager* createEventManager()
 {
-	static CEventManager singleton;
-	return singleton;
+	return new CEventManager();
 }
-}
+} // namespace hrengin
