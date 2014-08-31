@@ -8,6 +8,7 @@ hrengin TODO list
 + Implement hrengin model format.
 + Implement hrengin map/scene format.
 + Create hrengin shell, for ingame testing & debugging tasks
++ Create config manager
 
 ## graphics
 
@@ -35,3 +36,7 @@ hrengin TODO list
 ## tools
 
 + Create hrengin model editor
+
+## other
+
++ Test custom allocator for units: spawn 10000 units w/o visual model, moving in circles, and measure time taken for event manager to process all of them with and without custom continuous allocator
