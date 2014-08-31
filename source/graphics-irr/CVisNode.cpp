@@ -16,6 +16,7 @@ namespace graphics {
 
 CVisNode::CVisNode(CSceneManager* sceneManager, 
 	irr::scene::IAnimatedMeshSceneNode* meshNode)
+	:meshNode_(meshNode)
 {
 
 }

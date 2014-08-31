@@ -14,6 +14,9 @@ struct PlatformData {
 		struct {
 			void* wndHandle;
 		} win32;
+		struct {
+		
+		} linux;
 	};
 };
 
@@ -25,6 +28,7 @@ public:
 
 	virtual IRenderingDevice* getRenderingDevice() const = 0;
 	virtual ISceneManager* getSceneManager() const = 0;
+	virtual gui::IGUIManager* getGUIManager() const = 0;
 	
 	virtual bool step() = 0;
 	virtual void wait() = 0;

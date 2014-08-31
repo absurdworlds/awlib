@@ -12,17 +12,14 @@
 
 namespace irr {
 class IrrlichtDevice;
-
 namespace video {
-	class IVideoDriver;
+class IVideoDriver;
 }
-
 namespace scene {
-	class ISceneManager;
-	class IAnimatedMesh;
-	class ISceneCollisionManager;
+class ISceneManager;
+class IAnimatedMesh;
+class ISceneCollisionManager;
 }
-
 }
 
 namespace hrengin {
@@ -31,25 +28,6 @@ namespace hrengin {
 namespace gui {
 	class CGUIManager;
 }
-
-
-
-/*
-//TODO: later move t set caption func
-static int lastFPS = -1;
-int fps = driver->getFPS();
-
-if (lastFPS != fps)  
-{
-	irr::core::stringw str = L"hEengin - Irrlicht 1.8.1 DEBUG ["; //later move tosrt caption func
-	str += driver->getName();
-	str += "] FPS:";
-	str += fps;
-
-	device->setWindowCaption(str.c_str());
-	lastFPS = fps;
-}
-// end todo*/
 
 namespace graphics {
 
@@ -70,6 +48,7 @@ public:
 
 	virtual IRenderingDevice* getRenderingDevice() const;
 	virtual ISceneManager* getSceneManager() const;
+	virtual gui::IGUIManager* getGUIManager() const;
 
 	virtual PlatformData getPlatformSpecificData() const;
 
@@ -82,7 +61,7 @@ private:
 
 	ISceneManager* sceneManager_;
 	IRenderingDevice* renderer_;
-	//IGUIManager* guiManager_;
+	gui::IGUIManager* guiManager_;
 
 	PlatformData platformdata_;
 

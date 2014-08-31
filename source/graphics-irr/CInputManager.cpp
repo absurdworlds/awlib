@@ -17,7 +17,7 @@ HRENGINGRAPHICS_API IInputManager& getInputManager()
 
 CInputManager::CInputManager()
 {
-//	graphics::getLocalManager().GetDevice()->setEventReceiver(this);
+	//videomgr->getIrrDevice()->setEventReceiver(this);
 }
 
 bool CInputManager::OnEvent(const irr::SEvent& event)

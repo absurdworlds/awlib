@@ -8,6 +8,7 @@
 
 #include "CSceneManager.h"
 #include "CRenderingDevice.h"
+#include "CGuiManager.h"
 
 #include "CVideoManager.h"
 
@@ -28,10 +29,9 @@ CVideoManager::CVideoManager()
 
 	renderer_ = new CRenderingDevice(device_->getVideoDriver());
 	sceneManager_ = new CSceneManager(device_->getSceneManager(), renderer_, device_);
+	guiManager_ = new gui::CGUIManager(device_->getGUIEnvironment());
 
-	//guienv = device->getGUIEnvironment();
-
-	platformdata_.win32.wndHandle = device_->getVideoDriver()->getExposedVideoData().OpenGLWin32.HWnd;
+	//platformdata_.win32.wndHandle = device_->getVideoDriver()->getExposedVideoData().OpenGLWin32.HWnd;
 }
 
 CVideoManager::~CVideoManager() 
@@ -48,6 +48,12 @@ IRenderingDevice* CVideoManager::getRenderingDevice() const
 ISceneManager* CVideoManager::getSceneManager() const
 {
 	return sceneManager_;
+}
+
+
+gui::IGUIManager* CVideoManager::getGUIManager() const
+{
+	return guiManager_;
 }
 
 u32 CVideoManager::getTime()
@@ -81,12 +87,37 @@ bool CVideoManager::isWindowActive()
 }
 
 #if 0
-
-void CVideoManager::end()
+void CVideoManager::setWindowCaption(std::wstring newCaption)
 {
+	caption_ = newCaption.c_str();
+}
 
-	 
-	device->yield();
+void CVideoManager::updateCaption()
+{
+	irr::core::stringw addStr = "";
+	if(showFps_) {
+		static int lastFPS = -1;
+		int fps = driver->getFPS();
+
+		static irr::core::stringw fpsStr;
+
+		if (lastFPS != fps) {
+			fpsStr = L"[FPS: ";
+			fpsStr += fps;
+			fpsStr += "] ";
+		}
+		
+		addStr += fpsStr;
+	}
+	
+	//	str += driver->getName();
+	
+	device->setWindowCaption((caption + addStr).c_str());
+}
+
+void CVideoManager::showCaptionFPS(bool showFps)
+{
+	showFps_ = showFps;
 }
 #endif
 

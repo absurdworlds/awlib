@@ -29,12 +29,15 @@ public:
 
 		Vector3d newColor;
 
-		if (color[0] <= 1.0 && color[0] > 0.0)
+		if (color[0] <= 1.0 && color[0] > 0.0) {
 			newColor.X = ((u32)(color[0]*255.0));
-		if (color[1] <= 1.0 && color[1] > 0.0)
+		}
+		if (color[1] <= 1.0 && color[1] > 0.0) {
 			newColor.Y = ((u32)(color[1]*255.0));
-		if (color[2] <= 1.0 && color[2] > 0.0)
+		}
+		if (color[2] <= 1.0 && color[2] > 0.0) {
 			newColor.Z = ((u32)(color[2]*255.0));
+		}
 
 		vmgr_->drawLine(
 		Vector3d(from[0], from[1], from[2]),
@@ -45,7 +48,6 @@ public:
 
 	void drawContactPoint(const btVector3& PointOnB, const btVector3& normalOnB, btScalar distance, int lifeTime, const btVector3& color)
 	{
-
 		//   this->drawLine(PointOnB, PointOnB + normalOnB*distance, CONTACTPOINT_COLOR);
 
 		const btVector3 to(PointOnB + normalOnB*distance);
@@ -170,6 +172,8 @@ IDebugDrawer* CBulletPhysics::createDebugDrawer(graphics::IRenderingDevice* rend
 		btIDebugDraw::DBG_DrawConstraints //|
 	);
 	m_dynamicsWorld->setDebugDrawer(debugDraw);
+
+	return 0;
 }
 
 void CBulletPhysics::debugDraw()
@@ -385,8 +389,7 @@ u32 CBulletPhysics::loadModel(const char* modelName)
 
 	IModel* model = modelLoader_->loadModel(modelName);
 
-	if(!model)
-	{
+	if(!model) {
 		return 0;
 	}
 	
