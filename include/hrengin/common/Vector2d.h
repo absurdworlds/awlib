@@ -6,126 +6,135 @@
 
 namespace hrengin {
 
-template <class T>
-class hrVector2d {
-public: /* Data */
-	// Vector coordinates
+/*
+	Self-explanatory, a template class for defining 2D positions and
+	directions
+ */
+template <typename T>
+class Vector2d {
+public:
 	T X;
 	T Y;
 
-public: /* Functions */
-	// Constructors	
-	hrVector2d() 
+public:
+	Vector2d() 
 		: X(0), Y(0) 
-	{	}
+	{
+	}
 
-	hrVector2d(T x, T y) 
+	Vector2d(T x, T y) 
 		: X(x), Y(y) 
-	{	}
+	{
+	}
 	
-	// No implicit calling!
-	explicit hrVector2d(T v) 
+/*
+	Initialize both coordinates with same value
+	It is defined as explicit to avoid accidental mistakes
+ */
+	explicit Vector2d(T v) 
 		: X(v), Y(v) 
-	{	}
+	{
+	}
 
 	// Copy constructor
-	hrVector2d(const hrVector2d<T>& other) 
+	Vector2d(const Vector2d<T>& other) 
 		: X(other.X), Y(other.Y)
-	{	}
+	{
+	}
 
 	/* Arithmetic operators */
 
-	hrVector2d<T>& operator = (const hrVector2d<T>& other)
+	Vector2d<T>& operator = (const Vector2d<T>& other)
 	{
 		X = other.X; 
 		Y = other.Y; 
 		return *this; 
 	}
 
-	hrVector2d<T> operator - () const 
+	Vector2d<T> operator - () const 
 	{
-		return hrVector2d<T>(-X, -Y);
+		return Vector2d<T>(-X, -Y);
 	}
 
 	
-	hrVector2d<T> operator + (const hrVector2d<T>& other) const 
+	Vector2d<T> operator + (const Vector2d<T>& other) const 
 	{
-		return hrVector2d<T>(X + other.X, Y + other.Y);
+		return Vector2d<T>(X + other.X, Y + other.Y);
 	}
 
-	hrVector2d<T>& operator += (const hrVector2d<T>& other) 
+	Vector2d<T>& operator += (const Vector2d<T>& other) 
 	{
 		X+=other.X; 
 		Y+=other.Y; 
 		return *this; 
 	}
 
-	hrVector2d<T> operator - (const hrVector2d<T>& other) const 
+	Vector2d<T> operator - (const Vector2d<T>& other) const 
 	{ 
-		return hrVector2d<T>(X - other.X, Y - other.Y); 
+		return Vector2d<T>(X - other.X, Y - other.Y); 
 	}
 
-	hrVector2d<T>& operator -= (const hrVector2d<T>& other) 
+	Vector2d<T>& operator -= (const Vector2d<T>& other) 
 	{ 
 		X-=other.X; 
 		Y-=other.Y; 
 		return *this; 
 	}
 
-	hrVector2d<T> operator - (const T v) const 
+	Vector2d<T> operator - (const T v) const 
 	{ 
-		return hrVector2d<T>(X - v, Y - v); 
+		return Vector2d<T>(X - v, Y - v); 
 	}
 
-	hrVector2d<T>& operator -= (const T v) 
+	Vector2d<T>& operator -= (const T v) 
 	{ 
 		X-=v; 
 		Y-=v; 
 		return *this; 
 	}
 
-	hrVector2d<T> operator * (const hrVector2d<T>& other) const 
+	Vector2d<T> operator * (const Vector2d<T>& other) const 
 	{ 
-		return hrVector2d<T>(X * other.X, Y * other.Y); 
+		return Vector2d<T>(X * other.X, Y * other.Y); 
 	}
 
-	hrVector2d<T>& operator *= (const hrVector2d<T>& other) 
+	Vector2d<T>& operator *= (const Vector2d<T>& other) 
 	{ 
 		X*=other.X; 
 		Y*=other.Y; 
 		return *this; 
 	}
 
-	hrVector2d<T> operator * (const T v) const
+	Vector2d<T> operator * (const T v) const
 	{ 
-		return hrVector2d<T>(X * v, Y * v);
+		return Vector2d<T>(X * v, Y * v);
 	}
 
-	hrVector2d<T>& operator *= (const T v) 
+	Vector2d<T>& operator *= (const T v) 
 	{
 		X*=v; 
 		Y*=v; 
 		return *this; 
 	}
 
-	hrVector2d<T> operator / (const hrVector2d<T>& other) const 
+	Vector2d<T> operator / (const Vector2d<T>& other) const 
 	{
-		return hrVector2d<T>(X / other.X, Y / other.Y); 
+		return Vector2d<T>(X / other.X, Y / other.Y); 
 	}
 
-	hrVector2d<T>& operator /= (const hrVector2d<T>& other)
+	Vector2d<T>& operator /= (const Vector2d<T>& other)
 	{
 		X/=other.X; 
 		Y/=other.Y; 
 		return *this;
 	}
 
-	hrVector2d<T> operator / (const T v) const 
+	Vector2d<T> operator / (const T v) const 
 	{
-		return hrVector2d<T>(X / v, Y / v); 
+		return Vector2d<T>(X / v, Y / v); 
 	}
 
-	hrVector2d<T>& operator /= (const T v) 
+	Vector2d<T>& operator /= (const T v) 
 	{
 		X/=v; 
 		Y/=v; 
@@ -134,43 +143,39 @@ public: /* Functions */
 	
 	/* Functions */
 
-	//! Get length of the vector.
-	T Length() const 
+	// Get length of the vector.
+	T length() const 
 	{ 
 		return math::sqrt( X*X + Y*Y ); 
 	}
 
-	//! Get squared length of the vector.
-	T SquareLength() const 
+	// Get squared length of the vector.
+	T squareLength() const 
 	{ 
 		return X*X + Y*Y; 
 	}	
 	
-	//! Gets distance from another point. 
-	T GetDistance(const hrVector2d<T>& other) const
+	// Gets distance from another point. 
+	T getDistance(const Vector2d<T>& other) const
 	{
-		return hrVector2d<T>(X - other.X, Y - other.Y).Length();
+		return Vector2d<T>(X - other.X, Y - other.Y).length();
 	}
 
-	//! Get squared distance from another point.
-	T GetSquaredDistance(const hrVector2d<T>& other) const
+	// Get squared distance from another point.
+	T getSquaredDistance(const Vector2d<T>& other) const
 	{
-		return hrVector2d<T>(X - other.X, Y - other.Y).SquareLength();
+		return Vector2d<T>(X - other.X, Y - other.Y).squareLength();
 	}
 
-	//! Get the dot product of this vector with another.
-	T dotProduct(const hrVector2d<T>& other) const
+	// Get the dot product of this vector with another.
+	T dotProduct(const Vector2d<T>& other) const
 	{
 		return X*other.X + Y*other.Y;
 	}
 
 };
 
-typedef hrVector2d<f32>	Vectorf2d;
-typedef hrVector2d<f64>	Vectord2d;
-typedef hrVector2d<i32>	Vectori2d;
-typedef hrVector2d<i32>	Vector2d;
-}
+} // namespace hrengin
 
 #endif // _hrengin_Vector2d_
 
