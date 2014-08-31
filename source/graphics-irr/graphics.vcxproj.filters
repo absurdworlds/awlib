@@ -102,6 +102,24 @@
     <ClInclude Include="..\..\include\hrengin\gui\IGUIElement.h">
       <Filter>include\gui</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\gui\IGUIScrollBar.h">
+      <Filter>include\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\gui\IGUITextArea.h">
+      <Filter>include\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\gui\IGUITextBox.h">
+      <Filter>include\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\gui\IGUIWindow.h">
+      <Filter>include\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\gui\IGUIMenu.h">
+      <Filter>include\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="CGUIWindow.h">
+      <Filter>source\gui</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CCameraNode.cpp">
@@ -130,6 +148,9 @@
     </ClCompile>
     <ClCompile Include="CSceneManager.cpp">
       <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="CGUIWindow.cpp">
+      <Filter>source\gui</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
