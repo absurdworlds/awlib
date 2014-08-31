@@ -5,7 +5,7 @@
 #include <hrengin/common/types.h>
 
 namespace hrengin {
-HRENGINGRAPHICS_API u32 getTime();
+HRG_PLATFORM_API u32 getTime();
 }
 
 #endif//_hrengin_time_
