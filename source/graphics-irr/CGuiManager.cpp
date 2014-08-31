@@ -6,7 +6,6 @@
 #include "CGuiManager.h"
 
 namespace hrengin {
-namespace graphics {
 namespace gui {
 
 CGUIManager::CGUIManager(irr::gui::IGUIEnvironment* guienv,
@@ -31,5 +30,4 @@ io::IInputManager* CGUIManager::getInputManager()
 	return inputmgr_;
 }
 } // namespace gui
-} // namespace graphics
 } // namespace hrengin

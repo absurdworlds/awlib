@@ -99,6 +99,9 @@
     <ClInclude Include="..\..\include\hrengin\graphics\IMesh.h">
       <Filter>include\graphics</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\gui\IGUIElement.h">
+      <Filter>include\gui</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CCameraNode.cpp">

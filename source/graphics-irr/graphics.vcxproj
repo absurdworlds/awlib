@@ -22,6 +22,7 @@
     <ClInclude Include="..\..\include\hrengin\graphics\IVideoManager.h" />
     <ClInclude Include="..\..\include\hrengin\graphics\IVisNode.h" />
     <ClInclude Include="..\..\include\hrengin\graphics\SVertex.h" />
+    <ClInclude Include="..\..\include\hrengin\gui\IGUIElement.h" />
     <ClInclude Include="..\..\include\hrengin\gui\IGUIManager.h" />
     <ClInclude Include="..\..\include\hrengin\gui\IInputManager.h" />
     <ClInclude Include="..\..\include\hrengin\gui\InputEvent.h" />

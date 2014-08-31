@@ -5,7 +5,6 @@ namespace hrengin {
 namespace io {
 class IInputManager;
 }
-namespace graphics {
 namespace gui {
 
 
@@ -19,7 +18,6 @@ public:
 };
 
 } // namespace gui
-} // namespace graphics
 } // namespace hrengin
 
 #endif //_hrengin_IGUIManager_

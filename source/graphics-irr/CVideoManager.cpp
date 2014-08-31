@@ -62,11 +62,6 @@ u32 CVideoManager::getTime()
 	return timer->getTime();
 }
 
-PlatformData CVideoManager::getPlatformSpecificData() const
-{
-	return platformdata_;
-}
-
 bool CVideoManager::step()
 {
 	if (device_->run()) {

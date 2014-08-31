@@ -11,7 +11,6 @@ class IGUIEnvironment;
 }
 
 namespace hrengin {
-namespace graphics {
 namespace gui {
 
 class CGUIManager : public IGUIManager {
@@ -30,7 +29,6 @@ private:
 };
 
 } // namespace gui
-} // namespace graphics
 } // namespace hrengin
 
 #endif //_hrengin_CGUIManager_

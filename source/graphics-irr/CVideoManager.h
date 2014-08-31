@@ -50,8 +50,6 @@ public:
 	virtual ISceneManager* getSceneManager() const;
 	virtual gui::IGUIManager* getGUIManager() const;
 
-	virtual PlatformData getPlatformSpecificData() const;
-
 	//virtual IMesh* loadMesh(const char * modelname);
 	virtual u32 getTime();
 
@@ -62,9 +60,6 @@ private:
 	ISceneManager* sceneManager_;
 	IRenderingDevice* renderer_;
 	gui::IGUIManager* guiManager_;
-
-	PlatformData platformdata_;
-
 };
 	
 } // namespace graphics
