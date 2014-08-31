@@ -99,6 +99,9 @@
     <ClInclude Include="..\..\include\hrengin\common\versions.h">
       <Filter>include\common</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\common\Rect.h">
+      <Filter>include\common</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CReadFile.cpp">
