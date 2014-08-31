@@ -8,14 +8,14 @@ hrengin TODO list
 + Implement hrengin model format.
 + Implement hrengin map/scene format.
 + Create hrengin shell, for ingame testing & debugging tasks
-+ Create config manager
++ Create config manager (current)
 
 ## graphics
 
-+ Create GUI manager (ongoing)
-+ Rewrite video manager into separate smaller classes (ongoing)
++ Add hook for debug drawers
 + Create GUI for hrengin shell
 + Write interface for rendering vertex primitives
++ Rewrite InputReceiver (current)
 
 ## physics
 
