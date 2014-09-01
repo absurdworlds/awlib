@@ -15,7 +15,7 @@ hrengin TODO list
 + Add hook for debug drawers
 + Create GUI for hrengin shell
 + Write interface for rendering vertex primitives
-+ Rewrite InputReceiver (current)
++ IInputManager: revert receiver list from std::forward_list to std::vector
 
 ## physics
 
