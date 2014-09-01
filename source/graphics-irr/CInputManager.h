@@ -1,14 +1,20 @@
 #ifndef _hrengin_CInputManager_
 #define _hrengin_CInputManager_
 
-#include <vector>
+#include <forward_list>
 
 #include <Irrlicht/Irrlicht.h>
 
 #include <hrengin/gui/IInputManager.h>
 
+namespace irr {
+namespace gui {
+class ICursorControl;
+}
+}
+
 namespace hrengin {
-namespace io {
+namespace gui {
 
 /*
 	Class for handling user input. It inherits from irr::IEventReceiver
@@ -18,16 +24,16 @@ namespace io {
 	To access user input, use IGUIManager::getInputManager()
  */
 class CInputManager : public IInputManager, public irr::IEventReceiver {
-public:
+public: //IInputManager
 	CInputManager(irr::IrrlichtDevice* device);
-	virtual bool RegisterReceiver(IControllable& receiver);
-	virtual bool UnregisterReceiver(IControllable& receiver);
-public:
-	virtual irr::gui::ICursorControl* GetCursorControl();
+	virtual bool registerReceiver(IUserInputReceiver* receiver);
+	virtual bool unregisterReceiver(IUserInputReceiver* receiver);
+
+public: //irr::IEventReceiver
 	virtual bool OnEvent(const irr::SEvent& event);
-protected:
-	irr::gui::ICursorControl* CursorControl;
-	std::vector<IControllable*> mReceivers;
+private:
+	irr::gui::ICursorControl* cursor_;
+	std::forward_list<IUserInputReceiver*> receivers_;
 };
 
 

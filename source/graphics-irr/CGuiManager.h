@@ -21,14 +21,14 @@ public:
 
 	virtual void draw();
 
-	virtual io::IInputManager* getInputManager();
+	virtual IInputManager* getInputManager();
 
 	virtual IGUIWindow* addWindow(Rect<i32> rect, bool isModal = false, 
 		const wchar_t* title = 0, IGUIElement* parent = 0, i32 id=-1);
 private:
 	irr::IrrlichtDevice* device_;
 	irr::gui::IGUIEnvironment* guienv_;
-	io::IInputManager* inputmgr_;
+	IInputManager* inputmgr_;
 };
 
 } // namespace gui

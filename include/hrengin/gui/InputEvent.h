@@ -1,14 +1,83 @@
-
 #ifndef _hrengin_InputEvent_
 #define _hrengin_InputEvent_
 
+#include <hrengin/common/types.h>
+#include <hrengin/gui/IGUIElement.h>
+#include <hrengin/gui/Keycodes.h>
 #include <Irrlicht/IEventReceiver.h>
 
 namespace hrengin {
 namespace gui {
-	typedef irr::SEvent InputEvent;
-}
-} // end namespace hrengin
+
+enum class GUIEventType {
+	Unknown,
+	ElementClosed,
+	ElementHovered,
+	ElementLeft
+};
+
+enum class MouseEventType {
+	LButtonDown,
+	RButtonDown,
+	MButtonDown,
+	LButtonUp,
+	RButtonUp,
+	MButtonUp,
+	Wheel,
+	Moved,
+	LDoubleClick,
+	RDoubleClick,
+	MDoubleClick,
+	LTripleClick,
+	RTripleClick,
+	MTripleClick
+};
+
+enum MouseState {
+	MOUSE_LEFT = 0x01,
+	MOUSE_RIGHT = 0x02,
+	MOUSE_MIDDLE = 0x04
+};
+
+enum class InputEventType {
+	MouseEvent,
+	KeyboardEvent,
+	GUIEvent,
+	UnknownEvent
+};
+
+// Mimics Irrlicht's SEvent
+struct InputEvent {
+	struct GUIEvent {
+		gui::IGUIElement* caller;
+		gui::IGUIElement* element;
+		gui::GUIEventType event;
+	};
+	struct MouseEvent {
+		i32 X;
+		i32 Y;
+		f32 wheel;
+		u8 buttonStates;
+		MouseEventType event;
+	};
+	struct KeyboardEvent {
+		KeyCode keyCode;
+		wchar_t Char;
+		bool pressedDown:1;
+		bool shift:1;
+		bool control:1;
+	};
+
+	InputEventType type;
+	union {
+		GUIEvent gui;
+		MouseEvent mouse;
+		KeyboardEvent key;
+	};
+};
+
+} // namespace gui
+} // namespace hrengin
 
 #endif //_hrengin_InputEvent_
 

@@ -22,6 +22,8 @@
     <ClInclude Include="..\..\include\hrengin\common\Vector2d.h" />
     <ClInclude Include="..\..\include\hrengin\common\Vector3d.h" />
     <ClInclude Include="..\..\include\hrengin\common\versions.h" />
+    <ClInclude Include="..\..\include\hrengin\core\freelist_array.h" />
+    <ClInclude Include="..\..\include\hrengin\core\freelist_array_base.h" />
     <ClInclude Include="..\..\include\hrengin\core\hrenginfsutil.h" />
     <ClInclude Include="..\..\include\hrengin\core\hrenginmodels.h" />
     <ClInclude Include="..\..\include\hrengin\core\hrenginpaths.h" />

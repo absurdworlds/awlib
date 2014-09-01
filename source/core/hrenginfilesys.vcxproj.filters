@@ -102,6 +102,12 @@
     <ClInclude Include="..\..\include\hrengin\common\Rect.h">
       <Filter>include\common</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\core\freelist_array.h">
+      <Filter>include\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\core\freelist_array_base.h">
+      <Filter>include\core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CReadFile.cpp">

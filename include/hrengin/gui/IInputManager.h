@@ -7,27 +7,19 @@
 
 #include <hrengin/gui/InputEvent.h>
 
-namespace irr {
-namespace gui {
-	class ICursorControl;
-}
-}
-
 namespace hrengin {
-namespace io {
+class IUserInputReceiver;
+namespace gui {
 //class IRayPicker;
 
-class IInputManager
-{
-	public:
-		virtual bool RegisterReceiver(IControllable& receiver) = 0;
-		virtual bool UnregisterReceiver(IControllable& receiver) = 0;
-		//don't see the need in this
-		//virtual u32 AddMouseEvent(u32 Event, OnInputCallback callback) = 0;
+class IInputManager {
+public:
+	virtual bool registerReceiver(IUserInputReceiver* receiver) = 0;
+	virtual bool unregisterReceiver(IUserInputReceiver* receiver) = 0;
 
+	//don't see the need in this
+	//virtual u32 AddMouseEvent(u32 Event, OnInputCallback callback) = 0;
 };
-
-HRENGINGRAPHICS_API IInputManager& getInputManager();
 
 } // namespace io
 } // namespace hrengin

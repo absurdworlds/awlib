@@ -26,7 +26,9 @@
    Uses the trick: depending on number of arguments, the desired macro shifts
    to a NAME position.
 
-   Use FOR_EACH macro, other macros are to be used only internally by FOR_EACH
+   Use FOR_EACH macro, other macros are to be used only internally by FOR_EACH.
+   To process more arguments, add another FE_ macro and add more arguments to 
+   GET_MACRO
  */
 #define GET_MACRO(_1,_2,_3,_4,_5,_6,NAME,...) NAME
 

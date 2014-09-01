@@ -24,9 +24,6 @@
     <ClInclude Include="CCameraNode.h">
       <Filter>source</Filter>
     </ClInclude>
-    <ClInclude Include="CInputManager.h">
-      <Filter>source</Filter>
-    </ClInclude>
     <ClInclude Include="CLightNode.h">
       <Filter>source</Filter>
     </ClInclude>
@@ -120,12 +117,15 @@
     <ClInclude Include="CGUIWindow.h">
       <Filter>source\gui</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\gui\IUserInputReceiver.h">
+      <Filter>include\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="CInputManager.h">
+      <Filter>source\gui</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CCameraNode.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="CInputManager.cpp">
       <Filter>source</Filter>
     </ClCompile>
     <ClCompile Include="CLightNode.cpp">
@@ -150,6 +150,9 @@
       <Filter>source</Filter>
     </ClCompile>
     <ClCompile Include="CGUIWindow.cpp">
+      <Filter>source\gui</Filter>
+    </ClCompile>
+    <ClCompile Include="CInputManager.cpp">
       <Filter>source\gui</Filter>
     </ClCompile>
   </ItemGroup>

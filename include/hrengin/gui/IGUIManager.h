@@ -4,10 +4,8 @@
 #include <hrengin/common/Rect.h>
 
 namespace hrengin {
-namespace io {
-class IInputManager;
-}
 namespace gui {
+class IInputManager;
 class IGUIElement;
 class IGUIWindow;
 
@@ -17,7 +15,7 @@ public:
 
 	virtual void draw() = 0;
 
-	virtual io::IInputManager* getInputManager() = 0;
+	virtual IInputManager* getInputManager() = 0;
 
 	virtual IGUIWindow* addWindow(Rect<i32> rect, bool isModal = false, 
 		const wchar_t* title = 0, IGUIElement* parent = 0,

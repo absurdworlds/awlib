@@ -30,6 +30,7 @@
     <ClInclude Include="..\..\include\hrengin\gui\IGUITextBox.h" />
     <ClInclude Include="..\..\include\hrengin\gui\IGUIWindow.h" />
     <ClInclude Include="..\..\include\hrengin\gui\IInputManager.h" />
+    <ClInclude Include="..\..\include\hrengin\gui\IUserInputReceiver.h" />
     <ClInclude Include="..\..\include\hrengin\gui\InputEvent.h" />
     <ClInclude Include="..\..\include\hrengin\gui\Keycodes.h" />
     <ClInclude Include="CCameraNode.h" />

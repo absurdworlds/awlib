@@ -17,7 +17,7 @@ CGUIManager::CGUIManager(irr::gui::IGUIEnvironment* guienv,
 irr::IrrlichtDevice* device)
 : device_(device), guienv_(guienv)
 {
-	inputmgr_ = new io::CInputManager(device);
+	inputmgr_ = new CInputManager(device);
 }
 
 CGUIManager::~CGUIManager()
@@ -30,7 +30,7 @@ void CGUIManager::draw()
 	guienv_->drawAll();
 }
 
-io::IInputManager* CGUIManager::getInputManager()
+IInputManager* CGUIManager::getInputManager()
 {
 	return inputmgr_;
 }
