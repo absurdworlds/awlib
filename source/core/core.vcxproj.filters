@@ -57,9 +57,6 @@
     <ClInclude Include="..\..\include\hrengin\core\IModelLoader.h">
       <Filter>include\core</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\hrengin\core\IModelParser.h">
-      <Filter>include\core</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\hrengin\core\IntegerReader.h">
       <Filter>include\core</Filter>
     </ClInclude>
@@ -102,11 +99,17 @@
     <ClInclude Include="..\..\include\hrengin\common\Rect.h">
       <Filter>include\common</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\hrengin\core\freelist_array.h">
+    <ClInclude Include="..\..\include\hrengin\core\IShell.h">
       <Filter>include\core</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\hrengin\core\freelist_array_base.h">
-      <Filter>include\core</Filter>
+    <ClInclude Include="CHrenginShell.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\common\nowide.h">
+      <Filter>include\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\common\locale.h">
+      <Filter>include\common</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

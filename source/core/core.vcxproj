@@ -14,16 +14,16 @@
     <ClInclude Include="..\..\include\hrengin\common\api.h" />
     <ClInclude Include="..\..\include\hrengin\common\config.h" />
     <ClInclude Include="..\..\include\hrengin\common\Line3d.h" />
+    <ClInclude Include="..\..\include\hrengin\common\locale.h" />
     <ClInclude Include="..\..\include\hrengin\common\macro.h" />
     <ClInclude Include="..\..\include\hrengin\common\math.h" />
+    <ClInclude Include="..\..\include\hrengin\common\nowide.h" />
     <ClInclude Include="..\..\include\hrengin\common\Rect.h" />
     <ClInclude Include="..\..\include\hrengin\common\time.h" />
     <ClInclude Include="..\..\include\hrengin\common\types.h" />
     <ClInclude Include="..\..\include\hrengin\common\Vector2d.h" />
     <ClInclude Include="..\..\include\hrengin\common\Vector3d.h" />
     <ClInclude Include="..\..\include\hrengin\common\versions.h" />
-    <ClInclude Include="..\..\include\hrengin\core\freelist_array.h" />
-    <ClInclude Include="..\..\include\hrengin\core\freelist_array_base.h" />
     <ClInclude Include="..\..\include\hrengin\core\hrenginfsutil.h" />
     <ClInclude Include="..\..\include\hrengin\core\hrenginmodels.h" />
     <ClInclude Include="..\..\include\hrengin\core\hrenginpaths.h" />
@@ -34,13 +34,14 @@
     <ClInclude Include="..\..\include\hrengin\core\ILogger.h" />
     <ClInclude Include="..\..\include\hrengin\core\IModel.h" />
     <ClInclude Include="..\..\include\hrengin\core\IModelLoader.h" />
-    <ClInclude Include="..\..\include\hrengin\core\IModelParser.h" />
     <ClInclude Include="..\..\include\hrengin\core\IntegerReader.h" />
     <ClInclude Include="..\..\include\hrengin\core\IReadFile.h" />
+    <ClInclude Include="..\..\include\hrengin\core\IShell.h" />
     <ClInclude Include="..\..\include\hrengin\core\IWriteFile.h" />
     <ClInclude Include="CBufferedStream.h" />
     <ClInclude Include="CFileSystem.h" />
     <ClInclude Include="CHDFParser.h" />
+    <ClInclude Include="CHrenginShell.h" />
     <ClInclude Include="CReadFile.h" />
   </ItemGroup>
   <ItemGroup>

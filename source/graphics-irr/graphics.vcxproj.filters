@@ -123,6 +123,21 @@
     <ClInclude Include="CInputManager.h">
       <Filter>source\gui</Filter>
     </ClInclude>
+    <ClInclude Include="CGUITextBox.h">
+      <Filter>source\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\gui\IGUIListBox.h">
+      <Filter>include\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="CGUIListBox.h">
+      <Filter>source\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\gui\IConsoleGUI.h">
+      <Filter>include\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="CConsoleGUI.h">
+      <Filter>source\gui</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CCameraNode.cpp">
@@ -153,6 +168,15 @@
       <Filter>source\gui</Filter>
     </ClCompile>
     <ClCompile Include="CInputManager.cpp">
+      <Filter>source\gui</Filter>
+    </ClCompile>
+    <ClCompile Include="CGUITextBox.cpp">
+      <Filter>source\gui</Filter>
+    </ClCompile>
+    <ClCompile Include="CGUIListBox.cpp">
+      <Filter>source\gui</Filter>
+    </ClCompile>
+    <ClCompile Include="CConsoleGUI.cpp">
       <Filter>source\gui</Filter>
     </ClCompile>
   </ItemGroup>

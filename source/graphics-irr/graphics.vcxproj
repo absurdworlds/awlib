@@ -22,7 +22,9 @@
     <ClInclude Include="..\..\include\hrengin\graphics\IVideoManager.h" />
     <ClInclude Include="..\..\include\hrengin\graphics\IVisNode.h" />
     <ClInclude Include="..\..\include\hrengin\graphics\SVertex.h" />
+    <ClInclude Include="..\..\include\hrengin\gui\IConsoleGUI.h" />
     <ClInclude Include="..\..\include\hrengin\gui\IGUIElement.h" />
+    <ClInclude Include="..\..\include\hrengin\gui\IGUIListBox.h" />
     <ClInclude Include="..\..\include\hrengin\gui\IGUIManager.h" />
     <ClInclude Include="..\..\include\hrengin\gui\IGUIMenu.h" />
     <ClInclude Include="..\..\include\hrengin\gui\IGUIScrollBar.h" />
@@ -34,7 +36,10 @@
     <ClInclude Include="..\..\include\hrengin\gui\InputEvent.h" />
     <ClInclude Include="..\..\include\hrengin\gui\Keycodes.h" />
     <ClInclude Include="CCameraNode.h" />
+    <ClInclude Include="CConsoleGUI.h" />
+    <ClInclude Include="CGUIListBox.h" />
     <ClInclude Include="CGuiManager.h" />
+    <ClInclude Include="CGUITextBox.h" />
     <ClInclude Include="CGUIWindow.h" />
     <ClInclude Include="CInputManager.h" />
     <ClInclude Include="CLightNode.h" />
@@ -48,7 +53,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CCameraNode.cpp" />
+    <ClCompile Include="CConsoleGUI.cpp" />
+    <ClCompile Include="CGUIListBox.cpp" />
     <ClCompile Include="CGuiManager.cpp" />
+    <ClCompile Include="CGUITextBox.cpp" />
     <ClCompile Include="CGUIWindow.cpp" />
     <ClCompile Include="CInputManager.cpp" />
     <ClCompile Include="CLightNode.cpp" />
