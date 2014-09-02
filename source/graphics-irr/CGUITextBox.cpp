@@ -3,33 +3,33 @@
 
 #include <hrengin/common/nowide.h>
 
-#include "CGUIWindow.h"
+#include "CGUITextBox.h"
 
 namespace hrengin {
 namespace gui {
 
-CGUIWindow::CGUIWindow(irr::gui::IGUIElement* elem)
+CGUITextBox::CGUITextBox(irr::gui::IGUIElement* elem)
 	: irrElement_(elem)
 {
 	elem->grab();
 }
 
-CGUIWindow::~CGUIWindow()
+CGUITextBox::~CGUITextBox()
 {
 	irrElement_->drop();
 }
 
-u32 CGUIWindow::getId() const
+u32 CGUITextBox::getId() const
 {
 	return irrElement_->getID();
 }
 
-u32 CGUIWindow::getParentId() const
+u32 CGUITextBox::getParentId() const
 {
 	return irrElement_->getParent()->getID();
 }
 
-std::string CGUIWindow::getText() const
+std::string CGUITextBox::getText() const
 {
 	std::wstring text(irrElement_->getText());
 	return locale::narrow(text);

@@ -1,7 +1,7 @@
-#ifndef _hrengin_CGUIWindow_
-#define _hrengin_CGUIWindow_
+#ifndef _hrengin_CGUITextBox_
+#define _hrengin_CGUITextBox_
 
-#include <hrengin/gui/IGUIWindow.h>
+#include <hrengin/gui/IGUITextBox.h>
 
 namespace irr {
 namespace gui {
@@ -12,14 +12,14 @@ class IGUIElement;
 namespace hrengin {
 namespace gui {
 
-class CGUIWindow : public IGUIWindow {
+class CGUITextBox : public IGUITextBox {
 public:
-	CGUIWindow(irr::gui::IGUIElement* elem);
-	virtual ~CGUIWindow();
-
+	CGUITextBox(irr::gui::IGUIElement* elem);
+	virtual ~CGUITextBox();
+	
 	virtual u32 getId() const;
 	virtual u32 getParentId() const;
-	
+
 	virtual std::string getText() const;
 
 	virtual void* getUnderlyingElement() const
@@ -34,4 +34,4 @@ private:
 } // namespace gui
 } // namespace hrengin
 
-#endif //_hrengin_CGUIWindow_
+#endif //_hrengin_CGUITextBox_

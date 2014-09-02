@@ -3,38 +3,37 @@
 
 #include <hrengin/common/nowide.h>
 
-#include "CGUIWindow.h"
+#include "CGUIListBox.h"
 
 namespace hrengin {
 namespace gui {
 
-CGUIWindow::CGUIWindow(irr::gui::IGUIElement* elem)
+CGUIListBox::CGUIListBox(irr::gui::IGUIElement* elem)
 	: irrElement_(elem)
 {
 	elem->grab();
 }
 
-CGUIWindow::~CGUIWindow()
+CGUIListBox::~CGUIListBox()
 {
 	irrElement_->drop();
 }
 
-u32 CGUIWindow::getId() const
+u32 CGUIListBox::getId() const
 {
 	return irrElement_->getID();
 }
 
-u32 CGUIWindow::getParentId() const
+u32 CGUIListBox::getParentId() const
 {
 	return irrElement_->getParent()->getID();
 }
 
-std::string CGUIWindow::getText() const
+std::string CGUIListBox::getText() const
 {
 	std::wstring text(irrElement_->getText());
 	return locale::narrow(text);
 }
-
 
 } // namespace gui
 } // namespace hrengin

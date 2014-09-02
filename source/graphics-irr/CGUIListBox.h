@@ -1,7 +1,7 @@
-#ifndef _hrengin_CGUIWindow_
-#define _hrengin_CGUIWindow_
+#ifndef _hrengin_CGUIListBox_
+#define _hrengin_CGUIListBox_
 
-#include <hrengin/gui/IGUIWindow.h>
+#include <hrengin/gui/IGUIListBox.h>
 
 namespace irr {
 namespace gui {
@@ -12,11 +12,11 @@ class IGUIElement;
 namespace hrengin {
 namespace gui {
 
-class CGUIWindow : public IGUIWindow {
+class CGUIListBox : public IGUIListBox {
 public:
-	CGUIWindow(irr::gui::IGUIElement* elem);
-	virtual ~CGUIWindow();
-
+	CGUIListBox(irr::gui::IGUIElement* elem);
+	virtual ~CGUIListBox();
+	
 	virtual u32 getId() const;
 	virtual u32 getParentId() const;
 	
@@ -34,4 +34,4 @@ private:
 } // namespace gui
 } // namespace hrengin
 
-#endif //_hrengin_CGUIWindow_
+#endif //_hrengin_CGUIListBox_

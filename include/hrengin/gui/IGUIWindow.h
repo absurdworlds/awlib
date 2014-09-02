@@ -9,9 +9,6 @@ namespace gui {
 class IGUIWindow : public IGUIElement {
 public:
 	virtual ~IGUIWindow() {};
-
-	/* Get pointer to underlying class */
-	virtual void* getUnderlyingElement() const = 0;
 };
 
 } // namespace gui
