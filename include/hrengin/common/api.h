@@ -21,14 +21,18 @@
 
 #ifdef HRENGIN_GRAPHICS
 	#define HRENGINGRAPHICS_API __declspec(dllexport)
+	#define HR_GRAPHICS_API __declspec(dllexport)
 #else
 	#define HRENGINGRAPHICS_API __declspec(dllimport)
+	#define HR_GRAPHICS_API __declspec(dllimport)
 #endif
 
-#ifdef HRENGIN_FILESYSTEM
+#ifdef HRENGIN_FILESYSTEM 
 	#define HRENGINFILESYSTEM_API __declspec(dllexport)
+	#define HR_CORE_API __declspec(dllexport)
 #else
 	#define HRENGINFILESYSTEM_API __declspec(dllimport)
+	#define HR_CORE_API __declspec(dllimport)
 #endif
 
 #ifdef HRENGIN_PLATFORM

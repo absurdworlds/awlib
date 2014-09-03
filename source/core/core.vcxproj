@@ -42,12 +42,15 @@
     <ClInclude Include="CFileSystem.h" />
     <ClInclude Include="CHDFParser.h" />
     <ClInclude Include="CHrenginShell.h" />
+    <ClInclude Include="CLogger.h" />
     <ClInclude Include="CReadFile.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CBufferedStream.cpp" />
     <ClCompile Include="CFileSystem.cpp" />
     <ClCompile Include="CHDFParser.cpp" />
+    <ClCompile Include="CHrenginShell.cpp" />
+    <ClCompile Include="CLogger.cpp" />
     <ClCompile Include="CReadFile.cpp" />
     <ClCompile Include="hrenginfsutil.cpp" />
   </ItemGroup>

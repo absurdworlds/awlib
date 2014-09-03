@@ -30,9 +30,6 @@
     <ClInclude Include="CEventManager.h">
       <Filter>source</Filter>
     </ClInclude>
-    <ClInclude Include="CLogger.h">
-      <Filter>source</Filter>
-    </ClInclude>
     <ClInclude Include="CWorld.h">
       <Filter>source</Filter>
     </ClInclude>
@@ -78,9 +75,6 @@
       <Filter>source</Filter>
     </ClCompile>
     <ClCompile Include="CEventManager.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="CLogger.cpp">
       <Filter>source</Filter>
     </ClCompile>
     <ClCompile Include="CWorld.cpp">

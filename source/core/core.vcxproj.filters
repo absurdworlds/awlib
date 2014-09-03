@@ -13,6 +13,9 @@
     <Filter Include="include\common">
       <UniqueIdentifier>{3107c42a-44f2-436e-b20d-b31bf611fd69}</UniqueIdentifier>
     </Filter>
+    <Filter Include="include\common\locale">
+      <UniqueIdentifier>{51aaaf4c-ed27-4c0d-90b8-3cc80ac7a092}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CReadFile.h">
@@ -106,10 +109,13 @@
       <Filter>source</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\hrengin\common\nowide.h">
-      <Filter>include\common</Filter>
+      <Filter>include\common\locale</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\hrengin\common\locale.h">
-      <Filter>include\common</Filter>
+      <Filter>include\common\locale</Filter>
+    </ClInclude>
+    <ClInclude Include="CLogger.h">
+      <Filter>source</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -126,6 +132,12 @@
       <Filter>source</Filter>
     </ClCompile>
     <ClCompile Include="CHDFParser.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="CHrenginShell.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="CLogger.cpp">
       <Filter>source</Filter>
     </ClCompile>
   </ItemGroup>
