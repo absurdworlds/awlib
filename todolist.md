@@ -7,15 +7,18 @@ hrengin TODO list
 + Implement hrengin archive format.
 + Implement hrengin model format.
 + Implement hrengin map/scene format.
-+ Create hrengin shell, for ingame testing & debugging tasks
++ Create hrengin shell, for ingame testing & debugging tasks (current)
 + Create config manager (current)
 
 ## graphics
 
 + Add hook for debug drawers
-+ Create GUI for hrengin shell
 + Write interface for rendering vertex primitives
 + IInputManager: revert receiver list from std::forward_list to std::vector
+
+## gui
+
++ Rewrite Irrlicht's gui system
 
 ## physics
 
@@ -32,6 +35,7 @@ hrengin TODO list
 + Write navmesh/waypoint navigation system
 + Improve parenting
 + Rewrite event manager to use fixed time steps
++ Add event manager (a different one, for handling game events)
 
 ## tools
 
