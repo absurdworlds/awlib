@@ -1,4 +1,5 @@
 #include <vector>
+#include <algorithm>
 
 #include "CHrenginShell.h"
 
@@ -28,24 +29,31 @@ void CHrenginShell::execute(std::string command)
 		argEnd = command.length();
 	}
 
-	std::string arg = command.substr(argStart, argEnd);
+	std::string arg = command.substr(argStart, argEnd-argStart);
 
-	auto cmdIter = commands_.find(command);
+	auto cmdIter = commands_.find(arg);
 
 	if(cmdIter == commands_.end()) {
 		logger_->push("No command found: " + arg);
 	} else {
 		ICommand* cmd = cmdIter->second;
 
-		argStart = argEnd;
-		argEnd = command.find(' ', argStart);
 		while(argEnd != std::string::npos) {
-			arg = command.substr(argStart, argEnd);
-			cmd->pushArg(arg);
-
-			argStart = argEnd;
+			argStart = argEnd+1;
 			argEnd = command.find(' ', argStart);
+
+			arg = command.substr(argStart, argEnd-argStart);
+
+			std::remove_if(arg.begin(), arg.end(), isspace);
+
+			if(arg != "") {
+				cmd->pushArg(arg);
+			} else {
+				break;
+			}
 		}
+
+		cmd->execute();
 	}
 }
 

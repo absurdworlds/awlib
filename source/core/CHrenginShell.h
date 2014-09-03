@@ -24,7 +24,11 @@ public:
 
 	virtual void registerCommand(std::string name, ICommand* command)
 	{
-	
+		auto cmdIter = commands_.find(name);
+
+		if(cmdIter == commands_.end()) {
+			commands_[name] = command;
+		}
 	}
 
 	virtual void execute(std::string command);
