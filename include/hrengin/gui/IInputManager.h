@@ -3,22 +3,25 @@
 
 #include <hrengin/common/types.h>
 #include <hrengin/common/api.h>
-#include <hrengin/game/IControllable.h>
 
 #include <hrengin/gui/InputEvent.h>
 
 namespace hrengin {
 class IUserInputReceiver;
 namespace gui {
-//class IRayPicker;
 
 class IInputManager {
 public:
 	virtual bool registerReceiver(IUserInputReceiver* receiver) = 0;
 	virtual bool unregisterReceiver(IUserInputReceiver* receiver) = 0;
+	
+	#if 0
+	virtual void seizeControl(bool seizeCusror, bool seizeKeyboard) = 0;
+	#endif
 
-	//don't see the need in this
-	//virtual u32 AddMouseEvent(u32 Event, OnInputCallback callback) = 0;
+	// actually, I don't see the need in this comment
+	// //don't see the need in this
+	// //virtual u32 AddMouseEvent(u32 Event, OnInputCallback callback) = 0;
 };
 
 } // namespace io

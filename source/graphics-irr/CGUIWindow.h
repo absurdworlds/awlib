@@ -21,6 +21,7 @@ public:
 	virtual u32 getParentId() const;
 	
 	virtual std::string getText() const;
+	virtual void setText(std::string text);
 
 	virtual void* getUnderlyingElement() const
 	{

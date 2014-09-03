@@ -4,6 +4,7 @@
 #include <hrengin/common/api.h>
 #include <hrengin/common/types.h>
 #include <hrengin/gui/IUserInputReceiver.h>
+#include <hrengin/core/ILogger.h>
 
 namespace hrengin {
 namespace core {
@@ -12,7 +13,7 @@ class IShell;
 namespace gui {
 class IGUIManager;
 
-class IConsoleGUI : public IUserInputReceiver {
+class IConsoleGUI : public IUserInputReceiver, public ILogBook {
 public:
 	virtual ~IConsoleGUI() {};
 };

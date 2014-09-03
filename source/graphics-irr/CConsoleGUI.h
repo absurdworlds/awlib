@@ -14,6 +14,9 @@ public:
 
 	virtual bool onUserInput(gui::InputEvent input);
 	virtual bool isEnabled();
+	
+	void log(std::string message);
+
 private:
 	core::IShell* shell_;
 	IGUIWindow* window_;

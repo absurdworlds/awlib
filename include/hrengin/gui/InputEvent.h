@@ -13,7 +13,9 @@ enum class GUIEventType {
 	Unknown,
 	ElementClosed,
 	ElementHovered,
-	ElementLeft
+	ElementLeft,
+	ElementFocused,
+	ElementUnfocused,
 };
 
 enum class MouseEventType {
@@ -49,8 +51,10 @@ enum class InputEventType {
 // Mimics Irrlicht's SEvent
 struct InputEvent {
 	struct GUIEvent {
-		gui::IGUIElement* caller;
-		gui::IGUIElement* element;
+		//gui::IGUIElement* caller;
+		//gui::IGUIElement* element;
+		i32 caller;
+		i32 element;
 		gui::GUIEventType event;
 	};
 	struct MouseEvent {

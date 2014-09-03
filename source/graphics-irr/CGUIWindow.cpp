@@ -35,6 +35,11 @@ std::string CGUIWindow::getText() const
 	return locale::narrow(text);
 }
 
+void CGUIWindow::setText(std::string text)
+{
+	irrElement_->setText(locale::widen(text).c_str());
+}
+
 
 } // namespace gui
 } // namespace hrengin

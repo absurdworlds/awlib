@@ -75,6 +75,16 @@ void convertEvent(const irr::SEvent& irrEvent, InputEvent& hrgEvent) {
 		break;
 	case irr::EET_GUI_EVENT:
 		hrgEvent.type = InputEventType::GUIEvent;
+		if(irrEvent.GUIEvent.Caller) {
+			hrgEvent.gui.caller = irrEvent.GUIEvent.Caller->getID();
+		} else {
+			hrgEvent.gui.caller = 0;
+		}
+		if(irrEvent.GUIEvent.Element) {
+			hrgEvent.gui.element = irrEvent.GUIEvent.Element->getID();
+		} else {
+			hrgEvent.gui.element = 0;
+		}
 		switch(irrEvent.GUIEvent.EventType) {
 		case irr::gui::EGET_ELEMENT_CLOSED:
 			hrgEvent.gui.event = gui::GUIEventType::ElementClosed;
@@ -84,6 +94,12 @@ void convertEvent(const irr::SEvent& irrEvent, InputEvent& hrgEvent) {
 			break;
 		case irr::gui::EGET_ELEMENT_LEFT:
 			hrgEvent.gui.event = gui::GUIEventType::ElementLeft;
+			break;
+		case irr::gui::EGET_ELEMENT_FOCUSED:
+			hrgEvent.gui.event = gui::GUIEventType::ElementFocused;
+			break;
+		case irr::gui::EGET_ELEMENT_FOCUS_LOST:
+			hrgEvent.gui.event = gui::GUIEventType::ElementUnfocused;
 			break;
 		default:
 			hrgEvent.gui.event = gui::GUIEventType::Unknown;

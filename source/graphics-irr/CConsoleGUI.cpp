@@ -1,9 +1,6 @@
 
 #include <string>
 
-#include <Irrlicht/irrString.h>
-#include <Irrlicht/irrList.h>
-
 #include <Irrlicht/IGUIButton.h>
 #include <Irrlicht/IGUIWindow.h>
 #include <Irrlicht/IGUIEditBox.h>
@@ -66,25 +63,9 @@ bool CConsoleGUI::onUserInput(gui::InputEvent input)
 		break;
 	case gui::InputEventType::KeyboardEvent:
 		if(input.key.keyCode == irr::KEY_RETURN && input.key.pressedDown == true) {
-			std::wstring ws(((irr::gui::IGUIEditBox*)input_->getUnderlyingElement())->getText());
-			if(ws != L"") {
-				std::string str( ws.begin(), ws.end() );
-				((irr::gui::IGUIListBox*)output_->getUnderlyingElement())->addItem((L"$ " + ws).c_str());
-				((irr::gui::IGUIEditBox*)input_->getUnderlyingElement())->setText(L"");
-
-				
-				std::wstring::size_type position = ws.find (L' ');
-				if (position != std::wstring::npos) {
-					ws = ws.substr(ws.begin() - ws.begin(), position);
-				}
-				
-				((irr::gui::IGUIListBox*)output_->getUnderlyingElement())->addItem((L"No command found: " + ws).c_str());
-				((irr::gui::IGUIEditBox*)input_->getUnderlyingElement())->setText(L"");
-
-				irr::core::list<irr::gui::IGUIElement*>::ConstIterator it = ((irr::gui::IGUIListBox*)output_->getUnderlyingElement())->getChildren().getLast();
-				irr::gui::IGUIScrollBar* scrollbar = static_cast<irr::gui::IGUIScrollBar*>(*it);
-				scrollbar->setPos(0x7FFFFFFF);
-			}
+			std::string inputStr = input_->getText();
+			input_->setText("");
+			shell_->execute(inputStr);
 		}
 		break;
 	}
@@ -95,6 +76,12 @@ bool CConsoleGUI::onUserInput(gui::InputEvent input)
 bool CConsoleGUI::isEnabled()
 {
 	return true;
+}
+
+void CConsoleGUI::log(std::string message)
+{
+	output_->addItem(message);
+	//TODO: cut the log when it becomes too long
 }
 
 } // namespace gui

@@ -5,7 +5,7 @@
 
 namespace irr {
 namespace gui {
-class IGUIElement;
+class IGUIListBox;
 }
 }
 
@@ -14,13 +14,16 @@ namespace gui {
 
 class CGUIListBox : public IGUIListBox {
 public:
-	CGUIListBox(irr::gui::IGUIElement* elem);
+	CGUIListBox(irr::gui::IGUIListBox* elem);
 	virtual ~CGUIListBox();
 	
 	virtual u32 getId() const;
 	virtual u32 getParentId() const;
 	
+	virtual u32 addItem(std::string text);
+
 	virtual std::string getText() const;
+	virtual void setText(std::string text);
 
 	virtual void* getUnderlyingElement() const
 	{
@@ -28,7 +31,9 @@ public:
 	}
 
 private:
-	irr::gui::IGUIElement* irrElement_;
+	void adjustScrollPosition();
+
+	irr::gui::IGUIListBox* irrElement_;
 };
 
 } // namespace gui

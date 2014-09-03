@@ -25,6 +25,7 @@ public:
 	#endif
 	/* get the caption of this element */
 	virtual std::string getText() const = 0;
+	virtual void setText(std::string text) = 0;
 
 	virtual void* getUnderlyingElement() const = 0;
 };
