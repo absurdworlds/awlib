@@ -215,15 +215,15 @@ struct utf_traits<CharType,2> {
 	typedef CharType char_type;
 
 	// See RFC 2781
-	static bool is_first_surrogate(uint16_t x)
+	static bool is_first_surrogate(u16 x)
 	{
 		return 0xD800 <=x && x<= 0xDBFF;
 	}
-	static bool is_second_surrogate(uint16_t x)
+	static bool is_second_surrogate(u16 x)
 	{
 		return 0xDC00 <=x && x<= 0xDFFF;
 	}
-	static code_point combine_surrogate(uint16_t w1,uint16_t w2)
+	static code_point combine_surrogate(u16 w1,u16 w2)
 	{
 		return ((code_point(w1 & 0x3FF) << 10) | (w2 & 0x3FF)) + 0x10000;
 	}
@@ -250,7 +250,7 @@ struct utf_traits<CharType,2> {
 		if(BOOST_LOCALE_UNLIKELY(current == last)) {
 			return incomplete;
 		}
-		uint16_t w1=*current++;
+		u16 w1=*current++;
 		if(BOOST_LOCALE_LIKELY(w1 < 0xD800 || 0xDFFF < w1)) {
 			return w1;
 		}
@@ -260,7 +260,7 @@ struct utf_traits<CharType,2> {
 		if(current==last) {
 			return incomplete;
 		}
-		uint16_t w2=*current++;
+		u16 w2=*current++;
 		if(w2 < 0xDC00 || 0xDFFF < w2) {
 			return illegal;
 		}
@@ -269,11 +269,11 @@ struct utf_traits<CharType,2> {
 	template<typename It>
 	static code_point decode_valid(It &current)
 	{
-		uint16_t w1=*current++;
+		u16 w1=*current++;
 		if(BOOST_LOCALE_LIKELY(w1 < 0xD800 || 0xDFFF < w1)) {
 			return w1;
 		}
-		uint16_t w2=*current++;
+		u16 w2=*current++;
 		return combine_surrogate(w1,w2);
 	}
 
