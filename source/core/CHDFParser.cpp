@@ -93,8 +93,9 @@ bool isValidHdfType<std::string>(HdfType type) {
 	return HDF_STRING == type;
 }
 
+//template<template<class U> class T>
 template<>
-bool isValidHdfType<Vector2d>(HdfType type) {
+bool isValidHdfType<Vector2d<f32>>(HdfType type) {
 	return HDF_VECTOR2 == type;
 }
 
