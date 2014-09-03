@@ -8,6 +8,7 @@
 #include <hrengin/common/api.h>
 #include <hrengin/common/macro.h>
 
+
 #define TRACE_FUNCTION() \
 do { \
 	hrengin::getLogger().push("DEBUG:"); \
@@ -25,23 +26,29 @@ do { \
 	hrengin::getLogger().push(hrengin::endl); \
 } while (0);
 
+#undef TRACE
+#undef TRACE_FUNCTION
+
+#define TRACE(...)
+#define TRACE_FUNCTION(...)
+
 namespace hrengin {
 
-class ILogger
-{
+class ILogBook {
 public:
-	virtual void init() = 0;
-	virtual void push(std::string msg) = 0;
-	virtual void stop() = 0;
+	virtual void log(std::string) = 0;
 };
 
-const std::string  endl = std::string("\n");
+class ILogger {
+public:
+	virtual ~ILogger() {};
+	virtual void push(std::string msg) = 0;
+	virtual void addLog(ILogBook* log) = 0;
+	
+	const std::string endl = std::string("\n");
+};
 
-// creates a new logger on heap
-HRENGIN_API ILogger& createLogger();
-
-// creates a singleton logger
-HRENGIN_API ILogger& getLogger();
+HR_CORE_API ILogger* createLogger();
 
 } // namespace hrengin
 
