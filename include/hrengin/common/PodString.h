@@ -8,25 +8,32 @@
 
 namespace hrengin {
 
+/*
+   This struct is used fro more convenient storage of POD character arrays
+ */
 struct PodString {
-	PodString(std::string s) 
-	{
-		length = s.length();
-		data = new u8[length+1];
-		strcpy((char *)data,s.c_str());
-	}
-	PodString(const char* s) 
-	{
-		length = strlen(s);
-		data = new u8[length+1];
-		strcpy((char *)data,s);
-	}
-	PodString(PodString& s) = default;
-
 	size_t length;
 	u8* data;
 };
 
+
+PodString createPodString(std::string s) 
+{
+	PodString ps;
+	ps.length = s.length();
+	ps.data = new u8[ps.length+1];
+	strcpy((char *)ps.data,s.c_str());
+	return ps;
 }
+PodString createPodString(const char* s) 
+{
+	PodString ps;
+	ps.length = strlen(s);
+	ps.data = new u8[ps.length+1];
+	strcpy((char *)ps.data,s);
+	return ps;
+}
+
+} // namespace hrengin
 
 #endif//_hrengin_PodString_
