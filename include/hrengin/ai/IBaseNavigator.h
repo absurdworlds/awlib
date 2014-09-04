@@ -31,7 +31,7 @@ public:
 	virtual bool checkState(NavState state) = 0;
 	virtual NavState getState() = 0;
 
-	virtual void start(Vector3d destination) = 0;
+	virtual void start(Vector3d<f32> destination) = 0;
 	virtual bool move(f32 timeStep) = 0;
 	virtual void stop() = 0;
 	virtual void setFollow() = 0;

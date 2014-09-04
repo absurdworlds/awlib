@@ -18,7 +18,7 @@ CPhysicsBody::CPhysicsBody(btCollisionObject* pCollObject, IBaseEntity* pAttach)
 	CollObject->setUserPointer(this);
 }
 
-void CPhysicsBody::setPosition(Vector3d pos) 
+void CPhysicsBody::setPosition(Vector3d<f32> pos) 
 {
 	btTransform localTransform;
 	localTransform.setIdentity();
@@ -30,7 +30,7 @@ void CPhysicsBody::setPosition(Vector3d pos)
 };
 
 
-void CPhysicsBody::setRotation(Vector3d rot) 
+void CPhysicsBody::setRotation(Vector3d<f32> rot) 
 {
 	btTransform localTransform;
 	localTransform.setIdentity();
@@ -57,21 +57,21 @@ void quaternionToEuler(const btQuaternion &TQuat, btVector3 &TEuler) {
 	TEuler *= math::RADTODEG;
 }
 
-Vector3d CPhysicsBody::getPosition() 
+Vector3d<f32> CPhysicsBody::getPosition() 
 {
 	btVector3 pos = CollObject->getWorldTransform().getOrigin();
 
-	return Vector3d(pos.getX(),pos.getY(),pos.getZ());
+	return Vector3d<f32>(pos.getX(),pos.getY(),pos.getZ());
 };
 
-Vector3d CPhysicsBody::getRotation() 
+Vector3d<f32> CPhysicsBody::getRotation() 
 {
 	btQuaternion rot = CollObject->getWorldTransform().getRotation();
 	
 	btVector3 pos;
 	quaternionToEuler(rot,pos);
 
-	return Vector3d(pos.getX(),pos.getY(),pos.getZ());
+	return Vector3d<f32>(pos.getX(),pos.getY(),pos.getZ());
 };
 
 IBaseEntity* CPhysicsBody::getEntity()

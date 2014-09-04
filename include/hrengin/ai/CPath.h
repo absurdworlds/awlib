@@ -13,7 +13,7 @@ class CPath {
 public:
 	typedef u32 nodeId;
 
-	std::vector<Vector3d> pathData_;
+	std::vector<Vector3d<f32>> pathData_;
 	nodeId current_;
 
 	void increment() 
@@ -46,12 +46,12 @@ public:
 		return pathData_.size() - 1;
 	}
 
-	Vector3d node(nodeId id) const
+	Vector3d<f32> node(nodeId id) const
 	{
 		return pathData_[id];
 	}
 	
-	nodeId add(Vector3d node)
+	nodeId add(Vector3d<f32> node)
 	{
 		pathData_.push_back(node);
 		return end();

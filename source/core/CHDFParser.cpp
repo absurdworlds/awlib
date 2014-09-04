@@ -100,7 +100,7 @@ bool isValidHdfType<Vector2d<f32>>(HdfType type) {
 }
 
 template<>
-bool isValidHdfType<Vector3d>(HdfType type) {
+bool isValidHdfType<Vector3d<f32>>(HdfType type) {
 	return HDF_VECTOR3 == type;
 }
 
@@ -287,9 +287,9 @@ void CHndfParser::readString(std::string& val)
 {
 	readValue<std::string>(val);
 }
-void CHndfParser::readVector3d(Vector3d& val)
+void CHndfParser::readVector3d(Vector3d<f32>& val)
 {
-	readValue<Vector3d>(val);
+	readValue<Vector3d<f32>>(val);
 }
 
 //TODO: rewrite those two properly
@@ -580,7 +580,7 @@ void CHndfParser::convertValue(HdfToken& token, f64& val)
 }
 
 template<>
-void CHndfParser::convertValue(HdfToken& token, Vector3d& val)
+void CHndfParser::convertValue(HdfToken& token, Vector3d<f32>& val)
 {
 	val.X = strtod(token.value.c_str(), 0);
 	

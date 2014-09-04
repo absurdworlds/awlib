@@ -26,12 +26,12 @@ void CVisNode::setParentEntity(IBaseEntity* parent)
 	parent_ = parent;
 }
 
-void CVisNode::setPosition(Vector3d pos)
+void CVisNode::setPosition(Vector3d<f32> pos)
 {
 	meshNode_->setPosition(irr::core::vector3df(pos.X,pos.Y,pos.Z));
 }
 
-void CVisNode::setRotation(Vector3d rot)
+void CVisNode::setRotation(Vector3d<f32> rot)
 {
 	meshNode_->setRotation(irr::core::vector3df(rot.X,rot.Y,rot.Z));
 }

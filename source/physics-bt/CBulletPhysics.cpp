@@ -27,7 +27,7 @@ public:
 	{
 		//workaround to bullet's inconsistent debug colors which are either from 0.0 - 1.0 or from 0.0 - 255.0
 
-		Vector3d newColor;
+		Vector3d<f32> newColor;
 
 		if (color[0] <= 1.0 && color[0] > 0.0) {
 			newColor.X = ((u32)(color[0]*255.0));
@@ -40,8 +40,8 @@ public:
 		}
 
 		vmgr_->drawLine(
-		Vector3d(from[0], from[1], from[2]),
-		Vector3d(to[0], to[1], to[2]),
+		Vector3d<f32>(from[0], from[1], from[2]),
+		Vector3d<f32>(to[0], to[1], to[2]),
 		newColor);
 	}
 	
@@ -53,9 +53,9 @@ public:
 		const btVector3 to(PointOnB + normalOnB*distance);
 
 		vmgr_->drawLine(
-			Vector3d(PointOnB[0], PointOnB[1], PointOnB[2]),
-			Vector3d(to[0], to[1], to[2]),
-			Vector3d(255.0,255.0,255.0));
+			Vector3d<f32>(PointOnB[0], PointOnB[1], PointOnB[2]),
+			Vector3d<f32>(to[0], to[1], to[2]),
+			Vector3d<f32>(255.0,255.0,255.0));
 	}
 
 	void reportErrorWarning(const char* text)
@@ -202,13 +202,13 @@ bool CBulletPhysics::step()
 	return true;
 }
 
-IPhysicsBody* CBulletPhysics::createBody(const char* modelName, Vector3d pos, u16 group, u16 filters)
+IPhysicsBody* CBulletPhysics::createBody(const char* modelName, Vector3d<f32> pos, u16 group, u16 filters)
 {
 	u32 shapeId = loadModel(modelName);
 	return createBody(shapeId,pos, group,  filters); 
 };
 
-IPhysicsBody* CBulletPhysics::createBody(const u32 shapeid, Vector3d pos, u16 group, u16 filters)
+IPhysicsBody* CBulletPhysics::createBody(const u32 shapeid, Vector3d<f32> pos, u16 group, u16 filters)
 {
 	btTransform defaultTransform;
 	defaultTransform.setIdentity();
@@ -266,7 +266,7 @@ IPhysicsPhantom* CBulletPhysics::createPhantom(const u32 shapeid, u16 group, u16
 	return new CPhysicsPhantom(collObject);
 };
 
-IPhysicsObject* CBulletPhysics::castRay(Vectorf3d from, Vectorf3d to, u16 filters)
+IPhysicsObject* CBulletPhysics::castRay(Vector3d<f32> from, Vector3d<f32> to, u16 filters)
 {
 	btVector3 btfrom = btVector3(from.X,from.Y,from.Z);
 	btVector3 btto = btVector3(to.X,to.Y,to.Z);

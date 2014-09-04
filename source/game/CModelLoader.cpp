@@ -188,14 +188,14 @@ bool hndfParseShapeNode(io::IHDFParser* hndf, IModel* model)
 		} else if(objectName == "length") {
 			hndf->readFloat(primitive.dimensions[2]);
 		} else if(objectName == "rotation") {
-			hrengin::Vector3d vec3;
+			Vector3d<f32> vec3;
 			hndf->readVector3d(vec3);
 			
 			primitive.rotation[0] = vec3.X;
 			primitive.rotation[1] = vec3.Y;
 			primitive.rotation[2] = vec3.Z;
 		} else if(objectName == "offset") {
-			hrengin::Vector3d vec3;
+			Vector3d<f32> vec3;
 			hndf->readVector3d(vec3);
 			
 			primitive.offset[0] = vec3.X;

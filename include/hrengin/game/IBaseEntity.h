@@ -101,8 +101,8 @@ public:
 	virtual void sync() = 0;
 
 	// Methods to set entity's position and rotation.
-	virtual void setPosition(Vector3d position) = 0;
-	virtual void setRotation(Vector3d rotation) = 0; //LATER: replace with quaternions
+	virtual void setPosition(Vector3d<f32> position) = 0;
+	virtual void setRotation(Vector3d<f32> rotation) = 0; //LATER: replace with quaternions
 	
 protected: /* Methods */
 	virtual void enterDeleteQueue() = 0;

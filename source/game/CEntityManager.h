@@ -14,8 +14,8 @@ private:
 	class CNullEnt : public IBaseEntity {
 	public:
 		void sync() {};
-		void setPosition(Vector3d position) {};
-		void setRotation(Vector3d position) {};
+		void setPosition(Vector3d<f32> position) {};
+		void setRotation(Vector3d<f32> position) {};
 		void onParentRemove() {};
 		void enterDeleteQueue() {};
 	} nullEntity;

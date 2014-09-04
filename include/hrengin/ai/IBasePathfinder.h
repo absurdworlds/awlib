@@ -10,8 +10,8 @@ namespace ai {
 class CPath;
 
 class IBasePathfinder {
-	public:
-		virtual CPath findPath(Vector3d start, Vector3d end) = 0;
+public:
+	virtual CPath findPath(Vector3d<f32> start, Vector3d<f32> end) = 0;
 };
 
 HRENGIN_API IBasePathfinder* createSimplePathfinder();

@@ -15,13 +15,13 @@ class ISceneNode {
 public:
 	virtual void setParentEntity(IBaseEntity* parent) = 0;
 
-	virtual void setPosition(Vector3d pos) = 0;
-	virtual void setRotation(Vector3d rot) = 0;
+	virtual void setPosition(Vector3d<f32> pos) = 0;
+	virtual void setRotation(Vector3d<f32> rot) = 0;
 	// not supported
-	//virtual void setScale(Vectorf3d scale) = 0;
+	//virtual void setScale(Vector3d<f32> scale) = 0;
 protected:
-	Vector3d position_;
-	Vector3d rotation_;
+	Vector3d<f32> position_;
+	Vector3d<f32> rotation_;
 };
 
 	

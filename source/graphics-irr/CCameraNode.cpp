@@ -1,4 +1,5 @@
 
+#include <hrengin/common/Vector3d.h>
 #include <hrengin/common/Line3d.h>
 
 #include "IrrExt/CSceneNodeAnimatorCameraRTS.h"
@@ -36,7 +37,7 @@ hrengin::base::line3df CCameraNode::castRayFromScreen(hrengin::i32 x, hrengin::i
 	return line;
 }
 
-hrengin::Vector3d CCameraNode::__tempGetRayHitPlaneCoords(hrengin::i32 x, hrengin::i32 y)
+Vector3d<f32> CCameraNode::__tempGetRayHitPlaneCoords(hrengin::i32 x, hrengin::i32 y)
 {
 	irr::scene::ISceneCollisionManager* colman = scmgr_->getSceneCollisionManager();
 	irr::core::line3df line = colman->getRayFromScreenCoordinates(irr::core::vector2di(x,y), node_);
@@ -45,10 +46,10 @@ hrengin::Vector3d CCameraNode::__tempGetRayHitPlaneCoords(hrengin::i32 x, hrengi
 	//irr::core::line3df line(10,50,10,10,-50,10);
 	irr::core::vector3df vec;
 	
-	/*hrengin::Vectorf3d start(line.end.X,
+	/*hrengin::Vector3d<f32> start(line.end.X,
 				             50,
 				             line.end.Z);
-	hrengin::Vectorf3d end(line.start.X,
+	hrengin::Vector3d<f32> end(line.start.X,
 						  0,
 				           line.start.Z);
 						   */
@@ -58,14 +59,14 @@ hrengin::Vector3d CCameraNode::__tempGetRayHitPlaneCoords(hrengin::i32 x, hrengi
 	//irr::core::vector3df vec;
 	
 	plane.getIntersectionWithLine(line.start, line.getVector(), vec);
-	return hrengin::Vector3d(vec.X,0,vec.Z);
+	return Vector3d<f32>(vec.X,0,vec.Z);
 }
 
-void CCameraNode::setPosition(Vector3d pos)
+void CCameraNode::setPosition(Vector3d<f32> pos)
 {
 
 }
-void CCameraNode::setRotation(Vector3d rot)
+void CCameraNode::setRotation(Vector3d<f32> rot)
 {
 
 }
@@ -75,11 +76,11 @@ void CCameraNode::SetDistance(f64 dist)
 
 }
 
-void CCameraNode::SetTargetPosition(Vector3d pos)
+void CCameraNode::SetTargetPosition(Vector3d<f32> pos)
 {
 
 }
-void CCameraNode::SetCameraPosition(Vector3d pos)
+void CCameraNode::SetCameraPosition(Vector3d<f32> pos)
 {
 
 }

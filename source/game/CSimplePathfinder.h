@@ -12,7 +12,7 @@ class CPath;
 class CSimplePathfinder : public IBasePathfinder {
 public:
 	virtual ~CSimplePathfinder() {};
-	virtual CPath findPath(Vector3d start, Vector3d end)
+	virtual CPath findPath(Vector3d<f32> start, Vector3d<f32> end)
 	{
 		CPath path;
 		path.add(start);

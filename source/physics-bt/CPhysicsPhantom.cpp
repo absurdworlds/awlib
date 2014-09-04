@@ -15,7 +15,7 @@ CPhysicsPhantom::CPhysicsPhantom(btCollisionObject* pCollObject, IBaseEntity* pA
 	CollObject->setUserPointer(this);
 }
 
-void CPhysicsPhantom::setPosition(Vector3d pos) 
+void CPhysicsPhantom::setPosition(Vector3d<f32> pos) 
 {
 	btTransform localTransform;
 	localTransform.setIdentity();
@@ -26,7 +26,7 @@ void CPhysicsPhantom::setPosition(Vector3d pos)
 };
 
 
-void CPhysicsPhantom::setRotation(Vector3d rot) 
+void CPhysicsPhantom::setRotation(Vector3d<f32> rot) 
 {
 	btTransform localTransform;
 	localTransform.setIdentity();

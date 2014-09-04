@@ -23,14 +23,14 @@ public:
 
 	}
 
-	virtual void addVertex(Vectorf3d pos, u32 idx)
+	virtual void addVertex(Vector3d<f32> pos, u32 idx)
 	{
 		vertixes_.push_back(pos);
 		indexes_.push_back(idx);
 	}
 
 private:
-	std::vector<Vectorf3d> vertixes_;
+	std::vector<Vector3d<f32>> vertixes_;
 	std::vector<u32> indexes_;
 	graphics::IVideoManager* vmgr_;
 };

@@ -11,8 +11,8 @@ class ICameraNode : public ISceneNode {
 public:
 	virtual ~ICameraNode() {};
 
-	virtual void SetTargetPosition(Vector3d pos) = 0;
-	virtual void SetCameraPosition(Vector3d pos) = 0;
+	virtual void SetTargetPosition(Vector3d<f32> pos) = 0;
+	virtual void SetCameraPosition(Vector3d<f32> pos) = 0;
 
 	virtual void BindTargetToCamera(bool bind) = 0;
 
@@ -22,8 +22,8 @@ public:
 
 	virtual void SetDistance(f64 dist) = 0;
 
-	virtual hrengin::base::line3df castRayFromScreen(hrengin::i32 x, hrengin::i32 y) = 0;
-	virtual hrengin::Vector3d __tempGetRayHitPlaneCoords(hrengin::i32 x, hrengin::i32 y) = 0;
+	virtual hrengin::base::line3df castRayFromScreen(i32 x, i32 y) = 0;
+	virtual Vector3d<f32> __tempGetRayHitPlaneCoords(i32 x, i32 y) = 0;
 
 	enum CAM_Behavior
 	{
@@ -42,4 +42,4 @@ public:
 } // namespace graphics
 } // namespace hrengin
 
-#endif//__H_INCLUDED__HRENGIN_ICameraNode
+#endif//_hrengin_ICameraNode_

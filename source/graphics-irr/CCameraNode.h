@@ -21,14 +21,14 @@ public:
 	virtual void setParentEntity(IBaseEntity* parent);
 
 	virtual hrengin::base::line3df castRayFromScreen(hrengin::i32 x, hrengin::i32 y);
-	virtual hrengin::Vector3d __tempGetRayHitPlaneCoords(hrengin::i32 x, hrengin::i32 y);
+	virtual Vector3d<f32> __tempGetRayHitPlaneCoords(hrengin::i32 x, hrengin::i32 y);
 
-	virtual void setPosition(Vector3d pos);
-	virtual void setRotation(Vector3d rot);
-	//virtual void SetScale(Vector3d scale);
+	virtual void setPosition(Vector3d<f32> pos);
+	virtual void setRotation(Vector3d<f32> rot);
+	//virtual void SetScale(Vector3d<f32> scale);
 
-	virtual void SetTargetPosition(Vector3d pos);
-	virtual void SetCameraPosition(Vector3d pos);
+	virtual void SetTargetPosition(Vector3d<f32> pos);
+	virtual void SetCameraPosition(Vector3d<f32> pos);
 
 	virtual void BindTargetToCamera(bool bind);
 

@@ -176,7 +176,7 @@ public:
 	virtual void readBool(bool& val) = 0;
 	virtual void readString(std::string& val) = 0;
 	//virtual void readString(char* val) = 0;
-	virtual void readVector3d(Vector3d& val) = 0;
+	virtual void readVector3d(Vector3d<f32>& val) = 0;
 
 	/* skip current value or node (with all subnodes) */
 	virtual void skipValue() = 0;

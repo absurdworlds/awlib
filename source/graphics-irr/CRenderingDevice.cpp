@@ -17,7 +17,8 @@ bool CRenderingDevice::drawVertexPrimitive(const IVertexBuffer& vb, const IIndex
 	return false;
 }
 
-void CRenderingDevice::drawLine(const Vector3d& from, const Vector3d& to, const Vector3d& color)
+void CRenderingDevice::drawLine(const Vector3d<f32>& from,
+	const Vector3d<f32>& to, const Vector3d<f32>& color)
 {
 	irr::core::vector3df irrfrom(from.X, from.Y, from.Z);
 	irr::core::vector3df irrto(to.X, to.Y, to.Z);

@@ -25,7 +25,7 @@ public:
 
 
 	virtual bool drawVertexPrimitive(const IVertexBuffer& vb, const IIndexBuffer& ib) = 0;
-	virtual void drawLine(const Vector3d& from, const Vector3d& to, const Vector3d& color) = 0;
+	virtual void drawLine(const Vector3d<f32>& from, const Vector3d<f32>& to, const Vector3d<f32>& color) = 0;
 };
 
 	

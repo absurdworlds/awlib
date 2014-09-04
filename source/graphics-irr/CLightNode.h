@@ -18,9 +18,9 @@ public:
 		
 	virtual void setParentEntity(IBaseEntity* parent);
 
-	virtual void setPosition(Vector3d pos);
-	virtual void setRotation(Vector3d rot);
-	//virtual void SetScale(Vectorf3d scale);
+	virtual void setPosition(Vector3d<f32> pos);
+	virtual void setRotation(Vector3d<f32> rot);
+	//virtual void SetScale(Vector3d<f32> scale);
 protected:
 	IBaseEntity* attachedTo;
 

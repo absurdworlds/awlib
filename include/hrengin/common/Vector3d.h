@@ -6,39 +6,38 @@
 namespace hrengin {
 
 template <class T>
-class hrVector3d
-{
+class Vector3d {
 public: /* Data */
 // Vector coordinates
 	T X;
 	T Y;
 	T Z;
 public:
-	hrVector3d() 
+	Vector3d() 
 		: X(0), Y(0), Z(0) 
 	{	}
 
-	hrVector3d(T x, T y, T z) 
+	Vector3d(T x, T y, T z) 
 		: X(x), Y(y), Z(z) 
 	{	}
 
-	explicit hrVector3d(T v) 
+	explicit Vector3d(T v) 
 		: X(v), Y(v), Z(v) 
 	{	}
 
 	// Copy constructor
-	hrVector3d(const hrVector3d<T>& other) 
+	Vector3d(const Vector3d<T>& other) 
 		: X(other.X), Y(other.Y), Z(other.Z) 
 	{	}
 
 	// operators
 
-	hrVector3d<T> operator-() const 
+	Vector3d<T> operator-() const 
 	{
-		return hrVector3d<T>(-X, -Y, -Z);
+		return Vector3d<T>(-X, -Y, -Z);
 	}
 
-	hrVector3d<T>& operator=(const hrVector3d<T>& other)
+	Vector3d<T>& operator=(const Vector3d<T>& other)
 	{
 		X = other.X; 
 		Y = other.Y; 
@@ -46,12 +45,12 @@ public:
 		return *this;
 	}
 
-	hrVector3d<T> operator+(const hrVector3d<T>& other) const
+	Vector3d<T> operator+(const Vector3d<T>& other) const
 	{
-		return hrVector3d<T>(X + other.X, Y + other.Y, Z + other.Z); 
+		return Vector3d<T>(X + other.X, Y + other.Y, Z + other.Z); 
 	}
 
-	hrVector3d<T>& operator+=(const hrVector3d<T>& other)
+	Vector3d<T>& operator+=(const Vector3d<T>& other)
 	{ 
 		X+=other.X; 
 		Y+=other.Y; 
@@ -59,12 +58,12 @@ public:
 		return *this;
 	}
 
-	hrVector3d<T> operator+(const T val) const
+	Vector3d<T> operator+(const T val) const
 	{
-		return hrVector3d<T>(X + val, Y + val, Z + val);
+		return Vector3d<T>(X + val, Y + val, Z + val);
 	}
 
-	hrVector3d<T>& operator+=(const T val)
+	Vector3d<T>& operator+=(const T val)
 	{
 		X+=val;
 		Y+=val;
@@ -72,12 +71,12 @@ public:
 		return *this;
 	}
 
-	hrVector3d<T> operator-(const hrVector3d<T>& other) const
+	Vector3d<T> operator-(const Vector3d<T>& other) const
 	{
-		return hrVector3d<T>(X - other.X, Y - other.Y, Z - other.Z);
+		return Vector3d<T>(X - other.X, Y - other.Y, Z - other.Z);
 	}
 
-	hrVector3d<T>& operator-=(const hrVector3d<T>& other)
+	Vector3d<T>& operator-=(const Vector3d<T>& other)
 	{
 		X-=other.X;
 		Y-=other.Y;
@@ -85,12 +84,12 @@ public:
 		return *this;
 	}
 
-	hrVector3d<T> operator-(const T val) const
+	Vector3d<T> operator-(const T val) const
 	{
-		return hrVector3d<T>(X - val, Y - val, Z - val);
+		return Vector3d<T>(X - val, Y - val, Z - val);
 	}
 
-	hrVector3d<T>& operator-=(const T val)
+	Vector3d<T>& operator-=(const T val)
 	{
 		X-=val;
 		Y-=val;
@@ -98,12 +97,12 @@ public:
 		return *this;
 	}
 
-	hrVector3d<T> operator*(const hrVector3d<T>& other) const
+	Vector3d<T> operator*(const Vector3d<T>& other) const
 	{
-		return hrVector3d<T>(X * other.X, Y * other.Y, Z * other.Z);
+		return Vector3d<T>(X * other.X, Y * other.Y, Z * other.Z);
 	}
 
-	hrVector3d<T>& operator*=(const hrVector3d<T>& other)
+	Vector3d<T>& operator*=(const Vector3d<T>& other)
 	{
 		X*=other.X;
 		Y*=other.Y;
@@ -111,12 +110,12 @@ public:
 		return *this;
 	}
 
-	hrVector3d<T> operator*(const T v) const
+	Vector3d<T> operator*(const T v) const
 	{
-		return hrVector3d<T>(X * v, Y * v, Z * v);
+		return Vector3d<T>(X * v, Y * v, Z * v);
 	}
 
-	hrVector3d<T>& operator*=(const T v)
+	Vector3d<T>& operator*=(const T v)
 	{
 		X*=v;
 		Y*=v;
@@ -124,12 +123,12 @@ public:
 		return *this;
 	}
 
-	hrVector3d<T> operator/(const hrVector3d<T>& other) const
+	Vector3d<T> operator/(const Vector3d<T>& other) const
 	{
-		return hrVector3d<T>(X / other.X, Y / other.Y, Z / other.Z);
+		return Vector3d<T>(X / other.X, Y / other.Y, Z / other.Z);
 	}
 
-	hrVector3d<T>& operator/=(const hrVector3d<T>& other)
+	Vector3d<T>& operator/=(const Vector3d<T>& other)
 	{
 		X/=other.X;
 		Y/=other.Y;
@@ -137,13 +136,13 @@ public:
 		return *this;
 	}
 
-	hrVector3d<T> operator/(const T v) const
+	Vector3d<T> operator/(const T v) const
 	{
 		T i=(T)1.0/v;
-		return hrVector3d<T>(X * i, Y * i, Z * i);
+		return Vector3d<T>(X * i, Y * i, Z * i);
 	}
 
-	hrVector3d<T>& operator/=(const T v)
+	Vector3d<T>& operator/=(const T v)
 	{
 		T i=(T)1.0/v;
 		X*=i; 
@@ -152,11 +151,11 @@ public:
 		return *this; 
 	}
 	/*
-	hrVector3d<T>& set(const T nx, const T ny, const T nz) {X=nx; Y=ny; Z=nz; return *this;}
-	hrVector3d<T>& set(const hrVector3d<T>& p) {X=p.X; Y=p.Y; Z=p.Z;return *this;}-*/
+	Vector3d<T>& set(const T nx, const T ny, const T nz) {X=nx; Y=ny; Z=nz; return *this;}
+	Vector3d<T>& set(const Vector3d<T>& p) {X=p.X; Y=p.Y; Z=p.Z;return *this;}-*/
 	
 	// Normalize the vector
-	hrVector3d<T>& normalize()
+	Vector3d<T>& normalize()
 	{
 		f64 length = squareLength();
 		if (length == 0 )
@@ -174,17 +173,17 @@ public:
 	}
 
 	// Returns normalized vector without modifying it
-	hrVector3d<T> normalized() const
+	Vector3d<T> normalized() const
 	{
 		f64 length = squareLength();
 		if (length == 0 )
 		{
 			// don't normalize zero vector
-			return hrVector3d<T>();
+			return Vector3d<T>();
 		}
 		length = math::inverseSqrt(length);
 
-		return hrVector3d<T>((T)(X * length), (T)(Y * length), (T)(Z * length));
+		return Vector3d<T>((T)(X * length), (T)(Y * length), (T)(Z * length));
 	}
 
 	//! Get length of the vector.
@@ -202,31 +201,31 @@ public:
 	/*
 
 	//! Get the dot product with another vector.
-	T dotProduct(const hrVector3d<T>& other) const
+	T dotProduct(const Vector3d<T>& other) const
 	{
 		return X*other.X + Y*other.Y + Z*other.Z;
 	}
 
 	//! Get distance from another point.
 	//** Here, the vector is interpreted as point in 3 dimensional space. *
-	T getDistanceFrom(const hrVector3d<T>& other) const
+	T getDistanceFrom(const Vector3d<T>& other) const
 	{
-		return hrVector3d<T>(X - other.X, Y - other.Y, Z - other.Z).getLength();
+		return Vector3d<T>(X - other.X, Y - other.Y, Z - other.Z).getLength();
 	}
 
 	//! Returns squared distance from another point.
 	//** Here, the vector is interpreted as point in 3 dimensional space. *
-	T getDistanceFromSQ(const hrVector3d<T>& other) const
+	T getDistanceFromSQ(const Vector3d<T>& other) const
 	{
-		return hrVector3d<T>(X - other.X, Y - other.Y, Z - other.Z).getLengthSQ();
+		return Vector3d<T>(X - other.X, Y - other.Y, Z - other.Z).getLengthSQ();
 	}
 
 	//! Calculates the cross product with another vector.
 	//** \param p Vector to multiply with.
 	\return Crossproduct of this vector with p. *
-	hrVector3d<T> crossProduct(const hrVector3d<T>& p) const
+	Vector3d<T> crossProduct(const Vector3d<T>& p) const
 	{
-		return hrVector3d<T>(Y * p.Z - Z * p.Y, Z * p.X - X * p.Z, X * p.Y - Y * p.X);
+		return Vector3d<T>(Y * p.Z - Z * p.Y, Z * p.X - X * p.Z, X * p.Y - Y * p.X);
 	}
 
 	//! Returns if this vector interpreted as a point is on a line between two other points.
@@ -234,7 +233,7 @@ public:
 	\param begin Beginning vector to compare between.
 	\param end Ending vector to compare between.
 	\return True if this vector is between begin and end, false if not. *
-	bool isBetweenPoints(const hrVector3d<T>& begin, const hrVector3d<T>& end) const
+	bool isBetweenPoints(const Vector3d<T>& begin, const Vector3d<T>& end) const
 	{
 		const T f = (end - begin).getLengthSQ();
 		return getDistanceFromSQ(begin) <= f &&
@@ -243,14 +242,14 @@ public:
 
 
 	//! Sets the length of the vector to a new value
-	hrVector3d<T>& setLength(T newlength)
+	Vector3d<T>& setLength(T newlength)
 	{
 		normalize();
 		return (*this *= newlength);
 	}
 
 	//! Inverts the vector.
-	hrVector3d<T>& invert()
+	Vector3d<T>& invert()
 	{
 		X *= -1;
 		Y *= -1;
@@ -261,7 +260,7 @@ public:
 	//! Rotates the vector by a specified number of degrees around the Y axis and the specified center.
 	//** \param degrees Number of degrees to rotate around the Y axis.
 	\param center The center of the rotation. *
-	void rotateXZBy(f64 degrees, const hrVector3d<T>& center=hrVector3d<T>())
+	void rotateXZBy(f64 degrees, const Vector3d<T>& center=Vector3d<T>())
 	{
 		degrees *= DEGTORAD64;
 		f64 cs = cos(degrees);
@@ -276,7 +275,7 @@ public:
 	//! Rotates the vector by a specified number of degrees around the Z axis and the specified center.
 	//** \param degrees: Number of degrees to rotate around the Z axis.
 	\param center: The center of the rotation. *
-	void rotateXYBy(f64 degrees, const hrVector3d<T>& center=hrVector3d<T>())
+	void rotateXYBy(f64 degrees, const Vector3d<T>& center=Vector3d<T>())
 	{
 		degrees *= DEGTORAD64;
 		f64 cs = cos(degrees);
@@ -291,7 +290,7 @@ public:
 	//! Rotates the vector by a specified number of degrees around the X axis and the specified center.
 	//** \param degrees: Number of degrees to rotate around the X axis.
 	\param center: The center of the rotation. *
-	void rotateYZBy(f64 degrees, const hrVector3d<T>& center=hrVector3d<T>())
+	void rotateYZBy(f64 degrees, const Vector3d<T>& center=Vector3d<T>())
 	{
 		degrees *= DEGTORAD64;
 		f64 cs = cos(degrees);
@@ -308,10 +307,10 @@ public:
 	\param d Interpolation value between 0.0f (all the other vector) and 1.0f (all this vector).
 	Note that this is the opposite direction of interpolation to getInterpolated_quadratic()
 	\return An interpolated vector.  This vector is not modified. *
-	hrVector3d<T> getInterpolated(const hrVector3d<T>& other, f64 d) const
+	Vector3d<T> getInterpolated(const Vector3d<T>& other, f64 d) const
 	{
 		const f64 inv = 1.0 - d;
-		return hrVector3d<T>((T)(other.X*inv + X*d), (T)(other.Y*inv + Y*d), (T)(other.Z*inv + Z*d));
+		return Vector3d<T>((T)(other.X*inv + X*d), (T)(other.Y*inv + Y*d), (T)(other.Z*inv + Z*d));
 	}
 
 	//! Creates a quadratically interpolated vector between this and two other vectors.
@@ -320,7 +319,7 @@ public:
 	\param d Interpolation value between 0.0f (all this vector) and 1.0f (all the 3rd vector).
 	Note that this is the opposite direction of interpolation to getInterpolated() and interpolate()
 	\return An interpolated vector. This vector is not modified. *
-	hrVector3d<T> getInterpolated_quadratic(const hrVector3d<T>& v2, const hrVector3d<T>& v3, f64 d) const
+	Vector3d<T> getInterpolated_quadratic(const Vector3d<T>& v2, const Vector3d<T>& v3, f64 d) const
 	{
 		// this*(1-d)*(1-d) + 2 * v2 * (1-d) + v3 * d * d;
 		const f64 inv = (T) 1.0 - d;
@@ -328,7 +327,7 @@ public:
 		const f64 mul1 = (T) 2.0 * d * inv;
 		const f64 mul2 = d * d;
 
-		return hrVector3d<T> ((T)(X * mul0 + v2.X * mul1 + v3.X * mul2),
+		return Vector3d<T> ((T)(X * mul0 + v2.X * mul1 + v3.X * mul2),
 				(T)(Y * mul0 + v2.Y * mul1 + v3.Y * mul2),
 				(T)(Z * mul0 + v2.Z * mul1 + v3.Z * mul2));
 	}
@@ -339,7 +338,7 @@ public:
 	\param d Interpolation value between 0.0f (all vector b) and 1.0f (all vector a)
 	Note that this is the opposite direction of interpolation to getInterpolated_quadratic()
 	*
-	hrVector3d<T>& interpolate(const hrVector3d<T>& a, const hrVector3d<T>& b, f64 d)
+	Vector3d<T>& interpolate(const Vector3d<T>& a, const Vector3d<T>& b, f64 d)
 	{
 		X = (T)((f64)b.X + ( ( a.X - b.X ) * d ));
 		Y = (T)((f64)b.Y + ( ( a.Y - b.Y ) * d ));
@@ -363,9 +362,9 @@ public:
 	\return A rotation vector containing the X (pitch) and Y (raw) rotations (in degrees) that when applied to a
 	+Z (e.g. 0, 0, 1) direction vector would make it point in the same direction as this vector. The Z (roll) rotation
 	is always 0, since two Euler rotations are sufficient to point in any given direction. */
-	hrVector3d<T> getHorizontalAngle() const
+	Vector3d<T> getHorizontalAngle() const
 	{
-		hrVector3d<T> angle;
+		Vector3d<T> angle;
 
 		angle.Y = (T) atan2((f64)X, (f64)Z);
 
@@ -391,9 +390,9 @@ public:
 	this vector.  The calculation assumes the pole at (0,1,0) and
 	returns the angles in X and Y.
 	*
-	hrVector3d<T> getSphericalCoordinateAngles() const
+	Vector3d<T> getSphericalCoordinateAngles() const
 	{
-		hrVector3d<T> angle;
+		Vector3d<T> angle;
 		const f64 length = X*X + Y*Y + Z*Z;
 
 		if (length)
@@ -418,7 +417,7 @@ public:
 	If you do not provide a direction, then the +Z axis (0, 0, 1) will be assumed to be forwards.
 	\return A direction vector calculated by rotating the forwards direction by the 3 Euler angles
 	(in degrees) represented by this vector. *
-	hrVector3d<T> rotationToDirection(const hrVector3d<T> & forwards = hrVector3d<T>(0, 0, 1)) const
+	Vector3d<T> rotationToDirection(const Vector3d<T> & forwards = Vector3d<T>(0, 0, 1)) const
 	{
 		const f64 cr = cos( core::DEGTORAD64 * X );
 		const f64 sr = sin( core::DEGTORAD64 * X );
@@ -435,7 +434,7 @@ public:
 			( srsp*cy-cr*sy ), ( srsp*sy+cr*cy ), ( sr*cp ),
 			( crsp*cy+sr*sy ), ( crsp*sy-sr*cy ), ( cr*cp )};
 
-		return hrVector3d<T>(
+		return Vector3d<T>(
 			(T)(forwards.X * pseudoMatrix[0] +
 				forwards.Y * pseudoMatrix[3] +
 				forwards.Z * pseudoMatrix[6]),
@@ -471,13 +470,13 @@ public:
 
 //! partial specialization for integer vectors
 template <>
-inline hrVector3d<i32> hrVector3d<i32>::operator /(i32 val) const 
+inline Vector3d<i32> Vector3d<i32>::operator /(i32 val) const 
 {
-	return hrVector3d<i32>(X/val,Y/val,Z/val);
+	return Vector3d<i32>(X/val,Y/val,Z/val);
 }
 
 template <>
-inline hrVector3d<i32>& hrVector3d<i32>::operator /=(i32 val) 
+inline Vector3d<i32>& Vector3d<i32>::operator /=(i32 val) 
 {
 	X/=val;
 	Y/=val;
@@ -487,9 +486,9 @@ inline hrVector3d<i32>& hrVector3d<i32>::operator /=(i32 val)
 
 /*
 template <>
-inline hrVector3d<s32> hrVector3d<s32>::getSphericalCoordinateAngles() const
+inline Vector3d<s32> Vector3d<s32>::getSphericalCoordinateAngles() const
 {
-	hrVector3d<s32> angle;
+	Vector3d<s32> angle;
 	const f64 length = X*X + Y*Y + Z*Z;
 
 	if (length)
@@ -508,12 +507,11 @@ inline hrVector3d<s32> hrVector3d<s32>::getSphericalCoordinateAngles() const
 
 // multiply scalar and vector
 template<class S, class T>
-hrVector3d<T> operator*(const S scalar, const hrVector3d<T>& vector) { return vector*scalar; }
+Vector3d<T> operator*(const S scalar, const Vector3d<T>& vector)
+{
+	return vector*scalar; 
+}
 
-typedef hrVector3d<f32> Vectorf3d;
-typedef hrVector3d<f64> Vectord3d;
-typedef hrVector3d<i32> Vectori3d;
-typedef hrVector3d<f64> Vector3d;
 
 } // end namespace hrengin
 

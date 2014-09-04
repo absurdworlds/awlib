@@ -18,11 +18,11 @@ void CLightNode::setParentEntity(IBaseEntity* parent)
 
 }
 
-void CLightNode::setPosition(Vector3d pos)
+void CLightNode::setPosition(Vector3d<f32> pos)
 {
 
 }
-void CLightNode::setRotation(Vector3d rot)
+void CLightNode::setRotation(Vector3d<f32> rot)
 {
 
 }

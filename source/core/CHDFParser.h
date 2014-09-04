@@ -5,6 +5,7 @@
 #include <vector>
 
 #include <hrengin/common/types.h>
+#include <hrengin/core/hdf.h>
 #include <hrengin/core/IHDFParser.h>
 
 namespace hrengin {
@@ -35,6 +36,11 @@ enum HdfTokenType {
 	HDF_TOKEN_INVALID
 };
 
+struct HdfToken {
+	HdfTokenType type;
+	std::string value;
+};
+
 enum HdfType {
 	HDF_INTEGER,
 	HDF_FLOAT,
@@ -45,14 +51,7 @@ enum HdfType {
 	HDF_UNKNOWN_TYPE
 };
 
-struct HdfToken {
-	HdfTokenType type;
-	std::string value;
-};
-
-
-class CHndfParser : public IHDFParser
-{
+class CHndfParser : public IHDFParser {
 public:
 	CHndfParser(IReadFile* file);
 	virtual ~CHndfParser();
@@ -71,7 +70,7 @@ public:
 	virtual void readInt(i32& val);
 	virtual void readBool(bool& val);
 	virtual void readString(std::string& val);
-	virtual void readVector3d(Vector3d& val);
+	virtual void readVector3d(Vector3d<f32>& val);
 
 	void error(HdfParserMessage type, std::string msg);
 private:

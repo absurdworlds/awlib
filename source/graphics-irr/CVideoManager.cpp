@@ -117,7 +117,7 @@ void CVideoManager::showCaptionFPS(bool showFps)
 #endif
 
 
-/*void CVideoManager::drawVertexListObject(std::vector<Vectorf3d>& vert, std::vector<u32>& idxs)
+/*void CVideoManager::drawVertexListObject(std::vector<Vector3d<f32>>& vert, std::vector<u32>& idxs)
 {
 
 	this->driver->drawVertexPrimitiveList();

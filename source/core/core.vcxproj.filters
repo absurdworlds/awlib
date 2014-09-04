@@ -117,6 +117,18 @@
     <ClInclude Include="CLogger.h">
       <Filter>source</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\core\IProgram.h">
+      <Filter>include\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\core\ISettingsManager.h">
+      <Filter>include\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\common\PodString.h">
+      <Filter>include\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\core\hdf.h">
+      <Filter>include\core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CReadFile.cpp">
