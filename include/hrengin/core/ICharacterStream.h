@@ -14,7 +14,7 @@ public:
 	virtual u32 getPos() const = 0;
 };
 
-HR_CORE_API ICharacterStream* createCharacterStream(char* source);
+HR_CORE_API ICharacterStream* createCharacterStream(const char* source);
 
 } // namespace io
 } // namespace hrengin

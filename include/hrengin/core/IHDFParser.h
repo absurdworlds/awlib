@@ -190,11 +190,8 @@ public:
 	virtual void error(HdfParserMessage type, std::string msg) = 0;
 };
 
-/* Make an instance of HDF parser to process a file */
-HR_CORE_API IHDFParser* createHDFParser(IReadFile* file);
-
-/* Make an instance of HDF parser to process a character stream */
-HR_CORE_API IHDFParser* createHDFParser(ICharacterStream* stream)
+/* Make an instance of HDF parser */
+HR_CORE_API IHDFParser* createHDFParser(ICharacterStream* stream);
 
 } // namespace io
 } // namespace hrengin

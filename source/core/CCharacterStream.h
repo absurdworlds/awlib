@@ -9,17 +9,10 @@ namespace io {
 
 class IReadFile;
 
-// todo: add 'copy' specifier
-
-ICharacterStream* createCharacterStream(char* source)
-{
-	return new CCharacterStream(source);
-}
-
 class CCharacterStream : public ICharacterStream {
 public:
-	CCharacterStream(char* source)
-		: source_(source)
+	CCharacterStream(const char* source)
+		: source_(source), pos_(0)
 	{
 	
 	}
@@ -51,7 +44,7 @@ public:
 	}
 
 private:
-	char* source_;
+	const char* source_;
 	u32 pos_;
 };
 

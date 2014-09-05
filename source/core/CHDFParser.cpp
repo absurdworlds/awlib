@@ -1,5 +1,4 @@
 
-#include <hrengin/core/IReadFile.h>
 #include <hrengin/core/IBufferedStream.h>
 
 #include <hrengin/common/types.h>
@@ -140,25 +139,9 @@ HdfType hdfConvertImpicitType(const HdfToken& token)
    Member function definitions
  */
 
-IHDFParser* createHDFParser(IReadFile* file)
-{
-	if(!file->isOpen()) {
-		return 0;
-	}
-
-	return new CHndfParser(file);
-}
-
 IHDFParser* createHDFParser(ICharacterStream* stream)
 {
 	return new CHndfParser(stream);
-}
-
-CHndfParser::CHndfParser(IReadFile* file)
-	: depth_(0), state_(HDF_S_IDLE)
-{
-	stream_ = createBufferedStream(file);
-	
 }
 
 CHndfParser::CHndfParser(ICharacterStream* stream)
@@ -168,7 +151,6 @@ CHndfParser::CHndfParser(ICharacterStream* stream)
 
 CHndfParser::~CHndfParser()
 {
-	delete stream_;
 }
 
 bool CHndfParser::read() {
