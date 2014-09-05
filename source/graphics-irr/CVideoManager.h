@@ -37,7 +37,7 @@ class CVideoManager : public IVideoManager {
 friend class CEncore;
 friend class CGUIManager;
 public:
-	CVideoManager();
+	CVideoManager(core::ISettingsManager* settings);
 	virtual ~CVideoManager();
 	
 	virtual bool step();

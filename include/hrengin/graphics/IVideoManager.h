@@ -5,6 +5,9 @@
 #include <hrengin/common/Vector3d.h>
 
 namespace hrengin {
+namespace core{
+class ISettingsManager;
+}
 namespace gui {
 class IGUIManager;
 }
@@ -28,7 +31,7 @@ public:
 	virtual u32 getTime() = 0;
 };
 
-HRENGINGRAPHICS_API IVideoManager* createVideoManager();
+HRENGINGRAPHICS_API IVideoManager* createVideoManager(core::ISettingsManager* settings = 0);
 
 } // namespace graphics
 } // namespace hrengin

@@ -2,6 +2,8 @@
 //#include <Irrlicht/SAnimatedMesh.h>
 
 
+#include <hrengin/core/ISettingsManager.h>
+
 #include "CVisNode.h"
 #include "CCameraNode.h"
 #include "CLightNode.h"
@@ -16,14 +18,22 @@
 namespace hrengin {
 namespace graphics {
 
-IVideoManager* createVideoManager()
+IVideoManager* createVideoManager(core::ISettingsManager* settings)
 {
-	return new CVideoManager();
+	return new CVideoManager(settings);
 }
 
-CVideoManager::CVideoManager()
+CVideoManager::CVideoManager(core::ISettingsManager* settings)
 {
-	device_ = irr::createDevice( irr::video::EDT_OPENGL, irr::core::dimension2d<irr::u32>(1066, 600), 32, false, false, true, 0);
+	i32 resolutionX = 1066;
+	i32 resolutionY = 600;
+	bool fullscreen = false;
+	if(settings) {
+		settings->getValue("graphics.resolutionX",resolutionX);
+		settings->getValue("graphics.resolutionY",resolutionY);
+		settings->getValue("graphics.fullscreen",fullscreen);
+	}
+	device_ = irr::createDevice( irr::video::EDT_OPENGL, irr::core::dimension2d<irr::u32>(resolutionX, resolutionY), 32, fullscreen, false, true, 0);
 
 	device_->setWindowCaption(L"hrengin A - Irrlicht 1.8.1");
 
@@ -31,7 +41,7 @@ CVideoManager::CVideoManager()
 	sceneManager_ = new CSceneManager(device_->getSceneManager(), renderer_, device_);
 	guiManager_ = new gui::CGUIManager(device_->getGUIEnvironment(), device_);
 
-	//platformdata_.win32.wndHandle = device_->getVideoDriver()->getExposedVideoData().OpenGLWin32.HWnd;
+	settings->setValue("platform.win32.wndHandle", reinterpret_cast<i32>(device_->getVideoDriver()->getExposedVideoData().OpenGLWin32.HWnd));
 }
 
 CVideoManager::~CVideoManager() 
