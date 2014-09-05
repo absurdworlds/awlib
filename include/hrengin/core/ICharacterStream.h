@@ -1,5 +1,5 @@
-#ifndef __hrengin_ICharacterStream__
-#define __hrengin_ICharacterStream__
+#ifndef _hrengin_ICharacterStream_
+#define _hrengin_ICharacterStream_
 
 #include <hrengin/common/types.h>
 
@@ -13,9 +13,7 @@ public:
 	virtual u32 getPos() const = 0;
 };
 
+} // namespace io
+} // namespace hrengin
 
-}
-}
-
-
-#endif//__HRENGIN_ICharacterStream__
+#endif//_hrengin_ICharacterStream_

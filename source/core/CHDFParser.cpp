@@ -136,6 +136,9 @@ HdfType hdfConvertImpicitType(const HdfToken& token)
 	}
 }
 
+/*
+   Member function definitions
+ */
 
 IHDFParser* createHDFParser(IReadFile* file)
 {
@@ -146,11 +149,21 @@ IHDFParser* createHDFParser(IReadFile* file)
 	return new CHndfParser(file);
 }
 
+IHDFParser* createHDFParser(ICharacterStream* stream)
+{
+	return new CHndfParser(stream);
+}
+
 CHndfParser::CHndfParser(IReadFile* file)
-: depth_(0), state_(HDF_S_IDLE)
+	: depth_(0), state_(HDF_S_IDLE)
 {
 	stream_ = createBufferedStream(file);
 	
+}
+
+CHndfParser::CHndfParser(ICharacterStream* stream)
+	: depth_(0), state_(HDF_S_IDLE), stream_(stream)
+{
 }
 
 CHndfParser::~CHndfParser()

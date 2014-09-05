@@ -1,5 +1,5 @@
-#ifndef __hrengin_CHndfParser_H__
-#define __hrengin_CHndfParser_H__
+#ifndef _hrengin_CHDFParser_
+#define _hrengin_CHDFParser_
 
 #include <string>
 #include <vector>
@@ -54,6 +54,7 @@ enum HdfType {
 class CHndfParser : public IHDFParser {
 public:
 	CHndfParser(IReadFile* file);
+	CHndfParser(ICharacterStream* stream);
 	virtual ~CHndfParser();
 	
 	virtual void skipNode();
@@ -110,21 +111,14 @@ private:
 
 	std::vector<std::string> errors_;
 
-
-
 	void processCommand();
 
-	//void skipWhitespace();
-
-	IBufferedStream* stream_;
+	io::ICharacterStream* stream_;
 
 	u32 depth_;
 };
 
-
-
 } //namespace io
 } //namespace hrengin
 
-
-#endif//__HRENGIN_FILESYSTEM_CHndfParser_H__
+#endif//_hrengin_CHDFParser_
