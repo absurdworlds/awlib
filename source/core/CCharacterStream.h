@@ -23,6 +23,7 @@ public:
 	virtual bool getCurrent(u8& c)
 	{
 		if(pos_ == 0xFFFFFFF) {
+			c = 0;
 			return false;
 		}
 		c = source_[pos_];
@@ -32,6 +33,7 @@ public:
 	{
 		++ pos_;
 		if(source_[pos_] == 0) {
+			c = 0;
 			pos_ = 0xFFFFFFF;
 			return false;
 		}
