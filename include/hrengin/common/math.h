@@ -104,14 +104,22 @@ FORCEINLINE bool equals(const f64 a, const f64 b, const f64 tolerance = ROUNDING
 }
 
 /*
-Normalizes angle between -180 and 180 degrees
-*/
-inline hrengin::f32 clamp_angle(hrengin::f32 angle)
+   Normalize angle between -180 and 180 degrees
+ */
+inline f32 clamp_angle(f32 angle)
 {
 	angle = fmod(angle,360.0f);
 	return    angle >  180.0f ? angle - 360.0f
 		: angle < -180.0f ? angle + 360.0f 
 		: angle;
+}
+
+/*
+   Returns true if number is a power of 2
+ */
+inline bool isPowerOf2(u32 value)
+{
+	return (value & (value - 1)) && value;
 }
 
 } //namespace math
