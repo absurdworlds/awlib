@@ -1,0 +1,7 @@
+[settings
+ [graphics
+  resolutionX = int:1066
+  resolutionY = int:600
+  fullscreen = bool:false
+ ]
+]
