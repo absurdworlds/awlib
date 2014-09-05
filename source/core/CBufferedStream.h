@@ -1,5 +1,5 @@
-#ifndef __hrengin_CBufferedStream__
-#define __hrengin_CBufferedStream__
+#ifndef _hrengin_CBufferedStream_
+#define _hrengin_CBufferedStream_
 
 #include <hrengin/common/types.h>
 #include <hrengin/core/IBufferedStream.h>
@@ -9,8 +9,7 @@ namespace io {
 
 class IReadFile;
 
-class CBufferedStream : public IBufferedStream
-{
+class CBufferedStream : public IBufferedStream {
 public:
 	CBufferedStream(IReadFile* source);
 	~CBufferedStream();
@@ -25,10 +24,7 @@ private:
 	u32 pos_;
 };
 
-
 } //namespace io
-} //namespace hrg
+} //namespace hrengin
 
-
-
-#endif//__hrengin_CBufferedStream__
+#endif//_hrengin_CBufferedStream_

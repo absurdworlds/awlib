@@ -29,7 +29,7 @@ bool CBufferedStream::getCurrent(u8& c)
 {
 	if(pos_+1 > source_->getSize()) {
 		c = 0;
-		return 0;
+		return false;
 	}
 
 	c = buffer_[pos_ % STREAM_BUFFER_SIZE];
@@ -42,7 +42,7 @@ bool CBufferedStream::getNext(u8& c)
 	
 	if(pos_ > source_->getSize()) {
 		c = 0;
-		return 0;
+		return false;
 	}
 
 	if(pos_ % STREAM_BUFFER_SIZE == 0) {
@@ -51,7 +51,7 @@ bool CBufferedStream::getNext(u8& c)
 
 	c = buffer_[pos_ % STREAM_BUFFER_SIZE];
 
-	return 1;
+	return true;
 }
 
 u32 CBufferedStream::getPos() const 

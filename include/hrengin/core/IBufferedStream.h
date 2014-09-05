@@ -10,16 +10,11 @@ class IReadFile;
 
 class IBufferedStream : public ICharacterStream {
 public:
-//	virtual bool getCurrent(char& c) = 0;
-//	virtual bool getNext(char& c) = 0;
 };
-
 
 IBufferedStream* createBufferedStream(IReadFile* source);
 
 } //namespace io
-} //namespace hrg
+} //namespace hrengin
 
-
-
-#endif//__HRENGIN_IBufferedStream__
+#endif//_hrengin_IBufferedStream_

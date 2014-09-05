@@ -1,6 +1,7 @@
 #ifndef _hrengin_ICharacterStream_
 #define _hrengin_ICharacterStream_
 
+#include <hrengin/common/api.h>
 #include <hrengin/common/types.h>
 
 namespace hrengin {
@@ -12,6 +13,8 @@ public:
 	virtual bool getNext(u8& c) = 0;
 	virtual u32 getPos() const = 0;
 };
+
+HR_CORE_API ICharacterStream* createCharacterStream(char* source);
 
 } // namespace io
 } // namespace hrengin
