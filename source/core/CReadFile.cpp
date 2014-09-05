@@ -3,7 +3,6 @@
 
 #include "CReadFile.h"
 
-
 namespace hrengin {
 namespace io {
 
@@ -13,7 +12,7 @@ IReadFile* openReadFile(std::string path)
 	
 	if (readFile->isOpen()) {
 		return readFile;
-	}	
+	}
 
 	return 0;
 }
@@ -93,5 +92,5 @@ const std::string& CReadFile::getPath() const
 	return path_;
 }
 
-}
-}
+} // namespace io
+} // namespace hrengin

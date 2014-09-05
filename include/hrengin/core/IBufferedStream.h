@@ -12,7 +12,7 @@ class IBufferedStream : public ICharacterStream {
 public:
 };
 
-IBufferedStream* createBufferedStream(IReadFile* source);
+HR_CORE_API IBufferedStream* createBufferedStream(IReadFile* source);
 
 } //namespace io
 } //namespace hrengin

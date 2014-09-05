@@ -4,8 +4,6 @@
 #include <string>
 #include <cstring>
 
-#include <hrengin/common/types.h>
-
 namespace hrengin {
 
 /*
@@ -13,23 +11,24 @@ namespace hrengin {
  */
 struct PodString {
 	size_t length;
-	u8* data;
+	char* data;
 };
 
 
-PodString createPodString(std::string s) 
+inline PodString createPodString(std::string s) 
 {
 	PodString ps;
 	ps.length = s.length();
-	ps.data = new u8[ps.length+1];
+	ps.data = new char[ps.length+1];
 	strcpy((char *)ps.data,s.c_str());
 	return ps;
 }
-PodString createPodString(const char* s) 
+
+inline PodString createPodString(const char* s) 
 {
 	PodString ps;
 	ps.length = strlen(s);
-	ps.data = new u8[ps.length+1];
+	ps.data = new char[ps.length+1];
 	strcpy((char *)ps.data,s);
 	return ps;
 }

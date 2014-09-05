@@ -4,6 +4,7 @@
 #include <hrengin/core/hrenginfsutil.h>
 #include <hrengin/core/IFileSystem.h>
 #include <hrengin/core/IReadFile.h>
+#include <hrengin/core/IBufferedStream.h>
 #include <hrengin/core/IHDFParser.h>
 
 #include <hrengin/core/IModel.h>
@@ -37,16 +38,13 @@ IModel* CModelLoader::loadModel(const char* filename)
 	io::getFileExtension(ext, filename);
 
 	if(ext == "hndf" || ext == "hdf") {
-	
-		io::IHDFParser* hndf = io::createHDFParser(file);
-	
-		if(!hndf) {
-			return false;
-		}
+		io::ICharacterStream* stream = io::createBufferedStream(file);
+		io::IHDFParser* hndf = io::createHDFParser(stream);
 
 		hndfParse(hndf, model);
 
 		delete hndf;
+		delete stream;
 	}
 
 	delete file;
