@@ -7,8 +7,9 @@ hrengin TODO list
 + Implement hrengin archive format.
 + Implement hrengin model format.
 + Implement hrengin map/scene format.
-+ Create hrengin shell, for ingame testing & debugging tasks (current)
-+ Create config manager (current)
++ Rewrite hrengin shell (add more elegant way to define console commands)
++ Update config manager to parse any settings, not only hardcoded ones
++ Update HDF parser, add possibility to read values as hdf::Value class, instead of predefined type
 
 ## graphics
 
@@ -18,7 +19,7 @@ hrengin TODO list
 
 ## gui
 
-+ Rewrite Irrlicht's gui system
++ Write own gui system instead of Irrlicht's
 
 ## physics
 
