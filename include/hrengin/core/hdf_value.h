@@ -1,5 +1,5 @@
-#ifndef _hrengin_hdf_
-#define _hrengin_hdf_
+#ifndef _hrengin_hdf_value_
+#define _hrengin_hdf_value_
 
 #include <string>
 
@@ -30,10 +30,15 @@ enum HdfType {
 	HDF_UNKNOWN_TYPE
 };
 /*
-   Struct for holding any HDF Value.
+   Class for holding any HDF Value.
    As soon as it is initialized, it's type is immutable.
  */
-struct Value {
+class Value {
+public:
+	Value()
+		: val(0), type(HDF_UNKNOWN_TYPE)
+	{	}
+
 	Value(bool b)
 		: val(b), type(HDF_BOOLEAN)
 	{	}
@@ -193,4 +198,4 @@ private:
 } // namespace hdf
 } // namespace hrengin
 
-#endif//_hrengin_hdf_
+#endif//_hrengin_hdf_value_
