@@ -1,11 +1,11 @@
-#ifndef _hrengin_IHDFParser_
-#define _hrengin_IHDFParser_
+#ifndef _hrengin_IHDFReader_
+#define _hrengin_IHDFReader_
+
+#include <string>
 
 #include <hrengin/common/api.h>
 
 #include <hrengin/common/Vector3d.h>
-
-#include <string>
 
 namespace hrengin {
 namespace io {
@@ -196,4 +196,4 @@ HR_CORE_API IHDFParser* createHDFParser(ICharacterStream* stream);
 } // namespace io
 } // namespace hrengin
 
-#endif//_hrengin_IHDFParser_
+#endif//_hrengin_IHDFReader_

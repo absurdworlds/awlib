@@ -16,40 +16,22 @@
     <Filter Include="include\common\locale">
       <UniqueIdentifier>{51aaaf4c-ed27-4c0d-90b8-3cc80ac7a092}</UniqueIdentifier>
     </Filter>
+    <Filter Include="source\io">
+      <UniqueIdentifier>{31af56e6-5219-420b-bbb7-4b2b7180ff4c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\hdf">
+      <UniqueIdentifier>{e4edd400-acc6-4a7f-a52e-08ff9dd85bb9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\core\hdf">
+      <UniqueIdentifier>{bb360a51-a554-46a7-a6f6-c5e84f02ae56}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\core\io">
+      <UniqueIdentifier>{125b1068-f0df-4e9f-a3c7-d332c2a361e4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="CReadFile.h">
-      <Filter>source</Filter>
-    </ClInclude>
     <ClInclude Include="CFileSystem.h">
       <Filter>source</Filter>
-    </ClInclude>
-    <ClInclude Include="CBufferedStream.h">
-      <Filter>source</Filter>
-    </ClInclude>
-    <ClInclude Include="CHDFParser.h">
-      <Filter>source</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\hrengin\core\hrenginfsutil.h">
-      <Filter>include\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\hrengin\core\hrenginmodels.h">
-      <Filter>include\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\hrengin\core\hrenginpaths.h">
-      <Filter>include\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\hrengin\core\IBufferedStream.h">
-      <Filter>include\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\hrengin\core\ICharacterStream.h">
-      <Filter>include\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\hrengin\core\IFileSystem.h">
-      <Filter>include\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\hrengin\core\IHDFParser.h">
-      <Filter>include\core</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\hrengin\core\ILogger.h">
       <Filter>include\core</Filter>
@@ -58,15 +40,6 @@
       <Filter>include\core</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\hrengin\core\IModelLoader.h">
-      <Filter>include\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\hrengin\core\IntegerReader.h">
-      <Filter>include\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\hrengin\core\IReadFile.h">
-      <Filter>include\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\hrengin\core\IWriteFile.h">
       <Filter>include\core</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\hrengin\common\api.h">
@@ -126,24 +99,72 @@
     <ClInclude Include="..\..\include\hrengin\common\PodString.h">
       <Filter>include\common</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\hrengin\core\hdf.h">
+    <ClInclude Include="..\..\include\hrengin\core\default_settings.h">
       <Filter>include\core</Filter>
+    </ClInclude>
+    <ClInclude Include="CSettingsManager.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="CBufferedStream.h">
+      <Filter>source\io</Filter>
+    </ClInclude>
+    <ClInclude Include="CReadFile.h">
+      <Filter>source\io</Filter>
+    </ClInclude>
+    <ClInclude Include="CCharacterStream.h">
+      <Filter>source\io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\common\singleton.h">
+      <Filter>include\common</Filter>
+    </ClInclude>
+    <ClInclude Include="CHDFParser.h">
+      <Filter>source\hdf</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\core\IHDFParser.h">
+      <Filter>include\core\hdf</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\core\IReadFile.h">
+      <Filter>include\core\io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\core\IBufferedStream.h">
+      <Filter>include\core\io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\core\ICharacterStream.h">
+      <Filter>include\core\io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\core\hrenginpaths.h">
+      <Filter>include\core\io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\core\hrenginfsutil.h">
+      <Filter>include\core\io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\core\hrenginmodels.h">
+      <Filter>include\core\io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\core\IntegerReader.h">
+      <Filter>include\core\io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\core\IWriteFile.h">
+      <Filter>include\core\io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\core\IFileSystem.h">
+      <Filter>include\core\io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\core\hdf_node.h">
+      <Filter>include\core\hdf</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\core\hdf_value.h">
+      <Filter>include\core\hdf</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\common\stringutils.h">
+      <Filter>include\common</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="CReadFile.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
     <ClCompile Include="CFileSystem.cpp">
       <Filter>source</Filter>
     </ClCompile>
     <ClCompile Include="hrenginfsutil.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="CBufferedStream.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="CHDFParser.cpp">
       <Filter>source</Filter>
     </ClCompile>
     <ClCompile Include="CHrenginShell.cpp">
@@ -152,5 +173,25 @@
     <ClCompile Include="CLogger.cpp">
       <Filter>source</Filter>
     </ClCompile>
+    <ClCompile Include="CBufferedStream.cpp">
+      <Filter>source\io</Filter>
+    </ClCompile>
+    <ClCompile Include="CReadFile.cpp">
+      <Filter>source\io</Filter>
+    </ClCompile>
+    <ClCompile Include="CSettingsManager.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="CCharacterStream.cpp">
+      <Filter>source\io</Filter>
+    </ClCompile>
+    <ClCompile Include="CHDFParser.cpp">
+      <Filter>source\hdf</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\include\hrengin\common\header_preset.h">
+      <Filter>include\common</Filter>
+    </None>
   </ItemGroup>
 </Project>

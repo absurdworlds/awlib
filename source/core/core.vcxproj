@@ -20,12 +20,16 @@
     <ClInclude Include="..\..\include\hrengin\common\nowide.h" />
     <ClInclude Include="..\..\include\hrengin\common\PodString.h" />
     <ClInclude Include="..\..\include\hrengin\common\Rect.h" />
+    <ClInclude Include="..\..\include\hrengin\common\singleton.h" />
+    <ClInclude Include="..\..\include\hrengin\common\stringutils.h" />
     <ClInclude Include="..\..\include\hrengin\common\time.h" />
     <ClInclude Include="..\..\include\hrengin\common\types.h" />
     <ClInclude Include="..\..\include\hrengin\common\Vector2d.h" />
     <ClInclude Include="..\..\include\hrengin\common\Vector3d.h" />
     <ClInclude Include="..\..\include\hrengin\common\versions.h" />
-    <ClInclude Include="..\..\include\hrengin\core\hdf.h" />
+    <ClInclude Include="..\..\include\hrengin\core\default_settings.h" />
+    <ClInclude Include="..\..\include\hrengin\core\hdf_node.h" />
+    <ClInclude Include="..\..\include\hrengin\core\hdf_value.h" />
     <ClInclude Include="..\..\include\hrengin\core\hrenginfsutil.h" />
     <ClInclude Include="..\..\include\hrengin\core\hrenginmodels.h" />
     <ClInclude Include="..\..\include\hrengin\core\hrenginpaths.h" />
@@ -43,20 +47,27 @@
     <ClInclude Include="..\..\include\hrengin\core\IShell.h" />
     <ClInclude Include="..\..\include\hrengin\core\IWriteFile.h" />
     <ClInclude Include="CBufferedStream.h" />
+    <ClInclude Include="CCharacterStream.h" />
     <ClInclude Include="CFileSystem.h" />
     <ClInclude Include="CHDFParser.h" />
     <ClInclude Include="CHrenginShell.h" />
     <ClInclude Include="CLogger.h" />
     <ClInclude Include="CReadFile.h" />
+    <ClInclude Include="CSettingsManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CBufferedStream.cpp" />
+    <ClCompile Include="CCharacterStream.cpp" />
     <ClCompile Include="CFileSystem.cpp" />
     <ClCompile Include="CHDFParser.cpp" />
     <ClCompile Include="CHrenginShell.cpp" />
     <ClCompile Include="CLogger.cpp" />
     <ClCompile Include="CReadFile.cpp" />
+    <ClCompile Include="CSettingsManager.cpp" />
     <ClCompile Include="hrenginfsutil.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\include\hrengin\common\header_preset.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{74AD5236-2D65-440E-A517-4EF8B52EE555}</ProjectGuid>
