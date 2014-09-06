@@ -5,7 +5,7 @@
 #include <vector>
 
 #include <hrengin/common/types.h>
-#include <hrengin/core/hdf.h>
+#include <hrengin/core/hdf_value.h>
 #include <hrengin/core/IHDFParser.h>
 
 namespace hrengin {
@@ -51,11 +51,10 @@ enum HdfType {
 	HDF_UNKNOWN_TYPE
 };
 
-class CHndfParser : public IHDFParser {
+class CHDFParser : public IHDFParser {
 public:
-	CHndfParser(IReadFile* file);
-	CHndfParser(ICharacterStream* stream);
-	virtual ~CHndfParser();
+	CHDFParser(ICharacterStream* stream);
+	virtual ~CHDFParser();
 	
 	virtual void skipNode();
 	virtual void skipValue();

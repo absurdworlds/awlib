@@ -141,19 +141,19 @@ HdfType hdfConvertImpicitType(const HdfToken& token)
 
 IHDFParser* createHDFParser(ICharacterStream* stream)
 {
-	return new CHndfParser(stream);
+	return new CHDFParser(stream);
 }
 
-CHndfParser::CHndfParser(ICharacterStream* stream)
+CHDFParser::CHDFParser(ICharacterStream* stream)
 	: depth_(0), state_(HDF_S_IDLE), stream_(stream)
 {
 }
 
-CHndfParser::~CHndfParser()
+CHDFParser::~CHDFParser()
 {
 }
 
-bool CHndfParser::read() {
+bool CHDFParser::read() {
 	u8 c;
 
 	stream_->getCurrent(c);
@@ -188,7 +188,7 @@ bool CHndfParser::read() {
 	return (state_ == HDF_S_PANIC) ? false : true;
 }
 
-HdfObjectType CHndfParser::getObjectType()
+HdfObjectType CHDFParser::getObjectType()
 {
 	if(state_ == HDF_S_PANIC) {
 		return HDF_OBJ_NULL;
@@ -241,7 +241,7 @@ HdfObjectType CHndfParser::getObjectType()
 	}
 }
 
-void CHndfParser::getObjectName(std::string& name)
+void CHDFParser::getObjectName(std::string& name)
 {
 	if(state_ == HDF_S_PANIC) {
 		return;
@@ -258,37 +258,37 @@ void CHndfParser::getObjectName(std::string& name)
 	}
 }
 
-void CHndfParser::readFloat(float& val)
+void CHDFParser::readFloat(float& val)
 {
 	readValue<f32>(val);
 }
-void CHndfParser::readFloat(double& val)
+void CHDFParser::readFloat(double& val)
 {
 	readValue<f64>(val);
 }
-void CHndfParser::readInt(u32& val)
+void CHDFParser::readInt(u32& val)
 {
 	readValue<u32>(val);
 }
-void CHndfParser::readInt(i32& val)
+void CHDFParser::readInt(i32& val)
 {
 	readValue<i32>(val);
 }
-void CHndfParser::readBool(bool& val)
+void CHDFParser::readBool(bool& val)
 {
 	readValue<bool>(val);
 }
-void CHndfParser::readString(std::string& val)
+void CHDFParser::readString(std::string& val)
 {
 	readValue<std::string>(val);
 }
-void CHndfParser::readVector3d(Vector3d<f32>& val)
+void CHDFParser::readVector3d(Vector3d<f32>& val)
 {
 	readValue<Vector3d<f32>>(val);
 }
 
 //TODO: rewrite those two properly
-void CHndfParser::skipValue() 
+void CHDFParser::skipValue() 
 {
 	HdfToken token;
 	HdfType type;
@@ -310,7 +310,7 @@ void CHndfParser::skipValue()
 	}
 }
 
-void CHndfParser::skipNode() 
+void CHDFParser::skipNode() 
 {
 	u8 c;
 
@@ -330,7 +330,7 @@ void CHndfParser::skipNode()
 	read();
 }
 
-void CHndfParser::error(HdfParserMessage type, std::string msg)
+void CHDFParser::error(HdfParserMessage type, std::string msg)
 {
 	errors_.push_back(msg);
 	printf("[HDF:%u]: %s\n",stream_->getPos(),msg.c_str());
@@ -341,9 +341,9 @@ void CHndfParser::error(HdfParserMessage type, std::string msg)
 }
 
 
-//void CHndfParser::skip(bool (*condition)(u8))
+//void CHDFParser::skip(bool (*condition)(u8))
 template<bool (*condition)(u8)>
-void CHndfParser::skip()
+void CHDFParser::skip()
 {
 	u8 c;
 
@@ -359,22 +359,22 @@ inline bool notLineBreak(u8 c)
 	return c != '\n';
 }
 
-void CHndfParser::skipLine()
+void CHDFParser::skipLine()
 {
 	skip<notLineBreak>();
 }
 
-void CHndfParser::skipWhitespace()
+void CHDFParser::skipWhitespace()
 {
 	skip<isWhitespace>();
 }
 
-void CHndfParser::skipInlineWhitespace()
+void CHDFParser::skipInlineWhitespace()
 {
 	skip<isInlineWhitespace>();
 }
 
-void CHndfParser::fastForward() {
+void CHDFParser::fastForward() {
 	u8 c;
 
 	stream_->getCurrent(c);
@@ -401,7 +401,7 @@ void CHndfParser::fastForward() {
 	}
 }
 
-bool CHndfParser::parseType(HdfToken& token) {
+bool CHDFParser::parseType(HdfToken& token) {
 	skipInlineWhitespace();
 
 	u8 c;
@@ -438,7 +438,7 @@ bool CHndfParser::parseType(HdfToken& token) {
 	}
 }
 
-void CHndfParser::readToken(HdfToken& token)
+void CHDFParser::readToken(HdfToken& token)
 {
 	fastForward();
 
@@ -460,7 +460,7 @@ void CHndfParser::readToken(HdfToken& token)
 	}
 }
 
-void CHndfParser::readStringToken(std::string& val) {
+void CHDFParser::readStringToken(std::string& val) {
 	val = "";
 	u8 c;
 
@@ -483,7 +483,7 @@ void CHndfParser::readStringToken(std::string& val) {
 	stream_->getNext(c);
 }
 
-void CHndfParser::readNumber(std::string& val)
+void CHDFParser::readNumber(std::string& val)
 {
 	val = "";
 	u8 c;
@@ -499,7 +499,7 @@ void CHndfParser::readNumber(std::string& val)
 	}
 }
 
-void CHndfParser::readName(std::string& name, char stop)
+void CHDFParser::readName(std::string& name, char stop)
 {
 	name = "";
 	u8 c;
@@ -516,19 +516,19 @@ void CHndfParser::readName(std::string& name, char stop)
 	}
 }
 
-inline void CHndfParser::readValueName(std::string& name)
+inline void CHDFParser::readValueName(std::string& name)
 {
 	readName(name, '=');
 }
 
-void CHndfParser::readTypeName(std::string& name)
+void CHDFParser::readTypeName(std::string& name)
 {
 	readName(name, ':');
 }
 
 
 template<typename T> 
-void CHndfParser::readValue(T& var)
+void CHDFParser::readValue(T& var)
 {
 	HdfToken token;
 	HdfType type;
@@ -556,26 +556,26 @@ void CHndfParser::readValue(T& var)
 // TODO: make helper class to reduce almost duplicate functions
 
 template<typename T>
-void CHndfParser::convertValue(HdfToken& token, T& val)
+void CHDFParser::convertValue(HdfToken& token, T& val)
 {
 	// should never get this error
 	error(HDF_ERR_ERROR, "unknown type");
 }
 
 template<>
-void CHndfParser::convertValue(HdfToken& token, f32& val)
+void CHDFParser::convertValue(HdfToken& token, f32& val)
 {	
 	val = strtof(token.value.c_str(), 0);
 }
 
 template<>
-void CHndfParser::convertValue(HdfToken& token, f64& val)
+void CHDFParser::convertValue(HdfToken& token, f64& val)
 {
 	val = strtod(token.value.c_str(), 0);
 }
 
 template<>
-void CHndfParser::convertValue(HdfToken& token, Vector3d<f32>& val)
+void CHDFParser::convertValue(HdfToken& token, Vector3d<f32>& val)
 {
 	val.X = strtod(token.value.c_str(), 0);
 	
@@ -589,25 +589,25 @@ void CHndfParser::convertValue(HdfToken& token, Vector3d<f32>& val)
 }
 
 template<>
-void CHndfParser::convertValue(HdfToken& token, std::string& val)
+void CHDFParser::convertValue(HdfToken& token, std::string& val)
 {	
 	val = token.value;
 }
 
 template<>
-void CHndfParser::convertValue(HdfToken& token, u32& val)
+void CHDFParser::convertValue(HdfToken& token, u32& val)
 {	
 	val = strtoul(token.value.c_str(), 0, 10);
 }
 
 template<>
-void CHndfParser::convertValue(HdfToken& token, i32& val)
+void CHDFParser::convertValue(HdfToken& token, i32& val)
 {	
 	val = strtol(token.value.c_str(), 0, 10);
 }
 
 template<>
-void CHndfParser::convertValue(HdfToken& token, bool& val)
+void CHDFParser::convertValue(HdfToken& token, bool& val)
 {
 	if(token.value == "true" || token.value == "1") {
 		val = true;
@@ -620,7 +620,7 @@ void CHndfParser::convertValue(HdfToken& token, bool& val)
 
 
 // todo: rewrite
-void CHndfParser::processCommand() {
+void CHDFParser::processCommand() {
 	HdfToken token;
 	
 	u8 c;
