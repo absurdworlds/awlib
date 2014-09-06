@@ -31,7 +31,6 @@ enum HdfType {
 };
 /*
    Class for holding any HDF Value.
-   As soon as it is initialized, it's type is immutable.
  */
 class Value {
 public:
@@ -54,6 +53,12 @@ public:
 	Value(Vector3d<f32> v3)
 		: val(v3), type(HDF_VECTOR3)
 	{	}
+
+	Value& operator = (const Value& other)
+	{
+		type = other.type;
+		val = other.val;
+	}
 
 	bool get(bool& v)
 	{
@@ -153,8 +158,8 @@ public:
 		return false;
 	}
 
-	const HdfType type;
 private:
+	HdfType type;
 	union HdfValue {
 		HdfValue(bool b)
 			: b_(b)
