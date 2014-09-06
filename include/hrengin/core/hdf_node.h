@@ -23,6 +23,12 @@ public:
 		key_node_pair subnode(name, node);
 		nodes_.push_back(subnode);
 	}
+	
+	node_container::iterator
+		nodesBegin()
+	{
+		return nodes_.begin();
+	}
 
 	node_container::iterator
 		findNode(std::string name, node_container::iterator startAt)
@@ -92,42 +98,34 @@ private:
 	node_container nodes_;
 };
 
-class Document {
-	typedef std::pair<std::string,Node> key_node_pair;
-	typedef std::vector<key_node_pair> node_container;
+class Document : protected Node {
 public:
 	void addNode(std::string name, Node node)
 	{
-		key_node_pair subnode(name, node);
-		nodes_.push_back(subnode);
+		Node::addNode(name, node);
+	}
+	
+	node_container::iterator
+		nodesBegin()
+	{
+		return Node::nodesBegin();
 	}
 
 	node_container::iterator
 		findNode(std::string name, node_container::iterator startAt)
 	{
-		for(auto iter = startAt; iter != nodes_.end(); ++iter) {
-			if(iter->first == name) {
-				return iter;
-			}
-		}
-
-		return nodes_.end();
+		return Node::findNode(name, startAt);
 	}
 	
 	void removeNode(node_container::iterator node)
 	{
-		nodes_.erase(node);
+		Node::removeNode(node);
 	}
 
 	Node getNode(node_container::size_type index)
 	{
-		if(index < nodes_.size()) {
-			return nodes_[index].second;
-		}
-		return Node();
+		return Node::getNode(index);
 	}
-private:
-	node_container nodes_;
 };
 
 } // namespace hdf
