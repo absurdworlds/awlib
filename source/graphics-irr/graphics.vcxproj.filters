@@ -19,6 +19,9 @@
     <Filter Include="source\gui">
       <UniqueIdentifier>{d474a6ac-44eb-4cb9-8585-bb62a4fd59d3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="resources">
+      <UniqueIdentifier>{c3a2de4f-43ac-4af9-8d21-0065c13eccae}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CCameraNode.h">
@@ -78,9 +81,6 @@
     <ClInclude Include="..\..\include\hrengin\graphics\SVertex.h">
       <Filter>source</Filter>
     </ClInclude>
-    <ClInclude Include="CVertexListPrimitive.h">
-      <Filter>source</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\hrengin\graphics\ISceneManager.h">
       <Filter>include\graphics</Filter>
     </ClInclude>
@@ -137,6 +137,9 @@
     </ClInclude>
     <ClInclude Include="CConsoleGUI.h">
       <Filter>source\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\resources\default_texture.h">
+      <Filter>resources</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

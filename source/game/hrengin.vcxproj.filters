@@ -51,9 +51,6 @@
     <ClInclude Include="..\..\include\hrengin\game\IBaseEntity.h">
       <Filter>include\game</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\hrengin\game\IControllable.h">
-      <Filter>include\game</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\hrengin\game\IEntityManager.h">
       <Filter>include\game</Filter>
     </ClInclude>

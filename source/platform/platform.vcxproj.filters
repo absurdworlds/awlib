@@ -7,6 +7,9 @@
     <ClInclude Include="..\..\include\hrengin\platform\platform-init.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\platform\pointer_math.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="include">

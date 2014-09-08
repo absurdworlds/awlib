@@ -13,6 +13,7 @@
   <ItemGroup>
     <ClInclude Include="..\..\include\hrengin\platform\IPlatformData.h" />
     <ClInclude Include="..\..\include\hrengin\platform\platform-init.h" />
+    <ClInclude Include="..\..\include\hrengin\platform\pointer_math.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="time.cpp" />

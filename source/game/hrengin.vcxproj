@@ -115,7 +115,6 @@
     <ClInclude Include="..\..\include\hrengin\ai\IBaseNavigator.h" />
     <ClInclude Include="..\..\include\hrengin\ai\IBasePathfinder.h" />
     <ClInclude Include="..\..\include\hrengin\game\IBaseEntity.h" />
-    <ClInclude Include="..\..\include\hrengin\game\IControllable.h" />
     <ClInclude Include="..\..\include\hrengin\game\IEntityManager.h" />
     <ClInclude Include="..\..\include\hrengin\game\IEventManager.h" />
     <ClInclude Include="..\..\include\hrengin\game\IThinking.h" />

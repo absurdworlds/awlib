@@ -36,7 +36,7 @@
     <ClInclude Include="CDebugDrawer.h">
       <Filter>source</Filter>
     </ClInclude>
-    <ClInclude Include="hrgToBullet.h">
+    <ClInclude Include="hrToBullet.h">
       <Filter>source</Filter>
     </ClInclude>
   </ItemGroup>

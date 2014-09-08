@@ -20,7 +20,7 @@
     <ClInclude Include="CDebugDrawer.h" />
     <ClInclude Include="CPhysicsBody.h" />
     <ClInclude Include="CPhysicsPhantom.h" />
-    <ClInclude Include="hrgToBullet.h" />
+    <ClInclude Include="hrToBullet.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CBulletPhysics.cpp" />

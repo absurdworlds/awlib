@@ -28,6 +28,9 @@
     <Filter Include="include\core\io">
       <UniqueIdentifier>{125b1068-f0df-4e9f-a3c7-d332c2a361e4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="include\resources">
+      <UniqueIdentifier>{fa8207d3-10e0-4e31-8715-b4a6215320c0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CFileSystem.h">
@@ -69,9 +72,6 @@
     <ClInclude Include="..\..\include\hrengin\common\Vector3d.h">
       <Filter>include\common</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\hrengin\common\versions.h">
-      <Filter>include\common</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\hrengin\common\Rect.h">
       <Filter>include\common</Filter>
     </ClInclude>
@@ -98,9 +98,6 @@
     </ClInclude>
     <ClInclude Include="..\..\include\hrengin\common\PodString.h">
       <Filter>include\common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\hrengin\core\default_settings.h">
-      <Filter>include\core</Filter>
     </ClInclude>
     <ClInclude Include="CSettingsManager.h">
       <Filter>source</Filter>
@@ -171,6 +168,15 @@
     <ClInclude Include="..\..\include\hrengin\core\hdf_shared.h">
       <Filter>include\core\hdf</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\header_preset.h">
+      <Filter>include\resources</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\resources\default_settings.h">
+      <Filter>include\resources</Filter>
+    </ClInclude>
+    <ClInclude Include="CHrenginPackage.h">
+      <Filter>source</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CFileSystem.cpp">
@@ -200,10 +206,5 @@
     <ClCompile Include="CHDFParser.cpp">
       <Filter>source\hdf</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\..\include\hrengin\common\header_preset.h">
-      <Filter>include\common</Filter>
-    </None>
   </ItemGroup>
 </Project>
