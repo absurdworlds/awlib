@@ -19,13 +19,13 @@ Everything inside a scope must be indented by one level, with exception to label
 
 `class`, `struct`, `union` and `enum` names should be written in CamelCase. Classes with inheritance should have 'C' prefix, and interfaces should have 'I' prefix.
 
-Precprocessor definition and constant names should be written in UPPER_CASE. An exception to this rule are scoped enums: their members should be written in CamelCase.
+Preprocessor definition and constant names should be written in UPPER_CASE. An exception to this rule are scoped enums: their members should be written in CamelCase.
 
 Variables, functions and class members names should be written in camelCase, beginning with a lower case letter. Member variables should be suffixed with '_' (underscore).
 
 ### struct vs class
 
-`struct` should be used for POD classes, whereas `class` should be used for other classes.
+`struct` should be used for POD classes and classes withoud user-defined constructors and member functions, whereas `class` should be used for any other classes. 
 
 ### Header guards
 

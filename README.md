@@ -11,8 +11,8 @@ hrengin is based on modular architecture, that is, hrengin consists of several d
 
 ### Status ###
 
-Current version: hrengin-A 1.0
-
+hrengin currently is in it's early development, and contains a lot of unfinished and temporary code, and completely lacks documentation. 
+Even so, it is still possible to use it for developing a game, provided one will write own game logic.
 
 ## Dependencies ##
 
@@ -26,6 +26,10 @@ However, it is possible to replace any of those with another library, provided y
 ## Compiling ##
 
 Wish you luck!
+
+### Windows ###
+
+Pretty much straightforward, put dependency headers into `$hrengin_dir`/../External/include, and dependency export symbols (.lib) `$hrengin_dir`/../External/lib/win32-msvc-release or win32-msvc-debug.
 
 ### Configuration ###
 
