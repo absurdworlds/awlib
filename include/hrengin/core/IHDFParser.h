@@ -7,12 +7,14 @@
 
 #include <hrengin/common/Vector3d.h>
 
+#include <hrengin/core/hdf_shared.h>
+
+
 namespace hrengin {
 namespace io {
-
-class IReadFile;
 class ICharacterStream;
-
+}
+namespace hdf {
 /* Enumeration for objects parsed by HDF parser. */
 enum HdfObjectType {
 	HDF_OBJ_NULL = 0,
@@ -22,12 +24,6 @@ enum HdfObjectType {
 	HDF_OBJ_CMD
 };
 
-/* Enumeration for parser log messages */
-enum HdfParserMessage {
-	HDF_ERR_NOTICE,
-	HDF_ERR_WARNING,
-	HDF_ERR_ERROR
-};
 
 /* 
 # HDF parser
@@ -187,11 +183,11 @@ public:
 	   HDF_ERR_NOTICE — an unimportant message
 	   HDF_ERR_WARNING — warning, non-critical error
 	   HDF_ERR_ERROR — critical error, stops the parsing*/
-	virtual void error(HdfParserMessage type, std::string msg) = 0;
+	virtual void error(hdf::ParserMessage type, std::string msg) = 0;
 };
 
 /* Make an instance of HDF parser */
-HR_CORE_API IHDFParser* createHDFParser(ICharacterStream* stream);
+HR_CORE_API IHDFParser* createHDFParser(io::ICharacterStream* stream);
 
 } // namespace io
 } // namespace hrengin

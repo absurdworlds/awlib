@@ -9,10 +9,7 @@
 #include <hrengin/core/IHDFParser.h>
 
 namespace hrengin {
-namespace io {
-
-class IReadFile;
-class IBufferedStream;
+namespace hdf {
 
 /* 
  * Most of those are legacy values, only few are actually used
@@ -53,7 +50,7 @@ enum HdfType {
 
 class CHDFParser : public IHDFParser {
 public:
-	CHDFParser(ICharacterStream* stream);
+	CHDFParser(io::ICharacterStream* stream);
 	virtual ~CHDFParser();
 	
 	virtual void skipNode();
@@ -72,7 +69,7 @@ public:
 	virtual void readString(std::string& val);
 	virtual void readVector3d(Vector3d<f32>& val);
 
-	void error(HdfParserMessage type, std::string msg);
+	void error(hdf::ParserMessage type, std::string msg);
 private:
 	template<typename T> 
 	void readValue(T& val);

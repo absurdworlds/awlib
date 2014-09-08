@@ -29,6 +29,7 @@
     <ClInclude Include="..\..\include\hrengin\common\versions.h" />
     <ClInclude Include="..\..\include\hrengin\core\default_settings.h" />
     <ClInclude Include="..\..\include\hrengin\core\hdf_node.h" />
+    <ClInclude Include="..\..\include\hrengin\core\hdf_shared.h" />
     <ClInclude Include="..\..\include\hrengin\core\hdf_value.h" />
     <ClInclude Include="..\..\include\hrengin\core\hrenginfsutil.h" />
     <ClInclude Include="..\..\include\hrengin\core\hrenginmodels.h" />
@@ -37,6 +38,9 @@
     <ClInclude Include="..\..\include\hrengin\core\ICharacterStream.h" />
     <ClInclude Include="..\..\include\hrengin\core\IFileSystem.h" />
     <ClInclude Include="..\..\include\hrengin\core\IHDFParser.h" />
+    <ClInclude Include="..\..\include\hrengin\core\IHDFTreeReader.h" />
+    <ClInclude Include="..\..\include\hrengin\core\IHDFTreeWriter.h" />
+    <ClInclude Include="..\..\include\hrengin\core\IHDFWriter.h" />
     <ClInclude Include="..\..\include\hrengin\core\ILogger.h" />
     <ClInclude Include="..\..\include\hrengin\core\IModel.h" />
     <ClInclude Include="..\..\include\hrengin\core\IModelLoader.h" />

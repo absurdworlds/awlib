@@ -1,14 +1,17 @@
 #ifndef _hrengin_IHDFTreeReader_
 #define _hrengin_IHDFTreeReader_
 
+#include <string>
+
 #include <hrengin/common/api.h>
 
 #include <hrengin/common/Vector3d.h>
 
-#include <string>
+#include <hrengin/core/hdf_value.h>
+#include <hrengin/core/hdf_node.h>
 
 namespace hrengin {
-namespace io {
+namespace hdf {
 
 
 

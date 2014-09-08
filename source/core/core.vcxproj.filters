@@ -159,6 +159,18 @@
     <ClInclude Include="..\..\include\hrengin\common\stringutils.h">
       <Filter>include\common</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\core\IHDFTreeReader.h">
+      <Filter>include\core\hdf</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\core\IHDFTreeWriter.h">
+      <Filter>include\core\hdf</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\core\IHDFWriter.h">
+      <Filter>include\core\hdf</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\core\hdf_shared.h">
+      <Filter>include\core\hdf</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CFileSystem.cpp">

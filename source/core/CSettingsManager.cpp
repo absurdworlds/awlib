@@ -33,12 +33,12 @@ void CSettingsManager::loadSettings()
 {
 	io::IReadFile* file = io::openReadFile("../data/settings.hdf");
 	io::ICharacterStream* stream;
-	io::IHDFParser* hdf;
+	hdf::IHDFParser* hdf;
 
 	stream = file ? io::createBufferedStream(file)
 		: io::createCharacterStream(default_settings);
 
-	hdf = io::createHDFParser(stream);
+	hdf = hdf::createHDFParser(stream);
 	parseSettings(hdf);
 
 	delete hdf;
@@ -46,14 +46,14 @@ void CSettingsManager::loadSettings()
 	delete file;
 }
 
-void CSettingsManager::parseSettings(io::IHDFParser* hdf)
+void CSettingsManager::parseSettings(hdf::IHDFParser* hdf)
 {
 	std::string prevNode;
 	std::string curNode;
 	std::string curObj;
 	while(hdf->read()) {
 		switch(hdf->getObjectType()) {
-		case io::HDF_OBJ_NODE:
+		case hdf::HDF_OBJ_NODE:
 			if(curNode == "") {
 				hdf->getObjectName(curNode);
 			} else if(curNode == "settings") {
@@ -63,7 +63,7 @@ void CSettingsManager::parseSettings(io::IHDFParser* hdf)
 				hdf->skipNode();
 			}
 			break;
-		case io::HDF_OBJ_NODE_END:
+		case hdf::HDF_OBJ_NODE_END:
 			if (curNode != "settings") {
 				curNode = prevNode;
 				prevNode = "";
@@ -71,7 +71,7 @@ void CSettingsManager::parseSettings(io::IHDFParser* hdf)
 				curNode = "";
 			}
 			break;
-		case io::HDF_OBJ_VAL:
+		case hdf::HDF_OBJ_VAL:
 			hdf->getObjectName(curObj);
 			if(curNode == "graphics") {
 				if(curObj == "resolutionX") {

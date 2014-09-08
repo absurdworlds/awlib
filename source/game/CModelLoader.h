@@ -19,10 +19,7 @@ public:
 	virtual IModel* loadModel(const char* filename);
 
 private:
-	bool hndfParse(io::IHDFParser* hndf, IModel* model);
-	//bool hndfParseNode(io::IHDFParser* hndf, IModel* model);
-	//bool hndfParseObject(io::IHDFParser* hndf, IModel* model, std::string curNode);
-	//bool hndfParseShapeNode(io::IHDFParser* hndf, IModel* model);
+	bool hdfParse(hdf::IHDFParser* hdf, IModel* model);
 };
 
 }

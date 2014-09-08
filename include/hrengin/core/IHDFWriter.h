@@ -11,13 +11,6 @@
 namespace hrengin {
 namespace hdf {
 
-enum HDFIndentation {
-	HDF_INDENT_TAB,
-	HDF_INDENT_SPACE,
-	HDF_INDENT_DOUBLE_SPACE,
-	HDF_INDENT_QUAD_SPACE,
-	HDF_INDENT_OCTAL_SCAPE
-};
 
 class IHDFWriter {
 	virtual ~IHDFWriter() {};

@@ -7,51 +7,33 @@
 #include <hrengin/common/Vector3d.h>
 #include <hrengin/common/types.h>
 
+#include <hrengin/core/hdf_shared.h>
+
 namespace hrengin {
 namespace hdf {
-
-enum class Type {
-	Integer,
-	Float,
-	Boolean,
-	String,
-	Vector2d,
-	Vector3d,
-	Unknown
-};
-
-enum HdfType {
-	HDF_INTEGER,
-	HDF_FLOAT,
-	HDF_BOOLEAN,
-	HDF_STRING,
-	HDF_VECTOR2,
-	HDF_VECTOR3,
-	HDF_UNKNOWN_TYPE
-};
 /*
    Class for holding any HDF Value.
  */
 class Value {
 public:
 	Value()
-		: val(0), type(HDF_UNKNOWN_TYPE)
+		: val(0), type(Type::Unknown)
 	{	}
 
 	Value(bool b)
-		: val(b), type(HDF_BOOLEAN)
+		: val(b), type(Type::Boolean)
 	{	}
 	Value(i32 i)
-		: val(i), type(HDF_INTEGER)
+		: val(i), type(Type::Integer)
 	{	}
 	Value(f64 f)
-		: val(f), type(HDF_FLOAT)
+		: val(f), type(Type::Float)
 	{	}
 	Value(std::string s)
-		: val(s), type(HDF_STRING)
+		: val(s), type(Type::String)
 	{	}
 	Value(Vector3d<f32> v3)
-		: val(v3), type(HDF_VECTOR3)
+		: val(v3), type(Type::Vector3d)
 	{	}
 
 	Value& operator = (const Value& other)
@@ -62,7 +44,7 @@ public:
 
 	bool get(bool& v)
 	{
-		if(type == HDF_BOOLEAN) {
+		if(type == Type::Boolean) {
 			v = val.b_;
 		}
 		
@@ -71,7 +53,7 @@ public:
 	
 	bool get(i32& v)
 	{
-		if(type == HDF_INTEGER) {
+		if(type == Type::Integer) {
 			v = val.i_;
 		}
 		
@@ -80,7 +62,7 @@ public:
 	
 	bool get(f64& v)
 	{
-		if(type == HDF_FLOAT) {
+		if(type == Type::Float) {
 			v = val.f_;
 		}
 		
@@ -89,7 +71,7 @@ public:
 	
 	bool get(std::string& v)
 	{
-		if(type == HDF_STRING) {
+		if(type == Type::String) {
 			// (std::string::value_type *)
 			v = std::string(val.s_.data,val.s_.length);
 		}
@@ -99,7 +81,7 @@ public:
 	
 	bool get(Vector3d<f32>& v)
 	{
-		if(type == HDF_VECTOR3) {
+		if(type == Type::Vector3d) {
 			v.X = val.v3_[0];
 			v.Y = val.v3_[1];
 			v.Z = val.v3_[2];
@@ -108,7 +90,7 @@ public:
 	
 	bool set(const bool v)
 	{
-		if(type == HDF_BOOLEAN) {
+		if(type == Type::Boolean) {
 			val.b_ = v;
 			return true;
 		}
@@ -118,7 +100,7 @@ public:
 	
 	bool set(const i32 v)
 	{
-		if(type == HDF_INTEGER) {
+		if(type == Type::Integer) {
 			val.i_ = v;
 			return true;
 		}
@@ -128,7 +110,7 @@ public:
 	
 	bool set(const f64 v)
 	{
-		if(type == HDF_FLOAT) {
+		if(type == Type::Float) {
 			val.f_ = v;
 			return true;
 		}
@@ -138,7 +120,7 @@ public:
 	
 	bool set(const std::string v)
 	{
-		if(type == HDF_STRING) {
+		if(type == Type::String) {
 			val.s_ = createPodString(v);
 			return true;
 		}
@@ -148,7 +130,7 @@ public:
 	
 	bool set(const Vector3d<f32> v)
 	{
-		if(type == HDF_VECTOR3) {
+		if(type == Type::Vector3d) {
 			val.v3_[0] = v.X;
 			val.v3_[1] = v.Y;
 			val.v3_[2] = v.Z;
@@ -159,7 +141,7 @@ public:
 	}
 
 private:
-	HdfType type;
+	hdf::Type type;
 	union HdfValue {
 		HdfValue(bool b)
 			: b_(b)

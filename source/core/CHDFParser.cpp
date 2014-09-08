@@ -8,7 +8,7 @@
 #include "CHDFParser.h"
 
 namespace hrengin {
-namespace io {
+namespace hdf {
 
 inline bool in(u8 c, u8 c1, u8 c2, u8 c3, u8 c4)
 {
@@ -42,7 +42,7 @@ inline bool isInlineWhitespace(u8 c) {
 
 
 template<typename T>
-bool isValidHdfType(HdfType type)
+bool isValidHdfType(hdf::Type type)
 {
 	return false;
 }
@@ -50,88 +50,88 @@ bool isValidHdfType(HdfType type)
 #if 0
 
 template<typename T>
-bool isValidHdfType(HdfType type, typename std::enable_if<std::is_integral<T>::value,T>::type* t = 0) {
+bool isValidHdfType(hdf::Type type, typename std::enable_if<std::is_integral<T>::value,T>::type* t = 0) {
 	return HDF_INTEGER == type;
 }
 
 template<typename T>
-bool isValidHdfType(HdfType type, typename std::enable_if<std::is_floating_point<T>::value,T>::type* t = 0) {
+bool isValidHdfType(hdf::Type type, typename std::enable_if<std::is_floating_point<T>::value,T>::type* t = 0) {
 	return HDF_FLOAT == type;
 }
 
 #else
 
 template<>
-bool isValidHdfType<i32>(HdfType type) {
-	return HDF_INTEGER == type;
+bool isValidHdfType<i32>(hdf::Type type) {
+	return Type::Integer == type;
 }
 
 template<>
-bool isValidHdfType<u32>(HdfType type) {
-	return HDF_INTEGER == type;
+bool isValidHdfType<u32>(hdf::Type type) {
+	return Type::Integer == type;
 }
 
 template<>
-bool isValidHdfType<f32>(HdfType type) {
-	return HDF_FLOAT == type;
+bool isValidHdfType<f32>(hdf::Type type) {
+	return Type::Float == type;
 }
 
 template<>
-bool isValidHdfType<f64>(HdfType type) {
-	return HDF_FLOAT == type;
+bool isValidHdfType<f64>(hdf::Type type) {
+	return Type::Float == type;
 }
 #endif
 
 template<>
-bool isValidHdfType<bool>(HdfType type) {
-	return HDF_BOOLEAN == type;
+bool isValidHdfType<bool>(hdf::Type type) {
+	return Type::Boolean == type;
 }
 
 template<>
-bool isValidHdfType<std::string>(HdfType type) {
-	return HDF_STRING == type;
+bool isValidHdfType<std::string>(hdf::Type type) {
+	return Type::String == type;
 }
 
 //template<template<class U> class T>
 template<>
-bool isValidHdfType<Vector2d<f32>>(HdfType type) {
-	return HDF_VECTOR2 == type;
+bool isValidHdfType<Vector2d<f32>>(hdf::Type type) {
+	return Type::Vector2d == type;
 }
 
 template<>
-bool isValidHdfType<Vector3d<f32>>(HdfType type) {
-	return HDF_VECTOR3 == type;
+bool isValidHdfType<Vector3d<f32>>(hdf::Type type) {
+	return Type::Vector3d == type;
 }
 
 
-HdfType hdfTokenToType(const HdfToken& token) 
+hdf::Type hdfTokenToType(const HdfToken& token) 
 {
 	if(token.value == "bool" || token.value == "b") {
-		return HDF_BOOLEAN;
+		return Type::Boolean;
 	} else if(token.value == "int" || token.value == "i") {
-		return HDF_INTEGER;
+		return Type::Integer;
 	} else if(token.value == "float" || token.value == "f") {
-		return HDF_FLOAT;
+		return Type::Float;
 	} else if(token.value == "vec3" || token.value == "v3") {
-		return HDF_VECTOR3;
+		return Type::Vector3d;
 	} else if(token.value == "vec2" || token.value == "v2") {
-		return HDF_VECTOR2;
+		return Type::Vector2d;
 	} else if(token.value == "string" || token.value == "s") {
-		return HDF_STRING;
+		return Type::String;
 	} else {
-		return HDF_UNKNOWN_TYPE;
+		return Type::Unknown;
 	}
 }
 
-HdfType hdfConvertImpicitType(const HdfToken& token) 
+hdf::Type hdfConvertImpicitType(const HdfToken& token) 
 {
 	u8 c = token.value.c_str()[0];
 	if(isNameBeginChar(c) || c == '"') {
-		return HDF_STRING;
+		return Type::String;
 	} else if(c == '-' || (c > '0' && c < '9')) {
-		return HDF_FLOAT;
+		return Type::Float;
 	} else {
-		return HDF_UNKNOWN_TYPE;
+		return Type::Unknown;
 	}
 }
 
@@ -139,12 +139,12 @@ HdfType hdfConvertImpicitType(const HdfToken& token)
    Member function definitions
  */
 
-IHDFParser* createHDFParser(ICharacterStream* stream)
+IHDFParser* createHDFParser(io::ICharacterStream* stream)
 {
 	return new CHDFParser(stream);
 }
 
-CHDFParser::CHDFParser(ICharacterStream* stream)
+CHDFParser::CHDFParser(io::ICharacterStream* stream)
 	: depth_(0), state_(HDF_S_IDLE), stream_(stream)
 {
 }
@@ -199,7 +199,7 @@ HdfObjectType CHDFParser::getObjectType()
 	stream_->getCurrent(c);
 
 	if(state_ != HDF_S_OBJECT) {
-		error(HDF_ERR_ERROR, "there is no object");
+		error(HDF_LOG_ERROR, "there is no object");
 		return HDF_OBJ_NULL;
 	} else {
 		if(c == '[') {
@@ -211,7 +211,7 @@ HdfObjectType CHDFParser::getObjectType()
 			return HDF_OBJ_NODE;
 		} else if (isNameBeginChar(c)) {
 			if(depth_ == 0) {
-				error(HDF_ERR_ERROR, "unexpected name token");
+				error(HDF_LOG_ERROR, "unexpected name token");
 				return HDF_OBJ_NULL;
 			}
 			state_ = HDF_S_VALUE_BEGIN;
@@ -223,19 +223,19 @@ HdfObjectType CHDFParser::getObjectType()
 			return HDF_OBJ_NODE_END;
 
 			/*if(state_ != HDF_S_IDLE) {
-				error(HDF_ERR_ERROR, "unexpected node-end");
+				error(HDF_LOG_ERROR, "unexpected node-end");
 			} else {
 				depth_--;
 			}*/
 		} else if (c == '!') {
 			//if(depth_ > 0) {
-			error(HDF_ERR_ERROR, "unexpected token: '!'");
+			error(HDF_LOG_ERROR, "unexpected token: '!'");
 			return HDF_OBJ_NULL;
 			//}
 			//state_ = HDF_S_CMD_BEGIN;
 			//return HDF_OBJ_CMD;
 		} else {
-			error(HDF_ERR_ERROR, "invalid character: " + c);
+			error(HDF_LOG_ERROR, "invalid character: " + c);
 			return HDF_OBJ_NULL;
 		}
 	}
@@ -254,7 +254,7 @@ void CHDFParser::getObjectName(std::string& name)
 		readValueName(name);
 		state_ = HDF_S_VALUE_DATA;
 	} else {
-		error(HDF_ERR_ERROR, "must be called after getObjectType()");
+		error(HDF_LOG_ERROR, "must be called after getObjectType()");
 	}
 }
 
@@ -291,7 +291,7 @@ void CHDFParser::readVector3d(Vector3d<f32>& val)
 void CHDFParser::skipValue() 
 {
 	HdfToken token;
-	HdfType type;
+	hdf::Type type;
 	
 	bool hasType = parseType(token);
 
@@ -302,9 +302,9 @@ void CHDFParser::skipValue()
 		type = hdfConvertImpicitType(token);
 	}
 	
-	if(type == HDF_VECTOR3 || type == HDF_VECTOR2) {
+	if(type == Type::Vector3d || type == Type::Vector2d) {
 		readToken(token);
-		if(type == HDF_VECTOR3) {
+		if(type == Type::Vector3d) {
 			readToken(token);
 		}
 	}
@@ -330,12 +330,12 @@ void CHDFParser::skipNode()
 	read();
 }
 
-void CHDFParser::error(HdfParserMessage type, std::string msg)
+void CHDFParser::error(hdf::ParserMessage type, std::string msg)
 {
 	errors_.push_back(msg);
 	printf("[HDF:%u]: %s\n",stream_->getPos(),msg.c_str());
 
-	if(type == HDF_ERR_ERROR) {
+	if(type == HDF_LOG_ERROR) {
 		state_ = HDF_S_PANIC;
 	}
 }
@@ -391,7 +391,7 @@ void CHDFParser::fastForward() {
 				//token.type = tokenCOMMENT;
 				skipLine();
 			} else {
-				error(HDF_ERR_WARNING,"unexpected token: /");
+				error(HDF_LOG_WARNING,"unexpected token: /");
 			}
 		}		
 		
@@ -411,7 +411,7 @@ bool CHDFParser::parseType(HdfToken& token) {
 	if(c == '=') {
 		stream_->getNext(c);
 	} else {
-		error(HDF_ERR_ERROR, "illegal token, expected '='");
+		error(HDF_LOG_ERROR, "illegal token, expected '='");
 	}
 
 	skipInlineWhitespace();
@@ -422,7 +422,7 @@ bool CHDFParser::parseType(HdfToken& token) {
 		token.type = HDF_TOKEN_NAME;
 		readName(token.value, ':');
 	} else {
-		error(HDF_ERR_ERROR, "illegal token, expected typename");	
+		error(HDF_LOG_ERROR, "illegal token, expected typename");	
 	}
 	
 	skipInlineWhitespace();
@@ -456,7 +456,7 @@ void CHDFParser::readToken(HdfToken& token)
 		token.type = HDF_TOKEN_STRING;
 		readStringToken(token.value);
 	} else {
-		error(HDF_ERR_ERROR,"illegal token");
+		error(HDF_LOG_ERROR,"illegal token");
 	}
 }
 
@@ -469,7 +469,7 @@ void CHDFParser::readStringToken(std::string& val) {
 	stream_->getNext(c);
 	/*if(c != '"') {
 		// should not get this error
-		error(HDF_ERR_ERROR, "illegal string token");
+		error(HDF_LOG_ERROR, "illegal string token");
 	}*/
 	
 	while (c != '"') {
@@ -492,7 +492,7 @@ void CHDFParser::readNumber(std::string& val)
 
 	while (!isWhitespace(c) && (c != ']')) {
 		if (!(c >= '0' && c <= '9') && !in(c, '.', 'e', 'E', '+', '-' )) {
-			error(HDF_ERR_WARNING, "invalid number");
+			error(HDF_LOG_WARNING, "invalid number");
 		}
 		val += c;
 		stream_->getNext(c);
@@ -510,7 +510,7 @@ void CHDFParser::readName(std::string& name, char stop)
 		if(isNameChar(c)) {
 			name += c;
 		} else {
-			error(HDF_ERR_WARNING, "invalid name char");
+			error(HDF_LOG_WARNING, "invalid name char");
 		}
 		stream_->getNext(c);
 	}
@@ -531,7 +531,7 @@ template<typename T>
 void CHDFParser::readValue(T& var)
 {
 	HdfToken token;
-	HdfType type;
+	hdf::Type type;
 	
 	bool hasType = parseType(token);
 
@@ -543,7 +543,7 @@ void CHDFParser::readValue(T& var)
 	}
 	
 	if(isValidHdfType<T>(type) == false) {
-		error(HDF_ERR_ERROR, "type mismatch: " + token.value);
+		error(HDF_LOG_ERROR, "type mismatch: " + token.value);
 		//skipValue(type);
 
 		return;
@@ -559,7 +559,7 @@ template<typename T>
 void CHDFParser::convertValue(HdfToken& token, T& val)
 {
 	// should never get this error
-	error(HDF_ERR_ERROR, "unknown type");
+	error(HDF_LOG_ERROR, "unknown type");
 }
 
 template<>
@@ -614,7 +614,7 @@ void CHDFParser::convertValue(HdfToken& token, bool& val)
 	} else if(token.value == "false" || token.value == "0") {
 		val = false;
 	} else {
-		error(HDF_ERR_WARNING, "invalid boolean value");
+		error(HDF_LOG_WARNING, "invalid boolean value");
 	}
 }
 
@@ -630,7 +630,7 @@ void CHDFParser::processCommand() {
 	if (c == '!') {
 		stream_->getNext(c);
 	} else {
-		error(HDF_ERR_ERROR, "No command to process");
+		error(HDF_LOG_ERROR, "No command to process");
 	}
 
 	readToken(token);
@@ -638,28 +638,28 @@ void CHDFParser::processCommand() {
 	if (token.value == "hndf_version") {
 		readToken(token);
 		if(token.type != HDF_TOKEN_STRING) {
-			error(HDF_ERR_ERROR,"expected string");
+			error(HDF_LOG_ERROR,"expected string");
 			return ;
 		} else if(token.value == "1.1") {
-			error(HDF_ERR_ERROR, "Version 1.1 is outdated.");
+			error(HDF_LOG_ERROR, "Version 1.1 is outdated.");
 			return;
 		} else {
-			error(HDF_ERR_ERROR, "your version is bullshit!");
+			error(HDF_LOG_ERROR, "your version is bullshit!");
 			return;
 		}
 	} else if (token.value == "hdf_version") {
 		readToken(token);
 		if(token.type != HDF_TOKEN_STRING) {
-			error(HDF_ERR_ERROR,"expected string");
+			error(HDF_LOG_ERROR,"expected string");
 			return ;
 		} else if(token.value == "1.1.1") {
-			error(HDF_ERR_NOTICE, "HDF version: 1.1.1");
+			error(HDF_LOG_NOTICE, "HDF version: 1.1.1");
 			return;
 		} else if(token.value == "1.1") {
-			error(HDF_ERR_ERROR, "Version 1.1 is outdated.");
+			error(HDF_LOG_ERROR, "Version 1.1 is outdated.");
 			return;
 		} else {
-			error(HDF_ERR_ERROR, "your version is bullshit!");
+			error(HDF_LOG_ERROR, "your version is bullshit!");
 			return;
 		}
 	}

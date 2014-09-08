@@ -40,8 +40,7 @@ private:
 };
 
 
-}
-}
-
+} // namespace io
+} // namespace hrengin
 
 #endif//_hrengin_CReadFile_

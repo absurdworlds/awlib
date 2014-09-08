@@ -4,7 +4,7 @@
 #include <map>
 #include <vector>
 
-#include <hrengin/core/hdf.h>
+#include <hrengin/core/hdf_value.h>
 #include <hrengin/core/ISettingsManager.h>
 
 namespace hrengin {
@@ -43,7 +43,7 @@ public:
 	virtual bool setValue(std::string key, i32 val);
 	virtual bool setValue(std::string key, bool val);
 private:
-	void parseSettings(io::IHDFParser* hdf);
+	void parseSettings(hdf::IHDFParser* hdf);
 	
 	template<class T>
 	bool setValueImpl(std::string key, T val);
