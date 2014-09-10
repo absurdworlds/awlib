@@ -14,23 +14,12 @@
 namespace hrengin {
 namespace physics {
 
-// internal implementation details
-class DRigidBody;
-
 class IRigidBody : public ICollisionObject {
 public:
 	virtual ~IRigidBody() {};
 
 	virtual Vector3d<f32> getPosition() = 0;
 	virtual Vector3d<f32> getRotation() = 0;
-
-	/**
-	   get internal implementation details, intended only for internal use
-	 */
-	virtual DRigidBody* getDRigidBody()
-	{
-		return 0;
-	}
 };
 
 } // namespace physics

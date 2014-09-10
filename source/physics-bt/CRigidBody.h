@@ -20,15 +20,10 @@
 #include <hrengin/physics/IRigidBody.h>
 //#include <hrengin/physics/IPhysicsManager.h>
 
+#include "CCollisionObject.h"
+
 namespace hrengin {
 namespace physics {
-
-class DRigidBody {
-public:
-	DRigidBody(btRigidBody* Body) : body(Body) {}
-	btRigidBody* body;
-
-};
 
 class CRigidBody : public IRigidBody {
 public:
@@ -40,12 +35,12 @@ public:
 	virtual Vector3d<f32> getPosition();
 	virtual Vector3d<f32> getRotation();
 
-	virtual DRigidBody* getDRigidBody()
+	virtual ICollisionObject::Details* getDetails()
 	{
 		return &details_;
 	}
 protected:
-	DRigidBody details_;
+	ICollisionObject::Details details_;
 };
 
 } // namespace physics

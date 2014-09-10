@@ -18,11 +18,22 @@ namespace hrengin {
 namespace physics {
 
 // internal implementation details
-class DCollisionObject {
+
+class ICollisionObject::Details {
 public:
-	DCollisionObject(btCollisionObject* Object) : obj(Object) {}
+	Details(btCollisionObject* Object) : obj(Object)
+	{
+	
+	}
+	Details(btRigidBody* Body) : obj(Body)
+	{
+	
+	}
+	
 	btCollisionObject* obj;
+
 };
+
 
 } // namespace physics
 } // namespace hrengin

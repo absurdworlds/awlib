@@ -14,9 +14,6 @@
 namespace hrengin {
 namespace physics {
 
-// internal implementation details
-class DCollisionObject;
-
 class ICollisionObject {
 public:
 	virtual ~ICollisionObject() {};
@@ -34,13 +31,12 @@ public:
 		return pointer_;
 	}
 	
-	/**
-	   get internal implementation details, intended only for internal use
-	 */
-	virtual DCollisionObject* getDCollisionObject()
-	{
-		return 0;
-	}
+
+	// internal implementation details
+	class Details;
+
+	// get internal implementation details, intended only for internal use
+	virtual ICollisionObject::Details* getDetails() = 0;
 protected:
 	void* pointer_;
 };

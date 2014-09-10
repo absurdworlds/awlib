@@ -29,9 +29,13 @@ public:
 
 	virtual void setPosition(Vector3d<f32> pos);
 	virtual void setRotation(Vector3d<f32> rot);
-
+	
+	virtual ICollisionObject::Details* getDetails()
+	{
+		return &details_;
+	}
 protected:
-	DCollisionObject details_;
+	ICollisionObject::Details details_;
 };
 
 } // namespace physics

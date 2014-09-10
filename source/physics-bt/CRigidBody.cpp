@@ -18,7 +18,7 @@ namespace physics {
 CRigidBody::CRigidBody(btRigidBody* body)
 	: details_(body)
 {
-	details_.body->setUserPointer(this);
+	details_.obj->setUserPointer(this);
 }
 
 void CRigidBody::setPosition(Vector3d<f32> pos) 
@@ -27,7 +27,7 @@ void CRigidBody::setPosition(Vector3d<f32> pos)
 	localTransform.setIdentity();
 	btVector3 origin(pos.X,pos.Y,pos.Z);
 	localTransform.setOrigin(origin);
-	localTransform.setRotation(details_.body->getWorldTransform().getRotation());
+	localTransform.setRotation(details_.obj->getWorldTransform().getRotation());
 	
 	//CollObject->setWorldTransform(localTransform);
 };
@@ -37,7 +37,7 @@ void CRigidBody::setRotation(Vector3d<f32> rot)
 {
 	btTransform localTransform;
 	localTransform.setIdentity();
-	localTransform.setOrigin(details_.body->getWorldTransform().getOrigin());
+	localTransform.setOrigin(details_.obj->getWorldTransform().getOrigin());
 	localTransform.setRotation(btQuaternion(rot.Y*math::DEGTORAD64,rot.X*math::DEGTORAD64,rot.Z*math::DEGTORAD64));
 	
 	//CollObject->setWorldTransform(localTransform);
@@ -45,14 +45,14 @@ void CRigidBody::setRotation(Vector3d<f32> rot)
 
 Vector3d<f32> CRigidBody::getPosition() 
 {
-	btVector3 pos = details_.body->getWorldTransform().getOrigin();
+	btVector3 pos = details_.obj->getWorldTransform().getOrigin();
 
 	return Vector3d<f32>(pos.getX(),pos.getY(),pos.getZ());
 };
 
 Vector3d<f32> CRigidBody::getRotation() 
 {
-	btQuaternion rot = details_.body->getWorldTransform().getRotation();
+	btQuaternion rot = details_.obj->getWorldTransform().getRotation();
 	
 	btVector3 pos;
 	quaternionToEuler(rot,pos);
