@@ -313,7 +313,7 @@ btCollisionShape* CBulletPhysics::createPrimitiveShape(SPrimitive shape)
 		}
 
 		x /= 2.0;
-		//y /= 2.0;
+		y /= 2.0;
 		z /= 2.0;
 
 		switch(shape.axis) {
