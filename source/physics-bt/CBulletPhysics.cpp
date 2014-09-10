@@ -225,9 +225,7 @@ IPhysicsBody* CBulletPhysics::createBody(const u32 shapeid, Vector3d<f32> pos, u
 	btScalar mass(1.0f);
 	bool isDynamic = (mass != 0.f);
 	btVector3 localInertia(0,0,0);
-	//btCollisionShape* colShape = collisionShapes_[shapeid];
-	btCollisionShape* colShape = new btCylinderShape(btVector3(
-				btScalar(0.572/2),btScalar(0.851/2),btScalar(0.572/2)));
+	btCollisionShape* colShape = collisionShapes_[shapeid];
 	
 	if (isDynamic) {
 		colShape->calculateLocalInertia(mass,localInertia);
@@ -237,8 +235,6 @@ IPhysicsBody* CBulletPhysics::createBody(const u32 shapeid, Vector3d<f32> pos, u
 
 	btRigidBody::btRigidBodyConstructionInfo rbInfo(mass,defaultMotionState,colShape,localInertia);
 	btRigidBody *rigidBody = new btRigidBody(rbInfo);
-
-	//rigidBody->setCollisionFlags (btCollisionObject::CF_NO_CONTACT_RESPONSE);
 
 	if(group && filters) {
 		m_dynamicsWorld->addRigidBody(rigidBody,group,filters);
@@ -296,8 +292,8 @@ IPhysicsObject* CBulletPhysics::castRay(Vector3d<f32> from, Vector3d<f32> to, u1
 
 btCollisionShape* CBulletPhysics::createPrimitiveShape(SPrimitive shape) 
 {
-	btScalar x = shape.dimensions[0], 
-		y = shape.dimensions[1], 
+	btScalar x = shape.dimensions[0],
+		y = shape.dimensions[1],
 		z = shape.dimensions[2];
 
 	if(shape.shape == SHAPE_SPHERE) {
@@ -313,15 +309,14 @@ btCollisionShape* CBulletPhysics::createPrimitiveShape(SPrimitive shape)
 
 	if(shape.shape == SHAPE_CYLINDER) {
 		if(z == 0.0) {
-		 z = x;
+			z = x;
 		}
 
 		x /= 2.0;
 		//y /= 2.0;
 		z /= 2.0;
 
-		switch(shape.axis)
-		{
+		switch(shape.axis) {
 		case AXIS_X:
 			return new btCylinderShapeX(btVector3(
 				btScalar(x),btScalar(y),btScalar(z)));
@@ -335,8 +330,7 @@ btCollisionShape* CBulletPhysics::createPrimitiveShape(SPrimitive shape)
 	}
 	
 	if(shape.shape == SHAPE_CAPSULE) {
-		switch(shape.axis)
-		{
+		switch(shape.axis) {
 		case AXIS_X:
 			return new btCapsuleShapeX(x,y);
 		case AXIS_Y:
@@ -346,10 +340,8 @@ btCollisionShape* CBulletPhysics::createPrimitiveShape(SPrimitive shape)
 		}
 	}
 	
-	if(shape.shape == SHAPE_CONE)
-	{
-		switch(shape.axis)
-		{
+	if(shape.shape == SHAPE_CONE) {
+		switch(shape.axis) {
 		case AXIS_X:
 			return new btConeShapeX(x,y);
 		case AXIS_Y:
