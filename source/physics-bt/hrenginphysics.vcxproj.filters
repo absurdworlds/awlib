@@ -15,16 +15,7 @@
     <ClInclude Include="CPhysicsPhantom.h">
       <Filter>source</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\hrengin\physics\IPhysicsBody.h">
-      <Filter>include</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\hrengin\physics\IPhysicsManager.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\hrengin\physics\IPhysicsObject.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\hrengin\physics\IPhysicsPhantom.h">
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="CPhysicsBody.h">
@@ -38,6 +29,18 @@
     </ClInclude>
     <ClInclude Include="hrToBullet.h">
       <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\physics\IPhysicsWorld.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\physics\IRigidBody.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\physics\ICollisionPhantom.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\physics\ICollisionObject.h">
+      <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

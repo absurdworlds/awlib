@@ -17,17 +17,26 @@ class IBaseEntity;
 
 namespace physics {
 
-class ICollisionShape;
+// internal implementation details
+class DCollisionObject;
 
-class IPhysicsObject {
+class ICollisionObject {
 public:
-	virtual void attachToEntity(IBaseEntity* attach) = 0;
-	virtual IBaseEntity* getEntity() = 0;
-	
+	virtual ~ICollisionObject() {};
+
 	virtual void setPosition(Vector3d<f32> pos) = 0;
 	virtual void setRotation(Vector3d<f32> rot) = 0;
 
+	virtual void  setPointer(void* ptr) = 0;
+	virtual void* getPointer() = 0;
+
 	//virtual void SetScale(Vector3d<f32> scale) = 0;
+	
+	/**
+	   get internal implementation details 
+	   intended only for internal use
+	 */
+	virtual DCollisionObject* getDCollisionObject() {};
 protected:
 };
 

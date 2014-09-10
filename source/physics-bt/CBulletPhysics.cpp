@@ -108,21 +108,51 @@ CBulletPhysics::CBulletPhysics()
 	m_dynamicsWorld->setGravity(btVector3(0,-10,0));
 	
 	modelLoader_ = createModelLoader();
+	
+	// Add a 'fallback' empty shape, used if loading of some shape is failed
+	btCollisionShape* Shape = new btEmptyShape;
+	collisionShapes_.push_back(Shape);
 
-
+#if 0 
 	btTransform defaultTransform;
 	defaultTransform.setIdentity();
 	defaultTransform.setOrigin(btVector3(0,0,0));
 	
 	btCollisionObject *collObject = new btCollisionObject();
 
+
 	collObject->setCollisionShape(new btStaticPlaneShape(btVector3(0,1,0),0.0));
 	collObject->setCollisionFlags(btCollisionObject::CF_STATIC_OBJECT);
 	
 	m_dynamicsWorld->addCollisionObject(collObject,COL_GROUND,COL_GROUND | COL_DEBRIS); // 0000 0111
+#endif
 
-	btCollisionShape* Shape = new btEmptyShape;
-	collisionShapes_.push_back(Shape);
+//
+
+	btTransform defaultTransform;
+	defaultTransform.setIdentity();
+	defaultTransform.setOrigin(btVector3(0,0,0));
+
+	btScalar mass(0.0f);
+	bool isDynamic = (mass != 0.f);
+	btVector3 localInertia(0,0,0);
+	btCollisionShape* colShape = new btStaticPlaneShape(btVector3(0,1,0),0.0);
+	
+	if (isDynamic) {
+		colShape->calculateLocalInertia(mass,localInertia);
+	}
+
+	btDefaultMotionState* defaultMotionState = new btDefaultMotionState(defaultTransform);
+
+	btRigidBody::btRigidBodyConstructionInfo rbInfo(mass,defaultMotionState,colShape,localInertia);
+	btRigidBody *rigidBody = new btRigidBody(rbInfo);
+	
+	rigidBody->setFriction(1.f);
+	rigidBody->setRollingFriction(1.0);
+	m_dynamicsWorld->addRigidBody(rigidBody,COL_GROUND, COL_GROUND | COL_DEBRIS);
+
+	m_dynamicsWorld->updateAabbs();
+//	
 }
 
 CBulletPhysics::~CBulletPhysics()
@@ -131,12 +161,10 @@ CBulletPhysics::~CBulletPhysics()
 
 	//remove the rigidbodies from the dynamics world and delete them
 	int i;
-	for (i=m_dynamicsWorld->getNumCollisionObjects()-1; i>=0 ;i--)
-	{
+	for (i = m_dynamicsWorld->getNumCollisionObjects() -1 ; i>=0; -- i) {
 		btCollisionObject* obj = m_dynamicsWorld->getCollisionObjectArray()[i];
 		btRigidBody* body = btRigidBody::upcast(obj);
-		if (body && body->getMotionState())
-		{
+		if (body && body->getMotionState()) {
 			delete body->getMotionState();
 		}
 		m_dynamicsWorld->removeCollisionObject( obj );
@@ -144,8 +172,7 @@ CBulletPhysics::~CBulletPhysics()
 	}
 
 	//delete collision shapes
-	for (int j=0; j<collisionShapes_.size(); j++)
-	{
+	for (int j=0; j<collisionShapes_.size(); j++) {
 		btCollisionShape* shape = collisionShapes_[j];
 		delete shape;
 	}
@@ -235,7 +262,9 @@ IPhysicsBody* CBulletPhysics::createBody(const u32 shapeid, Vector3d<f32> pos, u
 
 	btRigidBody::btRigidBodyConstructionInfo rbInfo(mass,defaultMotionState,colShape,localInertia);
 	btRigidBody *rigidBody = new btRigidBody(rbInfo);
-
+	
+	rigidBody->setFriction(1.f);
+	rigidBody->setRollingFriction(.3);
 	if(group && filters) {
 		m_dynamicsWorld->addRigidBody(rigidBody,group,filters);
 	} else {

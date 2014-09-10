@@ -12,10 +12,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\hrengin\physics\IDebugDrawer.h" />
-    <ClInclude Include="..\..\include\hrengin\physics\IPhysicsBody.h" />
+    <ClInclude Include="..\..\include\hrengin\physics\IRigidBody.h" />
     <ClInclude Include="..\..\include\hrengin\physics\IPhysicsManager.h" />
-    <ClInclude Include="..\..\include\hrengin\physics\IPhysicsObject.h" />
-    <ClInclude Include="..\..\include\hrengin\physics\IPhysicsPhantom.h" />
+    <ClInclude Include="..\..\include\hrengin\physics\ICollisionObject.h" />
+    <ClInclude Include="..\..\include\hrengin\physics\ICollisionPhantom.h" />
+    <ClInclude Include="..\..\include\hrengin\physics\IPhysicsWorld.h" />
     <ClInclude Include="CBulletPhysics.h" />
     <ClInclude Include="CDebugDrawer.h" />
     <ClInclude Include="CPhysicsBody.h" />

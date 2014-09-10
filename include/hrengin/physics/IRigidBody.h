@@ -9,16 +9,26 @@
 #ifndef _hrengin_IPhysicsBody_
 #define _hrengin_IPhysicsBody_
 
-#include <hrengin/physics/IPhysicsObject.h>
+#include <hrengin/physics/ICollisionObject.h>
 
 namespace hrengin {
 namespace physics {
 
-class IPhysicsBody : public IPhysicsObject {
+// internal implementation details
+class DRigidBody;
+
+class IRigidBody : public ICollisionObject {
 public:
+	virtual ~IRigidBody() {};
+
 	virtual Vector3d<f32> getPosition() = 0;
 	virtual Vector3d<f32> getRotation() = 0;
-protected:
+
+	/**
+	   get internal implementation details 
+	   intended only for internal use
+	 */
+	virtual DRigidBody* getDRigidBody() {};
 };
 
 } // namespace physics

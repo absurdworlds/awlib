@@ -17,19 +17,22 @@
 
 #include <hrengin/common/types.h>
 #include <hrengin/game/IBaseEntity.h>
-#include <hrengin/physics/IPhysicsBody.h>
+#include <hrengin/physics/IRigidBody.h>
 //#include <hrengin/physics/IPhysicsManager.h>
 
 namespace hrengin {
 namespace physics {
 
-class CPhysicsBody : public IPhysicsBody {
+class DRigidBody {
 public:
-	CPhysicsBody(btCollisionObject* pCollObject);
-	CPhysicsBody(btCollisionObject* pCollObject, IBaseEntity* pAttach);
+	DRigidBody(btRigidBody* Body) : body(Body) {}
+	btRigidBody* body;
 
-	virtual void attachToEntity(IBaseEntity* pAttach) {AttachedTo = pAttach;};
-	virtual IBaseEntity* getEntity();;
+};
+
+class CPhysicsBody : public IRigidBody {
+public:
+	CPhysicsBody(btRigidBody* body);
 
 	virtual void setPosition(Vector3d<f32> pos);
 	virtual void setRotation(Vector3d<f32> rot);
@@ -37,9 +40,16 @@ public:
 	virtual Vector3d<f32> getPosition();
 	virtual Vector3d<f32> getRotation();
 
+	virtual void  setPointer(void* ptr);
+	virtual void* getPointer();
+
+	virtual DRigidBody* getDRigidBody()
+	{
+		return &details_;
+	}
 protected:
-	IBaseEntity* AttachedTo;
-	btCollisionObject* CollObject;
+	DRigidBody details_;
+	void* pointer_;
 };
 
 }	

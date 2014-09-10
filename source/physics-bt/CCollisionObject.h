@@ -6,20 +6,23 @@
    This is free software: you are free to change and redistribute it.
    There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_IPhysicsPhantom_
-#define _hrengin_IPhysicsPhantom_
+#ifndef _hrengin_CCollisionObject_
+#define _hrengin_CCollisionObject_
 
-#include <hrengin/physics/IPhysicsObject.h>
+#include <Bullet/btBulletDynamicsCommon.h>
+#include <Bullet/btBulletCollisionCommon.h>
+
+#include <hrengin/physics/ICollisionObject.h>
 
 namespace hrengin {
 namespace physics {
 
-class IPhysicsPhantom : public IPhysicsObject {
-public:
-protected:
+// internal implementation details
+class DCollisionObject {
+	btCollisionObject* obj;
 };
 
 } // namespace physics
 } // namespace hrengin
 
-#endif//_hrengin_IPhysicsPhantom_
+#endif//_hrengin_CCollisionObject_
