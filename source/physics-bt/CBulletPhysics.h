@@ -34,44 +34,28 @@ class CBulletPhysics : public IPhysicsManager {
 public:
 	CBulletPhysics();
 	virtual ~CBulletPhysics();
-
-	btScalar getDeltaTime();
 	
 	virtual u32 loadModel(const char* modelName);
 	
-	virtual IRigidBody* createBody(const u32 modelId, Vector3d<f32> pos, u16 group = 0, u16 filters = 0);
-	virtual IRigidBody* createBody(const char* modelName, Vector3d<f32> pos, u16 group = 0, u16 filters = 0);
+	virtual IRigidBody* createBody(const u32 modelId, Vector3d<f32> pos);
+	virtual IRigidBody* createBody(const char* modelName, Vector3d<f32> pos);
 
-	virtual ICollisionPhantom* createPhantom(const u32 modelId, u16 group = 0, u16 filters = 0);
-	virtual ICollisionPhantom* createPhantom(const char* modelName, u16 group = 0, u16 filters = 0);
+	virtual ICollisionPhantom* createPhantom(const u32 modelId);
+	virtual ICollisionPhantom* createPhantom(const char* modelName);
 
-	virtual ICollisionObject* castRay(Vector3d<f32> from, Vector3d<f32> to, u16 filters = 0);
+	virtual IPhysicsWorld* createPhysicsWorld();
 
 	virtual IDebugDrawer* createDebugDrawer(graphics::IRenderingDevice* renderer);
-
-	virtual void debugDraw();
-
-	virtual bool step();
 
 private:
 	virtual u32 addShape(IModel* model);
 	virtual btCollisionShape* createPrimitiveShape(SPrimitive shape);
 	//virtual btCollisionShape* createMeshShape(SMesh shape);
 
-	btClock	m_clock;
-
 	IModelLoader* modelLoader_;
-	IDebugDrawer* debugDrawer_;
+
 	std::map<std::string,u32> models_;
 	btAlignedObjectArray<btCollisionShape*>	collisionShapes_;
-
-	btDefaultCollisionConfiguration*	m_collisionConfiguration;
-
-	btBroadphaseInterface*	m_broadphase;
-	btCollisionDispatcher*	m_dispatcher;
-	btConstraintSolver*	m_solver;
-
-	btDynamicsWorld*	m_dynamicsWorld;
 };
 
 } // namespace physics

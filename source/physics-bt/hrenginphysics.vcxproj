@@ -11,7 +11,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\include\hrengin\physics\CollisionFilter.h" />
     <ClInclude Include="..\..\include\hrengin\physics\IDebugDrawer.h" />
+    <ClInclude Include="..\..\include\hrengin\physics\IRayTestResult.h" />
     <ClInclude Include="..\..\include\hrengin\physics\IRigidBody.h" />
     <ClInclude Include="..\..\include\hrengin\physics\IPhysicsManager.h" />
     <ClInclude Include="..\..\include\hrengin\physics\ICollisionObject.h" />
@@ -20,12 +22,15 @@
     <ClInclude Include="CBulletPhysics.h" />
     <ClInclude Include="CCollisionObject.h" />
     <ClInclude Include="CDebugDrawer.h" />
+    <ClInclude Include="CPhysicsWorld.h" />
     <ClInclude Include="CRigidBody.h" />
     <ClInclude Include="CCollisionPhantom.h" />
     <ClInclude Include="hrToBullet.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CBulletPhysics.cpp" />
+    <ClCompile Include="CDebugDrawer.cpp" />
+    <ClCompile Include="CPhysicsWorld.cpp" />
     <ClCompile Include="CRigidBody.cpp" />
     <ClCompile Include="CCollisionPhantom.cpp" />
   </ItemGroup>

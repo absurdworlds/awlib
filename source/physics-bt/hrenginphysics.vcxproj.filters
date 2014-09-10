@@ -45,6 +45,15 @@
     <ClInclude Include="CRigidBody.h">
       <Filter>source</Filter>
     </ClInclude>
+    <ClInclude Include="CPhysicsWorld.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\physics\CollisionFilter.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\physics\IRayTestResult.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CBulletPhysics.cpp">
@@ -54,6 +63,12 @@
       <Filter>source</Filter>
     </ClCompile>
     <ClCompile Include="CRigidBody.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="CPhysicsWorld.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="CDebugDrawer.cpp">
       <Filter>source</Filter>
     </ClCompile>
   </ItemGroup>

@@ -12,18 +12,20 @@
 //#include <hrengin/graphics/IRenderable.h>
 
 namespace hrengin {
-
-class IBaseEntity;
-
 namespace physics {
-	
 
 class IDebugDrawer /*: public IRenderable*/ {
 public:
-	virtual void render() = 0;
+	//virtual void render() = 0;
+
+	// internal implementation details
+	class Details;
+	
+	// for internal use only
+	virtual IDebugDrawer::Details* getDetails() = 0;
 };
 
-	
+
 } // namespace graphics
 } // namespace hrengin
 
