@@ -14,7 +14,7 @@
 namespace hrengin {
 namespace physics {
 
-class IPhysicsPhantom : public ICollisionObject {
+class ICollisionPhantom : public ICollisionObject {
 public:
 protected:
 };

@@ -10,19 +10,18 @@
 #include <hrengin/common/math.h>
 
 #include "hrToBullet.h"
-#include "CPhysicsBody.h"
-
+#include "CRigidBody.h"
 
 namespace hrengin {
 namespace physics {
 
-CPhysicsBody::CPhysicsBody(btRigidBody* body)
+CRigidBody::CRigidBody(btRigidBody* body)
 	: details_(body)
 {
 	details_.body->setUserPointer(this);
 }
 
-void CPhysicsBody::setPosition(Vector3d<f32> pos) 
+void CRigidBody::setPosition(Vector3d<f32> pos) 
 {
 	btTransform localTransform;
 	localTransform.setIdentity();
@@ -34,7 +33,7 @@ void CPhysicsBody::setPosition(Vector3d<f32> pos)
 };
 
 
-void CPhysicsBody::setRotation(Vector3d<f32> rot) 
+void CRigidBody::setRotation(Vector3d<f32> rot) 
 {
 	btTransform localTransform;
 	localTransform.setIdentity();
@@ -44,25 +43,14 @@ void CPhysicsBody::setRotation(Vector3d<f32> rot)
 	//CollObject->setWorldTransform(localTransform);
 };
 
-
-void  CPhysicsBody::setPointer(void* ptr)
-{
-	pointer_ = ptr;
-}
-
-void* CPhysicsBody::getPointer()
-{
-	return pointer_;
-}
-
-Vector3d<f32> CPhysicsBody::getPosition() 
+Vector3d<f32> CRigidBody::getPosition() 
 {
 	btVector3 pos = details_.body->getWorldTransform().getOrigin();
 
 	return Vector3d<f32>(pos.getX(),pos.getY(),pos.getZ());
 };
 
-Vector3d<f32> CPhysicsBody::getRotation() 
+Vector3d<f32> CRigidBody::getRotation() 
 {
 	btQuaternion rot = details_.body->getWorldTransform().getRotation();
 	

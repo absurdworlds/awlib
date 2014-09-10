@@ -19,6 +19,8 @@ namespace physics {
 
 // internal implementation details
 class DCollisionObject {
+public:
+	DCollisionObject(btCollisionObject* Object) : obj(Object) {}
 	btCollisionObject* obj;
 };
 

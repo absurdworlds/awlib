@@ -16,8 +16,8 @@
 #include <hrengin/graphics/IVideoManager.h>
 
 #include "CBulletPhysics.h"
-#include "CPhysicsPhantom.h"
-#include "CPhysicsBody.h"
+#include "CCollisionPhantom.h"
+#include "CRigidBody.h"
 
 
 namespace hrengin {
@@ -113,6 +113,8 @@ CBulletPhysics::CBulletPhysics()
 	btCollisionShape* Shape = new btEmptyShape;
 	collisionShapes_.push_back(Shape);
 
+
+	// temporary mess, for testing
 #if 0 
 	btTransform defaultTransform;
 	defaultTransform.setIdentity();
@@ -125,22 +127,14 @@ CBulletPhysics::CBulletPhysics()
 	collObject->setCollisionFlags(btCollisionObject::CF_STATIC_OBJECT);
 	
 	m_dynamicsWorld->addCollisionObject(collObject,COL_GROUND,COL_GROUND | COL_DEBRIS); // 0000 0111
-#endif
-
-//
-
+#else
 	btTransform defaultTransform;
 	defaultTransform.setIdentity();
 	defaultTransform.setOrigin(btVector3(0,0,0));
 
 	btScalar mass(0.0f);
-	bool isDynamic = (mass != 0.f);
 	btVector3 localInertia(0,0,0);
 	btCollisionShape* colShape = new btStaticPlaneShape(btVector3(0,1,0),0.0);
-	
-	if (isDynamic) {
-		colShape->calculateLocalInertia(mass,localInertia);
-	}
 
 	btDefaultMotionState* defaultMotionState = new btDefaultMotionState(defaultTransform);
 
@@ -152,7 +146,7 @@ CBulletPhysics::CBulletPhysics()
 	m_dynamicsWorld->addRigidBody(rigidBody,COL_GROUND, COL_GROUND | COL_DEBRIS);
 
 	m_dynamicsWorld->updateAabbs();
-//	
+#endif
 }
 
 CBulletPhysics::~CBulletPhysics()
@@ -237,13 +231,13 @@ bool CBulletPhysics::step()
 	return true;
 }
 
-IPhysicsBody* CBulletPhysics::createBody(const char* modelName, Vector3d<f32> pos, u16 group, u16 filters)
+IRigidBody* CBulletPhysics::createBody(const char* modelName, Vector3d<f32> pos, u16 group, u16 filters)
 {
 	u32 shapeId = loadModel(modelName);
 	return createBody(shapeId,pos, group,  filters); 
 };
 
-IPhysicsBody* CBulletPhysics::createBody(const u32 shapeid, Vector3d<f32> pos, u16 group, u16 filters)
+IRigidBody* CBulletPhysics::createBody(const u32 shapeid, Vector3d<f32> pos, u16 group, u16 filters)
 {
 	btTransform defaultTransform;
 	defaultTransform.setIdentity();
@@ -272,16 +266,16 @@ IPhysicsBody* CBulletPhysics::createBody(const u32 shapeid, Vector3d<f32> pos, u
 	}
 	m_dynamicsWorld->updateAabbs();
 
-	return new CPhysicsBody(rigidBody);
+	return new CRigidBody(rigidBody);
 };
 
-IPhysicsPhantom* CBulletPhysics::createPhantom(const char* modelName, u16 group, u16 filters)
+ICollisionPhantom* CBulletPhysics::createPhantom(const char* modelName, u16 group, u16 filters)
 {
 	u32 shapeId = loadModel(modelName);
 	return createPhantom(shapeId, filters); 
 };
 
-IPhysicsPhantom* CBulletPhysics::createPhantom(const u32 shapeid, u16 group, u16 filters)
+ICollisionPhantom* CBulletPhysics::createPhantom(const u32 shapeid, u16 group, u16 filters)
 {
 	btTransform defaultTransform;
 	defaultTransform.setIdentity();
@@ -296,10 +290,10 @@ IPhysicsPhantom* CBulletPhysics::createPhantom(const u32 shapeid, u16 group, u16
 	m_dynamicsWorld->addCollisionObject(collObject,group,filters);
 	//m_dynamicsWorld->updateAabbs();
 
-	return new CPhysicsPhantom(collObject);
+	return new CCollisionPhantom(collObject);
 };
 
-IPhysicsObject* CBulletPhysics::castRay(Vector3d<f32> from, Vector3d<f32> to, u16 filters)
+ICollisionObject* CBulletPhysics::castRay(Vector3d<f32> from, Vector3d<f32> to, u16 filters)
 {
 	btVector3 btfrom = btVector3(from.X,from.Y,from.Z);
 	btVector3 btto = btVector3(to.X,to.Y,to.Z);
@@ -313,7 +307,7 @@ IPhysicsObject* CBulletPhysics::castRay(Vector3d<f32> from, Vector3d<f32> to, u1
 
 	if (resultCallback.hasHit())
 	{
-		return (IPhysicsObject*)resultCallback.m_collisionObject->getUserPointer();
+		return (ICollisionObject*)resultCallback.m_collisionObject->getUserPointer();
 	}
 
 	return 0;

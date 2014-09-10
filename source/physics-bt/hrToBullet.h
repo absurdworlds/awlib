@@ -17,12 +17,12 @@
 namespace hrengin {
 namespace physics {
 
-inline Vector3d<f32> toHrengin(btVector3 btVec) 
+inline Vector3d<f32> toHrengin(btVector3 const& btVec)
 {
 	return Vector3d<f32>(btVec[0], btVec[1], btVec[2]);
 }
 
-inline btVector3 toBullet(Vector3d<f32> hrVec) 
+inline btVector3 toBullet(Vector3d<f32> const& hrVec)
 {
 	return btVector3(hrVec.X, hrVec.Y, hrVec.Z);
 }

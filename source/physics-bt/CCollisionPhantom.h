@@ -7,8 +7,8 @@
    There is NO WARRANTY, to the extent permitted by law.
  */
 
-#ifndef _hrengin_CPhysicsPhantom_
-#define _hrengin_CPhysicsPhantom_
+#ifndef _hrengin_CCollisionPhantom_
+#define _hrengin_CCollisionPhantom_
 
 #include <Bullet/btBulletDynamicsCommon.h>
 #include <Bullet/btBulletCollisionCommon.h>
@@ -18,26 +18,23 @@
 #include <hrengin/physics/ICollisionPhantom.h>
 //#include <hrengin/physics/IPhysicsManager.h>
 
+#include "CCollisionObject.h"
+
 namespace hrengin {
 namespace physics {
 
-class CPhysicsPhantom : public IPhysicsPhantom {
+class CCollisionPhantom : public ICollisionPhantom {
 public:
-	CPhysicsPhantom(btCollisionObject* pCollObject);
-	CPhysicsPhantom(btCollisionObject* pCollObject, IBaseEntity* pAttach);
-
-	virtual void attachToEntity(IBaseEntity* pAttach) {AttachedTo = pAttach;};
-	virtual IBaseEntity* getEntity();
+	CCollisionPhantom(btCollisionObject* object);
 
 	virtual void setPosition(Vector3d<f32> pos);
 	virtual void setRotation(Vector3d<f32> rot);
 
 protected:
-	IBaseEntity* AttachedTo;
-	btCollisionObject* CollObject;
+	DCollisionObject details_;
 };
 
-}	
+} // namespace physics
 } // namespace hrengin
 
-#endif//_hrengin_CPhysicsPhantom_
+#endif//_hrengin_CCollisionPhantom_

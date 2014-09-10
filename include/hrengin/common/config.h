@@ -9,8 +9,6 @@
 #ifndef _hrengin_config_
 #define _hrengin_config_
 
-#include <hrengin/common/versions.h>
-
 /* Windows platform */
 #if defined(_WIN32) || defined(_WIN64) || defined(WIN32) || defined(WIN64)
 	#define _HR_ØINDOWS

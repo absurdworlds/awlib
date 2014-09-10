@@ -7,8 +7,8 @@
    There is NO WARRANTY, to the extent permitted by law.
  */
 
-#ifndef _hrengin_CPhysicsBody_
-#define _hrengin_CPhysicsBody_
+#ifndef _hrengin_CRigidBody_
+#define _hrengin_CRigidBody_
 
 #include <stdio.h>
 
@@ -30,9 +30,9 @@ public:
 
 };
 
-class CPhysicsBody : public IRigidBody {
+class CRigidBody : public IRigidBody {
 public:
-	CPhysicsBody(btRigidBody* body);
+	CRigidBody(btRigidBody* body);
 
 	virtual void setPosition(Vector3d<f32> pos);
 	virtual void setRotation(Vector3d<f32> rot);
@@ -48,7 +48,7 @@ protected:
 	DRigidBody details_;
 };
 
-}	
+} // namespace physics
 } // namespace hrengin
 
-#endif//_hrengin_CPhysicsBody_
+#endif//_hrengin_CRigidBody_

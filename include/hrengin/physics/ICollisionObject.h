@@ -12,9 +12,6 @@
 #include <hrengin/common/Vector3d.h>
 
 namespace hrengin {
-
-class IBaseEntity;
-
 namespace physics {
 
 // internal implementation details
@@ -36,13 +33,14 @@ public:
 	{
 		return pointer_;
 	}
-
-	//virtual void SetScale(Vector3d<f32> scale) = 0;
 	
 	/**
 	   get internal implementation details, intended only for internal use
 	 */
-	virtual DCollisionObject* getDCollisionObject() {};
+	virtual DCollisionObject* getDCollisionObject()
+	{
+		return 0;
+	}
 protected:
 	void* pointer_;
 };

@@ -27,7 +27,10 @@ public:
 	/**
 	   get internal implementation details, intended only for internal use
 	 */
-	virtual DRigidBody* getDRigidBody() {};
+	virtual DRigidBody* getDRigidBody()
+	{
+		return 0;
+	}
 };
 
 } // namespace physics

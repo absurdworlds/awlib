@@ -12,14 +12,8 @@
     <ClInclude Include="CBulletPhysics.h">
       <Filter>source</Filter>
     </ClInclude>
-    <ClInclude Include="CPhysicsPhantom.h">
-      <Filter>source</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\hrengin\physics\IPhysicsManager.h">
       <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="CPhysicsBody.h">
-      <Filter>source</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\hrengin\physics\IDebugDrawer.h">
       <Filter>include</Filter>
@@ -42,15 +36,24 @@
     <ClInclude Include="..\..\include\hrengin\physics\ICollisionObject.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="CCollisionObject.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="CCollisionPhantom.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="CRigidBody.h">
+      <Filter>source</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CBulletPhysics.cpp">
       <Filter>source</Filter>
     </ClCompile>
-    <ClCompile Include="CPhysicsPhantom.cpp">
+    <ClCompile Include="CCollisionPhantom.cpp">
       <Filter>source</Filter>
     </ClCompile>
-    <ClCompile Include="CPhysicsBody.cpp">
+    <ClCompile Include="CRigidBody.cpp">
       <Filter>source</Filter>
     </ClCompile>
   </ItemGroup>

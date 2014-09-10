@@ -18,15 +18,16 @@
     <ClInclude Include="..\..\include\hrengin\physics\ICollisionPhantom.h" />
     <ClInclude Include="..\..\include\hrengin\physics\IPhysicsWorld.h" />
     <ClInclude Include="CBulletPhysics.h" />
+    <ClInclude Include="CCollisionObject.h" />
     <ClInclude Include="CDebugDrawer.h" />
-    <ClInclude Include="CPhysicsBody.h" />
-    <ClInclude Include="CPhysicsPhantom.h" />
+    <ClInclude Include="CRigidBody.h" />
+    <ClInclude Include="CCollisionPhantom.h" />
     <ClInclude Include="hrToBullet.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CBulletPhysics.cpp" />
-    <ClCompile Include="CPhysicsBody.cpp" />
-    <ClCompile Include="CPhysicsPhantom.cpp" />
+    <ClCompile Include="CRigidBody.cpp" />
+    <ClCompile Include="CCollisionPhantom.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{C793384E-45F2-4021-B9E0-1CB3D12DA78E}</ProjectGuid>
