@@ -27,17 +27,24 @@ public:
 	virtual void setPosition(Vector3d<f32> pos) = 0;
 	virtual void setRotation(Vector3d<f32> rot) = 0;
 
-	virtual void  setPointer(void* ptr) = 0;
-	virtual void* getPointer() = 0;
+	virtual void setPointer(void* ptr)
+	{
+		pointer_ = ptr;
+	}
+
+	virtual void* getPointer()
+	{
+		return pointer_;
+	}
 
 	//virtual void SetScale(Vector3d<f32> scale) = 0;
 	
 	/**
-	   get internal implementation details 
-	   intended only for internal use
+	   get internal implementation details, intended only for internal use
 	 */
 	virtual DCollisionObject* getDCollisionObject() {};
 protected:
+	void* pointer_;
 };
 
 } // namespace physics

@@ -40,16 +40,12 @@ public:
 	virtual Vector3d<f32> getPosition();
 	virtual Vector3d<f32> getRotation();
 
-	virtual void  setPointer(void* ptr);
-	virtual void* getPointer();
-
 	virtual DRigidBody* getDRigidBody()
 	{
 		return &details_;
 	}
 protected:
 	DRigidBody details_;
-	void* pointer_;
 };
 
 }	

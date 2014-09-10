@@ -25,8 +25,7 @@ public:
 	virtual Vector3d<f32> getRotation() = 0;
 
 	/**
-	   get internal implementation details 
-	   intended only for internal use
+	   get internal implementation details, intended only for internal use
 	 */
 	virtual DRigidBody* getDRigidBody() {};
 };
