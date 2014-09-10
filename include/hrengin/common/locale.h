@@ -13,18 +13,11 @@
 #ifndef _hrengin_locale_
 #define _hrengin_locale_
 
+#include <hrengin/common/macro.h>
 #include <hrengin/common/types.h>
 
 namespace hrengin {
 namespace locale {
-
-#ifdef __GNUC__
-#   define BOOST_LOCALE_LIKELY(x)   __builtin_expect((x),1)
-#   define BOOST_LOCALE_UNLIKELY(x) __builtin_expect((x),0)
-#else
-#   define BOOST_LOCALE_LIKELY(x)   (x)
-#   define BOOST_LOCALE_UNLIKELY(x) (x)
-#endif
 
 typedef u32 code_point;
 
@@ -34,34 +27,42 @@ static const code_point incomplete = 0xFFFFFFFEu;
 
 inline bool is_valid_codepoint(code_point v)
 {
-	if(v>0x10FFFF)
+	if(v > 0x10FFFF) {
 		return false;
-	if(0xD800 <=v && v<= 0xDFFF) // surragates
+	}
+	// surragates
+	if(0xD800 <= v && v <= 0xDFFF) {
 		return false;
+	}
 	return true;
 }
 
-template<typename CharType,int size=sizeof(CharType)>
+template<typename CharType, int size = sizeof(CharType)>
 struct utf_traits;
 
 template<typename CharType>
 struct utf_traits<CharType,1> {
 
 	typedef CharType char_type;
-		
+
 	static int trail_length(char_type ci) 
 	{
 		unsigned char c = ci;
-		if(c < 128)
+		if(c < 128) {
 			return 0;
-		if(BOOST_LOCALE_UNLIKELY(c < 194))
+		}
+		if(BRANCH_UNLIKELY(c < 194)) {
 			return -1;
-		if(c < 224)
+		}
+		if(c < 224) {
 			return 1;
-		if(c < 240)
+		}
+		if(c < 240) {
 			return 2;
-		if(BOOST_LOCALE_LIKELY(c <=244))
+		}
+		if(BRANCH_LIKELY(c <= 244)) {
 			return 3;
+		}
 		return -1;
 	}
 		
@@ -69,24 +70,21 @@ struct utf_traits<CharType,1> {
 
 	static int width(code_point value)
 	{
-		if(value <=0x7F) {
+		if(value <= 0x7F) {
 			return 1;
-		}
-		else if(value <=0x7FF) {
+		} else if(value <= 0x7FF) {
 			return 2;
-		}
-		else if(BOOST_LOCALE_LIKELY(value <=0xFFFF)) {
+		} else if(BRANCH_LIKELY(value <= 0xFFFF)) {
 			return 3;
-		}
-		else {
+		} else {
 			return 4;
 		}
 	}
 
 	static bool is_trail(char_type ci)
 	{
-		unsigned char c=ci;
-		return (c & 0xC0)==0x80;
+		unsigned char c = ci;
+		return (c & 0xC0) == 0x80;
 	}
 
 	static bool is_lead(char_type ci)
@@ -95,17 +93,18 @@ struct utf_traits<CharType,1> {
 	}
 		
 	template<typename Iterator>
-	static code_point decode(Iterator &p,Iterator e)
+	static code_point decode(Iterator &p, Iterator e)
 	{
-		if(BOOST_LOCALE_UNLIKELY(p==e))
+		if(BRANCH_UNLIKELY(p == e)) {
 			return incomplete;
+		}
 
 		unsigned char lead = *p++;
 
 		// First byte is fully validated here
 		int trail_size = trail_length(lead);
 
-		if(BOOST_LOCALE_UNLIKELY(trail_size < 0))
+		if(BRANCH_UNLIKELY(trail_size < 0))
 			return illegal;
 
 		//
@@ -122,35 +121,41 @@ struct utf_traits<CharType,1> {
 		unsigned char tmp;
 		switch(trail_size) {
 		case 3:
-			if(BOOST_LOCALE_UNLIKELY(p==e))
+			if(BRANCH_UNLIKELY(p==e)) {
 				return incomplete;
+			}
 			tmp = *p++;
-			if (!is_trail(tmp))
+			if (!is_trail(tmp)) {
 				return illegal;
+			}
 			c = (c << 6) | ( tmp & 0x3F);
 		case 2:
-			if(BOOST_LOCALE_UNLIKELY(p==e))
+			if(BRANCH_UNLIKELY(p==e)) {
 				return incomplete;
+			}
 			tmp = *p++;
-			if (!is_trail(tmp))
+			if (!is_trail(tmp)) {
 				return illegal;
+			}
 			c = (c << 6) | ( tmp & 0x3F);
 		case 1:
-			if(BOOST_LOCALE_UNLIKELY(p==e))
+			if(BRANCH_UNLIKELY(p==e)) {
 				return incomplete;
+			}
 			tmp = *p++;
-			if (!is_trail(tmp))
+			if (!is_trail(tmp)) {
 				return illegal;
+			}
 			c = (c << 6) | ( tmp & 0x3F);
 		}
 
 		// Check code point validity: no surrogates and
 		// valid range
-		if(BOOST_LOCALE_UNLIKELY(!is_valid_codepoint(c)))
+		if(BRANCH_UNLIKELY(!is_valid_codepoint(c)))
 			return illegal;
 
 		// make sure it is the most compact representation
-		if(BOOST_LOCALE_UNLIKELY(width(c)!=trail_size + 1))
+		if(BRANCH_UNLIKELY(width(c)!=trail_size + 1))
 			return illegal;
 
 		return c;
@@ -161,14 +166,15 @@ struct utf_traits<CharType,1> {
 	static code_point decode_valid(Iterator &p)
 	{
 		unsigned char lead = *p++;
-		if(lead < 192)
+		if(lead < 192) {
 			return lead;
+		}
 
 		int trail_size;
 
 		if(lead < 224)
 			trail_size = 1;
-		else if(BOOST_LOCALE_LIKELY(lead < 240)) // non-BMP rare
+		else if(BRANCH_LIKELY(lead < 240)) // non-BMP rare
 			trail_size = 2;
 		else
 			trail_size = 3;
@@ -196,7 +202,7 @@ struct utf_traits<CharType,1> {
 		} else if(value <= 0x7FF) {
 			*out++ = static_cast<char_type>((value >> 6) | 0xC0);
 			*out++ = static_cast<char_type>((value & 0x3F) | 0x80);
-		} else if(BOOST_LOCALE_LIKELY(value <= 0xFFFF)) {
+		} else if(BRANCH_LIKELY(value <= 0xFFFF)) {
 			*out++ = static_cast<char_type>((value >> 12) | 0xE0);
 			*out++ = static_cast<char_type>(((value >> 6) & 0x3F) | 0x80);
 			*out++ = static_cast<char_type>((value & 0x3F) | 0x80);
@@ -247,11 +253,11 @@ struct utf_traits<CharType,2> {
 	template<typename It>
 	static code_point decode(It &current,It last)
 	{
-		if(BOOST_LOCALE_UNLIKELY(current == last)) {
+		if(BRANCH_UNLIKELY(current == last)) {
 			return incomplete;
 		}
 		u16 w1=*current++;
-		if(BOOST_LOCALE_LIKELY(w1 < 0xD800 || 0xDFFF < w1)) {
+		if(BRANCH_LIKELY(w1 < 0xD800 || 0xDFFF < w1)) {
 			return w1;
 		}
 		if(w1 > 0xDBFF) {
@@ -270,7 +276,7 @@ struct utf_traits<CharType,2> {
 	static code_point decode_valid(It &current)
 	{
 		u16 w1=*current++;
-		if(BOOST_LOCALE_LIKELY(w1 < 0xD800 || 0xDFFF < w1)) {
+		if(BRANCH_LIKELY(w1 < 0xD800 || 0xDFFF < w1)) {
 			return w1;
 		}
 		u16 w2=*current++;
@@ -285,7 +291,7 @@ struct utf_traits<CharType,2> {
 	template<typename It>
 	static It encode(code_point u,It out)
 	{
-		if(BOOST_LOCALE_LIKELY(u<=0xFFFF)) {
+		if(BRANCH_LIKELY(u<=0xFFFF)) {
 			*out++ = static_cast<char_type>(u);
 		} else {
 			u -= 0x10000;
@@ -325,11 +331,11 @@ struct utf_traits<CharType,4> {
 	template<typename It>
 	static code_point decode(It &current,It last)
 	{
-		if(BOOST_LOCALE_UNLIKELY(current == last)) {
+		if(BRANCH_UNLIKELY(current == last)) {
 			return incomplete;
 		}
 		code_point c = *current++;
-		if(BOOST_LOCALE_UNLIKELY(!is_valid_codepoint(c))) {
+		if(BRANCH_UNLIKELY(!is_valid_codepoint(c))) {
 			return illegal;
 		}
 		return c;

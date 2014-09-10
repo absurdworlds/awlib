@@ -25,9 +25,7 @@
 #define CONCAT1(arg1, arg2)  CONCAT2(arg1, arg2)
 #define CONCAT2(arg1, arg2)  arg1##arg2
 
-/* Expand tokens — stupid MSVC glues __VA_ARGS__ */
-#define MSVC_DEVELOPERS_MUST_BE_FUCKED_BY_KEYMAN_TEN_TIMES_EACH(x) x
-#define FUCK_MSVC_DEVELOPERS(x) x
+/* Expand tokens — some preprocessors glue __VA_ARGS__ */
 #define EXPAND(x) x
 
 /* Vararg processing macros
@@ -52,5 +50,16 @@
 #define FOR_EACH(NAME,...) \
 	EXPAND(GET_MACRO(__VA_ARGS__, FE_6, FE_5, FE_4, FE_3, FE_2, FE_1)(NAME, __VA_ARGS__))
 
+
+// Branch prediction hints, works only with GCC
+#ifdef __GNUC__
+	#define BRANCH_LIKEY(X)		__builtin_expect((X),1)
+	#define BRANCH_UNLIKELY(X)	__builtin_expect((X),0)
+	#define BRANCH_EXPECT(X, V)		__builtin_expect((X),(V))
+#else
+	#define BRANCH_LIKELY(X)	__builtin_expect((X),1)
+	#define BRANCH_UNLIKELY(X)	__builtin_expect((X),0)
+	#define BRANCH_EXPECT(X, V)	__builtin_expect((X),(V))
+#endif
 
 #endif//_hrengin_hrenginmacro_
