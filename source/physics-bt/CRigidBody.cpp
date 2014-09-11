@@ -29,7 +29,7 @@ void CRigidBody::setPosition(Vector3d<f32> pos)
 	localTransform.setOrigin(origin);
 	localTransform.setRotation(details_.obj->getWorldTransform().getRotation());
 	
-	//CollObject->setWorldTransform(localTransform);
+	details_.obj->setWorldTransform(localTransform);
 };
 
 
@@ -40,7 +40,7 @@ void CRigidBody::setRotation(Vector3d<f32> rot)
 	localTransform.setOrigin(details_.obj->getWorldTransform().getOrigin());
 	localTransform.setRotation(btQuaternion(rot.Y*math::DEGTORAD64,rot.X*math::DEGTORAD64,rot.Z*math::DEGTORAD64));
 	
-	//CollObject->setWorldTransform(localTransform);
+	details_.obj->setWorldTransform(localTransform);
 };
 
 Vector3d<f32> CRigidBody::getPosition() 
