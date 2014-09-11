@@ -11,6 +11,7 @@
 #include "CRigidBody.h"
 
 #include "CPhysicsWorld.h"
+#include "CustomRayCallback.h"
 
 namespace hrengin {
 namespace physics {
@@ -29,6 +30,7 @@ CPhysicsWorld::CPhysicsWorld(btCollisionConfiguration* configuration,
 CPhysicsWorld::~CPhysicsWorld()
 {
 	int i;
+
 	for (i = dynamicsWorld_->getNumCollisionObjects() -1; i >= 0; -- i) {
 		btCollisionObject* obj = dynamicsWorld_->getCollisionObjectArray()[i];
 		btRigidBody* body = btRigidBody::upcast(obj);
@@ -94,23 +96,37 @@ void CPhysicsWorld::removeObject(ICollisionObject* object)
 	dynamicsWorld_->removeCollisionObject(obj);
 }
 
-ICollisionObject* CPhysicsWorld::castRay(Vector3d<f32> from, Vector3d<f32> to, u16 filters)
+
+void castRayMultipleTarget(btVector3 from, btVector3 to,
+	IRayResultCallback* callback, btDynamicsWorld* dynamicsWorld)
 {
-	btVector3 btfrom = btVector3(from.X,from.Y,from.Z);
-	btVector3 btto = btVector3(to.X,to.Y,to.Z);
-	btCollisionWorld::ClosestRayResultCallback resultCallback(btfrom, btto);
-	if(filters) {
-		resultCallback.m_collisionFilterGroup = COL_UNIT;
-		resultCallback.m_collisionFilterMask = filters;
+
+}
+
+void castRaySingleTarget(btVector3 from, btVector3 to,
+	IRayResultCallback* callback, btDynamicsWorld* dynamicsWorld)
+{
+	CustomClosestHitCallback resultCallback(from, to, callback);
+
+	
+	dynamicsWorld->rayTest(from, to, resultCallback);
+}
+
+void CPhysicsWorld::castRay(Vector3d<f32> from, Vector3d<f32> to, IRayResultCallback* callback)
+{
+#if 0
+	typedef void (* rayCastFunc)(btVector3, btVector3, IRayResultCallback*);
+	static rayCastFunc jumpTable[2];
+#endif
+	
+	switch(callback->singleHit) {
+	case true:
+		castRaySingleTarget(toBullet(from),toBullet(to),
+			callback, dynamicsWorld_);
+	case false:
+		castRayMultipleTarget(toBullet(from),toBullet(to),
+			callback, dynamicsWorld_);
 	}
-
-	dynamicsWorld_->rayTest(btfrom, btto, resultCallback);
-
-	if (resultCallback.hasHit()) {
-		return (ICollisionObject*)resultCallback.m_collisionObject->getUserPointer();
-	}
-
-	return 0;
 }
 
 void CPhysicsWorld::debugDraw()

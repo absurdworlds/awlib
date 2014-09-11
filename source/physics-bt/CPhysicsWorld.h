@@ -37,7 +37,7 @@ public:
 
 	virtual void setDebugDrawer(IDebugDrawer* drawer);
 
-	virtual ICollisionObject* castRay(Vector3d<f32> from, Vector3d<f32> to, u16 filters = 0);
+	virtual void castRay(Vector3d<f32> from, Vector3d<f32> to, IRayResultCallback* callback);
 
 	/* temporary, until VertexBuffer class is complete */
 	virtual void debugDraw();

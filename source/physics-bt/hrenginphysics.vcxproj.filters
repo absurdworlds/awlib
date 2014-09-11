@@ -51,8 +51,14 @@
     <ClInclude Include="..\..\include\hrengin\physics\CollisionFilter.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\hrengin\physics\IRayTestResult.h">
+    <ClInclude Include="..\..\include\hrengin\physics\IRayResultCallback.h">
       <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\physics\BroadphaseProxy.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="CustomRayCallback.h">
+      <Filter>source</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

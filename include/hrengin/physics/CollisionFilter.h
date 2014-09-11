@@ -24,10 +24,12 @@ namespace hrengin {
 namespace physics {
 
 struct CollisionFilter {
+	CollisionFilter() = default;
 	CollisionFilter(u16 colGroup, u16 bitMask)
 		: group(colGroup), mask(bitMask)
 	{
 	}
+
 	u16 group;
 	u16 mask;
 };
