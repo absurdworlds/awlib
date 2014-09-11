@@ -52,6 +52,15 @@ public:
 		//: drawer(renderer)
 	{
 		debugDraw = new DebugDraw(renderer);
+		// temporary
+		debugDraw->setDebugMode(
+			btIDebugDraw::DBG_DrawWireframe |
+			btIDebugDraw::DBG_DrawAabb |
+			btIDebugDraw::DBG_DrawContactPoints |
+			//btIDebugDraw::DBG_DrawText |
+			//btIDebugDraw::DBG_DrawConstraintLimits |
+			btIDebugDraw::DBG_DrawConstraints //|
+		);
 	}
 	btIDebugDraw* debugDraw;
 };

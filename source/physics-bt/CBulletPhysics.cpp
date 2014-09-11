@@ -104,20 +104,6 @@ IPhysicsWorld* CBulletPhysics::createPhysicsWorld()
 
 IDebugDrawer* CBulletPhysics::createDebugDrawer(graphics::IRenderingDevice* renderer)
 {
-#if 0
-	//debugDrawer_ = ;
-
-	// temporary
-	DebugDraw* debugDraw = new DebugDraw(renderer);
-	debugDraw->setDebugMode(
-		btIDebugDraw::DBG_DrawWireframe |
-		btIDebugDraw::DBG_DrawAabb |
-		btIDebugDraw::DBG_DrawContactPoints |
-		//btIDebugDraw::DBG_DrawText |
-		//btIDebugDraw::DBG_DrawConstraintLimits |
-		btIDebugDraw::DBG_DrawConstraints //|
-	);
-#endif
 	return new CDebugDrawer(renderer);
 }
 
