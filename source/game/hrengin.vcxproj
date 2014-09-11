@@ -111,9 +111,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\..\example\hrSampleProgramloop.h" />
-    <ClInclude Include="..\..\include\hrengin\ai\CPath.h" />
     <ClInclude Include="..\..\include\hrengin\ai\IBaseNavigator.h" />
     <ClInclude Include="..\..\include\hrengin\ai\IBasePathfinder.h" />
+    <ClInclude Include="..\..\include\hrengin\ai\NavigatorUtils.h" />
+    <ClInclude Include="..\..\include\hrengin\ai\Path.h" />
     <ClInclude Include="..\..\include\hrengin\game\IBaseEntity.h" />
     <ClInclude Include="..\..\include\hrengin\game\IEntityManager.h" />
     <ClInclude Include="..\..\include\hrengin\game\IEventManager.h" />

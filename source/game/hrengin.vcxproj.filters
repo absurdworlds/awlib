@@ -42,9 +42,6 @@
     <ClInclude Include="CModelLoader.h">
       <Filter>source</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\hrengin\ai\CPath.h">
-      <Filter>include\AI</Filter>
-    </ClInclude>
     <ClInclude Include="CSimplePathfinder.h">
       <Filter>source</Filter>
     </ClInclude>
@@ -65,6 +62,12 @@
     </ClInclude>
     <ClInclude Include="..\..\include\hrengin\game\IWorld.h">
       <Filter>include\game</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\ai\NavigatorUtils.h">
+      <Filter>include\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\ai\Path.h">
+      <Filter>include\AI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
