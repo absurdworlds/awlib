@@ -24,8 +24,8 @@ hrengin TODO list
 ## physics
 
 + Improve kinematic body support
-+ Improve collision filtering support
-+ Write separate raycasting class
++ Improve collision filtering support (partially done)
++ Write separate raycasting class (partially done)
 
 ## audio
 
