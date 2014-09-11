@@ -10,6 +10,7 @@
 #define _hrengin_CPath_
 
 #include <vector>
+#include <limits>
 
 #include <hrengin/common/types.h>
 #include <hrengin/common/Vector3d.h>
@@ -17,59 +18,180 @@
 namespace hrengin {
 namespace ai {
 
-class CPath {
+/* Class representing a path, consisting of points in space */
+class Path {
 public:
-	typedef u32 nodeId;
+	typedef Vector3d<f32> node_type;
+	typedef std::vector<node_type> container_type;
 
-	std::vector<Vector3d<f32>> pathData_;
-	nodeId current_;
+	class iterator 
+		: public std::iterator<std::random_access_iterator_tag,
+			node_type> {
+	public:
+		iterator(pointer ptr) : ptr_(ptr)
+		{
+		}
 
-	void increment() 
+		iterator operator ++ ()
+		{
+			iterator i = *this;
+			ptr_++;
+			return i;
+		}
+		
+		iterator operator ++ (int)
+		{
+			ptr_++;
+			return *this;
+		}
+		
+		iterator operator -- ()
+		{
+			iterator i = *this;
+			-- ptr_;
+			return i;
+		}
+		
+		iterator operator -- (int)
+		{
+			-- ptr_;
+			return *this;
+		}
+
+		reference operator * ()
+		{
+			return *ptr_;
+		}
+
+		pointer operator -> ()
+		{
+			return ptr_;
+		}
+
+		bool operator == (const iterator& other)
+		{
+			return ptr_ == other.ptr_;
+		}
+
+		bool operator != (const iterator& other)
+		{
+			return ptr_ != other.ptr_;
+		}
+	
+	private:
+		pointer ptr_;
+	};
+
+
+	class const_iterator 
+		: public std::iterator<std::random_access_iterator_tag,
+			const node_type> {
+	public:
+		const_iterator(pointer ptr) : ptr_(ptr)
+		{
+		}
+
+		const_iterator operator ++ ()
+		{
+			const_iterator i = *this;
+			++ ptr_;
+			return i;
+		}
+		
+		const_iterator operator ++ (int)
+		{
+			++ ptr_;
+			return *this;
+		}
+		
+		const_iterator operator -- ()
+		{
+			const_iterator i = *this;
+			-- ptr_;
+			return i;
+		}
+		
+		const_iterator operator -- (int)
+		{
+			-- ptr_;
+			return *this;
+		}
+
+		reference operator * ()
+		{
+			return *ptr_;
+		}
+
+		pointer operator -> ()
+		{
+			return ptr_;
+		}
+
+		bool operator == (const const_iterator& other)
+		{
+			return ptr_ == other.ptr_;
+		}
+
+		bool operator != (const const_iterator& other)
+		{
+			return ptr_ != other.ptr_;
+		}
+	
+	private:
+		pointer ptr_;
+	};
+
+
+	const_iterator begin() const
 	{
-		current_ ++;
+		const node_type* node = nodes_.data();
+		return const_iterator(node);
 	}
 
-	void operator ++ ()
+	const_iterator end() const
 	{
-		increment();
+		const node_type* node = nodes_.data() + (nodes_.end() - nodes_.begin());
+		return const_iterator(node);
 	}
 
-	void operator ++ (int)
+	node_type operator [] (size_t id) const
 	{
-		increment();
+		return nodes_[id];
 	}
 	
-	nodeId current() const
+	void push_back(node_type&& node)
 	{
-		return current_;
+		nodes_.push_back(node);
+		//return end();
 	}
 
-	nodeId start() const
-	{
-		return 0;
-	}
-
-	nodeId end() const
-	{
-		return pathData_.size() - 1;
-	}
-
-	Vector3d<f32> node(nodeId id) const
-	{
-		return pathData_[id];
-	}
-	
-	nodeId add(Vector3d<f32> node)
-	{
-		pathData_.push_back(node);
-		return end();
-	}
-
-	CPath() : current_(0)
+	Path()
 	{
 	
 	}
+private:
+	container_type nodes_;
 };
+
+Path::const_iterator findClosestNode(Path::const_iterator& first,
+	Path::const_iterator& last, Vector3d<f32> point)
+{
+	f32 closestDistance = std::numeric_limits<f32>::max();
+	Path::const_iterator closest = first;
+
+	for(auto it = first; it != last; ++ it) {
+		f32 diff = (*it - point).squareLength();
+
+		if(diff < closestDistance) {
+			closestDistance = diff;
+			closest = it;
+		} else if(closestDistance < diff) {
+			return -- it;
+		}
+	}
+
+	return closest;
+}
 
 } // namespace ai
 } // namespace hrengin
