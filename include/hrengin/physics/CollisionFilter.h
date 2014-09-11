@@ -10,15 +10,6 @@
 #define _hrengin_CollisionFilter_
 
 #include <hrengin/common/types.h>
-#include <hrengin/common/macro.h>
-
-// temporary, should be user-defined
-enum collisiontypes {
-	COL_NOTHING = 0,
-	COL_GROUND = BIT(0),
-	COL_UNIT = BIT(1),
-	COL_DEBRIS = BIT(2)
-};
 
 namespace hrengin {
 namespace physics {
