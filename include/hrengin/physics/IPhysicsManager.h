@@ -16,6 +16,7 @@
 #include <hrengin/common/Vector3d.h>
 
 #include <hrengin/graphics/IRenderingDevice.h>
+#include <hrengin/physics/IRigidBody.h>
 #include <hrengin/physics/IDebugDrawer.h>
 
 namespace hrengin {
@@ -27,7 +28,6 @@ namespace physics {
 class IPhysicsWorld;
 class ICollisionObject;
 class ICollisionPhantom;
-class IRigidBody;
 
 class IPhysicsManager {
 public:
@@ -37,8 +37,8 @@ public:
 	
 	virtual u32 loadModel(const char* modelName) = 0;
 
-	virtual IRigidBody* createBody(const u32 modelId, Vector3d<f32> pos) = 0;
-	virtual IRigidBody* createBody(const char* modelName, Vector3d<f32> pos) = 0;
+	virtual IRigidBody* createBody(const u32 modelId, IRigidBody::RigidBodyConstructionInfo cInfo) = 0;
+	virtual IRigidBody* createBody(const char* modelName, IRigidBody::RigidBodyConstructionInfo cInfo) = 0;
 	virtual ICollisionPhantom* createPhantom(const u32 modelId) = 0;
 	virtual ICollisionPhantom* createPhantom(const char* modelName) = 0;
 

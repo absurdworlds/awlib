@@ -19,6 +19,7 @@
 #include "CPhysicsWorld.h"
 #include "CCollisionPhantom.h"
 #include "CRigidBody.h"
+#include "hrToBullet.h"
 #include "CDebugDrawer.h"
 
 
@@ -107,22 +108,24 @@ IDebugDrawer* CBulletPhysics::createDebugDrawer(graphics::IRenderingDevice* rend
 	return new CDebugDrawer(renderer);
 }
 
-IRigidBody* CBulletPhysics::createBody(const char* modelName, Vector3d<f32> pos)
+IRigidBody* CBulletPhysics::createBody(const char* modelName, IRigidBody::RigidBodyConstructionInfo cInfo)
 {
 	u32 shapeId = loadModel(modelName);
-	return createBody(shapeId, pos); 
+	return createBody(shapeId, cInfo); 
 };
 
-IRigidBody* CBulletPhysics::createBody(const u32 shapeid, Vector3d<f32> pos)
+IRigidBody* CBulletPhysics::createBody(const u32 shapeid, IRigidBody::RigidBodyConstructionInfo cInfo)
 {
 	btTransform defaultTransform;
 	defaultTransform.setIdentity();
-	defaultTransform.setOrigin(btVector3(pos.X,pos.Y,pos.Z));
+	defaultTransform.setOrigin(toBullet(cInfo.position));
 
-	btScalar mass(1.0f);
+	btCollisionShape* colShape = collisionShapes_[shapeid];
+
+	btScalar mass(cInfo.mass);
+
 	bool isDynamic = (mass != 0.f);
 	btVector3 localInertia(0,0,0);
-	btCollisionShape* colShape = collisionShapes_[shapeid];
 	
 	if (isDynamic) {
 		colShape->calculateLocalInertia(mass,localInertia);
@@ -130,11 +133,17 @@ IRigidBody* CBulletPhysics::createBody(const u32 shapeid, Vector3d<f32> pos)
 
 	btDefaultMotionState* defaultMotionState = new btDefaultMotionState(defaultTransform);
 
-	btRigidBody::btRigidBodyConstructionInfo rbInfo(mass,defaultMotionState,colShape,localInertia);
+	btRigidBody::btRigidBodyConstructionInfo rbInfo(mass,
+		defaultMotionState,colShape,localInertia);
+
+	rbInfo.m_friction = cInfo.friction;
+	rbInfo.m_rollingFriction = cInfo.rollingFriction;
+	rbInfo.m_restitution = cInfo.restitution;
+	rbInfo.m_angularDamping = cInfo.angularDamping;
+	rbInfo.m_linearDamping = cInfo.linearDamping;
+
 	btRigidBody *rigidBody = new btRigidBody(rbInfo);
-	
-	rigidBody->setFriction(1.f);
-	rigidBody->setRollingFriction(0.3f);
+
 	return new CRigidBody(rigidBody);
 };
 

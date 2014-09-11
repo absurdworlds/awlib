@@ -37,8 +37,8 @@ public:
 	
 	virtual u32 loadModel(const char* modelName);
 	
-	virtual IRigidBody* createBody(const u32 modelId, Vector3d<f32> pos);
-	virtual IRigidBody* createBody(const char* modelName, Vector3d<f32> pos);
+	virtual IRigidBody* createBody(const u32 modelId, IRigidBody::RigidBodyConstructionInfo cInfo);
+	virtual IRigidBody* createBody(const char* modelName, IRigidBody::RigidBodyConstructionInfo cInfo);
 
 	virtual ICollisionPhantom* createPhantom(const u32 modelId);
 	virtual ICollisionPhantom* createPhantom(const char* modelName);

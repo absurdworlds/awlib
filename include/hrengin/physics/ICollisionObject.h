@@ -11,6 +11,8 @@
 
 #include <hrengin/common/Vector3d.h>
 
+#include <hrengin/physics/CollisionFilter.h>
+
 namespace hrengin {
 namespace physics {
 
