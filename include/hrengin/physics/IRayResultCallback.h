@@ -59,13 +59,19 @@ public:
 #endif
 };
 
-class IClosestHitCallback : IRayResultCallback {
+class IClosestHitCallback : public IRayResultCallback {
 public:
 	static const bool singleHit = true;
 
 	ICollisionObject const* collObject;
 	Vector3d<f32> hitPoint;
 	Vector3d<f32> hitNormal;
+	
+	IClosestHitCallback()
+		: collObject(0), hitPoint(0,0,0), hitNormal(0,0,0)
+	{
+		
+	}
 	
 	virtual f32 addResult(RaytestResult& result)
 	{

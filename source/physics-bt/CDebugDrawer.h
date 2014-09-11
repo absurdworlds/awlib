@@ -65,6 +65,7 @@ public:
 	}
 	virtual void render()
 	{
+		// temporary, until tendering tools are implemented
 		world_->debugDrawWorld();
 	}
 

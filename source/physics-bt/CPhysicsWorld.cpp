@@ -124,9 +124,11 @@ void CPhysicsWorld::castRay(Vector3d<f32> from, Vector3d<f32> to, IRayResultCall
 	case true:
 		castRaySingleTarget(toBullet(from),toBullet(to),
 			callback, dynamicsWorld_);
+		break;
 	case false:
 		castRayMultipleTarget(toBullet(from),toBullet(to),
 			callback, dynamicsWorld_);
+		break;
 	}
 }
 

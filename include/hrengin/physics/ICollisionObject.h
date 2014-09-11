@@ -26,7 +26,7 @@ public:
 		pointer_ = ptr;
 	}
 
-	virtual void* getPointer()
+	virtual void* getPointer() const
 	{
 		return pointer_;
 	}

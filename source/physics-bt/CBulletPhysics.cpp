@@ -19,6 +19,7 @@
 #include "CPhysicsWorld.h"
 #include "CCollisionPhantom.h"
 #include "CRigidBody.h"
+#include "CDebugDrawer.h"
 
 
 namespace hrengin {
@@ -104,7 +105,7 @@ IPhysicsWorld* CBulletPhysics::createPhysicsWorld()
 IDebugDrawer* CBulletPhysics::createDebugDrawer(graphics::IRenderingDevice* renderer)
 {
 #if 0
-	//debugDrawer_ = new CDebugDrawer();
+	//debugDrawer_ = ;
 
 	// temporary
 	DebugDraw* debugDraw = new DebugDraw(renderer);
@@ -117,7 +118,7 @@ IDebugDrawer* CBulletPhysics::createDebugDrawer(graphics::IRenderingDevice* rend
 		btIDebugDraw::DBG_DrawConstraints //|
 	);
 #endif
-	return 0;
+	return new CDebugDrawer(renderer);
 }
 
 IRigidBody* CBulletPhysics::createBody(const char* modelName, Vector3d<f32> pos)
