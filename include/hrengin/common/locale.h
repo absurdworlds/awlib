@@ -21,19 +21,21 @@ namespace locale {
 
 typedef u32 code_point;
 
-static const code_point illegal = 0xFFFFFFFFu;
+static const code_point illegal = 0xFFFFFFFF;
 
-static const code_point incomplete = 0xFFFFFFFEu;
+static const code_point incomplete = 0xFFFFFFFE;
 
-inline bool is_valid_codepoint(code_point v)
+inline bool isValidCodepoint(code_point v)
 {
 	if(v > 0x10FFFF) {
 		return false;
 	}
-	// surragates
+
+	// surrogates
 	if(0xD800 <= v && v <= 0xDFFF) {
 		return false;
 	}
+
 	return true;
 }
 
@@ -149,14 +151,15 @@ struct utf_traits<CharType,1> {
 			c = (c << 6) | ( tmp & 0x3F);
 		}
 
-		// Check code point validity: no surrogates and
-		// valid range
-		if(BRANCH_UNLIKELY(!is_valid_codepoint(c)))
+		// Check code point validity: no surrogates and valid range
+		if(BRANCH_UNLIKELY(!isValidCodepoint(c))) {
 			return illegal;
+		}
 
 		// make sure it is the most compact representation
-		if(BRANCH_UNLIKELY(width(c)!=trail_size + 1))
+		if(BRANCH_UNLIKELY(width(c) != trail_size + 1)) {
 			return illegal;
+		}
 
 		return c;
 
@@ -172,22 +175,23 @@ struct utf_traits<CharType,1> {
 
 		int trail_size;
 
-		if(lead < 224)
+		if(lead < 224) {
 			trail_size = 1;
-		else if(BRANCH_LIKELY(lead < 240)) // non-BMP rare
+		} else if(BRANCH_LIKELY(lead < 240)) {
 			trail_size = 2;
-		else
+		} else {
 			trail_size = 3;
-			
+		}
+
 		code_point c = lead & ((1<<(6-trail_size))-1);
 
 		switch(trail_size) {
 		case 3:
-			c = (c << 6) | ( static_cast<unsigned char>(*p++) & 0x3F);
+			c = (c << 6) | ( static_cast<u8>(*p++) & 0x3F);
 		case 2:
-			c = (c << 6) | ( static_cast<unsigned char>(*p++) & 0x3F);
+			c = (c << 6) | ( static_cast<u8>(*p++) & 0x3F);
 		case 1:
-			c = (c << 6) | ( static_cast<unsigned char>(*p++) & 0x3F);
+			c = (c << 6) | ( static_cast<u8>(*p++) & 0x3F);
 		}
 
 		return c;
@@ -195,7 +199,7 @@ struct utf_traits<CharType,1> {
 
 
 	template<typename Iterator>
-	static Iterator encode(code_point value,Iterator out)
+	static Iterator encode(code_point value, Iterator out)
 	{
 		if(value <= 0x7F) {
 			*out++ = static_cast<char_type>(value);
@@ -223,11 +227,11 @@ struct utf_traits<CharType,2> {
 	// See RFC 2781
 	static bool is_first_surrogate(u16 x)
 	{
-		return 0xD800 <=x && x<= 0xDBFF;
+		return 0xD800 <= x && x <= 0xDBFF;
 	}
 	static bool is_second_surrogate(u16 x)
 	{
-		return 0xDC00 <=x && x<= 0xDFFF;
+		return 0xDC00 <= x && x <= 0xDFFF;
 	}
 	static code_point combine_surrogate(u16 w1,u16 w2)
 	{
@@ -235,10 +239,12 @@ struct utf_traits<CharType,2> {
 	}
 	static int trail_length(char_type c)
 	{
-		if(is_first_surrogate(c))
+		if(is_first_surrogate(c)) {
 			return 1;
-		if(is_second_surrogate(c))
+		}
+		if(is_second_surrogate(c)) {
 			return -1;
+		}
 		return 0;
 	}
 	static bool is_trail(char_type c)
@@ -251,12 +257,12 @@ struct utf_traits<CharType,2> {
 	}
 
 	template<typename It>
-	static code_point decode(It &current,It last)
+	static code_point decode(It &current, It last)
 	{
 		if(BRANCH_UNLIKELY(current == last)) {
 			return incomplete;
 		}
-		u16 w1=*current++;
+		u16 w1 = *current++;
 		if(BRANCH_LIKELY(w1 < 0xD800 || 0xDFFF < w1)) {
 			return w1;
 		}
@@ -266,7 +272,7 @@ struct utf_traits<CharType,2> {
 		if(current==last) {
 			return incomplete;
 		}
-		u16 w2=*current++;
+		u16 w2 = *current++;
 		if(w2 < 0xDC00 || 0xDFFF < w2) {
 			return illegal;
 		}
@@ -288,8 +294,9 @@ struct utf_traits<CharType,2> {
 	{
 		return u>=0x10000 ? 2 : 1;
 	}
+
 	template<typename It>
-	static It encode(code_point u,It out)
+	static It encode(code_point u, It out)
 	{
 		if(BRANCH_LIKELY(u<=0xFFFF)) {
 			*out++ = static_cast<char_type>(u);
@@ -308,7 +315,7 @@ struct utf_traits<CharType,4> {
 	typedef CharType char_type;
 	static int trail_length(char_type c)
 	{
-		if(is_valid_codepoint(c)) {
+		if(isValidCodepoint(c)) {
 			return 0;
 		}
 		return -1;
@@ -329,13 +336,13 @@ struct utf_traits<CharType,4> {
 	}
 
 	template<typename It>
-	static code_point decode(It &current,It last)
+	static code_point decode(It &current, It last)
 	{
 		if(BRANCH_UNLIKELY(current == last)) {
 			return incomplete;
 		}
 		code_point c = *current++;
-		if(BRANCH_UNLIKELY(!is_valid_codepoint(c))) {
+		if(BRANCH_UNLIKELY(!isValidCodepoint(c))) {
 			return illegal;
 		}
 		return c;
@@ -346,7 +353,7 @@ struct utf_traits<CharType,4> {
 		return 1;
 	}
 	template<typename It>
-	static It encode(code_point u,It out)
+	static It encode(code_point u, It out)
 	{
 		*out++ = static_cast<char_type>(u);
 		return out;
