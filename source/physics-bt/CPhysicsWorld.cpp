@@ -25,6 +25,7 @@ CPhysicsWorld::CPhysicsWorld(btCollisionConfiguration* configuration,
 {
 	dynamicsWorld_ = new btDiscreteDynamicsWorld(dispatcher_, broadphase_, solver_, collisionConfiguration_);
 	dynamicsWorld_->setGravity(btVector3(0,-10,0));
+	details_.world = dynamicsWorld_;
 }
 
 CPhysicsWorld::~CPhysicsWorld()
@@ -97,13 +98,13 @@ void CPhysicsWorld::removeObject(ICollisionObject* object)
 }
 
 
-void castRayMultipleTarget(btVector3 from, btVector3 to,
+void castRayMultipleTarget(btVector3 const& from, btVector3 const& to,
 	IRayResultCallback* callback, btDynamicsWorld* dynamicsWorld)
 {
 
 }
 
-void castRaySingleTarget(btVector3 from, btVector3 to,
+void castRaySingleTarget(btVector3 const& from, btVector3 const& to,
 	IRayResultCallback* callback, btDynamicsWorld* dynamicsWorld)
 {
 	CustomClosestHitCallback resultCallback(from, to, callback);
@@ -129,15 +130,10 @@ void CPhysicsWorld::castRay(Vector3d<f32> from, Vector3d<f32> to, IRayResultCall
 	}
 }
 
-void CPhysicsWorld::debugDraw()
-{
-	dynamicsWorld_->debugDrawWorld();
-}
-
 void CPhysicsWorld::setDebugDrawer(IDebugDrawer* drawer)
 {
-	btIDebugDraw* debugDraw = drawer->getDetails()->debugDraw;
-	dynamicsWorld_->setDebugDrawer(debugDraw);
+	drawer->setWorld(this);
+	//btIDebugDraw* debugDraw = drawer->getDetails()->debugDraw;
 }
 
 bool CPhysicsWorld::step()

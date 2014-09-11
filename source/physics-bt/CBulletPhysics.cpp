@@ -147,7 +147,7 @@ IRigidBody* CBulletPhysics::createBody(const u32 shapeid, Vector3d<f32> pos)
 	btRigidBody *rigidBody = new btRigidBody(rbInfo);
 	
 	rigidBody->setFriction(1.f);
-	rigidBody->setRollingFriction(.3);
+	rigidBody->setRollingFriction(0.3f);
 	return new CRigidBody(rigidBody);
 };
 

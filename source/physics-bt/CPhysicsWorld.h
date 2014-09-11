@@ -19,6 +19,11 @@
 namespace hrengin {
 namespace physics {
 
+class IPhysicsWorld::Details {
+public:
+	btDynamicsWorld* world;
+};
+
 class CPhysicsWorld : public IPhysicsWorld {
 public:
 	CPhysicsWorld(btCollisionConfiguration* configuration,
@@ -39,12 +44,14 @@ public:
 
 	virtual void castRay(Vector3d<f32> from, Vector3d<f32> to, IRayResultCallback* callback);
 
-	/* temporary, until VertexBuffer class is complete */
-	virtual void debugDraw();
-
 	virtual bool step();
 
 	btScalar getDeltaTime();
+
+	virtual IPhysicsWorld::Details* getDetails() 
+	{
+		return &details_;
+	}
 private:
 	IDebugDrawer* debugDrawer_;
 
@@ -53,8 +60,10 @@ private:
 	btBroadphaseInterface*	broadphase_;
 	btCollisionDispatcher*	dispatcher_;
 	btConstraintSolver*	solver_;
+	
+	btDynamicsWorld* dynamicsWorld_;
 
-	btDynamicsWorld*	dynamicsWorld_;
+	IPhysicsWorld::Details details_;
 
 	btClock clock_;
 };

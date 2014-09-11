@@ -13,7 +13,6 @@
 
 #include <hrengin/common/Vector3d.h>
 
-#include <hrengin/graphics/IRenderingDevice.h>
 #include <hrengin/physics/IDebugDrawer.h>
 #include <hrengin/physics/CollisionFilter.h>
 #include <hrengin/physics/IRayResultCallback.h>
@@ -42,10 +41,13 @@ public:
 
 	virtual void castRay(Vector3d<f32> from, Vector3d<f32> to, IRayResultCallback* callback) = 0;
 
-	/* temporary, until VertexBuffer class is complete */
-	virtual void debugDraw() = 0;
-
 	virtual bool step() = 0;
+
+	// internal implementation details
+	class Details;
+	
+	// for internal use only
+	virtual IPhysicsWorld::Details* getDetails() = 0;
 };
 
 } // namespace physics

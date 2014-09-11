@@ -10,13 +10,17 @@
 #define _hrengin_IDebugDrawer_
 
 //#include <hrengin/graphics/IRenderable.h>
+#include <hrengin/graphics/IRenderingDevice.h>
 
 namespace hrengin {
 namespace physics {
+class IPhysicsWorld;
 
 class IDebugDrawer /*: public IRenderable*/ {
 public:
-	//virtual void render() = 0;
+	virtual void render() = 0;
+
+	virtual void setWorld(IPhysicsWorld* world) = 0;
 
 	// internal implementation details
 	class Details;
@@ -24,7 +28,6 @@ public:
 	// for internal use only
 	virtual IDebugDrawer::Details* getDetails() = 0;
 };
-
 
 } // namespace graphics
 } // namespace hrengin
