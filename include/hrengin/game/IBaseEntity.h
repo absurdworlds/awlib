@@ -17,21 +17,18 @@
 //#include "Base/IVirtualObject.h"
 
 namespace hrengin {
-	
-const u32 ENTID_Invalid = 0;
-const u32 ENTID_BaseEntity = 1;
 
-enum ENT_FLAG
-{
-	ENTFLAG_Someflag = 1,
+const u32 ENTID_Invalid = 0;
+const u32 ENTID_BaseEntity = 'base';
+
+enum EntFlag : u32 {
 };
 
 class IBaseEntity {
 public:
 	virtual ~IBaseEntity()
 	{
-		for(std::vector<IBaseEntity*>::iterator it = children_.begin(); it != children_.end(); ++it)
-		{
+		for(auto it = children_.begin(); it != children_.end(); ++it) {
 			(*it)->onParentRemove();
 		}
 	}
@@ -42,7 +39,7 @@ public:
 		return ENTID_BaseEntity;
 	}
 
-	virtual u32 getEntityFlag(ENT_FLAG flag)
+	virtual bool getEntityFlag(EntFlag flag)
 	{
 		return (entflags & flag) != 0;
 	}
@@ -56,12 +53,9 @@ public:
 	//! used in pair to attach one node to another
 	virtual bool attachChild(IBaseEntity* newChild)
 	{
-		if(findChild(newChild) != children_.end())
-		{
+		if(findChild(newChild) != children_.end()) {
 			return false;
-		}
-		else
-		{
+		} else {
 			newChild->parent_ = this;
 			children_.push_back(newChild);
 			return true;
@@ -70,8 +64,7 @@ public:
 
 	virtual bool setParent(IBaseEntity* newParent)
 	{
-		if(parent_)
-		{
+		if(parent_) {
 			unParent();
 		}
 
@@ -82,15 +75,12 @@ public:
 	virtual bool detachChild(IBaseEntity* child)
 	{
 		std::vector<IBaseEntity*>::iterator found = findChild(child);
-		if(found != children_.end())
-		{
+		if(found != children_.end()) {
 			(*found)->parent_ = 0;
 			std::iter_swap(found, children_.end()-1);
 			children_.pop_back();
 			return true;
-		}
-		else
-		{
+		} else {
 			return false;
 		}
 	}
@@ -100,17 +90,19 @@ public:
 		return parent_->detachChild(this);
 	}
 
-	/* Virtual methods */
-
-	//! callback: do some action on parent remove
+	// called on parent's removal
 	virtual void onParentRemove() = 0;
 
-	//! sync all attached nodes and entities
+	// sync all attached nodes and entities
 	virtual void sync() = 0;
 
-	// Methods to set entity's position and rotation.
+	// set entity's position
 	virtual void setPosition(Vector3d<f32> position) = 0;
-	virtual void setRotation(Vector3d<f32> rotation) = 0; //LATER: replace with quaternions
+	// set entity's rotation
+	virtual void setRotation(Vector3d<f32> rotation) = 0;
+
+	virtual void getPosition(Vector3d<f32> position) = 0;
+	virtual void getRotation(Vector3d<f32> rotation) = 0;
 	
 protected: /* Methods */
 	virtual void enterDeleteQueue() = 0;
@@ -120,11 +112,8 @@ protected: /* Data */
 
 	u32 entflags;
 
-protected:	
-	//! make this class uninstanciable
-	IBaseEntity() {}
-
-	/// EntID is stored 
+protected:
+	// EntID is stored 
 	u32 mEntID; 
 };
 
