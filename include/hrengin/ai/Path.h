@@ -165,6 +165,11 @@ public:
 		//return end();
 	}
 
+	void clear()
+	{
+		nodes_.clear();
+	}
+
 	Path()
 	{
 	

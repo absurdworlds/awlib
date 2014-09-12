@@ -15,11 +15,11 @@
 namespace hrengin {
 namespace ai {
 
-class CPath;
+class Path;
 
 class IBasePathfinder {
 public:
-	virtual CPath findPath(Vector3d<f32> start, Vector3d<f32> end) = 0;
+	virtual Path findPath(Vector3d<f32> start, Vector3d<f32> end) = 0;
 };
 
 HRENGIN_API IBasePathfinder* createSimplePathfinder();
