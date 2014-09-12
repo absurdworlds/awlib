@@ -111,6 +111,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\..\example\hrSampleProgramloop.h" />
+    <ClInclude Include="..\..\include\hrengin\ai\IActor.h" />
     <ClInclude Include="..\..\include\hrengin\ai\IBaseNavigator.h" />
     <ClInclude Include="..\..\include\hrengin\ai\IBasePathfinder.h" />
     <ClInclude Include="..\..\include\hrengin\ai\NavigatorUtils.h" />

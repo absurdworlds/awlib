@@ -69,6 +69,9 @@
     <ClInclude Include="..\..\include\hrengin\ai\Path.h">
       <Filter>include\AI</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\ai\IActor.h">
+      <Filter>include\AI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CEntityManager.cpp">

@@ -55,11 +55,11 @@
 #ifdef __GNUC__
 	#define BRANCH_LIKEY(X)		__builtin_expect((X),1)
 	#define BRANCH_UNLIKELY(X)	__builtin_expect((X),0)
-	#define BRANCH_EXPECT(X, V)		__builtin_expect((X),(V))
-#else
-	#define BRANCH_LIKELY(X)	__builtin_expect((X),1)
-	#define BRANCH_UNLIKELY(X)	__builtin_expect((X),0)
 	#define BRANCH_EXPECT(X, V)	__builtin_expect((X),(V))
+#else
+	#define BRANCH_LIKELY(X)	X
+	#define BRANCH_UNLIKELY(X)	X
+	#define BRANCH_EXPECT(X, V)	X
 #endif
 
 #endif//_hrengin_hrenginmacro_

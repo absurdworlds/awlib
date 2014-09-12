@@ -17,33 +17,52 @@ namespace ai {
 
 class IBasePathfinder;
 
-enum NavState : u32 {
-	NA_STATE_IDLE,
-	NA_STATE_VALIDATE,
-	NA_STATE_GUARD,
-	NA_STATE_MOVETO,
-	NA_STATE_FOLLOW,
-	NA_STATE_AVOID,
-	NA_STATE_GIVEWAY,
-	NA_STATE_BLOCKWAY,
-	NA_STATE_ATTACHED,
-	NA_STATE_COUNT
-};
-
+/* Base class for navigator
+   Navigators are used to guide an entity in the world
+ */
 class IBaseNavigator {
 public:
-	virtual ~IBaseNavigator() {};
-	//virtual void SetPathfinder(IBasePathfinder* pathfinder) = 0;
-		
-	//
-	virtual bool checkState(NavState state) = 0;
-	virtual NavState getState() = 0;
+	enum class NavState : u32 {
+		Idle,
+		Wander,
+		MoveTo,
+		Rotate,
+		Follow,
+		Avoid,
+		GiveWay,
+		WaitForPath,
+		BlockWay,
+		Flock,
+		Fail,
+		Count
+	};
 
-	virtual void start(Vector3d<f32> destination) = 0;
-	virtual bool move(f32 timeStep) = 0;
-	virtual void stop() = 0;
-	virtual void setFollow() = 0;
-	virtual void attachToGroup() = 0;
+	struct NavProxy {
+		Vector3d<f32> position;
+		Vector3d<f32> angle;
+		f32 speed;
+		f32 acceleration;
+		/* user pointer */
+		void* pointer;
+	};
+
+	virtual ~IBaseNavigator() {};
+
+	/* Set target to move towards */
+	virtual void go (Vector3d<f32> target) = 0;
+	/* Set target to follow */
+	virtual void follow (NavProxy& target) = 0;
+	/* Wander aimlessly */
+	virtual void wander () = 0;
+	/* Reset state */
+	virtual void abort() = 0;
+
+	/* Move towards goal */
+	virtual void move (f32 step) = 0;
+
+	virtual NavProxy& getProxy() = 0;
+
+	virtual NavState getState() const = 0;
 };
 
 } // namespace ai
