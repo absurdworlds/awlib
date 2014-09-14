@@ -18,36 +18,34 @@
 #include <hrengin/common/types.h>
 
 
-namespace hrengin
-{
-namespace math
-{
+namespace hrengin {
+namespace math {
 
 #ifdef PI
 #undef PI
 #endif
 
 // Constants for PI.
-const f32 PI		    = 3.14159265359f;
+const f32 PI		= 3.14159265359f;
 
 const f32 RECIPROCAL_PI	= 1.0f/PI;
 
-const f32 HALF_PI	    = PI/2.0f;
+const f32 HALF_PI	= PI/2.0f;
 const f32 QUARTER_PI	= PI/4.0f;
 
-const f32 DOUBLE_PI     = PI*2.0f;
+const f32 DOUBLE_PI	= PI*2.0f;
 
 #ifdef PI64
 #undef PI64
 #endif
 
 // Constants for 64bit PI.
-const f64 PI64		        = 3.1415926535897932384626433832795028841971693993751;
+const f64 PI64			= 3.1415926535897932384626433832795028841971693993751;
 
 const f32 RECIPROCAL_PI64	= 1.0/PI64;
 
-const f32 HALF_PI64	        = PI64/2.0;
-const f32 QUARTER_PI64	    = PI64/4.0;
+const f32 HALF_PI64		= PI64/2.0;
+const f32 QUARTER_PI64		= PI64/4.0;
 
 const f32 DOUBLE_PI64       = PI64*2.0;
 
@@ -120,6 +118,14 @@ inline f32 clamp_angle(f32 angle)
 	return    angle >  180.0f ? angle - 360.0f
 		: angle < -180.0f ? angle + 360.0f 
 		: angle;
+}
+
+/*
+   Interpolate values v0 and v1 by parameter t
+ */
+inline f32 lerp(float v0, float v1, float t)
+{
+	return (1-t)*v0 + t*v1;
 }
 
 /*
