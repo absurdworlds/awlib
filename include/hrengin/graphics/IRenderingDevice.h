@@ -16,9 +16,11 @@ class IRenderingDevice {
 public:
 	/* begin rendering the scene, must be called before drawing anything */
 	virtual bool beginRender() = 0;
+	// beginFrame()
 
 	/* end rendering the scene, */
 	virtual bool endRender() = 0;
+	// post()
 	
 	/* temporary */
 	virtual void drawDebug() = 0;

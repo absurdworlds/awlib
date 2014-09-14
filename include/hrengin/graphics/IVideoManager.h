@@ -23,7 +23,7 @@ public:
 	virtual ISceneManager* getSceneManager() const = 0;
 	virtual gui::IGUIManager* getGUIManager() const = 0;
 	
-	virtual bool step() = 0;
+	virtual bool step() = 0;	// update()
 	virtual void wait() = 0;
 
 	virtual bool isWindowActive() = 0;
