@@ -7,6 +7,9 @@
    There is NO WARRANTY, to the extent permitted by law.
  */
 
+#include <random>
+#include <string>
+
 #include <Irrlicht/Irrlicht.h>
 //#include <Irrlicht/SAnimatedMesh.h>
 
@@ -88,6 +91,7 @@ bool CVideoManager::step()
 	} else {
 		return false;
 	}
+	
 }
 
 void CVideoManager::wait()

@@ -23,8 +23,6 @@ public:
 	virtual void SetDistance(f64 dist) = 0;
 
 	virtual hrengin::base::line3df castRayFromScreen(i32 x, i32 y) = 0;
-	virtual Vector3d<f32> __tempGetRayHitPlaneCoords(i32 x, i32 y) = 0;
-
 	enum CAM_Behavior
 	{
 		CAM_NONE = 0,

@@ -32,42 +32,56 @@ void CCameraNode::setParentEntity(IBaseEntity* parent)
 
 }
 
-hrengin::base::line3df CCameraNode::castRayFromScreen(hrengin::i32 x, hrengin::i32 y)
+hrengin::base::line3df CCameraNode::getRayFromScreen(hrengin::i32 x, hrengin::i32 y)
 {
 	irr::scene::ISceneCollisionManager* colman = scmgr_->getSceneCollisionManager();
 	irr::core::line3df line = colman->getRayFromScreenCoordinates(irr::core::vector2di(x,y), node_);
-
-	//irr::core::plane3df plane(node->getViewFrustum()->planes[irr::scene::SViewFrustum::VF_FAR_PLANE]);
-	//irr::core::vector3df vec;
-	
-	//plane.getIntersectionWithLine(line.start, line.getVector(), vec);
-	return line;
+	return toHrengin(line);
 }
+
+#if 0
+	core::line3d<f32> ln(0,0,0,0,0,0);
+
+	if (!SceneManager)
+		return ln;
+
+	if (!camera)
+		camera = SceneManager->getActiveCamera();
+
+	if (!camera)
+		return ln;
+
+	const scene::SViewFrustum* f = camera->getViewFrustum();
+
+	core::vector3df farLeftUp = f->getFarLeftUp();
+	core::vector3df lefttoright = f->getFarRightUp() - farLeftUp;
+	core::vector3df uptodown = f->getFarLeftDown() - farLeftUp;
+
+	const core::rect<s32>& viewPort = Driver->getViewPort();
+	core::dimension2d<u32> screenSize(viewPort.getWidth(), viewPort.getHeight());
+
+	f32 dx = pos.X / (f32)screenSize.Width;
+	f32 dy = pos.Y / (f32)screenSize.Height;
+
+	if (camera->isOrthogonal())
+		ln.start = f->cameraPosition + (lefttoright * (dx-0.5f)) + (uptodown * (dy-0.5f));
+	else
+		ln.start = f->cameraPosition;
+
+	ln.end = farLeftUp + (lefttoright * dx) + (uptodown * dy);
+
+	return ln;
 
 Vector3d<f32> CCameraNode::__tempGetRayHitPlaneCoords(hrengin::i32 x, hrengin::i32 y)
 {
 	irr::scene::ISceneCollisionManager* colman = scmgr_->getSceneCollisionManager();
 	irr::core::line3df line = colman->getRayFromScreenCoordinates(irr::core::vector2di(x,y), node_);
-	//printf("%d\n",x);
-	//printf("%f\n",line.start.X);
-	//irr::core::line3df line(10,50,10,10,-50,10);
 	irr::core::vector3df vec;
-	
-	/*hrengin::Vector3d<f32> start(line.end.X,
-				             50,
-				             line.end.Z);
-	hrengin::Vector3d<f32> end(line.start.X,
-						  0,
-				           line.start.Z);
-						   */
-	//irr::core::plane3df plane(node->getViewFrustum()->planes[irr::scene::SViewFrustum::VF_FAR_PLANE]);
 	irr::core::plane3df plane(irr::core::vector3d<f32>(0, 0, 0), irr::core::vector3d<f32>(0, 1, 0));
-	//plane.getIntersectionWithLine(ray.getMiddle(),ray.getVector(),out);
-	//irr::core::vector3df vec;
-	
 	plane.getIntersectionWithLine(line.start, line.getVector(), vec);
 	return Vector3d<f32>(vec.X,0,vec.Z);
 }
+#endif
 
 void CCameraNode::setPosition(Vector3d<f32> pos)
 {

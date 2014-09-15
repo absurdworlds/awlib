@@ -167,7 +167,7 @@ public:
 			return *this;
 		}
 
-		length = math::inverseSqrt(length);
+		length = math::invSqrt(length);
 
 		X = (T)(X * length);
 		Y = (T)(Y * length);
@@ -182,7 +182,7 @@ public:
 		if (length == 0 ) {
 			return Vector3d<T>();
 		}
-		length = math::inverseSqrt(length);
+		length = math::invSqrt(length);
 
 		return Vector3d<T>((T)(X * length), (T)(Y * length), (T)(Z * length));
 	}

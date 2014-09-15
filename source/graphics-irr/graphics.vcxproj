@@ -23,6 +23,7 @@
     <ClInclude Include="..\..\include\hrengin\graphics\IVisNode.h" />
     <ClInclude Include="..\..\include\hrengin\graphics\SVertex.h" />
     <ClInclude Include="..\..\include\hrengin\gui\IConsoleGUI.h" />
+    <ClInclude Include="..\..\include\hrengin\gui\ICursor.h" />
     <ClInclude Include="..\..\include\hrengin\gui\IGUIElement.h" />
     <ClInclude Include="..\..\include\hrengin\gui\IGUIListBox.h" />
     <ClInclude Include="..\..\include\hrengin\gui\IGUIManager.h" />

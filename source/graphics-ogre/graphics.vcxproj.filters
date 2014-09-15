@@ -7,12 +7,6 @@
     <Filter Include="include">
       <UniqueIdentifier>{d95413b0-2b44-43a4-b95a-3f45b8c0dcd1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="source\IrrExt">
-      <UniqueIdentifier>{2091bad4-cebd-40ed-bd90-35267b32e612}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="include\gui">
-      <UniqueIdentifier>{3f75f0c8-a0b7-4af4-a8bb-37350105a974}</UniqueIdentifier>
-    </Filter>
     <Filter Include="include\graphics">
       <UniqueIdentifier>{cf0ebc7b-781e-4c1c-83bd-d1c659d33588}</UniqueIdentifier>
     </Filter>
@@ -21,6 +15,9 @@
     </Filter>
     <Filter Include="resources">
       <UniqueIdentifier>{c3a2de4f-43ac-4af9-8d21-0065c13eccae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="resources\gui">
+      <UniqueIdentifier>{3f75f0c8-a0b7-4af4-a8bb-37350105a974}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -36,17 +33,11 @@
     <ClInclude Include="CVisNode.h">
       <Filter>source</Filter>
     </ClInclude>
-    <ClInclude Include="IrrExt\CSceneNodeAnimatorCameraRTS.h">
-      <Filter>source\IrrExt</Filter>
-    </ClInclude>
-    <ClInclude Include="IrrExt\ISceneNodeAnimatorCameraRTS.h">
-      <Filter>source\IrrExt</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\hrengin\gui\IGUIManager.h">
-      <Filter>include\gui</Filter>
+      <Filter>resources\gui</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\hrengin\gui\IInputManager.h">
-      <Filter>include\gui</Filter>
+      <Filter>resources\gui</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\hrengin\graphics\ICameraNode.h">
       <Filter>include\graphics</Filter>
@@ -64,10 +55,10 @@
       <Filter>include\graphics</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\hrengin\gui\Keycodes.h">
-      <Filter>include\gui</Filter>
+      <Filter>resources\gui</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\hrengin\gui\InputEvent.h">
-      <Filter>include\gui</Filter>
+      <Filter>resources\gui</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\hrengin\graphics\IRenderable.h">
       <Filter>include\graphics</Filter>
@@ -97,28 +88,28 @@
       <Filter>include\graphics</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\hrengin\gui\IGUIElement.h">
-      <Filter>include\gui</Filter>
+      <Filter>resources\gui</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\hrengin\gui\IGUIScrollBar.h">
-      <Filter>include\gui</Filter>
+      <Filter>resources\gui</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\hrengin\gui\IGUITextArea.h">
-      <Filter>include\gui</Filter>
+      <Filter>resources\gui</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\hrengin\gui\IGUITextBox.h">
-      <Filter>include\gui</Filter>
+      <Filter>resources\gui</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\hrengin\gui\IGUIWindow.h">
-      <Filter>include\gui</Filter>
+      <Filter>resources\gui</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\hrengin\gui\IGUIMenu.h">
-      <Filter>include\gui</Filter>
+      <Filter>resources\gui</Filter>
     </ClInclude>
     <ClInclude Include="CGUIWindow.h">
       <Filter>source\gui</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\hrengin\gui\IUserInputReceiver.h">
-      <Filter>include\gui</Filter>
+      <Filter>resources\gui</Filter>
     </ClInclude>
     <ClInclude Include="CInputManager.h">
       <Filter>source\gui</Filter>
@@ -127,13 +118,13 @@
       <Filter>source\gui</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\hrengin\gui\IGUIListBox.h">
-      <Filter>include\gui</Filter>
+      <Filter>resources\gui</Filter>
     </ClInclude>
     <ClInclude Include="CGUIListBox.h">
       <Filter>source\gui</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\hrengin\gui\IConsoleGUI.h">
-      <Filter>include\gui</Filter>
+      <Filter>resources\gui</Filter>
     </ClInclude>
     <ClInclude Include="CConsoleGUI.h">
       <Filter>source\gui</Filter>
@@ -142,7 +133,7 @@
       <Filter>resources</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\hrengin\gui\ICursor.h">
-      <Filter>include\gui</Filter>
+      <Filter>resources\gui</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -157,9 +148,6 @@
     </ClCompile>
     <ClCompile Include="CVisNode.cpp">
       <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="IrrExt\CSceneNodeAnimatorCameraRTS.cpp">
-      <Filter>source\IrrExt</Filter>
     </ClCompile>
     <ClCompile Include="CRenderingDevice.cpp">
       <Filter>source</Filter>

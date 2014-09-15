@@ -29,7 +29,6 @@ public:
 	virtual void setParentEntity(IBaseEntity* parent);
 
 	virtual hrengin::base::line3df castRayFromScreen(hrengin::i32 x, hrengin::i32 y);
-	virtual Vector3d<f32> __tempGetRayHitPlaneCoords(hrengin::i32 x, hrengin::i32 y);
 
 	virtual void setPosition(Vector3d<f32> pos);
 	virtual void setRotation(Vector3d<f32> rot);

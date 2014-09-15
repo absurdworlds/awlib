@@ -150,13 +150,7 @@ u32 CVideoManager::getTime()
 bool CVideoManager::step()
 {
 	window_->update();
-
-	if (0) {
-		return true;
-	} else {
-		return false;
-	}
-	
+	return true;
 }
 
 void CVideoManager::wait()

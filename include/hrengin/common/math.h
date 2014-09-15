@@ -40,14 +40,14 @@ const f32 DOUBLE_PI	= PI*2.0f;
 #endif
 
 // Constants for 64bit PI.
-const f64 PI64			= 3.1415926535897932384626433832795028841971693993751;
+const f64 PI64			= 3.14159265358979323846; //26433832795028841971693993751;
 
 const f32 RECIPROCAL_PI64	= 1.0/PI64;
 
 const f32 HALF_PI64		= PI64/2.0;
 const f32 QUARTER_PI64		= PI64/4.0;
 
-const f32 DOUBLE_PI64       = PI64*2.0;
+const f32 DOUBLE_PI64		= PI64*2.0;
 
 // 32bit Constant for converting from degrees to radians
 const f32 DEGTORAD = PI / 180.0f;
@@ -84,7 +84,7 @@ FORCEINLINE i32 sqrt(const i32 x)
 }
 
 // Calculates inverse square root of a double
-FORCEINLINE f64 inverseSqrt(const f64 x)
+FORCEINLINE f64 invSqrt(const f64 x)
 {
 	return 1.0 / sqrt(x);
 }
@@ -98,7 +98,7 @@ FORCEINLINE bool equals(const u32 a, const u32 b, const u32 tolerance = ROUNDING
 {
 	return (a + tolerance >= b) && (a - tolerance <= b);
 }
-			
+
 FORCEINLINE bool equals(const f32 a, const f32 b, const f32 tolerance = ROUNDING_ERROR_float32)
 {
 	return (a + tolerance >= b) && (a - tolerance <= b);
@@ -112,7 +112,7 @@ FORCEINLINE bool equals(const f64 a, const f64 b, const f64 tolerance = ROUNDING
 /*
    Normalize angle between -180 and 180 degrees
  */
-inline f32 clamp_angle(f32 angle)
+inline f32 normalizeAngle(f32 angle)
 {
 	angle = fmod(angle,360.0f);
 	return    angle >  180.0f ? angle - 360.0f

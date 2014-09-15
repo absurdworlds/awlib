@@ -185,7 +185,7 @@ public:
 		if ( length == 0 ) {
 			return *this;
 		}
-		length = math::inverseSqrt(length);
+		length = math::invSqrt(length);
 		X = (T)(X * length);
 		Y = (T)(Y * length);
 		return *this;

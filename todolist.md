@@ -13,7 +13,10 @@ hrengin TODO list
 
 ## graphics
 
-+ [ ] Add hook for debug drawers
++ [ ] ~~Add hook for debug drawers~~
++ [ ] Implement IRenderable
+    * IVisNode will be created using ISceneManager::createVisNode(IRenderable *)
+    * VisNode will actually hook the renderable to underlying engine
 + [ ] Write interface for rendering vertex primitives
 + [ ] IInputManager: revert receiver list from std::forward_list to std::vector
 + [ ] IInputManager: split into subclasses

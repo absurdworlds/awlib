@@ -43,11 +43,6 @@ hrengin::base::line3df CCameraNode::castRayFromScreen(hrengin::i32 x, hrengin::i
 	return toHrengin(ray);
 }
 
-Vector3d<f32> CCameraNode::__tempGetRayHitPlaneCoords(hrengin::i32 x, hrengin::i32 y)
-{
-	return Vector3d<f32>(0,0,0);
-}
-
 void CCameraNode::setPosition(Vector3d<f32> pos)
 {
 
