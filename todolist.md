@@ -24,6 +24,7 @@ hrengin TODO list
 ## gui
 
 + [ ] Write own gui system instead of Irrlicht's
++ [ ] Key binding manager, takes an keyboard input event and translates keystrokes into bindings
 
 ## physics
 

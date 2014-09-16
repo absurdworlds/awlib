@@ -188,7 +188,7 @@ public:
 	}
 
 	// get length of the vector.
-	T length() const 
+	T length() const
 	{ 
 		return math::sqrt( X*X + Y*Y + Z*Z ); 
 	}
@@ -216,13 +216,13 @@ public:
 	}
 
 	// Get distance from another point
-	T getDistanceFrom(const Vector3d<T>& other) const
+	T getDistance(const Vector3d<T>& other) const
 	{
 		return Vector3d<T>(X - other.X, Y - other.Y, Z - other.Z).length();
 	}
 
 	// Get squared distance from another point.
-	T getDistanceFromSQ(const Vector3d<T>& other) const
+	T getDistanceSQ(const Vector3d<T>& other) const
 	{
 		return Vector3d<T>(X - other.X, Y - other.Y, Z - other.Z).squareLength();
 	}
