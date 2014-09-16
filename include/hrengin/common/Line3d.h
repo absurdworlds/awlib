@@ -6,8 +6,8 @@
    This is free software: you are free to change and redistribute it.
    There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef __H_INCLUDED__HRENGIN_line3d
-#define __H_INCLUDED__HRENGIN_line3d
+#ifndef _hrengin_Line3d_
+#define _hrengin_Line3d_
 
 #include <Irrlicht/line3d.h>
 #include <hrengin/common/Vector3d.h>
@@ -80,7 +80,8 @@ public:
 	{
 		return start.getDistance(end);
 	}
-private:
+
+public:
 	Vector3d<T> start_;
 	Vector3d<T> end_;
 };
@@ -89,5 +90,6 @@ private:
 template<typename T>
 using Line3d = Segment3d<T>;
 
-}
-#endif// __H_INCLUDED__HRENGIN_line3d
+} // namespace hrengin
+
+#endif// _hrengin_Line3d_
