@@ -15,6 +15,8 @@
 #include <hrengin/graphics/IVideoManager.h>
 #include <hrengin/game/IBaseEntity.h>
 
+#include "hrToIrr.h"
+
 namespace hrengin {
 namespace graphics {
 class CSceneManager;
@@ -28,7 +30,7 @@ public:
 
 	virtual void setParentEntity(IBaseEntity* parent);
 
-	virtual hrengin::base::line3df castRayFromScreen(hrengin::i32 x, hrengin::i32 y);
+	virtual Line3d<f32> getRayFromScreen(hrengin::i32 x, hrengin::i32 y);
 
 	virtual void setPosition(Vector3d<f32> pos);
 	virtual void setRotation(Vector3d<f32> rot);

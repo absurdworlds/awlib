@@ -1,7 +1,7 @@
 #ifndef _hrengin_ICameraNode_
 #define _hrengin_ICameraNode_
 
-#include <hrengin/common/line3d.h>
+#include <hrengin/common/Line3d.h>
 #include <hrengin/graphics/ISceneNode.h>
 
 namespace hrengin {
@@ -22,7 +22,7 @@ public:
 
 	virtual void SetDistance(f64 dist) = 0;
 
-	virtual hrengin::base::line3df castRayFromScreen(i32 x, i32 y) = 0;
+	virtual Line3d<f32> getRayFromScreen(i32 x, i32 y) = 0;
 	enum CAM_Behavior
 	{
 		CAM_NONE = 0,

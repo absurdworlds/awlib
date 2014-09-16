@@ -32,7 +32,7 @@ void CCameraNode::setParentEntity(IBaseEntity* parent)
 
 }
 
-hrengin::base::line3df CCameraNode::getRayFromScreen(hrengin::i32 x, hrengin::i32 y)
+Line3d<f32> CCameraNode::getRayFromScreen(hrengin::i32 x, hrengin::i32 y)
 {
 	irr::scene::ISceneCollisionManager* colman = scmgr_->getSceneCollisionManager();
 	irr::core::line3df line = colman->getRayFromScreenCoordinates(irr::core::vector2di(x,y), node_);
