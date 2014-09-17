@@ -45,12 +45,27 @@ public:
 		return Vector3d<T>(-X, -Y, -Z);
 	}
 
-	Vector3d<T>& operator = (const Vector3d<T>& other)
+	Vector3d<T>& operator = (Vector3d<T> const& other)
 	{
 		X = other.X; 
 		Y = other.Y; 
 		Z = other.Z; 
 		return *this;
+	}
+	
+
+	void set (T const& x, T const& y, T const& z)
+	{
+		X = x; 
+		Y = y; 
+		Z = z; 
+	}
+
+	void set (Vector3d<T> const& other)
+	{
+		X = other.X; 
+		Y = other.Y; 
+		Z = other.Z; 
 	}
 
 	Vector3d<T> operator + (const Vector3d<T>& other) const
@@ -221,7 +236,7 @@ public:
 		return Vector3d<T>(X - other.X, Y - other.Y, Z - other.Z).length();
 	}
 
-	// Get squared distance from another point.
+	// Get squared distance from another point
 	T getDistanceSQ(const Vector3d<T>& other) const
 	{
 		return Vector3d<T>(X - other.X, Y - other.Y, Z - other.Z).squareLength();
@@ -261,38 +276,68 @@ public:
 	}
 	
 	/**
-	   get the euler angles that when applied to a (0,0,1) direction vector
-	   would make it point in the same direction as this direction vector.
+	   Get euler angles that when applied to a (0,0,1) direction vector
+	   would make it point in the same direction as this vector.
 
 	   Original author of this method is Arras from the Irrlicht forums
 
-	   @return	A rotation vector containing the X (pitch) and Y (raw) rotations (in degrees) that when applied to a
-		+Z (e.g. 0, 0, 1) direction vector would make it point in the same direction as this vector.
-		The Z (roll) rotation is always 0, since two Euler rotations are sufficient to point in any given direction. 
+	   @return
+	   A rotation vector containing the X (pitch) and Y (raw)
+	   rotations in degrees, of this vector.
+	   The Z (roll) rotation is always 0, since two rotations are sufficient.
+	   (does a vector even have roll rotation? I don't think so)
 	 */
 	Vector3d<T> getHorizontalAngle() const
 	{
 		Vector3d<T> angle;
 
-		angle.Y = (T) atan2((f64)X, (f64)Z);
+		// Yaw
+		angle.Y = T(atan2((f64)X, (f64)Z));
 
-		if (angle.Y < 0) {
+		// Pitch
+		f64 const xz = math::sqrt(X*X + Z*Z);
+		angle.X = T(atan2((f64)xz, (f64)Y) - math::HALF_PI64);
+		
+		// Normalize angles
+		if (angle.Y <= math::PI64) {
 			angle.Y += math::DOUBLE_PI64;
-		} else if (angle.Y >= math::DOUBLE_PI64) {
+		} else if (angle.Y > math::DOUBLE_PI64) {
 			angle.Y -= math::DOUBLE_PI64;
 		}
-
-		const f64 z1 = math::sqrt(X*X + Z*Z);
-
-		angle.X = (T)(atan2((f64)z1, (f64)Y) - math::HALF_PI64);
-
-		if (angle.X < 0) {
+		if (angle.X <= math::PI64) {
 			angle.X += math::DOUBLE_PI64;
-		} else if (angle.X >= math::DOUBLE_PI64) {
+		} else if (angle.X > math::PI64) {
 			angle.X -= math::DOUBLE_PI64;
 		}
 
 		return angle * math::RADTODEG64;
+	}
+
+	Vector3d<T> getYaw() const
+	{
+		T yaw = T(atan2((f64)X, (f64)Z) * math::RADTODEG64);
+		
+		if (yaw <= -math::PI64) {
+			yaw += math::DOUBLE_PI64;
+		} else if (yaw > math::PI64) {
+			yaw -= math::DOUBLE_PI64;
+		}
+
+		return yaw * math::RADTODEG64;
+	}
+
+	Vector3d<T> getPitch() const
+	{
+		f64 const XZ = math::sqrt(X*X + Z*Z);
+		pitch = T(atan2((f64)XZ, (f64)Y) - math::HALF_PI64);
+	
+		if (pitch <= -math::PI64) {
+			pitch += math::DOUBLE_PI64;
+		} else if (pitch >= math::PI64) {
+			pitch -= math::DOUBLE_PI64;
+		}
+
+		return pitch * math::RADTODEG64;
 	}
 
 	// Fill an array of 4 values with the vector data
@@ -310,27 +355,6 @@ public:
 		array[0] = X;
 		array[1] = Y;
 		array[2] = Z;
-	}
-	
-	// Convert to an array of 4 values
-	T*[4] getArrayOf4() const
-	{
-		T* array[4];
-		array[0] = X;
-		array[1] = Y;
-		array[2] = Z;
-		array[3] = 0;
-		return array;
-	}
-
-	// Convert to an array of 3 values
-	T*[3] getArrayOf3() const
-	{
-		T* array[3];
-		array[0] = X;
-		array[1] = Y;
-		array[2] = Z;
-		return array;
 	}
 };
 
