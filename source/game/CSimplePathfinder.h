@@ -10,21 +10,19 @@
 #define _hrengin_CSimplePathfinder_
 
 #include <hrengin/ai/IBasePathfinder.h>
-#include <hrengin/ai/CPath.h>
+#include <hrengin/ai/Path.h>
 
 namespace hrengin {
 namespace ai {
 
-class CPath;
-
 class CSimplePathfinder : public IBasePathfinder {
 public:
 	virtual ~CSimplePathfinder() {};
-	virtual CPath findPath(Vector3d<f32> start, Vector3d<f32> end)
+	virtual Path findPath(Vector3d<f32> start, Vector3d<f32> end)
 	{
-		CPath path;
-		path.add(start);
-		path.add(end);
+		Path path;
+		path.push_back(start);
+		path.push_back(end);
 		return path;
 	}
 };

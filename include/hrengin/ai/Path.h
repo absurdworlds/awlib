@@ -154,12 +154,23 @@ public:
 		return const_iterator(node);
 	}
 
+	/* path size in nodes */
+	size_t size() const
+	{
+		return nodes_.size();
+	}
+	
+	node_type last () const
+	{
+		return nodes_.back();
+	}
+	
 	node_type operator [] (size_t id) const
 	{
 		return nodes_[id];
 	}
 	
-	void push_back(node_type&& node)
+	void push_back(node_type const& node)
 	{
 		nodes_.push_back(node);
 		//return end();
@@ -179,24 +190,7 @@ private:
 };
 
 Path::const_iterator findClosestNode(Path::const_iterator& first,
-	Path::const_iterator& last, Vector3d<f32> point)
-{
-	f32 closestDistance = std::numeric_limits<f32>::max();
-	Path::const_iterator closest = first;
-
-	for(auto it = first; it != last; ++ it) {
-		f32 diff = (*it - point).squareLength();
-
-		if(diff < closestDistance) {
-			closestDistance = diff;
-			closest = it;
-		} else if(closestDistance < diff) {
-			return -- it;
-		}
-	}
-
-	return closest;
-}
+	Path::const_iterator& last, Vector3d<f32> point);
 
 } // namespace ai
 } // namespace hrengin
