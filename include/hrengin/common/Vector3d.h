@@ -313,7 +313,7 @@ public:
 		return angle * math::RADTODEG64;
 	}
 
-	Vector3d<T> getYaw() const
+	T getYaw() const
 	{
 		T yaw = T(atan2((f64)X, (f64)Z) * math::RADTODEG64);
 		
@@ -326,7 +326,7 @@ public:
 		return yaw * math::RADTODEG64;
 	}
 
-	Vector3d<T> getPitch() const
+	T getPitch() const
 	{
 		f64 const XZ = math::sqrt(X*X + Z*Z);
 		pitch = T(atan2((f64)XZ, (f64)Y) - math::HALF_PI64);
