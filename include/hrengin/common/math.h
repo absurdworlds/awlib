@@ -42,12 +42,12 @@ const f32 DOUBLE_PI	= PI*2.0f;
 // Constants for 64bit PI.
 const f64 PI64			= 3.14159265358979323846; //26433832795028841971693993751;
 
-const f32 RECIPROCAL_PI64	= 1.0/PI64;
+const f64 RECIPROCAL_PI64	= 1.0/PI64;
 
-const f32 HALF_PI64		= PI64/2.0;
-const f32 QUARTER_PI64		= PI64/4.0;
+const f64 HALF_PI64		= PI64/2.0;
+const f64 QUARTER_PI64		= PI64/4.0;
 
-const f32 DOUBLE_PI64		= PI64*2.0;
+const f64 DOUBLE_PI64		= PI64*2.0;
 
 // 32bit Constant for converting from degrees to radians
 const f32 DEGTORAD = PI / 180.0f;
@@ -109,28 +109,43 @@ FORCEINLINE bool equals(const f64 a, const f64 b, const f64 tolerance = ROUNDING
 	return (a + tolerance >= b) && (a - tolerance <= b);
 }
 
-/*
+/**
    Normalize angle between -180 and 180 degrees
+   @param angle
+      angle to normalize, in degrees
+   @return
+      input angle normalized to [-180;180] range
  */
 inline f32 normalizeAngle(f32 angle)
 {
-	angle = fmod(angle,360.0f);
-	return    angle >  180.0f ? angle - 360.0f
-		: angle < -180.0f ? angle + 360.0f 
+	angle = fmod(angle, 360.0f);
+	return    angle >   180.0f ? angle - 360.0f
+		: angle <= -180.0f ? angle + 360.0f 
 		: angle;
 }
 
-/*
-   Interpolate values v0 and v1 by parameter t
- */
+/* Shorthand for above function */
+inline f32 wrapAngle(f32 angle)
+{
+	return normalizeAngle(angle);
+}
+
+/* Normalize angle between -PI and PI radians */
+inline f32 wrapAngleRad(f32 angle)
+{
+	angle = fmod(f64(angle),DOUBLE_PI64);
+	return    angle >  PI64 ? angle - DOUBLE_PI64
+		: angle < -PI64 ? angle + DOUBLE_PI64 
+		: angle;
+}
+
+/* Interpolate values v0 and v1 by parameter t */
 inline f32 lerp(float v0, float v1, float t)
 {
 	return (1-t)*v0 + t*v1;
 }
 
-/*
-   Returns true if number is a power of 2
- */
+/* Check if value is a power of 2 */
 inline bool isPowerOf2(u32 value)
 {
 	return (value & (value - 1)) && value;
