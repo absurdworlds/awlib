@@ -4,4 +4,7 @@
     <ClInclude Include="CGame.h" />
     <ClInclude Include="game.h" />
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="game.cpp" />
+  </ItemGroup>
 </Project>

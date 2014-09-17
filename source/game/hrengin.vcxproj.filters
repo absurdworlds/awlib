@@ -89,5 +89,8 @@
     <ClCompile Include="CSimplePathfinder.cpp">
       <Filter>source</Filter>
     </ClCompile>
+    <ClCompile Include="Path.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

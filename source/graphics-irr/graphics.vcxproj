@@ -51,6 +51,7 @@
     <ClInclude Include="CRenderingDevice.h" />
     <ClInclude Include="IrrExt\CSceneNodeAnimatorCameraRTS.h" />
     <ClInclude Include="IrrExt\ISceneNodeAnimatorCameraRTS.h" />
+    <ClInclude Include="hrToIrr.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CCameraNode.cpp" />

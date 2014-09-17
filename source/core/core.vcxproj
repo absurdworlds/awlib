@@ -17,6 +17,7 @@
     <ClInclude Include="..\..\include\hrengin\common\locale.h" />
     <ClInclude Include="..\..\include\hrengin\common\macro.h" />
     <ClInclude Include="..\..\include\hrengin\common\math.h" />
+    <ClInclude Include="..\..\include\hrengin\common\Matrix4.h" />
     <ClInclude Include="..\..\include\hrengin\common\nowide.h" />
     <ClInclude Include="..\..\include\hrengin\common\PodString.h" />
     <ClInclude Include="..\..\include\hrengin\common\Rect.h" />

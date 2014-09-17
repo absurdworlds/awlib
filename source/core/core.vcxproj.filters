@@ -28,7 +28,7 @@
     <Filter Include="include\core\io">
       <UniqueIdentifier>{125b1068-f0df-4e9f-a3c7-d332c2a361e4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="include\resources">
+    <Filter Include="resources">
       <UniqueIdentifier>{fa8207d3-10e0-4e31-8715-b4a6215320c0}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -169,13 +169,16 @@
       <Filter>include\core\hdf</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\hrengin\header_preset.h">
-      <Filter>include\resources</Filter>
+      <Filter>resources</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\hrengin\resources\default_settings.h">
-      <Filter>include\resources</Filter>
+      <Filter>resources</Filter>
     </ClInclude>
     <ClInclude Include="CHrenginPackage.h">
       <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\common\Matrix4.h">
+      <Filter>include\common</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

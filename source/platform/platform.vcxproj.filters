@@ -1,12 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClInclude Include="..\..\include\hrengin\platform\IPlatformData.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\hrengin\platform\platform-init.h">
-      <Filter>include</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\hrengin\platform\pointer_math.h">
       <Filter>include</Filter>
     </ClInclude>
