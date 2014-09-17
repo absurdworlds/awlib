@@ -31,11 +31,11 @@ struct CustomClosestHitCallback : public btCollisionWorld::ClosestRayResultCallb
 	IRayResultCallback* customCallback_;
 
 	//used to calculate hitPointWorld from hitFraction
-	btVector3	m_rayFromWorld;
-	btVector3	m_rayToWorld;
+	// btVector3	m_rayFromWorld;
+	// btVector3	m_rayToWorld;
 
-	btVector3	m_hitNormalWorld;
-	btVector3	m_hitPointWorld;
+	// btVector3	m_hitNormalWorld;
+	// btVector3	m_hitPointWorld;
 	
 	virtual bool needsCollision(btBroadphaseProxy* proxy0) const
 	{
@@ -54,8 +54,7 @@ struct CustomClosestHitCallback : public btCollisionWorld::ClosestRayResultCallb
 			
 		m_closestHitFraction = rayResult.m_hitFraction;
 		m_collisionObject = rayResult.m_collisionObject;
-		if (normalInWorldSpace)
-		{
+		if (normalInWorldSpace) {
 			m_hitNormalWorld = rayResult.m_hitNormalLocal;
 		} else {
 			m_hitNormalWorld = m_collisionObject->getWorldTransform().getBasis() * rayResult.m_hitNormalLocal;
