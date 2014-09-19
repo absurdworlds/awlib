@@ -37,43 +37,8 @@ CBulletPhysics::CBulletPhysics()
 	modelLoader_ = createModelLoader();
 	
 	// Add a 'fallback' empty shape, used if loading of some shape is failed
-	btCollisionShape* Shape = new btEmptyShape;
-	collisionShapes_.push_back(Shape);
-
-
-	// temporary mess, for testing
-#if 0 
-	btTransform defaultTransform;
-	defaultTransform.setIdentity();
-	defaultTransform.setOrigin(btVector3(0,0,0));
-	
-	btCollisionObject *collObject = new btCollisionObject();
-
-
-	collObject->setCollisionShape(new btStaticPlaneShape(btVector3(0,1,0),0.0));
-	collObject->setCollisionFlags(btCollisionObject::CF_STATIC_OBJECT);
-	
-	m_dynamicsWorld->addCollisionObject(collObject,COL_GROUND,COL_GROUND | COL_DEBRIS); // 0000 0111
-//#else
-	btTransform defaultTransform;
-	defaultTransform.setIdentity();
-	defaultTransform.setOrigin(btVector3(0,0,0));
-
-	btScalar mass(0.0f);
-	btVector3 localInertia(0,0,0);
-	btCollisionShape* colShape = new btStaticPlaneShape(btVector3(0,1,0),0.0);
-
-	btDefaultMotionState* defaultMotionState = new btDefaultMotionState(defaultTransform);
-
-	btRigidBody::btRigidBodyConstructionInfo rbInfo(mass,defaultMotionState,colShape,localInertia);
-	btRigidBody *rigidBody = new btRigidBody(rbInfo);
-	
-	rigidBody->setFriction(1.f);
-	rigidBody->setRollingFriction(1.0);
-	m_dynamicsWorld->addRigidBody(rigidBody,COL_GROUND, COL_GROUND | COL_DEBRIS);
-
-	m_dynamicsWorld->updateAabbs();
-#endif
+	btCollisionShape* shape = new btEmptyShape;
+	collisionShapes_.push_back(shape);
 }
 
 CBulletPhysics::~CBulletPhysics()
@@ -174,18 +139,15 @@ btCollisionShape* CBulletPhysics::createPrimitiveShape(SPrimitive shape)
 		y = shape.dimensions[1],
 		z = shape.dimensions[2];
 
-	if(shape.shape == SHAPE_SPHERE) {
+	switch(shape.shape) {
+	case SHAPE_SPHERE:
 		return new btSphereShape(x);
-	}
-
-	if(shape.shape == SHAPE_BOX) {
+	case SHAPE_BOX:
 		return new btBoxShape(btVector3(
 			btScalar(x/2.0),
-			btScalar(y),
+			btScalar(y/2.0),
 			btScalar(z/2.0)));
-	}
-
-	if(shape.shape == SHAPE_CYLINDER) {
+	case SHAPE_CYLINDER:
 		if(z == 0.0) {
 			z = x;
 		}
@@ -205,9 +167,7 @@ btCollisionShape* CBulletPhysics::createPrimitiveShape(SPrimitive shape)
 			return new btCylinderShapeZ(btVector3(
 				btScalar(x),btScalar(y),btScalar(z)));
 		}
-	}
-	
-	if(shape.shape == SHAPE_CAPSULE) {
+	case SHAPE_CAPSULE:
 		switch(shape.axis) {
 		case AXIS_X:
 			return new btCapsuleShapeX(x,y);
@@ -216,9 +176,7 @@ btCollisionShape* CBulletPhysics::createPrimitiveShape(SPrimitive shape)
 		case AXIS_Z:
 			return new btCapsuleShapeZ(x,y);
 		}
-	}
-	
-	if(shape.shape == SHAPE_CONE) {
+	case SHAPE_CONE:
 		switch(shape.axis) {
 		case AXIS_X:
 			return new btConeShapeX(x,y);
@@ -227,9 +185,14 @@ btCollisionShape* CBulletPhysics::createPrimitiveShape(SPrimitive shape)
 		case AXIS_Z:
 			return new btConeShapeZ(x,y);
 		}
+#if 0
+	case SHAPE_PLANE:
+		return new btStaticPlaneShape(btVector3(0,1,0),0.0);
+#endif
+	default:
+		return new btEmptyShape;
 	}
 
-	return new btEmptyShape;
 }
 
 u32 CBulletPhysics::addShape(IModel* model)

@@ -35,6 +35,7 @@
     <ClCompile Include="CPhysicsWorld.cpp" />
     <ClCompile Include="CRigidBody.cpp" />
     <ClCompile Include="CCollisionPhantom.cpp" />
+    <ClCompile Include="hrToBullet.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{C793384E-45F2-4021-B9E0-1CB3D12DA78E}</ProjectGuid>
