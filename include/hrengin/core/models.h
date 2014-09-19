@@ -29,14 +29,14 @@ enum Axis {
 	AXIS_Z
 };
 
-struct SPrimitive {
+struct Primitive {
 	Shape shape;
 	Axis axis;
 	f32 dimensions[3];
 	f32 offset[3];
 	f32 rotation[4];
 
-	SPrimitive () : shape(SHAPE_EMPTY), axis(AXIS_Y), dimensions(), offset(), rotation()
+	Primitive () : shape(SHAPE_EMPTY), axis(AXIS_Y), dimensions(), offset(), rotation()
 	{
 
 	}

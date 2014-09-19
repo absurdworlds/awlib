@@ -20,7 +20,7 @@
 
 namespace hrengin {
 
-struct SPrimitive;
+struct Primitive;
 struct SMesh;
 
 class IModel;
@@ -49,7 +49,7 @@ public:
 
 private:
 	virtual u32 addShape(IModel* model);
-	virtual btCollisionShape* createPrimitiveShape(SPrimitive shape);
+	virtual btCollisionShape* createPrimitiveShape(Primitive shape);
 	//virtual btCollisionShape* createMeshShape(SMesh shape);
 
 	IModelLoader* modelLoader_;

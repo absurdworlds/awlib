@@ -34,7 +34,7 @@ CPhysicsWorld::~CPhysicsWorld()
 
 	for (i = dynamicsWorld_->getNumCollisionObjects() -1; i >= 0; -- i) {
 		btCollisionObject* obj = dynamicsWorld_->getCollisionObjectArray()[i];
-		btRigidBody* body = btRigidBody::upcast(obj);
+		btRigidBody* body = btRigidBody::upcast( obj );
 		if (body && body->getMotionState()) {
 			delete body->getMotionState();
 		}

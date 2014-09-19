@@ -7,7 +7,7 @@
    There is NO WARRANTY, to the extent permitted by law.
  */
 
-#include <hrengin/core/hrenginmodels.h>
+#include <hrengin/core/models.h>
 #include <hrengin/core/hrenginpaths.h>
 #include <hrengin/core/hrenginfsutil.h>
 #include <hrengin/core/IFileSystem.h>
@@ -140,7 +140,7 @@ bool hndfParseObject(hdf::IHDFParser* hndf, IModel* model, std::string curNode)
 
 bool hndfParseShapeNode(hdf::IHDFParser* hndf, IModel* model)
 {
-	hrengin::SPrimitive primitive;
+	hrengin::Primitive primitive;
 	//io::HdfObjectType type = hndf->getObjectType();
 
 
@@ -216,4 +216,5 @@ bool hndfParseShapeNode(hdf::IHDFParser* hndf, IModel* model)
 
 	return true;
 }
+
 } // namespace hrengin

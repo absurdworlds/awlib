@@ -9,7 +9,7 @@
 
 #include <algorithm>
 
-#include <hrengin/core/hrenginmodels.h>
+#include <hrengin/core/models.h>
 #include <hrengin/core/IModel.h>
 #include <hrengin/core/IModelLoader.h>
 
@@ -133,7 +133,7 @@ ICollisionPhantom* CBulletPhysics::createPhantom(const u32 shapeid)
 	return new CCollisionPhantom(collObject);
 };
 
-btCollisionShape* CBulletPhysics::createPrimitiveShape(SPrimitive shape) 
+btCollisionShape* CBulletPhysics::createPrimitiveShape(Primitive shape) 
 {
 	btScalar x = shape.dimensions[0],
 		y = shape.dimensions[1],
@@ -206,7 +206,7 @@ u32 CBulletPhysics::addShape(IModel* model)
 		btCompoundShape* compound = new btCompoundShape();
 	
 		for(auto it = model->primitives.begin(); it != model->primitives.end(); it++) {
-			SPrimitive primitive = *it;
+			Primitive primitive = *it;
 			btCollisionShape * shape = createPrimitiveShape(primitive);
 			btTransform localTransform;
 

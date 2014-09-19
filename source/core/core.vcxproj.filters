@@ -180,6 +180,9 @@
     <ClInclude Include="..\..\include\hrengin\common\Matrix4.h">
       <Filter>include\common</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\core\models.h">
+      <Filter>include\core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CFileSystem.cpp">

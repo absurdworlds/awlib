@@ -10,7 +10,7 @@
 #define _hrengin_IModel_
 
 #include <vector>
-#include <hrengin/core/hrenginmodels.h>
+#include <hrengin/core/models.h>
 
 
 namespace hrengin {
@@ -18,7 +18,7 @@ namespace hrengin {
 class IModel
 {
 public:
-	std::vector<SPrimitive> primitives;
+	std::vector<Primitive> primitives;
 };
 
 }

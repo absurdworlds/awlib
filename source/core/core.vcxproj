@@ -49,6 +49,7 @@
     <ClInclude Include="..\..\include\hrengin\core\ISettingsManager.h" />
     <ClInclude Include="..\..\include\hrengin\core\IShell.h" />
     <ClInclude Include="..\..\include\hrengin\core\IWriteFile.h" />
+    <ClInclude Include="..\..\include\hrengin\core\models.h" />
     <ClInclude Include="..\..\include\hrengin\header_preset.h" />
     <ClInclude Include="..\..\include\hrengin\resources\default_settings.h" />
     <ClInclude Include="CBufferedStream.h" />
