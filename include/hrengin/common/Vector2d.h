@@ -178,8 +178,21 @@ public:
 		return X*other.X + Y*other.Y;
 	}
 	
+	T getRotation() const
+	{
+		T yaw = T(atan2((f64)X, (f64)Y) * math::RADTODEG64);
+		
+		if (yaw <= -math::PI64) {
+			yaw += math::DOUBLE_PI64;
+		} else if (yaw > math::PI64) {
+			yaw -= math::DOUBLE_PI64;
+		}
+
+		return yaw * math::RADTODEG64;
+	}
+
 	// Normalize the vector
-	vector2d<T>& normalize()
+	Vector2d<T>& normalize()
 	{
 		f32 length = squareLength();
 		if ( length == 0 ) {
