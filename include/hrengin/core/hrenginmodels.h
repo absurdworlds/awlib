@@ -15,6 +15,7 @@
 namespace hrengin {
 enum Shape {
 	SHAPE_EMPTY,
+	SHAPE_PLANE,
 	SHAPE_SPHERE,
 	SHAPE_BOX,
 	SHAPE_CAPSULE,
@@ -33,7 +34,7 @@ struct SPrimitive {
 	Axis axis;
 	f32 dimensions[3];
 	f32 offset[3];
-	f32 rotation[3];
+	f32 rotation[4];
 
 	SPrimitive () : shape(SHAPE_EMPTY), axis(AXIS_Y), dimensions(), offset(), rotation()
 	{

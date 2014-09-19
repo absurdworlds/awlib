@@ -185,10 +185,15 @@ btCollisionShape* CBulletPhysics::createPrimitiveShape(SPrimitive shape)
 		case AXIS_Z:
 			return new btConeShapeZ(x,y);
 		}
-#if 0
 	case SHAPE_PLANE:
-		return new btStaticPlaneShape(btVector3(0,1,0),0.0);
-#endif
+		switch(shape.axis) {
+		case AXIS_X:
+			return new btStaticPlaneShape(btVector3(1,0,0), z);
+		case AXIS_Y:
+			return new btStaticPlaneShape(btVector3(0,1,0), z);
+		case AXIS_Z:
+			return new btStaticPlaneShape(btVector3(0,0,1), z);
+		}
 	default:
 		return new btEmptyShape;
 	}
