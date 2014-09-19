@@ -50,3 +50,4 @@ hrengin TODO list
 ## other
 
 + [ ] Test custom allocator for units: spawn 10000 units w/o visual model, moving in circles, and measure time taken for event manager to process all of them with and without custom continuous allocator
++ [ ] Write doxygen documentation
