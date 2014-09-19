@@ -21,36 +21,29 @@ CRigidBody::CRigidBody(btRigidBody* body)
 	details_.obj->setUserPointer(this);
 }
 
-void CRigidBody::setPosition(Vector3d<f32> pos) 
+void CRigidBody::setPosition(Vector3d<f32> pos)
 {
-	btTransform localTransform;
-	localTransform.setIdentity();
-	btVector3 origin(pos.X,pos.Y,pos.Z);
-	localTransform.setOrigin(origin);
-	localTransform.setRotation(details_.obj->getWorldTransform().getRotation());
-	
-	details_.obj->setWorldTransform(localTransform);
+	btTransform transform = details_.obj->getWorldTransform();
+	transform.setOrigin(toBullet(pos));
+	details_.obj->setWorldTransform(transform);
 };
 
-
-void CRigidBody::setRotation(Vector3d<f32> rot) 
+void CRigidBody::setRotation(Vector3d<f32> rot)
 {
-	btTransform localTransform;
-	localTransform.setIdentity();
-	localTransform.setOrigin(details_.obj->getWorldTransform().getOrigin());
-	localTransform.setRotation(btQuaternion(rot.Y*math::DEGTORAD64,rot.X*math::DEGTORAD64,rot.Z*math::DEGTORAD64));
-	
-	details_.obj->setWorldTransform(localTransform);
+	btTransform transform = details_.obj->getWorldTransform();
+	rot *= math::DEGTORAD64;
+	transform.setRotation(btQuaternion(rot.Y, rot.X, rot.Z));
+	details_.obj->setWorldTransform(transform);
 };
 
-Vector3d<f32> CRigidBody::getPosition() 
+Vector3d<f32> CRigidBody::getPosition() const
 {
 	btVector3 pos = details_.obj->getWorldTransform().getOrigin();
 
 	return Vector3d<f32>(pos.getX(),pos.getY(),pos.getZ());
 };
 
-Vector3d<f32> CRigidBody::getRotation() 
+Vector3d<f32> CRigidBody::getRotation() const
 {
 	btQuaternion rot = details_.obj->getWorldTransform().getRotation();
 	

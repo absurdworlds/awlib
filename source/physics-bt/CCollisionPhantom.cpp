@@ -19,27 +19,29 @@ CCollisionPhantom::CCollisionPhantom(btCollisionObject* object)
 	details_.obj->setUserPointer(this);
 }
 
-void CCollisionPhantom::setPosition(Vector3d<f32> pos) 
+void CCollisionPhantom::setPosition(Vector3d<f32> pos)
 {
-	btTransform localTransform;
+	btTransform transform = details_.obj->getWorldTransform();
+	transform.setOrigin(toBullet(pos));
+#if 0
+	btVector3 origin(pos.X,pos.Y,pos.Z);
 	localTransform.setIdentity();
-	localTransform.setOrigin(btVector3(pos.X,pos.Y,pos.Z));
 	localTransform.setRotation(details_.obj->getWorldTransform().getRotation());
+#endif
 	
-	details_.obj->setWorldTransform(localTransform);
+	details_.obj->setWorldTransform(transform);
 };
 
-void CCollisionPhantom::setRotation(Vector3d<f32> rot) 
+void CCollisionPhantom::setRotation(Vector3d<f32> rot)
 {
-	btTransform localTransform;
+	btTransform transform = details_.obj->getWorldTransform();
+#if 0
 	localTransform.setIdentity();
 	localTransform.setOrigin(details_.obj->getWorldTransform().getOrigin());
-	localTransform.setRotation(btQuaternion(
-		rot.Y*math::DEGTORAD64, 
-		rot.X*math::DEGTORAD64,
-		rot.Z*math::DEGTORAD64));
-	
-	details_.obj->setWorldTransform(localTransform);
+#endif
+	rot *= math::DEGTORAD64;
+	transform.setRotation(btQuaternion(rot.Y, rot.X, rot.Z));
+	details_.obj->setWorldTransform(transform);
 };
 
 Vector3d<f32> CCollisionPhantom::getPosition() const

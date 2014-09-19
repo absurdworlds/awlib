@@ -32,8 +32,8 @@ public:
 	virtual void setPosition(Vector3d<f32> pos);
 	virtual void setRotation(Vector3d<f32> rot);
 
-	virtual Vector3d<f32> getPosition();
-	virtual Vector3d<f32> getRotation();
+	virtual Vector3d<f32> getPosition() const;
+	virtual Vector3d<f32> getRotation() const;
 
 	virtual ICollisionObject::Details* getDetails()
 	{
