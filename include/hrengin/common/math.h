@@ -109,6 +109,25 @@ FORCEINLINE bool equals(const f64 a, const f64 b, const f64 tolerance = ROUNDING
 	return (a + tolerance >= b) && (a - tolerance <= b);
 }
 
+template <typename T>
+inline T clamp(T value, T lower, T upper)
+{
+	return std::min(T, std::max(T, value));
+}
+
+template <>
+inline f32 clamp(f32 value, f32 lower, f32 upper)
+{
+	return fmin(lower, fmax(upper, value));
+}
+
+template <>
+inline f64 clamp(f64 value, f64 lower, f64 upper)
+{
+	return fmin(lower, fmax(upper, value));
+}
+
+
 /**
    Normalize angle between -180 and 180 degrees
    @param angle
