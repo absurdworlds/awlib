@@ -23,6 +23,9 @@ public:
 	virtual void setPosition(Vector3d<f32> pos) = 0;
 	virtual void setRotation(Vector3d<f32> rot) = 0;
 
+	virtual Vector3d<f32> getPosition() const = 0;
+	virtual Vector3d<f32> getRotation() const = 0;
+
 	virtual void setPointer(void* ptr)
 	{
 		pointer_ = ptr;

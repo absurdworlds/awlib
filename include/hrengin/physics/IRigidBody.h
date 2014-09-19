@@ -71,8 +71,8 @@ public:
 	};
 
 
-	virtual Vector3d<f32> getPosition() = 0;
-	virtual Vector3d<f32> getRotation() = 0;
+	virtual Vector3d<f32> getPosition() const = 0;
+	virtual Vector3d<f32> getRotation() const = 0;
 };
 
 } // namespace physics

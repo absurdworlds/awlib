@@ -8,6 +8,7 @@
  */
 
 #include "CCollisionPhantom.h"
+#include "hrToBullet.h"
 
 namespace hrengin {
 namespace physics {
@@ -28,7 +29,6 @@ void CCollisionPhantom::setPosition(Vector3d<f32> pos)
 	details_.obj->setWorldTransform(localTransform);
 };
 
-
 void CCollisionPhantom::setRotation(Vector3d<f32> rot) 
 {
 	btTransform localTransform;
@@ -40,6 +40,23 @@ void CCollisionPhantom::setRotation(Vector3d<f32> rot)
 		rot.Z*math::DEGTORAD64));
 	
 	details_.obj->setWorldTransform(localTransform);
+};
+
+Vector3d<f32> CCollisionPhantom::getPosition() const
+{
+	btVector3 pos = details_.obj->getWorldTransform().getOrigin();
+
+	return Vector3d<f32>(pos.getX(),pos.getY(),pos.getZ());
+};
+
+Vector3d<f32> CCollisionPhantom::getRotation() const
+{
+	btQuaternion rot = details_.obj->getWorldTransform().getRotation();
+	
+	btVector3 pos;
+	quaternionToEuler(rot,pos);
+
+	return Vector3d<f32>(pos.getX(),pos.getY(),pos.getZ());
 };
 
 } // namespace physics
