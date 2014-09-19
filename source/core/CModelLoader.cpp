@@ -172,6 +172,8 @@ bool hndfParseShapeNode(hdf::IHDFParser* hndf, IModel* model)
 				primitive.shape = SHAPE_CYLINDER;
 			} else if(type == "cone") {
 				primitive.shape = SHAPE_CONE;
+			} else if(type == "plane") {
+				primitive.shape = SHAPE_PLANE;
 			} else {
 				hndf->error(hdf::HDF_LOG_ERROR, "unknown 'type' value");
 				return false;

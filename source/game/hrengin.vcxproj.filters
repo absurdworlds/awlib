@@ -36,12 +36,6 @@
     <ClInclude Include="CEntityManager.h">
       <Filter>source</Filter>
     </ClInclude>
-    <ClInclude Include="CModel.h">
-      <Filter>source</Filter>
-    </ClInclude>
-    <ClInclude Include="CModelLoader.h">
-      <Filter>source</Filter>
-    </ClInclude>
     <ClInclude Include="CSimplePathfinder.h">
       <Filter>source</Filter>
     </ClInclude>
@@ -81,9 +75,6 @@
       <Filter>source</Filter>
     </ClCompile>
     <ClCompile Include="CWorld.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="CModelLoader.cpp">
       <Filter>source</Filter>
     </ClCompile>
     <ClCompile Include="CSimplePathfinder.cpp">

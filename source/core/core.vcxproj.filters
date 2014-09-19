@@ -183,6 +183,15 @@
     <ClInclude Include="..\..\include\hrengin\core\models.h">
       <Filter>include\core</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\common\Quaternion.h">
+      <Filter>include\common</Filter>
+    </ClInclude>
+    <ClInclude Include="CModelLoader.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="CModel.h">
+      <Filter>source</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CFileSystem.cpp">
@@ -211,6 +220,9 @@
     </ClCompile>
     <ClCompile Include="CHDFParser.cpp">
       <Filter>source\hdf</Filter>
+    </ClCompile>
+    <ClCompile Include="CModelLoader.cpp">
+      <Filter>source</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -15,13 +15,13 @@ namespace hrengin {
 
 class IModel;
 
-class IModelLoader
-{
+class IModelLoader {
 public:
+	virtual ~IModelLoader() {};
 	virtual IModel* loadModel(const char* filename) = 0;
 };
 
-HRENGIN_API IModelLoader* createModelLoader();
+HR_CORE_API IModelLoader* createModelLoader();
 
 } //end namespace hrengin
 

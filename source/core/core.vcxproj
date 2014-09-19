@@ -20,6 +20,7 @@
     <ClInclude Include="..\..\include\hrengin\common\Matrix4.h" />
     <ClInclude Include="..\..\include\hrengin\common\nowide.h" />
     <ClInclude Include="..\..\include\hrengin\common\PodString.h" />
+    <ClInclude Include="..\..\include\hrengin\common\Quaternion.h" />
     <ClInclude Include="..\..\include\hrengin\common\Rect.h" />
     <ClInclude Include="..\..\include\hrengin\common\singleton.h" />
     <ClInclude Include="..\..\include\hrengin\common\stringutils.h" />
@@ -58,6 +59,8 @@
     <ClInclude Include="CHDFParser.h" />
     <ClInclude Include="CHrenginShell.h" />
     <ClInclude Include="CLogger.h" />
+    <ClInclude Include="CModel.h" />
+    <ClInclude Include="CModelLoader.h" />
     <ClInclude Include="CReadFile.h" />
     <ClInclude Include="CSettingsManager.h" />
     <ClInclude Include="CHrenginPackage.h" />
@@ -69,6 +72,7 @@
     <ClCompile Include="CHDFParser.cpp" />
     <ClCompile Include="CHrenginShell.cpp" />
     <ClCompile Include="CLogger.cpp" />
+    <ClCompile Include="CModelLoader.cpp" />
     <ClCompile Include="CReadFile.cpp" />
     <ClCompile Include="CSettingsManager.cpp" />
     <ClCompile Include="hrenginfsutil.cpp" />

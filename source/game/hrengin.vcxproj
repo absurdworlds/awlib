@@ -124,15 +124,12 @@
     <ClInclude Include="..\..\include\hrengin\game\IWorld.h" />
     <ClInclude Include="CEntityManager.h" />
     <ClInclude Include="CEventManager.h" />
-    <ClInclude Include="CModel.h" />
-    <ClInclude Include="CModelLoader.h" />
     <ClInclude Include="CSimplePathfinder.h" />
     <ClInclude Include="CWorld.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CEntityManager.cpp" />
     <ClCompile Include="CEventManager.cpp" />
-    <ClCompile Include="CModelLoader.cpp" />
     <ClCompile Include="CSimplePathfinder.cpp" />
     <ClCompile Include="CWorld.cpp" />
     <ClCompile Include="Path.cpp" />
