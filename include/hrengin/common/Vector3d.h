@@ -299,9 +299,9 @@ public:
 		angle.X = T(atan2((f64)xz, (f64)Y) - math::HALF_PI64);
 		
 		// Normalize angles
-		if (angle.Y <= math::PI64) {
+		if (angle.Y <= -math::PI64) {
 			angle.Y += math::DOUBLE_PI64;
-		} else if (angle.Y > math::DOUBLE_PI64) {
+		} else if (angle.Y > math::PI64) {
 			angle.Y -= math::DOUBLE_PI64;
 		}
 		if (angle.X <= math::PI64) {
@@ -315,7 +315,7 @@ public:
 
 	T getYaw() const
 	{
-		T yaw = T(atan2((f64)X, (f64)Z) * math::RADTODEG64);
+		T yaw = T(atan2((f64)X, (f64)Z));
 		
 		if (yaw <= -math::PI64) {
 			yaw += math::DOUBLE_PI64;
