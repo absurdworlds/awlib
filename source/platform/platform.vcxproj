@@ -14,7 +14,7 @@
     <ClInclude Include="..\..\include\hrengin\platform\pointer_math.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="time.cpp" />
+    <ClCompile Include="windows\time.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{8F167D9D-4089-4663-82E1-61480E68881C}</ProjectGuid>

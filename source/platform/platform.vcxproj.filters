@@ -14,7 +14,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="time.cpp">
+    <ClCompile Include="windows\time.cpp">
       <Filter>source</Filter>
     </ClCompile>
   </ItemGroup>
