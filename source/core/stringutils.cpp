@@ -10,7 +10,7 @@
 #include <algorithm>
 
 #include <hrengin/common/types.h>
-#include <hrengin/io/fsutil.h>
+#include <hrengin/common/stringutils.h>
 
 namespace hrengin {
 namespace io {
