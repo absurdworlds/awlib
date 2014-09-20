@@ -9,7 +9,7 @@
 #ifndef _hrengin_IBufferedStream_
 #define _hrengin_IBufferedStream_
 
-#include <hrengin/core/ICharacterStream.h>
+#include <hrengin/io/ICharacterStream.h>
 
 namespace hrengin {
 namespace io {
@@ -20,7 +20,7 @@ class IBufferedStream : public ICharacterStream {
 public:
 };
 
-HR_CORE_API IBufferedStream* createBufferedStream(IReadFile* source);
+HR_PLATFORM_API IBufferedStream* createBufferedStream(IReadFile* source);
 
 } //namespace io
 } //namespace hrengin

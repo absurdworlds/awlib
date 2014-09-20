@@ -10,7 +10,7 @@
 #define _hrengin_CBufferedStream_
 
 #include <hrengin/common/types.h>
-#include <hrengin/core/IBufferedStream.h>
+#include <hrengin/io/IBufferedStream.h>
 
 namespace hrengin {
 namespace io {

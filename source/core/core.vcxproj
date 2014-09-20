@@ -41,6 +41,7 @@
     <ClInclude Include="..\..\include\hrengin\core\IHDFTreeReader.h" />
     <ClInclude Include="..\..\include\hrengin\core\IHDFTreeWriter.h" />
     <ClInclude Include="..\..\include\hrengin\core\IHDFWriter.h" />
+    <ClInclude Include="..\..\include\hrengin\core\IHrenginPackage.h" />
     <ClInclude Include="..\..\include\hrengin\core\ILogger.h" />
     <ClInclude Include="..\..\include\hrengin\core\IModel.h" />
     <ClInclude Include="..\..\include\hrengin\core\IModelLoader.h" />
@@ -53,29 +54,23 @@
     <ClInclude Include="..\..\include\hrengin\core\models.h" />
     <ClInclude Include="..\..\include\hrengin\header_preset.h" />
     <ClInclude Include="..\..\include\hrengin\resources\default_settings.h" />
-    <ClInclude Include="CBufferedStream.h" />
-    <ClInclude Include="CCharacterStream.h" />
     <ClInclude Include="CFileSystem.h" />
     <ClInclude Include="CHDFParser.h" />
     <ClInclude Include="CHrenginShell.h" />
     <ClInclude Include="CLogger.h" />
     <ClInclude Include="CModel.h" />
     <ClInclude Include="CModelLoader.h" />
-    <ClInclude Include="CReadFile.h" />
     <ClInclude Include="CSettingsManager.h" />
     <ClInclude Include="CHrenginPackage.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="CBufferedStream.cpp" />
-    <ClCompile Include="CCharacterStream.cpp" />
     <ClCompile Include="CFileSystem.cpp" />
     <ClCompile Include="CHDFParser.cpp" />
     <ClCompile Include="CHrenginShell.cpp" />
     <ClCompile Include="CLogger.cpp" />
     <ClCompile Include="CModelLoader.cpp" />
-    <ClCompile Include="CReadFile.cpp" />
     <ClCompile Include="CSettingsManager.cpp" />
-    <ClCompile Include="hrenginfsutil.cpp" />
+    <ClCompile Include="fsutil.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{74AD5236-2D65-440E-A517-4EF8B52EE555}</ProjectGuid>
@@ -134,7 +129,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>hrengin.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>hrengin.lib;hrplatform.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ImportLibrary>$(SolutionDir)lib\win32-msvc-debug\$(TargetName).lib</ImportLibrary>
     </Link>
     <CustomBuildStep>

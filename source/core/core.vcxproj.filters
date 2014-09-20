@@ -16,9 +16,6 @@
     <Filter Include="include\common\locale">
       <UniqueIdentifier>{51aaaf4c-ed27-4c0d-90b8-3cc80ac7a092}</UniqueIdentifier>
     </Filter>
-    <Filter Include="source\io">
-      <UniqueIdentifier>{31af56e6-5219-420b-bbb7-4b2b7180ff4c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="source\hdf">
       <UniqueIdentifier>{e4edd400-acc6-4a7f-a52e-08ff9dd85bb9}</UniqueIdentifier>
     </Filter>
@@ -102,15 +99,6 @@
     <ClInclude Include="CSettingsManager.h">
       <Filter>source</Filter>
     </ClInclude>
-    <ClInclude Include="CBufferedStream.h">
-      <Filter>source\io</Filter>
-    </ClInclude>
-    <ClInclude Include="CReadFile.h">
-      <Filter>source\io</Filter>
-    </ClInclude>
-    <ClInclude Include="CCharacterStream.h">
-      <Filter>source\io</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\hrengin\common\singleton.h">
       <Filter>include\common</Filter>
     </ClInclude>
@@ -192,12 +180,12 @@
     <ClInclude Include="CModel.h">
       <Filter>source</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\core\IHrenginPackage.h">
+      <Filter>include\core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CFileSystem.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="hrenginfsutil.cpp">
       <Filter>source</Filter>
     </ClCompile>
     <ClCompile Include="CHrenginShell.cpp">
@@ -206,22 +194,16 @@
     <ClCompile Include="CLogger.cpp">
       <Filter>source</Filter>
     </ClCompile>
-    <ClCompile Include="CBufferedStream.cpp">
-      <Filter>source\io</Filter>
-    </ClCompile>
-    <ClCompile Include="CReadFile.cpp">
-      <Filter>source\io</Filter>
-    </ClCompile>
     <ClCompile Include="CSettingsManager.cpp">
       <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="CCharacterStream.cpp">
-      <Filter>source\io</Filter>
     </ClCompile>
     <ClCompile Include="CHDFParser.cpp">
       <Filter>source\hdf</Filter>
     </ClCompile>
     <ClCompile Include="CModelLoader.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="fsutil.cpp">
       <Filter>source</Filter>
     </ClCompile>
   </ItemGroup>

@@ -9,6 +9,10 @@
 #ifndef _hrengin_api_
 #define _hrengin_api_
 
+#include <hrengin/common/config.h>
+
+#ifdef _HR_ØINDOWS
+
 #ifdef HRENGIN_HRENGIN
 	#define HRENGIN_API __declspec(dllexport)
 #else
@@ -54,4 +58,8 @@
 #else
 	#define HR_PLATFORM_API __declspec(dllimport)
 #endif
+
+#else
+#endif
+
 #endif//_hrengin_api_

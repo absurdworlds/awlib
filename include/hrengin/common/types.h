@@ -49,4 +49,5 @@ typedef u8 byte;
 #endif
 
 } // namespace hrengin
+
 #endif //_hrengin_types_

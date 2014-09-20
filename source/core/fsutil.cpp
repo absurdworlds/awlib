@@ -10,12 +10,12 @@
 #include <algorithm>
 
 #include <hrengin/common/types.h>
-#include <hrengin/core/hrenginfsutil.h>
+#include <hrengin/io/fsutil.h>
 
 namespace hrengin {
 namespace io {
 
-std::string getFileExtension(std::string& dest, const std::string& path)
+std::string getFileExtension(std::string& dest, std::string const& path)
 {
 	u32 extpos = path.find_last_of(".");
 
@@ -30,5 +30,5 @@ std::string getFileExtension(std::string& dest, const std::string& path)
 	return dest;
 }
 
-}
-}
+} // namespace io
+} // namespace hrengin

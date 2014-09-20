@@ -10,7 +10,7 @@
 #define _hrengin_CCharacterStream_
 
 #include <hrengin/common/types.h>
-#include <hrengin/core/ICharacterStream.h>
+#include <hrengin/io/ICharacterStream.h>
 
 namespace hrengin {
 namespace io {

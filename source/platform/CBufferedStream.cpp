@@ -7,7 +7,7 @@
    There is NO WARRANTY, to the extent permitted by law.
  */
 
-#include <hrengin/core/IReadFile.h>
+#include <hrengin/io/IReadFile.h>
 
 #include "CBufferedStream.h"
 

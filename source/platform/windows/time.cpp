@@ -3,7 +3,7 @@
 #include <Windows.h>
 
 #include <hrengin/common/time.h>
-#include <hrengin/common/api.h>
+#include <hrengin/platform/api.h>
 
 namespace hrengin {
 
@@ -25,8 +25,6 @@ HR_PLATFORM_API u32 getTime()
 	}
 
 	return 0;
-#if 0
-#endif
 }
 
 } // namespace hrengin
