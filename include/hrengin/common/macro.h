@@ -6,29 +6,29 @@
    This is free software: you are free to change and redistribute it.
    There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_hrenginmacro_
-#define _hrengin_hrenginmacro_
+#ifndef _hrengin_macro_
+#define _hrengin_macro_
 
 #include <hrengin/common/config.h>
 
-/* Make a bit mask of a desired bit */
+/*! Make a bit mask of a desired bit */
 #define BIT(x) (1<<(x))
 
 #define __FUNC__ __func__ 
 
-/* Stringize */
+/*! Stringize */
 #define TO_STR(x) TO_STR1(x)
 #define TO_STR1(x) #x
 
-/* Concatenate */
+/*! Concatenate */
 #define CONCAT(arg1, arg2)   CONCAT1(arg1, arg2)
 #define CONCAT1(arg1, arg2)  CONCAT2(arg1, arg2)
 #define CONCAT2(arg1, arg2)  arg1##arg2
 
-/* Expand tokens — some preprocessors glue __VA_ARGS__ */
+/*! Expand tokens — some preprocessors glue __VA_ARGS__ */
 #define EXPAND(x) x
 
-/* Vararg processing macros
+/*! Vararg processing macros
    Uses the trick: depending on number of arguments, the desired macro shifts
    to a NAME position.
 
@@ -62,4 +62,13 @@
 	#define BRANCH_EXPECT(X, V)	X
 #endif
 
-#endif//_hrengin_hrenginmacro_
+// Force inline macro
+#ifndef FORCEINLINE
+	#ifdef _MSC_VER
+		#define FORCEINLINE __forceinline
+	#else
+		#define FORCEINLINE inline
+	#endif
+#endif
+
+#endif//_hrengin_macro_

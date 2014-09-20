@@ -14,7 +14,7 @@
 #include <limits.h>
 #include <float.h>
 
-#include <hrengin/common/config.h>
+#include <hrengin/common/macro.h>
 #include <hrengin/common/types.h>
 
 
@@ -112,19 +112,19 @@ FORCEINLINE bool equals(const f64 a, const f64 b, const f64 tolerance = ROUNDING
 template <typename T>
 inline T clamp(T value, T lower, T upper)
 {
-	return std::min(T, std::max(T, value));
+	return std::max(upper, std::min(T, lower));
 }
 
 template <>
 inline f32 clamp(f32 value, f32 lower, f32 upper)
 {
-	return fmin(lower, fmax(upper, value));
+	return fmaxf(lower, fmin(value, upper));
 }
 
 template <>
 inline f64 clamp(f64 value, f64 lower, f64 upper)
 {
-	return fmin(lower, fmax(upper, value));
+	return fmax(lower, fmin(value, upper));
 }
 
 

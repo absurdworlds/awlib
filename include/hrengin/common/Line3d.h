@@ -18,6 +18,11 @@ namespace hrengin {
 template<typename T>
 class Segment3d {
 public:
+	Segment3d()
+		: start(0, 0, 0), end(1, 0, 0)
+	{
+	}
+
 	Segment3d(T ax, T ay, T az, T bx, T by, T bz)
 		: start(ax, ay, az), end(bx, by, bz)
 	{
@@ -27,6 +32,15 @@ public:
 		: start_(start), end_(end)
 	{
 	}
+		
+	Segment3d<T>& operator = (const Segment3d<T>& line)
+	{
+		start = line.start;
+		end = line.end;
+
+		return *this;
+	}
+
 
 	Vector3d<T> getNormalPoint(Vector3d<T> const& point) const
 	{
@@ -42,7 +56,7 @@ public:
 	
 	Vector3d<T> getClosestPoint(Vector3d<T> const& point) const
 	{
-		Vector3d<T> a = direction();
+		Vector3d<T> a = vector();
 		Vector3d<T> b = point - start;
 
 		T length = a.length();
@@ -82,13 +96,14 @@ public:
 	}
 
 public:
-	Vector3d<T> start_;
-	Vector3d<T> end_;
+	Vector3d<T> start;
+	Vector3d<T> end;
 };
 
 /* Alias for Segment3d */
 template<typename T>
 using Line3d = Segment3d<T>;
+
 
 } // namespace hrengin
 
