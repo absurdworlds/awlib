@@ -7,7 +7,7 @@
 
 namespace hrengin {
 
-HRG_PLATFORM_API u32 getTime()
+HR_PLATFORM_API u32 getTime()
 {
 	//borrowed from Irrlicht, temporary
 	LARGE_INTEGER HighPerformanceFreq;
@@ -20,8 +20,9 @@ HRG_PLATFORM_API u32 getTime()
 	
 	SetThreadAffinityMask(GetCurrentThread(), affinityMask);
 
-	if(queriedOK)
+	if(queriedOK) {
 		return u32((ticks.QuadPart) * 1000 / HighPerformanceFreq.QuadPart);
+	}
 
 	return 0;
 #if 0
