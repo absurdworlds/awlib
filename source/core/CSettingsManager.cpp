@@ -8,11 +8,11 @@
  */
 
 #include <hrengin/resources/default_settings.h>
-#include <hrengin/core/IHDFParser.h>
-#include <hrengin/core/IReadFile.h>
-#include <hrengin/core/ICharacterStream.h>
-#include <hrengin/core/IBufferedStream.h>
 #include <hrengin/common/singleton.h>
+#include <hrengin/core/IHDFParser.h>
+#include <hrengin/io/IReadFile.h>
+#include <hrengin/io/ICharacterStream.h>
+#include <hrengin/io/IBufferedStream.h>
 
 #include "CSettingsManager.h"
 

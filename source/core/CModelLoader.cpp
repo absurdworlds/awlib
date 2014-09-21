@@ -9,10 +9,12 @@
 
 #include <hrengin/core/models.h>
 #include <hrengin/core/hrenginpaths.h>
-#include <hrengin/core/hrenginfsutil.h>
+#include <hrengin/io/fsutil.h>
+
 #include <hrengin/core/IFileSystem.h>
-#include <hrengin/core/IReadFile.h>
-#include <hrengin/core/IBufferedStream.h>
+
+#include <hrengin/io/IReadFile.h>
+#include <hrengin/io/IBufferedStream.h>
 #include <hrengin/core/IHDFParser.h>
 
 #include <hrengin/core/IModel.h>

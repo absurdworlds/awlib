@@ -7,7 +7,7 @@
    There is NO WARRANTY, to the extent permitted by law.
  */
 
-#include <hrengin/core/IBufferedStream.h>
+#include <hrengin/io/IBufferedStream.h>
 
 #include <hrengin/common/types.h>
 #include <hrengin/common/Vector2d.h>
