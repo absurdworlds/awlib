@@ -20,6 +20,11 @@ hrengin TODO list
 + [ ] Write interface for rendering vertex primitives
 + [ ] IInputManager: revert receiver list from std::forward_list to std::vector
 + [ ] IInputManager: split into subclasses
++ [ ] Finish OGRE wrapper
+    * [ ] Model, texture loading
+    * [ ] Scene rendering
+    * [ ] GUI
++ [ ] Re-add OSG wrapper
 
 ## gui
 
@@ -51,3 +56,4 @@ hrengin TODO list
 
 + [ ] Test custom allocator for units: spawn 10000 units w/o visual model, moving in circles, and measure time taken for event manager to process all of them with and without custom continuous allocator
 + [ ] Write doxygen documentation
++ [ ] Write GNU makefiles
