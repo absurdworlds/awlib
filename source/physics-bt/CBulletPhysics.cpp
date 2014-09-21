@@ -197,7 +197,6 @@ btCollisionShape* CBulletPhysics::createPrimitiveShape(Primitive shape)
 	default:
 		return new btEmptyShape;
 	}
-
 }
 
 u32 CBulletPhysics::addShape(IModel* model)

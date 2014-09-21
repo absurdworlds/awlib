@@ -32,8 +32,8 @@ void quaternionToEuler(btQuaternion const& quat, btVector3& euler) {
 		f32 const sY = Y * Y;
 		f32 const sZ = Z * Z;
 		
-		euler.setX(atan2(2*(X*W - Y*Z) , 1 - 2*sX - 2*sZ));
-		euler.setY(atan2(2*(Y*W - X*Z) , 1 - 2*sY - 2*sZ));
+		euler.setX(atan2(2*(X*W - Y*Z), 1 - 2*sX - 2*sZ));
+		euler.setY(atan2(2*(Y*W - X*Z), 1 - 2*sY - 2*sZ));
 		euler.setZ(asin(2*test));
 	}
 
