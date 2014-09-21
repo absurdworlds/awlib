@@ -101,8 +101,8 @@ public:
 	// set entity's rotation
 	virtual void setRotation(Vector3d<f32> rotation) = 0;
 
-	virtual void getPosition(Vector3d<f32> position) = 0;
-	virtual void getRotation(Vector3d<f32> rotation) = 0;
+	virtual Vector3d<f32> getPosition() const = 0;
+	virtual Vector3d<f32> getRotation() const = 0;
 	
 protected: /* Methods */
 	virtual void enterDeleteQueue() = 0;

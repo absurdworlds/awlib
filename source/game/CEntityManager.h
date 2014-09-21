@@ -12,6 +12,8 @@
 #include <vector>
 #include <deque>
 
+#include <hrengin/common/Vector3d.h>
+
 #include <hrengin/game/IBaseEntity.h>
 #include <hrengin/game/IEntityManager.h>
 
@@ -24,6 +26,8 @@ private:
 		void sync() {};
 		void setPosition(Vector3d<f32> position) {};
 		void setRotation(Vector3d<f32> position) {};
+		Vector3d<f32> getPosition() const {return Vector3d<f32>(0,0,0);};
+		Vector3d<f32> getRotation() const {return Vector3d<f32>(0,0,0);};
 		void onParentRemove() {};
 		void enterDeleteQueue() {};
 	} nullEntity;
