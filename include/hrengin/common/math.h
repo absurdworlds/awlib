@@ -158,8 +158,8 @@ inline f32 wrapAngleRad(f32 angle)
 		: angle;
 }
 
-/* Interpolate values v0 and v1 by parameter t */
-inline f32 lerp(float v0, float v1, float t)
+//! Interpolate values v0 and v1 by parameter t
+inline f32 lerp(f32 v0, f32 v1, f64 t)
 {
 	return (1-t)*v0 + t*v1;
 }

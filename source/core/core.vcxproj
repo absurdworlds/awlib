@@ -70,7 +70,7 @@
     <ClCompile Include="CLogger.cpp" />
     <ClCompile Include="CModelLoader.cpp" />
     <ClCompile Include="CSettingsManager.cpp" />
-    <ClCompile Include="fsutil.cpp" />
+    <ClCompile Include="stringutils.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{74AD5236-2D65-440E-A517-4EF8B52EE555}</ProjectGuid>
