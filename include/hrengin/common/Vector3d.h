@@ -174,11 +174,11 @@ public:
 		return *this; 
 	}
 	
-	// Normalize the vector
+	//! Normalize the vector
 	Vector3d<T>& normalize()
 	{
 		f64 length = squareLength();
-		if (length == 0 ) {
+		if (length == 0) {
 			return *this;
 		}
 
@@ -187,16 +187,18 @@ public:
 		X = (T)(X * length);
 		Y = (T)(Y * length);
 		Z = (T)(Z * length);
+
 		return *this;
 	}
 
-	// Get a normalized version of a vector without modifying it
+	//! Get a normalized version of a vector without modifying it
 	Vector3d<T> normalized() const
 	{
 		f64 length = squareLength();
 		if (length == 0 ) {
 			return Vector3d<T>();
 		}
+
 		length = math::invSqrt(length);
 
 		return Vector3d<T>((T)(X * length), (T)(Y * length), (T)(Z * length));
@@ -261,27 +263,13 @@ public:
 		return *this;
 	}
 	
-	/** Interpolate this vector with other vector
-	   
-	   @param[other]	the other vector to interpolate with
-	   @param[t]		the value to use to interpolate between this and other.
-		must be in range [0,1]
-	 */
-	Vector3d<T> lerp (const Vector3d<T>& other, f64 t) const
-	{
-		const f64 inv = 1.0 - d;
-		return Vector3d<T>(T(X*inv + other.X*d),
-			T(Y*inv + other.Y*d),
-			T(Z*inv + other.Z*d));
-	}
-	
 	/**
 	   Get euler angles that when applied to a (0,0,1) direction vector
 	   would make it point in the same direction as this vector.
 
 	   Original author of this method is Arras from the Irrlicht forums
 
-	   @return
+	   \return
 	   A rotation vector containing the X (pitch) and Y (raw)
 	   rotations in degrees, of this vector.
 	   The Z (roll) rotation is always 0, since two rotations are sufficient.
@@ -340,7 +328,7 @@ public:
 		return pitch * math::RADTODEG64;
 	}
 
-	// Fill an array of 4 values with the vector data
+	//! Fill an array of 4 values with the vector data
 	void toArrayOf4(T* array) const
 	{
 		array[0] = X;
@@ -349,7 +337,7 @@ public:
 		array[3] = 0;
 	}
 
-	// Fill an array of 3 values with the vector data
+	//! Fill an array of 3 values with the vector data
 	void toArrayOf3(T* array) const
 	{
 		array[0] = X;
@@ -381,6 +369,22 @@ Vector3d<T> operator * (const S scalar, const Vector3d<T>& vector)
 	return vector * scalar; 
 }
 
+/** Interpolate two vectors
+	
+	\param v0 The first vector to interpolate
+	\param v1 The other vector to interpolate with.
+	\param t The value to use to interpolate between v0 and v1
+	Must be in range [0,1].
+	\return Interpolated vector
+	*/
+template<typename T>
+Vector3d<T> lerp (Vector3d<T> const& v0, Vector3d<T> const& v1, f64 t)
+{
+	f64 const inv = 1.0 - t;
+	return Vector3d<T>(T(v0.X*inv + v1.X*t),
+		T(v0.Y*inv + v1.Y*t),
+		T(v0.Z*inv + v1.Z*t));
+}
 
 } // namespace hrengin
 
