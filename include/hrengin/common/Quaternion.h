@@ -32,7 +32,7 @@ public:
 	/*!
 	\brief Construct quaternion using individual components.
 	 */
-	Quaternion(T const& X, T const& Y, T const& Z, T const& W)
+	Quaternion(T const X, T const Y, T const Z, T const W)
 		: X(X), Y(Y), Z(Z), W(W)
 	{
 	}
@@ -41,7 +41,7 @@ public:
 	/*!
 	\brief Construct quaternion from euler angles.
 	 */
-	Quaternion(T const& pitch, T const& yaw, T const& roll)
+	Quaternion(T const pitch, T const yaw, T const roll)
 	{
 		setEuler(pitch, yaw, roll);
 	}
@@ -58,8 +58,18 @@ public:
 	/*!
 	\brief Construct quaternion using axis and rotation around given axis.
 	 */
-	Quaternion(Vector3d<T> const& axis, T const& rotation)
+	Quaternion(Vector3d<T> const& axis, T const& angle)
 	{
+		Vector3d const v = axis.normalized() * sin(angle/2);
+		set(v.X, v.Y, v.Z, cos(angle/2));
+	}
+
+	void set(T const x, T const y, T const z, T const w)
+	{
+		X = x;
+		Y = y;
+		Z = z;
+		W = w;
 	}
 
 	void set(Quaternion<T> const& other)
@@ -69,12 +79,111 @@ public:
 		Z = other.Z;
 		W = other.W;
 	}
+	
+	Quaternion<T> operator + (Quaternion<T> const& other) const
+	{
+		return Quaternion<T>(X + other.X, Y + other.Y, Z + other.Z, W + other.W); 
+	}
 
-	Quaternion<T>& setEuler(T x, T y, T z)
+	Quaternion<T>& operator += (Quaternion<T> const& other)
+	{ 
+		X += other.X;
+		Y += other.Y;
+		Z += other.Z;
+		W += other.W;
+		return *this;
+	}
+
+	Quaternion<T> operator + (T const val) const
+	{
+		return Quaternion<T>(X + val, Y + val, Z + val, W + val);
+	}
+
+	Quaternion<T>& operator += (T const val)
+	{
+		X += val;
+		Y += val;
+		Z += val;
+		W += val;
+		return *this;
+	}
+
+	Quaternion<T> operator - (Quaternion<T> const& other) const
+	{
+		return Quaternion<T>(X - other.X, Y - other.Y, Z - other.Z, W - other.W);
+	}
+
+	Quaternion<T>& operator -= (Quaternion<T> const& other)
+	{
+		X -= other.X;
+		Y -= other.Y;
+		Z -= other.Z;
+		W -= other.Z;
+		return *this;
+	}
+	
+	Quaternion<T> operator - (T const val) const
+	{
+		return Quaternion<T>(X - val, Y - val, Z - val, W - val);
+	}
+
+	Quaternion<T>& operator -= (T const val)
+	{
+		X -= val;
+		Y -= val;
+		Z -= val;
+		W -= val;
+		return *this;
+	}
+
+	Quaternion<T> operator - () const
+	{
+		return Quaternion<T>(-X, -Y, -Z, -W);
+	}
+	
+	Quaternion<T> operator * (Quaternion<T> const& other) const
+	{
+		Quaternion<T> q0;
+
+		q0.X = (X * other.W) + (W * other.X) + (Z * other.Y) - (Y * other.Z);
+		q0.Y = (Y * other.W) - (Z * other.X) + (W * other.Y) + (X * other.Z);
+		q0.Z = (Z * other.W) + (Y * other.X) - (X * other.Y) + (W * other.Z);
+		q0.W = (W * other.W) - (X * other.X) - (Y * other.Y) - (Z * other.Z);
+
+		return q0;
+	}
+	
+	Quaternion<T>& operator *= (Quaternion<T> const& other)
+	{
+		X = (X * other.W) + (W * other.X) + (Z * other.Y) - (Y * other.Z);
+		Y = (Y * other.W) - (Z * other.X) + (W * other.Y) + (X * other.Z);
+		Z = (Z * other.W) + (Y * other.X) - (X * other.Y) + (W * other.Z);
+		W = (W * other.W) - (X * other.X) - (Y * other.Y) - (Z * other.Z);
+
+		return *this;
+	}
+	
+	Quaternion<T> operator * (T const val) const
+	{
+		return Quaternion<T>(X*val, Y*val, Z*val, W*val);
+	}
+	
+	Quaternion<T>& operator *= (T const val)
+	{
+		X *= val;
+		Y *= val;
+		Z *= val;
+		W *= val;
+
+		return *this;
+	}
+
+	
+	Quaternion<T>& setEuler(T const x, T const y, T const z)
 	{
 	
 	}
-	
+
 	//! Get quaternion as euler angles
 	Vector3d<T> getEuler()
 	{
@@ -124,61 +233,84 @@ public:
 		return *this;
 	}
 	
+	Quaternion<T>& normalized()
+	{
+		T mag = X*X + Y*Y + Z*Z + W*W;
+		if(math::equals(mag, T(1.0))) {
+			return *this;
+		}
+
+		mag = math::invSqrt(mag);
+
+		X *= mag;
+		Y *= mag;
+		Z *= mag;
+		W *= mag;
+
+		return Quaternion<T>(T(X*mag), T(Y*mag), T(Z*mag), T(W*mag));
+	}
+	
 	T X;
 	T Y;
 	T Z;
 	T W;
 };
 
+
+//! Multiply quaternion by scalar
+template<class S, class T>
+Quaternion<T> operator * (S const scalar, Quaternion<T> const& quat)
+{
+	return quat * scalar; 
+}
+
 template <typename T>
 Quaternion<T>& lerp (Quaternion<T> const& q0, Quaternion<T> const& q1, f64 t)
 {
-	
-	f64 const inv = 1.0 - t;
-	return Quaternion<T>(T(v0.X*inv + v1.X*t),
-		T(v0.Y*inv + v1.Y*t),
-		T(v0.Z*inv + v1.Z*t),
-		T(v0.W*inv + v1.W*t));
+	return (1-t)*q0 + t*q1;
 }
 
 template <typename T>
-Quaternion<T>& nlerp (Quaternion<T> const& q0, Quaternion<T> const& q1, f64 t)
+Quaternion<T> nlerp (Quaternion<T> const& q0, Quaternion<T> const& q1, f64 t)
 {
-	return lerp(q1, q2, t).normalized();
+	return lerp(q0, q1, t).normalize();
 }
+
 template <typename T>
-Quaternion<T> slerp (Quaternion<T> const& q1, Quaternion<T> const& q2,
-	f64 alpha, f64 threshold = 0.995)
+Quaternion<T> slerp (Quaternion<T> const& q0, Quaternion<T> const& q1,
+	f64 alpha, bool shortest)
 {
-	T dot = dot(other);
-	
-	if(dot > T(threshold)) {
-		return lerp(q1, q2, alpha);
-	}
+	T tCos = q0.dot(q1);
 
 	// use shortest path
-	if (dot < 0) {
-		q1.x = -q1.x;
-		q1.y = -q1.y; 
-		q1.z = -q1.z;
+	if (tCos < 0 && shortest) {
+		q0 = -q0;
 		dot = -dot;
 	}
+
+	static T const epsilon = T(0.005);
+	if(tCos > (1 - epsilon)) {
+		return nlerp(q0, q1, alpha);
+	}
+
+	T const tSin = sqrt(1.0 - tCos*tCos);
+	T const theta = atan2(tSin, tCos);
+	
+	T const invSin = 1/tSin;
+	T const t1 = sin((1.0 - alpha)*theta) * invSin;
+	T const t2 = sin(alpha*theta) * invSin;
+
+	return t1*q0 + t2*q1;
 
 #if 0 // alternative implementation
 	math::clamp(dot, T(-1.0), T(1.0));
 	T const theta = acos(dot) * alpha;
 
-	Quaternion<T> q3 = q2 - q1*dot;
-	q3.normalize();
+	Quaternion<T> q2 = q1 - q0*dot;
+	q2.normalize();
 
-	set(q1*sin(theta) + q3*cos(theta))
-#else
-	T const theta = acos(dot);
-	T const rsin = 1/sqrt(1.0 - dot*dot);
-	T const t1 = sin((1.0 - alpha)*theta) * rsin;
-	T const t2 = sin(alpha*theta) * rsin;
+	return sin(theta)*q0 + cos(theta)*q2;
 #endif
-	return q1*t1 + q2*t2;
 }
 
 
