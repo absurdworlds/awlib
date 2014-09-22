@@ -15,13 +15,44 @@
    License along with this program.  If not, see
    <http://www.gnu.org/licenses/>. 
  */
-#ifndef _hrengin_
-#define _hrengin_
+#ifndef _hrengin_hrengin_
+#define _hrengin_hrengin_
 
+//! Main namespace, contains everything else
 namespace hrengin {
-namespace {
 
-} // namespace
+// List of namespaces for Doxygen
+
+//! Contains everything related to visual output
+namespace graphics {
+}
+
+//! Everything related to GUI and user input
+namespace gui {
+}
+
+//! Everything related to audio output contained in this namespace
+namespace sound {
+}
+
+//! Wrapper for physics library
+namespace physics {
+}
+
+//! Everything related to file & std io is found in this namespace
+namespace io {
+}
+
+//! Contains all of hrengin's core functionality
+namespace core {
+}
+
+//! Utilities for processing the HDF file format
+namespace hdf {
+}
+
+
+
 } // namespace hrengin
 
-#endif //_hrengin_
+#endif //_hrengin_hrengin_
