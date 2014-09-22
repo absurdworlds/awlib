@@ -24,7 +24,7 @@ public:
 	\brief Represents zero rotation.
 	 */
 	Quaternion()
-		: X(0.0), Y(0.0), Z(0.0), W(1.0)
+		: W(1.0), X(0.0), Y(0.0), Z(0.0)
 	{
 	}
 	
@@ -32,8 +32,8 @@ public:
 	/*!
 	\brief Construct quaternion using individual components.
 	 */
-	Quaternion(T const X, T const Y, T const Z, T const W)
-		: X(X), Y(Y), Z(Z), W(W)
+	Quaternion( T const W, T const X, T const Y, T const Z)
+		: W(W), X(X), Y(Y), Z(Z)
 	{
 	}
 	
@@ -64,7 +64,7 @@ public:
 		setAxisAngle(axis, angle);
 	}
 
-	void set(T const x, T const y, T const z, T const w)
+	void set(T const w, T const x, T const y, T const z)
 	{
 		X = x;
 		Y = y;
@@ -82,7 +82,7 @@ public:
 	
 	Quaternion<T> operator + (Quaternion<T> const& other) const
 	{
-		return Quaternion<T>(X + other.X, Y + other.Y, Z + other.Z, W + other.W); 
+		return Quaternion<T>(W + other.W, X + other.X, Y + other.Y, Z + other.Z); 
 	}
 
 	Quaternion<T>& operator += (Quaternion<T> const& other)
@@ -96,7 +96,7 @@ public:
 
 	Quaternion<T> operator + (T const val) const
 	{
-		return Quaternion<T>(X + val, Y + val, Z + val, W + val);
+		return Quaternion<T>(W + val, X + val, Y + val, Z + val);
 	}
 
 	Quaternion<T>& operator += (T const val)
@@ -110,7 +110,7 @@ public:
 
 	Quaternion<T> operator - (Quaternion<T> const& other) const
 	{
-		return Quaternion<T>(X - other.X, Y - other.Y, Z - other.Z, W - other.W);
+		return Quaternion<T>(W - other.W, X - other.X, Y - other.Y, Z - other.Z);
 	}
 
 	Quaternion<T>& operator -= (Quaternion<T> const& other)
@@ -124,7 +124,7 @@ public:
 	
 	Quaternion<T> operator - (T const val) const
 	{
-		return Quaternion<T>(X - val, Y - val, Z - val, W - val);
+		return Quaternion<T>(W - val, X - val, Y - val, Z - val);
 	}
 
 	Quaternion<T>& operator -= (T const val)
@@ -138,7 +138,7 @@ public:
 
 	Quaternion<T> operator - () const
 	{
-		return Quaternion<T>(-X, -Y, -Z, -W);
+		return Quaternion<T>(-W, -X, -Y, -Z);
 	}
 	
 	Quaternion<T> operator * (Quaternion<T> const& other) const
@@ -165,7 +165,7 @@ public:
 	
 	Quaternion<T> operator * (T const val) const
 	{
-		return Quaternion<T>(X*val, Y*val, Z*val, W*val);
+		return Quaternion<T>(W*val, X*val, Y*val, Z*val);
 	}
 	
 	Quaternion<T>& operator *= (T const val)
@@ -207,7 +207,7 @@ public:
 
 		Vector3d<T> const v = axis.normalized() * sin(angle);
 
-		set(v.X, v.Y, v.Z, cos(angle));
+		set(cos(angle), v.X, v.Y, v.Z);
 	}
 
 	//! Get quaternion as euler angles
