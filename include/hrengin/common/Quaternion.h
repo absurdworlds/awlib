@@ -52,16 +52,16 @@ public:
 	 */
 	Quaternion(Vector3d<T> const& euler)
 	{
+		setEuler(euler.X, euler.Y, euler.Z);
 	}
 	
 	//! Constructor
 	/*!
 	\brief Construct quaternion using axis and rotation around given axis.
 	 */
-	Quaternion(Vector3d<T> const& axis, T const& angle)
+	Quaternion(Vector3d<T> const& axis, T const angle)
 	{
-		Vector3d const v = axis.normalized() * sin(angle/2);
-		set(v.X, v.Y, v.Z, cos(angle/2));
+		setAxisAngle(axis, angle);
 	}
 
 	void set(T const x, T const y, T const z, T const w)
@@ -118,7 +118,7 @@ public:
 		X -= other.X;
 		Y -= other.Y;
 		Z -= other.Z;
-		W -= other.Z;
+		W -= other.W;
 		return *this;
 	}
 	
@@ -178,16 +178,41 @@ public:
 		return *this;
 	}
 
-	
-	Quaternion<T>& setEuler(T const x, T const y, T const z)
+	//! Set quaternion from euler angles
+	void setEuler(T x, T y, T z)
 	{
+		x *= T(0.5 * math::DEGTORAD64);
+		y *= T(0.5 * math::DEGTORAD64);
+		z *= T(0.5 * math::DEGTORAD64);
+
+		T const sx = sin(x);
+		T const cx = sin(x);
+
+		T const sy = sin(y);
+		T const cy = sin(y);
+
+		T const sz = sin(z);
+		T const cz = sin(z);
+
+		X = sx*sy*cz + cx*cy*sz;
+		Y = sx*cy*cz + cx*sy*sz;
+		Z = cx*sy*cz - sx*cy*sz;
+		W = cx*cy*cz - sx*sy*sz;
+	}
 	
+	void setAxisAngle(Vector3d<T> const& axis, T angle)
+	{
+		angle /= T(2.0);
+		angle *= math::DEGTORAD64;
+
+		Vector3d<T> const v = axis.normalized() * sin(angle);
+
+		set(v.X, v.Y, v.Z, cos(angle));
 	}
 
 	//! Get quaternion as euler angles
-	Vector3d<T> getEuler()
+	void toEuler(Vector3d<T>& euler)
 	{
-		Vector3d euler;
 		// singularity test
 		f32 const test = X*Y + Z*W;
 		if (math::equals(test, 0.5f)) { // north pole
@@ -208,8 +233,32 @@ public:
 			euler.Z = asin(2*test);
 		}
 
-		return euler * math::RADTODEG64;
+		euler *= math::RADTODEG64;
 	}
+	
+	//! Get quaternion in axis-angle representation
+	void toAxisAngle(Vector3d<T>& axis, T& angle) const
+	{
+		T const tCos = W;
+		T tSin = T(1.0) - W*W;
+		// T tSin = X*X + Y*Y + Z*Z;
+
+		if(tSin > T(0.0)) {
+			tSin = T(sqrt(tSin));
+			T invSin = 1 / tSin;
+			
+			angle = T(2.0 * atan2(tSin, tCos));
+			axis.X = X * invSin;
+			axis.Y = Y * invSin;
+			axis.Z = Z * invSin;
+		} else {
+			axis.X = T(0.0);
+			axis.Y = T(1.0);
+			axis.Z = T(0.0);
+			angle = T(0.0);
+		}
+	}
+
 
 	T dot (Quaternion<T> const& other)
 	{
@@ -218,38 +267,34 @@ public:
 
 	Quaternion<T>& normalize()
 	{
-		T mag = X*X + Y*Y + Z*Z + W*W;
-		if(math::equals(mag, T(1.0))) {
-			return *this;
+		T const sqrMag = X*X + Y*Y + Z*Z + W*W;
+		
+		if(!math::equals(sqrMag, T(1.0))) {
+			T const invMag = math::invSqrt(sqrMag);
+
+			X *= invMag;
+			Y *= invMag;
+			Z *= invMag;
+			W *= invMag;
 		}
-
-		mag = math::invSqrt(mag);
-
-		X *= mag;
-		Y *= mag;
-		Z *= mag;
-		W *= mag;
 
 		return *this;
 	}
 	
-	Quaternion<T>& normalized()
+	Quaternion<T> normalized() const
 	{
-		T mag = X*X + Y*Y + Z*Z + W*W;
-		if(math::equals(mag, T(1.0))) {
-			return *this;
+		T const sqrMag = X*X + Y*Y + Z*Z + W*W;
+		
+		if(!math::equals(sqrMag, T(1.0))) {
+			T const invMag = math::invSqrt(sqrMag);
+
+			return Quaternion<T>(T(X*invMag),
+				T(Y*invMag), T(Z*invMag), T(W*invMag));
 		}
 
-		mag = math::invSqrt(mag);
-
-		X *= mag;
-		Y *= mag;
-		Z *= mag;
-		W *= mag;
-
-		return Quaternion<T>(T(X*mag), T(Y*mag), T(Z*mag), T(W*mag));
+		return Quaternion<T>();
 	}
-	
+
 	T X;
 	T Y;
 	T Z;
