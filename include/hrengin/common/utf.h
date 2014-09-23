@@ -37,7 +37,7 @@ inline bool isFirstSurrogate(u16 cp)
 }
 
 //! Check if code point is second surrogate
-inline bool isFirstSurrogate(u16 cp)
+inline bool isSecondSurrogate(u16 cp)
 {
 	return (CodePoint(cp) >= CodePoint::TailSurrogateStart
 		&& CodePoint(cp) <= CodePoint::TailSurrogateEnd);
@@ -57,7 +57,6 @@ inline bool isValidCodepoint(u32 cp)
 		&& !isSurrogate(cp));
 }
 
-namespace utf8 {
 inline bool isTrail(u32 cp)
 {
 	return (math::mask8<u32>(cp) & 0xC0) == 0x80;
@@ -92,22 +91,92 @@ inline size_t sequenceLength(u8 lead) {
 	} else {
 		return 0;
 	}
-#if 0
-	else if((lead >> 2) == 0x3E) {
-		return 5;
-	} else if((lead >> 2) == 0x7E) {
-		return 6;
-	}
-#endif
 }
 
-template<typename Iterator>
-static Iterator append(u32 cp, Iterator output)
-{
-	if(isValidCodepoint(cp)) {
-		if(value < 0x80) {
+class utf8checked {
+	template<typename Iterator>
+	static Iterator append(u32 cp, Iterator output)
+	{
+		if(isValidCodepoint(cp)) {
+			if(value < 0x80) {
+				*(output++) = u8(cp);
+			} else if(value < 0x800) {
+				*(output++) = u8((cp >> 6)   | 0xC0);
+				*(output++) = u8((cp & 0x3F) | 0x80);
+			} else if(cp < 0x10000)) {
+				*(output++) = u8((cp >> 12)         | 0xE0);
+				*(output++) = u8(((cp >> 6) & 0x3F) | 0x80);
+				*(output++) = u8((cp & 0x3F)        | 0x80);
+			} else {
+				*(output++) = u8((cp >> 18)          | 0xF0);
+				*(output++) = u8(((cp >> 12) & 0x3F) | 0x80);
+				*(output++) = u8(((cp >> 6) & 0x3F)  | 0x80);
+				*(output++) = u8((cp & 0x3F)         | 0x80);
+			}
+		}
+
+		return output;
+	}
+
+	template<typename Iterator>
+	static u32 get(Iterator& input, Iterator end)
+	{
+		u32 cp = *input;
+		size_t length = sequenceLength(math::mask8(cp));
+	
+		if(length == 1) {
+			return cp;
+		}
+
+		cp = cp & (0x7F >> (length + 1));
+
+		u8 octet;
+
+		switch(length) {
+			case 4:
+				if(input == end) {
+					return -1;
+				}
+				octet = *(input++);
+				if(!isTrail(octet)) {
+					return -1;
+				}
+				cp = (cp << 6) + (*input & 0x3F);
+			case 3:
+				if(input == end) {
+					return -1;
+				}
+				octet = *(input++);
+				if(!isTrail(octet)) {
+					return -1;
+				}
+				cp = (cp << 6) + (*input & 0x3F);
+			case 2:
+				if(input == end) {
+					return -1;
+				}
+				octet = *(input++);
+				if(!isTrail(octet)) {
+					return -1;
+				}
+				cp = (cp << 6) + (*input & 0x3F);
+				break;
+			case 0:
+				cp = -1;
+				break;
+		}
+
+		return cp;
+	}
+};
+
+class utf8unchecked {
+	template<typename Iterator>
+	static Iterator append(u32 cp, Iterator output)
+	{
+		if(cp < 0x80) {
 			*(output++) = u8(cp);
-		} else if(value < 0x800) {
+		} else if(cp < 0x800) {
 			*(output++) = u8((cp >> 6)   | 0xC0);
 			*(output++) = u8((cp & 0x3F) | 0x80);
 		} else if(cp < 0x10000)) {
@@ -120,53 +189,110 @@ static Iterator append(u32 cp, Iterator output)
 			*(output++) = u8(((cp >> 6) & 0x3F)  | 0x80);
 			*(output++) = u8((cp & 0x3F)         | 0x80);
 		}
+
+		return output;
 	}
 
-	return output;
-}
-
-template<typename Iterator>
-static u32 get(Iterator& input, Iterator end)
-{
-	u32 cp;
-	size_t length = sequenceLength(input);
-
-	switch(length) {
-		default:
-		case 0:
-			cp = -1;
-			break;
-		case 1:
-			cp = *input;
-			break;
-		case 2:
-			cp = *input << 6 & 0x7FF;
-			++input;
-			cp += *(input) & 0x3F;
-			break;
-		case 3:
-			cp = *input << 12 & 0xFFFF;
-			++input;
-			cp += *(input) << 6 & 0xFFF;
-			++input;
-			cp += *(input) & 0x3F;
-			break;
-		case 4:
-			cp = *input << 18 & 0x1FFFFF;
-			++input;
-			cp += *(input) << 12 & 0x3FFFF;
-			++input;
-			cp += *(input) << 6 & 0xFFF;
-			++input;
-			cp += *(input) & 0x3F;
-			break;
+	template<typename Iterator>
+	static u32 get(Iterator& input, Iterator end)
+	{
+		u32 cp = *input;
+		size_t length = sequenceLength(math::mask8(cp));
+	
+		if(length == 1) {
+			return cp;
 		}
+
+		cp = cp & (0x7F >> (length + 1));
+
+		u8 octet;
+
+		switch(length) {
+			case 4:
+				octet = *(input++);
+				cp = (cp << 6) + (*input & 0x3F);
+			case 3:
+				octet = *(input++);
+				cp = (cp << 6) + (*input & 0x3F);
+			case 2:
+				octet = *(input++);
+				cp = (cp << 6) + (*input & 0x3F);
+				break;
+		}
+
+		return cp;
+	}
+};
+
+class utf16checked {
+	template<typename Iterator>
+	static Iterator append(u32 cp, Iterator output)
+	{
+		if(isValidCodepoint(cp)) {
+			if(cp < 0x10000) {
+				*(output++) = cp;
+			} else {
+				cp -= 0x10000;
+				*(output++) = 0xDC00 + cp >> 10;
+				*(output++) = 0xDC00 + cp & 0x3FF;
+			}
+		}
+
+		return output;
 	}
 
-	return cp;
-}
+	template<typename Iterator>
+	static u32 get(Iterator& input, Iterator end)
+	{
+		u16 first = *input;
 
-} // namespace utf8
+		if(!isSurrogate(first)) {
+			return first;
+		}
+
+		if(isFirstSurrogate(first) {
+			u16 second = input ++;
+			if(isSecondSurrogate(second)) {
+				return ((first & 0x3FF) << 10) +
+					(second & 0x3FF) + 0x10000;
+			}
+		} 
+
+		return -1;
+	}
+};
+
+class utf16unchecked {
+	template<typename Iterator>
+	static Iterator append(u32 cp, Iterator output)
+	{
+		if(cp < 0x10000) {
+			*(output++) = cp;
+		} else {
+			cp -= 0x10000;
+			*(output++) = 0xDC00 + cp >> 10;
+			*(output++) = 0xDC00 + cp & 0x3FF;
+		}
+
+		return output;
+	}
+
+	template<typename Iterator>
+	static u32 get(Iterator& input, Iterator end)
+	{
+		u16 first = *input;
+
+		if(!isSurrogate(first)) {
+			return first;
+		}
+		
+		u16 second = input ++;
+
+		return ((first & 0x3FF) << 10) + (second & 0x3FF) + 0x10000;
+	}
+};
+
+
 } // namespace locale
 } // namespace hrengin
 
