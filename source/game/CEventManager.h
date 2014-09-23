@@ -34,8 +34,8 @@ public:
 		u32 time = hrengin::getTime();
 		for(std::vector<Event>::iterator event = events_.begin(); event != events_.end(); ++event) {
 			if((*event).nextFire <= time) {
-				(*event).owner->think(time);
-				(*event).nextFire =  time + (*event).period;
+				(*event).owner->think((*event).nextFire);
+				(*event).nextFire =  (*event).nextFire + (*event).period;
 			}
 		}
 	};
