@@ -54,6 +54,7 @@ The HDF format was not based on any other document format, although it was inspi
     + reintroduced separator characters, which don't serve any syntactic purpose, but are intended to be used as readability characters
 - HDF 1.1.3
     + added node-values, alternative form for values: `[node-value = string:"val"]`
+    + introduced command `!version`, deprecated `!hdf_version` and `!hndf_version`
 
 ### 1.2 Termiology <a name="sec-terminology"/>
 *stub*
@@ -101,24 +102,31 @@ form of `symbol` depends on the form of expression A
 
 ## 2 Documents <a name="sec-documents"/>
 
-###2.1 Character set <a name="sec-charset"/>
-HDF uses ASCII character set, making possible to use UTF-8 in [`strings`](#def-string), however the application which will use such strings must be UTF-8 aware.
+###2.1 Characters <a name="sec-charset"/>
+HDF uses ASCII character set. It allows to use UTF-8 in [`strings`](#def-string).
 
+####2.1.1 Names
 	[1] name ::= name_first name_char*
 
 	[2] name-begin ::= [A-Z] | [a-z]
 
 	[3] name-char ::= [A-Z] | [a-z] | '-' | '_'
 
+####2.1.2 White space
+White space consists of one or more spaces, tabs or line breaks.
 
 	[4] line-break ::= #A | (#A #D)
 
 	[5] ws-char ::= #x9 | #x20
 
-	[6] sp ::= ws_char+
-	[7] ws ::= (ws_char | line_break)+
+	[6] ws ::= (ws_char | line_break)+
 
+For convenience in describing tokens, which must be written in single line, `inline white space` is introduced. 
+Inline white space is white space without line breaks.
 
+	[7] sp ::= ws_char+
+	
+####2.1.3 Numbers
 	[8] number = sign? integer fraction? exponent?
 
 	[9] sign = '+' | '-'
@@ -131,7 +139,10 @@ HDF uses ASCII character set, making possible to use UTF-8 in [`strings`](#def-s
 
 	[13] exponent = [Ee] sign? digit+
 
+####2.1.4 Strings
+`string` is a sequence of characters, delimited by quote marks:
 
+	string ::= '"' char* '"'
 
 ###2.2 Document layout <a name="sec-layout"/>
 HDF document is composed of units referred here as 'objects', separated by white space.
@@ -162,7 +173,13 @@ Unlike nodes, name of a value must be unique. This rule may be neglected when im
 
 ##3 Values <a name="sec-values"/>
 ###3.1 Typing <a name="sec-typing"/>
+Type contains information about representation of data.
 ####3.1.1 Implicit typing <a name="sec-implicit"/>
 ####3.1.2 Valid types <a name="sec-type-list"/>
 ##4 Commands <a name="sec-commands"/>
+###4.1 `version`
+As the name implies, this command defines which version of HDF the document is written in.
 
+This command is used in the following format:
+
+	!version 113

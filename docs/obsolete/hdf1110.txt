@@ -1,59 +1,3 @@
-
-2.2. Names
-
-name is a sequence of characters. The first character must be a name_first, and the following characters are name_char.
-
-[1] name ::= name_first name_char*
-
-[2] name_first ::= [A-Z] | [a-z]
-
-[3] name_char ::= [A-Z] | [a-z] | '-' | '_'
-
-2.3. White space
-
-White space consists of one or more spaces, tabs or line breaks.
-
-[3] line_break ::= #xA | (#xA #xD)
-
-[4] ws_char ::= #x9 | #x20
-
-[5] s ::= (ws_char | line_break)+
-
-Note: this definition does not yet account for the unicode range characters.
-
-Inline white space is white space without line breaks.
-
-[6] ws ::= ws_char+
-
-2.4. Strings
-
-string is a sequence of characters enclosed within '"' (quotation marks) characters.
-
-[8] string ::= '"' char* '"'
-
-2.4.1. Escape sequences
-
-To be decided yet.
-
-
-2.5. Numbers
-
-[9]	number = sign? int fraction? exponent?
-
-[10] digit = [0-9]
-
-[11] int = digit+
-
-[12] exponent = [Ee] sign? digit+
-
-[13] fraction = '.' digit+
-
-[14] sign = '+' | '-'
-
-[15] hex-digit = digit | [a-f] | [A-F]
-
-[16] hexadecimal = '0x' hex-digit+
-
 3. HDF document
 
 3.1. Structure
@@ -134,7 +78,6 @@ An example HDF document, describing a simple geometric model.
 
 4.1. Explicit typing
 
-Type contains information about representation of data.
 
 type ::= name ws? ':'
 
