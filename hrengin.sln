@@ -13,11 +13,9 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "hrnetwork", "source\network
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "hrcore", "source\core\core.vcxproj", "{74AD5236-2D65-440E-A517-4EF8B52EE555}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "hrexample", "example\hrexample.vcxproj", "{BB50F5F3-4125-4557-BA3F-3A55ADFE867B}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "hrgraphics", "source\graphics-irr\graphics.vcxproj", "{20384754-19D0-4480-9EBC-1D326B7B9E60}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "hrplatform", "source\platform-msw\platform.vcxproj", "{8F167D9D-4089-4663-82E1-61480E68881C}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "hrplatform", "source\platform\platform.vcxproj", "{8F167D9D-4089-4663-82E1-61480E68881C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,10 +43,6 @@ Global
 		{74AD5236-2D65-440E-A517-4EF8B52EE555}.Debug|Win32.Build.0 = Debug|Win32
 		{74AD5236-2D65-440E-A517-4EF8B52EE555}.Release|Win32.ActiveCfg = Release|Win32
 		{74AD5236-2D65-440E-A517-4EF8B52EE555}.Release|Win32.Build.0 = Release|Win32
-		{BB50F5F3-4125-4557-BA3F-3A55ADFE867B}.Debug|Win32.ActiveCfg = Debug|Win32
-		{BB50F5F3-4125-4557-BA3F-3A55ADFE867B}.Debug|Win32.Build.0 = Debug|Win32
-		{BB50F5F3-4125-4557-BA3F-3A55ADFE867B}.Release|Win32.ActiveCfg = Release|Win32
-		{BB50F5F3-4125-4557-BA3F-3A55ADFE867B}.Release|Win32.Build.0 = Release|Win32
 		{20384754-19D0-4480-9EBC-1D326B7B9E60}.Debug|Win32.ActiveCfg = Debug|Win32
 		{20384754-19D0-4480-9EBC-1D326B7B9E60}.Debug|Win32.Build.0 = Debug|Win32
 		{20384754-19D0-4480-9EBC-1D326B7B9E60}.Release|Win32.ActiveCfg = Release|Win32

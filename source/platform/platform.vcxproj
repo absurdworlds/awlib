@@ -11,6 +11,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\include\hrengin\io\IBufferedStream.h" />
+    <ClInclude Include="..\..\include\hrengin\io\ICharacterStream.h" />
+    <ClInclude Include="..\..\include\hrengin\io\IReadFile.h" />
+    <ClInclude Include="..\..\include\hrengin\io\IWriteFile.h" />
     <ClInclude Include="..\..\include\hrengin\platform\pointer_math.h" />
   </ItemGroup>
   <ItemGroup>

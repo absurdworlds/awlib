@@ -4,6 +4,18 @@
     <ClInclude Include="..\..\include\hrengin\platform\pointer_math.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\io\IWriteFile.h">
+      <Filter>include\io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\io\IBufferedStream.h">
+      <Filter>include\io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\io\ICharacterStream.h">
+      <Filter>include\io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\io\IReadFile.h">
+      <Filter>include\io</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="include">
@@ -11,6 +23,9 @@
     </Filter>
     <Filter Include="source">
       <UniqueIdentifier>{a93c0109-6852-48fa-adb4-bb7acaacc7f1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\io">
+      <UniqueIdentifier>{7e860fd7-87f4-4e19-9cf1-f8930704b469}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
