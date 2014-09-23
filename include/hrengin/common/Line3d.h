@@ -1,4 +1,4 @@
-/**
+/*
    Copyright (C) 2014  absurdworlds
 
    License LGPLv3-only:
@@ -14,20 +14,26 @@
 
 namespace hrengin {
 
-/* Represents a line segment in 3D space */
+//! Represents a line segment in 3D space
 template<typename T>
 class Segment3d {
 public:
+	//! Default constructor
+	/*!
+	\brief Construct a line of unit length aligned along X axis
+	 */
 	Segment3d()
 		: start(0, 0, 0), end(1, 0, 0)
 	{
 	}
 
+	//! Construct line by individual components
 	Segment3d(T ax, T ay, T az, T bx, T by, T bz)
 		: start(ax, ay, az), end(bx, by, bz)
 	{
 	}
 
+	//! Construct line from start and end vectors
 	Segment3d(Vector3d<T> const& start, Vector3d<T> const& end)
 		: start_(start), end_(end)
 	{
@@ -78,13 +84,6 @@ public:
 		return end - start;
 	}
 
-#if 0
-	operator Vector3d<T> const
-	{
-		return vector();
-	}
-#endif
-
 	Vector3d<T> direction() const
 	{
 		return vector().normalized();
@@ -100,7 +99,7 @@ public:
 	Vector3d<T> end;
 };
 
-/* Alias for Segment3d */
+/*! Alias for Segment3d */
 template<typename T>
 using Line3d = Segment3d<T>;
 

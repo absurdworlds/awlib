@@ -1,4 +1,4 @@
-/**
+/*
    Copyright (C) 2014  absurdworlds
 
    License LGPLv3-only:
@@ -14,14 +14,11 @@
 
 namespace hrengin {
 
-/*
-   This struct is used fro more convenient storage of POD character arrays
- */
+//! This struct is used for more convenient storage of POD character arrays
 struct PodString {
 	size_t length;
 	char* data;
 };
-
 
 inline PodString createPodString(std::string s) 
 {

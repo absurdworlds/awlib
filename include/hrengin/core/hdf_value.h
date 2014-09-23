@@ -1,4 +1,4 @@
-/**
+/*
    Copyright (C) 2014  absurdworlds
 
    License LGPLv3-only:
@@ -19,30 +19,39 @@
 
 namespace hrengin {
 namespace hdf {
-/*
-   Class for holding any HDF Value.
- */
+
+//! Class for holding any HDF Value.
 class Value {
 public:
 	Value()
 		: val(0), type(Type::Unknown)
-	{	}
+	{
+	}
 
 	Value(bool b)
 		: val(b), type(Type::Boolean)
-	{	}
+	{
+	}
+
 	Value(i32 i)
 		: val(i), type(Type::Integer)
-	{	}
+	{
+	}
+
 	Value(f64 f)
 		: val(f), type(Type::Float)
-	{	}
+	{
+	}
+
 	Value(std::string s)
 		: val(s), type(Type::String)
-	{	}
+	{
+	}
+
 	Value(Vector3d<f32> v3)
 		: val(v3), type(Type::Vector3d)
-	{	}
+	{
+	}
 
 	Value& operator = (const Value& other)
 	{
@@ -151,6 +160,8 @@ public:
 private:
 	hdf::Type type;
 	union HdfValue {
+		~HdfValue()
+		{	}
 		HdfValue(bool b)
 			: b_(b)
 		{	}
@@ -160,9 +171,7 @@ private:
 		HdfValue(f64 f)
 			: f_(f)
 		{	}
-		~HdfValue() 
-		{	}
-#if 0
+#ifdef _GNUG_
 		HdfValue(std::string s)
 			: s_(s)
 		{	}
@@ -184,6 +193,7 @@ private:
 		f32 v3_[3];
 		PodString s_;
 #endif
+
 		bool b_;
 		i32 i_;
 		f64 f_;

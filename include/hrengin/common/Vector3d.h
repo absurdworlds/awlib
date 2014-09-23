@@ -1,4 +1,4 @@
-/**
+/*
    Copyright (C) 2014  absurdworlds
 
    License LGPLv3-only:
@@ -41,7 +41,7 @@ public:
 	{
 	}
 
-	void set (T x, T y, T z)
+	void set (T const x, T const y, T const z)
 	{
 		X = x; 
 		Y = y; 
@@ -197,7 +197,7 @@ public:
 	Vector3d<T> normalized() const
 	{
 		f64 length = squareLength();
-		if (length == 0 ) {
+		if (length == 0) {
 			return Vector3d<T>();
 		}
 
@@ -206,26 +206,26 @@ public:
 		return Vector3d<T>(T(X * length), T(Y * length), T(Z * length));
 	}
 
-	// get length of the vector.
+	//! Get length of the vector.
 	T length() const
 	{ 
 		return math::sqrt( X*X + Y*Y + Z*Z ); 
 	}
 	
-	// get squared length of the vector.
-	T squareLength() const 
+	//! Get squared length of the vector.
+	T squareLength() const
 	{ 
 		return X*X + Y*Y + Z*Z; 
 	}
 
 
-	// Calculate the dot product with another vector
+	//! Calculate the dot product with another vector
 	T dot(Vector3d<T> const& other) const
 	{
 		return X*other.X + Y*other.Y + Z*other.Z;
 	}
 
-	// Calculate the cross product with another vector
+	//! Calculate the cross product with another vector
 	Vector3d<T> cross(Vector3d<T> const& other) const
 	{
 		f32 x = Y * other.Z - Z * other.Y;
@@ -234,19 +234,19 @@ public:
 		return Vector3d<T>(x, -y, z);
 	}
 
-	// Get distance from another point
+	//! Get distance from another point
 	T getDistance(Vector3d<T> const& other) const
 	{
 		return Vector3d<T>(X - other.X, Y - other.Y, Z - other.Z).length();
 	}
 
-	// Get squared distance from another point
+	//! Get squared distance from another point
 	T getDistanceSQ(Vector3d<T> const& other) const
 	{
 		return Vector3d<T>(X - other.X, Y - other.Y, Z - other.Z).squareLength();
 	}
 
-	// Set the length of the vector to a new value
+	//! Set the length of the vector to a new value
 	Vector3d<T>& setLength(T const newlength)
 	{
 		normalize();
@@ -265,7 +265,7 @@ public:
 		return *this;
 	}
 	
-	/**
+	/*!
 	   Get euler angles that when applied to a (0,0,1) direction vector
 	   would make it point in the same direction as this vector.
 

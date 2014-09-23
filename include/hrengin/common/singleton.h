@@ -1,4 +1,4 @@
-/**
+/*
    Copyright (C) 2014  absurdworlds
 
    License LGPLv3-only:
@@ -11,6 +11,7 @@
 
 namespace hrengin {
 
+//! Utility to construct singleton
 template <class C>
 inline C& makeSingleton() {
 	static C singleton;

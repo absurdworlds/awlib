@@ -1,4 +1,4 @@
-/**
+/*
    Copyright (C) 2014  absurdworlds
 
    License LGPLv3-only:
@@ -13,6 +13,7 @@
 #include <hrengin/common/types.h>
 
 namespace hrengin {
+//! Get system time in milliseconds
 HR_PLATFORM_API u32 getTime();
 }
 

@@ -1,4 +1,4 @@
-/**
+/*
    Copyright (C) 2014  absurdworlds
 
    License LGPLv3-only:
@@ -21,8 +21,9 @@
 namespace hrengin {
 namespace hdf {
 
+class IHDFTreeWriter {
 
-
+};
 
 } // namespace io
 } // namespace hrengin

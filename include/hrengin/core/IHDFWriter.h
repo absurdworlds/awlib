@@ -1,4 +1,4 @@
-/**
+/*
    Copyright (C) 2014  absurdworlds
 
    License LGPLv3-only:
@@ -15,30 +15,34 @@
 
 #include <hrengin/common/Vector3d.h>
 
-
 namespace hrengin {
 namespace hdf {
 
-
+//! Interface for writing HDF files. Can write documents in HDF 1.1.3 format.
 class IHDFWriter {
 	virtual ~IHDFWriter() {};
 
-	virtual bool writeNodeHeader(std::string name) = 0;
-	virtual bool writeNodeEnd() = 0;
+	//! Write a node header, can be used in conjunction with `write*`
+	//! to produce a node-value
+	virtual bool addNodeHeader(std::string name) = 0;
+	virtual bool addNodeEnd() = 0;
 
-	virtual void writeFloatValue(std::string name, float val) = 0;
-	virtual void writeFloatValue(std::string name, double val) = 0;
-	virtual void writeInt(std::string name, u32 val) = 0;
-	virtual void writeInt(std::string name, i32 val) = 0;
-	virtual void writeBool(std::string name, bool val) = 0;
-	virtual void writeString(std::string name, std::string val) = 0;
-	virtual void writeVector3d(std::string name, Vector3d<f32> val) = 0;
+	//! Write a `value` object, must be used in conjunction with `write*`
+	virtual bool addValue(std::string name) = 0;
 
-	virtual void writeComment(std::string commentText) = 0;
+	virtual void writeFloat(f32 val) = 0;
+	virtual void writeFloat(f64 val) = 0;
+	virtual void writeInt(u32 val) = 0;
+	virtual void writeInt(i32 val) = 0;
+	virtual void writeBool(bool val) = 0;
+	virtual void writeString(std::string val) = 0;
+	virtual void writeVector3d(Vector3d<f32> val) = 0;
+
+	//! Write a comment
+	virtual void addComment(std::string commentText) = 0;
 
 	virtual void error(u32 type, std::string msg) = 0;
 };
-
 
 } // namespace io
 } // namespace hrengin

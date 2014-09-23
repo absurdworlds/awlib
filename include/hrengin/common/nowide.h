@@ -122,6 +122,7 @@ inline wchar_t* widen(wchar_t *output,size_t output_size,char const *source)
 {
 	return basic_convert(output,output_size,source,details::basic_strend(source));
 }
+
 inline wchar_t* widen(wchar_t *output,size_t output_size,char const *begin,char const *end)
 {
 	return basic_convert(output,output_size,begin,end);
@@ -131,6 +132,7 @@ inline u32* utf32(u32 *output,size_t output_size,char const *source)
 {
 	return basic_convert(output,output_size,source,details::basic_strend(source));
 }
+
 inline u32* utf32(u32 *output,size_t output_size,char const *begin,char const *end)
 {
 	return basic_convert(output,output_size,begin,end);

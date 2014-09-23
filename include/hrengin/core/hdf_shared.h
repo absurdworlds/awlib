@@ -1,4 +1,4 @@
-/**
+/*
    Copyright (C) 2014  absurdworlds
 
    License LGPLv3-only:
@@ -12,7 +12,7 @@
 namespace hrengin {
 namespace hdf {
 
-/* Enumeration of possible HDF value types */
+/*! Enumeration of possible HDF value types */
 enum class Type {
 	Integer,
 	Float,
@@ -23,7 +23,7 @@ enum class Type {
 	Unknown
 };
 
-/* Enumeration for selecting writer indentation style */
+/*! Enumeration for selecting writer indentation style */
 enum Indentation {
 	HDF_INDENT_TAB,
 	HDF_INDENT_SPACE,
@@ -33,7 +33,7 @@ enum Indentation {
 	HDF_INDENT_NONE
 };
 
-/* Enumeration for parser log messages */
+/*! Enumeration for parser log messages */
 enum ParserMessage {
 	HDF_LOG_NOTICE,
 	HDF_LOG_WARNING,

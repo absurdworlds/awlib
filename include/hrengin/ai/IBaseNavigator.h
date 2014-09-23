@@ -61,23 +61,27 @@ public:
 
 	virtual ~IBaseNavigator() {};
 	
-	virtual NavProxy const* getProxy() const = 0;
+	//virtual Proxy const& getProxy() const = 0;
+	//virtual void setGoal(IBaseNavigator::Proxy const& goal) = 0;
+	//virtual Proxy const& getGoal() const = 0;
+	//virtual void setAction(IBaseNavigator::Action const action) = 0;
+	//virtual Action const getAction() const = 0;
 
-	/* Set target to move towards */
+	//! Set target to move towards
 	virtual void go (Vector3d<f32> target) = 0;
-	/* Set target to follow */
+	//! Set target to follow
 	virtual void follow (NavProxy* target) = 0;
-	/* Set target to pursue */
+	//! Set target to pursue
 	virtual void pursue (NavProxy* target) = 0;
-	/* Attacj navigator to a group */
+	//! Attacj navigator to a group
 	virtual void attach (IGroupNavigator* group) = 0;
-	/* Wander aimlessly */
+	//! Wander aimlessly
 	virtual void wander () = 0;
-	/* Reset state */
+	//! Reset state
 	virtual void abort() = 0;
 
-	/* Move towards goal */
-	virtual void move (f32 step) = 0;
+	//! Navigate towards goal
+	virtual void navigate (f32 timeDelta) = 0;
 
 
 	virtual NavState getState() const = 0;

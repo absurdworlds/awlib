@@ -32,7 +32,7 @@ public:
 	/*!
 	\brief Construct quaternion using individual components.
 	 */
-	Quaternion( T const W, T const X, T const Y, T const Z)
+	Quaternion(T const W, T const X, T const Y, T const Z)
 		: W(W), X(X), Y(Y), Z(Z)
 	{
 	}
@@ -64,6 +64,7 @@ public:
 		setAxisAngle(axis, angle);
 	}
 
+	//! Set quaternion by individual components
 	void set(T const w, T const x, T const y, T const z)
 	{
 		X = x;
@@ -72,6 +73,7 @@ public:
 		W = w;
 	}
 
+	//! Copy components from other quaternion
 	void set(Quaternion<T> const& other)
 	{
 		X = other.X;

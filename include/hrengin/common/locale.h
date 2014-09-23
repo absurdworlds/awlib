@@ -67,7 +67,7 @@ struct utf_traits<CharType,1> {
 		}
 		return -1;
 	}
-		
+
 	static const int max_width = 4;
 
 	static int width(code_point value)
@@ -93,7 +93,7 @@ struct utf_traits<CharType,1> {
 	{
 		return !is_trail(ci);
 	}
-		
+
 	template<typename Iterator>
 	static code_point decode(Iterator &p, Iterator e)
 	{
@@ -162,9 +162,8 @@ struct utf_traits<CharType,1> {
 		}
 
 		return c;
-
 	}
-		
+
 	template<typename Iterator>
 	static code_point decode_valid(Iterator &p)
 	{

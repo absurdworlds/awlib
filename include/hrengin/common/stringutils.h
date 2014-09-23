@@ -1,4 +1,4 @@
-/**
+/*
    Copyright (C) 2014  absurdworlds
 
    License LGPLv3-only:
@@ -14,6 +14,7 @@
 
 namespace hrengin {
 
+//! Functor for finding a string key in a map
 template <class Value>
 class findKey {
 public:
@@ -28,6 +29,7 @@ public:
 	std::string key_;
 };
 
+//! Get file extension from string
 HR_CORE_API std::string getFileExtension(std::string& dest, const std::string& path);
 
 } // namespace hrengin

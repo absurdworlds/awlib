@@ -1,4 +1,4 @@
-/**
+/*
    Copyright (C) 2014  absurdworlds
 
    License LGPLv3-only:
@@ -15,8 +15,7 @@
 
 namespace hrengin {
 
-class IModel
-{
+class IModel {
 public:
 	std::vector<Primitive> primitives;
 };

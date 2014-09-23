@@ -1,4 +1,4 @@
-/**
+/*
    Copyright (C) 2014  absurdworlds
 
    License LGPLv3-only:
@@ -24,7 +24,7 @@
 	#pragma warning(disable: 4244) 
 #endif
 
-
+/*! Uncomment used graphics library */
 #define HR_GRAPHICS_IRRLICHT
 //#define HR_GRAPHICS_OGRE
 //#define HR_GRAPHICS_OSG

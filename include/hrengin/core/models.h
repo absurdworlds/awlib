@@ -1,4 +1,4 @@
-/**
+/*
    Copyright (C) 2014  absurdworlds
 
    License LGPLv3-only:
@@ -29,6 +29,7 @@ enum Axis {
 	AXIS_Z
 };
 
+//! Represents a geometric primitive
 struct Primitive {
 	Shape shape;
 	Axis axis;
@@ -49,4 +50,4 @@ struct SMesh {
 
 } // namespace hrengin
 
-#endif _hrengin_models_
+#endif//_hrengin_models_

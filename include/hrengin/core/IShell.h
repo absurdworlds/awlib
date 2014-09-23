@@ -1,4 +1,4 @@
-/**
+/*
    Copyright (C) 2014  absurdworlds
 
    License LGPLv3-only:
@@ -18,7 +18,7 @@ namespace hrengin {
 class ILogger;
 namespace core {
 
-/*
+/*!
    hrengin Shell, intended to be for manipulating game objects via
    unix-like shell commands
  */

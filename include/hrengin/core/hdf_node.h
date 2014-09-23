@@ -1,4 +1,4 @@
-/**
+/*
    Copyright (C) 2014  absurdworlds
 
    License LGPLv3-only:
@@ -19,6 +19,7 @@
 namespace hrengin {
 namespace hdf {
 
+//! Represents HDF node
 class Node {
 	typedef std::pair<std::string,Value> key_value_pair;
 	typedef std::vector<key_value_pair> value_container;
@@ -106,6 +107,7 @@ private:
 	node_container nodes_;
 };
 
+//! Used for storage of an arbitary HDF document
 class Document : protected Node {
 public:
 	void addNode(std::string name, Node node)
@@ -138,6 +140,5 @@ public:
 
 } // namespace hdf
 } // namespace hrengin
-
 
 #endif//_hrengin_hdf_node_

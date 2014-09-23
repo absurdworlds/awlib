@@ -16,11 +16,17 @@ namespace hrengin {
 namespace ai {
 
 /* Check if turn can be accomplished */
-bool isValidTurn(f32 speed, f32 turnRate, f32 angle, f32 distance)
+inline bool isValidTurn(f32 speed, f32 turnRate, f32 angle, f32 distance)
 {
 	f32 radius = speed / turnRate;
-	f32 chord = 2*radius*abs(sin(angle));
+	f32 chord = 2*radius*abs(sin(angle * math::RADTODEG64));
 	return distance > chord;
+}
+
+inline f32 getMaxTurnAngle(f32 speed, f32 turnRate, f32 distance)
+{
+	f32 angle = asin(distance * turnRate * math::RADTODEG64 / (2 * speed));
+	return angle * math::DEGTORAD64;
 }
 
 } // namespace ai

@@ -1,4 +1,4 @@
-/**
+/*
    Copyright (C) 2014  absurdworlds
 
    License LGPLv3-only:
@@ -14,6 +14,7 @@
 
 namespace hrengin {
 
+//! Represents a 2D rectangle, used mostly for GUI rendering
 template <class T>
 class Rect {
 public:

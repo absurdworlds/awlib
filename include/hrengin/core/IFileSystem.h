@@ -1,4 +1,4 @@
-/**
+/*
    Copyright (C) 2014  absurdworlds
 
    License LGPLv3-only:
@@ -25,7 +25,7 @@ public:
 };
 
 
-HRENGINFILESYSTEM_API IFileSystem& getFileSystem();
+HRENGINFILESYSTEM_API IFileSystem* initFilesystem();
 
 
 }
