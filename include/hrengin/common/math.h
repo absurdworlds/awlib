@@ -25,8 +25,10 @@ namespace math {
 #undef PI
 #endif
 
-// Constants for PI.
-const f32 PI		= 3.14159265359f;
+//! PI mathematical constant
+f32 const PI	= 3.14159265359f;
+//! E mathematical constant
+f32 const E	= 2.71828182845f;
 
 const f32 RECIPROCAL_PI	= 1.0f/PI;
 
@@ -39,8 +41,10 @@ const f32 DOUBLE_PI	= PI*2.0f;
 #undef PI64
 #endif
 
-// Constants for 64bit PI.
-const f64 PI64			= 3.14159265358979323846; //26433832795028841971693993751;
+//! 64-bit wide PI
+f64 const PI64	= 3.14159265358979323846; //26433832795028841971693993751;
+//! 64-bit wide E
+f64 const E64	= 2.71828182845904523536; //02874713526624977572470936999595
 
 const f64 RECIPROCAL_PI64	= 1.0/PI64;
 
@@ -164,10 +168,31 @@ inline f32 lerp(f32 v0, f32 v1, f64 t)
 	return (1-t)*v0 + t*v1;
 }
 
-/* Check if value is a power of 2 */
+//! Check if value is a power of 2
 inline bool isPowerOf2(u32 value)
 {
 	return (value & (value - 1)) && value;
+}
+
+//! Truncate integer to 8 bits
+template<typename integer_type>
+inline u8 mask8(integer_type val)
+{
+	return u8(val & 0xFF);
+}
+
+//! Truncate integer to 16 bits
+template<typename integer_type>
+inline u16 mask16(integer_type val)
+{
+	return u16(val & 0xFFFF);
+}
+
+//! Truncate integer to 32 bits
+template<typename integer_type>
+inline u32 mask32(integer_type val)
+{
+	return u32(val & 0xFFFFFFFF);
 }
 
 } //namespace math
