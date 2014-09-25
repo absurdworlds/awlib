@@ -21,25 +21,17 @@
 namespace hrengin {
 namespace math {
 
-#ifdef PI
-#undef PI
-#endif
-
 //! PI mathematical constant
 f32 const PI	= 3.14159265359f;
 //! E mathematical constant
 f32 const E	= 2.71828182845f;
 
-const f32 RECIPROCAL_PI	= 1.0f/PI;
+f32 const RECIPROCAL_PI	= 1.0f/PI;
 
-const f32 HALF_PI	= PI/2.0f;
-const f32 QUARTER_PI	= PI/4.0f;
+f32 const HALF_PI	= PI/2.0f;
+f32 const QUARTER_PI	= PI/4.0f;
 
-const f32 DOUBLE_PI	= PI*2.0f;
-
-#ifdef PI64
-#undef PI64
-#endif
+f32 const DOUBLE_PI	= PI*2.0f;
 
 //! 64-bit wide PI
 f64 const PI64	= 3.14159265358979323846; //26433832795028841971693993751;
