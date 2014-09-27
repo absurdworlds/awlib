@@ -52,7 +52,7 @@ CVideoManager::CVideoManager(core::ISettingsManager* settings)
 	window_ = ogreRoot_->initialise(true, "hrengin A-3");
 	renderer_ = new CRenderingDevice(ogreRoot_);
 	sceneManager_ = new CSceneManager(ogreRoot_, renderer_);
-	guiManager_ = new gui::CGUIManager(ogreRoot_);
+	guiManager_ = new gui::CGUIManager(ogreRoot_, settings);
 
 }
 
