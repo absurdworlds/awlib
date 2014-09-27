@@ -16,7 +16,7 @@
     <Filter Include="resources">
       <UniqueIdentifier>{c3a2de4f-43ac-4af9-8d21-0065c13eccae}</UniqueIdentifier>
     </Filter>
-    <Filter Include="resources\gui">
+    <Filter Include="include\gui">
       <UniqueIdentifier>{3f75f0c8-a0b7-4af4-a8bb-37350105a974}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -34,10 +34,10 @@
       <Filter>source</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\hrengin\gui\IGUIManager.h">
-      <Filter>resources\gui</Filter>
+      <Filter>include\gui</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\hrengin\gui\IInputManager.h">
-      <Filter>resources\gui</Filter>
+      <Filter>include\gui</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\hrengin\graphics\ICameraNode.h">
       <Filter>include\graphics</Filter>
@@ -55,10 +55,10 @@
       <Filter>include\graphics</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\hrengin\gui\Keycodes.h">
-      <Filter>resources\gui</Filter>
+      <Filter>include\gui</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\hrengin\gui\InputEvent.h">
-      <Filter>resources\gui</Filter>
+      <Filter>include\gui</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\hrengin\graphics\IRenderable.h">
       <Filter>include\graphics</Filter>
@@ -88,28 +88,28 @@
       <Filter>include\graphics</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\hrengin\gui\IGUIElement.h">
-      <Filter>resources\gui</Filter>
+      <Filter>include\gui</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\hrengin\gui\IGUIScrollBar.h">
-      <Filter>resources\gui</Filter>
+      <Filter>include\gui</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\hrengin\gui\IGUITextArea.h">
-      <Filter>resources\gui</Filter>
+      <Filter>include\gui</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\hrengin\gui\IGUITextBox.h">
-      <Filter>resources\gui</Filter>
+      <Filter>include\gui</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\hrengin\gui\IGUIWindow.h">
-      <Filter>resources\gui</Filter>
+      <Filter>include\gui</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\hrengin\gui\IGUIMenu.h">
-      <Filter>resources\gui</Filter>
+      <Filter>include\gui</Filter>
     </ClInclude>
     <ClInclude Include="CGUIWindow.h">
       <Filter>source\gui</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\hrengin\gui\IUserInputReceiver.h">
-      <Filter>resources\gui</Filter>
+      <Filter>include\gui</Filter>
     </ClInclude>
     <ClInclude Include="CInputManager.h">
       <Filter>source\gui</Filter>
@@ -118,13 +118,13 @@
       <Filter>source\gui</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\hrengin\gui\IGUIListBox.h">
-      <Filter>resources\gui</Filter>
+      <Filter>include\gui</Filter>
     </ClInclude>
     <ClInclude Include="CGUIListBox.h">
       <Filter>source\gui</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\hrengin\gui\IConsoleGUI.h">
-      <Filter>resources\gui</Filter>
+      <Filter>include\gui</Filter>
     </ClInclude>
     <ClInclude Include="CConsoleGUI.h">
       <Filter>source\gui</Filter>
@@ -133,7 +133,7 @@
       <Filter>resources</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\hrengin\gui\ICursor.h">
-      <Filter>resources\gui</Filter>
+      <Filter>include\gui</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

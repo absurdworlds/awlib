@@ -1,4 +1,4 @@
-/**
+/*
    Copyright (C) 2014  absurdworlds
 
    License LGPLv3-only:
@@ -12,7 +12,7 @@
 namespace hrengin {
 namespace gui {
 
-CGUIListBox::CGUIListBox(irr::gui::IGUIListBox* elem)
+CGUIListBox::CGUIListBox()
 {
 }
 

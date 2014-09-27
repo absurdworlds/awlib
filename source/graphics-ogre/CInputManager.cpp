@@ -1,4 +1,4 @@
-/**
+/*
    Copyright (C) 2014  absurdworlds
 
    License LGPLv3-only:
@@ -19,104 +19,6 @@
 namespace hrengin {
 namespace gui {
 
-void convertEvent(const irr::SEvent& irrEvent, InputEvent& hrgEvent) {
-	switch(irrEvent.EventType) {
-	case irr::EET_MOUSE_INPUT_EVENT:
-		hrgEvent.type = InputEventType::MouseEvent;
-		hrgEvent.mouse.X = irrEvent.MouseInput.X;
-		hrgEvent.mouse.Y = irrEvent.MouseInput.Y;
-		hrgEvent.mouse.wheel = irrEvent.MouseInput.Wheel;
-		hrgEvent.mouse.buttonStates = irrEvent.MouseInput.ButtonStates;
-
-		switch(irrEvent.MouseInput.Event) {
-		case irr::EMIE_LMOUSE_PRESSED_DOWN:
-			hrgEvent.mouse.event = MouseEventType::LButtonDown;
-			break;
-		case irr::EMIE_RMOUSE_PRESSED_DOWN:
-			hrgEvent.mouse.event = MouseEventType::RButtonDown;
-			break;
-		case irr::EMIE_MMOUSE_PRESSED_DOWN:
-			hrgEvent.mouse.event = MouseEventType::MButtonDown;
-			break;
-		case irr::EMIE_LMOUSE_LEFT_UP:
-			hrgEvent.mouse.event = MouseEventType::LButtonUp;
-			break;
-		case irr::EMIE_RMOUSE_LEFT_UP:
-			hrgEvent.mouse.event = MouseEventType::RButtonUp;
-			break;
-		case irr::EMIE_MMOUSE_LEFT_UP:
-			hrgEvent.mouse.event = MouseEventType::MButtonUp;
-			break;
-		case irr::EMIE_LMOUSE_DOUBLE_CLICK:
-			hrgEvent.mouse.event = MouseEventType::LDoubleClick;
-			break;
-		case irr::EMIE_RMOUSE_DOUBLE_CLICK:
-			hrgEvent.mouse.event = MouseEventType::RDoubleClick;
-			break;
-		case irr::EMIE_MMOUSE_DOUBLE_CLICK:
-			hrgEvent.mouse.event = MouseEventType::MDoubleClick;
-			break;
-		case irr::EMIE_LMOUSE_TRIPLE_CLICK:
-			hrgEvent.mouse.event = MouseEventType::LTripleClick;
-			break;
-		case irr::EMIE_RMOUSE_TRIPLE_CLICK:
-			hrgEvent.mouse.event = MouseEventType::RTripleClick;
-			break;
-		case irr::EMIE_MMOUSE_TRIPLE_CLICK:
-			hrgEvent.mouse.event = MouseEventType::MTripleClick;
-			break;
-		case irr::EMIE_MOUSE_MOVED:
-			hrgEvent.mouse.event = MouseEventType::Moved;
-			break;
-		case irr::EMIE_MOUSE_WHEEL:
-			hrgEvent.mouse.event = MouseEventType::Wheel;
-			break;
-		}
-		break;
-	case irr::EET_KEY_INPUT_EVENT:
-		hrgEvent.type = InputEventType::KeyboardEvent;
-		hrgEvent.key.Char = irrEvent.KeyInput.Char;
-		hrgEvent.key.keyCode = irrEvent.KeyInput.Key;
-		hrgEvent.key.pressedDown = irrEvent.KeyInput.PressedDown;
-		hrgEvent.key.control = irrEvent.KeyInput.Control;
-		hrgEvent.key.shift = irrEvent.KeyInput.Shift;
-		break;
-	case irr::EET_GUI_EVENT:
-		hrgEvent.type = InputEventType::GUIEvent;
-		if(irrEvent.GUIEvent.Caller) {
-			hrgEvent.gui.caller = irrEvent.GUIEvent.Caller->getID();
-		} else {
-			hrgEvent.gui.caller = 0;
-		}
-		if(irrEvent.GUIEvent.Element) {
-			hrgEvent.gui.element = irrEvent.GUIEvent.Element->getID();
-		} else {
-			hrgEvent.gui.element = 0;
-		}
-		switch(irrEvent.GUIEvent.EventType) {
-		case irr::gui::EGET_ELEMENT_CLOSED:
-			hrgEvent.gui.event = gui::GUIEventType::ElementClosed;
-			break;
-		case irr::gui::EGET_ELEMENT_HOVERED:
-			hrgEvent.gui.event = gui::GUIEventType::ElementHovered;
-			break;
-		case irr::gui::EGET_ELEMENT_LEFT:
-			hrgEvent.gui.event = gui::GUIEventType::ElementLeft;
-			break;
-		case irr::gui::EGET_ELEMENT_FOCUSED:
-			hrgEvent.gui.event = gui::GUIEventType::ElementFocused;
-			break;
-		case irr::gui::EGET_ELEMENT_FOCUS_LOST:
-			hrgEvent.gui.event = gui::GUIEventType::ElementUnfocused;
-			break;
-		default:
-			hrgEvent.gui.event = gui::GUIEventType::Unknown;
-		}
-		break;
-	default:
-		hrgEvent.type = InputEventType::UnknownEvent;
-	}
-}
 
 CInputManager::CInputManager(core::ISettingsManager* settings)
 {
@@ -134,65 +36,102 @@ CInputManager::CInputManager(core::ISettingsManager* settings)
 
 	cursor_->setEventCallback(this);
 	keyboard_->setEventCallback(this);
+
+	genKeyMap();
 }
 
+InputEvent CInputManager::key(OIS::KeyEvent const& arg)
+{
+	InputEvent event;
+	event.type = InputEventType::KeyboardEvent;
+
+	
+	event.key.control = keyboard_->isModifierDown(OIS::Keyboard::Ctrl);
+	event.key.shift = keyboard_->isModifierDown(OIS::Keyboard::Shift);
+	
+	event.key.keyCode = keyMap_[arg.key];
+
+	return event;
+}
 
 bool CInputManager::keyPressed( OIS::KeyEvent const& arg )
 {
-	InputEvent hrEvent;
+	InputEvent event = key(arg);
 
-	hrEvent.type = InputEventType::KeyboardEvent;
-	hrEvent.key.pressedDown = true;
-	
-	hrEvent.key.control = keyboard_->isModifierDown(OIS::Keyboard::Ctrl);
-	hrEvent.key.shift = keyboard_->isModifierDown(OIS::Keyboard::Shift);
+	event.key.pressedDown = true;
 
-	switch (arg.key) {
-
-	default:
-		break;
-	}
+	return true;
 }
 
 bool CInputManager::keyReleased( OIS::KeyEvent const& arg )
 {
-	InputEvent hrEvent;
+	InputEvent event = key(arg);
 
-	hrEvent.type = InputEventType::KeyboardEvent;
-	hrEvent.key.pressedDown = false;
-	
-	hrEvent.key.control = keyboard_->isModifierDown(OIS::Keyboard::Ctrl);
-	hrEvent.key.shift = keyboard_->isModifierDown(OIS::Keyboard::Shift);
+	event.key.pressedDown = false;
 
-	switch (arg.key) {
+	return true;
+}
 
-	default:
-		break;
-	}
+
+InputEvent CInputManager::mouse(OIS::MouseEvent const& arg)
+{
+	OIS::MouseState const& mstate = cursor_->getMouseState();
+
+	InputEvent event;
+
+	event.type = InputEventType::MouseEvent;
+
+	event.mouse.X = mstate.X.abs;
+	event.mouse.Y = mstate.Y.abs;
+	event.mouse.wheel = mstate.Z.rel;
+	event.mouse.buttonStates = mstate.buttonDown(OIS::MB_Left) ? MOUSE_LEFT : 0 +
+		mstate.buttonDown(OIS::MB_Right) ? MOUSE_RIGHT : 0 + 
+		mstate.buttonDown(OIS::MB_Middle) ? MOUSE_MIDDLE : 0;
+
+	return event;
 }
 
 bool CInputManager::mouseMoved( OIS::MouseEvent const& arg )
 {
-	InputEvent hrEvent;
-
-	hrEvent.type = InputEventType::MouseEvent;
-
-	OIS::MouseState const& mstate = cursor_->getMouseState();
-	hrEvent.mouse.X = mstate.X.abs;
-	hrEvent.mouse.Y = mstate.Y.abs;
-	hrEvent.mouse.buttonStates = mstate.buttonDown(OIS::MB_Left) ? MOUSE_LEFT : 0 +
-		mstate.buttonDown(OIS::MB_Right) ? MOUSE_RIGHT : 0 + 
-		mstate.buttonDown(OIS::MB_Middle) ? MOUSE_MIDDLE : 0;
-	hrEvent.mouse.event = MouseEventType::Moved;
-
+	InputEvent event = mouse(arg);
+	
+	if(!math::equals(event.mouse.wheel,0.0f)) {
+		event.mouse.event = MouseEventType::Wheel;
+	} else {
+		event.mouse.event = MouseEventType::Moved;
+	}
+	return true;
 }
+
 bool CInputManager::mousePressed( OIS::MouseEvent const& arg, OIS::MouseButtonID id )
 {
-
+	InputEvent event = mouse(arg);
+	switch(id) {
+	case OIS::MB_Right:
+		event.mouse.event = MouseEventType::LButtonDown;
+		break;
+	case OIS::MB_Left:
+		event.mouse.event = MouseEventType::RButtonDown;
+		break;
+	case OIS::MB_Middle:
+		event.mouse.event = MouseEventType::MButtonDown;
+		break;
+	}
 }
 bool CInputManager::mouseReleased(OIS::MouseEvent const& arg, OIS::MouseButtonID id )
 {
-
+	InputEvent event = mouse(arg);
+	switch(id) {
+	case OIS::MB_Right:
+		event.mouse.event = MouseEventType::LButtonUp;
+		break;
+	case OIS::MB_Left:
+		event.mouse.event = MouseEventType::RButtonUp;
+		break;
+	case OIS::MB_Middle:
+		event.mouse.event = MouseEventType::MButtonUp;
+		break;
+	}
 }
 
 void CInputManager::broadcast(InputEvent event)
