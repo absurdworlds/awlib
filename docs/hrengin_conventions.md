@@ -1,13 +1,15 @@
-hr engin conventions
+hrengin conventions
 ====================
 
-## Code conventions
+## Code conventions ##
 
-### Braces placement
+### Formatting ###
 
-All the code must adhere to K&R style. Additionally, braces must not be omitted in all scopes.
+#### Braces placement ####
 
-### Identation style
+All the code must adhere to K&R style. Additionally, braces must ever be omitted, in any scope.
+
+#### Identation style ####
 
 Tabulation characters should be used for identation. One tab character is equal to eight spaces.
 
@@ -15,7 +17,31 @@ If more then four levels of nesting present, function should be split.
 
 Everything inside a scope must be indented by one level, with exception to labels and namespace scopes.
 
-### Naming
+#### Spaces ####
+
+The rules are similar to those regular typography. 
+
+One thing to point out: I consider reference and pointer as part of type, so it is logical to write it as
+
+	type_t* ptr;
+	type_t& ref;
+
+And never like this
+
+	type_t *ptr;
+
+In my view, it is same as to write `type_t constvar` instead of `type_t const var`.
+
+#### Syntax ####
+
+Multiple variable declarations are forbidden. E.g.
+
+	int a, b, c;
+	int* ap,* bp,* cp;
+
+is not allowed.
+
+### Naming ###
 
 `class`, `struct`, `union` and `enum` names should be written in CamelCase. Classes with inheritance should have 'C' prefix, and interfaces should have 'I' prefix.
 
@@ -23,17 +49,18 @@ Preprocessor definition and constant names should be written in UPPER_CASE. An e
 
 Variables, functions and class members names should be written in camelCase, beginning with a lower case letter. Member variables should be suffixed with '_' (underscore).
 
-### struct vs class
+#### struct vs class ####
 
 `struct` should be used for POD classes and classes withoud user-defined constructors and member functions, whereas `class` should be used for any other classes. 
 
-### Header guards
+#### Header guards ####
 
 All header guards should have following format:
 
 `_project_fileName_`
 
 Where `project` refers to a whole product, not to a module or a IDE project file.
+
 
 ## Directory structure
 
