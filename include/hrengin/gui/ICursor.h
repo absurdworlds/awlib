@@ -6,3 +6,7 @@
    This is free software: you are free to change and redistribute it.
    There is NO WARRANTY, to the extent permitted by law.
  */
+#ifndef _hrengin_ICursor_
+#define _hrengin_ICursor_
+
+#endif//_hrengin_ICursor_

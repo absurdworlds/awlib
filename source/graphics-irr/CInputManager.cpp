@@ -1,4 +1,4 @@
-/**
+/*
    Copyright (C) 2014  absurdworlds
 
    License LGPLv3-only:
@@ -76,7 +76,7 @@ void convertEvent(const irr::SEvent& irrEvent, InputEvent& hrgEvent) {
 	case irr::EET_KEY_INPUT_EVENT:
 		hrgEvent.type = InputEventType::KeyboardEvent;
 		hrgEvent.key.Char = irrEvent.KeyInput.Char;
-		hrgEvent.key.keyCode = irrEvent.KeyInput.Key;
+		hrgEvent.key.keyCode = KeyCode(irrEvent.KeyInput.Key);
 		hrgEvent.key.pressedDown = irrEvent.KeyInput.PressedDown;
 		hrgEvent.key.control = irrEvent.KeyInput.Control;
 		hrgEvent.key.shift = irrEvent.KeyInput.Shift;

@@ -1,4 +1,4 @@
-/**
+/*
    Copyright (C) 2014  absurdworlds
 
    License LGPLv3-only:
@@ -21,8 +21,6 @@
 #include <hrengin/gui/IGUITextBox.h>
 #include <hrengin/gui/Keycodes.h>
 #include <hrengin/gui/IInputManager.h>
-
-#include <hrengin/common/nowide.h>
 
 #include "CConsoleGUI.h"
 

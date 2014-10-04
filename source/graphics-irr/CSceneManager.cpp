@@ -11,7 +11,7 @@
 #include <Irrlicht/ISceneCollisionManager.h>
 
 
-#include <hrengin/core/hrenginpaths.h>
+#include <hrengin/core/paths.h>
 
 #include "CCameraNode.h"
 #include "CLightNode.h"
@@ -58,6 +58,8 @@ IVisNode* CSceneManager::createMeshSceneNode(const char* meshname)
 {
 	irr::scene::IAnimatedMeshSceneNode* node = 
 		scnmgr->addAnimatedMeshSceneNode(convertMesh(meshname));
+	
+	node->addShadowVolumeSceneNode();
 	return new CVisNode(this, node);
 }
 

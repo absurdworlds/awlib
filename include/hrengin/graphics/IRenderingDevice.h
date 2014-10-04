@@ -1,3 +1,11 @@
+/*
+   Copyright (C) 2014  absurdworlds
+
+   License LGPLv3-only:
+   GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
+   This is free software: you are free to change and redistribute it.
+   There is NO WARRANTY, to the extent permitted by law.
+ */
 #ifndef _hrengin_IRenderingDevice_
 #define _hrengin_IRenderingDevice_
 
@@ -12,25 +20,28 @@ namespace graphics {
 class IVertexBuffer;
 class IIndexBuffer;
 
+//! Interface for rendering the scene into the window
 class IRenderingDevice {
 public:
-	/* begin rendering the scene, must be called before drawing anything */
+	//! prepare scene for rendering, must be called before drawing anything
 	virtual bool beginRender() = 0;
 	// beginFrame()
 
-	/* end rendering the scene, */
+	//! end rendering the scene, and swap the buffers
 	virtual bool endRender() = 0;
 	// post()
 	
-	/* temporary */
+	//! temporary tool to render debug drawers
 	virtual void drawDebug() = 0;
 
+	//! Draw a primitive using index buffer and vertex buffer
+	virtual bool drawVertexPrimitive(IVertexBuffer const& vb, IIndexBuffer const& ib) = 0;
 
-	virtual bool drawVertexPrimitive(const IVertexBuffer& vb, const IIndexBuffer& ib) = 0;
-	virtual void drawLine(const Vector3d<f32>& from, const Vector3d<f32>& to, const Vector3d<f32>& color) = 0;
+	//! Draw a line primitive
+	virtual void drawLine(Vector3d<f32> const& from,
+		Vector3d<f32> const& to, Vector3d<f32> const& color) = 0;
 };
 
-	
 } // namespace video
 } // namespace hrengin
 

@@ -45,7 +45,7 @@ CVideoManager::CVideoManager(core::ISettingsManager* settings)
 		settings->getValue("graphics.resolutionY",resolutionY);
 		settings->getValue("graphics.fullscreen",fullscreen);
 	}
-	device_ = irr::createDevice( irr::video::EDT_OPENGL, irr::core::dimension2d<irr::u32>(resolutionX, resolutionY), 32, fullscreen, false, true, 0);
+	device_ = irr::createDevice( irr::video::EDT_OPENGL, irr::core::dimension2d<irr::u32>(resolutionX, resolutionY), 32, fullscreen, true, true, 0);
 
 	device_->setWindowCaption(L"hrengin A - Irrlicht 1.8.1");
 
