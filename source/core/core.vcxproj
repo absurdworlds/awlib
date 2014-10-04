@@ -13,12 +13,11 @@
   <ItemGroup>
     <ClInclude Include="..\..\include\hrengin\common\api.h" />
     <ClInclude Include="..\..\include\hrengin\common\config.h" />
+    <ClInclude Include="..\..\include\hrengin\common\hidden_impl.h" />
     <ClInclude Include="..\..\include\hrengin\common\Line3d.h" />
-    <ClInclude Include="..\..\include\hrengin\common\locale.h" />
     <ClInclude Include="..\..\include\hrengin\common\macro.h" />
     <ClInclude Include="..\..\include\hrengin\common\math.h" />
     <ClInclude Include="..\..\include\hrengin\common\Matrix4.h" />
-    <ClInclude Include="..\..\include\hrengin\common\nowide.h" />
     <ClInclude Include="..\..\include\hrengin\common\PodString.h" />
     <ClInclude Include="..\..\include\hrengin\common\Quaternion.h" />
     <ClInclude Include="..\..\include\hrengin\common\Rect.h" />
@@ -26,6 +25,8 @@
     <ClInclude Include="..\..\include\hrengin\common\stringutils.h" />
     <ClInclude Include="..\..\include\hrengin\common\time.h" />
     <ClInclude Include="..\..\include\hrengin\common\types.h" />
+    <ClInclude Include="..\..\include\hrengin\common\utf.h" />
+    <ClInclude Include="..\..\include\hrengin\common\utf_convert.h" />
     <ClInclude Include="..\..\include\hrengin\common\Vector2d.h" />
     <ClInclude Include="..\..\include\hrengin\common\Vector3d.h" />
     <ClInclude Include="..\..\include\hrengin\core\hdf_node.h" />

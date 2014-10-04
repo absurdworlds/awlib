@@ -42,9 +42,6 @@
     <ClInclude Include="..\..\include\hrengin\core\IModelLoader.h">
       <Filter>include\core</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\hrengin\common\api.h">
-      <Filter>include\common</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\hrengin\common\config.h">
       <Filter>include\common</Filter>
     </ClInclude>
@@ -77,12 +74,6 @@
     </ClInclude>
     <ClInclude Include="CHrenginShell.h">
       <Filter>source</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\hrengin\common\nowide.h">
-      <Filter>include\common\locale</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\hrengin\common\locale.h">
-      <Filter>include\common\locale</Filter>
     </ClInclude>
     <ClInclude Include="CLogger.h">
       <Filter>source</Filter>
@@ -165,6 +156,18 @@
     <ClInclude Include="..\..\include\hrengin\core\paths.h">
       <Filter>include\core\io</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\common\utf.h">
+      <Filter>include\common\locale</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\common\api.h">
+      <Filter>include\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\common\utf_convert.h">
+      <Filter>include\common\locale</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\hrengin\common\hidden_impl.h">
+      <Filter>include\common</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CFileSystem.cpp">
@@ -185,6 +188,8 @@
     <ClCompile Include="CModelLoader.cpp">
       <Filter>source</Filter>
     </ClCompile>
-    <ClCompile Include="stringutils.cpp" />
+    <ClCompile Include="stringutils.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
