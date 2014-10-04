@@ -22,14 +22,7 @@
 	#else
 		#define HRENGINSOUND_API __declspec(dllimport)
 		#define HR_SOUND_API __declspec(dllimport)
-	#endif
-	
-	#ifdef HRENGIN_PHYSICS
-		#define HRENGINPHYSICS_API __declspec(dllexport)
-	#else
-		#define HRENGINPHYSICS_API __declspec(dllimport)
-	#endif
-		
+	#endif		
 #else
 #endif
 	

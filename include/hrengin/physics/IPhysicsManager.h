@@ -1,4 +1,4 @@
-/**
+/*
    Copyright (C) 2014  absurdworlds
 
    License LGPLv3-only:
@@ -10,12 +10,13 @@
 #define _hrengin_IPhysicsManager_
 
 #include <hrengin/common/types.h>
-#include <hrengin/common/api.h>
 #include <hrengin/common/macro.h>
 
 #include <hrengin/common/Vector3d.h>
 
 #include <hrengin/graphics/IRenderingDevice.h>
+
+#include <hrengin/physics/api.h>
 #include <hrengin/physics/IRigidBody.h>
 #include <hrengin/physics/IDebugDrawer.h>
 
@@ -29,10 +30,12 @@ class IPhysicsWorld;
 class ICollisionObject;
 class ICollisionPhantom;
 
+//! Used to create physical worlds and objects
 class IPhysicsManager {
 public:
-	/* Destructor
-	   Notice: must be called only after deletion of all physics worlds */
+	/*! Destructor
+	   Notice: must be called only after deletion of all physics worlds
+	 */
 	virtual ~IPhysicsManager() {};
 	
 	virtual u32 loadModel(const char* modelName) = 0;
@@ -47,7 +50,7 @@ public:
 	virtual IDebugDrawer* createDebugDrawer(graphics::IRenderingDevice* renderer) = 0;
 };
 
-HRENGINPHYSICS_API IPhysicsManager* createPhysicsManager();
+HR_PHYSICS_API IPhysicsManager* createPhysicsManager();
 
 } // namespace physics
 } // namespace hrengin

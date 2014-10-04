@@ -1,4 +1,4 @@
-/**
+/*
    Copyright (C) 2014  absurdworlds
 
    License LGPLv3-only:
@@ -9,8 +9,8 @@
 #ifndef _hrengin_CCollisionObject_
 #define _hrengin_CCollisionObject_
 
-#include <Bullet/btBulletDynamicsCommon.h>
-#include <Bullet/btBulletCollisionCommon.h>
+#include <btBulletDynamicsCommon.h>
+#include <btBulletCollisionCommon.h>
 
 #include <hrengin/physics/ICollisionObject.h>
 

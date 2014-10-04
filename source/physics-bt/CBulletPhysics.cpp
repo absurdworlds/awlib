@@ -1,4 +1,4 @@
-/**
+/*
    Copyright (C) 2014  absurdworlds
 
    License LGPLv3-only:
@@ -27,7 +27,7 @@ namespace hrengin {
 namespace physics {
 
 
-HRENGINPHYSICS_API IPhysicsManager* createPhysicsManager()
+HR_PHYSICS_API IPhysicsManager* createPhysicsManager()
 {
 	return new CBulletPhysics();
 }

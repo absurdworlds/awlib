@@ -9,7 +9,7 @@
 #ifndef _hrengin_IModelLoader_
 #define _hrengin_IModelLoader_
 
-#include <hrengin/common/api.h>
+#include <hrengin/core/api.h>
 
 namespace hrengin {
 
