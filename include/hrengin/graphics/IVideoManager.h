@@ -9,7 +9,7 @@
 #ifndef _hrengin_IVideoManager_
 #define _hrengin_IVideoManager_
 
-#include <hrengin/common/api.h>
+#include <hrengin/graphics/api.h>
 #include <hrengin/common/Vector3d.h>
 
 namespace hrengin {
@@ -40,7 +40,7 @@ public:
 	virtual u32 getTime() = 0;
 };
 
-HRENGINGRAPHICS_API IVideoManager* createVideoManager(core::ISettingsManager* settings = 0);
+HR_GRAPHICS_API IVideoManager* createVideoManager(core::ISettingsManager* settings = 0);
 
 } // namespace graphics
 } // namespace hrengin

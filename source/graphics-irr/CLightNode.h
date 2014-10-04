@@ -9,7 +9,7 @@
 #ifndef _hrengin_CLightNode_
 #define _hrengin_CLightNode_
 
-#include <Irrlicht/Irrlicht.h>
+#include <Irrlicht/irrlicht.h>
 
 #include <hrengin/graphics/ILightNode.h>
 #include <hrengin/graphics/IVideoManager.h>

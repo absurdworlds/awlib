@@ -10,7 +10,7 @@
 #define _hrengin_stringutils_
 
 #include <string>
-#include <hrengin/common/api.h>
+#include <hrengin/core/api.h>
 
 namespace hrengin {
 

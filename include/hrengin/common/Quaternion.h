@@ -332,7 +332,7 @@ Quaternion<T> slerp (Quaternion<T> const& q0, Quaternion<T> const& q1,
 	// use shortest path
 	if (tCos < 0 && shortest) {
 		q0 = -q0;
-		dot = -dot;
+		tCos = -tCos;
 	}
 
 	static T const epsilon = T(0.005);

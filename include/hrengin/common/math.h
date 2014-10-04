@@ -14,6 +14,8 @@
 #include <limits.h>
 #include <float.h>
 
+#include <algorithm>
+
 #include <hrengin/common/macro.h>
 #include <hrengin/common/types.h>
 
@@ -108,7 +110,7 @@ FORCEINLINE bool equals(const f64 a, const f64 b, const f64 tolerance = ROUNDING
 template <typename T>
 inline T clamp(T value, T lower, T upper)
 {
-	return std::max(upper, std::min(T, lower));
+	return std::max(upper, std::min(value, lower));
 }
 
 template <>
@@ -123,13 +125,12 @@ inline f64 clamp(f64 value, f64 lower, f64 upper)
 	return fmax(lower, fmin(value, upper));
 }
 
-
-/**
+/*!
    Normalize angle between -180 and 180 degrees
-   @param angle
+   \param angle
       angle to normalize, in degrees
-   @return
-      input angle normalized to [-180;180] range
+   \return
+      input angle normalized to (-180;180] range
  */
 inline f32 normalizeAngle(f32 angle)
 {
@@ -139,18 +140,22 @@ inline f32 normalizeAngle(f32 angle)
 		: angle;
 }
 
-/* Shorthand for above function */
+/*! Shorthand for above function */
 inline f32 wrapAngle(f32 angle)
 {
 	return normalizeAngle(angle);
 }
 
-/* Normalize angle between -PI and PI radians */
+/*!
+   Normalize angle between -Pi and Pi radians
+   \param angle Value in radians to normalize
+   \return Angle in (-Pi;Pi] range
+ */
 inline f32 wrapAngleRad(f32 angle)
 {
-	angle = fmod(f64(angle),DOUBLE_PI64);
-	return    angle >  PI64 ? angle - DOUBLE_PI64
-		: angle < -PI64 ? angle + DOUBLE_PI64 
+	angle = fmod(f64(angle), DOUBLE_PI64);
+	return    angle >   PI64 ? angle - DOUBLE_PI64
+		: angle <= -PI64 ? angle + DOUBLE_PI64 
 		: angle;
 }
 

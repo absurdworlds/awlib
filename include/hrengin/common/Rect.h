@@ -18,26 +18,30 @@ namespace hrengin {
 template <class T>
 class Rect {
 public:
-	// Coordinates of upper left corner
-	Vector2d<T> upperLeft_;
-	// Coordinates of lower right corner
-	Vector2d<T> lowerRight_;
-public:
-	/* Construct zero-sized rect at (0,0) */
-	Rect() : upperLeft(0,0), lowerRight(0,0)
+	//! Construct zero-sized rect at (0,0)
+	Rect()
+		: upperLeft(0,0), lowerRight(0,0)
 	{
 	}
 
-	/* Construct specifying each coordinate */
-	Rect(T x, T y, T x2, T y2) : upperLeft_(x,y), lowerRight_(x2,y2)
+	//! Construct specifying each coordinate
+	Rect(T x, T y, T x2, T y2)
+		: upperLeft(x,y), lowerRight(x2,y2)
 	{
 	}
 
-	/* Construct specifying coordinates as vectors */
+	//! Construct specifying coordinates as vectors
 	Rect(const Vector2d<T>& upperLeft, const Vector2d<T>& lowerRight)
-		: upperLeft_(upperLeft), lowerRight_(lowerRight)
+		: upperLeft(upperLeft), lowerRight(lowerRight)
 	{
 	}
+
+
+	//! Coordinates of upper left corner
+	Vector2d<T> upperLeft;
+	//! Coordinates of lower right corner
+	Vector2d<T> lowerRight;
+
 
 	/* It's all borrowed from Irrlicht
 	template <class U>

@@ -11,7 +11,7 @@
 
 #include <forward_list>
 
-#include <Irrlicht/Irrlicht.h>
+#include <Irrlicht/irrlicht.h>
 
 #include <hrengin/gui/IInputManager.h>
 

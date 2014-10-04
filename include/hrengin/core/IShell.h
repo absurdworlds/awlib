@@ -11,7 +11,7 @@
 
 #include <string>
 
-#include <hrengin/common/api.h>
+#include <hrengin/core/api.h>
 #include <hrengin/common/types.h>
 
 namespace hrengin {
@@ -24,7 +24,10 @@ namespace core {
  */
 class IShell {
 public:
-	virtual ~IShell() {};
+	//! Virtual destructor
+	virtual ~IShell()
+	{
+	}
 	
 	class ICommand {
 	public:

@@ -9,10 +9,12 @@
 #ifndef _hrengin_IConsoleGUI_
 #define _hrengin_IConsoleGUI_
 
-#include <hrengin/common/api.h>
 #include <hrengin/common/types.h>
-#include <hrengin/gui/IUserInputReceiver.h>
+
 #include <hrengin/core/ILogger.h>
+
+#include <hrengin/graphics/api.h>
+#include <hrengin/gui/IUserInputReceiver.h>
 
 namespace hrengin {
 namespace core {
@@ -21,11 +23,13 @@ class IShell;
 namespace gui {
 class IGUIManager;
 
+//! User interface console windows used to type commands
 class IConsoleGUI : public IUserInputReceiver, public ILogBook {
 public:
 	virtual ~IConsoleGUI() {};
 };
 
+//! Creates a console window
 HR_GRAPHICS_API IConsoleGUI* createConsole(core::IShell* shell, IGUIManager* guimgr);
 
 } // namespace gui

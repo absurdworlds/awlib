@@ -35,11 +35,11 @@ public:
 
 	//! Construct line from start and end vectors
 	Segment3d(Vector3d<T> const& start, Vector3d<T> const& end)
-		: start_(start), end_(end)
+		: start(start), end(end)
 	{
 	}
 		
-	Segment3d<T>& operator = (const Segment3d<T>& line)
+	Segment3d<T>& operator = (Segment3d<T> const& line)
 	{
 		start = line.start;
 		end = line.end;
@@ -53,7 +53,7 @@ public:
 		Vector3d<T> a = direction();
 		Vector3d<T> b = point - start;
 
-		a.normalize()
+		a.normalize();
 
 		T projectionLength = b.dot(a);
 

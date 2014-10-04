@@ -1,4 +1,4 @@
-/**
+/*
    Copyright (C) 2014  absurdworlds
 
    License LGPLv3-only:
@@ -10,7 +10,7 @@
 #include <random>
 #include <string>
 
-#include <Irrlicht/Irrlicht.h>
+#include <Irrlicht/irrlicht.h>
 //#include <Irrlicht/SAnimatedMesh.h>
 
 
@@ -53,7 +53,9 @@ CVideoManager::CVideoManager(core::ISettingsManager* settings)
 	sceneManager_ = new CSceneManager(device_->getSceneManager(), renderer_, device_);
 	guiManager_ = new gui::CGUIManager(device_->getGUIEnvironment(), device_);
 
+#ifdef HR_WINDOWS
 	settings->setValue("platform.win32.wndHandle", reinterpret_cast<i32>(device_->getVideoDriver()->getExposedVideoData().OpenGLWin32.HWnd));
+#endif
 }
 
 CVideoManager::~CVideoManager() 

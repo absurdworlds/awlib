@@ -42,7 +42,7 @@ typedef double				f64;
 
 typedef u8 byte;
 
-#if defined (HRENGIN_64BIT) 
+#if defined (HR_64BIT) 
 	typedef u64 handle;
 #else
 	typedef u32 handle;

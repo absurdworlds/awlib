@@ -9,7 +9,7 @@
 #ifndef _hrengin_CCameraNode_
 #define _hrengin_CCameraNode_
 
-#include <Irrlicht/Irrlicht.h>
+#include <Irrlicht/irrlicht.h>
 
 #include <hrengin/graphics/ICameraNode.h>
 #include <hrengin/graphics/IVideoManager.h>

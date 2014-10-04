@@ -13,9 +13,9 @@
 #include <thread>
 
 #include <hrengin/common/config.h>
-#include <hrengin/common/api.h>
 #include <hrengin/common/macro.h>
 
+#include <hrengin/core/api.h>
 
 #define TRACE_FUNCTION() \
 do { \
@@ -42,14 +42,20 @@ do { \
 
 namespace hrengin {
 
+//! Interface for logger output
 class ILogBook {
 public:
 	virtual void log(std::string) = 0;
 };
 
+//! Interface for logger class, which is used to write messages into log books
 class ILogger {
 public:
-	virtual ~ILogger() {};
+	//! Virtual destructor
+	virtual ~ILogger()
+	{
+	}
+
 	virtual void push(std::string msg) = 0;
 	virtual void addLog(ILogBook* log) = 0;
 	
@@ -59,6 +65,5 @@ public:
 HR_CORE_API ILogger* createLogger();
 
 } // namespace hrengin
-
 
 #endif//_hrengin_ILogger_

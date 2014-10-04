@@ -62,7 +62,8 @@ inline irr::gui::IGUIElement* getUnderlyingElement(IGUIElement* e) {
 IGUIWindow* CGUIManager::addWindow(Rect<i32> rect, bool isModal, 
 	const wchar_t* title, IGUIElement* parent, i32 id)
 {
-	irr::core::recti windowRect(rect.upperLeft_.X, rect.upperLeft_.Y, rect.lowerRight_.X, rect.lowerRight_.Y);
+	irr::core::recti windowRect(rect.upperLeft.X, rect.upperLeft.Y,
+		rect.lowerRight.X, rect.lowerRight.Y);
 	
 	irr::gui::IGUIElement* parentElem = 0;
 	
@@ -86,14 +87,10 @@ IGUIWindow* CGUIManager::addWindow(Rect<i32> rect, bool isModal,
 IGUITextBox* CGUIManager::addTextBox(Rect<i32> rect, const wchar_t* text,
 	bool border, IGUIElement* parent, i32 id)
 {
-	irr::core::recti elemRect(rect.upperLeft_.X, rect.upperLeft_.Y, rect.lowerRight_.X, rect.lowerRight_.Y);
+	irr::core::recti elemRect(rect.upperLeft.X, rect.upperLeft.Y,
+			rect.lowerRight.X, rect.lowerRight.Y);
 	irr::gui::IGUIElement* parentElem = 0;
-	
-	#if 0
-	if(parent == 0) {
-		parent = root_;
-	}
-	#endif
+
 	if(parent != 0) {
 		parentElem = getUnderlyingElement(parent);
 	}
@@ -105,14 +102,10 @@ IGUITextBox* CGUIManager::addTextBox(Rect<i32> rect, const wchar_t* text,
 
 IGUIListBox* CGUIManager::addListBox(Rect<i32> rect, bool background, IGUIElement* parent, i32 id)
 {
-	irr::core::recti elemRect(rect.upperLeft_.X, rect.upperLeft_.Y, rect.lowerRight_.X, rect.lowerRight_.Y);
+	irr::core::recti elemRect(rect.upperLeft.X, rect.upperLeft.Y,
+			rect.lowerRight.X, rect.lowerRight.Y);
 	irr::gui::IGUIElement* parentElem = 0;
-	
-	#if 0
-	if(parent == 0) {
-		parent = root_;
-	}
-	#endif
+
 	if(parent != 0) {
 		parentElem = getUnderlyingElement(parent);
 	}

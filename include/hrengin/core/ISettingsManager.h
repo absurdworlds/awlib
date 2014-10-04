@@ -11,16 +11,19 @@
 
 #include <string>
 
-#include <hrengin/common/api.h>
+#include <hrengin/core/api.h>
 #include <hrengin/common/types.h>
 
 namespace hrengin {
 namespace core {
 
+//! Interface is used to load, access and store different settings
 class ISettingsManager {
 public:
+	//! Virtual destructor
 	virtual ~ISettingsManager() {};
-
+	
+	//! Load and parse settings from file 'settings.hdf'
 	virtual void loadSettings() = 0;
 
 	//virtual void registerSetting(std::string key, hdf::Type type) = 0;

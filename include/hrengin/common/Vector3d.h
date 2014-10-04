@@ -319,7 +319,7 @@ public:
 	T getPitch() const
 	{
 		f64 const XZ = math::sqrt(X*X + Z*Z);
-		pitch = T(atan2((f64)XZ, (f64)Y) - math::HALF_PI64);
+		T const pitch = T(atan2((f64)XZ, (f64)Y) - math::HALF_PI64);
 	
 		if (pitch <= -math::PI64) {
 			pitch += math::DOUBLE_PI64;

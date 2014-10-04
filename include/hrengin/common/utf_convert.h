@@ -44,9 +44,9 @@ template<typename out_type, typename in_type>
 std::basic_string<out_type>
 utf_convert(std::basic_string<in_type> const& str)
 {
-	typedef std::basic_string<out_type> value_type;
-	typedef std::back_insert_iterator<value_type> out_iterator_type;
-	typedef std::basic_string<in_type>::const_iterator in_iterator_type;
+	typedef typename std::basic_string<out_type> value_type;
+	typedef typename std::back_insert_iterator<value_type> out_iterator_type;
+	typedef typename std::basic_string<in_type>::const_iterator in_iterator_type;
 
 	value_type result;
 	in_iterator_type begin(str.begin());
