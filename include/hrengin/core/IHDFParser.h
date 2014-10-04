@@ -11,10 +11,9 @@
 
 #include <string>
 
-#include <hrengin/common/api.h>
-
 #include <hrengin/common/Vector3d.h>
 
+#include <hrengin/core/api.h>
 #include <hrengin/core/hdf_shared.h>
 
 
@@ -47,21 +46,20 @@ class IHDFParser {
 public:
 	virtual ~IHDFParser() {};
 
-	/* fast-forward to the next object */
+	//! Fast-forward to the next object
 	virtual bool read() = 0;
 
-	/* read the object's type
-	   return: the object type or 0 (HDF_OBJ_NULL) in case of failure */
+	/*! Read the object's type
+	   \return The object type or 0 (HDF_OBJ_NULL) in case of failure */
 	virtual HdfObjectType getObjectType() = 0;
 	
-	/* read the object's name
-	   arg name: output of the function
-	   return: name of the object or empty string in case of failure */
+	/*! Read the object's name
+	   \param name Gets set to the name of the object or empty string in
+	   case of failure */
 	virtual void getObjectName(std::string& name) = 0;
 
-	/* read the value of the variable
-	   param val: output of the function
-	   return: formatted value */
+	/*! Read the value of the variable
+	   \param val Variable to output to */
 	virtual void readFloat(float& val) = 0;
 	virtual void readFloat(double& val) = 0;
 	virtual void readInt(u32& val) = 0;
@@ -71,11 +69,12 @@ public:
 	//virtual void readString(char* val) = 0;
 	virtual void readVector3d(Vector3d<f32>& val) = 0;
 
-	/* skip current value or node (with all subnodes) */
+	//! Skip current value
 	virtual void skipValue() = 0;
+	//! Skip current node (with all subnodes)
 	virtual void skipNode() = 0;
 
-	/* add message to the parser's error log
+	/*! Add message to the parser's error log
 	   HDF_ERR_NOTICE — an unimportant message
 	   HDF_ERR_WARNING — warning, non-critical error
 	   HDF_ERR_ERROR — critical error, stops the parsing*/

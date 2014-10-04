@@ -7,8 +7,8 @@
 #include <AL/al.h>
 #include <AL/alc.h>
 
-#include <hrengin/common/hrenginconfig.h>
-#include <hrengin/common/hrengintypes.h>
+#include <hrengin/common/config.h>
+#include <hrengin/common/types.h>
 
 #include <hrengin/sound/ISound.h>
 #include <hrengin/sound/ISoundManager.h>

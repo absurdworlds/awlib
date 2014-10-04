@@ -1,4 +1,4 @@
-/**
+/*
    Copyright (C) 2014  absurdworlds
 
    License LGPLv3-only:
@@ -8,8 +8,8 @@
  */
 
 #include <hrengin/core/models.h>
-#include <hrengin/core/hrenginpaths.h>
-#include <hrengin/io/fsutil.h>
+#include <hrengin/core/paths.h>
+#include <hrengin/common/stringutils.h>
 
 #include <hrengin/core/IFileSystem.h>
 
@@ -45,7 +45,7 @@ IModel* CModelLoader::loadModel(const char* filename)
 	
 	IModel* model = new IModel; // temp
 
-	io::getFileExtension(ext, filename);
+	getFileExtension(ext, filename);
 
 	if(ext == "hndf" || ext == "hdf") {
 		io::ICharacterStream* stream = io::createBufferedStream(file);

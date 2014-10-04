@@ -1,6 +1,6 @@
 # Add paths to dependency headers here
-ExternalIncludes = -I../../dependencies/include/ -I../../dependencies/include/Bullet/
-ExternalLibraries = -LBulletCollision -LBulletDynamics
+ExternalIncludes = -I../../dependencies/include/
+ExternalLibraries =
 
 
 # Version
@@ -8,7 +8,7 @@ VersionMajor = 1
 VersionMinor = 3
 
 # Includes and objects
-Objects = CBulletPhysics.o CCollisionPhantom.o CDebugDrawer.o CPhysicsWorld.o CRigidBody.o hrToBullet.o
+Objects = CSoundManager.o CSound.o
 
 Includes = -I../../include $(ExternalIncludes)
 
@@ -22,7 +22,7 @@ CC = cc
 CXX = g++ -std=c++11 $(CompilerFlags)
 
 Version = $(VersionMajor).$(VersionMinor)
-SharedLibName = libhrphysics.so
+SharedLibName = libhrcore.so
 SharedLibFullName = $(SharedLibName).$(Version)
 
 

@@ -5,7 +5,7 @@
 #include <string>
 #include <thread>
 
-#include <hrengin/filesystem/hrenginpaths.h>
+#include <hrengin/core/paths.h>
 #include <hrengin/graphics/IVideoManager.h>
 #include <hrengin/core/ILogger.h>
 

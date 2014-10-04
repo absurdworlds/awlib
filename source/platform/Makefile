@@ -1,17 +1,14 @@
 # Add paths to dependency headers here
-ExternalIncludes = -I../../dependencies/include/ -I../../dependencies/include/Bullet/
-ExternalLibraries = -LBulletCollision -LBulletDynamics
-
+ExternalIncludes = -I../../dependencies/include/
+ExternalLibraries = 
 
 # Version
 VersionMajor = 1
 VersionMinor = 3
 
 # Includes and objects
-Objects = CBulletPhysics.o CCollisionPhantom.o CDebugDrawer.o CPhysicsWorld.o CRigidBody.o hrToBullet.o
-
+Objects = CCharacterStream.o CBufferedStream.o CReadFile.o linux/time.o
 Includes = -I../../include $(ExternalIncludes)
-
 Libraries = $(ExternalLibraries)
 
 # Compiler flags
@@ -22,7 +19,7 @@ CC = cc
 CXX = g++ -std=c++11 $(CompilerFlags)
 
 Version = $(VersionMajor).$(VersionMinor)
-SharedLibName = libhrphysics.so
+SharedLibName = libhrplatform.so
 SharedLibFullName = $(SharedLibName).$(Version)
 
 

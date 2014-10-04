@@ -25,7 +25,7 @@ public:
 };
 
 
-HRENGINFILESYSTEM_API IFileSystem* initFilesystem();
+HR_CORE_API IFileSystem* initFilesystem();
 
 
 }
