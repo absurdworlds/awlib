@@ -10,6 +10,7 @@
 #define _hrengin_IPhysicsWorld_
 
 #include <hrengin/common/types.h>
+#include <hrengin/common/hidden_impl.h>
 
 #include <hrengin/common/Vector3d.h>
 

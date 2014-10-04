@@ -1,4 +1,4 @@
-/**
+/*
    Copyright (C) 2014  absurdworlds
 
    License LGPLv3-only:
@@ -15,7 +15,7 @@
 namespace hrengin {
 namespace physics {
 
-/* class for holding raytest result */
+//! Strcut for raytest result
 struct RaytestResult {
 	RaytestResult(const ICollisionObject* collisionObject,
 		f32 hitFrac, Vector3d<f32> hitPos, Vector3d<f32> hitNorm)
@@ -33,7 +33,7 @@ struct RaytestResult {
 	Vector3d<f32>	hitPosition;
 };
 
-/* Used to report callback results */
+//! Interface for raytest callbacks
 class IRayResultCallback {
 public:
 	static const bool singleHit = true;
@@ -59,6 +59,7 @@ public:
 #endif
 };
 
+//! This class is used to report single raytest result
 class IClosestHitCallback : public IRayResultCallback {
 public:
 	static const bool singleHit = true;

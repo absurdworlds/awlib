@@ -11,6 +11,8 @@
 
 #include <hrengin/common/Vector3d.h>
 
+#include <hrengin/common/hidden_impl.h>
+
 #include <hrengin/physics/CollisionFilter.h>
 
 namespace hrengin {
@@ -36,12 +38,8 @@ public:
 		return pointer_;
 	}
 	
-
-	// internal implementation details
-	class Details;
-
-	// get internal implementation details, intended only for internal use
-	virtual ICollisionObject::Details* getDetails() = 0;
+	//! Internal implementation details
+	DECLARE_HIDDEN_DETAILS(ICollisionObject);
 protected:
 	void* pointer_;
 };

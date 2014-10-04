@@ -1,4 +1,4 @@
-/**
+/*
    Copyright (C) 2014  absurdworlds
 
    License LGPLv3-only:
@@ -14,16 +14,16 @@
 namespace hrengin {
 namespace physics {
 
+//! Represents a rigid physical body
 class IRigidBody : public ICollisionObject {
 public:
 	virtual ~IRigidBody() {};
 
-	// Struct contains information needed to construct a rigid body
+	//! Contains information needed to construct a rigid body
 	struct RigidBodyConstructionInfo {
 	public:
-		/* Mass of the body
-		   If mass is zero, body is static
-		 */
+		//! Mass of the body
+		//! If mass is zero, body is static
 		f32 mass;
 		
 		// 
@@ -70,8 +70,10 @@ public:
 		}
 	};
 
-
+	//! Get position of the body
 	virtual Vector3d<f32> getPosition() const = 0;
+
+	//! Get orientation of the body
 	virtual Vector3d<f32> getRotation() const = 0;
 };
 

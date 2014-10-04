@@ -9,6 +9,8 @@
 #ifndef _hrengin_IDebugDrawer_
 #define _hrengin_IDebugDrawer_
 
+#include <hrengin/common/hidden_impl.h>
+
 //#include <hrengin/graphics/IRenderable.h>
 #include <hrengin/graphics/IRenderingDevice.h>
 
@@ -21,12 +23,9 @@ public:
 	virtual void render() = 0;
 
 	virtual void setWorld(IPhysicsWorld* world) = 0;
-
-	// internal implementation details
-	class Details;
 	
-	// for internal use only
-	virtual IDebugDrawer::Details* getDetails() = 0;
+	//! Internal implementation details
+	DECLARE_HIDDEN_DETAILS(IDebugDrawer);
 };
 
 } // namespace graphics
