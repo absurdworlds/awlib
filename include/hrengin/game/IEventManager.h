@@ -10,7 +10,7 @@
 #define _hrengin_IEventManager_
 
 #include <hrengin/common/types.h>
-#include <hrengin/common/api.h>
+#include <hrengin/game/api.h>
 
 namespace hrengin {
 class IThinking;
@@ -27,6 +27,7 @@ typedef struct {
 	bool isCallback : 1;
 } Event;
 
+//! Dispatches game events
 class IEventManager {
 	//virtual u32 addEvent(EventCallback event, u32 period) = 0;
 	public:
@@ -35,7 +36,7 @@ class IEventManager {
 		virtual void advance() = 0;
 };
 
-HRENGIN_API IEventManager* createEventManager();
+HR_GAME_API IEventManager* createEventManager();
 } //end namespace hrengin
 
 #endif//_hrengin_IEventManager_

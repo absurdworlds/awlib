@@ -9,7 +9,7 @@
 #include "CEntityManager.h"
 
 namespace hrengin {
-HRENGIN_API IEntityManager* createEntityManager()
+HR_GAME_API IEntityManager* createEntityManager()
 {
 	return new CEntityManager();
 }

@@ -1,4 +1,4 @@
-/**
+/*
    Copyright (C) 2014  absurdworlds
 
    License LGPLv3-only:
@@ -24,6 +24,7 @@ const u32 ENTID_BaseEntity = 'base';
 enum EntFlag : u32 {
 };
 
+//! Base for game entities
 class IBaseEntity {
 public:
 	virtual ~IBaseEntity()

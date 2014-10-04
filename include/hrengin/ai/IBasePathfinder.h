@@ -1,4 +1,4 @@
-/**
+/*
    Copyright (C) 2014  absurdworlds
 
    License LGPLv3-only:
@@ -9,8 +9,9 @@
 #ifndef _hrengin_IBasePathfinder_
 #define _hrengin_IBasePathfinder_
 
-#include <hrengin/common/api.h>
 #include <hrengin/common/Vector3d.h>
+
+#include <hrengin/game/api.h>
 
 namespace hrengin {
 namespace ai {
@@ -22,7 +23,7 @@ public:
 	virtual Path findPath(Vector3d<f32> start, Vector3d<f32> end) = 0;
 };
 
-HRENGIN_API IBasePathfinder* createSimplePathfinder();
+HR_GAME_API IBasePathfinder* createSimplePathfinder();
 
 } // namespace ai
 } // namespace hrengin

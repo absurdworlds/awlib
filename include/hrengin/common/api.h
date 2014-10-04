@@ -12,12 +12,6 @@
 #include <hrengin/common/config.h>
 
 #ifdef _HR_WINDOWS
-	#ifdef HRENGIN_HRENGIN
-		#define HRENGIN_API __declspec(dllexport)
-	#else
-		#define HRENGIN_API __declspec(dllimport)
-	#endif
-	
 	#ifdef HRENGIN_AUDIO
 		#if defined(_MSC_VER)
 			#define HRENGINSOUND_API __declspec(dllexport)

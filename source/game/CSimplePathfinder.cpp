@@ -11,7 +11,7 @@
 namespace hrengin {
 namespace ai {
 
-HRENGIN_API IBasePathfinder* createSimplePathfinder()
+HR_GAME_API IBasePathfinder* createSimplePathfinder()
 {
 	return new CSimplePathfinder;
 }

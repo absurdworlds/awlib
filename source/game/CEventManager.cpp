@@ -10,7 +10,7 @@
 #include "CEventManager.h"
 
 namespace hrengin {
-HRENGIN_API IEventManager* createEventManager()
+HR_GAME_API IEventManager* createEventManager()
 {
 	return new CEventManager();
 }

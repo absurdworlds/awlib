@@ -7,7 +7,7 @@ VersionMajor = 1
 VersionMinor = 3
 
 # Includes and objects
-Objects = CEntityManager.o CEventManager.o CLogger.o CModelLoader.o CSimplePathfinder.o CWorld.o
+Objects = CEntityManager.o CEventManager.o CSimplePathfinder.o CWorld.o
 
 Includes = -I../../include $(ExternalIncludes)
 

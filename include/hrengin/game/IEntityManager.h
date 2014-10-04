@@ -1,4 +1,4 @@
-/**
+/*
    Copyright (C) 2014  absurdworlds
 
    License LGPLv3-only:
@@ -10,15 +10,16 @@
 #define _hrengin_IEntityManager_
 
 #include <hrengin/common/types.h>
-#include <hrengin/common/api.h>
+#include <hrengin/game/api.h>
 
 namespace hrengin {
 
 class IBaseEntity;
 
+//! Entity manager keeps track of entities
 class IEntityManager {
 public:
-	// run entity syncronization, snaps all entity components to new positions
+	//! run entity syncronization, use to update entity position and orientation
 	virtual void doSync() = 0;
 	//virtual void doCleanup() = 0;
 
@@ -26,7 +27,7 @@ public:
 	virtual void deleteEntity(u32 entid) = 0;
 };
 
-HRENGIN_API IEntityManager* createEntityManager();
+HR_GAME_API IEntityManager* createEntityManager();
 	
 } // namespace hrengin
 
