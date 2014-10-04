@@ -7,8 +7,7 @@ VersionMajor = 1
 VersionMinor = 3
 
 # Includes and objects
-IrrExtObjs = IrrExt/CSceneNodeAnimatorCameraRTS.o
-Objects = CCameraNode.o CConsoleGUI.o CGUIListBox.o CGuiManager.o CGUITextBox.o CGUIWindow.o CInputManager.o CLightNode.o CRenderingDevice.o CSceneManager.o CVideoManager.o CVisNode.o $(IrrExtObjs)
+Objects = CEntityManager.o CEventManager.o CLogger.o CModelLoader.o CSimplePathfinder.o CWorld.o
 
 Includes = -I../../include $(ExternalIncludes)
 
@@ -20,7 +19,7 @@ CC = cc
 CXX = g++ -std=c++11 $(CompilerFlags)
 
 Version = $(VersionMajor).$(VersionMinor)
-SharedLibName = libhrgraphics.so
+SharedLibName = libhrgame.so
 SharedLibFullName = $(SharedLibName).$(Version)
 
 
@@ -30,4 +29,3 @@ shrared: $(Objects)
 .PHONY : clean
 clean:
 	-rm $(SharedLibFullName) $(Objects)
-
