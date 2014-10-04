@@ -1,0 +1,12 @@
+ipch/*
+ipch/*/
+ipch/*/*
+*.suo
+*.sdf
+*.opensdf
+*.lib
+*.exp
+*.vcproj
+*.vcxproj
+*.vcxproj.user
+*.vcxproj.filters
