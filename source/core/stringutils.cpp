@@ -13,7 +13,6 @@
 #include <hrengin/common/stringutils.h>
 
 namespace hrengin {
-namespace io {
 
 std::string getFileExtension(std::string& dest, std::string const& path)
 {
@@ -30,5 +29,4 @@ std::string getFileExtension(std::string& dest, std::string const& path)
 	return dest;
 }
 
-} // namespace io
 } // namespace hrengin

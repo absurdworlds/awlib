@@ -29,8 +29,19 @@ public:
 	std::string key_;
 };
 
+//! Generic strlen
+template<typename char_type>
+size_t strlen_g (char_type const* str)
+{
+	char_type const* s = str;
+	while(*s) {
+		s++;
+	}
+	return s - str;
+}
+
 //! Get file extension from string
-HR_CORE_API std::string getFileExtension(std::string& dest, const std::string& path);
+HR_CORE_API std::string getFileExtension(std::string& dest, std::string const& path);
 
 } // namespace hrengin
 
