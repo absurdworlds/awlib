@@ -13,7 +13,7 @@
 #include <Irrlicht/IGUIScrollBar.h>
 #include <Irrlicht/IGUIListBox.h>
 
-#include <hrengin/common/nowide.h>
+#include <hrengin/common/utf_convert.h>
 
 #include "CGUIListBox.h"
 
@@ -51,7 +51,7 @@ u32 CGUIListBox::addItem(std::string text)
 
 void CGUIListBox::adjustScrollPosition()
 {
-	// FGot this from Irrlicht forums, although I'm not sure it works
+	// Got this from Irrlicht forums, although I'm not sure it works
 	// correctly: irr::core::List::push_back adds an item to the
 	// 'Last' position (irr::core::List::push_back gets called when
 	// element::addChild is called)

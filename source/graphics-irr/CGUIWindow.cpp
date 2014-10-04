@@ -1,4 +1,4 @@
-/**
+/*
    Copyright (C) 2014  absurdworlds
 
    License LGPLv3-only:
@@ -9,7 +9,7 @@
 
 #include <Irrlicht/IGUIElement.h>
 
-#include <hrengin/common/nowide.h>
+#include <hrengin/common/utf_convert.h>
 
 #include "CGUIWindow.h"
 
