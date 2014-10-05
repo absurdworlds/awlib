@@ -19,160 +19,160 @@ class Vector3d {
 public:
 	//! Default constructor. Constructs zero vector.
 	Vector3d() 
-		: X(0), Y(0), Z(0) 
+		: x(0), y(0), z(0) 
 	{
 	}
 
 	//! Construct vector with individual coodrinates
 	Vector3d(T const x, T const y, T const z) 
-		: X(x), Y(y), Z(z) 
+		: x(x), y(y), z(z) 
 	{
 	}
 
 	//! Construct vector with same value for coordinates
 	explicit Vector3d(T const v) 
-		: X(v), Y(v), Z(v) 
+		: x(v), y(v), z(v) 
 	{
 	}
 
 	//! Copy constructor
 	Vector3d(Vector3d<T> const& other) 
-		: X(other.X), Y(other.Y), Z(other.Z) 
+		: x(other.x), y(other.y), z(other.z) 
 	{
 	}
 
 	void set (T const x, T const y, T const z)
 	{
-		X = x; 
-		Y = y; 
-		Z = z; 
+		x = x; 
+		y = y; 
+		z = z; 
 	}
 
 	void set (Vector3d<T> const& other)
 	{
-		X = other.X; 
-		Y = other.Y; 
-		Z = other.Z; 
+		x = other.x; 
+		y = other.y; 
+		z = other.z; 
 	}
 
 	
 	Vector3d<T>& operator = (Vector3d<T> const& other)
 	{
-		X = other.X; 
-		Y = other.Y; 
-		Z = other.Z; 
+		x = other.x; 
+		y = other.y; 
+		z = other.z; 
 		return *this;
 	}
 	
 	Vector3d<T> operator + (Vector3d<T> const& other) const
 	{
-		return Vector3d<T>(X + other.X, Y + other.Y, Z + other.Z); 
+		return Vector3d<T>(x + other.x, y + other.y, z + other.z); 
 	}
 
 	Vector3d<T>& operator += (Vector3d<T> const& other)
 	{ 
-		X+=other.X; 
-		Y+=other.Y; 
-		Z+=other.Z; 
+		x += other.x; 
+		y += other.y; 
+		z += other.z; 
 		return *this;
 	}
 
 	Vector3d<T> operator + (T const val) const
 	{
-		return Vector3d<T>(X + val, Y + val, Z + val);
+		return Vector3d<T>(x + val, y + val, z + val);
 	}
 
 	Vector3d<T>& operator += (T const val)
 	{
-		X+=val;
-		Y+=val;
-		Z+=val;
+		x += val;
+		y += val;
+		z += val;
 		return *this;
 	}
 	Vector3d<T> operator - (Vector3d<T> const& other) const
 	{
-		return Vector3d<T>(X - other.X, Y - other.Y, Z - other.Z);
+		return Vector3d<T>(x - other.x, y - other.y, z - other.z);
 	}
 
 	Vector3d<T>& operator -= (Vector3d<T> const& other)
 	{
-		X-=other.X;
-		Y-=other.Y;
-		Z-=other.Z;
+		x -= other.x;
+		y -= other.y;
+		z -= other.z;
 		return *this;
 	}
 
 	Vector3d<T> operator - (T const val) const
 	{
-		return Vector3d<T>(X - val, Y - val, Z - val);
+		return Vector3d<T>(x - val, y - val, z - val);
 	}
 
 	Vector3d<T>& operator -= (T const val)
 	{
-		X-=val;
-		Y-=val;
-		Z-=val;
+		x -= val;
+		y -= val;
+		z -= val;
 		return *this;
 	}
 
 	Vector3d<T> operator * (Vector3d<T> const& other) const
 	{
-		return Vector3d<T>(X * other.X, Y * other.Y, Z * other.Z);
+		return Vector3d<T>(x * other.x, y * other.y, z * other.z);
 	}
 
 	Vector3d<T>& operator *= (Vector3d<T> const& other)
 	{
-		X*=other.X;
-		Y*=other.Y;
-		Z*=other.Z;
+		x *= other.x;
+		y *= other.y;
+		z *= other.z;
 		return *this;
 	}
 
 	Vector3d<T> operator * (T const v) const
 	{
-		return Vector3d<T>(X * v, Y * v, Z * v);
+		return Vector3d<T>(x * v, y * v, z * v);
 	}
 
 	Vector3d<T>& operator *= (T const v)
 	{
-		X *= v;
-		Y *= v;
-		Z *= v;
+		x *= v;
+		y *= v;
+		z *= v;
 		return *this;
 	}
 
 	Vector3d<T> operator / (Vector3d<T> const& other) const
 	{
-		return Vector3d<T>(X / other.X, Y / other.Y, Z / other.Z);
+		return Vector3d<T>(x / other.x, y / other.y, z / other.z);
 	}
 
 	Vector3d<T>& operator /= (Vector3d<T> const& other)
 	{
-		X/=other.X;
-		Y/=other.Y;
-		Z/=other.Z;
+		x /= other.x;
+		y /= other.y;
+		z /= other.z;
 		return *this;
 	}
 
 	Vector3d<T> operator / (T const val) const
 	{
 		T inv = T(1.0/val);
-		return Vector3d<T>(X * inv, Y * inv, Z * inv);
+		return Vector3d<T>(x * inv, y * inv, z * inv);
 	}
 
 	Vector3d<T>& operator /= (T const val)
 	{
 		T const inv = T(1.0/val);
-		X *= inv; 
-		Y *= inv; 
-		Z *= inv; 
+		x *= inv; 
+		y *= inv; 
+		z *= inv; 
 		return *this; 
 	}
 	
 
 	Vector3d<T> operator - () const
 	{
-		return Vector3d<T>(-X, -Y, -Z);
+		return Vector3d<T>(-x, -y, -z);
 	}
 
 	
@@ -186,9 +186,9 @@ public:
 
 		length = math::invSqrt(length);
 
-		X = T(X * length);
-		Y = T(Y * length);
-		Z = T(Z * length);
+		x = T(x * length);
+		y = T(y * length);
+		z = T(z * length);
 
 		return *this;
 	}
@@ -203,65 +203,65 @@ public:
 
 		length = math::invSqrt(length);
 
-		return Vector3d<T>(T(X * length), T(Y * length), T(Z * length));
+		return Vector3d<T>(T(x * length), T(y * length), T(z * length));
 	}
 
 	//! Get length of the vector.
 	T length() const
 	{ 
-		return math::sqrt( X*X + Y*Y + Z*Z ); 
+		return math::sqrt( x*x + y*y + z*z ); 
 	}
 	
 	//! Get squared length of the vector.
 	T squareLength() const
 	{ 
-		return X*X + Y*Y + Z*Z; 
+		return x*x + y*y + z*z; 
 	}
 
 
 	//! Calculate the dot product with another vector
 	T dot(Vector3d<T> const& other) const
 	{
-		return X*other.X + Y*other.Y + Z*other.Z;
+		return x*other.x + y*other.y + z*other.Z;
 	}
 
 	//! Calculate the cross product with another vector
 	Vector3d<T> cross(Vector3d<T> const& other) const
 	{
-		f32 x = Y * other.Z - Z * other.Y;
-		f32 y = X * other.Z - Z * other.X;
-		f32 z = X * other.Y - Y * other.X;
-		return Vector3d<T>(x, -y, z);
+		f32 x = y * other.z - z * other.y;
+		f32 y = z * other.x - x * other.z;
+		f32 z = x * other.y - y * other.x;
+		return Vector3d<T>(x, y, z);
 	}
 
 	//! Get distance from another point
 	T getDistance(Vector3d<T> const& other) const
 	{
-		return Vector3d<T>(X - other.X, Y - other.Y, Z - other.Z).length();
+		return Vector3d<T>(x - other.x, y - other.y, z - other.z).length();
 	}
 
 	//! Get squared distance from another point
 	T getDistanceSQ(Vector3d<T> const& other) const
 	{
-		return Vector3d<T>(X - other.X, Y - other.Y, Z - other.Z).squareLength();
+		return Vector3d<T>(x - other.x, y - other.y, z - other.z).squareLength();
 	}
 
 	//! Set the length of the vector to a new value
 	Vector3d<T>& setLength(T const newlength)
 	{
 		normalize();
-		this.X *= newlength;
-		this.Y *= newlength;
-		this.Z *= newlength;
+		this.x *= newlength;
+		this.y *= newlength;
+		this.z *= newlength;
 		return *this;
 	}
 	
 	// Invert the vector.
 	Vector3d<T>& invert ()
 	{
-		X *= -1;
-		Y *= -1;
-		Z *= -1;
+		x *= -1;
+		y *= -1;
+		z *= -1;
 		return *this;
 	}
 	
@@ -282,22 +282,22 @@ public:
 		Vector3d<T> angle;
 
 		// Yaw
-		angle.Y = T(atan2((f64)X, (f64)Z));
+		angle.y = T(atan2(f64(x), f64(z)));
 
 		// Pitch
-		f64 const xz = math::sqrt(X*X + Z*Z);
-		angle.X = T(atan2((f64)xz, (f64)Y) - math::HALF_PI64);
+		f64 const xz = math::sqrt(x*x + z*z);
+		angle.x = T(atan2(f64(xz), f64(y)) - math::HALF_PI64);
 		
 		// Normalize angles
-		if (angle.Y <= -math::PI64) {
-			angle.Y += math::DOUBLE_PI64;
-		} else if (angle.Y > math::PI64) {
-			angle.Y -= math::DOUBLE_PI64;
+		if (angle.y <= -math::PI64) {
+			angle.y += math::DOUBLE_PI64;
+		} else if (angle.y > math::PI64) {
+			angle.y -= math::DOUBLE_PI64;
 		}
-		if (angle.X <= math::PI64) {
-			angle.X += math::DOUBLE_PI64;
-		} else if (angle.X > math::PI64) {
-			angle.X -= math::DOUBLE_PI64;
+		if (angle.x <= math::PI64) {
+			angle.x += math::DOUBLE_PI64;
+		} else if (angle.x > math::PI64) {
+			angle.x -= math::DOUBLE_PI64;
 		}
 
 		return angle * math::RADTODEG64;
@@ -305,7 +305,7 @@ public:
 
 	T getYaw() const
 	{
-		T yaw = T(atan2((f64)X, (f64)Z));
+		T yaw = T(atan2(f64(x), f64(z)));
 		
 		if (yaw <= -math::PI64) {
 			yaw += math::DOUBLE_PI64;
@@ -318,8 +318,8 @@ public:
 
 	T getPitch() const
 	{
-		f64 const XZ = math::sqrt(X*X + Z*Z);
-		T const pitch = T(atan2((f64)XZ, (f64)Y) - math::HALF_PI64);
+		f64 const xz = math::sqrt(x*x + z*z);
+		T const pitch = T(atan2(f64(xz), f64(y)) - math::HALF_PI64);
 	
 		if (pitch <= -math::PI64) {
 			pitch += math::DOUBLE_PI64;
@@ -333,42 +333,42 @@ public:
 	//! Fill an array of 4 values with the vector data
 	void toArrayOf4(T* array) const
 	{
-		array[0] = X;
-		array[1] = Y;
-		array[2] = Z;
+		array[0] = x;
+		array[1] = y;
+		array[2] = z;
 		array[3] = 0;
 	}
 
 	//! Fill an array of 3 values with the vector data
 	void toArrayOf3(T* array) const
 	{
-		array[0] = X;
-		array[1] = Y;
-		array[2] = Z;
+		array[0] = x;
+		array[1] = y;
+		array[2] = z;
 	}
 
 	//! Coordinate along X axis
-	T X;
+	T x;
 	//! Coordinate along Y axis
-	T Y;
+	T y;
 	//! Coordinate along Z axis
-	T Z;
+	T z;
 };
 
 //! Partial specialization for integer vectors
 template <>
 inline Vector3d<i32> Vector3d<i32>::operator / (i32 const val) const 
 {
-	return Vector3d<i32>(X/val, Y/val, Z/val);
+	return Vector3d<i32>(x/val, y/val, z/val);
 }
 
 //! Partial specialization for integer vectors
 template <>
 inline Vector3d<i32>& Vector3d<i32>::operator /= (i32 const val) 
 {
-	X /= val;
-	Y /= val;
-	Z /= val;
+	x /= val;
+	y /= val;
+	z /= val;
 	return *this;
 }
 

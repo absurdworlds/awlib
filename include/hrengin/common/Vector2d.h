@@ -18,163 +18,159 @@ namespace hrengin {
 template <typename T>
 class Vector2d {
 public:
-	T X;
-	T Y;
-
-public:
 	Vector2d() 
-		: X(0), Y(0) 
+		: x(0), y(0) 
 	{
 	}
 
 	Vector2d(T x, T y) 
-		: X(x), Y(y) 
+		: x(x), y(y) 
 	{
 	}
 	
 	//! Construct vector with same both coordinates 
 	explicit Vector2d(T v) 
-		: X(v), Y(v) 
+		: x(v), y(v) 
 	{
 	}
 
 	//! Copy constructor
 	Vector2d(Vector2d<T> const& other) 
-		: X(other.X), Y(other.Y)
+		: x(other.x), y(other.y)
 	{
 	}
 
 	Vector2d<T>& operator = (Vector2d<T> const& other)
 	{
-		X = other.X; 
-		Y = other.Y; 
+		x = other.x; 
+		y = other.y; 
 		return *this; 
 	}
 
 	Vector2d<T> operator - () const 
 	{
-		return Vector2d<T>(-X, -Y);
+		return Vector2d<T>(-x, -y);
 	}
 
 	
 	Vector2d<T> operator + (Vector2d<T> const& other) const 
 	{
-		return Vector2d<T>(X + other.X, Y + other.Y);
+		return Vector2d<T>(x + other.x, y + other.y);
 	}
 
 	Vector2d<T>& operator += (Vector2d<T> const& other) 
 	{
-		X += other.X; 
-		Y += other.Y; 
+		x += other.x; 
+		y += other.y; 
 		return *this; 
 	}
 
 	Vector2d<T> operator - (Vector2d<T> const& other) const 
 	{ 
-		return Vector2d<T>(X - other.X, Y - other.Y); 
+		return Vector2d<T>(x - other.x, y - other.y); 
 	}
 
 	Vector2d<T>& operator -= (Vector2d<T> const& other) 
 	{ 
-		X-=other.X; 
-		Y-=other.Y; 
+		x -= other.x; 
+		y -= other.y; 
 		return *this; 
 	}
 
 	Vector2d<T> operator - (T const v) const 
 	{ 
-		return Vector2d<T>(X - v, Y - v); 
+		return Vector2d<T>(x - v, y - v); 
 	}
 
 	Vector2d<T>& operator -= (T const v) 
 	{ 
-		X-=v; 
-		Y-=v; 
+		x -= v; 
+		y -= v; 
 		return *this; 
 	}
 
 	Vector2d<T> operator * (Vector2d<T> const& other) const 
 	{ 
-		return Vector2d<T>(X * other.X, Y * other.Y); 
+		return Vector2d<T>(x * other.x, y * other.y); 
 	}
 
 	Vector2d<T>& operator *= (Vector2d<T> const& other) 
 	{ 
-		X*=other.X; 
-		Y*=other.Y; 
+		x *= other.x; 
+		y *= other.y; 
 		return *this; 
 	}
 
 	Vector2d<T> operator * (const T v) const
 	{ 
-		return Vector2d<T>(X * v, Y * v);
+		return Vector2d<T>(x * v, y * v);
 	}
 
 	Vector2d<T>& operator *= (const T v) 
 	{
-		X*=v; 
-		Y*=v; 
+		x *= v; 
+		y *= v; 
 		return *this; 
 	}
 
 	Vector2d<T> operator / (Vector2d<T> const& other) const 
 	{
-		return Vector2d<T>(X / other.X, Y / other.Y); 
+		return Vector2d<T>(x / other.x, y / other.y); 
 	}
 
 	Vector2d<T>& operator /= (Vector2d<T> const& other)
 	{
-		X/=other.X; 
-		Y/=other.Y; 
+		x /= other.x; 
+		y /= other.y; 
 		return *this;
 	}
 
 	Vector2d<T> operator / (const T v) const 
 	{
-		return Vector2d<T>(X / v, Y / v); 
+		return Vector2d<T>(x / v, y / v); 
 	}
 
 	Vector2d<T>& operator /= (const T v) 
 	{
-		X/=v; 
-		Y/=v; 
+		x /= v; 
+		y /= v; 
 		return *this;
 	}
 
 	//! Get length of the vector.
 	T length() const 
 	{
-		return math::sqrt( X*X + Y*Y ); 
+		return math::sqrt( x*x + y*y ); 
 	}
 
 	//! Get squared length of the vector.
 	T squareLength() const 
 	{
-		return X*X + Y*Y; 
+		return x*x + y*y; 
 	}
 	
 	//! Get distance from another point. 
 	T getDistance(Vector2d<T> const& other) const
 	{
-		return Vector2d<T>(X - other.X, Y - other.Y).length();
+		return Vector2d<T>(x - other.x, y - other.y).length();
 	}
 
 	//! Get squared distance from another point.
 	T getSquaredDistance(Vector2d<T> const& other) const
 	{
-		return Vector2d<T>(X - other.X, Y - other.Y).squareLength();
+		return Vector2d<T>(x - other.x, y - other.y).squareLength();
 	}
 
 	//! Get the dot product of this vector with another
 	T dot(Vector2d<T> const& other) const
 	{
-		return X*other.X + Y*other.Y;
+		return x*other.x + y*other.y;
 	}
 	
 	//! Calculates angle of the vector
 	T getAngle() const
 	{
-		T yaw = T(atan2((f64)X, (f64)Y) * math::RADTODEG64);
+		T yaw = T(atan2(f64(x), f64(y)) * math::RADTODEG64);
 		
 		if (yaw <= -math::PI64) {
 			yaw += math::DOUBLE_PI64;
@@ -193,10 +189,15 @@ public:
 			return *this;
 		}
 		length = math::invSqrt(length);
-		X = (T)(X * length);
-		Y = (T)(Y * length);
+		x = T(x * length);
+		y = T(y * length);
 		return *this;
 	}
+
+	//! Coordinate along X axis
+	T x;
+	//! Coordinate along Y axis
+	T y;
 };
 
 //! Linear interpolation of two vectors
