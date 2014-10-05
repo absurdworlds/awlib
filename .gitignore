@@ -1,6 +1,8 @@
 ipch/*
 ipch/*/
 ipch/*/*
+*.o
+*.sln
 *.suo
 *.sdf
 *.opensdf
