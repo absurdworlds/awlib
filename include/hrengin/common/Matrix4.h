@@ -10,6 +10,7 @@
 #define _hrengin_Matrix4_
 
 #include <hrengin/common/Vector3d.h>
+#include <hrengin/common/Vector4d.h>
 
 namespace hrengin {
 
@@ -142,7 +143,7 @@ Matrix4<T> operator * (Matrix4<T> const& m, Vector3d<T> const& v)
 		m(0,2) * v.x + m(1,2) * v.y + m(2,2) * v.z + m(3,2) * 1,
 		m(0,3) * v.x + m(1,3) * v.y + m(2,3) * v.z + m(3,3) * 1);
 }
-#if 0
+
 template<typename T>
 Matrix4<T> operator * (Matrix4<T> const& m, Vector4d<T> const& v)
 {
@@ -152,7 +153,6 @@ Matrix4<T> operator * (Matrix4<T> const& m, Vector4d<T> const& v)
 		m(0,2) * v.x + m(1,2) * v.y + m(2,2) * v.z + m(3,2) * v.w,
 		m(0,3) * v.x + m(1,3) * v.y + m(2,3) * v.z + m(3,3) * v.w);
 }
-#endif
 
 } // namespace hrengin
 
