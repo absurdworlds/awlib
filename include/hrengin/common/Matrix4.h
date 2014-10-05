@@ -1,30 +1,23 @@
 /*
-   hrengin game engine library
-   Copyright (C) 2013-2014  absurdworlds
-   
-   This program is free software: you can redistribute it and/or modify
-   it under the terms of the GNU Lesser General Public License, version 3
-   as published by the Free Software Foundation.
-   
-   This program is distributed in the hope that it will be useful, but
-   WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-   GNU Lesser General Public License for more details.
-   
-   You should have received a copy of the GNU Lesser General Public
-   License along with this program.  If not, see
-   <http://www.gnu.org/licenses/>. 
+   Copyright (C) 2014  absurdworlds
+
+   License LGPLv3-only:
+   GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
+   This is free software: you are free to change and redistribute it.
+   There is NO WARRANTY, to the extent permitted by law.
  */
 #ifndef _hrengin_Matrix4_
 #define _hrengin_Matrix4_
 
+#include <hrengin/common/Vector3d.h>
+
 namespace hrengin {
 
-/* Represents a 4x4 matrix, whcih has a column-major layout
- */
+//! Represents a 4x4 matrix, which has a column-major layout
 template<typename T>
 class Matrix4 {
 public:
+	//! Matrix multiplication
 	Matrix4<T> operator * (Matrix4<T> const& B)
 	{
 		T* A = m_;
@@ -100,25 +93,25 @@ public:
 		return *this;
 	}
 	
-	// operator for accessing an element by it's index
-	T& operator () (size_t col, size_t row)
+	//! Access an element by its index
+	T& operator () (size_t row, size_t col)
 	{
 		return T[col*4 + row];
 	}
 
-	// operator for accessing an element by it's index
-	T const& operator () (size_t col, size_t row) const
+	//! Access an element by its index
+	T const& operator () (size_t row, size_t col) const
 	{
 		return T[col*4 + row];
 	}
 
-	// operator for directly accessing the matrix
+	//! Linear access to elements of the matrix
 	T& operator [] (size_t col)
 	{
 		return m_[col];
 	}
 	
-	// operator for directly accessing the matrix
+	//! Linear access to elements of the matrix
 	T const& operator [] (size_t col) const
 	{
 		return m_[col];
@@ -132,6 +125,34 @@ Matrix4<T> operator * (Matrix4<T> const& A, Matrix4<T> const& B)
 {
 	return A * B;
 }
+
+template<typename T>
+Matrix4<T> operator * (Matrix4<T> const& A, Matrix4<T> const& B)
+{
+	return A * B;
+}
+
+//! Vector-matrix multiplication
+template<typename T>
+Matrix4<T> operator * (Matrix4<T> const& m, Vector3d<T> const& v)
+{
+	return Vector3d(
+		m(0,0) * v.x + m(1,0) * v.y + m(2,0) * v.z + m(3,0) * 1,
+		m(0,1) * v.x + m(1,1) * v.y + m(2,1) * v.z + m(3,1) * 1,
+		m(0,2) * v.x + m(1,2) * v.y + m(2,2) * v.z + m(3,2) * 1,
+		m(0,3) * v.x + m(1,3) * v.y + m(2,3) * v.z + m(3,3) * 1);
+}
+#if 0
+template<typename T>
+Matrix4<T> operator * (Matrix4<T> const& m, Vector4d<T> const& v)
+{
+	return Vector4d(
+		m(0,0) * v.x + m(1,0) * v.y + m(2,0) * v.z + m(3,0) * v.w,
+		m(0,1) * v.x + m(1,1) * v.y + m(2,1) * v.z + m(3,1) * v.w,
+		m(0,2) * v.x + m(1,2) * v.y + m(2,2) * v.z + m(3,2) * v.w,
+		m(0,3) * v.x + m(1,3) * v.y + m(2,3) * v.z + m(3,3) * v.w);
+}
+#endif
 
 } // namespace hrengin
 
