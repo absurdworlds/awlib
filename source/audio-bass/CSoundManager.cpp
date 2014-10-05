@@ -1,7 +1,7 @@
 #include <map>
 #include <string>
 
-#include <bass/bass.h>
+#include <bass.h>
 
 #include <hrengin/core/paths.h>
 #include <hrengin/graphics/IVideoManager.h>

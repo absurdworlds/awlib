@@ -12,7 +12,6 @@
 #include <hrengin/common/types.h>
 #include <hrengin/gui/IGUIElement.h>
 #include <hrengin/gui/Keycodes.h>
-#include <Irrlicht/IEventReceiver.h>
 
 namespace hrengin {
 namespace gui {

@@ -9,8 +9,6 @@
 #ifndef _hrengin_Keycodes_
 #define _hrengin_Keycodes_
 
-#include <Irrlicht/Keycodes.h>
-
 namespace hrengin {
 
 //! Key code definitions (for future use)
@@ -284,6 +282,7 @@ enum KeyCode {
 
 	KEY_KEY_CODES_COUNT  = 0xFF // this is not a key, but the amount of keycodes there are.
 };
+
 
 } // end namespace hrengin
 

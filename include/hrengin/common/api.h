@@ -25,5 +25,7 @@
 	#endif		
 #else
 #endif
-	
+
+#define HRENGINSOUND_API
+
 #endif//_hrengin_api_

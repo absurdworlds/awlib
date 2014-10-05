@@ -9,7 +9,6 @@
 #ifndef _hrengin_Line3d_
 #define _hrengin_Line3d_
 
-#include <Irrlicht/line3d.h>
 #include <hrengin/common/Vector3d.h>
 
 namespace hrengin {

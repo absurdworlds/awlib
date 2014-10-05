@@ -1,6 +1,6 @@
 # Add paths to dependency headers here
 ExternalIncludes = -I../../dependencies/include/ -I../../dependencies/include/Bullet/
-ExternalLibraries = -LBulletCollision -LBulletDynamics
+ExternalLibraries = -L../../dependencies/lib -lBulletCollision -lBulletDynamics
 
 
 # Version
@@ -15,10 +15,10 @@ Includes = -I../../include $(ExternalIncludes)
 Libraries = $(ExternalLibraries)
 
 # Compiler flags
-CompilerFlags  = $(Includes) $(Libraries)
+CompilerFlags  = $(Includes)
 CompilerFlags += -g -D_DEBUG
 CompilerFlags += -fPIC
-CC = cc
+CC = cc -std=c99
 CXX = g++ -std=c++11 $(CompilerFlags)
 
 Version = $(VersionMajor).$(VersionMinor)
@@ -27,7 +27,8 @@ SharedLibFullName = $(SharedLibName).$(Version)
 
 
 shrared: $(Objects)
-	$(CXX) $(Objects) -shared -o $(SharedLibFullName)
+	$(CXX) $(Objects) -shared -o $(SharedLibFullName) $(Libraries)
+	cp $(SharedLibFullName) $(SharedLibName)
 
 .PHONY : clean
 clean:

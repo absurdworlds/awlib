@@ -22,7 +22,7 @@ CC = cc
 CXX = g++ -std=c++11 $(CompilerFlags)
 
 Version = $(VersionMajor).$(VersionMinor)
-SharedLibName = libhrcore.so
+SharedLibName = libhraudio.so
 SharedLibFullName = $(SharedLibName).$(Version)
 
 

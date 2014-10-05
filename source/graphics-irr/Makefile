@@ -1,6 +1,6 @@
 # Add paths to dependency headers here
 ExternalIncludes = -I../../dependencies/include/
-
+ExternalLibraries = -L../../dependencies/lib -lIrrlicht
 
 # Version
 VersionMajor = 1
@@ -11,6 +11,7 @@ IrrExtObjs = IrrExt/CSceneNodeAnimatorCameraRTS.o
 Objects = CCameraNode.o CConsoleGUI.o CGUIListBox.o CGuiManager.o CGUITextBox.o CGUIWindow.o CInputManager.o CLightNode.o CRenderingDevice.o CSceneManager.o CVideoManager.o CVisNode.o $(IrrExtObjs)
 
 Includes = -I../../include $(ExternalIncludes)
+Libraries = $(ExternalLibraries)
 
 # Compiler flags
 CompilerFlags  = $(Includes)
@@ -25,7 +26,8 @@ SharedLibFullName = $(SharedLibName).$(Version)
 
 
 shrared: $(Objects)
-	$(CXX) $(Objects) -shared -o $(SharedLibFullName)
+	$(CXX) $(Objects) -shared -o $(SharedLibFullName) $(Libraries)
+	cp $(SharedLibFullName) $(SharedLibName)
 
 .PHONY : clean
 clean:

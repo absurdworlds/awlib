@@ -7,6 +7,8 @@
    There is NO WARRANTY, to the extent permitted by law.
  */
 
+#include <stdio.h>
+
 #include <hrengin/io/IBufferedStream.h>
 
 #include <hrengin/common/types.h>
