@@ -222,7 +222,7 @@ public:
 	//! Calculate the dot product with another vector
 	T dot(Vector3d<T> const& other) const
 	{
-		return x*other.x + y*other.y + z*other.Z;
+		return x*other.x + y*other.y + z*other.z;
 	}
 
 	//! Calculate the cross product with another vector

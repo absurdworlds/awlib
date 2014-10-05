@@ -4,7 +4,7 @@
    License LGPLv3-only:
    GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
    This is free software: you are free to change and redistribute it.
-   There is NO WARRANTY, to the extent permitted by law.
+   There is NO wARRANTy, to the extent permitted by law.
  */
 #ifndef _hrengin_Quaternion_
 #define _hrengin_Quaternion_
@@ -13,32 +13,30 @@
 
 #include <hrengin/common/math.h>
 #include <hrengin/common/Vector3d.h>
+#include <hrengin/common/Vector4d.h>
 
 namespace hrengin {
 
 template<typename T>
 class Quaternion {
 public:
-	//! Default constructor
-	/*!
+	/*! Default constructor
 	\brief Represents zero rotation.
 	 */
 	Quaternion()
-		: W(1.0), X(0.0), Y(0.0), Z(0.0)
+		: w(1.0), x(0.0), y(0.0), z(0.0)
 	{
 	}
 	
-	//! Constructor
-	/*!
+	/*! Constructor
 	\brief Construct quaternion using individual components.
 	 */
-	Quaternion(T const W, T const X, T const Y, T const Z)
-		: W(W), X(X), Y(Y), Z(Z)
+	Quaternion(T const w, T const x, T const y, T const z)
+		: w(w), x(x), y(y), z(z)
 	{
 	}
 	
-	//! Constructor
-	/*!
+	/*! Constructor
 	\brief Construct quaternion from euler angles.
 	 */
 	Quaternion(T const pitch, T const yaw, T const roll)
@@ -46,17 +44,15 @@ public:
 		setEuler(pitch, yaw, roll);
 	}
 
-	//! Constructor
-	/*!
+	/*! Constructor
 	\brief Construct quaternion from euler angles.
 	 */
 	Quaternion(Vector3d<T> const& euler)
 	{
-		setEuler(euler.X, euler.Y, euler.Z);
+		setEuler(euler.x, euler.y, euler.z);
 	}
 	
-	//! Constructor
-	/*!
+	/*! Constructor
 	\brief Construct quaternion using axis and rotation around given axis.
 	 */
 	Quaternion(Vector3d<T> const& axis, T const angle)
@@ -67,115 +63,120 @@ public:
 	//! Set quaternion by individual components
 	void set(T const w, T const x, T const y, T const z)
 	{
-		X = x;
-		Y = y;
-		Z = z;
-		W = w;
+		x = x;
+		y = y;
+		z = z;
+		w = w;
 	}
 
 	//! Copy components from other quaternion
 	void set(Quaternion<T> const& other)
 	{
-		X = other.X;
-		Y = other.Y;
-		Z = other.Z;
-		W = other.W;
+		x = other.x;
+		y = other.y;
+		z = other.z;
+		w = other.w;
 	}
 	
+	//! Get a result of component-wise addition of two quaternions
 	Quaternion<T> operator + (Quaternion<T> const& other) const
 	{
-		return Quaternion<T>(W + other.W, X + other.X, Y + other.Y, Z + other.Z); 
+		return Quaternion<T>(w + other.w, x + other.x, y + other.y, z + other.z); 
 	}
 
+	//! Component-wise addition
 	Quaternion<T>& operator += (Quaternion<T> const& other)
 	{ 
-		X += other.X;
-		Y += other.Y;
-		Z += other.Z;
-		W += other.W;
+		x += other.x;
+		y += other.y;
+		z += other.z;
+		w += other.w;
 		return *this;
 	}
-
+	
 	Quaternion<T> operator + (T const val) const
 	{
-		return Quaternion<T>(W + val, X + val, Y + val, Z + val);
+		return Quaternion<T>(w + val, x + val, y + val, z + val);
 	}
 
 	Quaternion<T>& operator += (T const val)
 	{
-		X += val;
-		Y += val;
-		Z += val;
-		W += val;
+		x += val;
+		y += val;
+		z += val;
+		w += val;
 		return *this;
 	}
-
+	
+	//! Get a result of component-wise subtraction of two quaternions
 	Quaternion<T> operator - (Quaternion<T> const& other) const
 	{
-		return Quaternion<T>(W - other.W, X - other.X, Y - other.Y, Z - other.Z);
+		return Quaternion<T>(w - other.w, x - other.x, y - other.y, z - other.z);
 	}
-
+	
+	//! Component-wise subtraction
 	Quaternion<T>& operator -= (Quaternion<T> const& other)
 	{
-		X -= other.X;
-		Y -= other.Y;
-		Z -= other.Z;
-		W -= other.W;
+		x -= other.x;
+		y -= other.y;
+		z -= other.z;
+		w -= other.w;
 		return *this;
 	}
 	
 	Quaternion<T> operator - (T const val) const
 	{
-		return Quaternion<T>(W - val, X - val, Y - val, Z - val);
+		return Quaternion<T>(w - val, x - val, y - val, z - val);
 	}
 
 	Quaternion<T>& operator -= (T const val)
 	{
-		X -= val;
-		Y -= val;
-		Z -= val;
-		W -= val;
+		x -= val;
+		y -= val;
+		z -= val;
+		w -= val;
 		return *this;
 	}
 
 	Quaternion<T> operator - () const
 	{
-		return Quaternion<T>(-W, -X, -Y, -Z);
+		return Quaternion<T>(-w, -x, -y, -z);
 	}
 	
+	//! Quaternion multiplication
 	Quaternion<T> operator * (Quaternion<T> const& other) const
 	{
 		Quaternion<T> q0;
 
-		q0.X = (X * other.W) + (W * other.X) + (Z * other.Y) - (Y * other.Z);
-		q0.Y = (Y * other.W) - (Z * other.X) + (W * other.Y) + (X * other.Z);
-		q0.Z = (Z * other.W) + (Y * other.X) - (X * other.Y) + (W * other.Z);
-		q0.W = (W * other.W) - (X * other.X) - (Y * other.Y) - (Z * other.Z);
+		q0.x = (x * other.w) + (w * other.x) + (z * other.y) - (y * other.z);
+		q0.y = (y * other.w) - (z * other.x) + (w * other.y) + (x * other.z);
+		q0.z = (z * other.w) + (y * other.x) - (x * other.y) + (w * other.z);
+		q0.w = (w * other.w) - (x * other.x) - (y * other.y) - (z * other.z);
 
 		return q0;
 	}
 	
 	Quaternion<T>& operator *= (Quaternion<T> const& other)
 	{
-		X = (X * other.W) + (W * other.X) + (Z * other.Y) - (Y * other.Z);
-		Y = (Y * other.W) - (Z * other.X) + (W * other.Y) + (X * other.Z);
-		Z = (Z * other.W) + (Y * other.X) - (X * other.Y) + (W * other.Z);
-		W = (W * other.W) - (X * other.X) - (Y * other.Y) - (Z * other.Z);
+		x = (x * other.w) + (w * other.x) + (z * other.y) - (y * other.z);
+		y = (y * other.w) - (z * other.x) + (w * other.y) + (x * other.z);
+		z = (z * other.w) + (y * other.x) - (x * other.y) + (w * other.z);
+		w = (w * other.w) - (x * other.x) - (y * other.y) - (z * other.z);
 
 		return *this;
 	}
 	
 	Quaternion<T> operator * (T const val) const
 	{
-		return Quaternion<T>(W*val, X*val, Y*val, Z*val);
+		return Quaternion<T>(w*val, x*val, y*val, z*val);
 	}
 	
 	Quaternion<T>& operator *= (T const val)
 	{
-		X *= val;
-		Y *= val;
-		Z *= val;
-		W *= val;
+		x *= val;
+		y *= val;
+		z *= val;
+		w *= val;
 
 		return *this;
 	}
@@ -196,10 +197,10 @@ public:
 		T const sz = sin(z);
 		T const cz = sin(z);
 
-		X = sx*sy*cz + cx*cy*sz;
-		Y = sx*cy*cz + cx*sy*sz;
-		Z = cx*sy*cz - sx*cy*sz;
-		W = cx*cy*cz - sx*sy*sz;
+		x = sx*sy*cz + cx*cy*sz;
+		y = sx*cy*cz + cx*sy*sz;
+		z = cx*sy*cz - sx*cy*sz;
+		w = cx*cy*cz - sx*sy*sz;
 	}
 	
 	void setAxisAngle(Vector3d<T> const& axis, T angle)
@@ -209,30 +210,30 @@ public:
 
 		Vector3d<T> const v = axis.normalized() * sin(angle);
 
-		set(cos(angle), v.X, v.Y, v.Z);
+		set(cos(angle), v.x, v.y, v.z);
 	}
 
 	//! Get quaternion as euler angles
 	void toEuler(Vector3d<T>& euler)
 	{
 		// singularity test
-		f32 const test = X*Y + Z*W;
+		f32 const test = x*y + z*w;
 		if (math::equals(test, 0.5f)) { // north pole
-			euler.X = 0;
-			euler.Y = 2 * atan2(X, W);
-			euler.Z = math::HALF_PI64;
+			euler.x = 0;
+			euler.y = 2 * atan2(x, w);
+			euler.z = math::HALF_PI64;
 		} else if (math::equals(test, -0.5f)) { // south pole
-			euler.X = 0;
-			euler.Y = -2 * atan2(X,W);
-			euler.Z = -math::HALF_PI64;
+			euler.x = 0;
+			euler.y = -2 * atan2(x,w);
+			euler.z = -math::HALF_PI64;
 		} else {
-			f32 const sX = X * X;
-			f32 const sY = Y * Y;
-			f32 const sZ = Z * Z;
+			f32 const sX = x * x;
+			f32 const sY = y * y;
+			f32 const sZ = z * z;
 		
-			euler.X = atan2(2*(X*W - Y*Z) , 1 - 2*sX - 2*sZ);
-			euler.Y = atan2(2*(Y*W - X*Z) , 1 - 2*sY - 2*sZ);
-			euler.Z = asin(2*test);
+			euler.x = atan2(2*(x*w - y*z) , 1 - 2*sX - 2*sZ);
+			euler.y = atan2(2*(y*w - x*z) , 1 - 2*sY - 2*sZ);
+			euler.z = asin(2*test);
 		}
 
 		euler *= math::RADTODEG64;
@@ -241,43 +242,43 @@ public:
 	//! Get quaternion in axis-angle representation
 	void toAxisAngle(Vector3d<T>& axis, T& angle) const
 	{
-		T const tCos = W;
-		T tSin = T(1.0) - W*W;
-		// T tSin = X*X + Y*Y + Z*Z;
+		T const tCos = w;
+		T tSin = T(1.0) - w*w;
+		// T tSin = x*x + y*y + z*z;
 
 		if(tSin > T(0.0)) {
 			tSin = T(sqrt(tSin));
 			T invSin = 1 / tSin;
 			
 			angle = T(2.0 * atan2(tSin, tCos));
-			axis.X = X * invSin;
-			axis.Y = Y * invSin;
-			axis.Z = Z * invSin;
+			axis.x = x * invSin;
+			axis.y = y * invSin;
+			axis.z = z * invSin;
 		} else {
-			axis.X = T(0.0);
-			axis.Y = T(1.0);
-			axis.Z = T(0.0);
-			angle = T(0.0);
+			axis.x = T(0.0);
+			axis.y = T(1.0);
+			axis.z = T(0.0);
+			angle  = T(0.0);
 		}
 	}
 
 
 	T dot (Quaternion<T> const& other)
 	{
-		return X*other.X + Y*other.Y + Z*other.Z + W*other.W;
+		return x*other.x + y*other.y + z*other.z + w*other.w;
 	}
 
 	Quaternion<T>& normalize()
 	{
-		T const sqrMag = X*X + Y*Y + Z*Z + W*W;
+		T const sqrMag = x*x + y*y + z*z + w*w;
 		
 		if(!math::equals(sqrMag, T(1.0))) {
 			T const invMag = math::invSqrt(sqrMag);
 
-			X *= invMag;
-			Y *= invMag;
-			Z *= invMag;
-			W *= invMag;
+			x *= invMag;
+			y *= invMag;
+			z *= invMag;
+			w *= invMag;
 		}
 
 		return *this;
@@ -285,22 +286,26 @@ public:
 	
 	Quaternion<T> normalized() const
 	{
-		T const sqrMag = X*X + Y*Y + Z*Z + W*W;
+		T const sqrMag = x*x + y*y + z*z + w*w;
 		
 		if(!math::equals(sqrMag, T(1.0))) {
 			T const invMag = math::invSqrt(sqrMag);
 
-			return Quaternion<T>(T(X*invMag),
-				T(Y*invMag), T(Z*invMag), T(W*invMag));
+			return Quaternion<T>(T(x*invMag),
+				T(y*invMag), T(z*invMag), T(w*invMag));
 		}
 
 		return Quaternion<T>();
 	}
-
-	T X;
-	T Y;
-	T Z;
-	T W;
+	
+	//! Scalar component
+	T w;
+	//! First vector component
+	T x;
+	//! Second vector component
+	T y;
+	//! Third vector component
+	T z;
 };
 
 
