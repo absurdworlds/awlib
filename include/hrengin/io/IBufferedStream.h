@@ -1,4 +1,4 @@
-/**
+/*
    Copyright (C) 2014  absurdworlds
 
    License LGPLv3-only:
@@ -20,6 +20,7 @@ class IBufferedStream : public ICharacterStream {
 public:
 };
 
+//! Create a buffered file stream
 HR_PLATFORM_API IBufferedStream* createBufferedStream(IReadFile* source);
 
 } //namespace io
