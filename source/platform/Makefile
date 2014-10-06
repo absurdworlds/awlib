@@ -22,9 +22,10 @@ Version = $(VersionMajor).$(VersionMinor)
 SharedLibName = libhrplatform.so
 SharedLibFullName = $(SharedLibName).$(Version)
 
-
-shrared: $(Objects)
+shared: $(Objects)
 	$(CXX) $(Objects) -shared -o $(SharedLibFullName)
+
+all: shared
 
 .PHONY : clean
 clean:

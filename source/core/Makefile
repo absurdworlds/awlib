@@ -29,6 +29,8 @@ SharedLibFullName = $(SharedLibName).$(Version)
 shrared: $(Objects)
 	$(CXX) $(Objects) -shared -o $(SharedLibFullName)
 
+all: shared
+
 .PHONY : clean
 clean:
 	-rm $(SharedLibFullName) $(Objects)

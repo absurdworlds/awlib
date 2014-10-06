@@ -1,5 +1,6 @@
 # Add paths to dependency headers here
 ExternalIncludes = -I../../dependencies/include/
+ExternalLibraries = -L../../dependencies/lib -lbass
 
 
 # Version
@@ -7,9 +8,10 @@ VersionMajor = 1
 VersionMinor = 3
 
 # Includes and objects
-Objects = CEntityManager.o CEventManager.o CSimplePathfinder.o CWorld.o
-
+Objects = CSoundManager.o
 Includes = -I../../include $(ExternalIncludes)
+
+Libraries = $(ExternalLibraries)
 
 # Compiler flags
 CompilerFlags  = $(Includes)
@@ -19,11 +21,12 @@ CC = cc
 CXX = g++ -std=c++11 $(CompilerFlags)
 
 Version = $(VersionMajor).$(VersionMinor)
-SharedLibName = libhrgame.so
+SharedLibName = libhraudio.so
 SharedLibFullName = $(SharedLibName).$(Version)
 
-shared: $(Objects)
-	$(CXX) $(Objects) -shared -o $(SharedLibFullName)
+
+shrared: $(Objects)
+	$(CXX) $(Objects) -shared -o $(SharedLibFullName) $(Libraries)
 
 all: shared
 

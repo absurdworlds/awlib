@@ -25,9 +25,11 @@ SharedLibName = libhrgraphics.so
 SharedLibFullName = $(SharedLibName).$(Version)
 
 
-shrared: $(Objects)
+shared: $(Objects)
 	$(CXX) $(Objects) -shared -o $(SharedLibFullName) $(Libraries)
 	cp $(SharedLibFullName) $(SharedLibName)
+
+all: shared
 
 .PHONY : clean
 clean:
