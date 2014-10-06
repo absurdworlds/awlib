@@ -7,24 +7,25 @@
    There is NO WARRANTY, to the extent permitted by law.
  */
 #include <time.h>
-#include <stdio.h>
 
 #include <hrengin/common/time.h>
 #include <hrengin/common/api.h>
 
 namespace hrengin {
 
-HR_PLATFORM_API u32 getTime()
+u32 getClockResolution()
 {
-#if 0
 	struct timespec res;
 	int rc = clock_getres(CLOCK_MONOTONIC, &res);
 	
 	if(rc == 0) {
-		u32 resolution = res.tv_nsec;
+		return res.tv_nsec;
 	}
-#endif
+	return 0;
+}
 
+HR_PLATFORM_API u32 getTime()
+{	
 	struct timespec tp;
 	int rc = clock_gettime(CLOCK_MONOTONIC, &tp);
 	if(rc == 0) {
