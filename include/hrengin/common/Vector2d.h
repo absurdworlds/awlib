@@ -39,6 +39,12 @@ public:
 		: x(other.x), y(other.y)
 	{
 	}
+	
+	//! Construct zero vector
+	static Vector2d<T> zero()
+	{
+		return Vector2d;
+	}
 
 	Vector2d<T>& operator = (Vector2d<T> const& other)
 	{
