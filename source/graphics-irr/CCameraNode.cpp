@@ -8,6 +8,7 @@
  */
 #include <hrengin/common/Vector3d.h>
 #include <hrengin/common/Line3d.h>
+#include <hrengin/graphics/ICameraController.h>
 
 #include "IrrExt/CSceneNodeAnimatorCameraRTS.h"
 
