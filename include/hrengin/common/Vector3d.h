@@ -40,12 +40,9 @@ public:
 		: x(other.x), y(other.y), z(other.z) 
 	{
 	}
-
-	//! Construct zero vector
-	static Vector3d<T> zero()
-	{
-		return Vector3d;
-	}
+	
+	//! Predefined instance of zero vector
+	static Vector3d<T> const zero;
 
 	void set (T const x, T const y, T const z)
 	{
@@ -360,6 +357,11 @@ public:
 	//! Coordinate along Z axis
 	T z;
 };
+
+// Initialization of static member
+template<typename T>
+Vector3d<T> const Vector3d<T>::zero = Vector3d(0);
+
 
 //! Partial specialization for integer vectors
 template <>

@@ -40,11 +40,8 @@ public:
 	{
 	}
 	
-	//! Construct zero vector
-	static Vector2d<T> zero()
-	{
-		return Vector2d;
-	}
+	//! Predefined instance of zero vector
+	static Vector2d<T> const zero;
 
 	Vector2d<T>& operator = (Vector2d<T> const& other)
 	{
@@ -205,6 +202,10 @@ public:
 	//! Coordinate along Y axis
 	T y;
 };
+
+// Initialization of static member
+template<typename T>
+Vector2d<T> const Vector2d<T>::zero = Vector2d(0);
 
 //! Linear interpolation of two vectors
 template<typename T>
