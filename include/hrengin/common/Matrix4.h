@@ -18,6 +18,39 @@ namespace hrengin {
 template<typename T>
 class Matrix4 {
 public:
+	void set (T const a11, T const a21, T const a31, T const a41
+		  T const a12, T const a22, T const a32, T const a42,
+		  T const a13, T const a23, T const a33, T const a43,
+		  T const a14, T const a24, T const a34, T const a44)
+	{
+		m_[0]  = a11;	
+		m_[1]  = a21;
+		m_[2]  = a31;	
+		m_[3]  = a41;	
+		m_[4]  = a12;
+		m_[5]  = a22;     
+		m_[6]  = a32;     
+		m_[7]  = a42;     
+		m_[8]  = a13;     
+		m_[9]  = a23;     
+		m_[10] = a33;     
+		m_[11] = a43;     
+		m_[12] = a14;     
+		m_[13] = a24;     
+		m_[14] = a34;
+		m_[15] = a44;     
+	}	
+	
+	//! Set matrix to identity
+	Matrix4<T>& setIdentity ()
+	{
+		set(T(1),T(0),T(0),T(0),
+		    T(0),T(1),T(0),T(0),
+		    T(0),T(0),T(1),T(0),
+		    T(0),T(0),T(0),T(1));	
+		return *this;
+	}
+
 	//! Matrix multiplication
 	Matrix4<T> operator * (Matrix4<T> const& B)
 	{
@@ -72,7 +105,7 @@ public:
 	}
 
 	//! Multiply matrix by scalar
-	Matrix4<T>& operator = *(T const& S)
+	Matrix4<T>& operator *= (T const& S)
 	{
 		m_[0]  *= S;
 		m_[1]  *= S;
@@ -93,7 +126,7 @@ public:
 		
 		return *this;
 	}
-	
+
 	//! Access an element by its index
 	T& operator () (size_t row, size_t col)
 	{
@@ -122,13 +155,7 @@ private:
 };
 
 template<typename T>
-Matrix4<T> operator * (Matrix4<T> const& A, Matrix4<T> const& B)
-{
-	return A * B;
-}
-
-template<typename T>
-Matrix4<T> operator * (Matrix4<T> const& A, Matrix4<T> const& B)
+Matrix4<T> operator * (Matrix4<T> const& A, Matrix4<T> const& B) const
 {
 	return A * B;
 }
