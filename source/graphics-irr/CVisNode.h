@@ -1,4 +1,4 @@
-/**
+/*
    Copyright (C) 2014  absurdworlds
 
    License LGPLv3-only:
@@ -47,7 +47,6 @@ private:
 	irr::scene::IAnimatedMeshSceneNode* meshNode_;
 };
 
-	
 } // namespace graphics
 } // namespace hrengin
 

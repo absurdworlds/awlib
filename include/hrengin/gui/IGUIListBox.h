@@ -16,12 +16,14 @@
 namespace hrengin {
 namespace gui {
 
+//! List box GUI element
 class IGUIListBox : public IGUIElement {
 public:
 	virtual ~IGUIListBox() {};
 
-	/* Add an item to list 
-	   @return: Item id
+	/*! Add an item to list box
+	   \param text Text of the inserted item
+	   \return Item id
 	 */
 	virtual u32 addItem(std::string text) = 0;
 };

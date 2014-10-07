@@ -51,8 +51,16 @@ namespace core {
 namespace hdf {
 }
 
+/*!
+\mainpage hrengin Documentation
 
+\section intro_sec What is hrengin?
+hrengin (formerly hrEngine) is a general purpose game engine.
 
+hrengin is based on modular architecture, that is, hrengin consists of several dynamically linked modules, which are intended to be easily replaceable (ideally without recompiling other modules).
+
+Please note that hrengin is only a library and not a standalone game engine.
+*/
 } // namespace hrengin
 
 #endif //_hrengin_hrengin_

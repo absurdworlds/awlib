@@ -1,4 +1,4 @@
-/**
+/*
    Copyright (C) 2014  absurdworlds
 
    License LGPLv3-only:
@@ -12,15 +12,12 @@
 
 #include <hrengin/game/IBaseEntity.h>
 
+#include "hrToIrr.h"
 #include "CSceneManager.h"
-
 #include "CVisNode.h"
-
-
 
 namespace hrengin {
 namespace graphics {
-
 
 CVisNode::CVisNode(CSceneManager* sceneManager, 
 	irr::scene::IAnimatedMeshSceneNode* meshNode)
@@ -36,12 +33,12 @@ void CVisNode::setParentEntity(IBaseEntity* parent)
 
 void CVisNode::setPosition(Vector3d<f32> pos)
 {
-	meshNode_->setPosition(irr::core::vector3df(pos.X,pos.Y,pos.Z));
+	meshNode_->setPosition(toIrr(pos));
 }
 
 void CVisNode::setRotation(Vector3d<f32> rot)
 {
-	meshNode_->setRotation(irr::core::vector3df(rot.X,rot.Y,rot.Z));
+	meshNode_->setRotation(toIrr(rot));
 }
 
 //void CVisNode::setMesh(IMesh* mesh)
@@ -51,6 +48,5 @@ void CVisNode::setMesh(const char* mesh)
 	meshNode_->setMesh(irrMesh);
 }
 
-	
 } // namespace graphics
 } // namespace hrengin

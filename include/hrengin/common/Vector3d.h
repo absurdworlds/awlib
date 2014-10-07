@@ -22,7 +22,7 @@ public:
 		: x(0), y(0), z(0) 
 	{
 	}
-
+	
 	//! Construct vector with individual coodrinates
 	Vector3d(T const x, T const y, T const z) 
 		: x(x), y(y), z(z) 
@@ -41,11 +41,17 @@ public:
 	{
 	}
 
+	//! Construct zero vector
+	static Vector3d<T> zero()
+	{
+		return Vector3d;
+	}
+
 	void set (T const x, T const y, T const z)
 	{
-		x = x; 
-		y = y; 
-		z = z; 
+		this->x = x; 
+		this->y = y; 
+		this->z = z; 
 	}
 
 	void set (Vector3d<T> const& other)

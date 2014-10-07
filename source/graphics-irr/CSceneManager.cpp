@@ -1,4 +1,4 @@
-/**
+/*
    Copyright (C) 2014  absurdworlds
 
    License LGPLv3-only:
@@ -59,7 +59,9 @@ IVisNode* CSceneManager::createMeshSceneNode(const char* meshname)
 	irr::scene::IAnimatedMeshSceneNode* node = 
 		scnmgr->addAnimatedMeshSceneNode(convertMesh(meshname));
 	
-	node->addShadowVolumeSceneNode();
+	if(std::string(meshname) == "sotank.obj") {
+		node->addShadowVolumeSceneNode();
+	}
 	return new CVisNode(this, node);
 }
 

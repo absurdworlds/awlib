@@ -7,11 +7,11 @@ hrengin (formerly hrEngine) is a general purpose game engine.
 
 hrengin is based on modular architecture, that is, hrengin consists of several dynamically linked modules, which are intended to be easily replaceable (ideally without recompiling other modules).
 
-*NOTE:* hrengin is only a library, and can not be used alone.
+Please note that hrengin is only a library and not a standalone game engine.
 
 ### Status ###
 
-hrengin currently is in it's early development, and contains a lot of unfinished and temporary code, and completely lacks documentation. 
+hrengin currently is in its early development, and contains a lot of unfinished and temporary code, and completely lacks documentation. 
 Even so, it is still possible to use it for developing a game, provided one will write own game logic.
 
 ## Dependencies ##

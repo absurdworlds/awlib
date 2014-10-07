@@ -13,7 +13,6 @@
 #include <Irrlicht/irrlicht.h>
 //#include <Irrlicht/SAnimatedMesh.h>
 
-
 #include <hrengin/core/ISettingsManager.h>
 
 #include "CVisNode.h"
@@ -140,15 +139,6 @@ void CVideoManager::showCaptionFPS(bool showFps)
 	showFps_ = showFps;
 }
 #endif
-
-
-/*void CVideoManager::drawVertexListObject(std::vector<Vector3d<f32>>& vert, std::vector<u32>& idxs)
-{
-
-	this->driver->drawVertexPrimitiveList();
-
-}*/
-
 
 } // namespace graphics
 } // namespace hrengin

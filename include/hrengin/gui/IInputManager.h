@@ -18,7 +18,6 @@ namespace hrengin {
 class IUserInputReceiver;
 namespace gui {
 
-
 //! Handles user input and generates input events
 class IInputManager {
 public:

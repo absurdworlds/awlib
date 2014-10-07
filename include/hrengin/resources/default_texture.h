@@ -1,4 +1,4 @@
-/**
+/*
    Copyright (C) 2014  absurdworlds
 
    License LGPLv3-only:
@@ -13,7 +13,7 @@
 
 namespace hrengin {
 
-/* default texture, which will be used in absence of requested one, in png format */
+//! default texture in png format, which will be when requested one is absent
 const u8 default_texture[] = {
 	137,80,78,71,13,10,26,10,0,0,0,13,73,72,68,82,0,0,0,64,0,0,0,64,1,3,0,
 	0,0,144,167,227,157,0,0,0,9,112,72,89,115,0,0,14,195,0,0,14,195,1,199,

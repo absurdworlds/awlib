@@ -21,5 +21,4 @@ public:
 
 } // namespace hrengin
 
-
-#endif//_hrengin_IControllable_
+#endif//_hrengin_IUserInputReceiver_

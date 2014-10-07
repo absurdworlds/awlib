@@ -16,23 +16,26 @@
 namespace hrengin {
 namespace gui {
 
+//! Base class for GUI elements
 class IGUIElement {
 public:
+	//! Virtual destructor
 	virtual ~IGUIElement() {};
 
 	virtual u32 getId() const = 0;
 	virtual u32 getParentId() const = 0;
 
-	#if 0
+#if 0
 	virtual void setAbsolutePosition(Vector2d<i32> position) = 0;
 	virtual void setRelativePosition(Vector2d<i32> position) = 0;
 	virtual void setAbsoluteRect(Rect<i32> rect) = 0;
 	virtual void setRelativeRect(Rect<i32> rect) = 0;
+#endif
 
-
-	#endif
-	/* get the caption of this element */
+	//! Get caption of the element
 	virtual std::string getText() const = 0;
+
+	//! Set caption of the element
 	virtual void setText(std::string text) = 0;
 
 	virtual void* getUnderlyingElement() const = 0;
