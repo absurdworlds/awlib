@@ -49,9 +49,9 @@ public:
 
 	void set (T const x, T const y, T const z)
 	{
-		x = x; 
-		y = y; 
-		z = z; 
+		this->x = x; 
+		this->y = y; 
+		this->z = z; 
 	}
 
 	void set (Vector3d<T> const& other)
