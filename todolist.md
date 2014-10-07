@@ -58,3 +58,5 @@ hrengin TODO list
 + [ ] Write doxygen documentation
 + [ ] Write GNU makefiles
 + [ ] Write premake scripts to replace VC projects
++ [ ] Tackle with -fvisibility=hidden and visibility attributes
+	__attribute__ ((visibility ("default")))
