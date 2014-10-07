@@ -2,6 +2,7 @@ ipch/*
 ipch/*/
 ipch/*/*
 *.o
+*.swp
 *.sln
 *.suo
 *.sdf
@@ -12,3 +13,5 @@ ipch/*/*
 *.vcxproj
 *.vcxproj.user
 *.vcxproj.filters
+.*
+!/.gitignore
