@@ -1,4 +1,4 @@
-/**
+/*
    Copyright (C) 2014  absurdworlds
 
    License LGPLv3-only:
@@ -28,13 +28,12 @@ class ISceneManager;
 class IAnimatedMesh;
 class ISceneCollisionManager;
 }
-}
+} // namespace irr
 
 namespace hrengin {
-	class CEncore;
-
+class CEncore;
 namespace gui {
-	class CGUIManager;
+class CGUIManager;
 }
 
 namespace graphics {
@@ -61,7 +60,6 @@ public:
 	//virtual IMesh* loadMesh(const char * modelname);
 	virtual u32 getTime();
 
-
 private:
 	irr::IrrlichtDevice* device_;
 
@@ -69,7 +67,7 @@ private:
 	IRenderingDevice* renderer_;
 	gui::IGUIManager* guiManager_;
 };
-	
+
 } // namespace graphics
 } // namespace hrengin
 

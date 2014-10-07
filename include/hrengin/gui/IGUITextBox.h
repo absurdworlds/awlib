@@ -14,6 +14,7 @@
 namespace hrengin {
 namespace gui {
 
+//! Text box GUI element
 class IGUITextBox : public IGUIElement {
 public:
 	virtual ~IGUITextBox() {};

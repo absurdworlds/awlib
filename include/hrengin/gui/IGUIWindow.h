@@ -14,6 +14,7 @@
 namespace hrengin {
 namespace gui {
 
+//! GUI window
 class IGUIWindow : public IGUIElement {
 public:
 	virtual ~IGUIWindow() {};

@@ -10,6 +10,7 @@
 #include <Irrlicht/irrlicht.h>
 
 #include "CRenderingDevice.h"
+#include "hrToIrr.h"
 
 namespace hrengin {
 namespace graphics {
@@ -28,11 +29,9 @@ bool CRenderingDevice::drawVertexPrimitive(const IVertexBuffer& vb, const IIndex
 void CRenderingDevice::drawLine(const Vector3d<f32>& from,
 	const Vector3d<f32>& to, const Vector3d<f32>& color)
 {
-	irr::core::vector3df irrfrom(from.X, from.Y, from.Z);
-	irr::core::vector3df irrto(to.X, to.Y, to.Z);
-	irr::video::SColor irrcolor(255, (irr::u32)color.X, (irr::u32)color.Y, (irr::u32)color.Z);
+	irr::video::SColor irrcolor(255, irr::u32(color.x), irr::u32(color.y), irr::u32(color.z));
 
-	driver_->draw3DLine(irrfrom, irrto, irrcolor);
+	driver_->draw3DLine(toIrr(from), toIrr(to), irrcolor);
 }
 
 
