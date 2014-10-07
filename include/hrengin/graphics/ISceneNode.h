@@ -11,6 +11,7 @@
 
 #include <hrengin/common/types.h>
 #include <hrengin/common/Vector3d.h>
+#include <hrengin/common/Matrix4.h>
 #include <hrengin/common/Quaternion.h>
 
 namespace hrengin {

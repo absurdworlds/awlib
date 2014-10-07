@@ -54,7 +54,7 @@ private:
 	CAM_Behavior controlBehavior;
 
 	irr::scene::ISceneManager* scmgr_;
-	irr::scene::ICameraSceneNode* node_;
+	irr::scene::ICameraSceneNode* camera_;
 	irr::IrrlichtDevice* device_;
 	irr::scene::ISceneNodeAnimator* animator;
 };

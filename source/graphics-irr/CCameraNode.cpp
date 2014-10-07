@@ -1,4 +1,4 @@
-/**
+/*
    Copyright (C) 2014  absurdworlds
 
    License LGPLv3-only:
@@ -22,7 +22,8 @@ CCameraNode::CCameraNode(CSceneManager* sceneManager,
 	irr::scene::ICameraSceneNode* camNode,
 	irr::scene::ISceneManager* irrScMgr,
 	irr::IrrlichtDevice* device)
-	: controlBehavior(CAM_NONE), node_(camNode), scmgr_(irrScMgr), device_(device)
+	: controlBehavior(CAM_NONE), camera_(camNode),
+	  scmgr_(irrScMgr), device_(device)
 {
 
 }
@@ -35,53 +36,12 @@ void CCameraNode::setParentEntity(IBaseEntity* parent)
 Line3d<f32> CCameraNode::getRayFromScreen(hrengin::i32 x, hrengin::i32 y)
 {
 	irr::scene::ISceneCollisionManager* colman = scmgr_->getSceneCollisionManager();
-	irr::core::line3df line = colman->getRayFromScreenCoordinates(irr::core::vector2di(x,y), node_);
+	irr::core::line3df line = colman->getRayFromScreenCoordinates(irr::core::vector2di(x,y), camera_);
+
+
+
 	return toHrengin(line);
 }
-
-#if 0
-	core::line3d<f32> ln(0,0,0,0,0,0);
-
-	if (!SceneManager)
-		return ln;
-
-	if (!camera)
-		camera = SceneManager->getActiveCamera();
-
-	if (!camera)
-		return ln;
-
-	const scene::SViewFrustum* f = camera->getViewFrustum();
-
-	core::vector3df farLeftUp = f->getFarLeftUp();
-	core::vector3df lefttoright = f->getFarRightUp() - farLeftUp;
-	core::vector3df uptodown = f->getFarLeftDown() - farLeftUp;
-
-	const core::rect<s32>& viewPort = Driver->getViewPort();
-	core::dimension2d<u32> screenSize(viewPort.getWidth(), viewPort.getHeight());
-
-	f32 dx = pos.X / (f32)screenSize.Width;
-	f32 dy = pos.Y / (f32)screenSize.Height;
-
-	if (camera->isOrthogonal())
-		ln.start = f->cameraPosition + (lefttoright * (dx-0.5f)) + (uptodown * (dy-0.5f));
-	else
-		ln.start = f->cameraPosition;
-
-	ln.end = farLeftUp + (lefttoright * dx) + (uptodown * dy);
-
-	return ln;
-
-Vector3d<f32> CCameraNode::__tempGetRayHitPlaneCoords(hrengin::i32 x, hrengin::i32 y)
-{
-	irr::scene::ISceneCollisionManager* colman = scmgr_->getSceneCollisionManager();
-	irr::core::line3df line = colman->getRayFromScreenCoordinates(irr::core::vector2di(x,y), node_);
-	irr::core::vector3df vec;
-	irr::core::plane3df plane(irr::core::vector3d<f32>(0, 0, 0), irr::core::vector3d<f32>(0, 1, 0));
-	plane.getIntersectionWithLine(line.start, line.getVector(), vec);
-	return Vector3d<f32>(vec.X,0,vec.Z);
-}
-#endif
 
 void CCameraNode::setPosition(Vector3d<f32> pos)
 {
@@ -131,7 +91,7 @@ void CCameraNode::SetBehavior(CAM_Behavior beh)
 	/* reset camera animator */
 	if(animator)
 	{
-		node_->removeAnimator(animator);
+		camera_->removeAnimator(animator);
 		//animator->drop();
 		animator = 0;
 
@@ -141,7 +101,7 @@ void CCameraNode::SetBehavior(CAM_Behavior beh)
 	{
 	case CAM_STRATEGIC:
 		animator = new irr::scene::CSceneNodeAnimatorCameraRTS(device_->getCursorControl(), device_->getTimer());
-		node_->addAnimator(animator);
+		camera_->addAnimator(animator);
 		animator->drop();
 	break;
 	default:
@@ -149,8 +109,6 @@ void CCameraNode::SetBehavior(CAM_Behavior beh)
 		break;
 	}
 }
-
-
 	
 } // namespace graphics
 } // namespace hrengin

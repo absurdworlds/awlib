@@ -18,11 +18,8 @@ template<typename T>
 class Segment3d {
 public:
 	//! Default constructor
-	/*!
-	\brief Construct a line of unit length aligned along X axis
-	 */
 	Segment3d()
-		: start(0, 0, 0), end(1, 0, 0)
+		: start(0, 0, 0), end(0, 0, 0)
 	{
 	}
 
@@ -37,7 +34,8 @@ public:
 		: start(start), end(end)
 	{
 	}
-		
+
+	//! Assignment operator
 	Segment3d<T>& operator = (Segment3d<T> const& line)
 	{
 		start = line.start;
@@ -83,6 +81,7 @@ public:
 		return end - start;
 	}
 
+	//! Get direction vector
 	Vector3d<T> direction() const
 	{
 		return vector().normalized();
