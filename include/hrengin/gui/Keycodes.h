@@ -26,12 +26,14 @@ enum class _KeyCode : u8 {
 	Enter     = 0x0D,
 	Kana      = 0x10,
 	Kanji     = 0x12,
-	SysReq = 0x15,
+	SysReq    = 0x15,
+	PrintScr  = 0x16,
 	Space = 0x20,
 	BracketL = 0x21,
 	BracketR = 0x22,
 	Semicolon = 0x26,
 	Apostrophe = 0x27,
+	BackSlash = 0x2B,
 	Comma = 0x2C,
 	Slash = 0x2D,
 	Zero  = 0x30,  /*< Digit Zero  */
@@ -168,7 +170,6 @@ enum KeyCode {
 	KEY_SNAPSHOT         = 0x2C,  // PRINT SCREEN key
 	KEY_INSERT           = 0x2D,  // INS key
 	KEY_DELETE           = 0x2E,  // DEL key
-	KEY_HELP             = 0x2F,  // HELP key
 	KEY_KEY_0            = 0x30,  // 0 key
 	KEY_KEY_1            = 0x31,  // 1 key
 	KEY_KEY_2            = 0x32,  // 2 key
@@ -205,10 +206,6 @@ enum KeyCode {
 	KEY_KEY_X            = 0x58,  // X key
 	KEY_KEY_Y            = 0x59,  // Y key
 	KEY_KEY_Z            = 0x5A,  // Z key
-	KEY_LWIN             = 0x5B,  // Left Windows key (Microsoft® Natural® keyboard)
-	KEY_RWIN             = 0x5C,  // Right Windows key (Natural keyboard)
-	KEY_APPS             = 0x5D,  // Applications key (Natural keyboard)
-	KEY_SLEEP            = 0x5F,  // Computer Sleep key
 	KEY_NUMPAD0          = 0x60,  // Numeric keypad 0 key
 	KEY_NUMPAD1          = 0x61,  // Numeric keypad 1 key
 	KEY_NUMPAD2          = 0x62,  // Numeric keypad 2 key
@@ -237,18 +234,6 @@ enum KeyCode {
 	KEY_F10              = 0x79,  // F10 key
 	KEY_F11              = 0x7A,  // F11 key
 	KEY_F12              = 0x7B,  // F12 key
-	KEY_F13              = 0x7C,  // F13 key
-	KEY_F14              = 0x7D,  // F14 key
-	KEY_F15              = 0x7E,  // F15 key
-	KEY_F16              = 0x7F,  // F16 key
-	KEY_F17              = 0x80,  // F17 key
-	KEY_F18              = 0x81,  // F18 key
-	KEY_F19              = 0x82,  // F19 key
-	KEY_F20              = 0x83,  // F20 key
-	KEY_F21              = 0x84,  // F21 key
-	KEY_F22              = 0x85,  // F22 key
-	KEY_F23              = 0x86,  // F23 key
-	KEY_F24              = 0x87,  // F24 key
 	KEY_NUMLOCK          = 0x90,  // NUM LOCK key
 	KEY_SCROLL           = 0x91,  // SCROLL LOCK key
 	KEY_LSHIFT           = 0xA0,  // Left SHIFT key
@@ -262,27 +247,7 @@ enum KeyCode {
 	KEY_COMMA            = 0xBC,  // Comma Key  ","
 	KEY_MINUS            = 0xBD,  // Minus Key  "-"
 	KEY_PERIOD           = 0xBE,  // Period Key "."
-	KEY_OEM_2            = 0xBF,  // for US    "/?"
-	KEY_OEM_3            = 0xC0,  // for US    "`~"
-	KEY_OEM_4            = 0xDB,  // for US    "[{"
-	KEY_OEM_5            = 0xDC,  // for US    "\|"
-	KEY_OEM_6            = 0xDD,  // for US    "]}"
-	KEY_OEM_7            = 0xDE,  // for US    "'""
-	KEY_OEM_8            = 0xDF,  // None
-	KEY_OEM_AX           = 0xE1,  // for Japan "AX"
-	KEY_OEM_102          = 0xE2,  // "<>" or "\|"
-	KEY_ATTN             = 0xF6,  // Attn key
-	KEY_CRSEL            = 0xF7,  // CrSel key
-	KEY_EXSEL            = 0xF8,  // ExSel key
-	KEY_EREOF            = 0xF9,  // Erase EOF key
-	KEY_PLAY             = 0xFA,  // Play key
-	KEY_ZOOM             = 0xFB,  // Zoom key
-	KEY_PA1              = 0xFD,  // PA1 key
-	KEY_OEM_CLEAR        = 0xFE,   // Clear key
-
-	KEY_KEY_CODES_COUNT  = 0xFF // this is not a key, but the amount of keycodes there are.
 };
-
 
 } // end namespace hrengin
 
