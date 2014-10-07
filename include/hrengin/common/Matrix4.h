@@ -18,7 +18,7 @@ namespace hrengin {
 template<typename T>
 class Matrix4 {
 public:
-	void set (T const a11, T const a21, T const a31, T const a41
+	void set (T const a11, T const a21, T const a31, T const a41,
 		  T const a12, T const a22, T const a32, T const a42,
 		  T const a13, T const a23, T const a33, T const a43,
 		  T const a14, T const a24, T const a34, T const a44)
@@ -130,13 +130,13 @@ public:
 	//! Access an element by its index
 	T& operator () (size_t row, size_t col)
 	{
-		return T[col*4 + row];
+		return m_[col*4 + row];
 	}
 
 	//! Access an element by its index
 	T const& operator () (size_t row, size_t col) const
 	{
-		return T[col*4 + row];
+		return m_[col*4 + row];
 	}
 
 	//! Linear access to elements of the matrix
@@ -155,7 +155,7 @@ private:
 };
 
 template<typename T>
-Matrix4<T> operator * (Matrix4<T> const& A, Matrix4<T> const& B) const
+Matrix4<T> operator * (Matrix4<T> const& A, Matrix4<T> const& B)
 {
 	return A * B;
 }
@@ -164,7 +164,7 @@ Matrix4<T> operator * (Matrix4<T> const& A, Matrix4<T> const& B) const
 template<typename T>
 Matrix4<T> operator * (Matrix4<T> const& m, Vector3d<T> const& v)
 {
-	return Vector3d(
+	return Vector3d<T>(
 		m(0,0) * v.x + m(1,0) * v.y + m(2,0) * v.z + m(3,0) * 1,
 		m(0,1) * v.x + m(1,1) * v.y + m(2,1) * v.z + m(3,1) * 1,
 		m(0,2) * v.x + m(1,2) * v.y + m(2,2) * v.z + m(3,2) * 1,
@@ -174,7 +174,7 @@ Matrix4<T> operator * (Matrix4<T> const& m, Vector3d<T> const& v)
 template<typename T>
 Matrix4<T> operator * (Matrix4<T> const& m, Vector4d<T> const& v)
 {
-	return Vector4d(
+	return Vector4d<T>(
 		m(0,0) * v.x + m(1,0) * v.y + m(2,0) * v.z + m(3,0) * v.w,
 		m(0,1) * v.x + m(1,1) * v.y + m(2,1) * v.z + m(3,1) * v.w,
 		m(0,2) * v.x + m(1,2) * v.y + m(2,2) * v.z + m(3,2) * v.w,
