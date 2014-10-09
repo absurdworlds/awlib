@@ -25,7 +25,7 @@ class ICollisionObject;
 class ICollisionPhantom;
 class IRigidBody;
 
-/* This class is responsible for collision detection, dynamics simulation etc */
+//! This class is responsible for collision detection, dynamics simulation etc
 class IPhysicsWorld {
 public:
 	virtual ~IPhysicsWorld() {};
@@ -43,12 +43,9 @@ public:
 	virtual void castRay(Vector3d<f32> from, Vector3d<f32> to, IRayResultCallback* callback) = 0;
 
 	virtual bool step() = 0;
-
-	// internal implementation details
-	class Details;
 	
-	// for internal use only
-	virtual IPhysicsWorld::Details* getDetails() = 0;
+	//! Internal implementation details
+	DECLARE_HIDDEN_DETAILS(IPhysicsWorld);
 };
 
 } // namespace physics

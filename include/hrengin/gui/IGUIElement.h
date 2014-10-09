@@ -12,6 +12,7 @@
 #include <string>
 
 #include <hrengin/common/types.h>
+#include <hrengin/common/hidden_impl.h>
 
 namespace hrengin {
 namespace gui {
@@ -39,6 +40,9 @@ public:
 	virtual void setText(std::string text) = 0;
 
 	virtual void* getUnderlyingElement() const = 0;
+
+	//! Internal implementation details
+	DECLARE_HIDDEN_DETAILS(IGUIElement);
 };
 
 } // namespace gui
