@@ -9,10 +9,12 @@
 #ifndef _hrengin_models_
 #define _hrengin_models_
 
+#include <hrengin/common/compiler_setup.h>
 #include <hrengin/common/types.h>
 #include <hrengin/common/Vector3d.h>
 
 namespace hrengin {
+//! Enumeration of primitive shapes
 enum Shape {
 	SHAPE_EMPTY,
 	SHAPE_PLANE,
@@ -23,6 +25,7 @@ enum Shape {
 	SHAPE_CONE
 };
 
+//! Axis alignment for primitive shapes
 enum Axis {
 	AXIS_X,
 	AXIS_Y,

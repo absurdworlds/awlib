@@ -33,7 +33,8 @@
 		#undef HR_32BIT
 		#define HR_64BIT
 	#endif
-	#pragma warning(disable: 4244) 
+	#pragma warning(disable: 4244)
+	#pragma warning(disable: 4351)
 #endif
 
 #endif //_hrengin_compiler_setup_
