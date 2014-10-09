@@ -18,27 +18,29 @@ namespace hrengin {
 template<typename T>
 class Matrix4 {
 public:
+	typedef Vector4d<T> col_type;
+
+	Matrix4 ()
+	{
+	}
+
+	Matrix4 (Matrix4 const& other)
+	{
+		col_[0].set(other[0]);
+		col_[1].set(other[1]);
+		col_[2].set(other[2]);
+		col_[3].set(other[3]);
+	}
+
 	void set (T const a11, T const a21, T const a31, T const a41,
 		  T const a12, T const a22, T const a32, T const a42,
 		  T const a13, T const a23, T const a33, T const a43,
 		  T const a14, T const a24, T const a34, T const a44)
 	{
-		m_[0]  = a11;
-		m_[1]  = a21;
-		m_[2]  = a31;
-		m_[3]  = a41;
-		m_[4]  = a12;
-		m_[5]  = a22;
-		m_[6]  = a32;
-		m_[7]  = a42;
-		m_[8]  = a13;
-		m_[9]  = a23;
-		m_[10] = a33;
-		m_[11] = a43;
-		m_[12] = a14;
-		m_[13] = a24;
-		m_[14] = a34;
-		m_[15] = a44;
+		col_[0].set(a11, a12, a13, a14);
+		col_[1].set(a21, a22, a23, a24);
+		col_[2].set(a31, a32, a33, a34);
+		col_[3].set(a41, a42, a43, a44);
 	}	
 	
 	//! Set matrix to identity
@@ -52,54 +54,26 @@ public:
 	}
 
 	//! Matrix multiplication
-	Matrix4<T> operator * (Matrix4<T> const& B)
+	Matrix4<T> operator * (Matrix4<T> const& B) const
 	{
-		T* A = m_;
 		Matrix4<T> C;
-
-		C[0] = A[0]*B[0] + A[4]*B[1] + A[8]* B[2] + A[12]*B[3];
-		C[1] = A[1]*B[0] + A[5]*B[1] + A[9]* B[2] + A[13]*B[3];
-		C[2] = A[2]*B[0] + A[6]*B[1] + A[10]*B[2] + A[14]*B[3];
-		C[3] = A[3]*B[0] + A[7]*B[1] + A[11]*B[2] + A[15]*B[3];
 		
-		C[4] = A[0]*B[4] + A[4]*B[5] + A[8]* B[6] + A[12]*B[7];
-		C[5] = A[1]*B[4] + A[5]*B[5] + A[9]* B[6] + A[13]*B[7];
-		C[6] = A[2]*B[4] + A[6]*B[5] + A[10]*B[6] + A[14]*B[7];
-		C[7] = A[3]*B[4] + A[7]*B[5] + A[11]*B[6] + A[15]*B[7];
-		
-		C[8]  = A[0]*B[8] + A[4]*B[9] + A[8]* B[10] + A[12]*B[11];
-		C[9]  = A[1]*B[8] + A[5]*B[9] + A[9]* B[10] + A[13]*B[11];
-		C[10] = A[2]*B[8] + A[6]*B[9] + A[10]*B[10] + A[14]*B[11];
-		C[11] = A[3]*B[8] + A[7]*B[9] + A[11]*B[10] + A[15]*B[11];
-
-		C[12] = A[0]*B[12] + A[4]*B[13] + A[8]* B[14] + A[12]*B[15];
-		C[13] = A[1]*B[12] + A[5]*B[13] + A[9]* B[14] + A[13]*B[15];
-		C[14] = A[2]*B[12] + A[6]*B[13] + A[10]*B[14] + A[14]*B[15];
-		C[15] = A[3]*B[12] + A[7]*B[13] + A[11]*B[14] + A[15]*B[15];
+		C[0] = col_[0]*B[0][0] + col_[1]*B[0][1] + col_[2]*B[0][2] + col_[3]*B[0][3];
+		C[1] = col_[0]*B[1][0] + col_[1]*B[1][1] + col_[2]*B[1][2] + col_[3]*B[1][3];
+		C[2] = col_[0]*B[2][0] + col_[1]*B[2][1] + col_[2]*B[2][2] + col_[3]*B[2][3];
+		C[3] = col_[0]*B[3][0] + col_[1]*B[3][1] + col_[2]*B[3][2] + col_[3]*B[3][3];
 		
 		return C;
 	}
 	
 	//! Multiply matrix by scalar
-	Matrix4<T> operator * (T const& S)
+	Matrix4<T> operator * (T const& S) const
 	{
-		Matrix4<T> M[16];
-		M[0]  = m_[0]  * S;
-		M[1]  = m_[1]  * S;
-		M[2]  = m_[2]  * S;
-		M[3]  = m_[3]  * S;
-		M[4]  = m_[4]  * S;
-		M[5]  = m_[5]  * S;
-		M[6]  = m_[6]  * S;
-		M[7]  = m_[7]  * S;
-		M[8]  = m_[8]  * S;
-		M[9]  = m_[9]  * S;
-		M[10] = m_[10] * S;
-		M[11] = m_[11] * S;
-		M[12] = m_[12] * S;
-		M[13] = m_[13] * S;
-		M[14] = m_[14] * S;
-		M[15] = m_[15] * S;
+		Matrix4<T> M(*this);
+		M[0] *= S;
+		M[1] *= S;
+		M[2] *= S;
+		M[3] *= S;
 		
 		return M;
 	}
@@ -107,22 +81,33 @@ public:
 	//! Multiply matrix by scalar
 	Matrix4<T>& operator *= (T const& S)
 	{
-		m_[0]  *= S;
-		m_[1]  *= S;
-		m_[2]  *= S;
-		m_[3]  *= S;
-		m_[4]  *= S;
-		m_[5]  *= S;
-		m_[6]  *= S;
-		m_[7]  *= S;
-		m_[8]  *= S;
-		m_[9]  *= S;
-		m_[10] *= S;
-		m_[11] *= S;
-		m_[12] *= S;
-		m_[13] *= S;
-		m_[14] *= S;
-		m_[15] *= S;
+		col_[0]  *= S;
+		col_[1]  *= S;
+		col_[2]  *= S;
+		col_[3]  *= S;
+		
+		return *this;
+	}
+	
+	//! Divide matrix by scalar
+	Matrix4<T> operator / (T const& S) const
+	{
+		Matrix4<T> M(*this);
+		M[0] /= S;
+		M[1] /= S;
+		M[2] /= S;
+		M[3] /= S;
+		
+		return M;
+	}
+
+	//! Divide matrix by scalar
+	Matrix4<T>& operator /= (T const& S)
+	{
+		col_[0]  /= S;
+		col_[1]  /= S;
+		col_[2]  /= S;
+		col_[3]  /= S;
 		
 		return *this;
 	}
@@ -130,28 +115,28 @@ public:
 	//! Access an element by its index
 	T& operator () (size_t col, size_t row)
 	{
-		return m_[col + row*4];
+		return col_[col][row];
 	}
 
 	//! Access an element by its index
 	T const& operator () (size_t col, size_t row) const
 	{
-		return m_[col + row*4];
+		return col_[col][row];
 	}
 
-	//! Linear access to elements of the matrix
+	//! Access colums of the matrix by subscript
 	T& operator [] (size_t col)
 	{
-		return m_[col];
+		return col_[col];
 	}
 	
-	//! Linear access to elements of the matrix
+	//! Access colums of the matrix by subscript
 	T const& operator [] (size_t col) const
 	{
-		return m_[col];
+		return col_[col];
 	}
 private:
-	T m_[16];
+	col_type col_[4];
 };
 
 template<typename T>
