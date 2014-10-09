@@ -16,7 +16,7 @@ namespace hrengin {
 
 std::string getFileExtension(std::string& dest, std::string const& path)
 {
-	u32 extpos = path.find_last_of(".");
+	size_t extpos = path.find_last_of(".");
 
 	if(extpos == std::string::npos) {
 		dest = "";

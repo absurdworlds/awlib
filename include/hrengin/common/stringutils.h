@@ -9,7 +9,12 @@
 #ifndef _hrengin_stringutils_
 #define _hrengin_stringutils_
 
+#include <hrengin/common/compiler_setup.h>
+
+#include <cstring>
+
 #include <string>
+
 #include <hrengin/core/api.h>
 
 namespace hrengin {
@@ -42,6 +47,30 @@ size_t strlen_g (char_type const* str)
 
 //! Get file extension from string
 HR_CORE_API std::string getFileExtension(std::string& dest, std::string const& path);
+
+//! This struct is used for more convenient storage of POD character arrays
+struct PodString {
+	size_t length;
+	char* data;
+};
+
+inline PodString createPodString(std::string s) 
+{
+	PodString ps;
+	ps.length = s.length();
+	ps.data = new char[ps.length+1];
+	strcpy((char *)ps.data,s.c_str());
+	return ps;
+}
+
+inline PodString createPodString(const char* s) 
+{
+	PodString ps;
+	ps.length = strlen(s);
+	ps.data = new char[ps.length+1];
+	strcpy((char *)ps.data,s);
+	return ps;
+}
 
 } // namespace hrengin
 
