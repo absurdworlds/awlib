@@ -18,25 +18,48 @@ namespace hrengin {
 template <typename T>
 class Vector2d {
 public:
-	Vector2d() 
-		: x(0), y(0) 
-	{
-	}
-
-	Vector2d(T x, T y) 
-		: x(x), y(y) 
+	//! Default constructor. Constructs zero vector.
+	Vector2d ()
+#ifndef HR_COMPILER_MSC
+		: coord_{},
+#else
+		: coord_(),
+#endif
+		x(coord_[0]), y(coord_[1])
 	{
 	}
 	
 	//! Construct vector with same both coordinates 
-	explicit Vector2d(T v) 
-		: x(v), y(v) 
+	explicit Vector2d (T v)
+#ifndef HR_COMPILER_MSC
+		: coord_{{v, v}},
+#else
+		: coord_({v, v}),
+#endif
+		x(coord_[0]), y(coord_[1])
 	{
 	}
+	
+	//! Construct vector with individual coodrinates
+	Vector2d (T x, T y)
+#ifndef HR_COMPILER_MSC
+		: coord_{{x, y}},
+#else
+		: coord_({x, y}),
+#endif
+		x(coord_[0]), y(coord_[1])
+	{
+	}
+	
 
 	//! Copy constructor
-	Vector2d(Vector2d<T> const& other) 
-		: x(other.x), y(other.y)
+	Vector2d (Vector2d<T> const& other)
+#ifndef HR_COMPILER_MSC
+		: coord_{{other[0], other[1]}},
+#else
+		: coord_({other[0], other[1]}),
+#endif
+		x(coord_[0]), y(coord_[1])
 	{
 	}
 	
@@ -45,135 +68,153 @@ public:
 
 	Vector2d<T>& operator = (Vector2d<T> const& other)
 	{
-		x = other.x; 
-		y = other.y; 
-		return *this; 
+		coord_[0] = other[0];
+		coord_[1] = other[1];
+		return *this;
 	}
 
-	Vector2d<T> operator - () const 
+	Vector2d<T> operator - () const
 	{
-		return Vector2d<T>(-x, -y);
+		return Vector2d<T>(
+			-coords_[0],
+			-coords_[1]);
 	}
-
 	
-	Vector2d<T> operator + (Vector2d<T> const& other) const 
+	Vector2d<T> operator + (Vector2d<T> const& other) const
 	{
-		return Vector2d<T>(x + other.x, y + other.y);
+		return Vector2d<T>(x + other[0], y + other[1]);
 	}
 
-	Vector2d<T>& operator += (Vector2d<T> const& other) 
+	Vector2d<T>& operator += (Vector2d<T> const& other)
 	{
-		x += other.x; 
-		y += other.y; 
-		return *this; 
+		coord_[0] += other[0];
+		coord_[1] += other[1];
+		return *this;
 	}
 
-	Vector2d<T> operator - (Vector2d<T> const& other) const 
+	Vector2d<T> operator - (Vector2d<T> const& other) const
 	{ 
-		return Vector2d<T>(x - other.x, y - other.y); 
+		return Vector2d<T>(
+			coord_[0] - other[0],
+			coord_[1] - other[1]);
 	}
 
-	Vector2d<T>& operator -= (Vector2d<T> const& other) 
+	Vector2d<T>& operator -= (Vector2d<T> const& other)
 	{ 
-		x -= other.x; 
-		y -= other.y; 
-		return *this; 
+		coord_[0] -= other[0];
+		coord_[1] -= other[1];
+		return *this;
 	}
 
-	Vector2d<T> operator - (T const v) const 
+	Vector2d<T> operator - (T const v) const
 	{ 
-		return Vector2d<T>(x - v, y - v); 
+		return Vector2d<T>(
+			coord_[0] - v,
+			coord_[1] - v);
 	}
 
-	Vector2d<T>& operator -= (T const v) 
+	Vector2d<T>& operator -= (T const v)
 	{ 
-		x -= v; 
-		y -= v; 
-		return *this; 
+		coord_[0] -= v;
+		coord_[1] -= v;
+		return *this;
 	}
 
-	Vector2d<T> operator * (Vector2d<T> const& other) const 
+	Vector2d<T> operator * (Vector2d<T> const& other) const
 	{ 
-		return Vector2d<T>(x * other.x, y * other.y); 
+		return Vector2d<T>(
+			coord_[0] * other[0],
+			coord_[1] * other[1]);
 	}
 
-	Vector2d<T>& operator *= (Vector2d<T> const& other) 
+	Vector2d<T>& operator *= (Vector2d<T> const& other)
 	{ 
-		x *= other.x; 
-		y *= other.y; 
-		return *this; 
+		coord_[0] *= other[0];
+		coord_[1] *= other[1];
+		return *this;
 	}
 
 	Vector2d<T> operator * (const T v) const
 	{ 
-		return Vector2d<T>(x * v, y * v);
+		return Vector2d<T>(
+			coord_[0] * v,
+			coord_[1] * v);
 	}
 
-	Vector2d<T>& operator *= (const T v) 
+	Vector2d<T>& operator *= (const T v)
 	{
-		x *= v; 
-		y *= v; 
-		return *this; 
+		coord_[0] *= v;
+		coord_[1] *= v;
+		return *this;
 	}
 
-	Vector2d<T> operator / (Vector2d<T> const& other) const 
+	Vector2d<T> operator / (Vector2d<T> const& other) const
 	{
-		return Vector2d<T>(x / other.x, y / other.y); 
+		return Vector2d<T>(
+			coord_[0] / other[0],
+			coord_[1] / other[1]);
 	}
 
 	Vector2d<T>& operator /= (Vector2d<T> const& other)
 	{
-		x /= other.x; 
-		y /= other.y; 
+		coord_[0] /= other[0];
+		coord_[1] /= other[1];
 		return *this;
 	}
 
-	Vector2d<T> operator / (const T v) const 
+	Vector2d<T> operator / (const T v) const
 	{
-		return Vector2d<T>(x / v, y / v); 
+		return Vector2d<T>(
+			coord_[0] / v,
+			coord_[1] / v);
 	}
 
-	Vector2d<T>& operator /= (const T v) 
+	Vector2d<T>& operator /= (const T v)
 	{
-		x /= v; 
-		y /= v; 
+		coord_[0] /= v;
+		coord_[1] /= v;
 		return *this;
 	}
 
 	//! Get length of the vector.
-	T length() const 
+	T length() const
 	{
-		return math::sqrt( x*x + y*y ); 
-	}
+		return math::sqrt(coord_[0]*coord_[0] +
+	}			  coord_[1]*coord_[1]);
 
 	//! Get squared length of the vector.
-	T squareLength() const 
+	T squareLength() const
 	{
-		return x*x + y*y; 
+		return  coord_[0]*coord_[0] +
+			coord_[1]*coord_[1];
 	}
 	
-	//! Get distance from another point. 
+	//! Get distance from another point.
 	T getDistance(Vector2d<T> const& other) const
 	{
-		return Vector2d<T>(x - other.x, y - other.y).length();
+		return Vector2d<T>(
+			coord_[0] - other[0],
+			coord_[1] - other[1]).length();
 	}
 
 	//! Get squared distance from another point.
 	T getSquaredDistance(Vector2d<T> const& other) const
 	{
-		return Vector2d<T>(x - other.x, y - other.y).squareLength();
+		return Vector2d<T>(
+			coord_[0] - other[0],
+			coord_[1] - other[1]).squareLength();
 	}
 
 	//! Get the dot product of this vector with another
 	T dot(Vector2d<T> const& other) const
 	{
-		return x*other.x + y*other.y;
+		return coord_[0]*other[0] + coord_[1]*other[1];
 	}
 	
 	//! Calculates angle of the vector
 	T getAngle() const
 	{
-		T yaw = T(atan2( f64(x), f64(y) ));
+		T yaw = T(atan2( f64(coord_[0]), f64(coord_[1]) ));
 		
 		if (yaw <= -math::Pi) {
 			yaw += math::DoublePi;
@@ -192,15 +233,36 @@ public:
 			return *this;
 		}
 		length = math::invSqrt(length);
-		x = T(x * length);
-		y = T(y * length);
+		coord_[0] = T(coord_[0] * length);
+		coord_[1] = T(coord_[1] * length);
 		return *this;
 	}
+	
+	
+	//! Access elements of the vector by subscript
+	T& operator [] (size_t elem)
+	{
+		return coord_[elem];
+	}
+	
+	//! Access elements of the vector by subscript
+	T const& operator [] (size_t elem) const
+	{
+		return coord_[elem];
+	}
+	
 
-	//! Coordinate along X axis
-	T x;
-	//! Coordinate along Y axis
-	T y;
+	//! Temporary hack for backward compatibility
+	T& x;
+	T& y;
+private:
+#ifndef HR_COMPILER_MSC // fucking microsoft
+	//! Coordinates of the vector
+	T coord_[2];
+#else
+	//! Coordinates of the vector
+	std::array<T, 2> coord_;
+#endif
 };
 
 // Initialization of static member

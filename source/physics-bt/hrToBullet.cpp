@@ -1,4 +1,4 @@
-/**
+/*
    Copyright (C) 2014  absurdworlds
 
    License LGPLv3-only:
@@ -22,11 +22,11 @@ void quaternionToEuler(btQuaternion const& quat, btVector3& euler) {
 	if (math::equals(test, 0.5f)) { // north pole
 		euler.setX(0);
 		euler.setY(2 * atan2(X,W));
-		euler.setZ(math::HALF_PI);
+		euler.setZ(math::HalfPi);
 	} else if (math::equals(test, -0.5f)) { // south pole
 		euler.setX(0);
 		euler.setY(-2 * atan2(X,W));
-		euler.setZ(- math::HALF_PI);
+		euler.setZ(- math::HalfPi);
 	} else {
 		f32 const sX = X * X;
 		f32 const sY = Y * Y;
@@ -37,7 +37,7 @@ void quaternionToEuler(btQuaternion const& quat, btVector3& euler) {
 		euler.setZ(asin(2*test));
 	}
 
-	euler *= math::RADTODEG;
+	euler *= math::DegreesInRadian;
 }
 
 

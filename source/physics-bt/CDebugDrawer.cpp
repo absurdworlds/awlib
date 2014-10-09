@@ -1,4 +1,4 @@
-/**
+/*
    Copyright (C) 2014  absurdworlds
 
    License LGPLv3-only:
@@ -28,13 +28,13 @@ void DebugDraw::drawLine(const btVector3& from, const btVector3& to, const btVec
 	Vector3d<f32> newColor;
 
 	if (color[0] <= 1.0 && color[0] > 0.0) {
-		newColor.X = ((u32)(color[0]*255.0));
+		newColor[0] = ((u32)(color[0]*255.0));
 	}
 	if (color[1] <= 1.0 && color[1] > 0.0) {
-		newColor.Y = ((u32)(color[1]*255.0));
+		newColor[1] = ((u32)(color[1]*255.0));
 	}
 	if (color[2] <= 1.0 && color[2] > 0.0) {
-		newColor.Z = ((u32)(color[2]*255.0));
+		newColor[2] = ((u32)(color[2]*255.0));
 	}
 
 	vmgr_->drawLine(

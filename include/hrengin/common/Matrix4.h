@@ -23,22 +23,22 @@ public:
 		  T const a13, T const a23, T const a33, T const a43,
 		  T const a14, T const a24, T const a34, T const a44)
 	{
-		m_[0]  = a11;	
+		m_[0]  = a11;
 		m_[1]  = a21;
-		m_[2]  = a31;	
-		m_[3]  = a41;	
+		m_[2]  = a31;
+		m_[3]  = a41;
 		m_[4]  = a12;
-		m_[5]  = a22;     
-		m_[6]  = a32;     
-		m_[7]  = a42;     
-		m_[8]  = a13;     
-		m_[9]  = a23;     
-		m_[10] = a33;     
-		m_[11] = a43;     
-		m_[12] = a14;     
-		m_[13] = a24;     
+		m_[5]  = a22;
+		m_[6]  = a32;
+		m_[7]  = a42;
+		m_[8]  = a13;
+		m_[9]  = a23;
+		m_[10] = a33;
+		m_[11] = a43;
+		m_[12] = a14;
+		m_[13] = a24;
 		m_[14] = a34;
-		m_[15] = a44;     
+		m_[15] = a44;
 	}	
 	
 	//! Set matrix to identity
@@ -47,7 +47,7 @@ public:
 		set(T(1),T(0),T(0),T(0),
 		    T(0),T(1),T(0),T(0),
 		    T(0),T(0),T(1),T(0),
-		    T(0),T(0),T(0),T(1));	
+		    T(0),T(0),T(0),T(1));
 		return *this;
 	}
 
@@ -128,15 +128,15 @@ public:
 	}
 
 	//! Access an element by its index
-	T& operator () (size_t row, size_t col)
+	T& operator () (size_t col, size_t row)
 	{
-		return m_[col*4 + row];
+		return m_[col + row*4];
 	}
 
 	//! Access an element by its index
-	T const& operator () (size_t row, size_t col) const
+	T const& operator () (size_t col, size_t row) const
 	{
-		return m_[col*4 + row];
+		return m_[col + row*4];
 	}
 
 	//! Linear access to elements of the matrix
@@ -165,20 +165,20 @@ template<typename T>
 Matrix4<T> operator * (Matrix4<T> const& m, Vector3d<T> const& v)
 {
 	return Vector3d<T>(
-		m(0,0) * v.x + m(1,0) * v.y + m(2,0) * v.z + m(3,0) * 1,
-		m(0,1) * v.x + m(1,1) * v.y + m(2,1) * v.z + m(3,1) * 1,
-		m(0,2) * v.x + m(1,2) * v.y + m(2,2) * v.z + m(3,2) * 1,
-		m(0,3) * v.x + m(1,3) * v.y + m(2,3) * v.z + m(3,3) * 1);
+		m(0,0) * v[0] + m(1,0) * v[1] + m(2,0) * v[2] + m(3,0) * 1,
+		m(0,1) * v[0] + m(1,1) * v[1] + m(2,1) * v[2] + m(3,1) * 1,
+		m(0,2) * v[0] + m(1,2) * v[1] + m(2,2) * v[2] + m(3,2) * 1,
+		m(0,3) * v[0] + m(1,3) * v[1] + m(2,3) * v[2] + m(3,3) * 1);
 }
 
 template<typename T>
 Matrix4<T> operator * (Matrix4<T> const& m, Vector4d<T> const& v)
 {
 	return Vector4d<T>(
-		m(0,0) * v.x + m(1,0) * v.y + m(2,0) * v.z + m(3,0) * v.w,
-		m(0,1) * v.x + m(1,1) * v.y + m(2,1) * v.z + m(3,1) * v.w,
-		m(0,2) * v.x + m(1,2) * v.y + m(2,2) * v.z + m(3,2) * v.w,
-		m(0,3) * v.x + m(1,3) * v.y + m(2,3) * v.z + m(3,3) * v.w);
+		m(0,0) * v[0] + m(1,0) * v[1] + m(2,0) * v[2] + m(3,0) * v[3],
+		m(0,1) * v[0] + m(1,1) * v[1] + m(2,1) * v[2] + m(3,1) * v[3],
+		m(0,2) * v[0] + m(1,2) * v[1] + m(2,2) * v[2] + m(3,2) * v[3],
+		m(0,3) * v[0] + m(1,3) * v[1] + m(2,3) * v[2] + m(3,3) * v[3]);
 }
 
 } // namespace hrengin

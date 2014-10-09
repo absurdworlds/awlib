@@ -255,8 +255,8 @@ public:
 	T length() const
 	{
 		return math::sqrt(
-			coord_[0]*coord_[0],
-			coord_[1]*coord_[1],
+			coord_[0]*coord_[0] +
+			coord_[1]*coord_[1] +
 			coord_[2]*coord_[2]);
 	}
 	

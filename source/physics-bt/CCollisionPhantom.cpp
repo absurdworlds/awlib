@@ -1,4 +1,4 @@
-/**
+/*
    Copyright (C) 2014  absurdworlds
 
    License LGPLv3-only:
@@ -39,8 +39,8 @@ void CCollisionPhantom::setRotation(Vector3d<f32> rot)
 	localTransform.setIdentity();
 	localTransform.setOrigin(details_.obj->getWorldTransform().getOrigin());
 #endif
-	rot *= math::DEGTORAD64;
-	transform.setRotation(btQuaternion(rot.Y, rot.X, rot.Z));
+	rot *= math::RadiansInDegree;
+	transform.setRotation(btQuaternion(rot[1], rot[0], rot[2]));
 	details_.obj->setWorldTransform(transform);
 };
 

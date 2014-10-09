@@ -1,4 +1,4 @@
-/**
+/*
    Copyright (C) 2014  absurdworlds
 
    License LGPLv3-only:
@@ -24,7 +24,7 @@ inline Vector3d<f32> toHrengin(btVector3 const& btVec)
 
 inline btVector3 toBullet(Vector3d<f32> const& hrVec)
 {
-	return btVector3(hrVec.X, hrVec.Y, hrVec.Z);
+	return btVector3(hrVec[0], hrVec[1], hrVec[2]);
 }
 
 void quaternionToEuler(btQuaternion const& quat, btVector3& euler);

@@ -37,25 +37,25 @@ public:
 
 	//! Copy constructor
 	Vector4d(Vector4d<T> const& other) 
-		: x(other.x), y(other.y), z(other.z), w(other.w)
+		: x(other[0]), y(other[1]), z(other[2]), w(other[3])
 	{
 	}
 
 	//! Set vector's components
 	void set (T const x, T const y, T const z, T const w)
 	{
-		x = x;
-		y = y;
-		z = z;
-		w = w;
+		coord_[0] = x;
+		coord_[1] = y;
+		coord_[2] = z;
+		coord_[3] = w;
 	}
 
 	void set (Vector4d<T> const& other)
 	{
-		x = other.x;
-		y = other.y;
-		z = other.z;
-		w = other.w;
+		coord_[0] = other[0];
+		coord_[1] = other[1];
+		coord_[2] = other[2];
+		coord_[3] = other[3];
 	}
 	
 	Vector4d<T>& operator = (Vector4d<T> const& other)
@@ -66,122 +66,158 @@ public:
 	
 	Vector4d<T> operator + (Vector4d<T> const& other) const
 	{
-		return Vector4d<T>(w + other.w, x + other.x, y + other.y, z + other.z);
+		return Vector4d<T>(
+			coord_[0] + other[0],
+			coord_[1] + other[1],
+			coord_[2] + other[2],
+			coord_[3] + other[3]);
 	}
 
 	//! Component-wise addition
 	Vector4d<T>& operator += (Vector4d<T> const& other)
 	{ 
-		x += other.x;
-		y += other.y;
-		z += other.z;
-		w += other.w;
+		coord_[0] += other[0];
+		coord_[1] += other[1];
+		coord_[2] += other[2];
+		coord_[3] += other[3];
 		return *this;
 	}
 
 	Vector4d<T> operator + (T const val) const
 	{
-		return Vector4d<T>(x + val, y + val, z + val, w + val);
+		return Vector4d<T>(
+			coord_[0] + val,
+			coord_[1] + val,
+			coord_[2] + val,
+			coord_[3] + val);
 	}
 
 	Vector4d<T>& operator += (T const val)
 	{
-		x += val;
-		y += val;
-		z += val;
-		w += val;
+		coord_[0] += val;
+		coord_[1] += val;
+		coord_[2] += val;
+		coord_[3] += val;
 		return *this;
 	}
 	Vector4d<T> operator - (Vector4d<T> const& other) const
 	{
-		return Vector4d<T>(x - other.x, y - other.y, z - other.z, w - other.w);
+		return Vector4d<T>(
+			coord_[0] - other[0],
+			coord_[1] - other[1],
+			coord_[2] - other[2],
+			coord_[3] - other[3]);
 	}
 
 	Vector4d<T>& operator -= (Vector4d<T> const& other)
 	{
-		x -= other.x;
-		y -= other.y;
-		z -= other.z;
-		w -= other.w;
+		coord_[0] -= other[0];
+		coord_[1] -= other[1];
+		coord_[2] -= other[2];
+		coord_[3] -= other[3];
 		return *this;
 	}
 
 	Vector4d<T> operator - (T const val) const
 	{
-		return Vector4d<T>(x - val, y - val, z - val, w - val);
+		return Vector4d<T>(
+			coord_[0] - val,
+			coord_[1] - val,
+			coord_[2] - val,
+			coord_[3] - val);
 	}
 
 	Vector4d<T>& operator -= (T const val)
 	{
-		x -= val;
-		y -= val;
-		z -= val;
-		w -= val;
+		coord_[0] -= val;
+		coord_[1] -= val;
+		coord_[2] -= val;
+		coord_[3] -= val;
 		return *this;
 	}
 
 	Vector4d<T> operator * (Vector4d<T> const& other) const
 	{
-		return Vector4d<T>(x * other.x, y * other.y, z * other.z, w * other.w);
+		return Vector4d<T>(
+			coord_[0] * other[0],
+			coord_[1] * other[1],
+			coord_[2] * other[2],
+			coord_[3] * other[3]);
 	}
 
 	Vector4d<T>& operator *= (Vector4d<T> const& other)
 	{
-		x *= other.x;
-		y *= other.y;
-		z *= other.z;
-		w *= other.w;
+		coord_[0] *= other[0];
+		coord_[1] *= other[1];
+		coord_[2] *= other[2];
+		coord_[3] *= other[3];
 		return *this;
 	}
 
 	Vector4d<T> operator * (T const v) const
 	{
-		return Vector4d<T>(x * v, y * v, z * v, w * v);
+		return Vector4d<T>(
+			coord_[0] * v,
+			coord_[1] * v,
+			coord_[2] * v,
+			coord_[3] * v);
 	}
 
 	Vector4d<T>& operator *= (T const v)
 	{
-		x *= v;
-		y *= v;
-		z *= v;
-		w *= v;
+		coord_[0] *= v;
+		coord_[1] *= v;
+		coord_[2] *= v;
+		coord_[3] *= v;
 		return *this;
 	}
 
 	Vector4d<T> operator / (Vector4d<T> const& other) const
 	{
-		return Vector4d<T>(x / other.x, y / other.y, z / other.z, w / other.w);
+		return Vector4d<T>(
+			coord_[0] / other[0],
+			coord_[1] / other[1],
+			coord_[2] / other[2],
+			coord_[3] / other[3]);
 	}
 
 	Vector4d<T>& operator /= (Vector4d<T> const& other)
 	{
-		x /= other.x;
-		y /= other.y;
-		z /= other.z;
-		w /= other.w;
+		coord_[0] /= other[0];
+		coord_[1] /= other[1];
+		coord_[2] /= other[2];
+		coord_[3] /= other[3];
 		return *this;
 	}
 
 	Vector4d<T> operator / (T const val) const
 	{
 		T inv = T(1.0/val);
-		return Vector4d<T>(x * inv, y * inv, z * inv, w * inv);
+		return Vector4d<T>(
+			coord_[0] * inv,
+			coord_[1] * inv,
+			coord_[2] * inv,
+			coord_[3] * inv);
 	}
 
 	Vector4d<T>& operator /= (T const val)
 	{
 		T const inv = T(1.0/val);
-		x *= inv; 
-		y *= inv; 
-		z *= inv; 
-		w *= inv; 
+		coord_[0] *= inv; 
+		coord_[1] *= inv; 
+		coord_[2] *= inv; 
+		coord_[3] *= inv; 
 		return *this; 
 	}
 	
 
 	Vector4d<T> operator - () const
 	{
-		return Vector4d<T>(-x, -y, -z, -w);
+		return Vector4d<T>(
+			-coord_[0],
+			-coord_[1],
+			-coord_[2],
+			-coord_[3]);
 	}
 
 	
@@ -195,10 +231,10 @@ public:
 
 		length = math::invSqrt(length);
 
-		x = T(x * length);
-		y = T(y * length);
-		z = T(z * length);
-		w = T(w * length);
+		coord_[0] = T(coord_[0] * length);
+		coord_[1] = T(coord_[1] * length);
+		coord_[2] = T(coord_[2] * length);
+		coord_[3] = T(coord_[3] * length);
 
 		return *this;
 	}
@@ -213,80 +249,116 @@ public:
 
 		length = math::invSqrt(length);
 
-		return Vector4d<T>(T(x * length), T(y * length),
-			T(z * length), T(w * length));
+		return Vector4d<T>(
+			T(coord_[0] * length),
+			T(coord_[1] * length),
+			T(coord_[2] * length),
+			T(coord_[3] * length));
 	}
 
 	//! Get length of the vector.
 	T length() const
 	{ 
-		return math::sqrt( x*x + y*y + z*z + w*w );
+		return math::sqrt(
+			coord_[0]*coord_[0] +
+			coord_[1]*coord_[1] +
+			coord_[2]*coord_[2] +
+			coord_[3]*coord_[3] );
 	}
 	
 	//! Get squared length of the vector.
 	T squareLength() const
 	{ 
-		return x*x + y*y + z*z + w*w;
+		return  coord_[0]*coord_[0] +
+			coord_[1]*coord_[1] +
+			coord_[2]*coord_[2] +
+			coord_[3]*coord_[3];
 	}
 
 	//! Calculate the dot product with another vector
 	T dot(Vector4d<T> const& other) const
 	{
-		return x*other.x + y*other.y + z*other.z + w*other.w;
+		return  coord_[0]*other[0] +
+			coord_[1]*other[1] +
+			coord_[2]*other[2] +
+			coord_[3]*other[3];
 	}
 
 	//! Get distance from another point
 	T getDistance(Vector4d<T> const& other) const
 	{
-		return Vector4d<T>(x - other.x, y - other.y,
-			z - other.z, w - other.w).length();
+		return Vector4d<T>(
+			coord_[0] - other[0],
+			coord_[1] - other[1],
+			coord_[2] - other[2],
+			coord_[3] - other[3]).length();
 	}
 
 	//! Get squared distance from another point
 	T getDistanceSQ(Vector4d<T> const& other) const
 	{
-		return Vector4d<T>(x - other.x, y - other.y,
-			z - other.z, w - other.w).squareLength();
+		return Vector4d<T>(
+			coord_[0] - other[0],
+			coord_[1] - other[1],
+			coord_[2] - other[2],
+			coord_[3] - other[3]).squareLength();
 	}
 
 	//! Set the length of the vector to a new value
 	Vector4d<T>& setLength(T const newlength)
 	{
 		normalize();
-		this.x *= newlength;
-		this.y *= newlength;
-		this.z *= newlength;
-		this.w *= newlength;
+		coord_[0] *= newlength;
+		coord_[1] *= newlength;
+		coord_[2] *= newlength;
+		coord_[3] *= newlength;
 		return *this;
 	}
 	
 	// Invert the vector.
 	Vector4d<T>& invert ()
 	{
-		x *= -1;
-		y *= -1;
-		z *= -1;
-		w *= -1;
+		coord_[0] *= -1;
+		coord_[1] *= -1;
+		coord_[2] *= -1;
+		coord_[3] *= -1;
 		return *this;
 	}
 
 	//! Fill an array of 4 values with the vector data
 	void toArrayOf4(T* array) const
 	{
-		array[0] = x;
-		array[1] = y;
-		array[2] = z;
-		array[3] = w;
+		array[0] = coord_[0];
+		array[1] = coord_[1];
+		array[2] = coord_[2];
+		array[3] = coord_[3];
 	}
-
-	//! First component
-	T x;
-	//! Second component
-	T y;
-	//! Third component
-	T z;
-	//! Fourth component
-	T w;
+	
+	//! Access elements of the vector by subscript
+	T& operator [] (size_t elem)
+	{
+		return coord_[elem];
+	}
+	
+	//! Access elements of the vector by subscript
+	T const& operator [] (size_t elem) const
+	{
+		return coord_[elem];
+	}
+	
+	//! Temporary hack for backward compatibility
+	T& x;
+	T& y;
+	T& z;
+	T& w;
+private:
+#ifndef HR_COMPILER_MSC // fucking microsoft
+	//! Coordinates of the vector
+	T coord_[4];
+#else
+	//! Coordinates of the vector
+	std::array<T, 4> coord_;
+#endif
 };
 
 //! Partial specialization for integer vectors
@@ -294,7 +366,11 @@ public:
 template <>
 inline Vector4d<i32> Vector4d<i32>::operator / (i32 const val) const 
 {
-	return Vector4d<i32>(x/val, y/val, z/val, w/val);
+	return Vector4d<i32>(
+		coord_[0]/val,
+		coord_[1]/val,
+		coord_[2]/val,
+		coord_[3]/val);
 }
 
 //! Partial specialization for integer vectors
@@ -302,10 +378,10 @@ inline Vector4d<i32> Vector4d<i32>::operator / (i32 const val) const
 template <>
 inline Vector4d<i32>& Vector4d<i32>::operator /= (i32 const val) 
 {
-	x /= val;
-	y /= val;
-	z /= val;
-	w /= val;
+	coord_[0] /= val;
+	coord_[1] /= val;
+	coord_[2] /= val;
+	coord_[3] /= val;
 	return *this;
 }
 
