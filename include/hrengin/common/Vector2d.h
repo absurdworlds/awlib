@@ -9,6 +9,12 @@
 #ifndef _hrengin_Vector2d_
 #define _hrengin_Vector2d_
 
+#include <hrengin/common/compiler_setup.h>
+
+#ifdef HR_COMPILER_MSC // fucking microsoft
+#include <array>
+#endif
+
 #include <hrengin/common/types.h>
 #include <hrengin/common/math.h>
 
@@ -180,7 +186,8 @@ public:
 	T length() const
 	{
 		return math::sqrt(coord_[0]*coord_[0] +
-	}			  coord_[1]*coord_[1]);
+				  coord_[1]*coord_[1]);
+	}
 
 	//! Get squared length of the vector.
 	T squareLength() const

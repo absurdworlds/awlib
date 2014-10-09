@@ -11,6 +11,10 @@
 
 #include <hrengin/common/math.h>
 
+#ifdef HR_COMPILER_MSC // fucking microsoft
+#include <array>
+#endif
+
 namespace hrengin {
 
 //! Represents a 4-dimensional vector
@@ -18,26 +22,42 @@ template <class T>
 class Vector4d {
 public:
 	//! Default constructor. Constructs zero vector.
-	Vector4d() 
-		: x(0), y(0), z(0), w(0)
+	Vector4d()
+#ifndef HR_COMPILER_MSC // fucking microsoft
+		: coord_{}
+#else
+		: coord_()
+#endif
 	{
 	}
 
 	//! Construct vector specifying individual coodrinates
 	Vector4d(T const x, T const y, T const z, T const w)
-		: x(x), y(y), z(z), w(w)
+#ifndef HR_COMPILER_MSC // fucking microsoft
+		: coord_{{x,y,z,w}}
+#else
+		: coord_({x,y,z,w})
+#endif
 	{
 	}
 
 	//! Construct vector with same value for coordinates
 	explicit Vector4d(T const v)
-		: x(v), y(v), z(v), w(v)
+#ifndef HR_COMPILER_MSC // fucking microsoft
+		: coord_{{v,v,v,v}}
+#else
+		: coord_({v,v,v,v})
+#endif
 	{
 	}
 
 	//! Copy constructor
 	Vector4d(Vector4d<T> const& other) 
-		: x(other[0]), y(other[1]), z(other[2]), w(other[3])
+#ifndef HR_COMPILER_MSC // fucking microsoft
+		: coord_{{other[0],other[1],other[2],other[3]}
+#else
+		: coord_({other[0],other[1],other[2],other[3]})
+#endif
 	{
 	}
 
@@ -345,12 +365,7 @@ public:
 	{
 		return coord_[elem];
 	}
-	
-	//! Temporary hack for backward compatibility
-	T& x;
-	T& y;
-	T& z;
-	T& w;
+
 private:
 #ifndef HR_COMPILER_MSC // fucking microsoft
 	//! Coordinates of the vector
