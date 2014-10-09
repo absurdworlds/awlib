@@ -587,15 +587,15 @@ void CHDFParser::convertValue(HdfToken& token, f64& val)
 template<>
 void CHDFParser::convertValue(HdfToken& token, Vector3d<f32>& val)
 {
-	val.X = strtod(token.value.c_str(), 0);
+	val[0] = strtod(token.value.c_str(), 0);
 	
 	readToken(token);
 	
-	val.Y = strtod(token.value.c_str(), 0);
+	val[1] = strtod(token.value.c_str(), 0);
 	
 	readToken(token);
 	
-	val.Z = strtod(token.value.c_str(), 0);
+	val[2] = strtod(token.value.c_str(), 0);
 }
 
 template<>

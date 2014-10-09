@@ -24,14 +24,22 @@ class Vector3d {
 public:
 	//! Default constructor. Constructs zero vector.
 	Vector3d ()
-		: coord_(0),
+#ifndef HR_COMPILER_MSC // fucking microsoft
+		: coord_{},
+#else
+		: coord_(),
+#endif
 		x(coord_[0]), y(coord_[1]), z(coord_[2])
 	{
 	}
 
 	//! Construct vector with same value for coordinates
-	explicit Vector3d (T const v) 
-		: coord_(v),
+	explicit Vector3d (T const v)
+#ifndef HR_COMPILER_MSC // fucking microsoft
+		: coord_{{v, v, v}},
+#else
+		: coord_({v, v, v}),
+#endif
 		x(coord_[0]), y(coord_[1]), z(coord_[2])
 	{
 	}
@@ -336,48 +344,48 @@ public:
 
 		// Pitch
 		f64 const xz = math::sqrt(x*x + z*z);
-		angle.x = T(atan2(f64(xz), f64(y)) - math::HALF_PI64);
+		angle.x = T(atan2(f64(xz), f64(y)) - math::HalfPi);
 		
 		// Normalize angles
-		if (angle.y <= -math::PI64) {
-			angle.y += math::DOUBLE_PI64;
+		if (angle.y <= -math::Pi) {
+			angle.y += math::DoublePi;
 		} else if (angle.y > math::PI64) {
-			angle.y -= math::DOUBLE_PI64;
+			angle.y -= math::DoublePi;
 		}
-		if (angle.x <= math::PI64) {
-			angle.x += math::DOUBLE_PI64;
-		} else if (angle.x > math::PI64) {
-			angle.x -= math::DOUBLE_PI64;
+		if (angle.x <= math::Pi) {
+			angle.x += math::DoublePi;
+		} else if (angle.x > math::Pi) {
+			angle.x -= math::DoublePi;
 		}
 
-		return angle * math::RADTODEG64;
+		return math::RadToDeg(angle);
 	}
 
 	T getYaw () const
 	{
 		T yaw = T(atan2(f64(x), f64(z)));
 		
-		if (yaw <= -math::PI64) {
-			yaw += math::DOUBLE_PI64;
-		} else if (yaw > math::PI64) {
-			yaw -= math::DOUBLE_PI64;
+		if (yaw <= -math::Pi) {
+			yaw += math::DoublePi;
+		} else if (yaw > math::Pi) {
+			yaw -= math::DoublePi;
 		}
 
-		return yaw * math::RADTODEG64;
+		return math::RadToDeg(yaw);
 	}
 
 	T getPitch () const
 	{
 		f64 const xz = math::sqrt(x*x + z*z);
-		T const pitch = T(atan2(f64(xz), f64(y)) - math::HALF_PI64);
+		T const pitch = T(atan2(f64(xz), f64(y)) - math::HalfPi);
 	
 		if (pitch <= -math::PI64) {
-			pitch += math::DOUBLE_PI64;
+			pitch += math::DoublePi;
 		} else if (pitch >= math::PI64) {
-			pitch -= math::DOUBLE_PI64;
+			pitch -= math::DoublePi;
 		}
 
-		return pitch * math::RADTODEG64;
+		return math::RadToDeg(pitch);
 	}
 
 	//! Fill an array of 4 values with the vector data

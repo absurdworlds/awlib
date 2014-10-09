@@ -201,16 +201,16 @@ bool hndfParseShapeNode(hdf::IHDFParser* hndf, IModel* model)
 			Vector3d<f32> vec3;
 			hndf->readVector3d(vec3);
 			
-			primitive.rotation[0] = vec3.X;
-			primitive.rotation[1] = vec3.Y;
-			primitive.rotation[2] = vec3.Z;
+			primitive.rotation[0] = vec3[0];
+			primitive.rotation[1] = vec3[1];
+			primitive.rotation[2] = vec3[2];
 		} else if(objectName == "offset") {
 			Vector3d<f32> vec3;
 			hndf->readVector3d(vec3);
 			
-			primitive.offset[0] = vec3.X;
-			primitive.offset[1] = vec3.Y;
-			primitive.offset[2] = vec3.Z;
+			primitive.offset[0] = vec3[0];
+			primitive.offset[1] = vec3[1];
+			primitive.offset[2] = vec3[2];
 		} else {
 			hndf->skipValue();
 		}

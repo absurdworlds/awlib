@@ -23,65 +23,71 @@
 namespace hrengin {
 namespace math {
 
-//! PI mathematical constant
-f32 const PI	= 3.14159265359f;
-//! E mathematical constant
-f32 const E	= 2.71828182845f;
+//! Pi is a mathematical constant
+f64 const Pi	= 3.14159265358979323846; //26433832795028841971693993751;
+//! e is a mathematical constant
+f64 const e	= 2.71828182845904523536; //02874713526624977572470936999595
 
-f32 const RECIPROCAL_PI	= 1.0f/PI;
+const f64 ReciprocalPi	= 1.0/Pi;
 
-f32 const HALF_PI	= PI/2.0f;
-f32 const QUARTER_PI	= PI/4.0f;
+const f64 HalfPi		= Pi/2.0;
+const f64 QuarterPi		= Pi/4.0;
 
-f32 const DOUBLE_PI	= PI*2.0f;
+const f64 DoublePi		= Pi*2.0;
 
-//! 64-bit wide PI
-f64 const PI64	= 3.14159265358979323846; //26433832795028841971693993751;
-//! 64-bit wide E
-f64 const E64	= 2.71828182845904523536; //02874713526624977572470936999595
+// Constant defining ratio of degrees to radians
+f64 const DegreesInRadian = 180.0 / Pi;
 
-const f64 RECIPROCAL_PI64	= 1.0/PI64;
+// Constant defining ratio of radians to degrees
+f64 const RadiansInDegree = Pi / 180.0;
 
-const f64 HALF_PI64		= PI64/2.0;
-const f64 QUARTER_PI64		= PI64/4.0;
+//! Convert degrees to radians
+inline f32 DegToRad (f32 deg)
+{
+	return deg * RadiansInDegree;
+}
 
-const f64 DOUBLE_PI64		= PI64*2.0;
+//! Convert degrees to radians
+inline f64 DegToRad (f64 deg)
+{
+	return deg * RadiansInDegree;
+}
 
-// 32bit Constant for converting from degrees to radians
-const f32 DEGTORAD = PI / 180.0f;
+//! Convert radians to degrees
+inline f32 RadToDeg (f32 rad)
+{
+	return rad * DegreesInRadian;
+}
 
-// 32bit constant for converting from radians to degrees
-const f32 RADTODEG   = 180.0f / PI;
-
-// 64bit constant for converting from degrees to radians
-const f64 DEGTORAD64 = PI64 / 180.0;
-
-// 64bit constant for converting from radians to degrees
-const f64 RADTODEG64 = 180.0 / PI64;
-
+//! Convert radians to degrees
+inline f64 RadToDeg (f64 rad)
+{
+	return rad * DegreesInRadian;
+}
 
 const i32 ROUNDING_ERROR_INT = 0;
 const f32 ROUNDING_ERROR_float32 = 0.000001f;
 const f64 ROUNDING_ERROR_float64 = 0.00000001;
 
-// Calculates square root of a number
-FORCEINLINE f32 sqrt(const f32 x)
+//! Calculate square root of a number
+FORCEINLINE f32 sqrt (f32 const x)
 {
 	return ::sqrtf(x);
 }
 
-FORCEINLINE f64 sqrt(const f64 x)
+//! Calculate square root of a number
+FORCEINLINE f64 sqrt (f64 const x)
 {
 	return ::sqrt(x);
 }
 
-// Calculates square root of an integer
+//! Calculate square root of an integer
 FORCEINLINE i32 sqrt(const i32 x)
 {
 	return static_cast<i32>(::sqrt(static_cast<f32>(x)));
 }
 
-// Calculates inverse square root of a double
+//! Calculate inverse square root of a double
 FORCEINLINE f64 invSqrt(const f64 x)
 {
 	return 1.0 / sqrt(x);
@@ -153,9 +159,9 @@ inline f32 wrapAngle(f32 angle)
  */
 inline f32 wrapAngleRad(f32 angle)
 {
-	angle = fmod(f64(angle), DOUBLE_PI64);
-	return    angle >   PI64 ? angle - DOUBLE_PI64
-		: angle <= -PI64 ? angle + DOUBLE_PI64 
+	angle = fmod(f64(angle), DoublePi);
+	return    angle >   Pi ? angle - DoublePi
+		: angle <= -Pi ? angle + DoublePi 
 		: angle;
 }
 

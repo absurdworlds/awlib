@@ -63,6 +63,7 @@ public:
 	{
 		if(type == Type::Boolean) {
 			v = val.b_;
+			return true;
 		}
 		
 		return false;
@@ -72,6 +73,7 @@ public:
 	{
 		if(type == Type::Integer) {
 			v = val.i_;
+			return true;
 		}
 		
 		return false;
@@ -81,6 +83,7 @@ public:
 	{
 		if(type == Type::Float) {
 			v = val.f_;
+			return true;
 		}
 		
 		return false;
@@ -90,19 +93,23 @@ public:
 	{
 		if(type == Type::String) {
 			// (std::string::value_type *)
-			v = std::string(val.s_.data,val.s_.length);
+			v = std::string(val.str.ptr,val.str.length);
+			return true;
 		}
 		
 		return false;
 	}
 	
-	bool get(Vector3d<f32>& v)
+	bool get(Vector3d<f32>& v) const
 	{
 		if(type == Type::Vector3d) {
-			v.X = val.v3_[0];
-			v.Y = val.v3_[1];
-			v.Z = val.v3_[2];
+			v[0] = val.v3_[0];
+			v[1] = val.v3_[1];
+			v[2] = val.v3_[2];
+			return true;
 		}
+
+		return false;
 	}
 	
 	bool set(const bool v)
@@ -138,7 +145,10 @@ public:
 	bool set(const std::string v)
 	{
 		if(type == Type::String) {
-			val.s_ = createPodString(v);
+			delete[] val.str.ptr;
+			val.str.length = v.size();
+			val.str.ptr = new char[val.str.length];
+			memcpy((void*)(val.str.ptr), v.data(), val.str.length);
 			return true;
 		}
 		
@@ -148,17 +158,32 @@ public:
 	bool set(const Vector3d<f32> v)
 	{
 		if(type == Type::Vector3d) {
-			val.v3_[0] = v.X;
-			val.v3_[1] = v.Y;
-			val.v3_[2] = v.Z;
+			val.v3_[0] = v[0];
+			val.v3_[1] = v[1];
+			val.v3_[2] = v[2];
 			return true;
 		}
 		
 		return false;
 	}
 
+	void reset()
+	{
+		switch(type) {
+			case Type::String:
+				delete[] val.str.ptr;
+				val.str.length = 0;
+			default:
+				break;
+		}
+
+		type = Type::Unknown;
+	}
+
 private:
 	hdf::Type type;
+	// todo: replace it with soething like boost::variant
+	// (only custom-written)
 	union HdfValue {
 		~HdfValue()
 		{	}
@@ -171,28 +196,23 @@ private:
 		HdfValue(f64 f)
 			: f_(f)
 		{	}
-#ifdef _GNUG_
-		HdfValue(std::string s)
-			: s_(s)
-		{	}
-		HdfValue(Vector3d<f32> v3)
-			: v3_(v3)
-		{	}
-		Vector3d<f32> v3_;
-		std::string s_;
-#else
-		HdfValue(std::string s)
-			: s_(createPodString(s))
-		{	}
+		HdfValue(std::string const& s)
+		{
+			str.length = s.size();
+			str.ptr = new char[str.length];
+			memcpy((void*)(str.ptr), s.data(), str.length);
+		}
 		HdfValue(Vector3d<f32> v3)
 		{
-			v3_[0] = v3.X;
-			v3_[1] = v3.Y;
-			v3_[2] = v3.Z;
+			v3_[0] = v3[0];
+			v3_[1] = v3[1];
+			v3_[2] = v3[2];
 		}
 		f32 v3_[3];
-		PodString s_;
-#endif
+		struct string {
+			char const* ptr;
+			size_t length;
+		} str;
 
 		bool b_;
 		i32 i_;

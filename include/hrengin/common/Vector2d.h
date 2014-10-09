@@ -173,15 +173,15 @@ public:
 	//! Calculates angle of the vector
 	T getAngle() const
 	{
-		T yaw = T(atan2(f64(x), f64(y)) * math::RADTODEG64);
+		T yaw = T(atan2( f64(x), f64(y) ));
 		
-		if (yaw <= -math::PI64) {
-			yaw += math::DOUBLE_PI64;
-		} else if (yaw > math::PI64) {
-			yaw -= math::DOUBLE_PI64;
+		if (yaw <= -math::Pi) {
+			yaw += math::DoublePi;
+		} else if (yaw > math::Pi) {
+			yaw -= math::DoublePi;
 		}
 
-		return yaw * math::RADTODEG64;
+		return math::RadToDeg(yaw);
 	}
 
 	//! Make the vector of unit length
