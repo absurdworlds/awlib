@@ -1,4 +1,4 @@
-/**
+/*
    Copyright (C) 2014  absurdworlds
 
    License LGPLv3-only:
@@ -21,8 +21,8 @@ public:
 	virtual Path findPath(Vector3d<f32> start, Vector3d<f32> end)
 	{
 		Path path;
-		path.push_back(start);
-		path.push_back(end);
+		path.addNode(start);
+		path.addNode(end);
 		return path;
 	}
 };

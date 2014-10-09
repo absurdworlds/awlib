@@ -1,4 +1,4 @@
-/**
+/*
    Copyright (C) 2014  absurdworlds
 
    License LGPLv3-only:
@@ -18,13 +18,84 @@
 namespace hrengin {
 namespace ai {
 
-/* Class representing a path, consisting of points in space */
+//! Path consisting of waypoints, which are positions in 3d space
 class Path {
 public:
 	typedef Vector3d<f32> node_type;
 	typedef std::vector<node_type> container_type;
 
-	class iterator 
+	//! Get current node
+	node_type getCurrentNode () const
+	{
+		return nodes_[current_];
+	}
+	
+	//! Get next node and increment counter
+	node_type getNextNode ()
+	{
+		if(current_ < size()) {
+			++current_;
+		}
+		return nodes_[current_];
+	}
+	
+	//! Get previous node and decrement counter
+	node_type getPreviousNode ()
+	{
+		if(current_ < size()) {
+			--current_;
+		}
+		return nodes_[current_];
+	}
+
+	//! Get first node
+	node_type getFirstNode () const
+	{
+		return nodes_[0];
+	}
+	
+	//! Get last node
+	node_type getLastNode () const
+	{
+		return nodes_.back();
+	}
+
+	//! Add node to the end
+	void addNode (node_type const& node)
+	{
+		nodes_.push_back(node);
+	}
+	
+	//! Get current position
+	size_t position () const
+	{
+		return current_;
+	}
+
+	//! Check if currently at end of the path
+	size_t atEnd () const
+	{
+		return current_ == size();
+	}
+
+	//! Random access
+	node_type operator [] (size_t id) const
+	{
+		return nodes_[id];
+	}
+	
+	//! Count of nodes in path
+	size_t size () const
+	{
+		return nodes_.size();
+	}
+
+	void clear ()
+	{
+		nodes_.clear();
+	}
+
+	class iterator
 		: public std::iterator<std::random_access_iterator_tag,
 			node_type> {
 	public:
@@ -141,7 +212,6 @@ public:
 		pointer ptr_;
 	};
 
-
 	const_iterator begin() const
 	{
 		const node_type* node = nodes_.data();
@@ -154,39 +224,14 @@ public:
 		return const_iterator(node);
 	}
 
-	/* path size in nodes */
-	size_t size() const
-	{
-		return nodes_.size();
-	}
-	
-	node_type last () const
-	{
-		return nodes_.back();
-	}
-	
-	node_type operator [] (size_t id) const
-	{
-		return nodes_[id];
-	}
-	
-	void push_back(node_type const& node)
-	{
-		nodes_.push_back(node);
-		//return end();
-	}
-
-	void clear()
-	{
-		nodes_.clear();
-	}
-
 	Path()
+		: current_(0)
 	{
 	
 	}
 private:
 	container_type nodes_;
+	size_t current_;
 };
 
 Path::const_iterator findClosestNode(Path::const_iterator& first,
