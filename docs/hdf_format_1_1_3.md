@@ -55,6 +55,7 @@ The HDF format was not based on any other document format, although it was inspi
 - HDF 1.1.3
     + added node-values, alternative form for values: `[node-value = string:"val"]`
     + introduced command `!version`, deprecated `!hdf_version` and `!hndf_version`
+    + added `enum` type
 
 ### 1.2 Termiology <a name="sec-terminology"/>
 *stub*
@@ -167,15 +168,64 @@ Node starts with '[' followed by the name of this node, and ends with ']'. Name 
 ####2.3.2 Value <a name="sec-value"/>
 Values are used to store actual data. As described above, they must be contained within a node.
 
-	value ::= name sp? = sp? (type sp? ':')? sp? @data{type}
+	value ::= name sp? = sp? type? sp? @data{type}
 
 Unlike nodes, name of a value must be unique. This rule may be neglected when implementing a program, however, it is strongly avised to follow this rule when constructing HDF documents.
 
 ##3 Values <a name="sec-values"/>
 ###3.1 Typing <a name="sec-typing"/>
-Type contains information about representation of data.
+ <a name="def-type"/> `type` defines representation of variable and set of possible values which it can posess.
+ 
+ <a name="def-type-lable"/> `type label` is used to identify type of value.
+
+In HDF, types are prefixed to data in form of `name` followed by `:` symbol.
+
+	type ::= name sp? ':'
+
 ####3.1.1 Implicit typing <a name="sec-implicit"/>
 ####3.1.2 Valid types <a name="sec-type-list"/>
+In HDF there are several defined types:
+
+- `string` represents a sequence of characters
+
+	type labels: `string`, `s`
+	data{string} ::= '"' ucs_char+ '"'
+
+- `boolean` represents a true/false boolean value
+
+	type labels: `bool`, `b`
+	data{boolean} ::= sign? ('true'|'false')
+
+- `enum` represents a enumerated value
+
+	type labels: `enum`, `e`
+	data{enum} ::= name
+
+- `integer` represents an integral value
+
+	type labels: `int`, `i`
+	data{integer} ::= sign? integer
+
+- `float` represents a IEEE 754 floating point value
+
+	type labels: `float`, `f`
+	data{integer} ::= number
+
+- `vector2` represents a pair of floats
+
+	type labels: `vec2`, `v2`
+	data{vector2} ::= number sp number
+
+- `vector3` represents an array of three floats
+
+	type labels: `vec3`, `v3`
+	data{vector3} ::= number sp number sp number
+
+- `vector4` represents an array of four floats
+
+	type labels: `vec4`, `v4`
+	data{vector4} ::= number sp number sp number sp number
+
 ##4 Commands <a name="sec-commands"/>
 ###4.1 `version`
 As the name implies, this command defines which version of HDF the document is written in.
