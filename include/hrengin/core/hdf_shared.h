@@ -12,17 +12,6 @@
 namespace hrengin {
 namespace hdf {
 
-/*! Enumeration of possible HDF value types */
-enum class Type {
-	Integer,
-	Float,
-	Boolean,
-	String,
-	Vector2d,
-	Vector3d,
-	Unknown
-};
-
 /*! Enumeration for selecting writer indentation style */
 enum Indentation {
 	HDF_INDENT_TAB,

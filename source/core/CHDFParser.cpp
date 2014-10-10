@@ -15,6 +15,8 @@
 #include <hrengin/common/Vector2d.h>
 #include <hrengin/common/Vector3d.h>
 
+#include <hrengin/hdf/Type.h>
+
 #include "CHDFParser.h"
 
 namespace hrengin {
@@ -49,70 +51,6 @@ inline bool isWhitespace(u8 c) {
 inline bool isInlineWhitespace(u8 c) {
 	return c == ' ' || c == '\t';
 }
-
-
-template<typename T>
-bool isValidHdfType(hdf::Type type)
-{
-	return false;
-}
-
-#if 0
-
-template<typename T>
-bool isValidHdfType(hdf::Type type, typename std::enable_if<std::is_integral<T>::value,T>::type* t = 0) {
-	return HDF_INTEGER == type;
-}
-
-template<typename T>
-bool isValidHdfType(hdf::Type type, typename std::enable_if<std::is_floating_point<T>::value,T>::type* t = 0) {
-	return HDF_FLOAT == type;
-}
-
-#else
-
-template<>
-bool isValidHdfType<i32>(hdf::Type type) {
-	return Type::Integer == type;
-}
-
-template<>
-bool isValidHdfType<u32>(hdf::Type type) {
-	return Type::Integer == type;
-}
-
-template<>
-bool isValidHdfType<f32>(hdf::Type type) {
-	return Type::Float == type;
-}
-
-template<>
-bool isValidHdfType<f64>(hdf::Type type) {
-	return Type::Float == type;
-}
-#endif
-
-template<>
-bool isValidHdfType<bool>(hdf::Type type) {
-	return Type::Boolean == type;
-}
-
-template<>
-bool isValidHdfType<std::string>(hdf::Type type) {
-	return Type::String == type;
-}
-
-//template<template<class U> class T>
-template<>
-bool isValidHdfType<Vector2d<f32>>(hdf::Type type) {
-	return Type::Vector2d == type;
-}
-
-template<>
-bool isValidHdfType<Vector3d<f32>>(hdf::Type type) {
-	return Type::Vector3d == type;
-}
-
 
 hdf::Type hdfTokenToType(const HdfToken& token) 
 {
@@ -552,7 +490,7 @@ void CHDFParser::readValue(T& var)
 		type = hdfConvertImpicitType(token);
 	}
 	
-	if(isValidHdfType<T>(type) == false) {
+	if(checkType<T>(type) == false) {
 		error(HDF_LOG_ERROR, "type mismatch: " + token.value);
 		//skipValue(type);
 
