@@ -40,7 +40,7 @@ public:
 };
 
 HR_CORE_API ISettingsManager& getSettingsManager();
-//HR_CORE_API ISettingsManager* createSettingsManager();
+HR_CORE_API ISettingsManager* createSettingsManager();
 
 } // namespace core
 } // namespace hrengin

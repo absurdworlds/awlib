@@ -1,4 +1,4 @@
-/**
+/*
    Copyright (C) 2014  absurdworlds
 
    License LGPLv3-only:
@@ -19,13 +19,10 @@
 namespace hrengin {
 namespace core {
 
-#if 0 // I think that _this time_, singleton is appropriate.
-// (even so, it is not completely a singleton)
 ISettingsManager* createSettingsManager()
 {
 	return new CSettingsManager();
 }
-#endif
 
 ISettingsManager& getSettingsManager()
 {
