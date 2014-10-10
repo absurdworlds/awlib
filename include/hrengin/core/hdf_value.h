@@ -11,11 +11,12 @@
 
 #include <string>
 
-#include <hrengin/common/PodString.h>
-#include <hrengin/common/Vector3d.h>
 #include <hrengin/common/types.h>
+#include <hrengin/common/Vector2d.h>
+#include <hrengin/common/Vector3d.h>
+#include <hrengin/common/Vector4d.h>
 
-#include <hrengin/core/hdf_shared.h>
+#include <hrengin/hdf/Type.h>
 
 namespace hrengin {
 namespace hdf {
@@ -23,201 +24,222 @@ namespace hdf {
 //! Class for holding any HDF Value.
 class Value {
 public:
-	Value()
-		: val(0), type(Type::Unknown)
+	~Value ()
+	{
+		resetString();
+	}
+
+	Value ()
+		: val_(0), type_(Type::Unknown)
+	{
+	}
+	
+	template<typename val_type>
+	Value (val_type v)
+		: val_(v), type_(deduceType<val_type>())
 	{
 	}
 
-	Value(bool b)
-		: val(b), type(Type::Boolean)
-	{
-	}
-
-	Value(i32 i)
-		: val(i), type(Type::Integer)
-	{
-	}
-
-	Value(f64 f)
-		: val(f), type(Type::Float)
-	{
-	}
-
-	Value(std::string s)
-		: val(s), type(Type::String)
-	{
-	}
-
-	Value(Vector3d<f32> v3)
-		: val(v3), type(Type::Vector3d)
-	{
-	}
-
+	//! Assignment operator
 	Value& operator = (const Value& other)
 	{
-		type = other.type;
-		val = other.val;
-	}
-
-	bool get(bool& v)
-	{
-		if(type == Type::Boolean) {
-			v = val.b_;
-			return true;
-		}
-		
-		return false;
+		// reset to not pollute memory with loose strings
+		resetString();
+		type_ = other.type_;
+		val_ = other.val_;
+		return *this;
 	}
 	
-	bool get(i32& v)
+	//! Get value if types match
+	template<typename val_type>
+	bool get (val_type& v) const
 	{
-		if(type == Type::Integer) {
-			v = val.i_;
-			return true;
-		}
-		
-		return false;
-	}
-	
-	bool get(f64& v)
-	{
-		if(type == Type::Float) {
-			v = val.f_;
-			return true;
-		}
-		
-		return false;
-	}
-	
-	bool get(std::string& v)
-	{
-		if(type == Type::String) {
-			// (std::string::value_type *)
-			v = std::string(val.str.ptr,val.str.length);
-			return true;
-		}
-		
-		return false;
-	}
-	
-	bool get(Vector3d<f32>& v) const
-	{
-		if(type == Type::Vector3d) {
-			v[0] = val.v3_[0];
-			v[1] = val.v3_[1];
-			v[2] = val.v3_[2];
+		if(checkType<val_type>(type_)) {
+			val_.get(v);
 			return true;
 		}
 
 		return false;
 	}
-	
-	bool set(const bool v)
-	{
-		if(type == Type::Boolean) {
-			val.b_ = v;
-			return true;
-		}
-		
-		return false;
-	}
-	
-	bool set(const i32 v)
-	{
-		if(type == Type::Integer) {
-			val.i_ = v;
-			return true;
-		}
-		
-		return false;
-	}
-	
-	bool set(const f64 v)
-	{
-		if(type == Type::Float) {
-			val.f_ = v;
-			return true;
-		}
-		
-		return false;
-	}
-	
-	bool set(const std::string v)
-	{
-		if(type == Type::String) {
-			delete[] val.str.ptr;
-			val.str.length = v.size();
-			val.str.ptr = new char[val.str.length];
-			memcpy((void*)(val.str.ptr), v.data(), val.str.length);
-			return true;
-		}
-		
-		return false;
-	}
-	
-	bool set(const Vector3d<f32> v)
-	{
-		if(type == Type::Vector3d) {
-			val.v3_[0] = v[0];
-			val.v3_[1] = v[1];
-			val.v3_[2] = v[2];
-			return true;
-		}
-		
-		return false;
-	}
 
-	void reset()
+	//! Get current type
+	hdf::Type getType() const
 	{
-		switch(type) {
-			case Type::String:
-				delete[] val.str.ptr;
-				val.str.length = 0;
-			default:
-				break;
-		}
+		return type_;
+	}
+	
+	//! Set value if types are matching
+	template<typename val_type>
+	bool trySet (val_type const& v)
+	{
+		if(checkType<val_type>(type_)) {
+			val_.set(v);
 
-		type = Type::Unknown;
+			return true;
+		}
+		
+		return false;
+	}
+	
+	//! Specialization for string type
+	template<>
+	bool trySet (std::string const& v)
+	{
+		if(checkType<std::string>(type_)) {
+			resetString();
+			val_.set(v);
+
+			return true;
+		}
+		
+		return false;
+	}
+	
+	//! Set value with overriding type
+	template<typename val_type>
+	void set (bool const v)
+	{
+		resetString();
+		val_.set(v);
+		type_ = deduceType<val_type>;
+	}
+	
+	//! Reset value to <Unknown>
+	void reset ()
+	{
+		resetString ();
+		resetType ();
 	}
 
 private:
-	hdf::Type type;
-	// todo: replace it with soething like boost::variant
-	// (only custom-written)
-	union HdfValue {
-		~HdfValue()
-		{	}
-		HdfValue(bool b)
-			: b_(b)
-		{	}
-		HdfValue(i32 i)
-			: i_(i)
-		{	}
-		HdfValue(f64 f)
-			: f_(f)
-		{	}
-		HdfValue(std::string const& s)
+	void resetString ()
+	{
+		if(type_ == Type::String) {
+			delete[] val_.str.data;
+			val_.str.length = 0;
+		}
+	}
+	
+	void resetType ()
+	{
+		type_ = Type::Unknown;
+	}
+
+	hdf::Type type_;
+	union Value_ {
+		~Value_ ()
+		{
+		}
+
+		Value_ (bool b)
+			: boolean(b)
+		{
+		}
+
+		Value_ (i32 i)
+			: integer(i)
+		{
+		}
+
+		Value_ (f64 f)
+			: real(f)
+		{
+		}
+
+		Value_ (std::string const& s)
+		{
+			set(s);
+		}
+
+		Value_ (Vector2d<f32> const& v)
+		{
+			set(v);
+		}
+
+		Value_ (Vector3d<f32> const& v)
+		{
+			set(v);
+		}
+
+		Value_ (Vector4d<f32> const& v)
+		{
+			set(v);
+		}
+
+		void set (bool b)
+		{
+			boolean = b;
+		}
+
+		void set (i32 i)
+		{
+			integer = i;
+		}
+
+		void set (f64 f)
+		{
+			real = f;
+		}
+
+		void set (std::string const& s)
 		{
 			str.length = s.size();
-			str.ptr = new char[str.length];
-			memcpy((void*)(str.ptr), s.data(), str.length);
+			str.data = new char[str.length];
+
+			memcpy((void*)(str.data), s.data(), str.length);
 		}
-		HdfValue(Vector3d<f32> v3)
+
+		void set (Vector2d<f32> const& v)
 		{
-			v3_[0] = v3[0];
-			v3_[1] = v3[1];
-			v3_[2] = v3[2];
+			v.toArrayOf2(vector);
 		}
-		f32 v3_[3];
+
+		void set (Vector3d<f32> const& v)
+		{
+			v.toArrayOf4(vector);
+		}
+
+		void set (Vector4d<f32> const& v)
+		{
+			v.toArrayOf4(vector);
+		}
+
+		void get (bool& v) const
+		{
+			v = boolean;
+		}
+	
+		void get (i32& v) const
+		{
+			v = integer;
+		}
+	
+		void get (f64& v) const
+		{
+			v = real;
+		}
+	
+		void get (std::string& v) const
+		{
+			v.assign(str.data, str.length);
+		}
+	
+		void get (Vector3d<f32>& v) const
+		{
+			v[0] = vector[0];
+			v[1] = vector[1];
+			v[2] = vector[2];
+		}
+
+		bool boolean;
+		i32 integer;
+		f64 real;
+		f32 vector[4];
 		struct string {
-			char const* ptr;
+			char const* data;
 			size_t length;
 		} str;
-
-		bool b_;
-		i32 i_;
-		f64 f_;
-	} val;
+	} val_;
 };
 
 } // namespace hdf

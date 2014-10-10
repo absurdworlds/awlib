@@ -133,7 +133,7 @@ bool CSettingsManager::getValueImpl(std::string key, T& val)
 	auto found = indexMap_.find(key);
 
 	if(found != indexMap_.end()) {
-		return found->second.get(val);
+		return found->second.get<T>(val);
 	}
 
 	return false;
@@ -166,8 +166,8 @@ bool CSettingsManager::setValueImpl(std::string key, T val)
 	bool exists = !elem.second;
 
 	if(exists) {
-		hdf::Value v = (elem.first)->second;
-		return v.set(val);
+		hdf::Value& v = (elem.first)->second;
+		return v.trySet<T>(val);
 	}
 
 	return true;
