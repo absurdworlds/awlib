@@ -257,7 +257,30 @@ public:
 	{
 		return coord_[elem];
 	}
-	
+
+	//! Fill an array of 4 values with the vector data
+	void toArrayOf4 (T* array) const
+	{
+		array[0] = coord_[0];
+		array[1] = coord_[1];
+		array[2] = 0;
+		array[3] = 0;
+	}
+
+	//! Fill an array of 3 values with the vector data
+	void toArrayOf3 (T* array) const
+	{
+		array[0] = coord_[0];
+		array[1] = coord_[1];
+		array[2] = 0;
+	}
+
+	//! Fill an array of 2 values with the vector data
+	void toArrayOf2 (T* array) const
+	{
+		array[0] = coord_[0];
+		array[1] = coord_[1];
+	}
 
 	//! Temporary hack for backward compatibility
 	T& x;
