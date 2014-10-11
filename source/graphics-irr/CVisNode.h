@@ -14,6 +14,8 @@
 #include <hrengin/graphics/IMesh.h>
 #include <hrengin/scene/IVisNode.h>
 
+#include "CConversionTable.h"
+
 namespace irr {
 namespace scene {
 class IAnimatedMeshSceneNode;
@@ -29,7 +31,8 @@ class CSceneManager;
 class CVisNode : public IVisNode {
 public:
 	CVisNode(CSceneManager* sceneManager,
-		irr::scene::IAnimatedMeshSceneNode* meshNode);
+		irr::scene::IAnimatedMeshSceneNode* meshNode,
+		CConversionTable* convTable);
 	virtual ~CVisNode();
 
 	virtual void setPosition(Vector3d<f32> pos);
@@ -44,9 +47,10 @@ private:
 	IBaseEntity* parent_;
 
 	irr::scene::IAnimatedMeshSceneNode* meshNode_;
+	CConversionTable* convTable_;
 };
 
-} // namespace scenr
+} // namespace scene
 } // namespace hrengin
 
 #endif//_hrengin_CVisNode_

@@ -16,6 +16,8 @@
 
 #include <hrengin/scene/ILightNode.h>
 
+#include "CConversionTable.h"
+
 namespace hrengin {
 namespace scene {
 class CSceneManager;
@@ -23,7 +25,8 @@ class CSceneManager;
 class CLightNode : public ILightNode {
 public:
 	CLightNode(CSceneManager* sceneManager,
-		irr::scene::ILightSceneNode* lightNode);
+		irr::scene::ILightSceneNode* lightNode,
+		CConversionTable* convTable);
 		
 	virtual void setParentEntity(IBaseEntity* parent);
 
@@ -32,6 +35,7 @@ public:
 	//virtual void SetScale(Vector3d<f32> scale);
 protected:
 	irr::scene::ILightSceneNode* node_;
+	CConversionTable* convTable_;
 };
 
 } // namespace graphics

@@ -63,7 +63,12 @@ IVisNode* CSceneManager::createMeshSceneNode(const char* meshname)
 	if(std::string(meshname) == "sotank.obj") {
 		node->addShadowVolumeSceneNode();
 	}
-	return new CVisNode(this, node);
+
+	ISceneNode* newNode = new CVisNode(this, node, &convTable_);
+
+	addToTable(newNode, node);
+
+	return newNode;
 }
 
 ICameraNode* CSceneManager::createCameraSceneNode()
@@ -71,7 +76,12 @@ ICameraNode* CSceneManager::createCameraSceneNode()
 	irr::scene::ICameraSceneNode* node = scnmgr->addCameraSceneNode(0,
 		irr::core::vector3df(0, 0, 0),
 		irr::core::vector3df(0, 0, 0));
-	return new CCameraNode(this, node, scnmgr, device_);
+
+	ISceneNode* newNode = new CCameraNode(this, node, &convTable_, scnmgr, device_);
+
+	addToTable(newNode, node);
+
+	return newNode;
 }
 
 ILightNode* CSceneManager::createLightSceneNode()
@@ -79,7 +89,12 @@ ILightNode* CSceneManager::createLightSceneNode()
 	irr::scene::ILightSceneNode* node = scnmgr->addLightSceneNode(0,
 		irr::core::vector3df(100, 1000, 100),
 		irr::video::SColorf(0.95f, 0.95f, 1.00f, 0.0f), 2800.0f);
-	return new CLightNode(this, node);
+
+	ISceneNode* newNode = new CLightNode(this, node, &convTable_);
+
+	addToTable(newNode, node);
+
+	return newNode;
 }
 
 void CSceneManager::drawScene()
@@ -92,6 +107,11 @@ irr::scene::IAnimatedMesh* CSceneManager::convertMesh(const char* modelname)
 {
 	std::string path = io::modelpath + modelname;
 	return scnmgr->getMesh(path.c_str());
+}
+
+void CSceneManager::addToTable(ISceneNode* hrnode, irr::scene::ISceneNode* irrnode)
+{
+	convTable_.add(hrnode, irrnode);
 }
 
 } // namespace scene

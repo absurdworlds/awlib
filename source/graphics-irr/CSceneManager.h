@@ -22,12 +22,15 @@
 
 #include <hrengin/graphics/IRenderingDevice.h>
 
+#include "CConversionTable.h"
+
 namespace irr {
 class IrrlichtDevice;
 namespace scene {
 class ISceneManager;
 class IAnimatedMesh;
 class ISceneCollisionManager;
+class ISceneNode;
 }
 }
 
@@ -55,11 +58,15 @@ public:
 		return 0;
 	}
 private:
+	void addToTable(ISceneNode* hrnode, irr::scene::ISceneNode* irrnode);
+
 	std::vector<ISceneNode*> NodeList;
 	
 	irr::IrrlichtDevice* device_;
 	irr::scene::ISceneManager*		scnmgr;
 	irr::scene::ISceneCollisionManager*	colman;
+
+	CConversionTable convTable_;
 public:
 	irr::scene::IAnimatedMesh* convertMesh(const char* meshname);
 	//irr::scene::IAnimatedMesh* convertMesh(IMesh* mesh);
