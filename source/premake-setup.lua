@@ -17,5 +17,8 @@ function SetupProject(prjname, ...)
 
 		configuration "Release"
 			defines { "NDEBUG" }
-			flags { "Optimize" } 
+			flags { "Optimize" }
+	
+		configuration "vs*"
+			defines { "_CRT_SECURE_NO_WARNINGS" }
 end
