@@ -1,4 +1,4 @@
-/**
+/*
    Copyright (C) 2014  absurdworlds
 
    License LGPLv3-only:
@@ -17,9 +17,11 @@
 
 namespace hrengin {
 class CEventManager : public IEventManager {
-private:
-	std::vector<Event> events_;
 public:
+	virtual ~CEventManager()
+	{
+
+	}
 	virtual u32 addEvent(Event event)
 	{
 		events_.push_back(event);
@@ -39,6 +41,8 @@ public:
 			}
 		}
 	};
+private:
+	std::vector<Event> events_;
 };
 
 } // namespace hrengin
