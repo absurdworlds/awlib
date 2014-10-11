@@ -54,7 +54,7 @@ public:
 	template<typename val_type>
 	bool get (val_type& v) const
 	{
-		if(checkType<val_type>(type_)) {
+		if(checkType(type_, v)) {
 			val_.get(v);
 			return true;
 		}
@@ -72,7 +72,7 @@ public:
 	template<typename val_type>
 	bool trySet (val_type const& v)
 	{
-		if(checkType<val_type>(type_)) {
+		if(checkType(type_, v)) {
 			val_.set(v);
 
 			return true;
@@ -85,7 +85,7 @@ public:
 	template<>
 	bool trySet (std::string const& v)
 	{
-		if(checkType<std::string>(type_)) {
+		if(checkType(type_, v)) {
 			resetString();
 			val_.set(v);
 
@@ -101,7 +101,7 @@ public:
 	{
 		resetString();
 		val_.set(v);
-		type_ = deduceType<val_type>;
+		type_ = deduceType(v);
 	}
 	
 	//! Reset value to <Unknown>
