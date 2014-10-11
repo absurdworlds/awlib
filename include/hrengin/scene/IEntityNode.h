@@ -20,7 +20,6 @@ namespace scene {
 //! A node in the scene graph
 class IEntityNode : ISceneNode {
 public:
-	virtual void setParentEntity(IBaseEntity* parent) = 0;
 };
 
 } // namespace scene
