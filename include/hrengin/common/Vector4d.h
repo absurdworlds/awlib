@@ -9,11 +9,14 @@
 #ifndef _hrengin_Vector4d_
 #define _hrengin_Vector4d_
 
-#include <hrengin/common/math.h>
+#include <hrengin/common/compiler_setup.h>
 
 #ifdef HR_COMPILER_MSC // fucking microsoft
 #include <array>
 #endif
+
+#include <hrengin/common/math.h>
+
 
 namespace hrengin {
 
@@ -22,7 +25,7 @@ template <class T>
 class Vector4d {
 public:
 	//! Default constructor. Constructs zero vector.
-	Vector4d()
+	Vector4d ()
 #ifndef HR_COMPILER_MSC // fucking microsoft
 		: coord_{}
 #else
@@ -32,9 +35,9 @@ public:
 	}
 
 	//! Construct vector specifying individual coodrinates
-	Vector4d(T const x, T const y, T const z, T const w)
+	Vector4d (T const x, T const y, T const z, T const w)
 #ifndef HR_COMPILER_MSC // fucking microsoft
-		: coord_{{x,y,z,w}}
+		: coord_{x,y,z,w}
 #else
 		: coord_({x,y,z,w})
 #endif
@@ -42,11 +45,11 @@ public:
 	}
 
 	//! Construct vector with same value for coordinates
-	explicit Vector4d(T const v)
+	explicit Vector4d (T const v)
 #ifndef HR_COMPILER_MSC // fucking microsoft
-		: coord_{{v,v,v,v}}
+		: coord_{v,v,v,v}
 #else
-		: coord_({v,v,v,v})
+		: coord_{v,v,v,v}
 #endif
 	{
 	}
@@ -54,7 +57,7 @@ public:
 	//! Copy constructor
 	Vector4d(Vector4d<T> const& other) 
 #ifndef HR_COMPILER_MSC // fucking microsoft
-		: coord_{{other[0],other[1],other[2],other[3]}
+		: coord_{other[0],other[1],other[2],other[3]}
 #else
 		: coord_({other[0],other[1],other[2],other[3]})
 #endif
@@ -120,6 +123,7 @@ public:
 		coord_[3] += val;
 		return *this;
 	}
+
 	Vector4d<T> operator - (Vector4d<T> const& other) const
 	{
 		return Vector4d<T>(

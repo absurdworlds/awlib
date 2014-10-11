@@ -184,9 +184,9 @@ public:
 	//! Set quaternion from euler angles
 	void setEuler(T x, T y, T z)
 	{
-		x *= T(0.5 * math::DEGTORAD64);
-		y *= T(0.5 * math::DEGTORAD64);
-		z *= T(0.5 * math::DEGTORAD64);
+		x *= T(math::DegToRad(0.5));
+		y *= T(math::DegToRad(0.5));
+		z *= T(math::DegToRad(0.5));
 
 		T const sx = sin(x);
 		T const cx = sin(x);
@@ -206,7 +206,7 @@ public:
 	void setAxisAngle(Vector3d<T> const& axis, T angle)
 	{
 		angle /= T(2.0);
-		angle *= math::DEGTORAD64;
+		angle *= math::RadiansInDegree;
 
 		Vector3d<T> const v = axis.normalized() * sin(angle);
 
@@ -221,11 +221,11 @@ public:
 		if (math::equals(test, 0.5f)) { // north pole
 			euler.x = 0;
 			euler.y = 2 * atan2(x, w);
-			euler.z = math::HALF_PI64;
+			euler.z = math::HalfPi;
 		} else if (math::equals(test, -0.5f)) { // south pole
 			euler.x = 0;
 			euler.y = -2 * atan2(x,w);
-			euler.z = -math::HALF_PI64;
+			euler.z = -math::HalfPi;
 		} else {
 			f32 const sX = x * x;
 			f32 const sY = y * y;
@@ -236,7 +236,7 @@ public:
 			euler.z = asin(2*test);
 		}
 
-		euler *= math::RADTODEG64;
+		euler *= math::DegreesInRadian;
 	}
 	
 	//! Get quaternion in axis-angle representation
@@ -250,7 +250,7 @@ public:
 			tSin = T(sqrt(tSin));
 			T invSin = 1 / tSin;
 			
-			angle = T(2.0 * atan2(tSin, tCos));
+			angle = T(math::RadToDeg(2.0 * atan2(tSin, tCos)));
 			axis.x = x * invSin;
 			axis.y = y * invSin;
 			axis.z = z * invSin;

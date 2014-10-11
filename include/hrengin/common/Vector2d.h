@@ -38,7 +38,7 @@ public:
 	//! Construct vector with same both coordinates 
 	explicit Vector2d (T v)
 #ifndef HR_COMPILER_MSC
-		: coord_{{v, v}},
+		: coord_{v, v},
 #else
 		: coord_({v, v}),
 #endif
@@ -49,7 +49,7 @@ public:
 	//! Construct vector with individual coodrinates
 	Vector2d (T x, T y)
 #ifndef HR_COMPILER_MSC
-		: coord_{{x, y}},
+		: coord_{x, y},
 #else
 		: coord_({x, y}),
 #endif
@@ -61,7 +61,7 @@ public:
 	//! Copy constructor
 	Vector2d (Vector2d<T> const& other)
 #ifndef HR_COMPILER_MSC
-		: coord_{{other[0], other[1]}},
+		: coord_{other[0], other[1]},
 #else
 		: coord_({other[0], other[1]}),
 #endif
@@ -82,8 +82,8 @@ public:
 	Vector2d<T> operator - () const
 	{
 		return Vector2d<T>(
-			-coords_[0],
-			-coords_[1]);
+			-coord_[0],
+			-coord_[1]);
 	}
 	
 	Vector2d<T> operator + (Vector2d<T> const& other) const

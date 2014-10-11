@@ -36,7 +36,7 @@ public:
 	//! Construct vector with same value for coordinates
 	explicit Vector3d (T const v)
 #ifndef HR_COMPILER_MSC // fucking microsoft
-		: coord_{{v, v, v}},
+		: coord_{v, v, v},
 #else
 		: coord_({v, v, v}),
 #endif
@@ -47,7 +47,7 @@ public:
 	//! Construct vector with individual coodrinates
 	Vector3d (T const x, T const y, T const z)
 #ifndef HR_COMPILER_MSC // fucking microsoft
-		: coord_{{x, y, z}},
+		: coord_{x, y, z},
 #else
 		: coord_({x, y, z}),
 #endif
@@ -58,7 +58,7 @@ public:
 	//! Copy constructor
 	Vector3d (Vector3d<T> const& other) 
 #ifndef HR_COMPILER_MSC // fucking microsoft
-		: coord_{{other[0], other[1], other[2]}},
+		: coord_{other[0], other[1], other[2]},
 #else
 		: coord_({other[0], other[1], other[2]}),
 #endif
@@ -126,9 +126,9 @@ public:
 
 	Vector3d<T>& operator -= (Vector3d<T> const& other)
 	{
-		coord_[0] -= other.[0];
-		coord_[1] -= other.[1];
-		coord_[2] -= other.[2];
+		coord_[0] -= other[0];
+		coord_[1] -= other[1];
+		coord_[2] -= other[2];
 		return *this;
 	}
 
@@ -280,10 +280,10 @@ public:
 	//! Calculate the cross product with another vector
 	Vector3d<T> cross (Vector3d<T> const& other) const
 	{
-		f32 x const = coord_[1] * other[2] - coord_[2] * other[1];
-		f32 y const = coord_[2] * other[0] - coord_[0] * other[2];
-		f32 z const = coord_[0] * other[1] - coord_[1] * other[0];
-		return Vector3d<T>(x, y, z);
+		f32 const cx = coord_[1] * other[2] - coord_[2] * other[1];
+		f32 const cy = coord_[2] * other[0] - coord_[0] * other[2];
+		f32 const cz = coord_[0] * other[1] - coord_[1] * other[0];
+		return Vector3d<T>(cx, cy, cz);
 	}
 
 	//! Get distance from another point
@@ -349,7 +349,7 @@ public:
 		// Normalize angles
 		if (angle.y <= -math::Pi) {
 			angle.y += math::DoublePi;
-		} else if (angle.y > math::PI64) {
+		} else if (angle.y > math::Pi) {
 			angle.y -= math::DoublePi;
 		}
 		if (angle.x <= math::Pi) {
@@ -379,9 +379,9 @@ public:
 		f64 const xz = math::sqrt(x*x + z*z);
 		T const pitch = T(atan2(f64(xz), f64(y)) - math::HalfPi);
 	
-		if (pitch <= -math::PI64) {
+		if (pitch <= -math::Pi) {
 			pitch += math::DoublePi;
-		} else if (pitch >= math::PI64) {
+		} else if (pitch >= math::Pi) {
 			pitch -= math::DoublePi;
 		}
 

@@ -134,10 +134,10 @@ public:
 	{
 		Matrix4<T> M;
 		
-		M[0].set(col_[0][0], col_[1][0], col_[2][0], col[3][0]);
-		M[0].set(col_[0][1], col_[1][1], col_[2][1], col[3][1]);
-		M[0].set(col_[0][2], col_[1][2], col_[2][2], col[3][2]);
-		M[0].set(col_[0][3], col_[1][3], col_[2][3], col[3][3]);
+		M[0].set(col_[0][0], col_[1][0], col_[2][0], col_[3][0]);
+		M[0].set(col_[0][1], col_[1][1], col_[2][1], col_[3][1]);
+		M[0].set(col_[0][2], col_[1][2], col_[2][2], col_[3][2]);
+		M[0].set(col_[0][3], col_[1][3], col_[2][3], col_[3][3]);
 		
 		return M;
 	}
