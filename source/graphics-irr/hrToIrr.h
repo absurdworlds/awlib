@@ -9,7 +9,10 @@
 #ifndef _hrengin_hrToIrr_
 #define _hrengin_hrToIrr_
 
-#include <Irrlicht/line3d.h>
+#include <irrlicht/vector3d.h>
+#include <irrlicht/line3d.h>
+
+#include <hrengin/common/Vector3d.h>
 #include <hrengin/common/Line3d.h>
 
 namespace hrengin {
