@@ -14,7 +14,7 @@
 
 namespace hrengin {
 
-class IThinking : public IBaseEntity {
+class IThinking : public IEntity {
 public:
 	virtual void think(u32 time) = 0;
 };
