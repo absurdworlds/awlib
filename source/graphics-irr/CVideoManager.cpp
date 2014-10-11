@@ -49,7 +49,7 @@ CVideoManager::CVideoManager(core::ISettingsManager* settings)
 	device_->setWindowCaption(L"hrengin A - Irrlicht 1.8.1");
 
 	renderer_ = new CRenderingDevice(device_->getVideoDriver());
-	sceneManager_ = new CSceneManager(device_->getSceneManager(), renderer_, device_);
+	sceneManager_ = new scene::CSceneManager(device_->getSceneManager(), renderer_, device_);
 	guiManager_ = new gui::CGUIManager(device_->getGUIEnvironment(), device_);
 
 #ifdef HR_WINDOWS
@@ -68,7 +68,7 @@ IRenderingDevice* CVideoManager::getRenderingDevice() const
 	return renderer_;
 }
 
-ISceneManager* CVideoManager::getSceneManager() const
+scene::ISceneManager* CVideoManager::getSceneManager() const
 {
 	return sceneManager_;
 }

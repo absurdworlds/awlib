@@ -15,7 +15,6 @@ namespace irr {
 class IrrlichtDevice;
 
 namespace video {
-
 class IVideoDriver;
 
 } // namespace video
@@ -37,8 +36,7 @@ private:
 	irr::video::IVideoDriver* driver_;
 };
 
-
-} // namespace video
+} // namespace graphics
 } // namespace hrengin
 
 #endif//_hrengin_CRenderingDevice_

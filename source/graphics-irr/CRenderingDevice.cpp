@@ -1,4 +1,4 @@
-/**
+/*
    Copyright (C) 2014  absurdworlds
 
    License LGPLv3-only:
@@ -10,6 +10,7 @@
 #include <Irrlicht/irrlicht.h>
 
 #include "CRenderingDevice.h"
+
 #include "hrToIrr.h"
 
 namespace hrengin {
@@ -31,7 +32,7 @@ void CRenderingDevice::drawLine(const Vector3d<f32>& from,
 {
 	irr::video::SColor irrcolor(255, irr::u32(color.x), irr::u32(color.y), irr::u32(color.z));
 
-	driver_->draw3DLine(toIrr(from), toIrr(to), irrcolor);
+	driver_->draw3DLine(hrengin::toIrr(from), hrengin::toIrr(to), irrcolor);
 }
 
 

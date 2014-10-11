@@ -19,9 +19,11 @@ class ISettingsManager;
 namespace gui {
 class IGUIManager;
 }
+namespace scene {
+class ISceneManager;
+}
 namespace graphics {
 class IRenderingDevice;
-class ISceneManager;
 
 //! Holds other devices and manipuletas the window
 class IVideoManager {
@@ -29,7 +31,7 @@ public:
 	virtual ~IVideoManager() {};
 
 	virtual IRenderingDevice* getRenderingDevice() const = 0;
-	virtual ISceneManager* getSceneManager() const = 0;
+	virtual scene::ISceneManager* getSceneManager() const = 0;
 	virtual gui::IGUIManager* getGUIManager() const = 0;
 	
 	virtual bool step() = 0;	// update()

@@ -9,14 +9,15 @@
 #ifndef _hrengin_CLightNode_
 #define _hrengin_CLightNode_
 
+//TODO: move to .cpp
 #include <Irrlicht/irrlicht.h>
 
-#include <hrengin/graphics/ILightNode.h>
-#include <hrengin/graphics/IVideoManager.h>
 #include <hrengin/game/IBaseEntity.h>
 
+#include <hrengin/scene/ILightNode.h>
+
 namespace hrengin {
-namespace graphics {
+namespace scene {
 class CSceneManager;
 
 class CLightNode : public ILightNode {
@@ -30,8 +31,6 @@ public:
 	virtual void setRotation(Vector3d<f32> rot);
 	//virtual void SetScale(Vector3d<f32> scale);
 protected:
-	IBaseEntity* attachedTo;
-
 	irr::scene::ILightSceneNode* node_;
 };
 

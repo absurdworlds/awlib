@@ -16,8 +16,10 @@
 
 #include "CCameraNode.h"
 
+#include "hrToIrr.h"
+
 namespace hrengin {
-namespace graphics {
+namespace scene {
 
 CCameraNode::CCameraNode(CSceneManager* sceneManager,
 	irr::scene::ICameraSceneNode* camNode,
@@ -29,17 +31,10 @@ CCameraNode::CCameraNode(CSceneManager* sceneManager,
 
 }
 
-void CCameraNode::setParentEntity(IBaseEntity* parent)
-{
-
-}
-
-Line3d<f32> CCameraNode::getRayFromScreen(hrengin::i32 x, hrengin::i32 y)
+Line3d<f32> CCameraNode::getRayFromScreen(i32 x, i32 y)
 {
 	irr::scene::ISceneCollisionManager* colman = scmgr_->getSceneCollisionManager();
 	irr::core::line3df line = colman->getRayFromScreenCoordinates(irr::core::vector2di(x,y), camera_);
-
-
 
 	return toHrengin(line);
 }
@@ -111,5 +106,5 @@ void CCameraNode::SetBehavior(CAM_Behavior beh)
 	}
 }
 	
-} // namespace graphics
+} // namespace scene
 } // namespace hrengin

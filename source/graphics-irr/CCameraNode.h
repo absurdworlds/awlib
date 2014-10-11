@@ -9,16 +9,14 @@
 #ifndef _hrengin_CCameraNode_
 #define _hrengin_CCameraNode_
 
-#include <Irrlicht/irrlicht.h>
+#include <irrlicht/irrlicht.h>
 
-#include <hrengin/graphics/ICameraNode.h>
 #include <hrengin/graphics/IVideoManager.h>
-#include <hrengin/game/IBaseEntity.h>
 
-#include "hrToIrr.h"
+#include <hrengin/scene/ICameraNode.h>
 
 namespace hrengin {
-namespace graphics {
+namespace scene {
 class CSceneManager;
 
 class CCameraNode : public ICameraNode {
@@ -28,9 +26,7 @@ public:
 		irr::scene::ISceneManager* irrScMgr,
 		irr::IrrlichtDevice* device);
 
-	virtual void setParentEntity(IBaseEntity* parent);
-
-	virtual Line3d<f32> getRayFromScreen(hrengin::i32 x, hrengin::i32 y);
+	virtual Line3d<f32> getRayFromScreen(i32 x, i32 y);
 
 	virtual void setPosition(Vector3d<f32> pos);
 	virtual void setRotation(Vector3d<f32> rot);
@@ -49,8 +45,6 @@ public:
 
 	virtual void SetBehavior(CAM_Behavior beh);
 private:
-	IBaseEntity* attachedTo;
-
 	CAM_Behavior controlBehavior;
 
 	irr::scene::ISceneManager* scmgr_;
@@ -60,7 +54,7 @@ private:
 };
 
 	
-} // namespace graphics
+} // namespace scene
 } // namespace hrengin
 
 #endif//_hrengin_CCameraNode_

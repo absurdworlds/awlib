@@ -14,12 +14,13 @@
 #include <hrengin/common/api.h>
 #include <hrengin/common/Vector3d.h>
 
-#include <hrengin/graphics/ISceneManager.h>
+#include <hrengin/scene/ISceneManager.h>
+#include <hrengin/scene/IVisNode.h>
+#include <hrengin/scene/ICameraNode.h>
+#include <hrengin/scene/ILightNode.h>
+#include <hrengin/scene/IEntityNode.h>
+
 #include <hrengin/graphics/IRenderingDevice.h>
-#include <hrengin/graphics/ISceneNode.h>
-#include <hrengin/graphics/IVisNode.h>
-#include <hrengin/graphics/ICameraNode.h>
-#include <hrengin/graphics/ILightNode.h>
 
 namespace irr {
 class IrrlichtDevice;
@@ -31,11 +32,13 @@ class ISceneCollisionManager;
 }
 
 namespace hrengin {
-namespace graphics {
+namespace scene {
 
 class CSceneManager : public ISceneManager {
 public:
-	CSceneManager(irr::scene::ISceneManager* irrSceneManager, IRenderingDevice* renderer, irr::IrrlichtDevice* device);
+	CSceneManager(irr::scene::ISceneManager* irrSceneManager,
+		graphics::IRenderingDevice* renderer,
+		irr::IrrlichtDevice* device);
 
 	virtual void createScene();
 
@@ -47,6 +50,10 @@ public:
 	//virtual IVisNode* createMeshSceneNode(IMesh* mesh);
 	virtual ICameraNode* createCameraSceneNode();
 	virtual ILightNode* createLightSceneNode();
+	virtual IEntityNode* createEntitySceneNode(IEntity* entity)
+	{
+		return 0;
+	}
 private:
 	std::vector<ISceneNode*> NodeList;
 	

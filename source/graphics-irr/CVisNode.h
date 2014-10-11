@@ -12,7 +12,7 @@
 #include <hrengin/common/types.h>
 
 #include <hrengin/graphics/IMesh.h>
-#include <hrengin/graphics/IVisNode.h>
+#include <hrengin/scene/IVisNode.h>
 
 namespace irr {
 namespace scene {
@@ -23,15 +23,14 @@ class IAnimatedMeshSceneNode;
 namespace hrengin {
 class IBaseEntity;
 
-namespace graphics {
+namespace scene {
 class CSceneManager;
 
 class CVisNode : public IVisNode {
 public:
 	CVisNode(CSceneManager* sceneManager,
 		irr::scene::IAnimatedMeshSceneNode* meshNode);
-
-	virtual void setParentEntity(IBaseEntity* parent);
+	virtual ~CVisNode();
 
 	virtual void setPosition(Vector3d<f32> pos);
 	virtual void setRotation(Vector3d<f32> rot);
@@ -47,7 +46,7 @@ private:
 	irr::scene::IAnimatedMeshSceneNode* meshNode_;
 };
 
-} // namespace graphics
+} // namespace scenr
 } // namespace hrengin
 
 #endif//_hrengin_CVisNode_

@@ -12,33 +12,35 @@
 
 #include <hrengin/game/IBaseEntity.h>
 
-#include "hrToIrr.h"
 #include "CSceneManager.h"
 #include "CVisNode.h"
 
+#include "hrToIrr.h"
+
 namespace hrengin {
-namespace graphics {
+namespace scene {
 
 CVisNode::CVisNode(CSceneManager* sceneManager, 
 	irr::scene::IAnimatedMeshSceneNode* meshNode)
-	:meshNode_(meshNode)
+	: meshNode_(meshNode)
 {
 
 }
 
-void CVisNode::setParentEntity(IBaseEntity* parent)
+CVisNode::~CVisNode()
 {
-	parent_ = parent;
+	//TODO:
+	//meshNode_->delete();
 }
 
 void CVisNode::setPosition(Vector3d<f32> pos)
 {
-	meshNode_->setPosition(toIrr(pos));
+	meshNode_->setPosition(hrengin::toIrr(pos));
 }
 
 void CVisNode::setRotation(Vector3d<f32> rot)
 {
-	meshNode_->setRotation(toIrr(rot));
+	meshNode_->setRotation(hrengin::toIrr(rot));
 }
 
 //void CVisNode::setMesh(IMesh* mesh)

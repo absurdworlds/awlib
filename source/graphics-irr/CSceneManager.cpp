@@ -18,11 +18,12 @@
 #include "CVisNode.h"
 #include "CSceneManager.h"
 
-
 namespace hrengin {
-namespace graphics {
+namespace scene {
 
-CSceneManager::CSceneManager(irr::scene::ISceneManager* irrSceneManager, IRenderingDevice* renderer, irr::IrrlichtDevice* device)
+CSceneManager::CSceneManager(irr::scene::ISceneManager* irrSceneManager,
+	graphics::IRenderingDevice* renderer,
+	irr::IrrlichtDevice* device)
 : scnmgr(irrSceneManager), colman(scnmgr->getSceneCollisionManager()), device_(device)
 {
 
@@ -93,5 +94,5 @@ irr::scene::IAnimatedMesh* CSceneManager::convertMesh(const char* modelname)
 	return scnmgr->getMesh(path.c_str());
 }
 
-} // namespace graphics
+} // namespace scene
 } // namespace hrengin

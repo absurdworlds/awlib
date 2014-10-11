@@ -121,6 +121,7 @@ void convertEvent(const irr::SEvent& irrEvent, InputEvent& hrgEvent) {
 CInputManager::CInputManager(irr::IrrlichtDevice* device)
 {
 	device->setEventReceiver(this);
+	cursor_ = device->getCursorControl();
 }
 
 bool CInputManager::OnEvent(const irr::SEvent& event)

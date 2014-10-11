@@ -11,9 +11,11 @@
 
 #include <vector>
 
-#include <hrengin/graphics/IVideoManager.h>
 #include <hrengin/gui/IGUIManager.h>
-#include <hrengin/graphics/ISceneManager.h>
+
+#include <hrengin/scene/ISceneManager.h>
+
+#include <hrengin/graphics/IVideoManager.h>
 #include <hrengin/graphics/IRenderingDevice.h>
 
 #include "CVisNode.h"
@@ -31,15 +33,11 @@ class ISceneCollisionManager;
 } // namespace irr
 
 namespace hrengin {
-class CEncore;
 namespace gui {
 class CGUIManager;
 }
 
 namespace graphics {
-
-class CVisNode;
-
 class CVideoManager : public IVideoManager {
 friend class CEncore;
 friend class CGUIManager;
@@ -54,7 +52,7 @@ public:
 	
 
 	virtual IRenderingDevice* getRenderingDevice() const;
-	virtual ISceneManager* getSceneManager() const;
+	virtual scene::ISceneManager* getSceneManager() const;
 	virtual gui::IGUIManager* getGUIManager() const;
 
 	//virtual IMesh* loadMesh(const char * modelname);
@@ -63,7 +61,7 @@ public:
 private:
 	irr::IrrlichtDevice* device_;
 
-	ISceneManager* sceneManager_;
+	scene::ISceneManager* sceneManager_;
 	IRenderingDevice* renderer_;
 	gui::IGUIManager* guiManager_;
 };
