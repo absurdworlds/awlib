@@ -20,7 +20,7 @@ class IReadFile;
 class CBufferedStream : public IBufferedStream {
 public:
 	CBufferedStream(IReadFile* source);
-	~CBufferedStream();
+	virtual ~CBufferedStream();
 
 	virtual bool getCurrent(u8& c);
 	virtual bool getNext(u8& c);

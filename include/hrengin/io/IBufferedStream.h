@@ -18,6 +18,9 @@ class IReadFile;
 
 class IBufferedStream : public ICharacterStream {
 public:
+	virtual ~IBufferedStream ()
+	{
+	}
 };
 
 //! Create a buffered file stream
