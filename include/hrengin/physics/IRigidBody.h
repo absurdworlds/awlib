@@ -10,6 +10,7 @@
 #define _hrengin_IRigidBody_
 
 #include <hrengin/physics/ICollisionObject.h>
+#include <hrengin/physics/IMotionState.h>
 
 namespace hrengin {
 namespace physics {
@@ -39,7 +40,7 @@ public:
 		// Vector3d<f32> localInertia;
 		
 		// 
-		// MotionState* motionState;
+		// IMotionState* motionState;
 		Vector3d<f32> position;
 		//Vector4d<f32> rotation;
 		
@@ -69,6 +70,9 @@ public:
 		{
 		}
 	};
+	
+	//! Set motion state \see IMotionState
+	virtual void setMotionState(IMotionState* motionState) = 0;
 
 	//! Get position of the body
 	virtual Vector3d<f32> getPosition() const = 0;

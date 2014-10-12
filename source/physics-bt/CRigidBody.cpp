@@ -11,6 +11,7 @@
 
 #include "hrToBullet.h"
 #include "CRigidBody.h"
+#include "CustomMotionState.h"
 
 namespace hrengin {
 namespace physics {
@@ -19,6 +20,22 @@ CRigidBody::CRigidBody(btRigidBody* body)
 	: details_(body)
 {
 	details_.obj->setUserPointer(this);
+}
+
+void CRigidBody::setMotionState(IMotionState* motionState)
+{
+	btRigidBody* const body = (btRigidBody *)(details_.obj);
+
+	btMotionState* ms = body->getMotionState();
+
+	btTransform worldTrans;
+	ms->getWorldTransform(worldTrans);
+
+	delete ms;
+	
+	ms = new CustomMotionState(motionState, worldTrans);
+
+	body->setMotionState(ms);
 }
 
 void CRigidBody::setPosition(Vector3d<f32> pos)
