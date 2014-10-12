@@ -1,4 +1,4 @@
-/**
+/*
    Copyright (C) 2014  absurdworlds
 
    License LGPLv3-only:
@@ -78,8 +78,6 @@ IGUIWindow* CGUIManager::addWindow(Rect<i32> rect, bool isModal,
 
 	irr::gui::IGUIElement* elem = guienv_->addWindow(windowRect,isModal,title,parentElem,id);
 
-	//
-
 	return new CGUIWindow(elem);
 }
 
@@ -88,7 +86,7 @@ IGUITextBox* CGUIManager::addTextBox(Rect<i32> rect, const wchar_t* text,
 	bool border, IGUIElement* parent, i32 id)
 {
 	irr::core::recti elemRect(rect.upperLeft.x, rect.upperLeft.y,
-			rect.lowerRight.x, rect.lowerRight.y);
+		rect.lowerRight.x, rect.lowerRight.y);
 	irr::gui::IGUIElement* parentElem = 0;
 
 	if(parent != 0) {

@@ -12,8 +12,7 @@ namespace hrengin {
 namespace scene {
 
 class CEntityNode : IEntityNode {
-	CEntityNode(IEntity* entity) = 0;
-
+	CEntityNode(IEntity* entity);
 };
 
 } // namespace scene

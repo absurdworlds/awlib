@@ -25,10 +25,17 @@ public:
 	//! Virtual destructor
 	virtual ~IGUIManager() {};
 
+	/*! Draw all GUI
+	   \note Should be drawn after everything else, or it will be overdrawn
+	   or it may interfere with rendering (e.g. antialiasing)
+	 */
 	virtual void draw() = 0;
 
+	//! Get the input manager \see IInputManager
 	virtual IInputManager* getInputManager() = 0;
 
+	//TODO: setFont(IFont font);
+	//! Set main font
 	virtual void setFont(std::string path) = 0;
 
 	virtual IGUIWindow* addWindow(Rect<i32> rect, bool isModal = false, 
@@ -40,6 +47,16 @@ public:
 
 	virtual IGUIListBox* addListBox(Rect<i32> rect, bool background = true,
 		IGUIElement* parent = 0, i32 id = -1) = 0;
+		
+	/*//! Create a Window GUI element
+	virtual IGUIWindow* addWindow(IGUIElement* parent = 0,
+		std::string name = "") = 0;
+	//! Create a Text Box element
+	virtual IGUITextBox* addTextBox(IGUIElement* parent = 0,
+		std::string name = "") = 0;
+	//! Create a List Box element
+	virtual IGUIListBox* addListBox(IGUIElement* parent = 0,
+		std::string name = "") = 0;*/
 };
 
 } // namespace gui

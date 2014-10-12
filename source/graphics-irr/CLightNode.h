@@ -10,7 +10,7 @@
 #define _hrengin_CLightNode_
 
 //TODO: move to .cpp
-#include <Irrlicht/irrlicht.h>
+#include <irrlicht/irrlicht.h>
 
 #include <hrengin/game/IBaseEntity.h>
 
@@ -27,8 +27,6 @@ public:
 	CLightNode(CSceneManager* sceneManager,
 		irr::scene::ILightSceneNode* lightNode,
 		CConversionTable* convTable);
-		
-	virtual void setParentEntity(IBaseEntity* parent);
 
 	virtual void setPosition(Vector3d<f32> pos);
 	virtual void setRotation(Vector3d<f32> rot);

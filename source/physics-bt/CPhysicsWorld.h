@@ -42,7 +42,12 @@ public:
 
 	virtual void setDebugDrawer(IDebugDrawer* drawer);
 
-	virtual void castRay(Vector3d<f32> from, Vector3d<f32> to, IRayResultCallback* callback);
+	virtual void castRay(Vector3d<f32> from, Vector3d<f32> to,
+		IRayResultCallback* callback);
+#if 0
+	virtual void collisionSweep(CollisionShape shape, Vector3d<f32> from,
+		Vector3d<f32> to, IConvexSweepCallback* callback);
+#endif
 
 	virtual bool step();
 

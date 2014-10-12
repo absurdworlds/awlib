@@ -1,4 +1,4 @@
-/**
+/*
    Copyright (C) 2014  absurdworlds
 
    License LGPLv3-only:
@@ -9,7 +9,7 @@
 #ifndef _hrengin_CustomRayCallback_
 #define _hrengin_CustomRayCallback_
 
-#include <Bullet/btBulletCollisionCommon.h>
+#include <btBulletCollisionCommon.h>
 
 #include <hrengin/physics/IRayResultCallback.h>
 
@@ -18,7 +18,9 @@
 namespace hrengin {
 namespace physics {
 
-struct CustomClosestHitCallback : public btCollisionWorld::ClosestRayResultCallback {
+struct CustomClosestHitCallback
+	: public btCollisionWorld::ClosestRayResultCallback {
+
 	CustomClosestHitCallback(const btVector3& rayFromWorld,
 		const btVector3& rayToWorld, IRayResultCallback* hrCallback)
 	: btCollisionWorld::ClosestRayResultCallback(rayFromWorld, rayToWorld),

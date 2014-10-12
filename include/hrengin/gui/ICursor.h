@@ -9,4 +9,10 @@
 #ifndef _hrengin_ICursor_
 #define _hrengin_ICursor_
 
+namespace hrengin {
+namespace graphics {
+
+} // namespace graphics
+} // namespace hrengin
+
 #endif//_hrengin_ICursor_

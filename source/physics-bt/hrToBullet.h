@@ -27,6 +27,7 @@ inline btVector3 toBullet(Vector3d<f32> const& hrVec)
 	return btVector3(hrVec[0], hrVec[1], hrVec[2]);
 }
 
+// TODO: replace this with toHrengin() and toBullet() quaternion converion, to remove duplicate code
 void quaternionToEuler(btQuaternion const& quat, btVector3& euler);
 
 } // namespace physics
