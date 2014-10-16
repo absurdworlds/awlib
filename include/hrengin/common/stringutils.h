@@ -18,22 +18,6 @@
 #include <hrengin/core/api.h>
 
 namespace hrengin {
-
-//! Functor for finding a string key in a map
-template <class Value>
-class findKey {
-public:
-	typedef std::string Key;
-	findKey (std::string const& str) : key_(str) { }
-
-	bool operator () (std::pair<Key, Value> const& pair)
-	{
-		return (pair.first == key_);
-	}
-
-	std::string key_;
-};
-
 //! Generic strlen
 template<typename char_type>
 size_t strlen_g (char_type const* str)
@@ -46,7 +30,20 @@ size_t strlen_g (char_type const* str)
 }
 
 //! Get file extension from string
-HR_CORE_API std::string getFileExtension(std::string& dest, std::string const& path);
+inline std::string getFileExtension(std::string& dest, std::string const& path)
+{
+	size_t extpos = path.find_last_of(".");
+
+	if(extpos == std::string::npos) {
+		dest = "";
+	}
+
+	dest = path.substr(extpos+1);
+
+	std::transform(dest.begin(), dest.end(), dest.begin(), ::tolower);
+
+	return dest;
+}
 
 } // namespace hrengin
 
