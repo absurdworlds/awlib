@@ -15,8 +15,6 @@
 
 #include <hrengin/scene/ICameraNode.h>
 
-#include "CConversionTable.h"
-
 namespace hrengin {
 namespace scene {
 class CSceneManager;
@@ -25,7 +23,6 @@ class CCameraNode : public ICameraNode {
 public:
 	CCameraNode(CSceneManager* sceneManager,
 		irr::scene::ICameraSceneNode* camNode,
-		CConversionTable* convTable,
 		irr::scene::ISceneManager* irrScMgr,
 		irr::IrrlichtDevice* device);
 

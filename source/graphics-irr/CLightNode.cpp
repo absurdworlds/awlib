@@ -17,10 +17,8 @@ namespace hrengin {
 namespace scene {
 
 CLightNode::CLightNode (CSceneManager* sceneManager,
-	irr::scene::ILightSceneNode* lightNode,
-	CConversionTable* convTable)
-	: node_(lightNode),
-	  convTable_(convTable)
+	irr::scene::ILightSceneNode* lightNode)
+	: node_(lightNode)
 {
 
 }

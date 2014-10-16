@@ -21,10 +21,8 @@ namespace hrengin {
 namespace scene {
 
 CVisNode::CVisNode(CSceneManager* sceneManager, 
-	irr::scene::IAnimatedMeshSceneNode* meshNode,
-	CConversionTable* convTable)
-	: meshNode_(meshNode),
-	  convTable_(convTable)
+	irr::scene::IAnimatedMeshSceneNode* meshNode)
+	: meshNode_(meshNode)
 {
 
 }

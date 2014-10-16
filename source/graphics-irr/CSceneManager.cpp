@@ -64,7 +64,7 @@ IVisNode* CSceneManager::createMeshSceneNode(const char* meshname)
 		node->addShadowVolumeSceneNode();
 	}
 
-	ISceneNode* newNode = new CVisNode(this, node, &convTable_);
+	IVisNode* newNode = new CVisNode(this, node);
 
 	addToTable(newNode, node);
 
@@ -77,7 +77,7 @@ ICameraNode* CSceneManager::createCameraSceneNode()
 		irr::core::vector3df(0, 0, 0),
 		irr::core::vector3df(0, 0, 0));
 
-	ISceneNode* newNode = new CCameraNode(this, node, &convTable_, scnmgr, device_);
+	ICameraNode* newNode = new CCameraNode(this, node, scnmgr, device_);
 
 	addToTable(newNode, node);
 
@@ -90,7 +90,7 @@ ILightNode* CSceneManager::createLightSceneNode()
 		irr::core::vector3df(100, 1000, 100),
 		irr::video::SColorf(0.95f, 0.95f, 1.00f, 0.0f), 2800.0f);
 
-	ISceneNode* newNode = new CLightNode(this, node, &convTable_);
+	ILightNode* newNode = new CLightNode(this, node);
 
 	addToTable(newNode, node);
 

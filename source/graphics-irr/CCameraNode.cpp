@@ -23,12 +23,10 @@ namespace scene {
 
 CCameraNode::CCameraNode(CSceneManager* sceneManager,
 	irr::scene::ICameraSceneNode* camNode,
-	CConversionTable* convTable,
 	irr::scene::ISceneManager* irrScMgr,
 	irr::IrrlichtDevice* device)
 	: controlBehavior(CAM_NONE), camera_(camNode),
-	  scmgr_(irrScMgr), device_(device),
-	  convTable_(convTable)
+	  scmgr_(irrScMgr), device_(device)
 {
 
 }
