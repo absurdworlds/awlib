@@ -66,7 +66,10 @@ public:
 
 	bool addValue(std::string name, Value& val)
 	{
-		auto found = std::find_if(values_.begin(),values_.end(),findKey<Value>(name));
+		auto findKey = [&name] (std::pair<std::string, Value> const& pair) {
+			return (pair.first == name);
+		};
+		auto found = std::find_if(values_.begin(),values_.end(),findKey);
 
 		if(found != values_.end()) {
 			return false;
