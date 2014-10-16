@@ -6,15 +6,18 @@
    This is free software: you are free to change and redistribute it.
    There is NO WARRANTY, to the extent permitted by law.
  */
-
-#include "CEntityNode.h"
+#include <hrengin/scene/IEntityNode.h>
 
 namespace hrengin {
+class IEntity;
 namespace scene {
 
-CEntityNode::CEntityNode(IEntity* entity)
-{
-}
+class CEntityNode : IEntityNode {
+public:
+	CEntityNode(IEntity* entity);
+	virtual ~CEntityNode();
+private:
+};
 
 } // namespace scene
-} //namespace hrengin
+}
