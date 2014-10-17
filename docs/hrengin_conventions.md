@@ -18,8 +18,9 @@ If more then four levels of nesting present, function should be split.
 Everything inside a scope must be indented by one level, with exception to labels and namespace scopes.
 
 #### Spaces ####
-
 The rules are similar to those regular typography. 
+
+##### References and pointers #####
 
 One thing to point out: I consider reference and pointer as part of type, so it is logical to write it as
 
@@ -31,6 +32,9 @@ And never like this
 	type_t *ptr;
 
 In my view, it is same as to write `type_t constvar` instead of `type_t const var`.
+
+##### Functions #####
+Another thing to point out: while function declarations should have a space before the first bracket of argument list, function calls should not. The reasoning behind this, is when searching for a function usage in sources, it should be easy to separate declarations from usage.
 
 #### Syntax ####
 
