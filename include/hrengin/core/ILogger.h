@@ -26,17 +26,34 @@ public:
 	virtual void log (std::string) = 0;
 };
 
-//! Interface for logger class, which is used to write messages into log books
+//! Logger interface, which is used to write messages into log books
 class ILogger {
+	static ILogger* globalLogger_;
 public:
+	//! Set global logger, which is accesset by getGlobalLogger()
+	static void setGlobalLogger (ILogger* logger)
+	{
+		globalLogger_ = logger;
+	}
+
+	//! Get pointer to global logger, which is set by setGlobalLogger()
+	static ILogger* getGlobalLogger ()
+	{
+		return globalLogger_;
+	}
+
 	//! Virtual destructor
 	virtual ~ILogger ()
 	{
 	}
 
+	//! Push a message
 	virtual void push (std::string msg) = 0;
+
+	//! Add an output to logger
 	virtual void addLog (ILogBook* log) = 0;
 	
+	//! Constant for line ending
 	const std::string endl = std::string("\n");
 };
 
