@@ -1,4 +1,4 @@
-/**
+/*
    Copyright (C) 2014  absurdworlds
 
    License LGPLv3-only:
@@ -37,6 +37,6 @@ class IEventManager {
 };
 
 HR_GAME_API IEventManager* createEventManager();
-} //end namespace hrengin
 
+} // namespace hrengin
 #endif//_hrengin_IEventManager_

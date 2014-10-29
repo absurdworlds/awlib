@@ -11,7 +11,7 @@
 
 #include <vector>
 
-#include <hrengin/common/time.h>
+#include <hrengin/platform/time.h>
 #include <hrengin/game/IEventManager.h>
 #include <hrengin/game/IThinking.h>
 
@@ -46,5 +46,4 @@ private:
 };
 
 } // namespace hrengin
-
 #endif//_hrengin_CEventManager_
