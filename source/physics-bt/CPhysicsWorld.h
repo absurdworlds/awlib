@@ -40,6 +40,7 @@ public:
 	virtual void removeBody(IRigidBody* body);
 	virtual void removeObject(ICollisionObject* object);
 
+	//! TODO: virtual IDebugDrawer* createDebugDrawer();
 	virtual void setDebugDrawer(IDebugDrawer* drawer);
 
 	virtual void castRay(Vector3d<f32> from, Vector3d<f32> to,

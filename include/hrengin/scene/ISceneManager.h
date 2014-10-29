@@ -15,12 +15,13 @@ namespace graphics {
 class IMesh;
 }
 namespace scene {
+class INode;
 class IEntityNode;
-class ISceneNode;
 class IVisNode;
 class ICameraNode;
 class ILightNode;
 
+//! This class manages scene graph
 class ISceneManager {
 public:
 	virtual ~ISceneManager() {};

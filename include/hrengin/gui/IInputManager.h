@@ -10,8 +10,8 @@
 #define _hrengin_IInputManager_
 
 #include <hrengin/common/types.h>
-#include <hrengin/common/api.h>
 
+#include <hrengin/gui/gui.h>
 #include <hrengin/gui/InputEvent.h>
 
 namespace hrengin {
@@ -27,10 +27,6 @@ public:
 	#if 0
 	virtual void seizeControl(bool seizeCusror, bool seizeKeyboard) = 0;
 	#endif
-
-	// actually, I don't see the need in this comment
-	// //don't see the need in this
-	// //virtual u32 AddMouseEvent(u32 Event, OnInputCallback callback) = 0;
 };
 
 } // namespace io

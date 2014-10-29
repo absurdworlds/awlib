@@ -27,7 +27,7 @@ namespace hrengin {
 namespace physics {
 
 
-HR_PHYSICS_API IPhysicsManager* createPhysicsManager()
+HR_PHYS_EXP IPhysicsManager* createPhysicsManager()
 {
 	return new CBulletPhysics();
 }

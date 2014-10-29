@@ -1,4 +1,4 @@
-/**
+/*
    Copyright (C) 2014  absurdworlds
 
    License LGPLv3-only:
@@ -89,5 +89,4 @@ public:
 
 } // namespace ai
 } // namespace hrengin
-
 #endif //_hrengin_IBaseNavigator_

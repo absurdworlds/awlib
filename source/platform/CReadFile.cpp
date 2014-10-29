@@ -1,4 +1,4 @@
-/**
+/*
    Copyright (C) 2014  absurdworlds
 
    License LGPLv3-only:
@@ -6,7 +6,6 @@
    This is free software: you are free to change and redistribute it.
    There is NO WARRANTY, to the extent permitted by law.
  */
-
 #include <hrengin/core/ILogger.h>
 
 #include "CReadFile.h"
@@ -28,7 +27,7 @@ IReadFile* openReadFile(std::string path)
 CReadFile::CReadFile(const std::string& path)
 : file_(0), size_(0), path_(path)
 {
-	TRACE("Opening file:", path)
+	//TRACE("Opening file:", path)
 
 	this->open();
 }
@@ -36,18 +35,17 @@ CReadFile::CReadFile(const std::string& path)
 
 CReadFile::~CReadFile()
 {
-	TRACE("Closing file:", path_)
+	//TRACE("Closing file:", path_)
 
 	if(isOpen()) {
 		fclose(file_);
 	}
 }
 
-
 void CReadFile::open()
 {
 	if (path_.size() == 0) {
-		TRACE("invalid filename (empty)")
+		//TRACE("invalid filename (empty)")
 		file_ = 0;
 		return;
 	}
@@ -62,7 +60,7 @@ void CReadFile::open()
 		//seek(file_, 0, SEEK_SET);
 		fseek(file_, 0, SEEK_SET);
 	} else {
-		TRACE("File not found:", path_)
+		//TRACE("File not found:", path_)
 	}
 }
 

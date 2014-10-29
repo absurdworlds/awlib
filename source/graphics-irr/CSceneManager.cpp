@@ -66,8 +66,6 @@ IVisNode* CSceneManager::createMeshSceneNode(const char* meshname)
 
 	IVisNode* newNode = new CVisNode(this, node);
 
-	addToTable(newNode, node);
-
 	return newNode;
 }
 
@@ -79,8 +77,6 @@ ICameraNode* CSceneManager::createCameraSceneNode()
 
 	ICameraNode* newNode = new CCameraNode(this, node, scnmgr, device_);
 
-	addToTable(newNode, node);
-
 	return newNode;
 }
 
@@ -91,8 +87,6 @@ ILightNode* CSceneManager::createLightSceneNode()
 		irr::video::SColorf(0.95f, 0.95f, 1.00f, 0.0f), 2800.0f);
 
 	ILightNode* newNode = new CLightNode(this, node);
-
-	addToTable(newNode, node);
 
 	return newNode;
 }
@@ -107,11 +101,6 @@ irr::scene::IAnimatedMesh* CSceneManager::convertMesh(const char* modelname)
 {
 	std::string path = io::modelpath + modelname;
 	return scnmgr->getMesh(path.c_str());
-}
-
-void CSceneManager::addToTable(ISceneNode* hrnode, irr::scene::ISceneNode* irrnode)
-{
-	convTable_.add(hrnode, irrnode);
 }
 
 } // namespace scene

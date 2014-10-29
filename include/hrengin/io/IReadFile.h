@@ -11,7 +11,7 @@
 
 #include <string>
 
-#include <hrengin/platform/api.h>
+#include <hrengin/platform/platform.h>
 #include <hrengin/common/types.h>
 
 namespace hrengin {
@@ -32,7 +32,7 @@ public:
 	virtual const std::string& getPath() const = 0;
 };
 
-HR_PLATFORM_API IReadFile* openReadFile(std::string path);
+HR_SYS_EXP IReadFile* openReadFile(std::string path);
 
 } // namespace io
 } // namespace hrengin

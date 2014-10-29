@@ -9,12 +9,13 @@
 #ifndef _hrengin_time_
 #define _hrengin_time_
 
-#include <hrengin/platform/api.h>
 #include <hrengin/common/types.h>
+
+#include <hrengin/platform/platform.h>
 
 namespace hrengin {
 //! Get system time in milliseconds
-HR_PLATFORM_API u32 getTime();
-}
+HR_SYS_EXP u32 getTime();
 
+} // namespace hrengin
 #endif//_hrengin_time_

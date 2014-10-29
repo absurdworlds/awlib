@@ -8,7 +8,7 @@
  */
 
 #include <hrengin/resources/default_settings.h>
-#include <hrengin/core/IHDFParser.h>
+#include <hrengin/hdf/IHDFParser.h>
 #include <hrengin/io/IReadFile.h>
 #include <hrengin/io/ICharacterStream.h>
 #include <hrengin/io/IBufferedStream.h>

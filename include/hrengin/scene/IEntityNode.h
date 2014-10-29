@@ -12,8 +12,7 @@
 #include <hrengin/scene/ISceneNode.h>
 
 namespace hrengin {
-
-class IBaseEntity;
+class IEntity;
 
 namespace scene {
 

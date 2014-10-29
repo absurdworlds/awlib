@@ -1,4 +1,4 @@
-/**
+/*
    Copyright (C) 2014  absurdworlds
 
    License LGPLv3-only:
@@ -21,8 +21,7 @@ namespace io {
 	class IHDFParser;
 }
 
-class CModelLoader : public IModelLoader
-{
+class CModelLoader : public IModelLoader {
 public:
 	virtual IModel* loadModel(const char* filename);
 

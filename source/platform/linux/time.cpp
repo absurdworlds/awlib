@@ -24,8 +24,8 @@ u32 getClockResolution()
 	return 0;
 }
 
-HR_PLATFORM_API u32 getTime()
-{	
+HR_SYS_EXP u32 getTime()
+{
 	struct timespec tp;
 	int rc = clock_gettime(CLOCK_MONOTONIC, &tp);
 	if(rc == 0) {

@@ -19,12 +19,11 @@ class IMesh;
 namespace scene {
 
 // Visual scene node
-class IVisNode : public ISceneNode {
+class IVisNode : public INode {
 public:
 	virtual void setMesh(char const* mesh) = 0;
 };
 
 } // namespace scene
 } // namespace hrengin
-
 #endif//_hrengin_IVisNode_

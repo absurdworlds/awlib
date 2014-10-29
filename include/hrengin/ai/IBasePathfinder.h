@@ -11,7 +11,7 @@
 
 #include <hrengin/common/Vector3d.h>
 
-#include <hrengin/game/api.h>
+#include <hrengin/ai/ai.h>
 
 namespace hrengin {
 namespace ai {
@@ -23,7 +23,7 @@ public:
 	virtual Path findPath(Vector3d<f32> start, Vector3d<f32> end) = 0;
 };
 
-HR_GAME_API IBasePathfinder* createSimplePathfinder();
+HR_AI_EXP IBasePathfinder* createSimplePathfinder();
 
 } // namespace ai
 } // namespace hrengin

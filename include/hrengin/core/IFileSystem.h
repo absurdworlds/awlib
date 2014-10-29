@@ -9,7 +9,7 @@
 #ifndef _hrengin_IFileSystem_
 #define _hrengin_IFileSystem_
 
-#include <hrengin/common/api.h>
+#include <hrengin/core/core.h>
 
 namespace hrengin {
 namespace io {
@@ -24,12 +24,8 @@ public:
 	IWriteFile& openFileWrite(char * path);
 };
 
+HR_CORE_EXP IFileSystem* initFilesystem();
 
-HR_CORE_API IFileSystem* initFilesystem();
-
-
-}
-}
-
-
-#endif//__HRENGIN_FILESYSTEM_IFileSystem_H__
+} // namespace io
+} // namespace hrengin
+#endif//_hrengin_IFileSystem_

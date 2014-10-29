@@ -1,4 +1,4 @@
-/**
+/*
    Copyright (C) 2014  absurdworlds
 
    License LGPLv3-only:
@@ -8,8 +8,8 @@
  */
 #include "CLogger.h"
 
-namespace hrengin
-{
+namespace hrengin {
+namespace core {
 
 ILogger* createLogger()
 {
@@ -37,4 +37,5 @@ void CLogger::addLog(ILogBook* log)
 {
 	logs_.push_back(log);
 }
+} // namespace core
 } // namespace hrengin

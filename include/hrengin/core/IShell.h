@@ -11,13 +11,13 @@
 
 #include <string>
 
-#include <hrengin/core/api.h>
+#include <hrengin/core/core.h>
+
 #include <hrengin/common/types.h>
 
 namespace hrengin {
 class ILogger;
 namespace core {
-
 /*!
    hrengin Shell, intended to be for manipulating game objects via
    unix-like shell commands
@@ -39,7 +39,7 @@ public:
 	virtual void execute(std::string command) = 0;
 };
 
-HR_CORE_API IShell* createShell(ILogger* logger);
+HR_CORE_EXP IShell* createShell(ILogger* logger);
 
 } // namespace core
 } // namespace hrengin

@@ -9,7 +9,7 @@
 #include "CEntityManager.h"
 
 namespace hrengin {
-HR_GAME_API IEntityManager* createEntityManager()
+HR_GAME_EXP IEntityManager* createEntityManager()
 {
 	return new CEntityManager();
 }
@@ -21,12 +21,12 @@ CEntityManager::CEntityManager()
 
 void CEntityManager::doSync()
 {
-	for(std::deque<IBaseEntity*>::iterator ent = entlist_.begin(); ent != entlist_.end(); ++ent) {
+	for(std::deque<IEntity*>::iterator ent = entlist_.begin(); ent != entlist_.end(); ++ent) {
 		(*ent)->sync();
 	}
 }
 
-void CEntityManager::addEntity(IBaseEntity* entity)
+void CEntityManager::addEntity(IEntity* entity)
 {
 	if(freelist_.empty()) {
 		entlist_.push_back(entity);

@@ -1,4 +1,4 @@
-/**
+/*
    Copyright (C) 2014  absurdworlds
 
    License LGPLv3-only:
@@ -21,7 +21,7 @@ namespace hrengin {
 
 class CEntityManager : public IEntityManager {
 private:
-	class CNullEnt : public IBaseEntity {
+	class CNullEnt : public IEntity {
 	public:
 		void sync() {};
 		void setPosition(Vector3d<f32> position) {};
@@ -32,14 +32,14 @@ private:
 		void enterDeleteQueue() {};
 	} nullEntity;
 
-	std::deque<IBaseEntity*> entlist_;
+	std::deque<IEntity*> entlist_;
 	std::vector<u32> freelist_;
 public:
 	CEntityManager();
 
 	virtual void doSync();
 		
-	virtual void addEntity(IBaseEntity* entity);
+	virtual void addEntity(IEntity* entity);
 	virtual void deleteEntity(u32 entid);
 };
 

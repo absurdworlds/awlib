@@ -10,11 +10,11 @@
 #define _hrengin_IEntityManager_
 
 #include <hrengin/common/types.h>
-#include <hrengin/game/api.h>
+#include <hrengin/game/game.h>
 
 namespace hrengin {
 
-class IBaseEntity;
+class IEntity;
 
 //! Entity manager keeps track of entities
 class IEntityManager {
@@ -23,11 +23,11 @@ public:
 	virtual void doSync() = 0;
 	//virtual void doCleanup() = 0;
 
-	virtual void addEntity(IBaseEntity* entity) = 0;
+	virtual void addEntity(IEntity* entity) = 0;
 	virtual void deleteEntity(u32 entid) = 0;
 };
 
-HR_GAME_API IEntityManager* createEntityManager();
+HR_GAME_EXP IEntityManager* createEntityManager();
 	
 } // namespace hrengin
 

@@ -15,7 +15,7 @@
 
 #include <string>
 
-#include <hrengin/core/api.h>
+#include <hrengin/core/core.h>
 
 namespace hrengin {
 //! Generic strlen
@@ -46,5 +46,4 @@ inline std::string getFileExtension(std::string& dest, std::string const& path)
 }
 
 } // namespace hrengin
-
 #endif //_hrengin_stringutils_

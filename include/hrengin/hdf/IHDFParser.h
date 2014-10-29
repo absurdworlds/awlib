@@ -1,4 +1,4 @@
-/**
+/*
    Copyright (C) 2014  absurdworlds
 
    License LGPLv3-only:
@@ -13,14 +13,15 @@
 
 #include <hrengin/common/Vector3d.h>
 
-#include <hrengin/core/api.h>
-#include <hrengin/core/hdf_shared.h>
+#include <hrengin/hdf/hdf.h>
 
+#include <hrengin/hdf/hdf_shared.h>
 
 namespace hrengin {
 namespace io {
 class ICharacterStream;
 }
+
 namespace hdf {
 /* Enumeration for objects parsed by HDF parser. */
 enum HdfObjectType {
@@ -30,7 +31,6 @@ enum HdfObjectType {
 	HDF_OBJ_VAL,
 	HDF_OBJ_CMD
 };
-
 
 /*! \class IHDFParser
 \brief Interface for reading hrengin's HDF files. This parser provides a read-only access to documents in HDF 1.1.1 format.
@@ -86,9 +86,8 @@ public:
 A stream to parse.
 \see io::ICharacterStream
 */
-HR_CORE_API IHDFParser* createHDFParser(io::ICharacterStream* stream);
+HR_HDF_EXP IHDFParser* createHDFParser(io::ICharacterStream* stream);
 
 } // namespace io
 } // namespace hrengin
-
 #endif//_hrengin_IHDFReader_

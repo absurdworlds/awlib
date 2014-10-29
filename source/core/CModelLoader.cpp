@@ -6,7 +6,6 @@
    This is free software: you are free to change and redistribute it.
    There is NO WARRANTY, to the extent permitted by law.
  */
-
 #include <hrengin/core/models.h>
 #include <hrengin/core/paths.h>
 #include <hrengin/common/stringutils.h>
@@ -15,7 +14,8 @@
 
 #include <hrengin/io/IReadFile.h>
 #include <hrengin/io/IBufferedStream.h>
-#include <hrengin/core/IHDFParser.h>
+
+#include <hrengin/hdf/IHDFParser.h>
 
 #include <hrengin/core/IModel.h>
 

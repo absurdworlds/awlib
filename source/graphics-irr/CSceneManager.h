@@ -11,18 +11,16 @@
 
 #include <vector>
 
-#include <hrengin/common/api.h>
 #include <hrengin/common/Vector3d.h>
 
+#include <hrengin/graphics/IRenderingDevice.h>
+
+#include <hrengin/scene/scene.h>
 #include <hrengin/scene/ISceneManager.h>
 #include <hrengin/scene/IVisNode.h>
 #include <hrengin/scene/ICameraNode.h>
 #include <hrengin/scene/ILightNode.h>
 #include <hrengin/scene/IEntityNode.h>
-
-#include <hrengin/graphics/IRenderingDevice.h>
-
-#include "CConversionTable.h"
 
 namespace irr {
 class IrrlichtDevice;
@@ -65,8 +63,6 @@ private:
 	irr::IrrlichtDevice* device_;
 	irr::scene::ISceneManager*		scnmgr;
 	irr::scene::ISceneCollisionManager*	colman;
-
-	CConversionTable convTable_;
 public:
 	irr::scene::IAnimatedMesh* convertMesh(const char* meshname);
 	//irr::scene::IAnimatedMesh* convertMesh(IMesh* mesh);
@@ -76,5 +72,4 @@ ISceneManager* createSceneManager();
 
 } // namespace graphics
 } // namespace hrengin
-
 #endif//_hrengin_CSceneManager_

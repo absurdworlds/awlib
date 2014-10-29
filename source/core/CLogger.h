@@ -1,4 +1,4 @@
-/**
+/*
    Copyright (C) 2014  absurdworlds
 
    License LGPLv3-only:
@@ -14,6 +14,7 @@
 #include <hrengin/core/ILogger.h>
 
 namespace hrengin {
+namespace core {
 
 class CLogger : public ILogger {
 public:
@@ -26,6 +27,6 @@ private:
 	std::vector<ILogBook*> logs_;
 };
 
+} // namespace core
 } // namespace hrengin
-
 #endif//_hrengin_CLogger_

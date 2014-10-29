@@ -13,7 +13,7 @@
 
 #include <hrengin/core/ILogger.h>
 
-#include <hrengin/graphics/api.h>
+#include <hrengin/gui/gui.h>
 #include <hrengin/gui/IUserInputReceiver.h>
 
 namespace hrengin {
@@ -24,15 +24,14 @@ namespace gui {
 class IGUIManager;
 
 //! User interface console windows used to type commands
-class IConsoleGUI : public IUserInputReceiver, public ILogBook {
+class IConsoleGUI : public IUserInputReceiver, public core::ILogBook {
 public:
 	virtual ~IConsoleGUI() {};
 };
 
 //! Creates a console window
-HR_GRAPHICS_API IConsoleGUI* createConsole(core::IShell* shell, IGUIManager* guimgr);
+HR_GUI_EXP IConsoleGUI* createConsole(core::IShell* shell, IGUIManager* guimgr);
 
 } // namespace gui
 } // namespace hrengin
-
 #endif //_hrengin_IConsoleGUI_

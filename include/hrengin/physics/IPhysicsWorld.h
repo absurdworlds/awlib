@@ -37,7 +37,9 @@ public:
 	
 	virtual void removeBody(IRigidBody* body) = 0;
 	virtual void removeObject(ICollisionObject* object) = 0;
-
+	
+	//TODO: virtual IDebugDrawer* createDebugDrawer();
+	// this will allow to remove at least IDebugDrawer's 'hidden details'
 	virtual void setDebugDrawer(IDebugDrawer* drawer) = 0;
 
 	virtual void castRay(Vector3d<f32> from, Vector3d<f32> to, IRayResultCallback* callback) = 0;

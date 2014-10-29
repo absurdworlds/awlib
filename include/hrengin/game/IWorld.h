@@ -1,4 +1,4 @@
-/**
+/*
    Copyright (C) 2014  absurdworlds
 
    License LGPLv3-only:
@@ -6,16 +6,15 @@
    This is free software: you are free to change and redistribute it.
    There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef __H_INCLUDED__HRENGIN_IWorld
-#define __H_INCLUDED__HRENGIN_IWorld
+#ifndef _hrengin_IWorld_
+#define _hrengin_IWorld_
 
-namespace hrengin
-{
-	class IWorld
-	{
-	public:
+namespace hrengin {
 
-	}
-}
+class IWorld {
+public:
 
-#endif//__H_INCLUDED__HRENGIN_IWorld 
+};
+
+} // namespace hrengin
+#endif//_hrengin_IWorld_

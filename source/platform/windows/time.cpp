@@ -1,13 +1,10 @@
-//#include <Irrlicht/irrlicht.h>
-
 #include <Windows.h>
 
-#include <hrengin/common/time.h>
-#include <hrengin/platform/api.h>
+#include <hrengin/platform/time.h>
 
 namespace hrengin {
 
-HR_PLATFORM_API u32 getTime()
+HR_SYS_EXP u32 getTime()
 {
 	//borrowed from Irrlicht, temporary
 	LARGE_INTEGER HighPerformanceFreq;

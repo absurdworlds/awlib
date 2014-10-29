@@ -9,10 +9,9 @@
 #ifndef _hrengin_IModelLoader_
 #define _hrengin_IModelLoader_
 
-#include <hrengin/core/api.h>
+#include <hrengin/core/core.h>
 
 namespace hrengin {
-
 class IModel;
 
 class IModelLoader {
@@ -21,9 +20,7 @@ public:
 	virtual IModel* loadModel(const char* filename) = 0;
 };
 
-HR_CORE_API IModelLoader* createModelLoader();
+HR_CORE_EXP IModelLoader* createModelLoader();
 
-} //end namespace hrengin
-
-
+} // namespace hrengin
 #endif//_hrengin_IModelLoader_

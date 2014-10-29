@@ -11,8 +11,9 @@
 
 #include <string>
 
-#include <hrengin/core/api.h>
 #include <hrengin/common/types.h>
+
+#include <hrengin/core/core.h>
 
 namespace hrengin {
 namespace core {
@@ -40,10 +41,8 @@ public:
 };
 
 //! Create an instance of settings manager
-HR_CORE_API ISettingsManager* createSettingsManager();
+HR_CORE_EXP ISettingsManager* createSettingsManager();
 
 } // namespace core
 } // namespace hrengin
-
-
 #endif//_hrengin_ISettingsManager_

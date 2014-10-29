@@ -13,9 +13,9 @@
 
 namespace hrengin {
 namespace io {
-
 class IReadFile;
 
+//! Class defines an interface for buffered file stream
 class IBufferedStream : public ICharacterStream {
 public:
 	virtual ~IBufferedStream ()
@@ -24,7 +24,7 @@ public:
 };
 
 //! Create a buffered file stream
-HR_PLATFORM_API IBufferedStream* createBufferedStream(IReadFile* source);
+HR_SYS_EXP IBufferedStream* createBufferedStream(IReadFile* source);
 
 } //namespace io
 } //namespace hrengin

@@ -58,7 +58,7 @@ public:
 };
 
 //! Create a logger instance
-HR_CORE_API ILogger* createLogger ();
+HR_CORE_EXP ILogger* createLogger ();
 
 } // namespace core
 } // namespace hrengin

@@ -10,7 +10,7 @@
 #define _hrengin_IEventManager_
 
 #include <hrengin/common/types.h>
-#include <hrengin/game/api.h>
+#include <hrengin/game/game.h>
 
 namespace hrengin {
 class IThinking;
@@ -36,7 +36,7 @@ class IEventManager {
 		virtual void advance() = 0;
 };
 
-HR_GAME_API IEventManager* createEventManager();
+HR_GAME_EXP IEventManager* createEventManager();
 
 } // namespace hrengin
 #endif//_hrengin_IEventManager_

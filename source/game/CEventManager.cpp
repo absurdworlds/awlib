@@ -1,4 +1,4 @@
-/**
+/*
    Copyright (C) 2014  absurdworlds
 
    License LGPLv3-only:
@@ -10,7 +10,7 @@
 #include "CEventManager.h"
 
 namespace hrengin {
-HR_GAME_API IEventManager* createEventManager()
+HR_GAME_EXP IEventManager* createEventManager()
 {
 	return new CEventManager();
 }

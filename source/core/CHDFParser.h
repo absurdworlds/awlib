@@ -1,4 +1,4 @@
-/**
+/*
    Copyright (C) 2014  absurdworlds
 
    License LGPLv3-only:
@@ -13,16 +13,15 @@
 #include <vector>
 
 #include <hrengin/common/types.h>
-#include <hrengin/core/hdf_value.h>
-#include <hrengin/core/IHDFParser.h>
+#include <hrengin/hdf/hdf_value.h>
+#include <hrengin/hdf/IHDFParser.h>
 
 namespace hrengin {
 namespace hdf {
 
 /* 
- * Most of those are legacy values, only few are actually used
- * Probably should clean up, unless is decided to make parser backward-compatible
- *
+   Most of those are legacy values, only few are actually used
+   Probably should clean up, unless is decided to make parser backward-compatible
  */
 enum HdfTokenType {
 	HDF_TOKEN_EOF = 0,

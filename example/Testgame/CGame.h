@@ -32,7 +32,7 @@ namespace example {
 class CGame {
 public:
 	CGame ();
-	~CGame ();
+	virtual ~CGame ();
 	
 	void loadSettings ();
 	bool run ();
@@ -43,8 +43,8 @@ public:
 	}
 private:
 	// core 
-	ILogger* logger_;
-	core::ISettingsManager& settings_;
+	core::ILogger* logger_;
+	core::ISettingsManager* settings_;
 	core::IShell* shell_;
 
 	// graphics

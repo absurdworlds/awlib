@@ -16,7 +16,7 @@
 
 #include <hrengin/graphics/IRenderingDevice.h>
 
-#include <hrengin/physics/api.h>
+#include <hrengin/physics/physics.h>
 #include <hrengin/physics/IRigidBody.h>
 #include <hrengin/physics/IDebugDrawer.h>
 
@@ -47,10 +47,11 @@ public:
 
 	virtual IPhysicsWorld* createPhysicsWorld() = 0;
 
+	//TODO: move to IPhysicsWorld
 	virtual IDebugDrawer* createDebugDrawer(graphics::IRenderingDevice* renderer) = 0;
 };
 
-HR_PHYSICS_API IPhysicsManager* createPhysicsManager();
+HR_PHYS_EXP IPhysicsManager* createPhysicsManager();
 
 } // namespace physics
 } // namespace hrengin
