@@ -15,9 +15,10 @@
 #include <hrengin/common/config.h>
 #include <hrengin/common/macro.h>
 
-#include <hrengin/core/api.h>
+#include <hrengin/core/core.h>
 
 namespace hrengin {
+namespace core {
 //! Interface for logger output
 class ILogBook {
 public:
@@ -42,5 +43,6 @@ public:
 //! Create a logger instance
 HR_CORE_API ILogger* createLogger ();
 
+} // namespace core
 } // namespace hrengin
 #endif//_hrengin_ILogger_
