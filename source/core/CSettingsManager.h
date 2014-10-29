@@ -1,4 +1,4 @@
-/**
+/*
    Copyright (C) 2014  absurdworlds
 
    License LGPLv3-only:
@@ -12,25 +12,12 @@
 #include <map>
 #include <vector>
 
-#include <hrengin/core/hdf_value.h>
 #include <hrengin/core/ISettingsManager.h>
+
+#include <hrengin/hdf/hdf_value.h>
 
 namespace hrengin {
 namespace core {
-
-#if 0
-/* 
-   Struct is used to determine in which vector the Setting is stored,
-   additionally to storing it's index in vector;
- */
-union SettingId {
-	struct {
-		hdf::Type type;
-		u32 id;
-	};
-	u64 index;
-};
-#endif
 
 class CSettingsManager : public ISettingsManager {
 public:
@@ -62,24 +49,6 @@ private:
 	std::map<std::string, hdf::Value> indexMap_;
 	
 	typedef std::map<std::string, hdf::Value>::value_type value_type;
-
-#if 0	// I left this here, so a different approach
-	// which I tested first will be reflected in commit history
-
-	template<class T, std::vector<T>& container>
-	void setValueImpl(std::string key, T val);
-	
-	template<class T, std::vector<T>& container>
-	void getValueImpl(std::string key, T& val);
-
-	std::map<std::string, SettingId> indexMap_;
-	struct Settings {
-		std::vector<i32> i;
-		std::vector<f64> f;
-		std::vector<std::string> s;
-		std::vector<bool> b;
-	} settings_;
-#endif
 };
 
 } // namespace core
