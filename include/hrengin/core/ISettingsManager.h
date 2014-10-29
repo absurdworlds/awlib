@@ -39,7 +39,7 @@ public:
 	virtual bool setValue(std::string key, bool val) = 0;
 };
 
-HR_CORE_API ISettingsManager& getSettingsManager();
+//! Create an instance of settings manager
 HR_CORE_API ISettingsManager* createSettingsManager();
 
 } // namespace core

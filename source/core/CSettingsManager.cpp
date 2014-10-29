@@ -8,7 +8,6 @@
  */
 
 #include <hrengin/resources/default_settings.h>
-#include <hrengin/common/singleton.h>
 #include <hrengin/core/IHDFParser.h>
 #include <hrengin/io/IReadFile.h>
 #include <hrengin/io/ICharacterStream.h>
@@ -22,11 +21,6 @@ namespace core {
 ISettingsManager* createSettingsManager()
 {
 	return new CSettingsManager();
-}
-
-ISettingsManager& getSettingsManager()
-{
-	return makeSingleton<CSettingsManager>();
 }
 
 CSettingsManager::CSettingsManager()
