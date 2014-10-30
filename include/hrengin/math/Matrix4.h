@@ -14,18 +14,19 @@
 #include <hrengin/math/Matrix3.h>
 
 namespace hrengin {
-
 //! Represents a 4x4 matrix, which has a column-major layout
 template<typename T>
 class Matrix4 {
 public:
 	typedef Vector4d<T> col_type;
 
+	//! Construct zero matrix
 	Matrix4 ()
 	{
 	}
 
-	Matrix4 (Matrix4 const& other)
+	//! Copy matrix
+	Matrix4 (Matrix4<T> const& other)
 	{
 		col_[0].set(other[0]);
 		col_[1].set(other[1]);
@@ -130,19 +131,19 @@ public:
 		return *this;
 	}
 
-	//! Get transopsed matrix
+	//! Get transposed matrix
 	Matrix4<T> getTransposed () const
 	{
 		Matrix4<T> M;
 		
 		M[0].set(col_[0][0], col_[1][0], col_[2][0], col_[3][0]);
-		M[0].set(col_[0][1], col_[1][1], col_[2][1], col_[3][1]);
-		M[0].set(col_[0][2], col_[1][2], col_[2][2], col_[3][2]);
-		M[0].set(col_[0][3], col_[1][3], col_[2][3], col_[3][3]);
+		M[1].set(col_[0][1], col_[1][1], col_[2][1], col_[3][1]);
+		M[2].set(col_[0][2], col_[1][2], col_[2][2], col_[3][2]);
+		M[3].set(col_[0][3], col_[1][3], col_[2][3], col_[3][3]);
 		
 		return M;
 	}
-	
+
 	/*! Get matrix inverse of this matrix
 	    \return True if inverse matrix exists, flase otherwise.
 	*/
@@ -376,6 +377,65 @@ Matrix4<T> operator * (Matrix4<T> const& m, Vector4d<T> const& v)
 		m(0,1) * v[0] + m(1,1) * v[1] + m(2,1) * v[2] + m(3,1) * v[3],
 		m(0,2) * v[0] + m(1,2) * v[1] + m(2,2) * v[2] + m(3,2) * v[3],
 		m(0,3) * v[0] + m(1,3) * v[1] + m(2,3) * v[2] + m(3,3) * v[3]);
+}
+
+/*! Extract arbitary 3x3 submatrix
+    \param mat Matrix to extract from
+    \param col Column to exclude
+    \param row Row to exclude
+    \return 3x3 Submatrix of a matrix mat
+*/
+template<typename T>
+Matrix3<T> getSubMatrix3x3(Matrix4<T> const& mat, u32 col, u32 row)
+{
+	// Temporary array to gain linear access, it allows to avoid
+	// unnecessary using of % operator
+	T temp[9];
+	u32 index = 0;
+
+	for(u32 i = 0; i < 4; ++i)
+	{
+		if(i == col) {
+			continue;
+		}
+		for(u32 j = 0; j < 4; ++j)
+		{
+			if(j == row) {
+				continue;
+			}
+			temp[index] = mat[i][j];
+			++index;
+		}
+	}
+	return Matrix3<T>(temp);
+}
+
+//! Transpose matrix
+template<typename T>
+Matrix4<T>& transpose (Matrix4<T>& matrix)
+{
+	matrix = matrix.getTransposed();
+
+	return matrix;
+}
+
+//! Get inverse of a matrix
+template<typename T>
+Matrix4<T>& inverse (Matrix4<T>& matrix)
+{
+	Matrix4<T>& temp;
+	matrix.getInverse(temp);
+
+	matrix = temp;
+
+	return temp;
+}
+
+//! Calculate determinant of a matrix
+template<typename T>
+Matrix4<T>& determinant (Matrix4<T>& matrix)
+{
+	return matrix.determinant();
 }
 
 } // namespace hrengin
