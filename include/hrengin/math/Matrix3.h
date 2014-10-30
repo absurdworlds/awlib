@@ -18,11 +18,13 @@ class Matrix3 {
 public:
 	typedef Vector3d<T> col_type;
 
+	//! Construct zero matrix
 	Matrix3 ()
 	{
 	}
 
-	Matrix3 (Matrix3 const& other)
+	//! Copy matrix
+	Matrix3 (Matrix3<T> const& other)
 	{
 		col_[0].set(other[0]);
 		col_[1].set(other[1]);
@@ -30,15 +32,14 @@ public:
 	}
 	
 	//! Construct 3x3 matrix from column vectors
-	Matrix3 (Vector3d const& col1,
-		 Vector3d const& col2,
-		 Vector3d const& col3)
+	Matrix3 (Vector3d<T> const& col1,
+		 Vector3d<T> const& col2,
+		 Vector3d<T> const& col3)
 	{
 		col_[0].set(col1);
 		col_[1].set(col2);
 		col_[2].set(col3);
 	}
-	
 
 	/*! Construct matrix from individual values
 	   \note Arguments here appear in row-major order
@@ -50,6 +51,16 @@ public:
 		set (a11, a21, a31,
 		     a12, a22, a32,
 		     a13, a23, a33);
+	}
+
+	/*! Construct matrix from array
+	    \param arr Column-major matrix represented as array
+	*/
+	Matrix3 (T arr[])
+	{
+		set(	arr[0], arr[4], arr[6],
+			arr[1], arr[5], arr[7],
+			arr[2], arr[6], arr[8])
 	}
 
 	/*! Set each componenet of the matrix
