@@ -9,9 +9,9 @@
 #ifndef _hrengin_Matrix4_
 #define _hrengin_Matrix4_
 
-#include <hrengin/common/Vector3d.h>
-#include <hrengin/common/Vector4d.h>
-#include <hrengin/common/Matrix3.h>
+#include <hrengin/math/Vector3d.h>
+#include <hrengin/math/Vector4d.h>
+#include <hrengin/math/Matrix3.h>
 
 namespace hrengin {
 
@@ -239,6 +239,15 @@ public:
 		return det;
 	}
 
+	//! Extract 3x3 matrix containing rotation and scale
+	Matrix3<T> getSubMatrix() const
+	{
+		return Matrix3<T>(
+			col_[0][0], col_[1][0], col_[2][0],
+			col_[0][1], col_[1][1], col_[2][1],
+			col_[0][2], col_[1][2], col_[2][2]);
+	}
+
 	//! Extract translation from matrix
 	Vector3d<T> getTranslation() const
 	{
@@ -248,15 +257,13 @@ public:
 	//! Extract scale from matrix
 	Vector3d<T> getScale() const
 	{
-		Vector3d<T> const col1(col_[0][0], col_[0][1], col_[0][2]);
-		Vector3d<T> const col2(col_[0][0], col_[0][1], col_[0][2]);
-		Vector3d<T> const col3(col_[0][0], col_[0][1], col_[0][2]);
-		Matrix3<T> const subMatrix(col1, col2, col3);
+		Matrix3<T> const subMatrix = getSubMatrix();
 		T const det = subMatrix.determinant();
 
-		T const scaleX = det > 0 ? col1.length() : -col1.length();
-		T const scaleY = col2.length();
-		T const scaleZ = col3.length();
+		T const scaleX = det > 0 ?
+			subMatrix[0].length() : -subMatrix[0].length();
+		T const scaleY = subMatrix[0].length();
+		T const scaleZ = subMatrix[0].length();
 
 		return Vector3d<T>(scaleX, scaleY, scaleZ);
 	}
