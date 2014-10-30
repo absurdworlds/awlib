@@ -15,7 +15,7 @@
 #include <array>
 #endif
 
-#include <hrengin/common/math.h>
+#include <hrengin/math/math.h>
 
 
 namespace hrengin {
@@ -425,5 +425,4 @@ Vector4d<T> lerp (Vector4d<T> const& v0, Vector4d<T> const& v1, f64 t)
 }
 
 } // namespace hrengin
-
 #endif//_hrengin_Vector4d_

@@ -10,10 +10,9 @@
 #define _hrengin_Rect_
 
 #include <hrengin/common/types.h>
-#include <hrengin/common/Vector2d.h>
+#include <hrengin/math/Vector2d.h>
 
 namespace hrengin {
-
 //! Represents a 2D rectangle, used mostly for GUI rendering
 template <class T>
 class Rect {
@@ -35,7 +34,6 @@ public:
 		: upperLeft(upperLeft), lowerRight(lowerRight)
 	{
 	}
-
 
 	//! Coordinates of upper left corner
 	Vector2d<T> upperLeft;
@@ -269,5 +267,4 @@ public:
 };
 
 } // namespace hrengin
-
 #endif//_hrengin_Rect_

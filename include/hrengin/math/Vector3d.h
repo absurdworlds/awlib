@@ -10,7 +10,7 @@
 #define _hrengin_Vector3d_
 
 #include <hrengin/common/config.h>
-#include <hrengin/common/math.h>
+#include <hrengin/math/math.h>
 
 #ifdef HR_COMPILER_MSC // fucking microsoft
 #include <array>
@@ -268,7 +268,6 @@ public:
 			coord_[2]*coord_[2];
 	}
 
-
 	//! Calculate the dot product with another vector
 	T dot (Vector3d<T> const& other) const
 	{
@@ -516,5 +515,4 @@ Vector3d<T> lerp (Vector3d<T> const& v0, Vector3d<T> const& v1, f64 t)
 }
 
 } // namespace hrengin
-
 #endif//_hrengin_Vector3d_

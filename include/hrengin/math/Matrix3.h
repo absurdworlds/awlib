@@ -9,11 +9,9 @@
 #ifndef _hrengin_Matrix3_
 #define _hrengin_Matrix3_
 
-#include <hrengin/common/Vector3d.h>
-#include <hrengin/common/Vector4d.h>
+#include <hrengin/math/Vector3d.h>
 
 namespace hrengin {
-
 //! Represents a 3x3 matrix, which has a column-major layout
 template<typename T>
 class Matrix3 {

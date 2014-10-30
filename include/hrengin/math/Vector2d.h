@@ -16,7 +16,7 @@
 #endif
 
 #include <hrengin/common/types.h>
-#include <hrengin/common/math.h>
+#include <hrengin/math/math.h>
 
 namespace hrengin {
 
@@ -307,5 +307,4 @@ Vector2d<T> lerp (Vector2d<T> const& v0, Vector2d<T> const& v1, f64 t)
 }
 
 } // namespace hrengin
-
 #endif // _hrengin_Vector2d_

@@ -11,12 +11,12 @@
 
 //#include <complex>
 
-#include <hrengin/common/math.h>
-#include <hrengin/common/Vector3d.h>
-#include <hrengin/common/Vector4d.h>
+#include <hrengin/math/math.h>
+#include <hrengin/math/Vector3d.h>
+#include <hrengin/math/Vector4d.h>
 
 namespace hrengin {
-
+//! Quaternion for representing rotations
 template<typename T>
 class Quaternion {
 public:
@@ -262,12 +262,13 @@ public:
 		}
 	}
 
-
-	T dot (Quaternion<T> const& other)
+	//! Calculate dot product with other quaternion
+	T dot (Quaternion<T> const& other) const
 	{
 		return x*other.x + y*other.y + z*other.z + w*other.w;
 	}
 
+	//! Normalize quaternion
 	Quaternion<T>& normalize()
 	{
 		T const sqrMag = x*x + y*y + z*z + w*w;
@@ -284,6 +285,7 @@ public:
 		return *this;
 	}
 	
+	//! Get normalized quaterion
 	Quaternion<T> normalized() const
 	{
 		T const sqrMag = x*x + y*y + z*z + w*w;
@@ -316,6 +318,7 @@ Quaternion<T> operator * (S const scalar, Quaternion<T> const& quat)
 	return quat * scalar; 
 }
 
+//! Linear interpolation of quaternion
 template <typename T>
 Quaternion<T>& lerp (Quaternion<T> const& q0, Quaternion<T> const& q1, f64 t)
 {
@@ -365,7 +368,5 @@ Quaternion<T> slerp (Quaternion<T> const& q0, Quaternion<T> const& q1,
 #endif
 }
 
-
 } // namespace hrengin
-
 #endif//_hrengin_Quaternion_

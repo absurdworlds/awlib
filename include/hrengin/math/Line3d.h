@@ -9,10 +9,9 @@
 #ifndef _hrengin_Line3d_
 #define _hrengin_Line3d_
 
-#include <hrengin/common/Vector3d.h>
+#include <hrengin/math/Vector3d.h>
 
 namespace hrengin {
-
 //! Represents a line segment in 3D space
 template<typename T>
 class Segment3d {
@@ -103,5 +102,4 @@ using Line3d = Segment3d<T>;
 
 
 } // namespace hrengin
-
 #endif// _hrengin_Line3d_
