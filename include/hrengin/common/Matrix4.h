@@ -274,24 +274,20 @@ public:
 
 		return Vector3d<T>(scaleX, scaleY, scaleZ);
 	}
-	
-	//! Get rotation in degrees
-	Vector3d<T> getRotationDegrees(Vector3d<T> scale) const
-	{
-		return getRotationRadians() * math::DegreesInRadian;
-	}
-	
-	//! Get rotation in radians
-	Vector3d<T> getRotationRadians(Vector3d<T> scale) const
+
+	/*! Get rotation in radians
+	    \param scale Scales on X, Y, Z axes, obtained through getScale()
+	    \return Vector consisting of euler angles (in radians)
+	*/
+	Vector3d<T> getRotation(Vector3d<T> scale) const
 	{
 		Vector3d<T> rot;
-		if(scale[0] == 0) {
-		
-		}
 
 		rot.y = asin(-col_[2][0]);
 
-		if(rot.y >= 0.9999 || rot.y <= -0.9999) {
+		T const test = T(1.0 - math::RoundingError::float64)
+
+		if(rot.y >= test || rot.y <= -test) {
 			rot.x = atan2(col_[2][1]*scale[2], col_[2][2]);
 			rot.z = atan2(col_[1][0]*scale[0], col_[0][0]);
 		} else {
@@ -302,31 +298,21 @@ public:
 		return rot;
 	}
 	
-	//! Get rotation in degrees, calculating scale
-	Vector3d<T> getRotationDegrees() const
+	/*! Get rotation in radians, calculating the scale
+	    \return Vector consisting of euler angles (in radians)
+	*/
+	Vector3d<T> getRotation() const
 	{
 		Vector3d<T> const scale = getScale();
-		return getRotationRadians(scale) * math::DegreesInRadian;
+		return getRotation(scale);
 	}
-	
-	//! Get rotation in radians, calculating scale
-	Vector3d<T> getRotationRadians() const
+
+	/*! Get rotation in radians, assuming that matrix is not scaled
+	    \return Vector consisting of euler angles (in radians)
+	*/
+	Vector3d<T> getRotationUnscaled() const
 	{
-		Vector3d<T> const scale = getScale();
-		return getRotationRadians(scale);
-	}
-	
-	//! Get rotation in degrees, assuming that matrix is not scaled
-	Vector3d<T> getRotationDegreesUnscaled() const
-	{
-		Vector3d<T> const scale();
-		return getRotationRadians(scale) * math::DegreesInRadian;
-	}
-	
-	//! Get rotation in radians, assuming that matrix is not scaled
-	Vector3d<T> getRotationRadiansUnscaled() const
-	{
-		Vector3d<T> const scale();
+		Vector3d<T> const scale(1.0, 1.0, 1.0);
 		return getRotationRadians(scale);
 	}
 
