@@ -65,9 +65,13 @@ inline f64 RadToDeg (f64 rad)
 	return rad * DegreesInRadian;
 }
 
-const i32 ROUNDING_ERROR_INT = 0;
-const f32 ROUNDING_ERROR_float32 = 0.000001f;
-const f64 ROUNDING_ERROR_float64 = 0.00000001;
+namespace RoundingError {
+i32 const integer = 0;
+f32 const float32 = 0.000001f;
+f64 const float64 = 0.00000001;
+}
+
+
 
 //! Calculate square root of a number
 FORCEINLINE f32 sqrt (f32 const x)
@@ -93,22 +97,22 @@ FORCEINLINE f64 invSqrt(const f64 x)
 	return 1.0 / sqrt(x);
 }
 
-FORCEINLINE bool equals(const i32 a, const i32 b, const i32 tolerance = ROUNDING_ERROR_INT)
+FORCEINLINE bool equals(const i32 a, const i32 b, const i32 tolerance = RoundingError::integer)
 {
 	return (a + tolerance >= b) && (a - tolerance <= b);
 }
 
-FORCEINLINE bool equals(const u32 a, const u32 b, const u32 tolerance = ROUNDING_ERROR_INT)
+FORCEINLINE bool equals(const u32 a, const u32 b, const u32 tolerance = RoundingError::integer)
 {
 	return (a + tolerance >= b) && (a - tolerance <= b);
 }
 
-FORCEINLINE bool equals(const f32 a, const f32 b, const f32 tolerance = ROUNDING_ERROR_float32)
+FORCEINLINE bool equals(const f32 a, const f32 b, const f32 tolerance = RoundingError::float32)
 {
 	return (a + tolerance >= b) && (a - tolerance <= b);
 }
 
-FORCEINLINE bool equals(const f64 a, const f64 b, const f64 tolerance = ROUNDING_ERROR_float64)
+FORCEINLINE bool equals(const f64 a, const f64 b, const f64 tolerance = RoundingError::float64)
 {
 	return (a + tolerance >= b) && (a - tolerance <= b);
 }
