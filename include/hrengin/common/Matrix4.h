@@ -11,6 +11,7 @@
 
 #include <hrengin/common/Vector3d.h>
 #include <hrengin/common/Vector4d.h>
+#include <hrengin/common/Matrix3.h>
 
 namespace hrengin {
 
@@ -98,10 +99,10 @@ public:
 	//! Multiply matrix by scalar
 	Matrix4<T>& operator *= (T const& S)
 	{
-		col_[0]  *= S;
-		col_[1]  *= S;
-		col_[2]  *= S;
-		col_[3]  *= S;
+		col_[0] *= S;
+		col_[1] *= S;
+		col_[2] *= S;
+		col_[3] *= S;
 		
 		return *this;
 	}
@@ -207,6 +208,7 @@ public:
 		return true;
 	}
 
+	//! Calculate determinant of the matrix
 	T determinant() const
 	{
 		T const det = 
@@ -237,6 +239,97 @@ public:
 		return det;
 	}
 
+	//! Extract translation from matrix
+	Vector3d<T> getTranslation() const
+	{
+		return Vector3d<T>(col_[3][0], col_[3][1], col_[3][2]);
+	}
+
+	//! Extract scale from matrix
+	Vector3d<T> getScale() const
+	{
+		Vector3d<T> const col1(col_[0][0], col_[0][1], col_[0][2]);
+		Vector3d<T> const col2(col_[0][0], col_[0][1], col_[0][2]);
+		Vector3d<T> const col3(col_[0][0], col_[0][1], col_[0][2]);
+		Matrix3<T> const subMatrix(col1, col2, col3);
+		T const det = subMatrix.determinant();
+
+		T const scaleX = det > 0 ? col1.length() : -col1.length();
+		T const scaleY = col2.length();
+		T const scaleZ = col3.length();
+
+		return Vector3d<T>(scaleX, scaleY, scaleZ);
+	}
+	
+	//! Extract scale, assuming it is positive
+	Vector3d<T> getScalePositive() const
+	{
+		Vector3d<T> const col1(col_[0][0], col_[0][1], col_[0][2]);
+		Vector3d<T> const col2(col_[0][0], col_[0][1], col_[0][2]);
+		Vector3d<T> const col3(col_[0][0], col_[0][1], col_[0][2]);
+
+		T const scaleX = col1.length();
+		T const scaleY = col2.length();
+		T const scaleZ = col3.length();
+
+		return Vector3d<T>(scaleX, scaleY, scaleZ);
+	}
+	
+	//! Get rotation in degrees
+	Vector3d<T> getRotationDegrees(Vector3d<T> scale) const
+	{
+		return getRotationRadians() * math::DegreesInRadian;
+	}
+	
+	//! Get rotation in radians
+	Vector3d<T> getRotationRadians(Vector3d<T> scale) const
+	{
+		Vector3d<T> rot;
+		if(scale[0] == 0) {
+		
+		}
+
+		rot.y = asin(-col_[2][0]);
+
+		if(rot.y >= 0.9999 || rot.y <= -0.9999) {
+			rot.x = atan2(col_[2][1]*scale[2], col_[2][2]);
+			rot.z = atan2(col_[1][0]*scale[0], col_[0][0]);
+		} else {
+			rot.x = T(0.0);
+			rot.z = atan2(col_[0][1]*scale[1], col_[1][1]);
+		}
+
+		return rot;
+	}
+	
+	//! Get rotation in degrees, calculating scale
+	Vector3d<T> getRotationDegrees() const
+	{
+		Vector3d<T> const scale = getScale();
+		return getRotationRadians(scale) * math::DegreesInRadian;
+	}
+	
+	//! Get rotation in radians, calculating scale
+	Vector3d<T> getRotationRadians() const
+	{
+		Vector3d<T> const scale = getScale();
+		return getRotationRadians(scale);
+	}
+	
+	//! Get rotation in degrees, assuming that matrix is not scaled
+	Vector3d<T> getRotationDegreesUnscaled() const
+	{
+		Vector3d<T> const scale();
+		return getRotationRadians(scale) * math::DegreesInRadian;
+	}
+	
+	//! Get rotation in radians, assuming that matrix is not scaled
+	Vector3d<T> getRotationRadiansUnscaled() const
+	{
+		Vector3d<T> const scale();
+		return getRotationRadians(scale);
+	}
+
 	//! Access an element by its index
 	T& operator () (size_t col, size_t row)
 	{
@@ -264,6 +357,7 @@ private:
 	col_type col_[4];
 };
 
+//! Multiply two matrices
 template<typename T>
 Matrix4<T> operator * (Matrix4<T> const& A, Matrix4<T> const& B)
 {
@@ -277,10 +371,10 @@ Matrix4<T> operator * (Matrix4<T> const& m, Vector3d<T> const& v)
 	return Vector3d<T>(
 		m(0,0) * v[0] + m(1,0) * v[1] + m(2,0) * v[2] + m(3,0) * 1,
 		m(0,1) * v[0] + m(1,1) * v[1] + m(2,1) * v[2] + m(3,1) * 1,
-		m(0,2) * v[0] + m(1,2) * v[1] + m(2,2) * v[2] + m(3,2) * 1,
-		m(0,3) * v[0] + m(1,3) * v[1] + m(2,3) * v[2] + m(3,3) * 1);
+		m(0,2) * v[0] + m(1,2) * v[1] + m(2,2) * v[2] + m(3,2) * 1);
 }
 
+//! Vector-matrix multiplication
 template<typename T>
 Matrix4<T> operator * (Matrix4<T> const& m, Vector4d<T> const& v)
 {
@@ -292,5 +386,4 @@ Matrix4<T> operator * (Matrix4<T> const& m, Vector4d<T> const& v)
 }
 
 } // namespace hrengin
-
 #endif //_hrengin_Matrix4_
