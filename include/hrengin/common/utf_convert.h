@@ -16,124 +16,115 @@
 
 namespace hrengin {
 namespace locale {
-//TODO: rewrite utf.h with no templates
-template<typename out_type, typename in_type>
-std::basic_string<out_type>
-utf_convert(in_type const* begin, in_type const* end)
+//! Convert utf-16 character string to utf-8
+inline char* narrow (char* output, size_t size,
+	wchar_t const* begin, wchar_t const* end)
 {
-	typedef std::basic_string<out_type> value_type;
-	typedef std::back_insert_iterator<value_type> iterator_type;
+	if(size == 0) {
+		return 0;
+	}
 
-	value_type result;
-	iterator_type it(result);
+	-- size;
 
 	while(begin != end) {
-		u32 cp = UTF<in_type>::template get<in_type const *>(begin, end);
+		u32 cp = utf16::get<wchar_t const *>(begin, end);
 
 		if(cp == -1) {
 			continue;
-		} 
+		}
 
-		UTF<out_type>::template append<iterator_type>(cp, it);
+		size_t width = utf8::width(cp);
+
+		if(size < width) {
+			output = 0;
+			break;
+		}
+
+		utf8::append<char *>(cp, output);
+		size -= width;
 	}
-
-	return result;
+	*output++ = 0;
+	return output;
 }
 
-template<typename out_type, typename in_type>
-std::basic_string<out_type>
-utf_convert(std::basic_string<in_type> const& str)
+//! Convert utf-8 character string to utf-16
+inline wchar_t* widen (wchar_t* output, size_t size,
+	char const* begin, char const* end)
 {
-	typedef typename std::basic_string<out_type> value_type;
-	typedef typename std::back_insert_iterator<value_type> out_iterator_type;
-	typedef typename std::basic_string<in_type>::const_iterator in_iterator_type;
+	if(size == 0) {
+		return 0;
+	}
 
-	value_type result;
+	-- size;
+
+	while(begin != end) {
+		u32 cp = utf8::get<char const *>(begin, end);
+
+		if(cp == -1) {
+			continue;
+		}
+
+		size_t width = utf16::width(cp);
+
+		if(size < width) {
+			output = 0;
+			break;
+		}
+
+		utf16::append<wchar_t *>(cp, output);
+		size -= width;
+	}
+	*output++ = 0;
+	return output;
+}
+
+//! Convert utf-16 wstring to utf-8 string
+inline std::string narrow(std::wstring const& str) 
+{
+	typedef typename std::wstring::const_iterator in_iterator_type;
+	typedef typename std::back_insert_iterator<std::string> out_iterator_type;
+
+	std::string result;
+
 	in_iterator_type begin(str.begin());
 	in_iterator_type end(str.end());
 	out_iterator_type out(result);
 
 	while(begin != end) {
-		u32 cp = UTF<in_type>::template get<in_iterator_type>(begin, end);
+		u32 cp = utf16::get<in_iterator_type>(begin, end);
 
 		if(cp == -1) {
 			continue;
 		} 
 
-		UTF<out_type>::template append<out_iterator_type>(cp, out);
+		utf8::append<out_iterator_type>(cp, out);
 	}
 
 	return result;
 }
 
-template<typename out_type, typename in_type>
-out_type* utf_convert(out_type* buffer, size_t buffer_size,
-	in_type const* begin, in_type const* end)
+//! Convert utf-8 string to utf-16 wstring
+inline std::wstring widen(std::string const& str) 
 {
-	out_type* output = buffer;
-	if(buffer_size == 0) {
-		return 0;
-	}
+	typedef typename std::string::const_iterator in_iterator_type;
+	typedef typename std::back_insert_iterator<std::wstring> out_iterator_type;
 
-	-- buffer_size;
+	std::wstring result;
+	in_iterator_type begin(str.begin());
+	in_iterator_type end(str.end());
+	out_iterator_type out(result);
 
 	while(begin != end) {
-		u32 cp = UTF<in_type>::template get<in_type const *>(begin, end);
+		u32 cp = utf8::get<in_iterator_type>(begin, end);
 
 		if(cp == -1) {
 			continue;
-		}
+		} 
 
-		size_t width = UTF<out_type>::width(cp);
-
-		if(buffer_size < width) {
-			output = 0;
-			break;
-		}
-
-		buffer = UTF<out_type>::template append<out_type *>(cp, buffer);
-		buffer_size -= width;
+		utf16::append<out_iterator_type>(cp, out);
 	}
-	*buffer++ = 0;
-	return output;
-}
 
-inline char* narrow(char *output,size_t output_size,wchar_t const *source)
-{
-	return utf_convert(output,output_size,source,source + strlen_g(source));
-}
-inline char* narrow(char *output,size_t output_size,wchar_t const *begin,wchar_t const *end)
-{
-	return utf_convert(output,output_size,begin,end);
-}
-
-inline wchar_t* widen(wchar_t *output,size_t output_size,char const *source)
-{
-	return utf_convert(output,output_size,source,source + strlen_g(source));
-}
-
-inline wchar_t* widen(wchar_t *output,size_t output_size,char const *begin,char const *end)
-{
-	return utf_convert(output,output_size,begin,end);
-}
-
-
-inline std::string narrow(wchar_t const *s)
-{
-	return utf_convert<char>(s, s + strlen_g(s));
-}
-inline std::wstring widen(char const *s)
-{
-	return utf_convert<wchar_t>(s, s + strlen_g(s));
-}
-
-inline std::string narrow(std::wstring const& s) 
-{
-	return utf_convert<char>(s);
-}
-inline std::wstring widen(std::string const& s) 
-{
-	return utf_convert<wchar_t>(s);
+	return result;
 }
 
 } // namespace locale
