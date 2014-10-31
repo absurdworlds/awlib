@@ -19,8 +19,6 @@ class IrrlichtDevice;
 namespace scene {
 class ICameraSceneNode;
 class ISceneManager;
-
-class ISceneNodeAnimator;
 }
 }
 namespace hrengin {
@@ -35,19 +33,15 @@ public:
 		irr::scene::ISceneManager* irrScMgr,
 		irr::IrrlichtDevice* device);
 	virtual ~CCameraNode();
+	
+	virtual void setTarget(INode* target);
+	virtual void resetTarget();
+
+	virtual void setFOV(f64 fov);
+	virtual void setNearPlane(f64 dist);
+	virtual void setFarPlane(f64 dist);
 
 	virtual Line3d<f32> getRayFromScreen(i32 x, i32 y);
-
-	virtual void SetTargetPosition(Vector3d<f32> pos);
-	virtual void SetCameraPosition(Vector3d<f32> pos);
-
-	virtual void BindTargetToCamera(bool bind);
-
-	virtual void SetCameraFOV(f64 fov);
-	virtual void SetNearPlane(f64 dist);
-	virtual void SetFarPlane(f64 dist);
-
-	virtual void SetDistance(f64 dist);
 private:
 	irr::IrrlichtDevice* device_;
 	irr::scene::ISceneManager* scmgr_;
@@ -58,5 +52,4 @@ private:
 
 } // namespace scene
 } // namespace hrengin
-
 #endif//_hrengin_CCameraNode_

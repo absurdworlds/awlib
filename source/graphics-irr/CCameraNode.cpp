@@ -6,7 +6,6 @@
    This is free software: you are free to change and redistribute it.
    There is NO WARRANTY, to the extent permitted by law.
  */
-
 #include <irrlicht/irrlicht.h>
 
 #include <hrengin/math/Vector3d.h>
@@ -28,8 +27,7 @@ CCameraNode::CCameraNode(CSceneManager* sceneManager,
 	irr::scene::ICameraSceneNode* camNode,
 	irr::scene::ISceneManager* irrScMgr,
 	irr::IrrlichtDevice* device)
-	: controlBehavior(CAM_NONE), camera_(camNode),
-	  scmgr_(irrScMgr), device_(device)
+	: camera_(camNode), scmgr_(irrScMgr), device_(device)
 {
 	dummy_ = new CIrrDummyNode(this, camera_->getSceneManager());
 	dummy_->addChild(camera_);
@@ -49,36 +47,24 @@ Line3d<f32> CCameraNode::getRayFromScreen(i32 x, i32 y)
 	return toHrengin(line);
 }
 
-void CCameraNode::SetDistance(f64 dist)
+void setTarget(INode* target)
 {
-
+}
+void resetTarget()
+{
 }
 
-void CCameraNode::SetTargetPosition(Vector3d<f32> pos)
+void CCameraNode::setFOV(f64 fov)
 {
-
+	camera_->setFOV(fov);
 }
-void CCameraNode::SetCameraPosition(Vector3d<f32> pos)
+void CCameraNode::setNearPlane(f64 dist)
 {
-
+	camera_->setNearValue(dist);
 }
-
-void CCameraNode::BindTargetToCamera(bool bind)
+void CCameraNode::setFarPlane(f64 dist)
 {
-
-}
-
-void CCameraNode::SetCameraFOV(f64 fov)
-{
-
-}
-void CCameraNode::SetNearPlane(f64 dist)
-{
-
-}
-void CCameraNode::SetFarPlane(f64 dist)
-{
-
+	camera_->setFarValue(dist);
 }
 
 } // namespace scene

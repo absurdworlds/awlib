@@ -15,30 +15,33 @@
 
 namespace hrengin {
 namespace scene {
-
 //! Scene node which is a camera, scene is rendered from active camera's POV
-class ICameraNode : public ISceneNode {
+class ICameraNode : public INode {
 public:
 	//! Virtual destructor
-	virtual ~ICameraNode() {};
+	virtual ~ICameraNode()
+	{
+	}
 
-	virtual void SetTargetPosition(Vector3d<f32> pos) = 0;
-	virtual void SetCameraPosition(Vector3d<f32> pos) = 0;
+	//! Set target to track
+	virtual void setTarget(INode* target) = 0;
 
-	virtual void BindTargetToCamera(bool bind) = 0;
+	//! Reset target, camera will no longer track
+	virtual void resetTarget() = 0;
 
-	virtual void SetCameraFOV(f64 fov) = 0;
-	virtual void SetNearPlane(f64 dist) = 0;
-	virtual void SetFarPlane(f64 dist) = 0;
+	//! Set camera's field of view
+	virtual void setFOV(f64 fov) = 0;
 
-	virtual void SetDistance(f64 dist) = 0;
+	//! Set camera's near plane distance
+	virtual void setNearPlane(f64 dist) = 0;
+
+	//! Set camera's far plane distance
+	virtual void setFarPlane(f64 dist) = 0;
 
 	//! Get world-space ray from screen-space coordinates
 	virtual Line3d<f32> getRayFromScreen(i32 x, i32 y) = 0;
 };
 
-	
 } // namespace scene
 } // namespace hrengin
-
 #endif//_hrengin_ICameraNode_
