@@ -13,10 +13,11 @@
    \brief Setup compiler and platform specific settings
 */
 
+// defaults
 #define HR_32BIT
 
 /* Windows platform */
-#if defined(_WIN32) || defined(_WIN64) || defined(WIN32) || defined(WIN64)
+#if defined(_WIN32) || defined(_WIN64)
 	#define HR_WINDOWS
 #endif
 
@@ -29,7 +30,7 @@
 	#endif
 #elif defined(_MSC_VER)
 	#define HR_COMPILER_MSC
-	#if defined(_WIN64) || defined(WIN64)
+	#if defined(_WIN64)
 		#undef HR_32BIT
 		#define HR_64BIT
 	#endif
