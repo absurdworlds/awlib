@@ -16,7 +16,7 @@
 
 namespace hrengin {
 namespace locale {
-
+//TODO: rewrite utf.h with no templates
 template<typename out_type, typename in_type>
 std::basic_string<out_type>
 utf_convert(in_type const* begin, in_type const* end)
@@ -136,8 +136,6 @@ inline std::wstring widen(std::string const& s)
 	return utf_convert<wchar_t>(s);
 }
 
-
 } // namespace locale
 } // namespace hrengin
-
 #endif//_hrengin_utf_convert_

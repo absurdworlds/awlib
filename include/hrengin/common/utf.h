@@ -11,7 +11,7 @@
 
 #include <hrengin/common/macro.h>
 #include <hrengin/common/types.h>
-#include <hrengin/common/math.h>
+#include <hrengin/math/math.h>
 
 namespace hrengin {
 namespace locale {
@@ -338,5 +338,4 @@ public:
 
 } // namespace locale
 } // namespace hrengin
-
 #endif//_hrengin_utf_
