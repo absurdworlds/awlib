@@ -9,28 +9,16 @@ VersionMinor = 3
 
 # Includes and objects
 Objects = stringutils.o CSettingsManager.o CModelLoader.o CLogger.o CHrenginShell.o CHDFParser.o CFileSystem.o
-
 Includes = -I../../include $(ExternalIncludes)
-
 Libraries = $(ExternalLibraries)
+Defines = -D HR_MODULE_CORE -D HR_MODULE_HDF
 
 # Compiler flags
-CompilerFlags  = $(Includes) $(Libraries)
-CompilerFlags += -g -D_DEBUG
-CompilerFlags += -fPIC
-CC = cc
-CXX = g++ -std=c++11 $(CompilerFlags)
+include ../settings.gmake
+CompilerSettings = $(CompilerFlags) $(Defines) $(Includes) $(Libraries)
 
 Version = $(VersionMajor).$(VersionMinor)
 SharedLibName = libhrcore.so
 SharedLibFullName = $(SharedLibName).$(Version)
 
-
-shrared: $(Objects)
-	$(CXX) $(Objects) -shared -o $(SharedLibFullName)
-
-all: shared
-
-.PHONY : clean
-clean:
-	-rm $(SharedLibFullName) $(Objects)
+include ../targets.gmake

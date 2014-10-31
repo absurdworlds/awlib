@@ -10,23 +10,14 @@ VersionMinor = 3
 Objects = CCharacterStream.o CBufferedStream.o CReadFile.o linux/time.o
 Includes = -I../../include $(ExternalIncludes)
 Libraries = $(ExternalLibraries)
+Defines = -D HR_MODULE_PLATFORM -D HR_MODULE_IO
 
-# Compiler flags
-CompilerFlags  = $(Includes) $(Libraries)
-CompilerFlags += -g -D_DEBUG
-CompilerFlags += -fPIC
-CC = cc
-CXX = g++ -std=c++11 $(CompilerFlags)
+# Compiler settings
+include ../settings.gmake
+CompilerSettings = $(CompilerFlags) $(Defines) $(Includes) $(Libraries)
 
 Version = $(VersionMajor).$(VersionMinor)
 SharedLibName = libhrplatform.so
 SharedLibFullName = $(SharedLibName).$(Version)
 
-shared: $(Objects)
-	$(CXX) $(Objects) -shared -o $(SharedLibFullName)
-
-all: shared
-
-.PHONY : clean
-clean:
-	-rm $(SharedLibFullName) $(Objects)
+include ../targets.gmake

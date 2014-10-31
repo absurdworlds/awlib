@@ -34,8 +34,6 @@ hrengin TODO list
 ## physics
 
 + [ ] Improve kinematic body support
-+ [x] Improve collision filtering support
-+ [x] Write separate raycasting class 
 
 ## audio
 
@@ -56,7 +54,6 @@ hrengin TODO list
 
 + [ ] Test custom allocator for units: spawn 10000 units w/o visual model, moving in circles, and measure time taken for event manager to process all of them with and without custom continuous allocator
 + [ ] Write doxygen documentation
-+ [ ] Write GNU makefiles
++ [x] Write GNU makefiles
 + [ ] Write premake scripts to replace VC projects
-+ [ ] Tackle with -fvisibility=hidden and visibility attributes
-	__attribute__ ((visibility ("default")))
++ [x] Tackle with -fvisibility=hidden and visibility attributes

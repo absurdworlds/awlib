@@ -9,29 +9,16 @@ VersionMinor = 3
 
 # Includes and objects
 Objects = CBulletPhysics.o CCollisionPhantom.o CDebugDrawer.o CPhysicsWorld.o CRigidBody.o hrToBullet.o
-
 Includes = -I../../include $(ExternalIncludes)
-
 Libraries = $(ExternalLibraries)
+Defines = -D HR_MODULE_PHYSICS
 
 # Compiler flags
-CompilerFlags  = $(Includes)
-CompilerFlags += -g -D_DEBUG
-CompilerFlags += -fPIC
-CC = cc -std=c99
-CXX = g++ -std=c++11 $(CompilerFlags)
+include ../settings.gmake
+CompilerSettings = $(CompilerFlags) $(Defines) $(Includes) $(Libraries)
 
 Version = $(VersionMajor).$(VersionMinor)
 SharedLibName = libhrphysics.so
 SharedLibFullName = $(SharedLibName).$(Version)
 
-
-shared: $(Objects)
-	$(CXX) $(Objects) -shared -o $(SharedLibFullName) $(Libraries)
-	cp $(SharedLibFullName) $(SharedLibName)
-
-all: shared
-
-.PHONY : clean
-clean:
-	-rm $(SharedLibFullName) $(Objects)
+include ../targets.gmake

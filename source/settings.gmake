@@ -1,0 +1,6 @@
+CC = cc -std=c99
+CXX = g++ -std=c++11 
+
+CompilerFlags  = -g -D_DEBUG
+CompilerFlags += -fPIC
+CompilerFlags += -fvisibility=hidden

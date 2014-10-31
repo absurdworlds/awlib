@@ -1,0 +1,9 @@
+shared: $(Objects)
+	$(CXX) $(CompilerSettings) $(Objects) -shared -o $(SharedLibFullName) $(Libraries)
+	cp $(SharedLibFullName) $(SharedLibName)
+
+all: shared
+
+.PHONY : clean
+clean:
+	-rm $(SharedLibFullName) $(Objects)

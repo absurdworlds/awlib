@@ -9,29 +9,16 @@ VersionMinor = 3
 # Includes and objects
 IrrExtObjs = IrrExt/CSceneNodeAnimatorCameraRTS.o
 Objects = CCameraNode.o CConsoleGUI.o CGUIListBox.o CGuiManager.o CGUITextBox.o CGUIWindow.o CInputManager.o CLightNode.o CRenderingDevice.o CSceneManager.o CVideoManager.o CVisNode.o $(IrrExtObjs)
-
 Includes = -I../../include $(ExternalIncludes)
 Libraries = $(ExternalLibraries)
+Defines = -D HR_MODULE_GRAPHICS -D HR_MODULE_GUI -D HR_MODULE_SCENE
 
 # Compiler flags
-CompilerFlags  = $(Includes)
-CompilerFlags += -g -D_DEBUG
-CompilerFlags += -fPIC
-CC = cc
-CXX = g++ -std=c++11 $(CompilerFlags)
+include ../settings.gmake
+CompilerSettings = $(CompilerFlags) $(Defines) $(Includes) $(Libraries)
 
 Version = $(VersionMajor).$(VersionMinor)
 SharedLibName = libhrgraphics.so
 SharedLibFullName = $(SharedLibName).$(Version)
 
-
-shared: $(Objects)
-	$(CXX) $(Objects) -shared -o $(SharedLibFullName) $(Libraries)
-	cp $(SharedLibFullName) $(SharedLibName)
-
-all: shared
-
-.PHONY : clean
-clean:
-	-rm $(SharedLibFullName) $(Objects)
-
+include ../targets.gmake

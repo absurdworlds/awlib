@@ -1,6 +1,6 @@
 # Add paths to dependency headers here
 ExternalIncludes = -I../../dependencies/include/
-
+ExternalLibraries =
 
 # Version
 VersionMajor = 1
@@ -8,25 +8,16 @@ VersionMinor = 3
 
 # Includes and objects
 Objects = CEntityManager.o CEventManager.o CSimplePathfinder.o CWorld.o
-
 Includes = -I../../include $(ExternalIncludes)
+Libraries = $(ExternalLibraries)
+Defines = -D HR_MODULE_GAME -D HR_MODULE_AI
 
 # Compiler flags
-CompilerFlags  = $(Includes)
-CompilerFlags += -g -D_DEBUG
-CompilerFlags += -fPIC
-CC = cc
-CXX = g++ -std=c++11 $(CompilerFlags)
+include ../settings.gmake
+CompilerSettings = $(CompilerFlags) $(Defines) $(Includes) $(Libraries)
 
 Version = $(VersionMajor).$(VersionMinor)
 SharedLibName = libhrgame.so
 SharedLibFullName = $(SharedLibName).$(Version)
 
-shared: $(Objects)
-	$(CXX) $(Objects) -shared -o $(SharedLibFullName)
-
-all: shared
-
-.PHONY : clean
-clean:
-	-rm $(SharedLibFullName) $(Objects)
+include ../targets.gmake

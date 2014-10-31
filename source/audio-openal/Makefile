@@ -9,26 +9,16 @@ VersionMinor = 3
 
 # Includes and objects
 Objects = CSoundManager.o CSound.o
-
 Includes = -I../../include $(ExternalIncludes)
-
 Libraries = $(ExternalLibraries)
+Defines = -D HR_MODULE_SOUND
 
 # Compiler flags
-CompilerFlags  = $(Includes) $(Libraries)
-CompilerFlags += -g -D_DEBUG
-CompilerFlags += -fPIC
-CC = cc
-CXX = g++ -std=c++11 $(CompilerFlags)
+include ../settings.gmake
+CompilerSettings = $(CompilerFlags) $(Defines) $(Includes) $(Libraries)
 
 Version = $(VersionMajor).$(VersionMinor)
 SharedLibName = libhraudio.so
 SharedLibFullName = $(SharedLibName).$(Version)
 
-
-shrared: $(Objects)
-	$(CXX) $(Objects) -shared -o $(SharedLibFullName)
-
-.PHONY : clean
-clean:
-	-rm $(SharedLibFullName) $(Objects)
+include ../targets.gmake
