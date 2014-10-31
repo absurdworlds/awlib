@@ -6,6 +6,9 @@
    This is free software: you are free to change and redistribute it.
    There is NO WARRANTY, to the extent permitted by law.
  */
+
+#include <irrlicht/irrlicht.h>
+
 #include <hrengin/common/Vector3d.h>
 #include <hrengin/common/Line3d.h>
 #include <hrengin/graphics/ICameraController.h>
@@ -15,6 +18,7 @@
 #include "CVideoManager.h"
 
 #include "CCameraNode.h"
+#include "CIrrDummyNode.h"
 
 #include "hrToIrr.h"
 
@@ -28,7 +32,14 @@ CCameraNode::CCameraNode(CSceneManager* sceneManager,
 	: controlBehavior(CAM_NONE), camera_(camNode),
 	  scmgr_(irrScMgr), device_(device)
 {
+	dummy_ = new CIrrDummyNode(this, camera_->getSceneManager());
+	dummy_->addChild(camera_);
+}
 
+CCameraNode::~CCameraNode()
+{
+	camera_->remove();
+	dummy_->remove();
 }
 
 Line3d<f32> CCameraNode::getRayFromScreen(i32 x, i32 y)
@@ -37,15 +48,6 @@ Line3d<f32> CCameraNode::getRayFromScreen(i32 x, i32 y)
 	irr::core::line3df line = colman->getRayFromScreenCoordinates(irr::core::vector2di(x,y), camera_);
 
 	return toHrengin(line);
-}
-
-void CCameraNode::setPosition(Vector3d<f32> pos)
-{
-
-}
-void CCameraNode::setRotation(Vector3d<f32> rot)
-{
-
 }
 
 void CCameraNode::SetDistance(f64 dist)
@@ -105,6 +107,6 @@ void CCameraNode::SetBehavior(CAM_Behavior beh)
 		break;
 	}
 }
-	
+
 } // namespace scene
 } // namespace hrengin

@@ -25,6 +25,7 @@ class IBaseEntity;
 
 namespace scene {
 class CSceneManager;
+class CIrrDummyNode;
 
 class CVisNode : public IVisNode {
 public:
@@ -32,17 +33,14 @@ public:
 		irr::scene::IAnimatedMeshSceneNode* meshNode);
 	virtual ~CVisNode();
 
-	virtual void setPosition(Vector3d<f32> pos);
-	virtual void setRotation(Vector3d<f32> rot);
-	//virtual void SetScale(Vector3d<f32> scale);
-
 	//virtual void setMesh(IMesh* mesh);
 	virtual void setMesh(const char* mesh);
 
 private:
 	CSceneManager* sceneManager_;
 	IBaseEntity* parent_;
-
+	
+	CIrrDummyNode* dummy_;
 	irr::scene::IAnimatedMeshSceneNode* meshNode_;
 };
 

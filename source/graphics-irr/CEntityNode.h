@@ -6,6 +6,8 @@
    This is free software: you are free to change and redistribute it.
    There is NO WARRANTY, to the extent permitted by law.
  */
+#ifndef _hrengin_IEntityNode_
+#define _hrengin_IEntityNode_
 #include <hrengin/scene/IEntityNode.h>
 
 namespace hrengin {
@@ -20,4 +22,5 @@ private:
 };
 
 } // namespace scene
-}
+} // namespace hrengin
+#endif//_hrengin_IEntityNode_

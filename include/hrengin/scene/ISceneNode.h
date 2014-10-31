@@ -19,22 +19,34 @@
 
 namespace hrengin {
 namespace scene {
+class IObject;
 
 //! A node in the scene graph
-class ISceneNode {
+class INode {
 public:
-	virtual ~ISceneNode() 
+	//! Default constructor
+	INode ()
+		: parent_(0)
+	{
+	}
+
+	//! Construct attached to node
+	INode (INode* parent)
+	{
+		parent->addChild(this);
+	}
+
+	virtual ~INode ()
 	{
 		for(auto it = children_.begin();
 			 it != children_.end(); ++it) {
-			
 			(*it)->parent_ = 0;
 			(*it)->onParentRemove();
 		}
 	}
 	
 	//! Attach child to node
-	virtual bool addChild(ISceneNode* child)
+	virtual bool addChild (INode* child)
 	{
 		if(std::find(children_.begin(), children_.end(), child) != children_.end()) {
 			return false;
@@ -46,7 +58,7 @@ public:
 	}
 	
 	//! Remove child from node
-	virtual bool removeChild(ISceneNode* child)
+	virtual bool removeChild (INode* child)
 	{
 		auto found = std::find(children_.begin(), children_.end(), child);
 		if(found == children_.end()) {
@@ -60,7 +72,7 @@ public:
 	}
 	
 	//! Attach node to parent
-	virtual bool setParent(ISceneNode* parent)
+	virtual bool setParent (INode* parent)
 	{
 		if(parent_) {
 			unparent();
@@ -70,38 +82,100 @@ public:
 	}
 
 	//! Detach node from parent
-	virtual bool unparent()
+	virtual bool unparent ()
 	{
 		return parent_->removeChild(this);
 	}
 
 	//! Callback to be called on parent removal
-	virtual void onParentRemove()
+	virtual void onParentRemove ()
 	{
 
 	}
 
 	//! Set node's position via vector
-	virtual void setPosition(Vector3d<f32> pos) = 0;
+	virtual void setPosition (Vector3d<f32> pos)
+	{
+		position_.set(pos);
+	}
 	
 	//! Set node's position via coordinates
-//	virtual void setPosition(f32 const X, f32 const Y, f32 const Z) = 0;
+	virtual void setPosition (f32 const X, f32 const Y, f32 const Z)
+	{
+		position_.set(X, Y, Z);
+	}
 
+	// TODO: rename to 'setOrientation'
 	//! Set node's orientation via euler angles
-	virtual void setRotation(Vector3d<f32> euler) = 0;
+	virtual void setRotation (Vector3d<f32> euler)
+	{
+		rotation_ = euler;
+	}
 	
 	//! Set node's orientation via quaternion
-	virtual void setOrientation(Quaternion<f32> const& quat) {};
-	//virtual void setScale(Vector3d<f32> scale) = 0;
+	virtual void setOrientation (Quaternion<f32> const& quat)
+	{
+	
+	}
+
+	//! Set node's relative scale
+	virtual void setScale (Vector3d<f32> scale)
+	{
+	}
+	
+	//! Get node's position
+	virtual Vector3d<f32> getPosition ()
+	{
+		return position_;
+	}
+
+	//! Get node's orientation
+	virtual Vector3d<f32> getRotation ()
+	{
+		return rotation_;
+	}
+
+	//! Calculate node's absolute transform
+	virtual Matrix4<f32> calculateAbsoluteTransform ()
+	{
+		Vector3d<f32> rot = getRotation() * math::RadiansInDegree;
+		Vector3d<f32> pos = getPosition();
+
+		f32 cp = cosf(rot[0]);
+		f32 sp = sinf(rot[0]);
+		f32 cy = cosf(rot[1]);
+		f32 sy = sinf(rot[1]);
+		f32 cr = cosf(rot[2]);
+		f32 sr = sinf(rot[2]);
+
+		Matrix4<f32> trans(
+			cy*cp,	-cy*sp*cr + sy*sr,  cy*sp*sr + sy*cr,	pos[0],
+			sp,	 cp*cr,		   -cp*sr,		pos[1],
+			-sy*cp,	 sy*sp*cr + cy*sr, -sy*sp*sr + cy*cr,	pos[2],
+			0,	 0,		    0,			1);
+		return parent_ ?
+			trans * parent_->calculateAbsoluteTransform() :
+			trans;
+	}
+	
+	//virtual void attachObject (IObject* object) = 0;
+	//virtual void detachObject () = 0;
 private:
 	//! List of children of this node
-	std::vector<ISceneNode*> children_;
+	std::vector<INode*> children_;
 
 	//! Pointer to the parent node
-	ISceneNode* parent_;
+	INode* parent_;
+
+	Vector3d<f32> position_;
+	//! TODO: Replace with quaternion
+	Vector3d<f32> rotation_;
 };
 
-} // namespace graphics
+//! temporary typedef for backwards compatibility
+using ISceneNode = INode;
+
+} // namespace scene
 } // namespace hrengin
 
 #endif //_hrengin_ISceneNode_

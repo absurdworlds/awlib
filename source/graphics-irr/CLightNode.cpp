@@ -12,6 +12,7 @@
 #include "CVideoManager.h"
 
 #include "CLightNode.h"
+#include "CIrrDummyNode.h"
 
 namespace hrengin {
 namespace scene {
@@ -20,16 +21,15 @@ CLightNode::CLightNode (CSceneManager* sceneManager,
 	irr::scene::ILightSceneNode* lightNode)
 	: node_(lightNode)
 {
-
+	dummy_ = new CIrrDummyNode(this, node_->getSceneManager());
+	dummy_->addChild(node_);
 }
 
-void CLightNode::setPosition (Vector3d<f32> pos)
+CLightNode::~CLightNode()
 {
-
+	node_->remove();
+	dummy_->remove();
 }
-void CLightNode::setRotation (Vector3d<f32> rot)
-{
 
-}
 } // namespace graphics
 } // namespace hrengin

@@ -19,16 +19,15 @@
 namespace hrengin {
 namespace scene {
 class CSceneManager;
+class CIrrDummyNode;
 
 class CLightNode : public ILightNode {
 public:
 	CLightNode(CSceneManager* sceneManager,
 		irr::scene::ILightSceneNode* lightNode);
-
-	virtual void setPosition(Vector3d<f32> pos);
-	virtual void setRotation(Vector3d<f32> rot);
-	//virtual void SetScale(Vector3d<f32> scale);
+	virtual ~CLightNode();
 protected:
+	CIrrDummyNode* dummy_;
 	irr::scene::ILightSceneNode* node_;
 };
 

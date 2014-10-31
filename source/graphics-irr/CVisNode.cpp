@@ -14,6 +14,7 @@
 
 #include "CSceneManager.h"
 #include "CVisNode.h"
+#include "CIrrDummyNode.h"
 
 #include "hrToIrr.h"
 
@@ -24,23 +25,16 @@ CVisNode::CVisNode(CSceneManager* sceneManager,
 	irr::scene::IAnimatedMeshSceneNode* meshNode)
 	: meshNode_(meshNode)
 {
-
+	dummy_ = new CIrrDummyNode(this, meshNode->getSceneManager());
+	dummy_->addChild(meshNode);
 }
 
 CVisNode::~CVisNode()
 {
+	meshNode_->remove();
+	dummy_->remove();
 	//TODO:
 	//meshNode_->delete();
-}
-
-void CVisNode::setPosition(Vector3d<f32> pos)
-{
-	meshNode_->setPosition(hrengin::toIrr(pos));
-}
-
-void CVisNode::setRotation(Vector3d<f32> rot)
-{
-	meshNode_->setRotation(hrengin::toIrr(rot));
 }
 
 //void CVisNode::setMesh(IMesh* mesh)
