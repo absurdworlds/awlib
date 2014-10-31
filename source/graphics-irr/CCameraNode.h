@@ -48,18 +48,12 @@ public:
 	virtual void SetFarPlane(f64 dist);
 
 	virtual void SetDistance(f64 dist);
-
-	virtual void SetBehavior(CAM_Behavior beh);
 private:
 	irr::IrrlichtDevice* device_;
 	irr::scene::ISceneManager* scmgr_;
 	
 	CIrrDummyNode* dummy_;
 	irr::scene::ICameraSceneNode* camera_;
-
-	// TODO: move into separate class
-	CAM_Behavior controlBehavior;
-	irr::scene::ISceneNodeAnimator* animator;
 };
 
 } // namespace scene

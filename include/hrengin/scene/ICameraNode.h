@@ -9,7 +9,7 @@
 #ifndef _hrengin_ICameraNode_
 #define _hrengin_ICameraNode_
 
-#include <hrengin/common/Line3d.h>
+#include <hrengin/math/Line3d.h>
 
 #include <hrengin/scene/ISceneNode.h>
 
@@ -35,18 +35,6 @@ public:
 
 	//! Get world-space ray from screen-space coordinates
 	virtual Line3d<f32> getRayFromScreen(i32 x, i32 y) = 0;
-
-	// TODO: replace this with ICameraController class
-	enum CAM_Behavior {
-		CAM_NONE = 0,
-		CAM_STRATEGIC,
-		CAM_FIRSTPERON,
-		CAM_THIRDPERSON,
-		CAM_MODELVIEWER,
-		CAM_STATIC
-	};
-
-	virtual void SetBehavior(CAM_Behavior beh) = 0;
 };
 
 	

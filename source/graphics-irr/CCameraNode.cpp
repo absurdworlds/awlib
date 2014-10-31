@@ -9,11 +9,10 @@
 
 #include <irrlicht/irrlicht.h>
 
-#include <hrengin/common/Vector3d.h>
-#include <hrengin/common/Line3d.h>
-#include <hrengin/graphics/ICameraController.h>
+#include <hrengin/math/Vector3d.h>
+#include <hrengin/math/Line3d.h>
 
-#include "IrrExt/CSceneNodeAnimatorCameraRTS.h"
+#include <hrengin/graphics/ICameraController.h>
 
 #include "CVideoManager.h"
 
@@ -80,32 +79,6 @@ void CCameraNode::SetNearPlane(f64 dist)
 void CCameraNode::SetFarPlane(f64 dist)
 {
 
-}
-
-void CCameraNode::SetBehavior(CAM_Behavior beh)
-{
-	controlBehavior = beh;
-	
-	/* reset camera animator */
-	if(animator)
-	{
-		camera_->removeAnimator(animator);
-		//animator->drop();
-		animator = 0;
-
-	}
-
-	switch(controlBehavior)
-	{
-	case CAM_STRATEGIC:
-		animator = new irr::scene::CSceneNodeAnimatorCameraRTS(device_->getCursorControl(), device_->getTimer());
-		camera_->addAnimator(animator);
-		animator->drop();
-	break;
-	default:
-	case CAM_NONE:
-		break;
-	}
 }
 
 } // namespace scene
