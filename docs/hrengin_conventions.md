@@ -78,7 +78,11 @@ Repository is divided in several folders:
 
 ### source and include directories
 
-Each module should have it's own directory named `source/{module name}`. Wrapper libraries should have a name `source/{module name}-{external library name}`. Each module also should corresponding directory `include/hrengin/{module name}`. All shared headers not bound to any module should be located in `include/hrengin/common`.
+hrengin is separated into modules, each of which is supposed to have different area and purpose. 
+
+Each module should have it's own namespace, and all module's public headers should be located in `include/hrengin/{module name}`. All shared headers not bound to any module should be located in `include/hrengin/common`. 
+
+It doesn't matter, if modules are implemented as shared libraries, static libraries or are inside same library. Implementations should be located in `source/{module name}`. If librariy is a wrapper, it should have a name `source/{module name}-{external library name}`.
 
 #### hrengin modules
 
