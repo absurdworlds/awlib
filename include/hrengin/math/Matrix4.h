@@ -72,6 +72,19 @@ public:
 		return *this;
 	}
 
+	//! Matrix addition
+	Matrix4<T> operator + (Matrix4<T> const& B) const
+	{
+		Matrix4<T> C;
+		
+		C[0] = col_[0] + B[0];
+		C[1] = col_[1] + B[1];
+		C[2] = col_[2] + B[2];
+		C[3] = col_[3] + B[3];
+
+		return C;
+	}
+
 	//! Matrix multiplication
 	Matrix4<T> operator * (Matrix4<T> const& B) const
 	{
@@ -147,7 +160,7 @@ public:
 	/*! Get matrix inverse of this matrix
 	    \return True if inverse matrix exists, flase otherwise.
 	*/
-	bool getInverse (Matrix4<T>& M) const
+	bool getInverse (Matrix4<T>& inv) const
 	{
 		T det = determinant();
 
@@ -155,56 +168,60 @@ public:
 			return false;
 		}
 		
-		M[0][0] = col_[2][1]*col_[3][2]*col_[1][3] - col_[3][1]*col_[2][2]*col_[1][3] +
+		Matrix4<T> m;	
+
+		m[0][0] = col_[2][1]*col_[3][2]*col_[1][3] - col_[3][1]*col_[2][2]*col_[1][3] +
 			  col_[3][1]*col_[1][2]*col_[2][3] - col_[1][1]*col_[3][2]*col_[2][3] -
 			  col_[2][1]*col_[1][2]*col_[3][3] + col_[1][1]*col_[2][2]*col_[3][3];
-		M[0][1] = col_[3][1]*col_[2][2]*col_[0][3] - col_[2][1]*col_[3][2]*col_[0][3] -
+		m[0][1] = col_[3][1]*col_[2][2]*col_[0][3] - col_[2][1]*col_[3][2]*col_[0][3] -
 			  col_[3][1]*col_[0][2]*col_[2][3] + col_[0][1]*col_[3][2]*col_[2][3] +
 			  col_[2][1]*col_[0][2]*col_[3][3] - col_[0][1]*col_[2][2]*col_[3][3];
-		M[0][2] = col_[1][1]*col_[3][2]*col_[0][3] - col_[3][1]*col_[1][2]*col_[0][3] +
+		m[0][2] = col_[1][1]*col_[3][2]*col_[0][3] - col_[3][1]*col_[1][2]*col_[0][3] +
 			  col_[3][1]*col_[0][2]*col_[1][3] - col_[0][1]*col_[3][2]*col_[1][3] -
 			  col_[1][1]*col_[0][2]*col_[3][3] + col_[0][1]*col_[1][2]*col_[3][3];
-		M[0][3] = col_[2][1]*col_[1][2]*col_[0][3] - col_[1][1]*col_[2][2]*col_[0][3] -
+		m[0][3] = col_[2][1]*col_[1][2]*col_[0][3] - col_[1][1]*col_[2][2]*col_[0][3] -
 			  col_[2][1]*col_[0][2]*col_[1][3] + col_[0][1]*col_[2][2]*col_[1][3] +
 			  col_[1][1]*col_[0][2]*col_[2][3] - col_[0][1]*col_[1][2]*col_[2][3];
-		M[1][0] = col_[3][0]*col_[2][2]*col_[1][3] - col_[2][0]*col_[3][2]*col_[1][3] -
+		m[1][0] = col_[3][0]*col_[2][2]*col_[1][3] - col_[2][0]*col_[3][2]*col_[1][3] -
 			  col_[3][0]*col_[1][2]*col_[2][3] + col_[1][0]*col_[3][2]*col_[2][3] +
 			  col_[2][0]*col_[1][2]*col_[3][3] - col_[1][0]*col_[2][2]*col_[3][3];
-		M[1][1] = col_[2][0]*col_[3][2]*col_[0][3] - col_[3][0]*col_[2][2]*col_[0][3] +
+		m[1][1] = col_[2][0]*col_[3][2]*col_[0][3] - col_[3][0]*col_[2][2]*col_[0][3] +
 			  col_[3][0]*col_[0][2]*col_[2][3] - col_[0][0]*col_[3][2]*col_[2][3] -
 			  col_[2][0]*col_[0][2]*col_[3][3] + col_[0][0]*col_[2][2]*col_[3][3];
-		M[1][2] = col_[3][0]*col_[1][2]*col_[0][3] - col_[1][0]*col_[3][2]*col_[0][3] -
+		m[1][2] = col_[3][0]*col_[1][2]*col_[0][3] - col_[1][0]*col_[3][2]*col_[0][3] -
 			  col_[3][0]*col_[0][2]*col_[1][3] + col_[0][0]*col_[3][2]*col_[1][3] +
 			  col_[1][0]*col_[0][2]*col_[3][3] - col_[0][0]*col_[1][2]*col_[3][3];
-		M[1][3] = col_[1][0]*col_[2][2]*col_[0][3] - col_[2][0]*col_[1][2]*col_[0][3] +
+		m[1][3] = col_[1][0]*col_[2][2]*col_[0][3] - col_[2][0]*col_[1][2]*col_[0][3] +
 			  col_[2][0]*col_[0][2]*col_[1][3] - col_[0][0]*col_[2][2]*col_[1][3] -
 			  col_[1][0]*col_[0][2]*col_[2][3] + col_[0][0]*col_[1][2]*col_[2][3];
-		M[2][0] = col_[2][0]*col_[3][1]*col_[1][3] - col_[3][0]*col_[2][1]*col_[1][3] +
+		m[2][0] = col_[2][0]*col_[3][1]*col_[1][3] - col_[3][0]*col_[2][1]*col_[1][3] +
 			  col_[3][0]*col_[1][1]*col_[2][3] - col_[1][0]*col_[3][1]*col_[2][3] -
 			  col_[2][0]*col_[1][1]*col_[3][3] + col_[1][0]*col_[2][1]*col_[3][3];
-		M[2][1] = col_[3][0]*col_[2][1]*col_[0][3] - col_[2][0]*col_[3][1]*col_[0][3] -
+		m[2][1] = col_[3][0]*col_[2][1]*col_[0][3] - col_[2][0]*col_[3][1]*col_[0][3] -
 			  col_[3][0]*col_[0][1]*col_[2][3] + col_[0][0]*col_[3][1]*col_[2][3] +
 			  col_[2][0]*col_[0][1]*col_[3][3] - col_[0][0]*col_[2][1]*col_[3][3];
-		M[2][2] = col_[1][0]*col_[3][1]*col_[0][3] - col_[3][0]*col_[1][1]*col_[0][3] +
+		m[2][2] = col_[1][0]*col_[3][1]*col_[0][3] - col_[3][0]*col_[1][1]*col_[0][3] +
 			  col_[3][0]*col_[0][1]*col_[1][3] - col_[0][0]*col_[3][1]*col_[1][3] -
 			  col_[1][0]*col_[0][1]*col_[3][3] + col_[0][0]*col_[1][1]*col_[3][3];
-		M[2][3] = col_[2][0]*col_[1][1]*col_[0][3] - col_[1][0]*col_[2][1]*col_[0][3] -
+		m[2][3] = col_[2][0]*col_[1][1]*col_[0][3] - col_[1][0]*col_[2][1]*col_[0][3] -
 			  col_[2][0]*col_[0][1]*col_[1][3] + col_[0][0]*col_[2][1]*col_[1][3] +
 			  col_[1][0]*col_[0][1]*col_[2][3] - col_[0][0]*col_[1][1]*col_[2][3];
-		M[3][0] = col_[3][0]*col_[2][1]*col_[1][2] - col_[2][0]*col_[3][1]*col_[1][2] -
+		m[3][0] = col_[3][0]*col_[2][1]*col_[1][2] - col_[2][0]*col_[3][1]*col_[1][2] -
 			  col_[3][0]*col_[1][1]*col_[2][2] + col_[1][0]*col_[3][1]*col_[2][2] +
 			  col_[2][0]*col_[1][1]*col_[3][2] - col_[1][0]*col_[2][1]*col_[3][2];
-		M[3][1] = col_[2][0]*col_[3][1]*col_[0][2] - col_[3][0]*col_[2][1]*col_[0][2] +
+		m[3][1] = col_[2][0]*col_[3][1]*col_[0][2] - col_[3][0]*col_[2][1]*col_[0][2] +
 			  col_[3][0]*col_[0][1]*col_[2][2] - col_[0][0]*col_[3][1]*col_[2][2] -
 			  col_[2][0]*col_[0][1]*col_[3][2] + col_[0][0]*col_[2][1]*col_[3][2];
-		M[3][2] = col_[3][0]*col_[1][1]*col_[0][2] - col_[1][0]*col_[3][1]*col_[0][2] -
+		m[3][2] = col_[3][0]*col_[1][1]*col_[0][2] - col_[1][0]*col_[3][1]*col_[0][2] -
 			  col_[3][0]*col_[0][1]*col_[1][2] + col_[0][0]*col_[3][1]*col_[1][2] +
 			  col_[1][0]*col_[0][1]*col_[3][2] - col_[0][0]*col_[1][1]*col_[3][2];
-		M[3][3] = col_[1][0]*col_[2][1]*col_[0][2] - col_[2][0]*col_[1][1]*col_[0][2] +
+		m[3][3] = col_[1][0]*col_[2][1]*col_[0][2] - col_[2][0]*col_[1][1]*col_[0][2] +
 			  col_[2][0]*col_[0][1]*col_[1][2] - col_[0][0]*col_[2][1]*col_[1][2] -
 			  col_[1][0]*col_[0][1]*col_[2][2] + col_[0][0]*col_[1][1]*col_[2][2];
 
-		M /= det;
+		m /= det;
+
+		inv = m;
 		
 		return true;
 	}
@@ -293,7 +310,7 @@ public:
 
 		rot.y = asin(-col_[2][0]);
 
-		T const test = T(1.0 - math::RoundingError::float64)
+		T const test = T(1.0 - math::RoundingError::float64);
 
 		if(rot.y >= test || rot.y <= -test) {
 			rot.x = atan2(col_[2][1]*scale[2], col_[2][2]);
@@ -423,7 +440,7 @@ Matrix4<T>& transpose (Matrix4<T>& matrix)
 template<typename T>
 Matrix4<T>& inverse (Matrix4<T>& matrix)
 {
-	Matrix4<T>& temp;
+	Matrix4<T> temp;
 	matrix.getInverse(temp);
 
 	matrix = temp;
