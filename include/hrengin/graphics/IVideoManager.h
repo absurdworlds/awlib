@@ -10,7 +10,8 @@
 #define _hrengin_IVideoManager_
 
 #include <hrengin/graphics/graphics.h>
-#include <hrengin/common/Vector3d.h>
+
+#include <hrengin/common/types.h>
 
 namespace hrengin {
 namespace core {

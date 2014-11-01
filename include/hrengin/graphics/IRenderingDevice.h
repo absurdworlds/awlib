@@ -9,11 +9,10 @@
 #ifndef _hrengin_IRenderingDevice_
 #define _hrengin_IRenderingDevice_
 
-#include <hrengin/common/Vector3d.h>
+#include <hrengin/math/Vector3d.h>
 /* yt6dew — I don't know what is that, propbably someone was playng with
  keyboard. I decided to keep it.
  */
-
 namespace hrengin {
 namespace graphics {
 
@@ -23,7 +22,9 @@ class IIndexBuffer;
 //! Interface for rendering the scene into the window
 class IRenderingDevice {
 public:
-	//! prepare scene for rendering, must be called before drawing anything
+	/*! Prepare scene for rendering.
+	 *  Must be called before drawing anything.
+	 */
 	virtual bool beginRender() = 0;
 	// beginFrame()
 
@@ -44,5 +45,4 @@ public:
 
 } // namespace video
 } // namespace hrengin
-
 #endif//_hrengin_IRenderingDevice_

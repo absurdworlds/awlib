@@ -12,7 +12,7 @@
 #include <hrengin/common/types.h>
 #include <hrengin/common/macro.h>
 
-#include <hrengin/common/Vector3d.h>
+#include <hrengin/math/Vector3d.h>
 
 #include <hrengin/graphics/IRenderingDevice.h>
 
@@ -55,5 +55,4 @@ HR_PHYS_EXP IPhysicsManager* createPhysicsManager();
 
 } // namespace physics
 } // namespace hrengin
-
 #endif//_hrengin_IPhysicsManager_

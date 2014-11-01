@@ -41,7 +41,8 @@ public:
 	//! returns the axis aligned bounding box of this node
 	irr::core::aabbox3d<irr::f32>& getBoundingBox () const
 	{
-		return irr::core::aabbox3d<irr::f32>();
+		static irr::core::aabbox3d<irr::f32> aabb;
+		return aabb;
 	}
 
 	irr::core::matrix4 const& getAbsoluteTransformation () const

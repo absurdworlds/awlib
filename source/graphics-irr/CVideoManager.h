@@ -49,7 +49,6 @@ public:
 	virtual void wait();
 
 	virtual bool isWindowActive();
-	
 
 	virtual IRenderingDevice* getRenderingDevice() const;
 	virtual scene::ISceneManager* getSceneManager() const;
@@ -68,5 +67,4 @@ private:
 
 } // namespace graphics
 } // namespace hrengin
-
 #endif//_hrengin_CVideoManager_

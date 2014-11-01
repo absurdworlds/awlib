@@ -17,8 +17,7 @@ class IMesh;
 }
 
 namespace scene {
-
-// Visual scene node
+//! Visual scene node
 class IVisNode : public INode {
 public:
 	virtual void setMesh(char const* mesh) = 0;

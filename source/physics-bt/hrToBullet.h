@@ -6,13 +6,13 @@
    This is free software: you are free to change and redistribute it.
    There is NO WARRANTY, to the extent permitted by law.
  */
-
 #ifndef _hrengin_hrToBullet_
 #define _hrengin_hrToBullet_
 
-#include <hrengin/common/Vector3d.h>
 #include <Bullet/btBulletDynamicsCommon.h>
 #include <Bullet/btBulletCollisionCommon.h>
+
+#include <hrengin/math/Vector3d.h>
 
 namespace hrengin {
 namespace physics {
@@ -32,5 +32,4 @@ void quaternionToEuler(btQuaternion const& quat, btVector3& euler);
 
 } // namespace physics
 } // namespace hrengin
-
 #endif //_hrengin_hrToBullet_

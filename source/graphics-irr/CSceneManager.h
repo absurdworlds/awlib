@@ -11,7 +11,7 @@
 
 #include <vector>
 
-#include <hrengin/common/Vector3d.h>
+#include <hrengin/math/Vector3d.h>
 
 #include <hrengin/graphics/IRenderingDevice.h>
 
@@ -51,10 +51,7 @@ public:
 	//virtual IVisNode* createMeshSceneNode(IMesh* mesh);
 	virtual ICameraNode* createCameraSceneNode();
 	virtual ILightNode* createLightSceneNode();
-	virtual IEntityNode* createEntitySceneNode(IEntity* entity)
-	{
-		return 0;
-	}
+	virtual IEntityNode* createEntitySceneNode(IEntity* entity);
 private:
 	void addToTable(ISceneNode* hrnode, irr::scene::ISceneNode* irrnode);
 

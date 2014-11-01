@@ -1,4 +1,4 @@
-/**
+/*
    Copyright (C) 2014  absurdworlds
 
    License LGPLv3-only:
@@ -12,7 +12,7 @@
 #include <hrengin/common/types.h>
 #include <hrengin/common/hidden_impl.h>
 
-#include <hrengin/common/Vector3d.h>
+#include <hrengin/math/Vector3d.h>
 
 #include <hrengin/physics/IDebugDrawer.h>
 #include <hrengin/physics/CollisionFilter.h>
@@ -52,5 +52,4 @@ public:
 
 } // namespace physics
 } // namespace hrengin
-
 #endif//_hrengin_IPhysicsWorld_

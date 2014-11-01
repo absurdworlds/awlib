@@ -25,7 +25,6 @@
 
 #include "CVideoManager.h"
 
-
 namespace hrengin {
 namespace graphics {
 

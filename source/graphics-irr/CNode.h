@@ -13,7 +13,6 @@
 
 namespace hrengin {
 namespace scene {
-
 //! A node in the scene graph
 class CNode : public INode {
 public:
@@ -67,5 +66,4 @@ public:
 
 } // namespace graphics
 } // namespace hrengin
-
-#endif //_hrengin_CSceneNode_
+#endif //_hrengin_CNode_

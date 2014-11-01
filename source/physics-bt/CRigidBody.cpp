@@ -6,8 +6,7 @@
    This is free software: you are free to change and redistribute it.
    There is NO WARRANTY, to the extent permitted by law.
  */
-
-#include <hrengin/common/math.h>
+#include <hrengin/math/math.h>
 
 #include "hrToBullet.h"
 #include "CRigidBody.h"

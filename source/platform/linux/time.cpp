@@ -8,8 +8,8 @@
  */
 #include <time.h>
 
-#include <hrengin/common/time.h>
-#include <hrengin/common/api.h>
+#include <hrengin/platform/time.h>
+#include <hrengin/platform/platform.h>
 
 namespace hrengin {
 

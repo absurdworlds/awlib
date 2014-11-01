@@ -31,9 +31,9 @@ CSceneManager::CSceneManager(irr::scene::ISceneManager* irrSceneManager,
 
 void CSceneManager::createScene()
 {
-	/*
-	irr::scene::IAnimatedMesh* mesh = scnmgr->getMesh(irr::io::path("..\\data\\models\\ground.obj"));
+	//TODO: global lighting manager?
 	scnmgr->setAmbientLight(irr::video::SColorf(0.35f,0.35f,0.35f,0.35f));
+#if 0
 	
 	// cleanup later
 	irr::video::IImage *teal = device->getVideoDriver()->createImage(irr::video::ECF_A8R8G8B8, irr::core::dimension2d<irr::u32>(128, 128));
@@ -46,7 +46,8 @@ void CSceneManager::createScene()
 	
 	device->getVideoDriver()->addTexture("teal", teal);
 	device->getVideoDriver()->addTexture("blue", blue);
-	device->getVideoDriver()->addTexture("red", red);*/
+	device->getVideoDriver()->addTexture("red", red);
+#endif
 }
 
 void CSceneManager::update()
@@ -89,6 +90,12 @@ ILightNode* CSceneManager::createLightSceneNode()
 	ILightNode* newNode = new CLightNode(this, node);
 
 	return newNode;
+}
+
+
+IEntityNode* createEntitySceneNode(IEntity* entity)
+{
+	return 0;
 }
 
 void CSceneManager::drawScene()

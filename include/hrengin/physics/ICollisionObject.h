@@ -9,9 +9,9 @@
 #ifndef _hrengin_IPhysicsObject_
 #define _hrengin_IPhysicsObject_
 
-#include <hrengin/common/Vector3d.h>
-
 #include <hrengin/common/hidden_impl.h>
+
+#include <hrengin/math/Vector3d.h>
 
 #include <hrengin/physics/CollisionFilter.h>
 

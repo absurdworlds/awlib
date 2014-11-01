@@ -9,7 +9,7 @@
 #ifndef _hrengin_IGUIManager_
 #define _hrengin_IGUIManager_
 
-#include <hrengin/common/Rect.h>
+#include <hrengin/math/Rect.h>
 
 namespace hrengin {
 namespace gui {
@@ -61,5 +61,4 @@ public:
 
 } // namespace gui
 } // namespace hrengin
-
 #endif //_hrengin_IGUIManager_

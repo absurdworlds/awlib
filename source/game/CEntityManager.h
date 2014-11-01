@@ -12,7 +12,7 @@
 #include <vector>
 #include <deque>
 
-#include <hrengin/common/Vector3d.h>
+#include <hrengin/math/Vector3d.h>
 
 #include <hrengin/game/IBaseEntity.h>
 #include <hrengin/game/IEntityManager.h>

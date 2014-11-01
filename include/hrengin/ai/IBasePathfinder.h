@@ -9,13 +9,12 @@
 #ifndef _hrengin_IBasePathfinder_
 #define _hrengin_IBasePathfinder_
 
-#include <hrengin/common/Vector3d.h>
+#include <hrengin/math/Vector3d.h>
 
 #include <hrengin/ai/ai.h>
 
 namespace hrengin {
 namespace ai {
-
 class Path;
 
 class IBasePathfinder {
@@ -27,5 +26,4 @@ HR_AI_EXP IBasePathfinder* createSimplePathfinder();
 
 } // namespace ai
 } // namespace hrengin
-
 #endif //_hrengin_IBasePathfinder_

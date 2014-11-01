@@ -13,11 +13,10 @@
 #include <limits>
 
 #include <hrengin/common/types.h>
-#include <hrengin/common/Vector3d.h>
+#include <hrengin/math/Vector3d.h>
 
 namespace hrengin {
 namespace ai {
-
 //! Path consisting of waypoints, which are positions in 3d space
 class Path {
 public:
@@ -239,5 +238,4 @@ Path::const_iterator findClosestNode(Path::const_iterator& first,
 
 } // namespace ai
 } // namespace hrengin
-
 #endif//_hrengin_CPath_

@@ -13,7 +13,7 @@
 #include <algorithm>
 
 #include <hrengin/common/types.h>
-#include <hrengin/common/Vector3d.h>
+#include <hrengin/math/Vector3d.h>
 
 #include <hrengin/scene/IEntityNode.h>
 //#include "Base/IVirtualObject.h"
@@ -71,5 +71,4 @@ private:
 };
 
 } // namespace hrengin
-
 #endif//_hrengin_IBaseEntity_
