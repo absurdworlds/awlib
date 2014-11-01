@@ -276,26 +276,20 @@ public:
 	Vector3d<T> getScale() const
 	{
 		Matrix3<T> const subMatrix = getSubMatrix();
-		T const det = subMatrix.determinant();
 
-		T const scaleX = det > 0 ?
-			subMatrix[0].length() : -subMatrix[0].length();
-		T const scaleY = subMatrix[0].length();
-		T const scaleZ = subMatrix[0].length();
-
-		return Vector3d<T>(scaleX, scaleY, scaleZ);
+		return subMatrix.getScale();
 	}
 	
 	//! Extract scale, assuming it is positive
 	Vector3d<T> getScalePositive() const
 	{
-		Vector3d<T> const col1(col_[0][0], col_[0][1], col_[0][2]);
-		Vector3d<T> const col2(col_[0][0], col_[0][1], col_[0][2]);
-		Vector3d<T> const col3(col_[0][0], col_[0][1], col_[0][2]);
+		Vector3d<T> const row1(col_[0][0], col_[1][0], col_[2][0]);
+		Vector3d<T> const row2(col_[0][1], col_[1][1], col_[2][1]);
+		Vector3d<T> const row3(col_[0][2], col_[1][2], col_[2][2]);
 
-		T const scaleX = col1.length();
-		T const scaleY = col2.length();
-		T const scaleZ = col3.length();
+		T const scaleX = row1.length();
+		T const scaleY = row2.length();
+		T const scaleZ = row3.length();
 
 		return Vector3d<T>(scaleX, scaleY, scaleZ);
 	}
