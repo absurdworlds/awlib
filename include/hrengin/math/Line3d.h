@@ -43,7 +43,6 @@ public:
 		return *this;
 	}
 
-
 	Vector3d<T> getNormalPoint(Vector3d<T> const& point) const
 	{
 		Vector3d<T> a = direction();
@@ -53,7 +52,7 @@ public:
 
 		T projectionLength = b.dot(a);
 
-		return start + a * length;
+		return start + a * projectionLength;
 	}
 	
 	Vector3d<T> getClosestPoint(Vector3d<T> const& point) const
