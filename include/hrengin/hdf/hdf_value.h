@@ -9,18 +9,19 @@
 #ifndef _hrengin_hdf_value_
 #define _hrengin_hdf_value_
 
+#include <cstring>
+
 #include <string>
 
 #include <hrengin/common/types.h>
-#include <hrengin/common/Vector2d.h>
-#include <hrengin/common/Vector3d.h>
-#include <hrengin/common/Vector4d.h>
+#include <hrengin/math/Vector2d.h>
+#include <hrengin/math/Vector3d.h>
+#include <hrengin/math/Vector4d.h>
 
 #include <hrengin/hdf/Type.h>
 
 namespace hrengin {
 namespace hdf {
-
 //! Class for holding any HDF Value.
 class Value {
 public:
@@ -58,7 +59,6 @@ public:
 			val_.get(v);
 			return true;
 		}
-
 		return false;
 	}
 
@@ -77,24 +77,9 @@ public:
 
 			return true;
 		}
-		
 		return false;
 	}
-	
-	//! Specialization for string type
-	template<>
-	bool trySet (std::string const& v)
-	{
-		if(checkType(type_, v)) {
-			resetString();
-			val_.set(v);
-
-			return true;
-		}
 		
-		return false;
-	}
-	
 	//! Set value with overriding type
 	template<typename val_type>
 	void set (bool const v)
@@ -242,7 +227,20 @@ private:
 	} val_;
 };
 
+//! Specialization of trySet for string type
+template<>
+inline bool Value::trySet (std::string const& v)
+{
+	if(checkType(type_, v)) {
+		resetString();
+		val_.set(v);
+
+		return true;
+	}
+	return false;
+}
+
+
 } // namespace hdf
 } // namespace hrengin
-
 #endif//_hrengin_hdf_value_
