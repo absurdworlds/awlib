@@ -1,7 +1,9 @@
 ipch/*
 ipch/*/
 ipch/*/*
+dependencies/*
 *.o
+*.so
 *.swp
 *.sln
 *.suo
