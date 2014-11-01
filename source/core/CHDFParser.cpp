@@ -12,8 +12,6 @@
 #include <hrengin/io/IBufferedStream.h>
 
 #include <hrengin/common/types.h>
-#include <hrengin/common/Vector2d.h>
-#include <hrengin/common/Vector3d.h>
 
 #include <hrengin/hdf/Type.h>
 
@@ -183,7 +181,9 @@ HdfObjectType CHDFParser::getObjectType()
 			//state_ = HDF_S_CMD_BEGIN;
 			//return HDF_OBJ_CMD;
 		} else {
-			error(HDF_LOG_ERROR, "invalid character: " + c);
+			std::string msg("invalid character: ");
+			msg += c;
+			error(HDF_LOG_ERROR, msg);
 			return HDF_OBJ_NULL;
 		}
 	}
