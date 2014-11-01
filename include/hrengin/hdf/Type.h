@@ -9,6 +9,9 @@
 #ifndef _hrengin_hdf_Type_
 #define _hrengin_hdf_Type_
 
+#include <hrengin/math/Vector2d.h>
+#include <hrengin/math/Vector3d.h>
+
 namespace hrengin {
 namespace hdf {
 

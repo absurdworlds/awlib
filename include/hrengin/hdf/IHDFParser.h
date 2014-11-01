@@ -11,7 +11,7 @@
 
 #include <string>
 
-#include <hrengin/common/Vector3d.h>
+#include <hrengin/math/Vector3d.h>
 
 #include <hrengin/hdf/hdf.h>
 
@@ -75,9 +75,9 @@ public:
 	virtual void skipNode() = 0;
 
 	/*! Add message to the parser's error log
-	   HDF_ERR_NOTICE — an unimportant message
-	   HDF_ERR_WARNING — warning, non-critical error
-	   HDF_ERR_ERROR — critical error, stops the parsing*/
+	   HDF_ERR_NOTICE - an unimportant message
+	   HDF_ERR_WARNING - warning, non-critical error
+	   HDF_ERR_ERROR - critical error, stops the parsing */
 	virtual void error(hdf::ParserMessage type, std::string msg) = 0;
 };
 

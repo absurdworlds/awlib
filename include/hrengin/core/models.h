@@ -11,7 +11,7 @@
 
 #include <hrengin/common/compiler_setup.h>
 #include <hrengin/common/types.h>
-#include <hrengin/common/Vector3d.h>
+#include <hrengin/math/Vector3d.h>
 
 namespace hrengin {
 //! Enumeration of primitive shapes
