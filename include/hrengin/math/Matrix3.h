@@ -17,7 +17,7 @@ namespace hrengin {
 template<typename T>
 class Matrix3 {
 public:
-	typedef Vector3d<T> col_type;
+	typedef Vector3d<T> m_type;
 
 	//! Construct zero matrix
 	Matrix3 ()
@@ -27,9 +27,9 @@ public:
 	//! Copy matrix
 	Matrix3 (Matrix3<T> const& other)
 	{
-		col_[0].set(other[0]);
-		col_[1].set(other[1]);
-		col_[2].set(other[2]);
+		m_[0].set(other[0]);
+		m_[1].set(other[1]);
+		m_[2].set(other[2]);
 	}
 	
 	//! Construct 3x3 matrix from column vectors
@@ -37,9 +37,9 @@ public:
 		 Vector3d<T> const& col2,
 		 Vector3d<T> const& col3)
 	{
-		col_[0].set(col1);
-		col_[1].set(col2);
-		col_[2].set(col3);
+		m_[0].set(col1);
+		m_[1].set(col2);
+		m_[2].set(col3);
 	}
 
 	/*! Construct matrix from individual values
@@ -71,9 +71,9 @@ public:
 		  T const a12, T const a22, T const a32,
 		  T const a13, T const a23, T const a33)
 	{
-		col_[0].set(a11, a12, a13);
-		col_[1].set(a21, a22, a23);
-		col_[2].set(a31, a32, a33);
+		m_[0].set(a11, a12, a13);
+		m_[1].set(a21, a22, a23);
+		m_[2].set(a31, a32, a33);
 	}
 
 	//! Set matrix to identity
@@ -90,9 +90,9 @@ public:
 	{
 		Matrix3<T> C;
 		
-		C[0] = col_[0]*B[0][0] + col_[1]*B[0][1] + col_[2]*B[0][2];
-		C[1] = col_[0]*B[1][0] + col_[1]*B[1][1] + col_[2]*B[1][2];
-		C[2] = col_[0]*B[2][0] + col_[1]*B[2][1] + col_[2]*B[2][2];
+		C[0] = m_[0]*B[0][0] + m_[1]*B[0][1] + m_[2]*B[0][2];
+		C[1] = m_[0]*B[1][0] + m_[1]*B[1][1] + m_[2]*B[1][2];
+		C[2] = m_[0]*B[2][0] + m_[1]*B[2][1] + m_[2]*B[2][2];
 		
 		return C;
 	}
@@ -111,9 +111,9 @@ public:
 	//! Multiply matrix by scalar
 	Matrix3<T>& operator *= (T const& S)
 	{
-		col_[0] *= S;
-		col_[1] *= S;
-		col_[2] *= S;
+		m_[0] *= S;
+		m_[1] *= S;
+		m_[2] *= S;
 		
 		return *this;
 	}
@@ -132,9 +132,9 @@ public:
 	//! Divide matrix by scalar
 	Matrix3<T>& operator /= (T const& S)
 	{
-		col_[0]  /= S;
-		col_[1]  /= S;
-		col_[2]  /= S;
+		m_[0]  /= S;
+		m_[1]  /= S;
+		m_[2]  /= S;
 		
 		return *this;
 	}
@@ -144,9 +144,9 @@ public:
 	{
 		Matrix3<T> M;
 		
-		M[0].set(col_[0][0], col_[1][0], col_[2][0]);
-		M[0].set(col_[0][1], col_[1][1], col_[2][1]);
-		M[0].set(col_[0][2], col_[1][2], col_[2][2]);
+		M[0].set(m_[0][0], m_[1][0], m_[2][0]);
+		M[0].set(m_[0][1], m_[1][1], m_[2][1]);
+		M[0].set(m_[0][2], m_[1][2], m_[2][2]);
 		
 		return M;
 	}
@@ -155,21 +155,21 @@ public:
 	T determinant() const
 	{
 		T const det = 
-			col_[0][0]*col_[1][1]*col_[2][2] +
-			col_[0][2]*col_[1][0]*col_[2][1] +
-			col_[0][1]*col_[1][2]*col_[2][0] -
-			col_[0][0]*col_[1][2]*col_[2][1] -
-			col_[0][1]*col_[1][0]*col_[2][2] -
-			col_[0][2]*col_[1][1]*col_[2][0];
+			m_[0][0]*m_[1][1]*m_[2][2] +
+			m_[0][2]*m_[1][0]*m_[2][1] +
+			m_[0][1]*m_[1][2]*m_[2][0] -
+			m_[0][0]*m_[1][2]*m_[2][1] -
+			m_[0][1]*m_[1][0]*m_[2][2] -
+			m_[0][2]*m_[1][1]*m_[2][0];
 		return det;
 	}
 	
 	//! Extract scale from matrix
 	Vector3d<T> getScale() const
 	{
-		Vector3d<T> const row1(col_[0][0], col_[1][0], col_[2][0]);
-		Vector3d<T> const row2(col_[0][1], col_[1][1], col_[2][1]);
-		Vector3d<T> const row3(col_[0][2], col_[1][2], col_[2][2]);
+		Vector3d<T> const row1(m_[0][0], m_[1][0], m_[2][0]);
+		Vector3d<T> const row2(m_[0][1], m_[1][1], m_[2][1]);
+		Vector3d<T> const row3(m_[0][2], m_[1][2], m_[2][2]);
 
 		T const det = determinant();
 		
@@ -183,9 +183,9 @@ public:
 	//! Extract scale, assuming it is positive
 	Vector3d<T> getScalePositive() const
 	{
-		Vector3d<T> const row1(col_[0][0], col_[1][0], col_[2][0]);
-		Vector3d<T> const row2(col_[0][1], col_[1][1], col_[2][1]);
-		Vector3d<T> const row3(col_[0][2], col_[1][2], col_[2][2]);
+		Vector3d<T> const row1(m_[0][0], m_[1][0], m_[2][0]);
+		Vector3d<T> const row2(m_[0][1], m_[1][1], m_[2][1]);
+		Vector3d<T> const row3(m_[0][2], m_[1][2], m_[2][2]);
 
 		T const scaleX = row1[0].length();
 		T const scaleY = row2[1].length();
@@ -199,14 +199,14 @@ public:
 	{
 		Quaternion<T> quat;
 
-		quat.w = sqrt(max(0, 1 + m00 + m11 + m22)) / 2;
-		quat.x = sqrt(max(0, 1 + m00 - m11 - m22)) / 2;
-		quat.y = sqrt(max(0, 1 - m00 + m11 - m22)) / 2;
-		quat.z = sqrt(max(0, 1 - m00 - m11 + m22)) / 2;
+		quat.w = sqrt(max(0, 1 + m_[0][0] + m_[1][1] + m_[2][2])) / 2;
+		quat.x = sqrt(max(0, 1 + m_[0][0] - m_[1][1] - m_[2][2])) / 2;
+		quat.y = sqrt(max(0, 1 - m_[0][0] + m_[1][1] - m_[2][2])) / 2;
+		quat.z = sqrt(max(0, 1 - m_[0][0] - m_[1][1] + m_[2][2])) / 2;
 
-		quat.x = std::copysign(quat.x, m21 - m12);
-		quat.y = std::copysign(quat.y, m02 - m20);
-		quat.z = std::copysign(quat.z, m10 - m01);
+		quat.x = std::copysign(quat.x, m_[2][1] - m_[1][2]);
+		quat.y = std::copysign(quat.y, m_[0][2] - m_[2][0]);
+		quat.z = std::copysign(quat.z, m_[1][0] - m_[0][1]);
 
 		return quat;
 	}
@@ -216,16 +216,16 @@ public:
 	{
 		Quaternion<T> quat;
 
-		T const det = pow(determinant, 1/3);
+		T const det = pow(determinant(), 1/3);
 
-		quat.w = sqrt(max(0, det + m00 + m11 + m22)) / 2;
-		quat.x = sqrt(max(0, det + m00 - m11 - m22)) / 2;
-		quat.y = sqrt(max(0, det - m00 + m11 - m22)) / 2;
-		quat.z = sqrt(max(0, det - m00 - m11 + m22)) / 2;
+		quat.w = sqrt(max(0, det + m_[0][0] + m_[1][1] + m_[2][2]))/2;
+		quat.x = sqrt(max(0, det + m_[0][0] - m_[1][1] - m_[2][2]))/2;
+		quat.y = sqrt(max(0, det - m_[0][0] + m_[1][1] - m_[2][2]))/2;
+		quat.z = sqrt(max(0, det - m_[0][0] - m_[1][1] + m_[2][2]))/2;
 
-		quat.x = std::copysign(quat.x, m21 - m12);
-		quat.y = std::copysign(quat.y, m02 - m20);
-		quat.z = std::copysign(quat.z, m10 - m01);
+		quat.x = std::copysign(quat.x, m_[2][1] - m_[1][2]);
+		quat.y = std::copysign(quat.y, m_[0][2] - m_[2][0]);
+		quat.z = std::copysign(quat.z, m_[1][0] - m_[0][1]);
 
 		return quat;
 	}
@@ -233,28 +233,28 @@ public:
 	//! Access an element by its index
 	T& operator () (size_t col, size_t row)
 	{
-		return col_[col][row];
+		return m_[col][row];
 	}
 
 	//! Access an element by its index
 	T const& operator () (size_t col, size_t row) const
 	{
-		return col_[col][row];
+		return m_[col][row];
 	}
 
 	//! Access colums of the matrix by subscript
 	Vector4d<T>& operator [] (size_t col)
 	{
-		return col_[col];
+		return m_[col];
 	}
 	
 	//! Access colums of the matrix by subscript
 	Vector4d<T> const& operator [] (size_t col) const
 	{
-		return col_[col];
+		return m_[col];
 	}
 private:
-	col_type col_[3];
+	m_type m_[3];
 };
 
 template<typename T>
