@@ -10,6 +10,7 @@
 #define _hrengin_Matrix3_
 
 #include <hrengin/math/Vector3d.h>
+#include <hrengin/math/Quaternion.h>
 
 namespace hrengin {
 //! Represents a 3x3 matrix, which has a column-major layout
@@ -110,9 +111,9 @@ public:
 	//! Multiply matrix by scalar
 	Matrix3<T>& operator *= (T const& S)
 	{
-		col_[0]  *= S;
-		col_[1]  *= S;
-		col_[2]  *= S;
+		col_[0] *= S;
+		col_[1] *= S;
+		col_[2] *= S;
 		
 		return *this;
 	}
@@ -154,13 +155,79 @@ public:
 	T determinant() const
 	{
 		T const det = 
-			col_[0][0]*col_[1][1]*col_[2][2] + 
-			col_[0][2]*col_[1][0]*col_[2][1] + 
-			col_[0][1]*col_[1][2]*col_[2][0] - 
-			col_[0][0]*col_[1][2]*col_[2][1] - 
-			col_[0][1]*col_[1][0]*col_[2][2] - 
-			col_[1][1]*col_[0][2]*col_[2][0];
+			col_[0][0]*col_[1][1]*col_[2][2] +
+			col_[0][2]*col_[1][0]*col_[2][1] +
+			col_[0][1]*col_[1][2]*col_[2][0] -
+			col_[0][0]*col_[1][2]*col_[2][1] -
+			col_[0][1]*col_[1][0]*col_[2][2] -
+			col_[0][2]*col_[1][1]*col_[2][0];
 		return det;
+	}
+	
+	//! Extract scale from matrix
+	Vector3d<T> getScale() const
+	{
+		Vector3d<T> const row1(col_[0][0], col_[1][0], col_[2][0]);
+		Vector3d<T> const row2(col_[0][1], col_[1][1], col_[2][1]);
+		Vector3d<T> const row3(col_[0][2], col_[1][2], col_[2][2]);
+
+		T const det = determinant();
+		
+		T const scaleX =  det > 0 ? row1[0].length() : -row1[0].length();
+		T const scaleY = row2[1].length();
+		T const scaleZ = row3[2].length();
+
+		return Vector3d<T>(scaleX, scaleY, scaleZ);
+	}
+	
+	//! Extract scale, assuming it is positive
+	Vector3d<T> getScalePositive() const
+	{
+		Vector3d<T> const row1(col_[0][0], col_[1][0], col_[2][0]);
+		Vector3d<T> const row2(col_[0][1], col_[1][1], col_[2][1]);
+		Vector3d<T> const row3(col_[0][2], col_[1][2], col_[2][2]);
+
+		T const scaleX = row1[0].length();
+		T const scaleY = row2[1].length();
+		T const scaleZ = row3[2].length();
+
+		return Vector3d<T>(scaleX, scaleY, scaleZ);
+	}
+
+	//! Convert rotation matrix to quaternion
+	Quaternion<T> asQuaternion() const
+	{
+		Quaternion<T> quat;
+
+		quat.w = sqrt(max(0, 1 + m00 + m11 + m22)) / 2;
+		quat.x = sqrt(max(0, 1 + m00 - m11 - m22)) / 2;
+		quat.y = sqrt(max(0, 1 - m00 + m11 - m22)) / 2;
+		quat.z = sqrt(max(0, 1 - m00 - m11 + m22)) / 2;
+
+		quat.x = std::copysign(quat.x, m21 - m12);
+		quat.y = std::copysign(quat.y, m02 - m20);
+		quat.z = std::copysign(quat.z, m10 - m01);
+
+		return quat;
+	}
+
+	//! Convert matrix to quaternion
+	Quaternion<T> asQuaternionScaled() const
+	{
+		Quaternion<T> quat;
+
+		T const det = pow(determinant, 1/3);
+
+		quat.w = sqrt(max(0, det + m00 + m11 + m22)) / 2;
+		quat.x = sqrt(max(0, det + m00 - m11 - m22)) / 2;
+		quat.y = sqrt(max(0, det - m00 + m11 - m22)) / 2;
+		quat.z = sqrt(max(0, det - m00 - m11 + m22)) / 2;
+
+		quat.x = std::copysign(quat.x, m21 - m12);
+		quat.y = std::copysign(quat.y, m02 - m20);
+		quat.z = std::copysign(quat.z, m10 - m01);
+
+		return quat;
 	}
 
 	//! Access an element by its index
