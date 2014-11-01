@@ -1,6 +1,21 @@
-CC = cc -std=c99
-CXX = g++ -std=c++11 
+
+ifdef HR_C_COMPILER
+ CC = $(HR_C_COMPILER)
+else
+ CC = cc -std=c99
+endif
+
+ifdef HR_CXX_COMPILER
+ CXX = $(HR_CXX_COMPILER)
+else
+ CXX = g++ -std=c++11 
+endif
 
 CompilerFlags  = -g -D_DEBUG
 CompilerFlags += -fPIC
 CompilerFlags += -fvisibility=hidden
+
+
+CPPFLAGS = $(Defines) $(Includes)
+CXXFLAGS = $(CompilerFlags)
+LDFLAGS = $(Libraries)

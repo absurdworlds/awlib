@@ -14,7 +14,6 @@ Defines = -D HR_MODULE_GAME -D HR_MODULE_AI
 
 # Compiler flags
 include ../settings.gmake
-CompilerSettings = $(CompilerFlags) $(Defines) $(Includes) $(Libraries)
 
 Version = $(VersionMajor).$(VersionMinor)
 SharedLibName = libhrgame.so

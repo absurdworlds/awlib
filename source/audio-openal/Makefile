@@ -15,7 +15,6 @@ Defines = -D HR_MODULE_SOUND
 
 # Compiler flags
 include ../settings.gmake
-CompilerSettings = $(CompilerFlags) $(Defines) $(Includes) $(Libraries)
 
 Version = $(VersionMajor).$(VersionMinor)
 SharedLibName = libhraudio.so

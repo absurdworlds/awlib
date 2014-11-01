@@ -2,7 +2,6 @@
 ExternalIncludes = -I../../dependencies/include/ -I../../dependencies/include/Bullet/
 ExternalLibraries = -L../../dependencies/lib -lBulletCollision -lBulletDynamics
 
-
 # Version
 VersionMajor = 1
 VersionMinor = 3
@@ -15,7 +14,6 @@ Defines = -D HR_MODULE_PHYSICS
 
 # Compiler flags
 include ../settings.gmake
-CompilerSettings = $(CompilerFlags) $(Defines) $(Includes) $(Libraries)
 
 Version = $(VersionMajor).$(VersionMinor)
 SharedLibName = libhrphysics.so

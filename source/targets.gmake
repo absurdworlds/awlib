@@ -1,5 +1,5 @@
 shared: $(Objects)
-	$(CXX) $(CompilerSettings) $(Objects) -shared -o $(SharedLibFullName) $(Libraries)
+	$(CXX) $(Objects) -shared -o $(SharedLibFullName) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS)
 	cp $(SharedLibFullName) $(SharedLibName)
 
 all: shared
