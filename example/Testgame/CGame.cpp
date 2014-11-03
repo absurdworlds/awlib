@@ -6,7 +6,7 @@
    This is free software: you are free to change and redistribute it.
    There is NO WARRANTY, to the extent permitted by law.
  */
-#include <hrengin/common/time.h>
+#include <hrengin/platform/time.h>
 
 #include "CGame.h"
 
@@ -14,9 +14,27 @@ namespace hrengin {
 namespace example {
 
 CGame::CGame ()
-	: settings_(core::getSettingsManager())
+	: settings_(core::createSettingsManager()),
+	  logger_(core::createLogger())
 {
-	ILogger* logger_ = createLogger();
+	shell_ = core::createShell(logger_);
+
+	videomgr_ = graphics::createVideoManager(settings_);
+	scenemgr_ = videomgr_->getSceneManager();
+	renderer_ = videomgr_->getRenderingDevice();
+
+	guimgr_ = videomgr_->getGUIManager();
+	inputmgr_ = guimgr_->getInputManager();
+	//guimgr_->setFont("../data/fonts/courier.xml");
+	
+	phymgr_ = physics::createPhysicsManager();
+	pWorld_ = phymgr_->createPhysicsWorld();
+
+	drawer_ = phymgr_->createDebugDrawer(renderer_);
+	drawer_->setWorld(pWorld_);
+
+	entmgr_  = createEntityManager();
+	eventmgr_ = createEventManager();
 }
 
 CGame::~CGame ()
@@ -24,17 +42,47 @@ CGame::~CGame ()
 	delete logger_;
 }
 
+bool CGame::frame()
+{
+	bool runEngine = true;
+	bool debugMode = false;
+	
+	runEngine = videomgr_->step();
+	if(!runEngine) {
+		return false;
+	}
+
+	if(videomgr_->isWindowActive()) {
+		renderer_->beginRender();
+		scenemgr_->drawScene();
+		settings_->getValue("debugmode", debugMode);
+		if(debugMode) {
+			renderer_->drawDebug();
+			drawer_->render();
+		}
+		guimgr_->draw();
+		eventmgr_->advance();
+		//runEngine = pWorld_->step();
+		renderer_->endRender();
+	} else {
+		videomgr_->wait();
+	}
+
+	return true;
+}
+
 bool CGame::run ()
 {
 	bool runEngine = true;
 
-	hrengin::u32 time = hrengin::getTime();
+	hrengin::u32 curTime = hrengin::getTime();
 	hrengin::u32 lastTime;
 	
 	// Here I show how I implement my game loop.
 	do {
-		lastTime = time;
-		time = hrengin::getTime();
+		lastTime = curTime;
+		curTime = hrengin::getTime();
+		runEngine = frame();
 	}
 	while(runEngine);
 
@@ -43,7 +91,9 @@ bool CGame::run ()
 
 void CGame::loadSettings ()
 {
-	settings_.loadSettings();
+	settings_->setValue("debugmode",false);
+
+	settings_->loadSettings();
 }
 } // namespace example
 } // namespace hrengin

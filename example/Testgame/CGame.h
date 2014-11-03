@@ -36,10 +36,31 @@ public:
 	
 	void loadSettings ();
 	bool run ();
+	bool frame ();
+
+	graphics::IVideoManager* getVideoManager()
+	{
+		return videomgr_;
+	}
 
 	graphics::IRenderingDevice* getRenderer()
 	{
 		return renderer_;
+	}
+
+	gui::IGUIManager* getGUIManager()
+	{
+		return guimgr_;
+	}
+
+	scene::ISceneManager* getSceneManager()
+	{
+		return scenemgr_;
+	}
+
+	physics::IPhysicsManager* getPhysicsManager()
+	{
+		return phymgr_;
 	}
 private:
 	// core 
@@ -47,7 +68,7 @@ private:
 	core::ISettingsManager* settings_;
 	core::IShell* shell_;
 
-	// graphics
+	// grap/home/hudd/Clipps/hics
 	graphics::IVideoManager* videomgr_;
 	graphics::IRenderingDevice* renderer_;
 
