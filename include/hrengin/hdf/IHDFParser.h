@@ -33,14 +33,12 @@ enum HdfObjectType {
 };
 
 /*! \class IHDFParser
-\brief Interface for reading hrengin's HDF files. This parser provides a read-only access to documents in HDF 1.1.1 format.
-
-It can read only in forward mode, it is not able to rewind. The design goal of this parser is to quickly read HDF document without usage of any intermediate data structures.
-
-\see createHDFParser
-
-\exmaple hdf_example.cpp
-This is an example of usage of this parser.
+ * \brief Interface for reading hrengin's HDF files. This parser provides a read-only access to documents in HDF 1.1.1 format.
+ * 
+ * It can read only in forward mode, it is not able to rewind. The design goal of this parser is to quickly read HDF document without usage of any intermediate data structures.
+ * 
+ * \see createHDFParser
+ * Also, see an example in 'examples' directory
 */
 class IHDFParser {
 public:

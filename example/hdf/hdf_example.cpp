@@ -2,31 +2,16 @@
 #include <vector>
 
 #include <hrengin/io/IReadFile.h>
-#include <hrengin/core/IHDFParser.h>
+#include <hrengin/hdf/IHDFParser.h>
 
 using namespace hrengin;
 using namespace io;
 
-/* Code below provides an example of parsing this document:
-\code
-	!hdf_version "1.1.1"
-	[msg [color 
-		red = 100
-		blue = 200
-		green = 200]
-		text = "Starting the endine"]
-	[msg [color 
-		red = 80
-		blue = 80
-		green = 240]
-		text = "Success!"]
-	[msg [color 
-		red = 80
-		green = 80
-		blue = 240]
-		text = "Reading config..."]
-\endcode
-*/
+/*! \example hdf_example.cpp
+ *
+ * This file provides an usage example for IHDFParser,
+ * messages.hdf is used as an example document here.
+ */
 
 // the struct representing a message
 struct Message {
@@ -77,7 +62,7 @@ void parseNode(IHDFParser* hdf, std::string node, Message& msg)
 void main()
 {
 	// open a file
-	IReadFile* file = openReadFile("file.hdf");
+	IReadFile* file = openReadFile("./messages.hdf");
 	// create the parser
 	IHDFParser* hdf = createHDFParser(file);
 
@@ -86,7 +71,7 @@ void main()
 	// parse the file until end is reached
 
 	while(hdf->read()) {
-		if(hdf->getObjectType() == HDF_OBJ_NODE)) {
+		if(hdf->getObjectType() == HDF_OBJ_NODE) {
 			std::string name;
 			hdf->getObjectName(name);
 
