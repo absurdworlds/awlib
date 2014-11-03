@@ -93,7 +93,7 @@ ILightNode* CSceneManager::createLightSceneNode()
 }
 
 
-IEntityNode* createEntitySceneNode(IEntity* entity)
+IEntityNode* CSceneManager::createEntitySceneNode(IEntity* entity)
 {
 	return 0;
 }

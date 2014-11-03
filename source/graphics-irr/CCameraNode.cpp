@@ -47,10 +47,10 @@ Line3d<f32> CCameraNode::getRayFromScreen(i32 x, i32 y)
 	return toHrengin(line);
 }
 
-void setTarget(INode* target)
+void CCameraNode::setTarget(INode* target)
 {
 }
-void resetTarget()
+void CCameraNode::resetTarget()
 {
 }
 

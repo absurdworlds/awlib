@@ -15,8 +15,8 @@
    License along with this program.  If not, see
    <http://www.gnu.org/licenses/>. 
  */
-#ifndef _hrengin_game_
-#define _hrengin_game_
+#ifndef _hrengin_game_h_
+#define _hrengin_game_h_
 
 #include <hrengin/common/visibility.h>
 
@@ -31,4 +31,4 @@ namespace hrengin {
 //! Everything related to game logic, except AI
 namespace game {}
 }
-#endif//_hrengin_game_
+#endif//_hrengin_game_h_
