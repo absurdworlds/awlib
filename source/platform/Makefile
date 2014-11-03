@@ -12,12 +12,8 @@ Includes = -I../../include $(ExternalIncludes)
 Libraries = $(ExternalLibraries)
 Defines = -D HR_MODULE_PLATFORM -D HR_MODULE_IO
 
-# Compiler settings
-include ../settings.gmake
-CompilerSettings = $(CompilerFlags) $(Defines) $(Includes) $(Libraries)
-
 Version = $(VersionMajor).$(VersionMinor)
 SharedLibName = libhrplatform.so
 SharedLibFullName = $(SharedLibName).$(Version)
 
-include ../targets.gmake
+include ../shared.makefile

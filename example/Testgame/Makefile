@@ -12,17 +12,8 @@ Includes = -I../../include $(ExternalIncludes)
 Libraries = -L../../lib -lhrgame -lhrcore -lhrgraphics -lhrphysics -lhrplatform $(ExternalLibraries)
 Defines = 
 
-# Compiler settings
-include ../settings.gmake
-CompilerSettings = $(CompilerFlags) $(Defines) $(Includes) $(Libraries)
-
 Version = $(VersionMajor).$(VersionMinor)
 ExecutableName = testgame
 Executable = 1
 
-testgame: $(Objects)
-	$(CXX) $(Objects) -o $(ExecutableName) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS)
-	cp $(ExecutableName) $(InstallDir)/$(ExecutableName)
-all: testgame
-
-include ../targets.gmake
+include ../shared.makefile

@@ -12,11 +12,9 @@ Includes = -I../../include $(ExternalIncludes)
 Libraries = $(ExternalLibraries)
 Defines = -D HR_MODULE_PHYSICS
 
-# Compiler flags
-include ../settings.gmake
-
+# Binary name
 Version = $(VersionMajor).$(VersionMinor)
 SharedLibName = libhrphysics.so
 SharedLibFullName = $(SharedLibName).$(Version)
 
-include ../targets.gmake
+include ../shared.makefile
