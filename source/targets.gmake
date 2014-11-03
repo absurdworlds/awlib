@@ -1,9 +1,0 @@
-shared: $(Objects)
-	$(CXX) $(Objects) -shared -o $(SharedLibFullName) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS)
-	cp $(SharedLibFullName) $(SharedLibName)
-
-all: shared
-
-.PHONY : clean
-clean:
-	-rm $(SharedLibFullName) $(Objects)
