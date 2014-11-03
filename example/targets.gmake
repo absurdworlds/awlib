@@ -1,0 +1,10 @@
+ifndef Executable
+shared: $(Objects)
+	$(CXX) $(Objects) -shared -o $(SharedLibFullName) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS)
+	cp $(SharedLibFullName) $(SharedLibName)
+all: shared
+endif
+
+.PHONY : clean
+clean:
+	-rm $(SharedLibFullName) $(Objects)
