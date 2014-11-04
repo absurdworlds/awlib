@@ -8,6 +8,8 @@
  */
 #include <string>
 
+#include <hrengin/scene/IVisNode.h>
+
 #include "game.h"
 
 namespace hrengin {
@@ -17,8 +19,18 @@ i32 start (std::string)
 {
 	CGame game;
 	bool run = true;
+	
+	scene::ISceneManager* smgr = game.getSceneManager();
+	
+	smgr->createLightSceneNode();
+	smgr->createCameraSceneNode();
+	scene::IVisNode* mesh1 = smgr->createMeshSceneNode("crate10x10.3DS");
+	scene::IVisNode* mesh2 = smgr->createMeshSceneNode("crate10x10.3DS");
+	mesh2->setParent(mesh1);
+	mesh2->setPosition(0,0,45);
+	mesh1->setPosition(0,5,0);
+	mesh1->setRotation(Vector3d<f32>(0,100,0));
 
-	game.getSceneManager()->createLightSceneNode();
 
 	do {
 		run = game.frame();
