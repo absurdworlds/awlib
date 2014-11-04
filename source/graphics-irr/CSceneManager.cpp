@@ -76,6 +76,8 @@ ICameraNode* CSceneManager::createCameraSceneNode()
 		irr::core::vector3df(0, 0, 0),
 		irr::core::vector3df(0, 0, 0));
 
+	node->setPosition(irr::core::vector3df(100,100,100));
+
 	ICameraNode* newNode = new CCameraNode(this, node, scnmgr, device_);
 
 	return newNode;

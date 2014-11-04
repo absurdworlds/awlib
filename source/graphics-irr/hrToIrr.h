@@ -48,32 +48,32 @@ inline irr::core::line3df toIrr(Line3d<f32> const& hrLine)
 inline Matrix4<f32> toHrengin(irr::core::matrix4 const& mat)
 {
 	Matrix4<f32> const hrMatrix(
-		mat[0], mat[4],  mat[8], mat[12],
-		mat[1], mat[5],  mat[9], mat[13],
-		mat[2], mat[6], mat[10], mat[14],
-		mat[3], mat[7], mat[11], mat[15]);
+		mat[0], mat[4], - mat[8], mat[12],
+		mat[1], mat[5], - mat[9], mat[13],
+		mat[2], mat[6], -mat[10], mat[14],
+		mat[3], mat[7], -mat[11], mat[15]);
 	return hrMatrix;
 }
 
 inline irr::core::matrix4 toIrr(Matrix4<f32> const& hrMatrix)
 {
 	irr::core::matrix4 irrMatrix;
-	irrMatrix[0]  = hrMatrix[0][0];
-	irrMatrix[1]  = hrMatrix[1][0];
-	irrMatrix[2]  = hrMatrix[2][0];
-	irrMatrix[3]  = hrMatrix[3][0];
-	irrMatrix[4]  = hrMatrix[0][1];
-	irrMatrix[5]  = hrMatrix[1][1];
-	irrMatrix[6]  = hrMatrix[2][1];
-	irrMatrix[7]  = hrMatrix[3][1];
-	irrMatrix[8]  = hrMatrix[0][2];
-	irrMatrix[9]  = hrMatrix[1][2];
-	irrMatrix[10] = hrMatrix[2][2];
-	irrMatrix[11] = hrMatrix[3][2];
-	irrMatrix[12] = hrMatrix[0][3];
-	irrMatrix[13] = hrMatrix[1][3];
-	irrMatrix[14] = hrMatrix[2][3];
-	irrMatrix[15] = hrMatrix[3][3];
+	irrMatrix[0]  =  hrMatrix[0][0];
+	irrMatrix[1]  =  hrMatrix[0][1];
+	irrMatrix[2]  =  hrMatrix[0][2];
+	irrMatrix[3]  =  hrMatrix[0][3];
+	irrMatrix[4]  =  hrMatrix[1][0];
+	irrMatrix[5]  =  hrMatrix[1][1];
+	irrMatrix[6]  =  hrMatrix[1][2];
+	irrMatrix[7]  =  hrMatrix[1][3];
+	irrMatrix[8]  = -hrMatrix[2][0];
+	irrMatrix[9]  = -hrMatrix[2][1];
+	irrMatrix[10] = -hrMatrix[2][2];
+	irrMatrix[11] = -hrMatrix[2][3];
+	irrMatrix[12] =  hrMatrix[3][0];
+	irrMatrix[13] =  hrMatrix[3][1];
+	irrMatrix[14] =  hrMatrix[3][2];
+	irrMatrix[15] =  hrMatrix[3][3];
 	return irrMatrix;
 }
 

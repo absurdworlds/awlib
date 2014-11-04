@@ -47,7 +47,6 @@ public:
 
 	irr::core::matrix4 const& getAbsoluteTransformation () const
 	{
-		// AbsoluteTransformation = calcTransform();
 		return AbsoluteTransformation;
 	}
 
