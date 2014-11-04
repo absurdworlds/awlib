@@ -14,17 +14,23 @@ CompilerFlags  = -g -D_DEBUG
 CompilerFlags += -fPIC
 CompilerFlags += -fvisibility=hidden
 
-InstallDir = ../../bin
+#InstallDir = ../../bin
+InstallDir = /usr/local/bin
 
 CPPFLAGS = $(Defines) $(Includes)
 CXXFLAGS = $(CompilerFlags)
 LDFLAGS = $(Libraries)
 
 example: $(Objects)
-	$(CXX) $(Objects) -shared -o $(SharedLibFullName) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS)
-	cp $(SharedLibFullName) $(SharedLibName)
-all: example
+	$(CXX) $(Objects) $(CPPFLAGS) $(CXXFLAGS) -o $(ExecutableName) $(LDFLAGS)
+	cp -f $(ExecutableName) ../../bin
+	
+all: example 
+
+install:
+	install $(ExecutableName) $(InstallDir)
+
 
 .PHONY : clean
 clean:
-	-rm $(SharedLibFullName) $(Objects)
+	-rm $(ExecutableName) $(Objects)
