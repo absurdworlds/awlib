@@ -13,17 +13,22 @@
 
 namespace hrengin {
 namespace sound {
-
 class ISound;
 
+//! This class is used to manage all audio output
 class ISoundManager {
 public:
+	virtual ~ISoundManager()
+	{
+	};
+
 	virtual void addSound(const char* fileName) = 0;
 	virtual void initSounds() = 0;
 	virtual void playSound(const char* fileName) = 0;
 };
 
-HR_SND_EXP ISoundManager& getSoundManager();
+//! Create new sound manager
+HR_SND_EXP ISoundManager* createSoundManager();
 
 } // namespace sound
 } // namespace hrengin

@@ -1,9 +1,9 @@
 #ifndef _hrengin_ALutil_
 #define _hrengin_ALutil_
 
-#include <AL/al.h>
+#include <al.h>
 
-#include <hrengin/common/hrengintypes.h>
+#include <hrengin/common/types.h>
 
 inline ALenum toAlEnum(short channels, short samples)
 {

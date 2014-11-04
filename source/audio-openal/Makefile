@@ -1,5 +1,5 @@
 # Add paths to dependency headers here
-ExternalIncludes = -I../../dependencies/include/
+ExternalIncludes = -I../../dependencies/include/ -I /usr/include/AL
 ExternalLibraries =
 
 

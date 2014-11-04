@@ -1,26 +1,25 @@
 #ifndef _hrengin_ALvector_
 #define _hrengin_ALvector_
 
-#include <AL/al.h>
+#include <al.h>
 
-#include <hrengin/common/Vector3d.h>
+#include <hrengin/math/Vector3d.h>
 
 namespace hrengin {
 namespace audio {
 
-typedef hrVector3d<ALfloat> ALVector3d;
+typedef Vector3d<ALfloat> ALVector3d;
 
-Vector3d ALVectorToHrg(ALVector3d vec)
+Vector3d<f32> toHrengin(ALVector3d vec)
 {
-	return Vector3d(vec.X, vec.Y, vec.Z);
+	return Vector3d<f32>(vec[0], vec[1], vec[2]);
 }
 
-ALVector3d HrgVectorToAL(Vector3d vec)
+ALVector3d toAL(Vector3d<f32> vec)
 {
-	return ALVector3d(vec.X, vec.Y, vec.Z);
+	return ALVector3d(vec[0], vec[1], vec[2]);
 }
 
 } // namespace audio
 } // namespace hrengin
-
 #endif //_hrengin_ALvector_

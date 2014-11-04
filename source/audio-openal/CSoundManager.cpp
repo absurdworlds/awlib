@@ -18,11 +18,9 @@
 namespace hrengin {
 namespace audio {
 
-
-HRENGINSOUND_API ISoundManager& getSoundManager()
+HR_SND_EXP ISoundManager* createSoundManager()
 {
-	static CSoundManager singleton;
-	return singleton;
+	return new CSoundManager;
 }
 
 
