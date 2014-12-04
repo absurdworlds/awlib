@@ -47,7 +47,7 @@ public:
 	virtual bool isOpen() const = 0;
 
 	/*! Get full path to file */
-	virtual const std::string& getPath() const = 0;
+	virtual std::string const& getPath() const = 0;
 };
 
 HR_IO_EXP IReadFile* openReadFile(std::string path);
