@@ -24,7 +24,7 @@ ifndef Executable
 shared: $(Objects)
 	$(CXX) $(Objects) -shared -o $(SharedLibFullName) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS)
 	cp $(SharedLibFullName) $(InstallDir)/$(SharedLibFullName)
-	ln -s $(SharedLibFullName) $(InstallDir)/$(SharedLibName)
+	ln -sf $(SharedLibFullName) $(InstallDir)/$(SharedLibName)
 all: shared
 endif
 
