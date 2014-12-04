@@ -33,20 +33,23 @@ public:
 	}
 
 	/*! Read directory entry at current position
-	 * \param result Pointer to struct, which will store information about
-	 * directory entry.
-	 * \return 0 if successful, otherwise \a -error_code.
+	 * \return Pointer to struct, which represents directory entry.
 	 */
-	virtual i32 read (Dirent* result) = 0;
+	virtual Dirent const* read () = 0;
 	/*! Reset position to beginning of directory */
-	virtual i32 rewind () = 0;
+	virtual void rewind () = 0;
 	/*! Set position indicator in directory stream. */
-	virtual i32 seek (u32 loc) = 0;
+	virtual void seek (u32 loc) = 0;
 	/*! Get current position in directory stream. */
-	virtual u32 tell () = 0;
+	virtual u32 tell () const = 0;
 
 	/* \return true if directory is open */
-	bool isOpen() = 0;
+	bool isOpen() const = 0
+
+	/*! Get absolute path of the directory */	
+	virtual std::string const& getPath() const;
 }
+
+HR_IO_EXP IDirectory* openDirectory (std::string path);
 } // namespace io
 } // namespace hrengin
