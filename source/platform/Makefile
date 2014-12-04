@@ -7,7 +7,7 @@ VersionMajor = 1
 VersionMinor = 3
 
 # Includes and objects
-Objects = CCharacterStream.o CBufferedStream.o CReadFile.o linux/time.o
+Objects = CCharacterStream.o CBufferedStream.o CReadFile.o linux/time.o posix/CDirectory.o
 Includes = -I../../include $(ExternalIncludes)
 Libraries = $(ExternalLibraries)
 Defines = -D HR_MODULE_PLATFORM -D HR_MODULE_IO
