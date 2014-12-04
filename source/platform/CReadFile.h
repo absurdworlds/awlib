@@ -1,4 +1,4 @@
-/**
+/*
    Copyright (C) 2014  absurdworlds
 
    License LGPLv3-only:
@@ -20,16 +20,13 @@ namespace io {
 
 class CReadFile : public IReadFile {
 public:
-	CReadFile(const std::string& path);
+	CReadFile(std::string const& path);
 
 	virtual ~CReadFile();
 	
 	virtual i32 read(void* buffer, u32 size);
-
 	virtual i32 seek(i32 offset, bool relative = false);
-	
 	virtual u32 tell() const;
-
 	virtual u32 getSize() const;
 
 	virtual bool isOpen() const
@@ -37,7 +34,7 @@ public:
 		return file_ != 0;
 	}
 
-	virtual const std::string& getPath() const;
+	virtual std::string const& getPath() const;
 
 private:
 	void open();

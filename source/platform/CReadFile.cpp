@@ -24,7 +24,7 @@ IReadFile* openReadFile(std::string path)
 	return 0;
 }
 
-CReadFile::CReadFile(const std::string& path)
+CReadFile::CReadFile(std::string const& path)
 : file_(0), size_(0), path_(path)
 {
 	//TRACE("Opening file:", path)
@@ -93,7 +93,7 @@ u32 CReadFile::getSize() const
 	return size_;
 }
 
-const std::string& CReadFile::getPath() const
+std::string const& CReadFile::getPath() const
 {
 	return path_;
 }
