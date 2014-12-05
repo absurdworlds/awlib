@@ -15,7 +15,7 @@ hrengin TODO list
 
 + [ ] ~~Add hook for debug drawers~~
 + [ ] Implement IRenderable
-    * IVisNode will be created using ISceneManager::createVisNode(IRenderable *)
+    * IVisNode will be created using `ISceneManager::createVisNode(IRenderable*)`
     * VisNode will actually hook the renderable to underlying engine
 + [ ] Write interface for rendering vertex primitives
 + [ ] IInputManager: revert receiver list from std::forward_list to std::vector
@@ -52,8 +52,9 @@ hrengin TODO list
 
 ## other
 
++ [ ] Write hrengin Package documentation & tools
 + [ ] Test custom allocator for units: spawn 10000 units w/o visual model, moving in circles, and measure time taken for event manager to process all of them with and without custom continuous allocator
 + [ ] Write doxygen documentation
-+ [x] Write GNU makefiles
-+ [ ] Write premake scripts to replace VC projects
++ [ ] Reorganize makefiles, cleanup
++ [ ] Fix premake scripts
 + [x] Tackle with -fvisibility=hidden and visibility attributes
