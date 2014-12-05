@@ -22,5 +22,4 @@ public:
 
 } // namespace gui
 } // namespace hrengin
-
 #endif //_hrengin_IGUITextBox_

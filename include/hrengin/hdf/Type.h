@@ -290,5 +290,4 @@ inline hdf::Type deduceType (Vector3d<f32>)
 
 } // namespace hdf
 } // namespace hrengin
-
 #endif//_hrengin_hdf_Type_

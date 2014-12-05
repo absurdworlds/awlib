@@ -89,6 +89,4 @@ struct InputEvent {
 
 } // namespace gui
 } // namespace hrengin
-
 #endif //_hrengin_InputEvent_
-

@@ -31,5 +31,4 @@ public:
 
 } // namespace io
 } // namespace hrengin
-
 #endif//_hrengin_IInputManager_

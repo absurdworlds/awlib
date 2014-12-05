@@ -32,5 +32,4 @@ HR_SYS_EXP ICharacterStream* createCharacterStream (const char* source);
 
 } // namespace io
 } // namespace hrengin
-
 #endif//_hrengin_ICharacterStream_

@@ -31,5 +31,4 @@ enum ParserMessage {
 
 } // namespace hdf
 } // namespace hrengin
-
 #endif//_hrengin_hdf_shared_

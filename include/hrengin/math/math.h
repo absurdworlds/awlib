@@ -204,5 +204,4 @@ inline u32 mask32(integer_type val)
 
 } //namespace math
 } //namespace hrengin
-
 #endif //_hrengin_math_

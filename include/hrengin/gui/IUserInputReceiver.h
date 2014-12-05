@@ -20,5 +20,4 @@ public:
 };
 
 } // namespace hrengin
-
 #endif//_hrengin_IUserInputReceiver_

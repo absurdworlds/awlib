@@ -249,7 +249,5 @@ enum KeyCode {
 	KEY_PERIOD           = 0xBE,  // Period Key "."
 };
 
-} // end namespace hrengin
-
+} // namespace hrengin
 #endif //_hrengin_Keycodes_
-

@@ -99,6 +99,5 @@ public:
 template<typename T>
 using Line3d = Segment3d<T>;
 
-
 } // namespace hrengin
 #endif// _hrengin_Line3d_

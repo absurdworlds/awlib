@@ -8,7 +8,7 @@
  */
 #include <hrengin/math/Matrix4.h>
 
-void main ()
+int main ()
 {
 	hrengin::Matrix4<double> A(
 		1,2,3,4,
@@ -21,4 +21,6 @@ void main ()
 	A.getInverse(B);
 
 	hrengin::Matrix4<double> I = A * B;
+
+	return 0;
 }

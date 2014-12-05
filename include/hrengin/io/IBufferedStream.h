@@ -28,5 +28,4 @@ HR_SYS_EXP IBufferedStream* createBufferedStream(IReadFile* source);
 
 } //namespace io
 } //namespace hrengin
-
 #endif//_hrengin_IBufferedStream_

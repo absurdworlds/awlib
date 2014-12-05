@@ -14,5 +14,4 @@ namespace graphics {
 
 } // namespace graphics
 } // namespace hrengin
-
 #endif//_hrengin_ICursor_
