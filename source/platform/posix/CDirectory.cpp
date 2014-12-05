@@ -6,6 +6,7 @@
    This is free software: you are free to change and redistribute it.
    There is NO WARRANTY, to the extent permitted by law.
  */
+#include <iostream>
 #include <sys/stat.h>
 
 #include <hrengin/core/ILogger.h>
@@ -46,13 +47,17 @@ void CDirectory::open ()
 		dir_ = 0;
 		return;
 	}
-
+	
 	dir_ = opendir(path_.c_str());
+
+	if(path_.back() == '/') {
+		path_.pop_back();
+	}
 /*
 	if (dir_) {
-		seekdir(dir_, 0, SEEK_END);
+		seekdir(dir_, 0);
 		size_ = telldir();
-		seekdir(dir_, 0, SEEK_SET);
+		seekdir(dir_, 0);
 	} else {
 	}
 */
@@ -64,21 +69,22 @@ i32 CDirectory::read (Dirent& result)
 		return -1;
 	}
 
-	dirent* dp = readdir(dir_);
+	dirent* entry = readdir(dir_);
 
-	if(dp == 0) {
+	if(entry == 0) {
 		return 0;
 	}
 
-	struct stat* dstat;
-	
-	int err = stat(dp->d_name, dstat);
+	std::string dname = path_ + "/" + entry->d_name;
+	struct stat dstat;
+
+	int err = stat(dname.c_str(), &dstat);
 	if(err < 0) {
 		return -1;
 	}
 
 	//Dirent dent;
-	switch(dstat->st_mode & S_IFMT) {
+	switch(dstat.st_mode & S_IFMT) {
 	case S_IFREG:
 		result.type = Dirent::Type::File;
 		break;
@@ -88,8 +94,8 @@ i32 CDirectory::read (Dirent& result)
 	default:
 		result.type = Dirent::Type::Unknown;
 	}
-
-	result.name = std::string(dp->d_name);
+	
+	result.name = dname;
 
 	return 1;
 }
