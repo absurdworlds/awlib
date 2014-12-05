@@ -22,30 +22,28 @@ namespace io {
 
 class CDirectory : public IDirectory {
 public:
-	CDirectory(std::string const& path);
-	virtual ~CDirectory();
+	CDirectory (std::string const& path);
+	virtual ~CDirectory ();
 	
-	virtual i32 read(Dirent& result);
-	virtual void seek(u32 offset);
-	virtual void rewind();
-	virtual u32 tell() const;
+	virtual i32 read (Dirent& result);
+	virtual void seek (u32 offset);
+	virtual void rewind ();
+	virtual u32 tell () const;
 
-	virtual bool isOpen() const
+	virtual bool isOpen () const
 	{
 		return dir_ != 0;
 	}
 
-	virtual const std::string& getPath() const;
+	virtual const std::string& getPath () const;
 
 private:
-	void open();
+	void open ();
 
 	DIR* dir_;
 	std::string path_;
 };
 
-
 } // namespace io
 } // namespace hrengin
-
 #endif//_hrengin_CDirectory_

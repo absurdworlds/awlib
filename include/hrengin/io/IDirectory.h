@@ -51,11 +51,10 @@ public:
 	virtual bool isOpen() const = 0;
 
 	/*! Get absolute path of the directory */	
-	virtual std::string const& getPath() const;
+	virtual std::string const& getPath() const = 0;
 };
 
 HR_IO_EXP IDirectory* openDirectory (std::string path);
 } // namespace io
 } // namespace hrengin
-
 #endif //_hrengin_IDirectory_

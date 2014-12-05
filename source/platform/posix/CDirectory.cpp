@@ -15,7 +15,7 @@
 namespace hrengin {
 namespace io {
 
-IDirectory* openDirectory(std::string path)
+IDirectory* openDirectory (std::string path)
 {
 	IDirectory* dir = new CDirectory(path);
 	
@@ -26,25 +26,21 @@ IDirectory* openDirectory(std::string path)
 	return 0;
 }
 
-CDirectory::CDirectory(const std::string& path)
+CDirectory::CDirectory (const std::string& path)
 : dir_(0), path_(path)
 {
-	//TRACE("Opening file:", path)
-
 	this->open();
 }
 
 
-CDirectory::~CDirectory()
+CDirectory::~CDirectory ()
 {
-	//TRACE("Closing file:", path_)
-
 	if(isOpen()) {
 		closedir(dir_);
 	}
 }
 
-void CDirectory::open()
+void CDirectory::open ()
 {
 	if (path_.size() == 0) {
 		dir_ = 0;
@@ -62,7 +58,7 @@ void CDirectory::open()
 */
 }
 
-i32 CDirectory::read(Dirent& result)
+i32 CDirectory::read (Dirent& result)
 {
 	if (!isOpen()) {
 		return -1;
@@ -98,17 +94,17 @@ i32 CDirectory::read(Dirent& result)
 	return 1;
 }
 
-void CDirectory::seek(u32 offset)
+void CDirectory::seek (u32 offset)
 {
 	seekdir(dir_, offset);
 }
 
-void CDirectory::rewind()
+void CDirectory::rewind ()
 {
 	rewinddir(dir_);
 }
 
-u32 CDirectory::tell() const
+u32 CDirectory::tell () const
 {
 	return telldir(dir_);
 }
@@ -118,7 +114,7 @@ u32 CDirectory::getSize() const
 	return size_;
 }
 */
-const std::string& CDirectory::getPath() const
+const std::string& CDirectory::getPath () const
 {
 	return path_;
 }
