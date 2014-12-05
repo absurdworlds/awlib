@@ -47,20 +47,20 @@ void CDirectory::open ()
 		dir_ = 0;
 		return;
 	}
-	
-	dir_ = opendir(path_.c_str());
 
+	dir_ = opendir(path_.c_str());
+#if 0
 	if(path_.back() == '/') {
 		path_.pop_back();
 	}
-/*
+	
 	if (dir_) {
 		seekdir(dir_, 0);
 		size_ = telldir();
 		seekdir(dir_, 0);
 	} else {
 	}
-*/
+#endif
 }
 
 i32 CDirectory::read (Dirent& result)
@@ -95,7 +95,7 @@ i32 CDirectory::read (Dirent& result)
 		result.type = Dirent::Type::Unknown;
 	}
 	
-	result.name = dname;
+	result.name = entry->d_name;
 
 	return 1;
 }

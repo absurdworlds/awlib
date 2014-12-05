@@ -13,6 +13,17 @@
 
 #include <hrengin/io/IDirectory.h>
 
+void print_file(char const* path, char const* name)
+{
+	std::string filename = path;
+	if(filename.back() != '/') {
+		filename += "/";
+	}
+	filename += name;
+	
+	printf("%s\n", filename.c_str());
+}
+
 int listdir_dirent(char const* path)
 {
 	struct dirent *entry;
@@ -26,10 +37,8 @@ int listdir_dirent(char const* path)
 
 	struct stat dstat;
 
-	while((entry = readdir(dp))) {
-		char filename[512];
-		snprintf(filename, sizeof(filename), "%s/%s", path, entry->d_name);
-		printf("%s\n", filename, stat(filename, &dstat));
+	while((entry = readdir(dp))) {		
+		print_file(path, entry->d_name);
 	}
 
 	closedir(dp);
@@ -49,7 +58,7 @@ int listdir_hrengin(char const* path)
 	io::Dirent dent;
 
 	while(dir->read(dent) > 0) {
-		printf("%s\n", dent.name.c_str());
+		print_file(path, dent.name.c_str());
 	}
 
 	return 0;
