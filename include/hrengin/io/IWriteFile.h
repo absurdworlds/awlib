@@ -25,7 +25,7 @@ public:
 	/*! Write \a size bytes into file stream from \a buffer.
 	 * \param buffer Pointer to first object of source buffer.
 	 * \param size Number of bytes to read.
-	 * \return 0 if write was successful, \a -error_code otherwise.
+	 * \return >0 if write was successful, \a -error_code otherwise.
 	 */ 
 	virtual i32 write (void const* buffer, u32 size) = 0;
 

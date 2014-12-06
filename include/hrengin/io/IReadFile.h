@@ -25,7 +25,7 @@ public:
 	/*! Read \a size bytes into \a buffer.
 	 * \param buffer Pointer to first object of target buffer.
 	 * \param size Number of bytes to read.
-	 * \return 0 if read was successful, \a -error_code otherwise.
+	 * \return >0 if read was successful, \a -error_code otherwise.
 	 */ 
 	virtual i32 read (void* buffer, u32 size) = 0;
 };
