@@ -19,18 +19,36 @@ namespace io {
 //! Used to parse command line arguments passed to the program
 class IArgParser {
 public:
-	virtual ~IArgParser() 
+	//! Type of token
+	enum TokenType {
+		//! Short option ('-o')
+		ShortOpt,
+		//! Long option ('--option')
+		LongOpt,
+		//! Argument ('argument')
+		Argument
+	};
+
+	//! Command line token, represents a single option or argument
+	struct Token {
+		TokenType type;
+		std::string value;
+	};
+
+	//! Virtual destructor
+	virtual ~IArgParser () 
 	{
 	}
-	virtual void registerOption(char const shortKey, std::string fullKey,
-		std::string description) = 0;
-	
-	virtual void process(std::string args) = 0;
-	
+
+	/* Get a single token
+	 * \param tok Object to hold result
+	 * \return >0 if successful, 0 upon reaching end
+	 */
+	virtual i32 getToken (IArgParser::Token& tok) = 0;
 };
 
 //! Create an argument parser
-HR_CORE_API IArgParser* createArgParser();
+HR_CORE_API IArgParser* createArgParser (std::string const& argv);
 
 } //namespace io
 } //namespace hrengin
