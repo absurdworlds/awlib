@@ -4,6 +4,7 @@ ipch/*/*
 dependencies/*
 *.o
 *.so
+*.[0-9]
 *.swp
 *.sln
 *.suo
