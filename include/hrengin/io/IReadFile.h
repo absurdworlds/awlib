@@ -31,7 +31,6 @@ public:
 };
 
 HR_IO_EXP IReadFile* openReadFile (std::string path);
-
 } // namespace io
 } // namespace hrengin
 #endif//_hrengin_IReadFile_

@@ -18,6 +18,7 @@ namespace hrengin {
 namespace io {
 //! Base class for file streams
 class IFile {
+public:
 	virtual ~IFile ()
 	{
 	}
@@ -40,7 +41,7 @@ class IFile {
 
 	/*! Get full path to file */
 	virtual std::string const& getPath () const = 0;
-}
+};
 } // namespace io
 } // namespace hrengin
 #endif//_hrengin_IFile_

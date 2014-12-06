@@ -17,10 +17,10 @@ namespace io {
 
 IWriteFile* openWriteFile (std::string path, IWriteFile::Mode mode)
 {
-	IWriteFile* writeFile = new CWriteFile(path);
+	IWriteFile* writeFile = new CWriteFile(path, mode);
 	
-	if (readFile->isOpen()) {
-		return readFile;
+	if (writeFile->isOpen()) {
+		return writeFile;
 	}
 
 	delete writeFile;
@@ -40,7 +40,7 @@ CWriteFile::~CWriteFile ()
 	}
 }
 
-void CReadFile::open ()
+void CWriteFile::open ()
 {
 	if (path_.size() == 0) {
 		return;
@@ -65,7 +65,7 @@ void CReadFile::open ()
 	}
 }
 
-i32 CWriteFile::write (void* buffer, u32 size)
+i32 CWriteFile::write (char const* buffer, u32 size)
 {
 	if (!isOpen()) {
 		return -1;
