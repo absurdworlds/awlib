@@ -1,11 +1,13 @@
 /*
-   Copyright (C) 2014  absurdworlds
-
-   License LGPLv3-only:
-   GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
-   This is free software: you are free to change and redistribute it.
-   There is NO WARRANTY, to the extent permitted by law.
+ * Copyright (C) 2014  absurdworlds
+ *
+ * License LGPLv3-only:
+ * GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
+ * This is free software: you are free to change and redistribute it.
+ * There is NO WARRANTY, to the extent permitted by law.
  */
+#include <stdio.h>
+
 #include <hrengin/core/ILogger.h>
 
 #include "CWriteFile.h"
@@ -15,28 +17,41 @@ namespace io {
 
 IWriteFile* openWriteFile (std::string path, IWriteFile::Mode mode)
 {
-	IWriteFile* readFile = new C/WriteFile(path);
+	IWriteFile* writeFile = new CWriteFile(path);
 	
 	if (readFile->isOpen()) {
 		return readFile;
 	}
 
+	delete writeFile;
 	return 0;
 }
 
 CWriteFile::CWriteFile (std::string const& path, IWriteFile::Mode mode)
-: file_(0), size_(0), path_(path)
+: file_(0), size_(0), path_(path), mode_(mode)
+{
+	this->open();
+}
+
+CWriteFile::~CWriteFile ()
+{
+	if(isOpen()) {
+		fclose(file_);
+	}
+}
+
+void CReadFile::open ()
 {
 	if (path_.size() == 0) {
 		return;
 	}
 	
-	switch(mode) {
+	switch(mode_) {
 	case IWriteFile::Mode::Overwrite:
-		file_ = fopen(path_.c_str(), "w");
+		file_ = fopen(path_.c_str(), "wb");
 		break;
 	case IWriteFile::Mode::Append:
-		file_ = fopen(path_.c_str(), "a");
+		file_ = fopen(path_.c_str(), "ab");
 		break;
 	default:
 		return;
@@ -47,13 +62,6 @@ CWriteFile::CWriteFile (std::string const& path, IWriteFile::Mode mode)
 		size_ = tell();
 		fseek(file_, 0, SEEK_SET);
 	} else {
-	}
-}
-
-CWriteFile::~CWriteFile ()
-{
-	if(isOpen()) {
-		fclose(file_);
 	}
 }
 

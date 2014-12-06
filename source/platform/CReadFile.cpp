@@ -1,11 +1,13 @@
 /*
-   Copyright (C) 2014  absurdworlds
-
-   License LGPLv3-only:
-   GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
-   This is free software: you are free to change and redistribute it.
-   There is NO WARRANTY, to the extent permitted by law.
+ * Copyright (C) 2014  absurdworlds
+ *
+ * License LGPLv3-only:
+ * GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
+ * This is free software: you are free to change and redistribute it.
+ * There is NO WARRANTY, to the extent permitted by law.
  */
+#include <stdio.h>
+
 #include <hrengin/core/ILogger.h>
 
 #include "CReadFile.h"
@@ -21,21 +23,18 @@ IReadFile* openReadFile (std::string path)
 		return readFile;
 	}
 
+	delete readFile;
 	return 0;
 }
 
 CReadFile::CReadFile (std::string const& path)
 : file_(0), size_(0), path_(path)
 {
-	//TRACE("Opening file:", path)
-
 	this->open();
 }
 
 CReadFile::~CReadFile ()
 {
-	//TRACE("Closing file:", path_)
-
 	if(isOpen()) {
 		fclose(file_);
 	}
@@ -44,22 +43,16 @@ CReadFile::~CReadFile ()
 void CReadFile::open ()
 {
 	if (path_.size() == 0) {
-		//TRACE("invalid filename (empty)")
-		file_ = 0;
 		return;
 	}
 
-	//file_ = open(path_.c_str(), O_RDONLY);
 	file_ = fopen(path_.c_str(), "rb");
 
 	if (file_) {
-		//lseek(file_, 0, SEEK_END);
 		fseek(file_, 0, SEEK_END);
 		size_ = tell();
-		//seek(file_, 0, SEEK_SET);
 		fseek(file_, 0, SEEK_SET);
 	} else {
-		//TRACE("File not found:", path_)
 	}
 }
 
@@ -69,7 +62,6 @@ i32 CReadFile::read (void* buffer, u32 size)
 		return -1;
 	}
 
-	//return (i32)read(file_, buffer, size);
 	return (i32)fread(buffer, 1, size, file_);
 }
 
