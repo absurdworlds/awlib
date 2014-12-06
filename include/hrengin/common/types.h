@@ -1,16 +1,15 @@
 /*
-   Copyright (C) 2014  absurdworlds
-
-   License LGPLv3-only:
-   GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
-   This is free software: you are free to change and redistribute it.
-   There is NO WARRANTY, to the extent permitted by law.
+ * Copyright (C) 2014  absurdworlds
+ *
+ * License LGPLv3-only:
+ * GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
+ * This is free software: you are free to change and redistribute it.
+ * There is NO WARRANTY, to the extent permitted by law.
  */
 #ifndef _hrengin_types_
 #define _hrengin_types_
 
 namespace hrengin {
-
 #if defined(_MSC_VER)
 	typedef unsigned __int8		u8;
 	typedef signed __int8		i8;
@@ -47,7 +46,5 @@ typedef u8 byte;
 #else
 	typedef u32 handle;
 #endif
-
 } // namespace hrengin
-
 #endif //_hrengin_types_

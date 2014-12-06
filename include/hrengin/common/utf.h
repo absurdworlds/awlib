@@ -1,10 +1,10 @@
 /*
-   Copyright (C) 2014  absurdworlds
-
-   License LGPLv3-only:
-   GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
-   This is free software: you are free to change and redistribute it.
-   There is NO WARRANTY, to the extent permitted by law.
+ * Copyright (C) 2014  absurdworlds
+ *
+ * License LGPLv3-only:
+ * GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
+ * This is free software: you are free to change and redistribute it.
+ * There is NO WARRANTY, to the extent permitted by law.
  */
 #ifndef _hrengin_utf_
 #define _hrengin_utf_
@@ -15,6 +15,7 @@
 
 namespace hrengin {
 namespace locale {
+//! Enumeration of 'special' unicode codepoints
 enum class CodePoint : u32 {
 	MaxASCII = 0x80,
 	SurrogateStart =  0xD800,
@@ -40,12 +41,15 @@ inline bool isValidCodepoint(u32 cp)
 }
 
 namespace utf8 {
-inline bool isTrail(u32 cp)
+//! Check whether character is a trail shcracter
+inline bool isTrail(u8 ch)
 {
-	return (math::mask8<u32>(cp) & 0xC0) == 0x80;
-	//return (math::mask8<u32>(cp) & 0b1100000) == 0b10000000;
+	// Two most significant bits are equal '10'
+	return (ch & 0xC0) == 0x80;
+	//return (ch & 0b11000000) == 0b10000000;
 }
-	
+
+//! Determine how many characters are in an utf8 sequence
 inline size_t sequenceLength(u8 lead) {
 	if(lead < 0x80) {
 		return 1;
@@ -60,6 +64,7 @@ inline size_t sequenceLength(u8 lead) {
 	}
 }
 
+//! Determine how many characters are required to encode codepoint \a cp
 inline size_t width(u32 cp) {
 	if(cp < 0x80) {
 		return 1;

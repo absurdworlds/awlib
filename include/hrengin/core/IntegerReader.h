@@ -53,6 +53,4 @@ u32 getInt32(IReadFile* file)
 
 } // namespace io
 } // namespace hrengin
-
-
 #endif//_hrengin_IIntegerStream_
