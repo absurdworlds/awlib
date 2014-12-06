@@ -1,10 +1,10 @@
 /*
-   Copyright (C) 2014  absurdworlds
-
-   License LGPLv3-only:
-   GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
-   This is free software: you are free to change and redistribute it.
-   There is NO WARRANTY, to the extent permitted by law.
+ * Copyright (C) 2014  absurdworlds
+ *
+ * License LGPLv3-only:
+ * GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
+ * This is free software: you are free to change and redistribute it.
+ * There is NO WARRANTY, to the extent permitted by law.
  */
 #ifndef _hrengin_default_texture_
 #define _hrengin_default_texture_
@@ -12,8 +12,7 @@
 #include <hrengin/common/types.h>
 
 namespace hrengin {
-
-//! default texture in png format, which will be when requested one is absent
+//! default texture in png format, which is used when requested one is absent
 const u8 default_texture[] = {
 	137,80,78,71,13,10,26,10,0,0,0,13,73,72,68,82,0,0,0,64,0,0,0,64,1,3,0,
 	0,0,144,167,227,157,0,0,0,9,112,72,89,115,0,0,14,195,0,0,14,195,1,199,
@@ -30,5 +29,4 @@ const u8 default_texture[] = {
 };
 
 } // namespace hrengin 
-
 #endif//_hrengin_default_texture_
