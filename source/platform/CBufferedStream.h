@@ -28,7 +28,7 @@ public:
 
 private:
 	IReadFile* source_;
-	char* buffer_;
+	char cur_;
 	u32 pos_;
 };
 
