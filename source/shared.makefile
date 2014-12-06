@@ -14,6 +14,7 @@ InstallDir = ../../lib
 
 CompilerFlags  = -g -D_DEBUG
 CompilerFlags += -fPIC
+CompilerFlags += -fno-exceptions
 CompilerFlags += -fvisibility=hidden
 
 CPPFLAGS = $(Defines) $(Includes)
@@ -30,4 +31,4 @@ endif
 
 .PHONY : clean
 clean:
-	-rm $(SharedLibFullName) $(Objects)
+	-rm $(SharedLibFullName) *.o
