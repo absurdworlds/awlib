@@ -11,28 +11,29 @@
 
 #include <string>
 
-#include <hrengin/core/api.h>
+#include <hrengin/core/core.h>
+#include <hrengin/common/types.h>
 
 namespace hrengin {
 namespace io {
-
 //! Used to parse command line arguments passed to the program
 class IArgParser {
 public:
 	//! Type of token
 	enum TokenType {
 		//! Short option ('-o')
-		ShortOpt,
+		Option,
 		//! Long option ('--option')
 		LongOpt,
-		//! Argument ('argument')
-		Argument
+		//! Argument or operand
+		Argument,
+		Operand = Argument
 	};
 
 	//! Command line token, represents a single option or argument
 	struct Token {
 		TokenType type;
-		std::string value;
+		std::string name;
 	};
 
 	//! Virtual destructor
@@ -47,8 +48,12 @@ public:
 	virtual i32 getToken (IArgParser::Token& tok) = 0;
 };
 
-//! Create an argument parser
-HR_CORE_API IArgParser* createArgParser (std::string const& argv);
+/*! Create an argument parser
+ * \param argv Array of argument strings.
+ * Each argument must be null-terminated.
+ * Last element of array must be 0.
+ */
+HR_CORE_EXP IArgParser* createArgParser (char** argv);
 
 } //namespace io
 } //namespace hrengin
