@@ -2,10 +2,7 @@
 ExternalIncludes = -I../../dependencies/include/
 ExternalLibraries =
 
-
-# Version
-VersionMajor = 1
-VersionMinor = 3
+include ../../Makefile
 
 # Includes and objects
 Objects = CSettingsManager.o CModelLoader.o CLogger.o CHrenginShell.o CHDFParser.o CFileSystem.o

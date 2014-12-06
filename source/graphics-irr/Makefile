@@ -1,10 +1,7 @@
+include ../../Makefile
 # Add paths to dependency headers here
 ExternalIncludes = -I../../dependencies/include/
 ExternalLibraries = -L../../dependencies/lib -lIrrlicht
-
-# Version
-VersionMajor = 1
-VersionMinor = 3
 
 # Includes and objects
 Objects = CCameraNode.o CConsoleGUI.o CGUIListBox.o CGuiManager.o CGUITextBox.o CGUIWindow.o CInputManager.o CLightNode.o CRenderingDevice.o CSceneManager.o CVideoManager.o CVisNode.o CEntityNode.o 

@@ -1,10 +1,8 @@
+include ../../Makefile
+
 # Add paths to dependency headers here
 ExternalIncludes = -I../dependencies/include/
 ExternalLibraries = -Wl,-rpath-link,./,-rpath-link,../../dependencies/lib,-R,'$$ORIGIN/../lib'
-
-# Version
-VersionMajor = 1
-VersionMinor = 3
 
 # Includes and objects
 Objects = CGame.o game.o

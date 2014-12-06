@@ -1,10 +1,7 @@
+include ../../Makefile
 # Add paths to dependency headers here
 ExternalIncludes = -I../dependencies/include/
 ExternalLibraries =
-
-# Version
-VersionMajor = 1
-VersionMinor = 3
 
 # Includes and objects
 Objects = Matrix4_inverse.o

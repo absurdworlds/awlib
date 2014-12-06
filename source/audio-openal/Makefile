@@ -2,10 +2,7 @@
 ExternalIncludes = -I../../dependencies/include/ -I /usr/include/AL
 ExternalLibraries =
 
-
-# Version
-VersionMajor = 1
-VersionMinor = 3
+include ../../Makefile
 
 # Includes and objects
 Objects = CSoundManager.o CSound.o
