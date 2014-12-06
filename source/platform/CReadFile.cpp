@@ -13,7 +13,7 @@
 namespace hrengin {
 namespace io {
 
-IReadFile* openReadFile(std::string path)
+IReadFile* openReadFile (std::string path)
 {
 	IReadFile* readFile = new CReadFile(path);
 	
@@ -24,7 +24,7 @@ IReadFile* openReadFile(std::string path)
 	return 0;
 }
 
-CReadFile::CReadFile(std::string const& path)
+CReadFile::CReadFile (std::string const& path)
 : file_(0), size_(0), path_(path)
 {
 	//TRACE("Opening file:", path)
@@ -32,8 +32,7 @@ CReadFile::CReadFile(std::string const& path)
 	this->open();
 }
 
-
-CReadFile::~CReadFile()
+CReadFile::~CReadFile ()
 {
 	//TRACE("Closing file:", path_)
 
@@ -42,7 +41,7 @@ CReadFile::~CReadFile()
 	}
 }
 
-void CReadFile::open()
+void CReadFile::open ()
 {
 	if (path_.size() == 0) {
 		//TRACE("invalid filename (empty)")
@@ -64,7 +63,7 @@ void CReadFile::open()
 	}
 }
 
-i32 CReadFile::read(void* buffer, u32 size)
+i32 CReadFile::read (void* buffer, u32 size)
 {
 	if (!isOpen()) {
 		return -1;
@@ -74,7 +73,7 @@ i32 CReadFile::read(void* buffer, u32 size)
 	return (i32)fread(buffer, 1, size, file_);
 }
 
-i32 CReadFile::seek(i32 offset, bool relative)
+i32 CReadFile::seek (i32 offset, bool relative)
 {
 	if (!isOpen()) {
 		return -1;
@@ -83,17 +82,17 @@ i32 CReadFile::seek(i32 offset, bool relative)
 	return fseek(file_, offset, relative ? SEEK_CUR : SEEK_SET);
 }
 
-u32 CReadFile::tell() const
+u32 CReadFile::tell () const
 {
 	return ftell(file_);
 }
 
-u32 CReadFile::getSize() const
+u32 CReadFile::getSize () const
 {
 	return size_;
 }
 
-std::string const& CReadFile::getPath() const
+std::string const& CReadFile::getPath () const
 {
 	return path_;
 }

@@ -28,18 +28,18 @@ class IFile {
 	 * otherwise to the beginning of gile.
 	 * \return 0 if seek was successful, \a -error_code otherwise
 	 */ 
-	virtual i32 seek(i32 offset, bool relative = false) = 0;
+	virtual i32 seek (i32 offset, bool relative = false) = 0;
 	/* Get current position in file stream. */
-	virtual u32 tell() const = 0;
+	virtual u32 tell () const = 0;
 
 	/*! Get size of file in bytes */
-	virtual u32 getSize() const = 0;
+	virtual u32 getSize () const = 0;
 
 	/*! \return \a true if file is open. */
-	virtual bool isOpen() const = 0;
+	virtual bool isOpen () const = 0;
 
 	/*! Get full path to file */
-	virtual std::string const& getPath() const = 0;
+	virtual std::string const& getPath () const = 0;
 }
 } // namespace io
 } // namespace hrengin

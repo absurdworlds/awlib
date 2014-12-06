@@ -11,8 +11,6 @@
 
 #include <stdio.h>
 
-#include <string>
-
 #include <hrengin/io/IReadFile.h>
 
 namespace hrengin {
@@ -20,30 +18,29 @@ namespace io {
 
 class CReadFile : public IReadFile {
 public:
-	CReadFile(std::string const& path);
+	CReadFile (std::string const& path);
 
 	virtual ~CReadFile();
 	
-	virtual i32 read(void* buffer, u32 size);
-	virtual i32 seek(i32 offset, bool relative = false);
-	virtual u32 tell() const;
-	virtual u32 getSize() const;
+	virtual i32 read (void* buffer, u32 size);
+	virtual i32 seek (i32 offset, bool relative = false);
+	virtual u32 tell () const;
+	virtual u32 getSize () const;
 
-	virtual bool isOpen() const
+	virtual bool isOpen () const
 	{
 		return file_ != 0;
 	}
 
-	virtual std::string const& getPath() const;
+	virtual std::string const& getPath () const;
 
 private:
-	void open();
+	void open ();
 
 	FILE* file_;
 	u32 size_;
 	std::string path_;
 };
-
 
 } // namespace io
 } // namespace hrengin

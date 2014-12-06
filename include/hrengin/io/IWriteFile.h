@@ -43,7 +43,7 @@ public:
  * \paran path Full path to file
  * \param mode File access mode, \see IWriteFile;:Mode
  */
-HR_IO_EXP IWriteFile* openWriteFile (std::string path, IWriteFile;:Mode mode);
+HR_IO_EXP IWriteFile* openWriteFile (std::string path, IWriteFile::Mode mode);
 
 } // namespace io
 } // namespace hrengin
