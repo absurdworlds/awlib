@@ -5,7 +5,9 @@ ExternalIncludes = -I../../dependencies/include/
 ExternalLibraries = 
 
 # Includes and objects
-Objects = CCharacterStream.o CBufferedStream.o CReadFile.o linux/time.o posix/CDirectory.o
+Objects = CCharacterStream.o CBufferedStream.o \
+	  CReadFile.o CWriteFile.o posix/CDirectory.o \
+	  linux/time.o
 Includes = -I../../include $(ExternalIncludes)
 Libraries = $(ExternalLibraries)
 Defines = -D HR_MODULE_PLATFORM -D HR_MODULE_IO
