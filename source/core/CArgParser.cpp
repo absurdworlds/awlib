@@ -9,7 +9,7 @@
 #include "CArgParser.h"
 
 namespace hrengin {
-namespace io {
+namespace core {
 IArgParser* createArgParser (char** argv)
 {
 	return new CArgParser(argv);
@@ -21,7 +21,7 @@ CArgParser::CArgParser(char** argv)
 	parse(argv);
 }
 
-i32 CArgParser::getToken (IArgParser::Token& tok)
+i32 CArgParser::getToken (ClineArg& tok)
 {
 	if(tokens_.empty()) {
 		return 0;
@@ -43,10 +43,10 @@ void CArgParser::parse (char** argv)
 
 void CArgParser::parseToken (char* argv)
 {
-	IArgParser::Token tok;
+	ClineArg tok;
 
 	if(term_ || *argv != '-') {
-		tok.type = IArgParser::Argument;
+		tok.type = ClineArg::Operand;
 		tok.name = readString(argv);
 		tokens_.push_front(tok);
 		return;
@@ -54,16 +54,17 @@ void CArgParser::parseToken (char* argv)
 
 	++argv;
 
-	tok.type = IArgParser::Option;
+	tok.type = ClineArg::Option;
 	if(*argv == 0) {
 		tok.name = '-';
 	} else if (*argv == '-') {
 		++argv;
 		if(*argv == 0) {
+			tok.type = ClineArg::Delim;
 			tok.name = "--";
 			term_ = true;
 		} else {
-			tok.type = IArgParser::LongOpt;
+			tok.longOpt = true;
 			tok.name = readString(argv);
 		}
 	} else {
@@ -90,5 +91,5 @@ std::string CArgParser::readString (char* argv)
 	return s;
 }
 
-} //namespace io
+} //namespace core
 } //namespace hrengin

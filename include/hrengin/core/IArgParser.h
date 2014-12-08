@@ -15,27 +15,28 @@
 #include <hrengin/common/types.h>
 
 namespace hrengin {
-namespace io {
+namespace core {
+/*!
+ * Command-line argument,
+ * represents a single option or argument
+ */
+struct ClineArg {
+	enum Type : u8 {
+		//! Short option ('-o')
+		Option,
+		//! Argument or operand
+		Argument,
+		Operand = Argument,
+		Delim
+	} type;
+	//! Is a long option
+	bool longOpt;
+	std::string name;
+};
+
 //! Used to parse command line arguments passed to the program
 class IArgParser {
 public:
-	//! Type of token
-	enum TokenType {
-		//! Short option ('-o')
-		Option,
-		//! Long option ('--option')
-		LongOpt,
-		//! Argument or operand
-		Argument,
-		Operand = Argument
-	};
-
-	//! Command line token, represents a single option or argument
-	struct Token {
-		TokenType type;
-		std::string name;
-	};
-
 	//! Virtual destructor
 	virtual ~IArgParser () 
 	{
@@ -45,16 +46,16 @@ public:
 	 * \param tok Object to hold result
 	 * \return >0 if successful, 0 upon reaching end
 	 */
-	virtual i32 getToken (IArgParser::Token& tok) = 0;
+	virtual i32 getToken (ClineArg& tok) = 0;
 };
 
-/*! Create an argument parser
- * \param argv Array of argument strings.
- * Each argument must be null-terminated.
- * Last element of array must be 0.
+/*!
+ * Create an argument parser
+ * \param argv Array of pointers to command line token strings.
+ * \note Each string must be null-terminated. Last element of array must be 0.
  */
 HR_CORE_EXP IArgParser* createArgParser (char** argv);
 
-} //namespace io
+} //namespace core
 } //namespace hrengin
 #endif//_hrengin_IArgParser_

@@ -13,7 +13,7 @@
 #include <hrengin/core/IArgParser.h>
 
 namespace hrengin {
-namespace io {
+namespace core {
 
 class CArgParser : public IArgParser {
 public:
@@ -22,16 +22,16 @@ public:
 	{
 	}
 
-	virtual i32 getToken (IArgParser::Token& tok);
+	virtual i32 getToken (ClineArg& tok);
 private:
 	void parse (char** argv);
 	void parseToken (char* argv);
 	std::string readString (char* argv);
 		
-	std::deque<IArgParser::Token> tokens_;
+	std::deque<ClineArg> tokens_;
 	bool term_;
 };
 
-} //namespace io
+} //namespace core
 } //namespace hrengin
 #endif//_hrengin_IArgParser_
