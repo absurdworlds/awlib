@@ -20,7 +20,7 @@ public:
 
 	virtual ~CWriteFile ();
 
-	virtual i32 write (char const* buffer, u32 size);
+	virtual i32 write (void const* buffer, u32 size);
 	virtual i32 seek (i32 offset, bool relative = false);
 	virtual u32 tell () const;
 	virtual u32 getSize () const;

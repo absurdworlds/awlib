@@ -65,7 +65,7 @@ void CWriteFile::open ()
 	}
 }
 
-i32 CWriteFile::write (char const* buffer, u32 size)
+i32 CWriteFile::write (void const* buffer, u32 size)
 {
 	if (!isOpen()) {
 		return -1;

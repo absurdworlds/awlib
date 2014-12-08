@@ -27,7 +27,7 @@ public:
 	 * \param size Number of bytes to read.
 	 * \return >0 if write was successful, \a -error_code otherwise.
 	 */ 
-	virtual i32 write (char const* buffer, u32 size) = 0;
+	virtual i32 write (void const* buffer, u32 size) = 0;
 
 	/*! File access mode
 	 * \a Overwrite will destroy file contents upon opening
