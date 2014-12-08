@@ -13,19 +13,19 @@
 int main (int, char** v)
 {
 	using namespace hrengin;
-	io::IArgParser* a = io::createArgParser(v);
-	io::IArgParser::Token tok;
+	core::IArgParser* a = core::createArgParser(v);
+	core::ClineArg tok;
 
 	while(a->getToken(tok)) {
 		char c;
 		switch(tok.type) {
-		case io::IArgParser::Option:
-			c = 'o';
+		case core::ClineArg::Option:
+			c = tok.longOpt ? 'l' : 'o';
 			break;
-		case io::IArgParser::LongOpt:
-			c = 'l';
+		case core::ClineArg::Delim:
+			c = 'd';
 			break;
-		case io::IArgParser::Argument:
+		case core::ClineArg::Argument:
 			c = 'a';
 			break;
 		}	
