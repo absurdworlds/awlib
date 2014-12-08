@@ -14,9 +14,9 @@
 #include <hrengin/common/types.h>
 
 namespace hrengin {
+// ITD : Intelligently Trampled Data
 // source:
 // (09:23:04 AM) Spectre: gcfscape185(открыча гцф впк итд).zip
-//! ITD : Intelligently Trampled Data
 namespace itd {
 #ifdef HR_MODULE_ITD
 	#define HR_ITD_EXP HR_EXPORT
@@ -31,24 +31,37 @@ enum Flags : u16 {
 
 //! Header of ITD
 struct Header {
-	//! File type indetifier
-	u32 const fileId; // 'hitd'
+	Header ()
+		: padding{0}
+	{
+	}
+
+	//! File type indetifier, should be 'hitd'
+	u32 fileId;
 	//! hrengin package format version
 	u32 version;
 	//! Time packaged;
 	u64 ptime;
 	//! Flags
 	Flags flags;
+	//! Secondary identifier, application-specific
+	u32 secondId;
+	char padding[44];
 };
 
 //! File flags
 enum FileFlags : u16 {
+	None,
 	//! Specifies whether file can be executed.
 	Exec = 1,
 };
 
 //! Represents a file entry
 struct FileEntry {
+	FileEntry ()
+		: padding{0}
+	{
+	}
 	//! Position of first element from beginning of the package
 	u64 offset;
 	//! Size of file in bytes
@@ -57,8 +70,8 @@ struct FileEntry {
 	u64 mtime;
 	//! Flags
 	FileFlags flags;
-	//! 
-	u16 reserved[3];
+	//! Padding to 32 bytes
+	u8 padding[6];
 };
 
 #if 0
