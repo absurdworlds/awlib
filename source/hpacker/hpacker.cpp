@@ -12,6 +12,7 @@
 #include <hrengin/io/IDirectory.h>
 #include <hrengin/core/IArgParser.h>
 #include <sys/stat.h>
+#include <cstdio>
 
 #include "hpacker.h"
 
@@ -171,6 +172,7 @@ i32 main (char** args)
 		packer.pack(dir, true);
 		packer.writeIndex();
 		packer.writeArchive();
+		remove((filename + ".tmp.1").c_str());
 	}
 
 #if 0
