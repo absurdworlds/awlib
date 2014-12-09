@@ -14,7 +14,7 @@
 
 #include <hrengin/common/types.h>
 #include <hrengin/hitd/hitd.h>
-#include <hrengin/io/IWriteFile.h>
+#include <hrengin/io/CWriteFile.h>
 
 namespace hrengin {
 namespace itd {
@@ -30,8 +30,10 @@ public:
 	CItdPacker (std::string name);
 	~CItdPacker ();
 
-	i32 packDir(std::string path, bool recursive);
-	i32 addFile (std::string path, io::Dirent file);
+	i32 pack (std::string path, bool recursive);
+
+	i32 packDir (std::string path, bool recursive, io::CWriteFile& tmp);
+	i32 addFile (std::string path, io::Dirent file, io::CWriteFile& tmp);
 
 	i32 writeIndex();
 	i32 writeArchive();
@@ -39,8 +41,8 @@ public:
 private:
 	std::vector<itd::FileEntry> index_;
 	std::string name_;
-	io::IWriteFile* archive_;
-	io::IWriteFile* tmp_;
+	io::CWriteFile archive_;
+	// Global offset for file data
 	u64 globalOffset_;
 };
 } // namespace itd
