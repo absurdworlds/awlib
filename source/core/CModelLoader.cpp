@@ -1,10 +1,10 @@
 /*
-   Copyright (C) 2014  absurdworlds
-
-   License LGPLv3-only:
-   GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
-   This is free software: you are free to change and redistribute it.
-   There is NO WARRANTY, to the extent permitted by law.
+ * Copyright (C) 2014  absurdworlds
+ *
+ * License LGPLv3-only:
+ * GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
+ * This is free software: you are free to change and redistribute it.
+ * There is NO WARRANTY, to the extent permitted by law.
  */
 #include <hrengin/core/models.h>
 #include <hrengin/core/paths.h>
@@ -12,7 +12,7 @@
 
 #include <hrengin/core/IFileSystem.h>
 
-#include <hrengin/io/IReadFile.h>
+#include <hrengin/io/CReadFile.h>
 #include <hrengin/io/IBufferedStream.h>
 
 #include <hrengin/hdf/IHDFParser.h>
@@ -32,14 +32,14 @@ IModelLoader* createModelLoader()
 	return new CModelLoader();
 }
 
-IModel* CModelLoader::loadModel(const char* filename)
+IModel* CModelLoader::loadModel(char const* filename)
 {
 	std::string path = io::modelpath + filename;
 	std::string ext;
 
-	io::IReadFile* file = io::openReadFile(path);
+	io::CReadFile file(path);
 
-	if (!file) {
+	if (!file.isOpen()) {
 		return 0;
 	}
 	
@@ -56,8 +56,6 @@ IModel* CModelLoader::loadModel(const char* filename)
 		delete hdf;
 		delete stream;
 	}
-
-	delete file;
 
 	return model;
 }

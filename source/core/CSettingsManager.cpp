@@ -1,15 +1,14 @@
 /*
-   Copyright (C) 2014  absurdworlds
-
-   License LGPLv3-only:
-   GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
-   This is free software: you are free to change and redistribute it.
-   There is NO WARRANTY, to the extent permitted by law.
+ * Copyright (C) 2014  absurdworlds
+ *
+ * License LGPLv3-only:
+ * GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
+ * This is free software: you are free to change and redistribute it.
+ * There is NO WARRANTY, to the extent permitted by law.
  */
-
 #include <hrengin/resources/default_settings.h>
 #include <hrengin/hdf/IHDFParser.h>
-#include <hrengin/io/IReadFile.h>
+#include <hrengin/io/CReadFile.h>
 #include <hrengin/io/ICharacterStream.h>
 #include <hrengin/io/IBufferedStream.h>
 
@@ -30,11 +29,13 @@ CSettingsManager::CSettingsManager()
 
 void CSettingsManager::loadSettings()
 {
-	io::IReadFile* file = io::openReadFile("../data/settings.hdf");
+	io::CReadFile file("../data/settings.hdf");
+
 	io::ICharacterStream* stream;
 	hdf::IHDFParser* hdf;
 
-	stream = file ? io::createBufferedStream(file)
+	stream = file.isOpen() 
+		? io::createBufferedStream(file)
 		: io::createCharacterStream(default_settings);
 
 	hdf = hdf::createHDFParser(stream);
@@ -42,7 +43,6 @@ void CSettingsManager::loadSettings()
 
 	delete hdf;
 	delete stream;
-	delete file;
 }
 
 void CSettingsManager::parseSettings(hdf::IHDFParser* hdf)

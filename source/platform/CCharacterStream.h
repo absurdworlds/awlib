@@ -19,7 +19,7 @@ class IReadFile;
 
 class CCharacterStream : public ICharacterStream {
 public:
-	CCharacterStream(const char* source)
+	CCharacterStream(char const* source)
 		: source_(source), pos_(0)
 	{
 	
@@ -54,7 +54,7 @@ public:
 	}
 
 private:
-	const char* source_;
+	char const* source_;
 	u32 pos_;
 };
 

@@ -13,7 +13,7 @@
 
 namespace hrengin {
 namespace io {
-class IReadFile;
+class CReadFile;
 
 //! Class defines an interface for buffered file stream
 class IBufferedStream : public ICharacterStream {
@@ -24,7 +24,7 @@ public:
 };
 
 //! Create a buffered file stream
-HR_SYS_EXP IBufferedStream* createBufferedStream(IReadFile* source);
+HR_SYS_EXP IBufferedStream* createBufferedStream(CReadFile& source);
 
 } //namespace io
 } //namespace hrengin

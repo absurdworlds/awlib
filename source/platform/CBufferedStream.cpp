@@ -6,18 +6,19 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#include <hrengin/io/IReadFile.h>
+#include <hrengin/io/CReadFile.h>
 
 #include "CBufferedStream.h"
 
 namespace hrengin {
 namespace io {
-IBufferedStream* createBufferedStream(IReadFile* source)
+IBufferedStream* createBufferedStream(CReadFile& source)
 {
-	return new CBufferedStream(source);
+	// temporary hack
+	return new CBufferedStream(&source);
 }
 
-CBufferedStream::CBufferedStream(IReadFile* source)
+CBufferedStream::CBufferedStream(CReadFile* source)
 : pos_(0), source_(source)
 {
 	//TODO: may crash on file of zero length
