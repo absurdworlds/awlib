@@ -10,25 +10,13 @@
 
 #include <hrengin/core/ILogger.h>
 
-#include "CReadFile.h"
+#include <hrengin/io/CReadFile.h>
 
 namespace hrengin {
 namespace io {
 
-IReadFile* openReadFile (std::string path)
-{
-	IReadFile* readFile = new CReadFile(path);
-	
-	if (readFile->isOpen()) {
-		return readFile;
-	}
-
-	delete readFile;
-	return 0;
-}
-
 CReadFile::CReadFile (std::string const& path)
-: file_(0), size_(0), path_(path)
+	: IFile(path)
 {
 	this->open();
 }

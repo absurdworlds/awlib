@@ -10,25 +10,13 @@
 
 #include <hrengin/core/ILogger.h>
 
-#include "CWriteFile.h"
+#include <hrengin/io/CWriteFile.h>
 
 namespace hrengin {
 namespace io {
 
-IWriteFile* openWriteFile (std::string path, IWriteFile::Mode mode)
-{
-	IWriteFile* writeFile = new CWriteFile(path, mode);
-	
-	if (writeFile->isOpen()) {
-		return writeFile;
-	}
-
-	delete writeFile;
-	return 0;
-}
-
-CWriteFile::CWriteFile (std::string const& path, IWriteFile::Mode mode)
-: file_(0), size_(0), path_(path), mode_(mode)
+CWriteFile::CWriteFile (std::string const& path, FileMode mode)
+	: IFile(path), mode_(mode)
 {
 	this->open();
 }
@@ -47,10 +35,10 @@ void CWriteFile::open ()
 	}
 	
 	switch(mode_) {
-	case IWriteFile::Mode::Overwrite:
+	case FileMode::Overwrite:
 		file_ = fopen(path_.c_str(), "wb");
 		break;
-	case IWriteFile::Mode::Append:
+	case FileMode::Append:
 		file_ = fopen(path_.c_str(), "ab");
 		break;
 	default:
