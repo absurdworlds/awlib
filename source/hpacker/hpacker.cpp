@@ -76,6 +76,8 @@ i32 CItdPacker::packDir (std::string path, bool recursive, io::CWriteFile& tmp)
 		}
 	};
 
+	return 0;
+
 }
 
 i32 CItdPacker::addFile (std::string path, io::Dirent file, io::CWriteFile& tmp)
