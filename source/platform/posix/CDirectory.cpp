@@ -1,10 +1,10 @@
 /*
-   Copyright (C) 2014  absurdworlds
-
-   License LGPLv3-only:
-   GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
-   This is free software: you are free to change and redistribute it.
-   There is NO WARRANTY, to the extent permitted by law.
+ * Copyright (C) 2014  absurdworlds
+ *
+ * License LGPLv3-only:
+ * GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
+ * This is free software: you are free to change and redistribute it.
+ * There is NO WARRANTY, to the extent permitted by law.
  */
 #include <iostream>
 #include <sys/stat.h>
@@ -50,10 +50,6 @@ void CDirectory::open ()
 
 	dir_ = opendir(path_.c_str());
 #if 0
-	if(path_.back() == '/') {
-		path_.pop_back();
-	}
-	
 	if (dir_) {
 		seekdir(dir_, 0);
 		size_ = telldir();
@@ -86,13 +82,13 @@ i32 CDirectory::read (Dirent& result)
 	//Dirent dent;
 	switch(dstat.st_mode & S_IFMT) {
 	case S_IFREG:
-		result.type = Dirent::Type::File;
+		result.type = FileType::File;
 		break;
 	case S_IFDIR:
-		result.type = Dirent::Type::Dir;
+		result.type = FileType::Dir;
 		break;
 	default:
-		result.type = Dirent::Type::Unknown;
+		result.type = FileType::Unknown;
 	}
 	
 	result.name = entry->d_name;
