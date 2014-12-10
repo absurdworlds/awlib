@@ -7,20 +7,131 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
+#include <cstdio>
+
 #include <hrengin/platform/time.h>
 #include <hrengin/io/CReadFile.h>
+#include <hrengin/io/filesystem.h>
 #include <hrengin/io/IDirectory.h>
 #include <hrengin/core/IArgParser.h>
-#include <sys/stat.h>
-#include <cstdio>
 
 #include "hpacker.h"
 
 namespace hrengin {
 namespace itd {
-CItdPacker::CItdPacker (std::string name)
-	: name_(name), archive_(name_, io::FileMode::Overwrite)
+CItdPacker::CItdPacker (std::string const& archive_name)
+	: name_(archive_name), archive_(name_, io::FileMode::Overwrite)
 {	
+}
+
+CItdPacker::~CItdPacker ()
+{
+	remove((name_ + ".tmp.1").c_str());
+}
+
+void CItdPacker::add_file (std::string const& filename)
+{
+	//TODO? check for validity
+	files_to_pack_.push_back(filename);
+}
+
+i32 CItdPacker::pack ()
+{
+	if(!archive_.isOpen()) {
+		return -1;
+	}
+	pack_archive();
+
+	write_header();
+	write_index();
+	write_archive();
+
+	return 0;
+}
+
+i32 CItdPacker::pack_archive ()
+{
+	io::CWriteFile tmp(name_ + ".tmp.1", io::FileMode::Overwrite);
+
+	if(!tmp.isOpen()) {
+		return -1;
+	}
+
+	for(auto file : files_to_pack_) {
+		pack_object(file, tmp);
+	}
+
+	return 0;
+}
+
+i32 CItdPacker::pack_object (std::string const& file, io::CWriteFile& tmp)
+{
+	io::FileInfo finfo = io::file_stat(file);
+
+	switch(finfo.type) {
+	case io::FileType::File:
+		pack_file(file, tmp);
+		break;
+	case io::FileType::Dir:
+		pack_dir(file, tmp);
+		break;
+	default:
+		return -1;
+	}
+
+	return 0;
+}
+
+
+i32 CItdPacker::pack_dir (std::string const& path, io::CWriteFile& tmp)
+{
+	io::IDirectory* dir = io::openDirectory(path);
+	if(!dir) {
+		return -1;
+	}
+
+	io::Dirent file;
+	while(dir->read(file)) {
+		if(file.name == "." || file.name == "..") {
+			continue;
+		}
+
+		pack_object (path + "/" + file.name, tmp);
+	};
+
+	return 0;
+
+}
+
+i32 CItdPacker::pack_file (std::string const& path, io::CWriteFile& tmp)
+{
+	io::CReadFile in(path);
+
+	if(!in.isOpen()) {
+		return -1;
+	}
+	
+	//printf("Adding: %s\n",(path + "/" + file.name).c_str());
+
+	itd::FileEntry entry;
+	entry.offset = tmp.tell();
+	entry.size   = in.getSize();
+	entry.mtime  = 0;
+	entry.flags  = itd::FileFlags::None;
+	index_.push_back(entry);
+
+	char* buf = new char[entry.size];
+
+	in.read(buf, entry.size);
+	tmp.write(buf, entry.size);
+
+	delete[] buf;
+
+	return 0;
+}
+
+void CItdPacker::write_header()
+{
 	itd::Header header;
 	header.fileId = 'h' + ('i' << 8) + ('t' << 16) + ('d' << 24);
 	header.version = 1;
@@ -35,80 +146,10 @@ CItdPacker::CItdPacker (std::string name)
 
 	// File index starts at offset 64
 	globalOffset_ = 64;
-}
-
-CItdPacker::~CItdPacker ()
-{
-}
-
-i32 CItdPacker::pack (std::string path, bool recursive)
-{
-	io::CWriteFile tmp(name_ + ".tmp.1", io::FileMode::Overwrite);
-
-	packDir(path, recursive, tmp);
-
-	return 0;
-}
-
-i32 CItdPacker::packDir (std::string path, bool recursive, io::CWriteFile& tmp)
-{
-	io::IDirectory* dir = io::openDirectory(path);
-	if(!dir) {
-		return -1;
-	}
-	io::Dirent file;
-
-	while(dir->read(file)) {
-		if(file.name == "." || file.name == "..") {
-			continue;
-		}
-
-		switch(file.type) {
-		case io::Dirent::Type::File:
-			addFile(path, file, tmp);
-			break;
-		case io::Dirent::Type::Dir:
-			if(recursive) {
-				packDir(path + "/" + file.name, true, tmp);
-			}
-			break;
-		default:
-			break;
-		}
-	};
-
-	return 0;
 
 }
 
-i32 CItdPacker::addFile (std::string path, io::Dirent file, io::CWriteFile& tmp)
-{
-	io::CReadFile in(path + "/" + file.name);
-	itd::FileEntry entry;
-
-	if(!in.isOpen()) {
-		return -1;
-	}
-	
-	//printf("Adding: %s\n",(path + "/" + file.name).c_str());
-
-	entry.offset = tmp.tell();
-	entry.size   = in.getSize();
-	entry.mtime  = 0;
-	entry.flags  = itd::FileFlags::None;
-	index_.push_back(entry);
-
-	char* buf = new char[entry.size];
-	in.read(buf, entry.size);
-
-	tmp.write(buf, entry.size);
-
-	delete[] buf;
-
-	return 0;
-}
-
-i32 CItdPacker::writeIndex()
+void CItdPacker::write_index()
 {
 	globalOffset_ += index_.size()*32;
 
@@ -120,11 +161,9 @@ i32 CItdPacker::writeIndex()
 		archive_.write(&e.flags,2);
 		archive_.write(&e.padding[0],6);
 	}
-	
-	return 0;
 }
 
-i32 CItdPacker::writeArchive() 
+i32 CItdPacker::write_archive() 
 {
 	io::CReadFile in(name_ + ".tmp.1");
 
@@ -143,8 +182,13 @@ i32 CItdPacker::writeArchive()
 i32 main (char** args)
 {
 	core::IArgParser* argp = core::createArgParser(args);
-	
-	Action action;
+
+	enum Action {
+		None,
+		Create,
+		Unpack,
+		List
+	} action;
 
 	std::string filename;
 	std::vector<std::string> files;
@@ -157,9 +201,41 @@ i32 main (char** args)
 				action = Create;
 			}
 
+			if(arg.name == "l" || arg.name == "list") {
+				action = List;
+			}
+
+			if(arg.name == "e" || arg.name == "extract") {
+				action = List;
+			}
+
 			if(arg.name == "f" || arg.name == "file") {
 				argp->getToken(arg);
 				filename = arg.name;
+			}
+#if 0
+		if(arg.type == core::ClineArg::Option && arg.name == "-") {
+			// from stdin
+		}
+#endif
+
+			if(arg.name == "h" || arg.name == "help") {
+				printf("Usage: hpacker [OPTION]... [FILE...]\n");
+				printf("\n");
+				printf("  -c, --create         Create an archive\n");
+				printf("  -e, --extract        Extract contents of archive\n");
+				printf("  -l, --list           List contents of archive\n");
+				printf("  -f, --file NAME      Perform actions on file NAME\n");
+				printf("  -h, --help           Display this message\n");
+			}
+
+		} else if(arg.type == core::ClineArg::Argument) {
+			if(!action) {
+				fprintf(stderr, "No action selected\n");
+				fprintf(stderr, "Type hpacker -h or hpacker --help for usage.\n");			
+				return -1;
+			} else {
+				files.push_back(arg.name);
 			}
 		}
 	}
@@ -169,23 +245,13 @@ i32 main (char** args)
 	
 	if(action == Create) {
 		CItdPacker packer(filename);
-		packer.pack(dir, true);
-		packer.writeIndex();
-		packer.writeArchive();
-		remove((filename + ".tmp.1").c_str());
-	}
-
-#if 0
-	while(argp->getToken(arg)) {
-		if(arg.type == core::ClineArg::Option && arg.name == "-") {
-			// from stdin
+		for(auto f : files) {
+			packer.add_file(f);
 		}
 
-		if(arg.type == core::ClineArg::Argument) {
-			files.push_back(arg.name);
-		}
+		packer.pack();
 	}
-#endif
+
 	return 0;
 }
 

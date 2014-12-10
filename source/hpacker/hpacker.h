@@ -19,26 +19,33 @@
 namespace hrengin {
 namespace itd {
 
-enum Action {
-	Create,
-	Unpack,
-	List
-};
-
 class CItdPacker {
 public:	
-	CItdPacker (std::string name);
+	CItdPacker (std::string const& archive_name);
 	~CItdPacker ();
 
-	i32 pack (std::string path, bool recursive);
-
-	i32 packDir (std::string path, bool recursive, io::CWriteFile& tmp);
-	i32 addFile (std::string path, io::Dirent file, io::CWriteFile& tmp);
-
-	i32 writeIndex();
-	i32 writeArchive();
+	/*!
+	 * Add file to archive
+	 */
+	void add_file (std::string const& filename);
+	/*!
+	 * Pack archive
+	 */
+	i32 pack ();
 
 private:
+	i32 pack_archive ();
+	i32 pack_object (std::string const& filename, io::CWriteFile& tmp);
+	i32 pack_dir  (std::string const& path, io::CWriteFile& tmp);
+	i32 pack_file (std::string const& path, io::CWriteFile& tmp);
+
+	void write_header();
+	void write_index();
+	i32 write_archive();
+
+	std::vector<std::string> input_files_;
+	std::vector<std::string> files_to_pack_;
+
 	std::vector<itd::FileEntry> index_;
 	std::string name_;
 	io::CWriteFile archive_;
