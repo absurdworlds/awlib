@@ -45,16 +45,11 @@ i32 CItdPacker::pack ()
 	}
 	
 	buildFileList();
-
-	currentOffset_ = 64;
-	prepareFileIndex();
-
-	// buildFileTree();
-	updateFileIndex();
-
 	writeHeader();
-	writeIndex();
+	prepareFileIndex();
+	// buildFileTree();
 	writeArchive();
+	updateFileIndex();
 
 	return 0;
 }
@@ -105,40 +100,6 @@ i32 CItdPacker::addDir (std::string const& path)
 	return 0;
 }
 
-void CItdPacker::prepareFileIndex ()
-{
-	// Number of files + file tree and hashtable
-	u64 num_entries = 2 + fileList_.size();
-	index_.reserve(num_entries);
-	
-	currentOffset_ += num_entries * 32;
-}
-
-void CItdPacker::updateFileIndex ()
-{
-	for(size_t id = 0; id < fileList_.size(); ++id) {
-		updateFileEntry(id + 2, fileList_[id]);
-	}
-}
-
-void CItdPacker::updateFileEntry (size_t id, std::string const& path)
-{
-	io::CReadFile in(path);
-
-	if(!in.isOpen()) {
-		index_[id].offset = -1;
-		index_[id].size   =  0;
-		return;
-	}
-
-	index_[id].offset = currentOffset_;
-	index_[id].size = in.getSize();
-	index_[id].mtime = 0;
-	index_[id].flags = itd::FileFlags::None;
-
-	currentOffset_ += index_[id].size;
-}
-
 void CItdPacker::writeHeader()
 {
 	itd::Header header;
@@ -154,8 +115,13 @@ void CItdPacker::writeHeader()
 	archive_.write(&header.padding, 44);
 }
 
-void CItdPacker::writeIndex()
+void CItdPacker::prepareFileIndex ()
 {
+	// Number of files + file tree and hashtable
+	u64 num_entries = 2 + fileList_.size();
+	index_.resize(num_entries);
+
+	// Write empty index
 	for(auto entry : index_) {
 		archive_.write(&entry.offset,8);
 		archive_.write(&entry.size,8);
@@ -167,17 +133,24 @@ void CItdPacker::writeIndex()
 
 void CItdPacker::writeArchive() 
 {
+	for(size_t id = 0; id < fileList_.size(); ++id) {
+		packFile(id + 2, fileList_[id]);
+	}
+#if 0
 	for(auto file : fileList_) {
 		packFile(file);
 	}
+#endif
 }
 
-i32 CItdPacker::packFile (std::string const& path)
+void CItdPacker::packFile (size_t id, std::string const& path)
 {
 	io::CReadFile file(path);
 
 	if(!file.isOpen()) {
-		return -1;
+		index_[id].offset = -1;
+		index_[id].size   =  0;
+		return;
 	}
 
 	if(verbose_) {
@@ -186,14 +159,29 @@ i32 CItdPacker::packFile (std::string const& path)
 
 	size_t size = file.getSize();
 
+	index_[id].offset = archive_.tell();
+	index_[id].size = size;
+	index_[id].mtime = 0;
+	index_[id].flags = itd::FileFlags::None;
+
 	char* buf = new char[size];
 
 	file.read(buf, size);
 	archive_.write(buf, size);
 
 	delete[] buf;
+}
 
-	return 0;
+void CItdPacker::updateFileIndex ()
+{
+	archive_.seek(64);
+	for(auto entry : index_) {
+		archive_.write(&entry.offset,8);
+		archive_.write(&entry.size,8);
+		archive_.write(&entry.mtime,8);
+		archive_.write(&entry.flags,2);
+		archive_.write(&entry.padding[0],6);
+	}
 }
 
 i32 main (char** args)

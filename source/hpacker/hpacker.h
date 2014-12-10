@@ -43,22 +43,17 @@ private:
 	i32 addDir (std::string const& path);
 
 	void prepareFileIndex ();
-
 	void updateFileIndex ();
-	void updateFileEntry (size_t id, std::string const& path);
 
 	void writeHeader();
-	void writeIndex();
 	void writeArchive();
-	i32 packFile (std::string const& path);
+	void packFile (size_t id, std::string const& path);
 
 	std::vector<std::string> inputFiles_;
 	std::vector<std::string> fileList_;
 	std::vector<itd::FileEntry> index_;
 
 	io::CWriteFile archive_;
-
-	u64 currentOffset_;
 
 	bool verbose_;
 };
