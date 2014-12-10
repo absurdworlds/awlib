@@ -21,7 +21,7 @@ namespace itd {
 
 class CItdPacker {
 public:	
-	CItdPacker (std::string const& archive_name);
+	CItdPacker (std::string const& archive_name, bool verbose = false);
 	~CItdPacker ();
 
 	/*!

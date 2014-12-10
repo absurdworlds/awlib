@@ -19,8 +19,8 @@
 
 namespace hrengin {
 namespace itd {
-CItdPacker::CItdPacker (std::string const& archive_name)
-	: archive_(archive_name, io::FileMode::Overwrite)
+CItdPacker::CItdPacker (std::string const& archive_name, bool verbose)
+	: archive_(archive_name, io::FileMode::Overwrite), verbose_(verbose)
 {	
 }
 
@@ -184,6 +184,20 @@ void CItdPacker::updateFileIndex ()
 	}
 }
 
+void printUsage()
+{
+	printf("Usage: hpacker [OPTION]... [FILE...]\n");
+	printf("hpacker is a utility which serves files together into a ITD archive.\n");
+	printf("\n");
+	printf("  -c, --create         Create an archive\n");
+	printf("  -e, --extract        Extract contents of archive\n");
+	printf("  -l, --list           List contents of archive\n");
+	printf("  -f, --file NAME      Perform actions on file NAME\n");
+	printf("  -v, --verbose        Show verbose output\n");
+	printf("  -h, --help           Display this message\n");
+
+}
+
 i32 main (char** args)
 {
 	core::IArgParser* argp = core::createArgParser(args+1);
@@ -198,25 +212,22 @@ i32 main (char** args)
 	std::string filename;
 	std::vector<std::string> files;
 	std::string dir;
+	bool verbose = false;
 
 	core::ClineArg arg;
 	while(argp->getToken(arg)) {
 		if(arg.type == core::ClineArg::Option) {
 			if(arg.name == "c" || arg.name == "create") {
 				action = Create;
-			}
-
-			if(arg.name == "l" || arg.name == "list") {
+			} else if(arg.name == "l" || arg.name == "list") {
 				action = List;
-			}
-
-			if(arg.name == "e" || arg.name == "extract") {
+			} else if(arg.name == "e" || arg.name == "extract") {
 				action = List;
-			}
-
-			if(arg.name == "f" || arg.name == "file") {
+			} else if(arg.name == "f" || arg.name == "file") {
 				argp->getToken(arg);
 				filename = arg.name;
+			} else if(arg.name == "v" || arg.name == "verbose") {
+				verbose = true;
 			}
 #if 0
 		if(arg.type == core::ClineArg::Option && arg.name == "-") {
@@ -225,13 +236,7 @@ i32 main (char** args)
 #endif
 
 			if(arg.name == "h" || arg.name == "help") {
-				printf("Usage: hpacker [OPTION]... [FILE...]\n");
-				printf("\n");
-				printf("  -c, --create         Create an archive\n");
-				printf("  -e, --extract        Extract contents of archive\n");
-				printf("  -l, --list           List contents of archive\n");
-				printf("  -f, --file NAME      Perform actions on file NAME\n");
-				printf("  -h, --help           Display this message\n");
+				printUsage();
 			}
 		} else if(arg.type == core::ClineArg::Argument) {
 			if(!action) {
@@ -248,7 +253,7 @@ i32 main (char** args)
 	dir = arg.name;
 	
 	if(action == Create) {
-		CItdPacker packer(filename);
+		CItdPacker packer(filename, verbose);
 		packer.addList(files);
 
 		packer.pack();
