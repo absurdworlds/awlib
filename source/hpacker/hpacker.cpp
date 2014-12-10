@@ -198,7 +198,7 @@ i32 CItdPacker::packFile (std::string const& path)
 
 i32 main (char** args)
 {
-	core::IArgParser* argp = core::createArgParser(args);
+	core::IArgParser* argp = core::createArgParser(args+1);
 
 	enum Action {
 		None,
