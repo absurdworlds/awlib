@@ -27,30 +27,40 @@ public:
 	/*!
 	 * Add file to archive
 	 */
-	void add_file (std::string const& filename);
+	void addFile (std::string const& filename);
+	/*!
+	 * Add list of files
+	 */
+	void addList (std::vector<std::string> const& files);
 	/*!
 	 * Pack archive
 	 */
 	i32 pack ();
 
 private:
-	i32 pack_archive ();
-	i32 pack_object (std::string const& filename, io::CWriteFile& tmp);
-	i32 pack_dir  (std::string const& path, io::CWriteFile& tmp);
-	i32 pack_file (std::string const& path, io::CWriteFile& tmp);
+	void buildFileList ();
+	void addObject (std::string const& path);
+	i32 addDir (std::string const& path);
 
-	void write_header();
-	void write_index();
-	i32 write_archive();
+	void prepareFileIndex ();
 
-	std::vector<std::string> input_files_;
-	std::vector<std::string> files_to_pack_;
+	void updateFileIndex ();
+	void updateFileEntry (size_t id, std::string const& path);
 
+	void writeHeader();
+	void writeIndex();
+	void writeArchive();
+	i32 packFile (std::string const& path);
+
+	std::vector<std::string> inputFiles_;
+	std::vector<std::string> fileList_;
 	std::vector<itd::FileEntry> index_;
-	std::string name_;
+
 	io::CWriteFile archive_;
-	// Global offset for file data
-	u64 globalOffset_;
+
+	u64 currentOffset_;
+
+	bool verbose_;
 };
 } // namespace itd
 } // namespace hrengin

@@ -20,19 +20,22 @@
 namespace hrengin {
 namespace itd {
 CItdPacker::CItdPacker (std::string const& archive_name)
-	: name_(archive_name), archive_(name_, io::FileMode::Overwrite)
+	: archive_(archive_name, io::FileMode::Overwrite)
 {	
 }
 
 CItdPacker::~CItdPacker ()
 {
-	remove((name_ + ".tmp.1").c_str());
 }
 
-void CItdPacker::add_file (std::string const& filename)
+void CItdPacker::addFile (std::string const& filename)
 {
-	//TODO? check for validity
-	files_to_pack_.push_back(filename);
+	inputFiles_.push_back(filename);
+}
+
+void CItdPacker::addList (std::vector<std::string> const& files)
+{
+	inputFiles_.insert(inputFiles_.end(), files.begin(), files.end());
 }
 
 i32 CItdPacker::pack ()
@@ -40,50 +43,50 @@ i32 CItdPacker::pack ()
 	if(!archive_.isOpen()) {
 		return -1;
 	}
-	pack_archive();
+	
+	buildFileList();
 
-	write_header();
-	write_index();
-	write_archive();
+	currentOffset_ = 64;
+	prepareFileIndex();
 
-	return 0;
-}
+	// buildFileTree();
+	updateFileIndex();
 
-i32 CItdPacker::pack_archive ()
-{
-	io::CWriteFile tmp(name_ + ".tmp.1", io::FileMode::Overwrite);
-
-	if(!tmp.isOpen()) {
-		return -1;
-	}
-
-	for(auto file : files_to_pack_) {
-		pack_object(file, tmp);
-	}
+	writeHeader();
+	writeIndex();
+	writeArchive();
 
 	return 0;
 }
 
-i32 CItdPacker::pack_object (std::string const& file, io::CWriteFile& tmp)
+void CItdPacker::buildFileList ()
 {
-	io::FileInfo finfo = io::file_stat(file);
+	while(!inputFiles_.empty()) {
+		addObject(inputFiles_.back());
+		inputFiles_.pop_back();
+	}
+}
+
+void CItdPacker::addObject (std::string const& path)
+{
+	io::FileInfo finfo;
+	io::fileStat(path, finfo);
 
 	switch(finfo.type) {
 	case io::FileType::File:
-		pack_file(file, tmp);
+		fileList_.push_back(path);
 		break;
-	case io::FileType::Dir:
-		pack_dir(file, tmp);
-		break;
-	default:
-		return -1;
-	}
 
-	return 0;
+	case io::FileType::Dir:
+		addDir(path);
+		break;
+
+	default:
+		break;
+	}
 }
 
-
-i32 CItdPacker::pack_dir (std::string const& path, io::CWriteFile& tmp)
+i32 CItdPacker::addDir (std::string const& path)
 {
 	io::IDirectory* dir = io::openDirectory(path);
 	if(!dir) {
@@ -96,41 +99,47 @@ i32 CItdPacker::pack_dir (std::string const& path, io::CWriteFile& tmp)
 			continue;
 		}
 
-		pack_object (path + "/" + file.name, tmp);
+		addObject (path + "/" + file.name);
 	};
 
 	return 0;
-
 }
 
-i32 CItdPacker::pack_file (std::string const& path, io::CWriteFile& tmp)
+void CItdPacker::prepareFileIndex ()
+{
+	// Number of files + file tree and hashtable
+	u64 num_entries = 2 + fileList_.size();
+	index_.reserve(num_entries);
+	
+	currentOffset_ += num_entries * 32;
+}
+
+void CItdPacker::updateFileIndex ()
+{
+	for(size_t id = 0; id < fileList_.size(); ++id) {
+		updateFileEntry(id + 2, fileList_[id]);
+	}
+}
+
+void CItdPacker::updateFileEntry (size_t id, std::string const& path)
 {
 	io::CReadFile in(path);
 
 	if(!in.isOpen()) {
-		return -1;
+		index_[id].offset = -1;
+		index_[id].size   =  0;
+		return;
 	}
-	
-	//printf("Adding: %s\n",(path + "/" + file.name).c_str());
 
-	itd::FileEntry entry;
-	entry.offset = tmp.tell();
-	entry.size   = in.getSize();
-	entry.mtime  = 0;
-	entry.flags  = itd::FileFlags::None;
-	index_.push_back(entry);
+	index_[id].offset = currentOffset_;
+	index_[id].size = in.getSize();
+	index_[id].mtime = 0;
+	index_[id].flags = itd::FileFlags::None;
 
-	char* buf = new char[entry.size];
-
-	in.read(buf, entry.size);
-	tmp.write(buf, entry.size);
-
-	delete[] buf;
-
-	return 0;
+	currentOffset_ += index_[id].size;
 }
 
-void CItdPacker::write_header()
+void CItdPacker::writeHeader()
 {
 	itd::Header header;
 	header.fileId = 'h' + ('i' << 8) + ('t' << 16) + ('d' << 24);
@@ -143,38 +152,46 @@ void CItdPacker::write_header()
 	archive_.write(&header.ptime,8);
 	archive_.write(&header.secondId,4);
 	archive_.write(&header.padding, 44);
-
-	// File index starts at offset 64
-	globalOffset_ = 64;
-
 }
 
-void CItdPacker::write_index()
+void CItdPacker::writeIndex()
 {
-	globalOffset_ += index_.size()*32;
-
-	for(auto e : index_) {
-		e.offset += globalOffset_;
-		archive_.write(&e.offset,8);
-		archive_.write(&e.size,8);
-		archive_.write(&e.mtime,8);
-		archive_.write(&e.flags,2);
-		archive_.write(&e.padding[0],6);
+	for(auto entry : index_) {
+		archive_.write(&entry.offset,8);
+		archive_.write(&entry.size,8);
+		archive_.write(&entry.mtime,8);
+		archive_.write(&entry.flags,2);
+		archive_.write(&entry.padding[0],6);
 	}
 }
 
-i32 CItdPacker::write_archive() 
+void CItdPacker::writeArchive() 
 {
-	io::CReadFile in(name_ + ".tmp.1");
-
-	char buf[4096];
-	i32 num;
-	while((num = in.read(&buf, 4096))) {
-		//printf("%d;%d\n",in->tell(),in->getSize());
-		if(num > 0) {
-			archive_.write(buf, num);
-		}
+	for(auto file : fileList_) {
+		packFile(file);
 	}
+}
+
+i32 CItdPacker::packFile (std::string const& path)
+{
+	io::CReadFile file(path);
+
+	if(!file.isOpen()) {
+		return -1;
+	}
+
+	if(verbose_) {
+		printf("Adding %s\n", path.c_str());
+	}
+
+	size_t size = file.getSize();
+
+	char* buf = new char[size];
+
+	file.read(buf, size);
+	archive_.write(buf, size);
+
+	delete[] buf;
 
 	return 0;
 }
@@ -228,7 +245,6 @@ i32 main (char** args)
 				printf("  -f, --file NAME      Perform actions on file NAME\n");
 				printf("  -h, --help           Display this message\n");
 			}
-
 		} else if(arg.type == core::ClineArg::Argument) {
 			if(!action) {
 				fprintf(stderr, "No action selected\n");
@@ -245,9 +261,7 @@ i32 main (char** args)
 	
 	if(action == Create) {
 		CItdPacker packer(filename);
-		for(auto f : files) {
-			packer.add_file(f);
-		}
+		packer.addList(files);
 
 		packer.pack();
 	}
