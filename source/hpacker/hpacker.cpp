@@ -47,7 +47,7 @@ i32 CItdPacker::pack ()
 	buildFileList();
 	writeHeader();
 	prepareFileIndex();
-	// buildFileTree();
+	buildFileTree();
 	writeArchive();
 	updateFileIndex();
 
@@ -60,6 +60,16 @@ void CItdPacker::buildFileList ()
 		addObject(inputFiles_.back());
 		inputFiles_.pop_back();
 	}
+}
+
+void CItdPacker::buildFileTree ()
+{
+	FileTree root;
+	for(size_t id = 0; id < fileList_.size(); ++id) {
+		root.addFile(fileList_[id], id + 2);
+	}
+
+	printf("drbugoga");
 }
 
 void CItdPacker::addObject (std::string const& path)

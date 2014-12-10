@@ -11,13 +11,72 @@
 #define _hrengin_CArgParser_
 #include <string>
 #include <vector>
+#include <cstring>
+#include <algorithm>
 
 #include <hrengin/common/types.h>
+#include <hrengin/common/stringutils.h>
 #include <hrengin/hitd/hitd.h>
 #include <hrengin/io/CWriteFile.h>
 
 namespace hrengin {
 namespace itd {
+
+struct FileTree {
+	typedef std::pair<std::string, size_t> file_entry;
+	typedef std::pair<std::string, FileTree> leaf_type;
+
+
+	std::vector<leaf_type> leaves_;
+	std::vector<file_entry> files_;
+
+	void addFile (std::string const& path, u64 id)
+	{
+		std::vector<std::string> tokens;
+		size_t depth = splitString(path, "/", tokens);
+
+		addFile(tokens, id);
+	}
+
+	void addFile (std::vector<std::string> path, u64 id)
+	{
+		size_t depth = path.size();
+
+		if(depth > 1) {
+			findAndAdd(path.front(),
+				std::vector<std::string>(
+						path.begin()+1,
+						path.end()
+					), id);
+		} else if(depth == 1) {
+			files_.push_back(file_entry(path.back(), id));
+		}
+	}
+
+	void findAndAdd (std::string const& name,
+		std::vector<std::string> path, u64 id)
+	{
+		auto findChild = [&name] (leaf_type const& pair)
+		{
+			return (pair.first == name);
+		};
+
+		auto found = std::find_if(std::begin(leaves_), 
+				std::end(leaves_), findChild);
+
+		FileTree* child;
+
+		if(found != std::end(leaves_)) {
+			child = &found->second;
+		} else {
+			FileTree newChild;
+			leaves_.push_back(leaf_type(name, newChild)); 
+			child = &leaves_.back().second;
+		}
+
+		child->addFile(path, id);
+	}
+};
 
 class CItdPacker {
 public:	
@@ -42,10 +101,13 @@ private:
 	void addObject (std::string const& path);
 	i32 addDir (std::string const& path);
 
+	void writeHeader();
+
 	void prepareFileIndex ();
 	void updateFileIndex ();
 
-	void writeHeader();
+	void buildFileTree ();
+
 	void writeArchive();
 	void packFile (size_t id, std::string const& path);
 
