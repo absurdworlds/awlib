@@ -1,10 +1,10 @@
 /*
-   Copyright (C) 2014  absurdworlds
-
-   License LGPLv3-only:
-   GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
-   This is free software: you are free to change and redistribute it.
-   There is NO WARRANTY, to the extent permitted by law.
+ * Copyright (C) 2014  absurdworlds
+ *
+ * License LGPLv3-only:
+ * GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
+ * This is free software: you are free to change and redistribute it.
+ * There is NO WARRANTY, to the extent permitted by law.
  */
 #ifndef _hrengin_IDirectory_
 #define _hrengin_IDirectory_
@@ -12,18 +12,16 @@
 #include <string>
 
 #include <hrengin/io/io.h>
+#include <hrengin/io/filesystem.h>
 #include <hrengin/common/types.h>
 
 namespace hrengin {
 namespace io {
-
-/*! Struct, which represents directory entry. */
+/*!
+ * Struct, which represents directory entry.
+ */
 struct Dirent {
-	enum class Type {
-		File,
-		Dir,
-		Unknown
-	} type;
+	FileType type;
 	std::string name;
 };
 
@@ -34,7 +32,8 @@ public:
 	{
 	}
 
-	/*! Read directory entry at current position
+	/*!
+	 * Read directory entry at current position
 	 * \param result Reference to struct, which will hold directory
 	 * entry information. 
 	 * \return 0 on success, \a -error_code otherwise. 
