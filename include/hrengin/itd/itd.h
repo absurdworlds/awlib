@@ -30,15 +30,6 @@ enum Flags : u16 {
 };
 
 /*!
- * Header of ITD, provides file identifier and some additional
- * information adbout archive
- */
-struct Header {
-	struct MainHeader main;
-	struct SecondHeader second;
-};
-
-/*!
  * Main header contains format identifier and some additional information,
  * such as timestamp and number of files.
  */
@@ -77,6 +68,14 @@ struct SecondHeader {
 	char padding[24];
 };
 
+/*!
+ * Header of ITD, provides file identifier and some additional
+ * information adbout archive
+ */
+struct Header {
+	struct MainHeader main;
+	struct SecondHeader second;
+};
 //! File flags
 enum FileFlags : u16 {
 	None,
