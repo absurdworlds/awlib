@@ -1,10 +1,10 @@
 /*
-   Copyright (C) 2014  absurdworlds
-
-   License LGPLv3-only:
-   GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
-   This is free software: you are free to change and redistribute it.
-   There is NO WARRANTY, to the extent permitted by law.
+ * Copyright (C) 2014  absurdworlds
+ *
+ * License LGPLv3-only:
+ * GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
+ * This is free software: you are free to change and redistribute it.
+ * There is NO WARRANTY, to the extent permitted by law.
  */
 #ifndef _hrengin_IRayResultCallback_
 #define _hrengin_IRayResultCallback_
@@ -14,8 +14,9 @@
 
 namespace hrengin {
 namespace physics {
-
-//! Strcut for raytest result
+/*!
+ * Structure for storing raytest result
+ */
 struct RaytestResult {
 	RaytestResult(const ICollisionObject* collisionObject,
 		f32 hitFrac, Vector3d<f32> hitPos, Vector3d<f32> hitNorm)
@@ -50,13 +51,6 @@ public:
 
 	virtual f32 addResult(RaytestResult& result) = 0;
 	virtual bool hasHit() const = 0;
-#if 0
-	// internal implementation details
-	class Details;
-
-	// for internal use only
-	virtual IRayResultCallback::Details* getDetails() = 0;
-#endif
 };
 
 //! This class is used to report single raytest result
@@ -93,5 +87,4 @@ public:
 
 } // namespace graphics
 } // namespace hrengin
-
 #endif //_hrengin_IRayResultCallback_

@@ -1,14 +1,13 @@
 /*
-   Copyright (C) 2014  absurdworlds
-
-   License LGPLv3-only:
-   GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
-   This is free software: you are free to change and redistribute it.
-   There is NO WARRANTY, to the extent permitted by law.
+ * Copyright (C) 2014  absurdworlds
+ *
+ * License LGPLv3-only:
+ * GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
+ * This is free software: you are free to change and redistribute it.
+ * There is NO WARRANTY, to the extent permitted by law.
  */
 #ifndef _hrengin_hdf_node_
 #define _hrengin_hdf_node_
-
 #include <vector>
 #include <string>
 #include <algorithm>
@@ -19,7 +18,9 @@
 namespace hrengin {
 namespace hdf {
 
-//! Represents HDF node
+/*!
+ * This class is used to represend HDF document structure
+ */
 class Node {
 	typedef std::pair<std::string,Value> key_value_pair;
 	typedef std::vector<key_value_pair> value_container;
@@ -27,18 +28,38 @@ class Node {
 	typedef std::pair<std::string,Node> key_node_pair;
 	typedef std::vector<key_node_pair> node_container;
 public:
+	/*!
+	 * Add child node
+	 */
 	void addNode(std::string name, Node node)
 	{
 		key_node_pair subnode(name, node);
 		nodes_.push_back(subnode);
 	}
 	
-	node_container::iterator
-		nodesBegin()
+	/*!
+	 * Get iterator to first child node
+	 */
+	node_container::iterator nodesBegin()
+	{
+		return nodes_.begin();
+	}
+	
+	/*!
+	 * Get iterator to the end
+	 * \return Iterator to slot past last child node
+	 */
+	node_container::iterator nodesEnd()
 	{
 		return nodes_.begin();
 	}
 
+	/*!
+	 * Find child node by name
+	 * \param name Name of the node to search for
+	 * \param startAt Point to start the search at
+	 * \return iterator to found node
+	 */
 	node_container::iterator
 		findNode(std::string name, node_container::iterator startAt)
 	{
@@ -51,11 +72,18 @@ public:
 		return nodes_.end();
 	}
 	
+	/*!
+	 * Remove child node
+	 */
 	void removeNode(node_container::iterator node)
 	{
 		nodes_.erase(node);
 	}
 
+	/*!
+	 * Get child node by index
+	 * \return Child node or an empty node
+	 */
 	Node getNode(node_container::size_type index)
 	{
 		if(index < nodes_.size()) {
@@ -64,12 +92,21 @@ public:
 		return Node();
 	}
 
+	/*!
+	 * Add an HDF value
+	 */
 	bool addValue(std::string name, Value& val)
 	{
-		auto findKey = [&name] (std::pair<std::string, Value> const& pair) {
+		auto findKey = 
+		[&name] (std::pair<std::string, Value> const& pair)
+		{
 			return (pair.first == name);
 		};
-		auto found = std::find_if(values_.begin(),values_.end(),findKey);
+
+		auto found = std::find_if(
+				values_.begin(),
+				values_.end(),
+				findKey);
 
 		if(found != values_.end()) {
 			return false;
@@ -80,6 +117,9 @@ public:
 		return true;
 	}
 	
+	/*!
+	 * Find HDF value
+	 */
 	value_container::iterator
 		findValue(std::string name)
 	{

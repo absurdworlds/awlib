@@ -1,10 +1,10 @@
 /*
-   Copyright (C) 2014  absurdworlds
-
-   License LGPLv3-only:
-   GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
-   This is free software: you are free to change and redistribute it.
-   There is NO WARRANTY, to the extent permitted by law.
+ * Copyright (C) 2014  absurdworlds
+ *
+ * License LGPLv3-only:
+ * GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
+ * This is free software: you are free to change and redistribute it.
+ * There is NO WARRANTY, to the extent permitted by law.
  */
 #ifndef _hrengin_IPhysicsWorld_
 #define _hrengin_IPhysicsWorld_
@@ -25,11 +25,17 @@ class ICollisionObject;
 class ICollisionPhantom;
 class IRigidBody;
 
-//! This class is responsible for collision detection, dynamics simulation etc
+/*!
+ * This class is responsible for collision detection,
+ * dynamics simulation et cetera
+ */
 class IPhysicsWorld {
 public:
 	virtual ~IPhysicsWorld() {};
 	
+	/*!
+	 * Insert a rigid body into world
+	 */
 	virtual void addBody(IRigidBody* body) = 0;
 	virtual void addBody(IRigidBody* body, CollisionFilter filter) = 0;
 	virtual void addObject(ICollisionObject* object) = 0;
@@ -44,6 +50,9 @@ public:
 
 	virtual void castRay(Vector3d<f32> from, Vector3d<f32> to, IRayResultCallback* callback) = 0;
 
+	/*!
+	 * Step the simulation
+	 */
 	virtual bool step() = 0;
 	
 	//! Internal implementation details

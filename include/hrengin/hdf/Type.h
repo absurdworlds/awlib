@@ -1,10 +1,10 @@
 /*
-   Copyright (C) 2014  absurdworlds
-
-   License LGPLv3-only:
-   GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
-   This is free software: you are free to change and redistribute it.
-   There is NO WARRANTY, to the extent permitted by law.
+ * Copyright (C) 2014  absurdworlds
+ *
+ * License LGPLv3-only:
+ * GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
+ * This is free software: you are free to change and redistribute it.
+ * There is NO WARRANTY, to the extent permitted by law.
  */
 #ifndef _hrengin_hdf_Type_
 #define _hrengin_hdf_Type_
@@ -14,9 +14,11 @@
 
 namespace hrengin {
 namespace hdf {
-
-/*! Enumeration of possible HDF value types */
+/*!
+ * Enumeration of possible HDF value types
+ */
 enum class Type {
+	Unknown,
 	Integer,
 	Float,
 	Boolean,
@@ -25,9 +27,11 @@ enum class Type {
 	Vector3d,
 	Vector4d,
 	Enum,
-	Unknown
 };
 
+/*!
+ * Template function used to check if C++ type corresponds to HDF type \a type
+ */
 template<typename T>
 inline bool checkType (hdf::Type type)
 {
@@ -94,6 +98,9 @@ inline bool checkType<Vector3d<f32>> (hdf::Type type)
 	return Type::Vector3d == type;
 }
 
+/*!
+ * Template function used to deduce HDF type from C++ type
+ */
 template<typename T>
 inline hdf::Type deduceType ()
 {
@@ -160,7 +167,10 @@ inline hdf::Type deduceType<Vector3d<f32>> ()
 	return Type::Vector3d;
 }
 
-
+/*!
+ * Template function used to check if variable type
+ * corresponds to HDF type \a type
+ */
 template<typename T>
 inline bool checkType (hdf::Type type, T)
 {

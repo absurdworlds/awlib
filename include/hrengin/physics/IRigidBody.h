@@ -1,10 +1,10 @@
 /*
-   Copyright (C) 2014  absurdworlds
-
-   License LGPLv3-only:
-   GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
-   This is free software: you are free to change and redistribute it.
-   There is NO WARRANTY, to the extent permitted by law.
+ * Copyright (C) 2014  absurdworlds
+ *
+ * License LGPLv3-only:
+ * GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
+ * This is free software: you are free to change and redistribute it.
+ * There is NO WARRANTY, to the extent permitted by law.
  */
 #ifndef _hrengin_IRigidBody_
 #define _hrengin_IRigidBody_
@@ -14,8 +14,9 @@
 
 namespace hrengin {
 namespace physics {
-
-//! Represents a rigid physical body
+/*!
+ * Represents a rigid physical body
+ */
 class IRigidBody : public ICollisionObject {
 public:
 	virtual ~IRigidBody() {};
@@ -47,7 +48,8 @@ public:
 		f32 friction;
 		f32 rollingFriction;
 		f32 restitution;
-	
+
+		//! Default construction parameters
 		RigidBodyConstructionInfo()
 			: mass(1.0f),
 			linearDamping(0.0f),
@@ -59,6 +61,7 @@ public:
 		{
 		}
 
+		//! Construct specifying mass
 		RigidBodyConstructionInfo(f32 mass)
 			: mass(mass),
 			linearDamping(0.0f),
@@ -83,5 +86,4 @@ public:
 
 } // namespace physics
 } // namespace hrengin
-
 #endif//_hrengin_IRigidBody_

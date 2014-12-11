@@ -1,10 +1,10 @@
 /*
-   Copyright (C) 2014  absurdworlds
-
-   License LGPLv3-only:
-   GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
-   This is free software: you are free to change and redistribute it.
-   There is NO WARRANTY, to the extent permitted by law.
+ * Copyright (C) 2014  absurdworlds
+ *
+ * License LGPLv3-only:
+ * GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
+ * This is free software: you are free to change and redistribute it.
+ * There is NO WARRANTY, to the extent permitted by law.
  */
 #ifndef _hrengin_IPhysicsManager_
 #define _hrengin_IPhysicsManager_
@@ -21,11 +21,9 @@
 #include <hrengin/physics/IDebugDrawer.h>
 
 namespace hrengin {
-
 class IModelLoader;
 
 namespace physics {
-
 class IPhysicsWorld;
 class ICollisionObject;
 class ICollisionPhantom;

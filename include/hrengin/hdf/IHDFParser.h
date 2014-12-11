@@ -1,10 +1,10 @@
 /*
-   Copyright (C) 2014  absurdworlds
-
-   License LGPLv3-only:
-   GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
-   This is free software: you are free to change and redistribute it.
-   There is NO WARRANTY, to the extent permitted by law.
+ * Copyright (C) 2014  absurdworlds
+ *
+ * License LGPLv3-only:
+ * GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
+ * This is free software: you are free to change and redistribute it.
+ * There is NO WARRANTY, to the extent permitted by law.
  */
 #ifndef _hrengin_IHDFReader_
 #define _hrengin_IHDFReader_
@@ -14,7 +14,6 @@
 #include <hrengin/math/Vector3d.h>
 
 #include <hrengin/hdf/hdf.h>
-
 #include <hrengin/hdf/hdf_shared.h>
 
 namespace hrengin {
@@ -32,7 +31,8 @@ enum HdfObjectType {
 	HDF_OBJ_CMD
 };
 
-/*! \class IHDFParser
+/*!
+ * \class IHDFParser
  * \brief Interface for reading hrengin's HDF files. This parser provides a read-only access to documents in HDF 1.1.1 format.
  * 
  * It can read only in forward mode, it is not able to rewind. The design goal of this parser is to quickly read HDF document without usage of any intermediate data structures.
@@ -42,7 +42,7 @@ enum HdfObjectType {
 */
 class IHDFParser {
 public:
-	virtual ~IHDFParser() {};
+	virtual ~IHDFParser() {}
 
 	//! Fast-forward to the next object
 	virtual bool read() = 0;
@@ -72,17 +72,19 @@ public:
 	//! Skip current node (with all subnodes)
 	virtual void skipNode() = 0;
 
-	/*! Add message to the parser's error log
-	   HDF_ERR_NOTICE - an unimportant message
-	   HDF_ERR_WARNING - warning, non-critical error
-	   HDF_ERR_ERROR - critical error, stops the parsing */
+	/*!
+	 * Add message to the parser's error log
+	 * HDF_ERR_NOTICE - an unimportant message
+	 * HDF_ERR_WARNING - warning, non-critical error
+	 * HDF_ERR_ERROR - critical error, stops the parsing
+	 */
 	virtual void error(hdf::ParserMessage type, std::string msg) = 0;
 };
 
-/*! \brief Make an instance of HDF parser.
-\param stream
-A stream to parse.
-\see io::ICharacterStream
+/*!
+ * \brief Make an instance of HDF parser.
+ * \param stream Stream to parse.
+ * \see io::ICharacterStream
 */
 HR_HDF_EXP IHDFParser* createHDFParser(io::ICharacterStream* stream);
 

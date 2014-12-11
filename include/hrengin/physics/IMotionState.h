@@ -1,10 +1,10 @@
 /*
-   Copyright (C) 2014  absurdworlds
-
-   License LGPLv3-only:
-   GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
-   This is free software: you are free to change and redistribute it.
-   There is NO WARRANTY, to the extent permitted by law.
+ * Copyright (C) 2014  absurdworlds
+ *
+ * License LGPLv3-only:
+ * GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
+ * This is free software: you are free to change and redistribute it.
+ * There is NO WARRANTY, to the extent permitted by law.
  */
 #ifndef _hrengin_IMotionState_
 #define _hrengin_IMotionState_
@@ -13,8 +13,9 @@
 
 namespace hrengin {
 namespace physics {
-
-//! Motion state allows to synchronize physics world with other modules
+/*!
+ * Motion state allows to synchronize physics world with other modules
+ */
 class IMotionState {
 public:
 	//! Synchronize world transform from user to physics
@@ -59,5 +60,4 @@ private:
 
 } // namespace graphics
 } // namespace hrengin
-
 #endif //_hrengin_IMotionState_
