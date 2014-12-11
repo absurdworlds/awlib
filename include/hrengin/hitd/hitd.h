@@ -42,11 +42,17 @@ struct Header {
 	u32 version;
 	//! Time packaged;
 	u64 ptime;
+	//! Number of file entries
+	u64 files_num;
 	//! Flags
 	Flags flags;
+	//! Padding to 32 bytes
+	u8 padding[6];
 	//! Secondary identifier, application-specific
 	u32 secondId;
-	char padding[44];
+	//! Secondary format version
+	u32 secondVersion;
+	char padding[24];
 };
 
 //! File flags
