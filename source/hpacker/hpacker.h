@@ -7,8 +7,8 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_CArgParser_
-#define _hrengin_CArgParser_
+#ifndef _hrengin_hpacker_
+#define _hrengin_hpacker_
 #include <string>
 #include <vector>
 
@@ -64,4 +64,4 @@ private:
 };
 } // namespace itd
 } // namespace hrengin
-#endif//_hrengin_CArgParser_
+#endif//_hrengin_hpacker_
