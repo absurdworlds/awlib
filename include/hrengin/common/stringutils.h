@@ -14,6 +14,7 @@
 #include <cstring>
 
 #include <string>
+#include <vector>
 
 #include <hrengin/core/core.h>
 
@@ -30,7 +31,7 @@ size_t strlen_g (char_type const* str)
 }
 
 //! Get file extension from string
-inline std::string getFileExtension(std::string& dest, std::string const& path)
+inline std::string getFileExtension (std::string& dest, std::string const& path)
 {
 	size_t extpos = path.find_last_of(".");
 
@@ -43,6 +44,32 @@ inline std::string getFileExtension(std::string& dest, std::string const& path)
 	std::transform(dest.begin(), dest.end(), dest.begin(), ::tolower);
 
 	return dest;
+}
+
+/*!
+ * Split string into tokens
+ * \param source Source string to split
+ * \param delim Delimiting sequence
+ * \param holder Vector to hold results
+ * \return Number of found tokens
+ */
+inline size_t splitString (std::string const& source, std::string const& delim,
+		std::vector<std::string>& holder)
+{
+	size_t num_tokens = 0;
+
+	size_t pos = source.find_first_not_of(delim);
+	size_t delim_pos = source.find_first_of(delim, pos);
+
+	while(pos != std::string::npos) {
+		holder.push_back(source.substr(pos, delim_pos - pos));
+		++num_tokens;
+
+		pos = source.find_first_not_of(delim, delim_pos);
+		delim_pos = source.find_first_of(delim, pos);
+	}
+
+	return num_tokens;
 }
 
 } // namespace hrengin
