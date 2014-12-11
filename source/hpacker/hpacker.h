@@ -12,6 +12,7 @@
 #include <string>
 #include <vector>
 #include <cstring>
+#include <memory>
 #include <algorithm>
 
 #include <hrengin/common/types.h>
@@ -22,13 +23,30 @@
 namespace hrengin {
 namespace itd {
 
+struct FileTree;
+
+struct TreeEntry {
+	TreeEntry (std::string path, u64 id)
+		: name(path), id(id)
+	{
+	}
+	std::string name;
+	u64 id;
+};
+
+struct TreeLeaf {
+	TreeLeaf (std::string name, FileTree* tree)
+		: name(name), tree(tree)
+	{
+	}
+	std::string name;
+	std::unique_ptr<FileTree> tree;		
+	u64 position;
+};
+
 struct FileTree {
-	typedef std::pair<std::string, size_t> file_entry;
-	typedef std::pair<std::string, FileTree> leaf_type;
-
-
-	std::vector<leaf_type> leaves_;
-	std::vector<file_entry> files_;
+	std::vector<TreeLeaf> leaves_;
+	std::vector<TreeEntry> files_;
 
 	void addFile (std::string const& path, u64 id)
 	{
@@ -49,16 +67,16 @@ struct FileTree {
 						path.end()
 					), id);
 		} else if(depth == 1) {
-			files_.push_back(file_entry(path.back(), id));
+			files_.push_back(TreeEntry(path.back(), id));
 		}
 	}
 
 	void findAndAdd (std::string const& name,
 		std::vector<std::string> path, u64 id)
 	{
-		auto findChild = [&name] (leaf_type const& pair)
+		auto findChild = [&name] (TreeLeaf const& leaf)
 		{
-			return (pair.first == name);
+			return (leaf.name == name);
 		};
 
 		auto found = std::find_if(std::begin(leaves_), 
@@ -67,14 +85,22 @@ struct FileTree {
 		FileTree* child;
 
 		if(found != std::end(leaves_)) {
-			child = &found->second;
+			child = found->tree.get();
 		} else {
-			FileTree newChild;
-			leaves_.push_back(leaf_type(name, newChild)); 
-			child = &leaves_.back().second;
+			leaves_.push_back(TreeLeaf(name, new FileTree)); 
+			child = leaves_.back().tree.get();
 		}
 
 		child->addFile(path, id);
+	}
+	
+	void write (io::CWriteFile& target)
+	{	
+	}
+
+	u64 writeTree(io::CWriteFile& target)
+	{
+		return 0;
 	}
 };
 

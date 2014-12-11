@@ -69,7 +69,11 @@ void CItdPacker::buildFileTree ()
 		root.addFile(fileList_[id], id + 2);
 	}
 
-	printf("drbugoga");
+	index_[0].offset = archive_.tell();
+
+	root.write(archive_);
+
+	index_[0].size = archive_.tell() - index_[0].offset;
 }
 
 void CItdPacker::addObject (std::string const& path)
@@ -146,11 +150,6 @@ void CItdPacker::writeArchive()
 	for(size_t id = 0; id < fileList_.size(); ++id) {
 		packFile(id + 2, fileList_[id]);
 	}
-#if 0
-	for(auto file : fileList_) {
-		packFile(file);
-	}
-#endif
 }
 
 void CItdPacker::packFile (size_t id, std::string const& path)
