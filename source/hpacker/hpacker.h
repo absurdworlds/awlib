@@ -11,98 +11,15 @@
 #define _hrengin_CArgParser_
 #include <string>
 #include <vector>
-#include <cstring>
-#include <memory>
-#include <algorithm>
 
 #include <hrengin/common/types.h>
-#include <hrengin/common/stringutils.h>
 #include <hrengin/hitd/hitd.h>
 #include <hrengin/io/CWriteFile.h>
 
+#include "CItdFileTree.h"
+
 namespace hrengin {
 namespace itd {
-
-struct FileTree;
-
-struct TreeEntry {
-	TreeEntry (std::string path, u64 id)
-		: name(path), id(id)
-	{
-	}
-	std::string name;
-	u64 id;
-};
-
-struct TreeLeaf {
-	TreeLeaf (std::string name, FileTree* tree)
-		: name(name), tree(tree)
-	{
-	}
-	std::string name;
-	std::unique_ptr<FileTree> tree;		
-	u64 position;
-};
-
-struct FileTree {
-	std::vector<TreeLeaf> leaves_;
-	std::vector<TreeEntry> files_;
-
-	void addFile (std::string const& path, u64 id)
-	{
-		std::vector<std::string> tokens;
-		size_t depth = splitString(path, "/", tokens);
-
-		addFile(tokens, id);
-	}
-
-	void addFile (std::vector<std::string> path, u64 id)
-	{
-		size_t depth = path.size();
-
-		if(depth > 1) {
-			findAndAdd(path.front(),
-				std::vector<std::string>(
-						path.begin()+1,
-						path.end()
-					), id);
-		} else if(depth == 1) {
-			files_.push_back(TreeEntry(path.back(), id));
-		}
-	}
-
-	void findAndAdd (std::string const& name,
-		std::vector<std::string> path, u64 id)
-	{
-		auto findChild = [&name] (TreeLeaf const& leaf)
-		{
-			return (leaf.name == name);
-		};
-
-		auto found = std::find_if(std::begin(leaves_), 
-				std::end(leaves_), findChild);
-
-		FileTree* child;
-
-		if(found != std::end(leaves_)) {
-			child = found->tree.get();
-		} else {
-			leaves_.push_back(TreeLeaf(name, new FileTree)); 
-			child = leaves_.back().tree.get();
-		}
-
-		child->addFile(path, id);
-	}
-	
-	void write (io::CWriteFile& target)
-	{	
-	}
-
-	u64 writeTree(io::CWriteFile& target)
-	{
-		return 0;
-	}
-};
 
 class CItdPacker {
 public:	

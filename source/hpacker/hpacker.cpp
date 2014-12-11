@@ -8,6 +8,7 @@
  * There is NO WARRANTY, to the extent permitted by law.
  */
 #include <cstdio>
+#include <cstring>
 
 #include <hrengin/platform/time.h>
 #include <hrengin/io/CReadFile.h>
