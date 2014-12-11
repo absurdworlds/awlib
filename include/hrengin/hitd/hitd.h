@@ -29,9 +29,21 @@ enum Flags : u16 {
 
 };
 
-//! Header of ITD
+/*!
+ * Header of ITD, provides file identifier and some additional
+ * information adbout archive
+ */
 struct Header {
-	Header ()
+	struct MainHeader main;
+	struct SecondHeader second;
+};
+
+/*!
+ * Main header contains format identifier and some additional information,
+ * such as timestamp and number of files.
+ */
+struct MainHeader {
+	MainHeader ()
 		: padding{0}
 	{
 	}
@@ -48,6 +60,16 @@ struct Header {
 	Flags flags;
 	//! Padding to 32 bytes
 	u8 padding[6];
+};
+
+/*!
+ * Secondary header, used to define format extensions.
+ */
+struct SecondHeader {
+	SecondHeader ()
+		: padding{0}
+	{
+	}
 	//! Secondary identifier, application-specific
 	u32 secondId;
 	//! Secondary format version
