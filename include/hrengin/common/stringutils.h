@@ -47,11 +47,16 @@ inline std::string getFileExtension (std::string& dest, std::string const& path)
 }
 
 /*!
- * Split string into tokens
- * \param source Source string to split
- * \param delim Delimiting sequence
- * \param holder Vector to hold results
- * \return Number of found tokens
+ * \brief 
+ * 	Split string into tokens
+ * \param source
+ * 	Source string to split
+ * \param delim
+ * 	Delimiting sequence
+ * \param holder
+ * 	Vector to hold results
+ * \return
+ * 	Number of found tokens
  */
 inline size_t splitString (std::string const& source, std::string const& delim,
 		std::vector<std::string>& holder)
@@ -72,5 +77,28 @@ inline size_t splitString (std::string const& source, std::string const& delim,
 	return num_tokens;
 }
 
+namespace string {
+/*!
+ * \brief
+ * 	join strings together
+ * \param source
+ * 	vector of strings to be joined
+ * \param delim 
+ * 	delimiting sequence which will be inserted between 
+ * 	joined strings
+ * \return
+ * 	resulting string concatenated together
+ */
+inline std::string join (std::vector<std::string>& source, 
+		std::string const& delim)
+{
+	std::string result;
+	for(auto const& str : source) {
+		result.append(delim + str);
+	}
+
+	return result;
+}
+} // namespace string
 } // namespace hrengin
 #endif //_hrengin_stringutils_
