@@ -221,7 +221,6 @@ i32 main (char** args)
 
 	std::string filename;
 	std::vector<std::string> files;
-	std::string dir;
 	bool verbose = false;
 
 	core::ClineArg arg;
@@ -258,9 +257,6 @@ i32 main (char** args)
 			}
 		}
 	}
-	
-	argp->getToken(arg);
-	dir = arg.name;
 	
 	if(action == Create) {
 		CItdPacker packer(filename, verbose);
