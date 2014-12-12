@@ -6,20 +6,19 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
+#include <fstream>
+
 #include <hrengin/core/models.h>
 #include <hrengin/core/paths.h>
 #include <hrengin/common/stringutils.h>
 
 #include <hrengin/core/IFileSystem.h>
 
-#include <hrengin/io/CReadFile.h>
-#include <hrengin/io/IBufferedStream.h>
-
 #include <hrengin/hdf/IHDFParser.h>
 
 #include <hrengin/core/IModel.h>
 
-#include  "CModelLoader.h"
+#include "CModelLoader.h"
 
 namespace hrengin {
 
@@ -37,9 +36,10 @@ IModel* CModelLoader::loadModel(char const* filename)
 	std::string path = io::modelpath + filename;
 	std::string ext;
 
-	io::CReadFile file(path);
+	std::ifstream file;
+	file.open(path, std::ios::binary);
 
-	if (!file.isOpen()) {
+	if (file.fail()) {
 		return 0;
 	}
 	
@@ -48,13 +48,11 @@ IModel* CModelLoader::loadModel(char const* filename)
 	getFileExtension(ext, filename);
 
 	if(ext == "hndf" || ext == "hdf") {
-		io::ICharacterStream* stream = io::createBufferedStream(file);
-		hdf::IHDFParser* hdf = hdf::createHDFParser(stream);
+		hdf::IHDFParser* hdf = hdf::createHDFParser(file);
 
 		hdfParse(hdf, model);
 
 		delete hdf;
-		delete stream;
 	}
 
 	return model;

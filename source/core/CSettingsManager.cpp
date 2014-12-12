@@ -6,11 +6,11 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
+#include <fstream>
+#include <sstream>
+
 #include <hrengin/resources/default_settings.h>
 #include <hrengin/hdf/IHDFParser.h>
-#include <hrengin/io/CReadFile.h>
-#include <hrengin/io/ICharacterStream.h>
-#include <hrengin/io/IBufferedStream.h>
 
 #include "CSettingsManager.h"
 
@@ -29,20 +29,23 @@ CSettingsManager::CSettingsManager()
 
 void CSettingsManager::loadSettings()
 {
-	io::CReadFile file("../data/settings.hdf");
-
-	io::ICharacterStream* stream;
 	hdf::IHDFParser* hdf;
 
-	stream = file.isOpen() 
-		? io::createBufferedStream(file)
-		: io::createCharacterStream(default_settings);
+	std::ifstream file;
+	file.open("../data/settings.hdf", std::ios::binary);
 
-	hdf = hdf::createHDFParser(stream);
+	if(file) {
+		hdf = hdf::createHDFParser(file);
+	} else {
+		std::string def(default_settings);
+		std::istringstream sstream(def);
+
+		hdf = hdf::createHDFParser(sstream);
+	}
+
 	parseSettings(hdf);
 
 	delete hdf;
-	delete stream;
 }
 
 void CSettingsManager::parseSettings(hdf::IHDFParser* hdf)

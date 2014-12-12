@@ -1,15 +1,12 @@
-/**
-   Copyright (C) 2014  absurdworlds
-
-   License LGPLv3-only:
-   GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
-   This is free software: you are free to change and redistribute it.
-   There is NO WARRANTY, to the extent permitted by law.
+/*
+ * Copyright (C) 2014  absurdworlds
+ *
+ * License LGPLv3-only:
+ * GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
+ * This is free software: you are free to change and redistribute it.
+ * There is NO WARRANTY, to the extent permitted by law.
  */
-
 #include <stdio.h>
-
-#include <hrengin/io/IBufferedStream.h>
 
 #include <hrengin/common/types.h>
 
@@ -82,15 +79,15 @@ hdf::Type hdfConvertImpicitType(const HdfToken& token)
 }
 
 /*
-   Member function definitions
+ * Member function definitions
  */
 
-IHDFParser* createHDFParser(io::ICharacterStream* stream)
+IHDFParser* createHDFParser(std::istream& stream)
 {
 	return new CHDFParser(stream);
 }
 
-CHDFParser::CHDFParser(io::ICharacterStream* stream)
+CHDFParser::CHDFParser(std::istream& stream)
 	: depth_(0), state_(HDF_S_IDLE), stream_(stream)
 {
 }
@@ -100,9 +97,7 @@ CHDFParser::~CHDFParser()
 }
 
 bool CHDFParser::read() {
-	u8 c;
-
-	stream_->getCurrent(c);
+	u8 c = stream_.peek();
 
 	if(c == 0) {
 		return false;
@@ -110,7 +105,7 @@ bool CHDFParser::read() {
 
 	fastForward();
 
-	stream_->getCurrent(c);
+	c = stream_.peek();
 	
 	if(c == 0) {
 		return false;
@@ -120,7 +115,7 @@ bool CHDFParser::read() {
 		while(c == '!') {
 			processCommand();
 			fastForward();
-			stream_->getCurrent(c);
+			c = stream_.peek();			
 		}
 		if(c == '[') {
 			state_ = HDF_S_OBJECT;
@@ -140,9 +135,7 @@ HdfObjectType CHDFParser::getObjectType()
 		return HDF_OBJ_NULL;
 	}
 
-	u8 c;
-
-	stream_->getCurrent(c);
+	u8 c = stream_.peek();
 
 	if(state_ != HDF_S_OBJECT) {
 		error(HDF_LOG_ERROR, "there is no object");
@@ -151,7 +144,7 @@ HdfObjectType CHDFParser::getObjectType()
 		if(c == '[') {
 			// step forward - getObjectName expects a nameChar to
 			// be the first char
-			stream_->getNext(c); 
+			c = stream_.get(); 
 			state_ = HDF_S_NODE_BEGIN;
 			depth_ ++;
 			return HDF_OBJ_NODE;
@@ -163,7 +156,7 @@ HdfObjectType CHDFParser::getObjectType()
 			state_ = HDF_S_VALUE_BEGIN;
 			return HDF_OBJ_VAL;
 		} else if(c == ']') {
-			stream_->getNext(c); 
+			c = stream_.get(); 
 			depth_--;
 			state_ = HDF_S_IDLE;
 			return HDF_OBJ_NODE_END;
@@ -262,12 +255,12 @@ void CHDFParser::skipNode()
 {
 	u8 c;
 
-	stream_->getCurrent(c);
+	c = stream_.peek();
 
 	u32 depth = 1;
 
 	while (depth > 0) {
-		stream_->getNext(c);
+		c = stream_.get();
 		if(c == '[' ) {
 			depth++;
 		} else if(c == ']') {
@@ -281,7 +274,7 @@ void CHDFParser::skipNode()
 void CHDFParser::error(hdf::ParserMessage type, std::string msg)
 {
 	errors_.push_back(msg);
-	printf("[HDF:%u]: %s\n",stream_->getPos(),msg.c_str());
+	printf("[HDF:%u]: %s\n",u32(stream_.tellg()),msg.c_str());
 
 	if(type == HDF_LOG_ERROR) {
 		state_ = HDF_S_PANIC;
@@ -295,10 +288,10 @@ void CHDFParser::skip()
 {
 	u8 c;
 
-	stream_->getCurrent(c);
+	c = stream_.peek();
 	
 	while(condition(c) && c != 0) {
-		stream_->getNext(c);
+		c = stream_.get();
 	}
 }
 
@@ -325,7 +318,7 @@ void CHDFParser::skipInlineWhitespace()
 void CHDFParser::fastForward() {
 	u8 c;
 
-	stream_->getCurrent(c);
+	c = stream_.peek();
 
 	bool needsFastForward = isWhitespace(c) || c == '/';
 
@@ -333,7 +326,7 @@ void CHDFParser::fastForward() {
 		if(isWhitespace(c)) {
 			skipWhitespace();
 		} else if(c == '/') {
-			stream_->getNext(c);
+			c = stream_.get();
 
 			if(c == '/') {
 				//token.type = tokenCOMMENT;
@@ -343,9 +336,9 @@ void CHDFParser::fastForward() {
 			}
 		}		
 		
-		stream_->getCurrent(c);
+		c = stream_.peek();
 		needsFastForward = isWhitespace(c) || c == '/';
-		//stream_->getNext(c);
+		//c = stream_.get();
 	}
 }
 
@@ -354,17 +347,17 @@ bool CHDFParser::parseType(HdfToken& token) {
 
 	u8 c;
 
-	stream_->getCurrent(c);
+	c = stream_.peek();
 
 	if(c == '=') {
-		stream_->getNext(c);
+		c = stream_.get();
 	} else {
 		error(HDF_LOG_ERROR, "illegal token, expected '='");
 	}
 
 	skipInlineWhitespace();
 	
-	stream_->getCurrent(c);
+	c = stream_.peek();
 
 	if(isNameBeginChar(c)) {
 		token.type = HDF_TOKEN_NAME;
@@ -375,13 +368,13 @@ bool CHDFParser::parseType(HdfToken& token) {
 	
 	skipInlineWhitespace();
 	
-	stream_->getCurrent(c);
+	c = stream_.peek();
 
 	if(c == ':') {
-		stream_->getNext(c);
+		c = stream_.get();
 		return true;
 	} else {
-		//stream_->getNext(c);
+		//c = stream_.get();
 		return false;
 	}
 }
@@ -392,7 +385,7 @@ void CHDFParser::readToken(HdfToken& token)
 
 	u8 c;
 
-	stream_->getCurrent(c);
+	c = stream_.peek();
 
 	if(isNameBeginChar(c)) {
 		token.type = HDF_TOKEN_NAME;
@@ -412,24 +405,24 @@ void CHDFParser::readStringToken(std::string& val) {
 	val = "";
 	u8 c;
 
-	stream_->getCurrent(c);
+	c = stream_.peek();
 #if 0
 	if(c != '"') {
 		// should not get this error
 		error(HDF_LOG_ERROR, "illegal string token");
 	}
 #endif
-	stream_->getNext(c);
+	c = stream_.get();
 	
 	while (c != '"') {
 		if ( c == '\\' ) {
-			stream_->getNext(c);
+			c = stream_.get();
 		}
 		val += c;
-		stream_->getNext(c);
+		c = stream_.get();
 	}
 	
-	stream_->getNext(c);
+	c = stream_.get();
 }
 
 void CHDFParser::readNumber(std::string& val)
@@ -437,14 +430,14 @@ void CHDFParser::readNumber(std::string& val)
 	val = "";
 	u8 c;
 
-	stream_->getCurrent(c);
+	c = stream_.peek();
 
 	while (!isWhitespace(c) && (c != ']')) {
 		if (!(c >= '0' && c <= '9') && !in(c, '.', 'e', 'E', '+', '-' )) {
 			error(HDF_LOG_WARNING, "invalid number");
 		}
 		val += c;
-		stream_->getNext(c);
+		c = stream_.get();
 	}
 }
 
@@ -453,7 +446,7 @@ void CHDFParser::readName(std::string& name, char stop)
 	name = "";
 	u8 c;
 	
-	stream_->getCurrent(c);
+	c = stream_.peek();
 
 	while(!isWhitespace(c) && (c != stop) && (c != ']')) {
 		if(isNameChar(c)) {
@@ -461,7 +454,7 @@ void CHDFParser::readName(std::string& name, char stop)
 		} else {
 			error(HDF_LOG_WARNING, "invalid name char");
 		}
-		stream_->getNext(c);
+		c = stream_.get();
 	}
 }
 
@@ -474,7 +467,6 @@ void CHDFParser::readTypeName(std::string& name)
 {
 	readName(name, ':');
 }
-
 
 template<typename T> 
 void CHDFParser::readValue(T& var)
@@ -574,10 +566,10 @@ void CHDFParser::processCommand() {
 	
 	u8 c;
 
-	stream_->getCurrent(c);
+	c = stream_.peek();
 
 	if (c == '!') {
-		stream_->getNext(c);
+		c = stream_.get();
 	} else {
 		error(HDF_LOG_ERROR, "No command to process");
 	}
@@ -613,7 +605,6 @@ void CHDFParser::processCommand() {
 		}
 	}
 }
-
 
 } // namespace io
 } // namespace hrengin

@@ -31,4 +31,4 @@ endif
 
 .PHONY : clean
 clean:
-	-rm $(SharedLibFullName) $(Objects) *.o
+	-rm $(SharedLibFullName) $(Objects)
