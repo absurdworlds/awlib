@@ -24,23 +24,18 @@ namespace itd {
 	#define HR_ITD_EXP HR_IMPORT
 #endif
 
-//! Package flags (reserved)
-enum Flags : u16 {
-
-};
-
 /*!
  * Main header contains format identifier and some additional information,
  * such as timestamp and number of files.
  */
 struct MainHeader {
 	MainHeader ()
-		: padding{0}
+		: fileId{'h','i','t','d'}, padding{0}
 	{
 	}
 
 	//! File type indetifier, should be 'hitd'
-	u32 fileId;
+	u8 const fileId[4];
 	//! hrengin package format version
 	u32 version;
 	//! Time packaged;
@@ -48,9 +43,14 @@ struct MainHeader {
 	//! Number of file entries
 	u64 files_num;
 	//! Flags
-	Flags flags;
+	u16 flags;
 	//! Padding to 32 bytes
 	u8 padding[6];
+};
+
+//! Package flags (reserved)
+enum Flags : u16 {
+
 };
 
 /*!
@@ -62,10 +62,29 @@ struct SecondHeader {
 	{
 	}
 	//! Secondary identifier, application-specific
-	u32 secondId;
+	u8 id[4];
 	//! Secondary format version
-	u32 secondVersion;
-	char padding[24];
+	u32 version;
+	u8 padding[24];
+};
+
+/*!
+ * Second header for standard archive
+ */
+struct StandardHeader {
+	StandardHeader ()
+		: id{'h','p','k','a'}, padding{0}
+
+	u8 id[4];
+	u32 version;
+	u32 flags;
+	u8 padding[20];
+};
+
+enum StandardFlags : u32 {
+	STD_HasFileTree 	= 1 << 0,
+	STD_HasHashTable	= 1 << 1,
+	STD_HasFileMeta		= 1 << 2,
 };
 
 /*!
@@ -76,6 +95,7 @@ struct Header {
 	struct MainHeader main;
 	struct SecondHeader second;
 };
+
 //! File flags
 enum FileFlags : u16 {
 	None,
@@ -85,20 +105,10 @@ enum FileFlags : u16 {
 
 //! Represents a file entry
 struct FileEntry {
-	FileEntry ()
-		: padding{0}
-	{
-	}
 	//! Position of first element from beginning of the package
 	u64 offset;
 	//! Size of file in bytes
 	u64 size;
-	//! File modification time
-	u64 mtime;
-	//! Flags
-	FileFlags flags;
-	//! Padding to 32 bytes
-	u8 padding[6];
 };
 
 #if 0
