@@ -62,7 +62,7 @@ void parseNode(IHDFParser* hdf, std::string node, Message& msg)
 void main()
 {
 	// open a file
-	IReadFile* file = openReadFile("./messages.hdf");
+	IReadFile* file = openReadFile("../data/misc/messages.hdf");
 	// create the parser
 	IHDFParser* hdf = createHDFParser(file);
 
