@@ -27,10 +27,13 @@ public:
 	virtual void setWorldOrientation(Vector3d<f32> const& worldrot) = 0;
 };
 
-//! This motion state is used to synchronize physics and scene graph
+/*!
+ * This type of motion state is used to synchronize
+ * physics world and scene graph
+ */
 class CSceneMotionState : public IMotionState {
 public:
-	CSceneMotionState(scene::ISceneNode* node)
+	CSceneMotionState(scene::INode* node)
 		: node_(node)
 	{
 	}
@@ -55,7 +58,7 @@ public:
 		node_->setRotation(worldrot);
 	}
 private:
-	scene::ISceneNode* node_;
+	scene::INode* node_;
 };
 
 } // namespace graphics

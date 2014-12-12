@@ -1,12 +1,11 @@
 /*
-   Copyright (C) 2014  absurdworlds
-
-   License LGPLv3-only:
-   GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
-   This is free software: you are free to change and redistribute it.
-   There is NO WARRANTY, to the extent permitted by law.
+ * Copyright (C) 2014  absurdworlds
+ *
+ * License LGPLv3-only:
+ * GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
+ * This is free software: you are free to change and redistribute it.
+ * There is NO WARRANTY, to the extent permitted by law.
  */
-
 #include <algorithm>
 
 #include <hrengin/core/models.h>
@@ -22,10 +21,8 @@
 #include "hrToBullet.h"
 #include "CDebugDrawer.h"
 
-
 namespace hrengin {
 namespace physics {
-
 
 HR_PHYS_EXP IPhysicsManager* createPhysicsManager()
 {
@@ -68,12 +65,16 @@ IPhysicsWorld* CBulletPhysics::createPhysicsWorld()
 		dispatcher, solver);
 }
 
-IDebugDrawer* CBulletPhysics::createDebugDrawer(graphics::IRenderingDevice* renderer)
+IDebugDrawer*
+CBulletPhysics::createDebugDrawer(graphics::IRenderingDevice* renderer)
 {
 	return new CDebugDrawer(renderer);
 }
 
-IRigidBody* CBulletPhysics::createBody(const char* modelName, IRigidBody::RigidBodyConstructionInfo cInfo)
+IRigidBody*
+CBulletPhysics::createBody(
+		char const* modelName, 
+		IRigidBody::RigidBodyConstructionInfo cInfo)
 {
 	u32 shapeId = loadModel(modelName);
 	return createBody(shapeId, cInfo); 
@@ -201,29 +202,33 @@ btCollisionShape* CBulletPhysics::createPrimitiveShape(Primitive shape)
 
 u32 CBulletPhysics::addShape(IModel* model)
 {
-	if(model->primitives.size() > 0) {
-		btCompoundShape* compound = new btCompoundShape();
-	
-		for(auto it = model->primitives.begin(); it != model->primitives.end(); it++) {
-			Primitive primitive = *it;
-			btCollisionShape * shape = createPrimitiveShape(primitive);
-			btTransform localTransform;
-
-			localTransform.setIdentity();
-			localTransform.setOrigin(btVector3(primitive.offset[0],primitive.offset[1],primitive.offset[2]));
-			localTransform.setRotation(btQuaternion(primitive.rotation[1],primitive.rotation[0],primitive.rotation[2]));
-
-			compound->addChildShape(localTransform,shape);
-		}
-
-		collisionShapes_.push_back(compound);
-	} else {
+	if(model->primitives.size() == 0) {
 		return 0;
-	}	
+	}
+
+	btCompoundShape* compound = new btCompoundShape();
+
+	for(auto primitive : model->primitives) {
+		btCollisionShape * shape = createPrimitiveShape(primitive);
+		btTransform localTransform;
+
+		localTransform.setIdentity();
+		localTransform.setOrigin(btVector3(
+				primitive.offset[0],
+				primitive.offset[1],
+				primitive.offset[2]));
+		localTransform.setRotation(btQuaternion(
+				primitive.rotation[1],
+				primitive.rotation[0],
+				primitive.rotation[2]));
+
+		compound->addChildShape(localTransform,shape);
+	}
+
+	collisionShapes_.push_back(compound);
 
 	return collisionShapes_.size()-1;
 };
-
 
 u32 CBulletPhysics::loadModel(const char* modelName)
 {
@@ -242,7 +247,6 @@ u32 CBulletPhysics::loadModel(const char* modelName)
 	models_[modelName] = id;
 	return id;
 }
-
 
 } // namespace physics
 } // namespace hrengin
