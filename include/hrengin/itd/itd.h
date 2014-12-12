@@ -74,6 +74,8 @@ struct SecondHeader {
 struct StandardHeader {
 	StandardHeader ()
 		: id{'h','p','k','a'}, padding{0}
+	{
+	}
 
 	u8 id[4];
 	u32 version;

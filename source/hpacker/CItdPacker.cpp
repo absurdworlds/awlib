@@ -117,16 +117,26 @@ i32 CItdPacker::addDir (std::string const& path)
 void CItdPacker::writeHeader()
 {
 	itd::Header header;
-	header.fileId = 'h' + ('i' << 8) + ('t' << 16) + ('d' << 24);
-	header.version = 1;
-	header.ptime = getTime();
-	header.secondId = 'h' + ('p' << 8) + ('k' << 16) + ('a' << 24);
 
-	archive_.write(&header.fileId,4);
-	archive_.write(&header.version,4);
-	archive_.write(&header.ptime,8);
-	archive_.write(&header.secondId,4);
-	archive_.write(&header.padding, 44);
+	header.main.version = 3;
+	header.main.ptime = getTime();
+	header.main.files_num = 2 + fileList_.size();
+	
+	itd::StandardHeader second;
+	second.version = 2;
+	second.flags = itd::STD_HasFileTree;
+
+	archive_.write(&header.main.fileId,4);
+	archive_.write(&header.main.version,4);
+	archive_.write(&header.main.ptime,8);
+	archive_.write(&header.main.files_num,8);
+	archive_.write(&header.main.flags,2);
+	archive_.write(&header.main.padding, 6);
+
+	archive_.write(&second.id,4);
+	archive_.write(&second.version,4);
+	archive_.write(&second.flags,4);
+	archive_.write(&second.padding, 20);
 }
 
 void CItdPacker::prepareFileIndex ()
@@ -135,14 +145,9 @@ void CItdPacker::prepareFileIndex ()
 	u64 num_entries = 2 + fileList_.size();
 	index_.resize(num_entries);
 
-	// Write empty index
-	for(auto entry : index_) {
-		archive_.write(&entry.offset,8);
-		archive_.write(&entry.size,8);
-		archive_.write(&entry.mtime,8);
-		archive_.write(&entry.flags,2);
-		archive_.write(&entry.padding[0],6);
-	}
+	// Reserve space for file index
+	writeFileIndex();
+
 }
 
 void CItdPacker::writeArchive() 
@@ -170,8 +175,6 @@ void CItdPacker::packFile (size_t id, std::string const& path)
 
 	index_[id].offset = archive_.tell();
 	index_[id].size = size;
-	index_[id].mtime = 0;
-	index_[id].flags = itd::FileFlags::None;
 
 	char* buf = new char[size];
 
@@ -184,12 +187,14 @@ void CItdPacker::packFile (size_t id, std::string const& path)
 void CItdPacker::updateFileIndex ()
 {
 	archive_.seek(64);
+	writeFileIndex();
+}
+
+void CItdPacker::writeFileIndex ()
+{
 	for(auto entry : index_) {
 		archive_.write(&entry.offset,8);
 		archive_.write(&entry.size,8);
-		archive_.write(&entry.mtime,8);
-		archive_.write(&entry.flags,2);
-		archive_.write(&entry.padding[0],6);
 	}
 }
 

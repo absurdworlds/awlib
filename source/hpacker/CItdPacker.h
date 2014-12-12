@@ -7,13 +7,13 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_hpacker_
-#define _hrengin_hpacker_
+#ifndef _hrengin_CItdPacker_
+#define _hrengin_CItdPacker_
 #include <string>
 #include <vector>
 
 #include <hrengin/common/types.h>
-#include <hrengin/hitd/hitd.h>
+#include <hrengin/itd/itd.h>
 #include <hrengin/io/CWriteFile.h>
 
 #include "CItdFileTree.h"
@@ -48,6 +48,7 @@ private:
 
 	void prepareFileIndex ();
 	void updateFileIndex ();
+	void writeFileIndex ();
 
 	void buildFileTree ();
 
@@ -64,4 +65,4 @@ private:
 };
 } // namespace itd
 } // namespace hrengin
-#endif//_hrengin_hpacker_
+#endif//_hrengin_CItdPacker_
