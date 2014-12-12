@@ -10,10 +10,13 @@
 #ifndef _hrengin_hpacker_
 #define _hrengin_hpacker_
 #include <hrengin/common/types.h>
-#include <hrengin/hitd/hitd.h>
+#include <hrengin/itd/itd.h>
 
 #include "CItdFileTree.h"
 #include "CItdPacker.h"
 #include "CItdReader.h"
+
+// TODO: make Packer read directories on addition
+// TODO: refactor FileTree
 
 #endif//_hrengin_hpacker_
