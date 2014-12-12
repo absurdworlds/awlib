@@ -413,12 +413,13 @@ void CHDFParser::readStringToken(std::string& val) {
 	u8 c;
 
 	stream_->getCurrent(c);
-	
-	stream_->getNext(c);
-	/*if(c != '"') {
+#if 0
+	if(c != '"') {
 		// should not get this error
 		error(HDF_LOG_ERROR, "illegal string token");
-	}*/
+	}
+#endif
+	stream_->getNext(c);
 	
 	while (c != '"') {
 		if ( c == '\\' ) {
@@ -464,7 +465,7 @@ void CHDFParser::readName(std::string& name, char stop)
 	}
 }
 
-inline void CHDFParser::readValueName(std::string& name)
+void CHDFParser::readValueName(std::string& name)
 {
 	readName(name, '=');
 }

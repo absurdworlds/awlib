@@ -1,10 +1,10 @@
 /*
-   Copyright (C) 2014  absurdworlds
-
-   License LGPLv3-only:
-   GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
-   This is free software: you are free to change and redistribute it.
-   There is NO WARRANTY, to the extent permitted by law.
+ * Copyright (C) 2014  absurdworlds
+ *
+ * License LGPLv3-only:
+ * GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
+ * This is free software: you are free to change and redistribute it.
+ * There is NO WARRANTY, to the extent permitted by law.
  */
 #ifndef _hrengin_CHDFParser_
 #define _hrengin_CHDFParser_
@@ -18,41 +18,17 @@
 
 namespace hrengin {
 namespace hdf {
-
-/* 
-   Most of those are legacy values, only few are actually used
-   Probably should clean up, unless is decided to make parser backward-compatible
- */
 enum HdfTokenType {
-	HDF_TOKEN_EOF = 0,
+	HDF_TOKEN_INVALID,
+	HDF_TOKEN_EOF,
 	HDF_TOKEN_NAME,
 	HDF_TOKEN_NUMBER,
 	HDF_TOKEN_STRING,
-	HDF_TOKEN_WHITESPACE,
-	HDF_TOKEN_COMMENT,
-	HDF_TOKEN_OBJECT_BEGIN,
-	HDF_TOKEN_OBJECT_END,
-	HDF_TOKEN_SEPARATOR,
-	HDF_TOKEN_TYPE_SEPARATOR,
-	HDF_TOKEN_DIRECTIVE,
-	HDF_TOKEN_ARRAY_ELEMENT,
-	HDF_TOKEN_VALUE,
-	HDF_TOKEN_INVALID
 };
 
 struct HdfToken {
 	HdfTokenType type;
 	std::string value;
-};
-
-enum HdfType {
-	HDF_INTEGER,
-	HDF_FLOAT,
-	HDF_BOOLEAN,
-	HDF_STRING,
-	HDF_VECTOR2,
-	HDF_VECTOR3,
-	HDF_UNKNOWN_TYPE
 };
 
 class CHDFParser : public IHDFParser {
