@@ -12,7 +12,6 @@
 #include <hrengin/platform/time.h>
 
 #include <hrengin/io/filesystem.h>
-#include <hrengin/io/CReadFile.h>
 #include <hrengin/io/IDirectory.h>
 
 #include "CItdPacker.h"
@@ -20,12 +19,14 @@
 namespace hrengin {
 namespace itd {
 CItdPacker::CItdPacker (std::string const& archive_name, bool verbose)
-	: archive_(archive_name, io::FileMode::Overwrite), verbose_(verbose)
-{	
+	: verbose_(verbose)
+{
+	archive_.open(archive_name, std::ofstream::binary);
 }
 
 CItdPacker::~CItdPacker ()
 {
+	archive_.close();
 }
 
 void CItdPacker::addFile (std::string const& filename)
@@ -40,7 +41,7 @@ void CItdPacker::addList (std::vector<std::string> const& files)
 
 i32 CItdPacker::pack ()
 {
-	if(!archive_.isOpen()) {
+	if(!archive_.is_open()) {
 		return -1;
 	}
 	
@@ -69,11 +70,12 @@ void CItdPacker::buildFileTree ()
 		root.addFile(fileList_[id], id + 2);
 	}
 
-	index_[0].offset = archive_.tell();
+	index_[0].offset = archive_.tellp();
 
 	root.write(archive_);
 
-	index_[0].size = archive_.tell() - index_[0].offset;
+	index_[0].size  = archive_.tellp();
+	index_[0].size -= index_[0].offset;
 }
 
 void CItdPacker::addObject (std::string const& path)
@@ -122,21 +124,21 @@ void CItdPacker::writeHeader()
 	header.main.ptime = getTime();
 	header.main.files_num = 2 + fileList_.size();
 	
+	archive_.write((char *)&header.main.fileId,4);
+	archive_.write((char *)&header.main.version,4);
+	archive_.write((char *)&header.main.ptime,8);
+	archive_.write((char *)&header.main.files_num,8);
+	archive_.write((char *)&header.main.flags,2);
+	archive_.write((char *)&header.main.padding, 6);
+
 	itd::StandardHeader second;
 	second.version = 2;
 	second.flags = itd::STD_HasFileTree;
 
-	archive_.write(&header.main.fileId,4);
-	archive_.write(&header.main.version,4);
-	archive_.write(&header.main.ptime,8);
-	archive_.write(&header.main.files_num,8);
-	archive_.write(&header.main.flags,2);
-	archive_.write(&header.main.padding, 6);
-
-	archive_.write(&second.id,4);
-	archive_.write(&second.version,4);
-	archive_.write(&second.flags,4);
-	archive_.write(&second.padding, 20);
+	archive_.write((char *)&second.id,4);
+	archive_.write((char *)&second.version,4);
+	archive_.write((char *)&second.flags,4);
+	archive_.write((char *)&second.padding, 20);
 }
 
 void CItdPacker::prepareFileIndex ()
@@ -159,9 +161,9 @@ void CItdPacker::writeArchive()
 
 void CItdPacker::packFile (size_t id, std::string const& path)
 {
-	io::CReadFile file(path);
+	std::ifstream file(path, std::ifstream::binary);
 
-	if(!file.isOpen()) {
+	if(!file.is_open()) {
 		index_[id].offset = -1;
 		index_[id].size   =  0;
 		return;
@@ -171,30 +173,26 @@ void CItdPacker::packFile (size_t id, std::string const& path)
 		printf("Adding %s\n", path.c_str());
 	}
 
-	size_t size = file.getSize();
+	index_[id].offset = archive_.tellp();
 
-	index_[id].offset = archive_.tell();
-	index_[id].size = size;
+	archive_ << file.rdbuf();
 
-	char* buf = new char[size];
-
-	file.read(buf, size);
-	archive_.write(buf, size);
-
-	delete[] buf;
+	index_[id].size  = archive_.tellp();
+	index_[id].size -= index_[id].offset;
 }
 
 void CItdPacker::updateFileIndex ()
 {
-	archive_.seek(64);
+	archive_.seekp(64);
+
 	writeFileIndex();
 }
 
 void CItdPacker::writeFileIndex ()
 {
 	for(auto entry : index_) {
-		archive_.write(&entry.offset,8);
-		archive_.write(&entry.size,8);
+		archive_.write((char *)&entry.offset,8);
+		archive_.write((char *)&entry.size,8);
 	}
 }
 

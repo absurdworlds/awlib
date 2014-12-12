@@ -10,23 +10,23 @@
 #ifndef _hrengin_CItdReader_
 #define _hrengin_CItdReader_
 #include <vector>
+#include <fstream>
 
 #include <hrengin/common/types.h>
-#include <hrengin/io/CReadFile.h>
 
 namespace hrengin {
 namespace itd {
 
 class CItdReader {
 public:
-	CItdReader (io::CReadFile* archive);
+	CItdReader (std::string const& archive_name, bool verbose);
 
 	std::vector<std::string> list (std::string prefix);
 
 	std::vector<u8> getFileContents (u64 fileId);
 	std::vector<u8> getFileContents (std::string path);
 private:
-	io::CReadFile* archive_;
+	std::ifstream archive_;
 };
 } // namespace itd
 } // namespace hrengin

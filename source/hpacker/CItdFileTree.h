@@ -10,13 +10,12 @@
 #ifndef _hrengin_CItdFileTree_
 #define _hrengin_CItdFileTree_
 #include <memory>
-#include <algorithm>
 #include <string>
 #include <vector>
+#include <fstream>
 
 #include <hrengin/common/types.h>
 #include <hrengin/common/stringutils.h>
-#include <hrengin/io/CWriteFile.h>
 
 namespace hrengin {
 namespace itd {
@@ -49,12 +48,12 @@ struct FileTree {
 	void addFile (std::string const& path, u64 id);
 	void addFile (std::vector<std::string> path, u64 id);
 
-	void write (io::CWriteFile& target);
+	void write (std::ofstream& target);
 private:
 	void findAndAdd (std::string const& name,
 		std::vector<std::string> path, u64 id);
-	u64 writeTree (io::CWriteFile& target);
-	void writeDirList (io::CWriteFile& target);
+	u64 writeTree (std::ofstream& target);
+	void writeDirList (std::ofstream& target);
 };
 
 } // namespace itd

@@ -7,8 +7,9 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#include "CItdFileTree.h"
+#include <algorithm>
 
+#include "CItdFileTree.h"
 
 namespace hrengin {
 namespace itd {
@@ -60,39 +61,39 @@ void FileTree::findAndAdd (std::string const& name,
 	child->addFile(path, id);
 }
 
-void FileTree::write (io::CWriteFile& target)
+void FileTree::write (std::ofstream& target)
 {
 	u32 id = 't' + ('r' << 8) + ('e' << 16) + ('e' << 24);
 	u32 version = 1;
 
-	target.write(&id,4);
-	target.write(&version,4);
+	target.write((char *)&id,4);
+	target.write((char *)&version,4);
 	
 	writeTree(target);
 }
 
-u64 FileTree::writeTree (io::CWriteFile& target)
+u64 FileTree::writeTree (std::ofstream& target)
 {
-	u64 pointers = target.tell();
+	u64 pointers = target.tellp();
 
 	// Reserve space for pointers
 	u64 last_pos;
 	u64 entries_ptr = -1;
 	u64 subtree_ptr = -1;
-	target.write(&entries_ptr,8);
-	target.write(&subtree_ptr,8);
+	target.write((char *)&entries_ptr,8);
+	target.write((char *)&subtree_ptr,8);
 
 	if(files_.size() > 0) {
-		entries_ptr = target.tell();
+		entries_ptr = target.tellp();
 		for(auto const& file : files_) {
 			target.write(
 				file.name.c_str(),
 				file.name.size() + 1);
-			target.write(&file.id,8);
+			target.write((char *)&file.id,8);
 		}
 	}
 
-	last_pos = target.tell();
+	last_pos = target.tellp();
 
 	if(leaves_.size() > 0) {
 		subtree_ptr = last_pos;
@@ -106,34 +107,33 @@ u64 FileTree::writeTree (io::CWriteFile& target)
 		}
 		
 		// store position
-		last_pos = target.tell();
+		last_pos = target.tellp();
 
 		// Wrtite actual list
-		target.seek(subtree_ptr);
+		target.seekp(subtree_ptr);
 		writeDirList(target);
 	}
 
 	// write pointers
-	target.seek(pointers);
+	target.seekp(pointers);
 	if(files_.size() > 0) {
-		target.write(&entries_ptr,8);
+		target.write((char *)&entries_ptr,8);
 	}
 	if(leaves_.size() > 0) {
-
-		target.write(&subtree_ptr,8);
+		target.write((char *)&subtree_ptr,8);
 	}
-	target.seek(last_pos);
+	target.seekp(last_pos);
 
 	return pointers;
 }
 
-void FileTree::writeDirList (io::CWriteFile& target)
+void FileTree::writeDirList (std::ofstream& target)
 {
 	for(auto const& leaf : leaves_) {
 		target.write(
 			leaf.name.c_str(),
 			leaf.name.size() + 1);
-		target.write(&leaf.position,8);
+		target.write((char *)&leaf.position,8);
 	}
 }
 } // namespace itd

@@ -11,8 +11,7 @@
 
 namespace hrengin {
 namespace itd {
-CItdReader::CItdReader (io::CReadFile* archive)
-	: archive_(archive)
+CItdReader::CItdReader (std::string const& archive_name, bool verbose)
 {
 
 }

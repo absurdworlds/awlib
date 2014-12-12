@@ -11,10 +11,10 @@
 #define _hrengin_CItdPacker_
 #include <string>
 #include <vector>
+#include <fstream>
 
 #include <hrengin/common/types.h>
 #include <hrengin/itd/itd.h>
-#include <hrengin/io/CWriteFile.h>
 
 #include "CItdFileTree.h"
 
@@ -59,7 +59,7 @@ private:
 	std::vector<std::string> fileList_;
 	std::vector<itd::FileEntry> index_;
 
-	io::CWriteFile archive_;
+	std::ofstream archive_;
 
 	bool verbose_;
 };
