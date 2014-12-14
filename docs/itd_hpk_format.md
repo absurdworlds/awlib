@@ -75,7 +75,7 @@ Number of file entry is called 'file id'. File id are counted starting with 0.
 
 Files are stored immediately after file table. Each file is stored immediately after previous. This, however, is only a guideline and not a technical limitation.
 
-2) hrengin Package/Archive format (version 3)
+2) hrengin Package/Archive format (version 4)
 ---------------------------------------------
 
 This is the first extension for *itd* format. It adds facilities to store file names, paths and metadata on top of *itd* format.
@@ -108,15 +108,15 @@ For the sake of simplicity, `file 0` is always file index, and `file 1` is alway
 
 #### 2.2.1) File index ###
 `file 0`
-The purpose of file index is to provide file access by file names. It links file name to file id.
+The purpose of file index is to provide file access by file names. It links file names to file IDs.
 
 This file starts with `u32` code, specifying which type of index is used in this archive
 Possible values (see more in section 2.3):
 
-1. `tree` Directory tree. Each directory stored as a node which has a list of files, and list of child nodes.
-2. `htre` Hashed tree. Same as `tree`, however, file names are hashed for faster access.
-3. `list` Plain list. Stores file names as full paths.
-4. `htbl` Same as list, with hased names.
+1. `list` Plain list. Stores file names as full paths.
+2. `htbl` Same as list, with hased names.
+3. `tree` Directory tree. Each directory stored as a node which has a list of files, and list of child nodes.
+4. `htre` Hashed tree. Same as `tree`, however, file names are hashed for faster access.
 
 #### 2.2.2) Metadata ###
 `file 1`
@@ -124,10 +124,7 @@ The purpose of this file is to store additional metadata, such as file modificat
 Metadata is stored as 128-byte entries, number of which is equal to number of files in *itd* archive (see more in section 2.4).
 
 ### 2.3) File index description ##
-First goes identifier, which tells the type of file index. After that goes 28-byte padding.
-
-	u32 index_type
-	u8 [28] padding
+First goes identifier, which tells the type of file index. After that may come additional information, depending on the type of index.
 
 Regardless is type of the file index, each index has an array of strings at the end. This allows to make fixed-size structures, thus simplifying the reading.
 Each string is null-terminated and has `u16` field describing it's size, preceding it.
@@ -136,7 +133,15 @@ Each string is null-terminated and has `u16` field describing it's size, precedi
 All offsets are counted from the beginning of *index file* (`file 0`). 
 
 #### 2.3.1) File list ###
-File list is simplest type of index and consists of following entries:
+File list is simplest type of index. It has a header with number of entries.
+
+	u32 index_type
+Always `"list"`
+
+	u8 [4] unused
+	u64 files_num
+
+And rest of index consists of following entries:
 
 	u64 path_ptr
 Pointer (offset) to path string, containing file's full path.
@@ -146,6 +151,16 @@ ID of file in the file table
 
 #### 2.3.2) Hash table ###
 Hash table looks similar to file list, however, it is more complex.
+
+It's header contains number of entries, and also contains the `seed` for the hash.
+
+	u32 index_type
+Always `"htbl"`
+
+	u8 [4] unused
+	u64 files_num
+	u128 seed
+Used for computing the hash. Randomly generated at time of packaging.
 
 First comes array of 'buckets', each containing pointer to list of files in that 'bucket'.
 
@@ -157,12 +172,6 @@ After the array comes the regular file list.
 Entries are sorted in such way, that all files in a bucket have same hash value. Hash value computed using MurmurHash.
 	
 	hash = MurmurHash3(path, seed) % files_num
-
-Seed is randomly-generated and placed inside padding before the index.
-
-	u32 index_type
-	u8 [12] padding
-	u128 seed
 
 #### 2.3.3) Directory tree ###
 Directory tree consists of directory nodes
@@ -186,10 +195,29 @@ List of files in directory has same format as plain file list, except that each 
 
 List of directories contains child nodes in the same format as the parent node.
 
-File tree begins with nameless `root` node.
+File tree header contains nameless `root` node.
+
+	u32 index_type
+Always `"tree"`
+
+	u64 files_ptr
+	u64 files_num
+	u64 subtree_ptr
+	u32 subtree_num
 
 #### 2.3.4) Directory tree (hashed) ###
 Same as regular directory tree, however, instead of list of files, each directory has a hash table, which works same way as described in 2.3.2.
+
+It's header begins with a root node, and also contains `seed` for the hash.
+
+	u32 index_type
+Always `"htre"`
+	
+	u64 files_ptr
+	u64 files_num
+	u64 subtree_ptr
+	u32 subtree_num
+	u128 seed
 
 ### 2.4) Metadata entries ##
 
