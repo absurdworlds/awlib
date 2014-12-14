@@ -1,10 +1,10 @@
 /*
-   Copyright (C) 2014  absurdworlds
-
-   License LGPLv3-only:
-   GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
-   This is free software: you are free to change and redistribute it.
-   There is NO WARRANTY, to the extent permitted by law.
+ * Copyright (C) 2014  absurdworlds
+ *
+ * License LGPLv3-only:
+ * GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
+ * This is free software: you are free to change and redistribute it.
+ * There is NO WARRANTY, to the extent permitted by law.
  */
 #ifndef _hrengin_math_
 #define _hrengin_math_
@@ -201,6 +201,41 @@ inline u32 mask32(integer_type val)
 {
 	return u32(val & 0xFFFFFFFF);
 }
+
+
+#if defined(_MSC_VER)
+/*!
+ * Rotate 32-bit integer to the left
+ */
+inline u32 rotl32 (u32 x, i8 r)
+{
+	  return _rotl(x,y);
+}
+
+/*!
+ * Rotate 64-bit integer to the left
+ */
+inline u64 rotl64 (u64 x, i8 r)
+{
+	  return _rotl64(x,y);
+}
+#else
+/*!
+ * Rotate 32-bit integer to the left
+ */
+inline u32 rotl32 (u32 x, i8 r)
+{
+  return (x << r) | (x >> (32 - r));
+}
+
+/*!
+ * Rotate 64-bit integer to the left
+ */
+inline u64 rotl64 (u64 x, i8 r)
+{
+  return (x << r) | (x >> (64 - r));
+}
+#endif
 
 } //namespace math
 } //namespace hrengin
