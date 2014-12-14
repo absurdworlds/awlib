@@ -30,22 +30,18 @@ namespace itd {
  */
 struct MainHeader {
 	MainHeader ()
-		: fileId{'h','i','t','d'}, padding{0}
+		: fileId{'h','i','t','d'}
 	{
 	}
 
 	//! File type indetifier, should be 'hitd'
 	u8 const fileId[4];
 	//! hrengin package format version
-	u32 version;
-	//! Time packaged;
-	u64 ptime;
-	//! Number of file entries
-	u64 files_num;
+	u16 version;
 	//! Flags
 	u16 flags;
-	//! Padding to 32 bytes
-	u8 padding[6];
+	//! Number of file entries
+	u64 numFiles;
 };
 
 //! Package flags (reserved)
@@ -63,30 +59,29 @@ struct SecondHeader {
 	}
 	//! Secondary identifier, application-specific
 	u8 id[4];
-	//! Secondary format version
-	u32 version;
-	u8 padding[24];
+	u8 padding[48];
 };
 
 /*!
  * Second header for standard archive
  */
-struct StandardHeader {
+struct HPKHeader {
 	StandardHeader ()
 		: id{'h','p','k','a'}, padding{0}
 	{
 	}
-
 	u8 id[4];
-	u32 version;
-	u32 flags;
-	u8 padding[20];
+	//! HPK format version
+	u16 version;
+	u16 flags;
+	//! Time packaged;
+	i64 ptime;
+	u8 padding[32];
 };
 
-enum StandardFlags : u32 {
-	STD_HasFileTree 	= 1 << 0,
-	STD_HasHashTable	= 1 << 1,
-	STD_HasFileMeta		= 1 << 2,
+enum HPKFlags : u16 {
+	HPK_HasFileTree 	= 1 << 0,
+	HPK_HasMetadata		= 1 << 1,
 };
 
 /*!
