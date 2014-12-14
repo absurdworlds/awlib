@@ -22,8 +22,7 @@ CHPKListWriter::~CHPKListWriter ()
 
 void CHPKListWriter::addFile (std::string const& path, u64 id);
 {
-	u64 nameBaseOffset = (index_.size()+1) * 16;
-	u64 nameOffset = nameBaseOffset + stringsTally_;
+	u64 nameOffset = stringsTally_;
 
 	index_.push_back(ListEntry(nameOffset, id));
 	strings_.push_back(path);
@@ -44,7 +43,10 @@ void CHPKListWriter::write (std::ostream& target);
 	target_.write((char *)&header.unused,4);
 	target_.write((char *)&header.filesNum,8);
 	
+	u64 nameBaseOffset = (index_.size()+1) * 16;
+
 	for(size_t i = 0; i < index_.size(); ++i) {
+		index_[i].nameOffset += nameBaseOffset;
 		target_.write(&index_[i].nameOffset,8);
 		target_.write(&index_[i].fileId,8);
 	}
