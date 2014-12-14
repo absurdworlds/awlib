@@ -27,12 +27,10 @@ union u128 {
 // compile and run any of them on any platform, but your performance with the
 // non-native version will be less than optimal.
 
-void MurmurHash3_x86_32  (void const * key, size_t len, u128 seed, void * out);
-                                     
-void MurmurHash3_x86_128 (void const * key, size_t len, u128 seed, void * out);
-                                     
-void MurmurHash3_x64_128 (void const * key, size_t len, u128 seed, void * out);
+void MurmurHash3_x86_32  (void const * key, size_t len, u32 seed, void * out);
 
-//-----------------------------------------------------------------------------
+void MurmurHash3_x86_128 (void const * key, size_t len, u128 seed, void * out);
+
+void MurmurHash3_x64_128 (void const * key, size_t len, u128 seed, void * out);
 
 #endif//_hrengin_hash_
