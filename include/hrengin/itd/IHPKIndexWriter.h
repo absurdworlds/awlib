@@ -9,6 +9,9 @@
  */
 #ifndef _hrengin_IHPKIndexWriter_
 #define _hrengin_IHPKIndexWriter_
+#include <ostream>
+#include <string>
+
 #include <hrengin/common/types.h>
 #include <hrengin/itd/itd.h>
 
