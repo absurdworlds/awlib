@@ -23,11 +23,10 @@ CHPKListWriter::~CHPKListWriter ()
 void CHPKListWriter::addFile (std::string const& path, u64 id);
 {
 	u64 nameOffset = stringsTally_;
-
-	index_.push_back(ListEntry(nameOffset, id));
-	strings_.push_back(path);
-
 	stringsTally_ += 3 + path.size();
+
+	strings_.push_back(path);
+	index_.push_back(ListEntry(nameOffset, id));
 }
 
 void CHPKListWriter::write (std::ostream& target);
@@ -38,7 +37,7 @@ void CHPKListWriter::write (std::ostream& target);
 	//u64 baseOffset = target.tellp();
 
 	Header header;
-	header.files_num = index_.size();
+	header.filesNum = index_.size();
 	target_.write((char *)&header.type,4);
 	target_.write((char *)&header.unused,4);
 	target_.write((char *)&header.filesNum,8);
@@ -50,7 +49,12 @@ void CHPKListWriter::write (std::ostream& target);
 		target_.write(&index_[i].nameOffset,8);
 		target_.write(&index_[i].fileId,8);
 	}
-	
+
+	putStrings();
+}
+
+void CHPKListWriter::putStrings()
+{
 	for(auto str : strings_) {
 		// truncate size
 		u16 size = str.size() + 1;

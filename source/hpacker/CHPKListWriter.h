@@ -27,6 +27,7 @@ public:
 	virtual void addFile (std::string const& path, u64 id);
 	virtual void write (std::ostream& target);
 private:
+protected:
 	struct ListEntry {
 		ListEntry (u64 name, u64 id)
 			: nameOffset(name), fileId(id)
@@ -45,11 +46,12 @@ private:
 		u64 filesNum;
 	};
 
+	std::vector<std::string> strings_;
 	std::vector<ListEntry> index_;
 
-	u64 stringsOffset_;
+	void putStrings();
+private:
 	u64 stringsTally_;
-	std::vector<std::string> strings_;
 };
 
 } //namespace itd
