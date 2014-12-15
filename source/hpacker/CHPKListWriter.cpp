@@ -44,10 +44,10 @@ void CHPKListWriter::write (std::ostream& target);
 	
 	u64 nameBaseOffset = (index_.size()+1) * 16;
 
-	for(size_t i = 0; i < index_.size(); ++i) {
-		index_[i].nameOffset += nameBaseOffset;
-		target_.write(&index_[i].nameOffset,8);
-		target_.write(&index_[i].fileId,8);
+	for(auto & e : index_) {
+		e.nameOffset += nameBaseOffset;
+		target_.write(&e.nameOffset,8);
+		target_.write(&e.fileId,8);
 	}
 
 	putStrings();
@@ -55,7 +55,7 @@ void CHPKListWriter::write (std::ostream& target);
 
 void CHPKListWriter::putStrings()
 {
-	for(auto str : strings_) {
+	for(auto & str : strings_) {
 		// truncate size
 		u16 size = str.size() + 1;
 		target_.write(&size,2);

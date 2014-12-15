@@ -14,10 +14,10 @@
 namespace hrengin {
 namespace itd {
 CHPKHtableWriter ()
-	: stringsTally_(0)
+	: CHPKListWriter()
 {
 	std::random_device rd;
-	std::mt19937 mt_eng(rd());
+	std::mt19937_64 mt_eng(rd());
 
 	std::uniform_int_distribution udist;
 
@@ -77,12 +77,7 @@ void CHPKHtableWriter::write (std::ostream& target);
 		}
 	}
 
-	for(auto str : strings_) {
-		// truncate size
-		u16 size = str.size() + 1;
-		target_.write(&size,2);
-		target_.write(str.c_str(), str.size() + 1);
-	}
+	putStrings();
 }
 
 } //namespace itd
