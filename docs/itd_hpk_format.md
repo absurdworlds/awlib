@@ -75,7 +75,7 @@ Number of file entry is called 'file id'. File id are counted starting with 0.
 
 Files are stored immediately after file table. Each file is stored immediately after previous. This, however, is only a guideline and not a technical limitation.
 
-2) hrengin Package/Archive format (version 4)
+2) hrengin Package/Archive format (version 5)
 ---------------------------------------------
 
 This is the first extension for *itd* format. It adds facilities to store file names, paths and metadata on top of *itd* format.
@@ -165,7 +165,7 @@ Used for computing the hash. Randomly generated at time of packaging.
 First comes array of 'buckets', each containing pointer to list of files in that 'bucket'.
 
 	u64 file_list_ptr
-	u32 file_list_size
+	u64 file_list_size
 
 After the array comes the regular file list.
 
@@ -199,9 +199,9 @@ File tree header contains nameless `root` node.
 
 	u32 index_type
 Always `"tree"`
-
+	u8 [4] unused;
 	u64 files_ptr
-	u64 files_num
+	u32 files_num
 	u64 subtree_ptr
 	u32 subtree_num
 
