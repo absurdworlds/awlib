@@ -15,8 +15,7 @@
 
 #include <hrengin/common/types.h>
 #include <hrengin/itd/itd.h>
-
-#include "CItdFileTree.h"
+#include <hrengin/itd/IHPKIndexWriter.h>
 
 namespace hrengin {
 namespace itd {

@@ -13,6 +13,7 @@
 #include <fstream>
 
 #include <hrengin/common/types.h>
+#include <hrengin/itd/IHPKIndexReader.h>
 
 namespace hrengin {
 namespace itd {

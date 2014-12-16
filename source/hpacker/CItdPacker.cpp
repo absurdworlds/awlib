@@ -8,6 +8,7 @@
  * There is NO WARRANTY, to the extent permitted by law.
  */
 #include <cstdio>
+#include <memory>
 
 #include <hrengin/platform/time.h>
 
@@ -15,6 +16,7 @@
 #include <hrengin/io/IDirectory.h>
 
 #include "CItdPacker.h"
+#include "CHPKTreeWriter.h"
 
 namespace hrengin {
 namespace itd {
@@ -65,14 +67,15 @@ void CItdPacker::buildFileList ()
 
 void CItdPacker::buildFileTree ()
 {
-	FileTree root;
+	std::unique_ptr<IHPKIndexWriter> index(new CHPKTreeWriter);
+
 	for(size_t id = 0; id < fileList_.size(); ++id) {
-		root.addFile(fileList_[id], id + 2);
+		index->addFile(fileList_[id], id + 2);
 	}
 
 	index_[0].offset = archive_.tellp();
 
-	root.write(archive_);
+	index->write(archive_);
 
 	index_[0].size  = archive_.tellp();
 	index_[0].size -= index_[0].offset;
@@ -118,27 +121,26 @@ i32 CItdPacker::addDir (std::string const& path)
 
 void CItdPacker::writeHeader()
 {
-	itd::Header header;
+	itd::MainHeader main;
 
-	header.main.version = 3;
-	header.main.ptime = getTime();
-	header.main.files_num = 2 + fileList_.size();
+	main.version = 5;
+	main.numFiles = 2 + fileList_.size();
 	
-	archive_.write((char *)&header.main.fileId,4);
-	archive_.write((char *)&header.main.version,4);
-	archive_.write((char *)&header.main.ptime,8);
-	archive_.write((char *)&header.main.files_num,8);
-	archive_.write((char *)&header.main.flags,2);
-	archive_.write((char *)&header.main.padding, 6);
+	archive_.write((char *)&main.fileId,4);
+	archive_.write((char *)&main.version,2);
+	archive_.write((char *)&main.flags,2);
+	archive_.write((char *)&main.numFiles,8);
 
-	itd::StandardHeader second;
-	second.version = 2;
-	second.flags = itd::STD_HasFileTree;
+	itd::HPKHeader second;
+	second.version = 5;
+	second.flags = itd::HPK_HasFileTree;
+	second.ptime = getTime();
 
 	archive_.write((char *)&second.id,4);
-	archive_.write((char *)&second.version,4);
-	archive_.write((char *)&second.flags,4);
-	archive_.write((char *)&second.padding, 20);
+	archive_.write((char *)&second.version,2);
+	archive_.write((char *)&second.flags,2);
+	archive_.write((char *)&second.ptime,8);
+	archive_.write((char *)&second.padding, 32);
 }
 
 void CItdPacker::prepareFileIndex ()
@@ -152,7 +154,7 @@ void CItdPacker::prepareFileIndex ()
 
 }
 
-void CItdPacker::writeArchive() 
+void CItdPacker::writeArchive () 
 {
 	for(size_t id = 0; id < fileList_.size(); ++id) {
 		packFile(id + 2, fileList_[id]);

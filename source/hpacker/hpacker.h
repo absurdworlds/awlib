@@ -12,7 +12,6 @@
 #include <hrengin/common/types.h>
 #include <hrengin/itd/itd.h>
 
-#include "CItdFileTree.h"
 #include "CItdPacker.h"
 #include "CItdReader.h"
 

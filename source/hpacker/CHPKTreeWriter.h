@@ -47,7 +47,7 @@ struct TreeNode {
 /*!
  * Interface for building HPKA tree index
  */
-class CHPKTreeWriter : IHPKIndexWriter {
+class CHPKTreeWriter : public IHPKIndexWriter {
 public:
 	CHPKTreeWriter ();
 

@@ -26,7 +26,6 @@ public:
 
 	virtual ~CHPKHtableWriter ();
 
-	virtual void addFile (std::string const& path, u64 id);
 	virtual void write (std::ostream& target);
 private:
 	typedef CHPKListWriter::ListEntry ListEntry;
