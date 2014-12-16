@@ -59,6 +59,7 @@ void TreeNode::add (std::vector<std::string> path, std::string name, u64 id,
 	if(path.empty()) {
 		u64 nameOffset = strings.add(name);
 		files.push_back(ListEntry(nameOffset, id));
+		return;
 	}
 
 	std::string dirName = path.front();
