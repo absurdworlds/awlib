@@ -4,7 +4,9 @@ ExternalIncludes =
 ExternalLibraries = -Wl,-rpath-link,../../lib,-R,'$$ORIGIN/../lib'
 
 # Includes and objects
-Objects = hpacker.o CItdFileTree.o CItdReader.o CItdPacker.o
+Objects = hpacker.o CStringBank.o \
+	  CHPKListWriter.o CHPKHtableWriter.o CHPKTreeWriter.o \
+	  CItdReader.o CItdPacker.o
 Includes = -I../../include
 Libraries = -L../../lib -lhrplatform -lhrcore $(ExternalLibraries)
 Defines = 
