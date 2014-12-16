@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info">
+    <mime-type type="application/x-itd">
+        <comment>hrengin itd archive</comment>
+        <icon name="application-x-itd"/>
+
+	<magic priority="51">
+		<match type="little32" offset="0" value="0x64746968"/>
+	</magic>
+	<!--glob pattern="*.itd"/-->
+    </mime-type>
+</mime-info>

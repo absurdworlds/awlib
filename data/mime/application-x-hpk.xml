@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info">
+    <mime-type type="application/x-hpk">
+	<comment>hrengin package/archive</comment>
+        <!--icon name="application-x-hpk"/-->
+	<sub-class-of type="application/x-itd"/>
+	<magic priority="52">
+		<match type="little32" offset="0" value="0x64746968">
+			<match type="little32" offset="16" value="0x616b7068"/>
+		</match>
+	</magic>
+	<!--glob pattern="*.itd"/>
+	<glob pattern="*.hpk"/-->
+    </mime-type>
+</mime-info>
