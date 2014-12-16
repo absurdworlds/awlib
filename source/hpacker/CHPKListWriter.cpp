@@ -11,8 +11,7 @@
 
 namespace hrengin {
 namespace itd {
-CHPKListWriter ()
-	: stringsTally_(0)
+CHPKListWriter::CHPKListWriter ()
 {
 }
 
@@ -20,16 +19,14 @@ CHPKListWriter::~CHPKListWriter ()
 {
 }
 
-void CHPKListWriter::addFile (std::string const& path, u64 id);
+void CHPKListWriter::addFile (std::string const& path, u64 id)
 {
-	u64 nameOffset = stringsTally_;
-	stringsTally_ += 3 + path.size();
+	u64 nameOffset = strings_.add(path);
 
-	strings_.push_back(path);
 	index_.push_back(ListEntry(nameOffset, id));
 }
 
-void CHPKListWriter::write (std::ostream& target);
+void CHPKListWriter::write (std::ostream & target)
 {
 	// not needed, before I started writing this code, I planned to use
 	// target.tellg() to determine offsets, but and came up with better 
@@ -38,29 +35,19 @@ void CHPKListWriter::write (std::ostream& target);
 
 	Header header;
 	header.filesNum = index_.size();
-	target_.write((char *)&header.type,4);
-	target_.write((char *)&header.unused,4);
-	target_.write((char *)&header.filesNum,8);
+	target.write((char *)&header.type,4);
+	target.write((char *)&header.unused,4);
+	target.write((char *)&header.filesNum,8);
 	
 	u64 nameBaseOffset = (index_.size()+1) * 16;
 
 	for(auto & e : index_) {
 		e.nameOffset += nameBaseOffset;
-		target_.write(&e.nameOffset,8);
-		target_.write(&e.fileId,8);
+		target.write((char *)&e.nameOffset,8);
+		target.write((char *)&e.fileId,8);
 	}
 
-	putStrings();
-}
-
-void CHPKListWriter::putStrings()
-{
-	for(auto & str : strings_) {
-		// truncate size
-		u16 size = str.size() + 1;
-		target_.write(&size,2);
-		target_.write(str.c_str(), str.size() + 1);
-	}
+	strings_.putStrings(target);
 }
 
 } //namespace itd

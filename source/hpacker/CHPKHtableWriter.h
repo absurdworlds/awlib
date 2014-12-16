@@ -12,6 +12,7 @@
 #include <vector>
 
 #include <hrengin/core/hash.h>
+
 #include "CHPKListWriter.h"
 
 namespace hrengin {
@@ -51,12 +52,15 @@ private:
 		std::vector<ListEntry> list;
 	};
 
-	struct Header : public CHPKListWriter::Header {
+	struct Header {
 		Header ()
 			: type{'h','t','b','l'}, unused{0}
 		{
 		}
 
+		u8 type[4];
+		u8 unused[4];
+		u64 filesNum;
 		u128 seed;
 	};
 

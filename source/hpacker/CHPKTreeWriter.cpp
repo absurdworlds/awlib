@@ -15,8 +15,7 @@
 
 namespace hrengin {
 namespace itd {
-CHPKTreeWriter ()
-	: stringsTally_(0)
+CHPKTreeWriter::CHPKTreeWriter ()
 {
 }
 
@@ -24,7 +23,7 @@ CHPKTreeWriter::~CHPKTreeWriter ()
 {
 }
 
-void CHPKTreeWriter::addFile (std::string const& path, u64 id);
+void CHPKTreeWriter::addFile (std::string const& path, u64 id)
 {
 	std::vector<std::string> dir;
 	std::string name;
@@ -33,24 +32,25 @@ void CHPKTreeWriter::addFile (std::string const& path, u64 id);
 	name = dir.back();
 	dir.pop_back();
 
-	root_.add(dir, name, id, strings);
+	root_.add(dir, name, id, strings_);
 }
 
-void CHPKTreeWriter::write (std::ostream& target);
+void CHPKTreeWriter::write (std::ostream& target)
 {
 	Header header;
 	target.write((char *)&header.type,4);
 	target.write((char *)&header.unused,4);
-	
-	u64 nameBaseOffset = (index_.size()+1) * 16;
+		
+	target.write((char *)&root_.filesPtr, 8);
+	target.write((char *)&root_.filesNum, 4);
+	target.write((char *)&root_.subtreePtr, 8);
+	target.write((char *)&root_.subtreeNum, 4);
 
-	for(size_t i = 0; i < index_.size(); ++i) {
-		index_[i].nameOffset += nameBaseOffset;
-		target_.write(&index_[i].nameOffset,8);
-		target_.write(&index_[i].fileId,8);
-	}
+	u64 baseOffset = 32;
 
-	putStrings();
+	root_.calcOffsets(baseOffset);
+	root_.writeOut(target, baseOffset);
+	strings_.putStrings(target);
 }
 
 void TreeNode::add (std::vector<std::string> path, std::string name, u64 id,
@@ -58,12 +58,12 @@ void TreeNode::add (std::vector<std::string> path, std::string name, u64 id,
 {
 	if(path.empty()) {
 		u64 nameOffset = strings.add(name);
-		files.push_back(FileEntry(nameOffset, id));
+		files.push_back(ListEntry(nameOffset, id));
 	}
 
 	std::string dirName = path.front();
 
-	auto findChild = [&dirName] (TreeLeaf const& leaf)
+	auto findChild = [&dirName] (TreeNode const& leaf)
 	{
 		return (leaf.name == dirName);
 	};
@@ -75,9 +75,7 @@ void TreeNode::add (std::vector<std::string> path, std::string name, u64 id,
 		leaf.name = path.front();
 		leaf.nameOffset = strings.add(leaf.name);
 
-		leaves.push_back(leaf);
-
-		dir = leaves.back();
+		dir = leaves.insert(leaves.end(), leaf);
 	}
 
 	dir->add(std::vector<std::string>(path.begin()+1,path.end()),
@@ -94,7 +92,7 @@ void TreeNode::calcOffsets (u64 & baseOffset)
 		baseOffset += filesNum * 16;
 
 		subtreePtr = baseOffset;
-		subtreeNum = leaves.size()
+		subtreeNum = leaves.size();
 		
 		baseOffset += subtreeNum * 32;
 	}
@@ -104,7 +102,7 @@ void TreeNode::calcOffsets (u64 & baseOffset)
 	}
 }
 
-void TreeNode::writeOut (std::ofstream & target, u64 baseOffset)
+void TreeNode::writeOut (std::ostream & target, u64 baseOffset)
 {
 	for(auto & file : files) {
 		file.nameOffset += baseOffset;
@@ -122,7 +120,7 @@ void TreeNode::writeOut (std::ofstream & target, u64 baseOffset)
 	}
 
 	for(auto & node : leaves) {
-		node.writeOut();
+		node.writeOut(target, baseOffset);
 	}
 }
 } //namespace itd

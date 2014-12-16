@@ -13,19 +13,21 @@
 
 #include <hrengin/itd/IHPKIndexWriter.h>
 
+#include "CStringBank.h"
+
 namespace hrengin {
 namespace itd {
 /*!
  * Interface for building HPKA list index
  */
-class CHPKListWriter : IHPKIndexWriter {
+class CHPKListWriter : public IHPKIndexWriter {
 public:
 	CHPKListWriter ();
 
 	virtual ~CHPKListWriter ();
 
-	virtual void addFile (std::string const& path, u64 id);
-	virtual void write (std::ostream& target);
+	virtual void addFile (std::string const & path, u64 id);
+	virtual void write (std::ostream & target);
 private:
 protected:
 	struct ListEntry {
@@ -41,17 +43,16 @@ protected:
 	struct Header {
 		Header ()
 			: type{'l','i','s','t'}, unused{0}
+		{
+		}
+		
 		u8 type[4];
 		u8 unused[4];
 		u64 filesNum;
 	};
 
-	std::vector<std::string> strings_;
+	CStringBank strings_;
 	std::vector<ListEntry> index_;
-
-	void putStrings();
-private:
-	u64 stringsTally_;
 };
 
 } //namespace itd

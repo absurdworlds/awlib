@@ -13,13 +13,13 @@
 
 namespace hrengin {
 namespace itd {
-CHPKHtableWriter ()
+CHPKHtableWriter::CHPKHtableWriter ()
 	: CHPKListWriter()
 {
 	std::random_device rd;
 	std::mt19937_64 mt_eng(rd());
 
-	std::uniform_int_distribution udist;
+	std::uniform_int_distribution<u64> udist;
 
 	seed_.as64[0] = udist(mt_eng);
 	seed_.as64[1] = udist(mt_eng);
@@ -29,7 +29,7 @@ CHPKHtableWriter::~CHPKHtableWriter ()
 {
 }
 
-void CHPKHtableWriter::write (std::ostream& target);
+void CHPKHtableWriter::write (std::ostream& target)
 {
 	Header header;
 	header.filesNum = index_.size();
@@ -37,10 +37,10 @@ void CHPKHtableWriter::write (std::ostream& target);
 
 	u64 nameBaseOffset = (header.filesNum + 1) * 32;
 	while(index_.size() > 0) {
-		u64 num = index.size();
+		u64 num = index_.size();
 
 		u128 hash;
-		std::string& path = strings_[num];
+		std::string const & path = strings_[num];
 		MurmurHash3_x64_128(path.data(), path.size(), seed_, &hash);
 
 		u64 i = hash.as64[0] % header.filesNum;
@@ -51,33 +51,33 @@ void CHPKHtableWriter::write (std::ostream& target);
 		index_.pop_back();
 	}
 
-	target_.write((char *)&header.type,4);
-	target_.write((char *)&header.unused,4);
-	target_.write((char *)&header.filesNum,8);
-	target_.write((char *)&header.seed,16);
+	target.write((char *)&header.type,4);
+	target.write((char *)&header.unused,4);
+	target.write((char *)&header.filesNum,8);
+	target.write((char *)&header.seed,16);
 
 	u64 listTally = 0;
 	for(auto & h : htable_) {
 		h.entriesOffset = (header.filesNum + listTally)*16;
-		h.fileListSize = h.list.size()
-		listTally += fileListSize;
+		h.fileListSize = h.list.size();
+		listTally += h.fileListSize;
 
 		if(h.fileListSize > 1) {
 			// Warning: hash collision
 		}
 
-		target_.write((char *)&h.entriesOffset,8);
-		target_.write((char *)&h.fileListSize,8);
+		target.write((char *)&h.entriesOffset,8);
+		target.write((char *)&h.fileListSize,8);
 	}
 
 	for(auto & h : htable_) {
 		for(auto & e : h.list) {
-			target_.write(&e.nameOffset,8);
-			target_.write(&e.fileId,8);
+			target.write((char *)&e.nameOffset,8);
+			target.write((char *)&e.fileId,8);
 		}
 	}
 
-	putStrings();
+	strings_.putStrings(target);
 }
 
 } //namespace itd

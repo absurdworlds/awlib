@@ -7,22 +7,31 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_IHPKTreeWriter_
-#define _hrengin_IHPKTreeWriter_
+#ifndef _hrengin_CHPKTreeWriter_
+#define _hrengin_CHPKTreeWriter_
 #include <vector>
 
 #include <hrengin/itd/IHPKIndexWriter.h>
 
+#include "CStringBank.h"
+
 namespace hrengin {
 namespace itd {
 
-struct FileEntry {
+struct ListEntry {
+	ListEntry (u64 name, u64 id)
+		: nameOffset(name), id(id)
+	{
+	}
 	u64 nameOffset;
 	u64 id;
 };
 
 struct TreeNode {
-	void calcOffsets (u64 & baseOffset, CStringBank & strings);
+	void add (std::vector<std::string> path, std::string name, u64 id,
+		CStringBank & strings);
+	void calcOffsets (u64 & baseOffset);
+	void writeOut (std::ostream & target, u64 baseOffset);
 
 	u64 nameOffset;
 	u64 filesPtr;
@@ -32,7 +41,7 @@ struct TreeNode {
 
 	std::string name;
 	std::vector<TreeNode> leaves;
-	std::vector<FileEntry> files;
+	std::vector<ListEntry> files;
 };
 
 /*!
@@ -54,21 +63,20 @@ protected:
 	struct Header {
 		Header ()
 			: type{'t','r','e','e'}, unused{0}
+		{
+		}
+
 		u8 type[4];
 		u8 unused[4];
 	};
 
-
-
 	TreeNode root_;
-	std::vector<FileEntry> files_;
+	std::vector<ListEntry> files_;
 	std::vector<TreeNode> dirs_;
 
-	std::vector<std::string> strings_;
-private:
-	u64 stringsTally_;
+	CStringBank strings_;
 };
 
 } //namespace itd
 } //namespace hrengin
-#endif//_hrengin_IHPKTreeWriter_
+#endif//_hrengin_CHPKTreeWriter_
