@@ -66,7 +66,7 @@ struct SecondHeader {
  * Second header for standard archive
  */
 struct HPKHeader {
-	StandardHeader ()
+	HPKHeader ()
 		: id{'h','p','k','a'}, padding{0}
 	{
 	}
