@@ -9,6 +9,7 @@
 #ifndef _hrengin_hash_
 #define _hrengin_hash_
 #include <hrengin/common/types.h>
+#include <hrengin/core/core.h>
 
 namespace hrengin {
 /*!
@@ -28,10 +29,13 @@ union u128 {
 // compile and run any of them on any platform, but your performance with the
 // non-native version will be less than optimal.
 
+HR_CORE_EXP
 void MurmurHash3_x86_32  (void const * key, size_t len, u32 seed, void * out);
 
+HR_CORE_EXP
 void MurmurHash3_x86_128 (void const * key, size_t len, u128 seed, void * out);
 
+HR_CORE_EXP
 void MurmurHash3_x64_128 (void const * key, size_t len, u128 seed, void * out);
 
 } // namespace hrengin
