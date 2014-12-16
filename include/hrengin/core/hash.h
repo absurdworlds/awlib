@@ -10,6 +10,7 @@
 #define _hrengin_hash_
 #include <hrengin/common/types.h>
 
+namespace hrengin {
 /*!
  * Helper union to hold 128-bit values
  */
@@ -33,4 +34,5 @@ void MurmurHash3_x86_128 (void const * key, size_t len, u128 seed, void * out);
 
 void MurmurHash3_x64_128 (void const * key, size_t len, u128 seed, void * out);
 
+} // namespace hrengin
 #endif//_hrengin_hash_

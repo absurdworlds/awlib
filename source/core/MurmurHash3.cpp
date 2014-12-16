@@ -12,7 +12,9 @@
 
 #include <hrengin/core/hash.h>
 #include <hrengin/common/macro.h>
+#include <hrengin/math/math.h>
 
+namespace hrengin {
 /*!
  * Block read - if your platform needs to do endian-swapping or can only 
  * handle aligned reads, do the conversion here
@@ -71,11 +73,11 @@ void MurmurHash3_x86_32 (void const * key, size_t len, u32 seed, void * out)
 		u32 k1 = getblock32(blocks,i);
 
 		k1 *= c1;
-		k1 = rotl32(k1,15);
+		k1 = math::rotl32(k1,15);
 		k1 *= c2;
 
 		h1 ^= k1;
-		h1 = rotl32(h1,13); 
+		h1 = math::rotl32(h1,13); 
 		h1 = h1*5+0xe6546b64;
 	}
 
@@ -91,7 +93,7 @@ void MurmurHash3_x86_32 (void const * key, size_t len, u32 seed, void * out)
 	case 3: k1 ^= tail[2] << 16;
 	case 2: k1 ^= tail[1] << 8;
 	case 1: k1 ^= tail[0];
-		k1 *= c1; k1 = rotl32(k1,15); k1 *= c2; h1 ^= k1;
+		k1 *= c1; k1 = math::rotl32(k1,15); k1 *= c2; h1 ^= k1;
 	};
 
 	//----------
@@ -131,37 +133,37 @@ void MurmurHash3_x86_128 (void const * key, size_t len, u128 seed, void * out)
 		u32 k4 = getblock32(blocks,i*4+3);
 
 		k1 *= c1;
-		k1  = rotl32(k1,15);
+		k1  = math::rotl32(k1,15);
 		k1 *= c2;
 		h1 ^= k1;
 
-		h1 = rotl32(h1,19);
+		h1 = math::rotl32(h1,19);
 		h1 += h2;
 		h1 = h1*5+0x561ccd1b;
 
 		k2 *= c2;
-		k2  = rotl32(k2,16);
+		k2  = math::rotl32(k2,16);
 		k2 *= c3; h2 ^= k2;
 
-		h2 = rotl32(h2,17);
+		h2 = math::rotl32(h2,17);
 		h2 += h3;
 		h2 = h2*5+0x0bcaa747;
 
 		k3 *= c3;
-		k3  = rotl32(k3,17);
+		k3  = math::rotl32(k3,17);
 		k3 *= c4;
 		h3 ^= k3;
 
-		h3 = rotl32(h3,15);
+		h3 = math::rotl32(h3,15);
 		h3 += h4;
 		h3 = h3*5+0x96cd1c35;
 
 		k4 *= c4;
-		k4  = rotl32(k4,18);
+		k4  = math::rotl32(k4,18);
 		k4 *= c1;
 		h4 ^= k4;
 
-		h4 = rotl32(h4,13);
+		h4 = math::rotl32(h4,13);
 		h4 += h1;
 		h4 = h4*5+0x32ac3b17;
 	}
@@ -181,7 +183,7 @@ void MurmurHash3_x86_128 (void const * key, size_t len, u128 seed, void * out)
 	case 14: k4 ^= tail[13] << 8;
 	case 13: k4 ^= tail[12] << 0;
 		 k4 *= c4;
-		 k4  = rotl32(k4,18);
+		 k4  = math::rotl32(k4,18);
 		 k4 *= c1;
 		 h4 ^= k4;
 
@@ -190,7 +192,7 @@ void MurmurHash3_x86_128 (void const * key, size_t len, u128 seed, void * out)
 	case 10: k3 ^= tail[ 9] << 8;
 	case  9: k3 ^= tail[ 8] << 0;
 		 k3 *= c3;
-		 k3  = rotl32(k3,17);
+		 k3  = math::rotl32(k3,17);
 		 k3 *= c4;
 		 h3 ^= k3;
 
@@ -199,7 +201,7 @@ void MurmurHash3_x86_128 (void const * key, size_t len, u128 seed, void * out)
 	case  6: k2 ^= tail[ 5] << 8;
 	case  5: k2 ^= tail[ 4] << 0;
 		 k2 *= c2;
-		 k2  = rotl32(k2,16);
+		 k2  = math::rotl32(k2,16);
 		 k2 *= c3;
 		 h2 ^= k2;
 
@@ -208,7 +210,7 @@ void MurmurHash3_x86_128 (void const * key, size_t len, u128 seed, void * out)
 	case  2: k1 ^= tail[ 1] << 8;
 	case  1: k1 ^= tail[ 0] << 0;
 		 k1 *= c1;
-		 k1  = rotl32(k1,15);
+		 k1  = math::rotl32(k1,15);
 		 k1 *= c2;
 		 h1 ^= k1;
 	};
@@ -267,20 +269,20 @@ void MurmurHash3_x64_128 (void const * key, size_t len, u128 seed, void * out)
 		u64 k2 = getblock64(blocks,i*2+1);
 
 		k1 *= c1; 
-		k1  = rotl64(k1,31);
+		k1  = math::rotl64(k1,31);
 		k1 *= c2; 
 		h1 ^= k1;
 
-		h1 = rotl64(h1,27);
+		h1 = math::rotl64(h1,27);
 		h1 += h2;
 		h1 = h1*5+0x52dce729;
 
 		k2 *= c2;
-		k2  = rotl64(k2,33);
+		k2  = math::rotl64(k2,33);
 		k2 *= c1;
 		h2 ^= k2;
 
-		h2 = rotl64(h2,31);
+		h2 = math::rotl64(h2,31);
 		h2 += h1;
 		h2 = h2*5+0x38495ab5;
 	}
@@ -301,7 +303,7 @@ void MurmurHash3_x64_128 (void const * key, size_t len, u128 seed, void * out)
 	case 11: k2 ^= ((u64)tail[10]) << 16;
 	case 10: k2 ^= ((u64)tail[ 9]) << 8;
 	case  9: k2 ^= ((u64)tail[ 8]) << 0;
-		 k2 *= c2; k2  = rotl64(k2,33);
+		 k2 *= c2; k2  = math::rotl64(k2,33);
 		 k2 *= c1; h2 ^= k2;
 
 	case  8: k1 ^= ((u64)tail[ 7]) << 56;
@@ -312,7 +314,7 @@ void MurmurHash3_x64_128 (void const * key, size_t len, u128 seed, void * out)
 	case  3: k1 ^= ((u64)tail[ 2]) << 16;
 	case  2: k1 ^= ((u64)tail[ 1]) << 8;
 	case  1: k1 ^= ((u64)tail[ 0]) << 0;
-		 k1 *= c1; k1  = rotl64(k1,31);
+		 k1 *= c1; k1  = math::rotl64(k1,31);
 		 k1 *= c2; h1 ^= k1;
 	};
 
@@ -334,3 +336,4 @@ void MurmurHash3_x64_128 (void const * key, size_t len, u128 seed, void * out)
 	((u64*)out)[0] = h1;
 	((u64*)out)[1] = h2;
 }
+} // namespace hrengin

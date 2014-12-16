@@ -6,7 +6,7 @@ ExternalLibraries =
 # Includes and objects
 Objects = CHDFParser.o CSettingsManager.o CModelLoader.o \
 	  CFileSystem.o CLogger.o CHrenginShell.o \
-	  CArgParser.o
+	  CArgParser.o MurmurHash3.o
 Includes = -I../../include $(ExternalIncludes)
 Libraries = $(ExternalLibraries)
 Defines = -D HR_MODULE_CORE -D HR_MODULE_HDF
