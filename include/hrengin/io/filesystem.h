@@ -15,13 +15,20 @@
 
 namespace hrengin {
 namespace io {
-  
+/*!
+ * File type on a filesystem
+ */
 enum class FileType {
 	Unknown,
 	File,
-	Dir
+	Dir,
+	Symlink,
 };
 
+/*!
+ * This structure hold information about file,
+ * which is acquired by calling \a fileStat
+ */
 struct FileInfo {
 	FileType type;
 	size_t size;
@@ -44,12 +51,40 @@ inline FileType fileType (std::string const & path)
 /*!
  * Get file size in bytes
  */
-inline size_t   fileSize (std::string const & path)
+inline size_t fileSize (std::string const & path)
 {
 	FileInfo info = fileStat(path);
 
 	return info.size;
 }
+
+/*!
+ * File opening mode
+ */
+enum FileMode {
+	//! File exists
+	Exists	= 0,
+	//! Execute permission
+	Exec	= 1,
+	//! Write permission
+	Write	= 2,
+	//! Read permission
+	Read	= 4,
+};
+
+/*!
+ * Test file existence and permissions.
+ * \param path
+ * 	Path to file.
+ * \param mode
+ * 	Permissions to test. Can be OR'ed together to check for
+ * 	multiple permissions
+ * \return 
+ * 	Zero (0) on success, or -1 if file not exist
+ * 	or one of permissions was denied.
+ */
+i32 checkFile(std::string const & path, FileMode mode);
+
 } //namespace io
 } //namespace hrengin
 #endif//_hrengin_filesystem_
