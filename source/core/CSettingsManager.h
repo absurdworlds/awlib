@@ -9,7 +9,6 @@
 #ifndef _hrengin_CSettingsManager_
 #define _hrengin_CSettingsManager_
 #include <map>
-#include <vector>
 
 #include <hrengin/core/ISettingsManager.h>
 
@@ -21,9 +20,9 @@ namespace core {
 class CSettingsManager : public ISettingsManager {
 public:
 	CSettingsManager();
-	virtual ~CSettingsManager() {};
-
-	virtual void loadSettings();
+	virtual ~CSettingsManager()
+	{
+	}
 
 	//virtual void registerSetting(std::string key, hdf::Type type);
 
@@ -52,5 +51,4 @@ private:
 
 } // namespace core
 } // namespace hrengin
-
 #endif//_hrengin_CSettingsManager_
