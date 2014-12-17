@@ -4,15 +4,13 @@ ExternalIncludes = -I../../dependencies/include/
 ExternalLibraries =
 
 # Includes and objects
-Objects = CSettingsManager.o CModelLoader.o \
-	  CFileSystem.o CLogger.o CHrenginShell.o \
-	  CArgParser.o MurmurHash3.o
+Objects = CHDFParser.o 
 Includes = -I../../include $(ExternalIncludes)
 Libraries = $(ExternalLibraries)
-Defines = -D HR_MODULE_CORE
+Defines = -D HR_MODULE_HDF
 
 Version = $(VersionMajor).$(VersionMinor)
-SharedLibName = libhrcore.so
+SharedLibName = libhdf.so
 SharedLibFullName = $(SharedLibName).$(Version)
 
 include ../shared.makefile

@@ -74,7 +74,7 @@ private:
 	void skipWhitespace();
 	void skipInlineWhitespace();
 	//void skip(bool (*condition)(u8));
-	template<bool (*condition)(u8)> 
+	template<bool (*condition)(char)> 
 	void skip();
 
 	void processCommand();
