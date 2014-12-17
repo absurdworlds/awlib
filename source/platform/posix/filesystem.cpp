@@ -33,6 +33,8 @@ i32 fileStat (std::string const& path, FileInfo& result)
 		result.type = FileType::Unknown;
 	}
 
+	result.size = size_t(file_stat.st_size);
+
 	return 0;
 }
 } // namespace io

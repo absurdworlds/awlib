@@ -24,12 +24,32 @@ enum class FileType {
 
 struct FileInfo {
 	FileType type;
+	size_t size;
 };
 
 /*!
  * Get information about file
  */
-HR_IO_EXP i32 fileStat (std::string const& path, FileInfo& result);
+HR_IO_EXP i32 fileStat (std::string const & path, FileInfo& result);
+
+/*!
+ * Get type (e.g. regular file or directory) of a file
+ */
+inline FileType fileType (std::string const & path)
+{
+	FileInfo info = fileStat(path);
+
+	return info.type;
+}
+/*!
+ * Get file size in bytes
+ */
+inline size_t   fileSize (std::string const & path)
+{
+	FileInfo info = fileStat(path);
+
+	return info.size;
+}
 } //namespace io
 } //namespace hrengin
 #endif//_hrengin_filesystem_
