@@ -9,6 +9,7 @@
  */
 #include <cstdio>
 #include <memory>
+#include <sstream>
 
 #include <hrengin/platform/time.h>
 
@@ -24,6 +25,7 @@ CItdPacker::CItdPacker (std::string const& archive_name, bool verbose)
 	: verbose_(verbose)
 {
 	archive_.open(archive_name, std::ofstream::binary);
+	index_.resize(2);
 }
 
 CItdPacker::~CItdPacker ()
@@ -31,14 +33,38 @@ CItdPacker::~CItdPacker ()
 	archive_.close();
 }
 
-void CItdPacker::addFile (std::string const& filename)
+void CItdPacker::addFile (std::string const& name)
 {
-	inputFiles_.push_back(filename);
+	if(checkFile(name, io::FM_Read) < 0) {
+		// log warning
+		return;
+	}
+
+	io::FileInfo finfo;
+	io::fileStat(name, finfo);
+
+	switch(finfo.type) {
+	case io::FileType::File:
+		fileList_.push_back(name);
+		FileEntry e;
+		e.size = finfo.size;
+		index_.push_back(e);
+		break;
+
+	case io::FileType::Dir:
+		addDir(name);
+		break;
+
+	default:
+		break;
+	}
 }
 
 void CItdPacker::addList (std::vector<std::string> const& files)
 {
-	inputFiles_.insert(inputFiles_.end(), files.begin(), files.end());
+	for(auto const & filename : files) {
+		addFile(filename);
+	}
 }
 
 i32 CItdPacker::pack ()
@@ -47,57 +73,40 @@ i32 CItdPacker::pack ()
 		return -1;
 	}
 	
-	buildFileList();
 	writeHeader();
-	prepareFileIndex();
-	buildFileTree();
+	buildIndex();
 	writeArchive();
-	updateFileIndex();
 
 	return 0;
 }
 
-void CItdPacker::buildFileList ()
+void CItdPacker::buildIndex ()
 {
-	while(!inputFiles_.empty()) {
-		addObject(inputFiles_.back());
-		inputFiles_.pop_back();
-	}
-}
+	std::ostringstream result;
 
-void CItdPacker::buildFileTree ()
-{
-	std::unique_ptr<IHPKIndexWriter> index(new CHPKTreeWriter);
+	{
+		std::unique_ptr<IHPKIndexWriter> index(new CHPKTreeWriter);
 
-	for(size_t id = 0; id < fileList_.size(); ++id) {
-		index->addFile(fileList_[id], id + 2);
+		for(size_t id = 0; id < fileList_.size(); ++id) {
+			index->addFile(fileList_[id], id + 2);
+		}
+
+		index->write(result);
 	}
 
-	index_[0].offset = archive_.tellp();
+	u64 num_entries = index_.size();
 
-	index->write(archive_);
+	index_[0].size = result.str().size();
 
-	index_[0].size  = archive_.tellp();
-	index_[0].size -= index_[0].offset;
-}
-
-void CItdPacker::addObject (std::string const& path)
-{
-	io::FileInfo finfo;
-	io::fileStat(path, finfo);
-
-	switch(finfo.type) {
-	case io::FileType::File:
-		fileList_.push_back(path);
-		break;
-
-	case io::FileType::Dir:
-		addDir(path);
-		break;
-
-	default:
-		break;
+	u64 offsetTotal = 64 + num_entries * 16;
+	for(auto entry : index_) {
+		entry.offset = offsetTotal;
+		offsetTotal += entry.size;
+		archive_.write((char *)&entry.offset,8);
+		archive_.write((char *)&entry.size,8);
 	}
+	
+	archive_.write(result.str().c_str(),index_[0].size);
 }
 
 i32 CItdPacker::addDir (std::string const& path)
@@ -113,7 +122,7 @@ i32 CItdPacker::addDir (std::string const& path)
 			continue;
 		}
 
-		addObject (path + "/" + file.name);
+		addFile (path + "/" + file.name);
 	};
 
 	return 0;
@@ -143,17 +152,6 @@ void CItdPacker::writeHeader()
 	archive_.write((char *)&second.padding, 32);
 }
 
-void CItdPacker::prepareFileIndex ()
-{
-	// Number of files + file tree and hashtable
-	u64 num_entries = 2 + fileList_.size();
-	index_.resize(num_entries);
-
-	// Reserve space for file index
-	writeFileIndex();
-
-}
-
 void CItdPacker::writeArchive () 
 {
 	for(size_t id = 0; id < fileList_.size(); ++id) {
@@ -166,8 +164,10 @@ void CItdPacker::packFile (size_t id, std::string const& path)
 	std::ifstream file(path, std::ifstream::binary);
 
 	if(!file.is_open()) {
-		index_[id].offset = -1;
-		index_[id].size   =  0;
+		return;
+	}
+
+	if(index_[id].size == 0) {
 		return;
 	}
 
@@ -175,28 +175,7 @@ void CItdPacker::packFile (size_t id, std::string const& path)
 		printf("Adding %s\n", path.c_str());
 	}
 
-	index_[id].offset = archive_.tellp();
-
 	archive_ << file.rdbuf();
-
-	index_[id].size  = archive_.tellp();
-	index_[id].size -= index_[id].offset;
 }
-
-void CItdPacker::updateFileIndex ()
-{
-	archive_.seekp(64);
-
-	writeFileIndex();
-}
-
-void CItdPacker::writeFileIndex ()
-{
-	for(auto entry : index_) {
-		archive_.write((char *)&entry.offset,8);
-		archive_.write((char *)&entry.size,8);
-	}
-}
-
 } // namespace itd
 } // namespace hrengin

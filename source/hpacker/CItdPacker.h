@@ -39,28 +39,22 @@ public:
 	i32 pack ();
 
 private:
-	void buildFileList ();
-	void addObject (std::string const& path);
 	i32 addDir (std::string const& path);
 
 	void writeHeader();
 
-	void prepareFileIndex ();
-	void updateFileIndex ();
-	void writeFileIndex ();
-
-	void buildFileTree ();
+	void buildIndex ();
 
 	void writeArchive();
 	void packFile (size_t id, std::string const& path);
 
-	std::vector<std::string> inputFiles_;
 	std::vector<std::string> fileList_;
 	std::vector<itd::FileEntry> index_;
 
 	std::ofstream archive_;
 
 	bool verbose_;
+
 };
 } // namespace itd
 } // namespace hrengin
