@@ -37,7 +37,10 @@ void CHPKTreeWriter::addFile (std::string const& path, u64 id)
 
 void CHPKTreeWriter::write (std::ostream& target)
 {
-	Header header;
+        u64 baseOffset = 32;
+        root_.calcOffsets(baseOffset);
+
+        Header header;
 	target.write((char *)&header.type,4);
 	target.write((char *)&header.unused,4);
 		
@@ -46,9 +49,6 @@ void CHPKTreeWriter::write (std::ostream& target)
 	target.write((char *)&root_.subtreePtr, 8);
 	target.write((char *)&root_.subtreeNum, 4);
 
-	u64 baseOffset = 32;
-
-	root_.calcOffsets(baseOffset);
 	root_.writeOut(target, baseOffset);
 	strings_.putStrings(target);
 }
@@ -85,18 +85,21 @@ void TreeNode::add (std::vector<std::string> path, std::string name, u64 id,
 
 void TreeNode::calcOffsets (u64 & baseOffset)
 {
-	for(auto const & node : leaves) {
+	// Note: calcOffsets and writeOut can be combined together to 
+	// reduce number of tree traversals, however, I left them as
+	// they are now, for readability.
+	// I leave this note, <s>because I tend to leave a lot of unnecessary
+	// notes </s> so later this part will be rewritten.
+	//
+	filesPtr = baseOffset;
+	filesNum = files.size();
 
-		filesPtr = baseOffset;
-		filesNum = files.size();
+	baseOffset += filesNum * 16;
 
-		baseOffset += filesNum * 16;
-
-		subtreePtr = baseOffset;
-		subtreeNum = leaves.size();
-		
-		baseOffset += subtreeNum * 32;
-	}
+	subtreePtr = baseOffset;
+	subtreeNum = leaves.size();
+	
+	baseOffset += subtreeNum * 32;
 
 	for(auto & node : leaves) {
 		node.calcOffsets(baseOffset);
