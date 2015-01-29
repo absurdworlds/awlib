@@ -1,13 +1,15 @@
+#include <fstream>
 #include <string>
 #include <vector>
 
-#include <hrengin/io/IReadFile.h>
 #include <hrengin/hdf/IHDFParser.h>
 
 using namespace hrengin;
 using namespace io;
+using namespace hdf;
 
-/*! \example hdf_example.cpp
+/*!
+ * \example hdf_example.cpp
  *
  * This file provides an usage example for IHDFParser,
  * messages.hdf is used as an example document here.
@@ -29,7 +31,7 @@ void parseNode(IHDFParser* hdf, std::string node, Message& msg)
 	// any object must be read strictly in this order
 	while(hdf->read()) {
 		HdfObjectType type = hdf->getObjectType();
-		std::string name
+		std::string name;
 
 		hdf->getObjectName(name);
 
@@ -37,17 +39,21 @@ void parseNode(IHDFParser* hdf, std::string node, Message& msg)
 		case HDF_OBJ_NODE: // recursively parse a subnode
 			parseNode(hdf, name, msg);
 			break;
-		case HDF_OBJ_VAL: // parse and store a variable 
+		case HDF_OBJ_VAL: // parse and store a variable
+			u32 tmp;
 			if(name == "red" && node == "color") {
-				hdf->readInt(msg.color.red);
+				hdf->readInt(tmp);
+				msg.color.red = tmp;
 			} else if(name == "blue" && node == "color") {
-				hdf->readInt(msg.color.red);
+				hdf->readInt(tmp);
+				msg.color.blue = tmp;
 			} else if(name == "green" && node == "color") {
-				hdf->readInt(msg.color.red);
+				hdf->readInt(tmp);
+				msg.color.green = tmp;
 			} else if(name == "text" && node == "msg") {
 				hdf->readString(msg.text);
 			} else {
-				hdf->error(HDF_ERR_ERROR, "unknown object: " + name);
+				hdf->error(HDF_LOG_ERROR, "unknown object: " + name);
 			}
 			break;
 		case HDF_OBJ_NODE_END: // reached an end of node - exit
@@ -59,12 +65,13 @@ void parseNode(IHDFParser* hdf, std::string node, Message& msg)
 	}
 }
 
-void main()
+int main(int,char**)
 {
 	// open a file
 	IReadFile* file = openReadFile("../data/misc/messages.hdf");
+	IBufferedStream *stream = io::createBufferedStream(file);
 	// create the parser
-	IHDFParser* hdf = createHDFParser(file);
+	IHDFParser* hdf = createHDFParser(stream);
 
 	std::vector<Message> msgLog;
 
@@ -77,7 +84,7 @@ void main()
 
 			// skip unknown node
 			if(name != "msg") {
-				hdf->error(HDF_ERR_WARNING, "unknown node: " + name);
+				hdf->error(HDF_LOG_WARNING, "unknown node: " + name);
 				hdf->skipNode();
 			} else {
 				Message msg;
@@ -91,5 +98,4 @@ void main()
 	}
 
 	delete hdf;
-	delete file;
 }

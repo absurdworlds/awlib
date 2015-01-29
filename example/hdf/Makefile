@@ -1,13 +1,13 @@
 include ../../Makefile
 
 # Add paths to dependency headers here
-ExternalIncludes = -I../dependencies/include/
-ExternalLibraries = -Wl,-rpath-link,./,-R../../dependencies/lib,-R.
+ExternalIncludes =
+ExternalLibraries = -Wl,-rpath-link,./,-R,'$$ORIGIN/../lib'
 
 # Includes and objects
 Objects = hdf_example.o
 Includes = -I../../include $(ExternalIncludes)
-Libraries = -L../../lib -lhrcore -lhrgraphics $(ExternalLibraries)
+Libraries = -L../../lib -lhrdf $(ExternalLibraries)
 Defines = 
 
 Version = $(VersionMajor).$(VersionMinor)
