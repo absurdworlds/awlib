@@ -36,8 +36,7 @@ i32 CArgParser::getToken (ClineArg& tok)
 void CArgParser::parse (char** argv)
 {
 	while(*argv != 0) {
-		parseToken(*argv);
-		++argv;
+		parseToken(*(argv++));
 	}
 }
 
@@ -68,13 +67,10 @@ void CArgParser::parseToken (char* argv)
 			tok.name = readString(argv);
 		}
 	} else {
-		tok.name = *argv;
-		argv++;
+		tok.name = *(argv++);
 		do {
 			tokens_.push_front(tok);
-			tok.name = *argv;
-
-			argv++;
+			tok.name = *(argv++);
 		} while (*argv != 0);
 	}
 	
@@ -85,8 +81,7 @@ std::string CArgParser::readString (char* argv)
 {
 	std::string s;
 	while (*argv != 0) {
-		s += *argv;
-		argv++;
+		s += *(argv++);
 	}
 	return s;
 }
