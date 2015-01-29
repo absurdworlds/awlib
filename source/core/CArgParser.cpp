@@ -36,7 +36,7 @@ i32 CArgParser::getToken (ClineArg& tok)
 void CArgParser::parse (char** argv)
 {
 	while(*argv != 0) {
-		parseToken(*(argv++));
+		parseToken(*argv++);
 	}
 }
 
