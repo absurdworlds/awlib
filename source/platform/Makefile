@@ -5,7 +5,8 @@ ExternalIncludes = -I../../dependencies/include/
 ExternalLibraries = 
 
 # Includes and objects
-Objects = posix/filesystem.o posix/CDirectory.o \
+Objects = CCharacterStream.o CBufferedStream.o \
+	  CReadFile.o CWriteFile.o posix/filesystem.o posix/CDirectory.o \
 	  linux/time.o
 Includes = -I../../include $(ExternalIncludes)
 Libraries = $(ExternalLibraries)
