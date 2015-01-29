@@ -11,7 +11,7 @@
 #include <string>
 
 #include <hrengin/common/types.h>
-#include <hrengin/io/io.h>
+#include <hrengin/platform/platform.h>
 
 namespace hrengin {
 namespace io {
@@ -37,14 +37,15 @@ struct FileInfo {
 /*!
  * Get information about file
  */
-HR_IO_EXP i32 fileStat (std::string const & path, FileInfo& result);
+HR_SYS_EXP i32 fileStat (std::string const & path, FileInfo& result);
 
 /*!
  * Get type (e.g. regular file or directory) of a file
  */
 inline FileType fileType (std::string const & path)
 {
-	FileInfo info = fileStat(path);
+	FileInfo info;
+	fileStat(path, info);
 
 	return info.type;
 }
@@ -53,7 +54,8 @@ inline FileType fileType (std::string const & path)
  */
 inline size_t fileSize (std::string const & path)
 {
-	FileInfo info = fileStat(path);
+	FileInfo info;
+	fileStat(path, info);
 
 	return info.size;
 }
@@ -63,13 +65,13 @@ inline size_t fileSize (std::string const & path)
  */
 enum FileMode {
 	//! File exists
-	Exists	= 0,
+	FM_Exists	= 0,
 	//! Execute permission
-	Exec	= 1,
+	FM_Exec		= 1,
 	//! Write permission
-	Write	= 2,
+	FM_Write	= 2,
 	//! Read permission
-	Read	= 4,
+	FM_Read		= 4,
 };
 
 /*!
@@ -83,7 +85,7 @@ enum FileMode {
  * 	Zero (0) on success, or -1 if file not exist
  * 	or one of permissions was denied.
  */
-i32 checkFile(std::string const & path, FileMode mode);
+HR_SYS_EXP i32 checkFile(std::string const & path, FileMode mode);
 
 } //namespace io
 } //namespace hrengin
