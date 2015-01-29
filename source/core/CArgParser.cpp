@@ -79,11 +79,7 @@ void CArgParser::parseToken (char* argv)
 
 std::string CArgParser::readString (char* argv)
 {
-	std::string s;
-	while (*argv != 0) {
-		s += *(argv++);
-	}
-	return s;
+	return std::string(argv);
 }
 
 } //namespace core
