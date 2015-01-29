@@ -9,7 +9,7 @@
 #include <stdio.h>
 
 #include <hrengin/common/types.h>
-
+#include <hrengin/io/IBufferedStream.h>
 #include <hrengin/hdf/Type.h>
 
 #include "CHDFParser.h"
@@ -78,28 +78,12 @@ hdf::Type hdfConvertImpicitType(const HdfToken& token)
 	}
 }
 
-char peekchar(std::istream& stream)
-{
-	char c = stream.peek();
-	printf("\e[34m%c\e[0m",c);
-	return c;
-}
-char getchar(std::istream& stream)
-{	
-	char c = stream.get();
-	printf("\e[32m【%c】\e[0m",c);
-	return c;
-}
-
-/*
- * Member function definitions
- */
-IHDFParser* createHDFParser(std::istream& stream)
+IHDFParser* createHDFParser(io::ICharacterStream* stream)
 {
 	return new CHDFParser(stream);
 }
 
-CHDFParser::CHDFParser(std::istream& stream)
+CHDFParser::CHDFParser(io::ICharacterStream* stream)
 	: depth_(0), state_(HDF_S_IDLE), stream_(stream)
 {
 }
@@ -110,9 +94,16 @@ CHDFParser::~CHDFParser()
 
 bool CHDFParser::read() {
 	char c;
+
+	stream_->getCurrent(c);
+
+	if(c == 0) {
+		return false;
+	}
+
 	fastForward();
 
-	c = peekchar(stream_);
+	stream_->getCurrent(c);
 	
 	if(c == 0) {
 		return false;
@@ -122,7 +113,7 @@ bool CHDFParser::read() {
 		while(c == '!') {
 			processCommand();
 			fastForward();
-			c = peekchar(stream_);			
+			stream_->getCurrent(c);
 		}
 		if(c == '[') {
 			state_ = HDF_S_OBJECT;
@@ -142,7 +133,9 @@ HdfObjectType CHDFParser::getObjectType()
 		return HDF_OBJ_NULL;
 	}
 
-	char c = peekchar(stream_);
+	char c;
+
+	stream_->getCurrent(c);
 
 	if(state_ != HDF_S_OBJECT) {
 		error(HDF_LOG_ERROR, "there is no object");
@@ -151,7 +144,7 @@ HdfObjectType CHDFParser::getObjectType()
 		if(c == '[') {
 			// step forward - getObjectName expects a nameChar to
 			// be the first char
-			c = getchar(stream_); 
+			stream_->getNext(c); 
 			state_ = HDF_S_NODE_BEGIN;
 			depth_ ++;
 			return HDF_OBJ_NODE;
@@ -163,7 +156,7 @@ HdfObjectType CHDFParser::getObjectType()
 			state_ = HDF_S_VALUE_BEGIN;
 			return HDF_OBJ_VAL;
 		} else if(c == ']') {
-			c = getchar(stream_); 
+			stream_->getNext(c); 
 			depth_--;
 			state_ = HDF_S_IDLE;
 			return HDF_OBJ_NODE_END;
@@ -262,12 +255,13 @@ void CHDFParser::skipNode()
 {
 	char c;
 
-	c = peekchar(stream_);
+	stream_->getCurrent(c);
 
 	u32 depth = 1;
 
 	while (depth > 0) {
-		c = getchar(stream_);
+		stream_->getNext(c);
+
 		if(c == '[' ) {
 			depth++;
 		} else if(c == ']') {
@@ -281,7 +275,7 @@ void CHDFParser::skipNode()
 void CHDFParser::error(hdf::ParserMessage type, std::string msg)
 {
 	errors_.push_back(msg);
-	printf("[HDF:%u]: %s\n",u32(stream_.tellg()),msg.c_str());
+	printf("[HDF:%u]: %s\n",stream_->getPos(),msg.c_str());
 
 	if(type == HDF_LOG_ERROR) {
 		state_ = HDF_S_PANIC;
@@ -295,10 +289,10 @@ void CHDFParser::skip()
 {
 	char c;
 
-	c = peekchar(stream_);
+	stream_->getCurrent(c);
 	
 	while(condition(c) && c != 0) {
-		c = getchar(stream_);
+		stream_->getNext(c);
 	}
 }
 
@@ -325,7 +319,7 @@ void CHDFParser::skipInlineWhitespace()
 void CHDFParser::fastForward() {
 	char c;
 
-	c = peekchar(stream_);
+	stream_->getCurrent(c);
 
 	bool needsFastForward = isWhitespace(c) || c == '/';
 
@@ -333,7 +327,7 @@ void CHDFParser::fastForward() {
 		if(isWhitespace(c)) {
 			skipWhitespace();
 		} else if(c == '/') {
-			c = getchar(stream_);
+			stream_->getNext(c);
 
 			if(c == '/') {
 				//token.type = tokenCOMMENT;
@@ -343,9 +337,9 @@ void CHDFParser::fastForward() {
 			}
 		}		
 		
-		c = peekchar(stream_);
+		stream_->getCurrent(c);
 		needsFastForward = isWhitespace(c) || c == '/';
-		//c = getchar(stream_);
+		//stream_->getNext(c);
 	}
 }
 
@@ -354,17 +348,17 @@ bool CHDFParser::parseType(HdfToken& token) {
 
 	char c;
 
-	c = peekchar(stream_);
+	stream_->getCurrent(c);
 
 	if(c == '=') {
-		c = getchar(stream_);
+		stream_->getNext(c);
 	} else {
 		error(HDF_LOG_ERROR, "illegal token, expected '='");
 	}
 
 	skipInlineWhitespace();
 	
-	c = peekchar(stream_);
+	stream_->getCurrent(c);
 
 	if(isNameBeginChar(c)) {
 		token.type = HDF_TOKEN_NAME;
@@ -375,13 +369,13 @@ bool CHDFParser::parseType(HdfToken& token) {
 	
 	skipInlineWhitespace();
 	
-	c = peekchar(stream_);
+	stream_->getCurrent(c);
 
 	if(c == ':') {
-		c = getchar(stream_);
+		stream_->getNext(c);
 		return true;
 	} else {
-		//c = getchar(stream_);
+		//stream_->getNext(c);
 		return false;
 	}
 }
@@ -392,7 +386,7 @@ void CHDFParser::readToken(HdfToken& token)
 
 	char c;
 
-	c = peekchar(stream_);
+	stream_->getCurrent(c);
 
 	if(isNameBeginChar(c)) {
 		token.type = HDF_TOKEN_NAME;
@@ -412,24 +406,24 @@ void CHDFParser::readStringToken(std::string& val) {
 	val = "";
 	char c;
 
-	c = peekchar(stream_);
+	stream_->getCurrent(c);
 #if 0
 	if(c != '"') {
 		// should not get this error
 		error(HDF_LOG_ERROR, "illegal string token");
 	}
 #endif
-	c = getchar(stream_);
+	stream_->getNext(c);
 	
 	while (c != '"') {
 		if ( c == '\\' ) {
-			c = getchar(stream_);
+			stream_->getNext(c);
 		}
 		val += c;
-		c = getchar(stream_);
+		stream_->getNext(c);
 	}
 	
-	c = getchar(stream_);
+	stream_->getNext(c);
 }
 
 void CHDFParser::readNumber(std::string& val)
@@ -437,14 +431,14 @@ void CHDFParser::readNumber(std::string& val)
 	val = "";
 	char c;
 
-	c = peekchar(stream_);
+	stream_->getCurrent(c);
 
 	while (!isWhitespace(c) && (c != ']')) {
 		if (!(c >= '0' && c <= '9') && !in(c, '.', 'e', 'E', '+', '-' )) {
 			error(HDF_LOG_WARNING, "invalid number");
 		}
 		val += c;
-		c = getchar(stream_);
+		stream_->getNext(c);
 	}
 }
 
@@ -452,8 +446,8 @@ void CHDFParser::readName(std::string& name, char stop)
 {
 	name = "";
 	char c;
-	
-	c = peekchar(stream_);
+
+	stream_->getCurrent(c);
 
 	while(!isWhitespace(c) && (c != stop) && (c != ']')) {
 		if(isNameChar(c)) {
@@ -461,7 +455,7 @@ void CHDFParser::readName(std::string& name, char stop)
 		} else {
 			error(HDF_LOG_WARNING, "invalid name char");
 		}
-		c = getchar(stream_);
+		stream_->getNext(c);
 	}
 }
 
@@ -474,6 +468,7 @@ void CHDFParser::readTypeName(std::string& name)
 {
 	readName(name, ':');
 }
+
 
 template<typename T> 
 void CHDFParser::readValue(T& var)
@@ -573,10 +568,10 @@ void CHDFParser::processCommand() {
 	
 	char c;
 
-	c = peekchar(stream_);
+	stream_->getCurrent(c);
 
 	if (c == '!') {
-		c = getchar(stream_);
+		stream_->getNext(c);
 	} else {
 		error(HDF_LOG_ERROR, "No command to process");
 	}

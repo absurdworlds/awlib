@@ -8,6 +8,7 @@
  */
 #ifndef _hrengin_CHDFParser_
 #define _hrengin_CHDFParser_
+
 #include <string>
 #include <vector>
 
@@ -32,7 +33,7 @@ struct HdfToken {
 
 class CHDFParser : public IHDFParser {
 public:
-	CHDFParser(std::istream& stream);
+	CHDFParser(io::ICharacterStream* stream);
 	virtual ~CHDFParser();
 	
 	virtual void skipNode();
@@ -77,8 +78,6 @@ private:
 	template<bool (*condition)(char)> 
 	void skip();
 
-	void processCommand();
-
 	enum HdfParserState {
 		HDF_S_IDLE = 0,
 		HDF_S_OBJECT,
@@ -91,11 +90,14 @@ private:
 
 	std::vector<std::string> errors_;
 
-	std::istream& stream_;
+	void processCommand();
+
+	io::ICharacterStream* stream_;
 
 	u32 depth_;
 };
 
 } //namespace io
 } //namespace hrengin
+
 #endif//_hrengin_CHDFParser_

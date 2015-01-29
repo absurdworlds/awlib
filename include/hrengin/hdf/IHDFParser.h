@@ -8,7 +8,7 @@
  */
 #ifndef _hrengin_IHDFReader_
 #define _hrengin_IHDFReader_
-#include <istream>
+
 #include <string>
 
 #include <hrengin/math/Vector3d.h>
@@ -84,8 +84,9 @@ public:
 /*!
  * \brief Make an instance of HDF parser.
  * \param stream Stream to parse.
+ * \see io::ICharacterStream
 */
-HR_HDF_EXP IHDFParser* createHDFParser(std::istream&);
+HR_HDF_EXP IHDFParser* createHDFParser(io::ICharacterStream* stream);
 
 } // namespace io
 } // namespace hrengin

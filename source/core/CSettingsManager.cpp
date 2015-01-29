@@ -6,11 +6,11 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#include <fstream>
-#include <sstream>
-
 #include <hrengin/resources/default_settings.h>
 #include <hrengin/hdf/IHDFParser.h>
+#include <hrengin/io/CReadFile.h>
+#include <hrengin/io/ICharacterStream.h>
+#include <hrengin/io/IBufferedStream.h>
 
 #include "CSettingsManager.h"
 
@@ -26,6 +26,7 @@ CSettingsManager::CSettingsManager()
 {
 //	loadSettings();
 }
+
 bool CSettingsManager::getValue(std::string key, bool& val)
 {
 	return getValueImpl<bool>(key,val);
