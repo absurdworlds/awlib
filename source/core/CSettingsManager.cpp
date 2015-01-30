@@ -24,7 +24,6 @@ ISettingsManager* createSettingsManager()
 
 CSettingsManager::CSettingsManager()
 {
-//	loadSettings();
 }
 
 bool CSettingsManager::getValue(std::string key, bool& val)

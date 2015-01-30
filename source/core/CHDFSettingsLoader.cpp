@@ -12,6 +12,7 @@
 
 #include "CHDFSettingsLoader.h"
 
+#if 0
 i32 CHDFSettingsLoader::openFile(std::string const & path)
 {
 	FileInfo finfo = fileStat(path);
@@ -20,40 +21,45 @@ i32 CHDFSettingsLoader::openFile(std::string const & path)
 		return -1;
 	}
 
-	std::ifstream in;
-	in.open(path, std::ios::binary);
 	size_t size = finfo.size;
 
 	hdfFile_.reserve(size);
-	
+
 	in.read(&hdfFile_[0], size);
 }
+#endif
 
-void CHDFSettingsLoader::loadSettings()
+CHDFSettingsLoader::CHDFSettingsLoader (io::CReadFile & file)
+	file_(file)
 {
+}
+
+void CHDFSettingsLoader::loadSettings (ISettingsManager & settings)
+{
+	io::ICharacterStream* stream;
 	hdf::IHDFParser* hdf;
 
+	stream = file_.isOpen() 
+		? io::createBufferedStream(file_)
+		: io::createCharacterStream(default_settings);
 
-	if(file) {
-		hdf = hdf::createHDFParser(file);
-	} else {
-		std::string def(default_settings);
-		std::istringstream sstream(def);
-
-		hdf = hdf::createHDFParser(sstream);
-	}
+	hdf = hdf::createHDFParser(stream);
+	hdf::IHDFParser* hdf;
 
 	parseSettings(hdf);
 
 	delete hdf;
+	delete stream
 }
 
-void CHDFSettingsLoader::parseSettings(hdf::IHDFParser* hdf)
+void CHDFSettingsLoader::parseSettings (hdf::IHDFParser* hdf,
+	ISettingsManager & settings)
 {
 	std::string prevNode;
 	std::string curNode;
 	std::string curObj;
 	while(hdf->read()) {
+		// FIXME: write generic parser
 		switch(hdf->getObjectType()) {
 		case hdf::HDF_OBJ_NODE:
 			if(curNode == "") {
@@ -80,17 +86,17 @@ void CHDFSettingsLoader::parseSettings(hdf::IHDFParser* hdf)
 					i32 temp;
 					hdf->readInt(temp);
 					
-					setValue(curNode + "." + curObj, temp);
+					settings.setValue(curNode + "." + curObj, temp);
 				} else if (curObj == "resolutionY") {
 					i32 temp;
 					hdf->readInt(temp);
 					
-					setValue(curNode + "." + curObj, temp);
+					settings.setValue(curNode + "." + curObj, temp);
 				} else if (curObj == "fullscreen") {
 					bool temp;
 					hdf->readBool(temp);
 					
-					setValue(curNode + "." + curObj, temp);
+					settings.setValue(curNode + "." + curObj, temp);
 				}
 			}
 			break;

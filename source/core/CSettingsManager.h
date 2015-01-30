@@ -1,14 +1,13 @@
 /*
-   Copyright (C) 2014  absurdworlds
-
-   License LGPLv3-only:
-   GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
-   This is free software: you are free to change and redistribute it.
-   There is NO WARRANTY, to the extent permitted by law.
+ * Copyright (C) 2014  absurdworlds
+ *
+ * License LGPLv3-only:
+ * GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
+ * This is free software: you are free to change and redistribute it.
+ * There is NO WARRANTY, to the extent permitted by law.
  */
 #ifndef _hrengin_CSettingsManager_
 #define _hrengin_CSettingsManager_
-
 #include <map>
 
 #include <hrengin/core/ISettingsManager.h>
@@ -37,8 +36,6 @@ public:
 	virtual bool setValue(std::string key, i32 val);
 	virtual bool setValue(std::string key, bool val);
 private:
-	void parseSettings(hdf::IHDFParser* hdf);
-	
 	template<class T>
 	bool setValueImpl(std::string key, T val);
 	

@@ -13,6 +13,7 @@
 #include <hrengin/common/types.h>
 
 #include <hrengin/core/core.h>
+#include <hrengin/core/ISettingsManager.h>
 
 namespace hrengin {
 namespace core {

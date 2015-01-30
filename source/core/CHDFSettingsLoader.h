@@ -8,27 +8,29 @@
  */
 #ifndef _hrengin_CHDFSettingsLoader_
 #define _hrengin_CHDFSettingsLoader_
-#include <hrengin/core/ISettingsLoader.h>
-
+#include <hrengin/io/CReadFile.h>
 #include <hrengin/hdf/hdf_value.h>
+
+#include <hrengin/core/ISettingsLoader.h>
 
 namespace hrengin {
 namespace core {
 
 class CHDFSettingsLoader : public ISettingsLoader {
 public:
-	virtual ~CHDFSettingsLoader()
+	CHDFSettingsLoader (io::CReadFile & file);
+	virtual ~CHDFSettingsLoader ()
 	{
 	}
 
-	virtual void openFile(std::string const & path);
-	virtual void loadSettings(ISettingsManager & manager);
+	virtual void loadSettings (ISettingsManager & manager);
 
 protected:
-	void parseSettings(hdf::IHDFParser* hdf);
+	void parseSettings (hdf::IHDFParser* hdf);
 
 private:
-	std::string hdfFile_;
+	//std::string hdfFile_;
+	io::CReadFile & file_;
 };
 
 } // namespace core
