@@ -31,7 +31,7 @@ HR_PHYS_EXP IPhysicsManager* createPhysicsManager()
 
 CBulletPhysics::CBulletPhysics()
 {
-	modelLoader_ = createModelLoader();
+	modelLoader_ = core::createModelLoader();
 	
 	// Add a 'fallback' empty shape, used if loading of some shape is failed
 	btCollisionShape* shape = new btEmptyShape;

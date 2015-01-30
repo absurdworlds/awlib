@@ -19,20 +19,20 @@
 
 #include <hrengin/core/IModel.h>
 
-#include  "CModelLoader.h"
+#include "CModelLoader.h"
 
 namespace hrengin {
+namespace core {
+bool hdfParseNode(hdf::IHDFParser* hdf, IModel* model, std::string curNode);
+bool hdfParseObject(hdf::IHDFParser* hdf, IModel* model, std::string curNode);
+bool hdfParseShapeNode(hdf::IHDFParser* hdf, IModel* model);
 
-bool hndfParseNode(hdf::IHDFParser* hdf, IModel* model, std::string curNode);
-bool hndfParseObject(hdf::IHDFParser* hndf, IModel* model, std::string curNode);
-bool hndfParseShapeNode(hdf::IHDFParser* hndf, IModel* model);
-
-IModelLoader* createModelLoader()
+IModelLoader* createModelLoader ()
 {
 	return new CModelLoader();
 }
 
-IModel* CModelLoader::loadModel(char const* filename)
+IModel* CModelLoader::loadModel (char const* filename)
 {
 	std::string path = io::modelpath + filename;
 	std::string ext;
@@ -43,7 +43,7 @@ IModel* CModelLoader::loadModel(char const* filename)
 		return 0;
 	}
 	
-	IModel* model = new IModel; // temp
+	IModel* model = new IModel; // FIXME
 
 	getFileExtension(ext, filename);
 
@@ -60,7 +60,7 @@ IModel* CModelLoader::loadModel(char const* filename)
 	return model;
 }
 
-bool CModelLoader::hdfParse(hdf::IHDFParser* hdf, IModel* model)
+bool CModelLoader::hdfParse (hdf::IHDFParser* hdf, IModel* model)
 {
 	std::string curNode;
 
@@ -71,97 +71,82 @@ bool CModelLoader::hdfParse(hdf::IHDFParser* hdf, IModel* model)
 
 	hdf->getObjectName(curNode);
 
-	return hndfParseNode(hdf, model, curNode);
+	return hdfParseNode(hdf, model, curNode);
 }
 
-#if 0
-	while(hndf->read()) {
-		switch(hndf->getObjectType()) {
-		case io::HDF_OBJ_NODE:
-			return hndfParseNode(hndf, model);
-			break;
-		/*case io::HDF_OBJ_VAL:
-			break;*/
-		default:
-			return false;
-		}
-	}
-#endif
-
-bool hndfParseNode(hdf::IHDFParser* hndf, IModel* model, std::string curNode)
+bool hdfParseNode(hdf::IHDFParser* hdf, IModel* model, std::string curNode)
 {
 	bool successful = true;
 
-	while(hndf->read()) {
-		successful = hndfParseObject(hndf, model, curNode);
+	while(hdf->read()) {
+		successful = hdfParseObject(hdf, model, curNode);
 	}
 
 	return successful;
 }
 
-bool hndfParseObject(hdf::IHDFParser* hndf, IModel* model, std::string curNode)
+// FIXME mess of nested if's
+bool hdfParseObject(hdf::IHDFParser* hdf, IModel* model, std::string curNode)
 {
 	bool successful = true;
-	hdf::HdfObjectType type = hndf->getObjectType();
+	hdf::HdfObjectType type = hdf->getObjectType();
 	std::string objectName;
 
 	switch(type) {
 	case hdf::HDF_OBJ_NODE:
-		hndf->getObjectName(objectName);
+		hdf->getObjectName(objectName);
 
 		if(objectName == "shapes") {
 			if(curNode != "model") {
-				hndf->error(hdf::HDF_LOG_ERROR, "'shapes' node must be inside a 'model' node");
+				hdf->error(hdf::HDF_LOG_ERROR, "'shapes' node must be inside a 'model' node");
 				return false;
 			} else {
-				successful = hndfParseNode(hndf, model, objectName);
+				successful = hdfParseNode(hdf, model, objectName);
 			}
-		} else if((curNode == "shapes") && (objectName == "*" || objectName == "shape")) {
-			successful = hndfParseShapeNode(hndf, model);
+		} else if ((curNode == "shapes")
+			&& (objectName == "*" || objectName == "shape")) {
+			successful = hdfParseShapeNode(hdf, model);
 		} else {
-			hndf->error(hdf::HDF_LOG_ERROR, "found unknown node");
-			hndf->skipNode();
+			hdf->error(hdf::HDF_LOG_ERROR, "found unknown node");
+			hdf->skipNode();
 		}
 		break;
 	case hdf::HDF_OBJ_VAL:
-		hndf->skipValue();
+		hdf->skipValue();
 		break;
 	case hdf::HDF_OBJ_NODE_END:
 		break;
 	default:
 		return false;
-		
-	//case io::HNDF_NODE_END:
-		//endreached = true;
 	}
 
 	return successful;
 }
 
-bool hndfParseShapeNode(hdf::IHDFParser* hndf, IModel* model)
+bool hdfParseShapeNode(hdf::IHDFParser* hdf, IModel* model)
 {
 	hrengin::Primitive primitive;
-	//io::HdfObjectType type = hndf->getObjectType();
+	//io::HdfObjectType type = hdf->getObjectType();
 
 
-	while(hndf->read()) {
-		hdf::HdfObjectType type = hndf->getObjectType();
+	while(hdf->read()) {
+		hdf::HdfObjectType type = hdf->getObjectType();
 
 		if(type == hdf::HDF_OBJ_NODE_END) {
 			break;
 		}
 		if(type != hdf::HDF_OBJ_VAL) {
-			hndf->error(hdf::HDF_LOG_ERROR, "expected a variable in a 'shape' node, got node");
+			hdf->error(hdf::HDF_LOG_ERROR, "expected a variable in a 'shape' node, got node");
 			return false; 
 		}
 		
 		std::string objectName;
 
-		hndf->getObjectName(objectName);
+		hdf->getObjectName(objectName);
 
 		if(objectName == "type") {
 			std::string type;
-			hndf->readString(type);
+			hdf->readString(type);
 			if(type == "sphere") {
 				primitive.shape = SHAPE_SPHERE;
 			} else if(type == "box") {
@@ -175,12 +160,12 @@ bool hndfParseShapeNode(hdf::IHDFParser* hndf, IModel* model)
 			} else if(type == "plane") {
 				primitive.shape = SHAPE_PLANE;
 			} else {
-				hndf->error(hdf::HDF_LOG_ERROR, "unknown 'type' value");
+				hdf->error(hdf::HDF_LOG_ERROR, "unknown 'type' value");
 				return false;
 			}
 		} else if(objectName == "direction") {
 			std::string axis;
-			hndf->readString(axis);
+			hdf->readString(axis);
 			if(axis == "axisX" || axis == "axisx" || axis == "x" || axis == "X") {
 				primitive.axis = AXIS_X;
 			} else if(axis == "axisZ" || axis == "axisz" || axis == "z" || axis == "Z") {
@@ -190,27 +175,27 @@ bool hndfParseShapeNode(hdf::IHDFParser* hndf, IModel* model)
 			}
 
 		} else if(objectName == "radius" || objectName == "width") {
-			hndf->readFloat(primitive.dimensions[0]);
+			hdf->readFloat(primitive.dimensions[0]);
 		} else if(objectName == "height") {
-			hndf->readFloat(primitive.dimensions[1]);
+			hdf->readFloat(primitive.dimensions[1]);
 		} else if(objectName == "length") {
-			hndf->readFloat(primitive.dimensions[2]);
+			hdf->readFloat(primitive.dimensions[2]);
 		} else if(objectName == "rotation") {
 			Vector3d<f32> vec3;
-			hndf->readVector3d(vec3);
+			hdf->readVector3d(vec3);
 			
 			primitive.rotation[0] = vec3[0];
 			primitive.rotation[1] = vec3[1];
 			primitive.rotation[2] = vec3[2];
 		} else if(objectName == "offset") {
 			Vector3d<f32> vec3;
-			hndf->readVector3d(vec3);
+			hdf->readVector3d(vec3);
 			
 			primitive.offset[0] = vec3[0];
 			primitive.offset[1] = vec3[1];
 			primitive.offset[2] = vec3[2];
 		} else {
-			hndf->skipValue();
+			hdf->skipValue();
 		}
 	}
 
@@ -218,5 +203,5 @@ bool hndfParseShapeNode(hdf::IHDFParser* hndf, IModel* model)
 
 	return true;
 }
-
+} // namespace core
 } // namespace hrengin

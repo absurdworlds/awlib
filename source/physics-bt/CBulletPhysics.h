@@ -8,7 +8,6 @@
  */
 #ifndef _hrengin_CBulletPhysics_
 #define _hrengin_CBulletPhysics_
-
 #include <map>
 #include <string>
 
@@ -49,7 +48,7 @@ private:
 	virtual btCollisionShape* createPrimitiveShape(Primitive shape);
 	//virtual btCollisionShape* createMeshShape(SMesh shape);
 
-	IModelLoader* modelLoader_;
+	core::IModelLoader* modelLoader_;
 
 	std::map<std::string,u32> models_;
 	btAlignedObjectArray<btCollisionShape*>	collisionShapes_;

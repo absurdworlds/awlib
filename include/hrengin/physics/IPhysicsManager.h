@@ -21,7 +21,9 @@
 #include <hrengin/physics/IDebugDrawer.h>
 
 namespace hrengin {
+namespace core {
 class IModelLoader;
+}
 
 namespace physics {
 class IPhysicsWorld;

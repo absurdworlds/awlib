@@ -8,12 +8,12 @@
  */
 #ifndef _hrengin_IModelLoader_
 #define _hrengin_IModelLoader_
-
 #include <hrengin/core/core.h>
 
 namespace hrengin {
 class IModel;
 
+namespace core {
 //! Reads model files from disk and stores in hrengin standard format
 class IModelLoader {
 public:
@@ -25,13 +25,13 @@ public:
 	/*! Load model from disk
 	 * \see IModel
 	 */	
-	virtual IModel* loadModel(char const* filename) = 0;
+	virtual IModel* loadModel (char const* filename) = 0;
 };
 
 /*! Create a model loader
  * \note It is best to use only one model loader
  */
 HR_CORE_EXP IModelLoader* createModelLoader();
-
+} // namespace core
 } // namespace hrengin
 #endif//_hrengin_IModelLoader_
