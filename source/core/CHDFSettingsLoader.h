@@ -26,7 +26,8 @@ public:
 	virtual void loadSettings (ISettingsManager & manager);
 
 protected:
-	void parseSettings (hdf::IHDFParser* hdf);
+	void parseSettings (hdf::IHDFParser * hdf,
+		ISettingsManager & settings);
 
 private:
 	//std::string hdfFile_;
