@@ -54,8 +54,8 @@ void CArgParser::parseToken (char* argv)
 
 	++argv;
 
-	tok.type = ClineArg::Option;
 	if(*argv == 0) {
+		tok.type = ClineArg::Operand;
 		tok.name = '-';
 	} else if (*argv == '-') {
 		++argv;
@@ -64,10 +64,12 @@ void CArgParser::parseToken (char* argv)
 			tok.name = "--";
 			term_ = true;
 		} else {
-			tok.longOpt = true;
+			tok.type = ClineArg::Option;
 			tok.name = readString(argv);
+			tok.longOpt = true;
 		}
 	} else {
+		tok.type = ClineArg::Option;
 		tok.name = *(argv++);
 		do {
 			tokens_.push_front(tok);
