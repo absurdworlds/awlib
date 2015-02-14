@@ -74,6 +74,8 @@ inline std::string join (std::vector<std::string>& source,
 /*!
  * \brief 
  * 	Split string into tokens. Ignores empty tokens.
+ * 	For example, `splitString("/ab/cde//fgh/", "/")` will produce 
+ * 	three tokens: {"ab", "cde", "fgh}
  * \param source
  * 	Source string to split
  * \param delim
@@ -98,6 +100,36 @@ inline size_t split (std::string const& source, std::string const& delim,
 		pos = source.find_first_not_of(delim, delim_pos);
 		delim_pos = source.find_first_of(delim, pos);
 	}
+
+	return num_tokens;
+}
+
+/*!
+ * \brief 
+ * 	Split string into tokens, bearing in mind empty tokens.
+ * \param source
+ * 	Source string to split
+ * \param delim
+ * 	Delimiting sequence
+ * \param holder
+ * 	Vector to hold results
+ * \return
+ * 	Number of found tokens
+ */
+inline size_t explode (std::string const& source, std::string const& delim,
+		std::vector<std::string>& holder)
+{
+	size_t num_tokens = 0;
+	size_t pos1 = 0;
+	size_t pos2;
+	
+	do {
+		pos2 = source.find(delim, pos1);
+		holder.push_back(source.substr(pos1, pos2 - pos1));
+		++num_tokens;
+
+		pos1 = pos2 + delim.size();
+	} while(pos2 != std::string::npos);
 
 	return num_tokens;
 }
