@@ -1,5 +1,6 @@
 /*
- * Copyright (C) 2014  absurdworlds
+ * Copyright (C) 2014-2015  absurdworlds
+ * Copyright (C) 2015       Hedede <hededrk@gmail.com>
  *
  * License LGPLv3-only:
  * GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
@@ -80,14 +81,13 @@ inline std::string join (std::vector<std::string>& source,
  * 	Source string to split
  * \param delim
  * 	Delimiting sequence
- * \param holder
- * 	Vector to hold results
  * \return
- * 	Number of found tokens
+ * 	Vector with found tokens.
  */
-inline size_t split (std::string const& source, std::string const& delim,
-		std::vector<std::string>& holder)
+inline std::vector<std::string>
+split (std::string const& source, std::string const& delim)
 {
+	std::vector<std::string> holder;
 	size_t num_tokens = 0;
 
 	size_t pos = source.find_first_not_of(delim);
@@ -101,7 +101,7 @@ inline size_t split (std::string const& source, std::string const& delim,
 		delim_pos = source.find_first_of(delim, pos);
 	}
 
-	return num_tokens;
+	return holder;
 }
 
 /*!
@@ -111,27 +111,24 @@ inline size_t split (std::string const& source, std::string const& delim,
  * 	Source string to split
  * \param delim
  * 	Delimiting sequence
- * \param holder
- * 	Vector to hold results
  * \return
- * 	Number of found tokens
+ * 	Vector of found tokens.
  */
-inline size_t explode (std::string const& source, std::string const& delim,
-		std::vector<std::string>& holder)
+inline std::vector<std::string>
+explode (std::string const& source, std::string const& delim)
 {
-	size_t num_tokens = 0;
-	size_t pos1 = 0;
+	std::vector<std::string> holder;
+        size_t pos1 = 0;
 	size_t pos2;
-	
+        
 	do {
-		pos2 = source.find(delim, pos1);
-		holder.push_back(source.substr(pos1, pos2 - pos1));
-		++num_tokens;
+                pos2 = source.find(delim, pos1);
+                holder.push_back(source.substr(pos1, pos2 - pos1));
 
 		pos1 = pos2 + delim.size();
 	} while(pos2 != std::string::npos);
-
-	return num_tokens;
+ 
+	return holder;
 }
 } // namespace string
 } // namespace hrengin
