@@ -64,7 +64,9 @@
             <glossdef>
                 <para>The highest version of OpenGL to export. You may <emphasis>only</emphasis> use
                     this when <literal>-spec</literal> is <literal>gl</literal>. And you must use it
-                    when the specification is <literal>gl</literal>.</para>
+                    when the specification is <literal>gl</literal>. You can specify a valid OpenGL
+                    version number, or your can specify <quote>max</quote>. This means to use the
+                    highest available OpenGL version.</para>
             </glossdef>
         </glossentry>
         <glossentry>

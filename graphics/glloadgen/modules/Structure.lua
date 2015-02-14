@@ -462,6 +462,7 @@ end
 MakeActionType("sub-version-iter", subVersionIterAction, function(self, data)
 end)
 
+--[==[
 ---------------------------------------------
 -- Core Extension Iterator Action
 local coreExtIterAction = {}
@@ -484,8 +485,6 @@ conditionals["core-ext-iter"] = function(context)
 	return context._coreExts[context.version] ~= nil
 end
 
-
---[==[
 ---------------------------------------------
 -- Core Extension Iterator Action, culled against the requested extensions.
 local coreExtCullIterAction = {}

@@ -185,8 +185,14 @@ function optTbl.GetOptions(cmd_line)
 	
 	if(options.version) then
 		--Check the version against the allowed versions.
-		local versionTest = util.InvertTable(spec.GetCoreVersions())
-		parseOpts:AssertParse(versionTest[options.version], "The version " .. options.version .. " is not a legal version number.")
+		local versionTest = spec.GetCoreVersions()
+		if(options.version == "max") then
+			parseOpts:AssertParse(#versionTest ~= 0, "You cannot have a maximum version for a spec that has no version." .. #versionTest);
+			options.version = versionTest[#versionTest]
+		else
+			versionTest = util.InvertTable(versionTest)
+			parseOpts:AssertParse(versionTest[options.version], "The version " .. options.version .. " is not a legal version number.")
+		end
 	else
 		--Check to see that no versions are offered.
 		parseOpts:AssertParse(#spec.GetCoreVersions() == 0, "You must specify a version for the specification " .. options.spec)

@@ -102,6 +102,17 @@ local coreExts4_3 = {
 	"ARB_vertex_attrib_binding",
 };
 
+local coreExts4_4 = {
+	"ARB_buffer_storage",
+	"ARB_clear_texture",
+	"ARB_enhanced_layouts",
+	"ARB_multi_bind",
+	"ARB_query_buffer_object",
+	"ARB_texture_mirror_clamp_to_edge",
+	"ARB_texture_stencil8",
+	"ARB_vertex_type_10f_11f_11f_rev",
+};
+
 return {
 	["1.2"] = coreExts1_2,
 	["3.0"] = coreExts3_0,
@@ -112,5 +123,6 @@ return {
 	["4.1"] = coreExts4_1,
 	["4.2"] = coreExts4_2,
 	["4.3"] = coreExts4_3,
+	["4.4"] = coreExts4_4,
 };
 

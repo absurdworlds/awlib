@@ -30,6 +30,14 @@ if(status and type(userStyles) == "table") then
 			style_registry[styleName] = style
 		end
 	end
+else
+	if(not status) then
+		--Error out, but only if the file is there found.
+		local status, lfs = pcall(require, "lfs")
+		if(status and lfs.attributes("modules/UserStyles.lua", "mode") == "file") then
+			error(userStyles);
+		end
+	end
 end
 
 local function GetStyleList()
