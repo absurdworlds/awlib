@@ -1,5 +1,6 @@
 /*
- * Copyright (C) 2014  absurdworlds
+ * Copyright (C) 2014-2015  absurdworlds
+ * Copyright (C) 2015       Hedede <hededrk@gmail.com>
  *
  * License LGPLv3-only:
  * GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
@@ -22,7 +23,7 @@ public:
 	{
 	}
 
-	virtual i32 getToken (ClineArg& tok);
+	virtual i32 getNextArgument (ClineArg& tok);
 private:
 	void parse (char** argv);
 	void parseToken (char* argv);

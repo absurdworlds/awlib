@@ -1,5 +1,6 @@
 /*
- * Copyright (C) 2014  absurdworlds
+ * Copyright (C) 2014-2015  absurdworlds
+ * Copyright (C) 2015       Hedede <hededrk@gmail.com>
  *
  * License LGPLv3-only:
  * GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
@@ -21,7 +22,7 @@ CArgParser::CArgParser(char** argv)
 	parse(argv);
 }
 
-i32 CArgParser::getToken (ClineArg& tok)
+i32 CArgParser::getNextArgument (ClineArg& tok)
 {
 	if(tokens_.empty()) {
 		return 0;

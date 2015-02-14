@@ -1,5 +1,6 @@
 /*
- * Copyright (C) 2014  absurdworlds
+ * Copyright (C) 2014-2015  absurdworlds
+ * Copyright (C) 2015       Hedede <hededrk@gmail.com>
  *
  * License LGPLv3-only:
  * GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
@@ -17,7 +18,7 @@
 namespace hrengin {
 namespace core {
 /*!
- * Command-line argument,
+ * Command line argument,
  * represents a single option or argument
  */
 struct ClineArg {
@@ -42,11 +43,13 @@ public:
 	{
 	}
 
-	/* Get a single token
+	/*
+	 * Get the next argument from the command line
+	 *
 	 * \param tok Object to hold result
 	 * \return >0 if successful, 0 upon reaching end
 	 */
-	virtual i32 getToken (ClineArg& tok) = 0;
+	virtual i32 getNextArgument (ClineArg& arg) = 0;
 };
 
 /*!
