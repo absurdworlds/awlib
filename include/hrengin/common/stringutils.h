@@ -120,14 +120,18 @@ explode (std::string const& source, std::string const& delim)
 	std::vector<std::string> holder;
         size_t pos1 = 0;
 	size_t pos2;
-        
+
 	do {
                 pos2 = source.find(delim, pos1);
                 holder.push_back(source.substr(pos1, pos2 - pos1));
 
+		// I really hate duplicate code, so I have to do this.
+		if (pos2 == std::string::npos)
+			break;
+
 		pos1 = pos2 + delim.size();
-	} while(pos2 != std::string::npos);
- 
+	} while(true);
+
 	return holder;
 }
 } // namespace string
