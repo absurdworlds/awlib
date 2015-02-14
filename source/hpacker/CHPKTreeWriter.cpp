@@ -28,7 +28,7 @@ void CHPKTreeWriter::addFile (std::string const& path, u64 id)
 	std::vector<std::string> dir;
 	std::string name;
 
-	splitString(path, "/", dir);
+	string::split(path, "/", dir);
 	name = dir.back();
 	dir.pop_back();
 
