@@ -16,6 +16,7 @@ CompilerFlags  = -g -D_DEBUG
 CompilerFlags += -fPIC
 CompilerFlags += -fno-exceptions
 CompilerFlags += -fvisibility=hidden
+CompilerFlags += -fdiagnostics-color=auto
 
 CPPFLAGS = $(Defines) $(Includes)
 CXXFLAGS = $(CompilerFlags)
