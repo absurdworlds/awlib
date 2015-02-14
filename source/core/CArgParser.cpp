@@ -36,9 +36,8 @@ i32 CArgParser::getNextArgument (ClineArg& tok)
 
 void CArgParser::parse (char** argv)
 {
-	while(*argv != 0) {
+	while(*argv != 0)
 		parseToken(*argv++);
-	}
 }
 
 void CArgParser::parseToken (char* argv)
@@ -76,7 +75,7 @@ void CArgParser::parseToken (char* argv)
 			tok.name = *(argv++);
 		} while (*argv != 0);
 	}
-	
+
 	tokens_.push_front(tok);
 }
 
