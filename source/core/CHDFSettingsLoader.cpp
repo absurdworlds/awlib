@@ -1,5 +1,6 @@
 /*
- * Copyright (C) 2014  absurdworlds
+ * Copyright (C) 2014-2015  absurdworlds
+ * Copyright (C) 2015       Hedede <hededrk@gmail.com>
  *
  * License LGPLv3-only:
  * GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
@@ -11,6 +12,9 @@
 #include <hrengin/io/filesystem.h>
 
 #include "CHDFSettingsLoader.h"
+
+namespace hrengin {
+namespace core {
 
 #if 0
 i32 CHDFSettingsLoader::openFile(std::string const & path)
@@ -29,12 +33,13 @@ i32 CHDFSettingsLoader::openFile(std::string const & path)
 }
 #endif
 
-CHDFSettingsLoader::CHDFSettingsLoader (io::CReadFile & file)
-	file_(file)
+CHDFSettingsLoader::CHDFSettingsLoader (io::CReadFile& file,
+		ISettingsManager& settings)
+	: file_(file), manager_(settings)
 {
 }
 
-void CHDFSettingsLoader::loadSettings (ISettingsManager & settings)
+void CHDFSettingsLoader::loadSettings ()
 {
 	io::ICharacterStream* stream;
 	hdf::IHDFParser* hdf;
@@ -44,16 +49,14 @@ void CHDFSettingsLoader::loadSettings (ISettingsManager & settings)
 		: io::createCharacterStream(default_settings);
 
 	hdf = hdf::createHDFParser(stream);
-	hdf::IHDFParser* hdf;
 
 	parseSettings(hdf);
 
 	delete hdf;
-	delete stream
+	delete stream;
 }
 
-void CHDFSettingsLoader::parseSettings (hdf::IHDFParser* hdf,
-	ISettingsManager & settings)
+void CHDFSettingsLoader::parseSettings (hdf::IHDFParser* hdf)
 {
 	std::string prevNode;
 	std::string curNode;
@@ -86,17 +89,17 @@ void CHDFSettingsLoader::parseSettings (hdf::IHDFParser* hdf,
 					i32 temp;
 					hdf->readInt(temp);
 					
-					settings.setValue(curNode + "." + curObj, temp);
+					manager_.setValue(curNode + "." + curObj, temp);
 				} else if (curObj == "resolutionY") {
 					i32 temp;
 					hdf->readInt(temp);
 					
-					settings.setValue(curNode + "." + curObj, temp);
+					manager_.setValue(curNode + "." + curObj, temp);
 				} else if (curObj == "fullscreen") {
 					bool temp;
 					hdf->readBool(temp);
 					
-					settings.setValue(curNode + "." + curObj, temp);
+					manager_.setValue(curNode + "." + curObj, temp);
 				}
 			}
 			break;
@@ -106,4 +109,5 @@ void CHDFSettingsLoader::parseSettings (hdf::IHDFParser* hdf,
 	}
 }
 
-
+} // namespace core
+} // namespace hrengin

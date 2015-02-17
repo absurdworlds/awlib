@@ -4,7 +4,7 @@ ExternalIncludes = -I../../dependencies/include/
 ExternalLibraries =
 
 # Includes and objects
-Objects = CSettingsManager.o CModelLoader.o \
+Objects = CSettingsManager.o CHDFSettingsLoader.o CModelLoader.o \
 	  CFileSystem.o CLogger.o CHrenginShell.o \
 	  CArgParser.o MurmurHash3.o
 Includes = -I../../include $(ExternalIncludes)

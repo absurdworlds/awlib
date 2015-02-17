@@ -6,8 +6,6 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#include <hrengin/resources/default_settings.h>
-#include <hrengin/hdf/IHDFParser.h>
 #include <hrengin/io/CReadFile.h>
 #include <hrengin/io/ICharacterStream.h>
 #include <hrengin/io/IBufferedStream.h>

@@ -22,7 +22,7 @@ public:
 	 * \paran path Full path to file
 	 * \param mode File access mode, \see io;:FileMode
 	 */
-	CWriteFile (std::string const& path, FileMode mode);
+	CWriteFile (std::string const& path, bool append);
 
 	/*!
 	 * Destructor automatically closes the file
@@ -48,9 +48,7 @@ public:
 	virtual std::string const& getPath () const;
 
 private:
-	FileMode mode_;
-
-	void open ();
+	void open (bool append);
 };
 
 } // namespace io

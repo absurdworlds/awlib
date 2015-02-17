@@ -1,5 +1,6 @@
 /*
- * Copyright (C) 2014  absurdworlds
+ * Copyright (C) 2014-2015  absurdworlds
+ * Copyright (C) 2015       Hedede <hededrk@gmail.com>
  *
  * License LGPLv3-only:
  * GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
@@ -15,10 +16,10 @@
 namespace hrengin {
 namespace io {
 
-CWriteFile::CWriteFile (std::string const& path, FileMode mode)
-	: IFile(path), mode_(mode)
+CWriteFile::CWriteFile (std::string const& path, bool append)
+	: IFile(path)
 {
-	this->open();
+	this->open(append);
 }
 
 CWriteFile::~CWriteFile ()
@@ -28,21 +29,16 @@ CWriteFile::~CWriteFile ()
 	}
 }
 
-void CWriteFile::open ()
+void CWriteFile::open (bool append)
 {
 	if (path_.size() == 0) {
 		return;
 	}
 	
-	switch(mode_) {
-	case FileMode::Overwrite:
-		file_ = fopen(path_.c_str(), "wb");
-		break;
-	case FileMode::Append:
+	if(append) {
 		file_ = fopen(path_.c_str(), "ab");
-		break;
-	default:
-		return;
+	} else {
+		file_ = fopen(path_.c_str(), "wb");
 	}
 
 	if (file_) {

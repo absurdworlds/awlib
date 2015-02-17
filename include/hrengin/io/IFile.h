@@ -17,23 +17,6 @@
 namespace hrengin {
 namespace io {
 /*!
- * File access mode. Currently only used for CWriteFile.
- */
-enum class FileMode {
-	Read,
-	/*!
-	 * Overwrite opens file in write mode, and creates file if it does not exist,
-	 * or destroys file contents if it exists.
-	 */
-	Overwrite,
-	/*!
-	 * Append will keep file contents and put pointer to the end of file/
-	 */
-	Append,
-	
-};
-
-/*!
  * Base class for file streams
  */
 class IFile {

@@ -1,5 +1,6 @@
 /*
- * Copyright (C) 2014  absurdworlds
+ * Copyright (C) 2014-2015  absurdworlds
+ * Copyright (C) 2015       Hedede <hededrk@gmail.com>
  *
  * License LGPLv3-only:
  * GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
@@ -8,7 +9,6 @@
  */
 #ifndef _hrengin_IHDFReader_
 #define _hrengin_IHDFReader_
-
 #include <string>
 
 #include <hrengin/math/Vector3d.h>

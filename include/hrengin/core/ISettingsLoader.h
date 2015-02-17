@@ -19,7 +19,7 @@ namespace hrengin {
 namespace core {
 class ISettingsManager;
 /*!
- * Helper class to load settings from known file format
+ * Helper class to load settings from a known file format
  */
 class ISettingsLoader {
 public:
@@ -32,7 +32,7 @@ public:
 	 * Load settings and transfer them to \a manager
 	 * \param manager Settings manager which will store settings.
 	 */
-	virtual void loadSettings(ISettingsManager & manager) = 0;
+	virtual void loadSettings() = 0;
 };
 
 } // namespace core
