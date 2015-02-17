@@ -47,7 +47,10 @@ public:
 	 * Get the next argument from the command line
 	 *
 	 * \param tok Object to hold result
-	 * \return >0 if successful, 0 upon reaching end
+	 * \return
+	 * 	Number of remaining arguments if successful,
+	 * 	When end is reached, 0 is returned.
+	 * 	If error occurs, return value is -`.
 	 */
 	virtual i32 getNextArgument (ClineArg& arg) = 0;
 };

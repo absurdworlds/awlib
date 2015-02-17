@@ -24,14 +24,11 @@ CArgParser::CArgParser(char** argv)
 
 i32 CArgParser::getNextArgument (ClineArg& tok)
 {
-	if(tokens_.empty()) {
-		return 0;
+	if(!tokens_.empty()) {
+		tok = tokens_.back();
+		tokens_.pop_back();
 	}
-
-	tok = tokens_.back();
-	tokens_.pop_back();
-
-	return 1;
+	return tokens_.size();
 }
 
 void CArgParser::parse (char** argv)
