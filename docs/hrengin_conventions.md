@@ -1,95 +1,58 @@
-hrengin conventions
-====================
+hrengin Coding Conventions
+==========================
 
-## Code conventions ##
+## 1. Indentation style ##
 
-### Formatting ###
+Only tabulation characters should be used for indentation. One is 8 characters wide.
 
-#### Braces placement ####
+(Rationale: 8-character tabs make code easier to read)
 
-All the code must adhere to K&R style. Additionally, braces must ever be omitted, in any scope.
+Tabs should *never* be used for code alignment. Code should be aligned only by spaces, and *only on the same indentation level*. Spaces can follow indentation tabs, as long as two previous rules are properly met.
 
-#### Identation style ####
+(Note: if followed properly, this will result in tabs not being mixed with spaces, and also will make code look alright if tabs are set to different width)
 
-Tabulation characters should be used for identation. One tab character is equal to eight spaces.
+Now, with that cleared up, let's talk about indenting things.
 
-If more then four levels of nesting present, function should be split.
+Things that are indented: every block is indented by exactly one tab, except for namespace blocks (indenting namespaces will offset the code too far); class initializer lists are indented by one tab (relative to constructor declaration).
 
-Everything inside a scope must be indented by one level, with exception to labels and namespace scopes.
+Things that are not indented: case labels are put on the same level with the `switch` statement; same for class access modifiers: `private`, `public` and `protected`.
 
-#### Spaces ####
-The rules are similar to those regular typography. 
+Also, one should *never* put multiple statements on the same line. Same goes for variable declarations and variable assignments.
 
-##### References and pointers #####
+Lines should be limited by 80 columns (that's helpful even on large monitors, yes), and broken into multiple lines when that limit is exceeded. Continuation lines should be indented by at least one tab, however, more tabs might be placed, if it helps to distinguish the lines.
 
-One thing to point out: I consider reference and pointer as part of type, so it is logical to write it as
+If more then four levels of indentation are present, it means that function is too deply nested and should be split.
 
-	type_t* ptr;
-	type_t& ref;
+## 2. Braces placement ##
 
-And never like this
+The K&R style is preferred. I.e. opening braces are put on the same line as their respective control statements, and closing braces are put on their own line, except when they are followed by a continuation of their control statement. In that case, keyword is put on the same line, after the closing brace.
 
-	type_t *ptr;
+Exception to that rule are functions: the opening braces are placed on the next line after function declaration, on the same indentation level.
 
-In my view, it is same as to write `type_t constvar` instead of `type_t const var`.
+E.g.
 
-##### Functions #####
-Another thing to point out: while function declarations should have a space before the first bracket of argument list, function calls should not. The reasoning behind this, is when searching for a function usage in sources, it should be easy to separate declarations from usage.
+```
+void functon (...)
+{
+	if (...) {
+		...
+	} else {
+		...
+	}
+	...
+}
+```
 
-#### Syntax ####
+Avoid putting excessive mount of empty lines. If body of a control statement consists of a single statement, don't put braces around it. Except for conditional statements, which have more than one branch.
 
-Multiple variable declarations are forbidden. E.g.
+```
+	if (...)
+		something();
 
-	int a, b, c;
-	int* ap,* bp,* cp;
-
-is not allowed.
-
-### Naming ###
-
-`class`, `struct`, `union` and `enum` names should be written in CamelCase. Classes with inheritance should have 'C' prefix, and interfaces should have 'I' prefix.
-
-Preprocessor definition and constant names should be written in UPPER_CASE. An exception to this rule are scoped enums: their members should be written in CamelCase.
-
-Variables, functions and class members names should be written in camelCase, beginning with a lower case letter. Member variables should be suffixed with '_' (underscore).
-
-#### struct vs class ####
-
-`struct` should be used for POD classes and classes withoud user-defined constructors and member functions, whereas `class` should be used for any other classes. 
-
-#### Header guards ####
-
-All header guards should have following format:
-
-`_project_fileName_`
-
-Where `project` refers to a whole product, not to a module or a IDE project file.
-
-
-## Directory structure
-
-Repository is divided in several folders:
-- `source/` contains source code for engine modules;
-- `include/` contains headers with API and shared classes and functions;
-- `docs/` contains any documentation presented either by plain text or supplemented with a markup language;
-- `lib/` contains all compiled (binary) static libraries;
-- `bin/` contains any binary executable files and shared libraries;
-- `data/` contains any other media such as images, test cases, models, language data etc
-
-### source and include directories
-
-hrengin is separated into modules, each of which is supposed to have different area and purpose. 
-
-Each module should have it's own namespace, and all module's public headers should be located in `include/hrengin/{module name}`. All shared headers not bound to any module should be located in `include/hrengin/common`. 
-
-It doesn't matter, if modules are implemented as shared libraries, static libraries or are inside same library. Implementations should be located in `source/{module name}`. If librariy is a wrapper, it should have a name `source/{module name}-{external library name}`.
-
-#### hrengin modules
-
-- *game*: everything related to game logic, such as event timer or replay manager
-- *core*: modules such as file parsers, model convertors, configuration managers etc
-- *graphics*: visuals and gui
-- *physics*: physics simulation
-- *network*: remote connections
-- *audio*: sound
-- *platform*: wrappers for platform-specific functions
+	if (...) {
+		...
+		...
+	} else {
+		...
+	}
+```
