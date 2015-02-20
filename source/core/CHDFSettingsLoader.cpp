@@ -88,17 +88,17 @@ void CHDFSettingsLoader::parseSettings (hdf::IHDFParser* hdf)
 				if(curObj == "resolutionX") {
 					i32 temp;
 					hdf->readInt(temp);
-					
+
 					manager_.setValue(curNode + "." + curObj, temp);
 				} else if (curObj == "resolutionY") {
 					i32 temp;
 					hdf->readInt(temp);
-					
+
 					manager_.setValue(curNode + "." + curObj, temp);
 				} else if (curObj == "fullscreen") {
 					bool temp;
 					hdf->readBool(temp);
-					
+
 					manager_.setValue(curNode + "." + curObj, temp);
 				}
 			}

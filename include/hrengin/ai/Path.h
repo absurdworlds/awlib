@@ -1,10 +1,10 @@
 /*
-   Copyright (C) 2014  absurdworlds
-
-   License LGPLv3-only:
-   GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
-   This is free software: you are free to change and redistribute it.
-   There is NO WARRANTY, to the extent permitted by law.
+ * Copyright (C) 2014  absurdworlds
+ *
+ * License LGPLv3-only:
+ * GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
+ * This is free software: you are free to change and redistribute it.
+ * There is NO WARRANTY, to the extent permitted by law.
  */
 #ifndef _hrengin_CPath_
 #define _hrengin_CPath_
@@ -28,7 +28,7 @@ public:
 	{
 		return nodes_[current_];
 	}
-	
+
 	//! Get next node and increment counter
 	node_type getNextNode ()
 	{
@@ -37,7 +37,7 @@ public:
 		}
 		return nodes_[current_];
 	}
-	
+
 	//! Get previous node and decrement counter
 	node_type getPreviousNode ()
 	{
@@ -52,7 +52,7 @@ public:
 	{
 		return nodes_[0];
 	}
-	
+
 	//! Get last node
 	node_type getLastNode () const
 	{
@@ -64,7 +64,7 @@ public:
 	{
 		nodes_.push_back(node);
 	}
-	
+
 	//! Get current position
 	size_t position () const
 	{
@@ -82,7 +82,7 @@ public:
 	{
 		return nodes_[id];
 	}
-	
+
 	//! Count of nodes in path
 	size_t size () const
 	{
@@ -108,20 +108,20 @@ public:
 			ptr_++;
 			return i;
 		}
-		
+
 		iterator operator ++ (int)
 		{
 			ptr_++;
 			return *this;
 		}
-		
+
 		iterator operator -- ()
 		{
 			iterator i = *this;
 			-- ptr_;
 			return i;
 		}
-		
+
 		iterator operator -- (int)
 		{
 			-- ptr_;
@@ -147,7 +147,7 @@ public:
 		{
 			return ptr_ != other.ptr_;
 		}
-	
+
 	private:
 		pointer ptr_;
 	};
@@ -167,20 +167,20 @@ public:
 			++ ptr_;
 			return i;
 		}
-		
+
 		const_iterator operator ++ (int)
 		{
 			++ ptr_;
 			return *this;
 		}
-		
+
 		const_iterator operator -- ()
 		{
 			const_iterator i = *this;
 			-- ptr_;
 			return i;
 		}
-		
+
 		const_iterator operator -- (int)
 		{
 			-- ptr_;
@@ -206,7 +206,7 @@ public:
 		{
 			return ptr_ != other.ptr_;
 		}
-	
+
 	private:
 		pointer ptr_;
 	};
@@ -226,7 +226,7 @@ public:
 	Path()
 		: current_(0)
 	{
-	
+
 	}
 private:
 	container_type nodes_;

@@ -1,10 +1,10 @@
 /*
-   Copyright (C) 2014  absurdworlds
-
-   License LGPLv3-only:
-   GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
-   This is free software: you are free to change and redistribute it.
-   There is NO WARRANTY, to the extent permitted by law.
+ * Copyright (C) 2014  absurdworlds
+ *
+ * License LGPLv3-only:
+ * GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
+ * This is free software: you are free to change and redistribute it.
+ * There is NO WARRANTY, to the extent permitted by law.
  */
 #ifndef _hrengin_Vector4d_
 #define _hrengin_Vector4d_
@@ -80,13 +80,13 @@ public:
 		coord_[2] = other[2];
 		coord_[3] = other[3];
 	}
-	
+
 	Vector4d<T>& operator = (Vector4d<T> const& other)
 	{
 		set(other);
 		return *this;
 	}
-	
+
 	Vector4d<T> operator + (Vector4d<T> const& other) const
 	{
 		return Vector4d<T>(
@@ -233,7 +233,7 @@ public:
 		coord_[3] *= inv; 
 		return *this; 
 	}
-	
+
 
 	Vector4d<T> operator - () const
 	{
@@ -244,7 +244,7 @@ public:
 			-coord_[3]);
 	}
 
-	
+
 	//! Normalize the vector
 	Vector4d<T>& normalize()
 	{
@@ -289,7 +289,7 @@ public:
 			coord_[2]*coord_[2] +
 			coord_[3]*coord_[3] );
 	}
-	
+
 	//! Get squared length of the vector.
 	T squareLength() const
 	{ 
@@ -338,7 +338,7 @@ public:
 		coord_[3] *= newlength;
 		return *this;
 	}
-	
+
 	// Invert the vector.
 	Vector4d<T>& invert ()
 	{
@@ -357,13 +357,13 @@ public:
 		array[2] = coord_[2];
 		array[3] = coord_[3];
 	}
-	
+
 	//! Access elements of the vector by subscript
 	T& operator [] (size_t elem)
 	{
 		return coord_[elem];
 	}
-	
+
 	//! Access elements of the vector by subscript
 	T const& operator [] (size_t elem) const
 	{

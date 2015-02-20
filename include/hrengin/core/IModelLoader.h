@@ -21,10 +21,10 @@ public:
 	virtual ~IModelLoader()
 	{
 	}
-	
+
 	/*! Load model from disk
 	 * \see IModel
-	 */	
+	 */
 	virtual IModel* loadModel (char const* filename) = 0;
 };
 

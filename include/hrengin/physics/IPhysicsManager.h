@@ -37,7 +37,7 @@ public:
 	   Notice: must be called only after deletion of all physics worlds
 	 */
 	virtual ~IPhysicsManager() {};
-	
+
 	virtual u32 loadModel(const char* modelName) = 0;
 
 	virtual IRigidBody* createBody(const u32 modelId, IRigidBody::RigidBodyConstructionInfo cInfo) = 0;

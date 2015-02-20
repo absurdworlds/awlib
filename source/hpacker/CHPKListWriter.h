@@ -1,5 +1,4 @@
-/* This file is a part of hrengin library collection
- *
+/*
  * Copyright (C) 2014  absurdworlds
  *
  * License LGPLv3-only:
@@ -35,7 +34,7 @@ protected:
 			: nameOffset(name), fileId(id)
 		{
 		}
-		
+
 		u64 nameOffset;
 		u64 fileId;
 	};
@@ -45,7 +44,7 @@ protected:
 			: type{'l','i','s','t'}, unused{0}
 		{
 		}
-		
+
 		u8 type[4];
 		u8 unused[4];
 		u64 filesNum;

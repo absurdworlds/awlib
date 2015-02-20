@@ -1,12 +1,11 @@
 /*
-   Copyright (C) 2014  absurdworlds
-
-   License LGPLv3-only:
-   GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
-   This is free software: you are free to change and redistribute it.
-   There is NO WARRANTY, to the extent permitted by law.
+ * Copyright (C) 2014  absurdworlds
+ *
+ * License LGPLv3-only:
+ * GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
+ * This is free software: you are free to change and redistribute it.
+ * There is NO WARRANTY, to the extent permitted by law.
  */
-
 #include "CCollisionPhantom.h"
 #include "hrToBullet.h"
 
@@ -28,7 +27,7 @@ void CCollisionPhantom::setPosition(Vector3d<f32> pos)
 	localTransform.setIdentity();
 	localTransform.setRotation(details_.obj->getWorldTransform().getRotation());
 #endif
-	
+
 	details_.obj->setWorldTransform(transform);
 };
 
@@ -54,7 +53,7 @@ Vector3d<f32> CCollisionPhantom::getPosition() const
 Vector3d<f32> CCollisionPhantom::getRotation() const
 {
 	btQuaternion rot = details_.obj->getWorldTransform().getRotation();
-	
+
 	btVector3 pos;
 	quaternionToEuler(rot,pos);
 

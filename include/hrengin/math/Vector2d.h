@@ -1,10 +1,10 @@
 /*
-   Copyright (C) 2014  absurdworlds
-
-   License LGPLv3-only:
-   GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
-   This is free software: you are free to change and redistribute it.
-   There is NO WARRANTY, to the extent permitted by law.
+ * Copyright (C) 2014  absurdworlds
+ *
+ * License LGPLv3-only:
+ * GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
+ * This is free software: you are free to change and redistribute it.
+ * There is NO WARRANTY, to the extent permitted by law.
  */
 #ifndef _hrengin_Vector2d_
 #define _hrengin_Vector2d_
@@ -34,7 +34,7 @@ public:
 		x(coord_[0]), y(coord_[1])
 	{
 	}
-	
+
 	//! Construct vector with same both coordinates 
 	explicit Vector2d (T v)
 #ifndef HR_COMPILER_MSC
@@ -45,7 +45,7 @@ public:
 		x(coord_[0]), y(coord_[1])
 	{
 	}
-	
+
 	//! Construct vector with individual coodrinates
 	Vector2d (T x, T y)
 #ifndef HR_COMPILER_MSC
@@ -56,7 +56,7 @@ public:
 		x(coord_[0]), y(coord_[1])
 	{
 	}
-	
+
 
 	//! Copy constructor
 	Vector2d (Vector2d<T> const& other)
@@ -68,7 +68,7 @@ public:
 		x(coord_[0]), y(coord_[1])
 	{
 	}
-	
+
 	//! Predefined instance of zero vector
 	static Vector2d<T> const zero;
 
@@ -85,7 +85,7 @@ public:
 			-coord_[0],
 			-coord_[1]);
 	}
-	
+
 	Vector2d<T> operator + (Vector2d<T> const& other) const
 	{
 		return Vector2d<T>(x + other[0], y + other[1]);
@@ -195,7 +195,7 @@ public:
 		return  coord_[0]*coord_[0] +
 			coord_[1]*coord_[1];
 	}
-	
+
 	//! Get distance from another point.
 	T getDistance(Vector2d<T> const& other) const
 	{
@@ -217,12 +217,12 @@ public:
 	{
 		return coord_[0]*other[0] + coord_[1]*other[1];
 	}
-	
+
 	//! Calculates angle of the vector
 	T getAngle() const
 	{
 		T yaw = T(atan2( f64(coord_[0]), f64(coord_[1]) ));
-		
+
 		if (yaw <= -math::Pi) {
 			yaw += math::DoublePi;
 		} else if (yaw > math::Pi) {
@@ -244,14 +244,14 @@ public:
 		coord_[1] = T(coord_[1] * length);
 		return *this;
 	}
-	
-	
+
+
 	//! Access elements of the vector by subscript
 	T& operator [] (size_t elem)
 	{
 		return coord_[elem];
 	}
-	
+
 	//! Access elements of the vector by subscript
 	T const& operator [] (size_t elem) const
 	{

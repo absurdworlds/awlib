@@ -104,7 +104,7 @@ bool CHDFParser::read() {
 	fastForward();
 
 	stream_->getCurrent(c);
-	
+
 	if(c == 0) {
 		return false;
 	}
@@ -233,7 +233,7 @@ void CHDFParser::skipValue()
 {
 	HdfToken token;
 	hdf::Type type;
-	
+
 	bool hasType = parseType(token);
 
 	if(hasType) {
@@ -242,7 +242,7 @@ void CHDFParser::skipValue()
 	} else {
 		type = hdfConvertImpicitType(token);
 	}
-	
+
 	if(type == Type::Vector3d || type == Type::Vector2d) {
 		readToken(token);
 		if(type == Type::Vector3d) {
@@ -290,7 +290,7 @@ void CHDFParser::skip()
 	char c;
 
 	stream_->getCurrent(c);
-	
+
 	while(condition(c) && c != 0) {
 		stream_->getNext(c);
 	}
@@ -336,7 +336,7 @@ void CHDFParser::fastForward() {
 				error(HDF_LOG_WARNING,"unexpected token: /");
 			}
 		}		
-		
+
 		stream_->getCurrent(c);
 		needsFastForward = isWhitespace(c) || c == '/';
 		//stream_->getNext(c);
@@ -357,7 +357,7 @@ bool CHDFParser::parseType(HdfToken& token) {
 	}
 
 	skipInlineWhitespace();
-	
+
 	stream_->getCurrent(c);
 
 	if(isNameBeginChar(c)) {
@@ -366,9 +366,9 @@ bool CHDFParser::parseType(HdfToken& token) {
 	} else {
 		error(HDF_LOG_ERROR, "illegal token, expected typename");	
 	}
-	
+
 	skipInlineWhitespace();
-	
+
 	stream_->getCurrent(c);
 
 	if(c == ':') {
@@ -414,7 +414,7 @@ void CHDFParser::readStringToken(std::string& val) {
 	}
 #endif
 	stream_->getNext(c);
-	
+
 	while (c != '"') {
 		if ( c == '\\' ) {
 			stream_->getNext(c);
@@ -422,7 +422,7 @@ void CHDFParser::readStringToken(std::string& val) {
 		val += c;
 		stream_->getNext(c);
 	}
-	
+
 	stream_->getNext(c);
 }
 
@@ -475,7 +475,7 @@ void CHDFParser::readValue(T& var)
 {
 	HdfToken token;
 	hdf::Type type;
-	
+
 	bool hasType = parseType(token);
 
 	if(hasType) {
@@ -484,14 +484,14 @@ void CHDFParser::readValue(T& var)
 	} else {
 		type = hdfConvertImpicitType(token);
 	}
-	
+
 	if(checkType<T>(type) == false) {
 		error(HDF_LOG_ERROR, "type mismatch: " + token.value);
 		//skipValue(type);
 
 		return;
 	}
-	
+
 	convertValue<T>(token, var);
 	state_ = HDF_S_IDLE;
 }
@@ -521,13 +521,13 @@ template<>
 void CHDFParser::convertValue(HdfToken& token, Vector3d<f32>& val)
 {
 	val[0] = strtod(token.value.c_str(), 0);
-	
+
 	readToken(token);
-	
+
 	val[1] = strtod(token.value.c_str(), 0);
-	
+
 	readToken(token);
-	
+
 	val[2] = strtod(token.value.c_str(), 0);
 }
 
@@ -565,7 +565,7 @@ void CHDFParser::convertValue(HdfToken& token, bool& val)
 // todo: rewrite
 void CHDFParser::processCommand() {
 	HdfToken token;
-	
+
 	char c;
 
 	stream_->getCurrent(c);

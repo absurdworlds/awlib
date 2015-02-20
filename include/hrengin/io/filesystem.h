@@ -65,13 +65,13 @@ inline size_t fileSize (std::string const & path)
  */
 enum FileMode {
 	//! File exists
-	FM_Exists	= 0,
+	FM_Exists  = 0,
 	//! Execute permission
-	FM_Exec		= 1,
+	FM_Exec    = 1,
 	//! Write permission
-	FM_Write	= 2,
+	FM_Write   = 2,
 	//! Read permission
-	FM_Read		= 4,
+	FM_Read    = 4,
 };
 
 /*!

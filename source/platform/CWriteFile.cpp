@@ -34,7 +34,7 @@ void CWriteFile::open (bool append)
 	if (path_.size() == 0) {
 		return;
 	}
-	
+
 	if(append) {
 		file_ = fopen(path_.c_str(), "ab");
 	} else {

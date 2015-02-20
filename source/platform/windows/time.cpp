@@ -11,10 +11,10 @@ HR_SYS_EXP u32 getTime()
 	QueryPerformanceFrequency(&HighPerformanceFreq);
 
 	DWORD_PTR affinityMask = SetThreadAffinityMask(GetCurrentThread(), 1);
-	
+
 	LARGE_INTEGER ticks;
 	BOOL queriedOK = QueryPerformanceCounter(&ticks);
-	
+
 	SetThreadAffinityMask(GetCurrentThread(), affinityMask);
 
 	if(queriedOK) {
@@ -23,5 +23,4 @@ HR_SYS_EXP u32 getTime()
 
 	return 0;
 }
-
 } // namespace hrengin

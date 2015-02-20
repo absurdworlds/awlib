@@ -110,7 +110,7 @@ u32 get(Iterator& input, Iterator end)
 {
 	u32 cp = *(input++);
 	size_t length = sequenceLength(math::mask8(cp));
-	
+
 	if(length == 1) {
 		return cp;
 	}
@@ -183,7 +183,7 @@ u32 get_unchecked(Iterator& input, Iterator end)
 {
 	u32 cp = *(input++);
 	size_t length = sequenceLength(math::mask8(cp));
-	
+
 	if(length == 1) {
 		return cp;
 	}

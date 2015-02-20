@@ -30,9 +30,9 @@ class CBulletPhysics : public IPhysicsManager {
 public:
 	CBulletPhysics();
 	virtual ~CBulletPhysics();
-	
+
 	virtual u32 loadModel(const char* modelName);
-	
+
 	virtual IRigidBody* createBody(const u32 modelId, IRigidBody::RigidBodyConstructionInfo cInfo);
 	virtual IRigidBody* createBody(const char* modelName, IRigidBody::RigidBodyConstructionInfo cInfo);
 
@@ -51,7 +51,7 @@ private:
 	core::IModelLoader* modelLoader_;
 
 	std::map<std::string,u32> models_;
-	btAlignedObjectArray<btCollisionShape*>	collisionShapes_;
+	btAlignedObjectArray<btCollisionShape*> collisionShapes_;
 };
 
 } // namespace physics

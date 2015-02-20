@@ -151,10 +151,10 @@ public:
 		f32 sr = sinf(rot[2]);
 
 		Matrix4<f32> trans(
-			cy*cp,	-cy*sp*cr + sy*sr,  cy*sp*sr + sy*cr,	pos[0],
-			sp,	 cp*cr,		   -cp*sr,		pos[1],
-			-sy*cp,	 sy*sp*cr + cy*sr, -sy*sp*sr + cy*cr,	pos[2],
-			0,	 0,		    0,			1);
+			cy*cp, -cy*sp*cr + sy*sr,  cy*sp*sr + sy*cr, pos[0],
+			sp,     cp*cr,            -cp*sr,            pos[1],
+			-sy*cp, sy*sp*cr + cy*sr, -sy*sp*sr + cy*cr, pos[2],
+			0,      0,                 0,                1);
 		return parent_ ?
 			trans * parent_->calculateAbsoluteTransform() :
 			trans;

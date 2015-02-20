@@ -1,5 +1,4 @@
-/* This file is a part of hrengin library collection
- *
+/*
  * Copyright (C) 2014  absurdworlds
  *
  * License LGPLv3-only:
@@ -71,14 +70,14 @@ i32 main (char** args)
 		} else if(arg.type == core::ClineArg::Argument) {
 			if(!action) {
 				fprintf(stderr, "No action selected\n");
-				fprintf(stderr, "Type hpacker -h or hpacker --help for usage.\n");			
+				fprintf(stderr, "Type hpacker -h or hpacker --help for usage.\n");
 				return -1;
 			} else {
 				files.push_back(arg.name);
 			}
 		}
 	}
-	
+
 	if(action == Create) {
 		CItdPacker packer(filename, verbose);
 		packer.addList(files);

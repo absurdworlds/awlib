@@ -17,7 +17,7 @@ u32 getClockResolution()
 {
 	struct timespec res;
 	int rc = clock_getres(CLOCK_MONOTONIC, &res);
-	
+
 	if(rc == 0) {
 		return res.tv_nsec;
 	}

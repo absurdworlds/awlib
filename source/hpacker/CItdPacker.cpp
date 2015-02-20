@@ -72,7 +72,7 @@ i32 CItdPacker::pack ()
 	if(!archive_.is_open()) {
 		return -1;
 	}
-	
+
 	writeHeader();
 	buildIndex();
 	writeArchive();
@@ -105,7 +105,7 @@ void CItdPacker::buildIndex ()
 		archive_.write((char *)&entry.offset,8);
 		archive_.write((char *)&entry.size,8);
 	}
-	
+
 	archive_.write(result.str().c_str(),index_[0].size);
 }
 
@@ -134,7 +134,7 @@ void CItdPacker::writeHeader()
 
 	main.version = 5;
 	main.numFiles = 2 + fileList_.size();
-	
+
 	archive_.write((char *)&main.fileId,4);
 	archive_.write((char *)&main.version,2);
 	archive_.write((char *)&main.flags,2);

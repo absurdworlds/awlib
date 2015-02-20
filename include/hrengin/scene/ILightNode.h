@@ -19,7 +19,7 @@ class ILightNode : public INode {
 public:
 
 };
-	
+
 } // namespace scene
 } // namespace hrengin
 #endif//_hrengin_ILightNode_

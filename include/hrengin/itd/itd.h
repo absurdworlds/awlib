@@ -80,8 +80,8 @@ struct HPKHeader {
 };
 
 enum HPKFlags : u16 {
-	HPK_HasFileTree 	= 1 << 0,
-	HPK_HasMetadata		= 1 << 1,
+	HPK_HasFileTree = 1 << 0,
+	HPK_HasMetadata = 1 << 1,
 };
 
 /*!

@@ -44,7 +44,7 @@ private:
 		{
 			return list.empty();
 		}
-		
+
 		u64 entriesOffset;
 		u64 fileListSize;
 

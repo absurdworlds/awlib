@@ -33,9 +33,9 @@ class IEntity {
 	friend class scene::IEntityNode;
 public:
 	virtual ~IEntity()
-	{	
+	{
 	}
-	
+
 	//! get the entity type identifier
 	virtual u32 getEntityIdentifier()
 	{
@@ -57,7 +57,7 @@ public:
 
 	virtual Vector3d<f32> getPosition() const = 0;
 	virtual Vector3d<f32> getRotation() const = 0;
-	
+
 protected: 
 	virtual void enterDeleteQueue() = 0;
 private:
@@ -65,8 +65,8 @@ private:
 	{
 		parent_ = node;
 	}
-	
-	scene::IEntityNode*	parent_;
+
+	scene::IEntityNode* parent_;
 
 	u32 entflags_;
 	u32 entID_; 

@@ -21,7 +21,7 @@ public:
 	CReadFile (std::string const& path);
 
 	virtual ~CReadFile();
-	
+
 	/*!
 	 * Read \a size bytes into \a buffer.
 	 * \param buffer Pointer to first object of target buffer.

@@ -1,5 +1,4 @@
-/* This file is a part of hrengin library collection
- *
+/*
  * Copyright (C) 2014  absurdworlds
  *
  * License LGPLv3-only:
@@ -18,12 +17,12 @@ CItdReader::CItdReader (std::string const& archive_name, bool verbose)
 
 std::vector<std::string> CItdReader::list (std::string prefix)
 {
-	
+
 }
 
 std::vector<u8> CItdReader::getFileContents (u64 fileId)
 {
-	
+
 }
 
 std::vector<u8> CItdReader::getFileContents (std::string path)

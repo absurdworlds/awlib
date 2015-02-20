@@ -31,7 +31,7 @@ public:
 
 	virtual Vector3d<f32> getPosition() const;
 	virtual Vector3d<f32> getRotation() const;
-	
+
 	virtual ICollisionObject::Details* getDetails()
 	{
 		return &details_;

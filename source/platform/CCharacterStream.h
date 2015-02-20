@@ -1,10 +1,10 @@
-/**
-   Copyright (C) 2014  absurdworlds
-
-   License LGPLv3-only:
-   GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
-   This is free software: you are free to change and redistribute it.
-   There is NO WARRANTY, to the extent permitted by law.
+/*
+ * Copyright (C) 2014  absurdworlds
+ *
+ * License LGPLv3-only:
+ * GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
+ * This is free software: you are free to change and redistribute it.
+ * There is NO WARRANTY, to the extent permitted by law.
  */
 #ifndef _hrengin_CCharacterStream_
 #define _hrengin_CCharacterStream_
@@ -22,7 +22,7 @@ public:
 	CCharacterStream(char const* source)
 		: source_(source), pos_(0)
 	{
-	
+
 	}
 	~CCharacterStream()
 	{
@@ -58,8 +58,6 @@ private:
 	u32 pos_;
 };
 
-
 } //namespace io
 } //namespace hrengin
-
 #endif//_hrengin_CCharacterStream_

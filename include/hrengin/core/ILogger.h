@@ -52,7 +52,7 @@ public:
 
 	//! Add an output to logger
 	virtual void addLog (ILogBook* log) = 0;
-	
+
 	//! Constant for line ending
 	const std::string endl = std::string("\n");
 };

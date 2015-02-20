@@ -26,7 +26,7 @@ u64 CStringBank::add (std::string const & str)
 	strings_.push_back(str.substr(0, limit));
 
 	u16 const length = strings_.back().size();
-	
+
 	stringTally_ += length + 3;
 	return prevTally;
 }

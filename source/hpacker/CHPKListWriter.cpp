@@ -38,7 +38,7 @@ void CHPKListWriter::write (std::ostream & target)
 	target.write((char *)&header.type,4);
 	target.write((char *)&header.unused,4);
 	target.write((char *)&header.filesNum,8);
-	
+
 	u64 nameBaseOffset = (index_.size()+1) * 16;
 
 	for(auto & e : index_) {

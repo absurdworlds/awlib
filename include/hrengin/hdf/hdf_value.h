@@ -34,7 +34,7 @@ public:
 		: val_(0), type_(Type::Unknown)
 	{
 	}
-	
+
 	template<typename val_type>
 	Value (val_type v)
 		: val_(v), type_(deduceType<val_type>())
@@ -50,7 +50,7 @@ public:
 		val_ = other.val_;
 		return *this;
 	}
-	
+
 	//! Get value if types match
 	template<typename val_type>
 	bool get (val_type& v) const
@@ -67,7 +67,7 @@ public:
 	{
 		return type_;
 	}
-	
+
 	//! Set value if types are matching
 	template<typename val_type>
 	bool trySet (val_type const& v)
@@ -79,7 +79,7 @@ public:
 		}
 		return false;
 	}
-		
+
 	//! Set value with overriding type
 	template<typename val_type>
 	void set (bool const v)
@@ -88,7 +88,7 @@ public:
 		val_.set(v);
 		type_ = deduceType(v);
 	}
-	
+
 	//! Reset value to <Unknown>
 	void reset ()
 	{
@@ -104,7 +104,7 @@ private:
 			val_.str.length = 0;
 		}
 	}
-	
+
 	void resetType ()
 	{
 		type_ = Type::Unknown;
@@ -193,22 +193,22 @@ private:
 		{
 			v = boolean;
 		}
-	
+
 		void get (i32& v) const
 		{
 			v = integer;
 		}
-	
+
 		void get (f64& v) const
 		{
 			v = real;
 		}
-	
+
 		void get (std::string& v) const
 		{
 			v.assign(str.data, str.length);
 		}
-	
+
 		void get (Vector3d<f32>& v) const
 		{
 			v[0] = vector[0];

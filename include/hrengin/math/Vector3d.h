@@ -1,10 +1,10 @@
 /*
-   Copyright (C) 2014  absurdworlds
-
-   License LGPLv3-only:
-   GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
-   This is free software: you are free to change and redistribute it.
-   There is NO WARRANTY, to the extent permitted by law.
+ * Copyright (C) 2014  absurdworlds
+ *
+ * License LGPLv3-only:
+ * GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
+ * This is free software: you are free to change and redistribute it.
+ * There is NO WARRANTY, to the extent permitted by law.
  */
 #ifndef _hrengin_Vector3d_
 #define _hrengin_Vector3d_
@@ -43,7 +43,7 @@ public:
 		x(coord_[0]), y(coord_[1]), z(coord_[2])
 	{
 	}
-	
+
 	//! Construct vector with individual coodrinates
 	Vector3d (T const x, T const y, T const z)
 #ifndef HR_COMPILER_MSC // fucking microsoft
@@ -65,7 +65,7 @@ public:
 		x(coord_[0]), y(coord_[1]), z(coord_[2])
 	{
 	}
-	
+
 	//! Predefined instance of zero vector
 	static Vector3d<T> const zero;
 
@@ -76,7 +76,7 @@ public:
 		coord_[1] = y;
 		coord_[2] = z;
 	}
-	
+
 	//! Copy coordinates of other vector
 	void set (Vector3d<T> const& other)
 	{
@@ -84,14 +84,14 @@ public:
 		coord_[1] = other[1];
 		coord_[2] = other[2];
 	}
-	
+
 	//! Copy coordinates of other vector
 	Vector3d<T>& operator = (Vector3d<T> const& other)
 	{
 		set(other);
 		return *this;
 	}
-	
+
 	//! Vector addition
 	Vector3d<T> operator + (Vector3d<T> const& other) const
 	{
@@ -106,7 +106,7 @@ public:
 		coord_[2] += other[2]; 
 		return *this;
 	}
-	
+
 	Vector3d<T> operator + (T const val) const
 	{
 		return Vector3d<T>(x + val, y + val, z + val);
@@ -207,7 +207,7 @@ public:
 		coord_[2] *= inv; 
 		return *this; 
 	}
-	
+
 
 	Vector3d<T> operator - () const
 	{
@@ -217,7 +217,7 @@ public:
 			-coord_[2]);
 	}
 
-	
+
 	//! Normalize the vector
 	Vector3d<T>& normalize ()
 	{
@@ -259,7 +259,7 @@ public:
 			coord_[1]*coord_[1] +
 			coord_[2]*coord_[2]);
 	}
-	
+
 	//! Get squared length of the vector.
 	T squareLength() const
 	{
@@ -312,7 +312,7 @@ public:
 		coord_[2] *= newlength;
 		return *this;
 	}
-	
+
 	// Invert the vector.
 	Vector3d<T>& invert ()
 	{
@@ -321,7 +321,7 @@ public:
 		coord_[2] *= -1;
 		return *this;
 	}
-	
+
 	/*!
 	   Get euler angles that when applied to a (0,0,1) direction vector
 	   would make it point in the same direction as this vector.
@@ -344,7 +344,7 @@ public:
 		// Pitch
 		f64 const xz = math::sqrt(x*x + z*z);
 		angle.x = T(atan2(f64(xz), f64(y)) - math::HalfPi);
-		
+
 		// Normalize angles
 		if (angle.y <= -math::Pi) {
 			angle.y += math::DoublePi;
@@ -363,7 +363,7 @@ public:
 	T getYaw () const
 	{
 		T yaw = T(atan2(f64(x), f64(z)));
-		
+
 		if (yaw <= -math::Pi) {
 			yaw += math::DoublePi;
 		} else if (yaw > math::Pi) {
@@ -377,7 +377,7 @@ public:
 	{
 		f64 const xz = math::sqrt(x*x + z*z);
 		T const pitch = T(atan2(f64(xz), f64(y)) - math::HalfPi);
-	
+
 		if (pitch <= -math::Pi) {
 			pitch += math::DoublePi;
 		} else if (pitch >= math::Pi) {
@@ -403,50 +403,50 @@ public:
 		array[1] = coord_[1];
 		array[2] = coord_[2];
 	}
-	
+
 	//! Access elements of the vector by subscript
 	T& operator [] (size_t elem)
 	{
 		return coord_[elem];
 	}
-	
+
 	//! Access elements of the vector by subscript
 	T const& operator [] (size_t elem) const
 	{
 		return coord_[elem];
 	}
-	
+
 #if 0
 	//! Get coordinate along X axis
 	T& x ()
 	{
 		return coord_[0];
 	}
-	
+
 	//! Get coordinate along Y axis
 	T& y ()
 	{
 		return coord_[1];
 	}
-	
+
 	//! Get coordinate along Z axis
 	T& z ()
 	{
 		return coord_[2];
 	}
-	
+
 	//! Get coordinate along X axis
 	T const& x () const
 	{
 		return coord_[0];
 	}
-	
+
 	//! Get coordinate along Y axis
 	T const& y () const
 	{
 		return coord_[1];
 	}
-	
+
 	//! Get coordinate along Z axis
 	T const& z () const
 	{
@@ -501,7 +501,7 @@ Vector3d<T> operator * (S const scalar, Vector3d<T> const& vector)
 }
 
 /** Interpolate two vectors
-	
+
 	\param v0 The first vector to interpolate
 	\param v1 The other vector to interpolate with.
 	\param t The value to use to interpolate between v0 and v1

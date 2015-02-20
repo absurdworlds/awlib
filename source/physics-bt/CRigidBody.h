@@ -26,7 +26,7 @@ namespace physics {
 class CRigidBody : public IRigidBody {
 public:
 	CRigidBody(btRigidBody* body);
-	
+
 	virtual void setMotionState(IMotionState* motionState);
 
 	virtual void setPosition(Vector3d<f32> pos);

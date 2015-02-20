@@ -43,7 +43,7 @@ void CHPKTreeWriter::write (std::ostream& target)
         Header header;
 	target.write((char *)&header.type,4);
 	target.write((char *)&header.unused,4);
-		
+
 	target.write((char *)&root_.filesPtr, 8);
 	target.write((char *)&root_.filesNum, 4);
 	target.write((char *)&root_.subtreePtr, 8);
@@ -98,7 +98,7 @@ void TreeNode::calcOffsets (u64 & baseOffset)
 
 	subtreePtr = baseOffset;
 	subtreeNum = leaves.size();
-	
+
 	baseOffset += subtreeNum * 32;
 
 	for(auto & node : leaves) {

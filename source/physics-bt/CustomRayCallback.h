@@ -1,10 +1,10 @@
 /*
-   Copyright (C) 2014  absurdworlds
-
-   License LGPLv3-only:
-   GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
-   This is free software: you are free to change and redistribute it.
-   There is NO WARRANTY, to the extent permitted by law.
+ * Copyright (C) 2014  absurdworlds
+ *
+ * License LGPLv3-only:
+ * GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
+ * This is free software: you are free to change and redistribute it.
+ * There is NO WARRANTY, to the extent permitted by law.
  */
 #ifndef _hrengin_CustomRayCallback_
 #define _hrengin_CustomRayCallback_
@@ -29,7 +29,7 @@ struct CustomClosestHitCallback
 		m_collisionFilterGroup = customCallback_->collFilter.group;
 		m_collisionFilterMask = customCallback_->collFilter.mask;
 	}
-	
+
 	IRayResultCallback* customCallback_;
 
 	//used to calculate hitPointWorld from hitFraction
@@ -38,7 +38,7 @@ struct CustomClosestHitCallback
 
 	// btVector3	m_hitNormalWorld;
 	// btVector3	m_hitPointWorld;
-	
+
 	virtual bool needsCollision(btBroadphaseProxy* proxy0) const
 	{
 		void* userPointer = ((btCollisionObject*)proxy0->m_clientObject)->getUserPointer();
@@ -53,7 +53,7 @@ struct CustomClosestHitCallback
 	{
 		//caller already does the filter on the m_closestHitFraction
 		btAssert(rayResult.m_hitFraction <= m_closestHitFraction);
-			
+
 		m_closestHitFraction = rayResult.m_hitFraction;
 		m_collisionObject = rayResult.m_collisionObject;
 		if (normalInWorldSpace) {

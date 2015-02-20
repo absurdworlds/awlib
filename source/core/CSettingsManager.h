@@ -38,12 +38,12 @@ public:
 private:
 	template<class T>
 	bool setValueImpl(std::string key, T val);
-	
+
 	template<class T>
 	bool getValueImpl(std::string key, T& val);
-	
+
 	std::map<std::string, hdf::Value> indexMap_;
-	
+
 	typedef std::map<std::string, hdf::Value>::value_type value_type;
 };
 

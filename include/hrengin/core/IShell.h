@@ -28,7 +28,7 @@ public:
 	virtual ~IShell()
 	{
 	}
-	
+
 	class ICommand {
 	public:
 		virtual void pushArg(std::string argument) = 0;

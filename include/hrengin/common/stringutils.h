@@ -120,7 +120,7 @@ explode (std::string const& source, std::string const& delim)
 	std::vector<std::string> holder;
 	size_t pos1 = 0;
 	size_t pos2;
-	
+
 	do {
 		pos2 = source.find(delim, pos1);
 		holder.push_back(source.substr(pos1, pos2 - pos1));

@@ -1,10 +1,10 @@
 /*
-   Copyright (C) 2014  absurdworlds
-
-   License LGPLv3-only:
-   GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
-   This is free software: you are free to change and redistribute it.
-   There is NO WARRANTY, to the extent permitted by law.
+ * Copyright (C) 2014  absurdworlds
+ *
+ * License LGPLv3-only:
+ * GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
+ * This is free software: you are free to change and redistribute it.
+ * There is NO WARRANTY, to the extent permitted by law.
  */
 #ifndef _hrengin_Matrix4_
 #define _hrengin_Matrix4_
@@ -33,10 +33,10 @@ public:
 		col_[2].set(other[2]);
 		col_[3].set(other[3]);
 	}
-	
+
 	/*! Construct matrix from individual values
-	   \note Arguments here appear in row-major order
-	*/
+	 * \note Arguments here appear in row-major order
+	 */
 	Matrix4 (T const a11, T const a21, T const a31, T const a41,
 		 T const a12, T const a22, T const a32, T const a42,
 		 T const a13, T const a23, T const a33, T const a43,
@@ -76,7 +76,7 @@ public:
 	Matrix4<T> operator + (Matrix4<T> const& B) const
 	{
 		Matrix4<T> C;
-		
+
 		C[0] = col_[0] + B[0];
 		C[1] = col_[1] + B[1];
 		C[2] = col_[2] + B[2];
@@ -89,15 +89,15 @@ public:
 	Matrix4<T> operator * (Matrix4<T> const& B) const
 	{
 		Matrix4<T> C;
-		
+
 		C[0] = col_[0]*B[0][0] + col_[1]*B[0][1] + col_[2]*B[0][2] + col_[3]*B[0][3];
 		C[1] = col_[0]*B[1][0] + col_[1]*B[1][1] + col_[2]*B[1][2] + col_[3]*B[1][3];
 		C[2] = col_[0]*B[2][0] + col_[1]*B[2][1] + col_[2]*B[2][2] + col_[3]*B[2][3];
 		C[3] = col_[0]*B[3][0] + col_[1]*B[3][1] + col_[2]*B[3][2] + col_[3]*B[3][3];
-		
+
 		return C;
 	}
-	
+
 	//! Multiply matrix by scalar
 	Matrix4<T> operator * (T const& S) const
 	{
@@ -106,7 +106,7 @@ public:
 		M[1] *= S;
 		M[2] *= S;
 		M[3] *= S;
-		
+
 		return M;
 	}
 
@@ -117,10 +117,10 @@ public:
 		col_[1] *= S;
 		col_[2] *= S;
 		col_[3] *= S;
-		
+
 		return *this;
 	}
-	
+
 	//! Divide matrix by scalar
 	Matrix4<T> operator / (T const& S) const
 	{
@@ -129,7 +129,7 @@ public:
 		M[1] /= S;
 		M[2] /= S;
 		M[3] /= S;
-		
+
 		return M;
 	}
 
@@ -140,7 +140,7 @@ public:
 		col_[1]  /= S;
 		col_[2]  /= S;
 		col_[3]  /= S;
-		
+
 		return *this;
 	}
 
@@ -148,18 +148,18 @@ public:
 	Matrix4<T> getTransposed () const
 	{
 		Matrix4<T> M;
-		
+
 		M[0].set(col_[0][0], col_[1][0], col_[2][0], col_[3][0]);
 		M[1].set(col_[0][1], col_[1][1], col_[2][1], col_[3][1]);
 		M[2].set(col_[0][2], col_[1][2], col_[2][2], col_[3][2]);
 		M[3].set(col_[0][3], col_[1][3], col_[2][3], col_[3][3]);
-		
+
 		return M;
 	}
 
 	/*! Get matrix inverse of this matrix
-	    \return True if inverse matrix exists, flase otherwise.
-	*/
+	 *  \return True if inverse matrix exists, flase otherwise.
+	 */
 	bool getInverse (Matrix4<T>& inv) const
 	{
 		T det = determinant();
@@ -167,8 +167,8 @@ public:
 		if(math::equals(det, T(0.0))) {
 			return false;
 		}
-		
-		Matrix4<T> m;	
+
+		Matrix4<T> m;
 
 		m[0][0] = col_[2][1]*col_[3][2]*col_[1][3] - col_[3][1]*col_[2][2]*col_[1][3] +
 			  col_[3][1]*col_[1][2]*col_[2][3] - col_[1][1]*col_[3][2]*col_[2][3] -
@@ -222,7 +222,7 @@ public:
 		m /= det;
 
 		inv = m;
-		
+
 		return true;
 	}
 
@@ -279,7 +279,7 @@ public:
 
 		return subMatrix.getScale();
 	}
-	
+
 	//! Extract scale, assuming it is positive
 	Vector3d<T> getScalePositive() const
 	{
@@ -316,7 +316,7 @@ public:
 
 		return rot;
 	}
-	
+
 	/*! Get rotation in radians, calculating the scale
 	    \return Vector consisting of euler angles (in radians)
 	*/
@@ -352,7 +352,7 @@ public:
 	{
 		return col_[col];
 	}
-	
+
 	//! Access colums of the matrix by subscript
 	Vector4d<T> const& operator [] (size_t col) const
 	{
@@ -390,12 +390,17 @@ Matrix4<T> operator * (Matrix4<T> const& m, Vector4d<T> const& v)
 		m(0,3) * v[0] + m(1,3) * v[1] + m(2,3) * v[2] + m(3,3) * v[3]);
 }
 
-/*! Extract arbitary 3x3 submatrix
-    \param mat Matrix to extract from
-    \param col Column to exclude
-    \param row Row to exclude
-    \return 3x3 Submatrix of a matrix mat
-*/
+/*!
+ * Extract arbitary 3x3 submatrix
+ *  \param mat
+ * 	Matrix to extract from
+ *  \param col
+ * 	Column to exclude
+ *  \param row
+ * 	Row to exclude
+ *  \return 3x3
+ * 	Submatrix of a matrix mat
+ */
 template<typename T>
 Matrix3<T> getSubMatrix3x3(Matrix4<T> const& mat, u32 col, u32 row)
 {

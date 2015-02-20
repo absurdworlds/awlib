@@ -35,7 +35,7 @@ class CHDFParser : public IHDFParser {
 public:
 	CHDFParser(io::ICharacterStream* stream);
 	virtual ~CHDFParser();
-	
+
 	virtual void skipNode();
 	virtual void skipValue();
 
@@ -43,7 +43,7 @@ public:
 
 	virtual HdfObjectType getObjectType();
 	virtual void getObjectName(std::string& name);
-	
+
 	virtual void readFloat(float& val);
 	virtual void readFloat(double& val);
 	virtual void readInt(u32& val);
@@ -58,7 +58,7 @@ private:
 	void readValue(T& val);
 	template<typename T> 
 	void convertValue(HdfToken& token, T& val);
-	
+
 	bool parseType(HdfToken& token);
 
 	void readToken(HdfToken& token);

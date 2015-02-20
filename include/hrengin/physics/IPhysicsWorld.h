@@ -32,7 +32,7 @@ class IRigidBody;
 class IPhysicsWorld {
 public:
 	virtual ~IPhysicsWorld() {};
-	
+
 	/*!
 	 * Insert a rigid body into world
 	 */
@@ -40,10 +40,10 @@ public:
 	virtual void addBody(IRigidBody* body, CollisionFilter filter) = 0;
 	virtual void addObject(ICollisionObject* object) = 0;
 	virtual void addObject(ICollisionObject* object, CollisionFilter filter) = 0;
-	
+
 	virtual void removeBody(IRigidBody* body) = 0;
 	virtual void removeObject(ICollisionObject* object) = 0;
-	
+
 	//TODO: virtual IDebugDrawer* createDebugDrawer();
 	// this will allow to remove at least IDebugDrawer's 'hidden details'
 	virtual void setDebugDrawer(IDebugDrawer* drawer) = 0;
@@ -54,7 +54,7 @@ public:
 	 * Step the simulation
 	 */
 	virtual bool step() = 0;
-	
+
 	//! Internal implementation details
 	DECLARE_HIDDEN_DETAILS(IPhysicsWorld);
 };

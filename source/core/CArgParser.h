@@ -28,7 +28,7 @@ private:
 	void parse (char** argv);
 	void parseToken (char* argv);
 	std::string readString (char* argv);
-		
+
 	std::deque<ClineArg> tokens_;
 	bool term_;
 };

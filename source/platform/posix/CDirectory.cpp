@@ -19,7 +19,7 @@ namespace io {
 IDirectory* openDirectory (std::string path)
 {
 	IDirectory* dir = new CDirectory(path);
-	
+
 	if (dir->isOpen()) {
 		return dir;
 	}
@@ -90,7 +90,7 @@ i32 CDirectory::read (Dirent& result)
 	default:
 		result.type = FileType::Unknown;
 	}
-	
+
 	result.name = entry->d_name;
 
 	return 1;

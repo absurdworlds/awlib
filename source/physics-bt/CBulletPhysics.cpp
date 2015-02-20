@@ -32,7 +32,7 @@ HR_PHYS_EXP IPhysicsManager* createPhysicsManager()
 CBulletPhysics::CBulletPhysics()
 {
 	modelLoader_ = core::createModelLoader();
-	
+
 	// Add a 'fallback' empty shape, used if loading of some shape is failed
 	btCollisionShape* shape = new btEmptyShape;
 	collisionShapes_.push_back(shape);
@@ -52,9 +52,9 @@ IPhysicsWorld* CBulletPhysics::createPhysicsWorld()
 	//collision configuration contains default setup for memory, collision setup
 	btCollisionConfiguration* collisionConfiguration = new btDefaultCollisionConfiguration();
 	//m_collisionConfiguration->setConvexConvexMultipointIterations();
-	
+
 	btBroadphaseInterface* broadphase = new btDbvtBroadphase();
-	
+
 	//the default constraint solver. For parallel processing you can use a different solver (see Extras/BulletMultiThreaded)
 	btConstraintSolver* solver = new btSequentialImpulseConstraintSolver;
 
@@ -92,7 +92,7 @@ IRigidBody* CBulletPhysics::createBody(const u32 shapeid, IRigidBody::RigidBodyC
 
 	bool isDynamic = (mass != 0.f);
 	btVector3 localInertia(0,0,0);
-	
+
 	if (isDynamic) {
 		colShape->calculateLocalInertia(mass,localInertia);
 	}
@@ -124,7 +124,7 @@ ICollisionPhantom* CBulletPhysics::createPhantom(const u32 shapeid)
 	btTransform defaultTransform;
 	defaultTransform.setIdentity();
 	defaultTransform.setOrigin(btVector3(0,0,0));
-	
+
 	btCollisionObject *collObject = new btCollisionObject();
 
 	collObject->setCollisionShape(collisionShapes_[shapeid]);
@@ -242,7 +242,7 @@ u32 CBulletPhysics::loadModel(const char* modelName)
 	if(!model) {
 		return 0;
 	}
-	
+
 	u32 id = addShape(model);
 	models_[modelName] = id;
 	return id;

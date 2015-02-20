@@ -46,7 +46,7 @@ public:
 	virtual void drawScene();
 
 	virtual void update();
-	
+
 	virtual IVisNode* createMeshSceneNode(char const* meshname);
 	//virtual IVisNode* createMeshSceneNode(IMesh* mesh);
 	virtual ICameraNode* createCameraSceneNode();
@@ -56,10 +56,10 @@ private:
 	std::vector<INode*> NodeList;
 	
 	irr::IrrlichtDevice* device_;
-	irr::scene::ISceneManager*		scnmgr;
-	irr::scene::ISceneCollisionManager*	colman;
+	irr::scene::ISceneManager*          scnmgr;
+	irr::scene::ISceneCollisionManager* colman;
 public:
-	irr::scene::IAnimatedMesh* convertMesh(const char* meshname);
+	irr::scene::IAnimatedMesh* convertMesh(char* const meshname);
 	//irr::scene::IAnimatedMesh* convertMesh(IMesh* mesh);
 };
 

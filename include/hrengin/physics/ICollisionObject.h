@@ -37,7 +37,7 @@ public:
 	{
 		return pointer_;
 	}
-	
+
 	//! Internal implementation details
 	DECLARE_HIDDEN_DETAILS(ICollisionObject);
 protected:

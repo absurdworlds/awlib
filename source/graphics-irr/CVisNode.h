@@ -36,7 +36,7 @@ public:
 
 private:
 	CSceneManager* sceneManager_;
-	
+
 	CIrrDummyNode* dummy_;
 	irr::scene::IAnimatedMeshSceneNode* meshNode_;
 };

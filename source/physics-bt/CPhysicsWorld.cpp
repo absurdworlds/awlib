@@ -1,12 +1,11 @@
-/**
-   Copyright (C) 2014  absurdworlds
-
-   License LGPLv3-only:
-   GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
-   This is free software: you are free to change and redistribute it.
-   There is NO WARRANTY, to the extent permitted by law.
+/*
+ * Copyright (C) 2014  absurdworlds
+ *
+ * License LGPLv3-only:
+ * GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
+ * This is free software: you are free to change and redistribute it.
+ * There is NO WARRANTY, to the extent permitted by law.
  */
-
 #include "CCollisionPhantom.h"
 #include "CRigidBody.h"
 
@@ -109,7 +108,7 @@ void castRaySingleTarget(btVector3 const& from, btVector3 const& to,
 {
 	CustomClosestHitCallback resultCallback(from, to, callback);
 
-	
+
 	dynamicsWorld->rayTest(from, to, resultCallback);
 }
 
@@ -119,7 +118,7 @@ void CPhysicsWorld::castRay(Vector3d<f32> from, Vector3d<f32> to, IRayResultCall
 	typedef void (* rayCastFunc)(btVector3, btVector3, IRayResultCallback*);
 	static rayCastFunc jumpTable[2];
 #endif
-	
+
 	switch(callback->singleHit) {
 	case true:
 		castRaySingleTarget(toBullet(from),toBullet(to),
@@ -141,7 +140,7 @@ void CPhysicsWorld::setDebugDrawer(IDebugDrawer* drawer)
 bool CPhysicsWorld::step()
 {
 	btScalar ms = getDeltaTime();
-	
+
 	if (!dynamicsWorld_) {
 		return false;
 	}
@@ -153,7 +152,6 @@ bool CPhysicsWorld::step()
 
 	return true;
 }
-
 
 } // namespace physics
 } // namespace hrengin

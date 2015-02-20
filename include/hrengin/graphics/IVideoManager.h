@@ -36,8 +36,8 @@ public:
 	virtual IRenderingDevice* getRenderingDevice () const = 0;
 	virtual scene::ISceneManager* getSceneManager () const = 0;
 	virtual gui::IGUIManager* getGUIManager () const = 0;
-	
-	virtual bool step () = 0;	// update()
+
+	virtual bool step () = 0;  // update()
 	virtual void wait () = 0;
 
 	virtual bool isWindowActive () = 0;

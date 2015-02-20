@@ -1,12 +1,11 @@
 /*
-   Copyright (C) 2014  absurdworlds
-
-   License LGPLv3-only:
-   GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
-   This is free software: you are free to change and redistribute it.
-   There is NO WARRANTY, to the extent permitted by law.
+ * Copyright (C) 2014  absurdworlds
+ *
+ * License LGPLv3-only:
+ * GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
+ * This is free software: you are free to change and redistribute it.
+ * There is NO WARRANTY, to the extent permitted by law.
  */
-
 #include <hrengin/common/types.h>
 
 #include "CDebugDrawer.h"
@@ -42,7 +41,7 @@ void DebugDraw::drawLine(const btVector3& from, const btVector3& to, const btVec
 		Vector3d<f32>(to[0], to[1], to[2]),
 		newColor);
 }
-	
+
 void DebugDraw::drawContactPoint(const btVector3& PointOnB, const btVector3& normalOnB, btScalar distance, int lifeTime, const btVector3& color)
 {
 	//   this->drawLine(PointOnB, PointOnB + normalOnB*distance, CONTACTPOINT_COLOR);
@@ -71,7 +70,6 @@ int DebugDraw::getDebugMode() const
 {
 	return this->mode;
 }
-
 
 } // namespace physics
 } // namespace hrengin

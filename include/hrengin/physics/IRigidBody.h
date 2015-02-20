@@ -27,24 +27,24 @@ public:
 		//! Mass of the body
 		//! If mass is zero, body is static
 		f32 mass;
-		
+
 		// 
 		CollisionFilter collisionFilterInfo;
-	
+
 		// NYI
 		// const CollisionShape shape;
-		
+
 		f32 linearDamping;
 		f32 angularDamping;
-		
+
 		// NYI
 		// Vector3d<f32> localInertia;
-		
+
 		// 
 		// IMotionState* motionState;
 		Vector3d<f32> position;
 		//Vector4d<f32> rotation;
-		
+
 		f32 friction;
 		f32 rollingFriction;
 		f32 restitution;
@@ -73,7 +73,7 @@ public:
 		{
 		}
 	};
-	
+
 	//! Set motion state \see IMotionState
 	virtual void setMotionState(IMotionState* motionState) = 0;
 

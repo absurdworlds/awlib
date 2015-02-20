@@ -36,7 +36,7 @@ public:
 		key_node_pair subnode(name, node);
 		nodes_.push_back(subnode);
 	}
-	
+
 	/*!
 	 * Get iterator to first child node
 	 */
@@ -44,7 +44,7 @@ public:
 	{
 		return nodes_.begin();
 	}
-	
+
 	/*!
 	 * Get iterator to the end
 	 * \return Iterator to slot past last child node
@@ -71,7 +71,7 @@ public:
 
 		return nodes_.end();
 	}
-	
+
 	/*!
 	 * Remove child node
 	 */
@@ -116,7 +116,7 @@ public:
 		values_.push_back(value);
 		return true;
 	}
-	
+
 	/*!
 	 * Find HDF value
 	 */
@@ -131,7 +131,7 @@ public:
 
 		return values_.end();
 	}
-	
+
 	void removeValue(value_container::iterator val)
 	{
 		values_.erase(val);
@@ -157,7 +157,7 @@ public:
 	{
 		Node::addNode(name, node);
 	}
-	
+
 	node_container::iterator
 		nodesBegin()
 	{
@@ -169,7 +169,7 @@ public:
 	{
 		return Node::findNode(name, startAt);
 	}
-	
+
 	void removeNode(node_container::iterator node)
 	{
 		Node::removeNode(node);

@@ -1,10 +1,10 @@
 /*
-   Copyright (C) 2014  absurdworlds
-
-   License LGPLv3-only:
-   GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
-   This is free software: you are free to change and redistribute it.
-   There is NO WARRANTY, to the extent permitted by law.
+ * Copyright (C) 2014  absurdworlds
+ *
+ * License LGPLv3-only:
+ * GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
+ * This is free software: you are free to change and redistribute it.
+ * There is NO WARRANTY, to the extent permitted by law.
  */
 #include <hrengin/math/math.h>
 
@@ -31,7 +31,7 @@ void CRigidBody::setMotionState(IMotionState* motionState)
 	ms->getWorldTransform(worldTrans);
 
 	delete ms;
-	
+
 	ms = new CustomMotionState(motionState, worldTrans);
 
 	body->setMotionState(ms);
@@ -62,7 +62,7 @@ Vector3d<f32> CRigidBody::getPosition() const
 Vector3d<f32> CRigidBody::getRotation() const
 {
 	btQuaternion rot = details_.obj->getWorldTransform().getRotation();
-	
+
 	btVector3 pos;
 	quaternionToEuler(rot,pos);
 

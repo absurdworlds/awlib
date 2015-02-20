@@ -29,9 +29,9 @@ struct RaytestResult {
 
 	const ICollisionObject* collObject;
 
-	f32		hitFraction;
-	Vector3d<f32>	hitNormal;
-	Vector3d<f32>	hitPosition;
+	f32             hitFraction;
+	Vector3d<f32>   hitNormal;
+	Vector3d<f32>   hitPosition;
 };
 
 //! Interface for raytest callbacks
@@ -61,13 +61,13 @@ public:
 	ICollisionObject const* collObject;
 	Vector3d<f32> hitPoint;
 	Vector3d<f32> hitNormal;
-	
+
 	IClosestHitCallback()
 		: collObject(0), hitPoint(0,0,0), hitNormal(0,0,0)
 	{
-		
+
 	}
-	
+
 	virtual f32 addResult(RaytestResult& result)
 	{
 		collObject = result.collObject;

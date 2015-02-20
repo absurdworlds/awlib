@@ -42,7 +42,7 @@ IModel* CModelLoader::loadModel (char const* filename)
 	if (!file.isOpen()) {
 		return 0;
 	}
-	
+
 	IModel* model = new IModel; // FIXME
 
 	getFileExtension(ext, filename);
@@ -139,7 +139,7 @@ bool hdfParseShapeNode(hdf::IHDFParser* hdf, IModel* model)
 			hdf->error(hdf::HDF_LOG_ERROR, "expected a variable in a 'shape' node, got node");
 			return false; 
 		}
-		
+
 		std::string objectName;
 
 		hdf->getObjectName(objectName);
@@ -183,14 +183,14 @@ bool hdfParseShapeNode(hdf::IHDFParser* hdf, IModel* model)
 		} else if(objectName == "rotation") {
 			Vector3d<f32> vec3;
 			hdf->readVector3d(vec3);
-			
+
 			primitive.rotation[0] = vec3[0];
 			primitive.rotation[1] = vec3[1];
 			primitive.rotation[2] = vec3[2];
 		} else if(objectName == "offset") {
 			Vector3d<f32> vec3;
 			hdf->readVector3d(vec3);
-			
+
 			primitive.offset[0] = vec3[0];
 			primitive.offset[1] = vec3[1];
 			primitive.offset[2] = vec3[2];

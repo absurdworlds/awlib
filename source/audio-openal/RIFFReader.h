@@ -1,3 +1,11 @@
+/*
+ * Copyright (C) 2014  absurdworlds
+ *
+ * License LGPLv3-only:
+ * GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
+ * This is free software: you are free to change and redistribute it.
+ * There is NO WARRANTY, to the extent permitted by law.
+ */
 #ifndef _hrengin_RIFF_
 #define _hrengin_RIFF_
 
@@ -56,7 +64,7 @@ bool readWAV(std::string path, SoundSample& sample)
 	} else if((WaveFields)format != WaveFields::Format) {
 		return false;
 	}
-	
+
 	u32 headerLength;
 	file->read(&headerLength,4);
 	u16 type;
@@ -81,7 +89,7 @@ bool readWAV(std::string path, SoundSample& sample)
 
 	u32 dataSize;
 	file->read(&dataSize,4);
-	
+
 	sample.bitsPerSample = bitsPerSample;
 	sample.channels = channels;
 	sample.sampleRate = sampleRate;
@@ -92,7 +100,7 @@ bool readWAV(std::string path, SoundSample& sample)
 	if(bytesRead < dataSize) {
 		return false;
 	}
-	
+
 	sample.data = data;
 
 	delete file;
@@ -101,5 +109,4 @@ bool readWAV(std::string path, SoundSample& sample)
 
 }
 } //namespace hrengin
-
 #endif//_hrengin_RIFF_

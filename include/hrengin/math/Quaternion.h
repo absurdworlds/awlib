@@ -1,10 +1,10 @@
 /*
-   Copyright (C) 2014  absurdworlds
-
-   License LGPLv3-only:
-   GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
-   This is free software: you are free to change and redistribute it.
-   There is NO wARRANTy, to the extent permitted by law.
+ * Copyright (C) 2014  absurdworlds
+ *
+ * License LGPLv3-only:
+ * GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
+ * This is free software: you are free to change and redistribute it.
+ * There is NO wARRANTy, to the extent permitted by law.
  */
 #ifndef _hrengin_Quaternion_
 #define _hrengin_Quaternion_
@@ -27,7 +27,7 @@ public:
 		: w(1.0), x(0.0), y(0.0), z(0.0)
 	{
 	}
-	
+
 	/*! Constructor
 	\brief Construct quaternion using individual components.
 	 */
@@ -35,7 +35,7 @@ public:
 		: w(w), x(x), y(y), z(z)
 	{
 	}
-	
+
 	/*! Constructor
 	\brief Construct quaternion from euler angles.
 	 */
@@ -51,7 +51,7 @@ public:
 	{
 		setEuler(euler.x, euler.y, euler.z);
 	}
-	
+
 	/*! Constructor
 	\brief Construct quaternion using axis and rotation around given axis.
 	 */
@@ -77,7 +77,7 @@ public:
 		z = other.z;
 		w = other.w;
 	}
-	
+
 	//! Get a result of component-wise addition of two quaternions
 	Quaternion<T> operator + (Quaternion<T> const& other) const
 	{
@@ -93,7 +93,7 @@ public:
 		w += other.w;
 		return *this;
 	}
-	
+
 	Quaternion<T> operator + (T const val) const
 	{
 		return Quaternion<T>(w + val, x + val, y + val, z + val);
@@ -107,13 +107,13 @@ public:
 		w += val;
 		return *this;
 	}
-	
+
 	//! Get a result of component-wise subtraction of two quaternions
 	Quaternion<T> operator - (Quaternion<T> const& other) const
 	{
 		return Quaternion<T>(w - other.w, x - other.x, y - other.y, z - other.z);
 	}
-	
+
 	//! Component-wise subtraction
 	Quaternion<T>& operator -= (Quaternion<T> const& other)
 	{
@@ -123,7 +123,7 @@ public:
 		w -= other.w;
 		return *this;
 	}
-	
+
 	Quaternion<T> operator - (T const val) const
 	{
 		return Quaternion<T>(w - val, x - val, y - val, z - val);
@@ -142,7 +142,7 @@ public:
 	{
 		return Quaternion<T>(-w, -x, -y, -z);
 	}
-	
+
 	//! Quaternion multiplication
 	Quaternion<T> operator * (Quaternion<T> const& other) const
 	{
@@ -155,7 +155,7 @@ public:
 
 		return q0;
 	}
-	
+
 	Quaternion<T>& operator *= (Quaternion<T> const& other)
 	{
 		x = (x * other.w) + (w * other.x) + (z * other.y) - (y * other.z);
@@ -165,12 +165,12 @@ public:
 
 		return *this;
 	}
-	
+
 	Quaternion<T> operator * (T const val) const
 	{
 		return Quaternion<T>(w*val, x*val, y*val, z*val);
 	}
-	
+
 	Quaternion<T>& operator *= (T const val)
 	{
 		x *= val;
@@ -202,7 +202,7 @@ public:
 		z = cx*sy*cz - sx*cy*sz;
 		w = cx*cy*cz - sx*sy*sz;
 	}
-	
+
 	void setAxisAngle(Vector3d<T> const& axis, T angle)
 	{
 		angle /= T(2.0);
@@ -230,7 +230,7 @@ public:
 			f32 const sX = x * x;
 			f32 const sY = y * y;
 			f32 const sZ = z * z;
-		
+
 			euler.x = atan2(2*(x*w - y*z) , 1 - 2*sX - 2*sZ);
 			euler.y = atan2(2*(y*w - x*z) , 1 - 2*sY - 2*sZ);
 			euler.z = asin(2*test);
@@ -238,7 +238,7 @@ public:
 
 		euler *= math::DegreesInRadian;
 	}
-	
+
 	//! Get quaternion in axis-angle representation
 	void toAxisAngle(Vector3d<T>& axis, T& angle) const
 	{
@@ -249,7 +249,7 @@ public:
 		if(tSin > T(0.0)) {
 			tSin = T(sqrt(tSin));
 			T invSin = 1 / tSin;
-			
+
 			angle = T(math::RadToDeg(2.0 * atan2(tSin, tCos)));
 			axis.x = x * invSin;
 			axis.y = y * invSin;
@@ -272,7 +272,7 @@ public:
 	Quaternion<T>& normalize()
 	{
 		T const sqrMag = x*x + y*y + z*z + w*w;
-		
+
 		if(!math::equals(sqrMag, T(1.0))) {
 			T const invMag = math::invSqrt(sqrMag);
 
@@ -284,12 +284,12 @@ public:
 
 		return *this;
 	}
-	
+
 	//! Get normalized quaterion
 	Quaternion<T> normalized() const
 	{
 		T const sqrMag = x*x + y*y + z*z + w*w;
-		
+
 		if(!math::equals(sqrMag, T(1.0))) {
 			T const invMag = math::invSqrt(sqrMag);
 
@@ -299,7 +299,7 @@ public:
 
 		return Quaternion<T>();
 	}
-	
+
 	//! Scalar component
 	T w;
 	//! First vector component
@@ -350,7 +350,7 @@ Quaternion<T> slerp (Quaternion<T> const& q0, Quaternion<T> const& q1,
 
 	T const tSin = sqrt(1.0 - tCos*tCos);
 	T const theta = atan2(tSin, tCos);
-	
+
 	T const invSin = 1/tSin;
 	T const t1 = sin((1.0 - alpha)*theta) * invSin;
 	T const t2 = sin(alpha*theta) * invSin;
