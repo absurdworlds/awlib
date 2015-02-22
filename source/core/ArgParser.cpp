@@ -13,16 +13,17 @@ namespace hrengin {
 namespace core {
 ArgumentParser* createArgumentParser(char** argv)
 {
-	return new ArgumentParser_(argv);
+	return new impl_::ArgumentParser(argv);
 }
 
-ArgumentParser_::ArgumentParser_(char** argv)
+namespace impl_ {
+ArgumentParser::ArgumentParser(char** argv)
 	: term_(false)
 {
 	parse(argv);
 }
 
-i32 ArgumentParser_::getNextArgument(Argument& tok)
+i32 ArgumentParser::getNextArgument(Argument& tok)
 {
 	if(!tokens_.empty()) {
 		tok = tokens_.back();
@@ -31,13 +32,13 @@ i32 ArgumentParser_::getNextArgument(Argument& tok)
 	return tokens_.size();
 }
 
-void ArgumentParser_::parse(char** argv)
+void ArgumentParser::parse(char** argv)
 {
 	while(*argv != 0)
 		parseToken(*argv++);
 }
 
-void ArgumentParser_::parseToken (char* argv)
+void ArgumentParser::parseToken (char* argv)
 {
 	Argument tok;
 
@@ -76,10 +77,11 @@ void ArgumentParser_::parseToken (char* argv)
 	tokens_.push_front(tok);
 }
 
-std::string ArgumentParser_::readString (char* argv)
+std::string ArgumentParser::readString (char* argv)
 {
 	return std::string(argv);
 }
 
+} //namespace impl_
 } //namespace core
 } //namespace hrengin

@@ -7,23 +7,24 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_ArgumentParserImpl_
-#define _hrengin_ArgumentParserImpl_
+#ifndef _hrengin_ArgumentParser_impl_
+#define _hrengin_ArgumentParser_impl_
 #include <deque>
 
 #include <hrengin/core/ArgumentParser.h>
 
 namespace hrengin {
 namespace core {
+namespace impl_ {
 
-class ArgumentParserImpl : public ArgumentParser {
+class ArgumentParser : public core::ArgumentParser {
 public:
-	ArgumentParserImpl(char** argv);
-	virtual ~ArgumentParserImpl()
+	ArgumentParser(char** argv);
+	virtual ~ArgumentParser()
 	{
 	}
 
-	virtual i32 getNextArgument (Argument& tok);
+	virtual i32 getNextArgument(Argument& tok);
 private:
 	void parse(char** argv);
 	void parseToken(char* argv);
@@ -33,6 +34,7 @@ private:
 	bool term_;
 };
 
-} //namespace core
-} //namespace hrengin
-#endif//_hrengin_ArgumentParserImpl_
+} // namespace impl_
+} // namespace core
+} // namespace hrengin
+#endif//_hrengin_ArgumentParser_impl_

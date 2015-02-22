@@ -41,7 +41,7 @@ HDFSettingsLoader::HDFSettingsLoader (io::ReadFile& file,
 
 void HDFSettingsLoader::loadSettings ()
 {
-	io::ICharacterStream* stream;
+	io::CharacterStream* stream;
 	hdf::HDFParser* hdf;
 
 	stream = file_.isOpen() 

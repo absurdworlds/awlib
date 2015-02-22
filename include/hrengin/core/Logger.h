@@ -19,14 +19,22 @@
 
 namespace hrengin {
 namespace core {
-//! Interface for logger output
+/*!
+ * This class provides interface for handling message logs, such as
+ * streams and buffers, allowing to output into different targets 
+ * simultaneously, e.g. into ingame console and stdout.
+ */
 class LogBook {
 public:
 	//! Write logger output
 	virtual void log(std::string) = 0;
 };
 
-//! Logger interface, which is used to write messages into log books
+/*!
+ * This class provides interface for handling messages,
+ * and sending them into different targets, which are
+ * represented by LogBook class.
+ */ 
 class Logger {
 	static Logger* globalLogger_;
 public:

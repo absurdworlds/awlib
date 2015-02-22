@@ -6,8 +6,8 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_SettingsManager_
-#define _hrengin_SettingsManager_
+#ifndef _hrengin_SettingsManager_impl_
+#define _hrengin_SettingsManager_impl_
 #include <map>
 
 #include <hrengin/core/SettingsManager.h>
@@ -16,8 +16,9 @@
 
 namespace hrengin {
 namespace core {
-
-class SettingsManager : public SettingsManager {
+namespace impl_ {
+// Implementation of core::SettingsManager interface
+class SettingsManager : public core::SettingsManager {
 public:
 	SettingsManager();
 	virtual ~SettingsManager()
@@ -47,6 +48,7 @@ private:
 	typedef std::map<std::string, hdf::Value>::value_type value_type;
 };
 
+} // namespace impl_
 } // namespace core
 } // namespace hrengin
-#endif//_hrengin_SettingsManager_
+#endif//_hrengin_SettingsManager_impl_

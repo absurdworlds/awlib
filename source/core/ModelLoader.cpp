@@ -23,16 +23,18 @@
 
 namespace hrengin {
 namespace core {
+
+ModelLoader* createModelLoader ()
+{
+	return new impl_::ModelLoader();
+}
+
+namespace impl_ {
 bool hdfParseNode(hdf::HDFParser* hdf, Model* model, std::string curNode);
 bool hdfParseObject(hdf::HDFParser* hdf, Model* model, std::string curNode);
 bool hdfParseShapeNode(hdf::HDFParser* hdf, Model* model);
 
-ModelLoader_* createModelLoader ()
-{
-	return new ModelLoader_();
-}
-
-Model* ModelLoader_::loadModel (char const* filename)
+Model* ModelLoader::loadModel (char const* filename)
 {
 	std::string path = io::modelpath + filename;
 	std::string ext;
@@ -43,12 +45,12 @@ Model* ModelLoader_::loadModel (char const* filename)
 		return 0;
 	}
 
-	Model* model = new Model; // FIXME
+	Model* model = new Model; // FIXME: Should be allocated on stack
 
 	getFileExtension(ext, filename);
 
 	if(ext == "hndf" || ext == "hdf") {
-		io::ICharacterStream* stream = io::createBufferedStream(file);
+		io::CharacterStream* stream = io::createBufferedStream(file);
 		hdf::HDFParser* hdf = hdf::createHDFParser(stream);
 
 		hdfParse(hdf, model);
@@ -60,7 +62,7 @@ Model* ModelLoader_::loadModel (char const* filename)
 	return model;
 }
 
-bool ModelLoader_::hdfParse (hdf::HDFParser* hdf, Model* model)
+bool ModelLoader::hdfParse (hdf::HDFParser* hdf, Model* model)
 {
 	std::string curNode;
 
@@ -203,5 +205,6 @@ bool hdfParseShapeNode(hdf::HDFParser* hdf, Model* model)
 
 	return true;
 }
+} // namespace impl_
 } // namespace core
 } // namespace hrengin

@@ -15,37 +15,38 @@
 namespace hrengin {
 namespace core {
 
-SettingsManager_* createSettingsManager()
+SettingsManager* createSettingsManager()
 {
-	return new SettingsManager_();
+	return new impl_::SettingsManager();
 }
 
-SettingsManager_::SettingsManager_()
+namespace impl_ {
+SettingsManager::SettingsManager()
 {
 }
 
-bool SettingsManager_::getValue(std::string key, bool& val)
+bool SettingsManager::getValue(std::string key, bool& val)
 {
-	return getValue_<bool>(key,val);
+	return getValueImpl<bool>(key,val);
 }
 
-bool SettingsManager_::getValue(std::string key, i32& val)
+bool SettingsManager::getValue(std::string key, i32& val)
 {
-	return getValue_<i32>(key,val);
+	return getValueImpl<i32>(key,val);
 }
 
-bool SettingsManager_::getValue(std::string key, f64& val)
+bool SettingsManager::getValue(std::string key, f64& val)
 {
-	return getValue_<f64>(key,val);
+	return getValueImpl<f64>(key,val);
 }
 
-bool SettingsManager_::getValue(std::string key, std::string& val)
+bool SettingsManager::getValue(std::string key, std::string& val)
 {
-	return getValue_<std::string>(key,val);
+	return getValueImpl<std::string>(key,val);
 }
 
 template<class T>
-bool SettingsManager_::getValueImpl(std::string key, T& val)
+bool SettingsManager::getValueImpl(std::string key, T& val)
 {
 	auto found = indexMap_.find(key);
 
@@ -56,28 +57,28 @@ bool SettingsManager_::getValueImpl(std::string key, T& val)
 	return false;
 }
 
-bool SettingsManager_::setValue(std::string key, bool val)
+bool SettingsManager::setValue(std::string key, bool val)
 {
-	return setValue_<bool>(key,val);
+	return setValueImpl<bool>(key,val);
 }
 
-bool SettingsManager_::setValue(std::string key, i32 val)
+bool SettingsManager::setValue(std::string key, i32 val)
 {
-	return setValue_<i32>(key,val);
+	return setValueImpl<i32>(key,val);
 }
 
-bool SettingsManager_::setValue(std::string key, f64 val)
+bool SettingsManager::setValue(std::string key, f64 val)
 {
-	return setValue_<f64>(key,val);
+	return setValueImpl<f64>(key,val);
 }
 
-bool SettingsManager_::setValue(std::string key, std::string val)
+bool SettingsManager::setValue(std::string key, std::string val)
 {
-	return setValue_<std::string>(key,val);
+	return setValueImpl<std::string>(key,val);
 }
 
 template<class T>
-bool SettingsManager_::setValueImpl(std::string key, T val)
+bool SettingsManager::setValueImpl(std::string key, T val)
 {
 	auto elem = indexMap_.insert(value_type(key,val));
 	bool exists = !elem.second;
@@ -89,6 +90,6 @@ bool SettingsManager_::setValueImpl(std::string key, T val)
 
 	return true;
 }
-
+} // namespace impl_
 } // namespace core
 } // namespace hrengin

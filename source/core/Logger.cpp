@@ -11,20 +11,21 @@
 namespace hrengin {
 namespace core {
 
-Logger_* createLogger()
+Logger* createLogger()
 {
-	return new Logger_();
+	return new impl_::Logger();
 }
 
-Logger_::Logger_()
-{
-}
-
-Logger_::~Logger_()
+namespace impl_ {
+Logger::Logger()
 {
 }
 
-void Logger_::push(std::string msg)
+Logger::~Logger()
+{
+}
+
+void Logger::push(std::string msg)
 {
 	// woohoo, iterators incompatible
 	//for(std::vector<LogBook*>::iterator it; it != logs_.end(); ++it) {
@@ -33,9 +34,10 @@ void Logger_::push(std::string msg)
 	}
 }
 
-void Logger_::addLog(LogBook* log)
+void Logger::addLog(LogBook* log)
 {
 	logs_.push_back(log);
 }
+} // namespace impl_
 } // namespace core
 } // namespace hrengin

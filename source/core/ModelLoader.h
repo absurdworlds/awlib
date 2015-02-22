@@ -6,8 +6,8 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_ModelLoader_
-#define _hrengin_ModelLoader_
+#ifndef _hrengin_ModelLoader_impl_
+#define _hrengin_ModelLoader_impl_
 #include <string>
 
 #include <hrengin/core/ModelLoader.h>
@@ -20,7 +20,8 @@ class HDFParser;
 }
 
 namespace core {
-class ModelLoader : public ModelLoader {
+namespace impl_ {
+class ModelLoader : public core::ModelLoader {
 public:
 	virtual Model* loadModel (char const* filename);
 
@@ -28,6 +29,7 @@ private:
 	bool hdfParse (hdf::HDFParser* hdf, Model* model);
 };
 
+} // namespace impl_
 } // namespace core
 } // namespace hrengin
-#endif//_hrengin_ModelLoader_
+#endif//_hrengin_ModelLoader_impl_
