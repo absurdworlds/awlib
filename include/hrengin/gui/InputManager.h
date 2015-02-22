@@ -6,8 +6,8 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_IInputManager_
-#define _hrengin_IInputManager_
+#ifndef _hrengin_InputManager_
+#define _hrengin_InputManager_
 
 #include <hrengin/common/types.h>
 
@@ -15,14 +15,14 @@
 #include <hrengin/gui/InputEvent.h>
 
 namespace hrengin {
-class IUserInputReceiver;
+class UserInputReceiver;
 namespace gui {
 
 //! Handles user input and generates input events
-class IInputManager {
+class InputManager {
 public:
-	virtual bool registerReceiver(IUserInputReceiver* receiver) = 0;
-	virtual bool unregisterReceiver(IUserInputReceiver* receiver) = 0;
+	virtual bool registerReceiver(UserInputReceiver* receiver) = 0;
+	virtual bool unregisterReceiver(UserInputReceiver* receiver) = 0;
 
 	#if 0
 	virtual void seizeControl(bool seizeCusror, bool seizeKeyboard) = 0;
@@ -31,4 +31,4 @@ public:
 
 } // namespace io
 } // namespace hrengin
-#endif//_hrengin_IInputManager_
+#endif//_hrengin_InputManager_

@@ -6,8 +6,8 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_IHDFWriter_
-#define _hrengin_IHDFWriter_
+#ifndef _hrengin_HDFWriter_
+#define _hrengin_HDFWriter_
 
 #include <string>
 
@@ -19,8 +19,8 @@ namespace hrengin {
 namespace hdf {
 
 //! Interface for writing HDF files. Can write documents in HDF 1.1.3 format.
-class IHDFWriter {
-	virtual ~IHDFWriter() {};
+class HDFWriter {
+	virtual ~HDFWriter() {};
 
 	//! Write a node header, can be used in conjunction with `write*`
 	//! to produce a node-value
@@ -46,4 +46,4 @@ class IHDFWriter {
 
 } // namespace io
 } // namespace hrengin
-#endif//_hrengin_IHDFWriter_
+#endif//_hrengin_HDFWriter_

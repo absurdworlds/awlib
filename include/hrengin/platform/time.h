@@ -19,7 +19,7 @@ namespace hrengin {
  * Platfrom-dependent. May not be consistent between different executions of 
  * the application, so it should be probed at every startup.
  */
-HR_SYS_EXP u32 getTime ();
+HR_SYS_EXP u32 getTime();
 
 } // namespace hrengin
 #endif//_hrengin_time_

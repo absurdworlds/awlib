@@ -23,7 +23,7 @@
 namespace hrengin {
 //! Generic strlen
 template<typename char_type>
-size_t strlen_g (char_type const* str)
+size_t strlen_g(char_type const* str)
 {
 	char_type const* s = str;
 	while(*s++)
@@ -33,7 +33,7 @@ size_t strlen_g (char_type const* str)
 }
 
 //! Get file extension from string
-inline std::string getFileExtension (std::string& dest, std::string const& path)
+inline std::string getFileExtension(std::string& dest, std::string const& path)
 {
 	size_t extpos = path.find_last_of(".");
 
@@ -61,11 +61,11 @@ namespace string {
  * \return
  * 	resulting string concatenated together
  */
-inline std::string join (std::vector<std::string>& source, 
+inline std::string join(std::vector<std::string>& source, 
 		std::string const& delim)
 {
 	std::string result;
-	for(auto const& str : source) {
+	for (auto const& str : source) {
 		result.append(delim + str);
 	}
 
@@ -85,7 +85,7 @@ inline std::string join (std::vector<std::string>& source,
  * 	Vector with found tokens.
  */
 inline std::vector<std::string>
-split (std::string const& source, std::string const& delim)
+split(std::string const& source, std::string const& delim)
 {
 	std::vector<std::string> holder;
 	size_t num_tokens = 0;
@@ -93,7 +93,7 @@ split (std::string const& source, std::string const& delim)
 	size_t pos = source.find_first_not_of(delim);
 	size_t delim_pos = source.find_first_of(delim, pos);
 
-	while(pos != std::string::npos) {
+	while (pos != std::string::npos) {
 		holder.push_back(source.substr(pos, delim_pos - pos));
 		++num_tokens;
 
@@ -115,7 +115,7 @@ split (std::string const& source, std::string const& delim)
  * 	Vector of found tokens.
  */
 inline std::vector<std::string>
-explode (std::string const& source, std::string const& delim)
+explode(std::string const& source, std::string const& delim)
 {
 	std::vector<std::string> holder;
 	size_t pos1 = 0;
@@ -130,7 +130,7 @@ explode (std::string const& source, std::string const& delim)
 			break;
 
 		pos1 = pos2 + delim.size();
-	} while(true);
+	} while (true);
 
 	return holder;
 }

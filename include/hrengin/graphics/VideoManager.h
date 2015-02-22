@@ -6,8 +6,8 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_IVideoManager_
-#define _hrengin_IVideoManager_
+#ifndef _hrengin_VideoManager_
+#define _hrengin_VideoManager_
 
 #include <hrengin/graphics/graphics.h>
 
@@ -15,39 +15,39 @@
 
 namespace hrengin {
 namespace core {
-class ISettingsManager;
+class SettingsManager;
 }
 namespace gui {
-class IGUIManager;
+class GUIManager;
 }
 namespace scene {
-class ISceneManager;
+class SceneManager;
 }
 namespace graphics {
-class IRenderingDevice;
+class RenderingDevice;
 
 //! Holds other devices and manipuletas the window
-class IVideoManager {
+class VideoManager {
 public:
-	virtual ~IVideoManager ()
+	virtual ~VideoManager()
 	{
 	}
 
-	virtual IRenderingDevice* getRenderingDevice () const = 0;
-	virtual scene::ISceneManager* getSceneManager () const = 0;
-	virtual gui::IGUIManager* getGUIManager () const = 0;
+	virtual RenderingDevice* getRenderingDevice() const = 0;
+	virtual scene::SceneManager* getSceneManager() const = 0;
+	virtual gui::GUIManager* getGUIManager() const = 0;
 
-	virtual bool step () = 0;  // update()
-	virtual void wait () = 0;
+	virtual bool step() = 0;  // update()
+	virtual void wait() = 0;
 
-	virtual bool isWindowActive () = 0;
+	virtual bool isWindowActive() = 0;
 
-	virtual u32 getTime () = 0;
+	virtual u32 getTime() = 0;
 };
 
 //! Create a video manager
-HR_GX_EXP IVideoManager* createVideoManager (core::ISettingsManager* settings = 0);
+HR_GX_EXP VideoManager* createVideoManager(core::ISettingsManager* settings = 0);
 
 } // namespace graphics
 } // namespace hrengin
-#endif//_hrengin_IVideoManager_
+#endif//_hrengin_VideoManager_

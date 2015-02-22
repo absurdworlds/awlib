@@ -6,25 +6,25 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_IVisNode_
-#define _hrengin_IVisNode_
+#ifndef _hrengin_VisNode_
+#define _hrengin_VisNode_
 
-#include <hrengin/scene/ISceneNode.h>
+#include <hrengin/scene/SceneNode.h>
 
 namespace hrengin {
 namespace graphics {
-class IMesh;
+class Mesh;
 }
 
 namespace scene {
 /*! Scene node, representing a visual object
  * Various renderables can be attached to it
  */
-class IVisNode : public INode {
+class VisNode : public Node {
 public:
 	virtual void setMesh(char const* mesh) = 0;
 };
 
 } // namespace scene
 } // namespace hrengin
-#endif//_hrengin_IVisNode_
+#endif//_hrengin_VisNode_

@@ -6,24 +6,24 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_IGUIManager_
-#define _hrengin_IGUIManager_
+#ifndef _hrengin_GUIManager_
+#define _hrengin_GUIManager_
 
 #include <hrengin/math/Rect.h>
 
 namespace hrengin {
 namespace gui {
-class IInputManager;
-class IGUIElement;
-class IGUIWindow;
-class IGUITextBox;
-class IGUIListBox;
+class InputManager;
+class GUIElement;
+class GUIWindow;
+class GUITextBox;
+class GUIListBox;
 
 //! Class for controling the GUI
-class IGUIManager {
+class GUIManager {
 public:
 	//! Virtual destructor
-	virtual ~IGUIManager() {};
+	virtual ~GUIManager() {};
 
 	/*! Draw all GUI
 	   \note Should be drawn after everything else, or it will be overdrawn
@@ -31,34 +31,34 @@ public:
 	 */
 	virtual void draw() = 0;
 
-	//! Get the input manager \see IInputManager
-	virtual IInputManager* getInputManager() = 0;
+	//! Get the input manager \see InputManager
+	virtual InputManager* getInputManager() = 0;
 
-	//TODO: setFont(IFont font);
+	//TODO: setFont(Font font);
 	//! Set main font
 	virtual void setFont(std::string path) = 0;
 
-	virtual IGUIWindow* addWindow(Rect<i32> rect, bool isModal = false, 
-		const wchar_t* title = 0, IGUIElement* parent = 0,
+	virtual GUIWindow* addWindow(Rect<i32> rect, bool isModal = false, 
+		const wchar_t* title = 0, GUIElement* parent = 0,
 		i32 id = -1) = 0;
 
-	virtual IGUITextBox* addTextBox(Rect<i32> rect, const wchar_t* text,
-		bool border = true, IGUIElement* parent = 0, i32 id = -1) = 0;
+	virtual GUITextBox* addTextBox(Rect<i32> rect, const wchar_t* text,
+		bool border = true, GUIElement* parent = 0, i32 id = -1) = 0;
 
-	virtual IGUIListBox* addListBox(Rect<i32> rect, bool background = true,
-		IGUIElement* parent = 0, i32 id = -1) = 0;
+	virtual GUIListBox* addListBox(Rect<i32> rect, bool background = true,
+		GUIElement* parent = 0, i32 id = -1) = 0;
 
 	/*//! Create a Window GUI element
-	virtual IGUIWindow* addWindow(IGUIElement* parent = 0,
+	virtual GUIWindow* addWindow(IGUIElement* parent = 0,
 		std::string name = "") = 0;
 	//! Create a Text Box element
-	virtual IGUITextBox* addTextBox(IGUIElement* parent = 0,
+	virtual GUITextBox* addTextBox(IGUIElement* parent = 0,
 		std::string name = "") = 0;
 	//! Create a List Box element
-	virtual IGUIListBox* addListBox(IGUIElement* parent = 0,
+	virtual GUIListBox* addListBox(IGUIElement* parent = 0,
 		std::string name = "") = 0;*/
 };
 
 } // namespace gui
 } // namespace hrengin
-#endif //_hrengin_IGUIManager_
+#endif //_hrengin_GUIManager_

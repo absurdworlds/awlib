@@ -6,20 +6,20 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_IRigidBody_
-#define _hrengin_IRigidBody_
+#ifndef _hrengin_RigidBody_
+#define _hrengin_RigidBody_
 
-#include <hrengin/physics/ICollisionObject.h>
-#include <hrengin/physics/IMotionState.h>
+#include <hrengin/physics/CollisionObject.h>
+#include <hrengin/physics/MotionState.h>
 
 namespace hrengin {
 namespace physics {
 /*!
  * Represents a rigid physical body
  */
-class IRigidBody : public ICollisionObject {
+class RigidBody : public CollisionObject {
 public:
-	virtual ~IRigidBody() {};
+	virtual ~RigidBody() {};
 
 	//! Contains information needed to construct a rigid body
 	struct RigidBodyConstructionInfo {
@@ -41,7 +41,7 @@ public:
 		// Vector3d<f32> localInertia;
 
 		// 
-		// IMotionState* motionState;
+		// MotionState* motionState;
 		Vector3d<f32> position;
 		//Vector4d<f32> rotation;
 
@@ -74,8 +74,8 @@ public:
 		}
 	};
 
-	//! Set motion state \see IMotionState
-	virtual void setMotionState(IMotionState* motionState) = 0;
+	//! Set motion state \see MotionState
+	virtual void setMotionState(MotionState* motionState) = 0;
 
 	//! Get position of the body
 	virtual Vector3d<f32> getPosition() const = 0;
@@ -86,4 +86,4 @@ public:
 
 } // namespace physics
 } // namespace hrengin
-#endif//_hrengin_IRigidBody_
+#endif//_hrengin_RigidBody_

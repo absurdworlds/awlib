@@ -6,19 +6,19 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_IMesh_
-#define _hrengin_IMesh_
+#ifndef _hrengin_Mesh_
+#define _hrengin_Mesh_
 
 #include <hrengin/common/types.h>
 
 namespace hrengin {
 namespace graphics {
 
-class IMesh {
+class Mesh {
 public:
 };
 
 
 } // namespace video
 } // namespace hrengin
-#endif//_hrengin_IMesh_
+#endif//_hrengin_Mesh_

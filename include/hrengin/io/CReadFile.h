@@ -6,21 +6,21 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_CReadFile_
-#define _hrengin_CReadFile_
+#ifndef _hrengin_ReadFile_
+#define _hrengin_ReadFile_
 
-#include <hrengin/io/IFile.h>
+#include <hrengin/io/File.h>
 
 namespace hrengin {
 namespace io {
 /*!
  * Provides interface for reading files
  */
-class HR_IO_EXP CReadFile : public IFile {
+class HR_IO_EXP ReadFile : public IFile {
 public:
-	CReadFile (std::string const& path);
+	ReadFile (std::string const& path);
 
-	virtual ~CReadFile();
+	virtual ~ReadFile();
 
 	/*!
 	 * Read \a size bytes into \a buffer.
@@ -46,4 +46,4 @@ private:
 
 } // namespace io
 } // namespace hrengin
-#endif//_hrengin_CReadFile_
+#endif//_hrengin_ReadFile_

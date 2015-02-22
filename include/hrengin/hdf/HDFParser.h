@@ -7,8 +7,8 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_IHDFReader_
-#define _hrengin_IHDFReader_
+#ifndef _hrengin_HDFReader_
+#define _hrengin_HDFReader_
 #include <string>
 
 #include <hrengin/math/Vector3d.h>
@@ -18,7 +18,7 @@
 
 namespace hrengin {
 namespace io {
-class ICharacterStream;
+class CharacterStream;
 }
 
 namespace hdf {
@@ -32,7 +32,7 @@ enum HdfObjectType {
 };
 
 /*!
- * \class IHDFParser
+ * \class HDFParser
  * \brief Interface for reading hrengin's HDF files. This parser provides a read-only access to documents in HDF 1.1.1 format.
  * 
  * It can read only in forward mode, it is not able to rewind. The design goal of this parser is to quickly read HDF document without usage of any intermediate data structures.
@@ -40,9 +40,9 @@ enum HdfObjectType {
  * \see createHDFParser
  * Also, see an example in 'examples' directory
 */
-class IHDFParser {
+class HDFParser {
 public:
-	virtual ~IHDFParser() {}
+	virtual ~HDFParser() {}
 
 	//! Fast-forward to the next object
 	virtual bool read() = 0;
@@ -84,10 +84,10 @@ public:
 /*!
  * \brief Make an instance of HDF parser.
  * \param stream Stream to parse.
- * \see io::ICharacterStream
+ * \see io::CharacterStream
 */
-HR_HDF_EXP IHDFParser* createHDFParser(io::ICharacterStream* stream);
+HR_HDF_EXP HDFParser* createHDFParser(io::ICharacterStream* stream);
 
 } // namespace io
 } // namespace hrengin
-#endif//_hrengin_IHDFReader_
+#endif//_hrengin_HDFReader_

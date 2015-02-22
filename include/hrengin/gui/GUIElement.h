@@ -1,13 +1,13 @@
 /*
-   Copyright (C) 2014  absurdworlds
-
-   License LGPLv3-only:
-   GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
-   This is free software: you are free to change and redistribute it.
-   There is NO WARRANTY, to the extent permitted by law.
+ * Copyright (C) 2014  absurdworlds
+ *
+ * License LGPLv3-only:
+ * GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
+ * This is free software: you are free to change and redistribute it.
+ * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_IGUIElement_
-#define _hrengin_IGUIElement_
+#ifndef _hrengin_GUIElement_
+#define _hrengin_GUIElement_
 
 #include <string>
 
@@ -18,10 +18,10 @@ namespace hrengin {
 namespace gui {
 
 //! Base class for GUI elements
-class IGUIElement {
+class GUIElement {
 public:
 	//! Virtual destructor
-	virtual ~IGUIElement() {};
+	virtual ~GUIElement() {};
 
 	virtual u32 getId() const = 0;
 	virtual u32 getParentId() const = 0;
@@ -42,9 +42,9 @@ public:
 	virtual void* getUnderlyingElement() const = 0;
 
 	//! Internal implementation details
-	DECLARE_HIDDEN_DETAILS(IGUIElement);
+	DECLARE_HIDDEN_DETAILS(GUIElement);
 };
 
 } // namespace gui
 } // namespace hrengin
-#endif //_hrengin_IGUIElement_
+#endif //_hrengin_GUIElement_

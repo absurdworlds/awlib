@@ -1,30 +1,30 @@
 /*
-   Copyright (C) 2014  absurdworlds
-
-   License LGPLv3-only:
-   GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
-   This is free software: you are free to change and redistribute it.
-   There is NO WARRANTY, to the extent permitted by law.
+ * Copyright (C) 2014  absurdworlds
+ *
+ * License LGPLv3-only:
+ * GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
+ * This is free software: you are free to change and redistribute it.
+ * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_IIntegerStream_
-#define _hrengin_IIntegerStream_
+#ifndef _hrengin_IntegerStream_
+#define _hrengin_IntegerStream_
 
 #include <hrengin/common/types.h>
 
-#include <hrengin/core/IReadFile.h>
+#include <hrengin/core/ReadFile.h>
 
 namespace hrengin {
 namespace io {
 
 
-u8 getInt8(IReadFile* file)
+u8 getInt8(ReadFile* file)
 {
 	u8 buffer;
 	file->read(&buffer,1);
 	return buffer;
 }
 
-u16 getInt16(IReadFile* file)
+u16 getInt16(ReadFile* file)
 {
 	u8 buffer[2];
 	u16 Int;
@@ -33,7 +33,7 @@ u16 getInt16(IReadFile* file)
 	return Int;
 }
 
-u32 getInt24(IReadFile* file)
+u32 getInt24(ReadFile* file)
 {
 	u8 buffer[3];
 	u32 Int;
@@ -42,7 +42,7 @@ u32 getInt24(IReadFile* file)
 	return Int;
 }
 
-u32 getInt32(IReadFile* file)
+u32 getInt32(ReadFile* file)
 {
 	u8 buffer[4];
 	u32 Int;
@@ -53,4 +53,4 @@ u32 getInt32(IReadFile* file)
 
 } // namespace io
 } // namespace hrengin
-#endif//_hrengin_IIntegerStream_
+#endif//_hrengin_IntegerStream_

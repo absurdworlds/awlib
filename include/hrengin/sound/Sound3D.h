@@ -1,24 +1,24 @@
 /*
- * Copyright (C) 2014  absurdworlds
+ * Copyright (C) 2015  absurdworlds
  *
  * License LGPLv3-only:
  * GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_ISound3D_
-#define _hrengin_ISound3D_
+#ifndef _hrengin_Sound3D_
+#define _hrengin_Sound3D_
 
 #include <hrengin/common/hrengintypes.h>
 #include <hrengin/common/Vector3d.h>
 
-#include <hrengin/sound/ISound.h>
+#include <hrengin/sound/Sound.h>
 
 namespace hrengin {
 namespace audio {
 
 //! Represents a sound positioned in 3D space
-class ISound3D : public ISound {
+class Sound3D : public Sound {
 public:
 	/*! Play sound */
 	virtual bool play () = 0;
@@ -35,4 +35,4 @@ public:
 
 } // namespace audio
 } // namespace hrengin
-#endif//_hrengin_ISound3D_
+#endif//_hrengin_Sound3D_

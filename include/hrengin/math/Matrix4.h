@@ -21,12 +21,12 @@ public:
 	typedef Vector4d<T> col_type;
 
 	//! Construct zero matrix
-	Matrix4 ()
+	Matrix4()
 	{
 	}
 
 	//! Copy matrix
-	Matrix4 (Matrix4<T> const& other)
+	Matrix4(Matrix4<T> const& other)
 	{
 		col_[0].set(other[0]);
 		col_[1].set(other[1]);
@@ -37,7 +37,7 @@ public:
 	/*! Construct matrix from individual values
 	 * \note Arguments here appear in row-major order
 	 */
-	Matrix4 (T const a11, T const a21, T const a31, T const a41,
+	Matrix4(T const a11, T const a21, T const a31, T const a41,
 		 T const a12, T const a22, T const a32, T const a42,
 		 T const a13, T const a23, T const a33, T const a43,
 		 T const a14, T const a24, T const a34, T const a44)

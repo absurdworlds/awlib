@@ -6,17 +6,17 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_IMotionState_
-#define _hrengin_IMotionState_
+#ifndef _hrengin_MotionState_
+#define _hrengin_MotionState_
 
-#include <hrengin/scene/ISceneNode.h>
+#include <hrengin/scene/SceneNode.h>
 
 namespace hrengin {
 namespace physics {
 /*!
  * Motion state allows to synchronize physics world with other modules
  */
-class IMotionState {
+class MotionState {
 public:
 	//! Synchronize world transform from user to physics
 	virtual void getWorldPosition(Vector3d<f32>& worldpos) const = 0;
@@ -31,9 +31,9 @@ public:
  * This type of motion state is used to synchronize
  * physics world and scene graph
  */
-class CSceneMotionState : public IMotionState {
+class CSceneMotionState : public MotionState {
 public:
-	CSceneMotionState(scene::INode* node)
+	CSceneMotionState(scene::Node* node)
 		: node_(node)
 	{
 	}
@@ -58,9 +58,9 @@ public:
 		node_->setRotation(worldrot);
 	}
 private:
-	scene::INode* node_;
+	scene::Node* node_;
 };
 
 } // namespace graphics
 } // namespace hrengin
-#endif //_hrengin_IMotionState_
+#endif //_hrengin_MotionState_

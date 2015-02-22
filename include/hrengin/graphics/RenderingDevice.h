@@ -1,26 +1,26 @@
 /*
-   Copyright (C) 2014  absurdworlds
-
-   License LGPLv3-only:
-   GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
-   This is free software: you are free to change and redistribute it.
-   There is NO WARRANTY, to the extent permitted by law.
+ * Copyright (C) 2014-2015  absurdworlds
+ *
+ * License LGPLv3-only:
+ * GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
+ * This is free software: you are free to change and redistribute it.
+ * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_IRenderingDevice_
-#define _hrengin_IRenderingDevice_
+#ifndef _hrengin_RenderingDevice_
+#define _hrengin_RenderingDevice_
 
 #include <hrengin/math/Vector3d.h>
-/* yt6dew — I don't know what is that, propbably someone was playng with
+/* yt6dew â€” I don't know what is that, propbably someone was playng with
  keyboard. I decided to keep it.
  */
 namespace hrengin {
 namespace graphics {
 
-class IVertexBuffer;
-class IIndexBuffer;
+class VertexBuffer;
+class IndexBuffer;
 
 //! Interface for rendering the scene into the window
-class IRenderingDevice {
+class RenderingDevice {
 public:
 	/*! Prepare scene for rendering.
 	 *  Must be called before drawing anything.
@@ -36,7 +36,7 @@ public:
 	virtual void drawDebug() = 0;
 
 	//! Draw a primitive using index buffer and vertex buffer
-	virtual bool drawVertexPrimitive(IVertexBuffer const& vb, IIndexBuffer const& ib) = 0;
+	virtual bool drawVertexPrimitive(VertexBuffer const& vb, IIndexBuffer const& ib) = 0;
 
 	//! Draw a line primitive
 	virtual void drawLine(Vector3d<f32> const& from,
@@ -45,4 +45,4 @@ public:
 
 } // namespace video
 } // namespace hrengin
-#endif//_hrengin_IRenderingDevice_
+#endif//_hrengin_RenderingDevice_

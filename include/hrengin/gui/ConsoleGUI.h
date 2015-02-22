@@ -1,37 +1,37 @@
 /*
-   Copyright (C) 2014  absurdworlds
-
-   License LGPLv3-only:
-   GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
-   This is free software: you are free to change and redistribute it.
-   There is NO WARRANTY, to the extent permitted by law.
+ * Copyright (C) 2014  absurdworlds
+ *
+ * License LGPLv3-only:
+ * GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
+ * This is free software: you are free to change and redistribute it.
+ * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_IConsoleGUI_
-#define _hrengin_IConsoleGUI_
+#ifndef _hrengin_ConsoleGUI_
+#define _hrengin_ConsoleGUI_
 
 #include <hrengin/common/types.h>
 
-#include <hrengin/core/ILogger.h>
+#include <hrengin/core/Logger.h>
 
 #include <hrengin/gui/gui.h>
-#include <hrengin/gui/IUserInputReceiver.h>
+#include <hrengin/gui/UserInputReceiver.h>
 
 namespace hrengin {
 namespace core {
-class IShell;
+class Shell;
 }
 namespace gui {
-class IGUIManager;
+class GUIManager;
 
 //! User interface console windows used to type commands
-class IConsoleGUI : public IUserInputReceiver, public core::ILogBook {
+class ConsoleGUI : public UserInputReceiver, public core::LogBook {
 public:
-	virtual ~IConsoleGUI() {};
+	virtual ~ConsoleGUI() {};
 };
 
 //! Creates a console window
-HR_GUI_EXP IConsoleGUI* createConsole(core::IShell* shell, IGUIManager* guimgr);
+HR_GUI_EXP ConsoleGUI* createConsole(core::Shell* shell, GUIManager* guimgr);
 
 } // namespace gui
 } // namespace hrengin
-#endif //_hrengin_IConsoleGUI_
+#endif //_hrengin_ConsoleGUI_

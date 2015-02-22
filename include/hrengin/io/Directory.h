@@ -6,8 +6,8 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_IDirectory_
-#define _hrengin_IDirectory_
+#ifndef _hrengin_Directory_
+#define _hrengin_Directory_
 
 #include <string>
 
@@ -26,9 +26,9 @@ struct Dirent {
 };
 
 //! Interface for directory listing
-class IDirectory {
+class Directory {
 public:
-	virtual ~IDirectory ()
+	virtual ~Directory ()
 	{
 	}
 
@@ -38,13 +38,13 @@ public:
 	 * entry information. 
 	 * \return 0 on success, \a -error_code otherwise. 
 	 */
-	virtual i32 read (Dirent& result) = 0;
+	virtual i32 read(Dirent& result) = 0;
 	/*! Reset position to beginning of directory */
-	virtual void rewind () = 0;
+	virtual void rewind() = 0;
 	/*! Set position indicator in directory stream. */
-	virtual void seek (u32 loc) = 0;
+	virtual void seek(u32 loc) = 0;
 	/*! Get current position in directory stream. */
-	virtual u32 tell () const = 0;
+	virtual u32 tell() const = 0;
 
 	/* \return true if directory is open */
 	virtual bool isOpen() const = 0;
@@ -53,7 +53,7 @@ public:
 	virtual std::string const& getPath() const = 0;
 };
 
-HR_IO_EXP IDirectory* openDirectory (std::string path);
+HR_IO_EXP Directory* openDirectory(std::string path);
 } // namespace io
 } // namespace hrengin
-#endif //_hrengin_IDirectory_
+#endif //_hrengin_Directory_

@@ -6,26 +6,26 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_IBufferedStream_
-#define _hrengin_IBufferedStream_
+#ifndef _hrengin_BufferedStream_
+#define _hrengin_BufferedStream_
 
-#include <hrengin/io/ICharacterStream.h>
+#include <hrengin/io/CharacterStream.h>
 
 namespace hrengin {
 namespace io {
 class CReadFile;
 
 //! Class defines an interface for buffered file stream
-class IBufferedStream : public ICharacterStream {
+class BufferedStream : public CharacterStream {
 public:
-	virtual ~IBufferedStream ()
+	virtual ~BufferedStream ()
 	{
 	}
 };
 
 //! Create a buffered file stream
-HR_SYS_EXP IBufferedStream* createBufferedStream(CReadFile& source);
+HR_SYS_EXP BufferedStream* createBufferedStream(ReadFile& source);
 
 } //namespace io
 } //namespace hrengin
-#endif//_hrengin_IBufferedStream_
+#endif//_hrengin_BufferedStream_

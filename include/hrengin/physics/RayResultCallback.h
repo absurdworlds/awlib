@@ -6,10 +6,10 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_IRayResultCallback_
-#define _hrengin_IRayResultCallback_
+#ifndef _hrengin_RayResultCallback_
+#define _hrengin_RayResultCallback_
 
-#include <hrengin/physics/ICollisionObject.h>
+#include <hrengin/physics/CollisionObject.h>
 #include <hrengin/physics/BroadphaseProxy.h>
 
 namespace hrengin {
@@ -18,7 +18,7 @@ namespace physics {
  * Structure for storing raytest result
  */
 struct RaytestResult {
-	RaytestResult(const ICollisionObject* collisionObject,
+	RaytestResult(const CollisionObject* collisionObject,
 		f32 hitFrac, Vector3d<f32> hitPos, Vector3d<f32> hitNorm)
 	: collObject(collisionObject),
 	hitFraction(hitFrac),
@@ -27,7 +27,7 @@ struct RaytestResult {
 	{
 	}
 
-	const ICollisionObject* collObject;
+	const CollisionObject* collObject;
 
 	f32             hitFraction;
 	Vector3d<f32>   hitNormal;
@@ -35,9 +35,9 @@ struct RaytestResult {
 };
 
 //! Interface for raytest callbacks
-class IRayResultCallback {
+class RayResultCallback {
 public:
-	static const bool singleHit = true;
+	static bool const singleHit = true;
 
 	f32 closestHitFraction;
 	CollisionFilter collFilter;
@@ -54,15 +54,15 @@ public:
 };
 
 //! This class is used to report single raytest result
-class IClosestHitCallback : public IRayResultCallback {
+class ClosestHitCallback : public IRayResultCallback {
 public:
-	static const bool singleHit = true;
+	static bool const singleHit = true;
 
-	ICollisionObject const* collObject;
+	CollisionObject const* collObject;
 	Vector3d<f32> hitPoint;
 	Vector3d<f32> hitNormal;
 
-	IClosestHitCallback()
+	ClosestHitCallback()
 		: collObject(0), hitPoint(0,0,0), hitNormal(0,0,0)
 	{
 
@@ -82,9 +82,8 @@ public:
 	{
 		return (collObject != 0);
 	}
-
 };
 
 } // namespace graphics
 } // namespace hrengin
-#endif //_hrengin_IRayResultCallback_
+#endif //_hrengin_RayResultCallback_

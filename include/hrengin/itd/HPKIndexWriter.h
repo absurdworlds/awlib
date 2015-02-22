@@ -1,5 +1,4 @@
-/* This file is a part of hrengin library collection
- *
+/*
  * Copyright (C) 2014  absurdworlds
  *
  * License LGPLv3-only:
@@ -7,8 +6,8 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_IHPKIndexWriter_
-#define _hrengin_IHPKIndexWriter_
+#ifndef _hrengin_HPKIndexWriter_
+#define _hrengin_HPKIndexWriter_
 #include <ostream>
 #include <string>
 
@@ -20,9 +19,9 @@ namespace itd {
 /*!
  * Interface for building HPKA index
  */
-class IHPKIndexWriter {
+class HPKIndexWriter {
 public:
-	virtual ~IHPKIndexWriter ()
+	virtual ~HPKIndexWriter ()
 	{
 	}
 
@@ -38,4 +37,4 @@ public:
 
 } //namespace itd
 } //namespace hrengin
-#endif//_hrengin_IHPKIndexWriter_
+#endif//_hrengin_HPKIndexWriter_

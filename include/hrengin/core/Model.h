@@ -6,18 +6,18 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_IModel_
-#define _hrengin_IModel_
+#ifndef _hrengin_Model_
+#define _hrengin_Model_
 
 #include <vector>
 #include <hrengin/core/models.h>
 
 namespace hrengin {
 
-class IModel {
+class Model {
 public:
 	std::vector<Primitive> primitives;
 };
 
 } // namespace hrengin
-#endif//_hrengin_IModel_
+#endif//_hrengin_Model_

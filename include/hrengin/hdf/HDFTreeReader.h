@@ -6,8 +6,8 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_IHDFTreeReader_
-#define _hrengin_IHDFTreeReader_
+#ifndef _hrengin_HDFTreeReader_
+#define _hrengin_HDFTreeReader_
 
 #include <string>
 
@@ -21,10 +21,10 @@
 namespace hrengin {
 namespace hdf {
 
-class IHDFTreeReader {
+class HDFTreeReader {
 
 };
 
 } // namespace io
 } // namespace hrengin
-#endif//_hrengin_IHDFTreeReader_
+#endif//_hrengin_HDFTreeReader_

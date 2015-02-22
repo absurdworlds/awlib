@@ -6,8 +6,8 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_ISceneNode_
-#define _hrengin_ISceneNode_
+#ifndef _hrengin_SceneNode_
+#define _hrengin_SceneNode_
 
 #include <vector>
 #include <algorithm>
@@ -20,25 +20,25 @@
 
 namespace hrengin {
 namespace scene {
-class IObject;
+class Object;
 
 //! A node in the scene graph
-class INode {
+class Node {
 public:
 	//! Default constructor
-	INode ()
+	Node ()
 		: parent_(0)
 	{
 	}
 
 	//! Construct and attach to other node
-	INode (INode* parent)
+	Node (Node* parent)
 	{
 		parent->addChild(this);
 	}
 
 	//! Virtual destructor
-	virtual ~INode ()
+	virtual ~Node ()
 	{
 		for(auto it = children_.begin();
 			 it != children_.end(); ++it) {
@@ -48,7 +48,7 @@ public:
 	}
 	
 	//! Attach child to node
-	virtual bool addChild (INode* child)
+	virtual bool addChild (Node* child)
 	{
 		if(std::find(children_.begin(), children_.end(), child) != children_.end()) {
 			return false;
@@ -60,7 +60,7 @@ public:
 	}
 	
 	//! Remove child from node
-	virtual bool removeChild (INode* child)
+	virtual bool removeChild (Node* child)
 	{
 		auto found = std::find(children_.begin(), children_.end(), child);
 		if(found == children_.end()) {
@@ -74,7 +74,7 @@ public:
 	}
 	
 	//! Attach node to parent
-	virtual bool setParent (INode* parent)
+	virtual bool setParent (Node* parent)
 	{
 		if(parent_) {
 			unparent();
@@ -140,7 +140,7 @@ public:
 	//! Calculate node's absolute transform
 	virtual Matrix4<f32> calculateAbsoluteTransform ()
 	{
-		Vector3d<f32> rot = getRotation() * math::RadiansInDegree;
+		Vector3d<f32> rot = getRotation() * math::RadiansnDegree;
 		Vector3d<f32> pos = getPosition();
 
 		f32 cp = cosf(rot[0]);
@@ -160,14 +160,14 @@ public:
 			trans;
 	}
 	
-	//virtual void attachObject (IObject* object) = 0;
+	//virtual void attachObject (Object* object) = 0;
 	//virtual void detachObject () = 0;
 private:
 	//! List of children of this node
-	std::vector<INode*> children_;
+	std::vector<Node*> children_;
 
 	//! Pointer to the parent node
-	INode* parent_;
+	Node* parent_;
 
 	Vector3d<f32> position_;
 	//! TODO: Replace with quaternion
@@ -176,4 +176,4 @@ private:
 
 } // namespace scene
 } // namespace hrengin
-#endif //_hrengin_ISceneNode_
+#endif //_hrengin_SceneNode_

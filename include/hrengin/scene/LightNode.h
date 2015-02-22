@@ -6,20 +6,20 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_ILightNode_
-#define _hrengin_ILightNode_
+#ifndef _hrengin_LightNode_
+#define _hrengin_LightNode_
 
-#include <hrengin/scene/ISceneNode.h>
+#include <hrengin/scene/SceneNode.h>
 
 namespace hrengin {
 namespace scene {
 
 //! Scene node representing a dynamic light
-class ILightNode : public INode {
+class LightNode : public Node {
 public:
 
 };
 
 } // namespace scene
 } // namespace hrengin
-#endif//_hrengin_ILightNode_
+#endif//_hrengin_LightNode_

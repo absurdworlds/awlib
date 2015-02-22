@@ -6,25 +6,25 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_ISettingsLoader_
-#define _hrengin_ISettingsLoader_
+#ifndef _hrengin_SettingsLoader_
+#define _hrengin_SettingsLoader_
 #include <string>
 
 #include <hrengin/common/types.h>
 
 #include <hrengin/core/core.h>
-#include <hrengin/core/ISettingsManager.h>
+#include <hrengin/core/SettingsManager.h>
 
 namespace hrengin {
 namespace core {
-class ISettingsManager;
+class SettingsManager;
 /*!
  * Helper class to load settings from a known file format
  */
-class ISettingsLoader {
+class SettingsLoader {
 public:
 	//! Virtual destructor
-	virtual ~ISettingsLoader()
+	virtual ~SettingsLoader()
 	{
 	}
 
@@ -37,4 +37,4 @@ public:
 
 } // namespace core
 } // namespace hrengin
-#endif//_hrengin_ISettingsLoader_
+#endif//_hrengin_SettingsLoader_

@@ -1,30 +1,30 @@
 /*
- * Copyright (C) 2014  absurdworlds
+ * Copyright (C) 2014-2015  absurdworlds
  *
  * License LGPLv3-only:
  * GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_ICameraNode_
-#define _hrengin_ICameraNode_
+#ifndef _hrengin_CameraNode_
+#define _hrengin_CameraNode_
 
 #include <hrengin/math/Line3d.h>
 
-#include <hrengin/scene/ISceneNode.h>
+#include <hrengin/scene/SceneNode.h>
 
 namespace hrengin {
 namespace scene {
 //! Scene node which is a camera, scene is rendered from active camera's POV
-class ICameraNode : public INode {
+class CameraNode : public Node {
 public:
 	//! Virtual destructor
-	virtual ~ICameraNode()
+	virtual ~CameraNode()
 	{
 	}
 
 	//! Set target to track
-	virtual void setTarget(INode* target) = 0;
+	virtual void setTarget(Node* target) = 0;
 
 	//! Reset target, camera will no longer track
 	virtual void resetTarget() = 0;
@@ -44,4 +44,4 @@ public:
 
 } // namespace scene
 } // namespace hrengin
-#endif//_hrengin_ICameraNode_
+#endif//_hrengin_CameraNode_

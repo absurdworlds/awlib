@@ -6,8 +6,8 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_IPhysicsObject_
-#define _hrengin_IPhysicsObject_
+#ifndef _hrengin_PhysicsObject_
+#define _hrengin_PhysicsObject_
 
 #include <hrengin/common/hidden_impl.h>
 
@@ -18,9 +18,9 @@
 namespace hrengin {
 namespace physics {
 
-class ICollisionObject {
+class CollisionObject {
 public:
-	virtual ~ICollisionObject() {};
+	virtual ~CollisionObject() {};
 
 	virtual void setPosition(Vector3d<f32> pos) = 0;
 	virtual void setRotation(Vector3d<f32> rot) = 0;
@@ -39,11 +39,11 @@ public:
 	}
 
 	//! Internal implementation details
-	DECLARE_HIDDEN_DETAILS(ICollisionObject);
+	DECLARE_HIDDEN_DETAILS(CollisionObject);
 protected:
 	void* pointer_;
 };
 
 } // namespace physics
 } // namespace hrengin
-#endif//_hrengin_IPhysicsObject_
+#endif//_hrengin_PhysicsObject_

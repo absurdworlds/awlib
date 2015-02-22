@@ -7,8 +7,8 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_IArgParser_
-#define _hrengin_IArgParser_
+#ifndef _hrengin_ArgParser_
+#define _hrengin_ArgParser_
 
 #include <string>
 
@@ -36,10 +36,10 @@ struct ClineArg {
 };
 
 //! Used to parse command line arguments passed to the program
-class IArgParser {
+class ArgParser {
 public:
 	//! Virtual destructor
-	virtual ~IArgParser () 
+	virtual ~ArgParser () 
 	{
 	}
 
@@ -60,8 +60,8 @@ public:
  * \param argv Array of pointers to command line token strings.
  * \note Each string must be null-terminated. Last element of array must be 0.
  */
-HR_CORE_EXP IArgParser* createArgParser (char** argv);
+HR_CORE_EXP ArgParser* createArgParser (char** argv);
 
 } //namespace core
 } //namespace hrengin
-#endif//_hrengin_IArgParser_
+#endif//_hrengin_ArgParser_

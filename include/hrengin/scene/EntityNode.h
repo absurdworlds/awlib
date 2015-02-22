@@ -6,24 +6,24 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_IEntitySceneNode_
-#define _hrengin_IEntitySceneNode_
+#ifndef _hrengin_EntitySceneNode_
+#define _hrengin_EntitySceneNode_
 
-#include <hrengin/game/IEntity.h>
+#include <hrengin/game/Entity.h>
 
-#include <hrengin/scene/ISceneNode.h>
+#include <hrengin/scene/SceneNode.h>
 
 namespace hrengin {
-class IEntity;
+class Entity;
 
 namespace scene {
 /*! This type of node represents a game entity
- * \see IEntity
+ * \see Entity
  */
-class IEntityNode : INode {
+class EntityNode : Node {
 public:
 };
 
 } // namespace scene
 } // namespace hrengin
-#endif //_hrengin_IEntitySceneNode_
+#endif //_hrengin_EntitySceneNode_

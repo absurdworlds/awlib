@@ -6,8 +6,8 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_IHPKIndexReader_
-#define _hrengin_IHPKIndexReader_
+#ifndef _hrengin_HPKIndexReader_
+#define _hrengin_HPKIndexReader_
 #include <hrengin/common/types.h>
 #include <hrengin/itd/itd.h>
 
@@ -16,16 +16,16 @@ namespace itd {
 /*!
  * Interface for reading HPKA index
  */
-class IHPKIndexReader {
+class HPKIndexReader {
 public:
-	virtual ~IHPKIndexReader ()
+	virtual ~HPKIndexReader ()
 	{
 	}
 
 	/*!
 	 * Find a file
 	 * \param path Full path to file
-	 * \return ID of the file or -1
+	 * \return D of the file or -1
 	 */	 
 	virtual u64 findFile (std::string const& path) = 0;
 	/*!
@@ -38,4 +38,4 @@ public:
 
 } //namespace itd
 } //namespace hrengin
-#endif//_hrengin_IHPKIndexReader_
+#endif//_hrengin_HPKIndexReader_

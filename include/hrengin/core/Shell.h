@@ -6,8 +6,8 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_IShell_
-#define _hrengin_IShell_
+#ifndef _hrengin_Shell_
+#define _hrengin_Shell_
 
 #include <string>
 
@@ -16,31 +16,31 @@
 #include <hrengin/common/types.h>
 
 namespace hrengin {
-class ILogger;
+class Logger;
 namespace core {
 /*!
  * hrengin Shell, intended to be for manipulating game objects via
  * unix-like shell commands
  */
-class IShell {
+class Shell {
 public:
 	//! Virtual destructor
-	virtual ~IShell()
+	virtual ~Shell()
 	{
 	}
 
-	class ICommand {
+	class Command {
 	public:
 		virtual void pushArg(std::string argument) = 0;
 		virtual void execute() = 0;
 	};
 
-	virtual void registerCommand(std::string name, ICommand* command) = 0;
+	virtual void registerCommand(std::string name, Command* command) = 0;
 	virtual void execute(std::string command) = 0;
 };
 
-HR_CORE_EXP IShell* createShell(ILogger* logger);
+HR_CORE_EXP Shell* createShell(Logger* logger);
 
 } // namespace core
 } // namespace hrengin
-#endif//_hrengin_IShell_
+#endif//_hrengin_Shell_

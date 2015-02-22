@@ -6,32 +6,32 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_IModelLoader_
-#define _hrengin_IModelLoader_
+#ifndef _hrengin_ModelLoader_
+#define _hrengin_ModelLoader_
 #include <hrengin/core/core.h>
 
 namespace hrengin {
-class IModel;
+class Model;
 
 namespace core {
 //! Reads model files from disk and stores in hrengin standard format
-class IModelLoader {
+class ModelLoader {
 public:
 	//! Virtual destructor
-	virtual ~IModelLoader()
+	virtual ~ModelLoader()
 	{
 	}
 
 	/*! Load model from disk
-	 * \see IModel
+	 * \see Model
 	 */
-	virtual IModel* loadModel (char const* filename) = 0;
+	virtual Model* loadModel (char const* filename) = 0;
 };
 
 /*! Create a model loader
  * \note It is best to use only one model loader
  */
-HR_CORE_EXP IModelLoader* createModelLoader();
+HR_CORE_EXP ModelLoader* createModelLoader();
 } // namespace core
 } // namespace hrengin
-#endif//_hrengin_IModelLoader_
+#endif//_hrengin_ModelLoader_

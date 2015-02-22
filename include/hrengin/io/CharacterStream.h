@@ -6,8 +6,8 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_ICharacterStream_
-#define _hrengin_ICharacterStream_
+#ifndef _hrengin_CharacterStream_
+#define _hrengin_CharacterStream_
 
 #include <hrengin/platform/platform.h>
 #include <hrengin/common/types.h>
@@ -16,9 +16,9 @@ namespace hrengin {
 namespace io {
 
 //! Class defines an interface for character streams
-class ICharacterStream {
+class CharacterStream {
 public:
-	virtual ~ICharacterStream ()
+	virtual ~CharacterStream ()
 	{
 	}
 
@@ -28,8 +28,8 @@ public:
 };
 
 //! Create a character stream
-HR_SYS_EXP ICharacterStream* createCharacterStream (const char* source);
+HR_SYS_EXP CharacterStream* createCharacterStream (char const* source);
 
 } // namespace io
 } // namespace hrengin
-#endif//_hrengin_ICharacterStream_
+#endif//_hrengin_CharacterStream_

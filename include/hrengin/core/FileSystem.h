@@ -6,26 +6,26 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_IFileSystem_
-#define _hrengin_IFileSystem_
+#ifndef _hrengin_FileSystem_
+#define _hrengin_FileSystem_
 
 #include <hrengin/core/core.h>
 
 namespace hrengin {
 namespace io {
-class IFileParser;
-class IReadFile;
-class IWriteFile;
+class FileParser;
+class ReadFile;
+class WriteFile;
 
 //! Vitual filesystem, for transparent access to hrengin archives
-class IFileSystem {
+class FileSystem {
 public:
-	IReadFile& openFileRead(char* path);
-	IWriteFile& openFileWrite(char* path);
+	ReadFile& openFileRead(char* path);
+	WriteFile& openFileWrite(char* path);
 };
 
-HR_CORE_EXP IFileSystem* initFilesystem();
+HR_CORE_EXP FileSystem* initFilesystem();
 
 } // namespace io
 } // namespace hrengin
-#endif//_hrengin_IFileSystem_
+#endif//_hrengin_FileSystem_

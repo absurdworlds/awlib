@@ -6,8 +6,8 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_ILogger_
-#define _hrengin_ILogger_
+#ifndef _hrengin_Logger_
+#define _hrengin_Logger_
 
 #include <string>
 #include <thread>
@@ -20,46 +20,46 @@
 namespace hrengin {
 namespace core {
 //! Interface for logger output
-class ILogBook {
+class LogBook {
 public:
 	//! Write logger output
-	virtual void log (std::string) = 0;
+	virtual void log(std::string) = 0;
 };
 
 //! Logger interface, which is used to write messages into log books
-class ILogger {
-	static ILogger* globalLogger_;
+class Logger {
+	static Logger* globalLogger_;
 public:
 	//! Set global logger, which is accesset by getGlobalLogger()
-	static void setGlobalLogger (ILogger* logger)
+	static void setGlobalLogger(Logger* logger)
 	{
 		globalLogger_ = logger;
 	}
 
 	//! Get pointer to global logger, which is set by setGlobalLogger()
-	static ILogger* getGlobalLogger ()
+	static Logger* getGlobalLogger()
 	{
 		return globalLogger_;
 	}
 
 	//! Virtual destructor
-	virtual ~ILogger ()
+	virtual ~Logger()
 	{
 	}
 
 	//! Push a message
-	virtual void push (std::string msg) = 0;
+	virtual void push(std::string msg) = 0;
 
 	//! Add an output to logger
-	virtual void addLog (ILogBook* log) = 0;
+	virtual void addLog(LogBook* log) = 0;
 
 	//! Constant for line ending
 	const std::string endl = std::string("\n");
 };
 
 //! Create a logger instance
-HR_CORE_EXP ILogger* createLogger ();
+HR_CORE_EXP Logger* createLogger();
 
 } // namespace core
 } // namespace hrengin
-#endif//_hrengin_ILogger_
+#endif//_hrengin_Logger_

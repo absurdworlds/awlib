@@ -6,8 +6,8 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_IHDFTreeWriter_
-#define _hrengin_IHDFTreeWriter_
+#ifndef _hrengin_HDFTreeWriter_
+#define _hrengin_HDFTreeWriter_
 
 #include <string>
 
@@ -21,10 +21,10 @@
 namespace hrengin {
 namespace hdf {
 
-class IHDFTreeWriter {
+class HDFTreeWriter {
 
 };
 
 } // namespace io
 } // namespace hrengin
-#endif//_hrengin_IHDFTreeWriter_
+#endif//_hrengin_HDFTreeWriter_

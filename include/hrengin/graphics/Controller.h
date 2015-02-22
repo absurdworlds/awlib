@@ -6,17 +6,16 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_IController_
-#define _hrengin_IController_
+#ifndef _hrengin_Controller_
+#define _hrengin_Controller_
 
 namespace hrengin {
 namespace graphics {
-
 //! Class used to control scene node behavior
-class IController {
+class Controller {
 public:
 	//! Virtual destructor
-	virtual ~IController()
+	virtual ~Controller()
 	{
 	}
 
@@ -25,4 +24,4 @@ public:
 
 } // namespace graphics
 } // namespace hrengin
-#endif//_hrengin_IController_
+#endif//_hrengin_Controller_

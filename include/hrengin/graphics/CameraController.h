@@ -6,19 +6,18 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_ICameraController_
-#define _hrengin_ICameraController_
+#ifndef _hrengin_CameraController_
+#define _hrengin_CameraController_
 
-#include <hrengin/graphics/IController.h>
+#include <hrengin/graphics/Controller.h>
 
 namespace hrengin {
 namespace graphics {
-
 //! Class used to control camera movement
-class ICameraController : public IController {
+class CameraController : public Controller {
 public:
 	//! Virtual destructor
-	virtual ~ICameraController()
+	virtual ~CameraController()
 	{
 	}
 
@@ -28,4 +27,4 @@ public:
 
 } // namespace graphics
 } // namespace hrengin
-#endif//_hrengin_ICameraController_
+#endif//_hrengin_CameraController_

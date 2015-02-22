@@ -6,26 +6,26 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_ISceneManager_
-#define _hrengin_ISceneManager_
+#ifndef _hrengin_SceneManager_
+#define _hrengin_SceneManager_
 
 namespace hrengin {
-class IEntity;
+class Entity;
 namespace graphics {
-class IMesh;
+class Mesh;
 }
 namespace scene {
-class INode;
-class IEntityNode;
-class IVisNode;
-class ICameraNode;
-class ILightNode;
+class Node;
+class EntityNode;
+class VisNode;
+class CameraNode;
+class LightNode;
 
 //! This class manages scene graph
-class ISceneManager {
+class SceneManager {
 public:
 	//! Virtual destructor
-	virtual ~ISceneManager()
+	virtual ~SceneManager()
 	{
 	}
 	//virtual bool step() = 0;
@@ -35,13 +35,13 @@ public:
 	virtual void drawScene() = 0;
 	virtual void update() = 0;
 
-	//virtual IVisNode* createMeshSceneNode(IMesh* mesh) = 0;
-	virtual IVisNode* createMeshSceneNode(const char* meshname) = 0;
-	virtual ICameraNode* createCameraSceneNode() = 0;
-	virtual ILightNode* createLightSceneNode() = 0;
-	virtual IEntityNode* createEntitySceneNode(IEntity* entity) = 0;
+	//virtual VisNode* createMeshSceneNode(Mesh* mesh) = 0;
+	virtual VisNode* createMeshSceneNode(char const* meshname) = 0;
+	virtual CameraNode* createCameraSceneNode() = 0;
+	virtual LightNode* createLightSceneNode() = 0;
+	virtual EntityNode* createEntitySceneNode(Entity* entity) = 0;
 };
 
 } // namespace scene
 } // namespace hrengin
-#endif//_hrengin_ISceneManager_
+#endif//_hrengin_SceneManager_
