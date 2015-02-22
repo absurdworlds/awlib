@@ -36,7 +36,7 @@ public:
 	virtual void drawDebug() = 0;
 
 	//! Draw a primitive using index buffer and vertex buffer
-	virtual bool drawVertexPrimitive(VertexBuffer const& vb, IIndexBuffer const& ib) = 0;
+	virtual bool drawVertexPrimitive(VertexBuffer const& vb, IndexBuffer const& ib) = 0;
 
 	//! Draw a line primitive
 	virtual void drawLine(Vector3d<f32> const& from,

@@ -8,10 +8,9 @@
  */
 #ifndef _hrengin_VideoManager_
 #define _hrengin_VideoManager_
+#include <hrengin/common/types.h>
 
 #include <hrengin/graphics/graphics.h>
-
-#include <hrengin/common/types.h>
 
 namespace hrengin {
 namespace core {
@@ -46,7 +45,7 @@ public:
 };
 
 //! Create a video manager
-HR_GX_EXP VideoManager* createVideoManager(core::ISettingsManager* settings = 0);
+HR_GX_EXP VideoManager* createVideoManager(core::SettingsManager* settings = 0);
 
 } // namespace graphics
 } // namespace hrengin
