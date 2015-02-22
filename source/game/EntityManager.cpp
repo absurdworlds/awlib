@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014  absurdworlds
+ * Copyright (C) 2014-2015  absurdworlds
  *
  * License LGPLv3-only:
  * GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
@@ -9,24 +9,26 @@
 #include "EntityManager.h"
 
 namespace hrengin {
+namespace game {
 HR_GAME_EXP EntityManager* createEntityManager()
 {
-	return new EntityManager_();
+	return new impl_::EntityManager();
 }
 
-EntityManager_::EntityManager()
+namespace impl_ {
+EntityManager::EntityManager()
 {
 
 }
 
-void EntityManager_::doSync()
+void EntityManager::doSync()
 {
-	for(std::deque<Entity*>::iterator ent = entlist_.begin(); ent != entlist_.end(); ++ent) {
+	for (ent_iterator ent = entlist_.begin(); ent != entlist_.end(); ++ent) {
 		(*ent)->sync();
 	}
 }
 
-void EntityManager_::addEntity(Entity* entity)
+void EntityManager::addEntity(Entity* entity)
 {
 	if(freelist_.empty()) {
 		entlist_.push_back(entity);
@@ -37,10 +39,12 @@ void EntityManager_::addEntity(Entity* entity)
 	}
 }
 
-void EntityManager_::deleteEntity(u32 entid)
+void EntityManager::deleteEntity(u32 entid)
 {
 	delete entlist_[entid];
 	entlist_[entid] = &nullEntity;
 	freelist_.push_back(entid);
 }
+} // namespace impl_
+} // namespace game
 } // namespace hrengin

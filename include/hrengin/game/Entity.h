@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014  absurdworlds
+ * Copyright (C) 2014-2015  absurdworlds
  *
  * License LGPLv3-only:
  * GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
@@ -22,9 +22,8 @@ namespace hrengin {
 namespace scene {
 class EntityNode;
 }
-const u32 ENTID_Invalid = 0;
-const u32 ENTID_BaseEntity = 0x62617365; // 'base'
 
+namespace game {
 enum EntFlag : u32 {
 };
 
@@ -39,7 +38,7 @@ public:
 	//! get the entity type identifier
 	virtual u32 getEntityIdentifier()
 	{
-		return ENTID_BaseEntity;
+		return 0;
 	}
 
 	virtual bool getEntityFlag(EntFlag flag)
@@ -72,5 +71,6 @@ private:
 	u32 entID_; 
 };
 
+} // namespace game
 } // namespace hrengin
 #endif//_hrengin_BaseEntity_

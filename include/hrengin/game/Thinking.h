@@ -10,14 +10,16 @@
 #define _hrengin_Thinking_
 
 #include <hrengin/common/types.h>
-#include <hrengin/game/BaseEntity.h>
+#include <hrengin/game/Entity.h>
 
 namespace hrengin {
+namespace game {
 
 class Thinking : public Entity {
 public:
 	virtual void think(u32 time) = 0;
 };
 
+} // namespace game
 } // namespace hrengin
 #endif//_hrengin_Thinking_

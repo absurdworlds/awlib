@@ -13,6 +13,7 @@
 #include <hrengin/game/game.h>
 
 namespace hrengin {
+namespace game {
 class Thinking;
 typedef void (*EventCallback) (u32);
 
@@ -38,5 +39,6 @@ class EventManager {
 
 HR_GAME_EXP EventManager* createEventManager();
 
+} // namespace game
 } // namespace hrengin
 #endif//_hrengin_EventManager_

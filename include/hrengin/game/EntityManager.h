@@ -13,6 +13,7 @@
 #include <hrengin/game/game.h>
 
 namespace hrengin {
+namespace game {
 class Entity;
 
 //! Entity manager keeps track of entities
@@ -28,5 +29,6 @@ public:
 
 HR_GAME_EXP EntityManager* createEntityManager();
 
+} // namespace game
 } // namespace hrengin
 #endif//_hrengin_EntityManager_
