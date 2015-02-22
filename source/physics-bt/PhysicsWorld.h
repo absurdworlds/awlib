@@ -6,8 +6,8 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_PhysicsWorld_
-#define _hrengin_PhysicsWorld_
+#ifndef _hrengin_PhysicsWorld_impl_
+#define _hrengin_PhysicsWorld_impl_
 #include <Bullet/btBulletDynamicsCommon.h>
 #include <Bullet/btBulletCollisionCommon.h>
 
@@ -17,13 +17,14 @@
 
 namespace hrengin {
 namespace physics {
-
+// FIXME!!!!
 class PhysicsWorld::Details {
 public:
 	btDynamicsWorld* world;
 };
 
-class PhysicsWorld : public PhysicsWorld {
+namespace bullet {
+class PhysicsWorld : public physics::PhysicsWorld {
 public:
 	PhysicsWorld(btCollisionConfiguration* configuration,
 		btBroadphaseInterface* broadphase,
@@ -73,6 +74,7 @@ private:
 	btClock clock_;
 };
 
+} // namespace bullet
 } // namespace physics
 } // namespace hrengin
-#endif//_hrengin_PhysicsWorld_
+#endif//_hrengin_PhysicsWorld_impl_

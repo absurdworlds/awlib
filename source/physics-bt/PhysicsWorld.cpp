@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014  absurdworlds
+ * Copyright (C) 2014-2015  absurdworlds
  *
  * License LGPLv3-only:
  * GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
@@ -14,8 +14,9 @@
 
 namespace hrengin {
 namespace physics {
+namespace bullet {
 
-PhysicsWorld_::PhysicsWorld_(btCollisionConfiguration* configuration,
+PhysicsWorld::PhysicsWorld(btCollisionConfiguration* configuration,
 	btBroadphaseInterface* broadphase,
 	btCollisionDispatcher* dispatcher,
 	btConstraintSolver* constraintSolver)
@@ -27,7 +28,7 @@ PhysicsWorld_::PhysicsWorld_(btCollisionConfiguration* configuration,
 	details_.world = dynamicsWorld_;
 }
 
-PhysicsWorld_::~PhysicsWorld_()
+PhysicsWorld::~PhysicsWorld()
 {
 	int i;
 
@@ -48,7 +49,7 @@ PhysicsWorld_::~PhysicsWorld_()
 	delete collisionConfiguration_;
 }
 
-btScalar PhysicsWorld_::getDeltaTime()
+btScalar PhysicsWorld::getDeltaTime()
 {
 	btScalar dt = (btScalar)clock_.getTimeMicroseconds();
 	clock_.reset();
@@ -56,41 +57,41 @@ btScalar PhysicsWorld_::getDeltaTime()
 }
 
 
-void PhysicsWorld_::addBody(RigidBody* body)
+void PhysicsWorld::addBody(RigidBody* body)
 {
 	btRigidBody* rb = static_cast<btRigidBody*>(body->getDetails()->obj);
 	dynamicsWorld_->addRigidBody(rb);
 	dynamicsWorld_->updateAabbs();
 }
 
-void PhysicsWorld_::addBody(RigidBody* body, CollisionFilter filter)
+void PhysicsWorld::addBody(RigidBody* body, CollisionFilter filter)
 {
 	btRigidBody* rb = static_cast<btRigidBody*>(body->getDetails()->obj);
 	dynamicsWorld_->addRigidBody(rb, filter.group, filter.mask);
 	dynamicsWorld_->updateAabbs();
 }
 
-void PhysicsWorld_::addObject(CollisionObject* object)
+void PhysicsWorld::addObject(CollisionObject* object)
 {
 	btCollisionObject* obj = object->getDetails()->obj;
 	dynamicsWorld_->addCollisionObject(obj);
 	//dynamicsWorld_->updateAabbs();
 }
 
-void PhysicsWorld_::addObject(CollisionObject* object, CollisionFilter filter)
+void PhysicsWorld::addObject(CollisionObject* object, CollisionFilter filter)
 {
 	btCollisionObject* obj = object->getDetails()->obj;
 	dynamicsWorld_->addCollisionObject(obj, filter.group, filter.mask);
 	//dynamicsWorld_->updateAabbs();
 }
 
-void PhysicsWorld_::removeBody(RigidBody* body)
+void PhysicsWorld::removeBody(RigidBody* body)
 {
 	btRigidBody* obj = static_cast<btRigidBody*>(body->getDetails()->obj);
 	dynamicsWorld_->removeRigidBody(obj);
 }
 
-void PhysicsWorld_::removeObject(CollisionObject* object)
+void PhysicsWorld::removeObject(CollisionObject* object)
 {
 	btCollisionObject* obj = object->getDetails()->obj;
 	dynamicsWorld_->removeCollisionObject(obj);
@@ -112,7 +113,7 @@ void castRaySingleTarget(btVector3 const& from, btVector3 const& to,
 	dynamicsWorld->rayTest(from, to, resultCallback);
 }
 
-void PhysicsWorld_::castRay(Vector3d<f32> from, Vector3d<f32> to, RayResultCallback* callback)
+void PhysicsWorld::castRay(Vector3d<f32> from, Vector3d<f32> to, RayResultCallback* callback)
 {
 #if 0
 	typedef void (* rayCastFunc)(btVector3, btVector3, IRayResultCallback*);
@@ -131,13 +132,13 @@ void PhysicsWorld_::castRay(Vector3d<f32> from, Vector3d<f32> to, RayResultCallb
 	}
 }
 
-void PhysicsWorld_::setDebugDrawer(DebugDrawer* drawer)
+void PhysicsWorld::setDebugDrawer(DebugDrawer* drawer)
 {
 	drawer->setWorld(this);
 	//btIDebugDraw* debugDraw = drawer->getDetails()->debugDraw;
 }
 
-bool PhysicsWorld_::step()
+bool PhysicsWorld::step()
 {
 	btScalar ms = getDeltaTime();
 
@@ -152,6 +153,6 @@ bool PhysicsWorld_::step()
 
 	return true;
 }
-
+} // namespace bullet
 } // namespace physics
 } // namespace hrengin

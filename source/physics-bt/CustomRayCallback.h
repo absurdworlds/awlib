@@ -21,8 +21,10 @@ namespace physics {
 struct CustomClosestHitCallback
 	: public btCollisionWorld::ClosestRayResultCallback {
 
-	CustomClosestHitCallback(const btVector3& rayFromWorld,
-		const btVector3& rayToWorld, IRayResultCallback* hrCallback)
+	CustomClosestHitCallback(
+		btVector3 const& rayFromWorld,
+		btVector3 const& rayToWorld,
+		physics::RayResultCallback* hrCallback)
 	: btCollisionWorld::ClosestRayResultCallback(rayFromWorld, rayToWorld),
 		customCallback_(hrCallback)
 	{
@@ -30,7 +32,7 @@ struct CustomClosestHitCallback
 		m_collisionFilterMask = customCallback_->collFilter.mask;
 	}
 
-	RayResultCallback* customCallback_;
+	physics::RayResultCallback* customCallback_;
 
 	//used to calculate hitPointWorld from hitFraction
 	// btVector3	m_rayFromWorld;

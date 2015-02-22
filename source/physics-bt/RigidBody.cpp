@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014  absurdworlds
+ * Copyright (C) 2014-2015  absurdworlds
  *
  * License LGPLv3-only:
  * GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
@@ -14,6 +14,7 @@
 
 namespace hrengin {
 namespace physics {
+namespace bullet {
 
 RigidBody::RigidBody(btRigidBody* body)
 	: details_(body)
@@ -69,5 +70,6 @@ Vector3d<f32> RigidBody::getRotation() const
 	return Vector3d<f32>(pos.getX(),pos.getY(),pos.getZ());
 };
 
+} // namespace bullet
 } // namespace physics
 } // namespace hrengin

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014  absurdworlds
+ * Copyright (C) 2014-2015  absurdworlds
  *
  * License LGPLv3-only:
  * GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
@@ -61,18 +61,17 @@ PhysicsWorld* BulletPhysics::createPhysicsWorld()
 	//use the default collision dispatcher. For parallel processing you can use a diffent dispatcher (see Extras/BulletMultiThreaded)
 	btCollisionDispatcher* dispatcher = new btCollisionDispatcher(collisionConfiguration);
 
-	return new PhysicsWorld(collisionConfiguration, broadphase,
+	return new bullet::PhysicsWorld(collisionConfiguration, broadphase,
 		dispatcher, solver);
 }
 
 DebugDrawer*
 BulletPhysics::createDebugDrawer(graphics::RenderingDevice* renderer)
 {
-	return new DebugDrawer(renderer);
+	return new bullet::DebugDrawer(renderer);
 }
 
-RigidBody*
-BulletPhysics::createBody(
+RigidBody* BulletPhysics::createBody(
 		char const* modelName, 
 		RigidBody::RigidBodyConstructionInfo cInfo)
 {
@@ -80,7 +79,7 @@ BulletPhysics::createBody(
 	return createBody(shapeId, cInfo); 
 };
 
-RigidBody* BulletPhysics::createBody(const u32 shapeid, RigidBody::RigidBodyConstructionInfo cInfo)
+RigidBody* BulletPhysics::createBody(u32 const shapeid, RigidBody::RigidBodyConstructionInfo cInfo)
 {
 	btTransform defaultTransform;
 	defaultTransform.setIdentity();
@@ -110,16 +109,16 @@ RigidBody* BulletPhysics::createBody(const u32 shapeid, RigidBody::RigidBodyCons
 
 	btRigidBody *rigidBody = new btRigidBody(rbInfo);
 
-	return new RigidBody(rigidBody);
+	return new bullet::RigidBody(rigidBody);
 };
 
-CollisionPhantom* BulletPhysics::createPhantom(const char* modelName)
+CollisionPhantom* BulletPhysics::createPhantom(char const* modelName)
 {
 	u32 shapeId = loadModel(modelName);
 	return createPhantom(shapeId); 
 };
 
-CollisionPhantom* BulletPhysics::createPhantom(const u32 shapeid)
+CollisionPhantom* BulletPhysics::createPhantom(u32 const shapeid)
 {
 	btTransform defaultTransform;
 	defaultTransform.setIdentity();
@@ -131,14 +130,14 @@ CollisionPhantom* BulletPhysics::createPhantom(const u32 shapeid)
 	//collObject->setCollisionFlags (btCollisionObject::CF_NO_CONTACT_RESPONSE);
 	collObject->setCollisionFlags (btCollisionObject::CF_KINEMATIC_OBJECT);
 
-	return new CollisionPhantom(collObject);
+	return new bullet::CollisionPhantom(collObject);
 };
 
-btCollisionShape* CBulletPhysics::createPrimitiveShape(Primitive shape) 
+btCollisionShape* BulletPhysics::createPrimitiveShape(Primitive shape) 
 {
 	btScalar x = shape.dimensions[0],
-		y = shape.dimensions[1],
-		z = shape.dimensions[2];
+		 y = shape.dimensions[1],
+		 z = shape.dimensions[2];
 
 	switch(shape.shape) {
 	case SHAPE_SPHERE:
@@ -148,10 +147,9 @@ btCollisionShape* CBulletPhysics::createPrimitiveShape(Primitive shape)
 			btScalar(x/2.0),
 			btScalar(y/2.0),
 			btScalar(z/2.0)));
-	case SHAPE_YLINDER:
-		if(z == 0.0) {
+	case SHAPE_CYLINDER:
+		if(z == 0.0)
 			z = x;
-		}
 
 		x /= 2.0;
 		y /= 2.0;
@@ -168,7 +166,7 @@ btCollisionShape* CBulletPhysics::createPrimitiveShape(Primitive shape)
 			return new btCylinderShapeZ(btVector3(
 				btScalar(x),btScalar(y),btScalar(z)));
 		}
-	case SHAPE_APSULE:
+	case SHAPE_CAPSULE:
 		switch(shape.axis) {
 		case AXIS_X:
 			return new btCapsuleShapeX(x,y);
@@ -177,7 +175,7 @@ btCollisionShape* CBulletPhysics::createPrimitiveShape(Primitive shape)
 		case AXIS_Z:
 			return new btCapsuleShapeZ(x,y);
 		}
-	case SHAPE_ONE:
+	case SHAPE_CONE:
 		switch(shape.axis) {
 		case AXIS_X:
 			return new btConeShapeX(x,y);
@@ -202,13 +200,12 @@ btCollisionShape* CBulletPhysics::createPrimitiveShape(Primitive shape)
 
 u32 BulletPhysics::addShape(Model* model)
 {
-	if(model->primitives.size() == 0) {
+	if(model->primitives.size() == 0)
 		return 0;
-	}
 
 	btCompoundShape* compound = new btCompoundShape();
 
-	for(auto primitive : model->primitives) {
+	for (auto primitive : model->primitives) {
 		btCollisionShape * shape = createPrimitiveShape(primitive);
 		btTransform localTransform;
 
@@ -227,21 +224,19 @@ u32 BulletPhysics::addShape(Model* model)
 
 	collisionShapes_.push_back(compound);
 
-	return collisionShapes_.size()-1;
+	return collisionShapes_.size() - 1;
 };
 
-u32 BulletPhysics::loadModel(const char* modelName)
+u32 BulletPhysics::loadModel(char const* modelName)
 {
 	auto modelId = models_.find(modelName);
-	if(modelId != models_.end()) {
+	if(modelId != models_.end())
 		return modelId->second;
-	}
 
 	Model* model = modelLoader_->loadModel(modelName);
 
-	if(!model) {
+	if(!model)
 		return 0;
-	}
 
 	u32 id = addShape(model);
 	models_[modelName] = id;

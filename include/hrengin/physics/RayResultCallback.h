@@ -54,7 +54,7 @@ public:
 };
 
 //! This class is used to report single raytest result
-class ClosestHitCallback : public IRayResultCallback {
+class ClosestHitCallback : public RayResultCallback {
 public:
 	static bool const singleHit = true;
 

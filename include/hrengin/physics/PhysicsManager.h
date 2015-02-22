@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014  absurdworlds
+ * Copyright (C) 2014-2015  absurdworlds
  *
  * License LGPLv3-only:
  * GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
@@ -34,21 +34,21 @@ class CollisionPhantom;
 class PhysicsManager {
 public:
 	/*! Destructor
-	   Notice: must be called only after deletion of all physics worlds
+	 *  \note Should be called only after deletion of all physics worlds
 	 */
 	virtual ~PhysicsManager() {};
 
 	virtual u32 loadModel(char const* modelName) = 0;
 
-	virtual RigidBody* createBody(u const32 modelId, IRigidBody::RigidBodyConstructionInfo cInfo) = 0;
-	virtual RigidBody* createBody(char const* modelName, IRigidBody::RigidBodyConstructionInfo cInfo) = 0;
-	virtual CollisionPhantom* createPhantom(u const32 modelId) = 0;
+	virtual RigidBody* createBody(u32 const modelId, RigidBody::RigidBodyConstructionInfo cInfo) = 0;
+	virtual RigidBody* createBody(char const* modelName, RigidBody::RigidBodyConstructionInfo cInfo) = 0;
+	virtual CollisionPhantom* createPhantom(u32 const modelId) = 0;
 	virtual CollisionPhantom* createPhantom(char const* modelName) = 0;
 
 	virtual PhysicsWorld* createPhysicsWorld() = 0;
 
 	//TODO: move to PhysicsWorld
-	virtual DebugDrawer* createDebugDrawer(graphics::IRenderingDevice* renderer) = 0;
+	virtual DebugDrawer* createDebugDrawer(graphics::RenderingDevice* renderer) = 0;
 };
 
 HR_PHYS_EXP PhysicsManager* createPhysicsManager();

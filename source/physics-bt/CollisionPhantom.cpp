@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014  absurdworlds
+ * Copyright (C) 2014-2015  absurdworlds
  *
  * License LGPLv3-only:
  * GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
@@ -11,14 +11,15 @@
 
 namespace hrengin {
 namespace physics {
+namespace bullet {
 
-CollisionPhantom_::CollisionPhantom_(btCollisionObject* object)
+CollisionPhantom::CollisionPhantom(btCollisionObject* object)
 	: details_(object)
 {
 	details_.obj->setUserPointer(this);
 }
 
-void CollisionPhantom_::setPosition(Vector3d<f32> pos)
+void CollisionPhantom::setPosition(Vector3d<f32> pos)
 {
 	btTransform transform = details_.obj->getWorldTransform();
 	transform.setOrigin(toBullet(pos));
@@ -31,7 +32,7 @@ void CollisionPhantom_::setPosition(Vector3d<f32> pos)
 	details_.obj->setWorldTransform(transform);
 };
 
-void CollisionPhantom_::setRotation(Vector3d<f32> rot)
+void CollisionPhantom::setRotation(Vector3d<f32> rot)
 {
 	btTransform transform = details_.obj->getWorldTransform();
 #if 0
@@ -43,14 +44,14 @@ void CollisionPhantom_::setRotation(Vector3d<f32> rot)
 	details_.obj->setWorldTransform(transform);
 };
 
-Vector3d<f32> CollisionPhantom_::getPosition() const
+Vector3d<f32> CollisionPhantom::getPosition() const
 {
 	btVector3 pos = details_.obj->getWorldTransform().getOrigin();
 
 	return Vector3d<f32>(pos.getX(),pos.getY(),pos.getZ());
 };
 
-Vector3d<f32> CollisionPhantom_::getRotation() const
+Vector3d<f32> CollisionPhantom::getRotation() const
 {
 	btQuaternion rot = details_.obj->getWorldTransform().getRotation();
 
@@ -59,6 +60,6 @@ Vector3d<f32> CollisionPhantom_::getRotation() const
 
 	return Vector3d<f32>(pos.getX(),pos.getY(),pos.getZ());
 };
-
+} // namespace bullet
 } // namespace physics
 } // namespace hrengin

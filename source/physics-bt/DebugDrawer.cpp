@@ -12,6 +12,7 @@
 
 namespace hrengin {
 namespace physics {
+namespace bullet {
 
 DebugDraw::DebugDraw(graphics::RenderingDevice* renderer)
 	: mode(DBG_NoDebug), vmgr_(renderer)
@@ -19,7 +20,7 @@ DebugDraw::DebugDraw(graphics::RenderingDevice* renderer)
 
 }
 
-void DebugDraw::drawLine(const btVector3& from, const btVector3& to, const btVector3& color)
+void DebugDraw::drawLine(btVector3 const& from, btVector3 const& to, btVector3 const& color)
 {
 	//workaround to bullet's inconsistent debug colors which are
 	// either from 0.0 - 1.0 or from 0.0 - 255.0
@@ -42,11 +43,11 @@ void DebugDraw::drawLine(const btVector3& from, const btVector3& to, const btVec
 		newColor);
 }
 
-void DebugDraw::drawContactPoint(const btVector3& PointOnB, const btVector3& normalOnB, btScalar distance, int lifeTime, const btVector3& color)
+void DebugDraw::drawContactPoint(btVector3 const& PointOnB, btVector3 const& normalOnB, btScalar distance, int lifeTime, btVector3 const& color)
 {
-	//   this->drawLine(PointOnB, PointOnB + normalOnB*distance, ONTACTPOINT_OLOR);
+	//this->drawLine(PointOnB, PointOnB + normalOnB*distance, ONTACTPOINT_OLOR);
 
-	const btVector3 to(PointOnB + normalOnB*distance);
+	btVector3 const to(PointOnB + normalOnB*distance);
 
 	vmgr_->drawLine(
 		Vector3d<f32>(PointOnB[0], PointOnB[1], PointOnB[2]),
@@ -54,12 +55,12 @@ void DebugDraw::drawContactPoint(const btVector3& PointOnB, const btVector3& nor
 		Vector3d<f32>(255.0,255.0,255.0));
 }
 
-void DebugDraw::reportErrorWarning(const char* text)
+void DebugDraw::reportErrorWarning(char const* text)
 {
 	//this->logger->log(text, irr::ELL_ERROR);
 }
 
-//void DebugDraw::draw3dText(const btVector3& location, const char* text) { }
+//void DebugDraw::draw3dText(btVector3 const& location, char const* text) { }
 
 void DebugDraw::setDebugMode(int mode)
 {
@@ -70,6 +71,6 @@ int DebugDraw::getDebugMode() const
 {
 	return this->mode;
 }
-
+} // namespace bullet
 } // namespace physics
 } // namespace hrengin

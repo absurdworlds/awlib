@@ -6,8 +6,8 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_DebugDrawer_
-#define _hrengin_DebugDrawer_
+#ifndef _hrengin_DebugDrawer_impl_
+#define _hrengin_DebugDrawer_impl_
 
 #include <Bullet/btBulletDynamicsCommon.h>
 #include <Bullet/btBulletCollisionCommon.h>
@@ -19,7 +19,7 @@
 
 namespace hrengin {
 namespace physics {
-
+namespace bullet {
 
 class DebugDraw : public btIDebugDraw {
 public:
@@ -45,13 +45,14 @@ private:
 	int mode;
 	graphics::RenderingDevice * vmgr_;
 };
+} // namespace bullet
 
 class DebugDrawer::Details {
 public:
 	Details(graphics::RenderingDevice* renderer)
 		//: drawer(renderer)
 	{
-		debugDraw = new DebugDraw(renderer);
+		debugDraw = new bullet::DebugDraw(renderer);
 		// temporary
 		debugDraw->setDebugMode(
 			btIDebugDraw::DBG_DrawWireframe |
@@ -65,7 +66,8 @@ public:
 	btIDebugDraw* debugDraw;
 };
 
-class DebugDrawer : public DebugDrawer {
+namespace bullet {
+class DebugDrawer : public physics::DebugDrawer {
 public:
 	DebugDrawer(graphics::RenderingDevice* renderer)
 		: details_(renderer)
@@ -78,7 +80,7 @@ public:
 		world_->debugDrawWorld();
 	}
 
-	virtual void setWorld(PhysicsWorld* world)
+	virtual void setWorld(physics::PhysicsWorld* world)
 	{
 		world_ = world->getDetails()->world;
 		world_->setDebugDrawer(details_.debugDraw);
@@ -94,7 +96,7 @@ private:
 	btDynamicsWorld* world_;
 };
 
-
+} // namespace bullet
 } // namespace physics
 } // namespace hrengin
-#endif//_hrengin_DebugDrawer_
+#endif//_hrengin_DebugDrawer_impl_

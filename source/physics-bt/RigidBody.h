@@ -6,8 +6,8 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_RigidBody_
-#define _hrengin_RigidBody_
+#ifndef _hrengin_RigidBody_impl_
+#define _hrengin_RigidBody_impl_
 #include <stdio.h>
 
 #include <Bullet/btBulletDynamicsCommon.h>
@@ -22,8 +22,9 @@
 
 namespace hrengin {
 namespace physics {
+namespace bullet {
 
-class RigidBody : public RigidBody {
+class RigidBody : public physics::RigidBody {
 public:
 	RigidBody(btRigidBody* body);
 
@@ -43,6 +44,7 @@ protected:
 	CollisionObject::Details details_;
 };
 
+} // namespace bullet
 } // namespace physics
 } // namespace hrengin
-#endif//_hrengin_RigidBody_
+#endif//_hrengin_RigidBody_impl_
