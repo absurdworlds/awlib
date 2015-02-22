@@ -140,7 +140,7 @@ public:
 	//! Calculate node's absolute transform
 	virtual Matrix4<f32> calculateAbsoluteTransform ()
 	{
-		Vector3d<f32> rot = getRotation() * math::RadiansnDegree;
+		Vector3d<f32> rot = getRotation() * math::RadiansInDegree;
 		Vector3d<f32> pos = getPosition();
 
 		f32 cp = cosf(rot[0]);
