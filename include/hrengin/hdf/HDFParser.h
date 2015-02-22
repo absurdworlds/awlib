@@ -86,7 +86,7 @@ public:
  * \param stream Stream to parse.
  * \see io::CharacterStream
 */
-HR_HDF_EXP HDFParser* createHDFParser(io::ICharacterStream* stream);
+HR_HDF_EXP HDFParser* createHDFParser(io::CharacterStream* stream);
 
 } // namespace io
 } // namespace hrengin

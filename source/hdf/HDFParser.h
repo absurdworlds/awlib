@@ -1,5 +1,6 @@
 /*
- * Copyright (C) 2014  absurdworlds
+ * Copyright (C) 2014-2105  absurdworlds
+ * Copyright (C) 2015       Hedede <hededrk@gmail.com>
  *
  * License LGPLv3-only:
  * GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
@@ -18,6 +19,7 @@
 
 namespace hrengin {
 namespace hdf {
+namespace impl_ {
 enum HdfTokenType {
 	HDF_TOKEN_NVALID,
 	HDF_TOKEN_EOF,
@@ -31,7 +33,7 @@ struct HdfToken {
 	std::string value;
 };
 
-class HDFParser : public HDFParser {
+class HDFParser : public hdf::HDFParser {
 public:
 	HDFParser(io::CharacterStream* stream);
 	virtual ~HDFParser();
@@ -96,7 +98,7 @@ private:
 
 	u32 depth_;
 };
-
-} //namespace io
-} //namespace hrengin
+} // namespace impl_
+} // namespace io
+} // namespace hrengin
 #endif//_hrengin_HDFParser_

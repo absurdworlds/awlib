@@ -1,5 +1,6 @@
 /*
- * Copyright (C) 2014  absurdworlds
+ * Copyright (C) 2014-2015  absurdworlds
+ * Copyright (C) 2015       Hedede <hededrk@gmail.com>
  *
  * License LGPLv3-only:
  * GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
@@ -47,7 +48,13 @@ inline bool isInlineWhitespace(char c) {
 	return c == ' ' || c == '\t';
 }
 
-hdf::Type hdfTokenToType(const HdfToken& token) 
+HDFParser* createHDFParser(io::CharacterStream* stream)
+{
+	return new impl_::HDFParser(stream);
+}
+
+namespace impl_ {
+hdf::Type hdfTokenToType(HdfToken const& token) 
 {
 	if(token.value == "bool" || token.value == "b") {
 		return Type::Boolean;
@@ -66,7 +73,7 @@ hdf::Type hdfTokenToType(const HdfToken& token)
 	}
 }
 
-hdf::Type hdfConvertImpicitType(const HdfToken& token) 
+hdf::Type hdfConvertImpicitType(HdfToken const& token) 
 {
 	char c = token.value.c_str()[0];
 	if(isNameBeginChar(c) || c == '"') {
@@ -78,36 +85,29 @@ hdf::Type hdfConvertImpicitType(const HdfToken& token)
 	}
 }
 
-HDFParser* createHDFParser(io::CharacterStream* stream)
-{
-	return new HDFParser_(stream);
-}
-
-HDFParser_::HDFParser_(io::CharacterStream* stream)
+HDFParser::HDFParser(io::CharacterStream* stream)
 	: depth_(0), state_(HDF_S_DLE), stream_(stream)
 {
 }
 
-HDFParser_::~HDFParser_()
+HDFParser::~HDFParser()
 {
 }
 
-bool HDFParser_::read() {
+bool HDFParser::read() {
 	char c;
 
 	stream_->getCurrent(c);
 
-	if(c == 0) {
+	if(c == 0)
 		return false;
-	}
 
 	fastForward();
 
 	stream_->getCurrent(c);
 
-	if(c == 0) {
+	if(c == 0)
 		return false;
-	}
 
 	if(depth_ == 0) {
 		while(c == '!') {
@@ -127,11 +127,10 @@ bool HDFParser_::read() {
 	return (state_ == HDF_S_PANIC) ? false : true;
 }
 
-HdfObjectType HDFParser_::getObjectType()
+HdfObjectType HDFParser::getObjectType()
 {
-	if(state_ == HDF_S_PANIC) {
+	if(state_ == HDF_S_PANIC)
 		return HDF_OBJ_NULL;
-	}
 
 	char c;
 
@@ -182,11 +181,10 @@ HdfObjectType HDFParser_::getObjectType()
 	}
 }
 
-void HDFParser_::getObjectName(std::string& name)
+void HDFParser::getObjectName(std::string& name)
 {
-	if(state_ == HDF_S_PANIC) {
+	if(state_ == HDF_S_PANIC)
 		return;
-	}
 
 	if(state_ == HDF_S_NODE_BEGIN) {
 		readName(name);
@@ -199,37 +197,37 @@ void HDFParser_::getObjectName(std::string& name)
 	}
 }
 
-void HDFParser_::readFloat(float& val)
+void HDFParser::readFloat(float& val)
 {
 	readValue<f32>(val);
 }
-void HDFParser_::readFloat(double& val)
+void HDFParser::readFloat(double& val)
 {
 	readValue<f64>(val);
 }
-void HDFParser_::readInt(u32& val)
+void HDFParser::readInt(u32& val)
 {
 	readValue<u32>(val);
 }
-void HDFParser_::readInt(i32& val)
+void HDFParser::readInt(i32& val)
 {
 	readValue<i32>(val);
 }
-void HDFParser_::readBool(bool& val)
+void HDFParser::readBool(bool& val)
 {
 	readValue<bool>(val);
 }
-void HDFParser_::readString(std::string& val)
+void HDFParser::readString(std::string& val)
 {
 	readValue<std::string>(val);
 }
-void HDFParser_::readVector3d(Vector3d<f32>& val)
+void HDFParser::readVector3d(Vector3d<f32>& val)
 {
 	readValue<Vector3d<f32>>(val);
 }
 
 //TODO: rewrite those two properly
-void HDFParser_::skipValue() 
+void HDFParser::skipValue() 
 {
 	HdfToken token;
 	hdf::Type type;
@@ -251,7 +249,7 @@ void HDFParser_::skipValue()
 	}
 }
 
-void HDFParser_::skipNode() 
+void HDFParser::skipNode() 
 {
 	char c;
 
@@ -272,28 +270,25 @@ void HDFParser_::skipNode()
 	read();
 }
 
-void HDFParser_::error(hdf::ParserMessage type, std::string msg)
+void HDFParser::error(hdf::ParserMessage type, std::string msg)
 {
 	errors_.push_back(msg);
 	printf("[HDF:%u]: %s\n",stream_->getPos(),msg.c_str());
 
-	if(type == HDF_LOG_ERROR) {
+	if(type == HDF_LOG_ERROR)
 		state_ = HDF_S_PANIC;
-	}
 }
 
-
-//void HDFParser_::skip(bool (*condition)(char))
+//void HDFParser::skip(bool (*condition)(char))
 template<bool (*condition)(char)>
-void HDFParser_::skip()
+void HDFParser::skip()
 {
 	char c;
 
 	stream_->getCurrent(c);
 
-	while(condition(c) && c != 0) {
+	while(condition(c) && c != 0)
 		stream_->getNext(c);
-	}
 }
 
 inline bool notLineBreak(char c)
@@ -301,22 +296,22 @@ inline bool notLineBreak(char c)
 	return c != '\n';
 }
 
-void HDFParser_::skipLine()
+void HDFParser::skipLine()
 {
 	skip<notLineBreak>();
 }
 
-void HDFParser_::skipWhitespace()
+void HDFParser::skipWhitespace()
 {
 	skip<isWhitespace>();
 }
 
-void HDFParser_::skipInlineWhitespace()
+void HDFParser::skipInlineWhitespace()
 {
 	skip<isInlineWhitespace>();
 }
 
-void HDFParser_::fastForward() {
+void HDFParser::fastForward() {
 	char c;
 
 	stream_->getCurrent(c);
@@ -343,7 +338,7 @@ void HDFParser_::fastForward() {
 	}
 }
 
-bool HDFParser_::parseType(HdfToken& token) {
+bool HDFParser::parseType(HdfToken& token) {
 	skipInlineWhitespace();
 
 	char c;
@@ -380,7 +375,7 @@ bool HDFParser_::parseType(HdfToken& token) {
 	}
 }
 
-void HDFParser_::readToken(HdfToken& token)
+void HDFParser::readToken(HdfToken& token)
 {
 	fastForward();
 
@@ -402,7 +397,7 @@ void HDFParser_::readToken(HdfToken& token)
 	}
 }
 
-void HDFParser_::readStringToken(std::string& val) {
+void HDFParser::readStringToken(std::string& val) {
 	val = "";
 	char c;
 
@@ -426,7 +421,7 @@ void HDFParser_::readStringToken(std::string& val) {
 	stream_->getNext(c);
 }
 
-void HDFParser_::readNumber(std::string& val)
+void HDFParser::readNumber(std::string& val)
 {
 	val = "";
 	char c;
@@ -434,15 +429,15 @@ void HDFParser_::readNumber(std::string& val)
 	stream_->getCurrent(c);
 
 	while (!isWhitespace(c) && (c != ']')) {
-		if (!(c >= '0' && c <= '9') && !in(c, '.', 'e', 'E', '+', '-' )) {
+		if (!(c >= '0' && c <= '9') && !in(c, '.', 'e', 'E', '+', '-' ))
 			error(HDF_LOG_WARNING, "invalid number");
-		}
+
 		val += c;
 		stream_->getNext(c);
 	}
 }
 
-void HDFParser_::readName(std::string& name, char stop)
+void HDFParser::readName(std::string& name, char stop)
 {
 	name = "";
 	char c;
@@ -459,19 +454,19 @@ void HDFParser_::readName(std::string& name, char stop)
 	}
 }
 
-void HDFParser_::readValueName(std::string& name)
+void HDFParser::readValueName(std::string& name)
 {
 	readName(name, '=');
 }
 
-void HDFParser_::readTypeName(std::string& name)
+void HDFParser::readTypeName(std::string& name)
 {
 	readName(name, ':');
 }
 
 
 template<typename T> 
-void HDFParser_::readValue(T& var)
+void HDFParser::readValue(T& var)
 {
 	HdfToken token;
 	hdf::Type type;
@@ -499,26 +494,26 @@ void HDFParser_::readValue(T& var)
 // TODO: make helper class to reduce almost duplicate functions
 
 template<typename T>
-void HDFParser_::convertValue(HdfToken& token, T& val)
+void HDFParser::convertValue(HdfToken& token, T& val)
 {
 	// should never get this error
 	error(HDF_LOG_ERROR, "unknown type");
 }
 
 template<>
-void HDFParser_::convertValue(HdfToken& token, f32& val)
+void HDFParser::convertValue(HdfToken& token, f32& val)
 {	
 	val = strtof(token.value.c_str(), 0);
 }
 
 template<>
-void HDFParser_::convertValue(HdfToken& token, f64& val)
+void HDFParser::convertValue(HdfToken& token, f64& val)
 {
 	val = strtod(token.value.c_str(), 0);
 }
 
 template<>
-void HDFParser_::convertValue(HdfToken& token, Vector3d<f32>& val)
+void HDFParser::convertValue(HdfToken& token, Vector3d<f32>& val)
 {
 	val[0] = strtod(token.value.c_str(), 0);
 
@@ -532,25 +527,25 @@ void HDFParser_::convertValue(HdfToken& token, Vector3d<f32>& val)
 }
 
 template<>
-void HDFParser_::convertValue(HdfToken& token, std::string& val)
+void HDFParser::convertValue(HdfToken& token, std::string& val)
 {	
 	val = token.value;
 }
 
 template<>
-void HDFParser_::convertValue(HdfToken& token, u32& val)
+void HDFParser::convertValue(HdfToken& token, u32& val)
 {	
 	val = strtoul(token.value.c_str(), 0, 10);
 }
 
 template<>
-void HDFParser_::convertValue(HdfToken& token, i32& val)
+void HDFParser::convertValue(HdfToken& token, i32& val)
 {	
 	val = strtol(token.value.c_str(), 0, 10);
 }
 
 template<>
-void HDFParser_::convertValue(HdfToken& token, bool& val)
+void HDFParser::convertValue(HdfToken& token, bool& val)
 {
 	if(token.value == "true" || token.value == "1") {
 		val = true;
@@ -561,9 +556,8 @@ void HDFParser_::convertValue(HdfToken& token, bool& val)
 	}
 }
 
-
-// todo: rewrite
-void HDFParser_::processCommand() {
+// TODO: rewrite
+void HDFParser::processCommand() {
 	HdfToken token;
 
 	char c;
@@ -607,6 +601,6 @@ void HDFParser_::processCommand() {
 		}
 	}
 }
-
+} // namespace impl_
 } // namespace io
 } // namespace hrengin
