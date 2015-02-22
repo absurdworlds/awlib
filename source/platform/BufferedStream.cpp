@@ -14,23 +14,23 @@ namespace hrengin {
 namespace io {
 BufferedStream* createBufferedStream(ReadFile& source)
 {
-	// temporary hack
-	return new BufferedStream(&source);
+	// temporary hack                v
+	return new impl_::BufferedStream(&source);
 }
 
-BufferedStream::BufferedStream(ReadFile* source)
-: pos_(0), source_(source)
+impl_::BufferedStream::BufferedStream(ReadFile* source)
+	: pos_(0), source_(source)
 {
 	//TODO: may crash on file of zero length
 	source_->read(&cur_, 1);
 }
 
-BufferedStream::~BufferedStream()
+impl_::BufferedStream::~BufferedStream()
 {
 //	delete[] buffer_;
 }
 
-bool BufferedStream::getCurrent(char& c)
+bool impl_::BufferedStream::getCurrent(char& c)
 {
 	if(pos_ > source_->getSize()) {
 		c = 0;
@@ -41,7 +41,7 @@ bool BufferedStream::getCurrent(char& c)
 	return true;
 }
 
-bool BufferedStream::getNext(char& c)
+bool impl_::BufferedStream::getNext(char& c)
 {
 	pos_++;
 
@@ -57,7 +57,7 @@ bool BufferedStream::getNext(char& c)
 	return true;
 }
 
-u32 BufferedStream::getPos() const 
+u32 impl_::BufferedStream::getPos() const
 {
 	return pos_;
 }

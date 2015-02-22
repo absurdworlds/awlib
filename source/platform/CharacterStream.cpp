@@ -10,11 +10,32 @@
 
 namespace hrengin {
 namespace io {
-// todo: add 'copy' specifier
-
+// TODO: add 'copy' specifier // wait, what?
 CharacterStream* createCharacterStream(char const* source)
 {
 	return new impl_::CharacterStream(source);
+}
+
+bool impl_::CharacterStream::getCurrent(char& c)
+{
+	if(pos_ == 0xFFFFFFF) {
+		c = 0;
+		return false;
+	}
+	c = source_[pos_];
+	return true;
+}
+
+bool impl_::CharacterStream::getNext(char& c)
+{
+	++ pos_;
+	if(source_[pos_] == 0) {
+		c = 0;
+		pos_ = 0xFFFFFFF;
+		return false;
+	}
+	c = source_[pos_];
+	return true;
 }
 
 } //namespace io

@@ -14,7 +14,8 @@ namespace hrengin {
 namespace io {
 class ReadFile;
 
-class BufferedStream : public BufferedStream {
+namespace impl_ {
+class BufferedStream : public io::BufferedStream {
 public:
 	BufferedStream(ReadFile* source);
 	virtual ~BufferedStream();
@@ -28,7 +29,7 @@ private:
 	char cur_;
 	u32 pos_;
 };
-
-} //namespace io
-} //namespace hrengin
+} // namespace impl_
+} // namespace io
+} // namespace hrengin
 #endif//_hrengin_BufferedStream_
