@@ -12,7 +12,7 @@
 
 namespace hrengin {
 namespace io {
-class CReadFile;
+class ReadFile;
 
 //! Class defines an interface for buffered file stream
 class BufferedStream : public CharacterStream {
