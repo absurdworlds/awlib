@@ -6,24 +6,24 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_IHPKListWriter_
-#define _hrengin_IHPKListWriter_
+#ifndef _hrengin_HPKListWriter_
+#define _hrengin_HPKListWriter_
 #include <vector>
 
-#include <hrengin/itd/IHPKIndexWriter.h>
+#include <hrengin/itd/HPKIndexWriter.h>
 
-#include "CStringBank.h"
+#include "StringBank.h"
 
 namespace hrengin {
 namespace itd {
 /*!
  * Interface for building HPKA list index
  */
-class CHPKListWriter : public IHPKIndexWriter {
+class HPKListWriter : public HPKIndexWriter {
 public:
-	CHPKListWriter ();
+	HPKListWriter ();
 
-	virtual ~CHPKListWriter ();
+	virtual ~HPKListWriter ();
 
 	virtual void addFile (std::string const & path, u64 id);
 	virtual void write (std::ostream & target);
@@ -50,10 +50,10 @@ protected:
 		u64 filesNum;
 	};
 
-	CStringBank strings_;
+	StringBank strings_;
 	std::vector<ListEntry> index_;
 };
 
 } //namespace itd
 } //namespace hrengin
-#endif//_hrengin_IHPKListWriter_
+#endif//_hrengin_HPKListWriter_

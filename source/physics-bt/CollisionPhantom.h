@@ -6,25 +6,25 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_CCollisionPhantom_
-#define _hrengin_CCollisionPhantom_
+#ifndef _hrengin_CollisionPhantom_
+#define _hrengin_CollisionPhantom_
 
 #include <Bullet/btBulletDynamicsCommon.h>
 #include <Bullet/btBulletCollisionCommon.h>
 
 #include <hrengin/common/types.h>
-#include <hrengin/game/IEntity.h>
-#include <hrengin/physics/ICollisionPhantom.h>
-//#include <hrengin/physics/IPhysicsManager.h>
+#include <hrengin/game/Entity.h>
+#include <hrengin/physics/CollisionPhantom.h>
+//#include <hrengin/physics/PhysicsManager.h>
 
-#include "CCollisionObject.h"
+#include "CollisionObject.h"
 
 namespace hrengin {
 namespace physics {
 
-class CCollisionPhantom : public ICollisionPhantom {
+class CollisionPhantom : public CollisionPhantom {
 public:
-	CCollisionPhantom(btCollisionObject* object);
+	CollisionPhantom(btCollisionObject* object);
 
 	virtual void setPosition(Vector3d<f32> pos);
 	virtual void setRotation(Vector3d<f32> rot);
@@ -32,14 +32,14 @@ public:
 	virtual Vector3d<f32> getPosition() const;
 	virtual Vector3d<f32> getRotation() const;
 
-	virtual ICollisionObject::Details* getDetails()
+	virtual CollisionObject::Details* getDetails()
 	{
 		return &details_;
 	}
 protected:
-	ICollisionObject::Details details_;
+	CollisionObject::Details details_;
 };
 
 } // namespace physics
 } // namespace hrengin
-#endif//_hrengin_CCollisionPhantom_
+#endif//_hrengin_CollisionPhantom_

@@ -6,25 +6,25 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_CCharacterStream_
-#define _hrengin_CCharacterStream_
+#ifndef _hrengin_CharacterStream_
+#define _hrengin_CharacterStream_
 
 #include <hrengin/common/types.h>
-#include <hrengin/io/ICharacterStream.h>
+#include <hrengin/io/CharacterStream.h>
 
 namespace hrengin {
 namespace io {
 
-class IReadFile;
+class ReadFile;
 
-class CCharacterStream : public ICharacterStream {
+class CharacterStream : public CharacterStream {
 public:
-	CCharacterStream(char const* source)
+	CharacterStream(char const* source)
 		: source_(source), pos_(0)
 	{
 
 	}
-	~CCharacterStream()
+	~CharacterStream()
 	{
 	}
 
@@ -60,4 +60,4 @@ private:
 
 } //namespace io
 } //namespace hrengin
-#endif//_hrengin_CCharacterStream_
+#endif//_hrengin_CharacterStream_

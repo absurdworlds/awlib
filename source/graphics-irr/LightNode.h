@@ -6,32 +6,32 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_CLightNode_
-#define _hrengin_CLightNode_
+#ifndef _hrengin_LightNode_
+#define _hrengin_LightNode_
 
-#include <hrengin/scene/ILightNode.h>
+#include <hrengin/scene/LightNode.h>
 
 namespace irr {
 namespace scene {
-class ILightSceneNode;
+class LightSceneNode;
 }
 }
 
 namespace hrengin {
 namespace scene {
-class CSceneManager;
-class CIrrDummyNode;
+class SceneManager;
+class IrrDummyNode;
 
-class CLightNode : public ILightNode {
+class LightNode : public LightNode {
 public:
-	CLightNode (CSceneManager* sceneManager,
+	LightNode (SceneManager* sceneManager,
 		irr::scene::ILightSceneNode* lightNode);
-	virtual ~CLightNode ();
+	virtual ~LightNode ();
 protected:
-	CIrrDummyNode* dummy_;
+	IrrDummyNode* dummy_;
 	irr::scene::ILightSceneNode* node_;
 };
 
 } // namespace graphics
 } // namespace hrengin
-#endif//_hrengin_CLightNode_
+#endif//_hrengin_LightNode_

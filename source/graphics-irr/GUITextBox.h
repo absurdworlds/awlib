@@ -6,24 +6,24 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_CGUITextBox_
-#define _hrengin_CGUITextBox_
+#ifndef _hrengin_GUITextBox_
+#define _hrengin_GUITextBox_
 
-#include <hrengin/gui/IGUITextBox.h>
+#include <hrengin/gui/GUITextBox.h>
 
 namespace irr {
 namespace gui {
-class IGUIElement;
+class GUIElement;
 }
 }
 
 namespace hrengin {
 namespace gui {
 
-class CGUITextBox : public IGUITextBox {
+class GUITextBox : public GUITextBox {
 public:
-	CGUITextBox(irr::gui::IGUIElement* elem);
-	virtual ~CGUITextBox();
+	GUITextBox(irr::gui::IGUIElement* elem);
+	virtual ~GUITextBox();
 
 	virtual u32 getId() const;
 	virtual u32 getParentId() const;
@@ -42,5 +42,4 @@ private:
 
 } // namespace gui
 } // namespace hrengin
-
-#endif //_hrengin_CGUITextBox_
+#endif //_hrengin_GUITextBox_

@@ -9,27 +9,27 @@
  */
 #include <stdio.h>
 
-#include <hrengin/core/ILogger.h>
+#include <hrengin/core/Logger.h>
 
-#include <hrengin/io/CWriteFile.h>
+#include <hrengin/io/WriteFile.h>
 
 namespace hrengin {
 namespace io {
 
-CWriteFile::CWriteFile (std::string const& path, bool append)
-	: IFile(path)
+WriteFile::WriteFile (std::string const& path, bool append)
+	: File(path)
 {
 	this->open(append);
 }
 
-CWriteFile::~CWriteFile ()
+WriteFile::~WriteFile ()
 {
 	if(isOpen()) {
 		fclose(file_);
 	}
 }
 
-void CWriteFile::open (bool append)
+void WriteFile::open (bool append)
 {
 	if (path_.size() == 0) {
 		return;
@@ -49,7 +49,7 @@ void CWriteFile::open (bool append)
 	}
 }
 
-i32 CWriteFile::write (void const* buffer, u32 size)
+i32 WriteFile::write (void const* buffer, u32 size)
 {
 	if (!isOpen()) {
 		return -1;
@@ -58,26 +58,26 @@ i32 CWriteFile::write (void const* buffer, u32 size)
 	return i32(fwrite(buffer, 1, size, file_));
 }
 
-i32 CWriteFile::seek (i32 offset, bool relative)
+i32 WriteFile::seek (i32 offset, bool relative)
 {
 	if (!isOpen()) {
 		return -1;
 	}
 
-	return fseek(file_, offset, relative ? SEEK_CUR : SEEK_SET);
+	return fseek(file_, offset, relative ? SEEK_UR : SEEK_SET);
 }
 
-u32 CWriteFile::tell () const
+u32 WriteFile::tell () const
 {
 	return ftell(file_);
 }
 
-u32 CWriteFile::getSize () const
+u32 WriteFile::getSize () const
 {
 	return size_;
 }
 
-std::string const& CWriteFile::getPath () const
+std::string const& WriteFile::getPath () const
 {
 	return path_;
 }

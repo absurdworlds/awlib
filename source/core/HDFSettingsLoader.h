@@ -6,36 +6,36 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_CHDFSettingsLoader_
-#define _hrengin_CHDFSettingsLoader_
+#ifndef _hrengin_HDFSettingsLoader_
+#define _hrengin_HDFSettingsLoader_
 #include <hrengin/resources/default_settings.h>
-#include <hrengin/io/CReadFile.h>
-#include <hrengin/io/IBufferedStream.h>
-#include <hrengin/hdf/IHDFParser.h>
+#include <hrengin/io/ReadFile.h>
+#include <hrengin/io/BufferedStream.h>
+#include <hrengin/hdf/HDFParser.h>
 
-#include <hrengin/core/ISettingsLoader.h>
+#include <hrengin/core/SettingsLoader.h>
 
 namespace hrengin {
 namespace core {
 
-class CHDFSettingsLoader : public ISettingsLoader {
+class HDFSettingsLoader : public SettingsLoader {
 public:
-	CHDFSettingsLoader (io::CReadFile & file, ISettingsManager & manager);
-	virtual ~CHDFSettingsLoader ()
+	HDFSettingsLoader (io::ReadFile & file, SettingsManager & manager);
+	virtual ~HDFSettingsLoader ()
 	{
 	}
 
 	virtual void loadSettings ();
 
 protected:
-	void parseSettings (hdf::IHDFParser * hdf);
+	void parseSettings (hdf::HDFParser * hdf);
 
 private:
 	//std::string hdfFile_;
-	io::CReadFile & file_;
-	ISettingsManager & manager_;
+	io::ReadFile & file_;
+	SettingsManager & manager_;
 };
 
 } // namespace core
 } // namespace hrengin
-#endif//_hrengin_CHDFSettingsLoader_
+#endif//_hrengin_HDFSettingsLoader_

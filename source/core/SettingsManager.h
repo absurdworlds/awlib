@@ -6,21 +6,21 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_CSettingsManager_
-#define _hrengin_CSettingsManager_
+#ifndef _hrengin_SettingsManager_
+#define _hrengin_SettingsManager_
 #include <map>
 
-#include <hrengin/core/ISettingsManager.h>
+#include <hrengin/core/SettingsManager.h>
 
 #include <hrengin/hdf/hdf_value.h>
 
 namespace hrengin {
 namespace core {
 
-class CSettingsManager : public ISettingsManager {
+class SettingsManager : public SettingsManager {
 public:
-	CSettingsManager();
-	virtual ~CSettingsManager()
+	SettingsManager();
+	virtual ~SettingsManager()
 	{
 	}
 
@@ -49,4 +49,4 @@ private:
 
 } // namespace core
 } // namespace hrengin
-#endif//_hrengin_CSettingsManager_
+#endif//_hrengin_SettingsManager_

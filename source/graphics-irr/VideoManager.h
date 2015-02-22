@@ -1,70 +1,70 @@
 /*
-   Copyright (C) 2014  absurdworlds
-
-   License LGPLv3-only:
-   GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
-   This is free software: you are free to change and redistribute it.
-   There is NO WARRANTY, to the extent permitted by law.
+ * Copyright (C) 2014  absurdworlds
+ *
+ * License LGPLv3-only:
+ * GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
+ * This is free software: you are free to change and redistribute it.
+ * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_CVideoManager_
-#define _hrengin_CVideoManager_
+#ifndef _hrengin_VideoManager_
+#define _hrengin_VideoManager_
 
 #include <vector>
 
-#include <hrengin/gui/IGUIManager.h>
+#include <hrengin/gui/GUIManager.h>
 
-#include <hrengin/scene/ISceneManager.h>
+#include <hrengin/scene/SceneManager.h>
 
-#include <hrengin/graphics/IVideoManager.h>
-#include <hrengin/graphics/IRenderingDevice.h>
+#include <hrengin/graphics/VideoManager.h>
+#include <hrengin/graphics/RenderingDevice.h>
 
-#include "CVisNode.h"
+#include "VisNode.h"
 
 namespace irr {
 class IrrlichtDevice;
 namespace video {
-class IVideoDriver;
+class VideoDriver;
 }
 namespace scene {
-class ISceneManager;
-class IAnimatedMesh;
-class ISceneCollisionManager;
+class SceneManager;
+class AnimatedMesh;
+class SceneCollisionManager;
 }
 } // namespace irr
 
 namespace hrengin {
 namespace gui {
-class CGUIManager;
+class GUIManager;
 }
 
 namespace graphics {
-class CVideoManager : public IVideoManager {
-friend class CEncore;
-friend class CGUIManager;
+class VideoManager : public VideoManager {
+friend class Encore;
+friend class GUIManager;
 public:
-	CVideoManager(core::ISettingsManager* settings);
-	virtual ~CVideoManager();
+	VideoManager(core::SettingsManager* settings);
+	virtual ~VideoManager();
 	
 	virtual bool step();
 	virtual void wait();
 
 	virtual bool isWindowActive();
 
-	virtual IRenderingDevice* getRenderingDevice() const;
-	virtual scene::ISceneManager* getSceneManager() const;
-	virtual gui::IGUIManager* getGUIManager() const;
+	virtual RenderingDevice* getRenderingDevice() const;
+	virtual scene::SceneManager* getSceneManager() const;
+	virtual gui::GUIManager* getGUIManager() const;
 
-	//virtual IMesh* loadMesh(const char * modelname);
+	//virtual Mesh* loadMesh(const char * modelname);
 	virtual u32 getTime();
 
 private:
 	irr::IrrlichtDevice* device_;
 
-	scene::ISceneManager* sceneManager_;
-	IRenderingDevice* renderer_;
-	gui::IGUIManager* guiManager_;
+	scene::SceneManager* sceneManager_;
+	RenderingDevice* renderer_;
+	gui::GUIManager* guiManager_;
 };
 
 } // namespace graphics
 } // namespace hrengin
-#endif//_hrengin_CVideoManager_
+#endif//_hrengin_VideoManager_

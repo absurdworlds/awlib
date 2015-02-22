@@ -11,27 +11,27 @@
 
 #include <Irrlicht/irrlicht.h>
 
-#include <hrengin/core/ISettingsManager.h>
+#include <hrengin/core/SettingsManager.h>
 
-#include "CVisNode.h"
-#include "CCameraNode.h"
-#include "CLightNode.h"
+#include "VisNode.h"
+#include "CameraNode.h"
+#include "LightNode.h"
 
-#include "CSceneManager.h"
-#include "CRenderingDevice.h"
-#include "CGuiManager.h"
+#include "SceneManager.h"
+#include "RenderingDevice.h"
+#include "GuiManager.h"
 
-#include "CVideoManager.h"
+#include "VideoManager.h"
 
 namespace hrengin {
 namespace graphics {
 
-IVideoManager* createVideoManager(core::ISettingsManager* settings)
+VideoManager* createVideoManager(core::SettingsManager* settings)
 {
-	return new CVideoManager(settings);
+	return new VideoManager(settings);
 }
 
-CVideoManager::CVideoManager(core::ISettingsManager* settings)
+VideoManager::VideoManager(core::SettingsManager* settings)
 {
 	i32 resolutionX = 1066;
 	i32 resolutionY = 600;
@@ -45,44 +45,44 @@ CVideoManager::CVideoManager(core::ISettingsManager* settings)
 
 	device_->setWindowCaption(L"hrengin A - Irrlicht 1.8.1");
 
-	renderer_ = new CRenderingDevice(device_->getVideoDriver());
-	sceneManager_ = new scene::CSceneManager(device_->getSceneManager(), renderer_, device_);
-	guiManager_ = new gui::CGUIManager(device_->getGUIEnvironment(), device_);
+	renderer_ = new RenderingDevice(device_->getVideoDriver());
+	sceneManager_ = new scene::SceneManager(device_->getSceneManager(), renderer_, device_);
+	guiManager_ = new gui::GUIManager(device_->getGUIEnvironment(), device_);
 
 #ifdef HR_WINDOWS
 	settings->setValue("platform.win32.wndHandle", reinterpret_cast<i32>(device_->getVideoDriver()->getExposedVideoData().OpenGLWin32.HWnd));
 #endif
 }
 
-CVideoManager::~CVideoManager() 
+VideoManager::~VideoManager() 
 {
 	device_->drop();
 };
 
 
-IRenderingDevice* CVideoManager::getRenderingDevice() const
+RenderingDevice* VideoManager::getRenderingDevice() const
 {
 	return renderer_;
 }
 
-scene::ISceneManager* CVideoManager::getSceneManager() const
+scene::SceneManager* VideoManager::getSceneManager() const
 {
 	return sceneManager_;
 }
 
 
-gui::IGUIManager* CVideoManager::getGUIManager() const
+gui::GUIManager* VideoManager::getGUIManager() const
 {
 	return guiManager_;
 }
 
-u32 CVideoManager::getTime()
+u32 VideoManager::getTime()
 {
 	static irr::ITimer* timer(device_->getTimer());
 	return timer->getTime();
 }
 
-bool CVideoManager::step()
+bool VideoManager::step()
 {
 	if (device_->run()) {
 		return true;
@@ -92,23 +92,23 @@ bool CVideoManager::step()
 	
 }
 
-void CVideoManager::wait()
+void VideoManager::wait()
 {
 	device_->yield();
 }
 
-bool CVideoManager::isWindowActive()
+bool VideoManager::isWindowActive()
 {
 	return device_->isWindowActive();
 }
 
 #if 0
-void CVideoManager::setWindowCaption(std::wstring newCaption)
+void VideoManager::setWindowCaption(std::wstring newCaption)
 {
 	caption_ = newCaption.c_str();
 }
 
-void CVideoManager::updateCaption()
+void VideoManager::updateCaption()
 {
 	irr::core::stringw addStr = "";
 	if(showFps_) {
@@ -131,7 +131,7 @@ void CVideoManager::updateCaption()
 	device->setWindowCaption((caption + addStr).c_str());
 }
 
-void CVideoManager::showCaptionFPS(bool showFps)
+void VideoManager::showCaptionFPS(bool showFps)
 {
 	showFps_ = showFps;
 }

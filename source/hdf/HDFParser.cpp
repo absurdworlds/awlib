@@ -9,10 +9,10 @@
 #include <stdio.h>
 
 #include <hrengin/common/types.h>
-#include <hrengin/io/IBufferedStream.h>
+#include <hrengin/io/BufferedStream.h>
 #include <hrengin/hdf/Type.h>
 
-#include "CHDFParser.h"
+#include "HDFParser.h"
 
 namespace hrengin {
 namespace hdf {
@@ -78,21 +78,21 @@ hdf::Type hdfConvertImpicitType(const HdfToken& token)
 	}
 }
 
-IHDFParser* createHDFParser(io::ICharacterStream* stream)
+HDFParser* createHDFParser(io::CharacterStream* stream)
 {
-	return new CHDFParser(stream);
+	return new HDFParser_(stream);
 }
 
-CHDFParser::CHDFParser(io::ICharacterStream* stream)
-	: depth_(0), state_(HDF_S_IDLE), stream_(stream)
-{
-}
-
-CHDFParser::~CHDFParser()
+HDFParser_::HDFParser_(io::CharacterStream* stream)
+	: depth_(0), state_(HDF_S_DLE), stream_(stream)
 {
 }
 
-bool CHDFParser::read() {
+HDFParser_::~HDFParser_()
+{
+}
+
+bool HDFParser_::read() {
 	char c;
 
 	stream_->getCurrent(c);
@@ -127,7 +127,7 @@ bool CHDFParser::read() {
 	return (state_ == HDF_S_PANIC) ? false : true;
 }
 
-HdfObjectType CHDFParser::getObjectType()
+HdfObjectType HDFParser_::getObjectType()
 {
 	if(state_ == HDF_S_PANIC) {
 		return HDF_OBJ_NULL;
@@ -158,10 +158,10 @@ HdfObjectType CHDFParser::getObjectType()
 		} else if(c == ']') {
 			stream_->getNext(c); 
 			depth_--;
-			state_ = HDF_S_IDLE;
+			state_ = HDF_S_DLE;
 			return HDF_OBJ_NODE_END;
 
-			/*if(state_ != HDF_S_IDLE) {
+			/*if(state_ != HDF_S_DLE) {
 				error(HDF_LOG_ERROR, "unexpected node-end");
 			} else {
 				depth_--;
@@ -171,8 +171,8 @@ HdfObjectType CHDFParser::getObjectType()
 			error(HDF_LOG_ERROR, "unexpected token: '!'");
 			return HDF_OBJ_NULL;
 			//}
-			//state_ = HDF_S_CMD_BEGIN;
-			//return HDF_OBJ_CMD;
+			//state_ = HDF_S_MD_BEGIN;
+			//return HDF_OBJ_MD;
 		} else {
 			std::string msg("invalid character: ");
 			msg += c;
@@ -182,7 +182,7 @@ HdfObjectType CHDFParser::getObjectType()
 	}
 }
 
-void CHDFParser::getObjectName(std::string& name)
+void HDFParser_::getObjectName(std::string& name)
 {
 	if(state_ == HDF_S_PANIC) {
 		return;
@@ -190,7 +190,7 @@ void CHDFParser::getObjectName(std::string& name)
 
 	if(state_ == HDF_S_NODE_BEGIN) {
 		readName(name);
-		state_ = HDF_S_IDLE;
+		state_ = HDF_S_DLE;
 	} else if(state_ == HDF_S_VALUE_BEGIN) {
 		readValueName(name);
 		state_ = HDF_S_VALUE_DATA;
@@ -199,37 +199,37 @@ void CHDFParser::getObjectName(std::string& name)
 	}
 }
 
-void CHDFParser::readFloat(float& val)
+void HDFParser_::readFloat(float& val)
 {
 	readValue<f32>(val);
 }
-void CHDFParser::readFloat(double& val)
+void HDFParser_::readFloat(double& val)
 {
 	readValue<f64>(val);
 }
-void CHDFParser::readInt(u32& val)
+void HDFParser_::readInt(u32& val)
 {
 	readValue<u32>(val);
 }
-void CHDFParser::readInt(i32& val)
+void HDFParser_::readInt(i32& val)
 {
 	readValue<i32>(val);
 }
-void CHDFParser::readBool(bool& val)
+void HDFParser_::readBool(bool& val)
 {
 	readValue<bool>(val);
 }
-void CHDFParser::readString(std::string& val)
+void HDFParser_::readString(std::string& val)
 {
 	readValue<std::string>(val);
 }
-void CHDFParser::readVector3d(Vector3d<f32>& val)
+void HDFParser_::readVector3d(Vector3d<f32>& val)
 {
 	readValue<Vector3d<f32>>(val);
 }
 
 //TODO: rewrite those two properly
-void CHDFParser::skipValue() 
+void HDFParser_::skipValue() 
 {
 	HdfToken token;
 	hdf::Type type;
@@ -251,7 +251,7 @@ void CHDFParser::skipValue()
 	}
 }
 
-void CHDFParser::skipNode() 
+void HDFParser_::skipNode() 
 {
 	char c;
 
@@ -272,7 +272,7 @@ void CHDFParser::skipNode()
 	read();
 }
 
-void CHDFParser::error(hdf::ParserMessage type, std::string msg)
+void HDFParser_::error(hdf::ParserMessage type, std::string msg)
 {
 	errors_.push_back(msg);
 	printf("[HDF:%u]: %s\n",stream_->getPos(),msg.c_str());
@@ -283,9 +283,9 @@ void CHDFParser::error(hdf::ParserMessage type, std::string msg)
 }
 
 
-//void CHDFParser::skip(bool (*condition)(char))
+//void HDFParser_::skip(bool (*condition)(char))
 template<bool (*condition)(char)>
-void CHDFParser::skip()
+void HDFParser_::skip()
 {
 	char c;
 
@@ -301,22 +301,22 @@ inline bool notLineBreak(char c)
 	return c != '\n';
 }
 
-void CHDFParser::skipLine()
+void HDFParser_::skipLine()
 {
 	skip<notLineBreak>();
 }
 
-void CHDFParser::skipWhitespace()
+void HDFParser_::skipWhitespace()
 {
 	skip<isWhitespace>();
 }
 
-void CHDFParser::skipInlineWhitespace()
+void HDFParser_::skipInlineWhitespace()
 {
 	skip<isInlineWhitespace>();
 }
 
-void CHDFParser::fastForward() {
+void HDFParser_::fastForward() {
 	char c;
 
 	stream_->getCurrent(c);
@@ -343,7 +343,7 @@ void CHDFParser::fastForward() {
 	}
 }
 
-bool CHDFParser::parseType(HdfToken& token) {
+bool HDFParser_::parseType(HdfToken& token) {
 	skipInlineWhitespace();
 
 	char c;
@@ -380,7 +380,7 @@ bool CHDFParser::parseType(HdfToken& token) {
 	}
 }
 
-void CHDFParser::readToken(HdfToken& token)
+void HDFParser_::readToken(HdfToken& token)
 {
 	fastForward();
 
@@ -402,7 +402,7 @@ void CHDFParser::readToken(HdfToken& token)
 	}
 }
 
-void CHDFParser::readStringToken(std::string& val) {
+void HDFParser_::readStringToken(std::string& val) {
 	val = "";
 	char c;
 
@@ -426,7 +426,7 @@ void CHDFParser::readStringToken(std::string& val) {
 	stream_->getNext(c);
 }
 
-void CHDFParser::readNumber(std::string& val)
+void HDFParser_::readNumber(std::string& val)
 {
 	val = "";
 	char c;
@@ -442,7 +442,7 @@ void CHDFParser::readNumber(std::string& val)
 	}
 }
 
-void CHDFParser::readName(std::string& name, char stop)
+void HDFParser_::readName(std::string& name, char stop)
 {
 	name = "";
 	char c;
@@ -459,19 +459,19 @@ void CHDFParser::readName(std::string& name, char stop)
 	}
 }
 
-void CHDFParser::readValueName(std::string& name)
+void HDFParser_::readValueName(std::string& name)
 {
 	readName(name, '=');
 }
 
-void CHDFParser::readTypeName(std::string& name)
+void HDFParser_::readTypeName(std::string& name)
 {
 	readName(name, ':');
 }
 
 
 template<typename T> 
-void CHDFParser::readValue(T& var)
+void HDFParser_::readValue(T& var)
 {
 	HdfToken token;
 	hdf::Type type;
@@ -493,32 +493,32 @@ void CHDFParser::readValue(T& var)
 	}
 
 	convertValue<T>(token, var);
-	state_ = HDF_S_IDLE;
+	state_ = HDF_S_DLE;
 }
 
 // TODO: make helper class to reduce almost duplicate functions
 
 template<typename T>
-void CHDFParser::convertValue(HdfToken& token, T& val)
+void HDFParser_::convertValue(HdfToken& token, T& val)
 {
 	// should never get this error
 	error(HDF_LOG_ERROR, "unknown type");
 }
 
 template<>
-void CHDFParser::convertValue(HdfToken& token, f32& val)
+void HDFParser_::convertValue(HdfToken& token, f32& val)
 {	
 	val = strtof(token.value.c_str(), 0);
 }
 
 template<>
-void CHDFParser::convertValue(HdfToken& token, f64& val)
+void HDFParser_::convertValue(HdfToken& token, f64& val)
 {
 	val = strtod(token.value.c_str(), 0);
 }
 
 template<>
-void CHDFParser::convertValue(HdfToken& token, Vector3d<f32>& val)
+void HDFParser_::convertValue(HdfToken& token, Vector3d<f32>& val)
 {
 	val[0] = strtod(token.value.c_str(), 0);
 
@@ -532,25 +532,25 @@ void CHDFParser::convertValue(HdfToken& token, Vector3d<f32>& val)
 }
 
 template<>
-void CHDFParser::convertValue(HdfToken& token, std::string& val)
+void HDFParser_::convertValue(HdfToken& token, std::string& val)
 {	
 	val = token.value;
 }
 
 template<>
-void CHDFParser::convertValue(HdfToken& token, u32& val)
+void HDFParser_::convertValue(HdfToken& token, u32& val)
 {	
 	val = strtoul(token.value.c_str(), 0, 10);
 }
 
 template<>
-void CHDFParser::convertValue(HdfToken& token, i32& val)
+void HDFParser_::convertValue(HdfToken& token, i32& val)
 {	
 	val = strtol(token.value.c_str(), 0, 10);
 }
 
 template<>
-void CHDFParser::convertValue(HdfToken& token, bool& val)
+void HDFParser_::convertValue(HdfToken& token, bool& val)
 {
 	if(token.value == "true" || token.value == "1") {
 		val = true;
@@ -563,7 +563,7 @@ void CHDFParser::convertValue(HdfToken& token, bool& val)
 
 
 // todo: rewrite
-void CHDFParser::processCommand() {
+void HDFParser_::processCommand() {
 	HdfToken token;
 
 	char c;

@@ -6,49 +6,49 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_CBulletPhysics_
-#define _hrengin_CBulletPhysics_
+#ifndef _hrengin_BulletPhysics_
+#define _hrengin_BulletPhysics_
 #include <map>
 #include <string>
 
 #include <btBulletDynamicsCommon.h>
 #include <btBulletCollisionCommon.h>
 
-#include <hrengin/physics/IPhysicsManager.h>
+#include <hrengin/physics/PhysicsManager.h>
 
 namespace hrengin {
 struct Primitive;
 struct SMesh;
 
-class IModel;
+class Model;
 
 namespace physics {
-class CCollisionPhantom;
-class CRigidBody;
+class CollisionPhantom;
+class RigidBody;
 
-class CBulletPhysics : public IPhysicsManager {
+class BulletPhysics : public PhysicsManager {
 public:
-	CBulletPhysics();
-	virtual ~CBulletPhysics();
+	BulletPhysics();
+	virtual ~BulletPhysics();
 
 	virtual u32 loadModel(const char* modelName);
 
-	virtual IRigidBody* createBody(const u32 modelId, IRigidBody::RigidBodyConstructionInfo cInfo);
-	virtual IRigidBody* createBody(const char* modelName, IRigidBody::RigidBodyConstructionInfo cInfo);
+	virtual RigidBody* createBody(const u32 modelId, RigidBody::RigidBodyConstructionInfo cInfo);
+	virtual RigidBody* createBody(const char* modelName, RigidBody::RigidBodyConstructionInfo cInfo);
 
-	virtual ICollisionPhantom* createPhantom(const u32 modelId);
-	virtual ICollisionPhantom* createPhantom(const char* modelName);
+	virtual CollisionPhantom* createPhantom(const u32 modelId);
+	virtual CollisionPhantom* createPhantom(const char* modelName);
 
-	virtual IPhysicsWorld* createPhysicsWorld();
+	virtual PhysicsWorld* createPhysicsWorld();
 
-	virtual IDebugDrawer* createDebugDrawer(graphics::IRenderingDevice* renderer);
+	virtual DebugDrawer* createDebugDrawer(graphics::RenderingDevice* renderer);
 
 private:
-	virtual u32 addShape(IModel* model);
+	virtual u32 addShape(Model* model);
 	virtual btCollisionShape* createPrimitiveShape(Primitive shape);
 	//virtual btCollisionShape* createMeshShape(SMesh shape);
 
-	core::IModelLoader* modelLoader_;
+	core::ModelLoader* modelLoader_;
 
 	std::map<std::string,u32> models_;
 	btAlignedObjectArray<btCollisionShape*> collisionShapes_;
@@ -56,4 +56,4 @@ private:
 
 } // namespace physics
 } // namespace hrengin
-#endif//__HRENGIN_PHYSICS_CBulletPhysics_H__
+#endif//_hrengin_BulletPhysics__

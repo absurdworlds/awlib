@@ -1,21 +1,19 @@
 /*
- * Copyright (C) 2014  absurdworlds
+ * Copyright (C) 2014-2015  absurdworlds
  *
  * License LGPLv3-only:
  * GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-
 #include <thread>
 
-#include "CSound.h"
-
+#include "Sound.h"
 
 namespace hrengin {
 namespace audio {
 
-CSound::CSound(ALuint bufferHandle)
+ALSound::ALSound(ALuint bufferHandle)
 : pos_(), vel_() 
 {
 	alGenSources(1, &source_);
@@ -28,12 +26,12 @@ CSound::CSound(ALuint bufferHandle)
 	alSourcei (source_, AL_LOOPING, AL_FALSE);
 }
 
-CSound::~CSound()
+ALSound::~ALSound()
 {
 	alDeleteSources(1, &source_);
 }
 
-bool CSound::play()
+bool ALSound::play()
 {
 #if 0
 	// I realized that there is no need to use separate thread, because
@@ -42,7 +40,7 @@ bool CSound::play()
 
 	stopped_ = false;
 
-	std::thread playThread(&CSound::playThreaded, this);
+	std::thread playThread(&Sound::playThreaded, this);
 
 	playThread.detach();
 #endif
@@ -50,15 +48,14 @@ bool CSound::play()
 
 	alGetSourcei(source_, AL_SOURCE_STATE, &source_state);
 
-	if(source_state == AL_PLAYING) {
+	if(source_state == AL_PLAYING)
 		return false;
-	}
 
 	alSourcePlay(source_);
 	return true;
 }
 
-bool CSound::stop()
+bool ALSound::stop()
 {
 	alSourceStop(source_);
 #if 0
@@ -68,36 +65,35 @@ bool CSound::stop()
 	return true;
 }
 
-void CSound::move(Vector3d pos, f32 timeStep)
+void ALSound::move(Vector3d pos, f32 timeStep)
 {
-	vel_[0] = (pos.X - pos_[0]) / timeStep;
-	vel_[1] = (pos.Y - pos_[1]) / timeStep;
-	vel_[2] = (pos.Z - pos_[2]) / timeStep;
-	pos_[0] = pos.X;
-	pos_[1] = pos.Y;
-	pos_[2] = pos.Z;
+	vel_[0] = (pos[0] - pos_[0]) / timeStep;
+	vel_[1] = (pos[1] - pos_[1]) / timeStep;
+	vel_[2] = (pos[2] - pos_[2]) / timeStep;
+	pos_[0] = pos[0];
+	pos_[1] = pos[1];
+	pos_[2] = pos[2];
 
 	alSourcefv(source_, AL_POSITION, pos_);
 	alSourcefv(source_, AL_VELOCITY, vel_);
 }
 
-void CSound::setPosition(Vector3d pos)
+void ALSound::setPosition(Vector3d pos)
 {
 	vel_[0] = 0;
 	vel_[1] = 0;
 	vel_[2] = 0;
-	pos_[0] = pos.X;
-	pos_[1] = pos.Y;
-	pos_[2] = pos.Z;
+	pos_[0] = pos[0];
+	pos_[1] = pos[1];
+	pos_[2] = pos[2];
 
 	alSourcefv(source_, AL_POSITION, pos_);
 	alSourcefv(source_, AL_VELOCITY, vel_);
 }
 
-void CSound::playThreaded()
+void ALSound::playThreaded()
 {
 }
-
 
 } // namespace audio
 } // namespace hrengin

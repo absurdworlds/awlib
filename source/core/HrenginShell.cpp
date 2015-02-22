@@ -9,17 +9,17 @@
 #include <vector>
 #include <algorithm>
 
-#include "CHrenginShell.h"
+#include "HrenginShell.h"
 
 namespace hrengin {
 namespace core {
 
-CHrenginShell::CHrenginShell(ILogger* logger)
+HrenginShell::HrenginShell(Logger* logger)
 	: logger_(logger)
 {
 }
 
-void CHrenginShell::execute(std::string command)
+void HrenginShell::execute(std::string command)
 {
 	typedef std::string::size_type size_type;
 	if(command == "") {
@@ -43,7 +43,7 @@ void CHrenginShell::execute(std::string command)
 	if(cmdIter == commands_.end()) {
 		logger_->push("No command found: " + arg);
 	} else {
-		ICommand* cmd = cmdIter->second;
+		Command* cmd = cmdIter->second;
 
 		while(argEnd != std::string::npos) {
 			argStart = argEnd+1;

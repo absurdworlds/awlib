@@ -7,32 +7,32 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_CArgParser_
-#define _hrengin_CArgParser_
+#ifndef _hrengin_ArgumentParserImpl_
+#define _hrengin_ArgumentParserImpl_
 #include <deque>
 
-#include <hrengin/core/IArgParser.h>
+#include <hrengin/core/ArgumentParser.h>
 
 namespace hrengin {
 namespace core {
 
-class CArgParser : public IArgParser {
+class ArgumentParserImpl : public ArgumentParser {
 public:
-	CArgParser (char** argv);
-	virtual ~CArgParser ()
+	ArgumentParserImpl(char** argv);
+	virtual ~ArgumentParserImpl()
 	{
 	}
 
-	virtual i32 getNextArgument (ClineArg& tok);
+	virtual i32 getNextArgument (Argument& tok);
 private:
-	void parse (char** argv);
-	void parseToken (char* argv);
-	std::string readString (char* argv);
+	void parse(char** argv);
+	void parseToken(char* argv);
+	std::string readString(char* argv);
 
-	std::deque<ClineArg> tokens_;
+	std::deque<Argument> tokens_;
 	bool term_;
 };
 
 } //namespace core
 } //namespace hrengin
-#endif//_hrengin_IArgParser_
+#endif//_hrengin_ArgumentParserImpl_

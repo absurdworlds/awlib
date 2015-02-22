@@ -1,5 +1,4 @@
-/* This file is a part of hrengin library collection
- *
+/*
  * Copyright (C) 2014  absurdworlds
  *
  * License LGPLv3-only:
@@ -7,28 +6,28 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_IHPKHtableWriter_
-#define _hrengin_IHPKHtableWriter_
+#ifndef _hrengin_HPKHtableWriter_
+#define _hrengin_HPKHtableWriter_
 #include <vector>
 
 #include <hrengin/core/hash.h>
 
-#include "CHPKListWriter.h"
+#include "HPKListWriter.h"
 
 namespace hrengin {
 namespace itd {
 /*!
  * Interface for building HPKA hash table index
  */
-class CHPKHtableWriter : public CHPKListWriter {
+class HPKHtableWriter : public HPKListWriter {
 public:
-	CHPKHtableWriter ();
+	HPKHtableWriter ();
 
-	virtual ~CHPKHtableWriter ();
+	virtual ~HPKHtableWriter ();
 
 	virtual void write (std::ostream& target);
 private:
-	typedef CHPKListWriter::ListEntry ListEntry;
+	typedef HPKListWriter::ListEntry ListEntry;
 	struct HtableEntry {
 		HtableEntry ()
 			: entriesOffset(-1), fileListSize(0)
@@ -69,4 +68,4 @@ private:
 
 } //namespace itd
 } //namespace hrengin
-#endif//_hrengin_IHPKHtableWriter_
+#endif//_hrengin_HPKHtableWriter_

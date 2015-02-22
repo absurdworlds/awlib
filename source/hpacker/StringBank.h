@@ -1,5 +1,4 @@
-/* This file is a part of hrengin library collection
- *
+/*
  * Copyright (C) 2014  absurdworlds
  *
  * License LGPLv3-only:
@@ -7,8 +6,8 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_CStringBank_
-#define _hrengin_CStringBank_
+#ifndef _hrengin_StringBank_
+#define _hrengin_StringBank_
 #include <string>
 #include <vector>
 #include <ostream>
@@ -18,9 +17,9 @@
 namespace hrengin {
 namespace itd {
 
-class CStringBank {
+class StringBank {
 public:
-	CStringBank ();
+	StringBank ();
 	u64 add (std::string const & str);
 	void putStrings (std::ostream & target);
 
@@ -32,4 +31,4 @@ private:
 };
 } //namespace itd
 } //namespace hrengin
-#endif//_hrengin_CStringBank_
+#endif//_hrengin_StringBank_

@@ -4,7 +4,7 @@ ExternalIncludes = -I../../dependencies/include/
 ExternalLibraries =
 
 # Includes and objects
-Objects = CHDFParser.o 
+Objects = HDFParser.o 
 Includes = -I../../include $(ExternalIncludes)
 Libraries = $(ExternalLibraries)
 Defines = -D HR_MODULE_HDF

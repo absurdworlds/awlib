@@ -6,39 +6,39 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_CSceneManager_
-#define _hrengin_CSceneManager_
+#ifndef _hrengin_SceneManager_
+#define _hrengin_SceneManager_
 
 #include <vector>
 
 #include <hrengin/math/Vector3d.h>
 
-#include <hrengin/graphics/IRenderingDevice.h>
+#include <hrengin/graphics/RenderingDevice.h>
 
 #include <hrengin/scene/scene.h>
-#include <hrengin/scene/ISceneManager.h>
-#include <hrengin/scene/IVisNode.h>
-#include <hrengin/scene/ICameraNode.h>
-#include <hrengin/scene/ILightNode.h>
-#include <hrengin/scene/IEntityNode.h>
+#include <hrengin/scene/SceneManager.h>
+#include <hrengin/scene/VisNode.h>
+#include <hrengin/scene/CameraNode.h>
+#include <hrengin/scene/LightNode.h>
+#include <hrengin/scene/EntityNode.h>
 
 namespace irr {
 class IrrlichtDevice;
 namespace scene {
-class ISceneManager;
-class IAnimatedMesh;
-class ISceneCollisionManager;
-class ISceneNode;
+class SceneManager;
+class AnimatedMesh;
+class SceneCollisionManager;
+class SceneNode;
 }
 }
 
 namespace hrengin {
 namespace scene {
 //! Class to manage the scene graph
-class CSceneManager : public ISceneManager {
+class SceneManager : public SceneManager {
 public:
-	CSceneManager(irr::scene::ISceneManager* irrSceneManager,
-		graphics::IRenderingDevice* renderer,
+	SceneManager(irr::scene::ISceneManager* irrSceneManager,
+		graphics::RenderingDevice* renderer,
 		irr::IrrlichtDevice* device);
 
 	virtual void createScene();
@@ -47,13 +47,13 @@ public:
 
 	virtual void update();
 
-	virtual IVisNode* createMeshSceneNode(char const* meshname);
-	//virtual IVisNode* createMeshSceneNode(IMesh* mesh);
-	virtual ICameraNode* createCameraSceneNode();
-	virtual ILightNode* createLightSceneNode();
-	virtual IEntityNode* createEntitySceneNode(IEntity* entity);
+	virtual VisNode* createMeshSceneNode(char const* meshname);
+	//virtual VisNode* createMeshSceneNode(Mesh* mesh);
+	virtual CameraNode* createCameraSceneNode();
+	virtual LightNode* createLightSceneNode();
+	virtual EntityNode* createEntitySceneNode(Entity* entity);
 private:
-	std::vector<INode*> NodeList;
+	std::vector<Node*> NodeList;
 	
 	irr::IrrlichtDevice* device_;
 	irr::scene::ISceneManager*          scnmgr;
@@ -65,4 +65,4 @@ public:
 
 } // namespace graphics
 } // namespace hrengin
-#endif//_hrengin_CSceneManager_
+#endif//_hrengin_SceneManager_

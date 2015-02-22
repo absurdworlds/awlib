@@ -11,7 +11,7 @@
 
 #include <btBulletCollisionCommon.h>
 
-#include <hrengin/physics/IMotionState.h>
+#include <hrengin/physics/MotionState.h>
 
 #include "hrToBullet.h"
 
@@ -19,11 +19,11 @@ namespace hrengin {
 namespace physics {
 
 struct CustomMotionState : public btMotionState {
-	IMotionState* motionState;
+	MotionState* motionState;
 	btTransform centerOfMassOffset;
 	btTransform startWorldTrans;
 
-	CustomMotionState (IMotionState* motionState,
+	CustomMotionState (MotionState* motionState,
 		btTransform const& startTrans = btTransform::getIdentity(),
 		btTransform const& centerOfMass = btTransform::getIdentity())
 		: startWorldTrans(startTrans), centerOfMassOffset(centerOfMass),

@@ -5,7 +5,7 @@ ExternalLibraries =
 include ../../Makefile
 
 # Includes and objects
-Objects = CSoundManager.o CSound.o
+Objects = SoundManager.o Sound.o
 Includes = -I../../include $(ExternalIncludes)
 Libraries = $(ExternalLibraries)
 Defines = -D HR_MODULE_SOUND

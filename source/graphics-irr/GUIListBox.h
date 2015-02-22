@@ -6,24 +6,24 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_CGUIListBox_
-#define _hrengin_CGUIListBox_
+#ifndef _hrengin_GUIListBox_
+#define _hrengin_GUIListBox_
 
-#include <hrengin/gui/IGUIListBox.h>
+#include <hrengin/gui/GUIListBox.h>
 
 namespace irr {
 namespace gui {
-class IGUIListBox;
+class GUIListBox;
 }
 }
 
 namespace hrengin {
 namespace gui {
 
-class CGUIListBox : public IGUIListBox {
+class GUIListBox : public GUIListBox {
 public:
-	CGUIListBox(irr::gui::IGUIListBox* elem);
-	virtual ~CGUIListBox();
+	GUIListBox(irr::gui::IGUIListBox* elem);
+	virtual ~GUIListBox();
 
 	virtual u32 getId() const;
 	virtual u32 getParentId() const;
@@ -46,4 +46,4 @@ private:
 
 } // namespace gui
 } // namespace hrengin
-#endif //_hrengin_CGUIListBox_
+#endif //_hrengin_GUIListBox_

@@ -6,41 +6,41 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_CVisNode_
-#define _hrengin_CVisNode_
+#ifndef _hrengin_VisNode_
+#define _hrengin_VisNode_
 
 #include <hrengin/common/types.h>
 
-#include <hrengin/graphics/IMesh.h>
-#include <hrengin/scene/IVisNode.h>
+#include <hrengin/graphics/Mesh.h>
+#include <hrengin/scene/VisNode.h>
 
 namespace irr {
 namespace scene {
-class IAnimatedMeshSceneNode;
+class AnimatedMeshSceneNode;
 }
 }
 
 namespace hrengin {
 namespace scene {
-class CSceneManager;
-class CIrrDummyNode;
+class SceneManager;
+class IrrDummyNode;
 
-class CVisNode : public IVisNode {
+class VisNode : public VisNode {
 public:
-	CVisNode (CSceneManager* sceneManager,
+	VisNode (SceneManager* sceneManager,
 		irr::scene::IAnimatedMeshSceneNode* meshNode);
-	virtual ~CVisNode ();
+	virtual ~VisNode ();
 
-	//virtual void setMesh(IMesh* mesh);
+	//virtual void setMesh(Mesh* mesh);
 	virtual void setMesh (char const* mesh);
 
 private:
-	CSceneManager* sceneManager_;
+	SceneManager* sceneManager_;
 
-	CIrrDummyNode* dummy_;
+	IrrDummyNode* dummy_;
 	irr::scene::IAnimatedMeshSceneNode* meshNode_;
 };
 
 } // namespace scene
 } // namespace hrengin
-#endif//_hrengin_CVisNode_
+#endif//_hrengin_VisNode_

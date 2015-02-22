@@ -6,35 +6,35 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_CCameraNode_
-#define _hrengin_CCameraNode_
+#ifndef _hrengin_CameraNode_
+#define _hrengin_CameraNode_
 
-#include <hrengin/graphics/IVideoManager.h>
+#include <hrengin/graphics/VideoManager.h>
 
-#include <hrengin/scene/ISceneNode.h>
-#include <hrengin/scene/ICameraNode.h>
+#include <hrengin/scene/SceneNode.h>
+#include <hrengin/scene/CameraNode.h>
 
 namespace irr {
 class IrrlichtDevice;
 namespace scene {
-class ICameraSceneNode;
-class ISceneManager;
+class CameraSceneNode;
+class SceneManager;
 }
 }
 namespace hrengin {
 namespace scene {
-class CSceneManager;
-class CIrrDummyNode;
+class SceneManager;
+class IrrDummyNode;
 
-class CCameraNode : public ICameraNode {
+class CameraNode : public CameraNode {
 public:
-	CCameraNode(CSceneManager* sceneManager,
+	CameraNode(SceneManager* sceneManager,
 		irr::scene::ICameraSceneNode* camNode,
 		irr::scene::ISceneManager* irrScMgr,
 		irr::IrrlichtDevice* device);
-	virtual ~CCameraNode();
+	virtual ~CameraNode();
 
-	virtual void setTarget(INode* target);
+	virtual void setTarget(Node* target);
 	virtual void resetTarget();
 
 	virtual void setFOV(f64 fov);
@@ -46,10 +46,10 @@ private:
 	irr::IrrlichtDevice* device_;
 	irr::scene::ISceneManager* scmgr_;
 
-	CIrrDummyNode* dummy_;
+	IrrDummyNode* dummy_;
 	irr::scene::ICameraSceneNode* camera_;
 };
 
 } // namespace scene
 } // namespace hrengin
-#endif//_hrengin_CCameraNode_
+#endif//_hrengin_CameraNode_

@@ -1,5 +1,4 @@
-/* This file is a part of hrengin library collection
- *
+/*
  * Copyright (C) 2014  absurdworlds
  *
  * License LGPLv3-only:
@@ -7,23 +6,23 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_CItdPacker_
-#define _hrengin_CItdPacker_
+#ifndef _hrengin_ItdPacker_
+#define _hrengin_ItdPacker_
 #include <string>
 #include <vector>
 #include <fstream>
 
 #include <hrengin/common/types.h>
 #include <hrengin/itd/itd.h>
-#include <hrengin/itd/IHPKIndexWriter.h>
+#include <hrengin/itd/HPKIndexWriter.h>
 
 namespace hrengin {
 namespace itd {
 
-class CItdPacker {
+class ItdPacker {
 public:	
-	CItdPacker (std::string const& archive_name, bool verbose = false);
-	~CItdPacker ();
+	ItdPacker (std::string const& archive_name, bool verbose = false);
+	~ItdPacker ();
 
 	/*!
 	 * Add file to archive
@@ -58,4 +57,4 @@ private:
 };
 } // namespace itd
 } // namespace hrengin
-#endif//_hrengin_CItdPacker_
+#endif//_hrengin_ItdPacker_

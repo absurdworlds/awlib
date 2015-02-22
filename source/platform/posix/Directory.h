@@ -6,8 +6,8 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_CDirectory_
-#define _hrengin_CDirectory_
+#ifndef _hrengin_Directory_
+#define _hrengin_Directory_
 
 #include <stdio.h>
 #include <dirent.h>
@@ -15,15 +15,15 @@
 #include <string>
 #include <vector>
 
-#include <hrengin/io/IDirectory.h>
+#include <hrengin/io/Directory.h>
 
 namespace hrengin {
 namespace io {
 
-class CDirectory : public IDirectory {
+class Directory : public Directory {
 public:
-	CDirectory (std::string const& path);
-	virtual ~CDirectory ();
+	Directory (std::string const& path);
+	virtual ~Directory ();
 
 	virtual i32 read (Dirent& result);
 	virtual void seek (u32 offset);
@@ -46,4 +46,4 @@ private:
 
 } // namespace io
 } // namespace hrengin
-#endif//_hrengin_CDirectory_
+#endif//_hrengin_Directory_

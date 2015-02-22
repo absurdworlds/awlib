@@ -6,20 +6,20 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_CCollisionObject_
-#define _hrengin_CCollisionObject_
+#ifndef _hrengin_CollisionObject_
+#define _hrengin_CollisionObject_
 
 #include <btBulletDynamicsCommon.h>
 #include <btBulletCollisionCommon.h>
 
-#include <hrengin/physics/ICollisionObject.h>
+#include <hrengin/physics/CollisionObject.h>
 
 namespace hrengin {
 namespace physics {
 
 // internal implementation details
 
-class ICollisionObject::Details {
+class CollisionObject::Details {
 public:
 	Details(btCollisionObject* Object) : obj(Object)
 	{
@@ -37,4 +37,4 @@ public:
 
 } // namespace physics
 } // namespace hrengin
-#endif//_hrengin_CCollisionObject_
+#endif//_hrengin_CollisionObject_

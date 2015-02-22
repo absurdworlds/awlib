@@ -6,28 +6,28 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_CRigidBody_
-#define _hrengin_CRigidBody_
+#ifndef _hrengin_RigidBody_
+#define _hrengin_RigidBody_
 #include <stdio.h>
 
 #include <Bullet/btBulletDynamicsCommon.h>
 #include <Bullet/btBulletCollisionCommon.h>
 
 #include <hrengin/common/types.h>
-#include <hrengin/game/IEntity.h>
-#include <hrengin/physics/IRigidBody.h>
-//#include <hrengin/physics/IPhysicsManager.h>
+#include <hrengin/game/Entity.h>
+#include <hrengin/physics/RigidBody.h>
+//#include <hrengin/physics/PhysicsManager.h>
 
-#include "CCollisionObject.h"
+#include "CollisionObject.h"
 
 namespace hrengin {
 namespace physics {
 
-class CRigidBody : public IRigidBody {
+class RigidBody : public RigidBody {
 public:
-	CRigidBody(btRigidBody* body);
+	RigidBody(btRigidBody* body);
 
-	virtual void setMotionState(IMotionState* motionState);
+	virtual void setMotionState(MotionState* motionState);
 
 	virtual void setPosition(Vector3d<f32> pos);
 	virtual void setRotation(Vector3d<f32> rot);
@@ -35,15 +35,14 @@ public:
 	virtual Vector3d<f32> getPosition() const;
 	virtual Vector3d<f32> getRotation() const;
 
-	virtual ICollisionObject::Details* getDetails()
+	virtual CollisionObject::Details* getDetails()
 	{
 		return &details_;
 	}
 protected:
-	ICollisionObject::Details details_;
+	CollisionObject::Details details_;
 };
 
 } // namespace physics
 } // namespace hrengin
-
-#endif//_hrengin_CRigidBody_
+#endif//_hrengin_RigidBody_

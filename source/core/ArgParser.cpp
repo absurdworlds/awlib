@@ -7,22 +7,22 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#include "CArgParser.h"
+#include "ArgumentParser.h"
 
 namespace hrengin {
 namespace core {
-IArgParser* createArgParser (char** argv)
+ArgumentParser* createArgumentParser(char** argv)
 {
-	return new CArgParser(argv);
+	return new ArgumentParser_(argv);
 }
 
-CArgParser::CArgParser(char** argv)
+ArgumentParser_::ArgumentParser_(char** argv)
 	: term_(false)
 {
 	parse(argv);
 }
 
-i32 CArgParser::getNextArgument (ClineArg& tok)
+i32 ArgumentParser_::getNextArgument(Argument& tok)
 {
 	if(!tokens_.empty()) {
 		tok = tokens_.back();
@@ -31,18 +31,18 @@ i32 CArgParser::getNextArgument (ClineArg& tok)
 	return tokens_.size();
 }
 
-void CArgParser::parse (char** argv)
+void ArgumentParser_::parse(char** argv)
 {
 	while(*argv != 0)
 		parseToken(*argv++);
 }
 
-void CArgParser::parseToken (char* argv)
+void ArgumentParser_::parseToken (char* argv)
 {
-	ClineArg tok;
+	Argument tok;
 
 	if(term_ || *argv != '-') {
-		tok.type = ClineArg::Operand;
+		tok.type = Argument::Operand;
 		tok.name = readString(argv);
 		tokens_.push_front(tok);
 		return;
@@ -51,21 +51,21 @@ void CArgParser::parseToken (char* argv)
 	++argv;
 
 	if(*argv == 0) {
-		tok.type = ClineArg::Operand;
+		tok.type = Argument::Operand;
 		tok.name = '-';
 	} else if (*argv == '-') {
 		++argv;
 		if(*argv == 0) {
-			tok.type = ClineArg::Delim;
+			tok.type = Argument::Delim;
 			tok.name = "--";
 			term_ = true;
 		} else {
-			tok.type = ClineArg::Option;
+			tok.type = Argument::Option;
 			tok.name = readString(argv);
 			tok.longOpt = true;
 		}
 	} else {
-		tok.type = ClineArg::Option;
+		tok.type = Argument::Option;
 		tok.name = *(argv++);
 		do {
 			tokens_.push_front(tok);
@@ -76,7 +76,7 @@ void CArgParser::parseToken (char* argv)
 	tokens_.push_front(tok);
 }
 
-std::string CArgParser::readString (char* argv)
+std::string ArgumentParser_::readString (char* argv)
 {
 	return std::string(argv);
 }

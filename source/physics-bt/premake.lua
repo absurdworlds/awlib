@@ -1,10 +1,10 @@
 
 SetupProject( "hrphysics", 
-	"CBulletPhysics.cpp", "CBulletPhysics.h",
-	"CCollisionPhantom.cpp", "CCollisionPhantom.h",
-	"CDebugDrawer.cpp", "CDebugDrawer.h",
-	"CPhysicsWorld.cpp", "CPhysicsWorld.h",
-	"CRigidBody.cpp", "CRigidBody.h",
+	"BulletPhysics.cpp", "BulletPhysics.h",
+	"CollisionPhantom.cpp", "CollisionPhantom.h",
+	"DebugDrawer.cpp", "DebugDrawer.h",
+	"PhysicsWorld.cpp", "PhysicsWorld.h",
+	"RigidBody.cpp", "RigidBody.h",
 	"hrToBullet.cpp", "hrToBullet.h");
 
 SetupDefines( "hrphysics", "Release",

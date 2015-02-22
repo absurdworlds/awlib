@@ -10,24 +10,24 @@
 
 #include <Irrlicht/IAnimatedMeshSceneNode.h>
 
-#include "CSceneManager.h"
-#include "CVisNode.h"
-#include "CIrrDummyNode.h"
+#include "SceneManager.h"
+#include "VisNode.h"
+#include "IrrDummyNode.h"
 
 #include "hrToIrr.h"
 
 namespace hrengin {
 namespace scene {
 
-CVisNode::CVisNode(CSceneManager* sceneManager, 
+VisNode::VisNode(SceneManager* sceneManager, 
 	irr::scene::IAnimatedMeshSceneNode* meshNode)
 	: meshNode_(meshNode)
 {
-	dummy_ = new CIrrDummyNode(this, meshNode->getSceneManager());
+	dummy_ = new IrrDummyNode(this, meshNode->getSceneManager());
 	dummy_->addChild(meshNode);
 }
 
-CVisNode::~CVisNode()
+VisNode::~VisNode()
 {
 	meshNode_->remove();
 	dummy_->remove();
@@ -35,8 +35,8 @@ CVisNode::~CVisNode()
 	//meshNode_->delete();
 }
 
-//void CVisNode::setMesh(IMesh* mesh)
-void CVisNode::setMesh(char const* mesh)
+//void VisNode::setMesh(Mesh* mesh)
+void VisNode::setMesh(char const* mesh)
 {
 	irr::scene::IAnimatedMesh* irrMesh = sceneManager_->convertMesh(mesh);
 	meshNode_->setMesh(irrMesh);

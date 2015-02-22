@@ -4,7 +4,7 @@ ExternalIncludes = -I../../dependencies/include/
 ExternalLibraries =
 
 # Includes and objects
-Objects = CEntityManager.o CEventManager.o CSimplePathfinder.o CWorld.o
+Objects = EntityManager.o EventManager.o SimplePathfinder.o World.o
 Includes = -I../../include $(ExternalIncludes)
 Libraries = $(ExternalLibraries)
 Defines = -D HR_MODULE_GAME -D HR_MODULE_AI

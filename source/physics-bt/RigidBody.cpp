@@ -9,19 +9,19 @@
 #include <hrengin/math/math.h>
 
 #include "hrToBullet.h"
-#include "CRigidBody.h"
+#include "RigidBody.h"
 #include "CustomMotionState.h"
 
 namespace hrengin {
 namespace physics {
 
-CRigidBody::CRigidBody(btRigidBody* body)
+RigidBody::RigidBody(btRigidBody* body)
 	: details_(body)
 {
 	details_.obj->setUserPointer(this);
 }
 
-void CRigidBody::setMotionState(IMotionState* motionState)
+void RigidBody::setMotionState(MotionState* motionState)
 {
 	btRigidBody* const body = (btRigidBody *)(details_.obj);
 
@@ -37,14 +37,14 @@ void CRigidBody::setMotionState(IMotionState* motionState)
 	body->setMotionState(ms);
 }
 
-void CRigidBody::setPosition(Vector3d<f32> pos)
+void RigidBody::setPosition(Vector3d<f32> pos)
 {
 	btTransform transform = details_.obj->getWorldTransform();
 	transform.setOrigin(toBullet(pos));
 	details_.obj->setWorldTransform(transform);
 };
 
-void CRigidBody::setRotation(Vector3d<f32> rot)
+void RigidBody::setRotation(Vector3d<f32> rot)
 {
 	btTransform transform = details_.obj->getWorldTransform();
 	rot *= math::RadiansInDegree;
@@ -52,14 +52,14 @@ void CRigidBody::setRotation(Vector3d<f32> rot)
 	details_.obj->setWorldTransform(transform);
 };
 
-Vector3d<f32> CRigidBody::getPosition() const
+Vector3d<f32> RigidBody::getPosition() const
 {
 	btVector3 pos = details_.obj->getWorldTransform().getOrigin();
 
 	return Vector3d<f32>(pos.getX(),pos.getY(),pos.getZ());
 };
 
-Vector3d<f32> CRigidBody::getRotation() const
+Vector3d<f32> RigidBody::getRotation() const
 {
 	btQuaternion rot = details_.obj->getWorldTransform().getRotation();
 

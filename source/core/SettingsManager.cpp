@@ -6,46 +6,46 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#include <hrengin/io/CReadFile.h>
-#include <hrengin/io/ICharacterStream.h>
-#include <hrengin/io/IBufferedStream.h>
+#include <hrengin/io/ReadFile.h>
+#include <hrengin/io/CharacterStream.h>
+#include <hrengin/io/BufferedStream.h>
 
-#include "CSettingsManager.h"
+#include "SettingsManager.h"
 
 namespace hrengin {
 namespace core {
 
-ISettingsManager* createSettingsManager()
+SettingsManager_* createSettingsManager()
 {
-	return new CSettingsManager();
+	return new SettingsManager_();
 }
 
-CSettingsManager::CSettingsManager()
+SettingsManager_::SettingsManager_()
 {
 }
 
-bool CSettingsManager::getValue(std::string key, bool& val)
+bool SettingsManager_::getValue(std::string key, bool& val)
 {
-	return getValueImpl<bool>(key,val);
+	return getValue_<bool>(key,val);
 }
 
-bool CSettingsManager::getValue(std::string key, i32& val)
+bool SettingsManager_::getValue(std::string key, i32& val)
 {
-	return getValueImpl<i32>(key,val);
+	return getValue_<i32>(key,val);
 }
 
-bool CSettingsManager::getValue(std::string key, f64& val)
+bool SettingsManager_::getValue(std::string key, f64& val)
 {
-	return getValueImpl<f64>(key,val);
+	return getValue_<f64>(key,val);
 }
 
-bool CSettingsManager::getValue(std::string key, std::string& val)
+bool SettingsManager_::getValue(std::string key, std::string& val)
 {
-	return getValueImpl<std::string>(key,val);
+	return getValue_<std::string>(key,val);
 }
 
 template<class T>
-bool CSettingsManager::getValueImpl(std::string key, T& val)
+bool SettingsManager_::getValueImpl(std::string key, T& val)
 {
 	auto found = indexMap_.find(key);
 
@@ -56,28 +56,28 @@ bool CSettingsManager::getValueImpl(std::string key, T& val)
 	return false;
 }
 
-bool CSettingsManager::setValue(std::string key, bool val)
+bool SettingsManager_::setValue(std::string key, bool val)
 {
-	return setValueImpl<bool>(key,val);
+	return setValue_<bool>(key,val);
 }
 
-bool CSettingsManager::setValue(std::string key, i32 val)
+bool SettingsManager_::setValue(std::string key, i32 val)
 {
-	return setValueImpl<i32>(key,val);
+	return setValue_<i32>(key,val);
 }
 
-bool CSettingsManager::setValue(std::string key, f64 val)
+bool SettingsManager_::setValue(std::string key, f64 val)
 {
-	return setValueImpl<f64>(key,val);
+	return setValue_<f64>(key,val);
 }
 
-bool CSettingsManager::setValue(std::string key, std::string val)
+bool SettingsManager_::setValue(std::string key, std::string val)
 {
-	return setValueImpl<std::string>(key,val);
+	return setValue_<std::string>(key,val);
 }
 
 template<class T>
-bool CSettingsManager::setValueImpl(std::string key, T val)
+bool SettingsManager_::setValueImpl(std::string key, T val)
 {
 	auto elem = indexMap_.insert(value_type(key,val));
 	bool exists = !elem.second;

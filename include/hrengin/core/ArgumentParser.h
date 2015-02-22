@@ -9,7 +9,6 @@
  */
 #ifndef _hrengin_ArgumentParser_
 #define _hrengin_ArgumentParser_
-
 #include <string>
 
 #include <hrengin/core/core.h>
@@ -23,11 +22,11 @@ namespace core {
  */
 struct Argument {
 	enum Type : u8 {
-		//! Short option ('-o')
+		//! Option ('-o') or ('--option')
 		Option,
 		//! Argument or operand
-		Argument,
-		Operand = Argument,
+		Arg,
+		Operand = Arg,
 		Delim
 	} type;
 	//! Is a long option

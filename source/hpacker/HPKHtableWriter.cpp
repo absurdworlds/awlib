@@ -1,5 +1,4 @@
-/* This file is a part of hrengin library collection
- *
+/*
  * Copyright (C) 2014  absurdworlds
  *
  * License LGPLv3-only:
@@ -9,12 +8,12 @@
  */
 #include <random>
 
-#include "CHPKHtableWriter.h"
+#include "HPKHtableWriter.h"
 
 namespace hrengin {
 namespace itd {
-CHPKHtableWriter::CHPKHtableWriter ()
-	: CHPKListWriter()
+HPKHtableWriter::HPKHtableWriter ()
+	: HPKListWriter()
 {
 	std::random_device rd;
 	std::mt19937_64 mt_eng(rd());
@@ -25,11 +24,11 @@ CHPKHtableWriter::CHPKHtableWriter ()
 	seed_.as64[1] = udist(mt_eng);
 }
 
-CHPKHtableWriter::~CHPKHtableWriter ()
+HPKHtableWriter::~HPKHtableWriter ()
 {
 }
 
-void CHPKHtableWriter::write (std::ostream& target)
+void HPKHtableWriter::write (std::ostream& target)
 {
 	Header header;
 	header.filesNum = index_.size();
@@ -82,4 +81,3 @@ void CHPKHtableWriter::write (std::ostream& target)
 
 } //namespace itd
 } //namespace hrengin
-

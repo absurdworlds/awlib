@@ -1,5 +1,4 @@
-/* This file is a part of hrengin library collection
- *
+/*
  * Copyright (C) 2014  absurdworlds
  *
  * License LGPLv3-only:
@@ -12,8 +11,8 @@
 #include <hrengin/common/types.h>
 #include <hrengin/itd/itd.h>
 
-#include "CItdPacker.h"
-#include "CItdReader.h"
+#include "ItdPacker.h"
+#include "ItdReader.h"
 
 // TODO: make Packer read directories on addition
 // TODO: refactor FileTree

@@ -10,46 +10,46 @@
 #include <hrengin/core/paths.h>
 #include <hrengin/common/stringutils.h>
 
-#include <hrengin/core/IFileSystem.h>
+#include <hrengin/core/FileSystem.h>
 
-#include <hrengin/io/CReadFile.h>
-#include <hrengin/io/IBufferedStream.h>
+#include <hrengin/io/ReadFile.h>
+#include <hrengin/io/BufferedStream.h>
 
-#include <hrengin/hdf/IHDFParser.h>
+#include <hrengin/hdf/HDFParser.h>
 
-#include <hrengin/core/IModel.h>
+#include <hrengin/core/Model.h>
 
-#include "CModelLoader.h"
+#include "ModelLoader.h"
 
 namespace hrengin {
 namespace core {
-bool hdfParseNode(hdf::IHDFParser* hdf, IModel* model, std::string curNode);
-bool hdfParseObject(hdf::IHDFParser* hdf, IModel* model, std::string curNode);
-bool hdfParseShapeNode(hdf::IHDFParser* hdf, IModel* model);
+bool hdfParseNode(hdf::HDFParser* hdf, Model* model, std::string curNode);
+bool hdfParseObject(hdf::HDFParser* hdf, Model* model, std::string curNode);
+bool hdfParseShapeNode(hdf::HDFParser* hdf, Model* model);
 
-IModelLoader* createModelLoader ()
+ModelLoader_* createModelLoader ()
 {
-	return new CModelLoader();
+	return new ModelLoader_();
 }
 
-IModel* CModelLoader::loadModel (char const* filename)
+Model* ModelLoader_::loadModel (char const* filename)
 {
 	std::string path = io::modelpath + filename;
 	std::string ext;
 
-	io::CReadFile file(path);
+	io::ReadFile file(path);
 
 	if (!file.isOpen()) {
 		return 0;
 	}
 
-	IModel* model = new IModel; // FIXME
+	Model* model = new Model; // FIXME
 
 	getFileExtension(ext, filename);
 
 	if(ext == "hndf" || ext == "hdf") {
 		io::ICharacterStream* stream = io::createBufferedStream(file);
-		hdf::IHDFParser* hdf = hdf::createHDFParser(stream);
+		hdf::HDFParser* hdf = hdf::createHDFParser(stream);
 
 		hdfParse(hdf, model);
 
@@ -60,7 +60,7 @@ IModel* CModelLoader::loadModel (char const* filename)
 	return model;
 }
 
-bool CModelLoader::hdfParse (hdf::IHDFParser* hdf, IModel* model)
+bool ModelLoader_::hdfParse (hdf::HDFParser* hdf, Model* model)
 {
 	std::string curNode;
 
@@ -74,7 +74,7 @@ bool CModelLoader::hdfParse (hdf::IHDFParser* hdf, IModel* model)
 	return hdfParseNode(hdf, model, curNode);
 }
 
-bool hdfParseNode(hdf::IHDFParser* hdf, IModel* model, std::string curNode)
+bool hdfParseNode(hdf::HDFParser* hdf, Model* model, std::string curNode)
 {
 	bool successful = true;
 
@@ -86,7 +86,7 @@ bool hdfParseNode(hdf::IHDFParser* hdf, IModel* model, std::string curNode)
 }
 
 // FIXME mess of nested if's
-bool hdfParseObject(hdf::IHDFParser* hdf, IModel* model, std::string curNode)
+bool hdfParseObject(hdf::HDFParser* hdf, Model* model, std::string curNode)
 {
 	bool successful = true;
 	hdf::HdfObjectType type = hdf->getObjectType();
@@ -123,7 +123,7 @@ bool hdfParseObject(hdf::IHDFParser* hdf, IModel* model, std::string curNode)
 	return successful;
 }
 
-bool hdfParseShapeNode(hdf::IHDFParser* hdf, IModel* model)
+bool hdfParseShapeNode(hdf::HDFParser* hdf, Model* model)
 {
 	hrengin::Primitive primitive;
 	//io::HdfObjectType type = hdf->getObjectType();

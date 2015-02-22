@@ -1,5 +1,4 @@
-/* This file is a part of hrengin library collection
- *
+/*
  * Copyright (C) 2014  absurdworlds
  *
  * License LGPLv3-only:
@@ -14,26 +13,26 @@
 #include <hrengin/platform/time.h>
 
 #include <hrengin/io/filesystem.h>
-#include <hrengin/io/IDirectory.h>
+#include <hrengin/io/Directory.h>
 
-#include "CItdPacker.h"
-#include "CHPKTreeWriter.h"
+#include "ItdPacker.h"
+#include "HPKTreeWriter.h"
 
 namespace hrengin {
 namespace itd {
-CItdPacker::CItdPacker (std::string const& archive_name, bool verbose)
+ItdPacker::ItdPacker (std::string const& archive_name, bool verbose)
 	: verbose_(verbose)
 {
 	archive_.open(archive_name, std::ofstream::binary);
 	index_.resize(2);
 }
 
-CItdPacker::~CItdPacker ()
+ItdPacker::~ItdPacker ()
 {
 	archive_.close();
 }
 
-void CItdPacker::addFile (std::string const& name)
+void ItdPacker::addFile (std::string const& name)
 {
 	if(checkFile(name, io::FM_Read) < 0) {
 		// log warning
@@ -60,14 +59,14 @@ void CItdPacker::addFile (std::string const& name)
 	}
 }
 
-void CItdPacker::addList (std::vector<std::string> const& files)
+void ItdPacker::addList (std::vector<std::string> const& files)
 {
 	for(auto const & filename : files) {
 		addFile(filename);
 	}
 }
 
-i32 CItdPacker::pack ()
+i32 ItdPacker::pack ()
 {
 	if(!archive_.is_open()) {
 		return -1;
@@ -80,12 +79,12 @@ i32 CItdPacker::pack ()
 	return 0;
 }
 
-void CItdPacker::buildIndex ()
+void ItdPacker::buildIndex ()
 {
 	std::ostringstream result;
 
 	{
-		std::unique_ptr<IHPKIndexWriter> index(new CHPKTreeWriter);
+		std::unique_ptr<HPKIndexWriter> index(new HPKTreeWriter);
 
 		for(size_t id = 0; id < fileList_.size(); ++id) {
 			index->addFile(fileList_[id], id + 2);
@@ -109,9 +108,9 @@ void CItdPacker::buildIndex ()
 	archive_.write(result.str().c_str(),index_[0].size);
 }
 
-i32 CItdPacker::addDir (std::string const& path)
+i32 ItdPacker::addDir (std::string const& path)
 {
-	io::IDirectory* dir = io::openDirectory(path);
+	io::Directory* dir = io::openDirectory(path);
 	if(!dir) {
 		return -1;
 	}
@@ -128,7 +127,7 @@ i32 CItdPacker::addDir (std::string const& path)
 	return 0;
 }
 
-void CItdPacker::writeHeader()
+void ItdPacker::writeHeader()
 {
 	itd::MainHeader main;
 
@@ -152,14 +151,14 @@ void CItdPacker::writeHeader()
 	archive_.write((char *)&second.padding, 32);
 }
 
-void CItdPacker::writeArchive () 
+void ItdPacker::writeArchive () 
 {
 	for(size_t id = 0; id < fileList_.size(); ++id) {
 		packFile(id + 2, fileList_[id]);
 	}
 }
 
-void CItdPacker::packFile (size_t id, std::string const& path)
+void ItdPacker::packFile (size_t id, std::string const& path)
 {
 	std::ifstream file(path, std::ifstream::binary);
 

@@ -6,26 +6,26 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#include "CItdReader.h"
+#include "ItdReader.h"
 
 namespace hrengin {
 namespace itd {
-CItdReader::CItdReader (std::string const& archive_name, bool verbose)
+ItdReader::ItdReader (std::string const& archive_name, bool verbose)
 {
 
 }
 
-std::vector<std::string> CItdReader::list (std::string prefix)
+std::vector<std::string> ItdReader::list (std::string prefix)
 {
 
 }
 
-std::vector<u8> CItdReader::getFileContents (u64 fileId)
+std::vector<u8> ItdReader::getFileContents (u64 fileId)
 {
 
 }
 
-std::vector<u8> CItdReader::getFileContents (std::string path)
+std::vector<u8> ItdReader::getFileContents (std::string path)
 {
 }
 

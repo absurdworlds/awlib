@@ -1,26 +1,26 @@
 /*
-   Copyright (C) 2014  absurdworlds
-
-   License LGPLv3-only:
-   GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
-   This is free software: you are free to change and redistribute it.
-   There is NO WARRANTY, to the extent permitted by law.
+ * Copyright (C) 2014  absurdworlds
+ *
+ * License LGPLv3-only:
+ * GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
+ * This is free software: you are free to change and redistribute it.
+ * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_IEntityNode_
-#define _hrengin_IEntityNode_
-#include <hrengin/scene/IEntityNode.h>
+#ifndef _hrengin_EntityNode_
+#define _hrengin_EntityNode_
+#include <hrengin/scene/EntityNode.h>
 
 namespace hrengin {
-class IEntity;
+class Entity;
 namespace scene {
 
-class CEntityNode : IEntityNode {
+class EntityNode : EntityNode {
 public:
-	CEntityNode(IEntity* entity);
-	virtual ~CEntityNode();
+	EntityNode(Entity* entity);
+	virtual ~EntityNode();
 private:
 };
 
 } // namespace scene
 } // namespace hrengin
-#endif//_hrengin_IEntityNode_
+#endif//_hrengin_EntityNode_

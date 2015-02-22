@@ -8,11 +8,11 @@
  */
 #include <Irrlicht/IrrlichtDevice.h>
 
-#include <hrengin/gui/IUserInputReceiver.h>
+#include <hrengin/gui/UserInputReceiver.h>
 
-#include "CVideoManager.h"
+#include "VideoManager.h"
 
-#include "CInputManager.h"
+#include "InputManager.h"
 
 namespace hrengin {
 namespace gui {
@@ -116,13 +116,13 @@ void convertEvent(const irr::SEvent& irrEvent, InputEvent& hrgEvent) {
 	}
 }
 
-CInputManager::CInputManager(irr::IrrlichtDevice* device)
+InputManager::InputManager(irr::IrrlichtDevice* device)
 {
 	device->setEventReceiver(this);
 	cursor_ = device->getCursorControl();
 }
 
-bool CInputManager::OnEvent(const irr::SEvent& event)
+bool InputManager::OnEvent(const irr::SEvent& event)
 {
 	InputEvent hrEvent; 
 	convertEvent(event, hrEvent);
@@ -131,7 +131,7 @@ bool CInputManager::OnEvent(const irr::SEvent& event)
 		return false;
 	}
 
-	for(std::forward_list<IUserInputReceiver*>::iterator it = receivers_.begin(); it != receivers_.end(); ++it) {
+	for(std::forward_list<UserInputReceiver*>::iterator it = receivers_.begin(); it != receivers_.end(); ++it) {
 		if((*it)->isEnabled()) {
 			(*it)->onUserInput(hrEvent);
 		}
@@ -141,13 +141,13 @@ bool CInputManager::OnEvent(const irr::SEvent& event)
 	return false;
 }
 
-bool CInputManager::registerReceiver(IUserInputReceiver* receiver)
+bool InputManager::registerReceiver(UserInputReceiver* receiver)
 {
 	receivers_.push_front(receiver);
 	return true;
 }
 
-bool CInputManager::unregisterReceiver(IUserInputReceiver* receiver)
+bool InputManager::unregisterReceiver(UserInputReceiver* receiver)
 {
 	//remove from mReceivers
 

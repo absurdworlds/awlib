@@ -6,21 +6,21 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_CIrrDummyNode_
-#define _hrengin_CIrrDummyNode_
+#ifndef _hrengin_IrrDummyNode_
+#define _hrengin_IrrDummyNode_
 #include <irrlicht/ISceneNode.h>
 #include <irrlicht/ISceneManager.h>
 
-#include <hrengin/scene/ISceneNode.h>
+#include <hrengin/scene/SceneNode.h>
 
 #include "hrToIrr.h"
 
 namespace hrengin {
 namespace scene {
 
-class CIrrDummyNode : public irr::scene::ISceneNode {
+class IrrDummyNode : public irr::scene::ISceneNode {
 public:
-	CIrrDummyNode (hrengin::scene::INode* node,
+	IrrDummyNode (hrengin::scene::INode* node,
 		irr::scene::ISceneManager* mgr)
 		: irr::scene::ISceneNode(mgr->getRootSceneNode(), mgr),
 		  node_(node)
@@ -28,7 +28,7 @@ public:
 
 	}
 
-	virtual void setParent (ISceneNode* newParent)
+	virtual void setParent (SceneNode* newParent)
 	{
 		// do not change parent, since parent system is a part of
 		// hrengin's own scene graph system
@@ -55,9 +55,9 @@ public:
 		AbsoluteTransformation = toIrr(node_->calculateAbsoluteTransform());
 	}
 private:
-	hrengin::scene::INode* node_;
+	hrengin::scene::Node* node_;
 };
 
 } // namespace scene
 } // namespace hrengin
-#endif//_hrengin_CIrrDummyNode_
+#endif//_hrengin_IrrDummyNode_

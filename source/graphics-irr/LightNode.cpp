@@ -8,25 +8,25 @@
  */
 #include <irrlicht/irrlicht.h>
 
-#include <hrengin/graphics/IVideoManager.h>
+#include <hrengin/graphics/VideoManager.h>
 
-#include "CVideoManager.h"
+#include "VideoManager.h"
 
-#include "CLightNode.h"
-#include "CIrrDummyNode.h"
+#include "LightNode.h"
+#include "IrrDummyNode.h"
 
 namespace hrengin {
 namespace scene {
 
-CLightNode::CLightNode (CSceneManager* sceneManager,
+LightNode::LightNode (SceneManager* sceneManager,
 	irr::scene::ILightSceneNode* lightNode)
 	: node_(lightNode)
 {
-	dummy_ = new CIrrDummyNode(this, node_->getSceneManager());
+	dummy_ = new IrrDummyNode(this, node_->getSceneManager());
 	dummy_->addChild(node_);
 }
 
-CLightNode::~CLightNode ()
+LightNode::~LightNode ()
 {
 	node_->remove();
 	dummy_->remove();

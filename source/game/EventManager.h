@@ -1,24 +1,24 @@
 /*
-   Copyright (C) 2014  absurdworlds
-
-   License LGPLv3-only:
-   GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
-   This is free software: you are free to change and redistribute it.
-   There is NO WARRANTY, to the extent permitted by law.
+ * Copyright (C) 2014  absurdworlds
+ *
+ * License LGPLv3-only:
+ * GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
+ * This is free software: you are free to change and redistribute it.
+ * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_CEventManager_
-#define _hrengin_CEventManager_
+#ifndef _hrengin_EventManager_
+#define _hrengin_EventManager_
 
 #include <vector>
 
 #include <hrengin/platform/time.h>
-#include <hrengin/game/IEventManager.h>
+#include <hrengin/game/EventManager.h>
 #include <hrengin/game/IThinking.h>
 
 namespace hrengin {
-class CEventManager : public IEventManager {
+class EventManager : public EventManager {
 public:
-	virtual ~CEventManager()
+	virtual ~EventManager()
 	{
 
 	}
@@ -46,4 +46,4 @@ private:
 };
 
 } // namespace hrengin
-#endif//_hrengin_CEventManager_
+#endif//_hrengin_EventManager_

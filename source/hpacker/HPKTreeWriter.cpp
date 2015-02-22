@@ -1,5 +1,4 @@
-/* This file is a part of hrengin library collection
- *
+/*
  * Copyright (C) 2014  absurdworlds
  *
  * License LGPLv3-only:
@@ -11,19 +10,19 @@
 
 #include <hrengin/common/stringutils.h>
 
-#include "CHPKTreeWriter.h"
+#include "HPKTreeWriter.h"
 
 namespace hrengin {
 namespace itd {
-CHPKTreeWriter::CHPKTreeWriter ()
+HPKTreeWriter::HPKTreeWriter ()
 {
 }
 
-CHPKTreeWriter::~CHPKTreeWriter ()
+HPKTreeWriter::~HPKTreeWriter ()
 {
 }
 
-void CHPKTreeWriter::addFile (std::string const& path, u64 id)
+void HPKTreeWriter::addFile (std::string const& path, u64 id)
 {
 	std::vector<std::string> dir;
 	std::string name;
@@ -35,7 +34,7 @@ void CHPKTreeWriter::addFile (std::string const& path, u64 id)
 	root_.add(dir, name, id, strings_);
 }
 
-void CHPKTreeWriter::write (std::ostream& target)
+void HPKTreeWriter::write (std::ostream& target)
 {
         u64 baseOffset = 32;
         root_.calcOffsets(baseOffset);
@@ -54,7 +53,7 @@ void CHPKTreeWriter::write (std::ostream& target)
 }
 
 void TreeNode::add (std::vector<std::string> path, std::string name, u64 id,
-		CStringBank & strings)
+		StringBank & strings)
 {
 	if(path.empty()) {
 		u64 nameOffset = strings.add(name);

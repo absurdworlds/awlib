@@ -1,32 +1,32 @@
-/**
-   Copyright (C) 2014  absurdworlds
-
-   License LGPLv3-only:
-   GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
-   This is free software: you are free to change and redistribute it.
-   There is NO WARRANTY, to the extent permitted by law.
+/*
+ * Copyright (C) 2014  absurdworlds
+ *
+ * License LGPLv3-only:
+ * GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
+ * This is free software: you are free to change and redistribute it.
+ * There is NO WARRANTY, to the extent permitted by law.
  */
-#include "CEntityManager.h"
+#include "EntityManager.h"
 
 namespace hrengin {
-HR_GAME_EXP IEntityManager* createEntityManager()
+HR_GAME_EXP EntityManager* createEntityManager()
 {
-	return new CEntityManager();
+	return new EntityManager_();
 }
 
-CEntityManager::CEntityManager()
+EntityManager_::EntityManager()
 {
 
 }
 
-void CEntityManager::doSync()
+void EntityManager_::doSync()
 {
-	for(std::deque<IEntity*>::iterator ent = entlist_.begin(); ent != entlist_.end(); ++ent) {
+	for(std::deque<Entity*>::iterator ent = entlist_.begin(); ent != entlist_.end(); ++ent) {
 		(*ent)->sync();
 	}
 }
 
-void CEntityManager::addEntity(IEntity* entity)
+void EntityManager_::addEntity(Entity* entity)
 {
 	if(freelist_.empty()) {
 		entlist_.push_back(entity);
@@ -37,7 +37,7 @@ void CEntityManager::addEntity(IEntity* entity)
 	}
 }
 
-void CEntityManager::deleteEntity(u32 entid)
+void EntityManager_::deleteEntity(u32 entid)
 {
 	delete entlist_[entid];
 	entlist_[entid] = &nullEntity;

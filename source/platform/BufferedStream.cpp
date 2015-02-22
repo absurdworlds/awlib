@@ -6,31 +6,31 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#include <hrengin/io/CReadFile.h>
+#include <hrengin/io/ReadFile.h>
 
-#include "CBufferedStream.h"
+#include "BufferedStream.h"
 
 namespace hrengin {
 namespace io {
-IBufferedStream* createBufferedStream(CReadFile& source)
+BufferedStream* createBufferedStream(ReadFile& source)
 {
 	// temporary hack
-	return new CBufferedStream(&source);
+	return new BufferedStream(&source);
 }
 
-CBufferedStream::CBufferedStream(CReadFile* source)
+BufferedStream::BufferedStream(ReadFile* source)
 : pos_(0), source_(source)
 {
 	//TODO: may crash on file of zero length
 	source_->read(&cur_, 1);
 }
 
-CBufferedStream::~CBufferedStream()
+BufferedStream::~BufferedStream()
 {
 //	delete[] buffer_;
 }
 
-bool CBufferedStream::getCurrent(u8& c)
+bool BufferedStream::getCurrent(u8& c)
 {
 	if(pos_ > source_->getSize()) {
 		c = 0;
@@ -41,7 +41,7 @@ bool CBufferedStream::getCurrent(u8& c)
 	return true;
 }
 
-bool CBufferedStream::getNext(u8& c)
+bool BufferedStream::getNext(u8& c)
 {
 	pos_++;
 
@@ -57,7 +57,7 @@ bool CBufferedStream::getNext(u8& c)
 	return true;
 }
 
-u32 CBufferedStream::getPos() const 
+u32 BufferedStream::getPos() const 
 {
 	return pos_;
 }

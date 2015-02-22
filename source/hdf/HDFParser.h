@@ -6,20 +6,20 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_CHDFParser_
-#define _hrengin_CHDFParser_
+#ifndef _hrengin_HDFParser_
+#define _hrengin_HDFParser_
 
 #include <string>
 #include <vector>
 
 #include <hrengin/common/types.h>
 #include <hrengin/hdf/hdf_value.h>
-#include <hrengin/hdf/IHDFParser.h>
+#include <hrengin/hdf/HDFParser.h>
 
 namespace hrengin {
 namespace hdf {
 enum HdfTokenType {
-	HDF_TOKEN_INVALID,
+	HDF_TOKEN_NVALID,
 	HDF_TOKEN_EOF,
 	HDF_TOKEN_NAME,
 	HDF_TOKEN_NUMBER,
@@ -31,10 +31,10 @@ struct HdfToken {
 	std::string value;
 };
 
-class CHDFParser : public IHDFParser {
+class HDFParser : public HDFParser {
 public:
-	CHDFParser(io::ICharacterStream* stream);
-	virtual ~CHDFParser();
+	HDFParser(io::CharacterStream* stream);
+	virtual ~HDFParser();
 
 	virtual void skipNode();
 	virtual void skipValue();
@@ -79,10 +79,10 @@ private:
 	void skip();
 
 	enum HdfParserState {
-		HDF_S_IDLE = 0,
+		HDF_S_DLE = 0,
 		HDF_S_OBJECT,
 		HDF_S_NODE_BEGIN,
-		HDF_S_CMD_BEGIN,
+		HDF_S_MD_BEGIN,
 		HDF_S_VALUE_BEGIN,
 		HDF_S_VALUE_DATA,
 		HDF_S_PANIC
@@ -92,12 +92,11 @@ private:
 
 	void processCommand();
 
-	io::ICharacterStream* stream_;
+	io::CharacterStream* stream_;
 
 	u32 depth_;
 };
 
 } //namespace io
 } //namespace hrengin
-
-#endif//_hrengin_CHDFParser_
+#endif//_hrengin_HDFParser_

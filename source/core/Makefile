@@ -4,9 +4,9 @@ ExternalIncludes = -I../../dependencies/include/
 ExternalLibraries =
 
 # Includes and objects
-Objects = CSettingsManager.o CHDFSettingsLoader.o CModelLoader.o \
-	  CFileSystem.o CLogger.o CHrenginShell.o \
-	  CArgParser.o MurmurHash3.o
+Objects = ArgParser.o MurmurHash3.o \
+	  SettingsManager.o HDFSettingsLoader.o ModelLoader.o \
+	  FileSystem.o Logger.o HrenginShell.o
 Includes = -I../../include $(ExternalIncludes)
 Libraries = $(ExternalLibraries)
 Defines = -D HR_MODULE_CORE

@@ -6,16 +6,16 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_CDebugDrawer_
-#define _hrengin_CDebugDrawer_
+#ifndef _hrengin_DebugDrawer_
+#define _hrengin_DebugDrawer_
 
 #include <Bullet/btBulletDynamicsCommon.h>
 #include <Bullet/btBulletCollisionCommon.h>
 
 #include <hrengin/common/types.h>
 
-#include <hrengin/physics/IDebugDrawer.h>
-#include "CPhysicsWorld.h"
+#include <hrengin/physics/DebugDrawer.h>
+#include "PhysicsWorld.h"
 
 namespace hrengin {
 namespace physics {
@@ -23,7 +23,7 @@ namespace physics {
 
 class DebugDraw : public btIDebugDraw {
 public:
-	DebugDraw(graphics::IRenderingDevice* renderer);
+	DebugDraw(graphics::RenderingDevice* renderer);
 
 	void drawLine(const btVector3& from, const btVector3& to,
 		const btVector3& color);
@@ -43,12 +43,12 @@ private:
 	DebugDraw(const DebugDraw& other) = delete;
 
 	int mode;
-	graphics::IRenderingDevice * vmgr_;
+	graphics::RenderingDevice * vmgr_;
 };
 
-class IDebugDrawer::Details {
+class DebugDrawer::Details {
 public:
-	Details(graphics::IRenderingDevice* renderer)
+	Details(graphics::RenderingDevice* renderer)
 		//: drawer(renderer)
 	{
 		debugDraw = new DebugDraw(renderer);
@@ -65,9 +65,9 @@ public:
 	btIDebugDraw* debugDraw;
 };
 
-class CDebugDrawer : public IDebugDrawer {
+class DebugDrawer : public DebugDrawer {
 public:
-	CDebugDrawer(graphics::IRenderingDevice* renderer)
+	DebugDrawer(graphics::RenderingDevice* renderer)
 		: details_(renderer)
 	{
 		//details_.drawer = new DebugDraw(renderer);
@@ -78,23 +78,23 @@ public:
 		world_->debugDrawWorld();
 	}
 
-	virtual void setWorld(IPhysicsWorld* world)
+	virtual void setWorld(PhysicsWorld* world)
 	{
 		world_ = world->getDetails()->world;
 		world_->setDebugDrawer(details_.debugDraw);
 	}
 
 	// for internal use only
-	virtual IDebugDrawer::Details* getDetails()
+	virtual DebugDrawer::Details* getDetails()
 	{
 		return &details_;
 	}
 private:
-	IDebugDrawer::Details details_;
+	DebugDrawer::Details details_;
 	btDynamicsWorld* world_;
 };
 
 
 } // namespace physics
 } // namespace hrengin
-#endif//_hrengin_CDebugDrawer_
+#endif//_hrengin_DebugDrawer_

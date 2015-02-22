@@ -9,16 +9,16 @@
 #include <iostream>
 #include <sys/stat.h>
 
-#include <hrengin/core/ILogger.h>
+#include <hrengin/core/Logger.h>
 
-#include "CDirectory.h"
+#include "Directory.h"
 
 namespace hrengin {
 namespace io {
 
-IDirectory* openDirectory (std::string path)
+Directory* openDirectory (std::string path)
 {
-	IDirectory* dir = new CDirectory(path);
+	Directory* dir = new Directory(path);
 
 	if (dir->isOpen()) {
 		return dir;
@@ -27,21 +27,21 @@ IDirectory* openDirectory (std::string path)
 	return 0;
 }
 
-CDirectory::CDirectory (const std::string& path)
+Directory::Directory (const std::string& path)
 : dir_(0), path_(path)
 {
 	this->open();
 }
 
 
-CDirectory::~CDirectory ()
+Directory::~Directory ()
 {
 	if(isOpen()) {
 		closedir(dir_);
 	}
 }
 
-void CDirectory::open ()
+void Directory::open ()
 {
 	if (path_.size() == 0) {
 		dir_ = 0;
@@ -59,7 +59,7 @@ void CDirectory::open ()
 #endif
 }
 
-i32 CDirectory::read (Dirent& result)
+i32 Directory::read (Dirent& result)
 {
 	if (!isOpen()) {
 		return -1;
@@ -80,11 +80,11 @@ i32 CDirectory::read (Dirent& result)
 	}
 
 	//Dirent dent;
-	switch(dstat.st_mode & S_IFMT) {
-	case S_IFREG:
+	switch(dstat.st_mode & S_FMT) {
+	case S_FREG:
 		result.type = FileType::File;
 		break;
-	case S_IFDIR:
+	case S_FDIR:
 		result.type = FileType::Dir;
 		break;
 	default:
@@ -96,27 +96,27 @@ i32 CDirectory::read (Dirent& result)
 	return 1;
 }
 
-void CDirectory::seek (u32 offset)
+void Directory::seek (u32 offset)
 {
 	seekdir(dir_, offset);
 }
 
-void CDirectory::rewind ()
+void Directory::rewind ()
 {
 	rewinddir(dir_);
 }
 
-u32 CDirectory::tell () const
+u32 Directory::tell () const
 {
 	return telldir(dir_);
 }
 /*
-u32 CDirectory::getSize() const
+u32 Directory::getSize() const
 {
 	return size_;
 }
 */
-const std::string& CDirectory::getPath () const
+const std::string& Directory::getPath () const
 {
 	return path_;
 }

@@ -1,5 +1,4 @@
-/* This file is a part of hrengin library collection
- *
+/*
  * Copyright (C) 2014  absurdworlds
  *
  * License LGPLv3-only:
@@ -7,20 +6,20 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_CItdReader_
-#define _hrengin_CItdReader_
+#ifndef _hrengin_ItdReader_
+#define _hrengin_ItdReader_
 #include <vector>
 #include <fstream>
 
 #include <hrengin/common/types.h>
-#include <hrengin/itd/IHPKIndexReader.h>
+#include <hrengin/itd/HPKIndexReader.h>
 
 namespace hrengin {
 namespace itd {
 
-class CItdReader {
+class ItdReader {
 public:
-	CItdReader (std::string const& archive_name, bool verbose);
+	ItdReader (std::string const& archive_name, bool verbose);
 
 	std::vector<std::string> list (std::string prefix);
 
@@ -31,4 +30,4 @@ private:
 };
 } // namespace itd
 } // namespace hrengin
-#endif//_hrengin_CItdReadere_
+#endif//_hrengin_ItdReadere_

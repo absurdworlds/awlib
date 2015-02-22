@@ -13,53 +13,51 @@
 
 #include <Irrlicht/IGUIFont.h>
 
-#include <hrengin/gui/IGUIElement.h>
+#include <hrengin/gui/GUIElement.h>
 
-#include "CInputManager.h"
-#include "CGuiManager.h"
-#include "CGUIWindow.h"
-#include "CGUITextBox.h"
-#include "CGUIListBox.h"
+#include "InputManager.h"
+#include "GuiManager.h"
+#include "GUIWindow.h"
+#include "GUITextBox.h"
+#include "GUIListBox.h"
 
 namespace hrengin {
 namespace gui {
 
-CGUIManager::CGUIManager(irr::gui::IGUIEnvironment* guienv,
+GUIManager_::GUIManager_(irr::gui::IGUIEnvironment* guienv,
 irr::IrrlichtDevice* device)
 : device_(device), guienv_(guienv)
 {
-	inputmgr_ = new CInputManager(device);
+	inputmgr_ = new InputManager_(device);
 }
 
-CGUIManager::~CGUIManager()
+GUIManager_::~GUIManager_()
 {
 }
 
-void CGUIManager::draw()
+void GUIManager_::draw()
 {
 	guienv_->drawAll();
 }
 
-IInputManager* CGUIManager::getInputManager()
+InputManager* GUIManager_::getInputManager()
 {
 	return inputmgr_;
 }
 
-
-void CGUIManager::setFont(std::string path)
+void GUIManager_::setFont(std::string path)
 {
 	irr::gui::IGUIFont* font = guienv_->getFont(path.c_str());
-	if(font) {
+	if(font)
 		guienv_->getSkin()->setFont(font);
-	}
 }
 
 inline irr::gui::IGUIElement* getUnderlyingElement(IGUIElement* e) {
 	return static_cast<irr::gui::IGUIElement*>(e->getUnderlyingElement());
 }
 
-IGUIWindow* CGUIManager::addWindow(Rect<i32> rect, bool isModal, 
-	const wchar_t* title, IGUIElement* parent, i32 id)
+GUIWindow* GUIManager_::addWindow(Rect<i32> rect, bool isModal, 
+	const wchar_t* title, GUIElement* parent, i32 id)
 {
 	irr::core::recti windowRect(rect.upperLeft.x, rect.upperLeft.y,
 		rect.lowerRight.x, rect.lowerRight.y);
@@ -77,12 +75,12 @@ IGUIWindow* CGUIManager::addWindow(Rect<i32> rect, bool isModal,
 
 	irr::gui::IGUIElement* elem = guienv_->addWindow(windowRect,isModal,title,parentElem,id);
 
-	return new CGUIWindow(elem);
+	return new GUIWindow_(elem);
 }
 
 
-IGUITextBox* CGUIManager::addTextBox(Rect<i32> rect, const wchar_t* text,
-	bool border, IGUIElement* parent, i32 id)
+GUITextBox* GUIManager_::addTextBox(Rect<i32> rect, const wchar_t* text,
+	bool border, GUIElement* parent, i32 id)
 {
 	irr::core::recti elemRect(rect.upperLeft.x, rect.upperLeft.y,
 		rect.lowerRight.x, rect.lowerRight.y);
@@ -94,10 +92,10 @@ IGUITextBox* CGUIManager::addTextBox(Rect<i32> rect, const wchar_t* text,
 
 	irr::gui::IGUIElement* elem = guienv_->addEditBox(text,elemRect,border,parentElem,id);
 
-	return new CGUITextBox(elem);
+	return new GUITextBox_(elem);
 }
 
-IGUIListBox* CGUIManager::addListBox(Rect<i32> rect, bool background, IGUIElement* parent, i32 id)
+GUIListBox* GUIManager_::addListBox(Rect<i32> rect, bool background, GUIElement* parent, i32 id)
 {
 	irr::core::recti elemRect(rect.upperLeft.x, rect.upperLeft.y,
 			rect.lowerRight.x, rect.lowerRight.y);
@@ -109,7 +107,7 @@ IGUIListBox* CGUIManager::addListBox(Rect<i32> rect, bool background, IGUIElemen
 
 	irr::gui::IGUIListBox* elem = guienv_->addListBox(elemRect,parentElem,id,background);
 
-	return new CGUIListBox(elem);
+	return new GUIListBox_(elem);
 }
 
 } // namespace gui

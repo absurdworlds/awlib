@@ -8,12 +8,12 @@
  */
 #include <hrengin/common/types.h>
 
-#include "CDebugDrawer.h"
+#include "DebugDrawer.h"
 
 namespace hrengin {
 namespace physics {
 
-DebugDraw::DebugDraw(graphics::IRenderingDevice* renderer)
+DebugDraw::DebugDraw(graphics::RenderingDevice* renderer)
 	: mode(DBG_NoDebug), vmgr_(renderer)
 {
 
@@ -44,7 +44,7 @@ void DebugDraw::drawLine(const btVector3& from, const btVector3& to, const btVec
 
 void DebugDraw::drawContactPoint(const btVector3& PointOnB, const btVector3& normalOnB, btScalar distance, int lifeTime, const btVector3& color)
 {
-	//   this->drawLine(PointOnB, PointOnB + normalOnB*distance, CONTACTPOINT_COLOR);
+	//   this->drawLine(PointOnB, PointOnB + normalOnB*distance, ONTACTPOINT_OLOR);
 
 	const btVector3 to(PointOnB + normalOnB*distance);
 

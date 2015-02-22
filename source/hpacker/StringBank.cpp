@@ -1,5 +1,4 @@
-/* This file is a part of hrengin library collection
- *
+/*
  * Copyright (C) 2014  absurdworlds
  *
  * License LGPLv3-only:
@@ -9,16 +8,16 @@
  */
 #include <limits>
 
-#include "CStringBank.h"
+#include "StringBank.h"
 
 namespace hrengin {
 namespace itd {
-CStringBank::CStringBank ()
+StringBank::StringBank ()
 	: stringTally_(0)
 {
 }
 
-u64 CStringBank::add (std::string const & str)
+u64 StringBank::add (std::string const & str)
 {
 	u64 prevTally = stringTally_;
 	u16 const limit = std::numeric_limits<u16>::max();
@@ -31,7 +30,7 @@ u64 CStringBank::add (std::string const & str)
 	return prevTally;
 }
 
-void CStringBank::putStrings (std::ostream & target)
+void StringBank::putStrings (std::ostream & target)
 {
 	for(auto const & str : strings_) {
 		u16 length = str.size();
@@ -40,11 +39,11 @@ void CStringBank::putStrings (std::ostream & target)
 	}
 }
 
-std::string const & CStringBank::operator [] (size_t index) const
+std::string const & StringBank::operator [] (size_t index) const
 {
 	return strings_[index];
 }
-std::string const & CStringBank::back () const
+std::string const & StringBank::back () const
 {
 	return strings_.back();
 }

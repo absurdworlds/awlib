@@ -6,31 +6,31 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_CBufferedStream_
-#define _hrengin_CBufferedStream_
+#ifndef _hrengin_BufferedStream_
+#define _hrengin_BufferedStream_
 
 #include <hrengin/common/types.h>
-#include <hrengin/io/IBufferedStream.h>
+#include <hrengin/io/BufferedStream.h>
 
 namespace hrengin {
 namespace io {
-class CReadFile;
+class ReadFile;
 
-class CBufferedStream : public IBufferedStream {
+class BufferedStream : public BufferedStream {
 public:
-	CBufferedStream(CReadFile* source);
-	virtual ~CBufferedStream();
+	BufferedStream(ReadFile* source);
+	virtual ~BufferedStream();
 
 	virtual bool getCurrent(u8& c);
 	virtual bool getNext(u8& c);
 	virtual u32 getPos() const;
 
 private:
-	CReadFile* source_;
+	ReadFile* source_;
 	char cur_;
 	u32 pos_;
 };
 
 } //namespace io
 } //namespace hrengin
-#endif//_hrengin_CBufferedStream_
+#endif//_hrengin_BufferedStream_

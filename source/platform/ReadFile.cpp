@@ -8,27 +8,27 @@
  */
 #include <stdio.h>
 
-#include <hrengin/core/ILogger.h>
+#include <hrengin/core/Logger.h>
 
-#include <hrengin/io/CReadFile.h>
+#include <hrengin/io/ReadFile.h>
 
 namespace hrengin {
 namespace io {
 
-CReadFile::CReadFile (std::string const& path)
-	: IFile(path)
+ReadFile::ReadFile(std::string const& path)
+	: File(path)
 {
 	this->open();
 }
 
-CReadFile::~CReadFile ()
+ReadFile::~ReadFile()
 {
 	if(isOpen()) {
 		fclose(file_);
 	}
 }
 
-void CReadFile::open ()
+void ReadFile::open()
 {
 	if (path_.size() == 0) {
 		return;
@@ -44,7 +44,7 @@ void CReadFile::open ()
 	}
 }
 
-i32 CReadFile::read (void* buffer, u32 size)
+i32 ReadFile::read(void* buffer, u32 size)
 {
 	if (!isOpen()) {
 		return -1;
@@ -53,26 +53,26 @@ i32 CReadFile::read (void* buffer, u32 size)
 	return (i32)fread(buffer, 1, size, file_);
 }
 
-i32 CReadFile::seek (i32 offset, bool relative)
+i32 ReadFile::seek(i32 offset, bool relative)
 {
 	if (!isOpen()) {
 		return -1;
 	}
 
-	return fseek(file_, offset, relative ? SEEK_CUR : SEEK_SET);
+	return fseek(file_, offset, relative ? SEEK_UR : SEEK_SET);
 }
 
-u32 CReadFile::tell () const
+u32 ReadFile::tell() const
 {
 	return ftell(file_);
 }
 
-u32 CReadFile::getSize () const
+u32 ReadFile::getSize() const
 {
 	return size_;
 }
 
-std::string const& CReadFile::getPath () const
+std::string const& ReadFile::getPath() const
 {
 	return path_;
 }

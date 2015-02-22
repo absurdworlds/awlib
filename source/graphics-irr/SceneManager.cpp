@@ -13,23 +13,23 @@
 
 #include <hrengin/core/paths.h>
 
-#include "CCameraNode.h"
-#include "CLightNode.h"
-#include "CVisNode.h"
-#include "CSceneManager.h"
+#include "CameraNode.h"
+#include "LightNode.h"
+#include "VisNode.h"
+#include "SceneManager.h"
 
 namespace hrengin {
 namespace scene {
 
-CSceneManager::CSceneManager(irr::scene::ISceneManager* irrSceneManager,
-	graphics::IRenderingDevice* renderer,
+SceneManager::SceneManager(irr::scene::ISceneManager* irrSceneManager,
+	graphics::RenderingDevice* renderer,
 	irr::IrrlichtDevice* device)
 : scnmgr(irrSceneManager), colman(scnmgr->getSceneCollisionManager()), device_(device)
 {
 
 }
 
-void CSceneManager::createScene()
+void SceneManager::createScene()
 {
 	//TODO: global lighting manager?
 	scnmgr->setAmbientLight(irr::video::SColorf(0.35f,0.35f,0.35f,0.35f));
@@ -50,13 +50,13 @@ void CSceneManager::createScene()
 #endif
 }
 
-void CSceneManager::update()
+void SceneManager::update()
 {
 
 }
 
-//IVisNode* CSceneManager::createMeshSceneNode(IMesh* mesh)
-IVisNode* CSceneManager::createMeshSceneNode(const char* meshname)
+//VisNode* SceneManager::createMeshSceneNode(Mesh* mesh)
+VisNode* SceneManager::createMeshSceneNode(const char* meshname)
 {
 	irr::scene::IAnimatedMeshSceneNode* node = 
 		scnmgr->addAnimatedMeshSceneNode(convertMesh(meshname));
@@ -65,12 +65,12 @@ IVisNode* CSceneManager::createMeshSceneNode(const char* meshname)
 		node->addShadowVolumeSceneNode();
 	}
 
-	IVisNode* newNode = new CVisNode(this, node);
+	VisNode* newNode = new VisNode(this, node);
 
 	return newNode;
 }
 
-ICameraNode* CSceneManager::createCameraSceneNode()
+CameraNode* SceneManager::createCameraSceneNode()
 {
 	irr::scene::ICameraSceneNode* node = scnmgr->addCameraSceneNode(0,
 		irr::core::vector3df(0, 0, 0),
@@ -78,28 +78,28 @@ ICameraNode* CSceneManager::createCameraSceneNode()
 
 	node->setPosition(irr::core::vector3df(100,100,100));
 
-	ICameraNode* newNode = new CCameraNode(this, node, scnmgr, device_);
+	CameraNode* newNode = new CameraNode(this, node, scnmgr, device_);
 
 	return newNode;
 }
 
-ILightNode* CSceneManager::createLightSceneNode()
+LightNode* SceneManager::createLightSceneNode()
 {
 	irr::scene::ILightSceneNode* node = scnmgr->addLightSceneNode(0,
 		irr::core::vector3df(100, 1000, 100),
 		irr::video::SColorf(0.95f, 0.95f, 1.00f, 0.0f), 2800.0f);
 
-	ILightNode* newNode = new CLightNode(this, node);
+	LightNode* newNode = new LightNode(this, node);
 
 	return newNode;
 }
 
-IEntityNode* CSceneManager::createEntitySceneNode(IEntity* entity)
+EntityNode* SceneManager::createEntitySceneNode(Entity* entity)
 {
 	return 0;
 }
 
-void CSceneManager::drawScene()
+void SceneManager::drawScene()
 {
 	scnmgr->drawAll();
 }

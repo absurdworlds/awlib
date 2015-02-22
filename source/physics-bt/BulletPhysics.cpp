@@ -9,27 +9,27 @@
 #include <algorithm>
 
 #include <hrengin/core/models.h>
-#include <hrengin/core/IModel.h>
-#include <hrengin/core/IModelLoader.h>
+#include <hrengin/core/Model.h>
+#include <hrengin/core/ModelLoader.h>
 
-#include <hrengin/graphics/IVideoManager.h>
+#include <hrengin/graphics/VideoManager.h>
 
-#include "CBulletPhysics.h"
-#include "CPhysicsWorld.h"
-#include "CCollisionPhantom.h"
-#include "CRigidBody.h"
+#include "BulletPhysics.h"
+#include "PhysicsWorld.h"
+#include "CollisionPhantom.h"
+#include "RigidBody.h"
 #include "hrToBullet.h"
-#include "CDebugDrawer.h"
+#include "DebugDrawer.h"
 
 namespace hrengin {
 namespace physics {
 
-HR_PHYS_EXP IPhysicsManager* createPhysicsManager()
+HR_PHYS_EXP PhysicsManager* createPhysicsManager()
 {
-	return new CBulletPhysics();
+	return new BulletPhysics();
 }
 
-CBulletPhysics::CBulletPhysics()
+BulletPhysics::BulletPhysics()
 {
 	modelLoader_ = core::createModelLoader();
 
@@ -38,7 +38,7 @@ CBulletPhysics::CBulletPhysics()
 	collisionShapes_.push_back(shape);
 }
 
-CBulletPhysics::~CBulletPhysics()
+BulletPhysics::~BulletPhysics()
 {
 	for (int j=0; j<collisionShapes_.size(); j++) {
 		btCollisionShape* shape = collisionShapes_[j];
@@ -47,7 +47,7 @@ CBulletPhysics::~CBulletPhysics()
 	collisionShapes_.clear();
 }
 
-IPhysicsWorld* CBulletPhysics::createPhysicsWorld()
+PhysicsWorld* BulletPhysics::createPhysicsWorld()
 {
 	//collision configuration contains default setup for memory, collision setup
 	btCollisionConfiguration* collisionConfiguration = new btDefaultCollisionConfiguration();
@@ -61,26 +61,26 @@ IPhysicsWorld* CBulletPhysics::createPhysicsWorld()
 	//use the default collision dispatcher. For parallel processing you can use a diffent dispatcher (see Extras/BulletMultiThreaded)
 	btCollisionDispatcher* dispatcher = new btCollisionDispatcher(collisionConfiguration);
 
-	return new CPhysicsWorld(collisionConfiguration, broadphase,
+	return new PhysicsWorld(collisionConfiguration, broadphase,
 		dispatcher, solver);
 }
 
-IDebugDrawer*
-CBulletPhysics::createDebugDrawer(graphics::IRenderingDevice* renderer)
+DebugDrawer*
+BulletPhysics::createDebugDrawer(graphics::RenderingDevice* renderer)
 {
-	return new CDebugDrawer(renderer);
+	return new DebugDrawer(renderer);
 }
 
-IRigidBody*
-CBulletPhysics::createBody(
+RigidBody*
+BulletPhysics::createBody(
 		char const* modelName, 
-		IRigidBody::RigidBodyConstructionInfo cInfo)
+		RigidBody::RigidBodyConstructionInfo cInfo)
 {
 	u32 shapeId = loadModel(modelName);
 	return createBody(shapeId, cInfo); 
 };
 
-IRigidBody* CBulletPhysics::createBody(const u32 shapeid, IRigidBody::RigidBodyConstructionInfo cInfo)
+RigidBody* BulletPhysics::createBody(const u32 shapeid, RigidBody::RigidBodyConstructionInfo cInfo)
 {
 	btTransform defaultTransform;
 	defaultTransform.setIdentity();
@@ -110,16 +110,16 @@ IRigidBody* CBulletPhysics::createBody(const u32 shapeid, IRigidBody::RigidBodyC
 
 	btRigidBody *rigidBody = new btRigidBody(rbInfo);
 
-	return new CRigidBody(rigidBody);
+	return new RigidBody(rigidBody);
 };
 
-ICollisionPhantom* CBulletPhysics::createPhantom(const char* modelName)
+CollisionPhantom* BulletPhysics::createPhantom(const char* modelName)
 {
 	u32 shapeId = loadModel(modelName);
 	return createPhantom(shapeId); 
 };
 
-ICollisionPhantom* CBulletPhysics::createPhantom(const u32 shapeid)
+CollisionPhantom* BulletPhysics::createPhantom(const u32 shapeid)
 {
 	btTransform defaultTransform;
 	defaultTransform.setIdentity();
@@ -131,7 +131,7 @@ ICollisionPhantom* CBulletPhysics::createPhantom(const u32 shapeid)
 	//collObject->setCollisionFlags (btCollisionObject::CF_NO_CONTACT_RESPONSE);
 	collObject->setCollisionFlags (btCollisionObject::CF_KINEMATIC_OBJECT);
 
-	return new CCollisionPhantom(collObject);
+	return new CollisionPhantom(collObject);
 };
 
 btCollisionShape* CBulletPhysics::createPrimitiveShape(Primitive shape) 
@@ -148,7 +148,7 @@ btCollisionShape* CBulletPhysics::createPrimitiveShape(Primitive shape)
 			btScalar(x/2.0),
 			btScalar(y/2.0),
 			btScalar(z/2.0)));
-	case SHAPE_CYLINDER:
+	case SHAPE_YLINDER:
 		if(z == 0.0) {
 			z = x;
 		}
@@ -168,7 +168,7 @@ btCollisionShape* CBulletPhysics::createPrimitiveShape(Primitive shape)
 			return new btCylinderShapeZ(btVector3(
 				btScalar(x),btScalar(y),btScalar(z)));
 		}
-	case SHAPE_CAPSULE:
+	case SHAPE_APSULE:
 		switch(shape.axis) {
 		case AXIS_X:
 			return new btCapsuleShapeX(x,y);
@@ -177,7 +177,7 @@ btCollisionShape* CBulletPhysics::createPrimitiveShape(Primitive shape)
 		case AXIS_Z:
 			return new btCapsuleShapeZ(x,y);
 		}
-	case SHAPE_CONE:
+	case SHAPE_ONE:
 		switch(shape.axis) {
 		case AXIS_X:
 			return new btConeShapeX(x,y);
@@ -200,7 +200,7 @@ btCollisionShape* CBulletPhysics::createPrimitiveShape(Primitive shape)
 	}
 }
 
-u32 CBulletPhysics::addShape(IModel* model)
+u32 BulletPhysics::addShape(Model* model)
 {
 	if(model->primitives.size() == 0) {
 		return 0;
@@ -230,14 +230,14 @@ u32 CBulletPhysics::addShape(IModel* model)
 	return collisionShapes_.size()-1;
 };
 
-u32 CBulletPhysics::loadModel(const char* modelName)
+u32 BulletPhysics::loadModel(const char* modelName)
 {
 	auto modelId = models_.find(modelName);
 	if(modelId != models_.end()) {
 		return modelId->second;
 	}
 
-	IModel* model = modelLoader_->loadModel(modelName);
+	Model* model = modelLoader_->loadModel(modelName);
 
 	if(!model) {
 		return 0;

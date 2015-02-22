@@ -1,12 +1,11 @@
-/**
-   Copyright (C) 2014  absurdworlds
-
-   License LGPLv3-only:
-   GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
-   This is free software: you are free to change and redistribute it.
-   There is NO WARRANTY, to the extent permitted by law.
+/*
+ * Copyright (C) 2014  absurdworlds
+ *
+ * License LGPLv3-only:
+ * GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
+ * This is free software: you are free to change and redistribute it.
+ * There is NO WARRANTY, to the extent permitted by law.
  */
-
 #include <Irrlicht/irrString.h>
 #include <Irrlicht/irrList.h>
 
@@ -15,33 +14,33 @@
 
 #include <hrengin/common/utf_convert.h>
 
-#include "CGUIListBox.h"
+#include "GUIListBox.h"
 
 namespace hrengin {
 namespace gui {
 
-CGUIListBox::CGUIListBox(irr::gui::IGUIListBox* elem)
+GUIListBox_::GUIListBox_(irr::gui::IGUIListBox* elem)
 	: irrElement_(elem)
 {
 	elem->grab();
 }
 
-CGUIListBox::~CGUIListBox()
+GUIListBox_::~GUIListBox_()
 {
 	irrElement_->drop();
 }
 
-u32 CGUIListBox::getId() const
+u32 GUIListBox_::getId() const
 {
 	return irrElement_->getID();
 }
 
-u32 CGUIListBox::getParentId() const
+u32 GUIListBox_::getParentId() const
 {
 	return irrElement_->getParent()->getID();
 }
 
-u32 CGUIListBox::addItem(std::string text)
+u32 GUIListBox_::addItem(std::string text)
 {
 //	irr::core::stringw irrString;
 	u32 id = irrElement_->addItem(locale::widen(text).c_str());
@@ -49,7 +48,7 @@ u32 CGUIListBox::addItem(std::string text)
 	return id;
 }
 
-void CGUIListBox::adjustScrollPosition()
+void GUIListBox_::adjustScrollPosition()
 {
 	// Got this from Irrlicht forums, although I'm not sure it works
 	// correctly: irr::core::List::push_back adds an item to the
@@ -63,13 +62,13 @@ void CGUIListBox::adjustScrollPosition()
 }
 
 
-std::string CGUIListBox::getText() const
+std::string GUIListBox_::getText() const
 {
 	std::wstring text(irrElement_->getText());
 	return locale::narrow(text);
 }
 
-void CGUIListBox::setText(std::string text)
+void GUIListBox_::setText(std::string text)
 {
 	irrElement_->setText(locale::widen(text).c_str());
 }

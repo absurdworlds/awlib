@@ -11,13 +11,13 @@
 
 #include <hrengin/io/filesystem.h>
 
-#include "CHDFSettingsLoader.h"
+#include "HDFSettingsLoader.h"
 
 namespace hrengin {
 namespace core {
 
 #if 0
-i32 CHDFSettingsLoader::openFile(std::string const & path)
+i32 HDFSettingsLoader::openFile(std::string const & path)
 {
 	FileInfo finfo = fileStat(path);
 
@@ -33,16 +33,16 @@ i32 CHDFSettingsLoader::openFile(std::string const & path)
 }
 #endif
 
-CHDFSettingsLoader::CHDFSettingsLoader (io::CReadFile& file,
-		ISettingsManager& settings)
+HDFSettingsLoader::HDFSettingsLoader (io::ReadFile& file,
+		SettingsManager& settings)
 	: file_(file), manager_(settings)
 {
 }
 
-void CHDFSettingsLoader::loadSettings ()
+void HDFSettingsLoader::loadSettings ()
 {
 	io::ICharacterStream* stream;
-	hdf::IHDFParser* hdf;
+	hdf::HDFParser* hdf;
 
 	stream = file_.isOpen() 
 		? io::createBufferedStream(file_)
@@ -56,7 +56,7 @@ void CHDFSettingsLoader::loadSettings ()
 	delete stream;
 }
 
-void CHDFSettingsLoader::parseSettings (hdf::IHDFParser* hdf)
+void HDFSettingsLoader::parseSettings (hdf::HDFParser* hdf)
 {
 	std::string prevNode;
 	std::string curNode;

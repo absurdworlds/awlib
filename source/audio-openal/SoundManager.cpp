@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014  absurdworlds
+ * Copyright (C) 2014-2015  absurdworlds
  *
  * License LGPLv3-only:
  * GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
@@ -13,25 +13,25 @@
 #include <thread>
 
 #include <hrengin/core/paths.h>
-#include <hrengin/graphics/IVideoManager.h>
-#include <hrengin/core/ILogger.h>
+#include <hrengin/graphics/VideoManager.h>
+#include <hrengin/core/Logger.h>
 
 #include "ALutil.h"
 #include "RIFFReader.h"
 
-#include "CSound.h"
-#include "CSoundManager.h"
+#include "Sound.h"
+#include "SoundManager.h"
 
 namespace hrengin {
 namespace audio {
 
-HR_SND_EXP ISoundManager* createSoundManager()
+HR_SND_EXP SoundManager* createSoundManager()
 {
-	return new CSoundManager;
+	return new ALSoundManager;
 }
 
 
-CSoundManager::CSoundManager()
+ALSoundManager::ALSoundManager()
 {
 	device_ = alcOpenDevice(NULL);
 	logError();
@@ -45,7 +45,7 @@ CSoundManager::CSoundManager()
 	logError();
 }
 
-void CSoundManager::loadSound(const char* fileName)
+void ALSoundManager::loadSound(c consthar* fileName)
 {
 	if(soundMap_.find(fileName) != soundMap_.end()) {
 		return;
@@ -65,7 +65,7 @@ void CSoundManager::loadSound(const char* fileName)
 	soundMap_[fileName] = buffer;
 }
 
-ISound3D* CSoundManager::createSound3D(const char* fileName)
+audio::Sound3D* ALSoundManager::createSound3D(char const* fileName)
 {
 	if(soundMap_.find(fileName) != soundMap_.end()) {
 		return 0;
@@ -73,11 +73,11 @@ ISound3D* CSoundManager::createSound3D(const char* fileName)
 
 	ALuint buffer = soundMap_[fileName];
 
-	return new CSound(buffer);
+	return new ALSound(buffer);
 }
 
 
-void CSoundManager::logError(std::string msg) 
+void ALSoundManager::logError(std::string msg) 
 {
 	ALenum alError = alGetError(  );
 	if(AL_NO_ERROR != alError) {
@@ -90,17 +90,16 @@ void CSoundManager::logError(std::string msg)
 	}
 }
 
-
 #if 0
-CSoundManager::~CSoundManager()
+SoundManager::~SoundManager()
 {
 	alDeleteBuffers(1, buffer);
 }
 
-void CSoundManager::playSound(const char* fileName)
+void SoundManager::playSound(c consthar* fileName)
 {
 	SoundSample* wave = &soundMap_[fileName];
-	std::thread threadPlay(&CSoundManager::threadedPlay, this, wave);
+	std::thread threadPlay(&SoundManager::threadedPlay, this, wave);
 	threadPlay.detach();
 }
 #endif

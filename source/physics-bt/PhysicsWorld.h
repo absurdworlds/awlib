@@ -6,59 +6,59 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_CPhysicsWorld_
-#define _hrengin_CPhysicsWorld_
+#ifndef _hrengin_PhysicsWorld_
+#define _hrengin_PhysicsWorld_
 #include <Bullet/btBulletDynamicsCommon.h>
 #include <Bullet/btBulletCollisionCommon.h>
 
-#include <hrengin/physics/IPhysicsManager.h>
-#include <hrengin/physics/IDebugDrawer.h>
-#include <hrengin/physics/IPhysicsWorld.h>
+#include <hrengin/physics/PhysicsManager.h>
+#include <hrengin/physics/DebugDrawer.h>
+#include <hrengin/physics/PhysicsWorld.h>
 
 namespace hrengin {
 namespace physics {
 
-class IPhysicsWorld::Details {
+class PhysicsWorld::Details {
 public:
 	btDynamicsWorld* world;
 };
 
-class CPhysicsWorld : public IPhysicsWorld {
+class PhysicsWorld : public PhysicsWorld {
 public:
-	CPhysicsWorld(btCollisionConfiguration* configuration,
+	PhysicsWorld(btCollisionConfiguration* configuration,
 		btBroadphaseInterface* broadphase,
 		btCollisionDispatcher* dispatcher,
 		btConstraintSolver* constraintSolver);
-	virtual ~CPhysicsWorld();
+	virtual ~PhysicsWorld();
 
-	virtual void addBody(IRigidBody* body);
-	virtual void addBody(IRigidBody* body, CollisionFilter filter = CollisionFilter(0,-1));
-	virtual void addObject(ICollisionObject* object);
-	virtual void addObject(ICollisionObject* object, CollisionFilter filter = CollisionFilter(0,-1));
+	virtual void addBody(RigidBody* body);
+	virtual void addBody(RigidBody* body, CollisionFilter filter = CollisionFilter(0,-1));
+	virtual void addObject(CollisionObject* object);
+	virtual void addObject(CollisionObject* object, CollisionFilter filter = CollisionFilter(0,-1));
 
-	virtual void removeBody(IRigidBody* body);
-	virtual void removeObject(ICollisionObject* object);
+	virtual void removeBody(RigidBody* body);
+	virtual void removeObject(CollisionObject* object);
 
-	//! TODO: virtual IDebugDrawer* createDebugDrawer();
-	virtual void setDebugDrawer(IDebugDrawer* drawer);
+	//! TODO: virtual DebugDrawer* createDebugDrawer();
+	virtual void setDebugDrawer(DebugDrawer* drawer);
 
 	virtual void castRay(Vector3d<f32> from, Vector3d<f32> to,
-		IRayResultCallback* callback);
+		RayResultCallback* callback);
 #if 0
 	virtual void collisionSweep(CollisionShape shape, Vector3d<f32> from,
-		Vector3d<f32> to, IConvexSweepCallback* callback);
+		Vector3d<f32> to, ConvexSweepCallback* callback);
 #endif
 
 	virtual bool step();
 
 	btScalar getDeltaTime();
 
-	virtual IPhysicsWorld::Details* getDetails() 
+	virtual PhysicsWorld::Details* getDetails() 
 	{
 		return &details_;
 	}
 private:
-	IDebugDrawer* debugDrawer_;
+	DebugDrawer* debugDrawer_;
 
 	btCollisionConfiguration* collisionConfiguration_;
 
@@ -68,12 +68,11 @@ private:
 
 	btDynamicsWorld* dynamicsWorld_;
 
-	IPhysicsWorld::Details details_;
+	PhysicsWorld::Details details_;
 
 	btClock clock_;
 };
 
 } // namespace physics
 } // namespace hrengin
-
-#endif//_hrengin_CPhysicsWorld_
+#endif//_hrengin_PhysicsWorld_

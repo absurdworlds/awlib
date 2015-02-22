@@ -6,24 +6,24 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_CGUIWindow_
-#define _hrengin_CGUIWindow_
+#ifndef _hrengin_GUIWindow_
+#define _hrengin_GUIWindow_
 
-#include <hrengin/gui/IGUIWindow.h>
+#include <hrengin/gui/GUIWindow.h>
 
 namespace irr {
 namespace gui {
-class IGUIElement;
+class GUIElement;
 }
 }
 
 namespace hrengin {
 namespace gui {
 
-class CGUIWindow : public IGUIWindow {
+class GUIWindow : public GUIWindow {
 public:
-	CGUIWindow(irr::gui::IGUIElement* elem);
-	virtual ~CGUIWindow();
+	GUIWindow(irr::gui::IGUIElement* elem);
+	virtual ~GUIWindow();
 
 	virtual u32 getId() const;
 	virtual u32 getParentId() const;
@@ -42,5 +42,4 @@ private:
 
 } // namespace gui
 } // namespace hrengin
-
-#endif //_hrengin_CGUIWindow_
+#endif //_hrengin_GUIWindow_

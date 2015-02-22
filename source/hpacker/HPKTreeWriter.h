@@ -1,5 +1,4 @@
-/* This file is a part of hrengin library collection
- *
+/*
  * Copyright (C) 2014  absurdworlds
  *
  * License LGPLv3-only:
@@ -7,13 +6,13 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_CHPKTreeWriter_
-#define _hrengin_CHPKTreeWriter_
+#ifndef _hrengin_HPKTreeWriter_
+#define _hrengin_HPKTreeWriter_
 #include <vector>
 
-#include <hrengin/itd/IHPKIndexWriter.h>
+#include <hrengin/itd/HPKIndexWriter.h>
 
-#include "CStringBank.h"
+#include "StringBank.h"
 
 namespace hrengin {
 namespace itd {
@@ -29,7 +28,7 @@ struct ListEntry {
 
 struct TreeNode {
 	void add (std::vector<std::string> path, std::string name, u64 id,
-		CStringBank & strings);
+		StringBank & strings);
 	void calcOffsets (u64 & baseOffset);
 	void writeOut (std::ostream & target, u64 baseOffset);
 
@@ -47,11 +46,11 @@ struct TreeNode {
 /*!
  * Interface for building HPKA tree index
  */
-class CHPKTreeWriter : public IHPKIndexWriter {
+class HPKTreeWriter : public HPKIndexWriter {
 public:
-	CHPKTreeWriter ();
+	HPKTreeWriter ();
 
-	virtual ~CHPKTreeWriter ();
+	virtual ~HPKTreeWriter ();
 
 	virtual void addFile (std::string const& path, u64 id);
 	virtual void write (std::ostream& target);
@@ -74,9 +73,9 @@ protected:
 	std::vector<ListEntry> files_;
 	std::vector<TreeNode> dirs_;
 
-	CStringBank strings_;
+	StringBank strings_;
 };
 
 } //namespace itd
 } //namespace hrengin
-#endif//_hrengin_CHPKTreeWriter_
+#endif//_hrengin_HPKTreeWriter_

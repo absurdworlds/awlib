@@ -6,19 +6,19 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_CConsoleGUI_
-#define _hrengin_CConsoleGUI_
+#ifndef _hrengin_ConsoleGUI_
+#define _hrengin_ConsoleGUI_
 
-#include <hrengin/gui/IGUIManager.h>
-#include <hrengin/gui/IConsoleGUI.h>
+#include <hrengin/gui/IGUManager.h>
+#include <hrengin/gui/ConsoleGUI.h>
 
 namespace hrengin {
 namespace gui {
 
-class CConsoleGUI : public IConsoleGUI {
+class ConsoleGUI : public ConsoleGUI {
 public:
-	CConsoleGUI(core::IShell* shell, IGUIManager* guimgr);
-	virtual ~CConsoleGUI();
+	ConsoleGUI(core::Shell* shell, IGUManager* guimgr);
+	virtual ~ConsoleGUI();
 
 	virtual bool onUserInput(gui::InputEvent input);
 	virtual bool isEnabled();
@@ -26,12 +26,12 @@ public:
 	void log(std::string message);
 
 private:
-	core::IShell* shell_;
-	IGUIWindow* window_;
-	IGUITextBox* input_;
-	IGUIListBox* output_;
+	core::Shell* shell_;
+	IGUWindow* window_;
+	IGUTextBox* input_;
+	IGUListBox* output_;
 };
 
 } // namespace gui
 } // namespace hrengin
-#endif //_hrengin_CConsoleGUI_
+#endif //_hrengin_ConsoleGUI_

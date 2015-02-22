@@ -1,39 +1,39 @@
 /*
-   Copyright (C) 2014  absurdworlds
-
-   License LGPLv3-only:
-   GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
-   This is free software: you are free to change and redistribute it.
-   There is NO WARRANTY, to the extent permitted by law.
+ * Copyright (C) 2014  absurdworlds
+ *
+ * License LGPLv3-only:
+ * GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
+ * This is free software: you are free to change and redistribute it.
+ * There is NO WARRANTY, to the extent permitted by law.
  */
-#include "CLogger.h"
+#include "Logger.h"
 
 namespace hrengin {
 namespace core {
 
-ILogger* createLogger()
+Logger_* createLogger()
 {
-	return new CLogger();
+	return new Logger_();
 }
 
-CLogger::CLogger()
-{
-}
-
-CLogger::~CLogger()
+Logger_::Logger_()
 {
 }
 
-void CLogger::push(std::string msg)
+Logger_::~Logger_()
+{
+}
+
+void Logger_::push(std::string msg)
 {
 	// woohoo, iterators incompatible
-	//for(std::vector<ILogBook*>::iterator it; it != logs_.end(); ++it) {
+	//for(std::vector<LogBook*>::iterator it; it != logs_.end(); ++it) {
 	for(auto it = logs_.begin(); it != logs_.end(); ++it) {
 		(*it)->log(msg);
 	}
 }
 
-void CLogger::addLog(ILogBook* log)
+void Logger_::addLog(LogBook* log)
 {
 	logs_.push_back(log);
 }

@@ -1,5 +1,4 @@
-/* This file is a part of hrengin library collection
- *
+/*
  * Copyright (C) 2014  absurdworlds
  *
  * License LGPLv3-only:
@@ -7,26 +6,26 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#include "CHPKListWriter.h"
+#include "HPKListWriter.h"
 
 namespace hrengin {
 namespace itd {
-CHPKListWriter::CHPKListWriter ()
+HPKListWriter::HPKListWriter ()
 {
 }
 
-CHPKListWriter::~CHPKListWriter ()
+HPKListWriter::~HPKListWriter ()
 {
 }
 
-void CHPKListWriter::addFile (std::string const& path, u64 id)
+void HPKListWriter::addFile (std::string const& path, u64 id)
 {
 	u64 nameOffset = strings_.add(path);
 
 	index_.push_back(ListEntry(nameOffset, id));
 }
 
-void CHPKListWriter::write (std::ostream & target)
+void HPKListWriter::write (std::ostream & target)
 {
 	// not needed, before I started writing this code, I planned to use
 	// target.tellg() to determine offsets, but and came up with better 

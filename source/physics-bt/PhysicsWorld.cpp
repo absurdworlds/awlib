@@ -6,16 +6,16 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#include "CCollisionPhantom.h"
-#include "CRigidBody.h"
+#include "CollisionPhantom.h"
+#include "RigidBody.h"
 
-#include "CPhysicsWorld.h"
+#include "PhysicsWorld.h"
 #include "CustomRayCallback.h"
 
 namespace hrengin {
 namespace physics {
 
-CPhysicsWorld::CPhysicsWorld(btCollisionConfiguration* configuration,
+PhysicsWorld_::PhysicsWorld_(btCollisionConfiguration* configuration,
 	btBroadphaseInterface* broadphase,
 	btCollisionDispatcher* dispatcher,
 	btConstraintSolver* constraintSolver)
@@ -27,7 +27,7 @@ CPhysicsWorld::CPhysicsWorld(btCollisionConfiguration* configuration,
 	details_.world = dynamicsWorld_;
 }
 
-CPhysicsWorld::~CPhysicsWorld()
+PhysicsWorld_::~PhysicsWorld_()
 {
 	int i;
 
@@ -48,7 +48,7 @@ CPhysicsWorld::~CPhysicsWorld()
 	delete collisionConfiguration_;
 }
 
-btScalar CPhysicsWorld::getDeltaTime()
+btScalar PhysicsWorld_::getDeltaTime()
 {
 	btScalar dt = (btScalar)clock_.getTimeMicroseconds();
 	clock_.reset();
@@ -56,41 +56,41 @@ btScalar CPhysicsWorld::getDeltaTime()
 }
 
 
-void CPhysicsWorld::addBody(IRigidBody* body)
+void PhysicsWorld_::addBody(RigidBody* body)
 {
 	btRigidBody* rb = static_cast<btRigidBody*>(body->getDetails()->obj);
 	dynamicsWorld_->addRigidBody(rb);
 	dynamicsWorld_->updateAabbs();
 }
 
-void CPhysicsWorld::addBody(IRigidBody* body, CollisionFilter filter)
+void PhysicsWorld_::addBody(RigidBody* body, CollisionFilter filter)
 {
 	btRigidBody* rb = static_cast<btRigidBody*>(body->getDetails()->obj);
 	dynamicsWorld_->addRigidBody(rb, filter.group, filter.mask);
 	dynamicsWorld_->updateAabbs();
 }
 
-void CPhysicsWorld::addObject(ICollisionObject* object)
+void PhysicsWorld_::addObject(CollisionObject* object)
 {
 	btCollisionObject* obj = object->getDetails()->obj;
 	dynamicsWorld_->addCollisionObject(obj);
 	//dynamicsWorld_->updateAabbs();
 }
 
-void CPhysicsWorld::addObject(ICollisionObject* object, CollisionFilter filter)
+void PhysicsWorld_::addObject(CollisionObject* object, CollisionFilter filter)
 {
 	btCollisionObject* obj = object->getDetails()->obj;
 	dynamicsWorld_->addCollisionObject(obj, filter.group, filter.mask);
 	//dynamicsWorld_->updateAabbs();
 }
 
-void CPhysicsWorld::removeBody(IRigidBody* body)
+void PhysicsWorld_::removeBody(RigidBody* body)
 {
 	btRigidBody* obj = static_cast<btRigidBody*>(body->getDetails()->obj);
 	dynamicsWorld_->removeRigidBody(obj);
 }
 
-void CPhysicsWorld::removeObject(ICollisionObject* object)
+void PhysicsWorld_::removeObject(CollisionObject* object)
 {
 	btCollisionObject* obj = object->getDetails()->obj;
 	dynamicsWorld_->removeCollisionObject(obj);
@@ -98,13 +98,13 @@ void CPhysicsWorld::removeObject(ICollisionObject* object)
 
 
 void castRayMultipleTarget(btVector3 const& from, btVector3 const& to,
-	IRayResultCallback* callback, btDynamicsWorld* dynamicsWorld)
+	RayResultCallback* callback, btDynamicsWorld* dynamicsWorld)
 {
 
 }
 
 void castRaySingleTarget(btVector3 const& from, btVector3 const& to,
-	IRayResultCallback* callback, btDynamicsWorld* dynamicsWorld)
+	RayResultCallback* callback, btDynamicsWorld* dynamicsWorld)
 {
 	CustomClosestHitCallback resultCallback(from, to, callback);
 
@@ -112,7 +112,7 @@ void castRaySingleTarget(btVector3 const& from, btVector3 const& to,
 	dynamicsWorld->rayTest(from, to, resultCallback);
 }
 
-void CPhysicsWorld::castRay(Vector3d<f32> from, Vector3d<f32> to, IRayResultCallback* callback)
+void PhysicsWorld_::castRay(Vector3d<f32> from, Vector3d<f32> to, RayResultCallback* callback)
 {
 #if 0
 	typedef void (* rayCastFunc)(btVector3, btVector3, IRayResultCallback*);
@@ -131,13 +131,13 @@ void CPhysicsWorld::castRay(Vector3d<f32> from, Vector3d<f32> to, IRayResultCall
 	}
 }
 
-void CPhysicsWorld::setDebugDrawer(IDebugDrawer* drawer)
+void PhysicsWorld_::setDebugDrawer(DebugDrawer* drawer)
 {
 	drawer->setWorld(this);
 	//btIDebugDraw* debugDraw = drawer->getDetails()->debugDraw;
 }
 
-bool CPhysicsWorld::step()
+bool PhysicsWorld_::step()
 {
 	btScalar ms = getDeltaTime();
 
