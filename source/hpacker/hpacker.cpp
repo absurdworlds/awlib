@@ -8,7 +8,7 @@
  */
 #include <cstdio>
 
-#include <hrengin/core/IArgParser.h>
+#include <hrengin/core/ArgParser.h>
 
 #include "hpacker.h"
 
@@ -17,7 +17,7 @@ namespace itd {
 void printUsage()
 {
 	printf("Usage: hpacker [OPTION]... [FILE...]\n");
-	printf("hpacker is a utility which serves files together into a ITD archive.\n");
+	printf("hpacker is a utility which serves files together into a TD archive.\n");
 	printf("\n");
 	printf("  -c, --create         Create an archive\n");
 	printf("  -e, --extract        Extract contents of archive\n");
@@ -30,7 +30,7 @@ void printUsage()
 
 i32 main (char** args)
 {
-	core::IArgParser* argp = core::createArgParser(args+1);
+	core::ArgParser* argp = core::createArgParser(args+1);
 
 	enum Action {
 		None,
@@ -79,7 +79,7 @@ i32 main (char** args)
 	}
 
 	if(action == Create) {
-		CItdPacker packer(filename, verbose);
+		ItdPacker packer(filename, verbose);
 		packer.addList(files);
 
 		packer.pack();

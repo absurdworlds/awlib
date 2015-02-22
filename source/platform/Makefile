@@ -5,12 +5,12 @@ ExternalIncludes = -I../../dependencies/include/
 ExternalLibraries = 
 
 # Includes and objects
-Objects = CCharacterStream.o CBufferedStream.o \
-	  CReadFile.o CWriteFile.o posix/filesystem.o posix/CDirectory.o \
+Objects = CharacterStream.o BufferedStream.o \
+	  ReadFile.o WriteFile.o posix/filesystem.o posix/Directory.o \
 	  linux/time.o
 Includes = -I../../include $(ExternalIncludes)
 Libraries = $(ExternalLibraries)
-Defines = -D HR_MODULE_PLATFORM -D HR_MODULE_IO
+Defines = -D HR_MODULE_PLATFORM -D HR_MODULE_O
 
 Version = $(VersionMajor).$(VersionMinor)
 SharedLibName = libhrplatform.so

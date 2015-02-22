@@ -14,13 +14,13 @@
 namespace hrengin {
 
 /*! Align the address to N (power of 2) byte boundry, rounded up */
-inline void* alignUp (void* addr, u8 align)
+inline void* alignUp(void* addr, u8 align)
 {
 	return (void *)(((u8*)(addr) + (u8*)(align - 1)) & ~(u8*)(align - 1));
 }
 
 /*! Align the address to N (power of 2) byte boundry, rounded down */
-inline void* alignDown (void* addr, u8 align)
+inline void* alignDown(void* addr, u8 align)
 {
 	return (void *)((u8*)(addr) & ~(u8*)(align - 1));
 }

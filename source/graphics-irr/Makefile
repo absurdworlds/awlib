@@ -4,7 +4,9 @@ ExternalIncludes = -I../../dependencies/include/
 ExternalLibraries = -L../../dependencies/lib -lIrrlicht
 
 # Includes and objects
-Objects = CCameraNode.o CConsoleGUI.o CGUIListBox.o CGuiManager.o CGUITextBox.o CGUIWindow.o CInputManager.o CLightNode.o CRenderingDevice.o CSceneManager.o CVideoManager.o CVisNode.o CEntityNode.o 
+Objects = CameraNode.o VisNode.o EntityNode.o LightNode.o \
+	  ConsoleGUI.o GUIListBox.o GuiManager.o GUITextBox.o GUIWindow.o \
+	  InputManager.o RenderingDevice.o SceneManager.o VideoManager.o
 Includes = -I../../include $(ExternalIncludes)
 Libraries = $(ExternalLibraries)
 Defines = -D HR_MODULE_GRAPHICS -D HR_MODULE_GUI -D HR_MODULE_SCENE

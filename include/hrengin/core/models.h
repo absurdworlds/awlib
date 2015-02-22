@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014  absurdworlds
+ * Copyright (C) 2014-2015  absurdworlds
  *
  * License LGPLv3-only:
  * GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
@@ -40,13 +40,15 @@ struct Primitive {
 	f32 offset[3];
 	f32 rotation[4];
 
-	Primitive () : shape(SHAPE_EMPTY), axis(AXIS_Y), dimensions(), offset(), rotation()
+	Primitive()
+		: shape(SHAPE_EMPTY), axis(AXIS_Y),
+		  dimensions(), offset(), rotation()
 	{
 
 	}
 };
 
-struct SMesh {
+struct Mesh {
 	f32* verts;
 };
 

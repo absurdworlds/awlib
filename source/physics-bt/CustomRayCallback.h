@@ -11,7 +11,7 @@
 
 #include <btBulletCollisionCommon.h>
 
-#include <hrengin/physics/IRayResultCallback.h>
+#include <hrengin/physics/RayResultCallback.h>
 
 #include "hrToBullet.h"
 
@@ -21,8 +21,10 @@ namespace physics {
 struct CustomClosestHitCallback
 	: public btCollisionWorld::ClosestRayResultCallback {
 
-	CustomClosestHitCallback(const btVector3& rayFromWorld,
-		const btVector3& rayToWorld, IRayResultCallback* hrCallback)
+	CustomClosestHitCallback(
+		btVector3 const& rayFromWorld,
+		btVector3 const& rayToWorld,
+		physics::RayResultCallback* hrCallback)
 	: btCollisionWorld::ClosestRayResultCallback(rayFromWorld, rayToWorld),
 		customCallback_(hrCallback)
 	{
@@ -30,7 +32,7 @@ struct CustomClosestHitCallback
 		m_collisionFilterMask = customCallback_->collFilter.mask;
 	}
 
-	IRayResultCallback* customCallback_;
+	physics::RayResultCallback* customCallback_;
 
 	//used to calculate hitPointWorld from hitFraction
 	// btVector3	m_rayFromWorld;
@@ -64,7 +66,7 @@ struct CustomClosestHitCallback
 		m_hitPointWorld.setInterpolate3(m_rayFromWorld,m_rayToWorld,rayResult.m_hitFraction);
 
 		RaytestResult result(
-			(ICollisionObject*)m_collisionObject->getUserPointer(),
+			(CollisionObject*)m_collisionObject->getUserPointer(),
 			m_closestHitFraction, 
 			toHrengin(m_hitPointWorld), toHrengin(m_hitNormalWorld));
 

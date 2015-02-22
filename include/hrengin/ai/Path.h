@@ -6,8 +6,8 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_CPath_
-#define _hrengin_CPath_
+#ifndef _hrengin_Path_
+#define _hrengin_Path_
 
 #include <vector>
 #include <limits>
@@ -24,13 +24,13 @@ public:
 	typedef std::vector<node_type> container_type;
 
 	//! Get current node
-	node_type getCurrentNode () const
+	node_type getCurrentNode() const
 	{
 		return nodes_[current_];
 	}
 
 	//! Get next node and increment counter
-	node_type getNextNode ()
+	node_type getNextNode()
 	{
 		if(current_ < size()) {
 			++current_;
@@ -39,7 +39,7 @@ public:
 	}
 
 	//! Get previous node and decrement counter
-	node_type getPreviousNode ()
+	node_type getPreviousNode()
 	{
 		if(current_ < size()) {
 			--current_;
@@ -48,19 +48,19 @@ public:
 	}
 
 	//! Get first node
-	node_type getFirstNode () const
+	node_type getFirstNode() const
 	{
 		return nodes_[0];
 	}
 
 	//! Get last node
-	node_type getLastNode () const
+	node_type getLastNode() const
 	{
 		return nodes_.back();
 	}
 
 	//! Add node to the end
-	void addNode (node_type const& node)
+	void addNode(node_type const& node)
 	{
 		nodes_.push_back(node);
 	}
@@ -72,7 +72,7 @@ public:
 	}
 
 	//! Check if currently at end of the path
-	size_t atEnd () const
+	size_t atEnd() const
 	{
 		return current_ == size();
 	}
@@ -84,12 +84,12 @@ public:
 	}
 
 	//! Count of nodes in path
-	size_t size () const
+	size_t size() const
 	{
 		return nodes_.size();
 	}
 
-	void clear ()
+	void clear()
 	{
 		nodes_.clear();
 	}
@@ -238,4 +238,4 @@ Path::const_iterator findClosestNode(Path::const_iterator& first,
 
 } // namespace ai
 } // namespace hrengin
-#endif//_hrengin_CPath_
+#endif//_hrengin_Path_

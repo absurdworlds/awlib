@@ -39,7 +39,7 @@ i32 fileStat (std::string const& path, FileInfo& result)
 	return 0;
 }
 
-i32 checkFile(std::string const & path, FileMode fmode)
+i32 checkFile(std::string const& path, FileMode fmode)
 {
 #if 0
 	// Can't find any mention of exact values in the standard

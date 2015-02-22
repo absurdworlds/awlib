@@ -17,7 +17,7 @@
 namespace hrengin {
 namespace locale {
 //! Convert utf-16 character string to utf-8
-inline char* narrow (char* output, size_t size,
+inline char* narrow(char* output, size_t size,
 	wchar_t const* begin, wchar_t const* end)
 {
 	if(size == 0) {
@@ -26,16 +26,16 @@ inline char* narrow (char* output, size_t size,
 
 	-- size;
 
-	while(begin != end) {
+	while (begin != end) {
 		u32 cp = utf16::get<wchar_t const *>(begin, end);
 
-		if(cp == -1) {
+		if (cp == -1) {
 			continue;
 		}
 
 		size_t width = utf8::width(cp);
 
-		if(size < width) {
+		if (size < width) {
 			output = 0;
 			break;
 		}

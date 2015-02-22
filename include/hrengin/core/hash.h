@@ -30,13 +30,13 @@ union u128 {
 // non-native version will be less than optimal.
 
 HR_CORE_EXP
-void MurmurHash3_x86_32  (void const * key, size_t len, u32 seed, void * out);
+void MurmurHash3_x86_32(void const * key, size_t len, u32 seed, void * out);
 
 HR_CORE_EXP
-void MurmurHash3_x86_128 (void const * key, size_t len, u128 seed, void * out);
+void MurmurHash3_x86_128(void const * key, size_t len, u128 seed, void * out);
 
 HR_CORE_EXP
-void MurmurHash3_x64_128 (void const * key, size_t len, u128 seed, void * out);
+void MurmurHash3_x64_128(void const * key, size_t len, u128 seed, void * out);
 
 } // namespace hrengin
 #endif//_hrengin_hash_
