@@ -7,8 +7,8 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_ArgParser_
-#define _hrengin_ArgParser_
+#ifndef _hrengin_ArgumentParser_
+#define _hrengin_ArgumentParser_
 
 #include <string>
 
@@ -21,7 +21,7 @@ namespace core {
  * Command line argument,
  * represents a single option or argument
  */
-struct ClineArg {
+struct Argument {
 	enum Type : u8 {
 		//! Short option ('-o')
 		Option,
@@ -36,10 +36,10 @@ struct ClineArg {
 };
 
 //! Used to parse command line arguments passed to the program
-class ArgParser {
+class ArgumentParser {
 public:
 	//! Virtual destructor
-	virtual ~ArgParser () 
+	virtual ~ArgumentParser () 
 	{
 	}
 
@@ -50,9 +50,9 @@ public:
 	 * \return
 	 * 	Number of remaining arguments if successful,
 	 * 	When end is reached, 0 is returned.
-	 * 	If error occurs, return value is -`.
+	 * 	If error occurs, return value is negative.
 	 */
-	virtual i32 getNextArgument (ClineArg& arg) = 0;
+	virtual i32 getNextArgument (Argument& arg) = 0;
 };
 
 /*!
@@ -60,8 +60,8 @@ public:
  * \param argv Array of pointers to command line token strings.
  * \note Each string must be null-terminated. Last element of array must be 0.
  */
-HR_CORE_EXP ArgParser* createArgParser (char** argv);
+HR_CORE_EXP ArgumentParser* createArgumentParser (char** argv);
 
 } //namespace core
 } //namespace hrengin
-#endif//_hrengin_ArgParser_
+#endif//_hrengin_ArgumentParser_
