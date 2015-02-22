@@ -91,16 +91,16 @@ But control statement keywords are written with a space after them:
 	while  for  case  do  while
 ```
 
-These member access operators are written with no spaces around operands:
+These member access operators, and namespace resolution operator are written with no spaces around operands:
 
 ```
-	[]  .  ->
+	[]  .  ->  ::
 ```
 
 Commas (and semicolons) are written with space after them, but not before them (just as in regular typography):
 
 ```
-	for(int a, b; condition; ++a, ++b);
+	for (int a, b; condition; ++a, ++b);
 ```
 
 Also, there should be space between statement and opening curly brace:
