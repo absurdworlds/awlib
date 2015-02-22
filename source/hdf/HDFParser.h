@@ -7,8 +7,8 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_HDFParser_
-#define _hrengin_HDFParser_
+#ifndef _hrengin_HDFParser_impl_
+#define _hrengin_HDFParser_impl_
 
 #include <string>
 #include <vector>
@@ -101,4 +101,4 @@ private:
 } // namespace impl_
 } // namespace io
 } // namespace hrengin
-#endif//_hrengin_HDFParser_
+#endif//_hrengin_HDFParser_impl_
