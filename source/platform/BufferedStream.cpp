@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014  absurdworlds
+ * Copyright (C) 2014-2105  absurdworlds
  *
  * License LGPLv3-only:
  * GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
@@ -30,7 +30,7 @@ BufferedStream::~BufferedStream()
 //	delete[] buffer_;
 }
 
-bool BufferedStream::getCurrent(u8& c)
+bool BufferedStream::getCurrent(char& c)
 {
 	if(pos_ > source_->getSize()) {
 		c = 0;
@@ -41,7 +41,7 @@ bool BufferedStream::getCurrent(u8& c)
 	return true;
 }
 
-bool BufferedStream::getNext(u8& c)
+bool BufferedStream::getNext(char& c)
 {
 	pos_++;
 

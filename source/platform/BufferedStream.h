@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014  absurdworlds
+ * Copyright (C) 2014-2015  absurdworlds
  *
  * License LGPLv3-only:
  * GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
@@ -8,8 +8,6 @@
  */
 #ifndef _hrengin_BufferedStream_
 #define _hrengin_BufferedStream_
-
-#include <hrengin/common/types.h>
 #include <hrengin/io/BufferedStream.h>
 
 namespace hrengin {
@@ -21,8 +19,8 @@ public:
 	BufferedStream(ReadFile* source);
 	virtual ~BufferedStream();
 
-	virtual bool getCurrent(u8& c);
-	virtual bool getNext(u8& c);
+	virtual bool getCurrent(char& c);
+	virtual bool getNext(char& c);
 	virtual u32 getPos() const;
 
 private:

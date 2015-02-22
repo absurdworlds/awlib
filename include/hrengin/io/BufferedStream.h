@@ -8,7 +8,6 @@
  */
 #ifndef _hrengin_BufferedStream_
 #define _hrengin_BufferedStream_
-
 #include <hrengin/io/CharacterStream.h>
 
 namespace hrengin {
