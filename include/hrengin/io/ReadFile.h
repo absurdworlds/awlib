@@ -16,7 +16,7 @@ namespace io {
 /*!
  * Provides interface for reading files
  */
-class HR_IO_EXP ReadFile : public IFile {
+class HR_IO_EXP ReadFile : public File {
 public:
 	ReadFile (std::string const& path);
 
