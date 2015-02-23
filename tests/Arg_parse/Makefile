@@ -6,7 +6,7 @@ ExternalLibraries = -Wl,-rpath-link,../../lib,-R,'$$ORIGIN/../lib'
 # Includes and objects
 Objects = Arg_parse.o
 Includes = -I../../include
-Libraries = -L../../lib -lhrplatform -lhrcore $(ExternalLibraries)
+Libraries = -L../../lib -lhrplatform -lhdf -lhrcore $(ExternalLibraries)
 Defines = 
 
 Version = $(VersionMajor).$(VersionMinor)
