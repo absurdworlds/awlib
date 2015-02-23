@@ -18,9 +18,9 @@ namespace compose_ {
 
 char const CompositionChar = '%';
 
-class Composer {
+class Composed {
 public:
-	Composer(std::string const& fmt, std::vector<std::string> const& tokens,
+	Composed(std::string const& fmt, std::vector<std::string> const& tokens,
 			char delim = CompositionChar)
 		: fmt(fmt), bits(tokens), delim(delim)
 	{

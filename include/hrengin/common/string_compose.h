@@ -24,7 +24,7 @@ std::string compose(std::string const& fmt, Args const&... args)
 {
 	std::vector<std::string> bits{args...};
 
-	return compose_::Composer(fmt, bits);
+	return compose_::Composed(fmt, bits);
 }
 
 } // namespace string
