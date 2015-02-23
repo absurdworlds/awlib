@@ -6,8 +6,8 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_BufferedStream_
-#define _hrengin_BufferedStream_
+#ifndef _hrengin_BufferedStream_impl_
+#define _hrengin_BufferedStream_impl_
 #include <hrengin/io/BufferedStream.h>
 
 namespace hrengin {
@@ -32,4 +32,4 @@ private:
 } // namespace impl_
 } // namespace io
 } // namespace hrengin
-#endif//_hrengin_BufferedStream_
+#endif// (header guard)

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014  absurdworlds
+ * Copyright (C) 2014-2015  absurdworlds
  *
  * License LGPLv3-only:
  * GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
@@ -8,7 +8,7 @@
  */
 #include <hrengin/core/models.h>
 #include <hrengin/core/paths.h>
-#include <hrengin/common/stringutils.h>
+#include <hrengin/string/utility.h>
 
 #include <hrengin/core/FileSystem.h>
 

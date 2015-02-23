@@ -18,7 +18,7 @@ namespace io {
 
 Directory* openDirectory (std::string path)
 {
-	Directory* dir = new Directory(path);
+	Directory* dir = new impl_::Directory(path);
 
 	if (dir->isOpen()) {
 		return dir;
@@ -27,7 +27,8 @@ Directory* openDirectory (std::string path)
 	return 0;
 }
 
-Directory::Directory (const std::string& path)
+namespace impl_ {
+Directory::Directory (std::string const& path)
 : dir_(0), path_(path)
 {
 	this->open();
@@ -80,11 +81,11 @@ i32 Directory::read (Dirent& result)
 	}
 
 	//Dirent dent;
-	switch(dstat.st_mode & S_FMT) {
-	case S_FREG:
+	switch(dstat.st_mode & S_IFMT) {
+	case S_IFREG:
 		result.type = FileType::File;
 		break;
-	case S_FDIR:
+	case S_IFDIR:
 		result.type = FileType::Dir;
 		break;
 	default:
@@ -116,10 +117,10 @@ u32 Directory::getSize() const
 	return size_;
 }
 */
-const std::string& Directory::getPath () const
+std::string const& Directory::getPath () const
 {
 	return path_;
 }
-
+} // namespace impl_
 } // namespace io
 } // namespace hrengin

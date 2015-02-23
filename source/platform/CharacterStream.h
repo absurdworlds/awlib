@@ -6,8 +6,8 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_CharacterStream_
-#define _hrengin_CharacterStream_
+#ifndef _hrengin_CharacterStream_impl_
+#define _hrengin_CharacterStream_impl_
 #include <hrengin/io/CharacterStream.h>
 
 namespace hrengin {
@@ -42,4 +42,4 @@ private:
 } // namespace impl_
 } // namespace io
 } // namespace hrengin
-#endif//_hrengin_CharacterStream_
+#endif// (header guard)

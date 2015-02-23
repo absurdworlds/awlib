@@ -9,7 +9,7 @@
 #ifndef _hrengin_WriteFile_
 #define _hrengin_WriteFile_
 
-#include <hrengin/io/IFile.h>
+#include <hrengin/io/File.h>
 
 namespace hrengin {
 namespace io {

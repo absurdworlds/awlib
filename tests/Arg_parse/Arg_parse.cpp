@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014  absurdworlds
+ * Copyright (C) 2014-2015  absurdworlds
  *
  * License LGPLv3 or later:
  * GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
@@ -8,28 +8,28 @@
  */
 #include <cstdio>
 
-#include <hrengin/core/IArgParser.h>
+#include <hrengin/core/ArgumentParser.h>
 
 int main (int, char** v)
 {
 	using namespace hrengin;
-	core::IArgParser* a = core::createArgParser(v);
-	core::ClineArg tok;
+	core::ArgumentParser* a = core::createArgumentParser(v);
+	core::Argument arg;
 
-	while(a->getToken(tok)) {
+	while(a->getNextArgument(arg)) {
 		char c;
-		switch(tok.type) {
-		case core::ClineArg::Option:
-			c = tok.longOpt ? 'l' : 'o';
+		switch(arg.type) {
+		case core::Argument::Option:
+			c = arg.longOpt ? 'l' : 'o';
 			break;
-		case core::ClineArg::Delim:
+		case core::Argument::Delim:
 			c = 'd';
 			break;
-		case core::ClineArg::Argument:
+		case core::Argument::Operand:
 			c = 'a';
 			break;
 		}	
-		printf("%c %s\n", c, tok.name.c_str());
+		printf("%c %s\n", c, arg.name.c_str());
 	}
 
 	return 0;

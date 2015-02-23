@@ -6,8 +6,8 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_Directory_
-#define _hrengin_Directory_
+#ifndef _hrengin_Directory_impl
+#define _hrengin_Directory_impl
 
 #include <stdio.h>
 #include <dirent.h>
@@ -19,8 +19,9 @@
 
 namespace hrengin {
 namespace io {
+namespace impl_ {
 
-class Directory : public Directory {
+class Directory : public io::Directory {
 public:
 	Directory (std::string const& path);
 	virtual ~Directory ();
@@ -43,7 +44,7 @@ private:
 	DIR* dir_;
 	std::string path_;
 };
-
+} // namespace impl_
 } // namespace io
 } // namespace hrengin
-#endif//_hrengin_Directory_
+#endif// (header guard)

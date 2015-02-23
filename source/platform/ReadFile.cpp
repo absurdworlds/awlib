@@ -59,7 +59,7 @@ i32 ReadFile::seek(i32 offset, bool relative)
 		return -1;
 	}
 
-	return fseek(file_, offset, relative ? SEEK_UR : SEEK_SET);
+	return fseek(file_, offset, relative ? SEEK_CUR : SEEK_SET);
 }
 
 u32 ReadFile::tell() const
