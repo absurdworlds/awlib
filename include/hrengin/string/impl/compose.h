@@ -11,7 +11,6 @@
 #define _hrengin_string_compose_impl_
 #include <vector>
 #include <string>
-
 namespace hrengin {
 namespace string {
 // Implementation details, do not use directly

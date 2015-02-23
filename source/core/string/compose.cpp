@@ -68,4 +68,3 @@ size_t Composed::paste_arg(size_t pos)
 } // namespace compose_
 } // namespace string
 } // namespace hrengin
-#endif// (header guard)
