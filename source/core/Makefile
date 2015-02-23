@@ -4,7 +4,7 @@ ExternalIncludes = -I../../dependencies/include/
 ExternalLibraries =
 
 # Includes and objects
-Objects = ArgParser.o MurmurHash3.o \
+Objects = ArgumentParser.o MurmurHash3.o \
 	  SettingsManager.o HDFSettingsLoader.o ModelLoader.o \
 	  FileSystem.o Logger.o HrenginShell.o \
 	  string/compose.o
