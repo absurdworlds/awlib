@@ -22,18 +22,9 @@ namespace string {
 template<typename... Args>
 std::string compose(std::string const& fmt, Args const&... args)
 {
-	std::string out;
-	out.reserve(fmt.size());
+	std::vector<std::string> bits{args...};
 
-	std::vector<std::string> bits{ args... };
-
-	size_t pos = 0;
-	
-	while (pos != std::string::npos)
-		pos = impl_::compose_arg(fmt, out, bits, pos);
-
-
-	return out;
+	return compose_::Composer(fmt, bits);
 }
 
 } // namespace string

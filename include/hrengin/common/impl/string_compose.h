@@ -14,54 +14,85 @@
 
 namespace hrengin {
 namespace string {
-namespace impl_ {
+namespace compose_ {
 
-char const CompositionChar = '$';
+char const CompositionChar = '%';
 
-size_t compose_special(std::string const& fmt, std::string& out,
-		size_t pos)
-{
-	switch(fmt[pos]) {
-	case CompositionChar:
-		out += CompositionChar;
-		return pos + 1;
-	default:
-		out += CompositionChar;
-		return pos;
-	}
-}
-
-size_t compose_paste(std::string const& fmt, std::string& out,
-		std::vector<std::string> const& bits, size_t pos)
-{
-	return pos;
-}
-
-size_t compose_arg(std::string const& fmt, std::string& out,
-		std::vector<std::string> const& bits, size_t pos)
-{
-	size_t pos1 = fmt.find('%', pos);
-	
-	out += fmt.substr(pos, pos1 - pos);
-	if (pos1 == std::string::npos)
-		return pos1;
-
-	size_t pos2 = ++pos1;
-
-	if(!isdigit(fmt[pos2])) {
-		return compose_special(fmt, out, pos2);
+class Composer {
+public:
+	Composer(std::string const& fmt, std::vector<std::string> const& tokens,
+			char delim = CompositionChar)
+		: fmt(fmt), bits(tokens), delim(delim)
+	{
+		compose();
 	}
 
-	while(isdigit(fmt[pos2]))
-		++pos2;
+	operator std::string() const
+	{
+		return result;
+	}
+private:
+	void compose()
+	{
+		result.reserve(fmt.size());
 
-	size_t arg_no = stoull(fmt.substr(pos1, pos2 - pos1));
-	if(arg_no < bits.size())
-		out += bits[arg_no];
+		size_t pos = 0;
+		
+		while (pos != std::string::npos)
+			pos = compose_arg(pos);
+	}
 
-	return pos2;
-}
-} // namespace impl_
+	size_t compose_arg(size_t pos)
+	{
+		size_t pos1 = fmt.find(delim, pos);
+		
+		result += fmt.substr(pos, pos1 - pos);
+		if (pos1 == std::string::npos)
+			return pos1;
+
+		++pos1;
+
+		if(!isdigit(fmt[pos1]))
+			return compose_special(pos1);
+
+		return paste_arg(pos1);
+	}
+
+	size_t compose_special(size_t pos)
+	{
+		if(fmt[pos] == delim) {
+			result += delim;
+			return pos + 1;
+		}
+
+		switch(fmt[pos]) {
+		default:
+			result += delim;
+			return pos;
+		}
+	}
+
+	size_t paste_arg(size_t pos)
+	{
+		size_t pos2 = pos;
+
+		while(isdigit(fmt[pos2]))
+			++pos2;
+
+		size_t arg_no = stoull(fmt.substr(pos, pos2 - pos));
+		if(arg_no < bits.size())
+			result += bits[arg_no];
+
+		return pos2;
+	}
+
+	char const delim;
+	std::string const& fmt;
+	std::vector<std::string> const& bits;
+
+	std::string result;
+};
+} // namespace compose_
 } // namespace string
 } // namespace hrengin
 #endif// (header guard)
