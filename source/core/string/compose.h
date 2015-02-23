@@ -9,6 +9,8 @@
  */
 #ifndef _hrengin_string_compose_impl_
 #define _hrengin_string_compose_impl_
+#include <hrengin/string/compose.h>
+
 #include <vector>
 #include <string>
 namespace hrengin {

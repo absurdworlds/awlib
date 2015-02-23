@@ -7,10 +7,16 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#include <hrengin/string/compose.h>
+#include "compose.h"
 
 namespace hrengin {
 namespace string {
+HR_CORE_EXP std::string compose(std::string const& fmt,
+		std::vector<std::string> const& args)
+{
+	return compose_::Composed(fmt, args);
+}
+
 namespace compose_ {
 void Composed::compose()
 {

@@ -12,10 +12,16 @@
 #include <vector>
 #include <string>
 
-#include "impl/compose.h"
+#include <hrengin/core/core.h>
 
 namespace hrengin {
 namespace string {
+/*!
+ * Compose parametrized string (parameter substitution).
+ */
+HR_CORE_EXP std::string compose(std::string const& fmt,
+		std::vector<std::string> const& args);
+
 /*!
  * Compose parametrized string (parameter substitution).
  *
@@ -49,16 +55,7 @@ std::string compose(std::string const& fmt, Args const&... args)
 {
 	std::vector<std::string> bits{args...};
 
-	return compose_::Composed(fmt, bits);
-}
-
-/*!
- * Compose parametrized string (parameter substitution).
- */
-std::string compose(std::string const& fmt,
-		std::vector<std::string> const& args)
-{
-	return compose_::Composed(fmt, args);
+	return compose(fmt, bits);
 }
 } // namespace string
 } // namespace hrengin
