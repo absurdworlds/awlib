@@ -18,6 +18,31 @@ namespace hrengin {
 namespace string {
 /*!
  * Compose parametrized string (parameter substitution).
+ *
+ * Takes string as input, all characters of which are returned
+ * unchanged, with exception for '%'. Tokens, starting with '%'
+ * are replacement fields, and have following format:
+ *
+ * 	ref ::= '%' [0-9]+
+ *
+ * These refer to an argument number, and substituted by respective
+ * arguments, passed into this function.
+ *
+ * For example:
+ * 	compose("\1 \0", " a string", "this is");
+ *
+ * Will return std::string("this is a string").
+ *
+ * Use '%%' to write '%' symbol. Do not use '%' (single '%') with
+ * characters, other than [0-9] digits, as their behavior will
+ * change in the future.
+ * 
+ * \param fmt
+ * 	Format string, containing regular text and parameters
+ * 	starting with '%'.
+ * \param args
+ * 	Arguments, which will be used to substitute parameters in
+ * 	the string \a fmt.
  */
 template<typename... Args>
 std::string compose(std::string const& fmt, Args const&... args)
@@ -25,6 +50,15 @@ std::string compose(std::string const& fmt, Args const&... args)
 	std::vector<std::string> bits{args...};
 
 	return compose_::Composed(fmt, bits);
+}
+
+/*!
+ * Compose parametrized string (parameter substitution).
+ */
+std::string compose(std::string const& fmt,
+		std::vector<std::string> const& args)
+{
+	return compose_::Composed(fmt, args);
 }
 } // namespace string
 } // namespace hrengin
