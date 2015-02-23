@@ -6,7 +6,8 @@ ExternalLibraries =
 # Includes and objects
 Objects = ArgParser.o MurmurHash3.o \
 	  SettingsManager.o HDFSettingsLoader.o ModelLoader.o \
-	  FileSystem.o Logger.o HrenginShell.o
+	  FileSystem.o Logger.o HrenginShell.o \
+	  string/compose.o
 Includes = -I../../include $(ExternalIncludes)
 Libraries = $(ExternalLibraries)
 Defines = -D HR_MODULE_CORE

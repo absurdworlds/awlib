@@ -7,17 +7,17 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_string_compose_
-#define _hrengin_string_compose_
+#ifndef _hrengin_string_compose_impl_
+#define _hrengin_string_compose_impl_
 #include <vector>
 #include <string>
 
-#include "impl/string_compose.h"
+#include "impl/compose.h"
 
 namespace hrengin {
 namespace string {
 /*!
- * Compose string via token substitution.
+ * Compose parametrized string (parameter substitution).
  */
 template<typename... Args>
 std::string compose(std::string const& fmt, Args const&... args)
@@ -26,7 +26,6 @@ std::string compose(std::string const& fmt, Args const&... args)
 
 	return compose_::Composed(fmt, bits);
 }
-
 } // namespace string
 } // namespace hrengin
 #endif// (header guard)
