@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014  absurdworlds
+ * Copyright (C) 2014-2015  absurdworlds
  *
  * License LGPLv3-only:
  * GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
@@ -19,6 +19,19 @@
 
 namespace hrengin {
 namespace core {
+/*1
+ * Enumeration of all available log levels, to control
+ * verbosity of logger output.
+ */
+enum class LogLevel {
+	Default,
+	Info,
+	Debug,
+	Warning,
+	Error,
+	Critical
+};
+
 /*!
  * This class provides interface for handling message logs, such as
  * streams and buffers, allowing to output into different targets 
@@ -27,7 +40,7 @@ namespace core {
 class LogBook {
 public:
 	//! Write logger output
-	virtual void log(std::string) = 0;
+	virtual void log(std::string msg, LogLevel level) = 0;
 };
 
 /*!
@@ -36,18 +49,38 @@ public:
  * represented by LogBook class.
  */ 
 class Logger {
-	static Logger* globalLogger_;
 public:
-	//! Set global logger, which is accesset by getGlobalLogger()
+	/*!
+	 * Set global logger (useful for debug output).
+	 */
 	static void setGlobalLogger(Logger* logger)
 	{
-		globalLogger_ = logger;
+		globalLogger = logger;
 	}
 
-	//! Get pointer to global logger, which is set by setGlobalLogger()
+	/*!
+	 * Get pointer to global logger, which is set by setGlobalLogger()
+	 */
 	static Logger* getGlobalLogger()
 	{
-		return globalLogger_;
+		return globalLogger;
+	}
+
+	static logGlobal(std::string const& msg,
+			LogLevel logLevel = LogLevel::Default)
+	{
+		if (globalLogger) {
+			globalLogger->push(msg, logLevel)
+		}
+	}
+
+	static debugGlobal(std::string const& msg)
+	{
+#ifdef DEBUG
+		if (globalLogger) {
+			globalLogger->push(msg, LogLevel::DEBUG)
+		}
+#endif
 	}
 
 	//! Virtual destructor
@@ -55,14 +88,20 @@ public:
 	{
 	}
 
-	//! Push a message
-	virtual void push(std::string msg) = 0;
+	/*!
+	 * Write message to the log.
+	 */
+	virtual void push(std::string const& msg,
+			LogLevel logLevel = LogLevel::Default) = 0;
 
-	//! Add an output to logger
-	virtual void addLog(LogBook* log) = 0;
+	//! Add a recipient for the logger
+	virtual void registerLog(LogBook* log) = 0;
 
-	//! Constant for line ending
-	const std::string endl = std::string("\n");
+	//! Remove recipient
+	virtual void unregisterLog(LogBook* log) = 0;
+private:
+	// TODO: probably use std::unique_ptr?
+	static Logger* globalLogger;
 };
 
 //! Create a logger instance
