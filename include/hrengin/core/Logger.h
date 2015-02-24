@@ -66,7 +66,10 @@ public:
 		return globalLogger;
 	}
 
-	static logGlobal(std::string const& msg,
+	/*!
+	 * Write message to the global logger.
+	 */
+	static pushGlobal(std::string const& msg,
 			LogLevel logLevel = LogLevel::Default)
 	{
 		if (globalLogger) {
@@ -74,11 +77,14 @@ public:
 		}
 	}
 
-	static debugGlobal(std::string const& msg)
+	/*!
+	 * Write debug message to the global logger.
+	 */
+	static debug(std::string const& msg)
 	{
 #ifdef DEBUG
 		if (globalLogger) {
-			globalLogger->push(msg, LogLevel::DEBUG)
+			globalLogger->push(msg, LogLevel::Debug)
 		}
 #endif
 	}
