@@ -19,7 +19,7 @@
 
 namespace hrengin {
 namespace core {
-/*1
+/*!
  * Enumeration of all available log levels, to control
  * verbosity of logger output.
  */
