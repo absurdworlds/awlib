@@ -2,12 +2,12 @@ include ../../Makefile
 
 # Add paths to dependency headers here
 ExternalIncludes = -I../../dependencies/include/
-ExternalLibraries = 
+ExternalLibraries = -lsfml-window
 
 # Includes and objects
 Objects = CharacterStream.o BufferedStream.o \
 	  ReadFile.o WriteFile.o posix/filesystem.o posix/Directory.o \
-	  linux/time.o
+	  linux/time.o SFML/Window.o
 Includes = -I../../include $(ExternalIncludes)
 Libraries = $(ExternalLibraries)
 Defines = -D HR_MODULE_PLATFORM -D HR_MODULE_O
