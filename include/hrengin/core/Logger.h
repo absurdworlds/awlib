@@ -69,22 +69,22 @@ public:
 	/*!
 	 * Write message to the global logger.
 	 */
-	static pushGlobal(std::string const& msg,
+	static void pushGlobal(std::string const& msg,
 			LogLevel logLevel = LogLevel::Default)
 	{
 		if (globalLogger) {
-			globalLogger->push(msg, logLevel)
+			globalLogger->push(msg, logLevel);
 		}
 	}
 
 	/*!
 	 * Write debug message to the global logger.
 	 */
-	static debug(std::string const& msg)
+	static void debug(std::string const& msg)
 	{
 #ifdef DEBUG
 		if (globalLogger) {
-			globalLogger->push(msg, LogLevel::Debug)
+			globalLogger->push(msg, LogLevel::Debug);
 		}
 #endif
 	}
