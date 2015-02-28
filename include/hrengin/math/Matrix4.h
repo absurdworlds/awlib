@@ -38,9 +38,9 @@ public:
 	 * \note Arguments here appear in row-major order
 	 */
 	Matrix4(T const a11, T const a21, T const a31, T const a41,
-		 T const a12, T const a22, T const a32, T const a42,
-		 T const a13, T const a23, T const a33, T const a43,
-		 T const a14, T const a24, T const a34, T const a44)
+		T const a12, T const a22, T const a32, T const a42,
+		T const a13, T const a23, T const a33, T const a43,
+		T const a14, T const a24, T const a34, T const a44)
 	{
 		set (a11, a21, a31, a41,
 		     a12, a22, a32, a42,
@@ -51,10 +51,10 @@ public:
 	/*! Set each componenet of the matrix
 	   \note Arguments here appear in row-major order
 	*/
-	void set (T const a11, T const a21, T const a31, T const a41,
-		  T const a12, T const a22, T const a32, T const a42,
-		  T const a13, T const a23, T const a33, T const a43,
-		  T const a14, T const a24, T const a34, T const a44)
+	void set(T const a11, T const a21, T const a31, T const a41,
+		 T const a12, T const a22, T const a32, T const a42,
+		 T const a13, T const a23, T const a33, T const a43,
+		 T const a14, T const a24, T const a34, T const a44)
 	{
 		col_[0].set(a11, a12, a13, a14);
 		col_[1].set(a21, a22, a23, a24);
@@ -145,7 +145,7 @@ public:
 	}
 
 	//! Get transposed matrix
-	Matrix4<T> getTransposed () const
+	Matrix4<T> getTransposed() const
 	{
 		Matrix4<T> M;
 
@@ -157,14 +157,16 @@ public:
 		return M;
 	}
 
-	/*! Get matrix inverse of this matrix
-	 *  \return True if inverse matrix exists, flase otherwise.
+	/*!
+	 * Get matrix inverse of this matrix
+	 * \return
+	 * 	`true` if inverse matrix exists, `false` otherwise.
 	 */
-	bool getInverse (Matrix4<T>& inv) const
+	bool getInverse(Matrix4<T>& inv) const
 	{
 		T det = determinant();
 
-		if(math::equals(det, T(0.0))) {
+		if (math::equals(det, T(0.0))) {
 			return false;
 		}
 
@@ -229,31 +231,31 @@ public:
 	//! Calculate determinant of the matrix
 	T determinant() const
 	{
-		T const det = 
-			col_[0][3]*col_[1][2]*col_[3][0]*col_[2][1] -
-			col_[0][3]*col_[1][2]*col_[2][0]*col_[3][1] -
-			col_[0][3]*col_[2][2]*col_[3][0]*col_[1][1] +
-			col_[0][3]*col_[2][2]*col_[1][0]*col_[3][1] +
-			col_[0][3]*col_[3][2]*col_[2][0]*col_[1][1] -
-			col_[0][3]*col_[3][2]*col_[1][0]*col_[2][1] -
-			col_[1][3]*col_[0][2]*col_[3][0]*col_[2][1] +
-			col_[1][3]*col_[0][2]*col_[2][0]*col_[3][1] +
-			col_[1][3]*col_[2][2]*col_[3][0]*col_[0][1] -
-			col_[1][3]*col_[2][2]*col_[0][0]*col_[3][1] -
-			col_[1][3]*col_[3][2]*col_[2][0]*col_[0][1] +
-			col_[1][3]*col_[3][2]*col_[0][0]*col_[2][1] +
-			col_[2][3]*col_[0][2]*col_[3][0]*col_[1][1] -
-			col_[2][3]*col_[0][2]*col_[1][0]*col_[3][1] -
-			col_[2][3]*col_[1][2]*col_[3][0]*col_[0][1] +
-			col_[2][3]*col_[1][2]*col_[0][0]*col_[3][1] +
-			col_[2][3]*col_[3][2]*col_[1][0]*col_[0][1] -
-			col_[2][3]*col_[3][2]*col_[0][0]*col_[1][1] -
-			col_[3][3]*col_[0][2]*col_[2][0]*col_[1][1] +
-			col_[3][3]*col_[0][2]*col_[1][0]*col_[2][1] +
-			col_[3][3]*col_[1][2]*col_[2][0]*col_[0][1] -
-			col_[3][3]*col_[1][2]*col_[0][0]*col_[2][1] -
-			col_[3][3]*col_[2][2]*col_[1][0]*col_[0][1] +
-			col_[3][3]*col_[2][2]*col_[0][0]*col_[1][1];
+		T const det = (
+		        col_[0][3]*col_[1][2]*col_[3][0]*col_[2][1] -
+		        col_[0][3]*col_[1][2]*col_[2][0]*col_[3][1] -
+		        col_[0][3]*col_[2][2]*col_[3][0]*col_[1][1] +
+		        col_[0][3]*col_[2][2]*col_[1][0]*col_[3][1] +
+		        col_[0][3]*col_[3][2]*col_[2][0]*col_[1][1] -
+		        col_[0][3]*col_[3][2]*col_[1][0]*col_[2][1] -
+		        col_[1][3]*col_[0][2]*col_[3][0]*col_[2][1] +
+		        col_[1][3]*col_[0][2]*col_[2][0]*col_[3][1] +
+		        col_[1][3]*col_[2][2]*col_[3][0]*col_[0][1] -
+		        col_[1][3]*col_[2][2]*col_[0][0]*col_[3][1] -
+		        col_[1][3]*col_[3][2]*col_[2][0]*col_[0][1] +
+		        col_[1][3]*col_[3][2]*col_[0][0]*col_[2][1] +
+		        col_[2][3]*col_[0][2]*col_[3][0]*col_[1][1] -
+		        col_[2][3]*col_[0][2]*col_[1][0]*col_[3][1] -
+		        col_[2][3]*col_[1][2]*col_[3][0]*col_[0][1] +
+		        col_[2][3]*col_[1][2]*col_[0][0]*col_[3][1] +
+		        col_[2][3]*col_[3][2]*col_[1][0]*col_[0][1] -
+		        col_[2][3]*col_[3][2]*col_[0][0]*col_[1][1] -
+		        col_[3][3]*col_[0][2]*col_[2][0]*col_[1][1] +
+		        col_[3][3]*col_[0][2]*col_[1][0]*col_[2][1] +
+		        col_[3][3]*col_[1][2]*col_[2][0]*col_[0][1] -
+		        col_[3][3]*col_[1][2]*col_[0][0]*col_[2][1] -
+		        col_[3][3]*col_[2][2]*col_[1][0]*col_[0][1] +
+		        col_[3][3]*col_[2][2]*col_[0][0]*col_[1][1]);
 		return det;
 	}
 
@@ -261,9 +263,9 @@ public:
 	Matrix3<T> getSubMatrix() const
 	{
 		return Matrix3<T>(
-			col_[0][0], col_[1][0], col_[2][0],
-			col_[0][1], col_[1][1], col_[2][1],
-			col_[0][2], col_[1][2], col_[2][2]);
+		       col_[0][0], col_[1][0], col_[2][0],
+		       col_[0][1], col_[1][1], col_[2][1],
+		       col_[0][2], col_[1][2], col_[2][2]);
 	}
 
 	//! Extract translation from matrix
@@ -306,7 +308,7 @@ public:
 
 		T const test = T(1.0 - math::RoundingError::float64);
 
-		if(rot.y >= test || rot.y <= -test) {
+		if (rot.y >= test || rot.y <= -test) {
 			rot.x = atan2(col_[2][1]*scale[2], col_[2][2]);
 			rot.z = atan2(col_[1][0]*scale[0], col_[0][0]);
 		} else {
@@ -405,20 +407,18 @@ template<typename T>
 Matrix3<T> getSubMatrix3x3(Matrix4<T> const& mat, u32 col, u32 row)
 {
 	// Temporary array to gain linear access, it allows to avoid
-	// unnecessary using of % operator
+	// unnecessary usage of % operator
 	T temp[9];
 	u32 index = 0;
 
-	for(u32 i = 0; i < 4; ++i)
-	{
-		if(i == col) {
+	for (u32 i = 0; i < 4; ++i) {
+		if (i == col)
 			continue;
-		}
-		for(u32 j = 0; j < 4; ++j)
-		{
-			if(j == row) {
+
+		for (u32 j = 0; j < 4; ++j) {
+			if (j == row)
 				continue;
-			}
+
 			temp[index] = mat[i][j];
 			++index;
 		}
@@ -428,7 +428,7 @@ Matrix3<T> getSubMatrix3x3(Matrix4<T> const& mat, u32 col, u32 row)
 
 //! Transpose matrix
 template<typename T>
-Matrix4<T>& transpose (Matrix4<T>& matrix)
+Matrix4<T>& transpose(Matrix4<T>& matrix)
 {
 	matrix = matrix.getTransposed();
 
@@ -437,7 +437,7 @@ Matrix4<T>& transpose (Matrix4<T>& matrix)
 
 //! Get inverse of a matrix
 template<typename T>
-Matrix4<T>& inverse (Matrix4<T>& matrix)
+Matrix4<T>& inverse(Matrix4<T>& matrix)
 {
 	Matrix4<T> temp;
 	matrix.getInverse(temp);
@@ -449,7 +449,7 @@ Matrix4<T>& inverse (Matrix4<T>& matrix)
 
 //! Calculate determinant of a matrix
 template<typename T>
-Matrix4<T>& determinant (Matrix4<T>& matrix)
+Matrix4<T>& determinant(Matrix4<T>& matrix)
 {
 	return matrix.determinant();
 }

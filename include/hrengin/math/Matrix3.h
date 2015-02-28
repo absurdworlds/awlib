@@ -25,7 +25,7 @@ public:
 	}
 
 	//! Copy matrix
-	Matrix3 (Matrix3<T> const& other)
+	Matrix3(Matrix3<T> const& other)
 	{
 		m_[0].set(other[0]);
 		m_[1].set(other[1]);
@@ -33,9 +33,9 @@ public:
 	}
 
 	//! Construct 3x3 matrix from column vectors
-	Matrix3 (Vector3d<T> const& col1,
-		 Vector3d<T> const& col2,
-		 Vector3d<T> const& col3)
+	Matrix3(Vector3d<T> const& col1,
+		Vector3d<T> const& col2,
+		Vector3d<T> const& col3)
 	{
 		m_[0].set(col1);
 		m_[1].set(col2);
@@ -45,9 +45,9 @@ public:
 	/*! Construct matrix from individual values
 	 * \note Arguments here appear in row-major order
 	 */
-	Matrix3 (T const a11, T const a21, T const a31,
-		 T const a12, T const a22, T const a32,
-		 T const a13, T const a23, T const a33)
+	Matrix3(T const a11, T const a21, T const a31,
+		T const a12, T const a22, T const a32,
+		T const a13, T const a23, T const a33)
 	{
 		set(a11, a21, a31,
 		    a12, a22, a32,
@@ -57,7 +57,7 @@ public:
 	/*! Construct matrix from array
 	 *  \param arr Column-major matrix represented as array
 	 */
-	Matrix3 (T arr[])
+	Matrix3(T arr[])
 	{
 		set(arr[0], arr[4], arr[6],
 		    arr[1], arr[5], arr[7],
@@ -65,11 +65,11 @@ public:
 	}
 
 	/*! Set each componenet of the matrix
-	   \note Arguments here appear in row-major order
-	*/
-	void set (T const a11, T const a21, T const a31,
-		  T const a12, T const a22, T const a32,
-		  T const a13, T const a23, T const a33)
+	 * \note Arguments here appear in row-major order
+	 */
+	void set(T const a11, T const a21, T const a31,
+		 T const a12, T const a22, T const a32,
+		 T const a13, T const a23, T const a33)
 	{
 		m_[0].set(a11, a12, a13);
 		m_[1].set(a21, a22, a23);
@@ -77,7 +77,7 @@ public:
 	}
 
 	//! Set matrix to identity
-	Matrix3<T>& setIdentity ()
+	Matrix3<T>& setIdentity()
 	{
 		set(T(1),T(0),T(0),
 		    T(0),T(1),T(0),
