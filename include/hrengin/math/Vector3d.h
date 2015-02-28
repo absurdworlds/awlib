@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014  absurdworlds
+ * Copyright (C) 2014-2015  absurdworlds
  *
  * License LGPLv3-only:
  * GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
@@ -215,6 +215,18 @@ public:
 			-coord_[0],
 			-coord_[1],
 			-coord_[2]);
+	}
+
+	/*!
+	 * Check if vectors are identical.
+	 * \return
+	 * 	`true` if vectors are identical, otherwise `false`.
+	 */
+	bool operator == (Vector3d<T> const& other) const
+	{
+		return (math::equals(coord_[0], other[0]) &&
+		        math::equals(coord_[1], other[1]) &&
+		        math::equals(coord_[2], other[2]));
 	}
 
 
