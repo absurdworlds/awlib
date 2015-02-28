@@ -158,6 +158,19 @@ public:
 	}
 
 	/*!
+	 * Compare two matrices
+	 * \return
+	 * 	`true` if matrices are identical, otherwise `false`.
+	 */
+	bool operator == (Matrix4<T> const& other) const
+	{
+		return (col_[0] == other.col_[0] &&
+		        col_[1] == other.col_[1] &&
+		        col_[2] == other.col_[2] &&
+		        col_[3] == other.col_[3]);
+	}
+
+	/*!
 	 * Get matrix inverse of this matrix
 	 * \return
 	 * 	`true` if inverse matrix exists, `false` otherwise.
