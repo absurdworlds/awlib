@@ -12,14 +12,15 @@
 namespace hrengin {
 
 //! File, which will be used when a settings file is absent in filesystem
-const char* const default_settings = 
-"[settings"
-" [graphics"
-"  resolutionX = int:800"
-"  resolutionY = int:600"
-"  fullscreen = bool:false"
-" ]"
-"]";
+const char* const default_settings = R"hdf(
+[settings
+ [graphics
+  resolutionX = int:800
+  resolutionY = int:600
+  fullscreen = bool:false
+ ]
+]
+)hdf";
 
 } //namespace hrengin
 #endif//_hrengin_default_settings_
