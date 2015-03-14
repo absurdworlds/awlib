@@ -46,6 +46,10 @@ hrengin TODO list
 + [ ] Rewrite event manager to use fixed time steps
 + [ ] Add event manager (a different one, for handling game events)
 
+## Documentation
+
++ [ ] Move all the doxygen stuff into separate files, leaving only descriptions in the source code.
+
 ## tools
 
 + [ ] Create hrengin model editor
