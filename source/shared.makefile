@@ -1,23 +1,12 @@
-ifdef HR_C_COMPILER
- CC = $(HR_C_COMPILER)
-else
- CC = cc -std=c99
-endif
-
-ifdef HR_CXX_COMPILER
- CXX = $(HR_CXX_COMPILER)
-else
- CXX = g++ -std=c++11 
-endif
-
 InstallDir = ../../lib
 
-CompilerFlags  = -g -D_DEBUG
+CompilerFlags  = -g -D_DEBUG -std=c++14
 CompilerFlags += -fPIC
 CompilerFlags += -fno-exceptions
 CompilerFlags += -fvisibility=hidden
 CompilerFlags += -fdiagnostics-color=auto
 
+CCFLAGS = -std=c11
 CPPFLAGS = $(Defines) $(Includes)
 CXXFLAGS = $(CompilerFlags)
 LDFLAGS = $(Libraries)
