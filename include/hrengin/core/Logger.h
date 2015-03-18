@@ -8,9 +8,7 @@
  */
 #ifndef _hrengin_Logger_
 #define _hrengin_Logger_
-
 #include <string>
-#include <thread>
 
 #include <hrengin/common/config.h>
 #include <hrengin/common/macro.h>
