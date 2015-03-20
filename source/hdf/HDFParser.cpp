@@ -9,7 +9,6 @@
  */
 #include <stdio.h>
 
-#include <hrengin/common/types.h>
 #include <hrengin/io/BufferedStream.h>
 #include <hrengin/hdf/Type.h>
 

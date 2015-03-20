@@ -9,11 +9,9 @@
  */
 #ifndef _hrengin_HDFParser_impl_
 #define _hrengin_HDFParser_impl_
-
 #include <string>
 #include <vector>
 
-#include <hrengin/common/types.h>
 #include <hrengin/hdf/hdf_value.h>
 #include <hrengin/hdf/HDFParser.h>
 
