@@ -402,18 +402,17 @@ void HDFParser::readStringToken(std::string& val) {
 	char c;
 
 	stream_->getCurrent(c);
-#if 0
-	if(c != '"') {
-		// should not get this error
-		error(HDF_LOG_ERROR, "illegal string token");
-	}
-#endif
+
+	assert(c == '"' && "Improper call of HDFParser::readStringToken()"
+
 	stream_->getNext(c);
 
 	while (c != '"') {
-		if ( c == '\\' ) {
+		// When '\' is encountered in a string, skip the '\' and read
+		// next character as it is.
+		if (c == '\\')
 			stream_->getNext(c);
-		}
+
 		val += c;
 		stream_->getNext(c);
 	}
