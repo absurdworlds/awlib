@@ -1,6 +1,8 @@
 /*
- * hrengin game engine library collection
+ * HRDF parser & writer library
+ *
  * Copyright (C) 2013-2015  absurdworlds
+ * Copyright (C)      2015  hedede <haddayn@gmail.com>
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License, version 3

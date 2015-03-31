@@ -7,14 +7,24 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_HDFWriter_
-#define _hrengin_HDFWriter_
+#ifndef _hrengin_HDF_Writer_
+#define _hrengin_HDF_Writer_
 #include <string>
 
 #include <hrengin/hdf/hdf.h>
 #include <hrengin/hdf/Value.h>
 namespace hrengin {
 namespace hdf {
+/*! Enumeration for selecting writer indentation style */
+enum IndentationStyle {
+	Tab,
+	Space,
+	DoubleSpace,
+	FourSpaces,
+	EightSpaces,
+	None
+};
+
 //! Interface for writing HDF files. Supports HDF 1.2.0 format.
 class Writer {
 	virtual ~Writer() {};
@@ -33,8 +43,11 @@ class Writer {
 
 	/*! Report an error */
 	virtual void error(u32 type, std::string msg) = 0;
+
+	/*! Set the indentation style for the document */
+	virtual void setIndentationStyle(IndentationStyle style) = 0;
 };
 
 } // namespace io
 } // namespace hrengin
-#endif//_hrengin_HDFWriter_
+#endif//_hrengin_HDF_Writer_

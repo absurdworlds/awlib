@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2014  absurdworlds
+ * Copyright (C) 2015  hedede <haddayn@gmail.com>
  *
  * License LGPLv3-only:
  * GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
@@ -8,20 +9,8 @@
  */
 #ifndef _hrengin_hdf_shared_
 #define _hrengin_hdf_shared_
-
 namespace hrengin {
 namespace hdf {
-
-/*! Enumeration for selecting writer indentation style */
-enum Indentation {
-	HDF_INDENT_TAB,
-	HDF_INDENT_SPACE,
-	HDF_INDENT_DOUBLE_SPACE,
-	HDF_INDENT_QUAD_SPACE,
-	HDF_INDENT_OCTAL_SCAPE,
-	HDF_INDENT_NONE
-};
-
 /*! Enumeration for parser log messages */
 enum ParserMessage {
 	HDF_LOG_NOTICE,
