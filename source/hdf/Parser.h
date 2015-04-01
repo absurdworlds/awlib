@@ -7,18 +7,18 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_HDFParser_impl_
-#define _hrengin_HDFParser_impl_
+#ifndef _hrengin_hdf_Parser_impl_
+#define _hrengin_hdf_Parser_impl_
 #include <string>
 #include <vector>
 
-#include <hrengin/hdf/hdf_value.h>
-#include <hrengin/hdf/HDFParser.h>
+#include <hrengin/hdf/Value.h>
+#include <hrengin/hdf/Parser.h>
 
 namespace hrengin {
 namespace hdf {
 namespace impl_ {
-enum HdfTokenType {
+enum TokenType {
 	HDF_TOKEN_NVALID,
 	HDF_TOKEN_EOF,
 	HDF_TOKEN_NAME,
@@ -26,22 +26,22 @@ enum HdfTokenType {
 	HDF_TOKEN_STRING,
 };
 
-struct HdfToken {
-	HdfTokenType type;
+struct Token {
+	TokenType type;
 	std::string value;
 };
 
-class HDFParser : public hdf::HDFParser {
+class Parser : public hdf::Parser {
 public:
-	HDFParser(io::CharacterStream* stream);
-	virtual ~HDFParser();
+	Parser(io::CharacterStream* stream);
+	virtual ~Parser();
 
 	virtual void skipNode();
 	virtual void skipValue();
 
 	virtual bool read();
 
-	virtual HdfObjectType getObjectType();
+	virtual ObjectType getObjectType();
 	virtual void getObjectName(std::string& name);
 
 	virtual void readFloat(float& val);
@@ -57,11 +57,11 @@ private:
 	template<typename T> 
 	void readValue(T& val);
 	template<typename T> 
-	void convertValue(HdfToken& token, T& val);
+	void convertValue(Token& token, T& val);
 
-	bool parseType(HdfToken& token);
+	bool parseType(Token& token);
 
-	void readToken(HdfToken& token);
+	void readToken(Token& token);
 
 	void readStringToken(std::string& val);
 	void readNumber(std::string& val);
@@ -78,7 +78,7 @@ private:
 	template<bool (*condition)(char)> 
 	void skip();
 
-	enum HdfParserState {
+	enum State {
 		HDF_S_DLE = 0,
 		HDF_S_OBJECT,
 		HDF_S_NODE_BEGIN,
@@ -99,4 +99,4 @@ private:
 } // namespace impl_
 } // namespace io
 } // namespace hrengin
-#endif//_hrengin_HDFParser_impl_
+#endif//_hrengin_hdf_Parser_impl_

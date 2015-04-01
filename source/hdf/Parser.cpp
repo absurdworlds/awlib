@@ -12,7 +12,7 @@
 #include <hrengin/io/BufferedStream.h>
 #include <hrengin/hdf/Type.h>
 
-#include "HDFParser.h"
+#include "Parser.h"
 
 namespace hrengin {
 namespace hdf {
@@ -47,13 +47,13 @@ inline bool isInlineWhitespace(char c) {
 	return c == ' ' || c == '\t';
 }
 
-HDFParser* createHDFParser(io::CharacterStream* stream)
+Parser* createParser(io::CharacterStream* stream)
 {
-	return new impl_::HDFParser(stream);
+	return new impl_::Parser(stream);
 }
 
 namespace impl_ {
-hdf::Type hdfTokenToType(HdfToken const& token) 
+hdf::Type tokenToType(Token const& token) 
 {
 	if(token.value == "bool" || token.value == "b") {
 		return Type::Boolean;
@@ -72,7 +72,7 @@ hdf::Type hdfTokenToType(HdfToken const& token)
 	}
 }
 
-hdf::Type hdfConvertImpicitType(HdfToken const& token) 
+hdf::Type convertImpicitType(Token const& token) 
 {
 	char c = token.value.c_str()[0];
 	if(isNameBeginChar(c) || c == '"') {
@@ -84,16 +84,16 @@ hdf::Type hdfConvertImpicitType(HdfToken const& token)
 	}
 }
 
-HDFParser::HDFParser(io::CharacterStream* stream)
+Parser::Parser(io::CharacterStream* stream)
 	: depth_(0), state_(HDF_S_DLE), stream_(stream)
 {
 }
 
-HDFParser::~HDFParser()
+Parser::~Parser()
 {
 }
 
-bool HDFParser::read() {
+bool Parser::read() {
 	char c;
 
 	stream_->getCurrent(c);
@@ -126,7 +126,7 @@ bool HDFParser::read() {
 	return (state_ == HDF_S_PANIC) ? false : true;
 }
 
-HdfObjectType HDFParser::getObjectType()
+ObjectType Parser::getObjectType()
 {
 	if(state_ == HDF_S_PANIC)
 		return HDF_OBJ_NULL;
@@ -180,7 +180,7 @@ HdfObjectType HDFParser::getObjectType()
 	}
 }
 
-void HDFParser::getObjectName(std::string& name)
+void Parser::getObjectName(std::string& name)
 {
 	if(state_ == HDF_S_PANIC)
 		return;
@@ -196,48 +196,48 @@ void HDFParser::getObjectName(std::string& name)
 	}
 }
 
-void HDFParser::readFloat(float& val)
+void Parser::readFloat(float& val)
 {
 	readValue<f32>(val);
 }
-void HDFParser::readFloat(double& val)
+void Parser::readFloat(double& val)
 {
 	readValue<f64>(val);
 }
-void HDFParser::readInt(u32& val)
+void Parser::readInt(u32& val)
 {
 	readValue<u32>(val);
 }
-void HDFParser::readInt(i32& val)
+void Parser::readInt(i32& val)
 {
 	readValue<i32>(val);
 }
-void HDFParser::readBool(bool& val)
+void Parser::readBool(bool& val)
 {
 	readValue<bool>(val);
 }
-void HDFParser::readString(std::string& val)
+void Parser::readString(std::string& val)
 {
 	readValue<std::string>(val);
 }
-void HDFParser::readVector3d(Vector3d<f32>& val)
+void Parser::readVector3d(Vector3d<f32>& val)
 {
 	readValue<Vector3d<f32>>(val);
 }
 
 //TODO: rewrite those two properly
-void HDFParser::skipValue() 
+void Parser::skipValue() 
 {
-	HdfToken token;
+	Token token;
 	hdf::Type type;
 
 	bool hasType = parseType(token);
 
 	if(hasType) {
-		type = hdfTokenToType(token);
+		type = tokenToType(token);
 		readToken(token);
 	} else {
-		type = hdfConvertImpicitType(token);
+		type = convertImpicitType(token);
 	}
 
 	if(type == Type::Vector3d || type == Type::Vector2d) {
@@ -248,7 +248,7 @@ void HDFParser::skipValue()
 	}
 }
 
-void HDFParser::skipNode() 
+void Parser::skipNode() 
 {
 	char c;
 
@@ -269,7 +269,7 @@ void HDFParser::skipNode()
 	read();
 }
 
-void HDFParser::error(hdf::ParserMessage type, std::string msg)
+void Parser::error(hdf::ParserMessage type, std::string msg)
 {
 	errors_.push_back(msg);
 	printf("[HDF:%u]: %s\n",stream_->getPos(),msg.c_str());
@@ -278,9 +278,9 @@ void HDFParser::error(hdf::ParserMessage type, std::string msg)
 		state_ = HDF_S_PANIC;
 }
 
-//void HDFParser::skip(bool (*condition)(char))
+//void Parser::skip(bool (*condition)(char))
 template<bool (*condition)(char)>
-void HDFParser::skip()
+void Parser::skip()
 {
 	char c;
 
@@ -295,22 +295,22 @@ inline bool notLineBreak(char c)
 	return c != '\n';
 }
 
-void HDFParser::skipLine()
+void Parser::skipLine()
 {
 	skip<notLineBreak>();
 }
 
-void HDFParser::skipWhitespace()
+void Parser::skipWhitespace()
 {
 	skip<isWhitespace>();
 }
 
-void HDFParser::skipInlineWhitespace()
+void Parser::skipInlineWhitespace()
 {
 	skip<isInlineWhitespace>();
 }
 
-void HDFParser::fastForward() {
+void Parser::fastForward() {
 	char c;
 
 	stream_->getCurrent(c);
@@ -337,7 +337,7 @@ void HDFParser::fastForward() {
 	}
 }
 
-bool HDFParser::parseType(HdfToken& token) {
+bool Parser::parseType(Token& token) {
 	skipInlineWhitespace();
 
 	char c;
@@ -374,7 +374,7 @@ bool HDFParser::parseType(HdfToken& token) {
 	}
 }
 
-void HDFParser::readToken(HdfToken& token)
+void Parser::readToken(Token& token)
 {
 	fastForward();
 
@@ -396,13 +396,13 @@ void HDFParser::readToken(HdfToken& token)
 	}
 }
 
-void HDFParser::readStringToken(std::string& val) {
+void Parser::readStringToken(std::string& val) {
 	val = "";
 	char c;
 
 	stream_->getCurrent(c);
 
-	assert(c == '"' && "Improper call of HDFParser::readStringToken()"
+	assert(c == '"' && "Improper call of Parser::readStringToken()"
 
 	stream_->getNext(c);
 
@@ -419,7 +419,7 @@ void HDFParser::readStringToken(std::string& val) {
 	stream_->getNext(c);
 }
 
-void HDFParser::readNumber(std::string& val)
+void Parser::readNumber(std::string& val)
 {
 	val = "";
 	char c;
@@ -435,7 +435,7 @@ void HDFParser::readNumber(std::string& val)
 	}
 }
 
-void HDFParser::readName(std::string& name, char stop)
+void Parser::readName(std::string& name, char stop)
 {
 	name = "";
 	char c;
@@ -452,30 +452,30 @@ void HDFParser::readName(std::string& name, char stop)
 	}
 }
 
-void HDFParser::readValueName(std::string& name)
+void Parser::readValueName(std::string& name)
 {
 	readName(name, '=');
 }
 
-void HDFParser::readTypeName(std::string& name)
+void Parser::readTypeName(std::string& name)
 {
 	readName(name, ':');
 }
 
 
 template<typename T> 
-void HDFParser::readValue(T& var)
+void Parser::readValue(T& var)
 {
-	HdfToken token;
+	Token token;
 	hdf::Type type;
 
 	bool hasType = parseType(token);
 
 	if(hasType) {
-		type = hdfTokenToType(token);
+		type = tokenToType(token);
 		readToken(token);
 	} else {
-		type = hdfConvertImpicitType(token);
+		type = convertImpicitType(token);
 	}
 
 	if(checkType<T>(type) == false) {
@@ -492,26 +492,26 @@ void HDFParser::readValue(T& var)
 // TODO: make helper class to reduce almost duplicate functions
 
 template<typename T>
-void HDFParser::convertValue(HdfToken& token, T& val)
+void Parser::convertValue(Token& token, T& val)
 {
 	// should never get this error
 	error(HDF_LOG_ERROR, "unknown type");
 }
 
 template<>
-void HDFParser::convertValue(HdfToken& token, f32& val)
+void Parser::convertValue(Token& token, f32& val)
 {	
 	val = strtof(token.value.c_str(), 0);
 }
 
 template<>
-void HDFParser::convertValue(HdfToken& token, f64& val)
+void Parser::convertValue(Token& token, f64& val)
 {
 	val = strtod(token.value.c_str(), 0);
 }
 
 template<>
-void HDFParser::convertValue(HdfToken& token, Vector3d<f32>& val)
+void Parser::convertValue(Token& token, Vector3d<f32>& val)
 {
 	val[0] = strtod(token.value.c_str(), 0);
 
@@ -525,25 +525,25 @@ void HDFParser::convertValue(HdfToken& token, Vector3d<f32>& val)
 }
 
 template<>
-void HDFParser::convertValue(HdfToken& token, std::string& val)
+void Parser::convertValue(Token& token, std::string& val)
 {	
 	val = token.value;
 }
 
 template<>
-void HDFParser::convertValue(HdfToken& token, u32& val)
+void Parser::convertValue(Token& token, u32& val)
 {	
 	val = strtoul(token.value.c_str(), 0, 10);
 }
 
 template<>
-void HDFParser::convertValue(HdfToken& token, i32& val)
+void Parser::convertValue(Token& token, i32& val)
 {	
 	val = strtol(token.value.c_str(), 0, 10);
 }
 
 template<>
-void HDFParser::convertValue(HdfToken& token, bool& val)
+void Parser::convertValue(Token& token, bool& val)
 {
 	if(token.value == "true" || token.value == "1") {
 		val = true;
@@ -555,8 +555,8 @@ void HDFParser::convertValue(HdfToken& token, bool& val)
 }
 
 // TODO: rewrite
-void HDFParser::processCommand() {
-	HdfToken token;
+void Parser::processCommand() {
+	Token token;
 
 	char c;
 
