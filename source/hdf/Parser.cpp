@@ -7,7 +7,8 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#include <stdio.h>
+#include <cassert>
+#include <cstdio>
 
 #include <hrengin/io/BufferedStream.h>
 #include <hrengin/hdf/Type.h>
@@ -402,7 +403,7 @@ void Parser::readStringToken(std::string& val) {
 
 	stream_->getCurrent(c);
 
-	assert(c == '"' && "Improper call of Parser::readStringToken()"
+	assert(c == '"' && "Improper call of Parser::readStringToken()");
 
 	stream_->getNext(c);
 

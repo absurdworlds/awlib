@@ -14,7 +14,7 @@
 #include <hrengin/math/Vector3d.h>
 
 #include <hrengin/hdf/hdf.h>
-#include <hrengin/hdf/hdf_shared.h>
+#include <hrengin/hdf/shared.h>
 
 namespace hrengin {
 namespace io {
