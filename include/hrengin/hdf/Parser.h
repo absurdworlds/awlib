@@ -23,7 +23,7 @@ class CharacterStream;
 
 namespace hdf {
 /* Enumeration for objects parsed by HDF parser. */
-enum HdfObjectType {
+enum ObjectType {
 	HDF_OBJ_NULL = 0,
 	HDF_OBJ_NODE,
 	HDF_OBJ_NODE_END,
@@ -32,32 +32,38 @@ enum HdfObjectType {
 };
 
 /*!
- * \class HDFParser
+ * \class Parser
  * \brief Interface for reading hrengin's HDF files. This parser provides a read-only access to documents in HDF 1.1.1 format.
  * 
  * It can read only in forward mode, it is not able to rewind. The design goal of this parser is to quickly read HDF document without usage of any intermediate data structures.
  * 
- * \see createHDFParser
+ * \see createParser
  * Also, see an example in 'examples' directory
 */
-class HDFParser {
+class Parser {
 public:
-	virtual ~HDFParser() {}
+	virtual ~Parser() {}
 
 	//! Fast-forward to the next object
 	virtual bool read() = 0;
 
 	/*! Read the object's type
-	   \return The object type or 0 (HDF_OBJ_NULL) in case of failure */
-	virtual HdfObjectType getObjectType() = 0;
+	 * \return
+	 *     The object type or 0 (HDF_OBJ_NULL) in case of failure
+	 */
+	virtual ObjectType getObjectType() = 0;
 	
 	/*! Read the object's name
-	   \param name Gets set to the name of the object or empty string in
-	   case of failure */
+	 * \param name
+	 *     Gets set to the name of the object or empty string in
+	 * case of failure
+	 */
 	virtual void getObjectName(std::string& name) = 0;
 
 	/*! Read the value of the variable
-	   \param val Variable to output to */
+	 * \param val
+	 *     Variable to output to
+	 */
 	virtual void readFloat(float& val) = 0;
 	virtual void readFloat(double& val) = 0;
 	virtual void readInt(u32& val) = 0;
@@ -86,7 +92,7 @@ public:
  * \param stream Stream to parse.
  * \see io::CharacterStream
 */
-HR_HDF_EXP HDFParser* createHDFParser(io::CharacterStream* stream);
+HR_HDF_EXP Parser* createParser(io::CharacterStream* stream);
 
 } // namespace io
 } // namespace hrengin
