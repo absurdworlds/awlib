@@ -8,59 +8,36 @@
  */
 #ifndef _hrengin_Vector4d_
 #define _hrengin_Vector4d_
-
-#include <hrengin/common/compiler_setup.h>
-
-#ifdef HR_COMPILER_MSC // fucking microsoft
 #include <array>
-#endif
 
 #include <hrengin/math/math.h>
 
-
 namespace hrengin {
-
 //! Represents a 4-dimensional vector
 template <class T>
 class Vector4d {
 public:
 	//! Default constructor. Constructs zero vector.
 	Vector4d ()
-#ifndef HR_COMPILER_MSC // fucking microsoft
-		: coord_{}
-#else
 		: coord_()
-#endif
 	{
 	}
 
 	//! Construct vector specifying individual coodrinates
 	Vector4d (T const x, T const y, T const z, T const w)
-#ifndef HR_COMPILER_MSC // fucking microsoft
-		: coord_{x,y,z,w}
-#else
 		: coord_({x,y,z,w})
-#endif
 	{
 	}
 
 	//! Construct vector with same value for coordinates
 	explicit Vector4d (T const v)
-#ifndef HR_COMPILER_MSC // fucking microsoft
-		: coord_{v,v,v,v}
-#else
-		: coord_{v,v,v,v}
-#endif
+		: coord_({v,v,v,v})
 	{
 	}
 
 	//! Copy constructor
 	Vector4d(Vector4d<T> const& other) 
-#ifndef HR_COMPILER_MSC // fucking microsoft
-		: coord_{other[0],other[1],other[2],other[3]}
-#else
 		: coord_({other[0],other[1],other[2],other[3]})
-#endif
 	{
 	}
 
@@ -383,13 +360,8 @@ public:
 	}
 
 private:
-#ifndef HR_COMPILER_MSC // fucking microsoft
-	//! Coordinates of the vector
-	T coord_[4];
-#else
 	//! Coordinates of the vector
 	std::array<T, 4> coord_;
-#endif
 };
 
 //! Partial specialization for integer vectors

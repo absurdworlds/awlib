@@ -8,13 +8,9 @@
  */
 #ifndef _hrengin_Vector3d_
 #define _hrengin_Vector3d_
-
-#include <hrengin/common/config.h>
-#include <hrengin/math/math.h>
-
-#ifdef HR_COMPILER_MSC // fucking microsoft
 #include <array>
-#endif
+
+#include <hrengin/math/math.h>
 
 namespace hrengin {
 
@@ -24,44 +20,28 @@ class Vector3d {
 public:
 	//! Default constructor. Constructs zero vector.
 	Vector3d ()
-#ifndef HR_COMPILER_MSC // fucking microsoft
-		: coord_{},
-#else
 		: coord_(),
-#endif
 		x(coord_[0]), y(coord_[1]), z(coord_[2])
 	{
 	}
 
 	//! Construct vector with same value for coordinates
 	explicit Vector3d (T const v)
-#ifndef HR_COMPILER_MSC // fucking microsoft
-		: coord_{v, v, v},
-#else
 		: coord_({v, v, v}),
-#endif
 		x(coord_[0]), y(coord_[1]), z(coord_[2])
 	{
 	}
 
 	//! Construct vector with individual coodrinates
 	Vector3d (T const x, T const y, T const z)
-#ifndef HR_COMPILER_MSC // fucking microsoft
-		: coord_{x, y, z},
-#else
 		: coord_({x, y, z}),
-#endif
 		x(coord_[0]), y(coord_[1]), z(coord_[2])
 	{
 	}
 
 	//! Copy constructor
 	Vector3d (Vector3d<T> const& other) 
-#ifndef HR_COMPILER_MSC // fucking microsoft
-		: coord_{other[0], other[1], other[2]},
-#else
 		: coord_({other[0], other[1], other[2]}),
-#endif
 		x(coord_[0]), y(coord_[1]), z(coord_[2])
 	{
 	}
@@ -471,13 +451,8 @@ public:
 	T& y;
 	T& z;
 private:
-#ifndef HR_COMPILER_MSC // fucking microsoft
-	//! Coordinates of the vector
-	T coord_[3];
-#else
 	//! Coordinates of the vector
 	std::array<T, 3> coord_;
-#endif
 };
 
 // Initialization of static member

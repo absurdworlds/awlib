@@ -1,5 +1,6 @@
 /*
- * Copyright (C) 2014  absurdworlds
+ * Copyright (C) 2014-2015  absurdworlds
+ * Copyright (C)      2015  hedede <haddayn@gmail.com>
  *
  * License LGPLv3-only:
  * GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
@@ -8,12 +9,7 @@
  */
 #ifndef _hrengin_Vector2d_
 #define _hrengin_Vector2d_
-
-#include <hrengin/common/compiler_setup.h>
-
-#ifdef HR_COMPILER_MSC // fucking microsoft
 #include <array>
-#endif
 
 #include <hrengin/common/types.h>
 #include <hrengin/math/math.h>
@@ -26,33 +22,21 @@ class Vector2d {
 public:
 	//! Default constructor. Constructs zero vector.
 	Vector2d ()
-#ifndef HR_COMPILER_MSC
-		: coord_{},
-#else
 		: coord_(),
-#endif
 		x(coord_[0]), y(coord_[1])
 	{
 	}
 
 	//! Construct vector with same both coordinates 
 	explicit Vector2d (T v)
-#ifndef HR_COMPILER_MSC
-		: coord_{v, v},
-#else
 		: coord_({v, v}),
-#endif
 		x(coord_[0]), y(coord_[1])
 	{
 	}
 
 	//! Construct vector with individual coodrinates
 	Vector2d (T x, T y)
-#ifndef HR_COMPILER_MSC
-		: coord_{x, y},
-#else
 		: coord_({x, y}),
-#endif
 		x(coord_[0]), y(coord_[1])
 	{
 	}
@@ -60,11 +44,7 @@ public:
 
 	//! Copy constructor
 	Vector2d (Vector2d<T> const& other)
-#ifndef HR_COMPILER_MSC
-		: coord_{other[0], other[1]},
-#else
 		: coord_({other[0], other[1]}),
-#endif
 		x(coord_[0]), y(coord_[1])
 	{
 	}
@@ -286,13 +266,8 @@ public:
 	T& x;
 	T& y;
 private:
-#ifndef HR_COMPILER_MSC // fucking microsoft
-	//! Coordinates of the vector
-	T coord_[2];
-#else
 	//! Coordinates of the vector
 	std::array<T, 2> coord_;
-#endif
 };
 
 // Initialization of static member
