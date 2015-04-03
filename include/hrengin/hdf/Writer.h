@@ -52,7 +52,7 @@ public:
 	virtual void setIndentationStyle(IndentationStyle style) = 0;
 };
 
-hdf::Writer* createWriter(io::WriteStream& outStream);
+HR_HDF_EXP hdf::Writer* createWriter(io::WriteStream& outStream);
 
 } // namespace io
 } // namespace hrengin
