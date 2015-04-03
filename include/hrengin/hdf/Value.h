@@ -233,7 +233,7 @@ private:
 			v[2] = vector[2];
 		}
 
-		void get(Vector3d<f32>& v) const
+		void get(Vector4d<f32>& v) const
 		{
 			v[0] = vector[0];
 			v[1] = vector[1];
