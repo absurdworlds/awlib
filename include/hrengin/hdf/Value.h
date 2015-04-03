@@ -209,11 +209,25 @@ private:
 			v.assign(str.data, str.length);
 		}
 
+		void get(Vector2d<f32>& v) const
+		{
+			v[0] = vector[0];
+			v[1] = vector[1];
+		}
+
 		void get(Vector3d<f32>& v) const
 		{
 			v[0] = vector[0];
 			v[1] = vector[1];
 			v[2] = vector[2];
+		}
+
+		void get(Vector3d<f32>& v) const
+		{
+			v[0] = vector[0];
+			v[1] = vector[1];
+			v[2] = vector[2];
+			v[3] = vector[3];
 		}
 
 		bool boolean;
