@@ -15,9 +15,9 @@ namespace hrengin {
 namespace hdf {
 namespace impl_ {
 //! Implementation of HDF writer. Supports HDF 1.2.0 format.
-class Writer : hdf::Writer {
+class Writer : public hdf::Writer {
 public:
-	Writer(OctetOStream& out);
+	Writer(WriteStream& out);
 	virtual ~Writer();
 
 	/*! Create a new node and write a header for it. */
@@ -38,7 +38,11 @@ public:
 	/*! Set the indentation style for the document */
 	virtual void setIndentationStyle(IndentationStyle newStyle);
 private:
-	OctetOStream& ostream;
+	void writeValueValue(hdf::Value value);
+	void startLine();
+	void endLine();
+
+	WriteStream& ostream;
 	IndentationStyle indentation;
 	size_t depth;
 };

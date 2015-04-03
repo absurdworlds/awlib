@@ -14,6 +14,9 @@
 #include <hrengin/hdf/hdf.h>
 #include <hrengin/hdf/Value.h>
 namespace hrengin {
+namespace io {
+class WriteStream;
+}
 namespace hdf {
 /*! Enumeration for selecting writer indentation style */
 enum IndentationStyle {

@@ -7,14 +7,14 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_HDF_Writer_impl_
-#define _hrengin_HDF_Writer_impl_
-#include <hrengin/hdf/Writer.h>
+#include <hrengin/io/WriteStream.h>
+
+#include "Writer.h"
 
 namespace hrengin {
 namespace hdf {
 namespace impl_ {
-Writer::Writer(OctetOStream& out)
+Writer::Writer(WriteStream& out)
 	: ostream(out)
 {
 }
@@ -61,10 +61,11 @@ bool Writer::writeValue(std::string name, hdf::Value value)
 	endLine();
 }
 
-void writeValueValue(value)
+// TODO: Implement general-purpose to_string(hdf::Value)
+void Writer::writeValueValue(hdf::Value value)
 {
-	switch (value.getType) {
-	case hdf::Type::Unknown;
+	switch (value.getType()) {
+	case hdf::Type::Unknown:
 		ostream.put("null");
 		break;
 	case hdf::Type::Integer: {
@@ -204,4 +205,3 @@ void Writer::endLine()
 } // namespace impl_
 } // namespace io
 } // namespace hrengin
-#endif//_hrengin_HDF_Writer_impl_
