@@ -158,6 +158,11 @@ private:
 
 		void set(i32 i)
 		{
+			integer = i64(i);
+		}
+
+		void set(i64 i)
+		{
 			integer = i;
 		}
 
@@ -196,7 +201,13 @@ private:
 
 		void get(i32& v) const
 		{
-			v = integer;
+			// TODO: mask32
+			v = i32(integer);
+		}
+
+		void get(i64& v) const
+		{
+			v = i64(integer);
 		}
 
 		void get(f64& v) const
@@ -231,7 +242,7 @@ private:
 		}
 
 		bool boolean;
-		i32 integer;
+		i64 integer;
 		f64 real;
 		f32 vector[4];
 		struct string {
