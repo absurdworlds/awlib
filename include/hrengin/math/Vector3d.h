@@ -19,28 +19,28 @@ template <class T>
 class Vector3d {
 public:
 	//! Default constructor. Constructs zero vector.
-	Vector3d ()
+	Vector3d()
 		: coord_(),
 		x(coord_[0]), y(coord_[1]), z(coord_[2])
 	{
 	}
 
 	//! Construct vector with same value for coordinates
-	explicit Vector3d (T const v)
+	explicit Vector3d(T const v)
 		: coord_({v, v, v}),
 		x(coord_[0]), y(coord_[1]), z(coord_[2])
 	{
 	}
 
 	//! Construct vector with individual coodrinates
-	Vector3d (T const x, T const y, T const z)
+	Vector3d(T const x, T const y, T const z)
 		: coord_({x, y, z}),
 		x(coord_[0]), y(coord_[1]), z(coord_[2])
 	{
 	}
 
 	//! Copy constructor
-	Vector3d (Vector3d<T> const& other) 
+	Vector3d(Vector3d<T> const& other) 
 		: coord_({other[0], other[1], other[2]}),
 		x(coord_[0]), y(coord_[1]), z(coord_[2])
 	{
@@ -50,7 +50,7 @@ public:
 	static Vector3d<T> const zero;
 
 	//! Set coordinates of the vector
-	void set (T const x, T const y, T const z)
+	void set(T const x, T const y, T const z)
 	{
 		coord_[0] = x;
 		coord_[1] = y;
@@ -58,7 +58,7 @@ public:
 	}
 
 	//! Copy coordinates of other vector
-	void set (Vector3d<T> const& other)
+	void set(Vector3d<T> const& other)
 	{
 		coord_[0] = other[0];
 		coord_[1] = other[1];
@@ -211,7 +211,7 @@ public:
 
 
 	//! Normalize the vector
-	Vector3d<T>& normalize ()
+	Vector3d<T>& normalize()
 	{
 		f64 length = squareLength();
 		if (length == 0) {
@@ -228,7 +228,7 @@ public:
 	}
 
 	//! Get a normalized version of a vector without modifying it
-	Vector3d<T> normalized () const
+	Vector3d<T> normalized() const
 	{
 		f64 length = squareLength();
 		if (length == 0) {
@@ -261,7 +261,7 @@ public:
 	}
 
 	//! Calculate the dot product with another vector
-	T dot (Vector3d<T> const& other) const
+	T dot(Vector3d<T> const& other) const
 	{
 		return  coord_[0]*other[0] + 
 			coord_[1]*other[1] + 
@@ -269,7 +269,7 @@ public:
 	}
 
 	//! Calculate the cross product with another vector
-	Vector3d<T> cross (Vector3d<T> const& other) const
+	Vector3d<T> cross(Vector3d<T> const& other) const
 	{
 		f32 const cx = coord_[1] * other[2] - coord_[2] * other[1];
 		f32 const cy = coord_[2] * other[0] - coord_[0] * other[2];
@@ -278,7 +278,7 @@ public:
 	}
 
 	//! Get distance from another point
-	T getDistance (Vector3d<T> const& other) const
+	T getDistance(Vector3d<T> const& other) const
 	{
 		return Vector3d<T>(
 			coord_[0] - other[0],
@@ -287,7 +287,7 @@ public:
 	}
 
 	//! Get squared distance from another point
-	T getDistanceSQ (Vector3d<T> const& other) const
+	T getDistanceSQ(Vector3d<T> const& other) const
 	{
 		return Vector3d<T>(
 			coord_[0] - other[0],
@@ -296,7 +296,7 @@ public:
 	}
 
 	//! Set the length of the vector to a new value
-	Vector3d<T>& setLength (T const newlength)
+	Vector3d<T>& setLength(T const newlength)
 	{
 		normalize();
 		coord_[0] *= newlength;
@@ -306,7 +306,7 @@ public:
 	}
 
 	// Invert the vector.
-	Vector3d<T>& invert ()
+	Vector3d<T>& invert()
 	{
 		coord_[0] *= -1;
 		coord_[1] *= -1;
@@ -315,18 +315,19 @@ public:
 	}
 
 	/*!
-	   Get euler angles that when applied to a (0,0,1) direction vector
-	   would make it point in the same direction as this vector.
-
-	   Original author of this method is Arras from the Irrlicht forums
-
-	   \return
-	   A rotation vector containing the X (pitch) and Y (raw)
-	   rotations in degrees, of this vector.
-	   The Z (roll) rotation is always 0, since two rotations are sufficient.
-	   (does a vector even have roll rotation? I don't think so)
+	 * Get euler angles that when applied to a (0,0,1) direction vector
+	 * would make it point in the same direction as this vector.
+         *
+	 * Original author of this method is Arras from the Irrlicht forums
+         *
+	 * \return
+	 *     A rotation vector containing the X (pitch) and Y (raw)
+	 *     rotations in degrees, of this vector.
+	 *     The Z (roll) rotation is always 0, since two rotations
+	 *     are sufficient.
+	 *     (does a vector even have roll rotation? I don't think so)
 	 */
-	Vector3d<T> getHorizontalAngle () const
+	Vector3d<T> getHorizontalAngle() const
 	{
 		Vector3d<T> angle;
 
@@ -352,7 +353,7 @@ public:
 		return math::RadToDeg(angle);
 	}
 
-	T getYaw () const
+	T getYaw() const
 	{
 		T yaw = T(atan2(f64(x), f64(z)));
 
@@ -365,7 +366,7 @@ public:
 		return math::RadToDeg(yaw);
 	}
 
-	T getPitch () const
+	T getPitch() const
 	{
 		f64 const xz = math::sqrt(x*x + z*z);
 		T const pitch = T(atan2(f64(xz), f64(y)) - math::HalfPi);
@@ -380,7 +381,7 @@ public:
 	}
 
 	//! Fill an array of 4 values with the vector data
-	void toArrayOf4 (T* array) const
+	void toArrayOf4(T* array) const
 	{
 		array[0] = coord_[0];
 		array[1] = coord_[1];
@@ -389,7 +390,7 @@ public:
 	}
 
 	//! Fill an array of 3 values with the vector data
-	void toArrayOf3 (T* array) const
+	void toArrayOf3(T* array) const
 	{
 		array[0] = coord_[0];
 		array[1] = coord_[1];
@@ -408,7 +409,6 @@ public:
 		return coord_[elem];
 	}
 
-#if 0
 	//! Get coordinate along X axis
 	T& x ()
 	{
@@ -428,28 +428,23 @@ public:
 	}
 
 	//! Get coordinate along X axis
-	T const& x () const
+	T x () const
 	{
 		return coord_[0];
 	}
 
 	//! Get coordinate along Y axis
-	T const& y () const
+	T y () const
 	{
 		return coord_[1];
 	}
 
 	//! Get coordinate along Z axis
-	T const& z () const
+	T z () const
 	{
 		return coord_[2];
 	}
-#endif
 
-	//! Temporary hack for backward compatibility
-	T& x;
-	T& y;
-	T& z;
 private:
 	//! Coordinates of the vector
 	std::array<T, 3> coord_;

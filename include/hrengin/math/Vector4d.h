@@ -18,19 +18,19 @@ template <class T>
 class Vector4d {
 public:
 	//! Default constructor. Constructs zero vector.
-	Vector4d ()
+	Vector4d()
 		: coord_()
 	{
 	}
 
 	//! Construct vector specifying individual coodrinates
-	Vector4d (T const x, T const y, T const z, T const w)
+	Vector4d(T const x, T const y, T const z, T const w)
 		: coord_({x,y,z,w})
 	{
 	}
 
 	//! Construct vector with same value for coordinates
-	explicit Vector4d (T const v)
+	explicit Vector4d(T const v)
 		: coord_({v,v,v,v})
 	{
 	}
@@ -42,7 +42,7 @@ public:
 	}
 
 	//! Set vector's components
-	void set (T const x, T const y, T const z, T const w)
+	void set(T const x, T const y, T const z, T const w)
 	{
 		coord_[0] = x;
 		coord_[1] = y;
@@ -50,7 +50,7 @@ public:
 		coord_[3] = w;
 	}
 
-	void set (Vector4d<T> const& other)
+	void set(Vector4d<T> const& other)
 	{
 		coord_[0] = other[0];
 		coord_[1] = other[1];
@@ -329,7 +329,7 @@ public:
 	}
 
 	// Invert the vector.
-	Vector4d<T>& invert ()
+	Vector4d<T>& invert()
 	{
 		coord_[0] *= -1;
 		coord_[1] *= -1;

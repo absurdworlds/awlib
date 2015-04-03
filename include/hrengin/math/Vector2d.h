@@ -21,21 +21,21 @@ template <typename T>
 class Vector2d {
 public:
 	//! Default constructor. Constructs zero vector.
-	Vector2d ()
+	Vector2d()
 		: coord_(),
 		x(coord_[0]), y(coord_[1])
 	{
 	}
 
 	//! Construct vector with same both coordinates 
-	explicit Vector2d (T v)
+	explicit Vector2d(T v)
 		: coord_({v, v}),
 		x(coord_[0]), y(coord_[1])
 	{
 	}
 
 	//! Construct vector with individual coodrinates
-	Vector2d (T x, T y)
+	Vector2d(T x, T y)
 		: coord_({x, y}),
 		x(coord_[0]), y(coord_[1])
 	{
@@ -43,7 +43,7 @@ public:
 
 
 	//! Copy constructor
-	Vector2d (Vector2d<T> const& other)
+	Vector2d(Vector2d<T> const& other)
 		: coord_({other[0], other[1]}),
 		x(coord_[0]), y(coord_[1])
 	{
@@ -239,7 +239,7 @@ public:
 	}
 
 	//! Fill an array of 4 values with the vector data
-	void toArrayOf4 (T* array) const
+	void toArrayOf4(T* array) const
 	{
 		array[0] = coord_[0];
 		array[1] = coord_[1];
@@ -248,7 +248,7 @@ public:
 	}
 
 	//! Fill an array of 3 values with the vector data
-	void toArrayOf3 (T* array) const
+	void toArrayOf3(T* array) const
 	{
 		array[0] = coord_[0];
 		array[1] = coord_[1];
@@ -256,7 +256,7 @@ public:
 	}
 
 	//! Fill an array of 2 values with the vector data
-	void toArrayOf2 (T* array) const
+	void toArrayOf2(T* array) const
 	{
 		array[0] = coord_[0];
 		array[1] = coord_[1];
