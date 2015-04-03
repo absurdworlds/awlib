@@ -8,7 +8,9 @@
  * There is NO WARRANTY, to the extent permitted by law.
  */
 #include <hrengin/io/WriteStream.h>
+#include <hrengin/core/Logger.h>
 
+#include <hrengin/hdf/shared.h>
 #include "Writer.h"
 
 namespace hrengin {
@@ -20,7 +22,7 @@ hdf::Writer* createWriter(io::WriteStream& outStream)
 
 namespace impl_ {
 Writer::Writer(io::WriteStream& out)
-	: ostream(out)
+	: ostream(out), depth(0)
 {
 }
 
@@ -44,18 +46,30 @@ bool Writer::startNode(std::string name)
 /*! End current (bottom level) node. */
 bool Writer::endNode()
 {
+	if (depth == 0) {
+		error(HDF_LOG_ERROR, "‘]’ mismatch");
+		return false;
+	}
+
+	--depth;
+
 	startLine();
 
 	ostream.put(']');
 
-	--depth;
-
 	endLine();
+
+	return true
 }
 
 /*! Write a value object. */
 bool Writer::writeValue(std::string name, hdf::Value value)
 {
+	if (depth == 0) {
+		error(HDF_LOG_ERROR, "field outside node");
+		return false;
+	}
+
 	startLine();
 
 	ostream.put(name);
@@ -64,6 +78,8 @@ bool Writer::writeValue(std::string name, hdf::Value value)
 	writeValueValue(value);
 
 	endLine();
+
+	return true;
 }
 
 // TODO: Implement general-purpose to_string(hdf::Value)
@@ -158,7 +174,7 @@ void Writer::addComment(std::string comment_text)
 /*! Report an error */
 void Writer::error(u32 type, std::string msg)
 {
-	// TODO
+	core::Logger::debug("error: " + msg);
 }
 
 /*! Set the indentation style for the document */
