@@ -25,18 +25,18 @@ namespace hdf {
 //! Class for holding any HDF Value.
 class Value {
 public:
-	~Value ()
+	~Value()
 	{
 		resetString();
 	}
 
-	Value ()
+	Value()
 		: val_(0), type_(Type::Unknown)
 	{
 	}
 
 	template<typename val_type>
-	Value (val_type v)
+	Value(val_type v)
 		: val_(v), type_(deduceType<val_type>())
 	{
 	}
@@ -53,7 +53,7 @@ public:
 
 	//! Get value if types match
 	template<typename val_type>
-	bool get (val_type& v) const
+	bool get(val_type& v) const
 	{
 		if(checkType(type_, v)) {
 			val_.get(v);
@@ -70,7 +70,7 @@ public:
 
 	//! Set value if types are matching
 	template<typename val_type>
-	bool trySet (val_type const& v)
+	bool trySet(val_type const& v)
 	{
 		if(checkType(type_, v)) {
 			val_.set(v);
@@ -82,7 +82,7 @@ public:
 
 	//! Set value with overriding type
 	template<typename val_type>
-	void set (bool const v)
+	void set(bool const v)
 	{
 		resetString();
 		val_.set(v);
@@ -90,14 +90,14 @@ public:
 	}
 
 	//! Reset value to <Unknown>
-	void reset ()
+	void reset()
 	{
 		resetString ();
 		resetType ();
 	}
 
 private:
-	void resetString ()
+	void resetString()
 	{
 		if(type_ == Type::String) {
 			delete[] val_.str.data;
@@ -105,68 +105,68 @@ private:
 		}
 	}
 
-	void resetType ()
+	void resetType()
 	{
 		type_ = Type::Unknown;
 	}
 
 	hdf::Type type_;
 	union Value_ {
-		~Value_ ()
+		~Value_()
 		{
 		}
 
-		Value_ (bool b)
+		Value_(bool b)
 			: boolean(b)
 		{
 		}
 
-		Value_ (i32 i)
+		Value_(i32 i)
 			: integer(i)
 		{
 		}
 
-		Value_ (f64 f)
+		Value_(f64 f)
 			: real(f)
 		{
 		}
 
-		Value_ (std::string const& s)
+		Value_(std::string const& s)
 		{
 			set(s);
 		}
 
-		Value_ (Vector2d<f32> const& v)
+		Value_(Vector2d<f32> const& v)
 		{
 			set(v);
 		}
 
-		Value_ (Vector3d<f32> const& v)
+		Value_(Vector3d<f32> const& v)
 		{
 			set(v);
 		}
 
-		Value_ (Vector4d<f32> const& v)
+		Value_(Vector4d<f32> const& v)
 		{
 			set(v);
 		}
 
-		void set (bool b)
+		void set(bool b)
 		{
 			boolean = b;
 		}
 
-		void set (i32 i)
+		void set(i32 i)
 		{
 			integer = i;
 		}
 
-		void set (f64 f)
+		void set(f64 f)
 		{
 			real = f;
 		}
 
-		void set (std::string const& s)
+		void set(std::string const& s)
 		{
 			str.length = s.size();
 			str.data = new char[str.length];
@@ -174,42 +174,42 @@ private:
 			memcpy((void*)(str.data), s.data(), str.length);
 		}
 
-		void set (Vector2d<f32> const& v)
+		void set(Vector2d<f32> const& v)
 		{
 			v.toArrayOf2(vector);
 		}
 
-		void set (Vector3d<f32> const& v)
+		void set(Vector3d<f32> const& v)
 		{
 			v.toArrayOf4(vector);
 		}
 
-		void set (Vector4d<f32> const& v)
+		void set(Vector4d<f32> const& v)
 		{
 			v.toArrayOf4(vector);
 		}
 
-		void get (bool& v) const
+		void get(bool& v) const
 		{
 			v = boolean;
 		}
 
-		void get (i32& v) const
+		void get(i32& v) const
 		{
 			v = integer;
 		}
 
-		void get (f64& v) const
+		void get(f64& v) const
 		{
 			v = real;
 		}
 
-		void get (std::string& v) const
+		void get(std::string& v) const
 		{
 			v.assign(str.data, str.length);
 		}
 
-		void get (Vector3d<f32>& v) const
+		void get(Vector3d<f32>& v) const
 		{
 			v[0] = vector[0];
 			v[1] = vector[1];
@@ -229,7 +229,7 @@ private:
 
 //! Specialization of trySet for string type
 template<>
-inline bool Value::trySet (std::string const& v)
+inline bool Value::trySet(std::string const& v)
 {
 	if(checkType(type_, v)) {
 		resetString();
