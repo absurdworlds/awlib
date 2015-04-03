@@ -27,6 +27,7 @@ enum IndentationStyle {
 
 //! Interface for writing HDF files. Supports HDF 1.2.0 format.
 class Writer {
+public:
 	virtual ~Writer() {};
 
 	/*! Create a new node and write a header for it. */
