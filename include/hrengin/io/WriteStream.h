@@ -19,8 +19,6 @@ namespace hrengin {
  */
 class WriteStream {
 public:
-	typedef T primitive_type;
-
 	/*! Write a character into the output stream. */
 	virtual i32 put(char c) = 0;
 
