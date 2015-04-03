@@ -14,6 +14,7 @@
 #include <hrengin/common/types.h>
 
 namespace hrengin {
+namespace io {
 /*!
  * This class provides unified interface for sequential data writing.
  */
@@ -31,5 +32,6 @@ public:
 	virtual size_t position() const = 0;
 };
 
+} // namespace io
 } // namespace hrengin
 #endif//_hrengin_OStream_
