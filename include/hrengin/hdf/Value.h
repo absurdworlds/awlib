@@ -8,7 +8,6 @@
  */
 #ifndef _hrengin_hdf_value_
 #define _hrengin_hdf_value_
-
 #include <cstring>
 
 #include <string>

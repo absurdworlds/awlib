@@ -17,7 +17,7 @@ namespace impl_ {
 //! Implementation of HDF writer. Supports HDF 1.2.0 format.
 class Writer : public hdf::Writer {
 public:
-	Writer(WriteStream& out);
+	Writer(io::WriteStream& out);
 	virtual ~Writer();
 
 	/*! Create a new node and write a header for it. */
@@ -42,7 +42,7 @@ private:
 	void startLine();
 	void endLine();
 
-	WriteStream& ostream;
+	io::WriteStream& ostream;
 	IndentationStyle indentation;
 	size_t depth;
 };

@@ -13,8 +13,13 @@
 
 namespace hrengin {
 namespace hdf {
+hdf::Writer* createWriter(io::WriteStream& outStream)
+{
+	return new impl_::Writer(outStream);
+}
+
 namespace impl_ {
-Writer::Writer(WriteStream& out)
+Writer::Writer(io::WriteStream& out)
 	: ostream(out)
 {
 }
