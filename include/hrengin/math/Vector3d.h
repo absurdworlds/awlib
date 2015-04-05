@@ -20,29 +20,25 @@ class Vector3d {
 public:
 	//! Default constructor. Constructs zero vector.
 	Vector3d()
-		: coord_(),
-		x(coord_[0]), y(coord_[1]), z(coord_[2])
+		: coord_()
 	{
 	}
 
 	//! Construct vector with same value for coordinates
 	explicit Vector3d(T const v)
-		: coord_({v, v, v}),
-		x(coord_[0]), y(coord_[1]), z(coord_[2])
+		: coord_({v, v, v})
 	{
 	}
 
 	//! Construct vector with individual coodrinates
 	Vector3d(T const x, T const y, T const z)
-		: coord_({x, y, z}),
-		x(coord_[0]), y(coord_[1]), z(coord_[2])
+		: coord_({x, y, z})
 	{
 	}
 
 	//! Copy constructor
 	Vector3d(Vector3d<T> const& other) 
-		: coord_({other[0], other[1], other[2]}),
-		x(coord_[0]), y(coord_[1]), z(coord_[2])
+		: coord_({other[0], other[1], other[2]})
 	{
 	}
 
@@ -75,7 +71,9 @@ public:
 	//! Vector addition
 	Vector3d<T> operator + (Vector3d<T> const& other) const
 	{
-		return Vector3d<T>(x + other[0], y + other[1], z + other[2]); 
+		return Vector3d<T>(coord_[0] + other[0],
+		                   coord_[1] + other[1],
+		                   coord_[2] + other[2]); 
 	}
 
 	//! Vector addition
@@ -89,7 +87,9 @@ public:
 
 	Vector3d<T> operator + (T const val) const
 	{
-		return Vector3d<T>(x + val, y + val, z + val);
+		return Vector3d<T>(coord_[0] + val,
+		                   coord_[1] + val,
+		                   coord_[2] + val); 
 	}
 
 	Vector3d<T>& operator += (T const val)
@@ -101,7 +101,9 @@ public:
 	}
 	Vector3d<T> operator - (Vector3d<T> const& other) const
 	{
-		return Vector3d<T>(x - other[0], y - other[1], z - other[2]);
+		return Vector3d<T>(coord_[0] - other[0],
+		                   coord_[1] - other[1],
+		                   coord_[2] - other[2]); 
 	}
 
 	Vector3d<T>& operator -= (Vector3d<T> const& other)
@@ -114,10 +116,9 @@ public:
 
 	Vector3d<T> operator - (T const val) const
 	{
-		return Vector3d<T>(
-			coord_[0] - val,
-			coord_[1] - val,
-			coord_[2] - val);
+		return Vector3d<T>(coord_[0] - val,
+		                   coord_[1] - val,
+		                   coord_[2] - val);
 	}
 
 	Vector3d<T>& operator -= (T const val)
@@ -146,7 +147,9 @@ public:
 
 	Vector3d<T> operator * (T const v) const
 	{
-		return Vector3d<T>(x * v, y * v, z * v);
+		return Vector3d<T>(coord_[0] * v,
+		                   coord_[1] * v,
+		                   coord_[2] * v);
 	}
 
 	Vector3d<T>& operator *= (T const v)
@@ -159,7 +162,9 @@ public:
 
 	Vector3d<T> operator / (Vector3d<T> const& other) const
 	{
-		return Vector3d<T>(x / other[0], y / other[1], z / other[2]);
+		return Vector3d<T>(coord_[0] / other[0],
+		                   coord_[1] / other[1],
+		                   coord_[2] / other[2]);
 	}
 
 	Vector3d<T>& operator /= (Vector3d<T> const& other)
@@ -332,10 +337,10 @@ public:
 		Vector3d<T> angle;
 
 		// Yaw
-		angle.y = T(atan2(f64(x), f64(z)));
+		angle.y = T(atan2(f64(x()), f64(z())));
 
 		// Pitch
-		f64 const xz = math::sqrt(x*x + z*z);
+		f64 const xz = math::sqrt(x()*x() + z()*z());
 		angle.x = T(atan2(f64(xz), f64(y)) - math::HalfPi);
 
 		// Normalize angles
@@ -355,7 +360,7 @@ public:
 
 	T getYaw() const
 	{
-		T yaw = T(atan2(f64(x), f64(z)));
+		T yaw = T(atan2(f64(x()), f64(z())));
 
 		if (yaw <= -math::Pi) {
 			yaw += math::DoublePi;
@@ -368,7 +373,7 @@ public:
 
 	T getPitch() const
 	{
-		f64 const xz = math::sqrt(x*x + z*z);
+		f64 const xz = math::sqrt(x()*x() + z()*z());
 		T const pitch = T(atan2(f64(xz), f64(y)) - math::HalfPi);
 
 		if (pitch <= -math::Pi) {
