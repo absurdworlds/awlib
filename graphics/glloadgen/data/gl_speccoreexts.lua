@@ -113,6 +113,21 @@ local coreExts4_4 = {
 	"ARB_vertex_type_10f_11f_11f_rev",
 };
 
+local coreExts4_5 = {
+	"ARB_cull_distance",
+	"ARB_ES3_1_compatibility",
+	"ARB_clip_control",
+	"ARB_conditional_render_inverted",
+	"ARB_derivative_control",
+	"ARB_direct_state_access",
+	"ARB_get_texture_sub_image",
+	"ARB_shader_texture_image_samples",
+	"ARB_texture_barrier",
+	"KHR_context_flush_control",
+	"KHR_robust_buffer_access_behavior",
+	"KHR_robustness",
+};
+
 return {
 	["1.2"] = coreExts1_2,
 	["3.0"] = coreExts3_0,
@@ -124,5 +139,6 @@ return {
 	["4.2"] = coreExts4_2,
 	["4.3"] = coreExts4_3,
 	["4.4"] = coreExts4_4,
+	["4.5"] = coreExts4_5,
 };
 
