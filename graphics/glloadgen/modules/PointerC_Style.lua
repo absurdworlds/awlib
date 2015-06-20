@@ -138,7 +138,7 @@ local function GetFuncPtrDef(hFile, func, spec, options)
 		common.GetFuncReturnType(func),
 		spec.GetCodegenPtrType(),
 		GetFuncPtrName(func, spec, options),
-		common.GetFuncParamList(func))
+		common.GetFuncParamList(func, true))
 end
 
 function my_style.header.WriteFuncDecl(hFile, func, spec, options)
