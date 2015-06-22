@@ -65,6 +65,12 @@ function members:writeblock(block, ...)
 	if(last and #last ~= 0) then
 		self:write(last)
 	end
+	
+	--No \n. Check to see if there's one anywhere in string.
+	--If not, then we never wrote anything, so just write the block, with a \n.
+	if(not last and not block:match("\n")) then
+		self:write(block, "\n")
+	end
 end
 
 function members:fmtblock(block, ...)

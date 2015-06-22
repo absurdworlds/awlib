@@ -546,21 +546,17 @@ static void GetGLVersion()
 }
 ]])
 	hFile:write "\n"
-	
-	hFile:fmt("int %s(int majorVersion, int minorVersion)\n",
-		DecorateFuncName("IsVersionGEQ", spec, options))
-	hFile:writeblock([[
-{
-	if(g_major_version == 0)
-		GetGLVersion();
-		
-	if(majorVersion > g_major_version) return 1;
-	if(majorVersion < g_major_version) return 0;
-	if(minorVersion >= g_minor_version) return 1;
-	return 0;
-}
-]])
 
+	common.WriteCIsVersionGEQFunc(hFile,
+		{
+			returnType = "int",
+			funcName = DecorateFuncName("IsVersionGEQ", spec, options),
+			True = "1",
+			False = "0",
+			majorVersion = "g_major_version",
+			minorVersion = "g_minor_version",
+			verLoader = "GetGLVersion",
+		})
 end
 
 

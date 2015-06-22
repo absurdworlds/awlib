@@ -410,6 +410,38 @@ static void LoadExtByName(const char *extensionName)
 ]])
 end
 
+--The info data contains:
+-- `returnType`: The type that is returned by the function.
+-- `funcName`: The name to call the function.
+-- `True`: the (string) value to return when true.
+-- `False`: the (string) value to return when false.
+-- `majorVersion`: The variable containing the major OpenGL version.
+-- `minorVersion`: The variable containing the minor OpenGL version.
+-- `verLoader`: Optional. The function to call if the major version is zero.
+function common.WriteCIsVersionGEQFunc(hFile, info)
+	hFile:fmt("%s %s(int majorVersion, int minorVersion)\n",
+		info.returnType, info.funcName)
+
+	hFile:writeblock("{\n");
+	hFile:inc();
+	
+	if(info.verLoader) then
+		hFile:fmtblock([[
+if(%s == 0)
+	%s();
+
+]], info.majorVersion, info.verLoader)
+	end
+	
+	hFile:fmtblock([[if(majorVersion < %s) return %s;]], info.majorVersion, info.True)
+	hFile:fmtblock([[if(majorVersion > %s) return %s;]], info.majorVersion, info.False)
+	hFile:fmtblock([[if(minorVersion <= %s) return %s;]], info.minorVersion, info.True)
+	hFile:fmtblock([[return %s;]], info.False)
+	
+	hFile:dec();	
+	hFile:writeblock("}\n");
+end
+
 function common.WriteNamespaceBegin(hFile, namespace)
 	hFile:fmt("namespace %s\n", namespace)
 	hFile:write("{\n")
