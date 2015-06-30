@@ -125,7 +125,12 @@ function common.GetFuncParamList(func, bWriteVarNames)
 		end
 	end
 	
-	return table.concat(paramList, ", ");
+	if(#paramList == 0) then
+		--C makes () different from (void). So use (void).
+		return "void"
+	else
+		return table.concat(paramList, ", ")
+	end
 end
 
 --Get the list of parameter names, as a string ready to be put into ().
@@ -175,7 +180,7 @@ end
 function common.GetProcExtsFromExtListFunc(hFile, specData, spec, options,
 							indexed, GetFuncPtrName, GetEnumName)
 	return [[
-static void ProcExtsFromExtList()
+static void ProcExtsFromExtList(void)
 {
 	GLint iLoop;
 	GLint iNumExtensions = 0;
@@ -291,7 +296,7 @@ end
 function common.WriteCMappingTable(hFile, specData, spec,
 							options, structName, varName, GetExtVariableName, GetExtLoaderFuncName)
 	--Write the struct for the mapping table.
-	hFile:write("typedef int (*PFN_LOADFUNCPOINTERS)();\n")
+	hFile:write("typedef int (*PFN_LOADFUNCPOINTERS)(void);\n")
 	hFile:fmt("typedef struct %s%sStrToExtMap_s\n",
 		options.prefix, spec.DeclPrefix())
 	hFile:write("{\n")
@@ -359,7 +364,7 @@ end
 
 function common.WriteCClearExtensionVarsFunc(hFile, specData, spec,
 							options, GetExtVariableName, clearValue)
-	hFile:fmt("static void ClearExtensionVars()\n")
+	hFile:fmt("static void ClearExtensionVars(void)\n")
 	hFile:write("{\n")
 	hFile:inc()
 	for _, extName in ipairs(options.extensions) do

@@ -46,7 +46,7 @@ end
 function my_style.header.WriteBlockEndIncludeGuard(hFile, spec, options)
 	local inclGuard = GetIncludeGuard(hFile, spec, options)
 	
-	hFile:fmt("#endif //%s\n", inclGuard)
+	hFile:fmt("#endif /*%s*/\n", inclGuard)
 end
 
 function my_style.header.WriteInit(hFile, spec, options)
@@ -211,8 +211,8 @@ function my_style.header.WriteVersioningFuncDecls(hFile, spec, options)
 		return
 	end
 	
-	hFile:fmt("int %s();\n", DecorateFuncName("GetMinorVersion", spec, options))
-	hFile:fmt("int %s();\n", DecorateFuncName("GetMajorVersion", spec, options))
+	hFile:fmt("int %s(void);\n", DecorateFuncName("GetMinorVersion", spec, options))
+	hFile:fmt("int %s(void);\n", DecorateFuncName("GetMajorVersion", spec, options))
 	hFile:fmt("int %s(int majorVersion, int minorVersion);\n",
 		DecorateFuncName("IsVersionGEQ", spec, options))
 end
@@ -275,7 +275,7 @@ local function GetExtLoaderFuncName(extName, spec, options)
 end
 
 function my_style.source.WriteBlockBeginExtLoader(hFile, extName, spec, options)
-	hFile:fmt("static int %s()\n", GetExtLoaderFuncName(extName, spec, options))
+	hFile:fmt("static int %s(void)\n", GetExtLoaderFuncName(extName, spec, options))
 	hFile:write("{\n")
 	hFile:inc()
 	hFile:write("int numFailed = 0;\n")
@@ -307,7 +307,7 @@ local function GetCoreLoaderFuncName(spec, options)
 end
 
 function my_style.source.WriteBlockBeginCoreLoader(hFile, spec, options)
-	hFile:fmt("static int %s()\n", GetCoreLoaderFuncName(spec, options))
+	hFile:fmt("static int %s(void)\n", GetCoreLoaderFuncName(spec, options))
 	hFile:write("{\n")
 	hFile:inc()
 	hFile:write("int numFailed = 0;\n")
@@ -508,7 +508,7 @@ function my_style.source.WriteVersioningFuncs(hFile, specData, spec, options)
 	
 	if(tonumber(options.version) >= 3.0) then
 		hFile:writeblock([[
-static void GetGLVersion()
+static void GetGLVersion(void)
 {
 	glGetIntegerv(GL_MAJOR_VERSION, &g_major_version);
 	glGetIntegerv(GL_MINOR_VERSION, &g_minor_version);
@@ -519,7 +519,7 @@ static void GetGLVersion()
 		hFile:write "\n"
 		
 		hFile:writeblock([[
-static void GetGLVersion()
+static void GetGLVersion(void)
 {
 	ParseVersionFromString(&g_major_version, &g_minor_version, (const char*)glGetString(GL_VERSION));
 }
@@ -527,7 +527,7 @@ static void GetGLVersion()
 	end
 	
 	hFile:write "\n"
-	hFile:fmt("int %s()\n", DecorateFuncName("GetMajorVersion", spec, options))
+	hFile:fmt("int %s(void)\n", DecorateFuncName("GetMajorVersion", spec, options))
 	hFile:writeblock([[
 {
 	if(g_major_version == 0)
@@ -537,10 +537,10 @@ static void GetGLVersion()
 ]])
 	hFile:write "\n"
 
-	hFile:fmt("int %s()\n", DecorateFuncName("GetMinorVersion", spec, options))
+	hFile:fmt("int %s(void)\n", DecorateFuncName("GetMinorVersion", spec, options))
 	hFile:writeblock([[
 {
-	if(g_major_version == 0) //Yes, check the major version to get the minor one.
+	if(g_major_version == 0) /*Yes, check the major version to get the minor one.*/
 		GetGLVersion();
 	return g_minor_version;
 }
