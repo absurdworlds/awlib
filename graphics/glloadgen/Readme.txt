@@ -1,4 +1,4 @@
-glLoadGenerator, version 1.0
+glLoadGenerator, version 2.0.3
 
 
 Please see the documentation available on the web at https://bitbucket.org/alfonse/glloadgen/wiki/Home for detailed information on how to use this software.
