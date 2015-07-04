@@ -19,6 +19,15 @@ function util.InvertTable(tbl)
 	return ret
 end
 
+--
+function util.InvertTableIndex(tbl)
+	local ret = {}
+	for i, val in ipairs(tbl) do
+		ret[val] = i
+	end
+	return ret
+end
+
 --Returns two values: the base filename and the directory.
 --If the base filename is nil, it doesn't have a pathname.
 --If the directory is nil, then there was no directory.

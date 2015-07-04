@@ -240,6 +240,32 @@ function group:array(optName, tblName, desc, modifier, optional)
 	}
 end
 
+--As group:array, but can return an empty list.
+function group:array_empty(optName, tblName, desc, modifier, optional)
+	table.insert(self._doc_order, optName)
+	self._procs[optName] = {
+		desc = desc,
+		tableName = tblName,
+		optional = optional,
+		proc = function(self, param, iter)
+			self[tblName] = self[tblName] or {}
+			
+			local bFound = false
+			for ext in iter() do
+				if(modifier) then
+					ext = modifier(ext)
+				end
+				table.insert(self[tblName], ext)
+			end
+		end,
+		
+		document = function(self)
+			local docs = ExtractDescArray(self.desc)
+			return docs
+		end,
+	}
+end
+
 --Stores its data in an array, but it only takes one parameter.
 function group:array_single(optName, tblName, desc, modifier, optional)
 	table.insert(self._doc_order, optName)
