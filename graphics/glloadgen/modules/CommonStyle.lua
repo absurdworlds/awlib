@@ -458,6 +458,38 @@ function common.WriteNamespaceEnd(hFile)
 	hFile:write("}\n")
 end
 
+function common.WriteCGeneratorInfo(hFile, specData, spec, options)
+	--Write any appropriate generator info.
+	if(options.geninfo and #options.geninfo > 0) then
+		for _, info in ipairs(options.geninfo) do
+			hFile:write("/** ", info, "**/\n")
+		end
+		
+		hFile:write("\n")
+		
+		return true
+	end
+	
+	return false
+end
+
+function common.WriteCPPGeneratorInfo(hFile, specData, spec, options)
+	--Write any appropriate generator info.
+	if(options.geninfo and #options.geninfo > 0) then
+		hFile:write("//////////////////////\n")
+		for _, info in ipairs(options.geninfo) do
+			hFile:write("/// ", info, "\n")
+		end
+		
+		hFile:write("\n")
+		
+		return true
+	end
+	
+	return false
+end
+
+
 
 common.DeepCopyTable = DeepCopyTable
 
@@ -526,7 +558,7 @@ local my_struct =
 		},
 	},
 	{ type="file", style="source", name="GetFilename",
-		{ type="write", name="FilePreamble", optional=true} ,
+		{ type="write", name="FilePreamble", optional=true},
 		{ type="write", name="Includes(hFile, basename, spec, options)",},
 		{ type="blank"},
 		{ type="write", name="LoaderData(hFile, spec, options)",},

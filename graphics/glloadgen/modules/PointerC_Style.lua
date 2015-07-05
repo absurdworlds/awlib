@@ -17,13 +17,16 @@ function my_style.WriteSmallHeading(hFile, headingName)
 	hFile:write("/*", headingName, "*/\n")
 end
 
+function my_style.WriteFilePreamble(hFile, specData, spec, options)
+	WriteCGeneratorInfo(hFile, specData, spec, options)
+end
+
 ----------------------------------------------------------------
 -- Header file construction
 
 function my_style.header.GetFilename(basename, options)
 	return basename .. ".h"
 end
-
 
 local function GetIncludeGuard(hFile, spec, options)
 	local str = "POINTER_C_GENERATED_HEADER_" ..

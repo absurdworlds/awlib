@@ -206,9 +206,7 @@ local infoGetter = {}
 
 function infoGetter.version(cmd_line)
 	local status, version = pcall(require, "LoadgenVersion")
-	if(status) then
-		version = version()
-	else
+	if(not status) then
 		version = "Development"
 	end
 
@@ -261,10 +259,6 @@ function optTbl.GetOptions(cmd_line)
 		options.geninfo = newInfo
 	else
 		options.geninfo = {}
-	end
-	
-	for _, info in ipairs(options.geninfo) do
-		print(info)
 	end
 	
 	--Load and collate the extensions.
