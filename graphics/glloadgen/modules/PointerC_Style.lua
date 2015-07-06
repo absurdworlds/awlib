@@ -18,7 +18,7 @@ function my_style.WriteSmallHeading(hFile, headingName)
 end
 
 function my_style.WriteFilePreamble(hFile, specData, spec, options)
-	WriteCGeneratorInfo(hFile, specData, spec, options)
+	common.WriteCGeneratorInfo(hFile, specData, spec, options)
 end
 
 ----------------------------------------------------------------

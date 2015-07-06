@@ -91,33 +91,10 @@
                 <para>The code generation suite has a number of different ways of outputting the
                     functions and enumerators that define OpenGL. This option allows the user to
                     select between these particular mechanisms.</para>
-                <para>The specific meaning of these parameters is <link xlink:href="Styles"
-                        >explained elsewhere.</link> Note that the system is designed to be
-                    user-extensible; new styles can be added by creating an appropriate script and
-                    hooking it into the right place in
-                    <filename>modules/Styles.lua</filename>.</para>
-                <para>It must be one of the following values:</para>
-                <itemizedlist>
-                    <listitem>
-                        <para><link xlink:href="Style_Pointer_C"
-                            ><literal>pointer_c</literal></link>: Used for C-style header
-                            generation.</para>
-                    </listitem>
-                    <listitem>
-                        <para><link xlink:href="Style_Pointer_CPP"
-                                ><literal>pointer_cpp</literal></link>: Used for creating C++-style
-                            loaders, wrapping as much as possible in namespaces.</para>
-                    </listitem>
-                    <listitem>
-                        <para><link xlink:href="Style_No_Load_CPP"
-                                ><literal>noload_cpp</literal></link>: Used for creating C++-style
-                            loaders that you don't need to call an initialization function on to get
-                            function pointers.</para>
-                    </listitem>
-                    <listitem>
-                        <para><literal>glload</literal>: For internal use only.</para>
-                    </listitem>
-                </itemizedlist>
+                <para>The specified style must be <link xlink:href="Styles">one of the available
+                        styles.</link> Note that the system is designed to be user-extensible; new
+                    styles can be added by creating an appropriate script and hooking it into the
+                    right place in <filename>modules/Styles.lua</filename>.</para>
             </glossdef>
         </glossentry>
         <glossentry>
@@ -142,12 +119,39 @@
                     following:</para>
                 <itemizedlist>
                     <listitem>
-                        <para><code>plat</code>: default. This writes the platform-native line
+                        <para><literal>plat</literal>: default. This writes the platform-native line
                             endings.</para>
                     </listitem>
                     <listitem>
-                        <para><code>unix</code>: Uses the Unix default of using the "\n" character
-                            for text file line ending.</para>
+                        <para><literal>unix</literal>: Uses the Unix default of using the "\n"
+                            character for text file line ending.</para>
+                    </listitem>
+                </itemizedlist>
+            </glossdef>
+        </glossentry>
+        <glossentry>
+            <glossterm>-geninfo</glossterm>
+            <glossdef>
+                <para>Specifies which information about glLoadGen should be added to each file. The
+                    different styles have their own way of providing this information, but all of
+                    the standard ones put them in comments at the top of the file.</para>
+                <para>If this option is not specified, then no information is generated. If the
+                    option is specified, but that specification is not followed by any actual values
+                    (anything not prefixed by "-"), then <emphasis>all</emphasis> of the available
+                    data are provided. Otherwise, only the data items specified are provided.
+                    Multiple items can be specified.</para>
+                <para>The available generator data are:</para>
+                <itemizedlist>
+                    <listitem>
+                        <para><literal>version</literal>: The version of glLoadGen used to generate
+                            the file.</para>
+                    </listitem>
+                    <listitem>
+                        <para><literal>location</literal>: The URL for glLoadGen's website.</para>
+                    </listitem>
+                    <listitem>
+                        <para><literal>cmdline</literal>: The command line parameters used to
+                            generate the file.</para>
                     </listitem>
                 </itemizedlist>
             </glossdef>
