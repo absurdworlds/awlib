@@ -6,21 +6,21 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_SceneManager_
-#define _hrengin_SceneManager_
+#ifndef _awrts_SceneManager_
+#define _awrts_SceneManager_
 
 #include <vector>
 
-#include <hrengin/math/Vector3d.h>
+#include <awrts/math/Vector3d.h>
 
-#include <hrengin/graphics/RenderingDevice.h>
+#include <awrts/graphics/RenderingDevice.h>
 
-#include <hrengin/scene/scene.h>
-#include <hrengin/scene/SceneManager.h>
-#include <hrengin/scene/VisNode.h>
-#include <hrengin/scene/CameraNode.h>
-#include <hrengin/scene/LightNode.h>
-#include <hrengin/scene/EntityNode.h>
+#include <awrts/scene/scene.h>
+#include <awrts/scene/SceneManager.h>
+#include <awrts/scene/VisNode.h>
+#include <awrts/scene/CameraNode.h>
+#include <awrts/scene/LightNode.h>
+#include <awrts/scene/EntityNode.h>
 
 namespace irr {
 class IrrlichtDevice;
@@ -32,7 +32,7 @@ class SceneNode;
 }
 }
 
-namespace hrengin {
+namespace awrts {
 namespace scene {
 //! Class to manage the scene graph
 class SceneManager : public SceneManager {
@@ -64,5 +64,5 @@ public:
 };
 
 } // namespace graphics
-} // namespace hrengin
-#endif//_hrengin_SceneManager_
+} // namespace awrts
+#endif//_awrts_SceneManager_

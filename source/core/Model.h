@@ -6,17 +6,17 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_Model_
-#define _hrengin_Model_
+#ifndef _awrts_Model_
+#define _awrts_Model_
 
-#include <hrengin/core/Model.h>
+#include <awrts/core/Model.h>
 
-namespace hrengin {
+namespace awrts {
 
 class Model : public Model
 {
 
 };
 
-} // namespace hrengin
-#endif//_hrengin_Model_
+} // namespace awrts
+#endif//_awrts_Model_

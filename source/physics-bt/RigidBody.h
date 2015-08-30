@@ -6,21 +6,21 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_RigidBody_impl_
-#define _hrengin_RigidBody_impl_
+#ifndef _awrts_RigidBody_impl_
+#define _awrts_RigidBody_impl_
 #include <stdio.h>
 
 #include <Bullet/btBulletDynamicsCommon.h>
 #include <Bullet/btBulletCollisionCommon.h>
 
-#include <hrengin/common/types.h>
-#include <hrengin/game/Entity.h>
-#include <hrengin/physics/RigidBody.h>
-//#include <hrengin/physics/PhysicsManager.h>
+#include <awrts/common/types.h>
+#include <awrts/game/Entity.h>
+#include <awrts/physics/RigidBody.h>
+//#include <awrts/physics/PhysicsManager.h>
 
 #include "CollisionObject.h"
 
-namespace hrengin {
+namespace awrts {
 namespace physics {
 namespace bullet {
 
@@ -46,5 +46,5 @@ protected:
 
 } // namespace bullet
 } // namespace physics
-} // namespace hrengin
-#endif//_hrengin_RigidBody_impl_
+} // namespace awrts
+#endif//_awrts_RigidBody_impl_

@@ -9,7 +9,7 @@
  */
 #include "Window.h"
 
-namespace hrengin {
+namespace awrts {
 namespace platform {
 // TODO: move this into generic/Window.cpp
 Window* Window::create()
@@ -61,4 +61,4 @@ void Window::setTitle(std::string const& title)
 }
 } // namespace sf_
 } // namespace platform
-} // namespace hrengin
+} // namespace awrts

@@ -6,18 +6,18 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_EntityManager_impl_
-#define _hrengin_EntityManager_impl_
+#ifndef _awrts_EntityManager_impl_
+#define _awrts_EntityManager_impl_
 
 #include <vector>
 #include <deque>
 
-#include <hrengin/math/Vector3d.h>
+#include <awrts/math/Vector3d.h>
 
-#include <hrengin/game/Entity.h>
-#include <hrengin/game/EntityManager.h>
+#include <awrts/game/Entity.h>
+#include <awrts/game/EntityManager.h>
 
-namespace hrengin {
+namespace awrts {
 namespace game {
 namespace impl_ {
 class EntityManager : public game::EntityManager {
@@ -53,5 +53,5 @@ private:
 };
 } // namespace impl_
 } // namespace game
-} // namespace hrengin
-#endif//_hrengin_EntityManager_impl_
+} // namespace awrts
+#endif//_awrts_EntityManager_impl_

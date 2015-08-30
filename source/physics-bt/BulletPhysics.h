@@ -6,17 +6,17 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_BulletPhysics_impl_
-#define _hrengin_BulletPhysics_impl_
+#ifndef _awrts_BulletPhysics_impl_
+#define _awrts_BulletPhysics_impl_
 #include <map>
 #include <string>
 
 #include <btBulletDynamicsCommon.h>
 #include <btBulletCollisionCommon.h>
 
-#include <hrengin/physics/PhysicsManager.h>
+#include <awrts/physics/PhysicsManager.h>
 
-namespace hrengin {
+namespace awrts {
 struct Primitive;
 struct SMesh;
 
@@ -55,5 +55,5 @@ private:
 };
 
 } // namespace physics
-} // namespace hrengin
-#endif//_hrengin_BulletPhysics_impl_
+} // namespace awrts
+#endif//_awrts_BulletPhysics_impl_

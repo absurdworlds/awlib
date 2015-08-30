@@ -6,12 +6,12 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_SoundSample_
-#define _hrengin_SoundSample_
+#ifndef _awrts_SoundSample_
+#define _awrts_SoundSample_
 
-#include <hrengin/common/hrengintypes.h>
+#include <awrts/common/hrengintypes.h>
 
-namespace hrengin {
+namespace awrts {
 namespace audio {
 
 struct SoundSample {
@@ -24,4 +24,4 @@ struct SoundSample {
 
 }
 }
-#endif//_hrengin_SoundSample_
+#endif//_awrts_SoundSample_

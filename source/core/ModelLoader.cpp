@@ -6,22 +6,22 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#include <hrengin/core/models.h>
-#include <hrengin/core/paths.h>
-#include <hrengin/string/utility.h>
+#include <awrts/core/models.h>
+#include <awrts/core/paths.h>
+#include <awrts/string/utility.h>
 
-#include <hrengin/core/FileSystem.h>
+#include <awrts/core/FileSystem.h>
 
-#include <hrengin/io/ReadFile.h>
-#include <hrengin/io/BufferedStream.h>
+#include <awrts/io/ReadFile.h>
+#include <awrts/io/BufferedStream.h>
 
-#include <hrengin/hdf/HDFParser.h>
+#include <awrts/hdf/HDFParser.h>
 
-#include <hrengin/core/Model.h>
+#include <awrts/core/Model.h>
 
 #include "ModelLoader.h"
 
-namespace hrengin {
+namespace awrts {
 namespace core {
 
 ModelLoader* createModelLoader ()
@@ -127,7 +127,7 @@ bool hdfParseObject(hdf::HDFParser* hdf, Model* model, std::string curNode)
 
 bool hdfParseShapeNode(hdf::HDFParser* hdf, Model* model)
 {
-	hrengin::Primitive primitive;
+	awrts::Primitive primitive;
 	//io::HdfObjectType type = hdf->getObjectType();
 
 
@@ -207,4 +207,4 @@ bool hdfParseShapeNode(hdf::HDFParser* hdf, Model* model)
 }
 } // namespace impl_
 } // namespace core
-} // namespace hrengin
+} // namespace awrts

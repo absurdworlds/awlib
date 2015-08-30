@@ -9,9 +9,9 @@
  */
 #include <memory>
 
-#include <hrengin/platform/Window.h>
+#include <awrts/platform/Window.h>
 
-using namespace hrengin::platform;
+using namespace awrts::platform;
 
 int main()
 {

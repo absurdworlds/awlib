@@ -6,10 +6,10 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_GUIManager_
-#define _hrengin_GUIManager_
+#ifndef _awrts_GUIManager_
+#define _awrts_GUIManager_
 
-#include <hrengin/gui/GUIManager.h>
+#include <awrts/gui/GUIManager.h>
 
 namespace irr {
 class IrrlichtDevice;
@@ -18,7 +18,7 @@ class GUIEnvironment;
 }
 }
 
-namespace hrengin {
+namespace awrts {
 namespace gui {
 
 class GUIManager : public GUIManager {
@@ -48,5 +48,5 @@ private:
 };
 
 } // namespace gui
-} // namespace hrengin
-#endif //_hrengin_GUIManager_
+} // namespace awrts
+#endif //_awrts_GUIManager_

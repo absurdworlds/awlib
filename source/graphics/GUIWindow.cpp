@@ -8,11 +8,11 @@
  */
 #include <Irrlicht/IGUIElement.h>
 
-#include <hrengin/common/utf_convert.h>
+#include <awrts/common/utf_convert.h>
 
 #include "GUIWindow.h"
 
-namespace hrengin {
+namespace awrts {
 namespace gui {
 
 GUIWindow::GUIWindow(irr::gui::IGUIElement* elem)
@@ -49,4 +49,4 @@ void GUIWindow::setText(std::string text)
 
 
 } // namespace gui
-} // namespace hrengin
+} // namespace awrts

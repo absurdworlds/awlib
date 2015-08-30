@@ -6,15 +6,15 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_HPKTreeWriter_
-#define _hrengin_HPKTreeWriter_
+#ifndef _awrts_HPKTreeWriter_
+#define _awrts_HPKTreeWriter_
 #include <vector>
 
-#include <hrengin/itd/HPKIndexWriter.h>
+#include <awrts/itd/HPKIndexWriter.h>
 
 #include "StringBank.h"
 
-namespace hrengin {
+namespace awrts {
 namespace itd {
 
 struct ListEntry {
@@ -77,5 +77,5 @@ protected:
 };
 
 } //namespace itd
-} //namespace hrengin
-#endif//_hrengin_HPKTreeWriter_
+} //namespace awrts
+#endif//_awrts_HPKTreeWriter_

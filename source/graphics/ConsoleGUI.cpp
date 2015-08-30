@@ -15,16 +15,16 @@
 #include <Irrlicht/IGUElement.h>
 #include <Irrlicht/IGUScrollBar.h>
 
-#include <hrengin/core/Shell.h>
-#include <hrengin/gui/IGUWindow.h>
-#include <hrengin/gui/IGUListBox.h>
-#include <hrengin/gui/IGUTextBox.h>
-#include <hrengin/gui/Keycodes.h>
-#include <hrengin/gui/InputManager.h>
+#include <awrts/core/Shell.h>
+#include <awrts/gui/IGUWindow.h>
+#include <awrts/gui/IGUListBox.h>
+#include <awrts/gui/IGUTextBox.h>
+#include <awrts/gui/Keycodes.h>
+#include <awrts/gui/InputManager.h>
 
 #include "ConsoleGUI.h"
 
-namespace hrengin {
+namespace awrts {
 namespace gui {
 
 ConsoleGUI_* createConsole(core::Shell* shell, GUIManager* guimgr)
@@ -89,4 +89,4 @@ void ConsoleGUI_::log(std::string message)
 	//TODO: cut the log when it becomes too long
 }
 } // namespace gui
-} // namespace hrengin
+} // namespace awrts

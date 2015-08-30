@@ -12,9 +12,9 @@
 #include <string>
 #include <thread>
 
-#include <hrengin/core/paths.h>
-#include <hrengin/graphics/VideoManager.h>
-#include <hrengin/core/Logger.h>
+#include <awrts/core/paths.h>
+#include <awrts/graphics/VideoManager.h>
+#include <awrts/core/Logger.h>
 
 #include "ALutil.h"
 #include "RIFFReader.h"
@@ -22,7 +22,7 @@
 #include "Sound.h"
 #include "SoundManager.h"
 
-namespace hrengin {
+namespace awrts {
 namespace audio {
 
 HR_SND_EXP SoundManager* createSoundManager()
@@ -105,4 +105,4 @@ void SoundManager::playSound(c consthar* fileName)
 #endif
 
 } // namespace audio
-} // namespace hrengin
+} // namespace awrts

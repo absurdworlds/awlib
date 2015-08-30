@@ -6,14 +6,14 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_InputManager_
-#define _hrengin_InputManager_
+#ifndef _awrts_InputManager_
+#define _awrts_InputManager_
 
 #include <forward_list>
 
 #include <Irrlicht/irrlicht.h>
 
-#include <hrengin/gui/InputManager.h>
+#include <awrts/gui/InputManager.h>
 
 namespace irr {
 namespace gui {
@@ -21,7 +21,7 @@ class CursorControl;
 }
 }
 
-namespace hrengin {
+namespace awrts {
 namespace gui {
 
 /*
@@ -45,5 +45,5 @@ private:
 };
 
 } // namespace io
-} // namespace hrengin
-#endif//_hrengin_InputManager_
+} // namespace awrts
+#endif//_awrts_InputManager_

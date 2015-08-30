@@ -8,7 +8,7 @@
  */
 #include "Logger.h"
 
-namespace hrengin {
+namespace awrts {
 namespace core {
 
 Logger* createLogger()
@@ -47,4 +47,4 @@ void Logger::unregisterLog(LogBook* log)
 }
 } // namespace impl_
 } // namespace core
-} // namespace hrengin
+} // namespace awrts

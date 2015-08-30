@@ -6,13 +6,13 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_ModelLoader_impl_
-#define _hrengin_ModelLoader_impl_
+#ifndef _awrts_ModelLoader_impl_
+#define _awrts_ModelLoader_impl_
 #include <string>
 
-#include <hrengin/core/ModelLoader.h>
+#include <awrts/core/ModelLoader.h>
 
-namespace hrengin {
+namespace awrts {
 class Model;
 
 namespace io {
@@ -31,5 +31,5 @@ private:
 
 } // namespace impl_
 } // namespace core
-} // namespace hrengin
-#endif//_hrengin_ModelLoader_impl_
+} // namespace awrts
+#endif//_awrts_ModelLoader_impl_

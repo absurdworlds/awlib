@@ -8,11 +8,11 @@
  */
 #include <algorithm>
 
-#include <hrengin/core/models.h>
-#include <hrengin/core/Model.h>
-#include <hrengin/core/ModelLoader.h>
+#include <awrts/core/models.h>
+#include <awrts/core/Model.h>
+#include <awrts/core/ModelLoader.h>
 
-#include <hrengin/graphics/VideoManager.h>
+#include <awrts/graphics/VideoManager.h>
 
 #include "BulletPhysics.h"
 #include "PhysicsWorld.h"
@@ -21,7 +21,7 @@
 #include "hrToBullet.h"
 #include "DebugDrawer.h"
 
-namespace hrengin {
+namespace awrts {
 namespace physics {
 
 HR_PHYS_EXP PhysicsManager* createPhysicsManager()
@@ -244,4 +244,4 @@ u32 BulletPhysics::loadModel(char const* modelName)
 }
 
 } // namespace physics
-} // namespace hrengin
+} // namespace awrts

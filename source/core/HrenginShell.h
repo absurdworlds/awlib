@@ -6,15 +6,15 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_HrenginShell_
-#define _hrengin_HrenginShell_
+#ifndef _awrts_HrenginShell_
+#define _awrts_HrenginShell_
 
 #include <map>
 
-#include <hrengin/core/Logger.h>
-#include <hrengin/core/Shell.h>
+#include <awrts/core/Logger.h>
+#include <awrts/core/Shell.h>
 
-namespace hrengin {
+namespace awrts {
 namespace core {
 
 /*
@@ -24,7 +24,7 @@ namespace core {
  * This interface is temporary, and will be repalced by a more advanced one as
  * soon as virtual filesystem is ready (IFilesystem)
  */
-class HrenginShell : public Shell{
+class HrenginShell : public Shell {
 public:
 	HrenginShell(Logger* logger);
 
@@ -52,6 +52,5 @@ Shell* createShell(Logger* logger)
 }
 
 } // namespace core
-} // namespace hrengin
-
-#endif//_hrengin_HrenginShell_
+} // namespace awrts
+#endif//_awrts_HrenginShell_

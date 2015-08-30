@@ -6,10 +6,10 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_GUIWindow_
-#define _hrengin_GUIWindow_
+#ifndef _awrts_GUIWindow_
+#define _awrts_GUIWindow_
 
-#include <hrengin/gui/GUIWindow.h>
+#include <awrts/gui/GUIWindow.h>
 
 namespace irr {
 namespace gui {
@@ -17,7 +17,7 @@ class GUIElement;
 }
 }
 
-namespace hrengin {
+namespace awrts {
 namespace gui {
 
 class GUIWindow : public GUIWindow {
@@ -41,5 +41,5 @@ private:
 };
 
 } // namespace gui
-} // namespace hrengin
-#endif //_hrengin_GUIWindow_
+} // namespace awrts
+#endif //_awrts_GUIWindow_

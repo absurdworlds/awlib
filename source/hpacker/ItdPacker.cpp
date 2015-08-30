@@ -10,15 +10,15 @@
 #include <memory>
 #include <sstream>
 
-#include <hrengin/platform/time.h>
+#include <awrts/platform/time.h>
 
-#include <hrengin/io/filesystem.h>
-#include <hrengin/io/Directory.h>
+#include <awrts/io/filesystem.h>
+#include <awrts/io/Directory.h>
 
 #include "ItdPacker.h"
 #include "HPKTreeWriter.h"
 
-namespace hrengin {
+namespace awrts {
 namespace itd {
 ItdPacker::ItdPacker (std::string const& archive_name, bool verbose)
 	: verbose_(verbose)
@@ -177,4 +177,4 @@ void ItdPacker::packFile (size_t id, std::string const& path)
 	archive_ << file.rdbuf();
 }
 } // namespace itd
-} // namespace hrengin
+} // namespace awrts

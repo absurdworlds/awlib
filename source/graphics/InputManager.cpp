@@ -8,13 +8,13 @@
  */
 #include <Irrlicht/IrrlichtDevice.h>
 
-#include <hrengin/gui/UserInputReceiver.h>
+#include <awrts/gui/UserInputReceiver.h>
 
 #include "VideoManager.h"
 
 #include "InputManager.h"
 
-namespace hrengin {
+namespace awrts {
 namespace gui {
 
 void convertEvent(const irr::SEvent& irrEvent, InputEvent& hrgEvent) {
@@ -155,4 +155,4 @@ bool InputManager::unregisterReceiver(UserInputReceiver* receiver)
 }
 
 } // namespace io
-} // namespace hrengin
+} // namespace awrts

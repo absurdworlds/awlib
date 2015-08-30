@@ -6,16 +6,16 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_HDFSettingsLoader_
-#define _hrengin_HDFSettingsLoader_
-#include <hrengin/resources/default_settings.h>
-#include <hrengin/io/ReadFile.h>
-#include <hrengin/io/BufferedStream.h>
-#include <hrengin/hdf/HDFParser.h>
+#ifndef _awrts_HDFSettingsLoader_
+#define _awrts_HDFSettingsLoader_
+#include <awrts/resources/default_settings.h>
+#include <awrts/io/ReadFile.h>
+#include <awrts/io/BufferedStream.h>
+#include <awrts/hdf/HDFParser.h>
 
-#include <hrengin/core/SettingsLoader.h>
+#include <awrts/core/SettingsLoader.h>
 
-namespace hrengin {
+namespace awrts {
 namespace core {
 
 class HDFSettingsLoader : public SettingsLoader {
@@ -37,5 +37,5 @@ private:
 };
 
 } // namespace core
-} // namespace hrengin
-#endif//_hrengin_HDFSettingsLoader_
+} // namespace awrts
+#endif//_awrts_HDFSettingsLoader_

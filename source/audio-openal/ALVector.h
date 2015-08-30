@@ -6,14 +6,14 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_ALvector_
-#define _hrengin_ALvector_
+#ifndef _awrts_ALvector_
+#define _awrts_ALvector_
 
 #include <al.h>
 
-#include <hrengin/math/Vector3d.h>
+#include <awrts/math/Vector3d.h>
 
-namespace hrengin {
+namespace awrts {
 namespace audio {
 
 typedef Vector3d<ALfloat> ALVector3d;
@@ -29,5 +29,5 @@ ALVector3d toAL(Vector3d<f32> vec)
 }
 
 } // namespace audio
-} // namespace hrengin
-#endif //_hrengin_ALvector_
+} // namespace awrts
+#endif //_awrts_ALvector_

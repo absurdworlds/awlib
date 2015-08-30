@@ -9,11 +9,11 @@
  */
 #include <stdio.h>
 
-#include <hrengin/core/Logger.h>
+#include <awrts/core/Logger.h>
 
-#include <hrengin/io/WriteFile.h>
+#include <awrts/io/WriteFile.h>
 
-namespace hrengin {
+namespace awrts {
 namespace io {
 
 WriteFile::WriteFile (std::string const& path, bool append)
@@ -83,4 +83,4 @@ std::string const& WriteFile::getPath () const
 }
 
 } // namespace io
-} // namespace hrengin
+} // namespace awrts

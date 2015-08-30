@@ -6,15 +6,15 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_HPKListWriter_
-#define _hrengin_HPKListWriter_
+#ifndef _awrts_HPKListWriter_
+#define _awrts_HPKListWriter_
 #include <vector>
 
-#include <hrengin/itd/HPKIndexWriter.h>
+#include <awrts/itd/HPKIndexWriter.h>
 
 #include "StringBank.h"
 
-namespace hrengin {
+namespace awrts {
 namespace itd {
 /*!
  * Interface for building HPKA list index
@@ -55,5 +55,5 @@ protected:
 };
 
 } //namespace itd
-} //namespace hrengin
-#endif//_hrengin_HPKListWriter_
+} //namespace awrts
+#endif//_awrts_HPKListWriter_

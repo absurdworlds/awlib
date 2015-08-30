@@ -8,7 +8,7 @@
  */
 #include "EntityManager.h"
 
-namespace hrengin {
+namespace awrts {
 namespace game {
 HR_GAME_EXP EntityManager* createEntityManager()
 {
@@ -47,4 +47,4 @@ void EntityManager::deleteEntity(u32 entid)
 }
 } // namespace impl_
 } // namespace game
-} // namespace hrengin
+} // namespace awrts

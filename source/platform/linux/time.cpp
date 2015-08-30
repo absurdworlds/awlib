@@ -8,10 +8,10 @@
  */
 #include <time.h>
 
-#include <hrengin/platform/time.h>
-#include <hrengin/platform/platform.h>
+#include <awrts/platform/time.h>
+#include <awrts/platform/platform.h>
 
-namespace hrengin {
+namespace awrts {
 //! Get clock resolution, in nanoseconds
 u32 getClockResolution()
 {
@@ -38,4 +38,4 @@ HR_SYS_EXP u32 getTime()
 	}
 	return 0;
 }
-} // namespace hrengin
+} // namespace awrts

@@ -9,7 +9,7 @@
  */
 #include "compose.h"
 
-namespace hrengin {
+namespace awrts {
 namespace string {
 HR_CORE_EXP std::string compose(std::string const& fmt,
 		std::vector<std::string> const& args)
@@ -73,4 +73,4 @@ size_t Composed::paste_arg(size_t pos)
 }
 } // namespace compose_
 } // namespace string
-} // namespace hrengin
+} // namespace awrts

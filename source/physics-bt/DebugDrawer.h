@@ -6,18 +6,18 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_DebugDrawer_impl_
-#define _hrengin_DebugDrawer_impl_
+#ifndef _awrts_DebugDrawer_impl_
+#define _awrts_DebugDrawer_impl_
 
 #include <Bullet/btBulletDynamicsCommon.h>
 #include <Bullet/btBulletCollisionCommon.h>
 
-#include <hrengin/common/types.h>
+#include <awrts/common/types.h>
 
-#include <hrengin/physics/DebugDrawer.h>
+#include <awrts/physics/DebugDrawer.h>
 #include "PhysicsWorld.h"
 
-namespace hrengin {
+namespace awrts {
 namespace physics {
 namespace bullet {
 
@@ -98,5 +98,5 @@ private:
 
 } // namespace bullet
 } // namespace physics
-} // namespace hrengin
-#endif//_hrengin_DebugDrawer_impl_
+} // namespace awrts
+#endif//_awrts_DebugDrawer_impl_

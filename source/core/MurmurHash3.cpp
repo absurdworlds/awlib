@@ -10,11 +10,11 @@
 // MurmurHash3 was written by Austin Appleby, and is placed in the public
 // domain. The author hereby disclaims copyright to this source code.
 
-#include <hrengin/core/hash.h>
-#include <hrengin/common/macro.h>
-#include <hrengin/math/math.h>
+#include <awrts/core/hash.h>
+#include <awrts/common/macro.h>
+#include <awrts/math/math.h>
 
-namespace hrengin {
+namespace awrts {
 /*!
  * Block read - if your platform needs to do endian-swapping or can only 
  * handle aligned reads, do the conversion here
@@ -336,4 +336,4 @@ void MurmurHash3_x64_128 (void const * key, size_t len, u128 seed, void * out)
 	((u64*)out)[0] = h1;
 	((u64*)out)[1] = h2;
 }
-} // namespace hrengin
+} // namespace awrts

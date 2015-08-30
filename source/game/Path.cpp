@@ -6,9 +6,9 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#include <hrengin/ai/Path.h>
+#include <awrts/ai/Path.h>
 
-namespace hrengin {
+namespace awrts {
 namespace ai {
 
 Path::const_iterator findClosestNode(Path::const_iterator& first,
@@ -32,4 +32,4 @@ Path::const_iterator findClosestNode(Path::const_iterator& first,
 }
 
 } // namespace ai
-} // namespace hrengin
+} // namespace awrts

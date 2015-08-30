@@ -9,11 +9,11 @@
 #include <iostream>
 #include <sys/stat.h>
 
-#include <hrengin/core/Logger.h>
+#include <awrts/core/Logger.h>
 
 #include "Directory.h"
 
-namespace hrengin {
+namespace awrts {
 namespace io {
 
 Directory* openDirectory (std::string path)
@@ -123,4 +123,4 @@ std::string const& Directory::getPath () const
 }
 } // namespace impl_
 } // namespace io
-} // namespace hrengin
+} // namespace awrts

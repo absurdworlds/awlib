@@ -6,27 +6,27 @@
    This is free software: you are free to change and redistribute it.
    There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_CGame_
-#define _hrengin_CGame_
+#ifndef _awrts_CGame_
+#define _awrts_CGame_
 
-#include <hrengin/core/ILogger.h>
-#include <hrengin/core/ISettingsManager.h>
-#include <hrengin/core/IShell.h>
+#include <awrts/core/ILogger.h>
+#include <awrts/core/ISettingsManager.h>
+#include <awrts/core/IShell.h>
 
-#include <hrengin/graphics/IVideoManager.h>
-#include <hrengin/graphics/IRenderingDevice.h>
-#include <hrengin/gui/IGUIManager.h>
-#include <hrengin/gui/IInputManager.h>
-#include <hrengin/sound/ISoundManager.h>
+#include <awrts/graphics/IVideoManager.h>
+#include <awrts/graphics/IRenderingDevice.h>
+#include <awrts/gui/IGUIManager.h>
+#include <awrts/gui/IInputManager.h>
+#include <awrts/sound/ISoundManager.h>
 
-#include <hrengin/physics/IPhysicsManager.h>
-#include <hrengin/physics/IPhysicsWorld.h>
+#include <awrts/physics/IPhysicsManager.h>
+#include <awrts/physics/IPhysicsWorld.h>
 
-#include <hrengin/scene/ISceneManager.h>
-#include <hrengin/game/IEntityManager.h>
-#include <hrengin/game/IEventManager.h>
+#include <awrts/scene/ISceneManager.h>
+#include <awrts/game/IEntityManager.h>
+#include <awrts/game/IEventManager.h>
 
-namespace hrengin {
+namespace awrts {
 namespace example {
 
 class CGame {
@@ -90,5 +90,5 @@ private:
 };
 
 } // namespace example
-} // namespace hrengin
-#endif//_hrengin_CGame_
+} // namespace awrts
+#endif//_awrts_CGame_

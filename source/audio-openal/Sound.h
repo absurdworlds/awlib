@@ -6,17 +6,17 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_Sound_
-#define _hrengin_Sound_
+#ifndef _awrts_Sound_
+#define _awrts_Sound_
 #include <AL/al.h>
 
-#include <hrengin/common/hrengintypes.h>
+#include <awrts/common/hrengintypes.h>
 
-#include <hrengin/sound/Sound3D.h>
+#include <awrts/sound/Sound3D.h>
 
 #include "ALVector.h"
 
-namespace hrengin {
+namespace awrts {
 namespace audio {
 
 class Sound : public Sound3D {
@@ -41,5 +41,5 @@ private:
 };
 
 } // namespace audio
-} // namespace hrengin
-#endif//_hrengin_Sound_
+} // namespace awrts
+#endif//_awrts_Sound_

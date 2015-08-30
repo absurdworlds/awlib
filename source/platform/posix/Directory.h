@@ -6,8 +6,8 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_Directory_impl
-#define _hrengin_Directory_impl
+#ifndef _awrts_Directory_impl
+#define _awrts_Directory_impl
 
 #include <stdio.h>
 #include <dirent.h>
@@ -15,9 +15,9 @@
 #include <string>
 #include <vector>
 
-#include <hrengin/io/Directory.h>
+#include <awrts/io/Directory.h>
 
-namespace hrengin {
+namespace awrts {
 namespace io {
 namespace impl_ {
 
@@ -46,5 +46,5 @@ private:
 };
 } // namespace impl_
 } // namespace io
-} // namespace hrengin
+} // namespace awrts
 #endif// (header guard)

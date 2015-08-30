@@ -8,7 +8,7 @@
  */
 #include "SimplePathfinder.h"
 
-namespace hrengin {
+namespace awrts {
 namespace ai {
 
 HR_AI_EXP BasePathfinder* createSimplePathfinder()
@@ -17,4 +17,4 @@ HR_AI_EXP BasePathfinder* createSimplePathfinder()
 }
 
 } // namespace ai
-} // namespace hrengin
+} // namespace awrts

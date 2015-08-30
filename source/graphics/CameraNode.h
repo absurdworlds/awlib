@@ -6,13 +6,13 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_CameraNode_
-#define _hrengin_CameraNode_
+#ifndef _awrts_CameraNode_
+#define _awrts_CameraNode_
 
-#include <hrengin/graphics/VideoManager.h>
+#include <awrts/graphics/VideoManager.h>
 
-#include <hrengin/scene/SceneNode.h>
-#include <hrengin/scene/CameraNode.h>
+#include <awrts/scene/SceneNode.h>
+#include <awrts/scene/CameraNode.h>
 
 namespace irr {
 class IrrlichtDevice;
@@ -21,7 +21,7 @@ class CameraSceneNode;
 class SceneManager;
 }
 }
-namespace hrengin {
+namespace awrts {
 namespace scene {
 class SceneManager;
 class IrrDummyNode;
@@ -51,5 +51,5 @@ private:
 };
 
 } // namespace scene
-} // namespace hrengin
-#endif//_hrengin_CameraNode_
+} // namespace awrts
+#endif//_awrts_CameraNode_

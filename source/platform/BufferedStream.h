@@ -6,11 +6,11 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_BufferedStream_impl_
-#define _hrengin_BufferedStream_impl_
-#include <hrengin/io/BufferedStream.h>
+#ifndef _awrts_BufferedStream_impl_
+#define _awrts_BufferedStream_impl_
+#include <awrts/io/BufferedStream.h>
 
-namespace hrengin {
+namespace awrts {
 namespace io {
 class ReadFile;
 
@@ -31,5 +31,5 @@ private:
 };
 } // namespace impl_
 } // namespace io
-} // namespace hrengin
+} // namespace awrts
 #endif// (header guard)

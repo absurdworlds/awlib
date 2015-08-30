@@ -6,11 +6,11 @@
    This is free software: you are free to change and redistribute it.
    There is NO WARRANTY, to the extent permitted by law.
  */
-#include <hrengin/platform/time.h>
+#include <awrts/platform/time.h>
 
 #include "CGame.h"
 
-namespace hrengin {
+namespace awrts {
 namespace example {
 
 CGame::CGame ()
@@ -75,13 +75,13 @@ bool CGame::run ()
 {
 	bool runEngine = true;
 
-	hrengin::u32 curTime = hrengin::getTime();
-	hrengin::u32 lastTime;
+	awrts::u32 curTime = hrengin::getTime();
+	awrts::u32 lastTime;
 	
 	// Here I show how I implement my game loop.
 	do {
 		lastTime = curTime;
-		curTime = hrengin::getTime();
+		curTime = awrts::getTime();
 		runEngine = frame();
 	}
 	while(runEngine);
@@ -96,4 +96,4 @@ void CGame::loadSettings ()
 	settings_->loadSettings();
 }
 } // namespace example
-} // namespace hrengin
+} // namespace awrts

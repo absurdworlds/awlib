@@ -1,11 +1,11 @@
 #include <stdio.h>
 #include <utility>
 
-#include <hrengin/string/compose.h>
+#include <awrts/string/compose.h>
 
 int main (int c, char** a)
 {
-	using namespace hrengin::string;
+	using namespace awrts::string;
 
 	if (c < 3) {
 		return 1;

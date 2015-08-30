@@ -9,11 +9,11 @@
  */
 #include <fstream>
 
-#include <hrengin/io/filesystem.h>
+#include <awrts/io/filesystem.h>
 
 #include "HDFSettingsLoader.h"
 
-namespace hrengin {
+namespace awrts {
 namespace core {
 
 #if 0
@@ -110,4 +110,4 @@ void HDFSettingsLoader::parseSettings (hdf::HDFParser* hdf)
 }
 
 } // namespace core
-} // namespace hrengin
+} // namespace awrts

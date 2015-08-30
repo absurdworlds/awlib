@@ -10,7 +10,7 @@
 
 #include "HPKHtableWriter.h"
 
-namespace hrengin {
+namespace awrts {
 namespace itd {
 HPKHtableWriter::HPKHtableWriter ()
 	: HPKListWriter()
@@ -80,4 +80,4 @@ void HPKHtableWriter::write (std::ostream& target)
 }
 
 } //namespace itd
-} //namespace hrengin
+} //namespace awrts

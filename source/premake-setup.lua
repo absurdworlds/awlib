@@ -8,7 +8,7 @@
 --]]
 
 function SetupSolution()
-	solution "hrengin"
+	solution "awrts"
 		configurations { "Debug", "Release"}
  
 end

@@ -6,15 +6,15 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_EventManager_impl_
-#define _hrengin_EventManager_impl_
+#ifndef _awrts_EventManager_impl_
+#define _awrts_EventManager_impl_
 #include <vector>
 
-#include <hrengin/platform/time.h>
-#include <hrengin/game/EventManager.h>
-#include <hrengin/game/Thinking.h>
+#include <awrts/platform/time.h>
+#include <awrts/game/EventManager.h>
+#include <awrts/game/Thinking.h>
 
-namespace hrengin {
+namespace awrts {
 namespace game {
 namespace impl_ {
 class EventManager : public game::EventManager {
@@ -39,5 +39,5 @@ private:
 
 } // namespace impl_
 } // namespace game
-} // namespace hrengin
-#endif//_hrengin_EventManager_impl_
+} // namespace awrts
+#endif//_awrts_EventManager_impl_

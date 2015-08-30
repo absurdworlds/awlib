@@ -6,11 +6,11 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_EntityNode_
-#define _hrengin_EntityNode_
-#include <hrengin/scene/EntityNode.h>
+#ifndef _awrts_EntityNode_
+#define _awrts_EntityNode_
+#include <awrts/scene/EntityNode.h>
 
-namespace hrengin {
+namespace awrts {
 class Entity;
 namespace scene {
 
@@ -22,5 +22,5 @@ private:
 };
 
 } // namespace scene
-} // namespace hrengin
-#endif//_hrengin_EntityNode_
+} // namespace awrts
+#endif//_awrts_EntityNode_

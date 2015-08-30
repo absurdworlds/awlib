@@ -6,15 +6,15 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_CollisionObject_
-#define _hrengin_CollisionObject_
+#ifndef _awrts_CollisionObject_
+#define _awrts_CollisionObject_
 
 #include <btBulletDynamicsCommon.h>
 #include <btBulletCollisionCommon.h>
 
-#include <hrengin/physics/CollisionObject.h>
+#include <awrts/physics/CollisionObject.h>
 
-namespace hrengin {
+namespace awrts {
 namespace physics {
 
 // internal implementation details
@@ -36,5 +36,5 @@ public:
 
 
 } // namespace physics
-} // namespace hrengin
-#endif//_hrengin_CollisionObject_
+} // namespace awrts
+#endif//_awrts_CollisionObject_

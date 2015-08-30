@@ -6,11 +6,11 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#include <hrengin/io/ReadFile.h>
+#include <awrts/io/ReadFile.h>
 
 #include "BufferedStream.h"
 
-namespace hrengin {
+namespace awrts {
 namespace io {
 BufferedStream* createBufferedStream(ReadFile& source)
 {
@@ -63,4 +63,4 @@ u32 impl_::BufferedStream::getPos() const
 }
 
 } //namespace io
-} //namespace hrengin
+} //namespace awrts

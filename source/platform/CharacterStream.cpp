@@ -8,7 +8,7 @@
  */
 #include "CharacterStream.h"
 
-namespace hrengin {
+namespace awrts {
 namespace io {
 // TODO: add 'copy' specifier // wait, what?
 CharacterStream* createCharacterStream(char const* source)
@@ -39,4 +39,4 @@ bool impl_::CharacterStream::getNext(char& c)
 }
 
 } //namespace io
-} //namespace hrengin
+} //namespace awrts

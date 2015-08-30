@@ -6,12 +6,12 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_ALutil_
-#define _hrengin_ALutil_
+#ifndef _awrts_ALutil_
+#define _awrts_ALutil_
 
 #include <al.h>
 
-#include <hrengin/common/types.h>
+#include <awrts/common/types.h>
 
 inline ALenum toAlEnum(short channels, short samples)
 {
@@ -35,4 +35,4 @@ inline ALenum toAlEnum(short channels, short samples)
 	}
 }
 
-#endif//_hrengin_ALutil_
+#endif//_awrts_ALutil_

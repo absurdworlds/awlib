@@ -6,8 +6,8 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_SoundManager_
-#define _hrengin_SoundManager_
+#ifndef _awrts_SoundManager_
+#define _awrts_SoundManager_
 
 #include <map>
 #include <string>
@@ -15,15 +15,15 @@
 #include <al.h>
 #include <alc.h>
 
-#include <hrengin/common/config.h>
-#include <hrengin/common/types.h>
+#include <awrts/common/config.h>
+#include <awrts/common/types.h>
 
-#include <hrengin/sound/SoundManager.h>
-#include <hrengin/sound/Sound.h>
+#include <awrts/sound/SoundManager.h>
+#include <awrts/sound/Sound.h>
 
 #include "SoundSample.h"
 
-namespace hrengin {
+namespace awrts {
 namespace audio {
 
 class SoundManager : public SoundManager {
@@ -44,5 +44,5 @@ private:
 };
 
 } // namespace audio
-} // namespace hrengin
-#endif//_hrengin_SoundManager_
+} // namespace awrts
+#endif//_awrts_SoundManager_

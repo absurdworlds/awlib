@@ -6,17 +6,17 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_RIFF_
-#define _hrengin_RIFF_
+#ifndef _awrts_RIFF_
+#define _awrts_RIFF_
 
 #include <string>
 
-#include <hrengin/common/hrengintypes.h>
-#include <hrengin/filesystem/IReadFile.h>
+#include <awrts/common/hrengintypes.h>
+#include <awrts/filesystem/IReadFile.h>
 
 #include "SoundSample.h"
 
-namespace hrengin {
+namespace awrts {
 namespace audio {
 
 // assuming Little Endian
@@ -108,5 +108,5 @@ bool readWAV(std::string path, SoundSample& sample)
 }
 
 }
-} //namespace hrengin
-#endif//_hrengin_RIFF_
+} //namespace awrts
+#endif//_awrts_RIFF_

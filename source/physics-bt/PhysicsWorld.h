@@ -6,16 +6,16 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_PhysicsWorld_impl_
-#define _hrengin_PhysicsWorld_impl_
+#ifndef _awrts_PhysicsWorld_impl_
+#define _awrts_PhysicsWorld_impl_
 #include <Bullet/btBulletDynamicsCommon.h>
 #include <Bullet/btBulletCollisionCommon.h>
 
-#include <hrengin/physics/PhysicsManager.h>
-#include <hrengin/physics/DebugDrawer.h>
-#include <hrengin/physics/PhysicsWorld.h>
+#include <awrts/physics/PhysicsManager.h>
+#include <awrts/physics/DebugDrawer.h>
+#include <awrts/physics/PhysicsWorld.h>
 
-namespace hrengin {
+namespace awrts {
 namespace physics {
 // FIXME!!!!
 class PhysicsWorld::Details {
@@ -76,5 +76,5 @@ private:
 
 } // namespace bullet
 } // namespace physics
-} // namespace hrengin
-#endif//_hrengin_PhysicsWorld_impl_
+} // namespace awrts
+#endif//_awrts_PhysicsWorld_impl_

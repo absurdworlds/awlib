@@ -11,7 +11,7 @@
 
 #include "HrenginShell.h"
 
-namespace hrengin {
+namespace awrts {
 namespace core {
 
 HrenginShell::HrenginShell(Logger* logger)
@@ -65,4 +65,4 @@ void HrenginShell::execute(std::string command)
 }
 
 } // namespace core
-} // namespace hrengin
+} // namespace awrts

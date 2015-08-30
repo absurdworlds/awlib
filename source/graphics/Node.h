@@ -6,12 +6,12 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_SceneNode_
-#define _hrengin_SceneNode_
+#ifndef _awrts_SceneNode_
+#define _awrts_SceneNode_
 
-#include <hrengin/scene/SceneNode.h>
+#include <awrts/scene/SceneNode.h>
 
-namespace hrengin {
+namespace awrts {
 namespace scene {
 //! A node in the scene graph
 class Node : public Node {
@@ -65,5 +65,5 @@ public:
 };
 
 } // namespace graphics
-} // namespace hrengin
-#endif //_hrengin_Node_
+} // namespace awrts
+#endif //_awrts_Node_

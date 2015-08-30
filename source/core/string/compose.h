@@ -7,13 +7,13 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_string_compose_impl_
-#define _hrengin_string_compose_impl_
-#include <hrengin/string/compose.h>
+#ifndef _awrts_string_compose_impl_
+#define _awrts_string_compose_impl_
+#include <awrts/string/compose.h>
 
 #include <vector>
 #include <string>
-namespace hrengin {
+namespace awrts {
 namespace string {
 // Implementation details, do not use directly
 namespace compose_ {
@@ -46,5 +46,5 @@ private:
 };
 } // namespace compose_
 } // namespace string
-} // namespace hrengin
+} // namespace awrts
 #endif// (header guard)

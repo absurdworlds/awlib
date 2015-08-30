@@ -6,10 +6,10 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_RenderingDevice_
-#define _hrengin_RenderingDevice_
+#ifndef _awrts_RenderingDevice_
+#define _awrts_RenderingDevice_
 
-#include <hrengin/graphics/RenderingDevice.h>
+#include <awrts/graphics/RenderingDevice.h>
 
 namespace irr {
 class IrrlichtDevice;
@@ -20,7 +20,7 @@ class VideoDriver;
 } // namespace video
 } // namespace irr
 
-namespace hrengin {
+namespace awrts {
 namespace graphics {
 
 class RenderingDevice : public RenderingDevice {
@@ -37,5 +37,5 @@ private:
 };
 
 } // namespace graphics
-} // namespace hrengin
-#endif//_hrengin_RenderingDevice_
+} // namespace awrts
+#endif//_awrts_RenderingDevice_

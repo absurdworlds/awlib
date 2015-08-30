@@ -2,9 +2,9 @@
 #include <string>
 #include <vector>
 
-#include <hrengin/hdf/IHDFParser.h>
+#include <awrts/hdf/IHDFParser.h>
 
-using namespace hrengin;
+using namespace awrts;
 using namespace io;
 using namespace hdf;
 
@@ -26,7 +26,7 @@ struct Message {
 };
 
 // function to for parsing a single node
-void parseNode(IHDFParser* hdf, std::string node, Message& msg)
+void parseNode(HDFParser* hdf, std::string node, Message& msg)
 {
 	// any object must be read strictly in this order
 	while(hdf->read()) {

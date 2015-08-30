@@ -9,9 +9,9 @@
 #include <unistd.h>
 #include <sys/stat.h>
 
-#include <hrengin/io/filesystem.h>
+#include <awrts/io/filesystem.h>
 
-namespace hrengin {
+namespace awrts {
 namespace io {
 
 i32 fileStat (std::string const& path, FileInfo& result)
@@ -54,4 +54,4 @@ i32 checkFile(std::string const& path, FileMode fmode)
 	return status;
 }
 } // namespace io
-} // namespace hrengin
+} // namespace awrts

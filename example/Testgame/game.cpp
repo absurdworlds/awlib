@@ -1,18 +1,18 @@
 /*
-   Copyright (C) 2014  absurdworlds
-
-   License LGPLv3-only:
-   GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
-   This is free software: you are free to change and redistribute it.
-   There is NO WARRANTY, to the extent permitted by law.
+ * Copyright (C) 2014  absurdworlds
+ *
+ * License LGPLv3-only:
+ * GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
+ * This is free software: you are free to change and redistribute it.
+ * There is NO WARRANTY, to the extent permitted by law.
  */
 #include <string>
 
-#include <hrengin/scene/IVisNode.h>
+#include <awrts/scene/IVisNode.h>
 
 #include "game.h"
 
-namespace hrengin {
+namespace awrts {
 namespace example {
 
 i32 start (std::string)
@@ -40,7 +40,7 @@ i32 start (std::string)
 }
 
 } // namespace example
-} // namespace hrengin
+} // namespace awrts
 
 //! Collect arguments into string
 std::string collect (unsigned int c, char** v)
@@ -65,6 +65,6 @@ int main (int c, char** v)
 	int err = -1;
 	std::string arguments = collect(c, v);
 
-	err = hrengin::example::start(arguments);
+	err = awrts::example::start(arguments);
 	return 0;
 }

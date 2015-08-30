@@ -6,10 +6,10 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_LightNode_
-#define _hrengin_LightNode_
+#ifndef _awrts_LightNode_
+#define _awrts_LightNode_
 
-#include <hrengin/scene/LightNode.h>
+#include <awrts/scene/LightNode.h>
 
 namespace irr {
 namespace scene {
@@ -17,7 +17,7 @@ class LightSceneNode;
 }
 }
 
-namespace hrengin {
+namespace awrts {
 namespace scene {
 class SceneManager;
 class IrrDummyNode;
@@ -33,5 +33,5 @@ protected:
 };
 
 } // namespace graphics
-} // namespace hrengin
-#endif//_hrengin_LightNode_
+} // namespace awrts
+#endif//_awrts_LightNode_

@@ -6,11 +6,11 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#include <hrengin/common/types.h>
+#include <awrts/common/types.h>
 
 #include "DebugDrawer.h"
 
-namespace hrengin {
+namespace awrts {
 namespace physics {
 namespace bullet {
 
@@ -73,4 +73,4 @@ int DebugDraw::getDebugMode() const
 }
 } // namespace bullet
 } // namespace physics
-} // namespace hrengin
+} // namespace awrts

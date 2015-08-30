@@ -8,11 +8,11 @@
  */
 #include <stdio.h>
 
-#include <hrengin/core/Logger.h>
+#include <awrts/core/Logger.h>
 
-#include <hrengin/io/ReadFile.h>
+#include <awrts/io/ReadFile.h>
 
-namespace hrengin {
+namespace awrts {
 namespace io {
 
 ReadFile::ReadFile(std::string const& path)
@@ -78,4 +78,4 @@ std::string const& ReadFile::getPath() const
 }
 
 } // namespace io
-} // namespace hrengin
+} // namespace awrts

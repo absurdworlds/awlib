@@ -10,12 +10,12 @@
 #include <cassert>
 #include <cstdio>
 
-#include <hrengin/io/BufferedStream.h>
-#include <hrengin/hdf/Type.h>
+#include <awrts/io/BufferedStream.h>
+#include <awrts/hdf/Type.h>
 
 #include "Parser.h"
 
-namespace hrengin {
+namespace awrts {
 namespace hdf {
 
 inline bool in(char c, char c1, char c2, char c3, char c4)
@@ -602,4 +602,4 @@ void Parser::processCommand() {
 }
 } // namespace impl_
 } // namespace io
-} // namespace hrengin
+} // namespace awrts

@@ -6,17 +6,17 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_VideoManager_
-#define _hrengin_VideoManager_
+#ifndef _awrts_VideoManager_
+#define _awrts_VideoManager_
 
 #include <vector>
 
-#include <hrengin/gui/GUIManager.h>
+#include <awrts/gui/GUIManager.h>
 
-#include <hrengin/scene/SceneManager.h>
+#include <awrts/scene/SceneManager.h>
 
-#include <hrengin/graphics/VideoManager.h>
-#include <hrengin/graphics/RenderingDevice.h>
+#include <awrts/graphics/VideoManager.h>
+#include <awrts/graphics/RenderingDevice.h>
 
 #include "VisNode.h"
 
@@ -32,7 +32,7 @@ class SceneCollisionManager;
 }
 } // namespace irr
 
-namespace hrengin {
+namespace awrts {
 namespace gui {
 class GUIManager;
 }
@@ -66,5 +66,5 @@ private:
 };
 
 } // namespace graphics
-} // namespace hrengin
-#endif//_hrengin_VideoManager_
+} // namespace awrts
+#endif//_awrts_VideoManager_

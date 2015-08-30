@@ -7,13 +7,13 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#include <hrengin/io/WriteStream.h>
-#include <hrengin/core/Logger.h>
+#include <awrts/io/WriteStream.h>
+#include <awrts/core/Logger.h>
 
-#include <hrengin/hdf/shared.h>
+#include <awrts/hdf/shared.h>
 #include "Writer.h"
 
-namespace hrengin {
+namespace awrts {
 namespace hdf {
 hdf::Writer* createWriter(io::WriteStream& outStream)
 {
@@ -225,4 +225,4 @@ void Writer::endLine()
 
 } // namespace impl_
 } // namespace io
-} // namespace hrengin
+} // namespace awrts

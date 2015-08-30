@@ -9,7 +9,7 @@
  */
 #include "ArgumentParser.h"
 
-namespace hrengin {
+namespace awrts {
 namespace core {
 ArgumentParser* createArgumentParser(char** argv)
 {
@@ -84,4 +84,4 @@ std::string ArgumentParser::readString (char* argv)
 
 } //namespace impl_
 } //namespace core
-} //namespace hrengin
+} //namespace awrts

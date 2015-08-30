@@ -6,13 +6,13 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#include <hrengin/io/ReadFile.h>
-#include <hrengin/io/CharacterStream.h>
-#include <hrengin/io/BufferedStream.h>
+#include <awrts/io/ReadFile.h>
+#include <awrts/io/CharacterStream.h>
+#include <awrts/io/BufferedStream.h>
 
 #include "SettingsManager.h"
 
-namespace hrengin {
+namespace awrts {
 namespace core {
 
 SettingsManager* createSettingsManager()
@@ -92,4 +92,4 @@ bool SettingsManager::setValueImpl(std::string key, T val)
 }
 } // namespace impl_
 } // namespace core
-} // namespace hrengin
+} // namespace awrts

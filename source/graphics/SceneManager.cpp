@@ -11,14 +11,14 @@
 #include <Irrlicht/IAnimatedMeshSceneNode.h>
 #include <Irrlicht/ISceneCollisionManager.h>
 
-#include <hrengin/core/paths.h>
+#include <awrts/core/paths.h>
 
 #include "CameraNode.h"
 #include "LightNode.h"
 #include "VisNode.h"
 #include "SceneManager.h"
 
-namespace hrengin {
+namespace awrts {
 namespace scene {
 
 SceneManager::SceneManager(irr::scene::ISceneManager* irrSceneManager,
@@ -112,4 +112,4 @@ irr::scene::IAnimatedMesh* CSceneManager::convertMesh(const char* modelname)
 }
 
 } // namespace scene
-} // namespace hrengin
+} // namespace awrts

@@ -8,11 +8,11 @@
  */
 #include <cstdio>
 
-#include <hrengin/core/ArgParser.h>
+#include <awrts/core/ArgParser.h>
 
 #include "hpacker.h"
 
-namespace hrengin {
+namespace awrts {
 namespace itd {
 void printUsage()
 {
@@ -89,9 +89,9 @@ i32 main (char** args)
 }
 
 } // namespace itd
-} // namespace hrengin
+} // namespace awrts
 
 int main (int, char** argv)
 {
-	return hrengin::itd::main(argv);
+	return awrts::itd::main(argv);
 }

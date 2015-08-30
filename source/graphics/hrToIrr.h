@@ -6,18 +6,18 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_hrToIrr_
-#define _hrengin_hrToIrr_
+#ifndef _awrts_hrToIrr_
+#define _awrts_hrToIrr_
 
 #include <irrlicht/vector3d.h>
 #include <irrlicht/line3d.h>
 #include <irrlicht/matrix4.h>
 
-#include <hrengin/math/Vector3d.h>
-#include <hrengin/math/Line3d.h>
-#include <hrengin/math/Matrix4.h>
+#include <awrts/math/Vector3d.h>
+#include <awrts/math/Line3d.h>
+#include <awrts/math/Matrix4.h>
 
-namespace hrengin {
+namespace awrts {
 
 inline Vector3d<f32> toHrengin(irr::core::vector3df const& irrVec)
 {
@@ -77,5 +77,5 @@ inline irr::core::matrix4 toIrr(Matrix4<f32> const& hrMatrix)
 	return irrMatrix;
 }
 
-} // namespace hrengin
-#endif//_hrengin_hrToIrr_
+} // namespace awrts
+#endif//_awrts_hrToIrr_

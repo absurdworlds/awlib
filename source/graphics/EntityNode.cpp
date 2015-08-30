@@ -8,7 +8,7 @@
  */
 #include "EntityNode.h"
 
-namespace hrengin {
+namespace awrts {
 namespace scene {
 
 EntityNode_::EntityNode_(Entity* entity)
@@ -20,4 +20,4 @@ EntityNode_::~EntityNode_()
 }
 
 } // namespace scene
-} // namespace hrengin
+} // namespace awrts

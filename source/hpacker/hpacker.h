@@ -6,10 +6,10 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_hpacker_
-#define _hrengin_hpacker_
-#include <hrengin/common/types.h>
-#include <hrengin/itd/itd.h>
+#ifndef _awrts_hpacker_
+#define _awrts_hpacker_
+#include <awrts/common/types.h>
+#include <awrts/itd/itd.h>
 
 #include "ItdPacker.h"
 #include "ItdReader.h"
@@ -17,4 +17,4 @@
 // TODO: make Packer read directories on addition
 // TODO: refactor FileTree
 
-#endif//_hrengin_hpacker_
+#endif//_awrts_hpacker_

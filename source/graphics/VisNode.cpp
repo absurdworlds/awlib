@@ -16,7 +16,7 @@
 
 #include "hrToIrr.h"
 
-namespace hrengin {
+namespace awrts {
 namespace scene {
 
 VisNode::VisNode(SceneManager* sceneManager, 
@@ -43,4 +43,4 @@ void VisNode::setMesh(char const* mesh)
 }
 
 } // namespace graphics
-} // namespace hrengin
+} // namespace awrts

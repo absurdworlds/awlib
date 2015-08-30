@@ -8,7 +8,7 @@
  */
 #include "ItdReader.h"
 
-namespace hrengin {
+namespace awrts {
 namespace itd {
 ItdReader::ItdReader (std::string const& archive_name, bool verbose)
 {
@@ -30,4 +30,4 @@ std::vector<u8> ItdReader::getFileContents (std::string path)
 }
 
 } // namespace itd
-} // namespace hrengin
+} // namespace awrts

@@ -6,17 +6,17 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_ItdPacker_
-#define _hrengin_ItdPacker_
+#ifndef _awrts_ItdPacker_
+#define _awrts_ItdPacker_
 #include <string>
 #include <vector>
 #include <fstream>
 
-#include <hrengin/common/types.h>
-#include <hrengin/itd/itd.h>
-#include <hrengin/itd/HPKIndexWriter.h>
+#include <awrts/common/types.h>
+#include <awrts/itd/itd.h>
+#include <awrts/itd/HPKIndexWriter.h>
 
-namespace hrengin {
+namespace awrts {
 namespace itd {
 
 class ItdPacker {
@@ -56,5 +56,5 @@ private:
 
 };
 } // namespace itd
-} // namespace hrengin
-#endif//_hrengin_ItdPacker_
+} // namespace awrts
+#endif//_awrts_ItdPacker_

@@ -6,15 +6,15 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_SettingsManager_impl_
-#define _hrengin_SettingsManager_impl_
+#ifndef _awrts_SettingsManager_impl_
+#define _awrts_SettingsManager_impl_
 #include <map>
 
-#include <hrengin/core/SettingsManager.h>
+#include <awrts/core/SettingsManager.h>
 
-#include <hrengin/hdf/hdf_value.h>
+#include <awrts/hdf/hdf_value.h>
 
-namespace hrengin {
+namespace awrts {
 namespace core {
 namespace impl_ {
 // Implementation of core::SettingsManager interface
@@ -50,5 +50,5 @@ private:
 
 } // namespace impl_
 } // namespace core
-} // namespace hrengin
-#endif//_hrengin_SettingsManager_impl_
+} // namespace awrts
+#endif//_awrts_SettingsManager_impl_

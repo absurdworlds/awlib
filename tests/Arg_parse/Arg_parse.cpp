@@ -8,11 +8,11 @@
  */
 #include <cstdio>
 
-#include <hrengin/core/ArgumentParser.h>
+#include <awrts/core/ArgumentParser.h>
 
 int main (int, char** v)
 {
-	using namespace hrengin;
+	using namespace awrts;
 	core::ArgumentParser* a = core::createArgumentParser(v);
 	core::Argument arg;
 

@@ -12,7 +12,7 @@
 #include "PhysicsWorld.h"
 #include "CustomRayCallback.h"
 
-namespace hrengin {
+namespace awrts {
 namespace physics {
 namespace bullet {
 
@@ -155,4 +155,4 @@ bool PhysicsWorld::step()
 }
 } // namespace bullet
 } // namespace physics
-} // namespace hrengin
+} // namespace awrts

@@ -6,10 +6,10 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_GUITextBox_
-#define _hrengin_GUITextBox_
+#ifndef _awrts_GUITextBox_
+#define _awrts_GUITextBox_
 
-#include <hrengin/gui/GUITextBox.h>
+#include <awrts/gui/GUITextBox.h>
 
 namespace irr {
 namespace gui {
@@ -17,7 +17,7 @@ class GUIElement;
 }
 }
 
-namespace hrengin {
+namespace awrts {
 namespace gui {
 
 class GUITextBox : public GUITextBox {
@@ -41,5 +41,5 @@ private:
 };
 
 } // namespace gui
-} // namespace hrengin
-#endif //_hrengin_GUITextBox_
+} // namespace awrts
+#endif //_awrts_GUITextBox_

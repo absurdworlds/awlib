@@ -7,13 +7,13 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_Window_SFML_
-#define _hrengin_Window_SFML_
-#include <hrengin/platform/Window.h>
+#ifndef _awrts_Window_SFML_
+#define _awrts_Window_SFML_
+#include <awrts/platform/Window.h>
 
 #include <SFML/Window.hpp>
 
-namespace hrengin {
+namespace awrts {
 namespace platform {
 namespace sf_ {
 /*
@@ -40,5 +40,5 @@ private:
 };
 } // namespace sf_
 } // namespace platform
-} // namespace hrengin
-#endif//_hrengin_Window_SFML_
+} // namespace awrts
+#endif//_awrts_Window_SFML_

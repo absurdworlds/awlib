@@ -6,13 +6,13 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_SimplePathfinder_
-#define _hrengin_SimplePathfinder_
+#ifndef _awrts_SimplePathfinder_
+#define _awrts_SimplePathfinder_
 
-#include <hrengin/ai/BasePathfinder.h>
-#include <hrengin/ai/Path.h>
+#include <awrts/ai/BasePathfinder.h>
+#include <awrts/ai/Path.h>
 
-namespace hrengin {
+namespace awrts {
 namespace ai {
 
 class SimplePathfinder : public BasePathfinder {
@@ -28,5 +28,5 @@ public:
 };
 
 } // namespace ai
-} // namespace hrengin
-#endif //_hrengin_SimplePathfinder_
+} // namespace awrts
+#endif //_awrts_SimplePathfinder_

@@ -6,13 +6,13 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_Logger_impl_
-#define _hrengin_Logger_impl_
+#ifndef _awrts_Logger_impl_
+#define _awrts_Logger_impl_
 #include <vector>
 
-#include <hrengin/core/Logger.h>
+#include <awrts/core/Logger.h>
 
-namespace hrengin {
+namespace awrts {
 namespace core {
 namespace impl_ {
 // Logger interface, which is used to write messages into log books
@@ -31,5 +31,5 @@ private:
 };
 } // namespace impl_
 } // namespace core
-} // namespace hrengin
-#endif//_hrengin_Logger_impl_
+} // namespace awrts
+#endif//_awrts_Logger_impl_

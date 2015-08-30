@@ -6,16 +6,16 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_CustomRayCallback_
-#define _hrengin_CustomRayCallback_
+#ifndef _awrts_CustomRayCallback_
+#define _awrts_CustomRayCallback_
 
 #include <btBulletCollisionCommon.h>
 
-#include <hrengin/physics/MotionState.h>
+#include <awrts/physics/MotionState.h>
 
 #include "hrToBullet.h"
 
-namespace hrengin {
+namespace awrts {
 namespace physics {
 
 struct CustomMotionState : public btMotionState {
@@ -60,6 +60,6 @@ struct CustomMotionState : public btMotionState {
 };
 
 } // namespace physics
-} // namespace hrengin
+} // namespace awrts
 
-#endif //_hrengin_CustomRayCallback_
+#endif //_awrts_CustomRayCallback_

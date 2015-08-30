@@ -6,13 +6,13 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_VisNode_
-#define _hrengin_VisNode_
+#ifndef _awrts_VisNode_
+#define _awrts_VisNode_
 
-#include <hrengin/common/types.h>
+#include <awrts/common/types.h>
 
-#include <hrengin/graphics/Mesh.h>
-#include <hrengin/scene/VisNode.h>
+#include <awrts/graphics/Mesh.h>
+#include <awrts/scene/VisNode.h>
 
 namespace irr {
 namespace scene {
@@ -20,7 +20,7 @@ class AnimatedMeshSceneNode;
 }
 }
 
-namespace hrengin {
+namespace awrts {
 namespace scene {
 class SceneManager;
 class IrrDummyNode;
@@ -42,5 +42,5 @@ private:
 };
 
 } // namespace scene
-} // namespace hrengin
-#endif//_hrengin_VisNode_
+} // namespace awrts
+#endif//_awrts_VisNode_

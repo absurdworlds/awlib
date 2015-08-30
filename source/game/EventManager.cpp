@@ -8,7 +8,7 @@
  */
 #include "EventManager.h"
 
-namespace hrengin {
+namespace awrts {
 namespace game {
 HR_GAME_EXP EventManager* createEventManager()
 {
@@ -17,7 +17,7 @@ HR_GAME_EXP EventManager* createEventManager()
 
 void impl_::EventManager::advance()
 {
-	u32 time = hrengin::getTime();
+	u32 time = awrts::getTime();
 
 	for (auto event = events_.begin(); event != events_.end(); ++event) {
 		if ((*event).nextFire <= time) {
@@ -27,4 +27,4 @@ void impl_::EventManager::advance()
 	}
 }
 } // namespace game
-} // namespace hrengin
+} // namespace awrts

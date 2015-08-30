@@ -7,13 +7,13 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_ArgumentParser_impl_
-#define _hrengin_ArgumentParser_impl_
+#ifndef _awrts_ArgumentParser_impl_
+#define _awrts_ArgumentParser_impl_
 #include <deque>
 
-#include <hrengin/core/ArgumentParser.h>
+#include <awrts/core/ArgumentParser.h>
 
-namespace hrengin {
+namespace awrts {
 namespace core {
 namespace impl_ {
 
@@ -36,5 +36,5 @@ private:
 
 } // namespace impl_
 } // namespace core
-} // namespace hrengin
-#endif//_hrengin_ArgumentParser_impl_
+} // namespace awrts
+#endif//_awrts_ArgumentParser_impl_

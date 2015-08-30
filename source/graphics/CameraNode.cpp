@@ -8,10 +8,10 @@
  */
 #include <irrlicht/irrlicht.h>
 
-#include <hrengin/math/Vector3d.h>
-#include <hrengin/math/Line3d.h>
+#include <awrts/math/Vector3d.h>
+#include <awrts/math/Line3d.h>
 
-#include <hrengin/graphics/CameraController.h>
+#include <awrts/graphics/CameraController.h>
 
 #include "CVideoManager.h"
 
@@ -20,7 +20,7 @@
 
 #include "hrToIrr.h"
 
-namespace hrengin {
+namespace awrts {
 namespace scene {
 
 CameraNode_::CameraNode_(SceneManager* sceneManager,
@@ -68,4 +68,4 @@ void CameraNode_::setFarPlane(f64 dist)
 }
 
 } // namespace scene
-} // namespace hrengin
+} // namespace awrts

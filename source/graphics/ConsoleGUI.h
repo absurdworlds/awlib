@@ -6,13 +6,13 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_ConsoleGUI_
-#define _hrengin_ConsoleGUI_
+#ifndef _awrts_ConsoleGUI_
+#define _awrts_ConsoleGUI_
 
-#include <hrengin/gui/IGUManager.h>
-#include <hrengin/gui/ConsoleGUI.h>
+#include <awrts/gui/IGUManager.h>
+#include <awrts/gui/ConsoleGUI.h>
 
-namespace hrengin {
+namespace awrts {
 namespace gui {
 
 class ConsoleGUI : public ConsoleGUI {
@@ -33,5 +33,5 @@ private:
 };
 
 } // namespace gui
-} // namespace hrengin
-#endif //_hrengin_ConsoleGUI_
+} // namespace awrts
+#endif //_awrts_ConsoleGUI_

@@ -1,17 +1,17 @@
 /*
-   Copyright (C) 2014  absurdworlds
-
-   License LGPLv3 or later:
-   GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
-   This is free software: you are free to change and redistribute it.
-   There is NO WARRANTY, to the extent permitted by law.
+ * Copyright (C) 2014  absurdworlds
+ *
+ * License LGPLv3 or later:
+ * GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
+ * This is free software: you are free to change and redistribute it.
+ * There is NO WARRANTY, to the extent permitted by law.
  */
 #include <cstdio>
 #include <cstring>
 #include <dirent.h>
 #include <sys/stat.h>
 
-#include <hrengin/io/IDirectory.h>
+#include <awrts/io/IDirectory.h>
 
 void print_file(char const* path, char const* name)
 {
@@ -47,7 +47,7 @@ int listdir_dirent(char const* path)
 
 int listdir_hrengin(char const* path)
 {
-	using namespace hrengin;
+	using namespace awrts;
 
 	io::IDirectory* dir = io::openDirectory(path);
 
@@ -78,7 +78,7 @@ int main ()
 	
 	printf("\e[1;34mNative: >>>\e[0;32m\n");
 	listdir_dirent(buf);
-	printf("\e[1;34mhrengin: >>>\e[0;35m\n");
+	printf("\e[1;34mawrts: >>>\e[0;35m\n");
 	listdir_hrengin(buf);
 
 	return 0;

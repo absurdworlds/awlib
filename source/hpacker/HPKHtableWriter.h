@@ -6,15 +6,15 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_HPKHtableWriter_
-#define _hrengin_HPKHtableWriter_
+#ifndef _awrts_HPKHtableWriter_
+#define _awrts_HPKHtableWriter_
 #include <vector>
 
-#include <hrengin/core/hash.h>
+#include <awrts/core/hash.h>
 
 #include "HPKListWriter.h"
 
-namespace hrengin {
+namespace awrts {
 namespace itd {
 /*!
  * Interface for building HPKA hash table index
@@ -67,5 +67,5 @@ private:
 };
 
 } //namespace itd
-} //namespace hrengin
-#endif//_hrengin_HPKHtableWriter_
+} //namespace awrts
+#endif//_awrts_HPKHtableWriter_

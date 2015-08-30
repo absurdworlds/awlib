@@ -6,12 +6,12 @@
    This is free software: you are free to change and redistribute it.
    There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_game_
-#define _hrengin_game_
+#ifndef _awrts_game_
+#define _awrts_game_
 #include "CGame.h"
-namespace hrengin {
+namespace awrts {
 namespace example {
 
 } // namespace example
-} // namespace hrengin
-#endif //_hrengin_game_
+} // namespace awrts
+#endif //_awrts_game_

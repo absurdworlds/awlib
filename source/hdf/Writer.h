@@ -7,11 +7,11 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_HDF_Writer_impl_
-#define _hrengin_HDF_Writer_impl_
-#include <hrengin/hdf/Writer.h>
+#ifndef _awrts_HDF_Writer_impl_
+#define _awrts_HDF_Writer_impl_
+#include <awrts/hdf/Writer.h>
 
-namespace hrengin {
+namespace awrts {
 namespace hdf {
 namespace impl_ {
 //! Implementation of HDF writer. Supports HDF 1.2.0 format.
@@ -48,5 +48,5 @@ private:
 };
 } // namespace impl_
 } // namespace io
-} // namespace hrengin
-#endif//_hrengin_HDF_Writer_impl_
+} // namespace awrts
+#endif//_awrts_HDF_Writer_impl_

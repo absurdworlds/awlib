@@ -8,11 +8,11 @@
  */
 #include <algorithm>
 
-#include <hrengin/common/stringutils.h>
+#include <awrts/common/stringutils.h>
 
 #include "HPKTreeWriter.h"
 
-namespace hrengin {
+namespace awrts {
 namespace itd {
 HPKTreeWriter::HPKTreeWriter ()
 {
@@ -127,4 +127,4 @@ void TreeNode::writeOut (std::ostream & target, u64 baseOffset)
 	}
 }
 } //namespace itd
-} //namespace hrengin
+} //namespace awrts

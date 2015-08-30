@@ -8,9 +8,9 @@
  */
 #include <Windows.h>
 
-#include <hrengin/platform/time.h>
+#include <awrts/platform/time.h>
 
-namespace hrengin {
+namespace awrts {
 
 HR_SYS_EXP u32 getTime()
 {
@@ -31,4 +31,4 @@ HR_SYS_EXP u32 getTime()
 
 	return 0;
 }
-} // namespace hrengin
+} // namespace awrts

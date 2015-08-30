@@ -9,7 +9,7 @@
 #include "CollisionPhantom.h"
 #include "hrToBullet.h"
 
-namespace hrengin {
+namespace awrts {
 namespace physics {
 namespace bullet {
 
@@ -62,4 +62,4 @@ Vector3d<f32> CollisionPhantom::getRotation() const
 };
 } // namespace bullet
 } // namespace physics
-} // namespace hrengin
+} // namespace awrts

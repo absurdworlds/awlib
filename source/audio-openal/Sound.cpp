@@ -10,7 +10,7 @@
 
 #include "Sound.h"
 
-namespace hrengin {
+namespace awrts {
 namespace audio {
 
 ALSound::ALSound(ALuint bufferHandle)
@@ -96,4 +96,4 @@ void ALSound::playThreaded()
 }
 
 } // namespace audio
-} // namespace hrengin
+} // namespace awrts

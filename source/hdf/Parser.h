@@ -7,15 +7,15 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _hrengin_hdf_Parser_impl_
-#define _hrengin_hdf_Parser_impl_
+#ifndef _awrts_hdf_Parser_impl_
+#define _awrts_hdf_Parser_impl_
 #include <string>
 #include <vector>
 
-#include <hrengin/hdf/Value.h>
-#include <hrengin/hdf/Parser.h>
+#include <awrts/hdf/Value.h>
+#include <awrts/hdf/Parser.h>
 
-namespace hrengin {
+namespace awrts {
 namespace hdf {
 namespace impl_ {
 enum TokenType {
@@ -98,5 +98,5 @@ private:
 };
 } // namespace impl_
 } // namespace io
-} // namespace hrengin
-#endif//_hrengin_hdf_Parser_impl_
+} // namespace awrts
+#endif//_awrts_hdf_Parser_impl_
