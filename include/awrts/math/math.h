@@ -19,21 +19,20 @@
 #include <awrts/common/macro.h>
 #include <awrts/common/types.h>
 
-
 namespace awrts {
 namespace math {
 
-//! Pi is a mathematical constant
+//! π (mathematical constant)
 f64 const Pi	= 3.14159265358979323846; //26433832795028841971693993751;
-//! e is a mathematical constant
+//! e (mathematical constant)
 f64 const e	= 2.71828182845904523536; //02874713526624977572470936999595
 
-const f64 ReciprocalPi	= 1.0/Pi;
-
-const f64 HalfPi		= Pi/2.0;
-const f64 QuarterPi		= Pi/4.0;
-
-const f64 DoublePi		= Pi*2.0;
+f64 const ReciprocalPi	= 1.0/Pi;
+ 
+f64 const HalfPi		= Pi/2.0;
+f64 const QuarterPi		= Pi/4.0;
+          
+f64 const DoublePi		= Pi*2.0;
 
 // Constant defining ratio of degrees to radians
 f64 const DegreesInRadian = 180.0 / Pi;
@@ -70,8 +69,6 @@ i32 const integer = 0;
 f32 const float32 = 0.000001f;
 f64 const float64 = 0.00000001;
 }
-
-
 
 //! Calculate square root of a number
 FORCEINLINE f32 sqrt (f32 const x)
@@ -136,11 +133,11 @@ inline f64 clamp(f64 value, f64 lower, f64 upper)
 }
 
 /*!
-   Normalize angle between -180 and 180 degrees
-   \param angle
-      angle to normalize, in degrees
-   \return
-      input angle normalized to (-180;180] range
+ * Normalize angle between -180 and 180 degrees
+ * \param angle
+ *    angle to normalize, in degrees
+ * \return
+ *    input angle normalized to (-180;180] range
  */
 inline f32 normalizeAngle(f32 angle)
 {
@@ -150,16 +147,16 @@ inline f32 normalizeAngle(f32 angle)
 		: angle;
 }
 
-/*! Shorthand for above function */
+/*! Alias for normalizeAngle */
 inline f32 wrapAngle(f32 angle)
 {
 	return normalizeAngle(angle);
 }
 
 /*!
-   Normalize angle between -Pi and Pi radians
-   \param angle Value in radians to normalize
-   \return Angle in (-Pi;Pi] range
+ * Normalize angle between -Pi and Pi radians
+ * \param angle Value in radians to normalize
+ * \return Angle in (-Pi;Pi] range
  */
 inline f32 wrapAngleRad(f32 angle)
 {
@@ -201,7 +198,6 @@ inline u32 mask32(integer_type val)
 {
 	return u32(val & 0xFFFFFFFF);
 }
-
 
 #if defined(_MSC_VER)
 /*!
