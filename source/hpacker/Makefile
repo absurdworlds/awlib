@@ -1,18 +1,10 @@
-include ../../Makefile
-# Add paths to dependency headers here
-ExternalIncludes =
-ExternalLibraries = -Wl,-rpath-link,../../lib,-R,'$$ORIGIN/../lib'
-
-# Includes and objects
-Objects = hpacker.o StringBank.o \
-	  HPKListWriter.o HPKHtableWriter.o HPKTreeWriter.o \
-	  ItdReader.o ItdPacker.o
-Includes = -I../../include
-Libraries = -L../../lib -lhrplatform -lhrcore $(ExternalLibraries)
+RootPath = ../..
+Objects = hpacker.cpp StringBank.cpp \
+	  HPKListWriter.cpp HPKHtableWriter.cpp HPKTreeWriter.cpp \
+	  ItdReader.cpp ItdPacker.cpp
 Defines = 
+Libraries = awplatform awcore
+ProjectName = hpacker
+Executable = true
 
-Version = $(VersionMajor).$(VersionMinor)
-ExecutableName = hpacker
-Executable = 1
-
-include ../../tests/shared.makefile
+include $(RootPath)/Rules.mk

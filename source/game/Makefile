@@ -1,16 +1,8 @@
-include ../../Makefile
-# Add paths to dependency headers here
-ExternalIncludes = -I../../dependencies/include/
-ExternalLibraries =
+RootPath = ../..
+Objects = EntityManager.cpp EventManager.cpp SimplePathfinder.cpp World.cpp
+Defines = HR_MODULE_GAME HR_MODULE_AI
+Libraries = 
+ProjectName = awgame
+Executable = false
 
-# Includes and objects
-Objects = EntityManager.o EventManager.o SimplePathfinder.o World.o
-Includes = -I../../include $(ExternalIncludes)
-Libraries = $(ExternalLibraries)
-Defines = -D HR_MODULE_GAME -D HR_MODULE_AI
-
-Version = $(VersionMajor).$(VersionMinor)
-SharedLibName = libhrgame.so
-SharedLibFullName = $(SharedLibName).$(Version)
-
-include ../shared.makefile
+include $(RootPath)/Rules.mk

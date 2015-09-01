@@ -1,17 +1,9 @@
-include ../../Makefile
-# Add paths to dependency headers here
-ExternalIncludes = -I../../dependencies/include/ -I../../dependencies/include/Bullet/
-ExternalLibraries = -L../../dependencies/lib -lBulletCollision -lBulletDynamics
+RootPath = ../..
+Objects = BulletPhysics.cpp CollisionPhantom.cpp DebugDrawer.cpp \
+          PhysicsWorld.cpp RigidBody.cpp hrToBullet.cpp
+Defines = HR_MODULE_PHYSICS
+Libraries = BulletCollision BulletDynamics
+ProjectName = awphysics
+Executable = false
 
-# Includes and objects
-Objects = BulletPhysics.o CollisionPhantom.o DebugDrawer.o PhysicsWorld.o RigidBody.o hrToBullet.o
-Includes = -I../../include $(ExternalIncludes)
-Libraries = $(ExternalLibraries)
-Defines = -D HR_MODULE_PHYSICS
-
-# Binary name
-Version = $(VersionMajor).$(VersionMinor)
-SharedLibName = libhrphysics.so
-SharedLibFullName = $(SharedLibName).$(Version)
-
-include ../shared.makefile
+include $(RootPath)/Rules.mk

@@ -1,19 +1,10 @@
-include ../../Makefile
+RootPath = ../..
+Objects = CharacterStream.cpp BufferedStream.cpp \
+	  ReadFile.cpp WriteFile.cpp posix/filesystem.cpp posix/Directory.cpp \
+	  linux/time.cpp SFML/Window.cpp
+Defines = HR_MODULE_PLATFORM HR_MODULE_IO
+Libraries = sfml-window
+ProjectName = awplatform
+Executable = false
 
-# Add paths to dependency headers here
-ExternalIncludes = -I../../dependencies/include/
-ExternalLibraries = -lsfml-window
-
-# Includes and objects
-Objects = CharacterStream.o BufferedStream.o \
-	  ReadFile.o WriteFile.o posix/filesystem.o posix/Directory.o \
-	  linux/time.o SFML/Window.o
-Includes = -I../../include $(ExternalIncludes)
-Libraries = $(ExternalLibraries)
-Defines = -D HR_MODULE_PLATFORM -D HR_MODULE_O
-
-Version = $(VersionMajor).$(VersionMinor)
-SharedLibName = libhrplatform.so
-SharedLibFullName = $(SharedLibName).$(Version)
-
-include ../shared.makefile
+include $(RootPath)/Rules.mk
