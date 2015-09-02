@@ -8,52 +8,92 @@
  * There is NO WARRANTY, to the extent permitted by law.
  */
 namespace awrts {
-void initialize()
+
+struct EngineHub {
+	std::unique_ptr<core::Logger> logger;
+	std::unique_ptr<core::Settings> settings;
+	core::FileLog log;
+
+	std::unique_ptr<graphics::VideoManager> videomgr;
+	std::unique_ptr<scene::SceneManager> scenemgr;
+
+	std::unique_ptr<physics::PhysicsManager> phymgr;
+	std::unique_ptr<physics::World> physWorld;
+
+	std::unique_ptr<sound::SoundManager> soundmgr;
+	std::unique_ptr<gui::GUIManager> guimgr;
+	std::unique_ptr<gui::InputManager> inputmgr;
+	std::unique_ptr<ConsoleGUI> console;
+
+	std::unique_ptr<game::EventManager> eventmgr;
+	std::unique_ptr<game::UnitManager> unitmgr;
+	std::unique_ptr<game::MapManager> mapmgr;
+
+	Shell shell;
+};
+
+void initCore(EngineHub& hub)
 {
-	std::unique_ptr<core::Logger> logger = core::createLogger(&logbuffer);
-	std::unique_ptr<core::Settings> settings = core::createSettingsManager();
-	FileLog log(settings->get("debug.log_path"));
-	logger.addLog(log);
-
-	core::Logger::setGlobalLogger(logger);
-
-
+	hub.settings = core::createSettingsManager();
 	settings->addLoader(new core::HDFSettingsLoader());
 	settings->loadFile("../data/settings.hdf");
 
-	std::unique_ptr<graphics::VideoManager> videomgr(graphics::createVideoManager(settings));
-	std::unique_ptr<scene::SceneManager> scenemgr(scene::createSceneManager(videomgr));
+	hub.logger = core::createLogger();
+	hub.log = core::FileLog(settings->get("debug.log_path"));
+	logger.addLog(log);
+	core::Logger::setGlobalLogger(logger);
+}
 
-	std::unique_ptr<physics::PhysicsManager> phymgr(physics::createPhysicsManager());
-	std::unique_ptr<physics::World> pWorld(phymgr->createPhysicsWorld());
+void initGraphics(EngineHub& hub)
+{
+	hub.videomgr = graphics::createVideoManager(hub.settings);
+	hub.scenemgr = scene::createSceneManager(hub.videomgr);
+}
 
-	std::unique_ptr<sound::SoundManager> soundmgr(sound::createSoundManager());
+void initPhysics(EngineHub& hub)
+{
+	hub.phymgr = physics::createPhysicsManager();
+	hub.physWorld = phymgr->createPhysicsWorld();
+}
+
+void initSound(EngineHub& hub)
+{
+	hub.soundmgr = sound::createSoundManager();
 	sound::SoundLibrary& soundLib = soundmgr->getSoundLibrary();
-	soundLib.loadAll();
+	soundLib.loadAll(hub.settings->get("data.sound_path"));
+}
 
+void initGUI(EngineHub& hub)
+{
+	hub.guimgr = gui::createGUIManager(hub.videomgr);
+	//"../data/fonts/courier.xml"
+	guimgr_->setFont(hub.settings->get("data.font_path"));
+	hub.inputmgr = gui::createInputManager(hub.guimgr);
 
-	std::unique_ptr<gui::GUIManager> guimgr(gui::createGUIManager(videomgr));
-	guimgr_->setFont("../data/fonts/courier.xml");
+	hub.console = new ConsoleGUI(guimgr);
+	hub.logger->addLog(*console);
+}
 
-	std::unique_ptr<platform::InputManager> inputmgr(platform::createInputManager());
+void initGame(EngineHub& hub)
+{
+	hub.eventmgr = new game::EventManager();
 
-	std::unique_ptr<ConsoleGUI> console(new ConsoleGUI(guimgr));
-	logger->addLog(console);
-
-	std::unique_ptr<game::EventManager> eventmgr(new game::EventManager());
-
-	std::unique_ptr<game::UnitManager> unitmgr(new game::UnitManager(scenemgr, phymgr, eventmgr));
+	hub.unitmgr = new game::UnitManager(*hub.scenemgr, *hub.phymgr, *hub.eventmgr);
 	unitmgr->loadUnitTypes();
 
-	std::unique_ptr<game::MapManager> mapmgr(game::createMapManager());
-	mapmgr->addMapLoader(new game::DefaultMapLoader());
-	mapmgr->openMap("../maps/testmap.hdf");
+	hub.mapmgr = game::createMapManager();
+	hub.mapmgr->addMapLoader(new game::DefaultMapLoader());
+	hub.mapmgr->openMap("../maps/testmap.hdf");
 
-	Shell shell;
 	shell->registerCommand("AddUnit", new addUnit(unitmgr));
 
 	PlayerHuman TestPlayer(scenemgr, unitmgr, pWorld);
 	inputmgr->addReceiver(TestPlayer);
+}
+
+void initialize()
+{
+	EngineHub hub;
 }
 
 void createTestScene(graphics::VideoManager* videomgr, scene::SceneManager* scenemgr)
@@ -62,5 +102,10 @@ void createTestScene(graphics::VideoManager* videomgr, scene::SceneManager* scen
 	 graphics::Light* light = videomgr->createLight();
 	 lightNode->attachEntity(light);
 	 lightNode->setPosition(100.0,1000.0,100.0);
+}
+
+int main(int argc, char*[] argv)
+{
+
 }
 } // namespace awrts
