@@ -1,5 +1,5 @@
 RootPath = ../..
-Sources = 
+Sources = awrts.cpp
 ProjectName = awrts
 Executable = true
 

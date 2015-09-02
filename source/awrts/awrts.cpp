@@ -7,83 +7,83 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
+#include <awrts/core/Logger.h>
+#include <awrts/core/SettingsManager.h>
+
+#include <awrts/graphics/VideoManager.h>
+#include <awrts/scene/SceneManager.h>
+
+#include <awrts/physics/PhysicsManager.h>
+#include <awrts/physics/PhysicsWorld.h>
+
+#include <awrts/sound/SoundManager.h>
+
+#include <awrts/gui/GUIManager.h>
+#include <awrts/gui/InputManager.h>
+
+#include <awrts/game/EventManager.h>
+#include <awrts/game/UnitManager.h>
+#include <awrts/game/MapManager.h>
+
+#include <awrts/gui/ConsoleGUI.h>
+
+#include "EngineHub.h"
+
 namespace awrts {
 
-struct EngineHub {
-	std::unique_ptr<core::Logger> logger;
-	std::unique_ptr<core::Settings> settings;
-	core::FileLog log;
-
-	std::unique_ptr<graphics::VideoManager> videomgr;
-	std::unique_ptr<scene::SceneManager> scenemgr;
-
-	std::unique_ptr<physics::PhysicsManager> phymgr;
-	std::unique_ptr<physics::World> physWorld;
-
-	std::unique_ptr<sound::SoundManager> soundmgr;
-	std::unique_ptr<gui::GUIManager> guimgr;
-	std::unique_ptr<gui::InputManager> inputmgr;
-	std::unique_ptr<ConsoleGUI> console;
-
-	std::unique_ptr<game::EventManager> eventmgr;
-	std::unique_ptr<game::UnitManager> unitmgr;
-	std::unique_ptr<game::MapManager> mapmgr;
-
-	Shell shell;
-};
-
-void initCore(EngineHub& hub)
+void EngineHub::initCore()
 {
-	hub.settings = core::createSettingsManager();
+	settings.reset(core::createSettingsManager());
 	settings->addLoader(new core::HDFSettingsLoader());
 	settings->loadFile("../data/settings.hdf");
 
-	hub.logger = core::createLogger();
-	hub.log = core::FileLog(settings->get("debug.log_path"));
-	logger.addLog(log);
+	logger.reset(core::createLogger());
+	log = core::FileLog(settings->get("debug.log_path"));
+	logger.addLog(&log);
 	core::Logger::setGlobalLogger(logger);
 }
 
-void initGraphics(EngineHub& hub)
+void EngineHub::initGraphics(EngineHub& hub)
 {
-	hub.videomgr = graphics::createVideoManager(hub.settings);
-	hub.scenemgr = scene::createSceneManager(hub.videomgr);
+	videomgr.reset(graphics::createVideoManager(settings));
+	scenemgr.reset(scene::createSceneManager(videomgr));
 }
 
-void initPhysics(EngineHub& hub)
+void EngineHub::initPhysics(EngineHub& hub)
 {
-	hub.phymgr = physics::createPhysicsManager();
-	hub.physWorld = phymgr->createPhysicsWorld();
+	phymgr.reset(physics::createPhysicsManager());
+	physWorld.reset(phymgr->createPhysicsWorld());
 }
 
-void initSound(EngineHub& hub)
+void EngineHub::initSound(EngineHub& hub)
 {
-	hub.soundmgr = sound::createSoundManager();
+	soundmgr.reset(sound::createSoundManager());
 	sound::SoundLibrary& soundLib = soundmgr->getSoundLibrary();
-	soundLib.loadAll(hub.settings->get("data.sound_path"));
+	soundLib.loadAll(settings->get("data.sound_path"));
 }
 
-void initGUI(EngineHub& hub)
+void EngineHub::initGUI(EngineHub& hub)
 {
-	hub.guimgr = gui::createGUIManager(hub.videomgr);
+	guimgr.reset(gui::createGUIManager(*videomgr));
 	//"../data/fonts/courier.xml"
-	guimgr_->setFont(hub.settings->get("data.font_path"));
-	hub.inputmgr = gui::createInputManager(hub.guimgr);
+	guimgr_->setFont(settings->get("data.font_path"));
+	inputmgr.reset(gui::createInputManager(*guimgr));
 
-	hub.console = new ConsoleGUI(guimgr);
-	hub.logger->addLog(*console);
+	console = std::make_unique<gui::ConsoleGUI>(guimgr);
+	logger->addLog(console.get());
 }
 
-void initGame(EngineHub& hub)
+void EngineHub::initGame(EngineHub& hub)
 {
-	hub.eventmgr = new game::EventManager();
+	eventmgr = std::make_unique<game::EventManager>();
 
-	hub.unitmgr = new game::UnitManager(*hub.scenemgr, *hub.phymgr, *hub.eventmgr);
+	unitmgr = std::make_unique<game::UnitManager>(
+		       *scenemgr, *phymgr, *eventmgr);
 	unitmgr->loadUnitTypes();
 
-	hub.mapmgr = game::createMapManager();
-	hub.mapmgr->addMapLoader(new game::DefaultMapLoader());
-	hub.mapmgr->openMap("../maps/testmap.hdf");
+	mapmgr = std::make_unique<MapManager>();
+	mapmgr->addMapLoader(new game::DefaultMapLoader());
+	mapmgr->openMap("../maps/testmap.hdf");
 
 	shell->registerCommand("AddUnit", new addUnit(unitmgr));
 
@@ -94,6 +94,12 @@ void initGame(EngineHub& hub)
 void initialize()
 {
 	EngineHub hub;
+	hub.initCore();
+	hub.initGraphics();
+	hub.initPhysics();
+	hub.initSound();
+	hub.initGUI();
+	hub.initGame();
 }
 
 void createTestScene(graphics::VideoManager* videomgr, scene::SceneManager* scenemgr)
@@ -104,7 +110,7 @@ void createTestScene(graphics::VideoManager* videomgr, scene::SceneManager* scen
 	 lightNode->setPosition(100.0,1000.0,100.0);
 }
 
-int main(int argc, char*[] argv)
+int main(int argc, char** argv)
 {
 
 }
