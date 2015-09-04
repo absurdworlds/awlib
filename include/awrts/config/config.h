@@ -11,10 +11,4 @@
 
 #include <awrts/common/compiler_setup.h>
 
-/* Uncomment the one which is used */
-#define HR_GRAPHICS_IRRLICHT
-//#define HR_GRAPHICS_OGRE
-//#define HR_GRAPHICS_OSG
-//#define HR_GRAPHICS_HRENGIN
-
 #endif //_awrts_config_
