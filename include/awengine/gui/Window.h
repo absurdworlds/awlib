@@ -8,16 +8,15 @@
  */
 #ifndef _awrts_GUIWindow_
 #define _awrts_GUIWindow_
-
-#include <awrts/gui/GUIElement.h>
+#include <awengine/gui/Canvas.h>
 
 namespace awrts {
 namespace gui {
 
 //! GUI window
-class GUIWindow : public GUIElement {
+class Window : public Canvas {
 public:
-	virtual ~GUIWindow() {};
+	virtual ~Window() {};
 };
 
 } // namespace gui
