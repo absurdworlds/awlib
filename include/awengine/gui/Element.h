@@ -17,22 +17,28 @@
 
 namespace awrts {
 namespace gui {
+class Canvas;
 
 //! Base class for GUI elements
 class Element : EventListener {
 public:
-	virtual ~Element() {};
+	virtual ~Element() {}
 
 	/*!
-	 * Returns pointer to parent element, or nullptr
-	 * if element has no parent (i.e. top-level element)
+	 * Returns pointer to canvas, which contains this
+	 * element.
 	 */
-	virtual Element* getParent() const = 0;
+	virtual Canvas* getCanvas() const = 0;
 
-	/*!
-	 * Returns pointer to Root
-	 */
-	virtual Root* getRoot() const = 0;
+	virtual void setPosition(Vector2d<f32> position) = 0;
+	virtual void setWidth(f32 width) = 0;
+	virtual void setHeight(f32 height) = 0;
+
+	virtual Vector2d<f32> getPosition() = 0;
+	virtual Vector2d<f32> getAbsolutePosition() = 0;
+
+	virtual f32 getWidth() = 0;
+	virtual f32 getHeight() = 0;
 
 	/*!
 	 * Receive event.
@@ -42,6 +48,8 @@ public:
 
 	//! Internal implementation details
 	DECLARE_HIDDEN_DETAILS(Element);
+private:
+	Rect<f32> rect;
 };
 
 } // namespace gui
