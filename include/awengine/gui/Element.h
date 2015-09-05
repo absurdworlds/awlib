@@ -13,13 +13,13 @@
 
 #include <awrts/common/types.h>
 #include <awrts/common/hidden_impl.h>
-#include <awengine/gui/Event.h>
+#include <awengine/common/EventListener.h>
 
 namespace awrts {
 namespace gui {
 
 //! Base class for GUI elements
-class Element {
+class Element : EventListener {
 public:
 	virtual ~Element() {};
 

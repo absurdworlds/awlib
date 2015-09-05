@@ -8,14 +8,13 @@
  */
 #ifndef _awrts_GUI_Manager_
 #define _awrts_GUI_Manager_
-
-#include <awrts/math/Rect.h>
+#include <awengine/common/EventListener.h>
 
 namespace awrts {
 namespace gui {
 class Element;
 
-class Root {
+class Root : EventListener {
 public:
 	virtual ~Root() {};
 
@@ -26,7 +25,6 @@ public:
 };
 
 std::unique_ptr<Root> createRoot(input::Relay* input);
-
 
 } // namespace gui
 } // namespace awrts
