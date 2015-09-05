@@ -12,7 +12,6 @@
 #include <string>
 
 #include <awrts/common/types.h>
-#include <awrts/common/hidden_impl.h>
 #include <awengine/common/EventListener.h>
 
 namespace awrts {
@@ -45,9 +44,6 @@ public:
 	 * Most commonly used to receive user input.
 	 */
 	virtual bool onEvent(Event* event) = 0;
-
-	//! Internal implementation details
-	DECLARE_HIDDEN_DETAILS(Element);
 private:
 	Rect<f32> rect;
 };
