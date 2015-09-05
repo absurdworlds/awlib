@@ -18,6 +18,7 @@
 namespace awrts {
 namespace gui {
 class Canvas;
+class Skin;
 
 //! Base class for GUI elements
 class Element : EventListener {
@@ -28,17 +29,50 @@ public:
 	 * Returns pointer to canvas, which contains this
 	 * element.
 	 */
-	virtual Canvas* getCanvas() const = 0;
+	virtual Canvas* getParent() const
+	{
+		return parent;
+	}
 
-	virtual void setPosition(Vector2d<f32> position) = 0;
-	virtual void setWidth(f32 width) = 0;
-	virtual void setHeight(f32 height) = 0;
+	virtual void setPosition(Vector2d<f32> position)
+	{
+		rect.setPosition(position);
+	}
+	virtual void setWidth(f32 width)
+	{
+		rect.setWidth(width);
+	}
+	virtual void setHeight(f32 height)
+	{
+		rect.setHeight(height);
+	}
 
-	virtual Vector2d<f32> getPosition() = 0;
-	virtual Vector2d<f32> getAbsolutePosition() = 0;
+	virtual Vector2d<f32> getPosition()
+	{
+		return rect.getUpperLeft();
+	}
 
-	virtual f32 getWidth() = 0;
-	virtual f32 getHeight() = 0;
+	virtual Vector2d<f32> getAbsolutePosition()
+	{
+		if (!parent)
+			return getPosition();
+
+		return parent->getAbsolutePosition() + getPosition();
+	}
+
+	virtual f32 getWidth() const
+	{
+		return rect.getWidth()
+	}
+	virtual f32 getHeight() const
+	{
+		return rect.getHeight();
+	}
+
+	virtual Skin* getSkin() const
+	{
+		return skin;
+	}
 
 	/*!
 	 * Receive event.
@@ -47,6 +81,8 @@ public:
 	virtual bool onEvent(Event* event) = 0;
 private:
 	Rect<f32> rect;
+	Skin* skin;
+	Canvas* parent;
 };
 
 } // namespace gui

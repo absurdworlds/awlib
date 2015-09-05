@@ -35,6 +35,43 @@ public:
 	{
 	}
 
+
+	T getWidth() const
+	{
+		return upperLeft.x() - lowerRight.x();
+	}
+
+	T getHeight() const
+	{
+		return upperLeft.y() - lowerRight.y();
+	}
+
+	Vector2d<T> getUpperLeft() const
+	{
+		return upperLeft;
+	}
+
+	Vector2d<T> getLowerRight() const
+	{
+		return lowerRight;
+	}
+
+	void setHeight(T height)
+	{
+		lowerRight.y = height + upperLeft.y();
+	}
+
+	void setWidth(T width)
+	{
+		lowerRight.y = width + upperLeft.x();
+	}
+	
+	void setPosition(Vector2d<T> position)
+	{
+		lowerRight = newPos - upperLeft;
+		upperLeft = newPos;
+	}
+
 	//! Coordinates of upper left corner
 	Vector2d<T> upperLeft;
 	//! Coordinates of lower right corner
