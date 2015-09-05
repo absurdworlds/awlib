@@ -11,7 +11,8 @@
 #define _awrts_GUIElement_
 #include <string>
 
-#include <awrts/common/types.h>
+#include <awengine/common/types.h>
+#include <awengine/math/Rect.h>
 #include <awengine/common/EventListener.h>
 
 namespace awrts {
