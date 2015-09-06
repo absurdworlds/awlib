@@ -26,14 +26,14 @@ public:
 	/*!
 	 * Add a child element
 	 */
-	virtual void addElement(Element* e) = 0;
+	virtual void addElement(Element* e);
 
 	/*!
 	 * Remove child
 	 */
-	virtual void removeElement(Element* e) = 0;
+	virtual void removeElement(Element* e);
 
-	virtual void draw() = 0;
+	virtual void draw();
 };
 } // namespace gui
 } // namespace awrts
