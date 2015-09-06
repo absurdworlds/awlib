@@ -62,7 +62,7 @@ public:
 
 	Vector2d<T> operator + (Vector2d<T> const& other) const
 	{
-		return Vector2d<T>(x + other[0], y + other[1]);
+		return Vector2d<T>(coord_[0] + other[0], coord_[1] + other[1]);
 	}
 
 	Vector2d<T>& operator += (Vector2d<T> const& other)
