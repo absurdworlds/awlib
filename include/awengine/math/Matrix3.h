@@ -8,9 +8,8 @@
  */
 #ifndef _awrts_Matrix3_
 #define _awrts_Matrix3_
-
-#include <awrts/math/Vector3d.h>
-#include <awrts/math/Quaternion.h>
+#include <awengine/math/Vector3d.h>
+#include <awengine/math/Quaternion.h>
 
 namespace awrts {
 //! Represents a 3x3 matrix, which has a column-major layout

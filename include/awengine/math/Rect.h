@@ -1,16 +1,16 @@
 /*
  * Copyright (C) 2014  absurdworlds
+ * Copyright (C) 2015  hedede <haddayn@gmail.com>
  *
- * License LGPLv3-only:
+ * License LGPLv3 or later:
  * GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
 #ifndef _awrts_Rect_
 #define _awrts_Rect_
-
-#include <awrts/common/types.h>
-#include <awrts/math/Vector2d.h>
+#include <awengine/common/types.h>
+#include <awengine/math/Vector2d.h>
 
 namespace awrts {
 //! Represents a 2D rectangle, used mostly for GUI rendering

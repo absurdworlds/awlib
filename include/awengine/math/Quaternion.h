@@ -11,9 +11,9 @@
 
 //#include <complex>
 
-#include <awrts/math/math.h>
-#include <awrts/math/Vector3d.h>
-#include <awrts/math/Vector4d.h>
+#include <awengine/math/math.h>
+#include <awengine/math/Vector3d.h>
+#include <awengine/math/Vector4d.h>
 
 namespace awrts {
 //! Quaternion for representing rotations

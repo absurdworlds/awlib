@@ -10,10 +10,9 @@
 #define _awrts_Vector3d_
 #include <array>
 
-#include <awrts/math/math.h>
+#include <awengine/math/math.h>
 
 namespace awrts {
-
 //! Represents vector in 3D space
 template <class T>
 class Vector3d {

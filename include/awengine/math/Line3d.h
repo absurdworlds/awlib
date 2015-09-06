@@ -8,8 +8,7 @@
  */
 #ifndef _awrts_Line3d_
 #define _awrts_Line3d_
-
-#include <awrts/math/Vector3d.h>
+#include <awengine/math/Vector3d.h>
 
 namespace awrts {
 //! Represents a line segment in 3D space
