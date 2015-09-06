@@ -71,6 +71,11 @@ public:
 		return rect.getHeight();
 	}
 
+	virtual Rect<f32> getRect() const
+	{
+		return rect;
+	}
+
 	virtual Skin* getSkin() const
 	{
 		if (!skin)
