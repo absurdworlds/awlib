@@ -9,7 +9,7 @@
 #ifndef _awrts_macro_
 #define _awrts_macro_
 
-#include <awengine/common/config.h>
+#include <awengine/config/config.h>
 
 /*! Make a bit mask of a desired bit */
 #define BIT(x) (1<<(x))

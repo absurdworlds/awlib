@@ -9,6 +9,6 @@
 #ifndef _awrts_config_
 #define _awrts_config_
 
-#include <awengine/common/compiler_setup.h>
+#include <awengine/config/compiler_setup.h>
 
 #endif //_awrts_config_
