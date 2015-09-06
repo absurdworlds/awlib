@@ -14,7 +14,7 @@
 namespace awrts {
 namespace gui {
 //! Base class for GUI widget
-class Widget : Element {
+class Widget : public Element {
 public:
 	virtual ~Widget() {};
 };

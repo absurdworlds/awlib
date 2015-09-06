@@ -13,7 +13,7 @@
 
 namespace awrts {
 namespace gui {
-class Canvas : Element {
+class Canvas : public Element {
 public:
 	virtual ~Canvas() {};
 
