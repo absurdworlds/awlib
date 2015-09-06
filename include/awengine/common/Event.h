@@ -41,7 +41,7 @@ protected:
 
 template <class E>
 E* event_cast(Event* event) {
-	if (event.is(E::getType()))
+	if (event->is(E::getType()))
 		return static_cast<E*>(event);
 
 	return nullptr;
