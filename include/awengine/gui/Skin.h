@@ -7,16 +7,16 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_GUI_canvas_
-#define _awrts_GUI_canvas_
+#ifndef _awrts_GUI_skin_
+#define _awrts_GUI_skin_
 #include <awengine/gui/Element.h>
 
 namespace awrts {
 namespace gui {
 class Skin {
 public:
-	virtual ~Skin() {};
+	virtual ~Skin() = default;
 };
 } // namespace gui
 } // namespace awrts
-#endif //_awrts_GUI_canvas_
+#endif //_awrts_GUI_skin_
