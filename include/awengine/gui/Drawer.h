@@ -6,16 +6,13 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_gui_visitor_
-#define _awrts_gui_visitor_
+#ifndef _awrts_gui_drawer_
+#define _awrts_gui_drawer_
 #include <awengine/gui/Visitor.h>
 
 namespace awrts {
 namespace gui {
-class Canvas;
-class Skin;
-
-//! Base class for GUI visitor (see Visitor pattern)
+//! Drawing visitor. Used for rendering GUI.
 class Drawer : Visitor {
 public:
 	virtual ~Drawer();
@@ -27,4 +24,4 @@ public:
 
 } // namespace gui
 } // namespace awrts
-#endif //_awrts_gui_visitor_
+#endif //_awrts_gui_drawer_

@@ -13,6 +13,7 @@ namespace gui {
 class Element;
 class Canvas;
 class Widget;
+class Window;
 
 //! Base class for GUI visitor (see Visitor pattern)
 class Visitor {
@@ -21,6 +22,7 @@ public:
 
 	virtual void visit(Element* element) = 0;
 	virtual void visit(Canvas* element) = 0;
+	virtual void visit(Window* element) = 0;
 	virtual void visit(Widget* element) = 0;
 };
 
