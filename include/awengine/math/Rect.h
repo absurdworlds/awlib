@@ -58,18 +58,18 @@ public:
 
 	void setHeight(T height)
 	{
-		lowerRight.y = height + upperLeft.y();
+		lowerRight.y() = height + upperLeft.y();
 	}
 
 	void setWidth(T width)
 	{
-		lowerRight.y = width + upperLeft.x();
+		lowerRight.y() = width + upperLeft.x();
 	}
 	
 	void setPosition(Vector2d<T> position)
 	{
-		lowerRight = newPos - upperLeft;
-		upperLeft = newPos;
+		lowerRight = position - upperLeft;
+		upperLeft = position;
 	}
 
 	//! Coordinates of upper left corner
