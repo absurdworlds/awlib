@@ -1,4 +1,12 @@
+#include <memory>
 
+#include <awengine/gui/Canvas.h>
+#include <awengine/gui/Window.h>
+
+#include <IrrSkin.h>
+
+namespace awrts {
+namespace gui {
 
 int guimain()
 {
@@ -7,4 +15,7 @@ int guimain()
 	canvas->setSkin(skin.get());
 
 	std::unique_ptr<Window> window = createWindow(canvas.get());
+}
+
+}
 }
