@@ -83,6 +83,8 @@ public:
 		skin = newSkin;
 	}
 
+	virtual void accept(gui::Visitor& visitor) = 0;
+
 	/*!
 	 * Receive event.
 	 * Most commonly used to receive user input.
