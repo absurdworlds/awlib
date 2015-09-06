@@ -71,6 +71,9 @@ public:
 
 	virtual Skin* getSkin() const
 	{
+		if (!skin)
+			return parent->getSkin();
+
 		return skin;
 	}
 
