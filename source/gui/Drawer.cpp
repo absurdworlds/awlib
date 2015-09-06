@@ -6,21 +6,22 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_gui_visitor_
-#define _awrts_gui_visitor_
 #include <awengine/gui/Drawer.h>
 #include <awengine/gui/Canvas.h>
 #include <awengine/gui/Widget.h>
+#include <awengine/gui/Skin.h>
 
 namespace awrts {
 namespace gui {
 
-virtual Drawer::~Drawer();
+Drawer::~Drawer()
+{
+}
 
 void Drawer::visit(Element* element)
 {
 }
-void Drawer::visit(Canvas* element);
+void Drawer::visit(Canvas* element)
 {
 	Skin* skin = element->getSkin();
 	skin->drawCanvas(element->getRect());
@@ -31,4 +32,3 @@ void Drawer::visit(Widget* element)
 
 } // namespace gui
 } // namespace awrts
-#endif //_awrts_gui_visitor_

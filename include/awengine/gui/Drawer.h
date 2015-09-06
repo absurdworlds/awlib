@@ -13,7 +13,7 @@
 namespace awrts {
 namespace gui {
 //! Drawing visitor. Used for rendering GUI.
-class Drawer : Visitor {
+class Drawer : public Visitor {
 public:
 	virtual ~Drawer();
 
