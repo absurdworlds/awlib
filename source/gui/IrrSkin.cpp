@@ -6,8 +6,6 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_gui_visitor_
-#define _awrts_gui_visitor_
 #include <awengine/gui/Canvas.h>
 #include <awengine/gui/Widget.h>
 #include <awengine/gui/Drawer.h>
@@ -94,5 +92,16 @@ void IrrRenderer::drawWindowBackgroundIrr(irr::core::rect<s32> r)
 
 	Driver->draw2DRectangle(rect, c1, c1, c2, c2, clip);
 }
+
+void IrrRenderer::drawTitleBar(irr::core::rect<s32> r)
+{
+	rect = r;
+	rect.UpperLeftCorner.X += 2;
+	rect.UpperLeftCorner.Y += 2;
+	rect.LowerRightCorner.X -= 2;
+	rect.LowerRightCorner.Y = rect.UpperLeftCorner.Y + getSize(EGDS_WINDOW_BUTTON_WIDTH) + 2;
+
+	const video::SColor c = titleBarColor.getInterpolated( video::SColor(titleBarColor.getAlpha(),255,255,255), 0.8f);
+	Driver->draw2DRectangle(rect, titleBarColor, titleBarColor, c, c, clip);
 }
-#endif //_awrts_gui_visitor_
+}
