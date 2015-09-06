@@ -15,7 +15,7 @@ public:
 	virtual bool is(size_t id) = 0;
 	virtual size_t getType() = 0;
 protected:
-	static size_t types_count;
+	static size_t eventTypes;
 };
 
 template <class Derived>
