@@ -19,9 +19,10 @@ namespace awrts {
 namespace gui {
 class Canvas;
 class Skin;
+class Visitor;
 
 //! Base class for GUI elements
-class Element : EventListener {
+class Element : public EventListener {
 public:
 	virtual ~Element() {}
 
@@ -31,7 +32,7 @@ public:
 	 */
 	virtual Canvas* getParent() const
 	{
-		return parent;
+		return static_cast<Canvas*>(parent);
 	}
 
 	virtual void setPosition(Vector2d<f32> position)
@@ -90,10 +91,20 @@ public:
 	 * Most commonly used to receive user input.
 	 */
 	virtual bool onEvent(Event* event) = 0;
+protected:
+	Element()
+		: parent(nullptr)
+	{
+	}
+
+	Element(Canvas* parent)
+		: parent(parent)
+	{
+	}
 private:
 	Rect<f32> rect;
 	Skin* skin;
-	Canvas* parent;
+	Element* parent;
 };
 
 } // namespace gui
