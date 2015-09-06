@@ -9,9 +9,9 @@
 #ifndef _awrts_utf_
 #define _awrts_utf_
 
-#include <awrts/common/macro.h>
-#include <awrts/common/types.h>
-#include <awrts/math/math.h>
+#include <awengine/common/types.h>
+#include <awengine/utility/macro.h>
+#include <awengine/math/math.h>
 
 namespace awrts {
 namespace locale {

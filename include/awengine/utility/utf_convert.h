@@ -11,8 +11,8 @@
 
 #include <string>
 
-#include <awrts/common/utf.h>
-#include <awrts/common/stringutils.h>
+#include <awengine/utility/utf.h>
+#include <awengine/common/stringutils.h>
 
 namespace awrts {
 namespace locale {
