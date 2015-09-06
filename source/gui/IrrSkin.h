@@ -8,6 +8,7 @@
  */
 #ifndef _awrts_gui_irr_skin_
 #define _awrts_gui_irr_skin_
+#include <awengine/gui/Skin.h>
 #include <awengine/gui/Canvas.h>
 #include <awengine/gui/Widget.h>
 #include <awengine/gui/Drawer.h>
