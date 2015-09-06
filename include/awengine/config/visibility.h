@@ -8,7 +8,7 @@
  */
 #ifndef _awrts_visibility_
 #define _awrts_visibility_
-#include <awrts/config/compiler_setup.h>
+#include <awengine/config/compiler_setup.h>
 /*!
  * \file visibility
  * \brief Defines import/export macro.
