@@ -32,7 +32,7 @@ public:
 	 */
 	virtual Canvas* getParent() const
 	{
-		return static_cast<Canvas*>(parent);
+		return reinterpret_cast<Canvas*>(parent);
 	}
 
 	virtual void setPosition(Vector2d<f32> position)
@@ -63,8 +63,9 @@ public:
 
 	virtual f32 getWidth() const
 	{
-		return rect.getWidth()
+		return rect.getWidth();
 	}
+	
 	virtual f32 getHeight() const
 	{
 		return rect.getHeight();
@@ -97,7 +98,7 @@ protected:
 	{
 	}
 
-	Element(Canvas* parent)
+	Element(Element* parent)
 		: parent(parent)
 	{
 	}
