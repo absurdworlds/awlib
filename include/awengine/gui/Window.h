@@ -13,10 +13,15 @@
 namespace awrts {
 namespace gui {
 
-//! GUI window
+//! Typical “Window” with a title bar
 class Window : public Canvas {
 public:
-	virtual ~Window() {};
+	Window();
+	Window(Canvas* parent);
+	virtual ~Window();
+
+	virtual bool onEvent(Event* event);
+	virtual void accept(Visitor& visitor);
 };
 
 } // namespace gui

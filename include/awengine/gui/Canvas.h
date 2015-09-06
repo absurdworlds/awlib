@@ -15,6 +15,8 @@ namespace awrts {
 namespace gui {
 class Canvas : public Element {
 public:
+	Canvas();
+	Canvas(Canvas* parent);
 	virtual ~Canvas() {};
 
 	/*!
@@ -32,6 +34,9 @@ public:
 	 * Remove child
 	 */
 	virtual void removeElement(Element* e);
+
+	virtual bool onEvent(Event* event);
+	virtual void accept(Visitor& visitor);
 private:
 	// TODO: who owns elements?
 	std::vector<Element*> elements;
