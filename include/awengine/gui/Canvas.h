@@ -32,8 +32,10 @@ public:
 	 * Remove child
 	 */
 	virtual void removeElement(Element* e);
-
-	virtual void draw();
+private:
+	// TODO: who owns elements?
+	std::vector<Element*> elements;
+	Element* active;
 };
 } // namespace gui
 } // namespace awrts
