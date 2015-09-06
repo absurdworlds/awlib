@@ -77,6 +77,12 @@ public:
 		return skin;
 	}
 
+	virtual void setSkin(Skin* newSkin)
+	{
+		// TODO: if newSkin == parent->skin, should it be reset to 0?
+		skin = newSkin;
+	}
+
 	/*!
 	 * Receive event.
 	 * Most commonly used to receive user input.
