@@ -7,6 +7,7 @@
  * There is NO WARRANTY, to the extent permitted by law.
  */
 #include <awengine/gui/Canvas.h>
+#include <awengine/gui/Visitor.h>
 
 namespace awrts {
 namespace gui {
@@ -15,23 +16,33 @@ Element* Canvas::getActiveElement()
 	return active;
 }
 
-void Canvas::addElement(Element* e)
+void Canvas::addElement(std::unique_ptr<Element> e)
 {
 	e->setParent(this);
-	elements.push_back(e);
+	elements.push_back(std::move(e));
 }
 
-void Canvas::removeElement(Element* e)
+std::unique_ptr<Element> Canvas::removeElement(Element* e)
 {
-	auto element = std::find(elements.begin(), elements.end(), e);
+	auto compare = [&e] (std::unique_ptr<Element>& ptr) {
+		return ptr.get() == e;
+	};
+
+	auto element = std::find_if(elements.begin(), elements.end(), compare);
 
 	if (element != elements.end()) {
+		auto temp = std::move(*element);
+		temp->removeParent();
+
 		elements.erase(element);
-		element.removeParent();
+
+		return std::move(temp);
 	}
+
+	return nullptr;
 }
 
-bool Canvas::onEvent(Event& event)
+bool Canvas::onEvent(Event* event)
 {
 	Element* active = getActiveElement();
 	
@@ -41,9 +52,9 @@ bool Canvas::onEvent(Event& event)
 	return active->onEvent(event);
 }
 
-void Canvas::accept(Visitor* visitor)
+void Canvas::accept(Visitor& visitor)
 {
-	visitor->visit(this);
+	visitor.visit(this);
 }
 
 } // namespace gui

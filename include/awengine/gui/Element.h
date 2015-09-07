@@ -24,7 +24,7 @@ class Visitor;
 //! Base class for GUI elements
 class Element : public EventListener {
 public:
-	virtual ~Element() {}
+	virtual ~Element() = default;
 
 	/*!
 	 * Returns pointer to canvas, which contains this
@@ -97,14 +97,20 @@ public:
 	 * Most commonly used to receive user input.
 	 */
 	virtual bool onEvent(Event* event) = 0;
+
+	void setParent(Element* newParent)
+	{
+		parent = newParent;
+	}
+
+	void removeParent()
+	{
+		parent = nullptr;
+	}
+
 protected:
 	Element()
 		: parent(nullptr)
-	{
-	}
-
-	Element(Element* parent)
-		: parent(parent)
 	{
 	}
 private:
