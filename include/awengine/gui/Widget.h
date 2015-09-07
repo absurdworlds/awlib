@@ -17,6 +17,14 @@ namespace gui {
 class Widget : public Element {
 public:
 	virtual ~Widget() {};
+	virtual Canvas* toCanvas()
+	{
+		return nullptr;
+	}
+	virtual Widget* toWidget()
+	{
+		return this;
+	}
 };
 
 } // namespace gui

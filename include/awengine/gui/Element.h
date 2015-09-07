@@ -108,6 +108,9 @@ public:
 		parent = nullptr;
 	}
 
+	virtual Canvas* toCanvas() = 0;
+	virtual Widget* toWidget() = 0;
+
 protected:
 	Element()
 		: parent(nullptr)

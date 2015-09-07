@@ -33,6 +33,16 @@ public:
 
 	virtual bool onEvent(Event* event);
 	virtual void accept(Visitor& visitor);
+
+	virtual Canvas* toCanvas()
+	{
+		return this;
+	}
+
+	virtual Widget* toWidget()
+	{
+		return nullptr
+	}
 };
 
 
