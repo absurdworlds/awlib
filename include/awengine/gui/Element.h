@@ -14,6 +14,7 @@
 #include <awengine/common/types.h>
 #include <awengine/math/Rect.h>
 #include <awengine/common/EventListener.h>
+#include <awengine/gui/Container.h>
 
 namespace awrts {
 namespace gui {
@@ -27,12 +28,11 @@ public:
 	virtual ~Element() = default;
 
 	/*!
-	 * Returns pointer to canvas, which contains this
-	 * element.
+	 * Returns pointer to parent element.
 	 */
-	virtual Canvas* getParent() const
+	virtual Element* getParent() const
 	{
-		return reinterpret_cast<Canvas*>(parent);
+		return parent;
 	}
 
 	virtual void setPosition(Vector2d<f32> position)

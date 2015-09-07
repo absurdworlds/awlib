@@ -9,17 +9,21 @@
  */
 #ifndef _awrts_GUI_canvas_
 #define _awrts_GUI_canvas_
-#include <memory>
-
 #include <awengine/gui/Element.h>
+#include <awengine/gui/Container.h>
 
 namespace awrts {
 namespace gui {
-class Canvas : public Element {
+class Canvas : public Element, Container {
 public:
 	Canvas();
-	Canvas(Canvas* parent);
 	virtual ~Canvas() = default;
+
+	virtual void addElement(std::unique_ptr<Element> e)
+	{
+		Container::addElement(std::move(e));
+		e->setParent(this);
+	}
 
 	/*!
 	 * Get currently active element (which is
@@ -27,28 +31,8 @@ public:
 	 */
 	virtual Element* getActiveElement();
 
-	/*!
-	 * Add a child element
-	 */
-	virtual void addElement(std::unique_ptr<Element> e);
-
-	/*!
-	 * Remove child. Returns unique_ptr to detached child,
-	 * allowing to rebind it to different object.
-	 */
-	virtual std::unique_ptr<Element> removeElement(Element* e);
-
 	virtual bool onEvent(Event* event);
 	virtual void accept(Visitor& visitor);
-
-	typedef std::vector<std::unique_ptr<Element>> elements_t;
-	virtual elements_t const& getChildren()
-	{
-		return elements;
-	}
-private:
-	elements_t elements;
-	Element* active;
 };
 
 
