@@ -14,7 +14,6 @@
 #include <awengine/common/types.h>
 #include <awengine/math/Rect.h>
 #include <awengine/common/EventListener.h>
-#include <awengine/gui/Container.h>
 
 namespace awrts {
 namespace gui {

@@ -16,13 +16,13 @@ Element* Canvas::getActiveElement()
 	return elements.back().get();
 }
 
-void Container::addElement(std::unique_ptr<Element> e)
+void Canvas::addElement(std::unique_ptr<Element> e)
 {
-	//e->setParent(this);
+	e->setParent(this);
 	elements.push_back(std::move(e));
 }
 
-std::unique_ptr<Element> Container::removeElement(Element* e)
+std::unique_ptr<Element> Canvas::removeElement(Element* e)
 {
 	auto compare = [&e] (std::unique_ptr<Element>& ptr) {
 		return ptr.get() == e;
