@@ -23,7 +23,7 @@ class EventType : public Event {
 public:
 	static size_t type() {
 		static size_t id = eventTypes++;
-		return type;
+		return id;
 	}
 
 	virtual bool is(size_t id)
@@ -31,7 +31,7 @@ public:
 		return type() == id;
 	}
 	virtual size_t getType() {
-		return type;
+		return type();
 	}
 protected:
 	EventType<Derived>()
