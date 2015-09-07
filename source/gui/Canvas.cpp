@@ -17,6 +17,7 @@ Element* Canvas::getActiveElement()
 
 void Canvas::addElement(Element* e)
 {
+	e->setParent(this);
 	elements.push_back(e);
 }
 
@@ -26,8 +27,24 @@ void Canvas::removeElement(Element* e)
 
 	if (element != elements.end()) {
 		elements.erase(element);
+		element.removeParent();
 	}
 }
+
+bool Canvas::onEvent(Event& event)
+{
+	Element* active = getActiveElement();
+	
+	if (!active)
+		return true;
+
+	return active->onEvent(event);
+}
+
+void Canvas::accept(Visitor* visitor)
+{
+	visitor->visit(this);
+}
+
 } // namespace gui
 } // namespace awrts
-#endif //_awrts_GUI_canvas_
