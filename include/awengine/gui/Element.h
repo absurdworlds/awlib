@@ -28,11 +28,12 @@ public:
 	virtual ~Element() = default;
 
 	/*!
-	 * Returns pointer to parent element.
+	 * Returns pointer to canvas, which contains this
+	 * element.
 	 */
-	virtual Element* getParent() const
+	virtual Canvas* getParent() const
 	{
-		return parent;
+		return reinterpret_cast<Canvas*>(parent);
 	}
 
 	virtual void setPosition(Vector2d<f32> position)
