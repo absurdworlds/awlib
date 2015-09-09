@@ -80,19 +80,12 @@ private:
 	u32 value;
 };
 
-Color darken(Color const& color, f32 val)
+inline Color darken(Color const& color, u8 val)
 {
-	if (val < 0.0) val = 0.0;
-	else if (val > 1.0) val = 1.0; 
-
-	u32 rgb = color.getARGB() & 0xFFFFFF;
-	return Color(u32(rgb * (1.0 - val)) + color.getAlpha() << 24);
-}
-
-Color darken(Color const& color, u8 val)
-{
-	u32 rgb = color.getARGB() & 0xFFFFFF;
-	return Color(rgb * (0xFF - val) / 0xFF + color.getAlpha() << 24);
+	u32 red = color.getRed() * (0xFF - val) / 0xFF;
+	u32 green = color.getGreen() * (0xFF - val) / 0xFF;
+	u32 blue = color.getBlue() * (0xFF - val) / 0xFF;
+	return Color(color.getAlpha(), red, green, blue);
 }
 
 } // namespace graphics
