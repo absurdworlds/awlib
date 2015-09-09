@@ -76,7 +76,7 @@ inline std::string join(std::vector<std::string>& source,
  * \brief 
  * 	Split string into tokens. Ignores empty tokens.
  * 	For example, `splitString("/ab/cde//fgh/", "/")` will produce 
- * 	three tokens: {"ab", "cde", "fgh}
+ * 	three tokens: {"ab", "cde", "fgh"}
  * \param source
  * 	Source string to split
  * \param delim
