@@ -15,6 +15,10 @@
 
 namespace awrts {
 namespace gui {
+class BackgroundNone;
+class BackgroundSolid;
+class BackgroundGradient;
+class BackgroundImage;
 
 class Background {
 public:
@@ -25,19 +29,19 @@ public:
 		Image
 	};
 
-	virtual Background* none()
+	virtual BackgroundNone* none()
 	{
 		return nullptr;
 	}
-	virtual Background* solid()
+	virtual BackgroundSolid* solid()
 	{
 		return nullptr;
 	}
-	virtual Background* gradient()
+	virtual BackgroundGradient* gradient()
 	{
 		return nullptr;
 	}
-	virtual Background* image()
+	virtual BackgroundImage* image()
 	{
 		return nullptr;
 	}
@@ -64,7 +68,7 @@ public:
 	{
 	}
 
-	virtual Background* none()
+	virtual BackgroundNone* none()
 	{
 		return this;
 	}
@@ -81,7 +85,7 @@ public:
 	{
 		return c;
 	}
-	virtual Background* solid()
+	virtual BackgroundSolid* solid()
 	{
 		return this;
 	}
@@ -114,7 +118,7 @@ public:
 		return tmp < 4 ? colors[tmp] : graphics::Color(0);
 	}
 
-	virtual Background* gradient()
+	virtual BackgroundGradient* gradient()
 	{
 		return this;
 	}
@@ -139,7 +143,7 @@ public:
 	{
 		return tiling;
 	}
-	virtual Background* image()
+	virtual BackgroundImage* image()
 	{
 		return this;
 	}

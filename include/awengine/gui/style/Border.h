@@ -16,6 +16,13 @@
 
 namespace awrts {
 namespace gui {
+class BorderNone;
+class BorderPlain;
+class BorderSolid;
+class BorderInward;
+class BorderOutward;
+class BorderImage;
+
 class Border {
 public:
 	enum Style {
@@ -26,23 +33,27 @@ public:
 		Image
 	};
 
-	virtual Border* none()
+	virtual BorderNone* none()
 	{
 		return nullptr;
 	}
-	virtual Border* solid()
+	virtual BorderPlain* plain()
 	{
 		return nullptr;
 	}
-	virtual Border* inward()
+	virtual BorderSolid* solid()
 	{
 		return nullptr;
 	}
-	virtual Border* outward()
+	virtual BorderInward* inward()
 	{
 		return nullptr;
 	}
-	virtual Border* image()
+	virtual BorderOutward* outward()
+	{
+		return nullptr;
+	}
+	virtual BorderImage* image()
 	{
 		return nullptr;
 	}
@@ -68,7 +79,7 @@ public:
 	{
 	}
 
-	virtual Border* none()
+	virtual BorderNone* none()
 	{
 		return this;
 	}
@@ -92,6 +103,10 @@ public:
 		return c;
 	}
 
+	virtual BorderPlain* plain()
+	{
+		return this;
+	}
 private:
 	//! Border width in pixels
 	u8 w;
@@ -106,7 +121,7 @@ public:
 	{
 	}
 
-	virtual Border* solid()
+	virtual BorderSolid* solid()
 	{
 		return this;
 	}
@@ -119,7 +134,7 @@ public:
 	{
 	}
 
-	virtual Border* inward()
+	virtual BorderInward* inward()
 	{
 		return this;
 	}
@@ -132,7 +147,7 @@ public:
 	{
 	}
 
-	virtual Border* outward()
+	virtual BorderOutward* outward()
 	{
 		return this;
 	}
@@ -162,7 +177,7 @@ public:
 		return mode;
 	}
 
-	virtual Border* image()
+	virtual BorderImage* image()
 	{
 		return this;
 	}
