@@ -1,8 +1,8 @@
 RootPath = ../..
-Sources = test.cpp Canvas.cpp Drawer.cpp
+Sources = test.cpp Canvas.cpp Drawer.cpp Window.cpp IrrSkin.cpp
 Defines = HR_MODULE_GUI
-# Libraries = Irrlicht
+Libraries = Irrlicht
 ProjectName = awgui
-Executable = false
+Executable = true
 
 include $(RootPath)/Rules.mk
