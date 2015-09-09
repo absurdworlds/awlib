@@ -8,11 +8,12 @@
  */
 #ifndef _awrts_gui_irr_skin_
 #define _awrts_gui_irr_skin_
-#include <awengine/gui/Skin.h>
+#include <awengine/graphics/Color.h>
 #include <awengine/gui/Canvas.h>
 #include <awengine/gui/Widget.h>
 #include <awengine/gui/Drawer.h>
-#include <awengine/graphics/Color.h>
+#include <awengine/gui/Engine.h>
+#include <awengine/gui/Style.h>
 
 #include <Irrlicht/rect.h>
 namespace irr {
@@ -28,21 +29,23 @@ public:
 	IrrRenderer(irr::video::IVideoDriver* driver)
 		: Driver(driver)
 	{}
-	void drawRect(Rect<f32> r, graphics::Color c);
+	void drawRect(Rect<i32> r, graphics::Color c);
 	void drawTitleBar(irr::core::rect<irr::s32> r);
 private:
 	irr::video::IVideoDriver* Driver;
 };
 
-class IrrSkin : public Skin {
+class IrrEngine : public Engine {
 public:
 	IrrSkin(irr::video::IVideoDriver* driver)
 		: renderer(driver)
 	{}
 	virtual ~IrrSkin() = default;
 
-	virtual void drawCanvas(Rect<f32> const& rect);
-	virtual void draw3DBorderInset(Rect<f32> const& rect);
+	virtual void drawBorder(Rect<f32> const& rect, Border const* style);
+	virtual void draw3DBorderInset(Rect<f32> const& rect,
+	                               graphics::Color color,
+				       u32 width);
 	virtual void drawWindowTitleBar(Rect<f32> const& rect);
 private:
 	IrrRenderer renderer;

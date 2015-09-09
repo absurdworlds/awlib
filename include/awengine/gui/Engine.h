@@ -14,13 +14,17 @@
 
 namespace awrts {
 namespace gui {
-class Skin {
-public:
-	virtual ~Skin() = default;
+class Border;
+class Background;
 
-	virtual void drawCanvas(Rect<f32> const& rect) = 0;
-	virtual void draw3DBorderInset(Rect<f32> const& rect) = 0;
-	virtual void drawWindowTitleBar(Rect<f32> const& rect) = 0;
+class Engine {
+public:
+	virtual ~Engine() = default;
+
+	virtual void drawBorder(Rect<f32> const& rect,
+	                        Border const* style) = 0
+	virtual void drawBackground(Rect<f32> const& rect,
+	                            Background const* style) = 0
 };
 } // namespace gui
 } // namespace awrts
