@@ -12,6 +12,7 @@
 #include <awengine/gui/Canvas.h>
 #include <awengine/gui/Widget.h>
 #include <awengine/gui/Drawer.h>
+#include <awengine/graphics/Color.h>
 
 #include <Irrlicht/rect.h>
 namespace irr {
@@ -27,7 +28,7 @@ public:
 	IrrRenderer(irr::video::IVideoDriver* driver)
 		: Driver(driver)
 	{}
-	void drawWindowBackground(irr::core::rect<irr::s32> r);
+	void drawRect(Rect<f32> r, graphics::Color c);
 	void drawTitleBar(irr::core::rect<irr::s32> r);
 private:
 	irr::video::IVideoDriver* Driver;
