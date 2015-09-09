@@ -18,7 +18,7 @@ class Canvas : public Element {
 public:
 	typedef std::vector<std::unique_ptr<Element>> elements_t;
 
-	Canvas();
+	Canvas() = default;
 	virtual ~Canvas() = default;
  
 	/*!
@@ -48,7 +48,7 @@ public:
 
 	virtual Widget* toWidget()
 	{
-		return nullptr
+		return nullptr;
 	}
 
 	class iterator :
