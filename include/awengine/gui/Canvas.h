@@ -96,11 +96,11 @@ public:
 		base_t base;
 	};
 
-	virtual iterator begin() const
+	virtual iterator getFirstChild() const
 	{
 		return iterator(std::begin(elements));
 	}
-	virtual iterator end() const
+	virtual iterator getLastChild() const
 	{
 		return iterator(std::end(elements));
 	}
@@ -108,6 +108,15 @@ private:
 	elements_t elements;
 };
 
+inline Canvas::iterator begin(Canvas* canvas)
+{
+	return canvas->getFirstChild();
+}
+
+inline Canvas::iterator end(Canvas* canvas)
+{
+	return canvas->getLastChild();
+}
 
 } // namespace gui
 } // namespace awrts
