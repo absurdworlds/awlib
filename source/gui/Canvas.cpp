@@ -8,7 +8,7 @@
  */
 #include <awengine/gui/Canvas.h>
 #include <awengine/gui/Visitor.h>
-#include <iostream>
+#include <awengine/core/Logger.h>
 
 namespace awrts {
 namespace gui {
@@ -19,14 +19,14 @@ Element* Canvas::getActiveElement()
 
 void Canvas::addElement(std::unique_ptr<Element> e)
 {
+	Logger::debug("[GUI] Canvas: Adding Element");
 	e->setParent(this);
 	elements.push_back(std::move(e));
-	std::cout << "good" << std::endl;
 }
 
 std::unique_ptr<Element> Canvas::removeElement(Element* e)
 {
-	std::cout << "blya" << std::endl;
+	Logger::debug("[GUI] Canvas: Removing Element");
 	auto compare = [&e] (std::unique_ptr<Element>& ptr) {
 		return ptr.get() == e;
 	};
@@ -62,3 +62,4 @@ void Canvas::accept(Visitor& visitor)
 
 } // namespace gui
 } // namespace awrts
+
