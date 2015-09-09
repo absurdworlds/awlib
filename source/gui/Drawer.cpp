@@ -12,6 +12,7 @@
 #include <awengine/gui/Window.h>
 #include <awengine/gui/Skin.h>
 #include <awengine/utility/macro.h>
+#include <awengine/core/Logger.h>
 namespace awrts {
 namespace gui {
 
@@ -21,9 +22,11 @@ Drawer::~Drawer()
 
 void Drawer::visit(Element* element)
 {
+	Logger::debug("[GUI] Drawer: Unknown Element");
 }
 void Drawer::visit(Canvas* element)
 {
+	Logger::debug("[GUI] Drawer: Rendering canvas");
 	//Skin* skin = element->getSkin();
 	//skin->drawCanvas(element->getRect());
 	for (auto& e : element) {
@@ -32,11 +35,13 @@ void Drawer::visit(Canvas* element)
 }
 void Drawer::visit(Window* element)
 {
+	Logger::debug("[GUI] Drawer: Rendering Window");
 	Skin* skin = element->getSkin();
 	skin->draw3DBorderInset(element->getRect());
 }
 void Drawer::visit(Widget* element)
 {
+	Logger::debug("[GUI] Drawer: Unknown Widget");
 }
 
 } // namespace gui
