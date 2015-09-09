@@ -6,23 +6,19 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_GUIWindow_
-#define _awrts_GUIWindow_
-#include <awengine/gui/Canvas.h>
+#include <awengine/gui/Window.h>
+#include <awengine/gui/Visitor.h>
+
 
 namespace awrts {
 namespace gui {
-
-//! Typical “Window” with a title bar
-class Window : public Canvas {
-public:
-	Window() = default;
-	virtual ~Window() = default;
-
-	virtual bool onEvent(Event* event);
-	virtual void accept(Visitor& visitor);
-};
-
+bool Window::onEvent(Event* event)
+{
+	return true;
+}
+void Window::accept(Visitor& visitor)
+{
+	visitor.visit(this);
+}
 } // namespace gui
 } // namespace awrts
-#endif //_awrts_GUIWindow_

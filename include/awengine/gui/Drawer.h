@@ -19,6 +19,7 @@ public:
 
 	virtual void visit(Element* element);
 	virtual void visit(Canvas* element);
+	virtual void visit(Window* element);
 	virtual void visit(Widget* element);
 };
 
