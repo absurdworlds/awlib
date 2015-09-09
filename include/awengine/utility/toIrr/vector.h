@@ -9,7 +9,7 @@
 #ifndef _awrts_hrToIrr_
 #define _awrts_hrToIrr_
 #include <irrlicht/vector3d.h>
-#include <awrts/math/Vector3d.h>
+#include <awengine/math/Vector3d.h>
 
 namespace awrts {
 inline Vector3d<f32> toAW(irr::core::vector3df const& irrVec)
