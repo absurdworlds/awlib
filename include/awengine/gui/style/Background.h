@@ -42,7 +42,7 @@ public:
 		return nullptr;
 	}
 
-	Style style()
+	Style style() const
 	{
 		return s;
 	}
@@ -63,6 +63,7 @@ public:
 		: Background(Background::None)
 	{
 	}
+
 	virtual Background* none()
 	{
 		return this;
@@ -75,7 +76,8 @@ public:
 		: Background(Background::Solid), c(color)
 	{
 	}
-	graphics::Color color()
+
+	graphics::Color color() const
 	{
 		return c;
 	}
@@ -105,11 +107,13 @@ public:
 		: Background(Background::Gradient), colors({c1, c2, c3, c4})
 	{
 	}
-	graphics::Color color(Corner pos)
+
+	graphics::Color color(Corner pos) const
 	{
 		size_t tmp = size_t(pos);
 		return tmp < 4 ? colors[tmp] : graphics::Color(0);
 	}
+
 	virtual Background* gradient()
 	{
 		return this;
@@ -126,12 +130,12 @@ public:
 	{
 	}
 
-	std::string path()
+	std::string path() const
 	{
 		return img;
 	}
 
-	ImageRepeat repeat()
+	ImageRepeat repeat() const
 	{
 		return tiling;
 	}

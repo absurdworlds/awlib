@@ -80,11 +80,14 @@ protected:
 		: w(width), c(color), Border(s)
 	{
 	}
-	u8 width()
+
+public:
+	u8 width() const
 	{
 		return w;
 	}
-	graphics::Color color()
+
+	graphics::Color color() const
 	{
 		return c;
 	}
@@ -143,17 +146,18 @@ public:
 		: img(path), mode(mode), Border(Border::Image)
 	{
 	}	
-	std::string path()
+
+	std::string path() const
 	{
 		return img;
 	}
 
-	u8 slice()
+	u8 slice() const
 	{
 		return width;
 	}
 
-	ImageRepeat repeat()
+	ImageRepeat repeat() const
 	{
 		return mode;
 	}
