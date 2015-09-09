@@ -72,6 +72,18 @@ public:
 		return *this;
 	}
 
+	Vector2d<T> operator + (T const v) const
+	{
+		return Vector2d<T>(coord_[0] + v, coord_[1] + v);
+	}
+
+	Vector2d<T>& operator += (T const v)
+	{
+		coord_[0] += v;
+		coord_[1] += v;
+		return *this;
+	}
+
 	Vector2d<T> operator - (Vector2d<T> const& other) const
 	{ 
 		return Vector2d<T>(
@@ -114,14 +126,14 @@ public:
 		return *this;
 	}
 
-	Vector2d<T> operator * (const T v) const
+	Vector2d<T> operator * (T const v) const
 	{ 
 		return Vector2d<T>(
 			coord_[0] * v,
 			coord_[1] * v);
 	}
 
-	Vector2d<T>& operator *= (const T v)
+	Vector2d<T>& operator *= (T const v)
 	{
 		coord_[0] *= v;
 		coord_[1] *= v;
