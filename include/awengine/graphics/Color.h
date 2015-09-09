@@ -52,6 +52,26 @@ public:
 		return (value) & 0xFF;
 	}
 	
+	u32 a() const
+	{
+		return getAlpha();
+	}
+
+	u32 r() const
+	{
+		return getRed();
+	}
+
+	u32 g() const
+	{
+		return getGreen();
+	}
+
+	u32 b() const
+	{
+		return getBlue();
+	}
+
 	u32 getARGB() const
 	{
 		return value;
