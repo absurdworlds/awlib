@@ -10,6 +10,8 @@
 #define _awrts_Color_
 #include <awengine/math/Vector4d.h>
 
+namespace awrts {
+namespace graphics {
 class Color {
 public:
 	Color(u8 r, u8 g, u8 b)
@@ -73,4 +75,6 @@ Color darken(Color const& color, u8 val)
 	return Color(rgb * (0xFF - val) / 0xFF + color.getAlpha() << 24);
 }
 
+} // namespace graphics
+} // namespace awrts
 #endif//_awrts_Color_
