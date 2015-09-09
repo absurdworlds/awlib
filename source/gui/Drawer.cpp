@@ -9,8 +9,9 @@
 #include <awengine/gui/Drawer.h>
 #include <awengine/gui/Canvas.h>
 #include <awengine/gui/Widget.h>
+#include <awengine/gui/Window.h>
 #include <awengine/gui/Skin.h>
-
+#include <awengine/utility/macro.h>
 namespace awrts {
 namespace gui {
 
@@ -23,8 +24,16 @@ void Drawer::visit(Element* element)
 }
 void Drawer::visit(Canvas* element)
 {
+	//Skin* skin = element->getSkin();
+	//skin->drawCanvas(element->getRect());
+	for (auto& e : element) {
+		e.accept(*this);
+	}
+}
+void Drawer::visit(Window* element)
+{
 	Skin* skin = element->getSkin();
-	skin->drawCanvas(element->getRect());
+	skin->draw3DBorderInset(element->getRect());
 }
 void Drawer::visit(Widget* element)
 {
