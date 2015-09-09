@@ -18,6 +18,7 @@
 namespace awrts {
 namespace gui {
 class Canvas;
+class Widget;
 class Skin;
 class Visitor;
 
@@ -46,7 +47,10 @@ public:
 	{
 		rect.setHeight(height);
 	}
-
+	virtual void setRect(Rect<f32> newRect)
+	{
+		rect = newRect;
+	}
 	virtual Vector2d<f32> getPosition()
 	{
 		return rect.getUpperLeft();
