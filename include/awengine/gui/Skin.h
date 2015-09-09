@@ -10,12 +10,17 @@
 #ifndef _awrts_GUI_skin_
 #define _awrts_GUI_skin_
 #include <awengine/gui/Element.h>
+#include <awengine/math/Rect.h>
 
 namespace awrts {
 namespace gui {
 class Skin {
 public:
 	virtual ~Skin() = default;
+
+	virtual void drawCanvas(Rect<f32> const& rect) = 0;
+	virtual void draw3DBorderInset(Rect<f32> const& rect) = 0;
+	virtual void drawWindowTitleBar(Rect<f32> const& rect) = 0;
 };
 } // namespace gui
 } // namespace awrts
