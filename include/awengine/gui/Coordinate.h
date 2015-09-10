@@ -13,9 +13,84 @@ namespace awrts {
 namespace gui {
 
 struct Coordinate {
+	Coordinate(f32 fraction)
+		: fraction(fraction), offset(0)
+	{}
+	Coordinate(f64 fraction)
+		: fraction(fraction), offset(0)
+	{}
+	Coordinate(i32 offset)
+		: fraction(0.0), offset(offset)
+	{}
 	Coordinate(f32 fraction, i32 offset)
 		: fraction(fraction), offset(offset)
 	{}
+
+	Coordinate operator +(Coordinate const& other) const
+	{
+		return Coordinate(fraction + other.fraction,
+		                  offset + other.offset);
+	}
+	Coordinate operator -(Coordinate const& other) const
+	{
+		return Coordinate(fraction - other.fraction,
+		                  offset - other.offset);
+	}
+	Coordinate operator *(Coordinate const& other) const
+	{
+		return Coordinate(fraction * other.fraction,
+		                  offset * other.offset);
+	}
+	Coordinate operator /(Coordinate const& other) const
+	{
+		return Coordinate(fraction / other.fraction,
+		                  offset / other.offset);
+	}
+	Coordinate operator +(i32 v) const
+	{
+		return Coordinate(fraction,
+		                  offset + v);
+	}
+	Coordinate operator -(i32 v) const
+	{
+		return Coordinate(fraction,
+		                  offset - v);
+	}
+
+	Coordinate& operator +=(Coordinate const& other)
+	{
+		fraction += other.fraction;
+		offset += other.offset;
+		return *this;
+	}
+	Coordinate& operator -=(Coordinate const& other)
+	{
+		fraction -= other.fraction;
+		offset -= other.offset;
+		return *this;
+	}
+	Coordinate& operator *=(Coordinate const& other)
+	{
+		fraction *= other.fraction;
+		offset *= other.offset;
+		return *this;
+	}
+	Coordinate& operator /=(Coordinate const& other)
+	{
+		fraction /= other.fraction;
+		offset /= other.offset;
+		return *this;
+	}
+	Coordinate& operator +=(i32 v)
+	{
+		offset += v;
+		return *this;
+	}
+	Coordinate& operator -=(i32 v)
+	{
+		offset -= v;
+		return *this;
+	}
 
 	/*!
 	 * Fraction of a parent element's size
@@ -27,27 +102,7 @@ struct Coordinate {
 	 */
 	f32 offset;
 
-	Coordinate operator+(Coordinate const& other) const
-	{
-		return Coordinate(fraction + other.fraction,
-			       	  offset + other.offset);
-	}
-	Coordinate operator-(Coordinate const& other) const
-	{
-		return Coordinate(fraction - other.fraction,
-			       	  offset - other.offset);
-	}
-	Coordinate operator*(Coordinate const& other) const
-	{
-		return Coordinate(fraction * other.fraction,
-			       	  offset * other.offset);
-	}
-	Coordinate operator/(Coordinate const& other) const
-	{
-		return Coordinate(fraction / other.fraction,
-			       	  offset / other.offset);
-	}
-}
+};
 
 } // namespace gui
 } // namespace awrts
