@@ -8,13 +8,19 @@
  */
 #ifndef awrts_ToIrr_Color__
 #define awrts_ToIrr_Color__
-#include <Irrlicht/rect.h>
-#include <awengine/math/Rect.h>
+#include <Irrlicht/SColor.h>
+#include <awengine/graphics/Color.h>
 
 namespace awrts {
 irr::video::SColor toIrr(graphics::Color color)
 {
 	return irr::video::SColor(color.a(), color.r(), color.g(), color.b());
+}
+
+graphics::Color toAW(irr::video::SColor color)
+{
+	return graphics::Color(color.getAlpha(), color.getRed(),
+	                       color.getGreen(), color.getBlue());
 }
 } // namespace awrts
 #endif //awrts_ToIrr_Color__
