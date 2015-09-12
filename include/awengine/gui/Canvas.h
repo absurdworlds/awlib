@@ -104,8 +104,14 @@ public:
 	{
 		return iterator(std::end(elements));
 	}
+protected:
+	void makeActive(Element* element) {
+		// TODO: assert(isChild(element));
+		active = element;
+	}
 private:
 	elements_t elements;
+	Element* active;
 };
 
 inline Canvas::iterator begin(Canvas* canvas)

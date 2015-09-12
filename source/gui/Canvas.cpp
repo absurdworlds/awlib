@@ -14,19 +14,19 @@ namespace awrts {
 namespace gui {
 Element* Canvas::getActiveElement()
 {
-	return elements.back().get();
+	return active;
 }
 
 void Canvas::addElement(std::unique_ptr<Element> e)
 {
-	Logger::debug("[GUI] Canvas: Adding Element");
+	core::Logger::debug("[GUI] Canvas: Adding Element");
 	e->setParent(this);
 	elements.push_back(std::move(e));
 }
 
 std::unique_ptr<Element> Canvas::removeElement(Element* e)
 {
-	Logger::debug("[GUI] Canvas: Removing Element");
+	core::Logger::debug("[GUI] Canvas: Removing Element");
 	auto compare = [&e] (std::unique_ptr<Element>& ptr) {
 		return ptr.get() == e;
 	};
@@ -62,4 +62,3 @@ void Canvas::accept(Visitor& visitor)
 
 } // namespace gui
 } // namespace awrts
-
