@@ -162,6 +162,15 @@ private:
 	Element* parent;
 };
 
+inline bool pointWithinElement(Vector2d<i32> point,
+                               Element const& element,
+                               Vector2d<i32> screen)
+{
+	auto rect = element.getAbsoluteRect();
+	Rect<i32> screenRect = toPixels(rect, screen);
+	return pointWithinRect(point, screenRect);
+}
+
 } // namespace gui
 } // namespace awrts
 #endif //_awrts_GUIElement_
