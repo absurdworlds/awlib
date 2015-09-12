@@ -16,7 +16,17 @@ namespace awrts {
 namespace gui {
 bool Window::onEvent(Event* event)
 {
-	return true;
+	if(Canvas::onEvent(event))
+		return true;
+
+	bool consume = false;
+	if (event->getType() == MouseEvent::type()) {
+		consume = processEvent(event_cast<MouseEvent>(event));
+	} else if (event->getType() == GUIEvent::type()) {
+		consume = processEvent(event_cast<GUIEvent>(event));
+	}
+
+	return consume;
 }
 
 void Window::accept(Visitor& visitor)
@@ -69,5 +79,54 @@ void Window::recalculateClientRect() const
 
 	updateClientRect = false;
 }
+
+
+bool Window::processEvent(MouseEvent* event)
+{
+	Vector2d<f32> mousePos = event->position;
+	switch (event->action) {
+	case MouseEvent::Moved: {
+			if (!dragging)
+				break;
+			Vector2d<f32> delta = mouseStart - mousePos;
+			mouseStart = mousePos;
+			setPosition(getPosition() + 
+				    Vector2d<Coordinate>(delta[0], delta[1]));
+			return true;
+		}
+	case MouseEvent::LButtonDown:
+		mouseStart = mousePos;
+		dragging = isDraggable;
+		return true;
+	case MouseEvent::LButtonUp:
+		dragging = false;
+		return true;
+	default:
+		break;
+	}
+	return false;
+}
+
+bool Window::processEvent(GUIEvent* event)
+{
+	switch (event->action) {
+	case GUIEvent::Focused:
+		if (getParent()) {
+			getParent()->toCanvas()->bringToFront(this);
+		}
+		return true;
+	case GUIEvent::FocusLost:
+		dragging = false;
+		return true;
+	default:
+		break;
+	}
+	return false;
+}
+/*
+void Window::move(Vector2d<f32> delta)
+{
+	// TODO: check if within the parent's rectangle
+}*/
 } // namespace gui
 } // namespace awrts

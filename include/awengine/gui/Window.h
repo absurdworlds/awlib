@@ -32,9 +32,19 @@ public:
 protected:
 	virtual void recalculateClientRect() const;
 private:
+	bool processEvent(MouseEvent* event);
+	//bool processEvent(KeyboardEvent* event);
+	bool processEvent(GUIEvent* event);
 
 	mutable bool updateClientRect;
 	mutable Rect<Coordinate> clientRect;
+
+	bool dragging;
+	bool resizing;
+	Vector2d<f32> mouseStart;
+
+	bool hasTitlebar;
+	bool isDraggable;
 };
 
 } // namespace gui

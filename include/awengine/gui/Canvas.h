@@ -38,6 +38,8 @@ public:
 	 */
 	virtual Element* getActiveElement();
 
+	void bringToFront(Element* e);
+	void sendToBack(Element* e);
 	virtual bool onEvent(Event* event);
 	virtual void accept(Visitor& visitor);
 
@@ -82,14 +84,24 @@ public:
 			return *this;
 		}
 
-		bool operator==(iterator const& other)
+		bool operator == (iterator const& other)
 		{
 			return base == other.base;
 		}
 
-		bool operator!=(iterator const& other)
+		bool operator != (iterator const& other)
 		{
 			return base != other.base;
+		}
+
+		bool operator == (base_t const& other)
+		{
+			return base == other;
+		}
+
+		bool operator != (base_t const& other)
+		{
+			return base != other;
 		}
 	private:
 		friend class Canvas;
@@ -104,14 +116,28 @@ public:
 	{
 		return iterator(std::end(elements));
 	}
+
+	iterator findElement(Element* e) const;
+
+	virtual void invalidate()
+	{
+		Element::invalidate();
+	}
 protected:
 	void makeActive(Element* element) {
 		// TODO: assert(isChild(element));
 		active = element;
 	}
+	Element* getElementFromPoint(Vector2d<i32> point, Vector2d<i32> bounds);
+
 private:
+	elements_t::iterator findElement(Element* e);
+	bool processEvent(MouseEvent* event);
+	bool processEvent(GUIEvent* event);
+
 	elements_t elements;
 	Element* active;
+	Element* hovered;
 };
 
 inline Canvas::iterator begin(Canvas* canvas)

@@ -12,9 +12,13 @@
 
 namespace awrts {
 namespace gui {
-Element* Canvas::getActiveElement()
+Canvas::elements_t::iterator Canvas::findElement(Element* e)
 {
-	return active;
+	auto compare = [&e] (std::unique_ptr<Element>& ptr) {
+		return ptr.get() == e;
+	};
+
+	return std::find_if(elements.begin(), elements.end(), compare);
 }
 
 void Canvas::addElement(std::unique_ptr<Element> e)
@@ -27,30 +31,61 @@ void Canvas::addElement(std::unique_ptr<Element> e)
 std::unique_ptr<Element> Canvas::removeElement(Element* e)
 {
 	core::Logger::debug("[GUI] Canvas: Removing Element");
-	auto compare = [&e] (std::unique_ptr<Element>& ptr) {
-		return ptr.get() == e;
-	};
 
-	auto element = std::find_if(elements.begin(), elements.end(), compare);
+	auto element = findElement(e);
 
-	if (element != elements.end()) {
-		auto temp = std::move(*element);
-		temp->removeParent();
+	if (element == elements.end())
+		return nullptr;
 
-		elements.erase(element);
+	auto temp = std::move(*element);
+	temp->removeParent();
 
-		return std::move(temp);
-	}
+	elements.erase(element);
 
-	return nullptr;
+	return std::move(temp);
+}
+
+void Canvas::bringToFront(Element* e)
+{
+	auto element = findElement(e);
+	
+	if (element == elements.end())
+		return;
+
+	auto temp = std::move(*element);
+	elements.erase(element);
+	elements.push_back(std::move(temp));
+}
+
+void Canvas::sendToBack(Element* e)
+{
+	auto element = findElement(e);
+	
+	if (element == elements.end())
+		return;
+
+	auto temp = std::move(*element);
+	elements.erase(element);
+	elements.insert(std::begin(elements), std::move(temp));
+}
+
+Element* Canvas::getActiveElement()
+{
+	return active;
 }
 
 bool Canvas::onEvent(Event* event)
 {
+	if (event->getType() == MouseEvent::type()) {
+		processEvent(event_cast<MouseEvent>(event));
+	} else if (event->getType() == GUIEvent::type()) {
+		processEvent(event_cast<GUIEvent>(event));
+	}
+
 	Element* active = getActiveElement();
-	
+
 	if (!active)
-		return true;
+		return false;
 
 	return active->onEvent(event);
 }
@@ -60,5 +95,78 @@ void Canvas::accept(Visitor& visitor)
 	visitor.visit(this);
 }
 
+Element* Canvas::getElementFromPoint(Vector2d<i32> point, Vector2d<i32> bounds) {
+	Element* element = nullptr;
+	for (auto& e : elements) {
+		bool within = pointWithinElement(point, *e, bounds);
+		if (within) {
+			element = e.get();
+			break;
+		}
+	}
+	return element;
+}
+
+bool Canvas::processEvent(MouseEvent* event)
+{
+	auto bounds = event->bounds;
+	auto mousePos = Vector2d<i32>(event->position.x() * bounds.x(),
+	                 	      event->position.y() * bounds.y());
+	auto element = getElementFromPoint(mousePos, bounds);
+
+	switch (event->action) {
+	case MouseEvent::Moved: {
+			GUIEvent hoveredEvent;
+			auto setHovered = [&hoveredEvent, &element, this] {
+				hoveredEvent.action = GUIEvent::Hovered;
+				element->onEvent(&hoveredEvent);
+				this->hovered = element;
+			};
+
+			if (element && hovered == element) {
+				setHovered();
+				break;
+			}
+			if (hovered) {
+				hoveredEvent.action = GUIEvent::Left;
+				hovered->onEvent(&hoveredEvent);
+				hovered = nullptr;
+			}
+			if (element)
+				setHovered();
+			break;
+		}
+	case MouseEvent::LButtonUp:
+	case MouseEvent::RButtonDown: {
+			GUIEvent focusedEvent;
+			focusedEvent.action = GUIEvent::Unfocused;
+
+			active->onEvent(&focusedEvent);
+			active = nullptr;
+
+			if (element) {
+				focusedEvent.action = GUIEvent::Focused;
+				element->onEvent(&focusedEvent);
+				active = element;
+			}
+		}
+	default:
+		break;
+	}
+
+	return false;
+}
+
+bool Canvas::processEvent(GUIEvent* event)
+{
+	switch (event->type()) {
+	case GUIEvent::Focused:
+		if (getParent()) {
+			getParent()->toCanvas()->bringToFront(this);
+		}
+		return true;
+	}
+	return false;
+}
 } // namespace gui
 } // namespace awrts
