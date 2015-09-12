@@ -36,22 +36,6 @@ public:
 		return parent;
 	}
 
-	virtual void setPosition(Vector2d<Coordinate> position)
-	{
-		rect.setPosition(position);
-	}
-	virtual void setWidth(Coordinate width)
-	{
-		rect.setWidth(width);
-	}
-	virtual void setHeight(Coordinate height)
-	{
-		rect.setHeight(height);
-	}
-	virtual void setRect(Rect<Coordinate> newRect)
-	{
-		rect = newRect;
-	}
 	virtual Vector2d<Coordinate> getPosition()
 	{
 		return rect.getUpperLeft();
@@ -88,19 +72,25 @@ public:
 		return style;
 	}
 
-	virtual void setStyle(Style* newStyle)
+	virtual void setPosition(Vector2d<Coordinate> position)
 	{
-		// TODO: if newStyle == parent->style, should it be reset to 0?
-		style = newStyle;
+		rect.setPosition(position);
 	}
 
-	virtual void accept(gui::Visitor& visitor) = 0;
+	virtual void setWidth(Coordinate width)
+	{
+		rect.setWidth(width);
+	}
 
-	/*!
-	 * Receive event.
-	 * Most commonly used to receive user input.
-	 */
-	virtual bool onEvent(Event* event) = 0;
+	virtual void setHeight(Coordinate height)
+	{
+		rect.setHeight(height);
+	}
+
+	virtual void setRect(Rect<Coordinate> newRect)
+	{
+		rect = newRect;
+	}
 
 	void setParent(Element* newParent)
 	{
@@ -112,8 +102,29 @@ public:
 		parent = nullptr;
 	}
 
+	virtual void setStyle(Style* newStyle)
+	{
+		// TODO: if newStyle == parent->style, should it be reset to 0?
+		style = newStyle;
+	}
+
+
 	virtual Canvas* toCanvas() = 0;
 	virtual Widget* toWidget() = 0;
+
+	/*!
+	 * Accept a GUI Element Visitor. Useful for performing
+	 * various operations on Elements and their children.
+	 */
+	virtual void accept(gui::Visitor& visitor) = 0;
+
+	/*!
+	 * Receive event.
+	 * Most commonly used to receive user input.
+	 * \return
+	 *      true if event was consumed.
+	 */
+	virtual bool onEvent(Event* event) = 0;
 
 protected:
 	Element()
