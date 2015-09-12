@@ -26,32 +26,6 @@ IrrSkin::~IrrSkin()
 {
 }*/
 
-Rect<i32> IrrEngine::toPixels(Rect<Coordinate> const& rect)
-{
-	auto dim = driver->getScreenSize();
-	Rect<i32> tmp;
-	tmp.upperLeft.x()  = rect.upperLeft.x().fraction * dim.Width;
-	tmp.upperLeft.x() += rect.upperLeft.x().offset;
-	tmp.upperLeft.y()  = rect.upperLeft.y().fraction * dim.Height;
-	tmp.upperLeft.y() += rect.upperLeft.y().offset;
-	tmp.lowerRight.x()  = rect.lowerRight.x().fraction * dim.Width;
-	tmp.lowerRight.x() += rect.lowerRight.x().offset;
-	tmp.lowerRight.y()  = rect.lowerRight.y().fraction * dim.Height;
-	tmp.lowerRight.y() += rect.lowerRight.y().offset;
-
-	core::Logger::debug("[GUI] IrrEngine: Client rect: (" +
-			std::to_string(rect.upperLeft.x().fraction) + ", " +
-			std::to_string(rect.upperLeft.y().fraction) + ", " +
-			std::to_string(rect.lowerRight.x().fraction) + ", " +
-			std::to_string(rect.lowerRight.y().fraction) + ").");
-	core::Logger::debug("[GUI] IrrEngine: Client rect: (" +
-			std::to_string(rect.upperLeft.x().offset) + ", " +
-			std::to_string(rect.upperLeft.y().offset) + ", " +
-			std::to_string(rect.lowerRight.x().offset) + ", " +
-			std::to_string(rect.lowerRight.y().offset) + ").");
-	return tmp;
-}
-
 void IrrEngine::drawBorder(Rect<Coordinate> const& rect, Border* style)
 {
 	switch (style->style()) {
@@ -60,10 +34,11 @@ void IrrEngine::drawBorder(Rect<Coordinate> const& rect, Border* style)
 	case Border::Solid:
 	case Border::Outward:
 	case Border::Inward:
-		drawSolidBorder(toPixels(rect), style->plain());
+		drawSolidBorder(toPixels(rect, getScreenSize()),
+		                         style->plain());
 		break;
 	case Border::Image:
-		// drawImageBorder(toPixels(rect), style->image());
+		// drawImageBorder(toPixels(rect, getScreenSize()), style->image());
 		break;
 	}
 }
@@ -168,7 +143,8 @@ void IrrEngine::drawBackground(Rect<Coordinate> const& rect, Background* style)
 		return;
 	case Background::Solid:
 		core::Logger::debug("[GUI] IrrEngine: Drawing solid bg");
-		drawRect(toPixels(rect), style->solid()->color());
+		drawRect(toPixels(rect, getScreenSize()),
+		                  style->solid()->color());
 		break;
 	case Background::Gradient: {
 			core::Logger::debug("[GUI] IrrEngine: Drawing gradient bg");
@@ -177,11 +153,12 @@ void IrrEngine::drawBackground(Rect<Coordinate> const& rect, Background* style)
 			auto c2 = s->color(Corner::BottomLeft);
 			auto c3 = s->color(Corner::BottomRight);
 			auto c4 = s->color(Corner::TopRight);
-			drawRect(toPixels(rect), c1, c2, c3, c4);
+			drawRect(toPixels(rect, getScreenSize()),
+			         c1, c2, c3, c4);
 		}
 		break;
 	case Background::Image:
-		// drawImageBorder(toPixels(rect), style->image());
+		// drawImageBorder(toPixels(rect, getScreenSize()), style->image());
 		break;
 	}
 }

@@ -8,6 +8,7 @@
  */
 #ifndef _awrts_gui_Coordinate_
 #define _awrts_gui_Coordinate_
+#include <awengine/math/Rect.h>
 
 namespace awrts {
 namespace gui {
@@ -101,8 +102,22 @@ struct Coordinate {
 	 * the fraction
 	 */
 	f32 offset;
-
 };
+
+inline Rect<i32> toPixels(Rect<Coordinate> const& rect,
+                          Vector2d<i32> const& screen)
+{
+	Rect<i32> tmp;
+	tmp.upperLeft.x()  = rect.upperLeft.x().fraction * screen.x();
+	tmp.upperLeft.x() += rect.upperLeft.x().offset;
+	tmp.upperLeft.y()  = rect.upperLeft.y().fraction * screen.y();
+	tmp.upperLeft.y() += rect.upperLeft.y().offset;
+	tmp.lowerRight.x()  = rect.lowerRight.x().fraction * screen.x();
+	tmp.lowerRight.x() += rect.lowerRight.x().offset;
+	tmp.lowerRight.y()  = rect.lowerRight.y().fraction * screen.y();
+	tmp.lowerRight.y() += rect.lowerRight.y().offset;
+	return tmp;
+}
 
 } // namespace gui
 } // namespace awrts

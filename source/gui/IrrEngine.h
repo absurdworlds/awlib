@@ -34,12 +34,16 @@ public:
 	virtual void drawBorder(Rect<Coordinate> const& rect, Border* style);
 	virtual void drawBackground(Rect<Coordinate> const& rect, Background* style);
 private:
-	Rect<i32> toPixels(Rect<Coordinate> const& rect);
 	void drawSolidBorder(Rect<i32> rect, BorderPlain* style);
 	void drawRect(Rect<i32> r, graphics::Color c);
 	void drawRect(Rect<i32> r,
 	              graphics::Color c1, graphics::Color c2,
 	              graphics::Color c3, graphics::Color c4);
+	Vector3d<i32> getScreenSize() const
+	{
+		return Vector3d<i32>(driver->getScreenSize().Width,
+		                     driver->getScreenSize().Height);
+	}
 
 	irr::video::IVideoDriver* driver;
 };
