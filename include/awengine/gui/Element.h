@@ -69,7 +69,7 @@ public:
 		// Absolute rect needs updating (element moved,
 		// parent moved, etc)
 		if (updateAbsoluteRect)
-			absoluteRect = parent->getAbsoluteRect() + getRect();
+			recalculateAbsoluteRect();
 
 		return absoluteRect;
 	}
@@ -147,15 +147,54 @@ public:
 	{
 		updateAbsoluteRect = true;
 	}
+
+	void setName(std::string name)
+	{
+	}
 protected:
 	Element()
-		: parent(nullptr)
+		: parent(nullptr), updateAbsoluteRect(true)
 	{
 	}
 private:
+	void recalculateAbsoluteRect() const
+	{
+		if (!getParent()) {
+			absoluteRect = getRect();
+			return;
+		}
+		
+		// compute parent rect
+		Rect<Coordinate> parentRect = parent->getAbsoluteRect();
+		Coordinate height = parentRect.getHeight();
+		Coordinate width  = parentRect.getWidth();
+
+		// references to local rect coordinates, for convenience
+		auto& ulx = rect.upperLeft.x();
+		auto& uly = rect.upperLeft.y();
+		auto& lrx = rect.lowerRight.x();
+		auto& lry = rect.lowerRight.y();
+
+		// go from local coordinates to absolute (move origin)
+		Rect<Coordinate> temp;
+		temp.upperLeft  = parentRect.upperLeft;
+		temp.lowerRight = parentRect.upperLeft;
+
+		// compute using Coordinate's definition:
+		// parent_dimension * fraction + offset
+		temp.upperLeft.x()  += width  * ulx.fraction + ulx.offset;
+		temp.upperLeft.y()  += height * uly.fraction + uly.offset;
+		temp.lowerRight.x() += width  * lrx.fraction + lrx.offset;
+		temp.lowerRight.y() += height * lry.fraction + lry.offset;
+
+		absoluteRect = temp;
+
+		updateAbsoluteRect = false;
+	}
+
 	Rect<Coordinate> rect;
 
-	bool updateAbsoluteRect;
+	mutable bool updateAbsoluteRect;
 	mutable Rect<Coordinate> absoluteRect;
 
 	Style* style;

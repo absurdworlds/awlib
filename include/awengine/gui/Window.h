@@ -22,15 +22,19 @@ public:
 	virtual bool onEvent(Event* event);
 	virtual void accept(Visitor& visitor);
 
-	virtual Rect<Coordinate> getClientRect()
-	{
-		updateClientRect();
-		return clientRect;
-	}
+	virtual Rect<Coordinate> getClientRect() const;
 
-	virtual void updateClientRect();
+	virtual void invalidate()
+	{
+		Canvas::invalidate();
+		updateClientRect = true;
+	}
+protected:
+	virtual void recalculateClientRect() const;
 private:
-	Rect<Coordinate> clientRect;
+
+	mutable bool updateClientRect;
+	mutable Rect<Coordinate> clientRect;
 };
 
 } // namespace gui

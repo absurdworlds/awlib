@@ -24,9 +24,17 @@ void Window::accept(Visitor& visitor)
 	visitor.visit(this);
 }
 
-void Window::updateClientRect()
+Rect<Coordinate> Window::getClientRect() const
 {
-	clientRect = getRect();
+	if (updateClientRect)
+		recalculateClientRect();
+
+	return clientRect;
+}
+
+void Window::recalculateClientRect() const
+{
+	clientRect = getAbsoluteRect();
 	auto style = getStyle()->getElementStyle("window");
 	auto border = style->getBorderStyle();
 
@@ -58,6 +66,8 @@ void Window::updateClientRect()
 			std::to_string(clientRect.upperLeft.y().offset) + ", " +
 			std::to_string(clientRect.lowerRight.x().offset) + ", " +
 			std::to_string(clientRect.lowerRight.y().offset) + ").");
+
+	updateClientRect = false;
 }
 } // namespace gui
 } // namespace awrts
