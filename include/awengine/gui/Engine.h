@@ -21,10 +21,10 @@ class Engine {
 public:
 	virtual ~Engine() = default;
 
-	virtual void drawBorder(Rect<f32> const& rect,
-	                        Border const* style) = 0
-	virtual void drawBackground(Rect<f32> const& rect,
-	                            Background const* style) = 0
+	virtual void drawBorder(Rect<Coordinate> const& rect,
+	                        Border* style) = 0;
+	virtual void drawBackground(Rect<Coordinate> const& rect,
+	                            Background* style) = 0;
 };
 } // namespace gui
 } // namespace awrts

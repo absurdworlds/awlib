@@ -12,14 +12,15 @@
 #include <string>
 
 #include <awengine/common/types.h>
-#include <awengine/math/Rect.h>
 #include <awengine/common/EventListener.h>
+#include <awengine/math/Rect.h>
+#include <awengine/gui/Coordinate.h>
 
 namespace awrts {
 namespace gui {
 class Canvas;
 class Widget;
-class Skin;
+class Style;
 class Visitor;
 
 //! Base class for GUI elements
@@ -35,28 +36,28 @@ public:
 		return parent;
 	}
 
-	virtual void setPosition(Vector2d<f32> position)
+	virtual void setPosition(Vector2d<Coordinate> position)
 	{
 		rect.setPosition(position);
 	}
-	virtual void setWidth(f32 width)
+	virtual void setWidth(Coordinate width)
 	{
 		rect.setWidth(width);
 	}
-	virtual void setHeight(f32 height)
+	virtual void setHeight(Coordinate height)
 	{
 		rect.setHeight(height);
 	}
-	virtual void setRect(Rect<f32> newRect)
+	virtual void setRect(Rect<Coordinate> newRect)
 	{
 		rect = newRect;
 	}
-	virtual Vector2d<f32> getPosition()
+	virtual Vector2d<Coordinate> getPosition()
 	{
 		return rect.getUpperLeft();
 	}
 
-	virtual Vector2d<f32> getAbsolutePosition()
+	virtual Vector2d<Coordinate> getAbsolutePosition()
 	{
 		if (!parent)
 			return getPosition();
@@ -64,33 +65,33 @@ public:
 		return parent->getAbsolutePosition() + getPosition();
 	}
 
-	virtual f32 getWidth() const
+	virtual Coordinate getWidth() const
 	{
 		return rect.getWidth();
 	}
 	
-	virtual f32 getHeight() const
+	virtual Coordinate getHeight() const
 	{
 		return rect.getHeight();
 	}
 
-	virtual Rect<f32> getRect() const
+	virtual Rect<Coordinate> getRect() const
 	{
 		return rect;
 	}
 
-	virtual Skin* getSkin() const
+	virtual Style* getStyle() const
 	{
-		if (!skin)
-			return parent->getSkin();
+		if (!style)
+			return parent->getStyle();
 
-		return skin;
+		return style;
 	}
 
-	virtual void setSkin(Skin* newSkin)
+	virtual void setStyle(Style* newStyle)
 	{
-		// TODO: if newSkin == parent->skin, should it be reset to 0?
-		skin = newSkin;
+		// TODO: if newStyle == parent->style, should it be reset to 0?
+		style = newStyle;
 	}
 
 	virtual void accept(gui::Visitor& visitor) = 0;
@@ -120,8 +121,8 @@ protected:
 	{
 	}
 private:
-	Rect<f32> rect;
-	Skin* skin;
+	Rect<Coordinate> rect;
+	Style* style;
 	Element* parent;
 };
 
