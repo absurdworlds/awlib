@@ -9,6 +9,11 @@
 #include <Irrlicht/IVideoDriver.h>
 #include <Irrlicht/IGUISkin.h>
 
+#include <awengine/utility/toIrr/color.h>
+#include <awengine/utility/toIrr/rect.h>
+
+#include <awengine/core/Logger.h>
+
 #include <awengine/gui/Canvas.h>
 #include <awengine/gui/Widget.h>
 #include <awengine/gui/Drawer.h>
@@ -21,37 +26,33 @@ IrrSkin::~IrrSkin()
 {
 }*/
 
-irr::core::rect<irr::s32> toIrr(Rect<f32> awRect)
+Rect<i32> IrrEngine::toPixels(Rect<Coordinate> const& rect)
 {
-	return irr::core::rect<irr::s32>(
-	       (int)awRect.upperLeft.x(), (int)awRect.upperLeft.y(),
-	       (int)awRect.lowerRight.x(), (int)awRect.lowerRight.y());
-}
-
-irr::video::SColor toIrr(graphics::Color color)
-{
-	return irr::video::SColor(color.a(), color.r(), color.g(), color.b());
-}
-
-irr::core::rect<irr::s32> toIrr(Rect<i32> awRect)
-{
-	return irr::core::rect<irr::s32>(
-	       awRect.upperLeft.x(),  awRect.upperLeft.y(),
-	       awRect.lowerRight.x(), awRect.lowerRight.y());
-}
-
-Rect<i32> toPixels(Rect<f32> const& rect)
-{
-	Vector2d<i32> screen = toAW(driver->getScreenSize());
+	auto dim = driver->getScreenSize();
 	Rect<i32> tmp;
-	rect.upperLeft.x() = w.upperLeft.x() * screen.x();
-	rect.upperLeft.y() = w.upperLeft.y() * screen.y();
-	rect.lowerRight.x() = w.lowerRight.x() * screen.x();
-	rect.lowerRight.y() = w.lowerRight.y() * screen.y();
+	tmp.upperLeft.x()  = rect.upperLeft.x().fraction * dim.Width;
+	tmp.upperLeft.x() += rect.upperLeft.x().offset;
+	tmp.upperLeft.y()  = rect.upperLeft.y().fraction * dim.Height;
+	tmp.upperLeft.y() += rect.upperLeft.y().offset;
+	tmp.lowerRight.x()  = rect.lowerRight.x().fraction * dim.Width;
+	tmp.lowerRight.x() += rect.lowerRight.x().offset;
+	tmp.lowerRight.y()  = rect.lowerRight.y().fraction * dim.Height;
+	tmp.lowerRight.y() += rect.lowerRight.y().offset;
+
+	core::Logger::debug("[GUI] IrrEngine: Client rect: (" +
+			std::to_string(rect.upperLeft.x().fraction) + ", " +
+			std::to_string(rect.upperLeft.y().fraction) + ", " +
+			std::to_string(rect.lowerRight.x().fraction) + ", " +
+			std::to_string(rect.lowerRight.y().fraction) + ").");
+	core::Logger::debug("[GUI] IrrEngine: Client rect: (" +
+			std::to_string(rect.upperLeft.x().offset) + ", " +
+			std::to_string(rect.upperLeft.y().offset) + ", " +
+			std::to_string(rect.lowerRight.x().offset) + ", " +
+			std::to_string(rect.lowerRight.y().offset) + ").");
 	return tmp;
 }
 
-void IrrEngine::drawBorder(Rect<f32> const& rect, Border const* style)
+void IrrEngine::drawBorder(Rect<Coordinate> const& rect, Border* style)
 {
 	switch (style->style()) {
 	case Border::None:
@@ -67,7 +68,7 @@ void IrrEngine::drawBorder(Rect<f32> const& rect, Border const* style)
 	}
 }
 
-void IrrSkin::drawSolidBorder(Rect<i32> rect, BorderSolid const* style)
+void IrrEngine::drawSolidBorder(Rect<i32> rect, BorderPlain* style)
 {
 	auto color = style->color();
 	auto width = style->width();
@@ -79,47 +80,48 @@ void IrrSkin::drawSolidBorder(Rect<i32> rect, BorderSolid const* style)
 
 		// top dark
 		tmp = rect;
-		tmp.upperLeft.y() = tmp.lowerRight.y() - rest;
-		renderer.drawRect(tmp, graphics::darken(color, 200));
+		tmp.lowerRight.y() = tmp.upperLeft.y() + rest;
+		drawRect(tmp, graphics::darken(color, 200));
 
 		if ((width / 2) > 0) {
 			// top bright
 			tmp = rect;
 			tmp.lowerRight.y() = tmp.upperLeft.y() + width;
 			tmp.upperLeft += rest;
-			renderer.drawRect(tmp, graphics::darken(color, 127));
+			drawRect(tmp, graphics::darken(color, 127));
 		}
 		
 		// left dark
 		tmp = rect;
 		tmp.lowerRight.x() = tmp.upperLeft.x() + rest;
-		renderer.drawRect(tmp, graphics::darken(color, 200));
+		drawRect(tmp, graphics::darken(color, 200));
 
 		if ((width / 2) > 0) {
 			// left bright
 			tmp = rect;
 			tmp.lowerRight.x() = tmp.upperLeft.x() + width;
 			tmp.upperLeft += rest;
-			renderer.drawRect(tmp, graphics::darken(color, 127));
+			drawRect(tmp, graphics::darken(color, 127));
 		}
 	} else {
 		// top
 		tmp = rect;
 		tmp.lowerRight.y() = tmp.upperLeft.y() + width;
-		renderer.drawRect(tmp, color);
+		drawRect(tmp, color);
 
 		// left
 		tmp = rect;
 		tmp.lowerRight.x() = tmp.upperLeft.x() + width;
-		renderer.drawRect(tmp, color);
+		drawRect(tmp, color);
 	}
 
 
 	if (style->style() == Border::Outward) {
+		u32 rest = width - width / 2;
 		// bottom dark
 		tmp = rect;
 		tmp.upperLeft.y() = tmp.lowerRight.y() - rest;
-		renderer.drawRect(tmp, graphics::darken(color, 200));
+		drawRect(tmp, graphics::darken(color, 200));
 
 		if ((width / 2) > 0) {
 			// bottom bright
@@ -127,13 +129,13 @@ void IrrSkin::drawSolidBorder(Rect<i32> rect, BorderSolid const* style)
 			tmp.upperLeft.y() = tmp.lowerRight.y() - width;
 			tmp.lowerRight.y() = tmp.lowerRight.y() - rest;
 			tmp.lowerRight.x() -= rest; 
-			renderer.drawRect(tmp, graphics::darken(color, 127));
+			drawRect(tmp, graphics::darken(color, 127));
 		}
 
 		// right dark
 		tmp = rect;
 		tmp.upperLeft.x() = tmp.lowerRight.x() - rest;
-		renderer.drawRect(tmp, graphics::darken(color, 200));
+		drawRect(tmp, graphics::darken(color, 200));
 
 		if ((width / 2) > 0) {
 			// right bright
@@ -141,18 +143,46 @@ void IrrSkin::drawSolidBorder(Rect<i32> rect, BorderSolid const* style)
 			tmp.upperLeft.x() = tmp.lowerRight.x() - width;
 			tmp.lowerRight.x() = tmp.lowerRight.x() - rest;
 			tmp.lowerRight.y() -= rest;
-			renderer.drawRect(tmp, graphics::darken(color, 127));
+			drawRect(tmp, graphics::darken(color, 127));
 		}
 	} else {
 		// bottom
 		tmp = rect;
 		tmp.upperLeft.y() = tmp.lowerRight.y() - width;
-		renderer.drawRect(tmp, color);
+		tmp.upperLeft.x() += width;
+		drawRect(tmp, color);
 
 		// right
 		tmp = rect;
 		tmp.upperLeft.x() = tmp.lowerRight.x() - width;
-		renderer.drawRect(tmp, color);
+		tmp.upperLeft.y() += width;
+		drawRect(tmp, color);
+	}
+}
+
+void IrrEngine::drawBackground(Rect<Coordinate> const& rect, Background* style)
+{
+	switch (style->style()) {
+	case Background::None:
+		core::Logger::debug("[GUI] IrrEngine: Drawing empty bg");
+		return;
+	case Background::Solid:
+		core::Logger::debug("[GUI] IrrEngine: Drawing solid bg");
+		drawRect(toPixels(rect), style->solid()->color());
+		break;
+	case Background::Gradient: {
+			core::Logger::debug("[GUI] IrrEngine: Drawing gradient bg");
+			auto s = style->gradient();
+			auto c1 = s->color(Corner::TopLeft);
+			auto c2 = s->color(Corner::BottomLeft);
+			auto c3 = s->color(Corner::BottomRight);
+			auto c4 = s->color(Corner::TopRight);
+			drawRect(toPixels(rect), c1, c2, c3, c4);
+		}
+		break;
+	case Background::Image:
+		// drawImageBorder(toPixels(rect), style->image());
+		break;
 	}
 }
 
@@ -160,7 +190,25 @@ void IrrEngine::drawRect(Rect<i32> r, graphics::Color c)
 {
 	auto rect = toIrr(r);
 	auto color = toIrr(c);
-	Driver->draw2DRectangle(color, rect);
+	driver->draw2DRectangle(color, rect);
+}
+
+void IrrEngine::drawRect(Rect<i32> r,
+	                 graphics::Color c1, graphics::Color c2,
+	                 graphics::Color c3, graphics::Color c4)
+{
+	core::Logger::debug("[GUI] IrrEngine: Drawing rect: (" + 
+			std::to_string(r.upperLeft.x()) + ", " +
+			std::to_string(r.upperLeft.y()) + ", " +
+			std::to_string(r.lowerRight.x()) + ", " +
+			std::to_string(r.lowerRight.y()) + ").");
+	auto rect = toIrr(r);
+	auto lu = toIrr(c1);
+	auto ld = toIrr(c2);
+	auto rd = toIrr(c3);
+	auto ru = toIrr(c4);
+	driver->draw2DRectangle(rect, lu, ru, ld, rd);
+}
 
 	/*
 	// client area for background
@@ -173,9 +221,8 @@ void IrrEngine::drawRect(Rect<i32> r, graphics::Color c)
 	const irr::video::SColor c1 = irr::video::SColor(255,100,100,100).getInterpolated ( 0xFFFFFFFF, 0.9f );
 	const irr::video::SColor c2 = irr::video::SColor(255,150,150,150).getInterpolated ( 0xFFFFFFFF, 0.8f );
 
-	Driver->draw2DRectangle(rect, c1, c1, c2, c2);
+	driver->draw2DRectangle(rect, c1, c1, c2, c2);
 	*/
-}
 
 /*
 void IrrRenderer::drawTitleBar(irr::core::rect<irr::s32> r)
@@ -187,7 +234,7 @@ void IrrRenderer::drawTitleBar(irr::core::rect<irr::s32> r)
 	rect.LowerRightCorner.Y = rect.UpperLeftCorner.Y + getSize(EGDS_WINDOW_BUTTON_WIDTH) + 2;
 
 	const irr::video::SColor c = titleBarColor.getInterpolated( irr::video::SColor(titleBarColor.getAlpha(),255,255,255), 0.8f);
-	Driver->draw2DRectangle(rect, titleBarColor, titleBarColor, c, c);
+	driver->draw2DRectangle(rect, titleBarColor, titleBarColor, c, c);
 }*/
 } // namespace gui
 } // namespace awrts

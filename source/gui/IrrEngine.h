@@ -8,6 +8,7 @@
  */
 #ifndef _awrts_gui_irr_skin_
 #define _awrts_gui_irr_skin_
+#include <Irrlicht/rect.h>
 #include <awengine/graphics/Color.h>
 #include <awengine/gui/Canvas.h>
 #include <awengine/gui/Widget.h>
@@ -15,7 +16,6 @@
 #include <awengine/gui/Engine.h>
 #include <awengine/gui/Style.h>
 
-#include <Irrlicht/rect.h>
 namespace irr {
 namespace video {
 class IVideoDriver;
@@ -24,31 +24,24 @@ class IVideoDriver;
 
 namespace awrts {
 namespace gui {
-class IrrRenderer {
-public:
-	IrrRenderer(irr::video::IVideoDriver* driver)
-		: Driver(driver)
-	{}
-	void drawRect(Rect<i32> r, graphics::Color c);
-	void drawTitleBar(irr::core::rect<irr::s32> r);
-private:
-	irr::video::IVideoDriver* Driver;
-};
-
 class IrrEngine : public Engine {
 public:
-	IrrSkin(irr::video::IVideoDriver* driver)
-		: renderer(driver)
+	IrrEngine(irr::video::IVideoDriver* driver)
+		: driver(driver)
 	{}
-	virtual ~IrrSkin() = default;
+	virtual ~IrrEngine() = default;
 
-	virtual void drawBorder(Rect<f32> const& rect, Border const* style);
-	virtual void draw3DBorderInset(Rect<f32> const& rect,
-	                               graphics::Color color,
-				       u32 width);
-	virtual void drawWindowTitleBar(Rect<f32> const& rect);
+	virtual void drawBorder(Rect<Coordinate> const& rect, Border* style);
+	virtual void drawBackground(Rect<Coordinate> const& rect, Background* style);
 private:
-	IrrRenderer renderer;
+	Rect<i32> toPixels(Rect<Coordinate> const& rect);
+	void drawSolidBorder(Rect<i32> rect, BorderPlain* style);
+	void drawRect(Rect<i32> r, graphics::Color c);
+	void drawRect(Rect<i32> r,
+	              graphics::Color c1, graphics::Color c2,
+	              graphics::Color c3, graphics::Color c4);
+
+	irr::video::IVideoDriver* driver;
 };
 } // namespace gui
 } // namespace awrts
