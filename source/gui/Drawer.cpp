@@ -41,8 +41,21 @@ void Drawer::visit(Canvas* element)
 void Drawer::visit(Window* element)
 {
 	core::Logger::debug("[GUI] Drawer: Rendering Window");
-	Skin* skin = element->getSkin();
-	skin->draw3DBorderInset(element->getRect());
+	Style* style = element->getStyle();
+	auto windowStyle = style->getElementStyle("window");
+	if (!windowStyle) {
+		core::Logger::debug("[GUI] Drawer: Can't find style");
+		return; //todo : default
+	}
+
+	engine.drawBorder(element->getRect(),
+		          windowStyle->getBorderStyle());
+
+	engine.drawBackground(element->getClientRect(),
+	                      windowStyle->getBackgroundStyle());
+
+	//if (element->hasTitleBar()) {
+	//}
 }
 
 void Drawer::visit(Widget* element)

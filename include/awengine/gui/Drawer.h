@@ -12,15 +12,23 @@
 
 namespace awrts {
 namespace gui {
-//! Drawing visitor. Used for rendering GUI.
+class Engine;
+
+//! Drawing visitor. Used for GUI rendering.
 class Drawer : public Visitor {
 public:
+	Drawer(Engine& engine)
+		: engine(engine)
+	{
+	}
 	virtual ~Drawer();
 
 	virtual void visit(Element* element);
 	virtual void visit(Canvas* element);
 	virtual void visit(Window* element);
 	virtual void visit(Widget* element);
+private:
+	Engine& engine;
 };
 
 } // namespace gui
