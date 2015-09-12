@@ -210,20 +210,6 @@ void IrrEngine::drawRect(Rect<i32> r,
 	driver->draw2DRectangle(rect, lu, ru, ld, rd);
 }
 
-	/*
-	// client area for background
-	rect = r;
-	rect.UpperLeftCorner.X +=1;
-	rect.UpperLeftCorner.Y +=1;
-	rect.LowerRightCorner.X -= 2;
-	rect.LowerRightCorner.Y -= 2;
-
-	const irr::video::SColor c1 = irr::video::SColor(255,100,100,100).getInterpolated ( 0xFFFFFFFF, 0.9f );
-	const irr::video::SColor c2 = irr::video::SColor(255,150,150,150).getInterpolated ( 0xFFFFFFFF, 0.8f );
-
-	driver->draw2DRectangle(rect, c1, c1, c2, c2);
-	*/
-
 /*
 void IrrRenderer::drawTitleBar(irr::core::rect<irr::s32> r)
 {
