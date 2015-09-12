@@ -35,6 +35,22 @@ public:
 	{
 	}
 
+	Rect operator + (Rect const& other) const
+	{
+		Rect tmp = *this;
+		tmp.upperLeft  += other.upperLeft;
+		tmp.lowerRight += other.lowerRight;
+		return tmp;
+	}
+
+	Rect operator - (Rect const& other) const
+	{
+		Rect tmp = *this;
+		tmp.upperLeft  -= other.upperLeft;
+		tmp.lowerRight -= other.lowerRight;
+		return tmp;
+	}
+
 	T getWidth() const
 	{
 		return upperLeft.x() - lowerRight.x();
