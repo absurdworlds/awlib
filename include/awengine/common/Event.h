@@ -19,7 +19,7 @@ protected:
 };
 
 template <class Derived>
-class EventType : public Event {
+class EventId : public Event {
 public:
 	static size_t type() {
 		static size_t id = eventTypes++;
@@ -30,18 +30,19 @@ public:
 	{
 		return type() == id;
 	}
+
 	virtual size_t getType() {
 		return type();
 	}
 protected:
-	EventType<Derived>()
+	EventId<Derived>()
 	{
 	}
 };
 
 template <class E>
 E* event_cast(Event* event) {
-	if (event->is(E::getType()))
+	if (event->is(E::type()))
 		return static_cast<E*>(event);
 
 	return nullptr;
