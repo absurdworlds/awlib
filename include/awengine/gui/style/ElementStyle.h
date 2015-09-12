@@ -45,12 +45,12 @@ public:
 		background = std::move(newBackground);
 	}
 
-	Border const* getBorderStyle() const
+	Border* getBorderStyle() const
 	{
 		return border.get();
 	}
 
-	Background const* getBackgroundStyle() const
+	Background* getBackgroundStyle() const
 	{
 		return background.get();
 	}
