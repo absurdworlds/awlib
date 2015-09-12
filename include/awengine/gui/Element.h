@@ -46,10 +46,7 @@ public:
 
 	virtual Vector2d<Coordinate> getAbsolutePosition()
 	{
-		if (!parent)
-			return getPosition();
-
-		return parent->getAbsolutePosition() + getPosition();
+		return absoluteRect.getUpperLeft();
 	}
 
 	virtual Coordinate getWidth() const
@@ -67,6 +64,16 @@ public:
 		return rect;
 	}
 
+	virtual Rect<Coordinate> getAbsoluteRect() const
+	{
+		// Absolute rect needs updating (element moved,
+		// parent moved, etc)
+		if (updateAbsoluteRect)
+			absoluteRect = parent->getAbsoluteRect() + getRect();
+
+		return absoluteRect;
+	}
+
 	virtual Style* getStyle() const
 	{
 		if (!style)
@@ -78,37 +85,44 @@ public:
 	virtual void setPosition(Vector2d<Coordinate> position)
 	{
 		rect.setPosition(position);
+		invalidate();
 	}
 
 	virtual void setWidth(Coordinate width)
 	{
 		rect.setWidth(width);
+		invalidate();
 	}
 
 	virtual void setHeight(Coordinate height)
 	{
 		rect.setHeight(height);
+		invalidate();
 	}
 
 	virtual void setRect(Rect<Coordinate> newRect)
 	{
 		rect = newRect;
+		invalidate();
 	}
 
 	void setParent(Element* newParent)
 	{
 		parent = newParent;
+		invalidate();
 	}
 
 	void removeParent()
 	{
 		parent = nullptr;
+		invalidate();
 	}
 
 	virtual void setStyle(Style* newStyle)
 	{
 		// TODO: if newStyle == parent->style, should it be reset to 0?
 		style = newStyle;
+		invalidate();
 	}
 
 
@@ -129,6 +143,10 @@ public:
 	 */
 	virtual bool onEvent(Event* event) = 0;
 
+	virtual void invalidate()
+	{
+		updateAbsoluteRect = true;
+	}
 protected:
 	Element()
 		: parent(nullptr)
@@ -136,6 +154,10 @@ protected:
 	}
 private:
 	Rect<Coordinate> rect;
+
+	bool updateAbsoluteRect;
+	mutable Rect<Coordinate> absoluteRect;
+
 	Style* style;
 	Element* parent;
 };
