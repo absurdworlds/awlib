@@ -28,6 +28,8 @@ public:
 	virtual void visit(Window* element);
 	virtual void visit(Widget* element);
 private:
+	void drawChildren(Canvas* element);
+
 	Engine& engine;
 };
 

@@ -33,9 +33,7 @@ void Drawer::visit(Canvas* element)
 	core::Logger::debug("[GUI] Drawer: Rendering Canvas");
 	//Skin* skin = element->getSkin();
 	//skin->drawCanvas(element->getRect());
-	for (auto& e : element) {
-		e.accept(*this);
-	}
+	drawChildren(element);
 }
 
 void Drawer::visit(Window* element)
@@ -56,6 +54,7 @@ void Drawer::visit(Window* element)
 
 	//if (element->hasTitleBar()) {
 	//}
+	drawChildren(element);
 }
 
 void Drawer::visit(Widget* element)
@@ -63,5 +62,11 @@ void Drawer::visit(Widget* element)
 	core::Logger::debug("[GUI] Drawer: Unknown Widget");
 }
 
+void Drawer::drawChildren(Canvas* element)
+{
+	for (auto& e : element) {
+		e.accept(*this);
+	}
+}
 } // namespace gui
 } // namespace awrts
