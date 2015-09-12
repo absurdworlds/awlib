@@ -39,9 +39,9 @@ private:
 	void drawRect(Rect<i32> r,
 	              graphics::Color c1, graphics::Color c2,
 	              graphics::Color c3, graphics::Color c4);
-	Vector3d<i32> getScreenSize() const
+	Vector2d<i32> getScreenSize() const
 	{
-		return Vector3d<i32>(driver->getScreenSize().Width,
+		return Vector2d<i32>(driver->getScreenSize().Width,
 		                     driver->getScreenSize().Height);
 	}
 
