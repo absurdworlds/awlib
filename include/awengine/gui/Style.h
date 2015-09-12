@@ -21,11 +21,15 @@ public:
 
 	void initDefaults();
 
-	ElementStyle& getElementStyle(std::string element)
+	ElementStyle* getElementStyle(std::string element)
 	{
 		auto found = properties.find(element);
 
-		return found->second;
+		if (found != properties.end()) {
+			return &found->second;
+		}
+
+		return nullptr;
 	}
 
 	void setElementStyle(std::string element, ElementStyle style)
