@@ -46,7 +46,7 @@ void Drawer::visit(Window* element)
 		return; //todo : default
 	}
 
-	engine.drawBorder(element->getRect(),
+	engine.drawBorder(element->getAbsoluteRect(),
 		          windowStyle->getBorderStyle());
 
 	engine.drawBackground(element->getClientRect(),
