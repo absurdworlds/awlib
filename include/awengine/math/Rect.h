@@ -82,12 +82,12 @@ public:
 
 	T getWidth() const
 	{
-		return upperLeft.x() - lowerRight.x();
+		return lowerRight.x() - upperLeft.x();
 	}
 
 	T getHeight() const
 	{
-		return upperLeft.y() - lowerRight.y();
+		return lowerRight.y() - upperLeft.y();
 	}
 
 	Vector2d<T> getUpperLeft() const
