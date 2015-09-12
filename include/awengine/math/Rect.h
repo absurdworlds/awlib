@@ -35,7 +35,6 @@ public:
 	{
 	}
 
-
 	T getWidth() const
 	{
 		return upperLeft.x() - lowerRight.x();
@@ -56,6 +55,12 @@ public:
 		return lowerRight;
 	}
 
+	//! Get center of the rectangle.
+	Vector2d<T> getCenter() const
+	{
+		return (lowerRight + upperLeft) / 2;
+	}
+
 	void setHeight(T height)
 	{
 		lowerRight.y() = height + upperLeft.y();
@@ -65,7 +70,7 @@ public:
 	{
 		lowerRight.y() = width + upperLeft.x();
 	}
-	
+
 	void setPosition(Vector2d<T> position)
 	{
 		lowerRight = position - upperLeft;
