@@ -281,13 +281,13 @@ public:
 	}
 
 	//! Get coordinate along X axis
-	T x () const
+	T const& x () const
 	{
 		return coord_[0];
 	}
 
 	//! Get coordinate along Y axis
-	T y () const
+	T const& y () const
 	{
 		return coord_[1];
 	}
