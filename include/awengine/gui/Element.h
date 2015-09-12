@@ -15,6 +15,9 @@
 #include <awengine/common/EventListener.h>
 #include <awengine/math/Rect.h>
 #include <awengine/gui/Coordinate.h>
+#include <awengine/gui/KeyboardEvent.h>
+#include <awengine/gui/MouseEvent.h>
+#include <awengine/gui/GUIEvent.h>
 
 namespace awrts {
 namespace gui {
