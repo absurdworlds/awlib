@@ -16,9 +16,10 @@ void Style::initDefaults()
 	windowStyle.setBorderStyle(std::make_unique<BorderOutward>(2,0xFFFFFFFF));
 	windowStyle.setBackgroundStyle(std::make_unique<BackgroundGradient>(
 	                  0xFF969696, 0xFF646464,
-			  0xFF969696, 0xFF646464));
+			  0xFF646464, 0xFF969696));
 			
 	properties["window"] = std::move(windowStyle);
+
 	/*
 	properties["border-color"] = hdf::Value(0xFFFFFFFF);
 	properties["background-color"] = hdf::Value(0xFF969696);
