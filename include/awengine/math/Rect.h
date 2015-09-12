@@ -79,5 +79,22 @@ public:
 
 };
 
+/*!
+ * Check if point is inside a rectangle.
+ * \param point
+ *      Point to test against.
+ * \return
+ *      true if point is within the rectangle,
+ *      false otherwise
+ */
+template <typename T>
+bool pointWithinRect(Vector2d<T> point, Rect<T> rect)
+{
+	bool isInside = (rect.upperLeft[0] <= point[0]  &&
+			 rect.upperLeft[1] <= point[1]  &&
+			 point[0] <= rect.lowerRight[0] &&
+			 point[1] <= rect.lowerRight[1]);
+	return isInside;
+}
 } // namespace awrts
 #endif//_awrts_Rect_
