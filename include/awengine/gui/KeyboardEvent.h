@@ -9,13 +9,12 @@
 #ifndef _awrts_KeyboardEvent_
 #define _awrts_KeyboardEvent_
 #include <awengine/common/types.h>
-#include <awengine/common/types.h>
+#include <awengine/common/Event.h>
 #include <awengine/gui/Keycodes.h>
 
 namespace awrts {
 namespace gui {
-struct KeyboardEvent : EventId<KeyboardEvent> {
-private:
+struct KeyboardEvent : public EventId<KeyboardEvent> {
 	KeyCode keyCode;
 	u32 Char;
 	bool pressedDown:1;

@@ -9,7 +9,7 @@
  */
 #ifndef _awrts_MouseEvent_
 #define _awrts_MouseEvent_
-#include <awengine/common/types.h>
+#include <awengine/math/Vector2d.h>
 #include <awengine/common/Event.h>
 
 namespace awrts {
@@ -20,7 +20,7 @@ enum MouseState {
 	MOUSE_MIDDLE = 0x04
 };
 
-class MouseEvent : EventId<MouseEvent> {
+class MouseEvent : public EventId<MouseEvent> {
 public:
 	enum Action {
 		Moved,
@@ -37,13 +37,12 @@ public:
 		LTripleClick,
 		RTripleClick,
 		MTripleClick
-	}
+	};
 
-private:
 	Action action;
-	i32 mouseX;
-	i32 mouseY;
-	f32 mouseZ; // wheel
+	Vector2d<f32> position;
+	Vector2d<i32> bounds;
+	f32 wheel;
 	u8 buttonStates;
 };
 } // namespace gui

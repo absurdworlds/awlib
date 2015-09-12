@@ -14,21 +14,18 @@
 namespace awrts {
 namespace gui {
 
-
-struct GUIEvent {
+struct GUIEvent : public EventId<GUIEvent>{
 public:
 	enum Action {
 		Unknown,
-		ElementClosed,
-		ElementHovered,
-		ElementLeft,
-		ElementFocused,
-		ElementUnfocused,
+		Closed,
+		Hovered,
+		Left,
+		Focused,
+		Unfocused,
+		FocusLost = Unfocused,
 	};
 
-private:
-	Element* caller;
-	Element* element;
 	Action action;
 };
 
