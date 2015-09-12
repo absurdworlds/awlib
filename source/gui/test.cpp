@@ -6,16 +6,35 @@
 #include <awengine/gui/Canvas.h>
 #include <awengine/gui/Window.h>
 #include <awengine/gui/Drawer.h>
+#include <awengine/core/Logger.h>
 
 #include "IrrEngine.h"
 
+#include <iostream>
+
 using namespace irr;
 namespace awrts {
+namespace core {
+core::Logger* core::Logger::globalLogger;
+}
+
+class Couter : public core::LogBook {
+public:
+	virtual void log(std::string msg, core::LogLevel level)
+	{
+		std::cout << msg << std::endl;
+	}
+};
+
 namespace gui {
 
 
 int guimain()
 {
+	Couter cou;
+	core::Logger* log = core::createLogger();
+	log->registerLog(&cou);
+	core::Logger::setGlobalLogger(log);
 	IrrlichtDevice * device = createDevice(video::EDT_OPENGL,
 			irr::core::dimension2d<u32>(800, 600));
 	auto driver = device->getVideoDriver();
