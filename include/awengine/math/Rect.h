@@ -35,20 +35,49 @@ public:
 	{
 	}
 
-	Rect operator + (Rect const& other) const
+
+	Rect<T>& operator += (Rect<T> const& other)
 	{
-		Rect tmp = *this;
+		upperLeft  += other.upperLeft;
+		lowerRight += other.lowerRight;
+		return *this;
+	}
+
+	Rect<T> operator + (Rect<T> const& other) const
+	{
+		Rect<T> tmp = *this;
 		tmp.upperLeft  += other.upperLeft;
 		tmp.lowerRight += other.lowerRight;
 		return tmp;
 	}
 
-	Rect operator - (Rect const& other) const
+	Rect<T>& operator -= (Rect<T> const& other)
 	{
-		Rect tmp = *this;
+		upperLeft  -= other.upperLeft;
+		lowerRight -= other.lowerRight;
+		return *this;
+	}
+
+	Rect<T> operator - (Rect<T> const& other) const
+	{
+		Rect<T> tmp = *this;
 		tmp.upperLeft  -= other.upperLeft;
 		tmp.lowerRight -= other.lowerRight;
 		return tmp;
+	}
+
+	Rect<T>& operator += (Vector2d<T> const& vec)
+	{
+		upperLeft  += vec;
+		lowerRight += vec;
+		return *this;
+	}
+
+	Rect<T>& operator -= (Vector2d<T> const& vec)
+	{
+		upperLeft  -= vec;
+		lowerRight -= vec;
+		return *this;
 	}
 
 	T getWidth() const
