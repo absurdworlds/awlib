@@ -1,5 +1,6 @@
 RootPath = ../..
-Sources = test.cpp Canvas.cpp Drawer.cpp Window.cpp IrrEngine.cpp Style.cpp
+Sources = test.cpp Canvas.cpp Drawer.cpp Window.cpp Style.cpp \
+	  IrrEngine.cpp InputManager.cpp
 Defines = HR_MODULE_GUI
 Libraries = Irrlicht awcore
 ProjectName = awgui
