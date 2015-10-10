@@ -118,8 +118,8 @@ public:
 
 	void setPosition(Vector2d<T> position)
 	{
-		lowerRight = position - upperLeft;
-		upperLeft = position;
+		lowerRight += position - upperLeft;
+		upperLeft   = position;
 	}
 
 	//! Coordinates of upper left corner
