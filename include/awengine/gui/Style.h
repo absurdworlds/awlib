@@ -11,11 +11,12 @@
 #include <string>
 #include <map>
 
+#include <awengine/gui/gui.h>
 #include <awengine/gui/style/ElementStyle.h>
 
 namespace awrts {
 namespace gui {
-class Style {
+class AW_GUI_EXP Style {
 public:
 	virtual ~Style() = default;
 
