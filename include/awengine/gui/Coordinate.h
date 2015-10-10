@@ -30,29 +30,30 @@ struct Coordinate {
 	Coordinate operator +(Coordinate const& other) const
 	{
 		return Coordinate(fraction + other.fraction,
-		                  offset + other.offset);
+		                  offset   + other.offset);
 	}
 	Coordinate operator -(Coordinate const& other) const
 	{
 		return Coordinate(fraction - other.fraction,
-		                  offset - other.offset);
+		                  offset   - other.offset);
 	}
 	Coordinate operator *(Coordinate const& other) const
 	{
 		return Coordinate(fraction * other.fraction,
-		                  offset * other.offset);
+		                  offset   * other.offset);
 	}
 	Coordinate operator /(Coordinate const& other) const
 	{
 		return Coordinate(fraction / other.fraction,
-		                  offset / other.offset);
+		                  offset   / other.offset);
 	}
-	Coordinate operator +(i32 v) const
+
+	Coordinate operator + (i32 v) const
 	{
 		return Coordinate(fraction,
 		                  offset + v);
 	}
-	Coordinate operator -(i32 v) const
+	Coordinate operator - (i32 v) const
 	{
 		return Coordinate(fraction,
 		                  offset - v);
@@ -61,19 +62,19 @@ struct Coordinate {
 	Coordinate& operator +=(Coordinate const& other)
 	{
 		fraction += other.fraction;
-		offset += other.offset;
+		offset   += other.offset;
 		return *this;
 	}
 	Coordinate& operator -=(Coordinate const& other)
 	{
 		fraction -= other.fraction;
-		offset -= other.offset;
+		offset   -= other.offset;
 		return *this;
 	}
 	Coordinate& operator *=(Coordinate const& other)
 	{
 		fraction *= other.fraction;
-		offset *= other.offset;
+		offset   *= other.offset;
 		return *this;
 	}
 	Coordinate& operator /=(Coordinate const& other)
