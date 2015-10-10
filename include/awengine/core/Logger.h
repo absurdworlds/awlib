@@ -10,10 +10,10 @@
 #define _awrts_Logger_
 #include <string>
 
-#include <awrts/common/config.h>
-#include <awrts/common/macro.h>
+#include <awengine/config/config.h>
+#include <awengine/utility/macro.h>
 
-#include <awrts/core/core.h>
+#include <awengine/core/core.h>
 
 namespace awrts {
 namespace core {
@@ -109,7 +109,7 @@ private:
 };
 
 //! Create a logger instance
-HR_CORE_EXP Logger* createLogger();
+AW_CORE_EXP Logger* createLogger();
 
 } // namespace core
 } // namespace awrts
