@@ -138,7 +138,7 @@ bool Canvas::processEvent(MouseEvent* event)
 		}
 	case MouseEvent::LButtonUp:
 				break;
-	case MouseEvent::RButtonDown: {
+	case MouseEvent::LButtonDown: {
 			if (active == element)
 				break;
 
