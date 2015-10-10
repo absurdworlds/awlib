@@ -18,6 +18,7 @@
 #include <awengine/gui/KeyboardEvent.h>
 #include <awengine/gui/MouseEvent.h>
 #include <awengine/gui/GUIEvent.h>
+#include <awengine/core/Logger.h>
 
 namespace awrts {
 namespace gui {
@@ -188,7 +189,6 @@ private:
 		temp.lowerRight.y() += height * lry.fraction + lry.offset;
 
 		absoluteRect = temp;
-
 		updateAbsoluteRect = false;
 	}
 
