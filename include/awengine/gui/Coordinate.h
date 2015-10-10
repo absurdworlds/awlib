@@ -59,6 +59,17 @@ struct Coordinate {
 		                  offset - v);
 	}
 
+	Coordinate operator * (f32 v) const
+	{
+		return Coordinate(fraction * v,
+		                  offset   * v);
+	}
+	Coordinate operator / (f32 v) const
+	{
+		return Coordinate(fraction / v,
+		                  offset   / v);
+	}
+
 	Coordinate& operator +=(Coordinate const& other)
 	{
 		fraction += other.fraction;
@@ -80,7 +91,7 @@ struct Coordinate {
 	Coordinate& operator /=(Coordinate const& other)
 	{
 		fraction /= other.fraction;
-		offset /= other.offset;
+		offset   /= other.offset;
 		return *this;
 	}
 	Coordinate& operator +=(i32 v)
