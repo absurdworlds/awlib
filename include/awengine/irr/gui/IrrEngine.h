@@ -8,7 +8,6 @@
  */
 #ifndef _awrts_gui_irr_skin_
 #define _awrts_gui_irr_skin_
-#include <Irrlicht/rect.h>
 #include <awengine/graphics/Color.h>
 #include <awengine/gui/Canvas.h>
 #include <awengine/gui/Widget.h>
@@ -33,6 +32,7 @@ public:
 
 	virtual void drawBorder(Rect<Coordinate> const& rect, Border* style);
 	virtual void drawBackground(Rect<Coordinate> const& rect, Background* style);
+
 private:
 	void drawSolidBorder(Rect<i32> rect, BorderPlain* style);
 	void drawRect(Rect<i32> r, graphics::Color c);
