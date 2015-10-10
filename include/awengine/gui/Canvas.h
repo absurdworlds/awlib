@@ -80,7 +80,7 @@ public:
 
 		iterator& operator--()
 		{
-			++base;
+			--base;
 			return *this;
 		}
 
@@ -108,6 +108,8 @@ public:
 		base_t base;
 	};
 
+	typedef std::reverse_iterator<iterator> reverse_iterator;
+
 	virtual iterator getFirstChild() const
 	{
 		return iterator(std::begin(elements));
@@ -115,6 +117,15 @@ public:
 	virtual iterator getLastChild() const
 	{
 		return iterator(std::end(elements));
+	}
+
+	virtual reverse_iterator rbegin() const
+	{
+		return reverse_iterator(std::rbegin(elements));
+	}
+	virtual reverse_iterator rend() const
+	{
+		return reverse_iterator(std::rend(elements));
 	}
 
 	iterator findElement(Element* e) const;
@@ -150,6 +161,15 @@ inline Canvas::iterator end(Canvas* canvas)
 	return canvas->getLastChild();
 }
 
+inline auto rbegin(Canvas& canvas)
+{
+	return Canvas::reverse_iterator(canvas.getLastChild());
+}
+
+inline auto rend(Canvas& canvas)
+{
+	return Canvas::reverse_iterator(canvas.getFirstChild());
+}
 } // namespace gui
 } // namespace awrts
 #endif //_awrts_GUI_canvas_
