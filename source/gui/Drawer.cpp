@@ -6,9 +6,10 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#include <awengine/utility/macro.h>
 #include <awengine/core/Logger.h>
 #include <awengine/graphics/Color.h>
+
+#include <awengine/utility/range_adaptors.h>
 
 #include <awengine/gui/Drawer.h>
 #include <awengine/gui/Canvas.h>
@@ -25,12 +26,10 @@ Drawer::~Drawer()
 
 void Drawer::visit(Element* element)
 {
-	core::Logger::debug("[GUI] Drawer: Unknown Element");
 }
 
 void Drawer::visit(Canvas* element)
 {
-	core::Logger::debug("[GUI] Drawer: Rendering Canvas");
 	//Skin* skin = element->getSkin();
 	//skin->drawCanvas(element->getRect());
 	drawChildren(element);
@@ -38,11 +37,10 @@ void Drawer::visit(Canvas* element)
 
 void Drawer::visit(Window* element)
 {
-	core::Logger::debug("[GUI] Drawer: Rendering Window");
 	Style* style = element->getStyle();
 	auto windowStyle = style->getElementStyle("window");
 	if (!windowStyle) {
-		core::Logger::debug("[GUI] Drawer: Can't find style");
+		// core::Logger::debug("[GUI] Drawer: Can't find style");
 		return; //todo : default
 	}
 
@@ -62,6 +60,7 @@ void Drawer::visit(Widget* element)
 	core::Logger::debug("[GUI] Drawer: Unknown Widget");
 }
 
+// TODO: replace pointer with reference
 void Drawer::drawChildren(Canvas* element)
 {
 	for (auto& e : element) {
