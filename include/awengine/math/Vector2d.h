@@ -20,30 +20,26 @@ class Vector2d {
 public:
 	//! Default constructor. Constructs zero vector.
 	Vector2d()
-		: coord_(),
-		x(coord_[0]), y(coord_[1])
+		: coord_()
 	{
 	}
 
 	//! Construct vector with same both coordinates 
 	explicit Vector2d(T v)
-		: coord_({v, v}),
-		x(coord_[0]), y(coord_[1])
+		: coord_({v, v})
 	{
 	}
 
 	//! Construct vector with individual coodrinates
 	Vector2d(T x, T y)
-		: coord_({x, y}),
-		x(coord_[0]), y(coord_[1])
+		: coord_({x, y})
 	{
 	}
 
 
 	//! Copy constructor
 	Vector2d(Vector2d<T> const& other)
-		: coord_({other[0], other[1]}),
-		x(coord_[0]), y(coord_[1])
+		: coord_({other[0], other[1]})
 	{
 	}
 
@@ -66,13 +62,25 @@ public:
 
 	Vector2d<T> operator + (Vector2d<T> const& other) const
 	{
-		return Vector2d<T>(x + other[0], y + other[1]);
+		return Vector2d<T>(coord_[0] + other[0], coord_[1] + other[1]);
 	}
 
 	Vector2d<T>& operator += (Vector2d<T> const& other)
 	{
 		coord_[0] += other[0];
 		coord_[1] += other[1];
+		return *this;
+	}
+
+	Vector2d<T> operator + (T const v) const
+	{
+		return Vector2d<T>(coord_[0] + v, coord_[1] + v);
+	}
+
+	Vector2d<T>& operator += (T const v)
+	{
+		coord_[0] += v;
+		coord_[1] += v;
 		return *this;
 	}
 
@@ -118,14 +126,14 @@ public:
 		return *this;
 	}
 
-	Vector2d<T> operator * (const T v) const
+	Vector2d<T> operator * (T const v) const
 	{ 
 		return Vector2d<T>(
 			coord_[0] * v,
 			coord_[1] * v);
 	}
 
-	Vector2d<T>& operator *= (const T v)
+	Vector2d<T>& operator *= (T const v)
 	{
 		coord_[0] *= v;
 		coord_[1] *= v;
@@ -260,9 +268,29 @@ public:
 		array[1] = coord_[1];
 	}
 
-	//! Temporary hack for backward compatibility
-	T& x;
-	T& y;
+	//! Get coordinate along X axis
+	T& x ()
+	{
+		return coord_[0];
+	}
+
+	//! Get coordinate along Y axis
+	T& y ()
+	{
+		return coord_[1];
+	}
+
+	//! Get coordinate along X axis
+	T const& x () const
+	{
+		return coord_[0];
+	}
+
+	//! Get coordinate along Y axis
+	T const& y () const
+	{
+		return coord_[1];
+	}
 private:
 	//! Coordinates of the vector
 	std::array<T, 2> coord_;

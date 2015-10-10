@@ -6,20 +6,22 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_GUIWindow_
-#define _awrts_GUIWindow_
-
-#include <awrts/gui/GUIElement.h>
+#ifndef _awrts_KeyboardEvent_
+#define _awrts_KeyboardEvent_
+#include <awengine/common/types.h>
+#include <awengine/common/Event.h>
+#include <awengine/gui/Keycodes.h>
 
 namespace awrts {
 namespace gui {
-
-//! GUI window
-class GUIWindow : public GUIElement {
-public:
-	virtual ~GUIWindow() {};
+struct KeyboardEvent : public EventId<KeyboardEvent> {
+	KeyCode keyCode;
+	u32 Char;
+	bool pressedDown:1;
+	bool shift:1;
+	bool control:1;
 };
 
 } // namespace gui
 } // namespace awrts
-#endif //_awrts_GUIWindow_
+#endif //_awrts_KeyboardEvent_

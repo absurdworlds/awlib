@@ -17,13 +17,12 @@
  */
 #ifndef _awrts_gui_
 #define _awrts_gui_
+#include <awengine/config/visibility.h>
 
-#include <awrts/common/visibility.h>
-
-#ifdef HR_MODULE_GUI
-	#define HR_GUI_EXP HR_EXPORT
+#ifdef AW_MODULE_GUI
+	#define AW_GUI_EXP AW_EXPORT
 #else
-	#define HR_GUI_EXP HR_IMPORT
+	#define AW_GUI_EXP AW_IMPORT
 #endif
 
 // Namespace descriptions for Doxygen
