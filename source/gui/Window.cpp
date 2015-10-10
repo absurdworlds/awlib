@@ -66,17 +66,6 @@ void Window::recalculateClientRect() const
 	clientRect.upperLeft  += borderWidth;
 	clientRect.lowerRight -= borderWidth;
 
-	core::Logger::debug("[GUI] Window: Client rect: (" + 
-			std::to_string(clientRect.upperLeft.x().fraction) + ", " +
-			std::to_string(clientRect.upperLeft.y().fraction) + ", " +
-			std::to_string(clientRect.lowerRight.x().fraction) + ", " +
-			std::to_string(clientRect.lowerRight.y().fraction) + ").");
-	core::Logger::debug("[GUI] Window: Client rect: (" + 
-			std::to_string(clientRect.upperLeft.x().offset) + ", " +
-			std::to_string(clientRect.upperLeft.y().offset) + ", " +
-			std::to_string(clientRect.lowerRight.x().offset) + ", " +
-			std::to_string(clientRect.lowerRight.y().offset) + ").");
-
 	updateClientRect = false;
 }
 
