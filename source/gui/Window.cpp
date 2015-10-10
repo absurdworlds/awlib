@@ -69,22 +69,98 @@ void Window::recalculateClientRect() const
 	updateClientRect = false;
 }
 
+inline Vector2d<Coordinate> localToWorld(
+               Vector2d<Coordinate> const& local,
+	       Rect<Coordinate> const& parent)
+{
+	auto width  = parent.getWidth();
+	auto height = parent.getHeight();
+	auto temp = parent.upperLeft;
+
+	temp.x() +=  width * local.x().fraction + local.x().offset;
+	temp.y() += height * local.y().fraction + local.y().offset;
+
+	return temp;
+}
+
+inline Coordinate worldToLocal(
+		Coordinate const& world,
+		Coordinate const& origin,
+		Coordinate const& width)
+{
+	Coordinate temp = world - origin;
+	if (math::equals(width.fraction, 0.0f)) {
+		return temp;
+	} else if(math::equals(width.offset,0.0f)) {
+		temp.fraction /= width.fraction;
+		return temp;
+	}
+
+	temp /= width;
+	i32 offset = width.offset * (temp.offset - temp.fraction);
+
+	temp.offset = offset;
+	return temp;
+}
+
+inline Vector2d<Coordinate> worldToLocal(
+               Vector2d<Coordinate> const& world,
+	       Rect<Coordinate> const& parent)
+{
+	auto width  = parent.getWidth();
+	auto height = parent.getHeight();
+
+	Vector2d<Coordinate> temp(0,0);
+	temp.x() = worldToLocal(world.x(), parent.upperLeft.x(), width);
+	temp.y() = worldToLocal(world.y(), parent.upperLeft.y(), height);
+
+	return temp;
+}
+
+bool Window::mouseMoved(MouseEvent* event)
+{
+	if (!dragging)
+		return false;
+
+	auto const& mousePos = event->position;
+	auto const& bounds = event->bounds;
+	auto parentRect = getParent()->getAbsoluteRect();
+
+	Vector2d<Coordinate> pos(mousePos.x(), mousePos.y());
+	pos   = worldToLocal(pos, parentRect);
+
+	Vector2d<Coordinate> start(mouseStart.x(), mouseStart.y());
+	start = worldToLocal(start, parentRect);
+
+	mouseStart = mousePos;
+
+	Vector2d<Coordinate> delta = pos - start;
+
+	auto oldPos = getPosition();
+	auto newPos = oldPos + delta;
+
+	setPosition(newPos);
+
+	auto absoluteRect = toPixels(getAbsoluteRect(), bounds);
+	auto absoluteParentRect = toPixels(parentRect, bounds);
+
+	if (absoluteRect.upperLeft.x() < absoluteParentRect.upperLeft.x() ||
+	    absoluteRect.upperLeft.y() < absoluteParentRect.upperLeft.y() ||
+	    absoluteRect.lowerRight.x() > absoluteParentRect.lowerRight.x() ||
+	    absoluteRect.lowerRight.y() > absoluteParentRect.lowerRight.y()) {
+		setPosition(oldPos);
+		return true;
+	}
+	return true;
+}
 
 bool Window::processEvent(MouseEvent* event)
 {
-	Vector2d<f32> mousePos = event->position;
 	switch (event->action) {
-	case MouseEvent::Moved: {
-			if (!dragging)
-				break;
-			Vector2d<f32> delta = mouseStart - mousePos;
-			mouseStart = mousePos;
-			setPosition(getPosition() + 
-				    Vector2d<Coordinate>(delta[0], delta[1]));
-			return true;
-		}
+	case MouseEvent::Moved:
+		return mouseMoved(event);
 	case MouseEvent::LButtonDown:
-		mouseStart = mousePos;
+		mouseStart = event->position;
 		dragging = isDraggable;
 		return true;
 	case MouseEvent::LButtonUp:
