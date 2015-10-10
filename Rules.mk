@@ -35,6 +35,7 @@ endif
 BuildDir = $(RootPath)/build/$(ProjectName)
 Includes = -I$(RootPath)/include
 Objects = $(patsubst %.cpp, $(BuildDir)/%.o, $(Sources))
+Depends = $(Objects:.o=.d)
 ProjectDefines = $(addprefix -D,$(Defines))
 ProjectDependencies = $(addprefix -l,$(Libraries))
 
@@ -61,6 +62,12 @@ CPPFLAGS = $(ProjectDefines) $(Includes) $(ExtraIncludePaths)
 LDFLAGS  = -Wl,-rpath-link,$(RootPath)/lib,-R,'$$ORIGIN/../lib' -L$(RootPath)/lib
 LDFLAGS += $(ExtraLibraryPaths)
 LDFLAGS += $(ProjectDependencies)
+
+# Generate dependency files
+ifeq ($(CONFIG_MAKE_DEPENDS),true)
+CCFLAGS  += -MMD -MP
+CXXFLAGS += -MMD -MP
+endif
 
 
 # Build rules
@@ -97,3 +104,7 @@ endif
 .PHONY : clean
 clean:
 	-rm $(Objects) $(BuildDir)/$(OutputName)
+
+ifeq ($(CONFIG_MAKE_DEPENDS),true)
+-include $(Depends)
+endif
