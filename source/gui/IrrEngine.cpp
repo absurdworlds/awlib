@@ -17,7 +17,7 @@
 #include <awengine/gui/Canvas.h>
 #include <awengine/gui/Widget.h>
 #include <awengine/gui/Drawer.h>
-#include "IrrEngine.h"
+#include <awengine/irr/gui/IrrEngine.h>
 
 namespace awrts {
 namespace gui {
@@ -139,15 +139,15 @@ void IrrEngine::drawBackground(Rect<Coordinate> const& rect, Background* style)
 {
 	switch (style->style()) {
 	case Background::None:
-		core::Logger::debug("[GUI] IrrEngine: Drawing empty bg");
+		//core::Logger::debug("[GUI] IrrEngine: Drawing empty bg");
 		return;
 	case Background::Solid:
-		core::Logger::debug("[GUI] IrrEngine: Drawing solid bg");
+		//core::Logger::debug("[GUI] IrrEngine: Drawing solid bg");
 		drawRect(toPixels(rect, getScreenSize()),
 		                  style->solid()->color());
 		break;
 	case Background::Gradient: {
-			core::Logger::debug("[GUI] IrrEngine: Drawing gradient bg");
+			//core::Logger::debug("[GUI] IrrEngine: Drawing gradient bg");
 			auto s = style->gradient();
 			auto c1 = s->color(Corner::TopLeft);
 			auto c2 = s->color(Corner::BottomLeft);
@@ -174,11 +174,11 @@ void IrrEngine::drawRect(Rect<i32> r,
 	                 graphics::Color c1, graphics::Color c2,
 	                 graphics::Color c3, graphics::Color c4)
 {
-	core::Logger::debug("[GUI] IrrEngine: Drawing rect: (" + 
+	/*core::Logger::debug("[GUI] IrrEngine: Drawing rect: (" + 
 			std::to_string(r.upperLeft.x()) + ", " +
 			std::to_string(r.upperLeft.y()) + ", " +
 			std::to_string(r.lowerRight.x()) + ", " +
-			std::to_string(r.lowerRight.y()) + ").");
+			std::to_string(r.lowerRight.y()) + ").");*/
 	auto rect = toIrr(r);
 	auto lu = toIrr(c1);
 	auto ld = toIrr(c2);

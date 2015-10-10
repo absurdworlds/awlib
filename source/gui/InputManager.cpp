@@ -8,115 +8,88 @@
  */
 #include <Irrlicht/IrrlichtDevice.h>
 
-#include <awrts/gui/UserInputReceiver.h>
+#include <awengine/common/EventListener.h>
 
-#include "VideoManager.h"
-
-#include "InputManager.h"
+#include <awengine/irr/gui/InputManager.h>
 
 namespace awrts {
 namespace gui {
-
-void convertEvent(const irr::SEvent& irrEvent, InputEvent& hrgEvent) {
+namespace impl {
+bool InputManager::convertEvent(const irr::SEvent& irrEvent, Event*& event) {
 	switch(irrEvent.EventType) {
-	case irr::EET_MOUSE_INPUT_EVENT:
-		hrgEvent.type = InputEventType::MouseEvent;
-		hrgEvent.mouse.X = irrEvent.MouseInput.X;
-		hrgEvent.mouse.Y = irrEvent.MouseInput.Y;
-		hrgEvent.mouse.wheel = irrEvent.MouseInput.Wheel;
-		hrgEvent.mouse.buttonStates = irrEvent.MouseInput.ButtonStates;
+	case irr::EET_MOUSE_INPUT_EVENT: {
+		auto mevent = new MouseEvent();
+		auto screen = device->getVideoDriver()->getScreenSize();
+		mevent->position = Vector2d<f32>(f32(irrEvent.MouseInput.X) / screen.Width,
+		                                 f32(irrEvent.MouseInput.Y) / screen.Height);
+		mevent->bounds = Vector2d<i32>(screen.Width, screen.Height);
+		mevent->wheel = irrEvent.MouseInput.Wheel;
+		mevent->buttonStates = irrEvent.MouseInput.ButtonStates;
 
 		switch(irrEvent.MouseInput.Event) {
 		case irr::EMIE_LMOUSE_PRESSED_DOWN:
-			hrgEvent.mouse.event = MouseEventType::LButtonDown;
+			mevent->action = MouseEvent::LButtonDown;
 			break;
 		case irr::EMIE_RMOUSE_PRESSED_DOWN:
-			hrgEvent.mouse.event = MouseEventType::RButtonDown;
+			mevent->action = MouseEvent::RButtonDown;
 			break;
 		case irr::EMIE_MMOUSE_PRESSED_DOWN:
-			hrgEvent.mouse.event = MouseEventType::MButtonDown;
+			mevent->action = MouseEvent::MButtonDown;
 			break;
 		case irr::EMIE_LMOUSE_LEFT_UP:
-			hrgEvent.mouse.event = MouseEventType::LButtonUp;
+			mevent->action = MouseEvent::LButtonUp;
 			break;
 		case irr::EMIE_RMOUSE_LEFT_UP:
-			hrgEvent.mouse.event = MouseEventType::RButtonUp;
+			mevent->action = MouseEvent::RButtonUp;
 			break;
 		case irr::EMIE_MMOUSE_LEFT_UP:
-			hrgEvent.mouse.event = MouseEventType::MButtonUp;
+			mevent->action = MouseEvent::MButtonUp;
 			break;
 		case irr::EMIE_LMOUSE_DOUBLE_CLICK:
-			hrgEvent.mouse.event = MouseEventType::LDoubleClick;
+			mevent->action = MouseEvent::LDoubleClick;
 			break;
 		case irr::EMIE_RMOUSE_DOUBLE_CLICK:
-			hrgEvent.mouse.event = MouseEventType::RDoubleClick;
+			mevent->action = MouseEvent::RDoubleClick;
 			break;
 		case irr::EMIE_MMOUSE_DOUBLE_CLICK:
-			hrgEvent.mouse.event = MouseEventType::MDoubleClick;
+			mevent->action = MouseEvent::MDoubleClick;
 			break;
 		case irr::EMIE_LMOUSE_TRIPLE_CLICK:
-			hrgEvent.mouse.event = MouseEventType::LTripleClick;
+			mevent->action = MouseEvent::LTripleClick;
 			break;
 		case irr::EMIE_RMOUSE_TRIPLE_CLICK:
-			hrgEvent.mouse.event = MouseEventType::RTripleClick;
+			mevent->action = MouseEvent::RTripleClick;
 			break;
 		case irr::EMIE_MMOUSE_TRIPLE_CLICK:
-			hrgEvent.mouse.event = MouseEventType::MTripleClick;
+			mevent->action = MouseEvent::MTripleClick;
 			break;
 		case irr::EMIE_MOUSE_MOVED:
-			hrgEvent.mouse.event = MouseEventType::Moved;
+			mevent->action = MouseEvent::Moved;
 			break;
 		case irr::EMIE_MOUSE_WHEEL:
-			hrgEvent.mouse.event = MouseEventType::Wheel;
+			mevent->action = MouseEvent::Wheel;
 			break;
 		}
-		break;
+		event = mevent;
+		return true;
+	}
 	case irr::EET_KEY_INPUT_EVENT:
+#if 0 // Ignore keyboard event - I don't really need it while testing
 		hrgEvent.type = InputEventType::KeyboardEvent;
 		hrgEvent.key.Char = irrEvent.KeyInput.Char;
 		hrgEvent.key.keyCode = KeyCode(irrEvent.KeyInput.Key);
 		hrgEvent.key.pressedDown = irrEvent.KeyInput.PressedDown;
 		hrgEvent.key.control = irrEvent.KeyInput.Control;
 		hrgEvent.key.shift = irrEvent.KeyInput.Shift;
-		break;
-	case irr::EET_GUI_EVENT:
-		hrgEvent.type = InputEventType::GUIEvent;
-		if(irrEvent.GUIEvent.Caller) {
-			hrgEvent.gui.caller = irrEvent.GUIEvent.Caller->getID();
-		} else {
-			hrgEvent.gui.caller = 0;
-		}
-		if(irrEvent.GUIEvent.Element) {
-			hrgEvent.gui.element = irrEvent.GUIEvent.Element->getID();
-		} else {
-			hrgEvent.gui.element = 0;
-		}
-		switch(irrEvent.GUIEvent.EventType) {
-		case irr::gui::EGET_ELEMENT_CLOSED:
-			hrgEvent.gui.event = gui::GUIEventType::ElementClosed;
-			break;
-		case irr::gui::EGET_ELEMENT_HOVERED:
-			hrgEvent.gui.event = gui::GUIEventType::ElementHovered;
-			break;
-		case irr::gui::EGET_ELEMENT_LEFT:
-			hrgEvent.gui.event = gui::GUIEventType::ElementLeft;
-			break;
-		case irr::gui::EGET_ELEMENT_FOCUSED:
-			hrgEvent.gui.event = gui::GUIEventType::ElementFocused;
-			break;
-		case irr::gui::EGET_ELEMENT_FOCUS_LOST:
-			hrgEvent.gui.event = gui::GUIEventType::ElementUnfocused;
-			break;
-		default:
-			hrgEvent.gui.event = gui::GUIEventType::Unknown;
-		}
-		break;
+		return true;
+#endif
 	default:
-		hrgEvent.type = InputEventType::UnknownEvent;
+		return false;
 	}
 }
 
 InputManager::InputManager(irr::IrrlichtDevice* device)
+	: device(device)
 {
 	device->setEventReceiver(this);
 	cursor_ = device->getCursorControl();
@@ -124,35 +97,32 @@ InputManager::InputManager(irr::IrrlichtDevice* device)
 
 bool InputManager::OnEvent(const irr::SEvent& event)
 {
-	InputEvent hrEvent; 
-	convertEvent(event, hrEvent);
+	Event* hrEvent; 
+	bool convert = convertEvent(event, hrEvent);
 
-	if(hrEvent.type == InputEventType::UnknownEvent) {
+	if(!convert)
 		return false;
-	}
 
-	for(std::forward_list<UserInputReceiver*>::iterator it = receivers_.begin(); it != receivers_.end(); ++it) {
-		if((*it)->isEnabled()) {
-			(*it)->onUserInput(hrEvent);
-		}
+	for(auto listener : receivers_) {
+		listener->onEvent(hrEvent);
 	}
 
 	// return false, so Irrlicht processes other events
 	return false;
 }
 
-bool InputManager::registerReceiver(UserInputReceiver* receiver)
+bool InputManager::registerReceiver(EventListener* receiver)
 {
 	receivers_.push_front(receiver);
 	return true;
 }
 
-bool InputManager::unregisterReceiver(UserInputReceiver* receiver)
+bool InputManager::unregisterReceiver(EventListener* receiver)
 {
 	//remove from mReceivers
 
 	return true;
 }
-
+} // namespace impl
 } // namespace io
 } // namespace awrts
