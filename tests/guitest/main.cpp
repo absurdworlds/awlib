@@ -7,8 +7,8 @@
 #include <awengine/gui/Drawer.h>
 #include <awengine/core/Logger.h>
 
-#include "IrrEngine.h"
-#include "InputManager.h"
+#include <awengine/irr/gui/IrrEngine.h>
+#include <awengine/irr/gui/InputManager.h>
 
 #include <iostream>
 
