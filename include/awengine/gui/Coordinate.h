@@ -116,6 +116,17 @@ struct Coordinate {
 	f32 offset;
 };
 
+inline Vector2d<i32> toPixels(Vector2d<Coordinate> const& vec,
+                          Vector2d<i32> const& screen)
+{
+	Vector2d<i32> tmp;
+	tmp.x()  = vec.x().fraction * screen.x();
+	tmp.x() += vec.x().offset;
+	tmp.y()  = vec.y().fraction * screen.y();
+	tmp.y() += vec.y().offset;
+	return tmp;
+}
+
 inline Rect<i32> toPixels(Rect<Coordinate> const& rect,
                           Vector2d<i32> const& screen)
 {
