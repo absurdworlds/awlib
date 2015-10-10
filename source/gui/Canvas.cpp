@@ -139,6 +139,8 @@ bool Canvas::processEvent(MouseEvent* event)
 	case MouseEvent::LButtonUp:
 				break;
 	case MouseEvent::LButtonDown: {
+			// If element under cursor is current active
+			// element, then we don't need to send any events.
 			if (active == element)
 				break;
 
