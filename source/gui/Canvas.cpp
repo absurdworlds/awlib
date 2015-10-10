@@ -137,13 +137,17 @@ bool Canvas::processEvent(MouseEvent* event)
 			break;
 		}
 	case MouseEvent::LButtonUp:
+				break;
 	case MouseEvent::RButtonDown: {
+			if (active == element)
+				break;
+
 			GUIEvent focusedEvent;
-			focusedEvent.action = GUIEvent::Unfocused;
-
-			active->onEvent(&focusedEvent);
-			active = nullptr;
-
+			if (active) {
+				focusedEvent.action = GUIEvent::Unfocused;
+				active->onEvent(&focusedEvent);
+				active = nullptr;
+			}
 			if (element) {
 				focusedEvent.action = GUIEvent::Focused;
 				element->onEvent(&focusedEvent);
