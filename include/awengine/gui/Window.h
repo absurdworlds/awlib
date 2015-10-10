@@ -24,6 +24,11 @@ public:
 
 	virtual Rect<Coordinate> getClientRect() const;
 
+	virtual void setDraggable(bool draggable)
+	{
+		isDraggable = draggable;
+	}
+
 	virtual void invalidate()
 	{
 		Canvas::invalidate();
@@ -33,6 +38,7 @@ protected:
 	virtual void recalculateClientRect() const;
 private:
 	bool processEvent(MouseEvent* event);
+	bool mouseMoved(MouseEvent* event);
 	//bool processEvent(KeyboardEvent* event);
 	bool processEvent(GUIEvent* event);
 
