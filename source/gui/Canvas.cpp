@@ -6,6 +6,7 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
+#include <awengine/utility/range_adaptors.h>
 #include <awengine/gui/Canvas.h>
 #include <awengine/gui/Visitor.h>
 #include <awengine/core/Logger.h>
@@ -97,7 +98,7 @@ void Canvas::accept(Visitor& visitor)
 
 Element* Canvas::getElementFromPoint(Vector2d<i32> point, Vector2d<i32> bounds) {
 	Element* element = nullptr;
-	for (auto& e : elements) {
+	for (auto& e : make_reverse(elements)) {
 		bool within = pointWithinElement(point, *e, bounds);
 		if (within) {
 			element = e.get();
