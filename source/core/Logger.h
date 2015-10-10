@@ -10,7 +10,7 @@
 #define _awrts_Logger_impl_
 #include <vector>
 
-#include <awrts/core/Logger.h>
+#include <awengine/core/Logger.h>
 
 namespace awrts {
 namespace core {
@@ -27,7 +27,7 @@ public:
 	virtual void registerLog(LogBook* log);
 	virtual void unregisterLog(LogBook* log);
 private:
-	std::vector<LogBook*> logs_;
+	std::vector<LogBook*> logs;
 };
 } // namespace impl_
 } // namespace core

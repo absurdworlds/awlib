@@ -6,6 +6,7 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
+#include <algorithm>
 #include "Logger.h"
 
 namespace awrts {
@@ -27,14 +28,14 @@ Logger::~Logger()
 
 void Logger::push(std::string const& msg, LogLevel logLevel)
 {
-	for(auto it = logs_.begin(); it != logs_.end(); ++it) {
+	for(auto it = logs.begin(); it != logs.end(); ++it) {
 		(*it)->log(msg, logLevel);
 	}
 }
 
 void Logger::registerLog(LogBook* log)
 {
-	logs_.push_back(log);
+	logs.push_back(log);
 }
 
 void Logger::unregisterLog(LogBook* log)
@@ -42,7 +43,7 @@ void Logger::unregisterLog(LogBook* log)
 	auto found = std::find(logs.begin(), logs.end(), log);
 
 	if(found != logs.end()) {
-		// erase
+		logs.erase(found);
 	}
 }
 } // namespace impl_
