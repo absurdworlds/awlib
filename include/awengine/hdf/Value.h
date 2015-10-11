@@ -30,8 +30,9 @@ public:
 
 	template<typename val_type>
 	Value(val_type v)
-		: holder(v)
+		: holder()
 	{
+		holder.set<val_type>(v);
 	}
 
 	/*! Assignment operator. Copies content from another
@@ -68,7 +69,7 @@ public:
 	bool trySet(val_type const& v)
 	{
 		if(checkType(holder.type, v)) {
-			holder.set(v);
+			holder.set<val_type>(v);
 			return true;
 		}
 		return false;
@@ -84,44 +85,38 @@ public:
 	//! Reset value to <Unknown>
 	void reset()
 	{
-		holder = Holder();
+		holder.reset();
 	}
 
 private:
 	template <typename... Ts>
 	struct Helper;
-	
-	template <typename T, typename... Ts, >
+
+	template <typename T, typename... Ts>
 	struct Helper<T, Ts...> {
-		static void destroy(void* data, size_t type)
+		static void destroy(Type type, void* data)
 		{
 			if (checkType<T>(type))
 				reinterpret_cast<T*>(data)->~T();
 			else
-				Helper<Ts...>::destroy(data, type);
+				Helper<Ts...>::destroy(type, data);
 		}
-		static void copy(void const* from, void const* to, size_t type)
+		static void copy(Type type, void const* from, void* to)
 		{
-			if (checkType<T>())
+			if (checkType<T>(type))
 				new (to) T(*reinterpret_cast<T const*>(from));
 			else
-				Helper<Ts...>::copy(from, to, type);
+				Helper<Ts...>::copy(type, from, to);
 		}
-		static void move(void* from, void* to, size_t type)
+		static void move(Type type, void* from, void* to)
 		{
-			if (checkType<T>())
+			if (checkType<T>(type))
 				new (to) T(std::move(from));
 			else
-				Helper<Ts...>::move(from, to, type);
+				Helper<Ts...>::move(type, from, to);
 		}
-	}
-
-	template <>
-	struct Helper<> {
-		static void destroy(void* data, size_t type) { }
-		static void copy(void* from, void* to, size_t type) { }
-		static void move(void* from, void* to, size_t type) { }
 	};
+
 
 	template <typename... Ts>
 	struct Holder {
@@ -135,7 +130,7 @@ private:
 		storage data;
 
 		Holder()
-			: type(type::Unknown)
+			: type(Type::Unknown)
 		{
 		}
 
@@ -162,11 +157,12 @@ private:
 			helper::destroy(type, &data);
 			helper::copy(other.type, &other.data, &data);
 			type = other.type;
+			return *this;
 		}
 
 		~Holder()
 		{
-			helper::destroy(type, &data);
+			reset();
 		}
 
 		template<typename T, typename... Args>
@@ -178,18 +174,31 @@ private:
 		}
 
 		template<typename T>
-		bool get(T& target)
+		bool get(T& target) const
 		{
-			if (checkType<T>()) {
-				target = *reinterpret_cast<T*>(&data);
+			if (checkType<T>(type)) {
+				target = *reinterpret_cast<T const*>(&data);
 				return true;
 			}
 			return false;
 		}
-	}
 
-	Holder<bool, i64, f64, std::string,
-	       Vector2d<f32>, Vector3d<f32>, Vector4d<f32>> holder;
+		void reset()
+		{
+			helper::destroy(type, &data);
+		}
+	};
+
+	typedef Holder<bool, i64, f64, std::string,
+	       Vector2d<f32>, Vector3d<f32>, Vector4d<f32>> holder_t;
+	holder_t holder;
+};
+
+template <>
+struct Value::Helper<> {
+	static void destroy(Type type, void* data) { }
+	static void copy(Type type, void const* from, void* to) { }
+	static void move(Type type, void* from, void* to) { }
 };
 } // namespace hdf
 } // namespace awrts
