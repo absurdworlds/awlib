@@ -10,10 +10,10 @@
 #define _awrts_SettingsLoader_
 #include <string>
 
-#include <awrts/common/types.h>
+#include <awengine/common/types.h>
 
-#include <awrts/core/core.h>
-#include <awrts/core/SettingsManager.h>
+#include <awengine/core/core.h>
+#include <awengine/core/SettingsManager.h>
 
 namespace awrts {
 namespace core {

@@ -11,8 +11,8 @@
 #define _awrts_ArgumentParser_
 #include <string>
 
-#include <awrts/core/core.h>
-#include <awrts/common/types.h>
+#include <awengine/core/core.h>
+#include <awengine/common/types.h>
 
 namespace awrts {
 namespace core {
@@ -59,7 +59,7 @@ public:
  * \param argv Array of pointers to command line token strings.
  * \note Each string must be null-terminated. Last element of array must be 0.
  */
-HR_CORE_EXP ArgumentParser* createArgumentParser (char** argv);
+AW_CORE_EXP ArgumentParser* createArgumentParser (char** argv);
 
 } //namespace core
 } //namespace awrts

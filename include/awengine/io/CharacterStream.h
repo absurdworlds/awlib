@@ -8,13 +8,12 @@
  */
 #ifndef _awrts_CharacterStream_
 #define _awrts_CharacterStream_
-#include <awrts/common/types.h>
+#include <awengine/common/types.h>
 
-#include <awrts/platform/platform.h>
+#include <awengine/platform/platform.h>
 
 namespace awrts {
 namespace io {
-
 //! Class defines an interface for character streams
 class CharacterStream {
 public:
@@ -28,7 +27,7 @@ public:
 };
 
 //! Create a character stream
-HR_SYS_EXP CharacterStream* createCharacterStream (char const* source);
+AW_SYS_EXP CharacterStream* createCharacterStream (char const* source);
 
 } // namespace io
 } // namespace awrts

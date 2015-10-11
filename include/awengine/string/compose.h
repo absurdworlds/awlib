@@ -12,14 +12,14 @@
 #include <vector>
 #include <string>
 
-#include <awrts/core/core.h>
+#include <awengine/core/core.h>
 
 namespace awrts {
 namespace string {
 /*!
  * Compose parametrized string (parameter substitution).
  */
-HR_CORE_EXP std::string compose(std::string const& fmt,
+AW_CORE_EXP std::string compose(std::string const& fmt,
 		std::vector<std::string> const& args);
 
 /*!

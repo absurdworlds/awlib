@@ -8,12 +8,11 @@
  */
 #ifndef _awrts_HDFSettingsLoader_
 #define _awrts_HDFSettingsLoader_
-#include <awrts/resources/default_settings.h>
-#include <awrts/io/ReadFile.h>
-#include <awrts/io/BufferedStream.h>
-#include <awrts/hdf/HDFParser.h>
+#include <awengine/io/ReadFile.h>
+#include <awengine/io/BufferedStream.h>
+#include <awengine/hdf/Parser.h>
 
-#include <awrts/core/SettingsLoader.h>
+#include <awengine/core/SettingsLoader.h>
 
 namespace awrts {
 namespace core {
@@ -28,7 +27,7 @@ public:
 	virtual void loadSettings ();
 
 protected:
-	void parseSettings (hdf::HDFParser * hdf);
+	void parseSettings (hdf::Parser * hdf);
 
 private:
 	//std::string hdfFile_;

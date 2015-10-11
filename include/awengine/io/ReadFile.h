@@ -8,15 +8,14 @@
  */
 #ifndef _awrts_ReadFile_
 #define _awrts_ReadFile_
-
-#include <awrts/io/File.h>
+#include <awengine/io/File.h>
 
 namespace awrts {
 namespace io {
 /*!
  * Provides interface for reading files
  */
-class HR_IO_EXP ReadFile : public File {
+class AW_IO_EXP ReadFile : public File {
 public:
 	ReadFile (std::string const& path);
 

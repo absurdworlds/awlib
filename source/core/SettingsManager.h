@@ -10,9 +10,9 @@
 #define _awrts_SettingsManager_impl_
 #include <map>
 
-#include <awrts/core/SettingsManager.h>
+#include <awengine/hdf/Value.h>
 
-#include <awrts/hdf/hdf_value.h>
+#include <awengine/core/SettingsManager.h>
 
 namespace awrts {
 namespace core {

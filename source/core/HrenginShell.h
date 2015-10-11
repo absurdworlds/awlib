@@ -8,11 +8,10 @@
  */
 #ifndef _awrts_HrenginShell_
 #define _awrts_HrenginShell_
-
 #include <map>
 
-#include <awrts/core/Logger.h>
-#include <awrts/core/Shell.h>
+#include <awengine/core/Logger.h>
+#include <awengine/core/Shell.h>
 
 namespace awrts {
 namespace core {

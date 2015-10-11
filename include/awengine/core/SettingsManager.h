@@ -10,9 +10,9 @@
 #define _awrts_SettingsManager_
 #include <string>
 
-#include <awrts/common/types.h>
+#include <awengine/common/types.h>
 
-#include <awrts/core/core.h>
+#include <awengine/core/core.h>
 
 namespace awrts {
 namespace core {
@@ -42,7 +42,7 @@ public:
 /*!
  * Create an instance of settings manager
  */
-HR_CORE_EXP SettingsManager* createSettingsManager();
+AW_CORE_EXP SettingsManager* createSettingsManager();
 
 } // namespace core
 } // namespace awrts

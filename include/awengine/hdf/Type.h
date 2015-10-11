@@ -8,9 +8,8 @@
  */
 #ifndef _awrts_hdf_Type_
 #define _awrts_hdf_Type_
-
-#include <awrts/math/Vector2d.h>
-#include <awrts/math/Vector3d.h>
+#include <awengine/math/Vector2d.h>
+#include <awengine/math/Vector3d.h>
 
 namespace awrts {
 namespace hdf {

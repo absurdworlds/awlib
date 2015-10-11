@@ -10,9 +10,9 @@
 // MurmurHash3 was written by Austin Appleby, and is placed in the public
 // domain. The author hereby disclaims copyright to this source code.
 
-#include <awrts/core/hash.h>
-#include <awrts/common/macro.h>
-#include <awrts/math/math.h>
+#include <awengine/utility/macro.h>
+#include <awengine/math/math.h>
+#include <awengine/core/hash.h>
 
 namespace awrts {
 /*!

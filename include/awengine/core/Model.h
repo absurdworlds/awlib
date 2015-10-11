@@ -8,9 +8,8 @@
  */
 #ifndef _awrts_Model_
 #define _awrts_Model_
-
 #include <vector>
-#include <awrts/core/models.h>
+#include <awengine/core/models.h>
 
 namespace awrts {
 

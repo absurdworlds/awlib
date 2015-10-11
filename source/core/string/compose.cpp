@@ -11,8 +11,9 @@
 
 namespace awrts {
 namespace string {
-HR_CORE_EXP std::string compose(std::string const& fmt,
-		std::vector<std::string> const& args)
+AW_CORE_EXP std::string compose(
+        std::string const& fmt,
+       	std::vector<std::string> const& args)
 {
 	return compose_::Composed(fmt, args);
 }

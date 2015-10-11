@@ -8,10 +8,8 @@
  */
 #ifndef _awrts_models_
 #define _awrts_models_
-
-#include <awrts/common/compiler_setup.h>
-#include <awrts/common/types.h>
-#include <awrts/math/Vector3d.h>
+#include <awengine/common/types.h>
+#include <awengine/math/Vector3d.h>
 
 namespace awrts {
 //! Enumeration of primitive shapes

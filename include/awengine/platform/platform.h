@@ -18,12 +18,12 @@
 #ifndef _awrts_platform_
 #define _awrts_platform_
 
-#include <awrts/common/visibility.h>
+#include <awengine/config/visibility.h>
 
-#ifdef HR_MODULE_PLATFORM
-	#define HR_SYS_EXP HR_EXPORT
+#ifdef AW_MODULE_PLATFORM
+	#define AW_SYS_EXP AW_EXPORT
 #else
-	#define HR_SYS_EXP HR_IMPORT
+	#define AW_SYS_EXP AW_IMPORT
 #endif
 
 // Namespace descriptions for Doxygen

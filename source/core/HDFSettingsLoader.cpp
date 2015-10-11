@@ -9,7 +9,7 @@
  */
 #include <fstream>
 
-#include <awrts/io/filesystem.h>
+#include <awengine/io/filesystem.h>
 
 #include "HDFSettingsLoader.h"
 
@@ -39,16 +39,18 @@ HDFSettingsLoader::HDFSettingsLoader (io::ReadFile& file,
 {
 }
 
+std::string fallback_settings = "[]";
+
 void HDFSettingsLoader::loadSettings ()
 {
 	io::CharacterStream* stream;
-	hdf::HDFParser* hdf;
+	hdf::Parser* hdf;
 
 	stream = file_.isOpen() 
 		? io::createBufferedStream(file_)
-		: io::createCharacterStream(default_settings);
+		: io::createCharacterStream(fallback_settings.c_str());
 
-	hdf = hdf::createHDFParser(stream);
+	hdf = hdf::createParser(stream);
 
 	parseSettings(hdf);
 
@@ -56,7 +58,7 @@ void HDFSettingsLoader::loadSettings ()
 	delete stream;
 }
 
-void HDFSettingsLoader::parseSettings (hdf::HDFParser* hdf)
+void HDFSettingsLoader::parseSettings (hdf::Parser* hdf)
 {
 	std::string prevNode;
 	std::string curNode;

@@ -9,16 +9,13 @@
  */
 #ifndef _awrts_stringutils_
 #define _awrts_stringutils_
-
-#include <awrts/common/compiler_setup.h>
-
 #include <cstring>
 
 #include <string>
 #include <vector>
 #include <algorithm>
 
-#include <awrts/core/core.h>
+#include <awengine/core/core.h>
 
 namespace awrts {
 //! Generic strlen

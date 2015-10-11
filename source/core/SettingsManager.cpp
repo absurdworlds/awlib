@@ -6,9 +6,9 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#include <awrts/io/ReadFile.h>
-#include <awrts/io/CharacterStream.h>
-#include <awrts/io/BufferedStream.h>
+#include <awengine/io/ReadFile.h>
+#include <awengine/io/CharacterStream.h>
+#include <awengine/io/BufferedStream.h>
 
 #include "SettingsManager.h"
 

@@ -12,12 +12,12 @@
 
 #include <string>
 
-#include <awrts/common/types.h>
-#include <awrts/math/Vector2d.h>
-#include <awrts/math/Vector3d.h>
-#include <awrts/math/Vector4d.h>
+#include <awengine/common/types.h>
+#include <awengine/math/Vector2d.h>
+#include <awengine/math/Vector3d.h>
+#include <awengine/math/Vector4d.h>
 
-#include <awrts/hdf/Type.h>
+#include <awengine/hdf/Type.h>
 
 namespace awrts {
 namespace hdf {

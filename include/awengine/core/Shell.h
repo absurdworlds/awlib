@@ -8,12 +8,11 @@
  */
 #ifndef _awrts_Shell_
 #define _awrts_Shell_
-
 #include <string>
 
-#include <awrts/core/core.h>
+#include <awengine/core/core.h>
 
-#include <awrts/common/types.h>
+#include <awengine/common/types.h>
 
 namespace awrts {
 class Logger;
@@ -39,7 +38,7 @@ public:
 	virtual void execute(std::string command) = 0;
 };
 
-HR_CORE_EXP Shell* createShell(Logger* logger);
+AW_CORE_EXP Shell* createShell(Logger* logger);
 
 } // namespace core
 } // namespace awrts

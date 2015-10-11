@@ -11,10 +11,10 @@
 #define _awrts_HDFReader_
 #include <string>
 
-#include <awrts/math/Vector3d.h>
+#include <awengine/math/Vector3d.h>
 
-#include <awrts/hdf/hdf.h>
-#include <awrts/hdf/shared.h>
+#include <awengine/hdf/hdf.h>
+#include <awengine/hdf/shared.h>
 
 namespace awrts {
 namespace io {
@@ -92,7 +92,7 @@ public:
  * \param stream Stream to parse.
  * \see io::CharacterStream
 */
-HR_HDF_EXP Parser* createParser(io::CharacterStream* stream);
+AW_HDF_EXP Parser* createParser(io::CharacterStream* stream);
 
 } // namespace io
 } // namespace awrts

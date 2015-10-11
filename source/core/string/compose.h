@@ -9,7 +9,7 @@
  */
 #ifndef _awrts_string_compose_impl_
 #define _awrts_string_compose_impl_
-#include <awrts/string/compose.h>
+#include <awengine/string/compose.h>
 
 #include <vector>
 #include <string>

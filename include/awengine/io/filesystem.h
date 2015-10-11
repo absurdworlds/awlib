@@ -10,8 +10,8 @@
 #define _awrts_filesystem_
 #include <string>
 
-#include <awrts/common/types.h>
-#include <awrts/platform/platform.h>
+#include <awengine/common/types.h>
+#include <awengine/platform/platform.h>
 
 namespace awrts {
 namespace io {
@@ -37,7 +37,7 @@ struct FileInfo {
 /*!
  * Get information about file
  */
-HR_SYS_EXP i32 fileStat (std::string const & path, FileInfo& result);
+AW_SYS_EXP i32 fileStat (std::string const & path, FileInfo& result);
 
 /*!
  * Get type (e.g. regular file or directory) of a file
@@ -85,7 +85,7 @@ enum FileMode {
  * 	Zero (0) on success, or -1 if file not exist
  * 	or one of permissions was denied.
  */
-HR_SYS_EXP i32 checkFile(std::string const & path, FileMode mode);
+AW_SYS_EXP i32 checkFile(std::string const & path, FileMode mode);
 
 } //namespace io
 } //namespace awrts

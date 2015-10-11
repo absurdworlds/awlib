@@ -19,12 +19,12 @@
  */
 #ifndef _awrts_hdf_
 #define _awrts_hdf_
-#include <awrts/common/visibility.h>
+#include <awengine/config/visibility.h>
 
-#ifdef HR_MODULE_HDF
-	#define HR_HDF_EXP HR_EXPORT
+#ifdef AW_MODULE_HDF
+	#define AW_HDF_EXP AW_EXPORT
 #else
-	#define HR_HDF_EXP HR_IMPORT
+	#define AW_HDF_EXP AW_IMPORT
 #endif
 
 // Namespace descriptions for Doxygen

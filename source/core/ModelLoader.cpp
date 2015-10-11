@@ -6,18 +6,15 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#include <awrts/core/models.h>
-#include <awrts/core/paths.h>
-#include <awrts/string/utility.h>
+#include <awengine/core/paths.h>
+#include <awengine/string/utility.h>
 
-#include <awrts/core/FileSystem.h>
+#include <awengine/io/ReadFile.h>
+#include <awengine/io/BufferedStream.h>
 
-#include <awrts/io/ReadFile.h>
-#include <awrts/io/BufferedStream.h>
+#include <awengine/hdf/Parser.h>
 
-#include <awrts/hdf/HDFParser.h>
-
-#include <awrts/core/Model.h>
+#include <awengine/core/Model.h>
 
 #include "ModelLoader.h"
 
@@ -30,9 +27,9 @@ ModelLoader* createModelLoader ()
 }
 
 namespace impl_ {
-bool hdfParseNode(hdf::HDFParser* hdf, Model* model, std::string curNode);
-bool hdfParseObject(hdf::HDFParser* hdf, Model* model, std::string curNode);
-bool hdfParseShapeNode(hdf::HDFParser* hdf, Model* model);
+bool hdfParseNode(hdf::Parser* hdf, Model* model, std::string curNode);
+bool hdfParseObject(hdf::Parser* hdf, Model* model, std::string curNode);
+bool hdfParseShapeNode(hdf::Parser* hdf, Model* model);
 
 Model* ModelLoader::loadModel (char const* filename)
 {
@@ -51,7 +48,7 @@ Model* ModelLoader::loadModel (char const* filename)
 
 	if(ext == "hndf" || ext == "hdf") {
 		io::CharacterStream* stream = io::createBufferedStream(file);
-		hdf::HDFParser* hdf = hdf::createHDFParser(stream);
+		hdf::Parser* hdf = hdf::createParser(stream);
 
 		hdfParse(hdf, model);
 
@@ -62,7 +59,7 @@ Model* ModelLoader::loadModel (char const* filename)
 	return model;
 }
 
-bool ModelLoader::hdfParse (hdf::HDFParser* hdf, Model* model)
+bool ModelLoader::hdfParse (hdf::Parser* hdf, Model* model)
 {
 	std::string curNode;
 
@@ -76,7 +73,7 @@ bool ModelLoader::hdfParse (hdf::HDFParser* hdf, Model* model)
 	return hdfParseNode(hdf, model, curNode);
 }
 
-bool hdfParseNode(hdf::HDFParser* hdf, Model* model, std::string curNode)
+bool hdfParseNode(hdf::Parser* hdf, Model* model, std::string curNode)
 {
 	bool successful = true;
 
@@ -88,10 +85,10 @@ bool hdfParseNode(hdf::HDFParser* hdf, Model* model, std::string curNode)
 }
 
 // FIXME mess of nested if's
-bool hdfParseObject(hdf::HDFParser* hdf, Model* model, std::string curNode)
+bool hdfParseObject(hdf::Parser* hdf, Model* model, std::string curNode)
 {
 	bool successful = true;
-	hdf::HdfObjectType type = hdf->getObjectType();
+	hdf::ObjectType type = hdf->getObjectType();
 	std::string objectName;
 
 	switch(type) {
@@ -125,14 +122,14 @@ bool hdfParseObject(hdf::HDFParser* hdf, Model* model, std::string curNode)
 	return successful;
 }
 
-bool hdfParseShapeNode(hdf::HDFParser* hdf, Model* model)
+bool hdfParseShapeNode(hdf::Parser* hdf, Model* model)
 {
 	awrts::Primitive primitive;
-	//io::HdfObjectType type = hdf->getObjectType();
+	//io::ObjectType type = hdf->getObjectType();
 
 
 	while(hdf->read()) {
-		hdf::HdfObjectType type = hdf->getObjectType();
+		hdf::ObjectType type = hdf->getObjectType();
 
 		if(type == hdf::HDF_OBJ_NODE_END) {
 			break;

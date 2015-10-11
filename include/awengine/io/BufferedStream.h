@@ -8,7 +8,7 @@
  */
 #ifndef _awrts_BufferedStream_
 #define _awrts_BufferedStream_
-#include <awrts/io/CharacterStream.h>
+#include <awengine/io/CharacterStream.h>
 
 namespace awrts {
 namespace io {
@@ -23,7 +23,7 @@ public:
 };
 
 //! Create a buffered file stream
-HR_SYS_EXP BufferedStream* createBufferedStream(ReadFile& source);
+AW_SYS_EXP BufferedStream* createBufferedStream(ReadFile& source);
 
 } //namespace io
 } //namespace awrts

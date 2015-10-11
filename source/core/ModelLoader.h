@@ -10,13 +10,13 @@
 #define _awrts_ModelLoader_impl_
 #include <string>
 
-#include <awrts/core/ModelLoader.h>
+#include <awengine/core/ModelLoader.h>
 
 namespace awrts {
 class Model;
 
-namespace io {
-class HDFParser;
+namespace hdf {
+class Parser;
 }
 
 namespace core {
@@ -26,7 +26,7 @@ public:
 	virtual Model* loadModel (char const* filename);
 
 private:
-	bool hdfParse (hdf::HDFParser* hdf, Model* model);
+	bool hdfParse (hdf::Parser* hdf, Model* model);
 };
 
 } // namespace impl_

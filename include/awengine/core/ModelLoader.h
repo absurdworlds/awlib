@@ -8,7 +8,7 @@
  */
 #ifndef _awrts_ModelLoader_
 #define _awrts_ModelLoader_
-#include <awrts/core/core.h>
+#include <awengine/core/core.h>
 
 namespace awrts {
 class Model;
@@ -29,7 +29,7 @@ public:
 };
 
 //! Create a model loader
-HR_CORE_EXP ModelLoader* createModelLoader();
+AW_CORE_EXP ModelLoader* createModelLoader();
 } // namespace core
 } // namespace awrts
 #endif//_awrts_ModelLoader_
