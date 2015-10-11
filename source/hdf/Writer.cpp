@@ -7,10 +7,10 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#include <awrts/io/WriteStream.h>
-#include <awrts/core/Logger.h>
+#include <awengine/io/WriteStream.h>
+#include <awengine/core/Logger.h>
 
-#include <awrts/hdf/shared.h>
+#include <awengine/hdf/shared.h>
 #include "Writer.h"
 
 namespace awrts {

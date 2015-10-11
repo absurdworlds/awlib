@@ -12,8 +12,8 @@
 #include <string>
 #include <vector>
 
-#include <awrts/hdf/Value.h>
-#include <awrts/hdf/Parser.h>
+#include <awengine/hdf/Value.h>
+#include <awengine/hdf/Parser.h>
 
 namespace awrts {
 namespace hdf {

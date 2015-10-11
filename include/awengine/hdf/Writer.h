@@ -11,8 +11,8 @@
 #define _awrts_HDF_Writer_
 #include <string>
 
-#include <awrts/hdf/hdf.h>
-#include <awrts/hdf/Value.h>
+#include <awengine/hdf/hdf.h>
+#include <awengine/hdf/Value.h>
 namespace awrts {
 namespace io {
 class WriteStream;
@@ -52,7 +52,7 @@ public:
 	virtual void setIndentationStyle(IndentationStyle style) = 0;
 };
 
-HR_HDF_EXP hdf::Writer* createWriter(io::WriteStream& outStream);
+AW_HDF_EXP hdf::Writer* createWriter(io::WriteStream& outStream);
 
 } // namespace io
 } // namespace awrts
