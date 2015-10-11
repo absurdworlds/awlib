@@ -97,6 +97,12 @@ inline bool checkType<Vector3d<f32>>(hdf::Type type)
 	return Type::Vector3d == type;
 }
 
+template<>
+inline bool checkType<Vector4d<f32>>(hdf::Type type)
+{
+	return Type::Vector4d == type;
+}
+
 /*!
  * Template function used to deduce HDF type from C++ type
  */
@@ -228,6 +234,12 @@ template<>
 inline bool checkType(hdf::Type type, Vector3d<f32>)
 {
 	return Type::Vector3d == type;
+}
+
+template<>
+inline bool checkType(hdf::Type type, Vector4d<f32>)
+{
+	return Type::Vector4d == type;
 }
 
 template<typename T>
