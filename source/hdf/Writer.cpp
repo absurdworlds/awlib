@@ -59,7 +59,7 @@ bool Writer::endNode()
 
 	endLine();
 
-	return true
+	return true;
 }
 
 /*! Write a value object. */
