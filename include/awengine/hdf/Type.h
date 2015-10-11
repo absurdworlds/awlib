@@ -8,10 +8,17 @@
  */
 #ifndef _awrts_hdf_Type_
 #define _awrts_hdf_Type_
-#include <awengine/math/Vector2d.h>
-#include <awengine/math/Vector3d.h>
+#include <string>
+#include <awengine/common/types.h>
 
 namespace awrts {
+template <typename T>
+class Vector2d;
+template <typename T>
+class Vector3d;
+template <typename T>
+class Vector4d;
+
 namespace hdf {
 /*!
  * Enumeration of possible HDF value types
