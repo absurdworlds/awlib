@@ -68,7 +68,7 @@ public:
 	template<typename val_type>
 	bool trySet(val_type const& v)
 	{
-		if(checkType(holder.type, v)) {
+		if(compareType(holder.type, v)) {
 			holder.set<val_type>(v);
 			return true;
 		}
@@ -170,7 +170,7 @@ private:
 		{
 			helper::destroy(type, &data);
 			new (&data) T(std::forward<Args>(args)...);
-			type = deduceType<T>();	
+			type = typeof<T>::value;	
 		}
 
 		template<typename T>

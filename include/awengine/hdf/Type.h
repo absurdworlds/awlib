@@ -28,285 +28,100 @@ enum class Type {
 	Enum,
 };
 
+template<typename T>
+struct typeof {
+	static Type const value = Type::Unknown;
+};
+
+template<>
+struct typeof<i32> {
+	static Type const value = Type::Integer;
+};
+
+template<>
+struct typeof<u32> {
+	static Type const value = Type::Integer;
+};
+
+template<>
+struct typeof<i64> {
+	static Type const value = Type::Integer;
+};
+
+template<>
+struct typeof<u64> {
+	static Type const value = Type::Integer;
+};
+
+template<>
+struct typeof<f32> {
+	static Type const value = Type::Float;
+};
+
+template<>
+struct typeof<f64> {
+	static Type const value = Type::Float;
+};
+
+template<>
+struct typeof<bool> {
+	static Type const value = Type::Boolean;
+};
+
+template<>
+struct typeof<std::string> {
+	static Type const value = Type::String;
+};
+
+template<>
+struct typeof<Vector2d<f32>> {
+	static Type const value = Type::Vector2d;
+};
+
+template<>
+struct typeof<Vector3d<f32>> {
+	static Type const value = Type::Vector3d;
+};
+
+template<>
+struct typeof<Vector4d<f32>> {
+	static Type const value = Type::Vector4d;
+};
+
+/*!
+ * Template function used to deduce HDF type from C++ type
+ */
+template<typename T>
+inline hdf::Type deduceType(T)
+{
+	return typeof<T>::value;
+}
+
 /*!
  * Template function used to check if C++ type corresponds to HDF type \a type
  */
 template<typename T>
 inline bool checkType(hdf::Type type)
 {
-	return false;
-}
-
-template<>
-inline bool checkType<i32>(hdf::Type type)
-{
-	return Type::Integer == type;
-}
-
-template<>
-inline bool checkType<u32>(hdf::Type type)
-{
-	return Type::Integer == type;
-}
-
-template<>
-inline bool checkType<i64>(hdf::Type type)
-{
-	return Type::Integer == type;
-}
-
-template<>
-inline bool checkType<u64> (hdf::Type type)
-{
-	return Type::Integer == type;
-}
-
-template<>
-inline bool checkType<f32>(hdf::Type type)
-{
-	return Type::Float == type;
-}
-
-template<>
-inline bool checkType<f64>(hdf::Type type)
-{
-	return Type::Float == type;
-}
-
-template<>
-inline bool checkType<bool>(hdf::Type type)
-{
-	return Type::Boolean == type;
-}
-
-template<>
-inline bool checkType<std::string>(hdf::Type type)
-{
-	return Type::String == type;
-}
-
-template<>
-inline bool checkType<Vector2d<f32>>(hdf::Type type)
-{
-	return Type::Vector2d == type;
-}
-
-template<>
-inline bool checkType<Vector3d<f32>>(hdf::Type type)
-{
-	return Type::Vector3d == type;
-}
-
-template<>
-inline bool checkType<Vector4d<f32>>(hdf::Type type)
-{
-	return Type::Vector4d == type;
+	return typeof<T>::value == type;
 }
 
 /*!
- * Template function used to deduce HDF type from C++ type
+ * Compare type of a value \a val to the type \a type.
  */
 template<typename T>
-inline hdf::Type deduceType()
+inline bool compareType(hdf::Type type, T val)
 {
-	return Type::Unknown;
-}
-
-template<>
-inline hdf::Type deduceType<i32>()
-{
-	return Type::Integer;
-}
-
-template<>
-inline hdf::Type deduceType<u32>()
-{
-	return Type::Integer;
-}
-
-template<>
-inline hdf::Type deduceType<i64>()
-{
-	return Type::Integer;
-}
-
-template<>
-inline hdf::Type deduceType<u64>()
-{
-	return Type::Integer;
-}
-
-template<>
-inline hdf::Type deduceType<f32>()
-{
-	return Type::Float;
-}
-
-template<>
-inline hdf::Type deduceType<f64>()
-{
-	return Type::Float;
-}
-
-template<>
-inline hdf::Type deduceType<bool>()
-{
-	return Type::Boolean;
-}
-
-template<>
-inline hdf::Type deduceType<std::string>()
-{
-	return Type::String;
-}
-
-template<>
-inline hdf::Type deduceType<Vector2d<f32>>()
-{
-	return Type::Vector2d;
-}
-
-template<>
-inline hdf::Type deduceType<Vector3d<f32>>()
-{
-	return Type::Vector3d;
+	return type == deduceType(val);
 }
 
 /*!
- * Template function used to check if variable type
- * corresponds to HDF type \a type
+ * Compare type of a value \a val to the type \a type.
  */
 template<typename T>
-inline bool checkType(hdf::Type type, T)
+inline bool operator == (hdf::Type type, T val)
 {
-	return false;
-}
-
-template<>
-inline bool checkType(hdf::Type type, i32)
-{
-	return Type::Integer == type;
-}
-
-template<>
-inline bool checkType(hdf::Type type, u32)
-{
-	return Type::Integer == type;
-}
-
-template<>
-inline bool checkType(hdf::Type type, i64)
-{
-	return Type::Integer == type;
-}
-
-template<>
-inline bool checkType(hdf::Type type, u64)
-{
-	return Type::Integer == type;
-}
-
-template<>
-inline bool checkType(hdf::Type type, f64)
-{
-	return Type::Float == type;
-}
-
-template<>
-inline bool checkType(hdf::Type type, bool)
-{
-	return Type::Boolean == type;
-}
-
-template<>
-inline bool checkType(hdf::Type type, std::string)
-{
-	return Type::String == type;
-}
-
-template<>
-inline bool checkType(hdf::Type type, Vector2d<f32>)
-{
-	return Type::Vector2d == type;
-}
-
-template<>
-inline bool checkType(hdf::Type type, Vector3d<f32>)
-{
-	return Type::Vector3d == type;
-}
-
-template<>
-inline bool checkType(hdf::Type type, Vector4d<f32>)
-{
-	return Type::Vector4d == type;
-}
-
-template<typename T>
-inline hdf::Type deduceType(T)
-{
-	return Type::Unknown;
-}
-
-template<>
-inline hdf::Type deduceType(i32)
-{
-	return Type::Integer;
-}
-
-template<>
-inline hdf::Type deduceType(u32)
-{
-	return Type::Integer;
-}
-
-
-template<>
-inline hdf::Type deduceType(i64)
-{
-	return Type::Integer;
-}
-
-template<>
-inline hdf::Type deduceType(u64)
-{
-	return Type::Integer;
-}
-
-template<>
-inline hdf::Type deduceType(f32)
-{
-	return Type::Float;
-}
-
-template<>
-inline hdf::Type deduceType(f64)
-{
-	return Type::Float;
-}
-
-template<>
-inline hdf::Type deduceType(bool)
-{
-	return Type::Boolean;
-}
-
-template<>
-inline hdf::Type deduceType(std::string)
-{
-	return Type::String;
-}
-
-template<>
-inline hdf::Type deduceType(Vector2d<f32>)
-{
-	return Type::Vector2d;
-}
-
-template<>
-inline hdf::Type deduceType(Vector3d<f32>)
-{
-	return Type::Vector3d;
+	return compareType(type, val) ;
 }
 
 } // namespace hdf
