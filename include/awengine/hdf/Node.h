@@ -11,14 +11,13 @@
 #include <vector>
 #include <string>
 #include <algorithm>
-#include <experimental/optional>
 
 #include <awengine/string/utility.h>
 #include <awengine/hdf/Value.h>
 
 namespace awrts {
 namespace hdf {
-template <typename Node>
+template <typename Node, bool strict = false>
 class List : std::vector<std::pair<std::string, Node>> {
 public:
 	typedef std::vector<std::pair<std::string, Node>> base;
@@ -31,9 +30,15 @@ public:
 	/*!
 	 * Add child node
 	 */
-	void add(std::string name, Node& node)
+	bool add(std::string name, Node node)
 	{
+		if (strict) {
+			if(find(name, begin()) != end())
+				return false;
+		}
+
 		base::emplace_back(name, node);
+		return true;
 	}
 
 	iterator begin()
@@ -83,8 +88,6 @@ public:
 			return Node();
 
 		return base::operator[](index).second;
-
-		return Node();
 	}
 };
 
@@ -93,33 +96,86 @@ public:
  */
 class Node : List<Node>, List<Value> {
 public:
-	auto addNode = List<Node>::add;
-	auto beginNodes = List<Node>::begin;
-	auto endNodes = List<Node>::end;
-	auto findNode = List<Node>::find;
-	auto removeNode = List<Node>::remove;
-	auto getNode = List<Node>::get;
+	auto addNode(std::string name, Node node)
+	{
+		return List<Node>::add(name, node);
+	}
+	auto beginNodes()
+	{
+		return List<Node>::begin();
+	}
+	auto endNodes()
+	{
+		return List<Node>::end();
+	}
+	auto findNode(std::string name, List<Node>::iterator startAt)
+	{
+		return List<Node>::find(name, startAt);
+	}
+	auto removeNode(List<Node>::iterator node)
+	{
+		return List<Node>::remove(node);
+	}
+	auto getNode(size_t id)
+	{
+		return List<Node>::get(id);
+	}
 
-	auto addValue = List<Node>::add;
-	auto beginValues = List<Node>::begin;
-	auto endValues = List<Node>::end;
-	auto findValue = List<Node>::find;
-	auto removeValue = List<Node>::remove;
-	auto getValue = List<Node>::get;
+	auto addValue(std::string name, Value node)
+	{
+		return List<Value>::add(name, node);
+	}
+	auto beginValues()
+	{
+		return List<Value>::begin();
+	}
+	auto endValues()
+	{
+		return List<Value>::end();
+	}
+	auto findValue(std::string name, List<Value>::iterator startAt)
+	{
+		return List<Value>::find(name, startAt);
+	}
+	auto removeValue(List<Value>::iterator node)
+	{
+		return List<Value>::remove(node);
+	}
+	auto getValue(size_t id)
+	{
+		return List<Value>::get(id);
+	}
 private:
 };
 
 //! Used for storage of an arbitary HDF document
 class Document : public List<Node> {
 public:
-	auto addNode = List<Node>::add;
-	auto beginNodes = List<Node>::begin;
-	auto endNodes = List<Node>::end;
-	auto findNode = List<Node>::find;
-	auto removeNode = List<Node>::remove;
-	auto getNode = List<Node>::get;
+	auto addNode(std::string name, Node node)
+	{
+		return List<Node>::add(name, node);
+	}
+	auto begin()
+	{
+		return List<Node>::begin();
+	}
+	auto end()
+	{
+		return List<Node>::end();
+	}
+	auto findNode(std::string name, List<Node>::iterator startAt)
+	{
+		return List<Node>::find(name, startAt);
+	}
+	auto removeNode(List<Node>::iterator node)
+	{
+		return List<Node>::remove(node);
+	}
+	auto getNode(size_t id)
+	{
+		return List<Node>::get(id);
+	}
 };
-
 } // namespace hdf
 } // namespace awrts
 #endif//_awrts_hdf_node_
