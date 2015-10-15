@@ -75,6 +75,10 @@ public:
 		return absoluteRect;
 	}
 
+	virtual Rect<Coordinate> getClientRect() const
+	{
+	}
+
 	virtual Style* getStyle() const
 	{
 		if (!style)
