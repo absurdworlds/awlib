@@ -76,7 +76,7 @@ public:
 
 class BackgroundSolid : public Background {
 public:
-	BackgroundSolid(Style s, graphics::Color color)
+	BackgroundSolid(graphics::Color color)
 		: Background(Background::Solid), c(color)
 	{
 	}
