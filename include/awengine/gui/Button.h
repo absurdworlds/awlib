@@ -17,6 +17,8 @@ namespace gui {
 class Button : public Widget {
 public:
 	virtual ~Button() = default;
+
+	virtual bool isPressed();
 private:
 	bool state;
 	void onPressed();
