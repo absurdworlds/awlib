@@ -16,7 +16,7 @@ namespace gui {
 //! Base class for GUI widget
 class Widget : public Element {
 public:
-	virtual ~Widget() {};
+	virtual ~Widget() = default;
 	virtual Canvas* toCanvas()
 	{
 		return nullptr;

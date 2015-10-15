@@ -19,7 +19,7 @@ namespace gui {
 //! List box GUI element
 class GUIListBox : public GUIElement {
 public:
-	virtual ~GUIListBox() {};
+	virtual ~GUIListBox() = default;
 
 	/*! Add an item to list box
 	   \param text Text of the inserted item

@@ -17,7 +17,7 @@ namespace gui {
 //! Text box GUI element
 class GUITextBox : public GUIElement {
 public:
-	virtual ~GUITextBox() {};
+	virtual ~GUITextBox() = default;
 };
 
 } // namespace gui
