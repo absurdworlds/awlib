@@ -1,5 +1,4 @@
-
 all: core
 
 core:
-	$(MAKE) -C 'source/core'
+	$(MAKE) -C 'source/core' $(TARGET)
