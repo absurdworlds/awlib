@@ -9,6 +9,7 @@
  */
 #ifndef _awrts_range_adaptors_
 #define _awrts_range_adaptors_
+#include <iterator>
 namespace awrts {
 template <typename T>
 struct reverse_adapter {
