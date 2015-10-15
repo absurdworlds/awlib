@@ -18,13 +18,13 @@
 
 namespace awrts {
 namespace hdf {
-class Node;
+template <class Node>
 class NodeList : std::vector<std::pair<std::string, Node>> {
 	typedef std::vector<std::pair<std::string, Node>> base;
 public:
-	using base::value_type;
-	using base::size_type;
-	using base::iterator;
+	using typename base::value_type;
+	using typename base::size_type;
+	using typename base::iterator;
 
 	/*!
 	 * Add child node
@@ -150,13 +150,13 @@ private:
 /*!
  * This class is used to represend HDF document structure
  */
-class Node : public NodeList, ValueList {
+class Node : public NodeList<Node>, ValueList {
 public:
 private:
 };
 
 //! Used for storage of an arbitary HDF document
-class Document : public NodeList {
+class Document : public NodeList<Node> {
 public:
 };
 
