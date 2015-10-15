@@ -17,6 +17,7 @@
 #include <aw/gui/Window.h>
 #include <aw/gui/Engine.h>
 #include <aw/gui/Style.h>
+
 namespace aw {
 namespace gui {
 auto getStyle(Style* style, std::string const& name)
@@ -67,6 +68,18 @@ void Drawer::visit(Widget* element)
 	core::Logger::debug("[GUI] Drawer: Unknown Widget");
 }
 
+void Drawer::visit(Button* button)
+{
+	auto style = getStyle(button->getStyle(),
+	                      button->isPressed() ?
+	                      "buttonPressed" : "button");
+
+	engine.drawBackground(button->getClientRect(),
+	                      style->getBackgroundStyle());
+	engine.drawBorder(button->getAbsoluteRect(),
+	                  style->getBorderStyle());
+}
+
 // TODO: replace pointer with reference
 void Drawer::drawChildren(Canvas* element)
 {
@@ -74,5 +87,6 @@ void Drawer::drawChildren(Canvas* element)
 		e.accept(*this);
 	}
 }
+
 } // namespace gui
 } // namespace aw

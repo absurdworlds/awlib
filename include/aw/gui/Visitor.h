@@ -11,9 +11,12 @@
 namespace aw {
 namespace gui {
 class Element;
+
 class Canvas;
-class Widget;
 class Window;
+
+class Widget;
+class Button;
 
 //! Base class for GUI visitor (see Visitor pattern)
 class Visitor {
@@ -24,6 +27,7 @@ public:
 	virtual void visit(Canvas* element) = 0;
 	virtual void visit(Window* element) = 0;
 	virtual void visit(Widget* element) = 0;
+	virtual void visit(Button* element) = 0;
 };
 
 } // namespace gui

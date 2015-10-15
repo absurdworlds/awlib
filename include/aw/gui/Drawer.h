@@ -27,6 +27,7 @@ public:
 	virtual void visit(Canvas* element);
 	virtual void visit(Window* element);
 	virtual void visit(Widget* element);
+	virtual void visit(Button* element);
 private:
 	void drawChildren(Canvas* element);
 
