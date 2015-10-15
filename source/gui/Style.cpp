@@ -9,17 +9,34 @@
 #include <aw/gui/Style.h>
 namespace aw {
 namespace gui {
-void Style::initDefaults()
+Style::Style()
 {
-	ElementStyle windowStyle;
+	ElementStyle style;
 
-	windowStyle.setBorderStyle(std::make_unique<BorderOutward>(2,0xFFFFFFFF));
-	windowStyle.setBackgroundStyle(std::make_unique<BackgroundGradient>(
+	style.setBorderStyle(std::make_unique<BorderSolid>(2,0xFF000000));
+	style.setBackgroundStyle(std::make_unique<BackgroundSolid>(
+	                  0xFFFFFFFF));
+
+	properties["default"] = std::move(style);
+
+	
+	style = ElementStyle();
+
+	style.setBorderStyle(std::make_unique<BorderOutward>(2,0xFFFFFFFF));
+	style.setBackgroundStyle(std::make_unique<BackgroundGradient>(
 	                  0xFF969696, 0xFF646464,
 			  0xFF646464, 0xFF969696));
 			
-	properties["window"] = std::move(windowStyle);
+	properties["window"] = std::move(style);	
+}
 
+ElementStyle* Style::getDefaultStyle()
+{
+	return &properties["default"];
+}
+
+void Style::initDefaults()
+{
 	/*
 	properties["border-color"] = hdf::Value(0xFFFFFFFF);
 	properties["background-color"] = hdf::Value(0xFF969696);

@@ -18,9 +18,10 @@ namespace aw {
 namespace gui {
 class AW_GUI_EXP Style {
 public:
+	Style();
 	virtual ~Style() = default;
 
-	void initDefaults();
+	void initDefaults [[deprecated]] ();
 
 	ElementStyle* getElementStyle(std::string element)
 	{
@@ -32,6 +33,11 @@ public:
 
 		return nullptr;
 	}
+
+	/*!
+	 * Provides a safe default style
+	 */
+	ElementStyle* getDefaultStyle();
 
 	void setElementStyle(std::string element, ElementStyle style)
 	{

@@ -19,6 +19,18 @@
 #include <aw/gui/Style.h>
 namespace aw {
 namespace gui {
+auto getStyle(Style* style, std::string const& name)
+{
+	auto elementStyle = style->getElementStyle(name);
+
+	if (!elementStyle) {
+		core::Logger::debug("[GUI] Drawer: Can't find style for “" +
+		                    name + "”.");
+		return style->getDefaultStyle();
+	}
+
+	return elementStyle;
+}
 
 Drawer::~Drawer()
 {
@@ -37,18 +49,13 @@ void Drawer::visit(Canvas* element)
 
 void Drawer::visit(Window* element)
 {
-	Style* style = element->getStyle();
-	auto windowStyle = style->getElementStyle("window");
-	if (!windowStyle) {
-		// core::Logger::debug("[GUI] Drawer: Can't find style");
-		return; //todo : default
-	}
+	auto style = getStyle(element->getStyle(), "window");
 
 	engine.drawBorder(element->getAbsoluteRect(),
-		          windowStyle->getBorderStyle());
+	                  style->getBorderStyle());
 
 	engine.drawBackground(element->getClientRect(),
-	                      windowStyle->getBackgroundStyle());
+	                      style->getBackgroundStyle());
 
 	//if (element->hasTitleBar()) {
 	//}
