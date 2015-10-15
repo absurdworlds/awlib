@@ -11,47 +11,37 @@
 #include <vector>
 #include <string>
 #include <algorithm>
+#include <experimental/optional>
 
-#include <awrts/common/stringutils.h>
-#include <awrts/core/hdf_value.h>
+#include <awengine/string/utility.h>
+#include <awengine/hdf/Value.h>
 
 namespace awrts {
 namespace hdf {
-
-/*!
- * This class is used to represend HDF document structure
- */
-class Node {
-	typedef std::pair<std::string,Value> key_value_pair;
-	typedef std::vector<key_value_pair> value_container;
-
-	typedef std::pair<std::string,Node> key_node_pair;
-	typedef std::vector<key_node_pair> node_container;
+class Node;
+class NodeList : std::vector<std::pair<std::string, Node>> {
+	typedef std::vector<std::pair<std::string, Node>> base;
 public:
+	using base::value_type;
+	using base::size_type;
+	using base::iterator;
+
 	/*!
 	 * Add child node
 	 */
 	void addNode(std::string name, Node node)
 	{
-		key_node_pair subnode(name, node);
-		nodes_.push_back(subnode);
+		base::emplace_back(name, node);
 	}
 
-	/*!
-	 * Get iterator to first child node
-	 */
-	node_container::iterator nodesBegin()
+	iterator beginNodes()
 	{
-		return nodes_.begin();
+		return base::begin();
 	}
 
-	/*!
-	 * Get iterator to the end
-	 * \return Iterator to slot past last child node
-	 */
-	node_container::iterator nodesEnd()
+	iterator endNodes()
 	{
-		return nodes_.begin();
+		return base::end();
 	}
 
 	/*!
@@ -60,37 +50,45 @@ public:
 	 * \param startAt Point to start the search at
 	 * \return iterator to found node
 	 */
-	node_container::iterator
-		findNode(std::string name, node_container::iterator startAt)
+	iterator findNode(std::string name, iterator startAt)
 	{
-		for(auto iter = startAt; iter != nodes_.end(); ++iter) {
-			if(iter->first == name) {
-				return iter;
-			}
-		}
+		auto comparator = 
+		[&name] (value_type const& pair)
+		{
+			return (pair.first == name);
+		};
 
-		return nodes_.end();
+		return std::find_if(startAt,
+		                    base::end(),
+		                    comparator);
 	}
 
 	/*!
 	 * Remove child node
 	 */
-	void removeNode(node_container::iterator node)
+	void removeNode(iterator node)
 	{
-		nodes_.erase(node);
+		base::erase(node);
 	}
 
 	/*!
 	 * Get child node by index
 	 * \return Child node or an empty node
 	 */
-	Node getNode(node_container::size_type index)
+	bool getNode(size_type index, Node& out)
 	{
-		if(index < nodes_.size()) {
-			return nodes_[index].second;
-		}
-		return Node();
+		if(index > base::size())
+			return false;
+
+		out = base::operator[](index).second;
+
+		return true;
 	}
+};
+
+class ValueList {
+public:
+	typedef std::vector<std::pair<std::string, Value>> value_list;
 
 	/*!
 	 * Add an HDF value
@@ -104,81 +102,62 @@ public:
 		};
 
 		auto found = std::find_if(
-				values_.begin(),
-				values_.end(),
+				values.begin(),
+				values.end(),
 				findKey);
 
-		if(found != values_.end()) {
+		if(found != values.end()) {
 			return false;
 		}
 
-		key_value_pair value(name, val);
-		values_.push_back(value);
+		values.emplace_back(name, val);
 		return true;
 	}
 
 	/*!
 	 * Find HDF value
 	 */
-	value_container::iterator
+	value_list::iterator
 		findValue(std::string name)
 	{
-		for(auto iter = values_.begin(); iter != values_.end(); ++iter) {
+		for(auto iter = values.begin(); iter != values_.end(); ++iter) {
 			if(iter->first == name) {
 				return iter;
 			}
 		}
 
-		return values_.end();
+		return values.end();
 	}
 
-	void removeValue(value_container::iterator val)
+	void removeValue(value_list::iterator val)
 	{
-		values_.erase(val);
+		values.erase(val);
 	}
 
-	Value getValue(value_container::size_type index)
+	Value getValue(value_list::size_type index)
 	{
-		if(index < values_.size()) {
-			return values_[index].second;
-		}
+		if(index < values.size())
+			return values[index].second;
 
 		return Value();
 	}
 private:
-	value_container values_;
-	node_container nodes_;
+	value_list values;
+};
+
+
+
+/*!
+ * This class is used to represend HDF document structure
+ */
+class Node : public NodeList, ValueList {
+public:
+private:
 };
 
 //! Used for storage of an arbitary HDF document
-class Document : protected Node {
+class Document : public NodeList {
 public:
-	void addNode(std::string name, Node node)
-	{
-		Node::addNode(name, node);
-	}
-
-	node_container::iterator
-		nodesBegin()
-	{
-		return Node::nodesBegin();
-	}
-
-	node_container::iterator
-		findNode(std::string name, node_container::iterator startAt)
-	{
-		return Node::findNode(name, startAt);
-	}
-
-	void removeNode(node_container::iterator node)
-	{
-		Node::removeNode(node);
-	}
-
-	Node getNode(node_container::size_type index)
-	{
-		return Node::getNode(index);
-	}
 };
 
 } // namespace hdf
