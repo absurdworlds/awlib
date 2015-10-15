@@ -18,28 +18,30 @@
 
 namespace awrts {
 namespace hdf {
-template <class Node>
-class NodeList : std::vector<std::pair<std::string, Node>> {
-	typedef std::vector<std::pair<std::string, Node>> base;
+template <typename Node>
+class List : std::vector<std::pair<std::string, Node>> {
 public:
+	typedef std::vector<std::pair<std::string, Node>> base;
+
 	using typename base::value_type;
 	using typename base::size_type;
 	using typename base::iterator;
+	using typename base::const_iterator;
 
 	/*!
 	 * Add child node
 	 */
-	void addNode(std::string name, Node node)
+	void add(std::string name, Node& node)
 	{
 		base::emplace_back(name, node);
 	}
 
-	iterator beginNodes()
+	iterator begin()
 	{
 		return base::begin();
 	}
 
-	iterator endNodes()
+	iterator end()
 	{
 		return base::end();
 	}
@@ -50,7 +52,7 @@ public:
 	 * \param startAt Point to start the search at
 	 * \return iterator to found node
 	 */
-	iterator findNode(std::string name, iterator startAt)
+	iterator find(std::string name, iterator startAt)
 	{
 		auto comparator = 
 		[&name] (value_type const& pair)
@@ -66,7 +68,7 @@ public:
 	/*!
 	 * Remove child node
 	 */
-	void removeNode(iterator node)
+	void remove(iterator node)
 	{
 		base::erase(node);
 	}
@@ -75,89 +77,47 @@ public:
 	 * Get child node by index
 	 * \return Child node or an empty node
 	 */
-	bool getNode(size_type index, Node& out)
+	Node get(size_type index)
 	{
 		if(index > base::size())
-			return false;
+			return Node();
 
-		out = base::operator[](index).second;
+		return base::operator[](index).second;
 
-		return true;
+		return Node();
 	}
 };
-
-class ValueList {
-public:
-	typedef std::vector<std::pair<std::string, Value>> value_list;
-
-	/*!
-	 * Add an HDF value
-	 */
-	bool addValue(std::string name, Value& val)
-	{
-		auto findKey = 
-		[&name] (std::pair<std::string, Value> const& pair)
-		{
-			return (pair.first == name);
-		};
-
-		auto found = std::find_if(
-				values.begin(),
-				values.end(),
-				findKey);
-
-		if(found != values.end()) {
-			return false;
-		}
-
-		values.emplace_back(name, val);
-		return true;
-	}
-
-	/*!
-	 * Find HDF value
-	 */
-	value_list::iterator
-		findValue(std::string name)
-	{
-		for(auto iter = values.begin(); iter != values_.end(); ++iter) {
-			if(iter->first == name) {
-				return iter;
-			}
-		}
-
-		return values.end();
-	}
-
-	void removeValue(value_list::iterator val)
-	{
-		values.erase(val);
-	}
-
-	Value getValue(value_list::size_type index)
-	{
-		if(index < values.size())
-			return values[index].second;
-
-		return Value();
-	}
-private:
-	value_list values;
-};
-
-
 
 /*!
  * This class is used to represend HDF document structure
  */
-class Node : public NodeList<Node>, ValueList {
+class Node : List<Node>, List<Value> {
 public:
+	auto addNode = List<Node>::add;
+	auto beginNodes = List<Node>::begin;
+	auto endNodes = List<Node>::end;
+	auto findNode = List<Node>::find;
+	auto removeNode = List<Node>::remove;
+	auto getNode = List<Node>::get;
+
+	auto addValue = List<Node>::add;
+	auto beginValues = List<Node>::begin;
+	auto endValues = List<Node>::end;
+	auto findValue = List<Node>::find;
+	auto removeValue = List<Node>::remove;
+	auto getValue = List<Node>::get;
 private:
 };
 
 //! Used for storage of an arbitary HDF document
-class Document : public NodeList<Node> {
+class Document : public List<Node> {
 public:
+	auto addNode = List<Node>::add;
+	auto beginNodes = List<Node>::begin;
+	auto endNodes = List<Node>::end;
+	auto findNode = List<Node>::find;
+	auto removeNode = List<Node>::remove;
+	auto getNode = List<Node>::get;
 };
 
 } // namespace hdf
