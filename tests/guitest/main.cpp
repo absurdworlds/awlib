@@ -52,7 +52,6 @@ int guimain()
 	std::unique_ptr<Canvas> canvas = std::make_unique<Canvas>();
 	std::unique_ptr<Style> style = std::make_unique<Style>();
 	canvas->setStyle(style.get());
-	style->initDefaults();
 	style->getElementStyle("window");
 	canvas->setName("c");
 

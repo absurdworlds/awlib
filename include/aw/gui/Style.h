@@ -21,8 +21,6 @@ public:
 	Style();
 	virtual ~Style() = default;
 
-	void initDefaults [[deprecated]] ();
-
 	ElementStyle* getElementStyle(std::string element)
 	{
 		auto found = properties.find(element);

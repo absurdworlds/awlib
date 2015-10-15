@@ -28,6 +28,24 @@ Style::Style()
 			  0xFF646464, 0xFF969696));
 			
 	properties["window"] = std::move(style);	
+
+	style = ElementStyle();
+
+	style.setBorderStyle(std::make_unique<BorderOutward>(2,0xFFFFFFFF));
+	style.setBackgroundStyle(std::make_unique<BackgroundGradient>(
+	                  0xFF969696, 0xFF646464,
+			  0xFF646464, 0xFF969696));
+			
+	properties["button"] = std::move(style);	
+
+	style = ElementStyle();
+
+	style.setBorderStyle(std::make_unique<BorderInward>(2,0xFFFFFFFF));
+	style.setBackgroundStyle(std::make_unique<BackgroundGradient>(
+	                  0xFF969696, 0xFF646464,
+			  0xFF646464, 0xFF969696));
+			
+	properties["button"] = std::move(style);	
 }
 
 ElementStyle* Style::getDefaultStyle()
@@ -35,7 +53,7 @@ ElementStyle* Style::getDefaultStyle()
 	return &properties["default"];
 }
 
-void Style::initDefaults()
+void initDefaults()
 {
 	/*
 	properties["border-color"] = hdf::Value(0xFFFFFFFF);
