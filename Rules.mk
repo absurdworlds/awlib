@@ -82,16 +82,17 @@ release: CXXFLAGS+=$(CXXFLAGS_RELEASE)
 release: Build
 
 $(BuildDir)/%.o: %.cpp
+	@ $(MKDIR_P) $(dir $@)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $< -o $@
 
 .PHONY: directories
 directories: BuildDir InstallDir
 
 BuildDir:
-	$(MKDIR_P) $(BuildDir)
+	@ $(MKDIR_P) $(BuildDir)
 
 InstallDir:
-	$(MKDIR_P) $(InstallDir)
+	@ $(MKDIR_P) $(InstallDir)
 
 Build: directories $(Objects)
 	$(CXX) $(EXTRAFLAGS) -o $(BuildDir)/$(OutputName) \
@@ -103,7 +104,7 @@ endif
 
 .PHONY : clean
 clean:
-	-rm $(Objects) $(BuildDir)/$(OutputName)
+	- rm $(Objects) $(BuildDir)/$(OutputName)
 
 ifeq ($(CONFIG_MAKE_DEPENDS),true)
 -include $(Depends)
