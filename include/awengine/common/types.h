@@ -27,13 +27,9 @@ typedef  int64_t       i64;
 typedef float          f32;
 typedef double         f64;
 
-typedef u8 byte;
 typedef intmax_t diff_t;
 
-#if defined (HR_64BIT)
-	typedef u64 handle;
-#else
-	typedef u32 handle;
-#endif
+typedef u8 byte;
+typedef void* handle;
 } // namespace awrts
 #endif //_awrts_types_
