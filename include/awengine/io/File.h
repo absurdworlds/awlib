@@ -1,13 +1,14 @@
 /*
  * Copyright (C) 2014  absurdworlds
+ * Copyright (C) 2015  hedede <haddayn@gmail.com>
  *
- * License LGPLv3-only:
+ * License LGPLv3 or later:
  * GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_File_
-#define _awrts_File_
+#ifndef _awengine_File_
+#define _awengine_File_
 #include <string>
 
 #include <awengine/io/io.h>
@@ -15,59 +16,69 @@
 
 namespace awrts {
 namespace io {
+enum class FileMode {
+	Read,
+	Write,
+	Append
+};
+
+enum class SeekMode {
+	Set,
+	Offset,
+	Reverse,
+};
+
 /*!
  * Base class for file streams
  */
 class File {
 public:
-	File(std::string const& path)
-		: path_(path), file_(0), size_(0)
-	{
-	}
-
-	virtual ~File()
-	{
-	}
+	File(std::string const& path, FileMode mode);
+	virtual ~File();
 
 	/*!
-	 * Set position indicator in file stream.
-	 * \param offset Number of bytes to move.
-	 * \param relative If true, offset will be added to current position,
-	 * otherwise to the beginning of gile.
-	 * \return 0 if seek was successful, \a -error_code otherwise
-	 */ 
-	virtual i32 seek(i32 offset, bool relative = false) = 0;
-	/*!
-	 * Get current position in file stream.
+	 * Check if file is open
 	 */
-	virtual u32 tell() const = 0;
+	bool isOpen() const;
+
+	/*!
+	 * Close the file
+	 */
+	void close();
+
+	/*!
+	 * Read specified number of bytes from file to buffer
+	 */
+	diff_t read(void* buffer, diff_t count);
+
+	/*!
+	 * Write specified number of bytes to file from buffer.
+	 */
+	diff_t write(void const* buffer, diff_t count);
+
+	/*!
+	 * Set pointer position
+	 */
+	diff_t seek(diff_t count, SeekMode mode);
+
+	/*!
+	 * Get pointer position
+	 */
+	diff_t tell() const;
 
 	/*!
 	 * Get size of file in bytes
 	 */
-	virtual u32 getSize() const = 0;
-
-	/*! Test if file is open.
-	 * \return \a true if file is open.
-	 */
-	virtual bool isOpen() const = 0;
+	size_t size() const;
 
 	/*!
 	 * Get full path to file
 	 */
-	virtual std::string const& getPath() const = 0;
-
-#if 0
-	/*!
-	 * Get last error
-	 */
-	virtual error_code getError () const = 0;
-#endif
-protected:
-	FILE* file_;
-	u32 size_;
-	std::string path_;
+	std::string const& path() const;
+private:
+	std::string filename;
+	FILE* file;
 };
 } // namespace io
 } // namespace awrts
-#endif//_awrts_File_
+#endif//_awengine_File_

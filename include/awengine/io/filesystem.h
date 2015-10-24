@@ -21,7 +21,7 @@ namespace io {
 enum class FileType {
 	Unknown,
 	File,
-	Dir,
+	Directory,
 	Symlink,
 };
 
@@ -61,9 +61,9 @@ inline size_t fileSize (std::string const & path)
 }
 
 /*!
- * File opening mode
+ * File access mode
  */
-enum FileMode {
+enum FileAccess {
 	//! File exists
 	FM_Exists  = 0,
 	//! Execute permission
@@ -85,7 +85,7 @@ enum FileMode {
  * 	Zero (0) on success, or -1 if file not exist
  * 	or one of permissions was denied.
  */
-AW_SYS_EXP i32 checkFile(std::string const & path, FileMode mode);
+AW_SYS_EXP i32 checkFile(std::string const & path, FileAccess mode);
 
 } //namespace io
 } //namespace awrts

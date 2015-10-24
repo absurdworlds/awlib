@@ -1,7 +1,7 @@
 /*
  * Copyright (C) 2014  absurdworlds
  *
- * License LGPLv3-only:
+ * License LGPLv3 or later:
  * GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
@@ -15,32 +15,22 @@ namespace io {
 /*!
  * Provides interface for reading files
  */
-class AW_IO_EXP ReadFile : public File {
+class AW_IO_EXP ReadFile : private File {
 public:
-	ReadFile (std::string const& path);
-
-	virtual ~ReadFile();
-
-	/*!
-	 * Read \a size bytes into \a buffer.
-	 * \param buffer Pointer to first object of target buffer.
-	 * \param size Number of bytes to read.
-	 * \return >0 if read was successful, \a -error_code otherwise.
-	 */ 
-	virtual i32 read (void* buffer, u32 size);
-	virtual i32 seek (i32 offset, bool relative = false);
-	virtual u32 tell () const;
-	virtual u32 getSize () const;
-
-	virtual bool isOpen () const
+	ReadFile (std::string const& path)
+		: File(path, FileMode::Read)
 	{
-		return file_ != 0;
 	}
 
-	virtual std::string const& getPath () const;
+	virtual ~ReadFile() = default;
 
-private:
-	void open ();
+	using File::isOpen;
+	using File::close;
+	using File::write;
+	using File::seek;
+	using File::tell;
+	using File::size;
+	using File::path;
 };
 
 } // namespace io
