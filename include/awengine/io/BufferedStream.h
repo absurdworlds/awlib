@@ -8,22 +8,38 @@
  */
 #ifndef _awrts_BufferedStream_
 #define _awrts_BufferedStream_
-#include <awengine/io/CharacterStream.h>
+#include <awengine/io/InputStream.h>
 
 namespace awrts {
 namespace io {
 class ReadFile;
 
-//! Class defines an interface for buffered file stream
-class BufferedStream : public CharacterStream {
+//! Class defines an interface for file stream
+class AW_IO_EXP InputFileStream : public InputStream {
 public:
-	virtual ~BufferedStream ()
-	{
-	}
-};
+	InputFileStream(ReadFile& file);
+	virtual ~InputFileStream() = default;
 
-//! Create a buffered file stream
-AW_SYS_EXP BufferedStream* createBufferedStream(ReadFile& source);
+	/*!
+	 * Extract next character from stream.
+	 */
+	virtual bool get(char& c);
+
+	/*!
+	 * Peek at next character without extracting it.
+	 */
+	virtual bool peek(char& c);
+	
+	/*!
+	 * Get position in stream
+	 */
+	virtual size_t getPos() const;
+
+private:
+	ReadFile& source;
+	char next;
+	size_t pos;
+};
 
 } //namespace io
 } //namespace awrts

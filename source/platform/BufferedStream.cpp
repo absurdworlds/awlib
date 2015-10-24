@@ -6,60 +6,51 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#include <awrts/io/ReadFile.h>
-
-#include "BufferedStream.h"
+#include <awengine/io/ReadFile.h>
+#include <awengine/io/InputFileStream.h>
 
 namespace awrts {
 namespace io {
-BufferedStream* createBufferedStream(ReadFile& source)
-{
-	// temporary hack                v
-	return new impl_::BufferedStream(&source);
-}
-
-impl_::BufferedStream::BufferedStream(ReadFile* source)
-	: pos_(0), source_(source)
+InputFileStream::InputFileStream(ReadFile& source)
+	: pos_(0), source(source)
 {
 	//TODO: may crash on file of zero length
-	source_->read(&cur_, 1);
+	source.read(&cur_, 1);
 }
 
-impl_::BufferedStream::~BufferedStream()
+InputFileStream::~InputFileStream()
 {
-//	delete[] buffer_;
 }
 
-bool impl_::BufferedStream::getCurrent(char& c)
+bool InputFileStream::peek(char& c)
 {
-	if(pos_ > source_->getSize()) {
+	if(pos > source.getSize()) {
 		c = 0;
 		return false;
 	}
 
-	c = cur_;
+	c = next;
 	return true;
 }
 
-bool impl_::BufferedStream::getNext(char& c)
+bool InputFileStream::get(char& c)
 {
-	pos_++;
+	++pos;
 
-	if(pos_ > source_->getSize()) {
+	if(pos > source.getSize()) {
 		c = 0;
 		return false;
 	}
 
-	source_->read(&cur_, 1);
-
-	c = cur_;
+	source_->read(&next, 1);
+	c = next;
 
 	return true;
 }
 
-u32 impl_::BufferedStream::getPos() const
+u32 InputFileStream::getPos() const
 {
-	return pos_;
+	return pos;
 }
 
 } //namespace io
