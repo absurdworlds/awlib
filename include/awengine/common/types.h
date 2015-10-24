@@ -28,6 +28,7 @@ typedef float          f32;
 typedef double         f64;
 
 typedef u8 byte;
+typedef intmax_t diff_t;
 
 #if defined (HR_64BIT)
 	typedef u64 handle;
