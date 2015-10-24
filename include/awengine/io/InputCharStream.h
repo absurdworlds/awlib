@@ -23,8 +23,8 @@ public:
 	{
 	}
 
-	virtual bool get(char& c);
 	virtual bool peek(char& c);
+	virtual bool get(char& c);
 
 	virtual size_t getPos() const
 	{

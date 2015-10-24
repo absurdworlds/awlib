@@ -21,14 +21,14 @@ public:
 	virtual ~InputFileStream() = default;
 
 	/*!
-	 * Extract next character from stream.
-	 */
-	virtual bool get(char& c);
-
-	/*!
-	 * Peek at next character without extracting it.
+	 * Look at current character without extracting it
 	 */
 	virtual bool peek(char& c);
+
+	/*!
+	 * Extract current character from stream.
+	 */
+	virtual bool get(char& c);
 	
 	/*!
 	 * Get position in stream
@@ -37,8 +37,9 @@ public:
 
 private:
 	ReadFile& source;
-	char next;
+	char cur;
 	size_t pos;
+	size_t size;
 };
 
 } //namespace io

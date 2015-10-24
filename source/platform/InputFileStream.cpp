@@ -12,46 +12,38 @@
 namespace awrts {
 namespace io {
 InputFileStream::InputFileStream(ReadFile& source)
-	: pos_(0), source(source)
+	: pos(0), source(source), size(source.getSize())
 {
-	//TODO: may crash on file of zero length
-	source.read(&cur_, 1);
-}
-
-InputFileStream::~InputFileStream()
-{
+	if (size > 0) {
+		source.read(&cur, 1);
+	}
 }
 
 bool InputFileStream::peek(char& c)
 {
-	if(pos > source.getSize()) {
+	if (pos == size) {
 		c = 0;
 		return false;
 	}
 
-	c = next;
+	c = cur;
 	return true;
 }
 
 bool InputFileStream::get(char& c)
 {
-	++pos;
-
-	if(pos > source.getSize()) {
-		c = 0;
-		return false;
+	bool ret = peek(c);
+	if (pos < size) {
+		++pos;
+		source.read(&cur, 1);
 	}
 
-	source_->read(&next, 1);
-	c = next;
-
-	return true;
+	return ret;
 }
 
-u32 InputFileStream::getPos() const
+size_t InputFileStream::getPos() const
 {
 	return pos;
 }
-
 } //namespace io
 } //namespace awrts

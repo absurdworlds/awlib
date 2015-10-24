@@ -22,13 +22,11 @@ bool InputCharStream::peek(char& c)
 
 bool InputCharStream::get(char& c)
 {
-	if(source[pos] == 0) {
-		c = 0;
-		return false;
-	}
-	c = source[pos++];
-	return true;
-}
+	auto ret = peek(c);
 
+	if(source[pos] != 0)
+		++pos;
+	return ret;
+}
 } //namespace io
 } //namespace awrts

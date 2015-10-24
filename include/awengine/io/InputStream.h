@@ -15,19 +15,19 @@
 namespace awrts {
 namespace io {
 //! Class defines an interface for input streams
-class InStream {
+class InputStream {
 public:
-	virtual ~CharacterStream() = default;
+	virtual ~InputStream() = default;
 
 	/*!
-	 * Extract next character from stream.
-	 */
-	virtual bool get(char& c) = 0;
-
-	/*!
-	 * Peek at next character without extracting it.
+	 * Look at current character
 	 */
 	virtual bool peek(char& c) = 0;
+
+	/*!
+	 * Extract current character from stream
+	 */
+	virtual bool get(char& c) = 0;
 	
 	/*!
 	 * Get position in stream
