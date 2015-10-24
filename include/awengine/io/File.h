@@ -69,12 +69,12 @@ public:
 	/*!
 	 * Get size of file in bytes
 	 */
-	size_t size() const;
+	size_t getSize() const;
 
 	/*!
 	 * Get full path to file
 	 */
-	std::string const& path() const;
+	std::string const& getPath() const;
 private:
 	std::string filename;
 	FILE* file;

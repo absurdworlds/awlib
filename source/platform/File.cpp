@@ -78,13 +78,13 @@ diff_t File::tell() const
 	return ftell(file);
 }
 
-size_t File::size() const
+size_t File::getSize() const
 {
 	size_t size = fileSize(filename);
 	return size;
 }
 
-std::string const& File::path() const
+std::string const& File::getPath() const
 {
 	return filename;
 }
