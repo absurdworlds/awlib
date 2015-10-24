@@ -6,35 +6,27 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#include "CharacterStream.h"
+#include <awengine/io/InputCharStream.h>
 
 namespace awrts {
 namespace io {
-// TODO: add 'copy' specifier // wait, what?
-CharacterStream* createCharacterStream(char const* source)
+bool InputCharStream::peek(char& c)
 {
-	return new impl_::CharacterStream(source);
-}
-
-bool impl_::CharacterStream::getCurrent(char& c)
-{
-	if(pos_ == 0xFFFFFFF) {
+	if(source[pos] == 0) {
 		c = 0;
 		return false;
 	}
-	c = source_[pos_];
+	c = source[pos];
 	return true;
 }
 
-bool impl_::CharacterStream::getNext(char& c)
+bool InputCharStream::get(char& c)
 {
-	++ pos_;
-	if(source_[pos_] == 0) {
+	if(source[pos] == 0) {
 		c = 0;
-		pos_ = 0xFFFFFFF;
 		return false;
 	}
-	c = source_[pos_];
+	c = source[pos++];
 	return true;
 }
 
