@@ -26,7 +26,7 @@ public:
 
 	using File::isOpen;
 	using File::close;
-	using File::write;
+	using File::read;
 	using File::seek;
 	using File::tell;
 	using File::getSize;

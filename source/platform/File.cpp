@@ -89,6 +89,11 @@ std::string const& File::getPath() const
 	return filename;
 }
 
+bool File::isOpen() const
+{
+	return file != 0;
+}
+
 void File::close()
 {
 	if (!isOpen())

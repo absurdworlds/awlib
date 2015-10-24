@@ -9,7 +9,7 @@
 #include <unistd.h>
 #include <sys/stat.h>
 
-#include <awrts/io/filesystem.h>
+#include <awengine/io/filesystem.h>
 
 namespace awrts {
 namespace io {
@@ -28,7 +28,7 @@ i32 fileStat (std::string const& path, FileInfo& result)
 		result.type = FileType::File;
 		break;
 	case S_IFDIR:
-		result.type = FileType::Dir;
+		result.type = FileType::Directory;
 		break;
 	default:
 		result.type = FileType::Unknown;
@@ -39,7 +39,7 @@ i32 fileStat (std::string const& path, FileInfo& result)
 	return 0;
 }
 
-i32 checkFile(std::string const& path, FileMode fmode)
+i32 checkFile(std::string const& path, FileAccess fmode)
 {
 #if 0
 	// Can't find any mention of exact values in the standard
