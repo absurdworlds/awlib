@@ -26,9 +26,6 @@ extern "C" IRRLICHT_API IrrlichtDevice* IRRCALLCONV createDevice(
 }
 namespace awrts {
 size_t Event::eventTypes;
-namespace core {
-core::Logger* core::Logger::globalLogger;
-}
 
 class Couter : public core::LogBook {
 public:
