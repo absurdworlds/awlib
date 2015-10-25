@@ -68,7 +68,7 @@ hdf::Type tokenToType(Token const& token)
 	}
 }
 
-hdf::Type convertImpicitType(Token const& token) 
+hdf::Type convertImplicitType(Token const& token)
 {
 	char c = token.value.c_str()[0];
 	if(isNameBeginChar(c) || c == '"') {
@@ -227,7 +227,7 @@ void Parser::skipValue()
 		type = tokenToType(token);
 		readToken(token);
 	} else {
-		type = convertImpicitType(token);
+		type = convertImplicitType(token);
 	}
 
 	if(type == Type::Vector3d || type == Type::Vector2d) {
@@ -465,7 +465,7 @@ void Parser::readValue(T& var)
 		type = tokenToType(token);
 		readToken(token);
 	} else {
-		type = convertImpicitType(token);
+		type = convertImplicitType(token);
 	}
 
 	if(checkType<T>(type) == false) {
