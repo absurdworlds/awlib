@@ -8,8 +8,7 @@
  */
 #ifndef _awrts_SoundSample_
 #define _awrts_SoundSample_
-
-#include <awrts/common/hrengintypes.h>
+#include <awengine/common/types.h>
 
 namespace awrts {
 namespace audio {
@@ -22,6 +21,6 @@ struct SoundSample {
 	i8* data;
 };
 
-}
-}
+} // namespace audio
+} // namespace awrts
 #endif//_awrts_SoundSample_

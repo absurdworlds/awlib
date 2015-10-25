@@ -8,15 +8,14 @@
  */
 #ifndef _awrts_SoundManager_
 #define _awrts_SoundManager_
-
 #include <map>
 #include <string>
 
-#include <al.h>
-#include <alc.h>
+#include <AL/al.h>
+#include <AL/alc.h>
 
-#include <awrts/common/config.h>
-#include <awrts/common/types.h>
+#include <awengine/config/config.h>
+#include <awengine/common/types.h>
 
 #include <awrts/sound/SoundManager.h>
 #include <awrts/sound/Sound.h>

@@ -8,10 +8,9 @@
  */
 #ifndef _awrts_ALutil_
 #define _awrts_ALutil_
+#include <AL/al.h>
 
-#include <al.h>
-
-#include <awrts/common/types.h>
+#include <awengine/common/types.h>
 
 inline ALenum toAlEnum(short channels, short samples)
 {

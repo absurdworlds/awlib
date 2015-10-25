@@ -8,10 +8,9 @@
  */
 #ifndef _awrts_ALvector_
 #define _awrts_ALvector_
+#include <AL/al.h>
 
-#include <al.h>
-
-#include <awrts/math/Vector3d.h>
+#include <awengine/math/Vector3d.h>
 
 namespace awrts {
 namespace audio {

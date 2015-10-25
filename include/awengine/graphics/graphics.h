@@ -18,12 +18,12 @@
 #ifndef _awrts_graphics_
 #define _awrts_graphics_
 
-#include <awrts/common/visibility.h>
+#include <awengine/config/visibility.h>
 
-#ifdef HR_MODULE_GRAPHICS
-	#define HR_GX_EXP HR_EXPORT
+#ifdef AW_MODULE_GRAPHICS
+	#define AW_GX_EXP AW_EXPORT
 #else
-	#define HR_GX_EXP HR_IMPORT
+	#define AW_GX_EXP AW_IMPORT
 #endif
 
 // Namespace descriptions for Doxygen

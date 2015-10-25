@@ -1,7 +1,7 @@
 /*
  * Copyright (C) 2014-2015  absurdworlds
  *
- * License LGPLv3-only:
+ * License LGPLv3 or later:
  * GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
@@ -12,9 +12,9 @@
 #include <string>
 #include <thread>
 
-#include <awrts/core/paths.h>
-#include <awrts/graphics/VideoManager.h>
-#include <awrts/core/Logger.h>
+#include <awengine/core/paths.h>
+#include <awengine/graphics/VideoManager.h>
+#include <awengine/core/Logger.h>
 
 #include "ALutil.h"
 #include "RIFFReader.h"
@@ -25,7 +25,7 @@
 namespace awrts {
 namespace audio {
 
-HR_SND_EXP SoundManager* createSoundManager()
+AW_SND_EXP SoundManager* createSoundManager()
 {
 	return new ALSoundManager;
 }

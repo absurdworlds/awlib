@@ -8,9 +8,9 @@
  */
 #ifndef _awrts_VideoManager_
 #define _awrts_VideoManager_
-#include <awrts/common/types.h>
+#include <awengine/common/types.h>
 
-#include <awrts/graphics/graphics.h>
+#include <awengine/graphics/graphics.h>
 
 namespace awrts {
 namespace core {
@@ -45,7 +45,7 @@ public:
 };
 
 //! Create a video manager
-HR_GX_EXP VideoManager* createVideoManager(core::SettingsManager* settings = 0);
+AW_GX_EXP VideoManager* createVideoManager(core::SettingsManager* settings = 0);
 
 } // namespace graphics
 } // namespace awrts

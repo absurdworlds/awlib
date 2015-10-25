@@ -10,7 +10,7 @@
 #define _awrts_Sound_
 #include <AL/al.h>
 
-#include <awrts/common/hrengintypes.h>
+#include <awengine/common/types.h>
 
 #include <awrts/sound/Sound3D.h>
 

@@ -8,11 +8,10 @@
  */
 #ifndef _awrts_RIFF_
 #define _awrts_RIFF_
-
 #include <string>
 
-#include <awrts/common/hrengintypes.h>
-#include <awrts/filesystem/IReadFile.h>
+#include <awengine/common/types.h>
+#include <awengine/io/ReadFile.h>
 
 #include "SoundSample.h"
 
@@ -42,20 +41,20 @@ enum class WaveFormat {
 
 bool readWAV(std::string path, SoundSample& sample) 
 {
-	io::IReadFile* file = io::openReadFile(path);
+	io::ReadFile file(path);
 
-	if(!file->isOpen()) {
+	if(!file.isOpen()) {
 		return false;
 	}
 
 	u32 riffHeader;
-	file->read(&riffHeader,4);
+	file.read(&riffHeader,4);
 	u32 fileSize;
-	file->read(&fileSize,4);
+	file.read(&fileSize,4);
 	u32 waveTag;
-	file->read(&waveTag,4);
+	file.read(&waveTag,4);
 	u32 format;
-	file->read(&format,4);
+	file.read(&format,4);
 
 	if((WaveFields)riffHeader != WaveFields::RiffHeader) {
 		return false;
@@ -66,29 +65,29 @@ bool readWAV(std::string path, SoundSample& sample)
 	}
 
 	u32 headerLength;
-	file->read(&headerLength,4);
+	file.read(&headerLength,4);
 	u16 type;
-	file->read(&type,2);
+	file.read(&type,2);
 	u16 channels;
-	file->read(&channels,2);
+	file.read(&channels,2);
 	u32 sampleRate;
-	file->read(&sampleRate,4);
+	file.read(&sampleRate,4);
 	u32 bitRate;
-	file->read(&bitRate,4);
+	file.read(&bitRate,4);
 	u16 bytesPerSample;
-	file->read(&bytesPerSample,2);
+	file.read(&bytesPerSample,2);
 	u16 bitsPerSample;
-	file->read(&bitsPerSample,2);
+	file.read(&bitsPerSample,2);
 
 	u32 dataTag;
-	file->read(&dataTag,4);
+	file.read(&dataTag,4);
 
 	if((WaveFields)dataTag != WaveFields::DataTag) {
 		return false;
 	}
 
 	u32 dataSize;
-	file->read(&dataSize,4);
+	file.read(&dataSize,4);
 
 	sample.bitsPerSample = bitsPerSample;
 	sample.channels = channels;
@@ -96,14 +95,13 @@ bool readWAV(std::string path, SoundSample& sample)
 	sample.size = dataSize;
 
 	i8* data = new i8[dataSize*2];
-	i32 bytesRead = file->read(data,dataSize);
+	i32 bytesRead = file.read(data,dataSize);
 	if(bytesRead < dataSize) {
 		return false;
 	}
 
 	sample.data = data;
 
-	delete file;
 	return true;
 }
 

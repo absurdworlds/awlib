@@ -8,9 +8,8 @@
  */
 #ifndef _awrts_Sound3D_
 #define _awrts_Sound3D_
-
-#include <awrts/common/hrengintypes.h>
-#include <awrts/common/Vector3d.h>
+#include <awengine/common/types.h>
+#include <awengine/math/Vector3d.h>
 
 #include <awrts/sound/Sound.h>
 
