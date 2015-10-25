@@ -17,13 +17,12 @@
  */
 #ifndef _awrts_sound_
 #define _awrts_sound_
+#include <awengine/config/visibility.h>
 
-#include <awrts/common/visibility.h>
-
-#ifdef HR_MODULE_SOUND
-	#define HR_SND_EXP HR_EXPORT
+#ifdef AW_MODULE_SOUND
+	#define AW_SND_EXP AW_EXPORT
 #else
-	#define HR_SND_EXP HR_IMPORT
+	#define AW_SND_EXP AW_IMPORT
 #endif
 
 // Namespace descriptions for Doxygen

@@ -17,8 +17,8 @@
 #include <awengine/config/config.h>
 #include <awengine/common/types.h>
 
-#include <awrts/sound/SoundManager.h>
-#include <awrts/sound/Sound.h>
+#include <awengine/sound/SoundManager.h>
+#include <awengine/sound/Sound.h>
 
 #include "SoundSample.h"
 
@@ -28,7 +28,7 @@ namespace audio {
 class SoundManager : public SoundManager {
 public:
 	SoundManager();
-	virtual ~SoundManager() {};
+	virtual ~SoundManager() = default;
 
 	virtual void loadSound(char const* fileName);
 	virtual Sound3D* createSound3D(char const* fileName);

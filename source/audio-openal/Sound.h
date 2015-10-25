@@ -12,7 +12,7 @@
 
 #include <awengine/common/types.h>
 
-#include <awrts/sound/Sound3D.h>
+#include <awengine/sound/Sound3D.h>
 
 #include "ALVector.h"
 

@@ -8,8 +8,7 @@
  */
 #ifndef _awrts_SoundManager_
 #define _awrts_SoundManager_
-
-#include <awrts/sound/sound.h>
+#include <awengine/sound/sound.h>
 
 namespace awrts {
 namespace sound {
@@ -18,9 +17,7 @@ class Sound;
 //! This class is used to manage all audio output
 class SoundManager {
 public:
-	virtual ~SoundManager ()
-	{
-	};
+	virtual ~SoundManager () = default;
 
 	virtual void addSound (char const* fileName) = 0;
 	virtual void initSounds () = 0;
@@ -28,7 +25,7 @@ public:
 };
 
 //! Create new sound manager
-HR_SND_EXP SoundManager* createSoundManager ();
+AW_SND_EXP SoundManager* createSoundManager ();
 
 } // namespace sound
 } // namespace awrts

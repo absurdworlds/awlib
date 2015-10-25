@@ -11,7 +11,7 @@
 #include <awengine/common/types.h>
 #include <awengine/math/Vector3d.h>
 
-#include <awrts/sound/Sound.h>
+#include <awengine/sound/Sound.h>
 
 namespace awrts {
 namespace audio {
