@@ -18,17 +18,19 @@
 
 namespace awrts {
 namespace io {
-class CharacterStream;
+class InputStream;
 }
 
 namespace hdf {
-/* Enumeration for objects parsed by HDF parser. */
-enum ObjectType {
-	HDF_OBJ_NULL = 0,
-	HDF_OBJ_NODE,
-	HDF_OBJ_NODE_END,
-	HDF_OBJ_VAL,
-	HDF_OBJ_CMD
+/*!
+ * Enumeration of objects returned by HDF parser.
+ */
+enum class Object {
+	Null = 0,
+	Node,
+	NodeEnd,
+	Value,
+	Directive
 };
 
 /*!
@@ -42,7 +44,7 @@ enum ObjectType {
 */
 class Parser {
 public:
-	virtual ~Parser() {}
+	virtual ~Parser() = default;
 
 	//! Fast-forward to the next object
 	virtual bool read() = 0;
@@ -51,7 +53,7 @@ public:
 	 * \return
 	 *     The object type or 0 (HDF_OBJ_NULL) in case of failure
 	 */
-	virtual ObjectType getObjectType() = 0;
+	virtual Object getObjectType() = 0;
 	
 	/*! Read the object's name
 	 * \param name
@@ -92,8 +94,7 @@ public:
  * \param stream Stream to parse.
  * \see io::CharacterStream
 */
-AW_HDF_EXP Parser* createParser(io::CharacterStream* stream);
-
+AW_HDF_EXP Parser* createParser(io::InputStream* stream);
 } // namespace io
 } // namespace awrts
 #endif//_awrts_HDFReader_
