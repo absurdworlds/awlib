@@ -162,9 +162,11 @@ Object Parser::getObjectType()
 			//state = HDF_S_MD_BEGIN;
 			//return HDF_OBJ_MD;
 		} else {
-			std::string msg("invalid character: ");
-			msg += c;
-			error(HDF_LOG_ERROR, msg);
+			error(HDF_LOG_ERROR,
+			      string::compose(
+			         "Invalid character: %0",
+			         std::string(1, c)
+			));
 			return Object::Null;
 		}
 	}
@@ -243,15 +245,15 @@ void Parser::skipNode()
 	char c;
 	u32 depth = 1;
 
-	while (depth > 0) {
-		stream->get(c);
-
+	stream->peek(c);
+	do {
 		if(c == '[' ) {
-			depth++;
+			++depth;
 		} else if(c == ']') {
-			depth--;
+			--depth;
 		}
-	}
+		stream->next(c);
+	} while (depth > 0);
 
 	read();
 }
@@ -273,7 +275,7 @@ void Parser::skip()
 	stream->peek(c);
 
 	while(condition(c) && c != 0)
-		stream->get(c);
+		stream->next(c);
 }
 
 inline bool notLineBreak(char c)
@@ -306,8 +308,7 @@ void Parser::fastForward() {
 		if(isWhitespace(c)) {
 			skipWhitespace();
 		} else if(c == '/') {
-			stream->get(c);
-			stream->peek(c);
+			stream->next(c);
 
 			if(c == '/') {
 				//token.type = tokenCOMMENT;
@@ -344,7 +345,11 @@ bool Parser::parseType(Token& token) {
 		readName(token.value, ':');
 	} else {
 		error(HDF_LOG_ERROR,
-		      string::compose("illegal token %0, expected typename", c));
+		      string::compose(
+		           "illegal token %0, expected typename",
+			   std::string(1, c)
+		      )
+		);
 	}
 
 	skipInlineWhitespace();
@@ -388,18 +393,16 @@ void Parser::readStringToken(std::string& val) {
 
 	assert(c == '"' && "Improper call of Parser::readStringToken()");
 
-	stream->get(c);
+	stream->next(c);
 
 	while (c != '"') {
 		// When '\' is encountered in a string, skip the '\' and read
 		// next character as it is.
-		stream->peek(c);
 		if (c == '\\')
-			stream->get(c);
+			stream->next(c);
 
-		stream->peek(c);
 		val += c;
-		stream->get(c);
+		stream->next(c);
 	}
 
 	// consume "
@@ -410,35 +413,32 @@ void Parser::readNumber(std::string& val)
 {
 	val = "";
 	char c;
-
 	stream->peek(c);
 
 	while (!isWhitespace(c) && (c != ']')) {
 		if (!(c >= '0' && c <= '9') && !in(c, '.', 'e', 'E', '+', '-' ))
 			error(HDF_LOG_WARNING, "invalid number");
 
-		stream->get(c);
 		val += c;
-		stream->peek(c);
+		stream->next(c);
 	}
 }
 
 void Parser::readName(std::string& name, char stop)
 {
 	name = "";
+
 	char c;
 	stream->peek(c);
 
 	while(!isWhitespace(c) && (c != stop) && (c != ']')) {
-		stream->get(c);
-
 		if(isNameChar(c)) {
 			name += c;
 		} else {
 			error(HDF_LOG_WARNING, "invalid name char");
 		}
 
-		stream->peek(c);
+		stream->next(c);
 	}
 }
 
