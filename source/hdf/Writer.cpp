@@ -213,7 +213,7 @@ void Writer::startLine()
 
 	indent_size *= depth;
 
-	std::string indent(indent_char, indent_size);
+	std::string indent(indent_size, indent_char);
 
 	ostream.put(indent);
 }
