@@ -8,10 +8,8 @@
  */
 #ifndef _awrts_time_
 #define _awrts_time_
-
-#include <awrts/common/types.h>
-
-#include <awrts/platform/platform.h>
+#include <awengine/common/types.h>
+#include <awengine/platform/platform.h>
 
 namespace awrts {
 /*!
@@ -19,7 +17,7 @@ namespace awrts {
  * Platfrom-dependent. May not be consistent between different executions of 
  * the application, so it should be probed at every startup.
  */
-HR_SYS_EXP u32 getTime();
+AW_SYS_EXP u32 getTime();
 
 } // namespace awrts
 #endif//_awrts_time_

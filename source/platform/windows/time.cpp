@@ -8,11 +8,11 @@
  */
 #include <Windows.h>
 
-#include <awrts/platform/time.h>
+#include <awengine/platform/time.h>
 
 namespace awrts {
 
-HR_SYS_EXP u32 getTime()
+AW_SYS_EXP u32 getTime()
 {
 	//borrowed from Irrlicht, temporary
 	LARGE_INTEGER HighPerformanceFreq;
@@ -25,7 +25,7 @@ HR_SYS_EXP u32 getTime()
 
 	SetThreadAffinityMask(GetCurrentThread(), affinityMask);
 
-	if(queriedOK) {
+	if (queriedOK) {
 		return u32((ticks.QuadPart) * 1000 / HighPerformanceFreq.QuadPart);
 	}
 

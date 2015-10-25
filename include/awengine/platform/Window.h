@@ -9,12 +9,12 @@
  */
 #ifndef _awrts_Window_
 #define _awrts_Window_
-#include <awrts/common/types.h>
-#include <awrts/common/NonCopyable.h>
+#include <awengine/common/types.h>
+#include <awengine/utility/NonCopyable.h>
 
-#include <awrts/math/Vector2d.h>
+#include <awengine/math/Vector2d.h>
 
-#include <awrts/platform/platform.h>
+#include <awengine/platform/platform.h>
 
 namespace awrts {
 namespace platform {
@@ -45,7 +45,7 @@ public:
 
 	virtual void display() = 0;
 
-	static HR_SYS_EXP Window* create();
+	static AW_SYS_EXP Window* create();
 };
 } // namespace platform
 } // namespace awrts

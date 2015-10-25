@@ -9,7 +9,7 @@
 #include <iostream>
 #include <sys/stat.h>
 
-#include <awrts/core/Logger.h>
+#include <awengine/core/Logger.h>
 
 #include "Directory.h"
 
@@ -86,7 +86,7 @@ i32 Directory::read (Dirent& result)
 		result.type = FileType::File;
 		break;
 	case S_IFDIR:
-		result.type = FileType::Dir;
+		result.type = FileType::Directory;
 		break;
 	default:
 		result.type = FileType::Unknown;

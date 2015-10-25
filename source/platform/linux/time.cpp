@@ -8,8 +8,8 @@
  */
 #include <time.h>
 
-#include <awrts/platform/time.h>
-#include <awrts/platform/platform.h>
+#include <awengine/platform/time.h>
+#include <awengine/platform/platform.h>
 
 namespace awrts {
 //! Get clock resolution, in nanoseconds
@@ -29,7 +29,7 @@ u32 getClockResolution()
  * Platfrom-dependent. May not be consistent between different executions of 
  * the application, so it should be probed at every startup.
  */
-HR_SYS_EXP u32 getTime()
+AW_SYS_EXP u32 getTime()
 {
 	struct timespec tp;
 	int rc = clock_gettime(CLOCK_MONOTONIC, &tp);

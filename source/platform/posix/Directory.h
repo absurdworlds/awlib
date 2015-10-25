@@ -15,7 +15,7 @@
 #include <string>
 #include <vector>
 
-#include <awrts/io/Directory.h>
+#include <awengine/io/Directory.h>
 
 namespace awrts {
 namespace io {
@@ -23,20 +23,20 @@ namespace impl_ {
 
 class Directory : public io::Directory {
 public:
-	Directory (std::string const& path);
-	virtual ~Directory ();
+	Directory(std::string const& path);
+	virtual ~Directory();
 
-	virtual i32 read (Dirent& result);
-	virtual void seek (u32 offset);
-	virtual void rewind ();
-	virtual u32 tell () const;
+	virtual i32 read(Dirent& result);
+	virtual void seek(u32 offset);
+	virtual void rewind();
+	virtual u32 tell() const;
 
-	virtual bool isOpen () const
+	virtual bool isOpen() const
 	{
 		return dir_ != 0;
 	}
 
-	virtual const std::string& getPath () const;
+	virtual const std::string& getPath() const;
 
 private:
 	void open ();

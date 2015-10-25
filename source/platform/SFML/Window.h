@@ -9,9 +9,8 @@
  */
 #ifndef _awrts_Window_SFML_
 #define _awrts_Window_SFML_
-#include <awrts/platform/Window.h>
-
 #include <SFML/Window.hpp>
+#include <awengine/platform/Window.h>
 
 namespace awrts {
 namespace platform {

@@ -8,12 +8,11 @@
  */
 #ifndef _awrts_Directory_
 #define _awrts_Directory_
-
 #include <string>
 
-#include <awrts/io/io.h>
-#include <awrts/io/filesystem.h>
-#include <awrts/common/types.h>
+#include <awengine/io/io.h>
+#include <awengine/io/filesystem.h>
+#include <awengine/common/types.h>
 
 namespace awrts {
 namespace io {
@@ -28,7 +27,7 @@ struct Dirent {
 //! Interface for directory listing
 class Directory {
 public:
-	virtual ~Directory ()
+	virtual ~Directory()
 	{
 	}
 
@@ -53,7 +52,7 @@ public:
 	virtual std::string const& getPath() const = 0;
 };
 
-HR_IO_EXP Directory* openDirectory(std::string path);
+AW_IO_EXP Directory* openDirectory(std::string path);
 } // namespace io
 } // namespace awrts
 #endif //_awrts_Directory_
