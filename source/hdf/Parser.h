@@ -18,20 +18,46 @@
 namespace awrts {
 namespace hdf {
 struct Token {
-	enum Type {
+	enum Kind {
 		Invalid,
 		Eof,
 		Name,
 		Number,
-		String
-	} type;
+		String,
+		Equals,
+		Colon,
+		Comma,
+		Bang,
+		NodeBegin,
+		NodeEnd,
+		VecBegin,
+		VecEnd,
+	};
+
+	Token()
+		: type(Kind::Invalid)
+	{ }
+	
+	Token(Kind type)
+		: type(type)
+	{ }
+
+	Token(Kind type, std::string val)
+		: type(type), value(val)
+	{ }
+
+	Token(Kind type, char val)
+		: type(type), value(1, val)
+	{ }
+
+	Kind type;
 	std::string value;
 };
 
 namespace impl_ {
 class Parser : public hdf::Parser {
 public:
-	Parser(io::InputStream* stream);
+	Parser(io::InputStream& stream);
 	virtual ~Parser() = default;
 
 	virtual void skipNode();
@@ -39,42 +65,39 @@ public:
 
 	virtual bool read();
 
-	virtual Object getObjectType();
-	virtual void getObjectName(std::string& name);
+	virtual Object getObject();
 
-	virtual void readFloat(float& val);
-	virtual void readFloat(double& val);
-	virtual void readInt(u32& val);
-	virtual void readInt(i32& val);
-	virtual void readBool(bool& val);
-	virtual void readString(std::string& val);
-	virtual void readVector3d(Vector3d<f32>& val);
+	/*!
+	 * Read value into variable \a out.
+	 */
+	virtual void readValue(Value& out);
 
 	void error(hdf::ParserMessage type, std::string msg);
 private:
-	template<typename T> 
-	void readValue(T& val);
-	template<typename T> 
-	void convertValue(Token& token, T& val);
+	void processCommand();
 
-	bool parseType(Token& token);
+	Value convertValue(Type type);
+	Value convertUntypedValue();
 
-	void readToken(Token& token);
+	template <typename T>
+	bool parseVector(T& vec, size_t vecsize);
 
-	void readStringToken(std::string& val);
-	void readNumber(std::string& val);
-	void readName(std::string& name, char stop = 0);
+	Token getToken();
 
-	void readValueName(std::string& name);
-	void readTypeName(std::string& name);
+	std::string readString();
+	std::string readNumber();
+	std::string readName();
+	std::string readIllegalToken();
 
 	void fastForward();
 	void skipLine();
 	void skipWhitespace();
 	void skipInlineWhitespace();
 	//void skip(bool (*condition)(u8));
-	template<bool (*condition)(char)> 
-	void skip();
+	template<typename Func> 
+	void skip(Func condition);
+
+	Token tok;
 
 	enum class State {
 		Idle = 0,
@@ -86,13 +109,10 @@ private:
 		Panic
 	} state;
 
+	io::InputStream& stream;
+
+	size_t depth;
 	std::vector<std::string> errors;
-
-	void processCommand();
-
-	io::InputStream* stream;
-
-	u32 depth;
 };
 } // namespace impl_
 } // namespace io
