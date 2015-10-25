@@ -93,11 +93,6 @@ Parser::Parser(io::InputStream* stream)
 
 bool Parser::read() {
 	char c;
-	stream->peek(c);
-
-	if(c == 0)
-		return false;
-
 	fastForward();
 	stream->peek(c);
 
