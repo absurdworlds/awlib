@@ -17,31 +17,29 @@
 
 namespace awrts {
 namespace hdf {
-namespace impl_ {
-enum TokenType {
-	HDF_TOKEN_NVALID,
-	HDF_TOKEN_EOF,
-	HDF_TOKEN_NAME,
-	HDF_TOKEN_NUMBER,
-	HDF_TOKEN_STRING,
-};
-
 struct Token {
-	TokenType type;
+	enum Type {
+		Invalid,
+		Eof,
+		Name,
+		Number,
+		String
+	} type;
 	std::string value;
 };
 
+namespace impl_ {
 class Parser : public hdf::Parser {
 public:
 	Parser(io::InputStream* stream);
-	virtual ~Parser();
+	virtual ~Parser() = default;
 
 	virtual void skipNode();
 	virtual void skipValue();
 
 	virtual bool read();
 
-	virtual ObjectType getObjectType();
+	virtual Object getObjectType();
 	virtual void getObjectName(std::string& name);
 
 	virtual void readFloat(float& val);
@@ -92,7 +90,7 @@ private:
 
 	void processCommand();
 
-	io::CharacterStream* stream;
+	io::InputStream* stream;
 
 	u32 depth;
 };

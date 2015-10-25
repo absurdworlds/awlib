@@ -48,12 +48,6 @@ inline bool isInlineWhitespace(char c) {
 	return c == ' ' || c == '\t';
 }
 
-Parser* createParser(io::CharacterStream* stream)
-{
-	return new impl_::Parser(stream);
-}
-
-namespace impl_ {
 hdf::Type tokenToType(Token const& token) 
 {
 	if(token.value == "bool" || token.value == "b") {
@@ -85,12 +79,14 @@ hdf::Type convertImpicitType(Token const& token)
 	}
 }
 
-Parser::Parser(io::CharacterStream* stream)
-	: depth_(0), state(State::Idle), stream(stream)
+Parser* createParser(io::InputStream* stream)
 {
+	return new impl_::Parser(stream);
 }
 
-Parser::~Parser()
+namespace impl_ {
+Parser::Parser(io::InputStream* stream)
+	: depth(0), state(State::Idle), stream(stream)
 {
 }
 
@@ -102,7 +98,6 @@ bool Parser::read() {
 		return false;
 
 	fastForward();
-
 	stream->peek(c);
 
 	if(c == 0)
@@ -126,48 +121,47 @@ bool Parser::read() {
 	return (state == State::Panic) ? false : true;
 }
 
-ObjectType Parser::getObjectType()
+Object Parser::getObjectType()
 {
 	if(state == State::Panic)
-		return HDF_OBJ_NULL;
+		return Object::Null;
 
 	char c;
-
 	stream->peek(c);
 
-	if(state != HDF_S_OBJECT) {
+	if(state != State::Object) {
 		error(HDF_LOG_ERROR, "there is no object");
-		return HDF_OBJ_NULL;
+		return Object::Null;
 	} else {
 		if(c == '[') {
 			// step forward - getObjectName expects a nameChar to
 			// be the first char
 			stream->get(c); 
-			state = State::Node;
 			++depth;
-			return HDF_OBJ_NODE;
+			state = State::Node;
+			return Object::Node;
 		} else if (isNameBeginChar(c)) {
-			if(depth_ == 0) {
+			if(depth == 0) {
 				error(HDF_LOG_ERROR, "unexpected name token");
-				return HDF_OBJ_NULL;
+				return Object::Null;
 			}
 			state = State::Value;
-			return HDF_OBJ_VAL;
+			return Object::Value;
 		} else if (c == ']') {
 			stream->get(c); 
 			--depth;
 			state = State::Idle;
-			return HDF_OBJ_NODE_END;
+			return Object::NodeEnd;
 
 			/*if(state != State::Idle) {
 				error(HDF_LOG_ERROR, "unexpected node-end");
 			} else {
-				depth_--;
+				depth--;
 			}*/
 		} else if (c == '!') {
-			//if(depth_ > 0) {
+			//if(depth > 0) {
 			error(HDF_LOG_ERROR, "unexpected token: '!'");
-			return HDF_OBJ_NULL;
+			return Object::Null;
 			//}
 			//state = HDF_S_MD_BEGIN;
 			//return HDF_OBJ_MD;
@@ -175,7 +169,7 @@ ObjectType Parser::getObjectType()
 			std::string msg("invalid character: ");
 			msg += c;
 			error(HDF_LOG_ERROR, msg);
-			return HDF_OBJ_NULL;
+			return Object::Null;
 		}
 	}
 }
@@ -268,7 +262,7 @@ void Parser::skipNode()
 
 void Parser::error(hdf::ParserMessage type, std::string msg)
 {
-	errors_.push_back(msg);
+	errors.push_back(msg);
 	printf("[HDF:%u]: %s\n",stream->getPos(),msg.c_str());
 
 	if(type == HDF_LOG_ERROR)
@@ -350,7 +344,7 @@ bool Parser::parseType(Token& token) {
 	stream->peek(c);
 
 	if(isNameBeginChar(c)) {
-		token.type = HDF_TOKEN_NAME;
+		token.type = Token::Name;
 		readName(token.value, ':');
 	} else {
 		error(HDF_LOG_ERROR, "illegal token, expected typename");	
@@ -377,13 +371,13 @@ void Parser::readToken(Token& token)
 	stream->peek(c);
 
 	if(isNameBeginChar(c)) {
-		token.type = HDF_TOKEN_NAME;
+		token.type = Token::Name;
 		readName(token.value);	
 	} else if(c == '-' || (c >= '0' && c <= '9')) {
-		token.type = HDF_TOKEN_NUMBER;
+		token.type = Token::Number;
 		readNumber(token.value);
 	} else if(c == '"') {
-		token.type = HDF_TOKEN_STRING;
+		token.type = Token::String;
 		readStringToken(token.value);
 	} else {
 		error(HDF_LOG_ERROR,"illegal token");
@@ -571,7 +565,7 @@ void Parser::processCommand() {
 
 	if (token.value == "hdf_version" || token.value == "hdf") {
 		readToken(token);
-		if(token.type != HDF_TOKEN_STRING) {
+		if(token.type != Token::String) {
 			error(HDF_LOG_ERROR,"expected string");
 			return ;
 		} else if(token.value == "1.1.1") {
