@@ -15,13 +15,11 @@ namespace io {
 class InputCharStream : public io::InputStream {
 public:
 	InputCharStream(char const* source)
-		: source_(source), pos(0)
+		: source(source), pos(0)
 	{
 	}
 
-	~InputCharStream()
-	{
-	}
+	virtual ~InputCharStream() = default;
 
 	virtual bool peek(char& c);
 	virtual bool get(char& c);
