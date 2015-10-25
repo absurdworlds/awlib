@@ -33,7 +33,7 @@ struct Token {
 
 class Parser : public hdf::Parser {
 public:
-	Parser(io::CharacterStream* stream);
+	Parser(io::InputStream* stream);
 	virtual ~Parser();
 
 	virtual void skipNode();
@@ -78,23 +78,23 @@ private:
 	template<bool (*condition)(char)> 
 	void skip();
 
-	enum State {
-		HDF_S_DLE = 0,
-		HDF_S_OBJECT,
-		HDF_S_NODE_BEGIN,
-		HDF_S_MD_BEGIN,
-		HDF_S_VALUE_BEGIN,
-		HDF_S_VALUE_DATA,
-		HDF_S_PANIC
-	} state_;
+	enum class State {
+		Idle = 0,
+		Object,
+		Node,
+		Command,
+		Value,
+		Data,
+		Panic
+	} state;
 
-	std::vector<std::string> errors_;
+	std::vector<std::string> errors;
 
 	void processCommand();
 
-	io::CharacterStream* stream_;
+	io::CharacterStream* stream;
 
-	u32 depth_;
+	u32 depth;
 };
 } // namespace impl_
 } // namespace io
