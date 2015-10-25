@@ -70,14 +70,21 @@ hdf::Type tokenToType(Token const& token)
 
 hdf::Type convertImplicitType(Token const& token)
 {
-	char c = token.value.c_str()[0];
+	char c = token.value[0];
 	if(isNameBeginChar(c) || c == '"') {
 		return Type::String;
 	} else if(c == '-' || (c > '0' && c < '9')) {
-		return Type::Float;
-	} else {
-		return Type::Unknown;
+		auto type = Type::Integer;
+		for (char c : token.value) {
+			if (c == '.') {
+				type = Type::Float;
+			}
+		}
+
+		return type;
 	}
+
+	return Type::Unknown;
 }
 
 Parser* createParser(io::InputStream* stream)
@@ -343,13 +350,6 @@ bool Parser::parseType(Token& token) {
 	if(isNameBeginChar(c)) {
 		token.type = Token::Name;
 		readName(token.value, ':');
-	} else {
-		error(HDF_LOG_ERROR,
-		      string::compose(
-		           "illegal token %0, expected typename",
-			   std::string(1, c)
-		      )
-		);
 	}
 
 	skipInlineWhitespace();
@@ -465,11 +465,17 @@ void Parser::readValue(T& var)
 		type = tokenToType(token);
 		readToken(token);
 	} else {
+		readToken(token);
 		type = convertImplicitType(token);
 	}
 
 	if(checkType<T>(type) == false) {
-		error(HDF_LOG_ERROR, "type mismatch: " + token.value);
+		error(HDF_LOG_ERROR,
+		      string::compose("type mismatch: expected %0, got %1",
+		                      std::to_string(i32(typeof<T>::value)),
+				      std::to_string(i32(type))
+		      )
+		);
 		//skipValue(type);
 
 		return;
