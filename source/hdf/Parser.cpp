@@ -46,10 +46,6 @@ inline bool isWhitespace(char c) {
 	return (in(c, ' ', '\t', '\r', '\n'));
 }
 
-inline bool isInlineWhitespace(char c) {
-	return c == ' ' || c == '\t';
-}
-
 hdf::Type tokenToType(Token const& token) 
 {
 	if(token.value == "bool" || token.value == "b") {
@@ -68,7 +64,6 @@ hdf::Type tokenToType(Token const& token)
 		return Type::Unknown;
 	}
 }
-
 
 Parser* createParser(io::InputStream& stream)
 {
@@ -209,11 +204,6 @@ void Parser::skipLine()
 void Parser::skipWhitespace()
 {
 	skip(isWhitespace);
-}
-
-void Parser::skipInlineWhitespace()
-{
-	skip(isInlineWhitespace);
 }
 
 bool junk(char c)
