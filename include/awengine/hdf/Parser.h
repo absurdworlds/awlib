@@ -23,14 +23,27 @@ class InputStream;
 
 namespace hdf {
 /*!
- * Enumeration of objects returned by HDF parser.
+ * Object returned by HDF parser
  */
-enum class Object {
-	Null = 0,
-	Node,
-	NodeEnd,
-	Value,
-	Directive
+struct Object {
+	enum Kind {
+		Null = 0,
+		Node,
+		NodeEnd,
+		Value,
+		Directive
+	};
+	
+	Object(Kind type)
+		: type(type)
+	{ }
+
+	Object(Kind type, std::string val)
+		: type(type), name(val)
+	{ }
+		
+	Kind type;
+	std::string name;
 };
 
 /*!
@@ -49,31 +62,17 @@ public:
 	//! Fast-forward to the next object
 	virtual bool read() = 0;
 
-	/*! Read the object's type
+	/*!
+	 * Get next object.
 	 * \return
-	 *     The object type or 0 (HDF_OBJ_NULL) in case of failure
+	 *     Returns struct containing object's kind and name.
 	 */
-	virtual Object getObjectType() = 0;
-	
-	/*! Read the object's name
-	 * \param name
-	 *     Gets set to the name of the object or empty string in
-	 * case of failure
-	 */
-	virtual void getObjectName(std::string& name) = 0;
+	virtual Object getObject() = 0;
 
-	/*! Read the value of the variable
-	 * \param val
-	 *     Variable to output to
+	/*!
+	 * Read value into variable \a out.
 	 */
-	virtual void readFloat(float& val) = 0;
-	virtual void readFloat(double& val) = 0;
-	virtual void readInt(u32& val) = 0;
-	virtual void readInt(i32& val) = 0;
-	virtual void readBool(bool& val) = 0;
-	virtual void readString(std::string& val) = 0;
-	//virtual void readString(char* val) = 0;
-	virtual void readVector3d(Vector3d<f32>& val) = 0;
+	virtual void readValue(Value& out) = 0;
 
 	//! Skip current value
 	virtual void skipValue() = 0;
@@ -94,7 +93,7 @@ public:
  * \param stream Stream to parse.
  * \see io::CharacterStream
 */
-AW_HDF_EXP Parser* createParser(io::InputStream* stream);
+AW_HDF_EXP Parser* createParser(io::InputStream& stream);
 } // namespace io
 } // namespace awrts
 #endif//_awrts_HDFReader_
