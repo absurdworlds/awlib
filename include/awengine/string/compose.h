@@ -35,7 +35,7 @@ AW_CORE_EXP std::string compose(std::string const& fmt,
  * arguments, passed into this function.
  *
  * For example:
- * 	compose("\1 \0", " a string", "this is");
+ * 	compose("%1 %0", " a string", "this is");
  *
  * Will return std::string("this is a string").
  *
