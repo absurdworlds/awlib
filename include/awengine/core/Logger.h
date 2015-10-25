@@ -46,7 +46,7 @@ public:
  * and sending them into different targets, which are
  * represented by LogBook class.
  */ 
-class Logger {
+class AW_CORE_EXP Logger {
 public:
 	/*!
 	 * Set global logger (useful for debug output).
@@ -87,10 +87,7 @@ public:
 #endif
 	}
 
-	//! Virtual destructor
-	virtual ~Logger()
-	{
-	}
+	virtual ~Logger() = default;
 
 	/*!
 	 * Write message to the log.
@@ -103,8 +100,8 @@ public:
 
 	//! Remove recipient
 	virtual void unregisterLog(LogBook* log) = 0;
+
 private:
-	// TODO: probably use std::unique_ptr?
 	static Logger* globalLogger;
 };
 
