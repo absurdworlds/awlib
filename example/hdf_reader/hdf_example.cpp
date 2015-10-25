@@ -2,7 +2,9 @@
 #include <string>
 #include <vector>
 
-#include <awrts/hdf/IHDFParser.h>
+#include <awengine/io/ReadFile.h>
+#include <awengine/io/InputFileStream.h>
+#include <awengine/hdf/Parser.h>
 
 using namespace awrts;
 using namespace io;
@@ -26,20 +28,20 @@ struct Message {
 };
 
 // function to for parsing a single node
-void parseNode(HDFParser* hdf, std::string node, Message& msg)
+void parseNode(Parser* hdf, std::string node, Message& msg)
 {
 	// any object must be read strictly in this order
 	while(hdf->read()) {
-		HdfObjectType type = hdf->getObjectType();
+		hdf::Object type = hdf->getObjectType();
 		std::string name;
 
-		hdf->getObjectName(name);
-
 		switch(type) {
-		case HDF_OBJ_NODE: // recursively parse a subnode
+		case hdf::Object::Node: // recursively parse a subnode
+			hdf->getObjectName(name);
 			parseNode(hdf, name, msg);
 			break;
-		case HDF_OBJ_VAL: // parse and store a variable
+		case hdf::Object::Value: // parse and store a variable
+			hdf->getObjectName(name);
 			u32 tmp;
 			if(name == "red" && node == "color") {
 				hdf->readInt(tmp);
@@ -56,9 +58,9 @@ void parseNode(HDFParser* hdf, std::string node, Message& msg)
 				hdf->error(HDF_LOG_ERROR, "unknown object: " + name);
 			}
 			break;
-		case HDF_OBJ_NODE_END: // reached an end of node - exit
+		case hdf::Object::NodeEnd: // reached an end of node - exit
 			return;
-		case HDF_OBJ_NULL:
+		case hdf::Object::Null:
 		default:
 			return;
 		}
@@ -68,17 +70,17 @@ void parseNode(HDFParser* hdf, std::string node, Message& msg)
 int main(int,char**)
 {
 	// open a file
-	IReadFile* file = openReadFile("../data/misc/messages.hdf");
-	IBufferedStream *stream = io::createBufferedStream(file);
+	io::ReadFile file("../../data/misc/messages.hdf");
+	InputFileStream stream(file);
 	// create the parser
-	IHDFParser* hdf = createHDFParser(stream);
+	Parser* hdf = hdf::createParser(&stream);
 
 	std::vector<Message> msgLog;
 
 	// parse the file until end is reached
 
 	while(hdf->read()) {
-		if(hdf->getObjectType() == HDF_OBJ_NODE) {
+		if(hdf->getObjectType() == hdf::Object::Node) {
 			std::string name;
 			hdf->getObjectName(name);
 
