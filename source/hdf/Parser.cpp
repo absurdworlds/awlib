@@ -10,6 +10,7 @@
 #include <cassert>
 #include <cstdio>
 
+#include <awengine/string/compose.h>
 #include <awengine/io/InputStream.h>
 #include <awengine/hdf/Type.h>
 
@@ -347,7 +348,8 @@ bool Parser::parseType(Token& token) {
 		token.type = Token::Name;
 		readName(token.value, ':');
 	} else {
-		error(HDF_LOG_ERROR, "illegal token, expected typename");	
+		error(HDF_LOG_ERROR,
+		      string::compose("illegal token %0, expected typename", c));
 	}
 
 	skipInlineWhitespace();
@@ -575,11 +577,14 @@ void Parser::processCommand() {
 			error(HDF_LOG_ERROR, "Version 1.1 is outdated.");
 			return;
 		} else {
-			error(HDF_LOG_ERROR, "your version is bullshit!");
+			error(HDF_LOG_ERROR,
+			      string::compose(
+			              "format %0 is not supported.",
+			               token.value));
 			return;
 		}
 	}
 }
 } // namespace impl_
-} // namespace io
+} // namespace hdf
 } // namespace awrts
