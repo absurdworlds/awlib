@@ -359,7 +359,7 @@ void Parser::readValue(Value& var)
 	bool hasType = tok.type == Token::Colon;
 
 	var = hasType ? convertValue(tokenToType(id)) :
-		        convertUntypedValue();
+		        convertValue();
 
 	state = State::Idle;
 }
@@ -418,7 +418,7 @@ Value Parser::convertValue(Type type)
 	return Value();
 }
 
-Value Parser::convertUntypedValue()
+Value Parser::convertValue()
 {
 	switch (tok.type) {
 	case Token::String:

@@ -77,7 +77,7 @@ private:
 	void processCommand();
 
 	Value convertValue(Type type);
-	Value convertUntypedValue();
+	Value convertValue();
 
 	template <typename T>
 	bool parseVector(T& vec, size_t vecsize);
