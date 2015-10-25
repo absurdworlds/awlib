@@ -11,6 +11,7 @@
 
 namespace awrts {
 namespace core {
+Logger* Logger::globalLogger;
 
 Logger* createLogger()
 {
