@@ -29,6 +29,14 @@ public:
 	 * Extract current character from stream.
 	 */
 	virtual bool get(char& c);
+
+	/*!
+	 * Skip current character and look at next one, without
+	 * extracting it.
+	 * Equivalent to
+	 * 	get(c) && peek(c);
+	 */
+	virtual bool next(char& c);
 	
 	/*!
 	 * Get position in stream

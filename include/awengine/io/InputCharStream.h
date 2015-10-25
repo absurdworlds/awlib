@@ -24,6 +24,13 @@ public:
 	virtual bool peek(char& c);
 	virtual bool get(char& c);
 
+	/*!
+	 * Skip current character and peek a next.
+	 * Equivalent to
+	 * 	get(c) && peek(c);
+	 */
+	virtual bool next(char& c);
+
 	virtual size_t getPos() const
 	{
 		return pos;

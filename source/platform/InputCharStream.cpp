@@ -28,5 +28,13 @@ bool InputCharStream::get(char& c)
 		++pos;
 	return ret;
 }
+
+bool InputCharStream::next(char& c)
+{
+	if(source[pos] != 0)
+		++pos;
+
+	return peek(c);
+}
 } //namespace io
 } //namespace awrts

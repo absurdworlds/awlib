@@ -9,6 +9,8 @@
 #include <awengine/io/ReadFile.h>
 #include <awengine/io/InputFileStream.h>
 
+#include <cstdio>
+
 namespace awrts {
 namespace io {
 InputFileStream::InputFileStream(ReadFile& source)
@@ -39,6 +41,16 @@ bool InputFileStream::get(char& c)
 	}
 
 	return ret;
+}
+
+bool InputFileStream::next(char& c)
+{
+	if (pos < size) {
+		++pos;
+		source.read(&cur, 1);
+	}
+
+	return peek(c);
 }
 
 size_t InputFileStream::getPos() const
