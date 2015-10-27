@@ -248,12 +248,17 @@ Token Parser::getToken() {
 	char c;
 	stream.peek(c);
 
-	while (junk(c))
+	while (junk(c)) {
 		fastForward();
-
-	stream.peek(c);
+		stream.peek(c);
+	}
 
 	Token tok;
+
+	auto retToken = [&] (Token::Kind kind) {
+		stream.get(c);
+		return Token(kind, c);
+	};
 
 	switch (c) {
 	case 0:
@@ -274,21 +279,21 @@ Token Parser::getToken() {
 	case 'v': case 'w': case 'x': case 'y': case 'z':
 		return Token(Token::Name, readName());
 	case '=':
-		return Token(Token::Equals, c);
+		return retToken(Token::Equals);
 	case ':':
-		return Token(Token::Colon, c);
+		return retToken(Token::Colon);
 	case ',':
-		return Token(Token::Comma, c);
+		return retToken(Token::Comma);
 	case '!':
-		return Token(Token::Bang, c);
+		return retToken(Token::Bang);
 	case '[':
-		return Token(Token::NodeBegin, c);
+		return retToken(Token::NodeBegin);
 	case ']':
-		return Token(Token::NodeEnd, c);
+		return retToken(Token::NodeEnd);
 	case '{':
-		return Token(Token::VecBegin, c);
+		return retToken(Token::VecBegin);
 	case '}':
-		return Token(Token::VecEnd, c);
+		return retToken(Token::VecEnd);
 	default:
 		return Token(Token::Invalid, readIllegalToken());
 	}
@@ -364,8 +369,11 @@ std::string Parser::readIllegalToken()
 
 void Parser::readValue(Value& var)
 {
-	if (tok.type != Token::Name)
+	if(state != State::Value) {
+		error(HDF_LOG_ERROR, "Call getObject() before callin readValue");
 		return;
+	}
+	tok = getToken();
 
 	Token id = tok;
 
