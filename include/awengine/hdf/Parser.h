@@ -14,6 +14,7 @@
 #include <awengine/math/Vector3d.h>
 
 #include <awengine/hdf/hdf.h>
+#include <awengine/hdf/Value.h>
 #include <awengine/hdf/shared.h>
 
 namespace awrts {

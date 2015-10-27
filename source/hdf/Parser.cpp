@@ -13,6 +13,7 @@
 #include <awengine/string/compose.h>
 #include <awengine/io/InputStream.h>
 #include <awengine/hdf/Type.h>
+#include <awengine/math/Vector4d.h>
 
 #include "Parser.h"
 
@@ -63,6 +64,19 @@ hdf::Type tokenToType(Token const& token)
 	} else {
 		return Type::Unknown;
 	}
+}
+
+bool stringToBoolean(std::string const& str)
+{
+	bool val;
+
+	if(str == "true" || str == "1") {
+		val = true;
+	} else if(str == "false" || str == "0") {
+		val = false;
+	}
+
+	return val;
 }
 
 Parser* createParser(io::InputStream& stream)
@@ -367,52 +381,32 @@ void Parser::readValue(Value& var)
 
 Value Parser::convertValue(Type type)
 {
-	std::string str = tok.value;
-
 	switch (type) {
 	case Type::Enum:
 	case Type::String:
-		return Value(str);
+		if (!(tok.type == Token::String || tok.type == Token::Name))
+			break;
+
+		return Value(tok.value);
 	case Type::Float:
-		return Value(std::stod(str));
+		if (tok.type != Token::Number)
+			break;
+
+		return Value(std::stod(tok.value));
 	case Type::Integer:
-		return Value(std::stoll(str));
+		if (tok.type != Token::Number)
+			break;
+
+		return Value(std::stoll(tok.value));
 	case Type::Boolean:
-	       {
-			bool val;
+		if (tok.type != Token::Name)
+			break;
 
-			if(str == "true" || str == "1") {
-				val = true;
-			} else if(str == "false" || str == "0") {
-				val = false;
-			}
-
-			return Value(val);
-		}
-	case Type::Vector2d: {
-			Vector2d<f32> result;
-			bool parse = parseVector(result, 2);
-			if (!parse)
-				break;
-
-			return Value(result);
-		}
-	case Type::Vector3d: {
-			Vector3d<f32> result;
-			bool parse = parseVector(result, 3);
-			if (!parse)
-				break;
-
-			return Value(result);
-		}
-	case Type::Vector4d: {
-			Vector4d<f32> result;
-			bool parse = parseVector(result, 4);
-			if (!parse)
-				break;
-
-			return Value(result);
-		}
+		return Value(stringToBoolean(tok.value));
+	case Type::Vector2d:
+	case Type::Vector3d:
+	case Type::Vector4d:
+		return parseVector(type);
 	}
 
 	return Value();
@@ -422,47 +416,84 @@ Value Parser::convertValue()
 {
 	switch (tok.type) {
 	case Token::String:
-		return convertValue(Type::String);
+		return Value(tok.value);
 	case Token::Number:
-		{
-			auto type = Type::Integer;
-			for (char c : tok.value) {
-				if (c == '.') {
-					type = Type::Float;
-				}
-			}
-
-			return convertValue(type);
-		}
+		return parseInteger();
 	case Token::Name:
 		if (tok.value == "true" || tok.value == "false")
-			return convertValue(Type::Boolean);
+			return Value(stringToBoolean(tok.value));
 
-		return convertValue(Type::Enum);
+		return Value(tok.value);
 	case Token::VecBegin:
-		{
-		}
-
+		return parseVector();
 	}
 
 	return Value();
 }
 
-template <typename T>
-bool Parser::parseVector(T& vec, size_t vecsize)
+Value Parser::parseInteger()
 {
-	for (int i = 0; i < vecsize; ++i) {
-		tok = getToken();
-		if (tok.type != Token::Number)
-			return false;
-
-		tok = getToken();
-		vec[i] = stof(tok.value);
-
-		if (tok.type != Token::Comma)
-			return false;
+	auto type = Type::Integer;
+	for (char c : tok.value) {
+		if (c == '.') {
+			type = Type::Float;
+		}
 	}
 
+	if (type == Type::Integer)
+		return Value(stoll(tok.value));
+	else
+		return Value(stod(tok.value));
+}
+
+Value Parser::parseVector(Type type)
+{
+	if (tok.type != Token::VecBegin)
+		return Value();
+
+	Value tmp = parseVector();
+
+	if (tmp.getType() != type)
+		return Value();
+
+	return tmp;
+}
+
+Value Parser::parseVector()
+{
+	// Damn it, why is it so messy …
+	std::array<f32, 4> vec;
+	auto it = vec.begin();
+	while (tok.type != Token::Eof) {
+		if (it == vec.end())
+			continue;
+
+		tok = getToken();
+		if (tok.type != Token::Number)
+			return Value();
+
+		tok = getToken();
+		*(it++) = stof(tok.value);
+
+		if (tok.type == Token::VecEnd)
+			break;
+
+		if (tok.type != Token::Comma)
+			return Value();
+	}
+
+	size_t size = it - vec.begin();
+	switch (size) {
+	default:
+	case 1:
+		return Value();
+	case 2:
+		return Value(Vector2d<f32>(vec[0], vec[1]));
+	case 3:
+		return Value(Vector3d<f32>(vec[0], vec[1], vec[2]));
+	case 4:
+		return Value(Vector4d<f32>(vec[0], vec[1], vec[2], vec[3]));
+	}
 }
 
 // TODO: rewrite
@@ -486,7 +517,7 @@ void Parser::processCommand() {
 		std::string ver = tok.value.substr(0,3);
 		if (ver == "1.2") {
 			error(HDF_LOG_NOTICE, "HDF version: 1.2");
-		} else if (ver  == "1.1") {
+		} else if (ver == "1.1") {
 			error(HDF_LOG_ERROR, "Version 1.1 is not supported.");
 			return;
 		} else if (ver == "1.0") {
