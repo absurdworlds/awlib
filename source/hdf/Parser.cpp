@@ -49,17 +49,17 @@ inline bool isWhitespace(char c) {
 
 hdf::Type tokenToType(Token const& token) 
 {
-	if(token.value == "bool" || token.value == "b") {
+	if (token.value == "bool" || token.value == "b") {
 		return Type::Boolean;
-	} else if(token.value == "int" || token.value == "i") {
+	} else if (token.value == "int" || token.value == "i") {
 		return Type::Integer;
-	} else if(token.value == "float" || token.value == "f") {
+	} else if (token.value == "float" || token.value == "f") {
 		return Type::Float;
-	} else if(token.value == "vec3" || token.value == "v3") {
+	} else if (token.value == "vec3" || token.value == "v3") {
 		return Type::Vector3d;
-	} else if(token.value == "vec2" || token.value == "v2") {
+	} else if (token.value == "vec2" || token.value == "v2") {
 		return Type::Vector2d;
-	} else if(token.value == "string" || token.value == "s") {
+	} else if (token.value == "string" || token.value == "s") {
 		return Type::String;
 	} else {
 		return Type::Unknown;
@@ -70,9 +70,9 @@ bool stringToBoolean(std::string const& str)
 {
 	bool val;
 
-	if(str == "true" || str == "1") {
+	if (str == "true" || str == "1") {
 		val = true;
-	} else if(str == "false" || str == "0") {
+	} else if (str == "false" || str == "0") {
 		val = false;
 	}
 
@@ -137,7 +137,7 @@ bool Parser::read() {
 
 Object Parser::getObject()
 {
-	if(state != State::Object) {
+	if (state != State::Object) {
 		error(HDF_LOG_ERROR, "there is no object");
 		return Object::Null;
 	}
@@ -369,7 +369,7 @@ std::string Parser::readIllegalToken()
 
 void Parser::readValue(Value& var)
 {
-	if(state != State::Value) {
+	if (state != State::Value) {
 		error(HDF_LOG_ERROR, "Call getObject() before callin readValue");
 		return;
 	}

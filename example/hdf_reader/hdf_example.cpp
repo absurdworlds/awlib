@@ -43,19 +43,19 @@ void parseNode(Parser* hdf, std::string node, Message& msg)
 		case hdf::Object::Value: // parse and store a variable
 			hdf->readValue(tmp);
 
-			if(name == "red" && node == "color") {
+			if (name == "red" && node == "color") {
 				if (tmp.getType() != Type::Integer)
 					break;
 				tmp.get(msg.color.red);
-			} else if(name == "blue" && node == "color") {
+			} else if (name == "blue" && node == "color") {
 				if (tmp.getType() != Type::Integer)
 					break;
 				tmp.get(msg.color.red);
-			} else if(name == "green" && node == "color") {
+			} else if (name == "green" && node == "color") {
 				if (tmp.getType() != Type::Integer)
 					break;
 				tmp.get(msg.color.red);
-			} else if(name == "text" && node == "msg") {
+			} else if (name == "text" && node == "msg") {
 				if (tmp.getType() != Type::String)
 					break;
 				tmp.get(msg.text);
@@ -86,11 +86,11 @@ int main(int,char**)
 
 	while(hdf->read()) {
 		hdf::Object obj = hdf->getObject();
-		if(obj.type == hdf::Object::Node) {
+		if (obj.type == hdf::Object::Node) {
 			std::string& name = obj.name;
 
 			// skip unknown node
-			if(name != "msg") {
+			if (name != "msg") {
 				hdf->error(HDF_LOG_WARNING, "unknown node: " + name);
 				hdf->skipNode();
 			} else {
