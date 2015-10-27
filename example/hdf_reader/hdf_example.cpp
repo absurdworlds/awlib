@@ -32,28 +32,33 @@ void parseNode(Parser* hdf, std::string node, Message& msg)
 {
 	// any object must be read strictly in this order
 	while(hdf->read()) {
-		hdf::Object type = hdf->getObjectType();
-		std::string name;
+		hdf::Object obj = hdf->getObject();
+		std::string& name = obj.name;
+		Value tmp;
 
-		switch(type) {
+		switch(obj.type) {
 		case hdf::Object::Node: // recursively parse a subnode
-			hdf->getObjectName(name);
-			parseNode(hdf, name, msg);
+			parseNode(hdf, obj.name, msg);
 			break;
 		case hdf::Object::Value: // parse and store a variable
-			hdf->getObjectName(name);
-			u32 tmp;
+			hdf->readValue(tmp);
+
 			if(name == "red" && node == "color") {
-				hdf->readInt(tmp);
-				msg.color.red = tmp;
+				if (tmp.getType() != Type::Integer)
+					break;
+				tmp.get(msg.color.red);
 			} else if(name == "blue" && node == "color") {
-				hdf->readInt(tmp);
-				msg.color.blue = tmp;
+				if (tmp.getType() != Type::Integer)
+					break;
+				tmp.get(msg.color.red);
 			} else if(name == "green" && node == "color") {
-				hdf->readInt(tmp);
-				msg.color.green = tmp;
+				if (tmp.getType() != Type::Integer)
+					break;
+				tmp.get(msg.color.red);
 			} else if(name == "text" && node == "msg") {
-				hdf->readString(msg.text);
+				if (tmp.getType() != Type::String)
+					break;
+				tmp.get(msg.text);
 			} else {
 				hdf->error(HDF_LOG_ERROR, "unknown object: " + name);
 			}
@@ -73,16 +78,16 @@ int main(int,char**)
 	io::ReadFile file("../../data/misc/messages.hdf");
 	InputFileStream stream(file);
 	// create the parser
-	Parser* hdf = hdf::createParser(&stream);
+	Parser* hdf = hdf::createParser(stream);
 
 	std::vector<Message> msgLog;
 
 	// parse the file until end is reached
 
 	while(hdf->read()) {
-		if(hdf->getObjectType() == hdf::Object::Node) {
-			std::string name;
-			hdf->getObjectName(name);
+		hdf::Object obj = hdf->getObject();
+		if(obj.type == hdf::Object::Node) {
+			std::string& name = obj.name;
 
 			// skip unknown node
 			if(name != "msg") {
