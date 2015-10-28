@@ -293,9 +293,9 @@ Value Parser::parseVector()
 		if (tok.type != Token::Number)
 			return Value();
 
-		tok = lex.getToken();
 		*(it++) = stof(tok.value);
 
+		tok = lex.getToken();
 		if (tok.type == Token::VecEnd)
 			break;
 
