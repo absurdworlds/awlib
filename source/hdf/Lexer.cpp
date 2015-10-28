@@ -206,7 +206,8 @@ Token Lexer::readToken()
 	case '!':
 		return retToken(Token::Bang, getChar());
 	case '[':
-		return retToken(Token::NodeBegin, getChar());
+		stream.next(c); // consume '['
+		return retToken(Token::NodeBegin, readName());
 	case ']':
 		return retToken(Token::NodeEnd, getChar());
 	case '{':

@@ -121,12 +121,6 @@ Object Parser::getObject()
 	case Token::NodeBegin:
 		++depth;
 
-		tok = lex.getToken();
-		if (tok.type != Token::Name) {
-			error(tok.pos, "expected name");
-			break;
-		}
-
 		state = State::Idle;
 		return Object(Object::Node, tok.value);
 	case Token::NodeEnd:
