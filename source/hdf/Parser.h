@@ -46,10 +46,6 @@ struct Token {
 		: type(type), value(val)
 	{ }
 
-	Token(Kind type, char val)
-		: type(type), value(1, val)
-	{ }
-
 	Kind type;
 	std::string value;
 };

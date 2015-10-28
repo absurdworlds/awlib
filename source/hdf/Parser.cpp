@@ -255,9 +255,9 @@ Token Parser::getToken() {
 
 	Token tok;
 
-	auto retToken = [&] (Token::Kind kind) {
+	auto getChar = [&] () {
 		stream.get(c);
-		return Token(kind, c);
+		return std::string(1, c);
 	};
 
 	switch (c) {
@@ -279,21 +279,21 @@ Token Parser::getToken() {
 	case 'v': case 'w': case 'x': case 'y': case 'z':
 		return Token(Token::Name, readName());
 	case '=':
-		return retToken(Token::Equals);
+		return Token(Token::Equals, getChar());
 	case ':':
-		return retToken(Token::Colon);
+		return Token(Token::Colon, getChar());
 	case ',':
-		return retToken(Token::Comma);
+		return Token(Token::Comma, getChar());
 	case '!':
-		return retToken(Token::Bang);
+		return Token(Token::Bang, getChar());
 	case '[':
-		return retToken(Token::NodeBegin);
+		return Token(Token::NodeBegin, getChar());
 	case ']':
-		return retToken(Token::NodeEnd);
+		return Token(Token::NodeEnd, getChar());
 	case '{':
-		return retToken(Token::VecBegin);
+		return Token(Token::VecBegin, getChar());
 	case '}':
-		return retToken(Token::VecEnd);
+		return Token(Token::VecEnd, getChar());
 	default:
 		return Token(Token::Invalid, readIllegalToken());
 	}
