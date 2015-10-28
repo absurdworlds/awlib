@@ -42,10 +42,9 @@ private:
 	void processCommand();
 
 	Value convertValue(Type type);
-	Value convertValue();
+	Value convertValue(Token tok);
 	Value parseVector(Type type);
 	Value parseVector();
-	Value parseInteger();
 
 	template <typename T>
 	bool parseVector(T& vec, size_t vecsize);

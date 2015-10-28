@@ -38,7 +38,7 @@ hdf::Type tokenToType(Token const& token)
 	}
 }
 
-bool stringToBoolean(std::string const& str)
+bool parseBoolean(std::string const& str)
 {
 	bool val;
 
@@ -49,6 +49,21 @@ bool stringToBoolean(std::string const& str)
 	}
 
 	return val;
+}
+
+Value parseInteger(std::string const& str)
+{
+	auto type = Type::Integer;
+	for (char c : str) {
+		if (c == '.') {
+			type = Type::Float;
+		}
+	}
+
+	if (type == Type::Integer)
+		return Value(i64(stoll(str)));
+	else
+		return Value(f64(stod(str)));
 }
 
 Parser* createParser(io::InputStream& stream)
@@ -187,7 +202,7 @@ void Parser::readValue(Value& var)
 		tok = lex.getToken();
 		var = convertValue(tokenToType(id));
 	} else {
-		var = convertValue();
+		var = convertValue(id);
 	}
 
 	state = State::Idle;
@@ -219,7 +234,7 @@ Value Parser::convertValue(Type type)
 		if (tok.type != Token::Name)
 			break;
 
-		return Value(stringToBoolean(tok.value));
+		return Value(parseBoolean(tok.value));
 	case Type::Vector2d:
 	case Type::Vector3d:
 	case Type::Vector4d:
@@ -229,18 +244,16 @@ Value Parser::convertValue(Type type)
 	return Value();
 }
 
-Value Parser::convertValue()
+Value Parser::convertValue(Token tok)
 {
-	Token tok = lex.peekToken();
-
 	switch (tok.type) {
 	case Token::String:
 		return Value(tok.value);
 	case Token::Number:
-		return parseInteger();
+		return parseInteger(tok.value);
 	case Token::Name:
 		if (tok.value == "true" || tok.value == "false")
-			return Value(stringToBoolean(tok.value));
+			return Value(bool(parseBoolean(tok.value)));
 
 		return Value(tok.value);
 	case Token::VecBegin:
@@ -248,23 +261,6 @@ Value Parser::convertValue()
 	}
 
 	return Value();
-}
-
-Value Parser::parseInteger()
-{
-	Token tok = lex.peekToken();
-
-	auto type = Type::Integer;
-	for (char c : tok.value) {
-		if (c == '.') {
-			type = Type::Float;
-		}
-	}
-
-	if (type == Type::Integer)
-		return Value(i64(stoll(tok.value)));
-	else
-		return Value(f64(stod(tok.value)));
 }
 
 Value Parser::parseVector(Type type)
