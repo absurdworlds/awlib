@@ -135,7 +135,7 @@ std::string Lexer::readName()
 
 	std::string name;
 
-	while(isNameChar(c)) {
+	while (isNameChar(c)) {
 		name += c;
 
 		stream.next(c);
@@ -175,7 +175,7 @@ Token Lexer::readToken()
 		return std::string(1, c);
 	};
 
-	Token retToken = [&] (Token::Kind kind, std::string str) {
+	auto retToken = [&] (Token::Kind kind, std::string str) {
 		return Token(kind, str, stream.getPos());
 	};
 
