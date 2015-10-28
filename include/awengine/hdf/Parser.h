@@ -86,7 +86,7 @@ public:
 	 * HDF_ERR_WARNING - warning, non-critical error
 	 * HDF_ERR_ERROR - critical error, stops the parsing
 	 */
-	virtual void error(hdf::ParserMessage type, std::string msg) = 0;
+	virtual void error(size_t pos, std::string msg) = 0;
 };
 
 /*!

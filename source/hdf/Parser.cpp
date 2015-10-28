@@ -73,7 +73,7 @@ bool Parser::read() {
 		return false;
 	case Token::Bang:
 		if (depth > 0) {
-			error(HDF_LOG_WARNING, "Unexpected ! inside node.");
+			error(tok.pos, "Unexpected ! inside node.");
 			break;
 		}
 		lex.getToken();
@@ -84,25 +84,25 @@ bool Parser::read() {
 		return true;
 	case Token::NodeEnd:
 		if (depth == 0) {
-			error(HDF_LOG_WARNING, "Unexpected ].");
+			error(tok.pos, "Unexpected ].");
 			break;
 		}
 		state = State::Object;
 		return true;
 	case Token::Name:
 		if (depth == 0) {
-			error(HDF_LOG_WARNING, "Value must be inside node.");
+			error(tok.pos, "Value must be inside node.");
 			break;
 		}
 		state = State::Object;
 		return true;
 	case Token::Invalid:
-		error(HDF_LOG_WARNING,
-		      string::compose("Illegal token: %0", tok.value));
+		error(tok.pos,
+		      string::compose("read(): illegal token: %0", tok.value));
 		break;
 	default:
-		error(HDF_LOG_WARNING,
-		      string::compose("Unexpected token: %0", tok.value));
+		error(tok.pos,
+		      string::compose("read(): unexpected token: %0", tok.value));
 	}
 
 	return read();
@@ -113,7 +113,7 @@ Object Parser::getObject()
 	Token tok = lex.getToken();
 
 	if (state != State::Object) {
-		error(HDF_LOG_ERROR, "there is no object");
+		error(tok.pos, "there is no object");
 		return Object::Null;
 	}
 
@@ -138,7 +138,7 @@ Object Parser::getObject()
 		state = State::Value;
 		return Object(Object::Value, tok.value);
 	default:
-		error(HDF_LOG_ERROR, "Unexpected token.");
+		error(tok.pos, "Unexpected token.");
 	}
 
 	return Object(Object::Null);
@@ -168,22 +168,21 @@ void Parser::skipNode()
 	read();
 }
 
-void Parser::error(hdf::ParserMessage type, std::string msg)
+void Parser::error(size_t pos, std::string msg)
 {
-	// TODO: lex.getSourceBuffer()
-	lex.error(msg);
+	printf("[HDF:%u]: %s\n", pos, msg.c_str());
 }
 
 void Parser::readValue(Value& var)
 {
 	if (state != State::Value) {
-		error(HDF_LOG_ERROR, "Call getObject() before callin readValue");
+		error(0, "Call getObject() before callin readValue");
 		return;
 	}
 	Token tok = lex.getToken();
 
 	if (tok.type != Token::Equals) {
-		error(HDF_LOG_ERROR, "Expected '='");
+		error(tok.pos, "Expected '='");
 		return;
 	}
 	Token id = lex.getToken();
@@ -333,7 +332,7 @@ void Parser::processCommand() {
 	Token tok = lex.getToken();
 
 	if (tok.type != Token::Name) {
-		error(HDF_LOG_ERROR,
+		error(tok.pos,
 		      string::compose("Unexpected token: %0", tok.value));
 		return;
 	}
@@ -342,21 +341,21 @@ void Parser::processCommand() {
 		tok = lex.getToken();
 
 		if (tok.type != Token::String) {
-			error(HDF_LOG_ERROR, "Expected string after \"hdf_version\".");
+			error(tok.pos, "Expected string after \"hdf_version\".");
 			return;
 		}
 
 		std::string ver = tok.value.substr(0,3);
 		if (ver == "1.2") {
-			error(HDF_LOG_NOTICE, "HDF version: 1.2");
+			error(tok.pos, "HDF version: 1.2");
 		} else if (ver == "1.1") {
-			error(HDF_LOG_ERROR, "Version 1.1 is not supported.");
+			error(tok.pos, "Version 1.1 is not supported.");
 			return;
 		} else if (ver == "1.0") {
-			error(HDF_LOG_ERROR, "Version 1.0 is not supported.");
+			error(tok.pos, "Version 1.0 is not supported.");
 			return;
 		} else {
-			error(HDF_LOG_ERROR,
+			error(tok.pos,
 			      string::compose(
 			              "hdf_version: invalid version %0.",
 			               tok.value));

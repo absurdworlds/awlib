@@ -42,8 +42,13 @@ struct Token {
 		: type(type), value(val)
 	{ }
 
+	Token(Kind type, std::string val, size_t pos)
+		: type(type), value(val), pos(pos)
+	{ }
+
 	Kind type;
 	std::string value;
+	size_t pos;
 };
 
 class Lexer {

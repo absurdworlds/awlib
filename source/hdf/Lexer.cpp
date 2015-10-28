@@ -175,15 +175,19 @@ Token Lexer::readToken()
 		return std::string(1, c);
 	};
 
+	Token retToken = [&] (Token::Kind kind, std::string str) {
+		return Token(kind, str, stream.getPos());
+	};
+
 	switch (c) {
 	case 0:
 		return Token(Token::Eof);
 	case '0': case '1': case '2': case '3': case '4':
 	case '5': case '6': case '7': case '8': case '9':
-		return Token(Token::Number, readNumber());
+		return retToken(Token::Number, readNumber());
 	case '"':
 		stream.next(c); // consume '"'
-		return Token(Token::String, readString());
+		return retToken(Token::String, readString());
 	case 'A': case 'B': case 'C': case 'D': case 'E': case 'F': case 'G':
 	case 'H': case 'I': case 'J': case 'K': case 'L': case 'M': case 'N':
 	case 'O': case 'P': case 'Q': case 'R': case 'S': case 'T': case 'U':
@@ -192,25 +196,25 @@ Token Lexer::readToken()
 	case 'h': case 'i': case 'j': case 'k': case 'l': case 'm': case 'n':
 	case 'o': case 'p': case 'q': case 'r': case 's': case 't': case 'u':
 	case 'v': case 'w': case 'x': case 'y': case 'z':
-		return Token(Token::Name, readName());
+		return retToken(Token::Name, readName());
 	case '=':
-		return Token(Token::Equals, getChar());
+		return retToken(Token::Equals, getChar());
 	case ':':
-		return Token(Token::Colon, getChar());
+		return retToken(Token::Colon, getChar());
 	case ',':
-		return Token(Token::Comma, getChar());
+		return retToken(Token::Comma, getChar());
 	case '!':
-		return Token(Token::Bang, getChar());
+		return retToken(Token::Bang, getChar());
 	case '[':
-		return Token(Token::NodeBegin, getChar());
+		return retToken(Token::NodeBegin, getChar());
 	case ']':
-		return Token(Token::NodeEnd, getChar());
+		return retToken(Token::NodeEnd, getChar());
 	case '{':
-		return Token(Token::VecBegin, getChar());
+		return retToken(Token::VecBegin, getChar());
 	case '}':
-		return Token(Token::VecEnd, getChar());
+		return retToken(Token::VecEnd, getChar());
 	default:
-		return Token(Token::Invalid, readIllegalToken());
+		return retToken(Token::Invalid, readIllegalToken());
 	}
 }
 

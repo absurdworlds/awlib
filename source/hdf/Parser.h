@@ -37,7 +37,7 @@ public:
 	 */
 	virtual void readValue(Value& out);
 
-	void error(hdf::ParserMessage type, std::string msg);
+	void error(size_t pos, std::string msg);
 private:
 	void processCommand();
 
