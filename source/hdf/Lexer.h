@@ -80,9 +80,9 @@ private:
 	template<typename Func> 
 	void skip(Func condition);
 
-	Token tok;
-
 	io::InputStream& stream;
+
+	Token tok;
 };
 } // namespace io
 } // namespace awrts
