@@ -106,16 +106,19 @@ bool Parser::read() {
 		return true;
 	case Token::Name:
 		if (depth == 0) {
+			lex.getToken();
 			error(tok.pos, "Value must be inside node.");
 			break;
 		}
 		state = State::Object;
 		return true;
 	case Token::Invalid:
+		lex.getToken();
 		error(tok.pos,
 		      string::compose("read(): illegal token: %0", tok.value));
 		break;
 	default:
+		lex.getToken();
 		error(tok.pos,
 		      string::compose("read(): unexpected token: %0", tok.value));
 	}
