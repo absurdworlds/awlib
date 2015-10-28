@@ -15,41 +15,10 @@
 #include <awengine/hdf/Value.h>
 #include <awengine/hdf/Parser.h>
 
+#include "Lexer.h"
+
 namespace awrts {
 namespace hdf {
-struct Token {
-	enum Kind {
-		Invalid,
-		Eof,
-		Name,
-		Number,
-		String,
-		Equals,
-		Colon,
-		Comma,
-		Bang,
-		NodeBegin,
-		NodeEnd,
-		VecBegin,
-		VecEnd,
-	};
-
-	Token()
-		: type(Kind::Invalid)
-	{ }
-	
-	Token(Kind type)
-		: type(type)
-	{ }
-
-	Token(Kind type, std::string val)
-		: type(type), value(val)
-	{ }
-
-	Kind type;
-	std::string value;
-};
-
 namespace impl_ {
 class Parser : public hdf::Parser {
 public:
@@ -81,22 +50,7 @@ private:
 	template <typename T>
 	bool parseVector(T& vec, size_t vecsize);
 
-	Token getToken();
-
-	std::string readString();
-	std::string readNumber();
-	std::string readName();
-	std::string readIllegalToken();
-
-	void fastForward();
-	void skipLine();
-	void skipWhitespace();
-	void skipInlineWhitespace();
-	//void skip(bool (*condition)(u8));
-	template<typename Func> 
-	void skip(Func condition);
-
-	Token tok;
+	Lexer lex;
 
 	enum class State {
 		Idle = 0,
@@ -107,8 +61,6 @@ private:
 		Data,
 		Panic
 	} state;
-
-	io::InputStream& stream;
 
 	size_t depth;
 	std::vector<std::string> errors;

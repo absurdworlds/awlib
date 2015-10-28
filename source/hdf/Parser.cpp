@@ -19,34 +19,6 @@
 
 namespace awrts {
 namespace hdf {
-bool in(char c, char c1)
-{
-	return c == c1;
-}
-
-template<typename... Args>
-bool in(char c, char c1, Args... chars)
-{
-	return c == c1 || in(c, chars...);
-}
-
-
-inline bool isDigit(char c) {
-	return (c >= '0' && c <= '9');
-}
-
-inline bool isNameBeginChar(char c) {
-	return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z');
-}
-
-inline bool isNameChar(char c) {
-	return isNameBeginChar(c) || isDigit(c) || c == '-' || c == '_';
-}
-
-inline bool isWhitespace(char c) {
-	return (in(c, ' ', '\t', '\r', '\n'));
-}
-
 hdf::Type tokenToType(Token const& token) 
 {
 	if (token.value == "bool" || token.value == "b") {
@@ -86,12 +58,12 @@ Parser* createParser(io::InputStream& stream)
 
 namespace impl_ {
 Parser::Parser(io::InputStream& stream)
-	: depth(0), state(State::Idle), stream(stream)
+	: depth(0), state(State::Idle), lex(stream)
 {
 }
 
 bool Parser::read() {
-	tok = getToken();
+	Token tok = lex.peekToken();
 
 	if (tok.type == Token::Eof)
 		return false;
@@ -104,6 +76,7 @@ bool Parser::read() {
 			error(HDF_LOG_WARNING, "Unexpected ! inside node.");
 			break;
 		}
+		lex.getToken();
 		processCommand();
 		break;
 	case Token::NodeBegin:
@@ -137,6 +110,8 @@ bool Parser::read() {
 
 Object Parser::getObject()
 {
+	Token tok = lex.getToken();
+
 	if (state != State::Object) {
 		error(HDF_LOG_ERROR, "there is no object");
 		return Object::Null;
@@ -146,9 +121,11 @@ Object Parser::getObject()
 	case Token::NodeBegin:
 		++depth;
 
-		tok = getToken();
-		if (tok.type != Token::Name)
+		tok = lex.getToken();
+		if (tok.type != Token::Name) {
+			error(tok.pos, "expected name");
 			break;
+		}
 
 		state = State::Idle;
 		return Object(Object::Node, tok.value);
@@ -175,6 +152,8 @@ void Parser::skipValue()
 
 void Parser::skipNode() 
 {
+	Token tok = lex.peekToken();
+
 	size_t depth = 1;
 
 	do {
@@ -183,7 +162,7 @@ void Parser::skipNode()
 		} else if (tok.type == Token::NodeEnd) {
 			--depth;
 		}
-		tok = getToken();
+		tok = lex.getToken();
 	} while (depth > 0);
 
 	read();
@@ -191,180 +170,8 @@ void Parser::skipNode()
 
 void Parser::error(hdf::ParserMessage type, std::string msg)
 {
-	errors.push_back(msg);
-	printf("[HDF:%u]: %s\n", stream.getPos(), msg.c_str());
-}
-
-//void Parser::skip(bool (*condition)(char))
-template<typename Func>
-void Parser::skip(Func condition)
-{
-	char c;
-	stream.peek(c);
-
-	while(condition(c) && c != 0)
-		stream.next(c);
-}
-
-void Parser::skipLine()
-{
-	skip(
-		[] (char c) {
-			return c != '\n';
-		}
-	);
-}
-
-void Parser::skipWhitespace()
-{
-	skip(isWhitespace);
-}
-
-bool junk(char c)
-{
-	return isWhitespace(c) || c == '/';
-}
-
-void Parser::fastForward()
-{
-	char c;
-	stream.peek(c);
-
-	if (isWhitespace(c)) {
-		skipWhitespace();
-	} else if (c == '/') {
-		stream.next(c);
-
-		if (c == '/') {
-			skipLine();
-		} else {
-			stream.get(c);
-			error(HDF_LOG_WARNING,"unexpected token: /");
-		}
-	}
-}
-
-Token Parser::getToken() {
-	char c;
-	stream.peek(c);
-
-	while (junk(c)) {
-		fastForward();
-		stream.peek(c);
-	}
-
-	Token tok;
-
-	auto getChar = [&] () {
-		stream.get(c);
-		return std::string(1, c);
-	};
-
-	switch (c) {
-	case 0:
-		return Token(Token::Eof);
-	case '0': case '1': case '2': case '3': case '4':
-	case '5': case '6': case '7': case '8': case '9':
-		return Token(Token::Number, readNumber());
-	case '"':
-		stream.next(c); // consume '"'
-		return Token(Token::String, readString());
-	case 'A': case 'B': case 'C': case 'D': case 'E': case 'F': case 'G':
-	case 'H': case 'I': case 'J': case 'K': case 'L': case 'M': case 'N':
-	case 'O': case 'P': case 'Q': case 'R': case 'S': case 'T': case 'U':
-	case 'V': case 'W': case 'X': case 'Y': case 'Z':
-	case 'a': case 'b': case 'c': case 'd': case 'e': case 'f': case 'g':
-	case 'h': case 'i': case 'j': case 'k': case 'l': case 'm': case 'n':
-	case 'o': case 'p': case 'q': case 'r': case 's': case 't': case 'u':
-	case 'v': case 'w': case 'x': case 'y': case 'z':
-		return Token(Token::Name, readName());
-	case '=':
-		return Token(Token::Equals, getChar());
-	case ':':
-		return Token(Token::Colon, getChar());
-	case ',':
-		return Token(Token::Comma, getChar());
-	case '!':
-		return Token(Token::Bang, getChar());
-	case '[':
-		return Token(Token::NodeBegin, getChar());
-	case ']':
-		return Token(Token::NodeEnd, getChar());
-	case '{':
-		return Token(Token::VecBegin, getChar());
-	case '}':
-		return Token(Token::VecEnd, getChar());
-	default:
-		return Token(Token::Invalid, readIllegalToken());
-	}
-}
-
-std::string Parser::readNumber()
-{
-	char c;
-	stream.peek(c);
-
-	std::string val;
-
-	while ((c >= '0' && c <= '9') || in(c, '.', 'e', 'E', '+', '-' )) {
-		val += c;
-		stream.next(c);
-	}
-
-	return val;
-}
-
-std::string Parser::readString() {
-	char c;
-	stream.peek(c);
-
-	std::string val;
-
-	while (c != '"') {
-		// When '\' is encountered in a string, skip the '\' and read
-		// next character as it is.
-		if (c == '\\')
-			stream.next(c);
-
-		val += c;
-		stream.next(c);
-	}
-
-	// consume "
-	stream.get(c);
-	return val;
-}
-
-std::string Parser::readName()
-{
-	char c;
-	stream.peek(c);
-
-	std::string name;
-
-	while(isNameChar(c)) {
-		name += c;
-
-		stream.next(c);
-	}
-
-	return name;
-}
-
-std::string Parser::readIllegalToken()
-{
-	char c;
-	stream.peek(c);
-
-	std::string name;
-
-	while(!isWhitespace(c) && !in(c, '[', ']', '=', ':', ',')) {
-		name += c;
-
-		stream.next(c);
-	}
-
-	return name;
+	// TODO: lex.getSourceBuffer()
+	lex.error(msg);
 }
 
 void Parser::readValue(Value& var)
@@ -373,15 +180,22 @@ void Parser::readValue(Value& var)
 		error(HDF_LOG_ERROR, "Call getObject() before callin readValue");
 		return;
 	}
-	tok = getToken();
+	Token tok = lex.getToken();
 
-	Token id = tok;
+	if (tok.type != Token::Equals) {
+		error(HDF_LOG_ERROR, "Expected '='");
+		return;
+	}
+	Token id = lex.getToken();
+	tok = lex.peekToken();
 
-	tok = getToken();
 	bool hasType = tok.type == Token::Colon;
-
-	var = hasType ? convertValue(tokenToType(id)) :
-		        convertValue();
+	if (hasType) {
+		tok = lex.getToken();
+		var = convertValue(tokenToType(id));
+	} else {
+		var = convertValue();
+	}
 
 	state = State::Idle;
 }
@@ -389,6 +203,8 @@ void Parser::readValue(Value& var)
 
 Value Parser::convertValue(Type type)
 {
+	Token tok = lex.getToken();
+
 	switch (type) {
 	case Type::Enum:
 	case Type::String:
@@ -405,7 +221,7 @@ Value Parser::convertValue(Type type)
 		if (tok.type != Token::Number)
 			break;
 
-		return Value(std::stoll(tok.value));
+		return Value(i64(std::stoll(tok.value)));
 	case Type::Boolean:
 		if (tok.type != Token::Name)
 			break;
@@ -422,6 +238,8 @@ Value Parser::convertValue(Type type)
 
 Value Parser::convertValue()
 {
+	Token tok = lex.peekToken();
+
 	switch (tok.type) {
 	case Token::String:
 		return Value(tok.value);
@@ -441,6 +259,8 @@ Value Parser::convertValue()
 
 Value Parser::parseInteger()
 {
+	Token tok = lex.peekToken();
+
 	auto type = Type::Integer;
 	for (char c : tok.value) {
 		if (c == '.') {
@@ -449,13 +269,15 @@ Value Parser::parseInteger()
 	}
 
 	if (type == Type::Integer)
-		return Value(stoll(tok.value));
+		return Value(i64(stoll(tok.value)));
 	else
-		return Value(stod(tok.value));
+		return Value(f64(stod(tok.value)));
 }
 
 Value Parser::parseVector(Type type)
 {
+	Token tok = lex.peekToken();
+
 	if (tok.type != Token::VecBegin)
 		return Value();
 
@@ -469,6 +291,8 @@ Value Parser::parseVector(Type type)
 
 Value Parser::parseVector()
 {
+	Token tok = lex.peekToken();
+
 	// Damn it, why is it so messy …
 	std::array<f32, 4> vec;
 	auto it = vec.begin();
@@ -476,11 +300,11 @@ Value Parser::parseVector()
 		if (it == vec.end())
 			continue;
 
-		tok = getToken();
+		tok = lex.getToken();
 		if (tok.type != Token::Number)
 			return Value();
 
-		tok = getToken();
+		tok = lex.getToken();
 		*(it++) = stof(tok.value);
 
 		if (tok.type == Token::VecEnd)
@@ -506,7 +330,7 @@ Value Parser::parseVector()
 
 // TODO: rewrite
 void Parser::processCommand() {
-	tok = getToken();
+	Token tok = lex.getToken();
 
 	if (tok.type != Token::Name) {
 		error(HDF_LOG_ERROR,
@@ -515,7 +339,7 @@ void Parser::processCommand() {
 	}
 
 	if (tok.value == "hdf_version") {
-		tok = getToken();
+		tok = lex.getToken();
 
 		if (tok.type != Token::String) {
 			error(HDF_LOG_ERROR, "Expected string after \"hdf_version\".");
