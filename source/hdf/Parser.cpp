@@ -289,22 +289,29 @@ Value Parser::parseVector()
 	std::array<f32, 4> vec;
 	auto it = vec.begin();
 	while (tok.type != Token::Eof) {
-		if (it == vec.end())
-			continue;
+		do {
+			if (it == vec.end())
+				break;
+
+
+			tok = lex.getToken();
+			if (tok.type != Token::Number)
+				return Value();
+
+			*(it++) = stof(tok.value);
+		} while (0);
 
 		tok = lex.getToken();
-		if (tok.type != Token::Number)
-			return Value();
 
-		*(it++) = stof(tok.value);
-
-		tok = lex.getToken();
 		if (tok.type == Token::VecEnd)
 			break;
 
 		if (tok.type != Token::Comma)
 			return Value();
 	}
+
+	if (tok.type == Token::Eof)
+		error(tok.pos, "parseVector: Reached end looking for '}'");
 
 	size_t size = it - vec.begin();
 	switch (size) {
