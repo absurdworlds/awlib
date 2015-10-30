@@ -288,21 +288,17 @@ Value Parser::parseVector()
 	// Damn it, why is it so messy …
 	std::array<f32, 4> vec;
 	auto it = vec.begin();
+
 	while (tok.type != Token::Eof) {
-		do {
-			if (it == vec.end())
-				break;
+		tok = lex.getToken();
+		if (tok.type != Token::Number)
+			return Value();
 
-
-			tok = lex.getToken();
-			if (tok.type != Token::Number)
-				return Value();
-
+		if (it < vec.end())
 			*(it++) = stof(tok.value);
-		} while (0);
 
 		tok = lex.getToken();
-
+		
 		if (tok.type == Token::VecEnd)
 			break;
 
