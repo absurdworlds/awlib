@@ -358,6 +358,19 @@ void Parser::processCommand() {
 			return;
 		}
 	}
+
+	if (tok.value == "strict") {
+		error(tok.pos, "Strict mode: not implemented");
+
+		tok = lex.getToken();
+
+		if (tok.type != Token::Name && tok.type != Token::Number) {
+			error(tok.pos, "Expected true/false value.");
+			return;
+		}
+
+		bool strict = parseBoolean(tok.value);
+	}
 }
 } // namespace impl_
 } // namespace hdf
