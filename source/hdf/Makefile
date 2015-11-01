@@ -1,6 +1,6 @@
 RootPath = ../..
 Sources = Lexer.cpp Parser.cpp Writer.cpp
-Defines = HR_MODULE_HDF
+Defines = AW_MODULE_HDF
 Libraries = awcore
 ProjectName = hdf
 Executable = false
