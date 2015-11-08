@@ -3,7 +3,8 @@ lib/*
 ipch/*
 ipch/*/
 ipch/*/*
-dependencies/*
+build/*
+a.out
 *.o
 *.so
 *.[0-9]
