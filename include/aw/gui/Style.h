@@ -21,28 +21,23 @@ public:
 	Style();
 	virtual ~Style() = default;
 
-	ElementStyle* getElementStyle(std::string element)
+	Value& property(std::string key)
 	{
-		auto found = properties.find(element);
-
-		if (found != properties.end()) {
-			return &found->second;
-		}
-
-		return nullptr;
+		return properties[key];
 	}
 
-	/*!
-	 * Provides a safe default style
-	 */
-	ElementStyle* getDefaultStyle();
-
-	void setElementStyle(std::string element, ElementStyle style)
+	Style& substyle(std::string key)
 	{
-		properties[element] = std::move(style);
+		return subclasses[key];
+	}
+
+	Style& operator[] (std::string key)
+	{
+		return substyle(key);
 	}
 private:
-	std::map<std::string, ElementStyle> properties;
+	std::map<std::string, Style> subclasses;
+	std::map<std::string, Value> properties;
 };
 } // namespace gui
 } // namespace aw
