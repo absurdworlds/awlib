@@ -16,18 +16,6 @@
 
 namespace awrts {
 namespace io {
-//! Flags specifying how to treat the file
-enum class FileMode {
-	//! Open file for reading
-	Read     = 1,
-	//! Open file for writing
-	Write    = 1 << 1,
-	//! Append mode - seek to the end of file before each write
-	Append   = 1 << 2,
-	//! Clear the file contents
-	Truncate = 1 << 3
-};
-
 enum class SeekMode {
 	Set,
 	Offset,
@@ -39,8 +27,19 @@ enum class SeekMode {
  */
 class File {
 public:
+	//! Flags specifying how to treat the file
+	enum Mode {
+		//! Open file for reading
+		Read     = 1,
+		//! Open file for writing
+		Write    = 1 << 1,
+		//! Append mode - seek to the end of file before each write
+		Append   = 1 << 2,
+		//! Clear the file contents
+		Truncate = 1 << 3
+	};
 
-	File(std::string const& path, FileMode mode);
+	File(std::string const& path, Mode mode);
 	virtual ~File();
 
 	/*!

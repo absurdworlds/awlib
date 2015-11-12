@@ -25,7 +25,7 @@ public:
 	 *     If true, will append to the end instead of overwriting the file.
 	 */
 	WriteFile(std::string const& path, bool append)
-		: File(path, append ? FileMode::Append : FileMode::Write)
+		: File(path, File::Write | append ? File::Append : 0)
 	{
 	}
 
