@@ -1,4 +1,4 @@
-hrengin Coding Conventions
+hrengin style guidelines
 ==========================
 
 ## 1. Indentation style ##
@@ -117,11 +117,13 @@ Names always should be descriptive, e.g. if a variable holds offset of current n
 
 Most names are written in mixed-case. Function (and method) names, local and member variable names all begin with lower-case letters. Class global variable and constant names begin with upper-case letters.
 
-Also, private member variabes end with underscore:
+Local variables aso can be written in lowercase, with words split by underscores (a.k.a. snake_case).
 
-	int private_;
+There should be no any decorations. All of `ITheInteface`, `CTheClass`, `thing_sz`, `m_member` are unacceptable.
 
-Local variables aso can be written in lowercase, with words split by underscores.
+It is preferred to put identifier inside of scope, instead of adding something to its name. For example, if there is an enumeration of file opening modes, instead of adding some prefix to its members, like `FM_Read`, it is preferrable to put the enum inside `File` class or `file` namespace.
+
+I also recommend same thing for naming of the enum itself. Instead of calling it something like `FileMode`, it should be `file::Mode` or `File::Mode`.
 
 ### 4.1. Header guards ###
 
@@ -130,7 +132,6 @@ All header guards should have following format:
 `_project_fileName_`
 
 Where `project` refers to a whole product, not to a module or a IDE project file.
-
 
 ## 5. Types ##
 
