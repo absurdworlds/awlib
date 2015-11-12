@@ -16,10 +16,16 @@
 
 namespace awrts {
 namespace io {
+//! Flags specifying how to treat the file
 enum class FileMode {
-	Read,
-	Write,
-	Append
+	//! Open file for reading
+	Read     = 1,
+	//! Open file for writing
+	Write    = 1 << 1,
+	//! Append mode - seek to the end of file before each write
+	Append   = 1 << 2,
+	//! Clear the file contents
+	Truncate = 1 << 3
 };
 
 enum class SeekMode {
@@ -33,6 +39,7 @@ enum class SeekMode {
  */
 class File {
 public:
+
 	File(std::string const& path, FileMode mode);
 	virtual ~File();
 
@@ -75,6 +82,7 @@ public:
 	 * Get full path to file
 	 */
 	std::string const& getPath() const;
+
 private:
 	std::string filename;
 	FILE* file;
