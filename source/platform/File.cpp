@@ -14,18 +14,39 @@
 
 namespace awrts {
 namespace io {
-File::File(std::string const& path, FileMode mode)
-	: filename(path), file(nullptr)
+
+char const* getMode(File::Mode mode)
+{
+	switch(mode) {
+	case File::Read:
+		return "rb";
+	case File::Read | File::Write:
+		return "rb+";
+	case File::Write:
+	case File::Write | File::Truncate:
+		return "wb";
+	case File::Write | File::Read | File::Truncate:
+		return "wb+";
+	case File::Write | File::Append:
+		return "ab";
+	case File::Write | File::Read | File::Append:
+		return "ab+";
+	default:
+		// invalid — can't just be Trunc or Append
+		return nullptr;
+	};
+}
+
+File::File(std::string const& path, File::Mode mode)
+	: path(path)
 {
 	if (path.size() == 0) {
 		return;
 	}
 
-	char const* m = mode == FileMode::Read   ? "rb" :
-	                mode == FileMode::Write  ? "wb" :
-	                mode == FileMode::Append ? "ab" : nullptr;
+	char const* mode_string = getMode(mode);
 
-	if (!m) {
+	if (!mode_string) {
 		return;
 	}
 
