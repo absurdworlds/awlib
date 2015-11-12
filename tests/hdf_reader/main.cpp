@@ -60,7 +60,6 @@ void parseObject(Parser* hdf, std::string parent, Document& doc)
 	}
 }
 
-// function to for parsing a single node
 void parseNode(Parser* hdf, std::string name, std::string node, Document& doc)
 {
 	parseObject(hdf, node + "." + name, doc);
@@ -76,8 +75,8 @@ void parseValue(Parser* hdf, std::string name, std::string node, Document& doc)
 	doc[node + "." + name] = v;
 }
 
-
-std::string to_string(Value val)
+// Conver Value to string
+std::string to_string(Value const& val)
 {
 	switch (val.getType()) {
 	case hdf::Type::String:
@@ -108,19 +107,25 @@ std::string to_string(Value val)
 		{
 			Vector2d<f32> v;
 			val.get(v);
-			return std::to_string(v[0]) + ", " + std::to_string(v[1]);
+			return std::to_string(v[0]) + ", " +
+			       std::to_string(v[1]);
 		}
 	case hdf::Type::Vector3d:
 		{
 			Vector3d<f32> v;
 			val.get(v);
-			return std::to_string(v[0]) + ", " + std::to_string(v[1]) + ", " + std::to_string(v[2]);
+			return std::to_string(v[0]) + ", " +
+			       std::to_string(v[1]) + ", " +
+			       std::to_string(v[2]);
 		}
 	case hdf::Type::Vector4d:
 		{
 			Vector4d<f32> v;
 			val.get(v);
-			return std::to_string(v[0]) + ", " + std::to_string(v[1]) + ", " + std::to_string(v[2]) + ", " + std::to_string(v[3]);
+			return std::to_string(v[0]) + ", " +
+			       std::to_string(v[1]) + ", " +
+			       std::to_string(v[2]) + ", " +
+			       std::to_string(v[3]);
 		}
 	}
 
