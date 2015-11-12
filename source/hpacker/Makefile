@@ -1,5 +1,6 @@
 RootPath = ../..
-Objects = hpacker.cpp StringBank.cpp \
+Sources = hpacker.cpp StringBank.cpp \
+	  HPKTreeReader.cpp \
 	  HPKListWriter.cpp HPKHtableWriter.cpp HPKTreeWriter.cpp \
 	  ItdReader.cpp ItdPacker.cpp
 Defines = 

@@ -83,6 +83,13 @@ i32 main (char** args)
 		packer.addList(files);
 
 		packer.pack();
+	} else if (action == List) {
+		ItdReader reader(filename, verbose);
+		auto list = reader.list("");
+
+		for (auto file : list) {
+			printf("%s\n",file.c_str());
+		}
 	}
 
 	return 0;
