@@ -48,7 +48,7 @@ struct File::Details {
 };
 
 File::File(std::string const& path, File::Mode mode)
-	: path(path)
+	: path(path), details(std::make_unique<File::Details>())
 {
 	if (path.size() == 0) {
 		return;
