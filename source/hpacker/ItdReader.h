@@ -10,6 +10,7 @@
 #define _aw_ItdReader_
 #include <vector>
 #include <fstream>
+#include <memory>
 
 #include <aw/common/types.h>
 #include <aw/itd/HPKIndexReader.h>
@@ -26,7 +27,8 @@ public:
 	std::vector<u8> getFileContents (u64 fileId);
 	std::vector<u8> getFileContents (std::string path);
 private:
-	std::ifstream archive_;
+	std::ifstream archive;
+	std::unique_ptr<HPKIndexReader> reader;
 };
 } // namespace itd
 } // namespace aw

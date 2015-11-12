@@ -9,6 +9,7 @@
 #include <cstdio>
 
 #include <aw/core/ArgumentParser.h>
+#include <aw/string/utility.h>
 
 #include "hpacker.h"
 
@@ -36,6 +37,7 @@ i32 main (char** args)
 		None,
 		Create,
 		Unpack,
+		Extract,
 		List
 	} action;
 
@@ -51,7 +53,7 @@ i32 main (char** args)
 			} else if (arg.name == "l" || arg.name == "list") {
 				action = List;
 			} else if (arg.name == "e" || arg.name == "extract") {
-				action = List;
+				action = Extract;
 			} else if (arg.name == "f" || arg.name == "file") {
 				argp->getNextArgument(arg);
 				filename = arg.name;
@@ -90,7 +92,16 @@ i32 main (char** args)
 		for (auto file : list) {
 			printf("%s\n",file.c_str());
 		}
+	} else if (action == Extract) {
+		ItdReader reader(filename, verbose);
+
+		for (auto file : files) {
+			std::ofstream f(string::split(file,"/").back(), std::ios::binary);
+			auto v = reader.getFileContents(file);
+			f.write((char*)v.data(),v.size());
+		}
 	}
+
 
 	return 0;
 }

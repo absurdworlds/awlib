@@ -93,6 +93,8 @@ void HPKTreeReader::readFiles(std::string dir, u64 ptr, u64 num)
 	source.seekg(base + ptr);
 
 	while (count < num) {
+		source.seekg(base + ptr + count*16);
+
 		u64 nameOffset;
 		u64 id;
 
@@ -116,6 +118,8 @@ void HPKTreeReader::readDirs(std::string dir, u64 ptr, u64 num)
 	source.seekg(base + ptr);
 
 	while (count < num) {
+		source.seekg(base + ptr + count*32);
+
 		u64 nameOffset;
 		u64 files_ptr;
 		u32 files_num;

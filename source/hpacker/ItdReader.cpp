@@ -12,36 +12,45 @@
 namespace aw {
 namespace itd {
 ItdReader::ItdReader(std::string const& archive_name, bool verbose)
+	: reader(std::make_unique<HPKTreeReader>(archive))
 {
-	archive_.open(archive_name, std::ifstream::binary);
+	archive.open(archive_name, std::ifstream::binary);
 
+	archive.seekg(0x40);
+	u64 ptr;
+	u64 size;
+
+	archive.read((char *)&ptr, 8);
+	archive.read((char *)&size, 8);
+
+	archive.seekg(ptr);
+
+	reader->read();
 }
 
 std::vector<std::string> ItdReader::list(std::string prefix)
 {
-	HPKTreeReader reader(archive_);
+	return reader->list(prefix);
+}
 
-	archive_.seekg(0x40);
+std::vector<u8> ItdReader::getFileContents(u64 fileId)
+{
+	archive.seekg(0x40 + 16*fileId);
 	u64 ptr;
 	u64 size;
+	archive.read((char *)&ptr, 8);
+	archive.read((char *)&size, 8);
 
-	archive_.read((char *)&ptr, 8);
-	archive_.read((char *)&size, 8);
+	archive.seekg(ptr);
 
-	archive_.seekg(ptr);
-
-	reader.read();
-
-	return reader.list(prefix);
+	std::vector<u8> tmp(size,0);
+	archive.read((char*)tmp.data(), size);
+	return tmp;
 }
 
-std::vector<u8> ItdReader::getFileContents (u64 fileId)
+std::vector<u8> ItdReader::getFileContents(std::string path)
 {
-
-}
-
-std::vector<u8> ItdReader::getFileContents (std::string path)
-{
+	return getFileContents(reader->findFile(path));
 }
 
 } // namespace itd

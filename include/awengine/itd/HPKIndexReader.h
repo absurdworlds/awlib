@@ -33,6 +33,8 @@ public:
 	 * \return List of files in directory \prefix
 	 */
 	virtual std::vector<std::string> list(std::string const& prefix) = 0;
+
+	virtual void read() = 0;
 };
 
 } //namespace itd
