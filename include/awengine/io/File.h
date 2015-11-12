@@ -13,6 +13,7 @@
 
 #include <awengine/io/io.h>
 #include <awengine/common/types.h>
+#include <awengine/utility/NonCopyable.h>
 
 namespace awrts {
 namespace io {
@@ -41,6 +42,9 @@ public:
 
 	File(std::string const& path, Mode mode);
 	virtual ~File();
+
+	File(File&& other);
+	File& operator = (File&& other);
 
 	/*!
 	 * Check if file is open

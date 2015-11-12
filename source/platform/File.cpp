@@ -39,6 +39,20 @@ File::~File()
 	}
 }
 
+
+File::File(File&& other)
+{
+	filename = std::move(other.filename);
+	file = std::move(other.file);
+}
+
+File& operator = (File&& other)
+{
+	filename = std::move(other.filename);
+	file = std::move(other.file);
+	return *this;
+}
+
 diff_t File::read(void* buffer, diff_t count)
 {
 	if (!isOpen()) {
