@@ -35,7 +35,6 @@ public:
 	virtual ~WriteFile() = default;
 
 	using File::isOpen;
-	using File::close;
 	using File::write;
 	using File::seek;
 	using File::tell;

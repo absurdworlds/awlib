@@ -25,7 +25,6 @@ public:
 	virtual ~ReadFile() = default;
 
 	using File::isOpen;
-	using File::close;
 	using File::read;
 	using File::seek;
 	using File::tell;

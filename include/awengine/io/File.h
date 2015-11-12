@@ -52,11 +52,6 @@ public:
 	bool isOpen() const;
 
 	/*!
-	 * Close the file
-	 */
-	void close();
-
-	/*!
 	 * Read specified number of bytes from file to buffer
 	 */
 	diff_t read(void* buffer, diff_t count);
@@ -87,6 +82,11 @@ public:
 	std::string const& getPath() const;
 
 private:
+	/*!
+	 * Close the file
+	 */
+	void close();
+
 	std::string path;
 
 	class Details;
