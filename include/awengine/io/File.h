@@ -10,10 +10,10 @@
 #ifndef _awengine_File_
 #define _awengine_File_
 #include <string>
+#include <memory>
 
 #include <awengine/io/io.h>
 #include <awengine/common/types.h>
-#include <awengine/utility/NonCopyable.h>
 
 namespace awrts {
 namespace io {
@@ -87,8 +87,10 @@ public:
 	std::string const& getPath() const;
 
 private:
-	std::string filename;
-	FILE* file;
+	std::string path;
+
+	class Details;
+	std::unique_ptr<Details> details;
 };
 } // namespace io
 } // namespace awrts

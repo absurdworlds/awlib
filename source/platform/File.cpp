@@ -37,6 +37,16 @@ char const* getMode(File::Mode mode)
 	};
 }
 
+
+struct File::Details {
+	FILE* file;
+
+	Details()
+		: file(nullptr)
+	{
+	}
+};
+
 File::File(std::string const& path, File::Mode mode)
 	: path(path)
 {
@@ -50,7 +60,7 @@ File::File(std::string const& path, File::Mode mode)
 		return;
 	}
 
-	file = fopen(path.c_str(), m);
+	details->file = fopen(path.c_str(), mode_string);
 }
 
 File::~File()
@@ -63,14 +73,16 @@ File::~File()
 
 File::File(File&& other)
 {
-	filename = std::move(other.filename);
-	file = std::move(other.file);
+	path = std::move(other.path);
+	details = std::move(other.details);
 }
 
-File& operator = (File&& other)
+File& File::operator = (File&& other)
 {
-	filename = std::move(other.filename);
-	file = std::move(other.file);
+	close();
+
+	path = std::move(other.path);
+	details = std::move(other.details);
 	return *this;
 }
 
@@ -80,7 +92,7 @@ diff_t File::read(void* buffer, diff_t count)
 		return -1;
 	}
 
-	return (diff_t)fread(buffer, 1, count, file);
+	return (diff_t)fread(buffer, 1, count, details->file);
 }
 
 diff_t File::write(void const* buffer, diff_t count)
@@ -89,7 +101,7 @@ diff_t File::write(void const* buffer, diff_t count)
 		return -1;
 	}
 
-	return (i32)fwrite(buffer, 1, count, file);
+	return (i32)fwrite(buffer, 1, count, details->file);
 }
 
 diff_t File::seek(diff_t offset, SeekMode mode)
@@ -101,7 +113,7 @@ diff_t File::seek(diff_t offset, SeekMode mode)
 	auto m = mode == SeekMode::Set     ? SEEK_SET :
 	         mode == SeekMode::Reverse ? SEEK_END : SEEK_CUR;
 
-	return fseek(file, offset, m);
+	return fseek(details->file, offset, m);
 }
 
 diff_t File::tell() const
@@ -110,23 +122,23 @@ diff_t File::tell() const
 		return -1;
 	}
 
-	return ftell(file);
+	return ftell(details->file);
 }
 
 size_t File::getSize() const
 {
-	size_t size = fileSize(filename);
+	size_t size = fileSize(path);
 	return size;
 }
 
 std::string const& File::getPath() const
 {
-	return filename;
+	return path;
 }
 
 bool File::isOpen() const
 {
-	return file != 0;
+	return details->file != 0;
 }
 
 void File::close()
@@ -134,8 +146,8 @@ void File::close()
 	if (!isOpen())
 		return;
 
-	fclose(file);
-	file = 0;
+	fclose(details->file);
+	details->file = 0;
 }
 } // namespace io
 } // namespace awrts
