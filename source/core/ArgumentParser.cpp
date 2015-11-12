@@ -25,11 +25,14 @@ ArgumentParser::ArgumentParser(char** argv)
 
 i32 ArgumentParser::getNextArgument(Argument& tok)
 {
+	// bug: because it pops element first, and then returns size,
+	// arg parser returned 0, when there was actually an element
+	size_t size = tokens_.size();
 	if(!tokens_.empty()) {
 		tok = tokens_.back();
 		tokens_.pop_back();
 	}
-	return tokens_.size();
+	return size;
 }
 
 void ArgumentParser::parse(char** argv)
