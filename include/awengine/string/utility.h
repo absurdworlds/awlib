@@ -72,7 +72,7 @@ inline std::string join(std::vector<std::string>& source,
 /*!
  * \brief 
  * 	Split string into tokens. Ignores empty tokens.
- * 	For example, `splitString("/ab/cde//fgh/", "/")` will produce 
+ * 	For example, `split("/ab/cde//fgh/", "/")` will produce 
  * 	three tokens: {"ab", "cde", "fgh"}
  * \param source
  * 	Source string to split
@@ -104,6 +104,7 @@ split(std::string const& source, std::string const& delim)
 /*!
  * \brief 
  * 	Split string into tokens, bearing in mind empty tokens.
+ * 	For example, explode("/") produces {"", ""}.
  * \param source
  * 	Source string to split
  * \param delim
