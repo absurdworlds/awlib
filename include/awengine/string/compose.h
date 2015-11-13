@@ -14,6 +14,8 @@
 
 #include <awengine/core/core.h>
 
+#include <awengine/string/as_string.h>
+
 namespace awrts {
 namespace string {
 /*!
@@ -53,10 +55,10 @@ AW_CORE_EXP std::string compose(std::string const& fmt,
 template<typename... Args>
 std::string compose(std::string const& fmt, Args const&... args)
 {
-	std::vector<std::string> bits{args...};
+	std::vector<std::string> bits{as_string(args)...};
 
 	return compose(fmt, bits);
 }
 } // namespace string
 } // namespace awrts
-#endif// (header guard)
+#endif//_awrts_string_compose_
