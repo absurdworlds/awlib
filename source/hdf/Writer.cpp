@@ -22,7 +22,7 @@ hdf::Writer* createWriter(io::WriteStream& outStream)
 
 namespace impl_ {
 Writer::Writer(io::WriteStream& out)
-	: ostream(out), depth(0)
+	: ostream(out), depth(0), indentation(IndentationStyle::DoubleSpace)
 {
 }
 
@@ -188,7 +188,7 @@ void Writer::startLine()
 	if (indentation == IndentationStyle::None)
 		return;
 
-	size_t indent_size;
+	size_t indent_size = 0;
 	char indent_char = ' ';
 
 	switch (indentation) {
@@ -212,7 +212,7 @@ void Writer::startLine()
 	}
 
 	indent_size *= depth;
-
+	
 	std::string indent(indent_size, indent_char);
 
 	ostream.put(indent);
