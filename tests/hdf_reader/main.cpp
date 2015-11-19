@@ -75,63 +75,6 @@ void parseValue(Parser* hdf, std::string name, std::string node, Document& doc)
 	doc[node + "." + name] = v;
 }
 
-// Conver Value to string
-std::string to_string(Value const& val)
-{
-	switch (val.getType()) {
-	case hdf::Type::String:
-		{
-			std::string v;
-			val.get(v);
-			return v;
-		}
-	case hdf::Type::Float:
-		{
-			f64 f;
-			val.get(f);
-			return std::to_string(f);
-		}
-	case hdf::Type::Integer:
-		{
-			i64 i;
-			val.get(i);
-			return std::to_string(i);
-		}
-	case hdf::Type::Boolean:
-		{
-			bool b;
-			val.get(b);
-			return std::to_string(b);
-		}
-	case hdf::Type::Vector2d:
-		{
-			Vector2d<f32> v;
-			val.get(v);
-			return std::to_string(v[0]) + ", " +
-			       std::to_string(v[1]);
-		}
-	case hdf::Type::Vector3d:
-		{
-			Vector3d<f32> v;
-			val.get(v);
-			return std::to_string(v[0]) + ", " +
-			       std::to_string(v[1]) + ", " +
-			       std::to_string(v[2]);
-		}
-	case hdf::Type::Vector4d:
-		{
-			Vector4d<f32> v;
-			val.get(v);
-			return std::to_string(v[0]) + ", " +
-			       std::to_string(v[1]) + ", " +
-			       std::to_string(v[2]) + ", " +
-			       std::to_string(v[3]);
-		}
-	}
-
-	return "";
-}
-
 int main(int,char** arg)
 {
 	if (arg[1] == 0)
@@ -149,13 +92,13 @@ int main(int,char** arg)
 
 	for (auto pair : doc) {
 		std::cout << pair.first;
-		std::string const val = to_string(pair.second);
+		std::string const val = as_string(pair.second);
 		if (val == "") {
 			std::cout << "\n";
 			continue;
 		}
 
-	       	std::cout << " = " << to_string(pair.second) << "\n";
+		std::cout << " = " << as_string(pair.second) << "\n";
 	}
 
 	delete hdf;
