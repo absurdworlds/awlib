@@ -217,7 +217,7 @@ void Writer::startLine()
 
 	if (indent_size == 0)
 		return;
-	
+
 	std::string indent(indent_size, indent_char);
 
 	ostream.put(indent);
