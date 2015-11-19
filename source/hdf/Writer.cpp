@@ -11,16 +11,10 @@
 #include <awengine/core/Logger.h>
 
 #include <awengine/hdf/shared.h>
-#include "Writer.h"
+#include <awengine/hdf/Writer.h>
 
 namespace awrts {
 namespace hdf {
-hdf::Writer* createWriter(io::WriteStream& outStream)
-{
-	return new impl_::Writer(outStream);
-}
-
-namespace impl_ {
 Writer::Writer(io::WriteStream& out)
 	: ostream(out), depth(0), indentation(IndentationStyle::DoubleSpace)
 {
@@ -228,6 +222,5 @@ void Writer::endLine()
 	ostream.put('\n');
 }
 
-} // namespace impl_
 } // namespace io
 } // namespace awrts

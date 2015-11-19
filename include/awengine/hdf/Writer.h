@@ -18,7 +18,7 @@ namespace io {
 class WriteStream;
 }
 namespace hdf {
-/*! Enumeration for selecting writer indentation style */
+/*! List of Writer indentation styles */
 enum IndentationStyle {
 	Tab,
 	Space,
@@ -34,26 +34,31 @@ public:
 	virtual ~Writer() = default;
 
 	/*! Create a new node and write a header for it. */
-	virtual bool startNode(std::string name) = 0;
+	virtual bool startNode(std::string name);
 
 	/*! End current (bottom level) node.  */
-	virtual bool endNode() = 0;
+	virtual bool endNode();
 
 	/*! Write a value object. */
-	virtual bool writeValue(std::string name, hdf::Value value) = 0;
+	virtual bool writeValue(std::string name, hdf::Value value);
 
 	/*! Write a comment */
-	virtual void addComment(std::string comment_text) = 0;
+	virtual void addComment(std::string comment_text);
 
 	/*! Report an error */
-	virtual void error(u32 type, std::string msg) = 0;
+	virtual void error(u32 type, std::string msg);
 
 	/*! Set the indentation style for the document */
-	virtual void setIndentationStyle(IndentationStyle style) = 0;
+	virtual void setIndentationStyle(IndentationStyle style);
+private:
+	void writeValueValue(hdf::Value value);
+	void startLine();
+	void endLine();
+
+	io::WriteStream& ostream;
+	IndentationStyle indentation;
+	size_t depth;
 };
-
-AW_HDF_EXP hdf::Writer* createWriter(io::WriteStream& outStream);
-
 } // namespace io
 } // namespace awrts
 #endif//_awrts_HDF_Writer_
