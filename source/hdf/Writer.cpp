@@ -20,10 +20,6 @@ Writer::Writer(io::WriteStream& out)
 {
 }
 
-Writer::~Writer()
-{
-}
-
 /*! Create a new node and write a header for it. */
 bool Writer::startNode(std::string name)
 {

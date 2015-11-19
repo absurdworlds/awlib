@@ -204,7 +204,7 @@ struct Value::Helper<> {
 } // namespace hdf
 
 //! Convert Value to string
-std::string as_string(Value const& val)
+std::string as_string(hdf::Value const& val)
 {
 	switch (val.getType()) {
 	case hdf::Type::String:
