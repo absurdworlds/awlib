@@ -115,7 +115,9 @@ void Writer::writeValueValue(hdf::Value value)
 			std::string s;
 			value.get(s);
 			ostream.put("string:");
+			ostream.put('"');
 			ostream.put(s);
+			ostream.put('"');
 			break;
 		}
 	case hdf::Type::Vector2d: {
@@ -212,6 +214,9 @@ void Writer::startLine()
 	}
 
 	indent_size *= depth;
+
+	if (indent_size == 0)
+		return;
 	
 	std::string indent(indent_size, indent_char);
 
