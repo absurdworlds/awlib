@@ -56,8 +56,31 @@ bool Writer::endNode()
 	return true;
 }
 
+//! Spell the type of value
+std::string spellType(hdf::Value value)
+{
+	switch (value.getType()) {
+	case hdf::Type::Integer:
+		return("int:");
+	case hdf::Type::Float:
+		return("float:");
+	case hdf::Type::Boolean:
+		return("bool:");
+	case hdf::Type::String:
+		return("string:");
+	case hdf::Type::Vector2d:
+		return("vec2:");
+	case hdf::Type::Vector3d:
+		return("vec3:");
+	case hdf::Type::Vector4d:
+		return("vec4:");
+	default:
+		break;
+	}
+}
+
 /*! Write a value object. */
-bool Writer::writeValue(std::string name, hdf::Value value)
+bool Writer::writeValue(std::string name, hdf::Value value, bool typed)
 {
 	if (depth == 0) {
 		error(HDF_LOG_ERROR, "field outside node");
@@ -69,6 +92,9 @@ bool Writer::writeValue(std::string name, hdf::Value value)
 	ostream.put(name);
 	ostream.put(" = ");
 
+	if (typed)
+		ostream.put(spellType(value));
+
 	writeValueValue(value);
 
 	endLine();
@@ -76,84 +102,36 @@ bool Writer::writeValue(std::string name, hdf::Value value)
 	return true;
 }
 
-// TODO: Implement general-purpose to_string(hdf::Value)
 void Writer::writeValueValue(hdf::Value value)
 {
 	switch (value.getType()) {
-	case hdf::Type::Unknown:
-		ostream.put("null");
+	default:
 		break;
-	case hdf::Type::Integer: {
-			i64 i;
-			value.get(i);
-			ostream.put("int:");
-			ostream.put(std::to_string(i));
-			break;
-		}
-	case hdf::Type::Float: {
-			f64 f;
-			value.get(f);
-			ostream.put("float:");
-			ostream.put(std::to_string(f));
-			break;
-		}
-	case hdf::Type::Boolean: {
-			bool b;
-			value.get(b);
-			ostream.put("bool:");
-			// TODO: does std:: provide same functionality?
-			ostream.put(b ? "true" : "false");
-			break;
-		}
-	case hdf::Type::String: {
-			std::string s;
-			value.get(s);
-			ostream.put("string:");
-			ostream.put('"');
-			ostream.put(s);
-			ostream.put('"');
-			break;
-		}
-	case hdf::Type::Vector2d: {
-			  Vector2d<f32> v;
-			  value.get(v);
-			  ostream.put("vec2:");
-			  ostream.put('{');
-			  ostream.put(std::to_string(v[0]));
-			  ostream.put(",");
-			  ostream.put(std::to_string(v[1]));
-			  ostream.put('}');
-			  break;
-		}
-	case hdf::Type::Vector3d: {
-			  Vector3d<f32> v;
-			  value.get(v);
-			  ostream.put("vec3:");
-			  ostream.put('{');
-			  ostream.put(std::to_string(v[0]));
-			  ostream.put(",");
-			  ostream.put(std::to_string(v[1]));
-			  ostream.put(",");
-			  ostream.put(std::to_string(v[2]));
-			  ostream.put('}');
-			  break;
-		}
-	case hdf::Type::Vector4d: {
-			  Vector4d<f32> v;
-			  value.get(v);
-			  ostream.put("vec4:");
-			  ostream.put('{');
-			  ostream.put(std::to_string(v[0]));
-			  ostream.put(",");
-			  ostream.put(std::to_string(v[1]));
-			  ostream.put(",");
-			  ostream.put(std::to_string(v[2]));
-			  ostream.put(",");
-			  ostream.put(std::to_string(v[3]));
-			  ostream.put('}');
-			  break;
-		}
+	case hdf::Type::String:
+		ostream.put('"');
+		ostream.put(as_string(value));
+		ostream.put('"');
+		break;
+	case hdf::Type::Vector2d:
+		ostream.put('{');
+		ostream.put(as_string(value));
+		ostream.put('}');
+		break;
+	case hdf::Type::Vector3d:
+		ostream.put("vec3:");
+		ostream.put('{');
+		ostream.put(as_string(value));
+		ostream.put('}');
+		break;
+	case hdf::Type::Vector4d:
+		ostream.put("vec4:");
+		ostream.put('{');
+		ostream.put(as_string(value));
+		ostream.put('}');
+		break;
 	}
+
+	ostream.put(as_string(value));
 }
 
 /*! Write a comment */

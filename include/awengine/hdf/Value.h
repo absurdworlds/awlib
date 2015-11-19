@@ -257,7 +257,7 @@ std::string as_string(Value const& val)
 		}
 	}
 
-	return "";
+	return "null";
 }
 } // namespace awrts
 #endif//_awrts_hdf_value_

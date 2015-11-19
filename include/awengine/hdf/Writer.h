@@ -40,7 +40,9 @@ public:
 	virtual bool endNode();
 
 	/*! Write a value object. */
-	virtual bool writeValue(std::string name, hdf::Value value);
+	virtual bool writeValue(std::string name,
+	                        hdf::Value value,
+	                        bool typed = true);
 
 	/*! Write a comment */
 	virtual void addComment(std::string comment_text);
