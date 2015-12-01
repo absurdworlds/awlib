@@ -12,40 +12,40 @@
 
 namespace aw {
 namespace itd {
-StringBank::StringBank ()
-	: stringTally_(0)
+StringBank::StringBank()
+	: stringTally(0)
 {
 }
 
-u64 StringBank::add (std::string const & str)
+u64 StringBank::add(std::string const & str)
 {
-	u64 prevTally = stringTally_;
+	u64 prevTally = stringTally;
 	u16 const limit = std::numeric_limits<u16>::max();
 
-	strings_.push_back(str.substr(0, limit));
+	strings.push_back(str.substr(0, limit));
 
-	u16 const length = strings_.back().size();
+	u16 const length = strings.back().size();
 
-	stringTally_ += length + 3;
+	stringTally += length + 3;
 	return prevTally;
 }
 
-void StringBank::putStrings (std::ostream & target)
+void StringBank::putStrings(std::ostream & target)
 {
-	for(auto const & str : strings_) {
+	for(auto const & str : strings) {
 		u16 length = str.size();
 		target.write((char *)&length, 2);
 		target.write(str.c_str(), length + 1);
 	}
 }
 
-std::string const & StringBank::operator [] (size_t index) const
+std::string const & StringBank::operator [](size_t index) const
 {
-	return strings_[index];
+	return strings[index];
 }
-std::string const & StringBank::back () const
+std::string const & StringBank::back() const
 {
-	return strings_.back();
+	return strings.back();
 }
 } //namespace itd
 } //namespace aw

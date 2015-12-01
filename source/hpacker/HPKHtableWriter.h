@@ -21,15 +21,15 @@ namespace itd {
  */
 class HPKHtableWriter : public HPKListWriter {
 public:
-	HPKHtableWriter ();
+	HPKHtableWriter();
 
-	virtual ~HPKHtableWriter ();
+	virtual ~HPKHtableWriter();
 
-	virtual void write (std::ostream& target);
+	virtual void write(std::ostream& target);
 private:
 	typedef HPKListWriter::ListEntry ListEntry;
 	struct HtableEntry {
-		HtableEntry ()
+		HtableEntry()
 			: entriesOffset(-1), fileListSize(0)
 		{
 		}

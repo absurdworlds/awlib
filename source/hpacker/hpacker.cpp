@@ -8,7 +8,7 @@
  */
 #include <cstdio>
 
-#include <aw/core/ArgParser.h>
+#include <aw/core/ArgumentParser.h>
 
 #include "hpacker.h"
 
@@ -17,7 +17,7 @@ namespace itd {
 void printUsage()
 {
 	printf("Usage: hpacker [OPTION]... [FILE...]\n");
-	printf("hpacker is a utility which serves files together into a TD archive.\n");
+	printf("hpacker is a utility which packs files together into ITD archive.\n");
 	printf("\n");
 	printf("  -c, --create         Create an archive\n");
 	printf("  -e, --extract        Extract contents of archive\n");
@@ -30,7 +30,7 @@ void printUsage()
 
 i32 main (char** args)
 {
-	core::ArgParser* argp = core::createArgParser(args+1);
+	core::ArgumentParser* argp = core::createArgumentParser(args+1);
 
 	enum Action {
 		None,
@@ -43,32 +43,32 @@ i32 main (char** args)
 	std::vector<std::string> files;
 	bool verbose = false;
 
-	core::ClineArg arg;
-	while(argp->getToken(arg)) {
-		if(arg.type == core::ClineArg::Option) {
+	core::Argument arg;
+	while (argp->getNextArgument(arg)) {
+		if (arg.type == core::Argument::Option) {
 			if(arg.name == "c" || arg.name == "create") {
 				action = Create;
-			} else if(arg.name == "l" || arg.name == "list") {
+			} else if (arg.name == "l" || arg.name == "list") {
 				action = List;
-			} else if(arg.name == "e" || arg.name == "extract") {
+			} else if (arg.name == "e" || arg.name == "extract") {
 				action = List;
-			} else if(arg.name == "f" || arg.name == "file") {
-				argp->getToken(arg);
+			} else if (arg.name == "f" || arg.name == "file") {
+				argp->getNextArgument(arg);
 				filename = arg.name;
-			} else if(arg.name == "v" || arg.name == "verbose") {
+			} else if (arg.name == "v" || arg.name == "verbose") {
 				verbose = true;
 			}
 #if 0
-		if(arg.type == core::ClineArg::Option && arg.name == "-") {
+		if(arg.type == core::Argument::Option && arg.name == "-") {
 			// from stdin
 		}
 #endif
 
-			if(arg.name == "h" || arg.name == "help") {
+			if (arg.name == "h" || arg.name == "help") {
 				printUsage();
 			}
-		} else if(arg.type == core::ClineArg::Argument) {
-			if(!action) {
+		} else if (arg.type == core::Argument::Arg) {
+			if (!action) {
 				fprintf(stderr, "No action selected\n");
 				fprintf(stderr, "Type hpacker -h or hpacker --help for usage.\n");
 				return -1;
@@ -78,7 +78,7 @@ i32 main (char** args)
 		}
 	}
 
-	if(action == Create) {
+	if (action == Create) {
 		ItdPacker packer(filename, verbose);
 		packer.addList(files);
 
@@ -91,7 +91,7 @@ i32 main (char** args)
 } // namespace itd
 } // namespace aw
 
-int main (int, char** argv)
+int main(int, char** argv)
 {
 	return aw::itd::main(argv);
 }

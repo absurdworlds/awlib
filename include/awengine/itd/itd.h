@@ -1,14 +1,13 @@
 /*
  * Copyright (C) 2014  absurdworlds
  *
- * License LGPLv3-only:
+ * License LGPLv3 or later:
  * GNU Lesser GPL version 2.1 <http://gnu.org/licenses/lgpl-2.1.html>
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
 #ifndef _aw_itd_
 #define _aw_itd_
-
 #include <string>
 #include <aw/common/types.h>
 
@@ -17,10 +16,10 @@ namespace aw {
 // source:
 // (09:23:04 AM) Spectre: gcfscape185(открыча гцф впк итд).zip
 namespace itd {
-#ifdef HR_MODULE_ITD
-	#define HR_ITD_EXP HR_EXPORT
+#ifdef AW_MODULE_ITD
+	#define AW_ITD_EXP HR_EXPORT
 #else
-	#define HR_ITD_EXP HR_IMPORT
+	#define AW_ITD_EXP HR_IMPORT
 #endif
 
 /*!
@@ -29,7 +28,7 @@ namespace itd {
  */
 struct MainHeader {
 	MainHeader ()
-		: fileId{'h','i','t','d'}
+		: fileId{'.','i','t','d'}
 	{
 	}
 

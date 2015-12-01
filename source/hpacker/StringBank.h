@@ -16,18 +16,21 @@
 
 namespace aw {
 namespace itd {
-
+// This class is used to collect strings,
+// referred by filename pointers, together
 class StringBank {
 public:
-	StringBank ();
-	u64 add (std::string const & str);
-	void putStrings (std::ostream & target);
+	StringBank();
+	~StringBank() = default;
 
-	std::string const & operator [] (size_t index) const;
-	std::string const & back () const;
+	u64 add(std::string const & str);
+	void putStrings(std::ostream & target);
+
+	std::string const & operator [](size_t index) const;
+	std::string const & back() const;
 private:
-	std::vector<std::string> strings_;
-	u64 stringTally_;
+	std::vector<std::string> strings;
+	u64 stringTally;
 };
 } //namespace itd
 } //namespace aw

@@ -8,7 +8,7 @@
  */
 #include <algorithm>
 
-#include <aw/common/stringutils.h>
+#include <aw/string/utility.h>
 
 #include "HPKTreeWriter.h"
 
@@ -27,7 +27,7 @@ void HPKTreeWriter::addFile (std::string const& path, u64 id)
 	std::vector<std::string> dir;
 	std::string name;
 
-	string::split(path, "/", dir);
+	dir = string::split(path, "/");
 	name = dir.back();
 	dir.pop_back();
 

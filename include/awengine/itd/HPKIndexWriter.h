@@ -21,18 +21,17 @@ namespace itd {
  */
 class HPKIndexWriter {
 public:
-	virtual ~HPKIndexWriter ()
-	{
-	}
+	virtual ~HPKIndexWriter() = default;
 
 	/*!
 	 * Add file to index
 	 */
-	virtual void addFile (std::string const& path, u64 id) = 0;
+	virtual void addFile(std::string const& path, u64 id) = 0;
+
 	/*!
 	 * Write index to a stream
 	 */
-	virtual void write (std::ostream& target) = 0;
+	virtual void write(std::ostream& target) = 0;
 };
 
 } //namespace itd

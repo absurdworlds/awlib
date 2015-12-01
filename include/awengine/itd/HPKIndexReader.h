@@ -18,22 +18,21 @@ namespace itd {
  */
 class HPKIndexReader {
 public:
-	virtual ~HPKIndexReader ()
-	{
-	}
+	virtual ~HPKIndexReader() = default;
 
 	/*!
 	 * Find a file
 	 * \param path Full path to file
 	 * \return D of the file or -1
 	 */	 
-	virtual u64 findFile (std::string const& path) = 0;
+	virtual u64 findFile(std::string const& path) = 0;
+
 	/*!
 	 * List all files with paths starting with \a prefix
 	 * \param prefix Diectory to list
 	 * \return List of files in directory \prefix
 	 */
-	virtual std::vector<std::string> list (std::string const& prefix) = 0;
+	virtual std::vector<std::string> list(std::string const& prefix) = 0;
 };
 
 } //namespace itd
