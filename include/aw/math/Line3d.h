@@ -6,11 +6,11 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_Line3d_
-#define _awrts_Line3d_
-#include <awengine/math/Vector3d.h>
+#ifndef _aw_Line3d_
+#define _aw_Line3d_
+#include <aw/math/Vector3d.h>
 
-namespace awrts {
+namespace aw {
 //! Represents a line segment in 3D space
 template<typename T>
 class Segment3d {
@@ -98,5 +98,5 @@ public:
 template<typename T>
 using Line3d = Segment3d<T>;
 
-} // namespace awrts
-#endif// _awrts_Line3d_
+} // namespace aw
+#endif// _aw_Line3d_

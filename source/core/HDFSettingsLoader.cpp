@@ -9,11 +9,11 @@
  */
 #include <fstream>
 
-#include <awengine/io/filesystem.h>
+#include <aw/io/filesystem.h>
 
 #include "HDFSettingsLoader.h"
 
-namespace awrts {
+namespace aw {
 namespace core {
 
 #if 0
@@ -112,4 +112,4 @@ void HDFSettingsLoader::parseSettings (hdf::Parser* hdf)
 }
 
 } // namespace core
-} // namespace awrts
+} // namespace aw

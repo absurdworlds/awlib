@@ -6,13 +6,13 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_Matrix4_
-#define _awrts_Matrix4_
-#include <awengine/math/Vector3d.h>
-#include <awengine/math/Vector4d.h>
-#include <awengine/math/Matrix3.h>
+#ifndef _aw_Matrix4_
+#define _aw_Matrix4_
+#include <aw/math/Vector3d.h>
+#include <aw/math/Vector4d.h>
+#include <aw/math/Matrix3.h>
 
-namespace awrts {
+namespace aw {
 //! Represents a 4x4 matrix, which has a column-major layout
 template<typename T>
 class Matrix4 {
@@ -466,5 +466,5 @@ Matrix4<T>& determinant(Matrix4<T>& matrix)
 	return matrix.determinant();
 }
 
-} // namespace awrts
-#endif //_awrts_Matrix4_
+} // namespace aw
+#endif //_aw_Matrix4_

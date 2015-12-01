@@ -7,13 +7,13 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_MapManager_
-#define _awrts_MapManager_
+#ifndef _aw_MapManager_
+#define _aw_MapManager_
 
-#include <awrts/common/types.h>
-#include <awrts/game/game.h>
+#include <aw/common/types.h>
+#include <aw/game/game.h>
 
-namespace awrts {
+namespace aw {
 namespace game {
 //! MapManager loads game maps
 class MapManager {
@@ -21,5 +21,5 @@ class MapManager {
 
 
 } // namespace game
-} // namespace awrts
-#endif//_awrts_MapManager_
+} // namespace aw
+#endif//_aw_MapManager_

@@ -8,7 +8,7 @@
  */
 #include "hrToBullet.h"
 
-namespace awrts {
+namespace aw {
 namespace physics {
 
 void quaternionToEuler(btQuaternion const& quat, btVector3& euler) {
@@ -40,4 +40,4 @@ void quaternionToEuler(btQuaternion const& quat, btVector3& euler) {
 }
 
 } // namespace physics
-} // namespace awrts
+} // namespace aw

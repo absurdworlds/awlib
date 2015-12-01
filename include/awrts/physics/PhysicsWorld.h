@@ -6,19 +6,19 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_PhysicsWorld_
-#define _awrts_PhysicsWorld_
+#ifndef _aw_PhysicsWorld_
+#define _aw_PhysicsWorld_
 
-#include <awrts/common/types.h>
-#include <awrts/common/hidden_impl.h>
+#include <aw/common/types.h>
+#include <aw/common/hidden_impl.h>
 
-#include <awrts/math/Vector3d.h>
+#include <aw/math/Vector3d.h>
 
-#include <awrts/physics/DebugDrawer.h>
-#include <awrts/physics/CollisionFilter.h>
-#include <awrts/physics/RayResultCallback.h>
+#include <aw/physics/DebugDrawer.h>
+#include <aw/physics/CollisionFilter.h>
+#include <aw/physics/RayResultCallback.h>
 
-namespace awrts {
+namespace aw {
 namespace physics {
 
 class CollisionObject;
@@ -60,5 +60,5 @@ public:
 };
 
 } // namespace physics
-} // namespace awrts
-#endif//_awrts_PhysicsWorld_
+} // namespace aw
+#endif//_aw_PhysicsWorld_

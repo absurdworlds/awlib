@@ -6,23 +6,23 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_SoundManager_
-#define _awrts_SoundManager_
+#ifndef _aw_SoundManager_
+#define _aw_SoundManager_
 #include <map>
 #include <string>
 
 #include <AL/al.h>
 #include <AL/alc.h>
 
-#include <awengine/config/config.h>
-#include <awengine/common/types.h>
+#include <aw/config/config.h>
+#include <aw/common/types.h>
 
-#include <awengine/sound/SoundManager.h>
-#include <awengine/sound/Sound.h>
+#include <aw/sound/SoundManager.h>
+#include <aw/sound/Sound.h>
 
 #include "SoundSample.h"
 
-namespace awrts {
+namespace aw {
 namespace audio {
 
 class SoundManager : public SoundManager {
@@ -43,5 +43,5 @@ private:
 };
 
 } // namespace audio
-} // namespace awrts
-#endif//_awrts_SoundManager_
+} // namespace aw
+#endif//_aw_SoundManager_

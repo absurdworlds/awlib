@@ -6,13 +6,12 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_EntityManager_
-#define _awrts_EntityManager_
-
-#include <awrts/common/types.h>
+#ifndef _aw_EntityManager_
+#define _aw_EntityManager_
+#include <aw/common/types.h>
 #include <awrts/game/game.h>
 
-namespace awrts {
+namespace aw {
 namespace game {
 class Entity;
 
@@ -27,8 +26,8 @@ public:
 	virtual void deleteEntity(u32 entid) = 0;
 };
 
-HR_GAME_EXP EntityManager* createEntityManager();
+AW_GAME_EXP EntityManager* createEntityManager();
 
 } // namespace game
-} // namespace awrts
-#endif//_awrts_EntityManager_
+} // namespace aw
+#endif//_aw_EntityManager_

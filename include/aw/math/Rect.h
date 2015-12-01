@@ -7,12 +7,12 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_Rect_
-#define _awrts_Rect_
-#include <awengine/common/types.h>
-#include <awengine/math/Vector2d.h>
+#ifndef _aw_Rect_
+#define _aw_Rect_
+#include <aw/common/types.h>
+#include <aw/math/Vector2d.h>
 
-namespace awrts {
+namespace aw {
 //! Represents a 2D rectangle, used mostly for GUI rendering
 template <class T>
 class Rect {
@@ -146,5 +146,5 @@ bool pointWithinRect(Vector2d<T> point, Rect<T> rect)
 			 point[1] <= rect.lowerRight[1]);
 	return isInside;
 }
-} // namespace awrts
-#endif//_awrts_Rect_
+} // namespace aw
+#endif//_aw_Rect_

@@ -7,12 +7,12 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_MouseEvent_
-#define _awrts_MouseEvent_
-#include <awengine/math/Vector2d.h>
-#include <awengine/common/Event.h>
+#ifndef _aw_MouseEvent_
+#define _aw_MouseEvent_
+#include <aw/math/Vector2d.h>
+#include <aw/common/Event.h>
 
-namespace awrts {
+namespace aw {
 namespace gui {
 enum MouseState {
 	MOUSE_LEFT = 0x01,
@@ -46,5 +46,5 @@ public:
 	u8 buttonStates;
 };
 } // namespace gui
-} // namespace awrts
-#endif //_awrts_MouseEvent_
+} // namespace aw
+#endif //_aw_MouseEvent_

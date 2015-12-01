@@ -8,9 +8,9 @@
  */
 #include <Windows.h>
 
-#include <awengine/platform/time.h>
+#include <aw/platform/time.h>
 
-namespace awrts {
+namespace aw {
 
 AW_SYS_EXP u32 getTime()
 {
@@ -31,4 +31,4 @@ AW_SYS_EXP u32 getTime()
 
 	return 0;
 }
-} // namespace awrts
+} // namespace aw

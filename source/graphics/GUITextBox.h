@@ -6,10 +6,10 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_GUITextBox_
-#define _awrts_GUITextBox_
+#ifndef _aw_GUITextBox_
+#define _aw_GUITextBox_
 
-#include <awrts/gui/GUITextBox.h>
+#include <aw/gui/GUITextBox.h>
 
 namespace irr {
 namespace gui {
@@ -17,7 +17,7 @@ class GUIElement;
 }
 }
 
-namespace awrts {
+namespace aw {
 namespace gui {
 
 class GUITextBox : public GUITextBox {
@@ -41,5 +41,5 @@ private:
 };
 
 } // namespace gui
-} // namespace awrts
-#endif //_awrts_GUITextBox_
+} // namespace aw
+#endif //_aw_GUITextBox_

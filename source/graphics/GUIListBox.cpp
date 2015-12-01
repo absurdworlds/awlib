@@ -12,11 +12,11 @@
 #include <Irrlicht/IGUIScrollBar.h>
 #include <Irrlicht/IGUIListBox.h>
 
-#include <awrts/common/utf_convert.h>
+#include <aw/common/utf_convert.h>
 
 #include "GUIListBox.h"
 
-namespace awrts {
+namespace aw {
 namespace gui {
 
 GUIListBox_::GUIListBox_(irr::gui::IGUIListBox* elem)
@@ -75,4 +75,4 @@ void GUIListBox_::setText(std::string text)
 
 
 } // namespace gui
-} // namespace awrts
+} // namespace aw

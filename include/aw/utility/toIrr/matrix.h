@@ -6,12 +6,12 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_ToIrr_Matrix_
-#define _awrts_ToIrr_Matrix_
+#ifndef _aw_ToIrr_Matrix_
+#define _aw_ToIrr_Matrix_
 #include <irrlicht/matrix4.h>
-#include <awengine/math/Matrix4.h>
+#include <aw/math/Matrix4.h>
 
-namespace awrts {
+namespace aw {
 inline Matrix4<f32> toAW(irr::core::matrix4 const& mat)
 {
 	Matrix4<f32> const awMatrix(
@@ -44,5 +44,5 @@ inline irr::core::matrix4 toIrr(Matrix4<f32> const& awMatrix)
 	return irrMatrix;
 }
 
-} // namespace awrts
-#endif//_awrts_ToIrr_Matrix_
+} // namespace aw
+#endif//_aw_ToIrr_Matrix_

@@ -6,10 +6,10 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_RenderingDevice_
-#define _awrts_RenderingDevice_
+#ifndef _aw_RenderingDevice_
+#define _aw_RenderingDevice_
 
-#include <awrts/graphics/RenderingDevice.h>
+#include <aw/graphics/RenderingDevice.h>
 
 namespace irr {
 class IrrlichtDevice;
@@ -20,7 +20,7 @@ class VideoDriver;
 } // namespace video
 } // namespace irr
 
-namespace awrts {
+namespace aw {
 namespace graphics {
 
 class RenderingDevice : public RenderingDevice {
@@ -37,5 +37,5 @@ private:
 };
 
 } // namespace graphics
-} // namespace awrts
-#endif//_awrts_RenderingDevice_
+} // namespace aw
+#endif//_aw_RenderingDevice_

@@ -6,16 +6,16 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_InputManager_
-#define _awrts_InputManager_
-#include <awengine/common/types.h>
-#include <awengine/common/EventListener.h>
+#ifndef _aw_InputManager_
+#define _aw_InputManager_
+#include <aw/common/types.h>
+#include <aw/common/EventListener.h>
 
-#include <awengine/gui/gui.h>
-#include <awengine/gui/MouseEvent.h>
-#include <awengine/gui/KeyboardEvent.h>
+#include <aw/gui/gui.h>
+#include <aw/gui/MouseEvent.h>
+#include <aw/gui/KeyboardEvent.h>
 
-namespace awrts {
+namespace aw {
 namespace gui {
 //! Handles user input and generates input events
 class InputManager {
@@ -28,5 +28,5 @@ public:
 	#endif
 };
 } // namespace io
-} // namespace awrts
-#endif//_awrts_InputManager_
+} // namespace aw
+#endif//_aw_InputManager_

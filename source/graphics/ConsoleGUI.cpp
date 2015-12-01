@@ -15,16 +15,16 @@
 #include <Irrlicht/IGUElement.h>
 #include <Irrlicht/IGUScrollBar.h>
 
-#include <awrts/core/Shell.h>
-#include <awrts/gui/IGUWindow.h>
-#include <awrts/gui/IGUListBox.h>
-#include <awrts/gui/IGUTextBox.h>
-#include <awrts/gui/Keycodes.h>
-#include <awrts/gui/InputManager.h>
+#include <aw/core/Shell.h>
+#include <aw/gui/IGUWindow.h>
+#include <aw/gui/IGUListBox.h>
+#include <aw/gui/IGUTextBox.h>
+#include <aw/gui/Keycodes.h>
+#include <aw/gui/InputManager.h>
 
 #include "ConsoleGUI.h"
 
-namespace awrts {
+namespace aw {
 namespace gui {
 
 ConsoleGUI_* createConsole(core::Shell* shell, GUIManager* guimgr)
@@ -89,4 +89,4 @@ void ConsoleGUI_::log(std::string message)
 	//TODO: cut the log when it becomes too long
 }
 } // namespace gui
-} // namespace awrts
+} // namespace aw

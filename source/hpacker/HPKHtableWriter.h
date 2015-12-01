@@ -6,15 +6,15 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_HPKHtableWriter_
-#define _awrts_HPKHtableWriter_
+#ifndef _aw_HPKHtableWriter_
+#define _aw_HPKHtableWriter_
 #include <vector>
 
-#include <awrts/core/hash.h>
+#include <aw/core/hash.h>
 
 #include "HPKListWriter.h"
 
-namespace awrts {
+namespace aw {
 namespace itd {
 /*!
  * Interface for building HPKA hash table index
@@ -67,5 +67,5 @@ private:
 };
 
 } //namespace itd
-} //namespace awrts
-#endif//_awrts_HPKHtableWriter_
+} //namespace aw
+#endif//_aw_HPKHtableWriter_

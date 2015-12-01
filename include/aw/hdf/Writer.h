@@ -7,13 +7,13 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_HDF_Writer_
-#define _awrts_HDF_Writer_
+#ifndef _aw_HDF_Writer_
+#define _aw_HDF_Writer_
 #include <string>
 
-#include <awengine/hdf/hdf.h>
-#include <awengine/hdf/Value.h>
-namespace awrts {
+#include <aw/hdf/hdf.h>
+#include <aw/hdf/Value.h>
+namespace aw {
 namespace io {
 class WriteStream;
 }
@@ -65,5 +65,5 @@ private:
 	size_t depth;
 };
 } // namespace io
-} // namespace awrts
-#endif//_awrts_HDF_Writer_
+} // namespace aw
+#endif//_aw_HDF_Writer_

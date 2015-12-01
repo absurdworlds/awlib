@@ -7,13 +7,13 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_CharacterStream_
-#define _awrts_CharacterStream_
-#include <awengine/common/types.h>
+#ifndef _aw_CharacterStream_
+#define _aw_CharacterStream_
+#include <aw/common/types.h>
 
-#include <awengine/io/io.h>
+#include <aw/io/io.h>
 
-namespace awrts {
+namespace aw {
 namespace io {
 /*!
  * Class provides interface for sequential data access.
@@ -48,5 +48,5 @@ public:
 	virtual size_t position() const = 0;
 };
 } // namespace io
-} // namespace awrts
-#endif//_awrts_CharacterStream_
+} // namespace aw
+#endif//_aw_CharacterStream_

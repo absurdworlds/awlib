@@ -6,11 +6,11 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_EntityNode_
-#define _awrts_EntityNode_
-#include <awrts/scene/EntityNode.h>
+#ifndef _aw_EntityNode_
+#define _aw_EntityNode_
+#include <aw/scene/EntityNode.h>
 
-namespace awrts {
+namespace aw {
 class Entity;
 namespace scene {
 
@@ -22,5 +22,5 @@ private:
 };
 
 } // namespace scene
-} // namespace awrts
-#endif//_awrts_EntityNode_
+} // namespace aw
+#endif//_aw_EntityNode_

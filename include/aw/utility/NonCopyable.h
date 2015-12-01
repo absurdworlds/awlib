@@ -7,9 +7,9 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_NonCopyable_
-#define _awrts_NonCopyable_
-namespace awrts {
+#ifndef _aw_NonCopyable_
+#define _aw_NonCopyable_
+namespace aw {
 /*!
  * Utility class, supposed to be used as base, to explicitly define classes,
  * which are derived from this class non-copyable.
@@ -22,5 +22,5 @@ private:
 	NonCopyable(NonCopyable const&) = delete;
 	NonCopyable& operator = (NonCopyable const&) = delete;
 };
-} // namespace awrts
-#endif//_awrts_NonCopyable_
+} // namespace aw
+#endif//_aw_NonCopyable_

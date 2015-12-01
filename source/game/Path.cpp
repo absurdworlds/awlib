@@ -6,9 +6,9 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#include <awrts/ai/Path.h>
+#include <aw/ai/Path.h>
 
-namespace awrts {
+namespace aw {
 namespace ai {
 
 Path::const_iterator findClosestNode(Path::const_iterator& first,
@@ -32,4 +32,4 @@ Path::const_iterator findClosestNode(Path::const_iterator& first,
 }
 
 } // namespace ai
-} // namespace awrts
+} // namespace aw

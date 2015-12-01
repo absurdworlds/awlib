@@ -1,5 +1,5 @@
 /*
- * awrts game engine library
+ * aw game engine library
  * Copyright (C) 2013-2015  absurdworlds
  * 
  * This program is free software: you can redistribute it and/or modify
@@ -15,20 +15,20 @@
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/>. 
  */
-#ifndef _awrts_game_h_
-#define _awrts_game_h_
+#ifndef _aw_game_h_
+#define _aw_game_h_
 
-#include <awrts/common/visibility.h>
+#include <aw/config/visibility.h>
 
-#ifdef HR_MODULE_GAME
-	#define HR_GAME_EXP HR_EXPORT
+#ifdef AW_MODULE_GAME
+	#define AW_GAME_EXP HR_EXPORT
 #else
-	#define HR_GAME_EXP HR_IMPORT
+	#define AW_GAME_EXP HR_IMPORT
 #endif
 
 // Namespace descriptions for Doxygen
-namespace awrts {
+namespace aw {
 //! Everything related to game logic, except AI
 namespace game {}
 }
-#endif//_awrts_game_h_
+#endif//_aw_game_h_

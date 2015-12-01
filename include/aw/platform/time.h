@@ -6,12 +6,12 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_time_
-#define _awrts_time_
-#include <awengine/common/types.h>
-#include <awengine/platform/platform.h>
+#ifndef _aw_time_
+#define _aw_time_
+#include <aw/common/types.h>
+#include <aw/platform/platform.h>
 
-namespace awrts {
+namespace aw {
 /*!
  * Get time elapsed from some moment.
  * Platfrom-dependent. May not be consistent between different executions of 
@@ -19,5 +19,5 @@ namespace awrts {
  */
 AW_SYS_EXP u32 getTime();
 
-} // namespace awrts
-#endif//_awrts_time_
+} // namespace aw
+#endif//_aw_time_

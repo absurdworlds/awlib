@@ -6,7 +6,7 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#include <awengine/math/Matrix4.h>
+#include <aw/math/Matrix4.h>
 
 int main()
 {

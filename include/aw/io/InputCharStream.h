@@ -6,11 +6,11 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_InputCharStream_impl_
-#define _awrts_InputCharStream_impl_
-#include <awengine/io/InputStream.h>
+#ifndef _aw_InputCharStream_impl_
+#define _aw_InputCharStream_impl_
+#include <aw/io/InputStream.h>
 
-namespace awrts {
+namespace aw {
 namespace io {
 class InputCharStream : public io::InputStream {
 public:
@@ -41,5 +41,5 @@ private:
 	size_t pos;
 };
 } // namespace io
-} // namespace awrts
+} // namespace aw
 #endif// (header guard)

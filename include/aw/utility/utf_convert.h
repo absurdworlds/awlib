@@ -6,15 +6,15 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_utf_convert_
-#define _awrts_utf_convert_
+#ifndef _aw_utf_convert_
+#define _aw_utf_convert_
 
 #include <string>
 
-#include <awengine/utility/utf.h>
-#include <awengine/common/stringutils.h>
+#include <aw/utility/utf.h>
+#include <aw/common/stringutils.h>
 
-namespace awrts {
+namespace aw {
 namespace locale {
 //! Convert utf-16 character string to utf-8
 inline char* narrow(char* output, size_t size,
@@ -128,5 +128,5 @@ inline std::wstring widen(std::string const& str)
 }
 
 } // namespace locale
-} // namespace awrts
-#endif//_awrts_utf_convert_
+} // namespace aw
+#endif//_aw_utf_convert_

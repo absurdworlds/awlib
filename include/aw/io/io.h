@@ -1,5 +1,5 @@
 /*
- * awrts game engine library
+ * aw game engine library
  * Copyright (C) 2013-2015  absurdworlds
  * 
  * This program is free software: you can redistribute it and/or modify
@@ -15,9 +15,9 @@
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/>. 
  */
-#ifndef _awrts_io_
-#define _awrts_io_
-#include <awengine/config/visibility.h>
+#ifndef _aw_io_
+#define _aw_io_
+#include <aw/config/visibility.h>
 
 #ifdef AW_MODULE_IO
 	#define AW_IO_EXP AW_EXPORT
@@ -26,8 +26,8 @@
 #endif
 
 // Namespace descriptions for Doxygen
-namespace awrts {
+namespace aw {
 //! Everything related to file & console io is found in this namespace
 namespace io {}
 }
-#endif//_awrts_io_
+#endif//_aw_io_

@@ -11,7 +11,7 @@
 
 #include <Irrlicht/irrlicht.h>
 
-#include <awrts/core/SettingsManager.h>
+#include <aw/core/SettingsManager.h>
 
 #include "VisNode.h"
 #include "CameraNode.h"
@@ -23,7 +23,7 @@
 
 #include "VideoManager.h"
 
-namespace awrts {
+namespace aw {
 namespace graphics {
 
 VideoManager* createVideoManager(core::SettingsManager* settings)
@@ -43,7 +43,7 @@ VideoManager::VideoManager(core::SettingsManager* settings)
 	}
 	device_ = irr::createDevice( irr::video::EDT_OPENGL, irr::core::dimension2d<irr::u32>(resolutionX, resolutionY), 32, fullscreen, true, true, 0);
 
-	device_->setWindowCaption(L"awrts A - Irrlicht 1.8.1");
+	device_->setWindowCaption(L"aw A - Irrlicht 1.8.1");
 
 	renderer_ = new RenderingDevice(device_->getVideoDriver());
 	sceneManager_ = new scene::SceneManager(device_->getSceneManager(), renderer_, device_);
@@ -138,4 +138,4 @@ void VideoManager::showCaptionFPS(bool showFps)
 #endif
 
 } // namespace graphics
-} // namespace awrts
+} // namespace aw

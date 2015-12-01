@@ -6,12 +6,12 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_Cursor_
-#define _awrts_Cursor_
+#ifndef _aw_Cursor_
+#define _aw_Cursor_
 
-namespace awrts {
+namespace aw {
 namespace graphics {
 
 } // namespace graphics
-} // namespace awrts
-#endif//_awrts_Cursor_
+} // namespace aw
+#endif//_aw_Cursor_

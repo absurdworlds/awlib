@@ -6,11 +6,11 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_Actor_
-#define _awrts_Actor_
+#ifndef _aw_Actor_
+#define _aw_Actor_
 
 class Actor {
 
 };
 
-#endif//_awrts_Actor_
+#endif//_aw_Actor_

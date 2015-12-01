@@ -7,13 +7,13 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_ArgumentParser_impl_
-#define _awrts_ArgumentParser_impl_
+#ifndef _aw_ArgumentParser_impl_
+#define _aw_ArgumentParser_impl_
 #include <deque>
 
-#include <awengine/core/ArgumentParser.h>
+#include <aw/core/ArgumentParser.h>
 
-namespace awrts {
+namespace aw {
 namespace core {
 namespace impl_ {
 class ArgumentParser : public core::ArgumentParser {
@@ -35,5 +35,5 @@ private:
 
 } // namespace impl_
 } // namespace core
-} // namespace awrts
-#endif//_awrts_ArgumentParser_impl_
+} // namespace aw
+#endif//_aw_ArgumentParser_impl_

@@ -6,12 +6,12 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_Matrix3_
-#define _awrts_Matrix3_
-#include <awengine/math/Vector3d.h>
-#include <awengine/math/Quaternion.h>
+#ifndef _aw_Matrix3_
+#define _aw_Matrix3_
+#include <aw/math/Vector3d.h>
+#include <aw/math/Quaternion.h>
 
-namespace awrts {
+namespace aw {
 //! Represents a 3x3 matrix, which has a column-major layout
 template<typename T>
 class Matrix3 {
@@ -272,5 +272,5 @@ Matrix3<T> operator * (Matrix3<T> const& m, Vector3d<T> const& v)
 		m(0,2) * v[0] + m(1,2) * v[1] + m(2,2) * v[2]);
 }
 
-} // namespace awrts
-#endif //_awrts_Matrix3_
+} // namespace aw
+#endif //_aw_Matrix3_

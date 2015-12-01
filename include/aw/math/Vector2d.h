@@ -7,13 +7,13 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_Vector2d_
-#define _awrts_Vector2d_
+#ifndef _aw_Vector2d_
+#define _aw_Vector2d_
 #include <array>
 
-#include <awengine/math/math.h>
+#include <aw/math/math.h>
 
-namespace awrts {
+namespace aw {
 //! Represents positions and directions in 2D space
 template <typename T>
 class Vector2d {
@@ -307,5 +307,5 @@ Vector2d<T> lerp (Vector2d<T> const& v0, Vector2d<T> const& v1, f64 t)
 	return (1.0-t)*v0 + t*v1;
 }
 
-} // namespace awrts
-#endif // _awrts_Vector2d_
+} // namespace aw
+#endif // _aw_Vector2d_

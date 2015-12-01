@@ -6,8 +6,8 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#include <awengine/gui/Style.h>
-namespace awrts {
+#include <aw/gui/Style.h>
+namespace aw {
 namespace gui {
 void Style::initDefaults()
 {
@@ -41,4 +41,4 @@ void Style::initDefaults()
 	properties["titlebar.background-color"] = hdf::Value(0xFF9696C8);*/
 }
 } // namespace gui
-} // namespace awrts
+} // namespace aw

@@ -6,21 +6,21 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_PhysicsManager_
-#define _awrts_PhysicsManager_
+#ifndef _aw_PhysicsManager_
+#define _aw_PhysicsManager_
 
-#include <awrts/common/types.h>
-#include <awrts/common/macro.h>
+#include <aw/common/types.h>
+#include <aw/common/macro.h>
 
-#include <awrts/math/Vector3d.h>
+#include <aw/math/Vector3d.h>
 
-#include <awrts/graphics/RenderingDevice.h>
+#include <aw/graphics/RenderingDevice.h>
 
-#include <awrts/physics/physics.h>
-#include <awrts/physics/RigidBody.h>
-#include <awrts/physics/DebugDrawer.h>
+#include <aw/physics/physics.h>
+#include <aw/physics/RigidBody.h>
+#include <aw/physics/DebugDrawer.h>
 
-namespace awrts {
+namespace aw {
 namespace core {
 class ModelLoader;
 }
@@ -54,5 +54,5 @@ public:
 HR_PHYS_EXP PhysicsManager* createPhysicsManager();
 
 } // namespace physics
-} // namespace awrts
-#endif//_awrts_PhysicsManager_
+} // namespace aw
+#endif//_aw_PhysicsManager_

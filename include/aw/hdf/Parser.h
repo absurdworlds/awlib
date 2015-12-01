@@ -7,17 +7,17 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_HDFReader_
-#define _awrts_HDFReader_
+#ifndef _aw_HDFReader_
+#define _aw_HDFReader_
 #include <string>
 
-#include <awengine/math/Vector3d.h>
+#include <aw/math/Vector3d.h>
 
-#include <awengine/hdf/hdf.h>
-#include <awengine/hdf/Value.h>
-#include <awengine/hdf/shared.h>
+#include <aw/hdf/hdf.h>
+#include <aw/hdf/Value.h>
+#include <aw/hdf/shared.h>
 
-namespace awrts {
+namespace aw {
 namespace io {
 class InputStream;
 }
@@ -49,7 +49,7 @@ struct Object {
 
 /*!
  * \class Parser
- * \brief Interface for reading awrts's HDF files. This parser provides a read-only access to documents in HDF 1.1.1 format.
+ * \brief Interface for reading aw's HDF files. This parser provides a read-only access to documents in HDF 1.1.1 format.
  * 
  * It can read only in forward mode, it is not able to rewind. The design goal of this parser is to quickly read HDF document without usage of any intermediate data structures.
  * 
@@ -96,5 +96,5 @@ public:
 */
 AW_HDF_EXP Parser* createParser(io::InputStream& stream);
 } // namespace io
-} // namespace awrts
-#endif//_awrts_HDFReader_
+} // namespace aw
+#endif//_aw_HDFReader_

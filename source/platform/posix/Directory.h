@@ -6,8 +6,8 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_Directory_impl
-#define _awrts_Directory_impl
+#ifndef _aw_Directory_impl
+#define _aw_Directory_impl
 
 #include <stdio.h>
 #include <dirent.h>
@@ -15,9 +15,9 @@
 #include <string>
 #include <vector>
 
-#include <awengine/io/Directory.h>
+#include <aw/io/Directory.h>
 
-namespace awrts {
+namespace aw {
 namespace io {
 namespace impl_ {
 
@@ -46,5 +46,5 @@ private:
 };
 } // namespace impl_
 } // namespace io
-} // namespace awrts
+} // namespace aw
 #endif// (header guard)

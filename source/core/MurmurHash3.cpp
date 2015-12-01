@@ -10,11 +10,11 @@
 // MurmurHash3 was written by Austin Appleby, and is placed in the public
 // domain. The author hereby disclaims copyright to this source code.
 
-#include <awengine/utility/macro.h>
-#include <awengine/math/math.h>
-#include <awengine/core/hash.h>
+#include <aw/utility/macro.h>
+#include <aw/math/math.h>
+#include <aw/core/hash.h>
 
-namespace awrts {
+namespace aw {
 /*!
  * Block read - if your platform needs to do endian-swapping or can only 
  * handle aligned reads, do the conversion here
@@ -336,4 +336,4 @@ void MurmurHash3_x64_128 (void const * key, size_t len, u128 seed, void * out)
 	((u64*)out)[0] = h1;
 	((u64*)out)[1] = h2;
 }
-} // namespace awrts
+} // namespace aw

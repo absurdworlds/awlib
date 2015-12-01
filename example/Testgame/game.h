@@ -6,12 +6,12 @@
    This is free software: you are free to change and redistribute it.
    There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_game_
-#define _awrts_game_
+#ifndef _aw_game_
+#define _aw_game_
 #include "CGame.h"
-namespace awrts {
+namespace aw {
 namespace example {
 
 } // namespace example
-} // namespace awrts
-#endif //_awrts_game_
+} // namespace aw
+#endif //_aw_game_

@@ -6,13 +6,13 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#include <awengine/io/ReadFile.h>
-#include <awengine/io/CharacterStream.h>
-#include <awengine/io/BufferedStream.h>
+#include <aw/io/ReadFile.h>
+#include <aw/io/InputStream.h>
+#include <aw/io/InputFileStream.h>
 
 #include "SettingsManager.h"
 
-namespace awrts {
+namespace aw {
 namespace core {
 
 SettingsManager* createSettingsManager()
@@ -92,4 +92,4 @@ bool SettingsManager::setValueImpl(std::string key, T val)
 }
 } // namespace impl_
 } // namespace core
-} // namespace awrts
+} // namespace aw

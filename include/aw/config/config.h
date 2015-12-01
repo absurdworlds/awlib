@@ -6,9 +6,9 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_config_
-#define _awrts_config_
+#ifndef _aw_config_
+#define _aw_config_
 
-#include <awengine/config/compiler_setup.h>
+#include <aw/config/compiler_setup.h>
 
-#endif //_awrts_config_
+#endif //_aw_config_

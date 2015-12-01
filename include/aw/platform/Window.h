@@ -7,16 +7,16 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_Window_
-#define _awrts_Window_
-#include <awengine/common/types.h>
-#include <awengine/utility/NonCopyable.h>
+#ifndef _aw_Window_
+#define _aw_Window_
+#include <aw/common/types.h>
+#include <aw/utility/NonCopyable.h>
 
-#include <awengine/math/Vector2d.h>
+#include <aw/math/Vector2d.h>
 
-#include <awengine/platform/platform.h>
+#include <aw/platform/platform.h>
 
-namespace awrts {
+namespace aw {
 namespace platform {
 /*!
  * Abstracts platform-specific windowing API.
@@ -48,5 +48,5 @@ public:
 	static AW_SYS_EXP Window* create();
 };
 } // namespace platform
-} // namespace awrts
-#endif//_awrts_Window_
+} // namespace aw
+#endif//_aw_Window_

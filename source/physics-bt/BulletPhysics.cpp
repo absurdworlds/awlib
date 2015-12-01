@@ -8,11 +8,11 @@
  */
 #include <algorithm>
 
-#include <awrts/core/models.h>
-#include <awrts/core/Model.h>
-#include <awrts/core/ModelLoader.h>
+#include <aw/core/models.h>
+#include <aw/core/Model.h>
+#include <aw/core/ModelLoader.h>
 
-#include <awrts/graphics/VideoManager.h>
+#include <aw/graphics/VideoManager.h>
 
 #include "BulletPhysics.h"
 #include "PhysicsWorld.h"
@@ -21,7 +21,7 @@
 #include "hrToBullet.h"
 #include "DebugDrawer.h"
 
-namespace awrts {
+namespace aw {
 namespace physics {
 
 HR_PHYS_EXP PhysicsManager* createPhysicsManager()
@@ -244,4 +244,4 @@ u32 BulletPhysics::loadModel(char const* modelName)
 }
 
 } // namespace physics
-} // namespace awrts
+} // namespace aw

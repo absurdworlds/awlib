@@ -6,11 +6,11 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_ALutil_
-#define _awrts_ALutil_
+#ifndef _aw_ALutil_
+#define _aw_ALutil_
 #include <AL/al.h>
 
-#include <awengine/common/types.h>
+#include <aw/common/types.h>
 
 inline ALenum toAlEnum(short channels, short samples)
 {
@@ -34,4 +34,4 @@ inline ALenum toAlEnum(short channels, short samples)
 	}
 }
 
-#endif//_awrts_ALutil_
+#endif//_aw_ALutil_

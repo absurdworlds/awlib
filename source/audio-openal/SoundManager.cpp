@@ -12,9 +12,9 @@
 #include <string>
 #include <thread>
 
-#include <awengine/core/paths.h>
-#include <awengine/graphics/VideoManager.h>
-#include <awengine/core/Logger.h>
+#include <aw/core/paths.h>
+#include <aw/graphics/VideoManager.h>
+#include <aw/core/Logger.h>
 
 #include "ALutil.h"
 #include "RIFFReader.h"
@@ -22,7 +22,7 @@
 #include "Sound.h"
 #include "SoundManager.h"
 
-namespace awrts {
+namespace aw {
 namespace audio {
 
 AW_SND_EXP SoundManager* createSoundManager()
@@ -105,4 +105,4 @@ void SoundManager::playSound(c consthar* fileName)
 #endif
 
 } // namespace audio
-} // namespace awrts
+} // namespace aw

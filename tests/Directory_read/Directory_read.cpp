@@ -11,7 +11,7 @@
 #include <dirent.h>
 #include <sys/stat.h>
 
-#include <awrts/io/IDirectory.h>
+#include <aw/io/Directory.h>
 
 void print_file(char const* path, char const* name)
 {
@@ -47,7 +47,7 @@ int listdir_dirent(char const* path)
 
 int listdir_hrengin(char const* path)
 {
-	using namespace awrts;
+	using namespace aw;
 
 	io::IDirectory* dir = io::openDirectory(path);
 

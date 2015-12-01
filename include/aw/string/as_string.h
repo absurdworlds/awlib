@@ -7,11 +7,11 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_string_as_string_
-#define _awrts_string_as_string_
+#ifndef _aw_string_as_string_
+#define _aw_string_as_string_
 #include <string>
-#include <awengine/common/types.h>
-namespace awrts {
+#include <aw/common/types.h>
+namespace aw {
 /*
  * Convert value to string. There may be specializations
  * for other types in their headers.
@@ -72,5 +72,5 @@ inline std::string as_string(std::string value)
 	return value;
 }
 
-} // namespace awrts
-#endif//_awrts_string_as_string_
+} // namespace aw
+#endif//_aw_string_as_string_

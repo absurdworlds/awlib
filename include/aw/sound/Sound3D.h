@@ -6,14 +6,14 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_Sound3D_
-#define _awrts_Sound3D_
-#include <awengine/common/types.h>
-#include <awengine/math/Vector3d.h>
+#ifndef _aw_Sound3D_
+#define _aw_Sound3D_
+#include <aw/common/types.h>
+#include <aw/math/Vector3d.h>
 
-#include <awengine/sound/Sound.h>
+#include <aw/sound/Sound.h>
 
-namespace awrts {
+namespace aw {
 namespace audio {
 
 //! Represents a sound positioned in 3D space
@@ -33,5 +33,5 @@ public:
 };
 
 } // namespace audio
-} // namespace awrts
-#endif//_awrts_Sound3D_
+} // namespace aw
+#endif//_aw_Sound3D_

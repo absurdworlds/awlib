@@ -6,11 +6,11 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_gui_Coordinate_
-#define _awrts_gui_Coordinate_
-#include <awengine/math/Rect.h>
+#ifndef _aw_gui_Coordinate_
+#define _aw_gui_Coordinate_
+#include <aw/math/Rect.h>
 
-namespace awrts {
+namespace aw {
 namespace gui {
 
 struct Coordinate {
@@ -143,5 +143,5 @@ inline Rect<i32> toPixels(Rect<Coordinate> const& rect,
 }
 
 } // namespace gui
-} // namespace awrts
-#endif//_awrts_gui_Coordinate_
+} // namespace aw
+#endif//_aw_gui_Coordinate_

@@ -6,13 +6,13 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_VideoManager_
-#define _awrts_VideoManager_
-#include <awengine/common/types.h>
+#ifndef _aw_VideoManager_
+#define _aw_VideoManager_
+#include <aw/common/types.h>
 
-#include <awengine/graphics/graphics.h>
+#include <aw/graphics/graphics.h>
 
-namespace awrts {
+namespace aw {
 namespace core {
 class SettingsManager;
 }
@@ -48,5 +48,5 @@ public:
 AW_GX_EXP VideoManager* createVideoManager(core::SettingsManager* settings = 0);
 
 } // namespace graphics
-} // namespace awrts
-#endif//_awrts_VideoManager_
+} // namespace aw
+#endif//_aw_VideoManager_

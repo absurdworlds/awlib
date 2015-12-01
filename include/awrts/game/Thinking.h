@@ -6,13 +6,12 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_Thinking_
-#define _awrts_Thinking_
-
-#include <awrts/common/types.h>
+#ifndef _aw_Thinking_
+#define _aw_Thinking_
+#include <aw/common/types.h>
 #include <awrts/game/Entity.h>
 
-namespace awrts {
+namespace aw {
 namespace game {
 
 class Thinking : public Entity {
@@ -21,5 +20,5 @@ public:
 };
 
 } // namespace game
-} // namespace awrts
-#endif//_awrts_Thinking_
+} // namespace aw
+#endif//_aw_Thinking_

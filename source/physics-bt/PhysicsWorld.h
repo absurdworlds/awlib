@@ -6,16 +6,16 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_PhysicsWorld_impl_
-#define _awrts_PhysicsWorld_impl_
+#ifndef _aw_PhysicsWorld_impl_
+#define _aw_PhysicsWorld_impl_
 #include <Bullet/btBulletDynamicsCommon.h>
 #include <Bullet/btBulletCollisionCommon.h>
 
-#include <awrts/physics/PhysicsManager.h>
-#include <awrts/physics/DebugDrawer.h>
-#include <awrts/physics/PhysicsWorld.h>
+#include <aw/physics/PhysicsManager.h>
+#include <aw/physics/DebugDrawer.h>
+#include <aw/physics/PhysicsWorld.h>
 
-namespace awrts {
+namespace aw {
 namespace physics {
 // FIXME!!!!
 class PhysicsWorld::Details {
@@ -76,5 +76,5 @@ private:
 
 } // namespace bullet
 } // namespace physics
-} // namespace awrts
-#endif//_awrts_PhysicsWorld_impl_
+} // namespace aw
+#endif//_aw_PhysicsWorld_impl_

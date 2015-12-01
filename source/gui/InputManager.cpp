@@ -8,11 +8,11 @@
  */
 #include <Irrlicht/IrrlichtDevice.h>
 
-#include <awengine/common/EventListener.h>
+#include <aw/common/EventListener.h>
 
-#include <awengine/irr/gui/InputManager.h>
+#include <aw/irr/gui/InputManager.h>
 
-namespace awrts {
+namespace aw {
 namespace gui {
 namespace impl {
 bool InputManager::convertEvent(const irr::SEvent& irrEvent, Event*& event) {
@@ -125,4 +125,4 @@ bool InputManager::unregisterReceiver(EventListener* receiver)
 }
 } // namespace impl
 } // namespace io
-} // namespace awrts
+} // namespace aw

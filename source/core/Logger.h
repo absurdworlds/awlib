@@ -6,13 +6,13 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_Logger_impl_
-#define _awrts_Logger_impl_
+#ifndef _aw_Logger_impl_
+#define _aw_Logger_impl_
 #include <vector>
 
-#include <awengine/core/Logger.h>
+#include <aw/core/Logger.h>
 
-namespace awrts {
+namespace aw {
 namespace core {
 namespace impl_ {
 // Logger interface, which is used to write messages into log books
@@ -31,5 +31,5 @@ private:
 };
 } // namespace impl_
 } // namespace core
-} // namespace awrts
-#endif//_awrts_Logger_impl_
+} // namespace aw
+#endif//_aw_Logger_impl_

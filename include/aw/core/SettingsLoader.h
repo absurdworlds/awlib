@@ -6,16 +6,16 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_SettingsLoader_
-#define _awrts_SettingsLoader_
+#ifndef _aw_SettingsLoader_
+#define _aw_SettingsLoader_
 #include <string>
 
-#include <awengine/common/types.h>
+#include <aw/common/types.h>
 
-#include <awengine/core/core.h>
-#include <awengine/core/SettingsManager.h>
+#include <aw/core/core.h>
+#include <aw/core/SettingsManager.h>
 
-namespace awrts {
+namespace aw {
 namespace core {
 class SettingsManager;
 /*!
@@ -36,5 +36,5 @@ public:
 };
 
 } // namespace core
-} // namespace awrts
-#endif//_awrts_SettingsLoader_
+} // namespace aw
+#endif//_aw_SettingsLoader_

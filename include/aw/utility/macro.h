@@ -6,10 +6,10 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_macro_
-#define _awrts_macro_
+#ifndef _aw_macro_
+#define _aw_macro_
 
-#include <awengine/config/config.h>
+#include <aw/config/config.h>
 
 /*! Make a bit mask of a desired bit */
 #define BIT(x) (1<<(x))
@@ -70,4 +70,4 @@
 		#define FORCEINLINE inline __attribute__((always_inline))
 	#endif
 #endif
-#endif//_awrts_macro_
+#endif//_aw_macro_

@@ -6,16 +6,16 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_GUI_ElementStyle_
-#define _awrts_GUI_ElementStyle_
+#ifndef _aw_GUI_ElementStyle_
+#define _aw_GUI_ElementStyle_
 #include <string>
 #include <map>
 #include <memory>
 
-#include <awengine/gui/style/Border.h>
-#include <awengine/gui/style/Background.h>
+#include <aw/gui/style/Border.h>
+#include <aw/gui/style/Background.h>
 
-namespace awrts {
+namespace aw {
 namespace gui {
 class ElementStyle {
 public:
@@ -59,5 +59,5 @@ private:
 	std::unique_ptr<Background> background;
 };
 } // namespace gui
-} // namespace awrts
-#endif //_awrts_GUI_ElementStyle_
+} // namespace aw
+#endif //_aw_GUI_ElementStyle_

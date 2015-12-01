@@ -6,13 +6,13 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_VisNode_
-#define _awrts_VisNode_
+#ifndef _aw_VisNode_
+#define _aw_VisNode_
 
-#include <awrts/common/types.h>
+#include <aw/common/types.h>
 
-#include <awrts/graphics/Mesh.h>
-#include <awrts/scene/VisNode.h>
+#include <aw/graphics/Mesh.h>
+#include <aw/scene/VisNode.h>
 
 namespace irr {
 namespace scene {
@@ -20,7 +20,7 @@ class AnimatedMeshSceneNode;
 }
 }
 
-namespace awrts {
+namespace aw {
 namespace scene {
 class SceneManager;
 class IrrDummyNode;
@@ -42,5 +42,5 @@ private:
 };
 
 } // namespace scene
-} // namespace awrts
-#endif//_awrts_VisNode_
+} // namespace aw
+#endif//_aw_VisNode_

@@ -7,13 +7,13 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_UnitManager_
-#define _awrts_UnitManager_
+#ifndef _aw_UnitManager_
+#define _aw_UnitManager_
 
-#include <awrts/common/types.h>
-#include <awrts/game/game.h>
+#include <aw/common/types.h>
+#include <aw/game/game.h>
 
-namespace awrts {
+namespace aw {
 namespace game {
 //! UnitManager creates and keeps track of units
 class UnitManager {
@@ -21,5 +21,5 @@ class UnitManager {
 
 
 } // namespace game
-} // namespace awrts
-#endif//_awrts_UnitManager_
+} // namespace aw
+#endif//_aw_UnitManager_

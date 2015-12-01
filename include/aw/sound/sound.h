@@ -1,5 +1,5 @@
 /*
- * awrts  engine
+ * aw  engine
  * Copyright (C) 2013-2015  absurdworlds
  * 
  * This program is free software: you can redistribute it and/or modify
@@ -15,9 +15,9 @@
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/>. 
  */
-#ifndef _awrts_sound_
-#define _awrts_sound_
-#include <awengine/config/visibility.h>
+#ifndef _aw_sound_
+#define _aw_sound_
+#include <aw/config/visibility.h>
 
 #ifdef AW_MODULE_SOUND
 	#define AW_SND_EXP AW_EXPORT
@@ -26,8 +26,8 @@
 #endif
 
 // Namespace descriptions for Doxygen
-namespace awrts {
+namespace aw {
 //! Everything related to audio output is contained in this namespace
 namespace sound {}
 }
-#endif//_awrts_sound_
+#endif//_aw_sound_

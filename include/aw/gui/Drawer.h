@@ -6,11 +6,11 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_gui_drawer_
-#define _awrts_gui_drawer_
-#include <awengine/gui/Visitor.h>
+#ifndef _aw_gui_drawer_
+#define _aw_gui_drawer_
+#include <aw/gui/Visitor.h>
 
-namespace awrts {
+namespace aw {
 namespace gui {
 class Engine;
 
@@ -34,5 +34,5 @@ private:
 };
 
 } // namespace gui
-} // namespace awrts
-#endif //_awrts_gui_drawer_
+} // namespace aw
+#endif //_aw_gui_drawer_

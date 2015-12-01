@@ -6,11 +6,11 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_Color_
-#define _awrts_Color_
-#include <awengine/math/Vector4d.h>
+#ifndef _aw_Color_
+#define _aw_Color_
+#include <aw/math/Vector4d.h>
 
-namespace awrts {
+namespace aw {
 namespace graphics {
 class Color {
 public:
@@ -89,5 +89,5 @@ inline Color darken(Color const& color, u8 val)
 }
 
 } // namespace graphics
-} // namespace awrts
-#endif//_awrts_Color_
+} // namespace aw
+#endif//_aw_Color_

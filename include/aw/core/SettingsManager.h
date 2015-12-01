@@ -6,15 +6,15 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_SettingsManager_
-#define _awrts_SettingsManager_
+#ifndef _aw_SettingsManager_
+#define _aw_SettingsManager_
 #include <string>
 
-#include <awengine/common/types.h>
+#include <aw/common/types.h>
 
-#include <awengine/core/core.h>
+#include <aw/core/core.h>
 
-namespace awrts {
+namespace aw {
 namespace core {
 /*!
  * Interface to store settings and access them by strng keys
@@ -45,5 +45,5 @@ public:
 AW_CORE_EXP SettingsManager* createSettingsManager();
 
 } // namespace core
-} // namespace awrts
-#endif//_awrts_SettingsManager_
+} // namespace aw
+#endif//_aw_SettingsManager_

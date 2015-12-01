@@ -6,13 +6,13 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_BaseNavigator_
-#define _awrts_BaseNavigator_
+#ifndef _aw_BaseNavigator_
+#define _aw_BaseNavigator_
 
-#include <awrts/common/types.h>
-#include <awrts/common/Vector3d.h>
+#include <aw/common/types.h>
+#include <aw/common/Vector3d.h>
 
-namespace awrts {
+namespace aw {
 
 class BaseEntity;
 
@@ -88,5 +88,5 @@ public:
 };
 
 } // namespace ai
-} // namespace awrts
-#endif //_awrts_BaseNavigator_
+} // namespace aw
+#endif //_aw_BaseNavigator_

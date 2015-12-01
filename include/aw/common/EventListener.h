@@ -6,10 +6,10 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_common_EventListener_
-#define _awrts_common_EventListener_
-#include <awengine/common/Event.h>
-namespace awrts {
+#ifndef _aw_common_EventListener_
+#define _aw_common_EventListener_
+#include <aw/common/Event.h>
+namespace aw {
 class EventListener {
 public:
 	/*!
@@ -21,5 +21,5 @@ public:
 	virtual bool onEvent(Event* event) = 0;
 };
 
-} // namespace awrts
-#endif //_awrts_common_EventListener_
+} // namespace aw
+#endif //_aw_common_EventListener_

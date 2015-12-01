@@ -6,12 +6,12 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#include <awengine/utility/range_adaptors.h>
-#include <awengine/gui/Canvas.h>
-#include <awengine/gui/Visitor.h>
-#include <awengine/core/Logger.h>
+#include <aw/utility/range_adaptors.h>
+#include <aw/gui/Canvas.h>
+#include <aw/gui/Visitor.h>
+#include <aw/core/Logger.h>
 
-namespace awrts {
+namespace aw {
 namespace gui {
 Canvas::elements_t::iterator Canvas::findElement(Element* e)
 {
@@ -176,4 +176,4 @@ bool Canvas::processEvent(GUIEvent* event)
 	return false;
 }
 } // namespace gui
-} // namespace awrts
+} // namespace aw

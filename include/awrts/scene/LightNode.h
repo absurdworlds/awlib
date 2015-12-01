@@ -6,12 +6,12 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_LightNode_
-#define _awrts_LightNode_
+#ifndef _aw_LightNode_
+#define _aw_LightNode_
 
-#include <awrts/scene/SceneNode.h>
+#include <aw/scene/SceneNode.h>
 
-namespace awrts {
+namespace aw {
 namespace scene {
 
 //! Scene node representing a dynamic light
@@ -21,5 +21,5 @@ public:
 };
 
 } // namespace scene
-} // namespace awrts
-#endif//_awrts_LightNode_
+} // namespace aw
+#endif//_aw_LightNode_

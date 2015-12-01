@@ -6,15 +6,15 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_ItdReader_
-#define _awrts_ItdReader_
+#ifndef _aw_ItdReader_
+#define _aw_ItdReader_
 #include <vector>
 #include <fstream>
 
-#include <awrts/common/types.h>
-#include <awrts/itd/HPKIndexReader.h>
+#include <aw/common/types.h>
+#include <aw/itd/HPKIndexReader.h>
 
-namespace awrts {
+namespace aw {
 namespace itd {
 
 class ItdReader {
@@ -29,5 +29,5 @@ private:
 	std::ifstream archive_;
 };
 } // namespace itd
-} // namespace awrts
-#endif//_awrts_ItdReadere_
+} // namespace aw
+#endif//_aw_ItdReadere_

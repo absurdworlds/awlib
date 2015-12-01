@@ -6,11 +6,11 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_InputManager_impl_
-#define _awrts_InputManager_impl_
+#ifndef _aw_InputManager_impl_
+#define _aw_InputManager_impl_
 #include <forward_list>
 
-#include <awengine/gui/InputManager.h>
+#include <aw/gui/InputManager.h>
 
 namespace irr {
 class IrrlichtDevice;
@@ -20,7 +20,7 @@ class CursorControl;
 }
 }
 
-namespace awrts {
+namespace aw {
 namespace gui {
 namespace impl {
 class InputManager : public gui::InputManager, public irr::IEventReceiver {
@@ -39,5 +39,5 @@ private:
 };
 } // namespace impl
 } // namespace io
-} // namespace awrts
-#endif//_awrts_InputManager_impl_
+} // namespace aw
+#endif//_aw_InputManager_impl_

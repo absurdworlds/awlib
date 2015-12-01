@@ -6,16 +6,16 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_PhysicsObject_
-#define _awrts_PhysicsObject_
+#ifndef _aw_PhysicsObject_
+#define _aw_PhysicsObject_
 
-#include <awrts/common/hidden_impl.h>
+#include <aw/common/hidden_impl.h>
 
-#include <awrts/math/Vector3d.h>
+#include <aw/math/Vector3d.h>
 
-#include <awrts/physics/CollisionFilter.h>
+#include <aw/physics/CollisionFilter.h>
 
-namespace awrts {
+namespace aw {
 namespace physics {
 
 class CollisionObject {
@@ -45,5 +45,5 @@ protected:
 };
 
 } // namespace physics
-} // namespace awrts
-#endif//_awrts_PhysicsObject_
+} // namespace aw
+#endif//_aw_PhysicsObject_

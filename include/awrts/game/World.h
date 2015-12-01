@@ -6,15 +6,15 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_World_
-#define _awrts_World_
+#ifndef _aw_World_
+#define _aw_World_
 
-namespace awrts {
+namespace aw {
 
 class World {
 public:
 
 };
 
-} // namespace awrts
-#endif//_awrts_World_
+} // namespace aw
+#endif//_aw_World_

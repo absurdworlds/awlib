@@ -7,12 +7,12 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_Window_SFML_
-#define _awrts_Window_SFML_
+#ifndef _aw_Window_SFML_
+#define _aw_Window_SFML_
 #include <SFML/Window.hpp>
-#include <awengine/platform/Window.h>
+#include <aw/platform/Window.h>
 
-namespace awrts {
+namespace aw {
 namespace platform {
 namespace sf_ {
 /*
@@ -39,5 +39,5 @@ private:
 };
 } // namespace sf_
 } // namespace platform
-} // namespace awrts
-#endif//_awrts_Window_SFML_
+} // namespace aw
+#endif//_aw_Window_SFML_

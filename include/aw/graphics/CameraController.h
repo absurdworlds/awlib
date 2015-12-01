@@ -6,12 +6,12 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_CameraController_
-#define _awrts_CameraController_
+#ifndef _aw_CameraController_
+#define _aw_CameraController_
 
-#include <awrts/graphics/Controller.h>
+#include <aw/graphics/Controller.h>
 
-namespace awrts {
+namespace aw {
 namespace graphics {
 //! Class used to control camera movement
 class CameraController : public Controller {
@@ -26,5 +26,5 @@ public:
 };
 
 } // namespace graphics
-} // namespace awrts
-#endif//_awrts_CameraController_
+} // namespace aw
+#endif//_aw_CameraController_

@@ -6,12 +6,12 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_HPKIndexReader_
-#define _awrts_HPKIndexReader_
-#include <awrts/common/types.h>
-#include <awrts/itd/itd.h>
+#ifndef _aw_HPKIndexReader_
+#define _aw_HPKIndexReader_
+#include <aw/common/types.h>
+#include <aw/itd/itd.h>
 
-namespace awrts {
+namespace aw {
 namespace itd {
 /*!
  * Interface for reading HPKA index
@@ -37,5 +37,5 @@ public:
 };
 
 } //namespace itd
-} //namespace awrts
-#endif//_awrts_HPKIndexReader_
+} //namespace aw
+#endif//_aw_HPKIndexReader_

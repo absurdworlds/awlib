@@ -6,13 +6,13 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_ModelLoader_impl_
-#define _awrts_ModelLoader_impl_
+#ifndef _aw_ModelLoader_impl_
+#define _aw_ModelLoader_impl_
 #include <string>
 
-#include <awengine/core/ModelLoader.h>
+#include <aw/core/ModelLoader.h>
 
-namespace awrts {
+namespace aw {
 class Model;
 
 namespace hdf {
@@ -31,5 +31,5 @@ private:
 
 } // namespace impl_
 } // namespace core
-} // namespace awrts
-#endif//_awrts_ModelLoader_impl_
+} // namespace aw
+#endif//_aw_ModelLoader_impl_

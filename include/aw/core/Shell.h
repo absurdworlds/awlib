@@ -6,19 +6,19 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_Shell_
-#define _awrts_Shell_
+#ifndef _aw_Shell_
+#define _aw_Shell_
 #include <string>
 
-#include <awengine/core/core.h>
+#include <aw/core/core.h>
 
-#include <awengine/common/types.h>
+#include <aw/common/types.h>
 
-namespace awrts {
+namespace aw {
 class Logger;
 namespace core {
 /*!
- * awrts Shell, intended to be for manipulating game objects via
+ * aw Shell, intended to be for manipulating game objects via
  * unix-like shell commands
  */
 class Shell {
@@ -41,5 +41,5 @@ public:
 AW_CORE_EXP Shell* createShell(Logger* logger);
 
 } // namespace core
-} // namespace awrts
-#endif//_awrts_Shell_
+} // namespace aw
+#endif//_aw_Shell_

@@ -6,10 +6,10 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_GUIManager_
-#define _awrts_GUIManager_
+#ifndef _aw_GUIManager_
+#define _aw_GUIManager_
 
-#include <awrts/gui/GUIManager.h>
+#include <aw/gui/GUIManager.h>
 
 namespace irr {
 class IrrlichtDevice;
@@ -18,7 +18,7 @@ class GUIEnvironment;
 }
 }
 
-namespace awrts {
+namespace aw {
 namespace gui {
 
 class GUIManager : public GUIManager {
@@ -48,5 +48,5 @@ private:
 };
 
 } // namespace gui
-} // namespace awrts
-#endif //_awrts_GUIManager_
+} // namespace aw
+#endif //_aw_GUIManager_

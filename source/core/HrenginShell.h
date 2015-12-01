@@ -6,14 +6,14 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_HrenginShell_
-#define _awrts_HrenginShell_
+#ifndef _aw_HrenginShell_
+#define _aw_HrenginShell_
 #include <map>
 
-#include <awengine/core/Logger.h>
-#include <awengine/core/Shell.h>
+#include <aw/core/Logger.h>
+#include <aw/core/Shell.h>
 
-namespace awrts {
+namespace aw {
 namespace core {
 
 /*
@@ -51,5 +51,5 @@ Shell* createShell(Logger* logger)
 }
 
 } // namespace core
-} // namespace awrts
-#endif//_awrts_HrenginShell_
+} // namespace aw
+#endif//_aw_HrenginShell_

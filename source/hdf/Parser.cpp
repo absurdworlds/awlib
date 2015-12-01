@@ -10,14 +10,14 @@
 #include <cassert>
 #include <cstdio>
 
-#include <awengine/string/compose.h>
-#include <awengine/io/InputStream.h>
-#include <awengine/hdf/Type.h>
-#include <awengine/math/Vector4d.h>
+#include <aw/string/compose.h>
+#include <aw/io/InputStream.h>
+#include <aw/hdf/Type.h>
+#include <aw/math/Vector4d.h>
 
 #include "Parser.h"
 
-namespace awrts {
+namespace aw {
 namespace hdf {
 hdf::Type tokenToType(Token const& token) 
 {
@@ -374,4 +374,4 @@ void Parser::processCommand() {
 }
 } // namespace impl_
 } // namespace hdf
-} // namespace awrts
+} // namespace aw

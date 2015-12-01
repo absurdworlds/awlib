@@ -6,12 +6,12 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_GUIEvent_
-#define _awrts_GUIEvent_
-#include <awengine/common/types.h>
-#include <awengine/common/Event.h>
-#include <awengine/gui/Element.h>
-namespace awrts {
+#ifndef _aw_GUIEvent_
+#define _aw_GUIEvent_
+#include <aw/common/types.h>
+#include <aw/common/Event.h>
+#include <aw/gui/Element.h>
+namespace aw {
 namespace gui {
 
 struct GUIEvent : public EventId<GUIEvent>{
@@ -30,5 +30,5 @@ public:
 };
 
 } // namespace gui
-} // namespace awrts
-#endif //_awrts_GUIEvent_
+} // namespace aw
+#endif //_aw_GUIEvent_

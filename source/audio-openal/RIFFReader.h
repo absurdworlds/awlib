@@ -6,16 +6,16 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_RIFF_
-#define _awrts_RIFF_
+#ifndef _aw_RIFF_
+#define _aw_RIFF_
 #include <string>
 
-#include <awengine/common/types.h>
-#include <awengine/io/ReadFile.h>
+#include <aw/common/types.h>
+#include <aw/io/ReadFile.h>
 
 #include "SoundSample.h"
 
-namespace awrts {
+namespace aw {
 namespace audio {
 
 // assuming Little Endian
@@ -106,5 +106,5 @@ bool readWAV(std::string path, SoundSample& sample)
 }
 
 }
-} //namespace awrts
-#endif//_awrts_RIFF_
+} //namespace aw
+#endif//_aw_RIFF_

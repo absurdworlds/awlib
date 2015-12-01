@@ -7,7 +7,7 @@
  * There is NO WARRANTY, to the extent permitted by law.
  */
 
-namespace awrts {
+namespace aw {
 namespace io {
 
 }

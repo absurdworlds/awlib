@@ -8,10 +8,10 @@
  */
 #include <irrlicht/irrlicht.h>
 
-#include <awrts/math/Vector3d.h>
-#include <awrts/math/Line3d.h>
+#include <aw/math/Vector3d.h>
+#include <aw/math/Line3d.h>
 
-#include <awrts/graphics/CameraController.h>
+#include <aw/graphics/CameraController.h>
 
 #include "CVideoManager.h"
 
@@ -20,7 +20,7 @@
 
 #include "hrToIrr.h"
 
-namespace awrts {
+namespace aw {
 namespace scene {
 
 CameraNode_::CameraNode_(SceneManager* sceneManager,
@@ -68,4 +68,4 @@ void CameraNode_::setFarPlane(f64 dist)
 }
 
 } // namespace scene
-} // namespace awrts
+} // namespace aw

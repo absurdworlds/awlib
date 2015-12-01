@@ -6,11 +6,11 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_hidden_impl_
-#define _awrts_hidden_impl_
+#ifndef _aw_hidden_impl_
+#define _aw_hidden_impl_
 
 #define DECLARE_HIDDEN_DETAILS(CLASSNAME) \
 	class Details; \
 	virtual CLASSNAME::Details* getDetails() {return 0;}
 
-#endif//_awrts_hidden_impl_
+#endif//_aw_hidden_impl_

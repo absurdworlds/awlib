@@ -6,13 +6,13 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_itd_
-#define _awrts_itd_
+#ifndef _aw_itd_
+#define _aw_itd_
 
 #include <string>
-#include <awrts/common/types.h>
+#include <aw/common/types.h>
 
-namespace awrts {
+namespace aw {
 // ITD : Intelligently Trampled Data
 // source:
 // (09:23:04 AM) Spectre: gcfscape185(открыча гцф впк итд).zip
@@ -35,7 +35,7 @@ struct MainHeader {
 
 	//! File type indetifier, should be 'hitd'
 	u8 const fileId[4];
-	//! awrts package format version
+	//! aw package format version
 	u16 version;
 	//! Flags
 	u16 flags;
@@ -116,5 +116,5 @@ struct PackageIndexEntry {
 #endif
 
 } // namespace itd
-} // namespace awrts
-#endif//_awrts_hitd_
+} // namespace aw
+#endif//_aw_hitd_

@@ -7,12 +7,12 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#include <awengine/io/filesystem.h>
-#include <awengine/io/File.h>
-#include <awengine/io/ReadFile.h>
-#include <awengine/io/WriteFile.h>
+#include <aw/io/filesystem.h>
+#include <aw/io/File.h>
+#include <aw/io/ReadFile.h>
+#include <aw/io/WriteFile.h>
 
-namespace awrts {
+namespace aw {
 namespace io {
 
 char const* getMode(File::Mode mode)
@@ -150,4 +150,4 @@ void File::close()
 	details->file = 0;
 }
 } // namespace io
-} // namespace awrts
+} // namespace aw

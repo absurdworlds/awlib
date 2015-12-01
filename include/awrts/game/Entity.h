@@ -6,19 +6,18 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_BaseEntity_
-#define _awrts_BaseEntity_
-
+#ifndef _aw_BaseEntity_
+#define _aw_BaseEntity_
 #include <vector>
 #include <algorithm>
 
-#include <awrts/common/types.h>
-#include <awrts/math/Vector3d.h>
+#include <aw/common/types.h>
+#include <aw/math/Vector3d.h>
 
-#include <awrts/scene/EntityNode.h>
+#include <aw/scene/EntityNode.h>
 //#include "Base/VirtualObject.h"
 
-namespace awrts {
+namespace aw {
 namespace scene {
 class EntityNode;
 }
@@ -72,5 +71,5 @@ private:
 };
 
 } // namespace game
-} // namespace awrts
-#endif//_awrts_BaseEntity_
+} // namespace aw
+#endif//_aw_BaseEntity_

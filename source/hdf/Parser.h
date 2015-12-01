@@ -7,17 +7,17 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_hdf_Parser_impl_
-#define _awrts_hdf_Parser_impl_
+#ifndef _aw_hdf_Parser_impl_
+#define _aw_hdf_Parser_impl_
 #include <string>
 #include <vector>
 
-#include <awengine/hdf/Value.h>
-#include <awengine/hdf/Parser.h>
+#include <aw/hdf/Value.h>
+#include <aw/hdf/Parser.h>
 
 #include "Lexer.h"
 
-namespace awrts {
+namespace aw {
 namespace hdf {
 namespace impl_ {
 class Parser : public hdf::Parser {
@@ -66,5 +66,5 @@ private:
 };
 } // namespace impl_
 } // namespace io
-} // namespace awrts
-#endif//_awrts_hdf_Parser_impl_
+} // namespace aw
+#endif//_aw_hdf_Parser_impl_

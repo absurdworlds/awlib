@@ -6,10 +6,10 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_common_Event_
-#define _awrts_common_Event_
-#include <awengine/common/types.h>
-namespace awrts {
+#ifndef _aw_common_Event_
+#define _aw_common_Event_
+#include <aw/common/types.h>
+namespace aw {
 class Event {
 public:
 	virtual bool is(size_t id) = 0;
@@ -47,5 +47,5 @@ E* event_cast(Event* event) {
 
 	return nullptr;
 }
-} // namespace awrts
-#endif //_awrts_common_Event_
+} // namespace aw
+#endif //_aw_common_Event_

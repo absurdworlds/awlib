@@ -9,7 +9,7 @@
  */
 #include "compose.h"
 
-namespace awrts {
+namespace aw {
 namespace string {
 AW_CORE_EXP std::string compose(
         std::string const& fmt,
@@ -74,4 +74,4 @@ size_t Composed::paste_arg(size_t pos)
 }
 } // namespace compose_
 } // namespace string
-} // namespace awrts
+} // namespace aw

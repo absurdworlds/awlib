@@ -8,13 +8,13 @@
  */
 #include "SimplePathfinder.h"
 
-namespace awrts {
+namespace aw {
 namespace ai {
 
-HR_AI_EXP BasePathfinder* createSimplePathfinder()
+AW_AI_EXP BasePathfinder* createSimplePathfinder()
 {
 	return new SimplePathfinder;
 }
 
 } // namespace ai
-} // namespace awrts
+} // namespace aw

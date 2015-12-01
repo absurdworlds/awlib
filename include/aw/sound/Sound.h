@@ -6,10 +6,10 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_Sound_
-#define _awrts_Sound_
+#ifndef _aw_Sound_
+#define _aw_Sound_
 
-namespace awrts {
+namespace aw {
 namespace audio {
 //! Represents a sound
 class Sound {
@@ -22,5 +22,5 @@ public:
 };
 
 } // namespace audio
-} // namespace awrts
-#endif//_awrts_Sound_
+} // namespace aw
+#endif//_aw_Sound_

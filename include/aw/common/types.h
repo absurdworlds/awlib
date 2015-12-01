@@ -6,12 +6,12 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_types_
-#define _awrts_types_
+#ifndef _aw_types_
+#define _aw_types_
 #include <cstddef>
 #include <cstdint>
 
-namespace awrts {
+namespace aw {
 typedef uint8_t        u8;
 typedef  int8_t        i8;
 
@@ -31,5 +31,5 @@ typedef intmax_t diff_t;
 
 typedef u8 byte;
 typedef void* handle;
-} // namespace awrts
-#endif //_awrts_types_
+} // namespace aw
+#endif //_aw_types_

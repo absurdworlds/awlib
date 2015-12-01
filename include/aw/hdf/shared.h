@@ -7,9 +7,9 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_hdf_shared_
-#define _awrts_hdf_shared_
-namespace awrts {
+#ifndef _aw_hdf_shared_
+#define _aw_hdf_shared_
+namespace aw {
 namespace hdf {
 /*! Enumeration for parser log messages */
 enum ParserMessage {
@@ -19,5 +19,5 @@ enum ParserMessage {
 };
 
 } // namespace hdf
-} // namespace awrts
-#endif//_awrts_hdf_shared_
+} // namespace aw
+#endif//_aw_hdf_shared_

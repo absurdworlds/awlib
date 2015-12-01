@@ -6,10 +6,10 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_GUIListBox_
-#define _awrts_GUIListBox_
+#ifndef _aw_GUIListBox_
+#define _aw_GUIListBox_
 
-#include <awrts/gui/GUIListBox.h>
+#include <aw/gui/GUIListBox.h>
 
 namespace irr {
 namespace gui {
@@ -17,7 +17,7 @@ class GUIListBox;
 }
 }
 
-namespace awrts {
+namespace aw {
 namespace gui {
 
 class GUIListBox : public GUIListBox {
@@ -45,5 +45,5 @@ private:
 };
 
 } // namespace gui
-} // namespace awrts
-#endif //_awrts_GUIListBox_
+} // namespace aw
+#endif //_aw_GUIListBox_

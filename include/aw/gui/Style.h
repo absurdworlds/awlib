@@ -6,15 +6,15 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_GUI_Style_
-#define _awrts_GUI_Style_
+#ifndef _aw_GUI_Style_
+#define _aw_GUI_Style_
 #include <string>
 #include <map>
 
-#include <awengine/gui/gui.h>
-#include <awengine/gui/style/ElementStyle.h>
+#include <aw/gui/gui.h>
+#include <aw/gui/style/ElementStyle.h>
 
-namespace awrts {
+namespace aw {
 namespace gui {
 class AW_GUI_EXP Style {
 public:
@@ -41,5 +41,5 @@ private:
 	std::map<std::string, ElementStyle> properties;
 };
 } // namespace gui
-} // namespace awrts
-#endif //_awrts_GUI_Style_
+} // namespace aw
+#endif //_aw_GUI_Style_

@@ -7,16 +7,16 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_string_compose_
-#define _awrts_string_compose_
+#ifndef _aw_string_compose_
+#define _aw_string_compose_
 #include <vector>
 #include <string>
 
-#include <awengine/core/core.h>
+#include <aw/core/core.h>
 
-#include <awengine/string/as_string.h>
+#include <aw/string/as_string.h>
 
-namespace awrts {
+namespace aw {
 namespace string {
 /*!
  * Compose parametrized string (parameter substitution).
@@ -60,5 +60,5 @@ std::string compose(std::string const& fmt, Args const&... args)
 	return compose(fmt, bits);
 }
 } // namespace string
-} // namespace awrts
-#endif//_awrts_string_compose_
+} // namespace aw
+#endif//_aw_string_compose_

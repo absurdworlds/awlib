@@ -6,12 +6,12 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_hdf_Type_
-#define _awrts_hdf_Type_
+#ifndef _aw_hdf_Type_
+#define _aw_hdf_Type_
 #include <string>
-#include <awengine/common/types.h>
+#include <aw/common/types.h>
 
-namespace awrts {
+namespace aw {
 template <typename T>
 class Vector2d;
 template <typename T>
@@ -132,5 +132,5 @@ inline bool operator == (hdf::Type type, T val)
 }
 
 } // namespace hdf
-} // namespace awrts
-#endif//_awrts_hdf_Type_
+} // namespace aw
+#endif//_aw_hdf_Type_

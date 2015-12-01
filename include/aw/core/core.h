@@ -1,5 +1,5 @@
 /*
- * awrts  engine
+ * aw  engine
  * Copyright (C) 2013-2015  absurdworlds
  * 
  * This program is free software: you can redistribute it and/or modify
@@ -15,10 +15,10 @@
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/>. 
  */
-#ifndef _awrts_core_
-#define _awrts_core_
+#ifndef _aw_core_
+#define _aw_core_
 
-#include <awengine/config/visibility.h>
+#include <aw/config/visibility.h>
 
 #ifdef AW_MODULE_CORE
 	#define AW_CORE_EXP AW_EXPORT
@@ -28,8 +28,8 @@
 
 // Namespace descriptions for Doxygen
 //! Main namespace, contains everything else
-namespace awrts {
-//! Contains all of awrts's core functionality
+namespace aw {
+//! Contains all of aw's core functionality
 namespace core {}
 }
-#endif//_awrts_core_
+#endif//_aw_core_

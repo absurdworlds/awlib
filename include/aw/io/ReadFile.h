@@ -6,11 +6,11 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_ReadFile_
-#define _awrts_ReadFile_
-#include <awengine/io/File.h>
+#ifndef _aw_ReadFile_
+#define _aw_ReadFile_
+#include <aw/io/File.h>
 
-namespace awrts {
+namespace aw {
 namespace io {
 /*!
  * Provides interface for reading files
@@ -33,5 +33,5 @@ public:
 };
 
 } // namespace io
-} // namespace awrts
-#endif//_awrts_ReadFile_
+} // namespace aw
+#endif//_aw_ReadFile_

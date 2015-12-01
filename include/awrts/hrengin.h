@@ -1,5 +1,5 @@
 /*
- * awrts  engine
+ * aw  engine
  * Copyright (C) 2013-2015  absurdworlds
  * 
  * This program is free software: you can redistribute it and/or modify
@@ -17,5 +17,5 @@
  */
 
 //! Main namespace, contains everything else
-namespace awrts {
+namespace aw {
 }

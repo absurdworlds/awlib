@@ -6,8 +6,8 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_Listener_
-#define _awrts_Listener_
+#ifndef _aw_Listener_
+#define _aw_Listener_
 
 /*!
  * Equivalent to listener object in OpenAL,
@@ -16,4 +16,4 @@
 class Listener {
 
 };
-#endif//_awrts_Listener_
+#endif//_aw_Listener_

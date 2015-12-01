@@ -6,14 +6,14 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_BasePathfinder_
-#define _awrts_BasePathfinder_
+#ifndef _aw_BasePathfinder_
+#define _aw_BasePathfinder_
 
-#include <awrts/math/Vector3d.h>
+#include <aw/math/Vector3d.h>
 
-#include <awrts/ai/ai.h>
+#include <aw/ai/ai.h>
 
-namespace awrts {
+namespace aw {
 namespace ai {
 class Path;
 
@@ -25,5 +25,5 @@ public:
 HR_AI_EXP BasePathfinder* createSimplePathfinder();
 
 } // namespace ai
-} // namespace awrts
-#endif //_awrts_BasePathfinder_
+} // namespace aw
+#endif //_aw_BasePathfinder_

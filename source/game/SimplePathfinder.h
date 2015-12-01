@@ -6,13 +6,12 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_SimplePathfinder_
-#define _awrts_SimplePathfinder_
-
+#ifndef _aw_SimplePathfinder_
+#define _aw_SimplePathfinder_
 #include <awrts/ai/BasePathfinder.h>
 #include <awrts/ai/Path.h>
 
-namespace awrts {
+namespace aw {
 namespace ai {
 
 class SimplePathfinder : public BasePathfinder {
@@ -28,5 +27,5 @@ public:
 };
 
 } // namespace ai
-} // namespace awrts
-#endif //_awrts_SimplePathfinder_
+} // namespace aw
+#endif //_aw_SimplePathfinder_

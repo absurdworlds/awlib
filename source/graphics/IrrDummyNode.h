@@ -6,21 +6,21 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_IrrDummyNode_
-#define _awrts_IrrDummyNode_
+#ifndef _aw_IrrDummyNode_
+#define _aw_IrrDummyNode_
 #include <irrlicht/ISceneNode.h>
 #include <irrlicht/ISceneManager.h>
 
-#include <awrts/scene/SceneNode.h>
+#include <aw/scene/SceneNode.h>
 
 #include "hrToIrr.h"
 
-namespace awrts {
+namespace aw {
 namespace scene {
 
 class IrrDummyNode : public irr::scene::ISceneNode {
 public:
-	IrrDummyNode (awrts::scene::INode* node,
+	IrrDummyNode (aw::scene::INode* node,
 		irr::scene::ISceneManager* mgr)
 		: irr::scene::ISceneNode(mgr->getRootSceneNode(), mgr),
 		  node_(node)
@@ -31,7 +31,7 @@ public:
 	virtual void setParent (SceneNode* newParent)
 	{
 		// do not change parent, since parent system is a part of
-		// awrts's own scene graph system
+		// aw's own scene graph system
 	}
 
 	virtual void render ()
@@ -55,9 +55,9 @@ public:
 		AbsoluteTransformation = toIrr(node_->calculateAbsoluteTransform());
 	}
 private:
-	awrts::scene::Node* node_;
+	aw::scene::Node* node_;
 };
 
 } // namespace scene
-} // namespace awrts
-#endif//_awrts_IrrDummyNode_
+} // namespace aw
+#endif//_aw_IrrDummyNode_

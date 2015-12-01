@@ -6,12 +6,12 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_paths_
-#define _awrts_paths_
+#ifndef _aw_paths_
+#define _aw_paths_
 
 #include <string>
 
-namespace awrts {
+namespace aw {
 namespace io {
 
 std::string const datapath("../data/");
@@ -19,5 +19,5 @@ std::string const modelpath(datapath + "models/");
 std::string const soundpath(datapath + "sound/");
 
 } // namespace io
-} // namespace awrts
-#endif //_awrts_paths_
+} // namespace aw
+#endif //_aw_paths_

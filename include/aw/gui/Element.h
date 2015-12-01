@@ -7,20 +7,20 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_GUIElement_
-#define _awrts_GUIElement_
+#ifndef _aw_GUIElement_
+#define _aw_GUIElement_
 #include <string>
 
-#include <awengine/common/types.h>
-#include <awengine/common/EventListener.h>
-#include <awengine/math/Rect.h>
-#include <awengine/gui/Coordinate.h>
-#include <awengine/gui/KeyboardEvent.h>
-#include <awengine/gui/MouseEvent.h>
-#include <awengine/gui/GUIEvent.h>
-#include <awengine/core/Logger.h>
+#include <aw/common/types.h>
+#include <aw/common/EventListener.h>
+#include <aw/math/Rect.h>
+#include <aw/gui/Coordinate.h>
+#include <aw/gui/KeyboardEvent.h>
+#include <aw/gui/MouseEvent.h>
+#include <aw/gui/GUIEvent.h>
+#include <aw/core/Logger.h>
 
-namespace awrts {
+namespace aw {
 namespace gui {
 class Canvas;
 class Widget;
@@ -211,5 +211,5 @@ inline bool pointWithinElement(Vector2d<i32> point,
 }
 
 } // namespace gui
-} // namespace awrts
-#endif //_awrts_GUIElement_
+} // namespace aw
+#endif //_aw_GUIElement_

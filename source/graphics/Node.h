@@ -6,12 +6,12 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_SceneNode_
-#define _awrts_SceneNode_
+#ifndef _aw_SceneNode_
+#define _aw_SceneNode_
 
-#include <awrts/scene/SceneNode.h>
+#include <aw/scene/SceneNode.h>
 
-namespace awrts {
+namespace aw {
 namespace scene {
 //! A node in the scene graph
 class Node : public Node {
@@ -65,5 +65,5 @@ public:
 };
 
 } // namespace graphics
-} // namespace awrts
-#endif //_awrts_Node_
+} // namespace aw
+#endif //_aw_Node_

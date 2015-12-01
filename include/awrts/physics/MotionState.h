@@ -6,12 +6,12 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_MotionState_
-#define _awrts_MotionState_
+#ifndef _aw_MotionState_
+#define _aw_MotionState_
 
-#include <awrts/scene/SceneNode.h>
+#include <aw/scene/SceneNode.h>
 
-namespace awrts {
+namespace aw {
 namespace physics {
 /*!
  * Motion state allows to synchronize physics world with other modules
@@ -62,5 +62,5 @@ private:
 };
 
 } // namespace graphics
-} // namespace awrts
-#endif //_awrts_MotionState_
+} // namespace aw
+#endif //_aw_MotionState_

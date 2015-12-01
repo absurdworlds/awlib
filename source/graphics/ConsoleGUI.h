@@ -6,13 +6,13 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_ConsoleGUI_
-#define _awrts_ConsoleGUI_
+#ifndef _aw_ConsoleGUI_
+#define _aw_ConsoleGUI_
 
-#include <awrts/gui/IGUManager.h>
-#include <awrts/gui/ConsoleGUI.h>
+#include <aw/gui/IGUManager.h>
+#include <aw/gui/ConsoleGUI.h>
 
-namespace awrts {
+namespace aw {
 namespace gui {
 
 class ConsoleGUI : public ConsoleGUI {
@@ -33,5 +33,5 @@ private:
 };
 
 } // namespace gui
-} // namespace awrts
-#endif //_awrts_ConsoleGUI_
+} // namespace aw
+#endif //_aw_ConsoleGUI_

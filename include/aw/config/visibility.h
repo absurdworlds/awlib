@@ -6,9 +6,9 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_visibility_
-#define _awrts_visibility_
-#include <awengine/config/compiler_setup.h>
+#ifndef _aw_visibility_
+#define _aw_visibility_
+#include <aw/config/compiler_setup.h>
 /*!
  * \file visibility
  * \brief Defines import/export macro.
@@ -41,4 +41,4 @@
 		#define AW_LOCAL
 	#endif
 #endif
-#endif//_awrts_visibility_
+#endif//_aw_visibility_

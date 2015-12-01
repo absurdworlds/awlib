@@ -6,12 +6,12 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_hash_
-#define _awrts_hash_
-#include <awengine/common/types.h>
-#include <awengine/core/core.h>
+#ifndef _aw_hash_
+#define _aw_hash_
+#include <aw/common/types.h>
+#include <aw/core/core.h>
 
-namespace awrts {
+namespace aw {
 /*!
  * Helper union to hold 128-bit values
  */
@@ -38,5 +38,5 @@ void MurmurHash3_x86_128(void const * key, size_t len, u128 seed, void * out);
 AW_CORE_EXP
 void MurmurHash3_x64_128(void const * key, size_t len, u128 seed, void * out);
 
-} // namespace awrts
-#endif//_awrts_hash_
+} // namespace aw
+#endif//_aw_hash_

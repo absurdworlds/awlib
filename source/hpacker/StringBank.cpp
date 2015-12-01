@@ -10,7 +10,7 @@
 
 #include "StringBank.h"
 
-namespace awrts {
+namespace aw {
 namespace itd {
 StringBank::StringBank ()
 	: stringTally_(0)
@@ -48,4 +48,4 @@ std::string const & StringBank::back () const
 	return strings_.back();
 }
 } //namespace itd
-} //namespace awrts
+} //namespace aw

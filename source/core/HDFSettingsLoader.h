@@ -6,15 +6,15 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_HDFSettingsLoader_
-#define _awrts_HDFSettingsLoader_
-#include <awengine/io/ReadFile.h>
-#include <awengine/io/BufferedStream.h>
-#include <awengine/hdf/Parser.h>
+#ifndef _aw_HDFSettingsLoader_
+#define _aw_HDFSettingsLoader_
+#include <aw/io/ReadFile.h>
+#include <aw/io/BufferedStream.h>
+#include <aw/hdf/Parser.h>
 
-#include <awengine/core/SettingsLoader.h>
+#include <aw/core/SettingsLoader.h>
 
-namespace awrts {
+namespace aw {
 namespace core {
 
 class HDFSettingsLoader : public SettingsLoader {
@@ -36,5 +36,5 @@ private:
 };
 
 } // namespace core
-} // namespace awrts
-#endif//_awrts_HDFSettingsLoader_
+} // namespace aw
+#endif//_aw_HDFSettingsLoader_

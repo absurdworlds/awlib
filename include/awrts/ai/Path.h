@@ -6,16 +6,16 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_Path_
-#define _awrts_Path_
+#ifndef _aw_Path_
+#define _aw_Path_
 
 #include <vector>
 #include <limits>
 
-#include <awrts/common/types.h>
-#include <awrts/math/Vector3d.h>
+#include <aw/common/types.h>
+#include <aw/math/Vector3d.h>
 
-namespace awrts {
+namespace aw {
 namespace ai {
 //! Path consisting of waypoints, which are positions in 3d space
 class Path {
@@ -237,5 +237,5 @@ Path::const_iterator findClosestNode(Path::const_iterator& first,
 	Path::const_iterator& last, Vector3d<f32> point);
 
 } // namespace ai
-} // namespace awrts
-#endif//_awrts_Path_
+} // namespace aw
+#endif//_aw_Path_

@@ -6,12 +6,12 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#include <awengine/io/ReadFile.h>
-#include <awengine/io/InputFileStream.h>
+#include <aw/io/ReadFile.h>
+#include <aw/io/InputFileStream.h>
 
 #include <cstdio>
 
-namespace awrts {
+namespace aw {
 namespace io {
 InputFileStream::InputFileStream(ReadFile& source)
 	: pos(0), source(source), size(source.getSize())
@@ -53,9 +53,9 @@ bool InputFileStream::next(char& c)
 	return peek(c);
 }
 
-size_t InputFileStream::getPos() const
+size_t InputFileStream::position() const
 {
 	return pos;
 }
 } //namespace io
-} //namespace awrts
+} //namespace aw

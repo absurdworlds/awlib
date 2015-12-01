@@ -7,12 +7,12 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_GUI_canvas_
-#define _awrts_GUI_canvas_
+#ifndef _aw_GUI_canvas_
+#define _aw_GUI_canvas_
 #include <memory>
 
-#include <awengine/gui/Element.h>
-namespace awrts {
+#include <aw/gui/Element.h>
+namespace aw {
 namespace gui {
 class Canvas : public Element {
 public:
@@ -171,5 +171,5 @@ inline auto rend(Canvas& canvas)
 	return Canvas::reverse_iterator(canvas.getFirstChild());
 }
 } // namespace gui
-} // namespace awrts
-#endif //_awrts_GUI_canvas_
+} // namespace aw
+#endif //_aw_GUI_canvas_

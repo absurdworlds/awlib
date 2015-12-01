@@ -7,29 +7,29 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#include <awrts/core/Logger.h>
-#include <awrts/core/SettingsManager.h>
+#include <aw/core/Logger.h>
+#include <aw/core/SettingsManager.h>
 
-#include <awrts/graphics/VideoManager.h>
-#include <awrts/scene/SceneManager.h>
+#include <aw/graphics/VideoManager.h>
+#include <aw/scene/SceneManager.h>
 
-#include <awrts/physics/PhysicsManager.h>
-#include <awrts/physics/PhysicsWorld.h>
+#include <aw/physics/PhysicsManager.h>
+#include <aw/physics/PhysicsWorld.h>
 
-#include <awrts/sound/SoundManager.h>
+#include <aw/sound/SoundManager.h>
 
-#include <awrts/gui/GUIManager.h>
-#include <awrts/gui/InputManager.h>
+#include <aw/gui/GUIManager.h>
+#include <aw/gui/InputManager.h>
 
-#include <awrts/game/EventManager.h>
-#include <awrts/game/UnitManager.h>
-#include <awrts/game/MapManager.h>
+#include <aw/game/EventManager.h>
+#include <aw/game/UnitManager.h>
+#include <aw/game/MapManager.h>
 
-#include <awrts/gui/ConsoleGUI.h>
+#include <aw/gui/ConsoleGUI.h>
 
 #include "EngineHub.h"
 
-namespace awrts {
+namespace aw {
 
 void EngineHub::initCore()
 {
@@ -114,4 +114,4 @@ int main(int argc, char** argv)
 {
 
 }
-} // namespace awrts
+} // namespace aw

@@ -8,14 +8,14 @@
  */
 #include <irrlicht/irrlicht.h>
 
-#include <awrts/graphics/VideoManager.h>
+#include <aw/graphics/VideoManager.h>
 
 #include "VideoManager.h"
 
 #include "LightNode.h"
 #include "IrrDummyNode.h"
 
-namespace awrts {
+namespace aw {
 namespace scene {
 
 LightNode::LightNode (SceneManager* sceneManager,
@@ -33,4 +33,4 @@ LightNode::~LightNode ()
 }
 
 } // namespace graphics
-} // namespace awrts
+} // namespace aw

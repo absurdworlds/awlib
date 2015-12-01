@@ -6,15 +6,15 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_StringBank_
-#define _awrts_StringBank_
+#ifndef _aw_StringBank_
+#define _aw_StringBank_
 #include <string>
 #include <vector>
 #include <ostream>
 
-#include <awrts/common/types.h>
+#include <aw/common/types.h>
 
-namespace awrts {
+namespace aw {
 namespace itd {
 
 class StringBank {
@@ -30,5 +30,5 @@ private:
 	u64 stringTally_;
 };
 } //namespace itd
-} //namespace awrts
-#endif//_awrts_StringBank_
+} //namespace aw
+#endif//_aw_StringBank_

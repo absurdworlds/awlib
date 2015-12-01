@@ -8,7 +8,7 @@
  */
 #include "EntityNode.h"
 
-namespace awrts {
+namespace aw {
 namespace scene {
 
 EntityNode_::EntityNode_(Entity* entity)
@@ -20,4 +20,4 @@ EntityNode_::~EntityNode_()
 }
 
 } // namespace scene
-} // namespace awrts
+} // namespace aw

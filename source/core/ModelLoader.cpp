@@ -6,19 +6,19 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#include <awengine/core/paths.h>
-#include <awengine/string/utility.h>
+#include <aw/core/paths.h>
+#include <aw/string/utility.h>
 
-#include <awengine/io/ReadFile.h>
-#include <awengine/io/BufferedStream.h>
+#include <aw/io/ReadFile.h>
+#include <aw/io/BufferedStream.h>
 
-#include <awengine/hdf/Parser.h>
+#include <aw/hdf/Parser.h>
 
-#include <awengine/core/Model.h>
+#include <aw/core/Model.h>
 
 #include "ModelLoader.h"
 
-namespace awrts {
+namespace aw {
 namespace core {
 
 ModelLoader* createModelLoader ()
@@ -124,7 +124,7 @@ bool hdfParseObject(hdf::Parser* hdf, Model* model, std::string curNode)
 
 bool hdfParseShapeNode(hdf::Parser* hdf, Model* model)
 {
-	awrts::Primitive primitive;
+	aw::Primitive primitive;
 	//io::ObjectType type = hdf->getObjectType();
 
 
@@ -204,4 +204,4 @@ bool hdfParseShapeNode(hdf::Parser* hdf, Model* model)
 }
 } // namespace impl_
 } // namespace core
-} // namespace awrts
+} // namespace aw

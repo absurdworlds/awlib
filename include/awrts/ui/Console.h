@@ -6,17 +6,17 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_ConsoleGUI_
-#define _awrts_ConsoleGUI_
+#ifndef _aw_ConsoleGUI_
+#define _aw_ConsoleGUI_
 
-#include <awrts/common/types.h>
+#include <aw/common/types.h>
 
-#include <awrts/core/Logger.h>
+#include <aw/core/Logger.h>
 
-#include <awrts/gui/gui.h>
-#include <awrts/gui/UserInputReceiver.h>
+#include <aw/gui/gui.h>
+#include <aw/gui/UserInputReceiver.h>
 
-namespace awrts {
+namespace aw {
 namespace core {
 class Shell;
 }
@@ -33,5 +33,5 @@ public:
 HR_GUI_EXP ConsoleGUI* createConsole(core::Shell* shell, GUIManager* guimgr);
 
 } // namespace gui
-} // namespace awrts
-#endif //_awrts_ConsoleGUI_
+} // namespace aw
+#endif //_aw_ConsoleGUI_

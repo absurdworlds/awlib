@@ -6,11 +6,11 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_SoundManager_
-#define _awrts_SoundManager_
-#include <awengine/sound/sound.h>
+#ifndef _aw_SoundManager_
+#define _aw_SoundManager_
+#include <aw/sound/sound.h>
 
-namespace awrts {
+namespace aw {
 namespace sound {
 class Sound;
 
@@ -28,5 +28,5 @@ public:
 AW_SND_EXP SoundManager* createSoundManager ();
 
 } // namespace sound
-} // namespace awrts
-#endif//_awrts_SoundManager_
+} // namespace aw
+#endif//_aw_SoundManager_

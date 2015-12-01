@@ -1,5 +1,5 @@
 /*
- * HRDF parser & writer library
+ * HDF parser & writer library
  *
  * Copyright (C) 2013-2015  absurdworlds
  * Copyright (C)      2015  hedede <haddayn@gmail.com>
@@ -17,9 +17,9 @@
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/>. 
  */
-#ifndef _awrts_hdf_
-#define _awrts_hdf_
-#include <awengine/config/visibility.h>
+#ifndef _aw_hdf_
+#define _aw_hdf_
+#include <aw/config/visibility.h>
 
 #ifdef AW_MODULE_HDF
 	#define AW_HDF_EXP AW_EXPORT
@@ -28,8 +28,8 @@
 #endif
 
 // Namespace descriptions for Doxygen
-namespace awrts {
+namespace aw {
 //! Utilities for processing the HDF file format
 namespace hdf {}
 }
-#endif//_awrts_hdf_
+#endif//_aw_hdf_

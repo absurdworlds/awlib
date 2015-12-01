@@ -1,5 +1,5 @@
 /*
- * awrts engine
+ * aw engine
  * Copyright (C) 2013-2015  absurdworlds
  * 
  * This program is free software: you can redistribute it and/or modify
@@ -15,9 +15,9 @@
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/>. 
  */
-#ifndef _awrts_gui_
-#define _awrts_gui_
-#include <awengine/config/visibility.h>
+#ifndef _aw_gui_
+#define _aw_gui_
+#include <aw/config/visibility.h>
 
 #ifdef AW_MODULE_GUI
 	#define AW_GUI_EXP AW_EXPORT
@@ -26,8 +26,8 @@
 #endif
 
 // Namespace descriptions for Doxygen
-namespace awrts {
+namespace aw {
 //! Everything related to GUI and user input
 namespace gui {}
 }
-#endif//_awrts_gui_
+#endif//_aw_gui_

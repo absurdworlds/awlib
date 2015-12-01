@@ -6,8 +6,8 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_compiler_setup_
-#define _awrts_compiler_setup_
+#ifndef _aw_compiler_setup_
+#define _aw_compiler_setup_
 /*!
  * \file compiler_setup
  * \brief Setup compiler and platform specific settings
@@ -37,4 +37,4 @@
 	#pragma warning(disable: 4244)
 	#pragma warning(disable: 4351)
 #endif
-#endif //_awrts_compiler_setup_
+#endif //_aw_compiler_setup_

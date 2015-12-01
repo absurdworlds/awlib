@@ -2,13 +2,13 @@
 
 #include <Irrlicht/IrrlichtDevice.h>
 
-#include <awengine/gui/Canvas.h>
-#include <awengine/gui/Window.h>
-#include <awengine/gui/Drawer.h>
-#include <awengine/core/Logger.h>
+#include <aw/gui/Canvas.h>
+#include <aw/gui/Window.h>
+#include <aw/gui/Drawer.h>
+#include <aw/core/Logger.h>
 
-#include <awengine/irr/gui/IrrEngine.h>
-#include <awengine/irr/gui/InputManager.h>
+#include <aw/irr/gui/IrrEngine.h>
+#include <aw/irr/gui/InputManager.h>
 
 #include <iostream>
 
@@ -24,7 +24,7 @@ extern "C" IRRLICHT_API IrrlichtDevice* IRRCALLCONV createDevice(
 	bool vsync = false,
 	IEventReceiver* receiver = 0);
 }
-namespace awrts {
+namespace aw {
 size_t Event::eventTypes;
 
 class Couter : public core::LogBook {
@@ -114,9 +114,9 @@ int guimain()
 }
 
 } // namespace core
-} // namespace awrts
+} // namespace aw
 
 int main()
 {
-	awrts::gui::guimain();
+	aw::gui::guimain();
 }

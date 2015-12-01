@@ -6,11 +6,11 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#include <awrts/common/types.h>
+#include <aw/common/types.h>
 
 #include "DebugDrawer.h"
 
-namespace awrts {
+namespace aw {
 namespace physics {
 namespace bullet {
 
@@ -73,4 +73,4 @@ int DebugDraw::getDebugMode() const
 }
 } // namespace bullet
 } // namespace physics
-} // namespace awrts
+} // namespace aw

@@ -6,12 +6,12 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_Mesh_
-#define _awrts_Mesh_
+#ifndef _aw_Mesh_
+#define _aw_Mesh_
 
-#include <awrts/common/types.h>
+#include <aw/common/types.h>
 
-namespace awrts {
+namespace aw {
 namespace graphics {
 
 class Mesh {
@@ -20,5 +20,5 @@ public:
 
 
 } // namespace video
-} // namespace awrts
-#endif//_awrts_Mesh_
+} // namespace aw
+#endif//_aw_Mesh_

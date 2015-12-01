@@ -6,14 +6,14 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_EntitySceneNode_
-#define _awrts_EntitySceneNode_
+#ifndef _aw_EntitySceneNode_
+#define _aw_EntitySceneNode_
 
-#include <awrts/game/Entity.h>
+#include <aw/game/Entity.h>
 
-#include <awrts/scene/SceneNode.h>
+#include <aw/scene/SceneNode.h>
 
-namespace awrts {
+namespace aw {
 class Entity;
 
 namespace scene {
@@ -25,5 +25,5 @@ public:
 };
 
 } // namespace scene
-} // namespace awrts
-#endif //_awrts_EntitySceneNode_
+} // namespace aw
+#endif //_aw_EntitySceneNode_

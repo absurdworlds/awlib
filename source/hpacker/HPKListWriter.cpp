@@ -8,7 +8,7 @@
  */
 #include "HPKListWriter.h"
 
-namespace awrts {
+namespace aw {
 namespace itd {
 HPKListWriter::HPKListWriter ()
 {
@@ -50,4 +50,4 @@ void HPKListWriter::write (std::ostream & target)
 }
 
 } //namespace itd
-} //namespace awrts
+} //namespace aw

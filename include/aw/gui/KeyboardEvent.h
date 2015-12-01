@@ -6,13 +6,13 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_KeyboardEvent_
-#define _awrts_KeyboardEvent_
-#include <awengine/common/types.h>
-#include <awengine/common/Event.h>
-#include <awengine/gui/Keycodes.h>
+#ifndef _aw_KeyboardEvent_
+#define _aw_KeyboardEvent_
+#include <aw/common/types.h>
+#include <aw/common/Event.h>
+#include <aw/gui/Keycodes.h>
 
-namespace awrts {
+namespace aw {
 namespace gui {
 struct KeyboardEvent : public EventId<KeyboardEvent> {
 	KeyCode keyCode;
@@ -23,5 +23,5 @@ struct KeyboardEvent : public EventId<KeyboardEvent> {
 };
 
 } // namespace gui
-} // namespace awrts
-#endif //_awrts_KeyboardEvent_
+} // namespace aw
+#endif //_aw_KeyboardEvent_

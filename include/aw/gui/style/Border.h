@@ -6,15 +6,15 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_GUI_Border_
-#define _awrts_GUI_Border_
+#ifndef _aw_GUI_Border_
+#define _aw_GUI_Border_
 #include <string>
 
-#include <awengine/common/types.h>
-#include <awengine/graphics/Color.h>
-#include <awengine/gui/style/Shared.h>
+#include <aw/common/types.h>
+#include <aw/graphics/Color.h>
+#include <aw/gui/style/Shared.h>
 
-namespace awrts {
+namespace aw {
 namespace gui {
 class BorderNone;
 class BorderPlain;
@@ -188,5 +188,5 @@ private:
 };
 
 } // namespace gui
-} // namespace awrts
-#endif //_awrts_GUI_Border_
+} // namespace aw
+#endif //_aw_GUI_Border_

@@ -8,11 +8,11 @@
  */
 #include <Irrlicht/IGUIElement.h>
 
-#include <awrts/common/utf_convert.h>
+#include <aw/common/utf_convert.h>
 
 #include "GUITextBox.h"
 
-namespace awrts {
+namespace aw {
 namespace gui {
 
 GUITextBox::GUITextBox(irr::gui::IGUIElement* elem)
@@ -48,4 +48,4 @@ void GUITextBox::setText(std::string text)
 }
 
 } // namespace gui
-} // namespace awrts
+} // namespace aw

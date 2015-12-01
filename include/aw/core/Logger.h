@@ -6,16 +6,16 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_Logger_
-#define _awrts_Logger_
+#ifndef _aw_Logger_
+#define _aw_Logger_
 #include <string>
 
-#include <awengine/config/config.h>
-#include <awengine/utility/macro.h>
+#include <aw/config/config.h>
+#include <aw/utility/macro.h>
 
-#include <awengine/core/core.h>
+#include <aw/core/core.h>
 
-namespace awrts {
+namespace aw {
 namespace core {
 /*!
  * Enumeration of all available log levels, to control
@@ -109,5 +109,5 @@ private:
 AW_CORE_EXP Logger* createLogger();
 
 } // namespace core
-} // namespace awrts
-#endif//_awrts_Logger_
+} // namespace aw
+#endif//_aw_Logger_

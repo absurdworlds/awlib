@@ -6,18 +6,18 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#include <awengine/core/Logger.h>
-#include <awengine/graphics/Color.h>
+#include <aw/core/Logger.h>
+#include <aw/graphics/Color.h>
 
-#include <awengine/utility/range_adaptors.h>
+#include <aw/utility/range_adaptors.h>
 
-#include <awengine/gui/Drawer.h>
-#include <awengine/gui/Canvas.h>
-#include <awengine/gui/Widget.h>
-#include <awengine/gui/Window.h>
-#include <awengine/gui/Engine.h>
-#include <awengine/gui/Style.h>
-namespace awrts {
+#include <aw/gui/Drawer.h>
+#include <aw/gui/Canvas.h>
+#include <aw/gui/Widget.h>
+#include <aw/gui/Window.h>
+#include <aw/gui/Engine.h>
+#include <aw/gui/Style.h>
+namespace aw {
 namespace gui {
 
 Drawer::~Drawer()
@@ -68,4 +68,4 @@ void Drawer::drawChildren(Canvas* element)
 	}
 }
 } // namespace gui
-} // namespace awrts
+} // namespace aw

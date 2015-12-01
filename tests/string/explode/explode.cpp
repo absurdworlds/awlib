@@ -13,22 +13,10 @@ int main (int c, char** a)
 
 	std::string string = a[1];
 	std::string delim = a[2];
+	auto bits = explode(string, delim);
 
-	auto test = [&] (auto func) {
-				
-		auto bits = func(string, delim);
-
-		for (auto bit : bits) {
-			printf("%s\n", bit.c_str());
-		}
-	};
-
-	printf("split():\n");
-	test(split);
-	printf("explode():\n");
-	test(explode);
-	{
+	for (auto bit : bits) {
+		printf("%s\n", bit.c_str());
 	}
-
 	return 0;
 }

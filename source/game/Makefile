@@ -1,6 +1,6 @@
 RootPath = ../..
-Objects = EntityManager.cpp EventManager.cpp SimplePathfinder.cpp World.cpp
-Defines = HR_MODULE_GAME HR_MODULE_AI
+Sources = SimplePathfinder.cpp World.cpp EntityManager.cpp EventManager.cpp 
+Defines = AW_MODULE_GAME AW_MODULE_AI
 Libraries = 
 ProjectName = awgame
 Executable = false

@@ -8,16 +8,16 @@
  */
 #include "EventManager.h"
 
-namespace awrts {
+namespace aw {
 namespace game {
-HR_GAME_EXP EventManager* createEventManager()
+AW_GAME_EXP EventManager* createEventManager()
 {
 	return new impl_::EventManager();
 }
 
 void impl_::EventManager::advance()
 {
-	u32 time = awrts::getTime();
+	u32 time = aw::getTime();
 
 	for (auto event = events_.begin(); event != events_.end(); ++event) {
 		if ((*event).nextFire <= time) {
@@ -27,4 +27,4 @@ void impl_::EventManager::advance()
 	}
 }
 } // namespace game
-} // namespace awrts
+} // namespace aw

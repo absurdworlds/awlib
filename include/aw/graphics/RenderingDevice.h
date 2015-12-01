@@ -6,14 +6,14 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_RenderingDevice_
-#define _awrts_RenderingDevice_
+#ifndef _aw_RenderingDevice_
+#define _aw_RenderingDevice_
 
-#include <awrts/math/Vector3d.h>
+#include <aw/math/Vector3d.h>
 /* yt6dew — I don't know what is that, propbably someone was playng with
  keyboard. I decided to keep it.
  */
-namespace awrts {
+namespace aw {
 namespace graphics {
 
 class VertexBuffer;
@@ -44,5 +44,5 @@ public:
 };
 
 } // namespace video
-} // namespace awrts
-#endif//_awrts_RenderingDevice_
+} // namespace aw
+#endif//_aw_RenderingDevice_

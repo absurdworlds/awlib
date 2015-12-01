@@ -6,13 +6,13 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_ALvector_
-#define _awrts_ALvector_
+#ifndef _aw_ALvector_
+#define _aw_ALvector_
 #include <AL/al.h>
 
-#include <awengine/math/Vector3d.h>
+#include <aw/math/Vector3d.h>
 
-namespace awrts {
+namespace aw {
 namespace audio {
 
 typedef Vector3d<ALfloat> ALVector3d;
@@ -28,5 +28,5 @@ ALVector3d toAL(Vector3d<f32> vec)
 }
 
 } // namespace audio
-} // namespace awrts
-#endif //_awrts_ALvector_
+} // namespace aw
+#endif //_aw_ALvector_

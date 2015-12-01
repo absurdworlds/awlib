@@ -6,18 +6,17 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_EntityManager_impl_
-#define _awrts_EntityManager_impl_
-
+#ifndef _aw_EntityManager_impl_
+#define _aw_EntityManager_impl_
 #include <vector>
 #include <deque>
 
-#include <awrts/math/Vector3d.h>
+#include <aw/math/Vector3d.h>
 
 #include <awrts/game/Entity.h>
 #include <awrts/game/EntityManager.h>
 
-namespace awrts {
+namespace aw {
 namespace game {
 namespace impl_ {
 class EntityManager : public game::EntityManager {
@@ -53,5 +52,5 @@ private:
 };
 } // namespace impl_
 } // namespace game
-} // namespace awrts
-#endif//_awrts_EntityManager_impl_
+} // namespace aw
+#endif//_aw_EntityManager_impl_

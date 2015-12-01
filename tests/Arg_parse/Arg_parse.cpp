@@ -8,11 +8,11 @@
  */
 #include <cstdio>
 
-#include <awrts/core/ArgumentParser.h>
+#include <aw/core/ArgumentParser.h>
 
 int main (int, char** v)
 {
-	using namespace awrts;
+	using namespace aw;
 	core::ArgumentParser* a = core::createArgumentParser(v);
 	core::Argument arg;
 

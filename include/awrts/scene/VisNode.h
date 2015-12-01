@@ -6,12 +6,12 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_VisNode_
-#define _awrts_VisNode_
+#ifndef _aw_VisNode_
+#define _aw_VisNode_
 
-#include <awrts/scene/SceneNode.h>
+#include <aw/scene/SceneNode.h>
 
-namespace awrts {
+namespace aw {
 namespace graphics {
 class Mesh;
 }
@@ -26,5 +26,5 @@ public:
 };
 
 } // namespace scene
-} // namespace awrts
-#endif//_awrts_VisNode_
+} // namespace aw
+#endif//_aw_VisNode_

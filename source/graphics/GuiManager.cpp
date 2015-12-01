@@ -13,7 +13,7 @@
 
 #include <Irrlicht/IGUIFont.h>
 
-#include <awrts/gui/GUIElement.h>
+#include <aw/gui/GUIElement.h>
 
 #include "InputManager.h"
 #include "GuiManager.h"
@@ -21,7 +21,7 @@
 #include "GUITextBox.h"
 #include "GUIListBox.h"
 
-namespace awrts {
+namespace aw {
 namespace gui {
 
 GUIManager_::GUIManager_(irr::gui::IGUIEnvironment* guienv,
@@ -111,4 +111,4 @@ GUIListBox* GUIManager_::addListBox(Rect<i32> rect, bool background, GUIElement*
 }
 
 } // namespace gui
-} // namespace awrts
+} // namespace aw

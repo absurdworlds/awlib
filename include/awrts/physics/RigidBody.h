@@ -6,13 +6,13 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_RigidBody_
-#define _awrts_RigidBody_
+#ifndef _aw_RigidBody_
+#define _aw_RigidBody_
 
-#include <awrts/physics/CollisionObject.h>
-#include <awrts/physics/MotionState.h>
+#include <aw/physics/CollisionObject.h>
+#include <aw/physics/MotionState.h>
 
-namespace awrts {
+namespace aw {
 namespace physics {
 /*!
  * Represents a rigid physical body
@@ -85,5 +85,5 @@ public:
 };
 
 } // namespace physics
-} // namespace awrts
-#endif//_awrts_RigidBody_
+} // namespace aw
+#endif//_aw_RigidBody_

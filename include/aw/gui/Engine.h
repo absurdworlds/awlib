@@ -7,12 +7,12 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_GUI_skin_
-#define _awrts_GUI_skin_
-#include <awengine/gui/Element.h>
-#include <awengine/math/Rect.h>
+#ifndef _aw_GUI_skin_
+#define _aw_GUI_skin_
+#include <aw/gui/Element.h>
+#include <aw/math/Rect.h>
 
-namespace awrts {
+namespace aw {
 namespace gui {
 class Border;
 class Background;
@@ -27,5 +27,5 @@ public:
 	                            Background* style) = 0;
 };
 } // namespace gui
-} // namespace awrts
-#endif //_awrts_GUI_skin_
+} // namespace aw
+#endif //_aw_GUI_skin_

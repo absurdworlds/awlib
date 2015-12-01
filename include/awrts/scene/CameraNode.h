@@ -6,14 +6,14 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_CameraNode_
-#define _awrts_CameraNode_
+#ifndef _aw_CameraNode_
+#define _aw_CameraNode_
 
-#include <awrts/math/Line3d.h>
+#include <aw/math/Line3d.h>
 
-#include <awrts/scene/SceneNode.h>
+#include <aw/scene/SceneNode.h>
 
-namespace awrts {
+namespace aw {
 namespace scene {
 //! Scene node which is a camera, scene is rendered from active camera's POV
 class CameraNode : public Node {
@@ -43,5 +43,5 @@ public:
 };
 
 } // namespace scene
-} // namespace awrts
-#endif//_awrts_CameraNode_
+} // namespace aw
+#endif//_aw_CameraNode_

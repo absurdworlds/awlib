@@ -6,17 +6,17 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_Model_
-#define _awrts_Model_
+#ifndef _aw_Model_
+#define _aw_Model_
 #include <vector>
-#include <awengine/core/models.h>
+#include <aw/core/models.h>
 
-namespace awrts {
+namespace aw {
 
 class Model {
 public:
 	std::vector<Primitive> primitives;
 };
 
-} // namespace awrts
-#endif//_awrts_Model_
+} // namespace aw
+#endif//_aw_Model_

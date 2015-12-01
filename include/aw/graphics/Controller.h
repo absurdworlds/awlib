@@ -6,10 +6,10 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_Controller_
-#define _awrts_Controller_
+#ifndef _aw_Controller_
+#define _aw_Controller_
 
-namespace awrts {
+namespace aw {
 namespace graphics {
 //! Class used to control scene node behavior
 class Controller {
@@ -23,5 +23,5 @@ public:
 };
 
 } // namespace graphics
-} // namespace awrts
-#endif//_awrts_Controller_
+} // namespace aw
+#endif//_aw_Controller_

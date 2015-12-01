@@ -7,14 +7,14 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_ArgumentParser_
-#define _awrts_ArgumentParser_
+#ifndef _aw_ArgumentParser_
+#define _aw_ArgumentParser_
 #include <string>
 
-#include <awengine/core/core.h>
-#include <awengine/common/types.h>
+#include <aw/core/core.h>
+#include <aw/common/types.h>
 
-namespace awrts {
+namespace aw {
 namespace core {
 /*!
  * Command line argument,
@@ -62,5 +62,5 @@ public:
 AW_CORE_EXP ArgumentParser* createArgumentParser (char** argv);
 
 } //namespace core
-} //namespace awrts
-#endif//_awrts_ArgumentParser_
+} //namespace aw
+#endif//_aw_ArgumentParser_

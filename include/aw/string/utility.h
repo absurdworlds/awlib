@@ -7,17 +7,17 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_stringutils_
-#define _awrts_stringutils_
+#ifndef _aw_stringutils_
+#define _aw_stringutils_
 #include <cstring>
 
 #include <string>
 #include <vector>
 #include <algorithm>
 
-#include <awengine/core/core.h>
+#include <aw/core/core.h>
 
-namespace awrts {
+namespace aw {
 //! Generic strlen
 template<typename char_type>
 size_t strlen_g(char_type const* str)
@@ -133,5 +133,5 @@ explode(std::string const& source, std::string const& delim)
 	return holder;
 }
 } // namespace string
-} // namespace awrts
-#endif //_awrts_stringutils_
+} // namespace aw
+#endif //_aw_stringutils_

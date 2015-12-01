@@ -6,13 +6,13 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#include <awengine/core/Logger.h>
+#include <aw/core/Logger.h>
 
-#include <awengine/gui/Window.h>
-#include <awengine/gui/Visitor.h>
-#include <awengine/gui/Style.h>
+#include <aw/gui/Window.h>
+#include <aw/gui/Visitor.h>
+#include <aw/gui/Style.h>
 
-namespace awrts {
+namespace aw {
 namespace gui {
 bool Window::onEvent(Event* event)
 {
@@ -194,4 +194,4 @@ void Window::move(Vector2d<f32> delta)
 	// TODO: check if within the parent's rectangle
 }*/
 } // namespace gui
-} // namespace awrts
+} // namespace aw

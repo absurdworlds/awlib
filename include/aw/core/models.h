@@ -6,12 +6,12 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_models_
-#define _awrts_models_
-#include <awengine/common/types.h>
-#include <awengine/math/Vector3d.h>
+#ifndef _aw_models_
+#define _aw_models_
+#include <aw/common/types.h>
+#include <aw/math/Vector3d.h>
 
-namespace awrts {
+namespace aw {
 //! Enumeration of primitive shapes
 enum Shape {
 	SHAPE_EMPTY,
@@ -50,5 +50,5 @@ struct Mesh {
 	f32* verts;
 };
 
-} // namespace awrts
-#endif//_awrts_models_
+} // namespace aw
+#endif//_aw_models_

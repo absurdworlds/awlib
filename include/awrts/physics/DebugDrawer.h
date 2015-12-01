@@ -6,15 +6,15 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_DebugDrawer_
-#define _awrts_DebugDrawer_
+#ifndef _aw_DebugDrawer_
+#define _aw_DebugDrawer_
 
-#include <awrts/common/hidden_impl.h>
+#include <aw/common/hidden_impl.h>
 
-//#include <awrts/graphics/Renderable.h>
-#include <awrts/graphics/RenderingDevice.h>
+//#include <aw/graphics/Renderable.h>
+#include <aw/graphics/RenderingDevice.h>
 
-namespace awrts {
+namespace aw {
 namespace physics {
 class PhysicsWorld;
 
@@ -29,5 +29,5 @@ public:
 };
 
 } // namespace graphics
-} // namespace awrts
-#endif //_awrts_DebugDrawer_
+} // namespace aw
+#endif //_aw_DebugDrawer_

@@ -6,12 +6,12 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef awrts_ToIrr_Rect__
-#define awrts_ToIrr_Rect__
+#ifndef aw_ToIrr_Rect__
+#define aw_ToIrr_Rect__
 #include <Irrlicht/rect.h>
-#include <awengine/math/Rect.h>
+#include <aw/math/Rect.h>
 
-namespace awrts {
+namespace aw {
 irr::core::rect<irr::f32> toIrr(Rect<f32> awRect)
 {
 	return irr::core::rect<irr::f32>(
@@ -24,5 +24,5 @@ irr::core::rect<irr::s32> toIrr(Rect<i32> awRect)
 	       awRect.upperLeft.x(),  awRect.upperLeft.y(),
 	       awRect.lowerRight.x(), awRect.lowerRight.y());
 }
-} // namespace awrts
-#endif //awrts_ToIrr_Rect__
+} // namespace aw
+#endif //aw_ToIrr_Rect__

@@ -9,9 +9,9 @@
 #include <unistd.h>
 #include <sys/stat.h>
 
-#include <awengine/io/filesystem.h>
+#include <aw/io/filesystem.h>
 
-namespace awrts {
+namespace aw {
 namespace io {
 
 i32 fileStat (std::string const& path, FileInfo& result)
@@ -54,4 +54,4 @@ i32 checkFile(std::string const& path, FileAccess fmode)
 	return status;
 }
 } // namespace io
-} // namespace awrts
+} // namespace aw

@@ -6,13 +6,13 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_RayResultCallback_
-#define _awrts_RayResultCallback_
+#ifndef _aw_RayResultCallback_
+#define _aw_RayResultCallback_
 
-#include <awrts/physics/CollisionObject.h>
-#include <awrts/physics/BroadphaseProxy.h>
+#include <aw/physics/CollisionObject.h>
+#include <aw/physics/BroadphaseProxy.h>
 
-namespace awrts {
+namespace aw {
 namespace physics {
 /*!
  * Structure for storing raytest result
@@ -85,5 +85,5 @@ public:
 };
 
 } // namespace graphics
-} // namespace awrts
-#endif //_awrts_RayResultCallback_
+} // namespace aw
+#endif //_aw_RayResultCallback_

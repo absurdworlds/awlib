@@ -6,11 +6,11 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_SoundSample_
-#define _awrts_SoundSample_
-#include <awengine/common/types.h>
+#ifndef _aw_SoundSample_
+#define _aw_SoundSample_
+#include <aw/common/types.h>
 
-namespace awrts {
+namespace aw {
 namespace audio {
 
 struct SoundSample {
@@ -22,5 +22,5 @@ struct SoundSample {
 };
 
 } // namespace audio
-} // namespace awrts
-#endif//_awrts_SoundSample_
+} // namespace aw
+#endif//_aw_SoundSample_

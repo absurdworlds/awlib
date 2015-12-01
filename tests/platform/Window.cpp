@@ -9,9 +9,9 @@
  */
 #include <memory>
 
-#include <awrts/platform/Window.h>
+#include <aw/platform/Window.h>
 
-using namespace awrts::platform;
+using namespace aw::platform;
 
 int main()
 {

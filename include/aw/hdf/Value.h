@@ -7,20 +7,20 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_hdf_value_
-#define _awrts_hdf_value_
+#ifndef _aw_hdf_value_
+#define _aw_hdf_value_
 #include <cstring>
 
 #include <string>
 
-#include <awengine/common/types.h>
-#include <awengine/math/Vector2d.h>
-#include <awengine/math/Vector3d.h>
-#include <awengine/math/Vector4d.h>
+#include <aw/common/types.h>
+#include <aw/math/Vector2d.h>
+#include <aw/math/Vector3d.h>
+#include <aw/math/Vector4d.h>
 
-#include <awengine/hdf/Type.h>
+#include <aw/hdf/Type.h>
 
-namespace awrts {
+namespace aw {
 namespace hdf {
 //! Class for holding any HDF Value.
 class Value {
@@ -260,5 +260,5 @@ inline std::string as_string(hdf::Value const& val)
 
 	return "null";
 }
-} // namespace awrts
-#endif//_awrts_hdf_value_
+} // namespace aw
+#endif//_aw_hdf_value_

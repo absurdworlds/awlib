@@ -6,12 +6,12 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_default_texture_
-#define _awrts_default_texture_
+#ifndef _aw_default_texture_
+#define _aw_default_texture_
 
-#include <awrts/common/types.h>
+#include <aw/common/types.h>
 
-namespace awrts {
+namespace aw {
 //! default texture in png format, which is used when requested one is absent
 const u8 default_texture[] = {
 	137,80,78,71,13,10,26,10,0,0,0,13,73,72,68,82,0,0,0,64,0,0,0,64,1,3,0,
@@ -28,5 +28,5 @@ const u8 default_texture[] = {
 	0,0,0,73,69,78,68,174,66,96,130
 };
 
-} // namespace awrts 
-#endif//_awrts_default_texture_
+} // namespace aw 
+#endif//_aw_default_texture_

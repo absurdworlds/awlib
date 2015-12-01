@@ -6,10 +6,10 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_SceneManager_
-#define _awrts_SceneManager_
+#ifndef _aw_SceneManager_
+#define _aw_SceneManager_
 
-namespace awrts {
+namespace aw {
 class Entity;
 namespace graphics {
 class Mesh;
@@ -43,5 +43,5 @@ public:
 };
 
 } // namespace scene
-} // namespace awrts
-#endif//_awrts_SceneManager_
+} // namespace aw
+#endif//_aw_SceneManager_

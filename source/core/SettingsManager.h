@@ -6,15 +6,15 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_SettingsManager_impl_
-#define _awrts_SettingsManager_impl_
+#ifndef _aw_SettingsManager_impl_
+#define _aw_SettingsManager_impl_
 #include <map>
 
-#include <awengine/hdf/Value.h>
+#include <aw/hdf/Value.h>
 
-#include <awengine/core/SettingsManager.h>
+#include <aw/core/SettingsManager.h>
 
-namespace awrts {
+namespace aw {
 namespace core {
 namespace impl_ {
 // Implementation of core::SettingsManager interface
@@ -50,5 +50,5 @@ private:
 
 } // namespace impl_
 } // namespace core
-} // namespace awrts
-#endif//_awrts_SettingsManager_impl_
+} // namespace aw
+#endif//_aw_SettingsManager_impl_

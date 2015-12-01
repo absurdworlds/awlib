@@ -8,11 +8,11 @@
  */
 #include <cstdio>
 
-#include <awrts/core/ArgParser.h>
+#include <aw/core/ArgParser.h>
 
 #include "hpacker.h"
 
-namespace awrts {
+namespace aw {
 namespace itd {
 void printUsage()
 {
@@ -89,9 +89,9 @@ i32 main (char** args)
 }
 
 } // namespace itd
-} // namespace awrts
+} // namespace aw
 
 int main (int, char** argv)
 {
-	return awrts::itd::main(argv);
+	return aw::itd::main(argv);
 }

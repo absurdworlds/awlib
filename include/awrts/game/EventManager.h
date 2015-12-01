@@ -6,13 +6,12 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_EventManager_
-#define _awrts_EventManager_
-
-#include <awrts/common/types.h>
+#ifndef _aw_EventManager_
+#define _aw_EventManager_
+#include <aw/common/types.h>
 #include <awrts/game/game.h>
 
-namespace awrts {
+namespace aw {
 namespace game {
 class Thinking;
 typedef void (*EventCallback) (u32);
@@ -37,8 +36,8 @@ class EventManager {
 		virtual void advance() = 0;
 };
 
-HR_GAME_EXP EventManager* createEventManager();
+AW_GAME_EXP EventManager* createEventManager();
 
 } // namespace game
-} // namespace awrts
-#endif//_awrts_EventManager_
+} // namespace aw
+#endif//_aw_EventManager_

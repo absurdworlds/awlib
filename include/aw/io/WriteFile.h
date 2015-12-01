@@ -6,11 +6,11 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_WriteFile_
-#define _awrts_WriteFile_
-#include <awengine/io/File.h>
+#ifndef _aw_WriteFile_
+#define _aw_WriteFile_
+#include <aw/io/File.h>
 
-namespace awrts {
+namespace aw {
 namespace io {
 /*!
  * Class provides interface for writing into files
@@ -43,5 +43,5 @@ public:
 };
 
 } // namespace io
-} // namespace awrts
-#endif//_awrts_WriteFile_
+} // namespace aw
+#endif//_aw_WriteFile_

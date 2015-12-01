@@ -8,9 +8,9 @@
  */
 #include "EntityManager.h"
 
-namespace awrts {
+namespace aw {
 namespace game {
-HR_GAME_EXP EntityManager* createEntityManager()
+AW_GAME_EXP EntityManager* createEntityManager()
 {
 	return new impl_::EntityManager();
 }
@@ -47,4 +47,4 @@ void EntityManager::deleteEntity(u32 entid)
 }
 } // namespace impl_
 } // namespace game
-} // namespace awrts
+} // namespace aw

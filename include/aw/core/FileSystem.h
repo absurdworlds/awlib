@@ -6,18 +6,18 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_FileSystem_
-#define _awrts_FileSystem_
+#ifndef _aw_FileSystem_
+#define _aw_FileSystem_
 
-#include <awrts/core/core.h>
+#include <aw/core/core.h>
 
-namespace awrts {
+namespace aw {
 namespace io {
 class FileParser;
 class ReadFile;
 class WriteFile;
 
-//! Vitual filesystem, for transparent access to awrts archives
+//! Vitual filesystem, for transparent access to aw archives
 class FileSystem {
 public:
 	ReadFile& openFileRead(char* path);
@@ -27,5 +27,5 @@ public:
 HR_CORE_EXP FileSystem* initFilesystem();
 
 } // namespace io
-} // namespace awrts
-#endif//_awrts_FileSystem_
+} // namespace aw
+#endif//_aw_FileSystem_

@@ -6,20 +6,20 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_CollisionPhantom_impl_
-#define _awrts_CollisionPhantom_impl_
+#ifndef _aw_CollisionPhantom_impl_
+#define _aw_CollisionPhantom_impl_
 
 #include <Bullet/btBulletDynamicsCommon.h>
 #include <Bullet/btBulletCollisionCommon.h>
 
-#include <awrts/common/types.h>
-#include <awrts/game/Entity.h>
-#include <awrts/physics/CollisionPhantom.h>
-//#include <awrts/physics/PhysicsManager.h>
+#include <aw/common/types.h>
+#include <aw/game/Entity.h>
+#include <aw/physics/CollisionPhantom.h>
+//#include <aw/physics/PhysicsManager.h>
 
 #include "CollisionObject.h"
 
-namespace awrts {
+namespace aw {
 namespace physics {
 namespace bullet {
 
@@ -42,5 +42,5 @@ protected:
 };
 } // namespace bullet
 } // namespace physics
-} // namespace awrts
-#endif//_awrts_CollisionPhantom_impl_
+} // namespace aw
+#endif//_aw_CollisionPhantom_impl_

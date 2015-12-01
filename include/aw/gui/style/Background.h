@@ -6,14 +6,14 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_GUI_Background_
-#define _awrts_GUI_Background_
+#ifndef _aw_GUI_Background_
+#define _aw_GUI_Background_
 #include <string>
 
-#include <awengine/graphics/Color.h>
-#include <awengine/gui/style/Shared.h>
+#include <aw/graphics/Color.h>
+#include <aw/gui/style/Shared.h>
 
-namespace awrts {
+namespace aw {
 namespace gui {
 class BackgroundNone;
 class BackgroundSolid;
@@ -153,5 +153,5 @@ private:
 };
 
 } // namespace gui
-} // namespace awrts
-#endif //_awrts_GUI_Background_
+} // namespace aw
+#endif //_aw_GUI_Background_

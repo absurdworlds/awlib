@@ -6,10 +6,10 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_Keycodes_
-#define _awrts_Keycodes_
+#ifndef _aw_Keycodes_
+#define _aw_Keycodes_
 
-namespace awrts {
+namespace aw {
 
 //! Key code definitions (for future use)
 enum class _KeyCode : u8 {
@@ -249,5 +249,5 @@ enum KeyCode {
 	KEY_PERIOD           = 0xBE,  // Period Key "."
 };
 
-} // namespace awrts
-#endif //_awrts_Keycodes_
+} // namespace aw
+#endif //_aw_Keycodes_

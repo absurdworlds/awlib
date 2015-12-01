@@ -8,11 +8,11 @@
  */
 #include <string>
 
-#include <awrts/scene/IVisNode.h>
+#include <aw/scene/IVisNode.h>
 
 #include "game.h"
 
-namespace awrts {
+namespace aw {
 namespace example {
 
 i32 start (std::string)
@@ -40,7 +40,7 @@ i32 start (std::string)
 }
 
 } // namespace example
-} // namespace awrts
+} // namespace aw
 
 //! Collect arguments into string
 std::string collect (unsigned int c, char** v)
@@ -65,6 +65,6 @@ int main (int c, char** v)
 	int err = -1;
 	std::string arguments = collect(c, v);
 
-	err = awrts::example::start(arguments);
+	err = aw::example::start(arguments);
 	return 0;
 }

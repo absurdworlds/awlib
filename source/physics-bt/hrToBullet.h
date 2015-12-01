@@ -6,15 +6,15 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_hrToBullet_
-#define _awrts_hrToBullet_
+#ifndef _aw_hrToBullet_
+#define _aw_hrToBullet_
 
 #include <Bullet/btBulletDynamicsCommon.h>
 #include <Bullet/btBulletCollisionCommon.h>
 
-#include <awrts/math/Vector3d.h>
+#include <aw/math/Vector3d.h>
 
-namespace awrts {
+namespace aw {
 namespace physics {
 
 inline Vector3d<f32> toHrengin(btVector3 const& btVec)
@@ -31,5 +31,5 @@ inline btVector3 toBullet(Vector3d<f32> const& hrVec)
 void quaternionToEuler(btQuaternion const& quat, btVector3& euler);
 
 } // namespace physics
-} // namespace awrts
-#endif //_awrts_hrToBullet_
+} // namespace aw
+#endif //_aw_hrToBullet_

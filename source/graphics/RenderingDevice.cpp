@@ -12,7 +12,7 @@
 
 #include "hrToIrr.h"
 
-namespace awrts {
+namespace aw {
 namespace graphics {
 
 RenderingDevice::RenderingDevice(irr::video::IVideoDriver* driver)
@@ -31,7 +31,7 @@ void RenderingDevice::drawLine(const Vector3d<f32>& from,
 {
 	irr::video::SColor irrcolor(255, irr::u32(color.x), irr::u32(color.y), irr::u32(color.z));
 
-	driver_->draw3DLine(awrts::toIrr(from), hrengin::toIrr(to), irrcolor);
+	driver_->draw3DLine(aw::toIrr(from), hrengin::toIrr(to), irrcolor);
 }
 
 
@@ -55,4 +55,4 @@ bool RenderingDevice::endRender()
 }
 
 } // namespace video
-} // namespace awrts
+} // namespace aw

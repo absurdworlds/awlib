@@ -9,17 +9,17 @@
 #include <Irrlicht/IVideoDriver.h>
 #include <Irrlicht/IGUISkin.h>
 
-#include <awengine/utility/toIrr/color.h>
-#include <awengine/utility/toIrr/rect.h>
+#include <aw/utility/toIrr/color.h>
+#include <aw/utility/toIrr/rect.h>
 
-#include <awengine/core/Logger.h>
+#include <aw/core/Logger.h>
 
-#include <awengine/gui/Canvas.h>
-#include <awengine/gui/Widget.h>
-#include <awengine/gui/Drawer.h>
-#include <awengine/irr/gui/IrrEngine.h>
+#include <aw/gui/Canvas.h>
+#include <aw/gui/Widget.h>
+#include <aw/gui/Drawer.h>
+#include <aw/irr/gui/IrrEngine.h>
 
-namespace awrts {
+namespace aw {
 namespace gui {
 /*
 IrrSkin::~IrrSkin()
@@ -200,4 +200,4 @@ void IrrRenderer::drawTitleBar(irr::core::rect<irr::s32> r)
 	driver->draw2DRectangle(rect, titleBarColor, titleBarColor, c, c);
 }*/
 } // namespace gui
-} // namespace awrts
+} // namespace aw

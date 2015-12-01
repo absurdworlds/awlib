@@ -6,16 +6,16 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_CustomRayCallback_
-#define _awrts_CustomRayCallback_
+#ifndef _aw_CustomRayCallback_
+#define _aw_CustomRayCallback_
 
 #include <btBulletCollisionCommon.h>
 
-#include <awrts/physics/RayResultCallback.h>
+#include <aw/physics/RayResultCallback.h>
 
 #include "hrToBullet.h"
 
-namespace awrts {
+namespace aw {
 namespace physics {
 
 struct CustomClosestHitCallback
@@ -96,6 +96,6 @@ struct RayCallback {
 #endif
 
 } // namespace physics
-} // namespace awrts
+} // namespace aw
 
-#endif //_awrts_CustomRayCallback_
+#endif //_aw_CustomRayCallback_

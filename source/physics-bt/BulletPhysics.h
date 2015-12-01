@@ -6,17 +6,17 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_BulletPhysics_impl_
-#define _awrts_BulletPhysics_impl_
+#ifndef _aw_BulletPhysics_impl_
+#define _aw_BulletPhysics_impl_
 #include <map>
 #include <string>
 
 #include <btBulletDynamicsCommon.h>
 #include <btBulletCollisionCommon.h>
 
-#include <awrts/physics/PhysicsManager.h>
+#include <aw/physics/PhysicsManager.h>
 
-namespace awrts {
+namespace aw {
 struct Primitive;
 struct SMesh;
 
@@ -55,5 +55,5 @@ private:
 };
 
 } // namespace physics
-} // namespace awrts
-#endif//_awrts_BulletPhysics_impl_
+} // namespace aw
+#endif//_aw_BulletPhysics_impl_

@@ -6,19 +6,19 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_SceneNode_
-#define _awrts_SceneNode_
+#ifndef _aw_SceneNode_
+#define _aw_SceneNode_
 
 #include <vector>
 #include <algorithm>
 
-#include <awrts/common/types.h>
+#include <aw/common/types.h>
 
-#include <awrts/math/Vector3d.h>
-#include <awrts/math/Matrix4.h>
-#include <awrts/math/Quaternion.h>
+#include <aw/math/Vector3d.h>
+#include <aw/math/Matrix4.h>
+#include <aw/math/Quaternion.h>
 
-namespace awrts {
+namespace aw {
 namespace scene {
 class Object;
 
@@ -175,5 +175,5 @@ private:
 };
 
 } // namespace scene
-} // namespace awrts
-#endif //_awrts_SceneNode_
+} // namespace aw
+#endif //_aw_SceneNode_

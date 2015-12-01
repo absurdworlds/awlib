@@ -6,14 +6,14 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_filesystem_
-#define _awrts_filesystem_
+#ifndef _aw_filesystem_
+#define _aw_filesystem_
 #include <string>
 
-#include <awengine/common/types.h>
-#include <awengine/platform/platform.h>
+#include <aw/common/types.h>
+#include <aw/platform/platform.h>
 
-namespace awrts {
+namespace aw {
 namespace io {
 /*!
  * File type on a filesystem
@@ -88,5 +88,5 @@ enum FileAccess {
 AW_SYS_EXP i32 checkFile(std::string const & path, FileAccess mode);
 
 } //namespace io
-} //namespace awrts
-#endif//_awrts_filesystem_
+} //namespace aw
+#endif//_aw_filesystem_

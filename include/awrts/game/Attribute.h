@@ -6,12 +6,12 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_attribute_
-#define _awrts_attribute_
+#ifndef _aw_attribute_
+#define _aw_attribute_
 #include <unordered_map>
 #include <memory>
 
-namespace awrts {
+namespace aw {
 class Attribute {
 public:
 	size_t getAttributeTypeCount()
@@ -60,5 +60,5 @@ private:
 	std::unordered_map<size_t, std::unique_ptr<Attribute>> attributes;
 };
 
-} // namespace awrts
-#endif//_awrts_attribute_
+} // namespace aw
+#endif//_aw_attribute_

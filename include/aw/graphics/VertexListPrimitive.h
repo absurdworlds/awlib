@@ -6,14 +6,14 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_VertexListPrimitive_
-#define _awrts_VertexListPrimitive_
+#ifndef _aw_VertexListPrimitive_
+#define _aw_VertexListPrimitive_
 
-#include <awrts/common/types.h>
-#include <awrts/common/Vector3d.h>
-#include <awrts/graphics/Renderable.h>
+#include <aw/common/types.h>
+#include <aw/common/Vector3d.h>
+#include <aw/graphics/Renderable.h>
 
-namespace awrts {
+namespace aw {
 namespace video {
 
 class VertexListPrimitive : IRenderable {
@@ -24,5 +24,5 @@ public:
 
 	
 } // namespace video
-} // namespace awrts
-#endif//_awrts_VertexListPrimitive_
+} // namespace aw
+#endif//_aw_VertexListPrimitive_

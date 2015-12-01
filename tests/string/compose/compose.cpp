@@ -1,11 +1,11 @@
 #include <stdio.h>
 #include <utility>
 
-#include <awengine/string/compose.h>
+#include <aw/string/compose.h>
 
 int main (int c, char** a)
 {
-	using namespace awrts::string;
+	using namespace aw::string;
 
 	if (c < 3) {
 		return 1;

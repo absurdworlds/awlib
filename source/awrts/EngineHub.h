@@ -7,11 +7,11 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_EngineHub_
-#define _awrts_EngineHub_
+#ifndef _aw_EngineHub_
+#define _aw_EngineHub_
 #include <memory>
 
-namespace awrts {
+namespace aw {
 namespace core {
 class Logger
 class SettingsManager
@@ -69,5 +69,5 @@ struct EngineHub {
 	void initGUI();
 	void initGame();
 };
-} // namespace awrts
-#endif//_awrts_EngineHub_
+} // namespace aw
+#endif//_aw_EngineHub_

@@ -6,15 +6,15 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_EventManager_impl_
-#define _awrts_EventManager_impl_
+#ifndef _aw_EventManager_impl_
+#define _aw_EventManager_impl_
 #include <vector>
 
-#include <awrts/platform/time.h>
+#include <aw/platform/time.h>
 #include <awrts/game/EventManager.h>
 #include <awrts/game/Thinking.h>
 
-namespace awrts {
+namespace aw {
 namespace game {
 namespace impl_ {
 class EventManager : public game::EventManager {
@@ -39,5 +39,6 @@ private:
 
 } // namespace impl_
 } // namespace game
-} // namespace awrts
-#endif//_awrts_EventManager_impl_
+} // namespace aw
+#endif//_aw_EventManager_impl_
+

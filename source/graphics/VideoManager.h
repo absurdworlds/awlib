@@ -6,17 +6,17 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_VideoManager_
-#define _awrts_VideoManager_
+#ifndef _aw_VideoManager_
+#define _aw_VideoManager_
 
 #include <vector>
 
-#include <awrts/gui/GUIManager.h>
+#include <aw/gui/GUIManager.h>
 
-#include <awrts/scene/SceneManager.h>
+#include <aw/scene/SceneManager.h>
 
-#include <awrts/graphics/VideoManager.h>
-#include <awrts/graphics/RenderingDevice.h>
+#include <aw/graphics/VideoManager.h>
+#include <aw/graphics/RenderingDevice.h>
 
 #include "VisNode.h"
 
@@ -32,7 +32,7 @@ class SceneCollisionManager;
 }
 } // namespace irr
 
-namespace awrts {
+namespace aw {
 namespace gui {
 class GUIManager;
 }
@@ -66,5 +66,5 @@ private:
 };
 
 } // namespace graphics
-} // namespace awrts
-#endif//_awrts_VideoManager_
+} // namespace aw
+#endif//_aw_VideoManager_

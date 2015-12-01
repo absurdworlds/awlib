@@ -6,14 +6,14 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_BroadphaseProxy_
-#define _awrts_BroadphaseProxy_
+#ifndef _aw_BroadphaseProxy_
+#define _aw_BroadphaseProxy_
 
-#include <awrts/common/types.h>
+#include <aw/common/types.h>
 
-#include <awrts/physics/CollisionFilter.h>
+#include <aw/physics/CollisionFilter.h>
 
-namespace awrts {
+namespace aw {
 namespace physics {
 
 /* This class is used to access broadphase information */
@@ -43,5 +43,5 @@ struct BroadphaseProxy {
 };
 
 } // namespace physics
-} // namespace awrts
-#endif//_awrts_BroadphaseProxy_
+} // namespace aw
+#endif//_aw_BroadphaseProxy_

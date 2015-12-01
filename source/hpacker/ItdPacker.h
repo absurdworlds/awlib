@@ -6,17 +6,17 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_ItdPacker_
-#define _awrts_ItdPacker_
+#ifndef _aw_ItdPacker_
+#define _aw_ItdPacker_
 #include <string>
 #include <vector>
 #include <fstream>
 
-#include <awrts/common/types.h>
-#include <awrts/itd/itd.h>
-#include <awrts/itd/HPKIndexWriter.h>
+#include <aw/common/types.h>
+#include <aw/itd/itd.h>
+#include <aw/itd/HPKIndexWriter.h>
 
-namespace awrts {
+namespace aw {
 namespace itd {
 
 class ItdPacker {
@@ -56,5 +56,5 @@ private:
 
 };
 } // namespace itd
-} // namespace awrts
-#endif//_awrts_ItdPacker_
+} // namespace aw
+#endif//_aw_ItdPacker_

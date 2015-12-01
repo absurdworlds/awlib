@@ -9,11 +9,11 @@
 #include <iostream>
 #include <sys/stat.h>
 
-#include <awengine/core/Logger.h>
+#include <aw/core/Logger.h>
 
 #include "Directory.h"
 
-namespace awrts {
+namespace aw {
 namespace io {
 
 Directory* openDirectory (std::string path)
@@ -123,4 +123,4 @@ std::string const& Directory::getPath () const
 }
 } // namespace impl_
 } // namespace io
-} // namespace awrts
+} // namespace aw

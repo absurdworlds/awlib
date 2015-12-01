@@ -10,12 +10,12 @@
 #include <cassert>
 #include <cstdio>
 
-#include <awengine/io/InputStream.h>
-#include <awengine/string/compose.h>
+#include <aw/io/InputStream.h>
+#include <aw/string/compose.h>
 
 #include "Lexer.h"
 
-namespace awrts {
+namespace aw {
 namespace hdf {
 bool in (char c, char c1)
 {
@@ -236,4 +236,4 @@ void Lexer::error(std::string msg)
 	printf("[HDF:%u]: %s\n", stream.getPos(), msg.c_str());
 }
 } // namespace hdf
-} // namespace awrts
+} // namespace aw

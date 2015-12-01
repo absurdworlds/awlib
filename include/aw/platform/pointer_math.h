@@ -6,12 +6,12 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_pointer_math_
-#define _awrts_pointer_math_
+#ifndef _aw_pointer_math_
+#define _aw_pointer_math_
 
-#include <awrts/common/types.h>
+#include <aw/common/types.h>
 
-namespace awrts {
+namespace aw {
 
 /*! Align the address to N (power of 2) byte boundry, rounded up */
 inline void* alignUp(void* addr, u8 align)
@@ -25,5 +25,5 @@ inline void* alignDown(void* addr, u8 align)
 	return (void *)((u8*)(addr) & ~(u8*)(align - 1));
 }
 
-} // namespace awrts
-#endif//_awrts_pointer_math_
+} // namespace aw
+#endif//_aw_pointer_math_

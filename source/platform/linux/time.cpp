@@ -8,10 +8,10 @@
  */
 #include <time.h>
 
-#include <awengine/platform/time.h>
-#include <awengine/platform/platform.h>
+#include <aw/platform/time.h>
+#include <aw/platform/platform.h>
 
-namespace awrts {
+namespace aw {
 //! Get clock resolution, in nanoseconds
 u32 getClockResolution()
 {
@@ -38,4 +38,4 @@ AW_SYS_EXP u32 getTime()
 	}
 	return 0;
 }
-} // namespace awrts
+} // namespace aw

@@ -6,11 +6,11 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_BufferedStream_
-#define _awrts_BufferedStream_
-#include <awengine/io/InputStream.h>
+#ifndef _aw_BufferedStream_
+#define _aw_BufferedStream_
+#include <aw/io/InputStream.h>
 
-namespace awrts {
+namespace aw {
 namespace io {
 class ReadFile;
 
@@ -57,5 +57,5 @@ private:
 };
 
 } //namespace io
-} //namespace awrts
-#endif//_awrts_BufferedStream_
+} //namespace aw
+#endif//_aw_BufferedStream_

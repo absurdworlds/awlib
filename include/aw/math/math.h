@@ -7,9 +7,8 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_math_
-#define _awrts_math_
-
+#ifndef _aw_math_
+#define _aw_math_
 #include <math.h>
 #include <stdlib.h>
 #include <limits.h>
@@ -17,10 +16,10 @@
 
 #include <algorithm>
 
-#include <awengine/utility/macro.h>
-#include <awengine/common/types.h>
+#include <aw/utility/macro.h>
+#include <aw/common/types.h>
 
-namespace awrts {
+namespace aw {
 namespace math {
 
 //! π (mathematical constant)
@@ -235,5 +234,5 @@ inline u64 rotl64 (u64 x, i8 r)
 #endif
 
 } //namespace math
-} //namespace awrts
-#endif //_awrts_math_
+} //namespace aw
+#endif //_aw_math_

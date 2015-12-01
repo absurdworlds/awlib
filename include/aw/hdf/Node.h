@@ -6,16 +6,16 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_hdf_node_
-#define _awrts_hdf_node_
+#ifndef _aw_hdf_node_
+#define _aw_hdf_node_
 #include <vector>
 #include <string>
 #include <algorithm>
 
-#include <awengine/string/utility.h>
-#include <awengine/hdf/Value.h>
+#include <aw/string/utility.h>
+#include <aw/hdf/Value.h>
 
-namespace awrts {
+namespace aw {
 namespace hdf {
 template <typename Node, bool strict = false>
 class List : std::vector<std::pair<std::string, Node>> {
@@ -177,5 +177,5 @@ public:
 	}
 };
 } // namespace hdf
-} // namespace awrts
-#endif//_awrts_hdf_node_
+} // namespace aw
+#endif//_aw_hdf_node_

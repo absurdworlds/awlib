@@ -7,15 +7,15 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awengine_File_
-#define _awengine_File_
+#ifndef _aw_File_
+#define _aw_File_
 #include <string>
 #include <memory>
 
-#include <awengine/io/io.h>
-#include <awengine/common/types.h>
+#include <aw/io/io.h>
+#include <aw/common/types.h>
 
-namespace awrts {
+namespace aw {
 namespace io {
 enum class SeekMode {
 	Set,
@@ -93,5 +93,5 @@ private:
 	std::unique_ptr<Details> details;
 };
 } // namespace io
-} // namespace awrts
-#endif//_awengine_File_
+} // namespace aw
+#endif//_aw_File_

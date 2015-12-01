@@ -6,12 +6,12 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_hrToIrr_
-#define _awrts_hrToIrr_
+#ifndef _aw_hrToIrr_
+#define _aw_hrToIrr_
 #include <irrlicht/vector3d.h>
-#include <awengine/math/Vector3d.h>
+#include <aw/math/Vector3d.h>
 
-namespace awrts {
+namespace aw {
 inline Vector3d<f32> toAW(irr::core::vector3df const& irrVec)
 {
 	return Vector3d<f32>(irrVec.X, irrVec.Y, irrVec.Z);
@@ -31,5 +31,5 @@ inline irr::core::vector3di toIrr(Vector3d<i32> const& awVec)
 {
 	return irr::core::vector3di(awVec.x,awVec.y,awVec.z);
 }
-} // namespace awrts
-#endif//_awrts_hrToIrr_
+} // namespace aw
+#endif//_aw_hrToIrr_

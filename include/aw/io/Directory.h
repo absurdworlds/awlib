@@ -6,15 +6,15 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_Directory_
-#define _awrts_Directory_
+#ifndef _aw_Directory_
+#define _aw_Directory_
 #include <string>
 
-#include <awengine/io/io.h>
-#include <awengine/io/filesystem.h>
-#include <awengine/common/types.h>
+#include <aw/io/io.h>
+#include <aw/io/filesystem.h>
+#include <aw/common/types.h>
 
-namespace awrts {
+namespace aw {
 namespace io {
 /*!
  * Struct, which represents directory entry.
@@ -54,5 +54,5 @@ public:
 
 AW_IO_EXP Directory* openDirectory(std::string path);
 } // namespace io
-} // namespace awrts
-#endif //_awrts_Directory_
+} // namespace aw
+#endif //_aw_Directory_

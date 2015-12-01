@@ -7,10 +7,10 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_range_adaptors_
-#define _awrts_range_adaptors_
+#ifndef _aw_range_adaptors_
+#define _aw_range_adaptors_
 #include <iterator>
-namespace awrts {
+namespace aw {
 template <typename T>
 struct reverse_adapter {
 	reverse_adapter(T& range)
@@ -36,5 +36,5 @@ reverse_adapter<T> make_reverse(T&& container)
 {
 	return reverse_adapter<T> (container);
 }
-} // namespace awrts
-#endif//_awrts_range_adaptors_
+} // namespace aw
+#endif//_aw_range_adaptors_

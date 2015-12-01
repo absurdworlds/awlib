@@ -6,14 +6,14 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_utf_
-#define _awrts_utf_
+#ifndef _aw_utf_
+#define _aw_utf_
 
-#include <awengine/common/types.h>
-#include <awengine/utility/macro.h>
-#include <awengine/math/math.h>
+#include <aw/common/types.h>
+#include <aw/utility/macro.h>
+#include <aw/math/math.h>
 
-namespace awrts {
+namespace aw {
 namespace locale {
 //! Enumeration of 'special' unicode codepoints
 enum class CodePoint : u32 {
@@ -290,5 +290,5 @@ inline u32 get_unchecked(Iterator& input, Iterator end)
 } // namespace utf16
 
 } // namespace locale
-} // namespace awrts
-#endif//_awrts_utf_
+} // namespace aw
+#endif//_aw_utf_

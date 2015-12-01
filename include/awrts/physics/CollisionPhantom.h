@@ -6,12 +6,12 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_PhysicsPhantom_
-#define _awrts_PhysicsPhantom_
+#ifndef _aw_PhysicsPhantom_
+#define _aw_PhysicsPhantom_
 
-#include <awrts/physics/CollisionObject.h>
+#include <aw/physics/CollisionObject.h>
 
-namespace awrts {
+namespace aw {
 namespace physics {
 
 class CollisionPhantom : public CollisionObject {
@@ -20,5 +20,5 @@ protected:
 };
 
 } // namespace physics
-} // namespace awrts
-#endif//_awrts_PhysicsPhantom_
+} // namespace aw
+#endif//_aw_PhysicsPhantom_

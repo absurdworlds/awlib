@@ -6,21 +6,20 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_SceneManager_
-#define _awrts_SceneManager_
-
+#ifndef _aw_SceneManager_
+#define _aw_SceneManager_
 #include <vector>
 
-#include <awrts/math/Vector3d.h>
+#include <aw/math/Vector3d.h>
 
-#include <awrts/graphics/RenderingDevice.h>
+#include <aw/graphics/RenderingDevice.h>
 
-#include <awrts/scene/scene.h>
-#include <awrts/scene/SceneManager.h>
-#include <awrts/scene/VisNode.h>
-#include <awrts/scene/CameraNode.h>
-#include <awrts/scene/LightNode.h>
-#include <awrts/scene/EntityNode.h>
+#include <aw/scene/scene.h>
+#include <aw/scene/SceneManager.h>
+#include <aw/scene/VisNode.h>
+#include <aw/scene/CameraNode.h>
+#include <aw/scene/LightNode.h>
+#include <aw/scene/EntityNode.h>
 
 namespace irr {
 class IrrlichtDevice;
@@ -32,7 +31,7 @@ class SceneNode;
 }
 }
 
-namespace awrts {
+namespace aw {
 namespace scene {
 //! Class to manage the scene graph
 class SceneManager : public SceneManager {
@@ -64,5 +63,5 @@ public:
 };
 
 } // namespace graphics
-} // namespace awrts
-#endif//_awrts_SceneManager_
+} // namespace aw
+#endif//_aw_SceneManager_

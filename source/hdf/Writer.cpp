@@ -7,13 +7,13 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#include <awengine/io/WriteStream.h>
-#include <awengine/core/Logger.h>
+#include <aw/io/WriteStream.h>
+#include <aw/core/Logger.h>
 
-#include <awengine/hdf/shared.h>
-#include <awengine/hdf/Writer.h>
+#include <aw/hdf/shared.h>
+#include <aw/hdf/Writer.h>
 
-namespace awrts {
+namespace aw {
 namespace hdf {
 Writer::Writer(io::WriteStream& out)
 	: ostream(out), depth(0), indentation(IndentationStyle::DoubleSpace)
@@ -196,4 +196,4 @@ void Writer::endLine()
 }
 
 } // namespace io
-} // namespace awrts
+} // namespace aw

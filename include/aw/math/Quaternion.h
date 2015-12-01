@@ -6,16 +6,16 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO wARRANTy, to the extent permitted by law.
  */
-#ifndef _awrts_Quaternion_
-#define _awrts_Quaternion_
+#ifndef _aw_Quaternion_
+#define _aw_Quaternion_
 
 //#include <complex>
 
-#include <awengine/math/math.h>
-#include <awengine/math/Vector3d.h>
-#include <awengine/math/Vector4d.h>
+#include <aw/math/math.h>
+#include <aw/math/Vector3d.h>
+#include <aw/math/Vector4d.h>
 
-namespace awrts {
+namespace aw {
 //! Quaternion for representing rotations
 template<typename T>
 class Quaternion {
@@ -368,5 +368,5 @@ Quaternion<T> slerp (Quaternion<T> const& q0, Quaternion<T> const& q1,
 #endif
 }
 
-} // namespace awrts
-#endif//_awrts_Quaternion_
+} // namespace aw
+#endif//_aw_Quaternion_

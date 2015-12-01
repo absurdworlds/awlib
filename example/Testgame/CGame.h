@@ -6,27 +6,27 @@
    This is free software: you are free to change and redistribute it.
    There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_CGame_
-#define _awrts_CGame_
+#ifndef _aw_CGame_
+#define _aw_CGame_
 
-#include <awrts/core/ILogger.h>
-#include <awrts/core/ISettingsManager.h>
-#include <awrts/core/IShell.h>
+#include <aw/core/ILogger.h>
+#include <aw/core/ISettingsManager.h>
+#include <aw/core/IShell.h>
 
-#include <awrts/graphics/IVideoManager.h>
-#include <awrts/graphics/IRenderingDevice.h>
-#include <awrts/gui/IGUIManager.h>
-#include <awrts/gui/IInputManager.h>
-#include <awrts/sound/ISoundManager.h>
+#include <aw/graphics/IVideoManager.h>
+#include <aw/graphics/IRenderingDevice.h>
+#include <aw/gui/IGUIManager.h>
+#include <aw/gui/IInputManager.h>
+#include <aw/sound/ISoundManager.h>
 
-#include <awrts/physics/IPhysicsManager.h>
-#include <awrts/physics/IPhysicsWorld.h>
+#include <aw/physics/IPhysicsManager.h>
+#include <aw/physics/IPhysicsWorld.h>
 
-#include <awrts/scene/ISceneManager.h>
-#include <awrts/game/IEntityManager.h>
-#include <awrts/game/IEventManager.h>
+#include <aw/scene/ISceneManager.h>
+#include <aw/game/IEntityManager.h>
+#include <aw/game/IEventManager.h>
 
-namespace awrts {
+namespace aw {
 namespace example {
 
 class CGame {
@@ -90,5 +90,5 @@ private:
 };
 
 } // namespace example
-} // namespace awrts
-#endif//_awrts_CGame_
+} // namespace aw
+#endif//_aw_CGame_

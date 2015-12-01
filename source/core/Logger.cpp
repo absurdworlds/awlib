@@ -9,7 +9,7 @@
 #include <algorithm>
 #include "Logger.h"
 
-namespace awrts {
+namespace aw {
 namespace core {
 Logger* Logger::globalLogger;
 
@@ -49,4 +49,4 @@ void Logger::unregisterLog(LogBook* log)
 }
 } // namespace impl_
 } // namespace core
-} // namespace awrts
+} // namespace aw

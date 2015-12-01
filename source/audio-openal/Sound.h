@@ -6,17 +6,17 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_Sound_
-#define _awrts_Sound_
+#ifndef _aw_Sound_
+#define _aw_Sound_
 #include <AL/al.h>
 
-#include <awengine/common/types.h>
+#include <aw/common/types.h>
 
-#include <awengine/sound/Sound3D.h>
+#include <aw/sound/Sound3D.h>
 
 #include "ALVector.h"
 
-namespace awrts {
+namespace aw {
 namespace audio {
 
 class Sound : public Sound3D {
@@ -41,5 +41,5 @@ private:
 };
 
 } // namespace audio
-} // namespace awrts
-#endif//_awrts_Sound_
+} // namespace aw
+#endif//_aw_Sound_
