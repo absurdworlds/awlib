@@ -17,57 +17,57 @@ namespace awrts {
  * for other types in their headers.
  */
 
-std::string as_string(int value)
+inline std::string as_string(int value)
 {
 	return std::to_string(value);
 }
 
-std::string as_string(long value)
+inline std::string as_string(long value)
 {
 	return std::to_string(value);
 }
 
-std::string as_string(long long value)
+inline std::string as_string(long long value)
 {
 	return std::to_string(value);
 }
 
-std::string as_string(unsigned value)
+inline std::string as_string(unsigned value)
 {
 	return std::to_string(value);
 }
 
-std::string as_string(unsigned long value)
+inline std::string as_string(unsigned long value)
 {
 	return std::to_string(value);
 }
 
-std::string as_string(unsigned long long value)
+inline std::string as_string(unsigned long long value)
 {
 	return std::to_string(value);
 }
 
-std::string as_string(float value)
+inline std::string as_string(float value)
 {
  	return std::to_string(value);
 }
 
-std::string as_string(double value)
+inline std::string as_string(double value)
 {
 	return std::to_string(value);
 }
 
-std::string as_string(long double value)
+inline std::string as_string(long double value)
 {
 	return std::to_string(value);
 }
 
-std::string as_string(char const* value)
+inline std::string as_string(char const* value)
 {
 	return std::string(value);
 }
 
-std::string as_string(std::string value)
+inline std::string as_string(std::string value)
 {
 	return value;
 }
