@@ -82,8 +82,9 @@ release: CXXFLAGS+=$(CXXFLAGS_RELEASE)
 release: Build
 
 $(BuildDir)/%.o: %.cpp
+	@ echo Building $@
 	@ $(MKDIR_P) $(dir $@)
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $< -o $@
+	@ $(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $< -o $@
 
 .PHONY: directories
 directories: BuildDir InstallDir
@@ -95,12 +96,16 @@ InstallDir:
 	@ $(MKDIR_P) $(InstallDir)
 
 Build: directories $(Objects)
-	$(CXX) $(EXTRAFLAGS) -o $(BuildDir)/$(OutputName) \
+	@ echo Linking object files ...
+	@ $(CXX) $(EXTRAFLAGS) -o $(BuildDir)/$(OutputName) \
 	$(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS) $(Objects)
-	cp $(BuildDir)/$(OutputName) $(InstallDir)/$(OutputName)
+	@ echo Copying output file ...
+	@ cp $(BuildDir)/$(OutputName) $(InstallDir)/$(OutputName)
 ifeq ($(Executable),false)
-	ln -sf $(OutputName) $(InstallDir)/$(OutputShortName)
+	@ echo Adding symlinks ...
+	@ ln -sf $(OutputName) $(InstallDir)/$(OutputShortName)
 endif
+	@ echo Done.
 
 .PHONY : clean
 clean:
