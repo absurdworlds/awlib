@@ -1,16 +1,8 @@
-include ../../Makefile
-# Add paths to dependency headers here
-ExternalIncludes = -I../dependencies/include/
-ExternalLibraries =
-
-# Includes and objects
-Objects = Matrix4_inverse.o
-Includes = -I../../include
+RootPath = ../..
+Sources = Matrix4_inverse.cpp
+# Defines = AW_MODULE_UI
 Libraries =
-Defines = 
+ProjectName = Matrix4_inverse
+Executable = true
 
-Version = $(VersionMajor).$(VersionMinor)
-ExecutableName = matrix4
-Executable = 1
-
-include ../shared.makefile
+include $(RootPath)/Rules.mk
