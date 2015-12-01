@@ -29,7 +29,7 @@ enum IndentationStyle {
 };
 
 //! Interface for writing HDF files. Supports HDF 1.2.0 format.
-class Writer {
+class AW_HDF_EXP Writer {
 public:
 	//! Create writer outputting to \a out.
 	Writer(io::WriteStream& out);
