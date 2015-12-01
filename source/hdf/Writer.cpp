@@ -102,6 +102,7 @@ void Writer::writeValueValue(hdf::Value value)
 {
 	switch (value.getType()) {
 	default:
+		ostream.put(as_string(value));
 		break;
 	case hdf::Type::String:
 		ostream.put('"');
@@ -126,8 +127,6 @@ void Writer::writeValueValue(hdf::Value value)
 		ostream.put('}');
 		break;
 	}
-
-	ostream.put(as_string(value));
 }
 
 /*! Write a comment */
