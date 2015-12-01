@@ -1,3 +1,4 @@
+#
 # Copyright (C) 2015  hedede <haddayn@gmail.com>
 #
 # License LGPLv3 or later:
@@ -48,6 +49,7 @@ ExtraLibraryPaths = $(addprefix -L$(RootPath)/,$(CONFIG_LIBRARY_PATHS))
 
 # Tool configuration
 MKDIR_P = mkdir -p
+ECHO = @echo
 
 CXXFLAGS  = -std=c++14
 CXXFLAGS += -fPIC
@@ -69,11 +71,16 @@ CCFLAGS  += -MMD -MP
 CXXFLAGS += -MMD -MP
 endif
 
+# Colors
+PRINTF = @printf
+PRINTF_BOLD=$(PRINTF) '\033[1m'
+PRINTF_RED=$(PRINTF) '\033[31m'
+PRINTF_RESET=$(PRINTF) '\033[0m'
 
 # Build rules
-all: debug
+all: debug install
 
-.PHONY:
+.PHONY: debug
 debug: CXXFLAGS+=$(CXXFLAGS_DEBUG)
 debug: Build
 
@@ -82,34 +89,49 @@ release: CXXFLAGS+=$(CXXFLAGS_RELEASE)
 release: Build
 
 $(BuildDir)/%.o: %.cpp
-	@ echo Building $@
+	$(PRINTF_BOLD)
+	$(ECHO) [Build] Compiling $@
+	$(PRINTF_RESET)
 	@ $(MKDIR_P) $(dir $@)
 	@ $(CXX) $(CPPFLAGS) $(CXXFLAGS) -c $< -o $@
 
-.PHONY: directories
-directories: BuildDir InstallDir
-
-BuildDir:
+Build: $(Objects)
 	@ $(MKDIR_P) $(BuildDir)
-
-InstallDir:
-	@ $(MKDIR_P) $(InstallDir)
-
-Build: directories $(Objects)
-	@ echo Linking object files ...
+	$(PRINTF_BOLD)
+	$(ECHO) [Build] Linking object files.
+	$(PRINTF_RESET)
 	@ $(CXX) $(EXTRAFLAGS) -o $(BuildDir)/$(OutputName) \
-	$(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS) $(Objects)
-	@ echo Copying output file ...
+	$(CPPFLAGS) $(CXXFLAGS) $(Objects) $(LDFLAGS)
+	$(PRINTF_BOLD)
+	$(ECHO) [Build] Done.
+	$(PRINTF_RESET)
+
+install: Build
+	$(PRINTF_BOLD)
+	$(ECHO) [Install] Copying $(OutputName)
+	$(PRINTF_RESET)
+	@ $(MKDIR_P) $(InstallDir)
 	@ cp $(BuildDir)/$(OutputName) $(InstallDir)/$(OutputName)
 ifeq ($(Executable),false)
-	@ echo Adding symlinks ...
+	$(PRINTF_BOLD)
+	$(ECHO) [Install] Creating symlink $(OutputShortName) to $(OutputName).
+	$(PRINTF_RESET)
 	@ ln -sf $(OutputName) $(InstallDir)/$(OutputShortName)
 endif
-	@ echo Done.
+	$(PRINTF_BOLD)
+	$(ECHO) [Install] Done.
+	$(PRINTF_RESET)
+
 
 .PHONY : clean
-clean:
-	- rm $(Objects) $(BuildDir)/$(OutputName)
+clean: 
+	$(PRINTF_BOLD)
+	$(ECHO) [Clean] Removing build files
+	$(PRINTF_RESET)
+	@ rm -f $(Objects) $(BuildDir)/$(OutputName)
+	$(PRINTF_BOLD)
+	$(ECHO) [Done] Removing build files
+	$(PRINTF_RESET)
 
 ifeq ($(CONFIG_MAKE_DEPENDS),true)
 -include $(Depends)
