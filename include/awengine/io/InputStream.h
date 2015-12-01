@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2014-2015  absurdworlds
+ * Copyright (C) 2015  hedede <haddayn@gmail.com>
  *
  * License LGPLv3 or later:
  * GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
@@ -14,7 +15,11 @@
 
 namespace awrts {
 namespace io {
-//! Class defines an interface for input streams
+/*!
+ * Class provides interface for sequential data access.
+ */
+// template<typename T>
+// TODO: Better name? StreamIn? InStream? IStream?
 class InputStream {
 public:
 	virtual ~InputStream() = default;
@@ -40,9 +45,8 @@ public:
 	/*!
 	 * Get position in stream
 	 */
-	virtual size_t getPos() const = 0;
+	virtual size_t position() const = 0;
 };
-
 } // namespace io
 } // namespace awrts
 #endif//_awrts_CharacterStream_

@@ -14,11 +14,17 @@ namespace awrts {
 namespace io {
 class ReadFile;
 
-//! Class defines an interface for file stream
+/*!
+ * Implements InputStream interface as a file stream.
+ * Provies sequential file access,
+ */
 class AW_IO_EXP InputFileStream : public InputStream {
 public:
 	InputFileStream(ReadFile& file);
 	virtual ~InputFileStream() = default;
+
+	//FileStream() = delete;
+	//FileStream(FileStream&) = delete;
 
 	/*!
 	 * Look at current character without extracting it
@@ -41,7 +47,7 @@ public:
 	/*!
 	 * Get position in stream
 	 */
-	virtual size_t getPos() const;
+	virtual size_t position() const;
 
 private:
 	ReadFile& source;
