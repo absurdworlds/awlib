@@ -11,6 +11,7 @@
 #include <cstddef>
 #include <cstdint>
 #include <memory>
+#include <experimental/optional>
 
 namespace aw {
 typedef uint8_t        u8;
@@ -35,5 +36,8 @@ typedef void* handle;
 
 template <typename T>
 using uptr = std::unique_ptr<T>;
+
+template <typename T>
+using opt = std::experimental::optional<T>;
 } // namespace aw
 #endif //_aw_types_
