@@ -10,6 +10,7 @@
 #define _aw_types_
 #include <cstddef>
 #include <cstdint>
+#include <memory>
 
 namespace aw {
 typedef uint8_t        u8;
@@ -31,5 +32,8 @@ typedef intmax_t diff_t;
 
 typedef u8 byte;
 typedef void* handle;
+
+template <typename T>
+using uptr = std::unique_ptr<T>;
 } // namespace aw
 #endif //_aw_types_
