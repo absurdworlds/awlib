@@ -30,7 +30,7 @@ class RigidBody;
  */
 class PhysicsWorld {
 public:
-	virtual ~PhysicsWorld() {};
+	virtual ~PhysicsWorld() = default;
 
 	/*!
 	 * Insert a rigid body into world

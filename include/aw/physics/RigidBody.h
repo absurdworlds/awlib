@@ -8,7 +8,6 @@
  */
 #ifndef _aw_RigidBody_
 #define _aw_RigidBody_
-
 #include <aw/physics/CollisionObject.h>
 #include <aw/physics/MotionState.h>
 
@@ -19,7 +18,7 @@ namespace physics {
  */
 class RigidBody : public CollisionObject {
 public:
-	virtual ~RigidBody() {};
+	virtual ~RigidBody() = default;
 
 	//! Contains information needed to construct a rigid body
 	struct RigidBodyConstructionInfo {

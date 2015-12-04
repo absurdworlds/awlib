@@ -8,12 +8,11 @@
  */
 #ifndef _aw_CollisionFilter_
 #define _aw_CollisionFilter_
-
 #include <aw/common/types.h>
 
 namespace aw {
 namespace physics {
-
+//! Helper struct to filter objects by collision groups
 struct CollisionFilter {
 	CollisionFilter() = default;
 	CollisionFilter(u16 colGroup, u16 bitMask)

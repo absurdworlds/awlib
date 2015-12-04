@@ -8,12 +8,14 @@
  */
 #ifndef _aw_PhysicsPhantom_
 #define _aw_PhysicsPhantom_
-
 #include <aw/physics/CollisionObject.h>
 
 namespace aw {
 namespace physics {
-
+/*!
+ * Collision phantom is ignored by other bodies,
+ * useful for callbacks
+ */
 class CollisionPhantom : public CollisionObject {
 public:
 protected:

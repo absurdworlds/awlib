@@ -8,7 +8,6 @@
  */
 #ifndef _aw_MotionState_
 #define _aw_MotionState_
-
 #include <aw/scene/SceneNode.h>
 
 namespace aw {
@@ -31,9 +30,9 @@ public:
  * This type of motion state is used to synchronize
  * physics world and scene graph
  */
-class CSceneMotionState : public MotionState {
+class SceneMotionState : public MotionState {
 public:
-	CSceneMotionState(scene::Node* node)
+	SceneMotionState(scene::Node* node)
 		: node_(node)
 	{
 	}

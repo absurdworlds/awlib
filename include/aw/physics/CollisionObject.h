@@ -16,10 +16,10 @@
 
 namespace aw {
 namespace physics {
-
+//! Represents a static collision object
 class CollisionObject {
 public:
-	virtual ~CollisionObject() {};
+	virtual ~CollisionObject() = default;
 
 	virtual void setPosition(Vector3d<f32> pos) = 0;
 	virtual void setRotation(Vector3d<f32> rot) = 0;

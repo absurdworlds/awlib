@@ -8,7 +8,6 @@
  */
 #ifndef _aw_RayResultCallback_
 #define _aw_RayResultCallback_
-
 #include <aw/physics/CollisionObject.h>
 #include <aw/physics/BroadphaseProxy.h>
 

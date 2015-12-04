@@ -8,7 +8,6 @@
  */
 #ifndef _aw_BroadphaseProxy_
 #define _aw_BroadphaseProxy_
-
 #include <aw/common/types.h>
 
 #include <aw/physics/CollisionFilter.h>

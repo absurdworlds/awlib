@@ -8,7 +8,6 @@
  */
 #ifndef _aw_DebugDrawer_
 #define _aw_DebugDrawer_
-
 #include <aw/utility/hidden_impl.h>
 
 //#include <aw/graphics/Renderable.h>

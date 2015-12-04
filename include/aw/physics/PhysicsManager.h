@@ -8,7 +8,6 @@
  */
 #ifndef _aw_PhysicsManager_
 #define _aw_PhysicsManager_
-
 #include <aw/common/types.h>
 #include <aw/utility/macro.h>
 
@@ -36,7 +35,7 @@ public:
 	/*! Destructor
 	 *  \note Should be called only after deletion of all physics worlds
 	 */
-	virtual ~PhysicsManager() {};
+	virtual ~PhysicsManager() = default;
 
 	virtual u32 loadModel(char const* modelName) = 0;
 
