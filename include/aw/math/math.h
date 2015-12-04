@@ -41,25 +41,15 @@ f64 const DegreesInRadian = 180.0 / Pi;
 f64 const RadiansInDegree = Pi / 180.0;
 
 //! Convert degrees to radians
-inline f32 DegToRad (f32 deg)
-{
-	return deg * RadiansInDegree;
-}
-
-//! Convert degrees to radians
-inline f64 DegToRad (f64 deg)
+template<typename T>
+inline T DegToRad(T deg)
 {
 	return deg * RadiansInDegree;
 }
 
 //! Convert radians to degrees
-inline f32 RadToDeg (f32 rad)
-{
-	return rad * DegreesInRadian;
-}
-
-//! Convert radians to degrees
-inline f64 RadToDeg (f64 rad)
+template<typename T>
+inline T RadToDeg(T rad)
 {
 	return rad * DegreesInRadian;
 }
