@@ -19,6 +19,8 @@ class PhysicsWorld;
 
 class DebugDrawer /*: public IRenderable*/ {
 public:
+	virtual DebugDrawer() = default;
+
 	virtual void render() = 0;
 
 	virtual void setWorld(PhysicsWorld* world) = 0;

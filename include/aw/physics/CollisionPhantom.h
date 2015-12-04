@@ -18,6 +18,7 @@ namespace physics {
  */
 class CollisionPhantom : public CollisionObject {
 public:
+	virtual CollisionPhantom() = default;
 protected:
 };
 
