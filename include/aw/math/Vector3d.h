@@ -234,17 +234,10 @@ public:
 	//! Get a normalized version of a vector without modifying it
 	Vector3d<T> normalized() const
 	{
-		f64 length = squareLength();
-		if (length == 0) {
-			return Vector3d<T>();
-		}
+		Vector3d<T> temp(*this);
+		temp.normalize();
 
-		length = math::invSqrt(length);
-
-		return Vector3d<T>(
-			T(coord_[0] * length),
-			T(coord_[1] * length),
-			T(coord_[2] * length));
+		return temp;
 	}
 
 	//! Get length of the vector.

@@ -255,18 +255,10 @@ public:
 	//! Get a normalized version of a vector without modifying it
 	Vector4d<T> normalized() const
 	{
-		f64 length = squareLength();
-		if (length == 0) {
-			return Vector4d<T>();
-		}
+		Vector4d<T> temp(*this);
+		temp.normalize();
 
-		length = math::invSqrt(length);
-
-		return Vector4d<T>(
-			T(coord_[0] * length),
-			T(coord_[1] * length),
-			T(coord_[2] * length),
-			T(coord_[3] * length));
+		return temp;
 	}
 
 	//! Get length of the vector.
