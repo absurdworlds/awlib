@@ -21,3 +21,4 @@ a.out
 *.vcxproj.filters
 .*
 !/.gitignore
+Config.mk
