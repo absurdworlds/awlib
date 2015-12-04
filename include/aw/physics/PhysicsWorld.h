@@ -8,9 +8,8 @@
  */
 #ifndef _aw_PhysicsWorld_
 #define _aw_PhysicsWorld_
-
 #include <aw/common/types.h>
-#include <aw/common/hidden_impl.h>
+#include <aw/utility/hidden_impl.h>
 
 #include <aw/math/Vector3d.h>
 

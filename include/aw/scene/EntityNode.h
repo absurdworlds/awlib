@@ -8,8 +8,7 @@
  */
 #ifndef _aw_EntitySceneNode_
 #define _aw_EntitySceneNode_
-
-#include <aw/game/Entity.h>
+#include <awrts/game/Entity.h>
 
 #include <aw/scene/SceneNode.h>
 

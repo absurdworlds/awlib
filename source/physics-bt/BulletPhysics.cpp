@@ -24,7 +24,7 @@
 namespace aw {
 namespace physics {
 
-HR_PHYS_EXP PhysicsManager* createPhysicsManager()
+AW_PHYS_EXP PhysicsManager* createPhysicsManager()
 {
 	return new BulletPhysics();
 }

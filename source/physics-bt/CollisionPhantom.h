@@ -8,12 +8,11 @@
  */
 #ifndef _aw_CollisionPhantom_impl_
 #define _aw_CollisionPhantom_impl_
-
 #include <Bullet/btBulletDynamicsCommon.h>
 #include <Bullet/btBulletCollisionCommon.h>
 
 #include <aw/common/types.h>
-#include <aw/game/Entity.h>
+#include <awrts/game/Entity.h>
 #include <aw/physics/CollisionPhantom.h>
 //#include <aw/physics/PhysicsManager.h>
 

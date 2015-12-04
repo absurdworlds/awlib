@@ -10,7 +10,7 @@
 #define _aw_PhysicsManager_
 
 #include <aw/common/types.h>
-#include <aw/common/macro.h>
+#include <aw/utility/macro.h>
 
 #include <aw/math/Vector3d.h>
 
@@ -51,7 +51,7 @@ public:
 	virtual DebugDrawer* createDebugDrawer(graphics::RenderingDevice* renderer) = 0;
 };
 
-HR_PHYS_EXP PhysicsManager* createPhysicsManager();
+AW_PHYS_EXP PhysicsManager* createPhysicsManager();
 
 } // namespace physics
 } // namespace aw

@@ -8,8 +8,7 @@
  */
 #ifndef _aw_PhysicsObject_
 #define _aw_PhysicsObject_
-
-#include <aw/common/hidden_impl.h>
+#include <aw/utility/hidden_impl.h>
 
 #include <aw/math/Vector3d.h>
 

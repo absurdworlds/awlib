@@ -10,9 +10,8 @@
 #define _aw_BulletPhysics_impl_
 #include <map>
 #include <string>
-
-#include <btBulletDynamicsCommon.h>
-#include <btBulletCollisionCommon.h>
+#include <Bullet/btBulletDynamicsCommon.h>
+#include <Bullet/btBulletCollisionCommon.h>
 
 #include <aw/physics/PhysicsManager.h>
 

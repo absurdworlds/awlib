@@ -17,13 +17,12 @@
  */
 #ifndef _aw_physics_
 #define _aw_physics_
+#include <aw/config/visibility.h>
 
-#include <aw/common/visibility.h>
-
-#ifdef HR_MODULE_PHYSICS
-	#define HR_PHYS_EXP HR_EXPORT
+#ifdef AW_MODULE_PHYSICS
+	#define AW_PHYS_EXP AW_EXPORT
 #else
-	#define HR_PHYS_EXP HR_IMPORT
+	#define AW_PHYS_EXP AW_IMPORT
 #endif
 
 // Namespace descriptions for Doxygen

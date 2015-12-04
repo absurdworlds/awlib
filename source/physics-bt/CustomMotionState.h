@@ -8,8 +8,7 @@
  */
 #ifndef _aw_CustomRayCallback_
 #define _aw_CustomRayCallback_
-
-#include <btBulletCollisionCommon.h>
+#include <Bullet/btBulletCollisionCommon.h>
 
 #include <aw/physics/MotionState.h>
 

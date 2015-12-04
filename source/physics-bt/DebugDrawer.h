@@ -8,7 +8,6 @@
  */
 #ifndef _aw_DebugDrawer_impl_
 #define _aw_DebugDrawer_impl_
-
 #include <Bullet/btBulletDynamicsCommon.h>
 #include <Bullet/btBulletCollisionCommon.h>
 

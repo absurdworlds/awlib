@@ -8,7 +8,6 @@
  */
 #ifndef _aw_hrToBullet_
 #define _aw_hrToBullet_
-
 #include <Bullet/btBulletDynamicsCommon.h>
 #include <Bullet/btBulletCollisionCommon.h>
 

@@ -14,7 +14,7 @@
 #include <Bullet/btBulletCollisionCommon.h>
 
 #include <aw/common/types.h>
-#include <aw/game/Entity.h>
+#include <awrts/game/Entity.h>
 #include <aw/physics/RigidBody.h>
 //#include <aw/physics/PhysicsManager.h>
 

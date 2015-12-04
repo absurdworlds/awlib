@@ -8,9 +8,8 @@
  */
 #ifndef _aw_CollisionObject_
 #define _aw_CollisionObject_
-
-#include <btBulletDynamicsCommon.h>
-#include <btBulletCollisionCommon.h>
+#include <Bullet/btBulletDynamicsCommon.h>
+#include <Bullet/btBulletCollisionCommon.h>
 
 #include <aw/physics/CollisionObject.h>
 
