@@ -272,7 +272,7 @@ public:
 	}
 
 	//! Get squared length of the vector.
-	T squareLength() const
+	T lengthSquared() const
 	{ 
 		return  coord_[0]*coord_[0] +
 			coord_[1]*coord_[1] +
@@ -290,7 +290,7 @@ public:
 	}
 
 	//! Get distance from another point
-	T getDistance(Vector4d<T> const& other) const
+	T distance(Vector4d<T> const& other) const
 	{
 		return Vector4d<T>(
 			coord_[0] - other[0],
@@ -300,7 +300,7 @@ public:
 	}
 
 	//! Get squared distance from another point
-	T getDistanceSQ(Vector4d<T> const& other) const
+	T distanceSquared(Vector4d<T> const& other) const
 	{
 		return Vector4d<T>(
 			coord_[0] - other[0],

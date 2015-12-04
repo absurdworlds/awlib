@@ -250,7 +250,7 @@ public:
 	}
 
 	//! Get squared length of the vector.
-	T squareLength() const
+	T lengthSquared() const
 	{
 		return  coord_[0]*coord_[0] +
 			coord_[1]*coord_[1] +
@@ -275,7 +275,7 @@ public:
 	}
 
 	//! Get distance from another point
-	T getDistance(Vector3d<T> const& other) const
+	T distance(Vector3d<T> const& other) const
 	{
 		return Vector3d<T>(
 			coord_[0] - other[0],
@@ -284,7 +284,7 @@ public:
 	}
 
 	//! Get squared distance from another point
-	T getDistanceSQ(Vector3d<T> const& other) const
+	T distanceSquared(Vector3d<T> const& other) const
 	{
 		return Vector3d<T>(
 			coord_[0] - other[0],
@@ -324,7 +324,7 @@ public:
 	 *     are sufficient.
 	 *     (does a vector even have roll rotation? I don't think so)
 	 */
-	Vector3d<T> getHorizontalAngle() const
+	Vector3d<T> horizontalAngle() const
 	{
 		Vector3d<T> angle;
 
@@ -350,7 +350,7 @@ public:
 		return math::RadToDeg(angle);
 	}
 
-	T getYaw() const
+	T yaw() const
 	{
 		T yaw = T(atan2(f64(x()), f64(z())));
 
@@ -363,7 +363,7 @@ public:
 		return math::RadToDeg(yaw);
 	}
 
-	T getPitch() const
+	T pitch() const
 	{
 		f64 const xz = math::sqrt(x()*x() + z()*z());
 		T const pitch = T(atan2(f64(xz), f64(y)) - math::HalfPi);

@@ -176,14 +176,14 @@ public:
 	}
 
 	//! Get squared length of the vector.
-	T squareLength() const
+	T lengthSquared() const
 	{
 		return  coord_[0]*coord_[0] +
 			coord_[1]*coord_[1];
 	}
 
 	//! Get distance from another point.
-	T getDistance(Vector2d<T> const& other) const
+	T distance(Vector2d<T> const& other) const
 	{
 		return Vector2d<T>(
 			coord_[0] - other[0],
@@ -191,7 +191,7 @@ public:
 	}
 
 	//! Get squared distance from another point.
-	T getSquaredDistance(Vector2d<T> const& other) const
+	T distanceSquared(Vector2d<T> const& other) const
 	{
 		return Vector2d<T>(
 			coord_[0] - other[0],
@@ -205,7 +205,7 @@ public:
 	}
 
 	//! Calculates angle of the vector
-	T getAngle() const
+	T angle() const
 	{
 		T yaw = T(atan2( f64(coord_[0]), f64(coord_[1]) ));
 
