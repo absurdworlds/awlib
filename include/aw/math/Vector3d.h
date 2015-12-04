@@ -214,6 +214,57 @@ public:
 	}
 
 
+	//! Calculate the dot product with another vector
+	T dot(Vector3d<T> const& other) const
+	{
+		return coord_[0]*other[0] + 
+		       coord_[1]*other[1] + 
+		       coord_[2]*other[2];
+	}
+
+	//! Get squared length of the vector.
+	T lengthSquared() const
+	{
+		return dot(this);
+	}
+
+	//! Get length of the vector.
+	T length() const
+	{
+		return math::sqrt(lengthSquared());
+	}
+
+	//! Calculate the cross product with another vector
+	Vector3d<T> cross(Vector3d<T> const& other) const
+	{
+		f32 const cx = coord_[1] * other[2] - coord_[2] * other[1];
+		f32 const cy = coord_[2] * other[0] - coord_[0] * other[2];
+		f32 const cz = coord_[0] * other[1] - coord_[1] * other[0];
+		return Vector3d<T>(cx, cy, cz);
+	}
+
+	//! Get distance from another point
+	T distance(Vector3d<T> const& other) const
+	{
+		return (*this - other).length();
+	}
+
+	//! Get squared distance from another point
+	T distanceSquared(Vector3d<T> const& other) const
+	{
+		return (*this - other).lengthSquared();
+	}
+
+	//! Set the length of the vector to a new value
+	Vector3d<T>& setLength(T const newlength)
+	{
+		normalize();
+		coord_[0] *= newlength;
+		coord_[1] *= newlength;
+		coord_[2] *= newlength;
+		return *this;
+	}
+
 	//! Normalize the vector
 	Vector3d<T>& normalize()
 	{
@@ -240,69 +291,7 @@ public:
 		return temp;
 	}
 
-	//! Get length of the vector.
-	T length() const
-	{
-		return math::sqrt(
-			coord_[0]*coord_[0] +
-			coord_[1]*coord_[1] +
-			coord_[2]*coord_[2]);
-	}
-
-	//! Get squared length of the vector.
-	T lengthSquared() const
-	{
-		return  coord_[0]*coord_[0] +
-			coord_[1]*coord_[1] +
-			coord_[2]*coord_[2];
-	}
-
-	//! Calculate the dot product with another vector
-	T dot(Vector3d<T> const& other) const
-	{
-		return  coord_[0]*other[0] + 
-			coord_[1]*other[1] + 
-			coord_[2]*other[2];
-	}
-
-	//! Calculate the cross product with another vector
-	Vector3d<T> cross(Vector3d<T> const& other) const
-	{
-		f32 const cx = coord_[1] * other[2] - coord_[2] * other[1];
-		f32 const cy = coord_[2] * other[0] - coord_[0] * other[2];
-		f32 const cz = coord_[0] * other[1] - coord_[1] * other[0];
-		return Vector3d<T>(cx, cy, cz);
-	}
-
-	//! Get distance from another point
-	T distance(Vector3d<T> const& other) const
-	{
-		return Vector3d<T>(
-			coord_[0] - other[0],
-			coord_[1] - other[1],
-			coord_[2] - other[2]).length();
-	}
-
-	//! Get squared distance from another point
-	T distanceSquared(Vector3d<T> const& other) const
-	{
-		return Vector3d<T>(
-			coord_[0] - other[0],
-			coord_[1] - other[1],
-			coord_[2] - other[2]).squareLength();
-	}
-
-	//! Set the length of the vector to a new value
-	Vector3d<T>& setLength(T const newlength)
-	{
-		normalize();
-		coord_[0] *= newlength;
-		coord_[1] *= newlength;
-		coord_[2] *= newlength;
-		return *this;
-	}
-
-	// Invert the vector.
+	//! Invert the vector.
 	Vector3d<T>& invert()
 	{
 		coord_[0] *= -1;
@@ -312,44 +301,8 @@ public:
 	}
 
 	/*!
-	 * Get euler angles that when applied to a (0,0,1) direction vector
-	 * would make it point in the same direction as this vector.
-         *
-	 * Original author of this method is Arras from the Irrlicht forums
-         *
-	 * \return
-	 *     A rotation vector containing the X (pitch) and Y (raw)
-	 *     rotations in degrees, of this vector.
-	 *     The Z (roll) rotation is always 0, since two rotations
-	 *     are sufficient.
-	 *     (does a vector even have roll rotation? I don't think so)
+	 * Get rotation around Y axis
 	 */
-	Vector3d<T> horizontalAngle() const
-	{
-		Vector3d<T> angle;
-
-		// Yaw
-		angle.y = T(atan2(f64(x()), f64(z())));
-
-		// Pitch
-		f64 const xz = math::sqrt(x()*x() + z()*z());
-		angle.x = T(atan2(f64(xz), f64(y)) - math::HalfPi);
-
-		// Normalize angles
-		if (angle.y <= -math::Pi) {
-			angle.y += math::DoublePi;
-		} else if (angle.y > math::Pi) {
-			angle.y -= math::DoublePi;
-		}
-		if (angle.x <= math::Pi) {
-			angle.x += math::DoublePi;
-		} else if (angle.x > math::Pi) {
-			angle.x -= math::DoublePi;
-		}
-
-		return math::RadToDeg(angle);
-	}
-
 	T yaw() const
 	{
 		T yaw = T(atan2(f64(x()), f64(z())));
@@ -363,6 +316,9 @@ public:
 		return math::RadToDeg(yaw);
 	}
 
+	/*!
+	 * Get rotation around X axis
+	 */
 	T pitch() const
 	{
 		f64 const xz = math::sqrt(x()*x() + z()*z());
@@ -375,6 +331,21 @@ public:
 		}
 
 		return math::RadToDeg(pitch);
+	}
+
+	/*!
+	 * Get euler angles such that when applied to a (0,0,1) direction
+	 * vector would make it point in the same direction as this vector.
+         *
+	 * \return
+	 *     A rotation vector containing the X (pitch) and Y (raw)
+	 *     rotations in degrees, of this vector.
+	 *     The Z (roll) rotation is always 0, since direction vector
+	 *     doesn't have roll rotation.
+	 */
+	Vector3d<T> horizontalAngle() const
+	{
+		return Vector3d<T>(yaw(), pitch(), 0);
 	}
 
 	//! Fill an array of 4 values with the vector data
@@ -407,37 +378,37 @@ public:
 	}
 
 	//! Get coordinate along X axis
-	T& x ()
+	T& x()
 	{
 		return coord_[0];
 	}
 
 	//! Get coordinate along Y axis
-	T& y ()
+	T& y()
 	{
 		return coord_[1];
 	}
 
 	//! Get coordinate along Z axis
-	T& z ()
+	T& z()
 	{
 		return coord_[2];
 	}
 
 	//! Get coordinate along X axis
-	T x () const
+	T x() const
 	{
 		return coord_[0];
 	}
 
 	//! Get coordinate along Y axis
-	T y () const
+	T y() const
 	{
 		return coord_[1];
 	}
 
 	//! Get coordinate along Z axis
-	T z () const
+	T z() const
 	{
 		return coord_[2];
 	}
@@ -488,7 +459,7 @@ Vector3d<T> operator * (S const scalar, Vector3d<T> const& vector)
 	\return Interpolated vector
  */
 template<typename T>
-Vector3d<T> lerp (Vector3d<T> const& v0, Vector3d<T> const& v1, f64 t)
+Vector3d<T> lerp(Vector3d<T> const& v0, Vector3d<T> const& v1, f64 t)
 {
 	return (1.0 - t)*v0 + t*v1;
 }

@@ -168,46 +168,40 @@ public:
 		return *this;
 	}
 
-	//! Get length of the vector.
-	T length() const
-	{
-		return math::sqrt(coord_[0]*coord_[0] +
-				  coord_[1]*coord_[1]);
-	}
-
-	//! Get squared length of the vector.
-	T lengthSquared() const
-	{
-		return  coord_[0]*coord_[0] +
-			coord_[1]*coord_[1];
-	}
-
-	//! Get distance from another point.
-	T distance(Vector2d<T> const& other) const
-	{
-		return Vector2d<T>(
-			coord_[0] - other[0],
-			coord_[1] - other[1]).length();
-	}
-
-	//! Get squared distance from another point.
-	T distanceSquared(Vector2d<T> const& other) const
-	{
-		return Vector2d<T>(
-			coord_[0] - other[0],
-			coord_[1] - other[1]).squareLength();
-	}
-
 	//! Get the dot product of this vector with another
 	T dot(Vector2d<T> const& other) const
 	{
 		return coord_[0]*other[0] + coord_[1]*other[1];
 	}
 
+	//! Get squared length of the vector.
+	T squareLength() const
+	{
+		return dot(this);
+	}
+
+	//! Get length of the vector.
+	T length() const
+	{
+		return math::sqrt(lengthSquared());
+	}
+
+	//! Get distance from another point.
+	T distance(Vector2d<T> const& other) const
+	{
+		return (*this - other).length();
+	}
+
+	//! Get squared distance from another point.
+	T distanceSquared(Vector2d<T> const& other) const
+	{
+		return (*this - other).lengthSquared();
+	}
+
 	//! Calculates angle of the vector
 	T angle() const
 	{
-		T yaw = T(atan2( f64(coord_[0]), f64(coord_[1]) ));
+		T yaw = T(atan2(f64(coord_[0]), f64(coord_[1])));
 
 		if (yaw <= -math::Pi) {
 			yaw += math::DoublePi;
@@ -222,9 +216,9 @@ public:
 	Vector2d<T>& normalize()
 	{
 		f32 length = squareLength();
-		if ( length == 0 ) {
+		if (length == 0)
 			return *this;
-		}
+
 		length = math::invSqrt(length);
 		coord_[0] = T(coord_[0] * length);
 		coord_[1] = T(coord_[1] * length);
@@ -269,25 +263,25 @@ public:
 	}
 
 	//! Get coordinate along X axis
-	T& x ()
+	T& x()
 	{
 		return coord_[0];
 	}
 
 	//! Get coordinate along Y axis
-	T& y ()
+	T& y()
 	{
 		return coord_[1];
 	}
 
 	//! Get coordinate along X axis
-	T const& x () const
+	T const& x() const
 	{
 		return coord_[0];
 	}
 
 	//! Get coordinate along Y axis
-	T const& y () const
+	T const& y() const
 	{
 		return coord_[1];
 	}
@@ -302,7 +296,7 @@ Vector2d<T> const Vector2d<T>::zero = Vector2d(0);
 
 //! Linear interpolation of two vectors
 template<typename T>
-Vector2d<T> lerp (Vector2d<T> const& v0, Vector2d<T> const& v1, f64 t)
+Vector2d<T> lerp(Vector2d<T> const& v0, Vector2d<T> const& v1, f64 t)
 {
 	return (1.0-t)*v0 + t*v1;
 }

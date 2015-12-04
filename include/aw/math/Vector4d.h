@@ -234,6 +234,50 @@ public:
 		        math::equals(coord_[3], other[3]));
 	}
 
+	//! Calculate the dot product with another vector
+	T dot(Vector4d<T> const& other) const
+	{
+		return coord_[0]*other[0] +
+		       coord_[1]*other[1] +
+		       coord_[2]*other[2] +
+		       coord_[3]*other[3];
+	}
+	
+	//! Get squared length of the vector.
+	T lengthSquared() const
+	{
+		return dot(this);
+	}
+
+	//! Get length of the vector.
+	T length() const
+	{
+		return math::sqrt(lengthSquared());
+	}
+
+	//! Get distance from another point
+	T distance(Vector4d<T> const& other) const
+	{
+		return (*this - other).length();
+	}
+
+	//! Get squared distance from another point
+	T distanceSquared(Vector4d<T> const& other) const
+	{
+		return (*this - other).lengthSquared();
+	}
+
+	//! Set the length of the vector to a new value
+	Vector4d<T>& setLength(T const newlength)
+	{
+		normalize();
+		coord_[0] *= newlength;
+		coord_[1] *= newlength;
+		coord_[2] *= newlength;
+		coord_[3] *= newlength;
+		return *this;
+	}
+
 	//! Normalize the vector
 	Vector4d<T>& normalize()
 	{
@@ -259,65 +303,6 @@ public:
 		temp.normalize();
 
 		return temp;
-	}
-
-	//! Get length of the vector.
-	T length() const
-	{ 
-		return math::sqrt(
-			coord_[0]*coord_[0] +
-			coord_[1]*coord_[1] +
-			coord_[2]*coord_[2] +
-			coord_[3]*coord_[3] );
-	}
-
-	//! Get squared length of the vector.
-	T lengthSquared() const
-	{ 
-		return  coord_[0]*coord_[0] +
-			coord_[1]*coord_[1] +
-			coord_[2]*coord_[2] +
-			coord_[3]*coord_[3];
-	}
-
-	//! Calculate the dot product with another vector
-	T dot(Vector4d<T> const& other) const
-	{
-		return  coord_[0]*other[0] +
-			coord_[1]*other[1] +
-			coord_[2]*other[2] +
-			coord_[3]*other[3];
-	}
-
-	//! Get distance from another point
-	T distance(Vector4d<T> const& other) const
-	{
-		return Vector4d<T>(
-			coord_[0] - other[0],
-			coord_[1] - other[1],
-			coord_[2] - other[2],
-			coord_[3] - other[3]).length();
-	}
-
-	//! Get squared distance from another point
-	T distanceSquared(Vector4d<T> const& other) const
-	{
-		return Vector4d<T>(
-			coord_[0] - other[0],
-			coord_[1] - other[1],
-			coord_[2] - other[2],
-			coord_[3] - other[3]).squareLength();
-	}
-
-	//! Set the length of the vector to a new value
-	Vector4d<T>& setLength(T const newlength)
-	{
-		normalize();
-		coord_[0] *= newlength;
-		coord_[1] *= newlength;
-		coord_[2] *= newlength;
-		coord_[3] *= newlength;
-		return *this;
 	}
 
 	// Invert the vector.
@@ -395,7 +380,7 @@ Vector4d<T> operator * (S const scalar, Vector4d<T> const& vector)
 	\return Interpolated vector
  */
 template<typename T>
-Vector4d<T> lerp (Vector4d<T> const& v0, Vector4d<T> const& v1, f64 t)
+Vector4d<T> lerp(Vector4d<T> const& v0, Vector4d<T> const& v1, f64 t)
 {
 	return (1.0 - t)*v0 + t*v1;
 }
