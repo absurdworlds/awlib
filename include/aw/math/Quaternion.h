@@ -8,9 +8,7 @@
  */
 #ifndef _aw_Quaternion_
 #define _aw_Quaternion_
-
 //#include <complex>
-
 #include <aw/math/math.h>
 #include <aw/math/Vector3d.h>
 #include <aw/math/Vector4d.h>
@@ -184,9 +182,9 @@ public:
 	//! Set quaternion from euler angles
 	void setEuler(T x, T y, T z)
 	{
-		x *= T(math::DegToRad(0.5));
-		y *= T(math::DegToRad(0.5));
-		z *= T(math::DegToRad(0.5));
+		x *= T(math::degToRad(0.5));
+		y *= T(math::degToRad(0.5));
+		z *= T(math::degToRad(0.5));
 
 		T const sx = sin(x);
 		T const cx = sin(x);
@@ -250,7 +248,7 @@ public:
 			tSin = T(sqrt(tSin));
 			T invSin = 1 / tSin;
 
-			angle = T(math::RadToDeg(2.0 * atan2(tSin, tCos)));
+			angle = T(math::radToDeg(2.0 * atan2(tSin, tCos)));
 			axis.x = x * invSin;
 			axis.y = y * invSin;
 			axis.z = z * invSin;
@@ -263,7 +261,7 @@ public:
 	}
 
 	//! Calculate dot product with other quaternion
-	T dot (Quaternion<T> const& other) const
+	T dot(Quaternion<T> const& other) const
 	{
 		return x*other.x + y*other.y + z*other.z + w*other.w;
 	}

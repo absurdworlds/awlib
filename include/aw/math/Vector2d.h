@@ -209,7 +209,7 @@ public:
 			yaw -= math::DoublePi;
 		}
 
-		return math::RadToDeg(yaw);
+		return math::radToDeg(yaw);
 	}
 
 	//! Make the vector of unit length

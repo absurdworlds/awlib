@@ -42,14 +42,14 @@ f64 const RadiansInDegree = Pi / 180.0;
 
 //! Convert degrees to radians
 template<typename T>
-inline T DegToRad(T deg)
+inline T degToRad(T deg)
 {
 	return deg * RadiansInDegree;
 }
 
 //! Convert radians to degrees
 template<typename T>
-inline T RadToDeg(T rad)
+inline T radToDeg(T rad)
 {
 	return rad * DegreesInRadian;
 }
@@ -61,13 +61,13 @@ f64 const float64 = 0.00000001;
 }
 
 //! Calculate square root of a number
-FORCEINLINE f32 sqrt (f32 const x)
+FORCEINLINE f32 sqrt(f32 const x)
 {
 	return ::sqrtf(x);
 }
 
 //! Calculate square root of a number
-FORCEINLINE f64 sqrt (f64 const x)
+FORCEINLINE f64 sqrt(f64 const x)
 {
 	return ::sqrt(x);
 }
