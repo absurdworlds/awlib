@@ -176,7 +176,7 @@ Token Lexer::readToken()
 	};
 
 	auto retToken = [&] (Token::Kind kind, std::string str) {
-		return Token(kind, str, stream.getPos());
+		return Token(kind, str, stream.position());
 	};
 
 	switch (c) {
@@ -233,7 +233,7 @@ Token Lexer::getToken()
 
 void Lexer::error(std::string msg)
 {
-	printf("[HDF:%u]: %s\n", stream.getPos(), msg.c_str());
+	printf("[HDF:%u]: %s\n", stream.position(), msg.c_str());
 }
 } // namespace hdf
 } // namespace aw
