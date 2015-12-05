@@ -463,6 +463,5 @@ Vector3d<T> lerp(Vector3d<T> const& v0, Vector3d<T> const& v1, f64 t)
 {
 	return (1.0 - t)*v0 + t*v1;
 }
-
 } // namespace aw
 #endif//_aw_Vector3d_
