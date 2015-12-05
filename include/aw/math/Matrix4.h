@@ -41,10 +41,10 @@ public:
 		T const a13, T const a23, T const a33, T const a43,
 		T const a14, T const a24, T const a34, T const a44)
 	{
-		set (a11, a21, a31, a41,
-		     a12, a22, a32, a42,
-		     a13, a23, a33, a43,
-		     a14, a24, a34, a44);
+		set(a11, a21, a31, a41,
+		    a12, a22, a32, a42,
+		    a13, a23, a33, a43,
+		    a14, a24, a34, a44);
 	}
 
 	/*! Set each componenet of the matrix
@@ -135,16 +135,16 @@ public:
 	//! Divide matrix by scalar
 	Matrix4<T>& operator /= (T const& S)
 	{
-		col_[0]  /= S;
-		col_[1]  /= S;
-		col_[2]  /= S;
-		col_[3]  /= S;
+		col_[0] /= S;
+		col_[1] /= S;
+		col_[2] /= S;
+		col_[3] /= S;
 
 		return *this;
 	}
 
 	//! Get transposed matrix
-	Matrix4<T> getTransposed() const
+	Matrix4<T> transposed() const
 	{
 		Matrix4<T> M;
 
@@ -174,7 +174,7 @@ public:
 	 * \return
 	 * 	`true` if inverse matrix exists, `false` otherwise.
 	 */
-	bool getInverse(Matrix4<T>& inv) const
+	bool inverse(Matrix4<T>& inv) const
 	{
 		T det = determinant();
 
@@ -272,7 +272,7 @@ public:
 	}
 
 	//! Extract 3x3 matrix containing rotation and scale
-	Matrix3<T> getSubMatrix() const
+	Matrix3<T> subMatrix() const
 	{
 		return Matrix3<T>(
 		       col_[0][0], col_[1][0], col_[2][0],
@@ -281,21 +281,21 @@ public:
 	}
 
 	//! Extract translation from matrix
-	Vector3d<T> getTranslation() const
+	Vector3d<T> translation() const
 	{
 		return Vector3d<T>(col_[3][0], col_[3][1], col_[3][2]);
 	}
 
 	//! Extract scale from matrix
-	Vector3d<T> getScale() const
+	Vector3d<T> scale() const
 	{
-		Matrix3<T> const subMatrix = getSubMatrix();
+		Matrix3<T> const tmp = subMatrix();
 
-		return subMatrix.getScale();
+		return tmp.scale();
 	}
 
 	//! Extract scale, assuming it is positive
-	Vector3d<T> getScalePositive() const
+	Vector3d<T> scalePositive() const
 	{
 		Vector3d<T> const row1(col_[0][0], col_[1][0], col_[2][0]);
 		Vector3d<T> const row2(col_[0][1], col_[1][1], col_[2][1]);
@@ -312,7 +312,7 @@ public:
 	    \param scale Scales on X, Y, Z axes, obtained through getScale()
 	    \return Vector consisting of euler angles (in radians)
 	*/
-	Vector3d<T> getRotation(Vector3d<T> scale) const
+	Vector3d<T> rotation(Vector3d<T> scale) const
 	{
 		Vector3d<T> rot;
 
@@ -334,16 +334,16 @@ public:
 	/*! Get rotation in radians, calculating the scale
 	    \return Vector consisting of euler angles (in radians)
 	*/
-	Vector3d<T> getRotation() const
+	Vector3d<T> rotation() const
 	{
-		Vector3d<T> const scale = getScale();
+		Vector3d<T> const scale = scale();
 		return getRotation(scale);
 	}
 
 	/*! Get rotation in radians, assuming that matrix is not scaled
 	    \return Vector consisting of euler angles (in radians)
 	*/
-	Vector3d<T> getRotationUnscaled() const
+	Vector3d<T> rotationUnscaled() const
 	{
 		Vector3d<T> const scale(1.0, 1.0, 1.0);
 		return getRotationRadians(scale);
@@ -461,7 +461,7 @@ Matrix4<T>& inverse(Matrix4<T>& matrix)
 
 //! Calculate determinant of a matrix
 template<typename T>
-Matrix4<T>& determinant(Matrix4<T>& matrix)
+Matrix4<T>& determinant(Matrix4<T> const& matrix)
 {
 	return matrix.determinant();
 }
