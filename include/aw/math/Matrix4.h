@@ -172,15 +172,14 @@ public:
 	/*!
 	 * Get matrix inverse of this matrix
 	 * \return
-	 * 	`true` if inverse matrix exists, `false` otherwise.
+	 * 	Inverse matrix, or nullopt if one does not exist.
 	 */
-	bool inverse(Matrix4<T>& inv) const
+	opt<Matrix4<T>> inverse() const
 	{
 		T det = determinant();
 
-		if (math::equals(det, T(0.0))) {
-			return false;
-		}
+		if (math::equals(det, T(0.0)))
+			return nullopt;
 
 		Matrix4<T> m;
 
@@ -235,9 +234,7 @@ public:
 
 		m /= det;
 
-		inv = m;
-
-		return true;
+		return m;
 	}
 
 	//! Calculate determinant of the matrix
@@ -449,14 +446,9 @@ Matrix4<T>& transpose(Matrix4<T>& matrix)
 
 //! Get inverse of a matrix
 template<typename T>
-Matrix4<T>& inverse(Matrix4<T>& matrix)
+opt<Matrix4<T>> inverse(Matrix4<T> const& matrix)
 {
-	Matrix4<T> temp;
-	matrix.getInverse(temp);
-
-	matrix = temp;
-
-	return temp;
+	return matrix.inverse();
 }
 
 //! Calculate determinant of a matrix
