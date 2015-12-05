@@ -17,6 +17,8 @@
 #include <aw/math/Vector2d.h>
 #include <aw/math/Vector3d.h>
 #include <aw/math/Vector4d.h>
+#include <aw/string/as_string.h>
+#include <aw/math/as_string.h>
 
 #include <aw/hdf/Type.h>
 
@@ -217,56 +219,21 @@ struct Value::Helper<> {
 //! Convert Value to string
 inline std::string as_string(hdf::Value const& val)
 {
-// TODO: through individual as_string
 	switch (val.getType()) {
 	case hdf::Type::String:
-		{
-			std::string v;
-			val.get(v);
-			return v;
-		}
+		return as_string(val.get<std::string>());
 	case hdf::Type::Float:
-		{
-			f64 f;
-			val.get(f);
-			return std::to_string(f);
-		}
+		return as_string(val.get<f64>());
 	case hdf::Type::Integer:
-		{
-			i64 i;
-			val.get(i);
-			return std::to_string(i);
-		}
+		return as_string(val.get<i64>());
 	case hdf::Type::Boolean:
-		{
-			bool b;
-			val.get(b);
-			return std::to_string(b);
-		}
+		return as_string(val.get<bool>());
 	case hdf::Type::Vector2d:
-		{
-			Vector2d<f32> v;
-			val.get(v);
-			return std::to_string(v[0]) + ", " +
-			       std::to_string(v[1]);
-		}
+		return as_string(val.get<Vector2d<f32>>());
 	case hdf::Type::Vector3d:
-		{
-			Vector3d<f32> v;
-			val.get(v);
-			return std::to_string(v[0]) + ", " +
-			       std::to_string(v[1]) + ", " +
-			       std::to_string(v[2]);
-		}
+		return as_string(val.get<Vector3d<f32>>());
 	case hdf::Type::Vector4d:
-		{
-			Vector4d<f32> v;
-			val.get(v);
-			return std::to_string(v[0]) + ", " +
-			       std::to_string(v[1]) + ", " +
-			       std::to_string(v[2]) + ", " +
-			       std::to_string(v[3]);
-		}
+		return as_string(val.get<Vector4d<f32>>());
 	}
 
 	return "null";
