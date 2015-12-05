@@ -10,18 +10,20 @@
 
 int main()
 {
-	awrts::Matrix4<double> A(
+	aw::Matrix4<double> A(
 		1,2,3,4,
 		5,6,7,8,
 		9,1,1,2,
 		3,4,5,1);
-		
-	awrts::Matrix4<double> B;
 
-	A.getInverse(B);
+	auto inv = A.inverse();
+	if(!inv)
+		return 2;
 
-	awrts::Matrix4<double> I = A * B;
-	awrts::Matrix4<double> I2;
+	aw::Matrix4<double> B = inv.value();
+
+	aw::Matrix4<double> I = A * B;
+	aw::Matrix4<double> I2;
 
 	I2.setIdentity();
 
