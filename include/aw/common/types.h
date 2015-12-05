@@ -39,5 +39,9 @@ using uptr = std::unique_ptr<T>;
 
 template <typename T>
 using opt = std::experimental::optional<T>;
+
+using nullopt_t = std::experimental::nullopt_t;
+
+constexpr nullopt_t nullopt = std::experimental::nullopt;
 } // namespace aw
 #endif //_aw_types_
