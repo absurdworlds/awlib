@@ -75,7 +75,10 @@ inline std::string as_string(std::string value)
 template<typename T>
 std::string as_string(opt<T> value)
 {
-	return as_string(value.value_or("nullopt"));
+	if (value)
+		return as_string(value.value());
+
+	return "nullopt";
 }
 
 } // namespace aw
