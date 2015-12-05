@@ -175,7 +175,7 @@ public:
 	}
 
 	//! Get squared length of the vector.
-	T squareLength() const
+	T lengthSquared() const
 	{
 		return dot(this);
 	}
@@ -215,7 +215,7 @@ public:
 	//! Make the vector of unit length
 	Vector2d<T>& normalize()
 	{
-		f32 length = squareLength();
+		f32 length = lengthSquared();
 		if (length == 0)
 			return *this;
 
