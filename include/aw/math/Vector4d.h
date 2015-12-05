@@ -281,7 +281,7 @@ public:
 	//! Normalize the vector
 	Vector4d<T>& normalize()
 	{
-		f64 length = squareLength();
+		f64 length = lengthSquared();
 		if (length == 0) {
 			return *this;
 		}

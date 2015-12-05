@@ -268,7 +268,7 @@ public:
 	//! Normalize the vector
 	Vector3d<T>& normalize()
 	{
-		f64 length = squareLength();
+		f64 length = lengthSquared();
 		if (length == 0) {
 			return *this;
 		}
@@ -313,7 +313,7 @@ public:
 			yaw -= math::DoublePi;
 		}
 
-		return math::RadToDeg(yaw);
+		return math::radToDeg(yaw);
 	}
 
 	/*!
@@ -330,7 +330,7 @@ public:
 			pitch -= math::DoublePi;
 		}
 
-		return math::RadToDeg(pitch);
+		return math::radToDeg(pitch);
 	}
 
 	/*!
