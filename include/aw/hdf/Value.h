@@ -59,6 +59,17 @@ public:
 		return holder.get(v);
 	}
 
+	template<typename val_type>
+	opt<val_type> get() const
+	{
+		val_type tmp;
+
+		if (holder.get(tmp))
+			return tmp;
+
+		return nullopt;
+	}
+
 	//! Returns type of currently held value
 	hdf::Type getType() const
 	{
