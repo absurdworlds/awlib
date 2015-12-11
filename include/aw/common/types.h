@@ -26,10 +26,10 @@ typedef  int32_t       i32;
 typedef uint64_t       u64;
 typedef  int64_t       i64;
 
+typedef ptrdiff_t      diff_t;
+
 typedef float          f32;
 typedef double         f64;
-
-typedef intmax_t diff_t;
 
 template <typename T>
 using uptr = std::unique_ptr<T>;
