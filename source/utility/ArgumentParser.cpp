@@ -23,7 +23,9 @@ ArgumentParser::ArgumentParser(char const* const* argv)
 
 Argument ArgumentParser::nextArg(char const* arg)
 {
-	if(*arg != '-')
+	using namespace std::string_literals;
+
+	if (*arg != '-')
 		return std::string(arg);
 
 	++arg; // Eat '-'
@@ -32,10 +34,10 @@ Argument ArgumentParser::nextArg(char const* arg)
 
 	switch (*arg) {
 	case 0:
-		return std::string("-");
+		return "-"s;
 	case '-':
 		++arg;
-		if(*arg == 0) {
+		if (*arg == 0) {
 			tok.type = Argument::Delim;
 			tok.name = "--";
 		} else {
