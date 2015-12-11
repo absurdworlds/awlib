@@ -11,8 +11,13 @@
 
 namespace aw {
 namespace core {
+namespace {
+// Dummy variable for pointer-to-null initialization
+char const dummy = 0;
+}
+
 ArgumentParser::ArgumentParser(char const* const* argv)
-	: argv(argv), args(0)
+	: argv(argv), args(&dummy)
 {
 }
 
@@ -50,7 +55,7 @@ Argument ArgumentParser::nextArg(char const* arg)
 
 opt<Argument> ArgumentParser::parseArgument()
 {
-	if (args != 0 && *args != 0) {
+	if (*args != 0) {
 		Argument tok;
 		tok.type = Argument::Option;
 		tok.name = *(args++);
