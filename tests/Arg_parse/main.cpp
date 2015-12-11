@@ -8,15 +8,16 @@
  */
 #include <cstdio>
 
-#include <aw/core/ArgumentParser.h>
+#include <aw/utility/ArgumentParser.h>
 
 int main (int, char** v)
 {
 	using namespace aw;
-	core::ArgumentParser* a = core::createArgumentParser(v + 1);
-	core::Argument arg;
+	core::ArgumentParser parser(v + 1);
+	opt<core::Argument> r;
 
-	while(a->getNextArgument(arg)) {
+	while(r = parser.parseArgument()) {
+		core::Argument& arg = r.value();
 		char c;
 		switch(arg.type) {
 		case core::Argument::Option:

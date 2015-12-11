@@ -1,7 +1,7 @@
 RootPath = ../..
 
 Sources = main.cpp
-Libraries = awplatform awcore
+Libraries = awutils
 ProjectName = arg-parser
 Executable = true
 

@@ -1,5 +1,5 @@
 RootPath = ../..
-Sources = 
+Sources = ArgumentParser.cpp
 Defines = AW_MODULE_UTILS
 Libraries =
 ProjectName = awutils

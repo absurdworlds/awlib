@@ -1,7 +1,7 @@
 all: libs
 
 # core
-libs: core hdf gui physics platform
+libs: utility core hdf gui physics platform
 core:
 	@ $(MAKE) -C 'source/core' $(TARGET)
 
@@ -16,6 +16,10 @@ physics:
 
 platform:
 	@ $(MAKE) -C 'source/platform' $(TARGET)
+
+utility:
+	@ $(MAKE) -C 'source/utility' $(TARGET)
+
 
 # tests
 tests: guitest

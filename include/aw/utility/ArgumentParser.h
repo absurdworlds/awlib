@@ -20,15 +20,23 @@ namespace core {
  * Command line argument,
  * represents a single option or argument
  */
-struct AW_CORE_EXP Argument {
+struct Argument {
 	Argument()
-		: longOpt(false)
+		: type(Invalid),
+		  longOpt(false)
+	{ }
+
+	Argument(std::string str)
+		: type(Operand),
+		  longOpt(false),
+		  name(str)
 	{ }
 
 	/*!
 	 * List of types of arguments:
 	 */
 	enum Type : u8 {
+		Invalid,
 		//! Option ('-o') or ('--option')
 		Option,
 		//! Argument or operand
@@ -42,12 +50,17 @@ struct AW_CORE_EXP Argument {
 };
 
 //! Used to parse command line arguments passed to the program
-class ArgumentParser {
+class AW_CORE_EXP ArgumentParser {
 public:
-	//! Virtual destructor
-	virtual ~ArgumentParser()
-	{
-	}
+	/*!
+	 * Create an argument parser
+	 * \param argv
+	 *     Array of pointers to command line token strings.
+	 *     (e.g. one that is passed to `main()`)
+	 * \note
+	 *     Each string and array itself must be null-terminated.
+	 */
+	ArgumentParser(char const* const* argv);
 
 	/*
 	 * Get the next argument from the command line
@@ -58,16 +71,14 @@ public:
 	 * 	When end is reached, 0 is returned.
 	 * 	If error occurs, return value is negative.
 	 */
-	virtual i32 getNextArgument(Argument& arg) = 0;
+	opt<Argument> parseArgument();
+private:
+	Argument nextArg(char const* arg);
+
+	char const* const* argv;
+	// Prevent modifying pointers
+	char const* args;
 };
-
-/*!
- * Create an argument parser
- * \param argv Array of pointers to command line token strings.
- * \note Each string must be null-terminated. Last element of array must be 0.
- */
-AW_CORE_EXP ArgumentParser* createArgumentParser(char** argv);
-
 } //namespace core
 } //namespace aw
 #endif//_aw_ArgumentParser_
