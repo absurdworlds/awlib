@@ -11,14 +11,8 @@
 
 namespace aw {
 namespace core {
-enum ArgumentParser::State : u8 {
-	Default,
-	ArgGroup,
-	ArgsEnd
-};
-
 ArgumentParser::ArgumentParser(char const* const* argv)
-	: state(Default), argv(argv), args(0)
+	: argv(argv), args(0)
 {
 }
 
@@ -39,7 +33,6 @@ Argument ArgumentParser::nextArg(char const* arg)
 		if(*arg == 0) {
 			tok.type = Argument::Delim;
 			tok.name = "--";
-			state = ArgsEnd;
 		} else {
 			tok.type = Argument::Option;
 			tok.name = std::string(arg);
@@ -49,7 +42,6 @@ Argument ArgumentParser::nextArg(char const* arg)
 	default:
 		tok.type = Argument::Option;
 		tok.name = *(arg++);
-		state = ArgGroup;
 		args = arg;
 	}
 
@@ -58,26 +50,17 @@ Argument ArgumentParser::nextArg(char const* arg)
 
 opt<Argument> ArgumentParser::parseArgument()
 {
+	if (args != 0 && *args != 0) {
+		Argument tok;
+		tok.type = Argument::Option;
+		tok.name = *(args++);
+		return tok;
+	}
+
 	if (*argv == 0)
 		return nullopt;
 
-	switch (state) {
-	case ArgGroup:
-		if (*args != 0) {
-			Argument tok;
-			tok.type = Argument::Option;
-			tok.name = *(args++);
-			return tok;
-		} else {
-			// Reset state and parse next arg
-			// (case fall-through)
-			state = Default;
-		}
-	case Default:
-		return nextArg(*argv++);
-	case ArgsEnd:
-		return Argument(*argv++);
-	};
+	return nextArg(*argv++);
 }
 } //namespace core
 } //namespace aw

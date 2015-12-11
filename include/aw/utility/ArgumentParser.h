@@ -78,9 +78,6 @@ private:
 	char const* const* argv;
 	// Prevent modifying pointers
 	char const* args;
-
-	enum State : u8;
-	State state;
 };
 } //namespace core
 } //namespace aw
