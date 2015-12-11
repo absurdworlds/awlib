@@ -14,6 +14,7 @@
 #include <experimental/optional>
 
 namespace aw {
+// Shorthands for integer types
 typedef uint8_t        u8;
 typedef  int8_t        i8;
 
@@ -28,12 +29,15 @@ typedef  int64_t       i64;
 
 typedef ptrdiff_t      diff_t;
 
+//        ... for floating point types
 typedef float          f32;
 typedef double         f64;
 
+//! Shorthand for std::unique_ptr template
 template <typename T>
 using uptr = std::unique_ptr<T>;
 
+//! Shorthand for std::experimental::optional template
 template <typename T>
 using opt = std::experimental::optional<T>;
 
