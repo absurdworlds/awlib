@@ -8,7 +8,7 @@
  */
 #include <cstdio>
 
-#include <aw/core/ArgumentParser.h>
+#include <aw/utility/ArgumentParser.h>
 #include <aw/string/utility.h>
 
 #include "hpacker.h"
@@ -31,7 +31,7 @@ void printUsage()
 
 i32 main (char** args)
 {
-	core::ArgumentParser* argp = core::createArgumentParser(args+1);
+	core::ArgumentParser argp(args+1);
 
 	enum Action {
 		None,
@@ -45,8 +45,9 @@ i32 main (char** args)
 	std::vector<std::string> files;
 	bool verbose = false;
 
-	core::Argument arg;
-	while (argp->getNextArgument(arg)) {
+	opt<core::Argument> optArg;
+	while (arg = argp.parseArgument()) {
+		Argument& arg = optArg.value();
 		if (arg.type == core::Argument::Option) {
 			if(arg.name == "c" || arg.name == "create") {
 				action = Create;

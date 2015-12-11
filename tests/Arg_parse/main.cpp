@@ -17,7 +17,7 @@ int main (int, char** v)
 	opt<core::Argument> r;
 
 	while(r = parser.parseArgument()) {
-		core::Argument arg = r.value();
+		core::Argument& arg = r.value();
 		char c;
 		switch(arg.type) {
 		case core::Argument::Option:
