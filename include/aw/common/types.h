@@ -31,9 +31,6 @@ typedef double         f64;
 
 typedef intmax_t diff_t;
 
-typedef u8 byte;
-typedef void* handle;
-
 template <typename T>
 using uptr = std::unique_ptr<T>;
 
