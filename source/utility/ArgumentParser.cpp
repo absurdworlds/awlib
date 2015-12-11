@@ -41,7 +41,6 @@ Argument ArgumentParser::nextArg(char const* arg)
 		} else {
 			tok.type = Argument::Option;
 			tok.name = std::string(arg);
-			tok.longOpt = true;
 		}
 		break;
 	default:

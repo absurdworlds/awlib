@@ -22,13 +22,11 @@ namespace core {
  */
 struct Argument {
 	Argument()
-		: type(Invalid),
-		  longOpt(false)
+		: type(Invalid)
 	{ }
 
 	Argument(std::string str)
 		: type(Operand),
-		  longOpt(false),
 		  name(str)
 	{ }
 
@@ -44,9 +42,14 @@ struct Argument {
 		//! End of arguments delimiter: "--"
 		Delim
 	} type;
-	//! Is a long option
-	bool longOpt;
+
 	std::string name;
+
+	//! Returns true if it is a long option
+	bool longOpt() const
+	{
+		return type == Option && name.size() == 1;
+	}
 };
 
 //! Used to parse command line arguments passed to the program
