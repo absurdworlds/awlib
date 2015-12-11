@@ -4,7 +4,7 @@ Sources = hpacker.cpp StringBank.cpp \
 	  HPKListWriter.cpp HPKHtableWriter.cpp HPKTreeWriter.cpp \
 	  ItdReader.cpp ItdPacker.cpp
 Defines = 
-Libraries = awplatform awcore
+Libraries = awplatform awcore awutils
 ProjectName = hpacker
 Executable = true
 

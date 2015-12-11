@@ -20,6 +20,10 @@ platform:
 utility:
 	@ $(MAKE) -C 'source/utility' $(TARGET)
 
+# tools
+hpacker:
+	@ $(MAKE) -C 'source/hpacker' $(TARGET)
+
 
 # tests
 tests: guitest

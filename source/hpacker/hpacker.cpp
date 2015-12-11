@@ -46,8 +46,8 @@ i32 main (char** args)
 	bool verbose = false;
 
 	opt<core::Argument> optArg;
-	while (arg = argp.parseArgument()) {
-		Argument& arg = optArg.value();
+	while (optArg = argp.parseArgument()) {
+		core::Argument& arg = optArg.value();
 		if (arg.type == core::Argument::Option) {
 			if(arg.name == "c" || arg.name == "create") {
 				action = Create;
@@ -56,8 +56,7 @@ i32 main (char** args)
 			} else if (arg.name == "e" || arg.name == "extract") {
 				action = Extract;
 			} else if (arg.name == "f" || arg.name == "file") {
-				argp->getNextArgument(arg);
-				filename = arg.name;
+				filename = argp.getParam();
 			} else if (arg.name == "v" || arg.name == "verbose") {
 				verbose = true;
 			}
@@ -70,7 +69,7 @@ i32 main (char** args)
 			if (arg.name == "h" || arg.name == "help") {
 				printUsage();
 			}
-		} else if (arg.type == core::Argument::Arg) {
+		} else if (arg.type == core::Argument::Operand) {
 			if (!action) {
 				fprintf(stderr, "No action selected\n");
 				fprintf(stderr, "Type hpacker -h or hpacker --help for usage.\n");
