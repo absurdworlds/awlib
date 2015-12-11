@@ -8,7 +8,7 @@
  */
 #include <cstdio>
 
-#include <aw/core/ArgumentParser.h>
+#include <aw/utility/ArgumentParser.h>
 
 int main (int, char** v)
 {
