@@ -8,12 +8,10 @@
  */
 #ifndef _aw_GUITextBox_
 #define _aw_GUITextBox_
-
 #include <aw/gui/GUIElement.h>
 
 namespace aw {
 namespace gui {
-
 //! Text box GUI element
 class GUITextBox : public GUIElement {
 public:

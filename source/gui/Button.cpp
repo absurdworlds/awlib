@@ -6,14 +6,14 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#include <awengine/core/Logger.h>
+#include <aw/core/Logger.h>
 
-#include <awengine/gui/Button.h>
-#include <awengine/gui/Visitor.h>
-#include <awengine/gui/Style.h>
+#include <aw/gui/Button.h>
+#include <aw/gui/Visitor.h>
+#include <aw/gui/Style.h>
 
-namespace awrts {
+namespace aw {
 namespace gui {
 
 } // namespace gui
-} // namespace awrts
+} // namespace aw

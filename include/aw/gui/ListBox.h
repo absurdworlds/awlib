@@ -15,7 +15,6 @@
 
 namespace aw {
 namespace gui {
-
 //! List box GUI element
 class GUIListBox : public GUIElement {
 public:

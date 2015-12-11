@@ -6,13 +6,12 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _awrts_gui_button_
-#define _awrts_gui_button_
-#include <awengine/gui/Widget.h>
+#ifndef _aw_gui_button_
+#define _aw_gui_button_
+#include <aw/gui/Widget.h>
 
-namespace awrts {
+namespace aw {
 namespace gui {
-
 //! Text box GUI element
 class Button : public Widget {
 public:
@@ -26,5 +25,5 @@ private:
 };
 
 } // namespace gui
-} // namespace awrts
-#endif //_awrts_gui_button_
+} // namespace aw
+#endif //_aw_gui_button_

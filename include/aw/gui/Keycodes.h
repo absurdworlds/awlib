@@ -10,7 +10,6 @@
 #define _aw_Keycodes_
 
 namespace aw {
-
 //! Key code definitions (for future use)
 enum class _KeyCode : u8 {
 	Unknown = 0x00,

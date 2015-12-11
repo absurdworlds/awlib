@@ -12,7 +12,6 @@
 
 namespace aw {
 namespace gui {
-
 //! Typical “Window” with a title bar
 class Window : public Canvas {
 public:
