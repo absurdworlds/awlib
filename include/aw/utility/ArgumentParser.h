@@ -75,6 +75,8 @@ public:
 	 * 	If error occurs, return value is negative.
 	 */
 	opt<Argument> parseArgument();
+
+	std::string getParam();
 private:
 	Argument nextArg(char const* arg);
 

@@ -66,5 +66,19 @@ opt<Argument> ArgumentParser::parseArgument()
 
 	return nextArg(*argv++);
 }
+
+std::string ArgumentParser::getParam()
+{
+	if (*args != 0) {
+		std::string tmp(args);
+		args = &dummy; // reset 'args'
+		return tmp;
+	}
+
+	if (*argv == 0)
+		return "";
+
+	return std::string(*argv++);
+}
 } //namespace core
 } //namespace aw
