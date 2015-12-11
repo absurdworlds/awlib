@@ -1,5 +1,5 @@
 RootPath = ../..
-Sources = Logger.cpp ArgumentParser.cpp SettingsManager.cpp \
+Sources = Logger.cpp SettingsManager.cpp \
 	  MurmurHash3.cpp string/compose.cpp
 #	  SettingsManager.cpp HDFSettingsLoader.cpp ModelLoader.cpp \
 #	  FileSystem.cpp HrenginShell.cpp \
