@@ -27,6 +27,9 @@ i32 ArgumentParser::getNextArgument(Argument& tok)
 {
 	// bug: because it pops element first, and then returns size,
 	// arg parser returned 0, when there was actually an element
+	// TODO: ^ I think it should just return opt<Argument>
+	// And if needed to check number of arguments left, there should be
+	// separate method
 	size_t size = tokens_.size();
 	if(!tokens_.empty()) {
 		tok = tokens_.back();
@@ -71,10 +74,10 @@ void ArgumentParser::parseToken (char* argv)
 	} else {
 		tok.type = Argument::Option;
 		tok.name = *(argv++);
-		do {
+		while (*argv != 0) {
 			tokens_.push_front(tok);
 			tok.name = *(argv++);
-		} while (*argv != 0);
+		}
 	}
 
 	tokens_.push_front(tok);

@@ -13,7 +13,7 @@
 int main (int, char** v)
 {
 	using namespace aw;
-	core::ArgumentParser* a = core::createArgumentParser(v);
+	core::ArgumentParser* a = core::createArgumentParser(v + 1);
 	core::Argument arg;
 
 	while(a->getNextArgument(arg)) {

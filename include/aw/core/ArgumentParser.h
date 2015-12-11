@@ -20,13 +20,20 @@ namespace core {
  * Command line argument,
  * represents a single option or argument
  */
-struct Argument {
+struct AW_CORE_EXP Argument {
+	Argument()
+		: longOpt(false)
+	{ }
+
+	/*!
+	 * List of types of arguments:
+	 */
 	enum Type : u8 {
 		//! Option ('-o') or ('--option')
 		Option,
 		//! Argument or operand
-		Arg,
-		Operand = Arg,
+		Operand,
+		//! End of arguments delimiter: "--"
 		Delim
 	} type;
 	//! Is a long option
@@ -38,7 +45,7 @@ struct Argument {
 class ArgumentParser {
 public:
 	//! Virtual destructor
-	virtual ~ArgumentParser () 
+	virtual ~ArgumentParser()
 	{
 	}
 
@@ -51,7 +58,7 @@ public:
 	 * 	When end is reached, 0 is returned.
 	 * 	If error occurs, return value is negative.
 	 */
-	virtual i32 getNextArgument (Argument& arg) = 0;
+	virtual i32 getNextArgument(Argument& arg) = 0;
 };
 
 /*!
@@ -59,7 +66,7 @@ public:
  * \param argv Array of pointers to command line token strings.
  * \note Each string must be null-terminated. Last element of array must be 0.
  */
-AW_CORE_EXP ArgumentParser* createArgumentParser (char** argv);
+AW_CORE_EXP ArgumentParser* createArgumentParser(char** argv);
 
 } //namespace core
 } //namespace aw
