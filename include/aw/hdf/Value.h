@@ -17,7 +17,7 @@
 #include <aw/math/Vector2d.h>
 #include <aw/math/Vector3d.h>
 #include <aw/math/Vector4d.h>
-#include <aw/string/as_string.h>
+#include <aw/utility/string/as_string.h>
 #include <aw/math/as_string.h>
 
 #include <aw/hdf/Type.h>
@@ -234,6 +234,8 @@ inline std::string as_string(hdf::Value const& val)
 		return as_string(val.get<Vector3d<f32>>());
 	case hdf::Type::Vector4d:
 		return as_string(val.get<Vector4d<f32>>());
+	default:
+		break;
 	}
 
 	return "null";
