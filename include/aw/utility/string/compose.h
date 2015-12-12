@@ -12,7 +12,7 @@
 #include <vector>
 #include <string>
 
-#include <aw/core/core.h>
+#include <aw/utility/utility.h>
 
 #include <aw/utility/string/as_string.h>
 

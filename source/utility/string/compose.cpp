@@ -11,7 +11,8 @@
 
 namespace aw {
 namespace string {
-AW_CORE_EXP std::string compose(
+AW_UTILS_EXP
+std::string compose(
         std::string const& fmt,
        	std::vector<std::string> const& args)
 {
