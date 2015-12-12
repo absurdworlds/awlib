@@ -3,13 +3,12 @@
 
 #include <aw/string/utility.h>
 
-int main (int c, char** a)
+int main(int c, char** a)
 {
 	using namespace aw::string;
 
-	if (c < 3) {
+	if (c < 3)
 		return 1;
-	}
 
 	std::string string = a[1];
 	std::string delim = a[2];
@@ -27,8 +26,6 @@ int main (int c, char** a)
 	test(split);
 	printf("explode():\n");
 	test(explode);
-	{
-	}
 
 	return 0;
 }
