@@ -21,8 +21,9 @@ namespace string {
 /*!
  * Compose parametrized string (parameter substitution).
  */
-AW_CORE_EXP std::string compose(std::string const& fmt,
-		std::vector<std::string> const& args);
+AW_UTILS_EXP
+std::string compose(std::string const& fmt,
+                    std::vector<std::string> const& args);
 
 /*!
  * Compose parametrized string (parameter substitution).

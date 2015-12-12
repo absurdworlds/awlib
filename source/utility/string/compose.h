@@ -7,8 +7,8 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _aw_string_compose_impl_
-#define _aw_string_compose_impl_
+#ifndef aw_string_compose_impl__
+#define aw_string_compose_impl__
 #include <aw/utility/string/compose.h>
 namespace aw {
 namespace string {
@@ -18,8 +18,8 @@ char const CompositionChar = '%';
 class Composed {
 public:
 	Composed(std::string const& fmt,
-			std::vector<std::string> const& tokens,
-			char delim = CompositionChar)
+	         std::vector<std::string> const& tokens,
+	         char delim = CompositionChar)
 		: fmt(fmt), bits(tokens), delim(delim)
 	{
 		compose();
@@ -44,4 +44,4 @@ private:
 } // namespace compose_
 } // namespace string
 } // namespace aw
-#endif// (header guard)
+#endif// aw_string_compose_impl__
