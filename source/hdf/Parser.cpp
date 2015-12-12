@@ -194,7 +194,7 @@ void Parser::readValue(Value& var)
 	Token tok = lex.getToken();
 
 	if (tok.type != Token::Equals) {
-		error(tok.pos, "Expected '='");
+		error(tok.pos, string::compose("Expected '=', got %0", tok.value));
 		return;
 	}
 	Token id = lex.getToken();

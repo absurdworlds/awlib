@@ -99,7 +99,7 @@ std::string Lexer::readNumber()
 
 	std::string val;
 
-	while ((c >= '0' && c <= '9') || in(c, '.', 'e', 'E', '+', '-' )) {
+	while ((c >= '0' && c <= '9') || in(c, '.', 'e', 'E', '+', '-')) {
 		val += c;
 		stream.next(c);
 	}
