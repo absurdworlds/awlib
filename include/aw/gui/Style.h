@@ -12,7 +12,6 @@
 #include <map>
 
 #include <aw/gui/gui.h>
-#include <aw/gui/style/ElementStyle.h>
 
 namespace aw {
 namespace gui {
