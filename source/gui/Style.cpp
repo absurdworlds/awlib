@@ -9,9 +9,6 @@
 #include <aw/gui/Style.h>
 namespace aw {
 namespace gui {
-Style::Style()
-{
-}
 
 } // namespace gui
 } // namespace aw

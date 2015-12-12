@@ -20,7 +20,7 @@ using hdf::Value;
 
 class AW_GUI_EXP Style {
 public:
-	Style();
+	Style() = default;
 	virtual ~Style() = default;
 
 	Value& property(std::string key)
