@@ -12,9 +12,12 @@
 #include <map>
 
 #include <aw/gui/gui.h>
+#include <aw/hdf/Value.h>
 
 namespace aw {
 namespace gui {
+using hdf::Value;
+
 class AW_GUI_EXP Style {
 public:
 	Style();
