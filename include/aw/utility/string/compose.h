@@ -14,7 +14,7 @@
 
 #include <aw/core/core.h>
 
-#include <aw/string/as_string.h>
+#include <aw/utility/string/as_string.h>
 
 namespace aw {
 namespace string {

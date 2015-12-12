@@ -11,7 +11,7 @@
 #include <cstdio>
 
 #include <aw/io/InputStream.h>
-#include <aw/string/compose.h>
+#include <aw/utility/string/compose.h>
 
 #include "Lexer.h"
 

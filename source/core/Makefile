@@ -1,6 +1,6 @@
 RootPath = ../..
 Sources = Logger.cpp SettingsManager.cpp \
-	  MurmurHash3.cpp string/compose.cpp
+	  MurmurHash3.cpp
 #	  SettingsManager.cpp HDFSettingsLoader.cpp ModelLoader.cpp \
 #	  FileSystem.cpp HrenginShell.cpp \
 Defines = AW_MODULE_CORE

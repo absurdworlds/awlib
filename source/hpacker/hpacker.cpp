@@ -9,7 +9,7 @@
 #include <cstdio>
 
 #include <aw/utility/ArgumentParser.h>
-#include <aw/string/utility.h>
+#include <aw/utility/string/string.h>
 
 #include "hpacker.h"
 

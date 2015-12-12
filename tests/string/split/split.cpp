@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <utility>
 
-#include <aw/string/utility.h>
+#include <aw/utility/string/string.h>
 
 int main(int c, char** a)
 {

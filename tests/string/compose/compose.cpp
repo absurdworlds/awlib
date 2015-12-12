@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <utility>
 
-#include <aw/string/compose.h>
+#include <aw/utility/string/compose.h>
 
 int main (int c, char** a)
 {

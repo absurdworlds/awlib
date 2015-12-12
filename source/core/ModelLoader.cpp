@@ -7,7 +7,7 @@
  * There is NO WARRANTY, to the extent permitted by law.
  */
 #include <aw/core/paths.h>
-#include <aw/string/utility.h>
+#include <aw/utility/string/string.h>
 
 #include <aw/io/ReadFile.h>
 #include <aw/io/BufferedStream.h>

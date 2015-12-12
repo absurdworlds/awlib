@@ -10,7 +10,7 @@
 #include <cassert>
 #include <cstdio>
 
-#include <aw/string/compose.h>
+#include <aw/utility/string/compose.h>
 #include <aw/io/InputStream.h>
 #include <aw/hdf/Type.h>
 #include <aw/math/Vector4d.h>

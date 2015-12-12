@@ -12,7 +12,7 @@
 #include <string>
 #include <algorithm>
 
-#include <aw/string/utility.h>
+#include <aw/utility/string/string.h>
 #include <aw/hdf/Value.h>
 
 namespace aw {

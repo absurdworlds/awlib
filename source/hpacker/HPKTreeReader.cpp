@@ -8,7 +8,7 @@
  */
 #include <algorithm>
 
-#include <aw/string/utility.h>
+#include <aw/utility/string/string.h>
 
 #include "HPKTreeReader.h"
 

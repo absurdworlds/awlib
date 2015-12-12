@@ -12,8 +12,8 @@
 #include <aw/math/Vector2d.h>
 #include <aw/math/Vector3d.h>
 #include <aw/math/Vector4d.h>
-#include <aw/string/as_string.h>
-#include <aw/string/compose.h>
+#include <aw/utility/string/as_string.h>
+#include <aw/utility/string/compose.h>
 
 namespace aw {
 template<typename T>

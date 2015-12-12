@@ -9,10 +9,7 @@
  */
 #ifndef _aw_string_compose_impl_
 #define _aw_string_compose_impl_
-#include <aw/string/compose.h>
-
-#include <vector>
-#include <string>
+#include <aw/utility/string/compose.h>
 namespace aw {
 namespace string {
 // Implementation details, do not use directly
