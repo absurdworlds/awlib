@@ -7,6 +7,7 @@
  * There is NO WARRANTY, to the extent permitted by law.
  */
 #include <aw/hdf/Parser.h>
+#include <aw/gui/StyleLoader.h>
 
 namespace aw {
 namespace gui {
@@ -30,7 +31,7 @@ void readObjects(hdf::Parser* hdf, Style& parent)
 }
 }
 
-Style StyleLoader::loadStyle(InputStream& stream)
+Style StyleLoader::loadStyle(io::InputStream& stream) const
 {
 	Style style;
 	std::unique_ptr<hdf::Parser> hdf(hdf::createParser(stream));

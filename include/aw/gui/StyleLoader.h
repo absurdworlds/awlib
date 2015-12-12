@@ -13,11 +13,12 @@
 
 namespace aw {
 namespace gui {
-class StyleLoader {
-	StyleLoader();
-	~StyleLoader() = default;
+class AW_GUI_EXP StyleLoader {
+public:
+	StyleLoader() = default;
+	virtual ~StyleLoader() = default;
 
-	Style loadStyle(InputStream& stream) const
+	Style loadStyle(io::InputStream& stream) const;
 };
 } // namespace gui
 } // namespace aw
