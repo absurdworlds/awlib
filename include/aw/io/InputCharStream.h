@@ -31,7 +31,7 @@ public:
 	 */
 	virtual bool next(char& c);
 
-	virtual size_t getPos() const
+	virtual size_t position() const
 	{
 		return pos;
 	}
