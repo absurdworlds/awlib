@@ -20,6 +20,7 @@ struct KeyboardEvent : public EventId<KeyboardEvent> {
 	bool pressedDown:1;
 	bool shift:1;
 	bool control:1;
+	bool alt:1;
 };
 
 } // namespace gui
