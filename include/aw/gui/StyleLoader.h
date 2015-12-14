@@ -6,21 +6,20 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _aw_GUI_Style_Shared_
-#define _aw_GUI_Style_Shared_
+#ifndef aw_GUI_Style_Loader_
+#define aw_GUI_Style_Loader_
+#include <aw/io/InputStream.h>
+#include <aw/gui/Style.h>
+
 namespace aw {
 namespace gui {
-enum class ImageRepeat {
-	Stretch,
-	Tile
-};
+class AW_GUI_EXP StyleLoader {
+public:
+	StyleLoader() = default;
+	virtual ~StyleLoader() = default;
 
-enum Corner {
-	TopLeft,
-	BottomLeft,
-	BottomRight,
-	TopRight,
+	virtual Style loadStyle(io::InputStream& stream) const;
 };
 } // namespace gui
 } // namespace aw
-#endif //_aw_GUI_Style_Shared_
+#endif//aw_GUI_Style_Loader_
