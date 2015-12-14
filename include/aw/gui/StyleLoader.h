@@ -18,7 +18,7 @@ public:
 	StyleLoader() = default;
 	virtual ~StyleLoader() = default;
 
-	Style loadStyle(io::InputStream& stream) const;
+	virtual Style loadStyle(io::InputStream& stream) const;
 };
 } // namespace gui
 } // namespace aw
