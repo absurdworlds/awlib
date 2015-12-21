@@ -8,7 +8,6 @@
  */
 #ifndef _aw_macro_
 #define _aw_macro_
-
 #include <aw/config/config.h>
 
 /*! Make a bit mask of a desired bit */
@@ -25,16 +24,16 @@
 #define CONCAT1(arg1, arg2)  CONCAT2(arg1, arg2)
 #define CONCAT2(arg1, arg2)  arg1##arg2
 
-/*! Expand tokens — some preprocessors glue __VA_ARGS__ */
+/*! Expand tokens â€” some preprocessors glue __VA_ARGS__ */
 #define EXPAND(x) x
 
 /*! Vararg processing macros
-   Uses the trick: depending on number of arguments, the desired macro shifts
-   to a NAME position.
-
-   Use FOR_EACH macro, other macros are to be used only internally by FOR_EACH.
-   To process more arguments, add another FE_ macro and add more arguments to 
-   GET_MACRO
+ * Uses the trick: depending on number of arguments, the desired macro shifts
+ * to a NAME position.
+ *
+ * Use FOR_EACH macro, other macros are to be used only internally by FOR_EACH.
+ * To process more arguments, add another FE_ macro and add more arguments to
+ * GET_MACRO
  */
 #define GET_MACRO(_1,_2,_3,_4,_5,_6,NAME,...) NAME
 
@@ -48,7 +47,10 @@
 #define FE_8(DO, X, ...) EXPAND(DO(X)FE_7(DO, __VA_ARGS__))
 
 #define FOR_EACH(NAME,...) \
-	EXPAND(GET_MACRO(__VA_ARGS__, FE_6, FE_5, FE_4, FE_3, FE_2, FE_1)(NAME, __VA_ARGS__))
+	EXPAND( \
+	       GET_MACRO(__VA_ARGS__, FE_6, FE_5, FE_4, FE_3, FE_2, FE_1) \
+	       (NAME, __VA_ARGS__) \
+	)
 
 
 // Branch prediction hints, works only with GCC
