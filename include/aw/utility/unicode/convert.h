@@ -8,76 +8,13 @@
  */
 #ifndef _aw_utf_convert_
 #define _aw_utf_convert_
-
 #include <string>
 
-#include <aw/utility/utf.h>
-#include <aw/common/stringutils.h>
+#include <aw/utility/string/string.h>
+#include <aw/utility/unicode/utf.h>
 
 namespace aw {
-namespace locale {
-//! Convert utf-16 character string to utf-8
-inline char* narrow(char* output, size_t size,
-	wchar_t const* begin, wchar_t const* end)
-{
-	if(size == 0) {
-		return 0;
-	}
-
-	-- size;
-
-	while (begin != end) {
-		u32 cp = utf16::get<wchar_t const *>(begin, end);
-
-		if (cp == -1) {
-			continue;
-		}
-
-		size_t width = utf8::width(cp);
-
-		if (size < width) {
-			output = 0;
-			break;
-		}
-
-		utf8::append<char *>(cp, output);
-		size -= width;
-	}
-	*output++ = 0;
-	return output;
-}
-
-//! Convert utf-8 character string to utf-16
-inline wchar_t* widen (wchar_t* output, size_t size,
-	char const* begin, char const* end)
-{
-	if(size == 0) {
-		return 0;
-	}
-
-	-- size;
-
-	while(begin != end) {
-		u32 cp = utf8::get<char const *>(begin, end);
-
-		if(cp == -1) {
-			continue;
-		}
-
-		size_t width = utf16::width(cp);
-
-		if(size < width) {
-			output = 0;
-			break;
-		}
-
-		utf16::append<wchar_t *>(cp, output);
-		size -= width;
-	}
-	*output++ = 0;
-	return output;
-}
-
+namespace unicode {
 //! Convert utf-16 wstring to utf-8 string
 inline std::string narrow(std::wstring const& str) 
 {
@@ -127,6 +64,6 @@ inline std::wstring widen(std::string const& str)
 	return result;
 }
 
-} // namespace locale
+} // namespace unicode
 } // namespace aw
 #endif//_aw_utf_convert_
