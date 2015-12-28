@@ -126,6 +126,9 @@ Iterator append(u32 cp, Iterator output)
 	return output;
 }
 
+/*!
+ * Decode UTF-8 sequence without checking for validity
+ */
 template<typename Iterator>
 Iterator get_unchecked(Iterator input, Iterator end, u32& cp)
 {
@@ -134,6 +137,11 @@ Iterator get_unchecked(Iterator input, Iterator end, u32& cp)
 
 	if (length == 1)
 		return iter;
+
+	if (end - input < length - 1) {
+		cp = -1;
+		return end;
+	}
 
 	cp = cp & (0x7F >> (length + 1));
 
@@ -149,6 +157,9 @@ Iterator get_unchecked(Iterator input, Iterator end, u32& cp)
 	return input;
 }
 
+/*!
+ * Decode UTF-8 sequence, if valid
+ */
 template<typename Iterator>
 Iterator get(Iterator input, Iterator end, u32& cp)
 {
@@ -159,15 +170,15 @@ Iterator get(Iterator input, Iterator end, u32& cp)
 	if (length == 1)
 		return cp;
 
+	cp = cp & (0xFF >> (length + 1));
+
 	// Decrement length, because we incremented input by 1
 	// so (end - input) is less by one
 	--length;
 	if (end - input < length) {
 		cp = -1;
-		return input;
+		return end;
 	}
-
-	cp = cp & (0xFF >> (length + 1));
 
 	// There's no perfromance difference between manually unrolled loop
 	// and this loop (this loop is even faster, if I can trust my benchmark)
