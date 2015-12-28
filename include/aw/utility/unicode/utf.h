@@ -14,7 +14,7 @@
 #include <aw/math/math.h>
 
 namespace aw {
-namespace locale {
+namespace unicode {
 //! Enumeration of 'special' unicode codepoints
 enum class CodePoint : u32 {
 	MaxASCII = 0x80,
