@@ -127,7 +127,7 @@ Iterator append(u32 cp, Iterator output)
 }
 
 template<typename Iterator>
-Iterator get_unchecked(Iterator iter, Iterator end, u32& cp)
+Iterator get_unchecked(Iterator input, Iterator end, u32& cp)
 {
 	cp = *(input++);
 	size_t length = sequenceLength(math::mask8(cp));
@@ -146,11 +146,11 @@ Iterator get_unchecked(Iterator iter, Iterator end, u32& cp)
 			cp = (cp << 6) + (*(input++) & 0x3F);
 	}
 
-	return cp;
+	return input;
 }
 
 template<typename Iterator>
-u32 get(Iterator input, Iterator end, u32& cp)
+Iterator get(Iterator input, Iterator end, u32& cp)
 {
 	auto error = [&cp] 
 	u32 cp = *(input++);
