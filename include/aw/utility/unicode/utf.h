@@ -8,11 +8,9 @@
  */
 #ifndef _aw_utf_
 #define _aw_utf_
-
 #include <aw/common/types.h>
 #include <aw/utility/macro.h>
 #include <aw/math/math.h>
-
 namespace aw {
 namespace unicode {
 //! Enumeration of 'special' unicode codepoints
@@ -41,41 +39,50 @@ inline bool isValidCodepoint(u32 cp)
 }
 
 namespace utf8 {
-//! Check whether character is a trail shcracter
+//! Check whether character is a trail character
 inline bool isTrail(u8 ch)
 {
-	// Two most significant bits are equal '10'
-	return (ch & 0xC0) == 0x80;
 	//return (ch & 0b11000000) == 0b10000000;
+	return (ch & 0xC0) == 0x80;
 }
 
 //! Determine how many characters are in an utf8 sequence
 inline size_t sequenceLength(u8 lead) {
-	if(lead < 0x80) {
+	if (lead < 0x80) {
 		return 1;
-	} else if((lead >> 5) == 0x6) {
+	} else if ((lead >> 5) == 0b110) {
 		return 2;
-	} else if((lead >> 4) == 0xE) {
+	} else if ((lead >> 4) == 0b1110) {
 		return 3;
-	} else if((lead >> 3) == 0x1E) {
+	} else if ((lead >> 3) == 0b11110) {
 		return 4;
+#if 0 // non-standard
+	} else if ((lead >> 2) == 0b111110) {
+		return 5;
+	} else if ((lead >> 1) == 0b1111110) {
+		return 6;
+#endif
 	} else {
 		return 0;
 	}
 }
 
-//! Determine how many characters are required to encode codepoint \a cp
+//! Determine how many characters are required to encode codepoint
 inline size_t width(u32 cp) {
-	if(cp < 0x80) {
+	if (cp < 0x80) {
 		return 1;
-	} else if(cp < 0x800) {
+	} else if (cp < 0x800) {
 		return 2;
-	} else if(cp < 0x10000) {
+	} else if (cp < 0x10000) {
 		return 3;
+	} else if (cp < 0x10FFFF) {
+		return 4;
 	}
-	return 4;
+
+	return 0;
 }
 
+//! Helper to check if encoding is overlong
 inline bool isOverlong(u32 cp, size_t length)
 {
 	return width(cp) != length;
@@ -288,7 +295,6 @@ inline u32 get_unchecked(Iterator& input, Iterator end)
 	return ((first & 0x3FF) << 10) + (second & 0x3FF) + 0x10000;
 }
 } // namespace utf16
-
-} // namespace locale
+} // namespace unicode
 } // namespace aw
 #endif//_aw_utf_
