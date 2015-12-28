@@ -15,10 +15,10 @@
 
 namespace aw {
 namespace unicode {
-//! Convert utf-16 wstring to utf-8 string
-inline std::string narrow(std::wstring const& str) 
+//! Convert utf-16 string to utf-8 string
+inline std::string narrow(std::u16string const& str)
 {
-	typedef typename std::wstring::const_iterator in_iterator_type;
+	typedef typename std::u16string::const_iterator in_iterator_type;
 	typedef typename std::back_insert_iterator<std::string> out_iterator_type;
 
 	std::string result;
@@ -27,38 +27,41 @@ inline std::string narrow(std::wstring const& str)
 	in_iterator_type end(str.end());
 	out_iterator_type out(result);
 
-	while(begin != end) {
-		u32 cp = utf16::get<in_iterator_type>(begin, end);
+	while (begin != end) {
+		u32 cp;
 
-		if(cp == -1) {
+		begin = utf16::get(begin, end, cp);
+
+		if (cp == -1)
 			continue;
-		} 
 
-		utf8::append<out_iterator_type>(cp, out);
+		utf8::append(cp, out);
 	}
 
 	return result;
 }
 
-//! Convert utf-8 string to utf-16 wstring
-inline std::wstring widen(std::string const& str) 
+//! Convert utf-8 string to utf-16 u16string
+inline std::u16string widen(std::string const& str)
 {
 	typedef typename std::string::const_iterator in_iterator_type;
-	typedef typename std::back_insert_iterator<std::wstring> out_iterator_type;
+	typedef typename std::back_insert_iterator<std::u16string> out_iterator_type;
 
-	std::wstring result;
+	std::u16string result;
+
 	in_iterator_type begin(str.begin());
 	in_iterator_type end(str.end());
 	out_iterator_type out(result);
 
-	while(begin != end) {
-		u32 cp = utf8::get<in_iterator_type>(begin, end);
+	while (begin != end) {
+		u32 cp;
 
-		if(cp == -1) {
+		begin = utf8::get(begin, end, cp);
+
+		if (cp == -1)
 			continue;
-		} 
 
-		utf16::append<out_iterator_type>(cp, out);
+		utf16::append(cp, out);
 	}
 
 	return result;
