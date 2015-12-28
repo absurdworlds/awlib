@@ -195,66 +195,28 @@ Iterator get(Iterator input, Iterator end, u32& cp)
 
 	return input;
 }
-
-
 } // namespace utf8
 
 namespace utf16 {
 //! Check if code point is first surrogate
 inline bool isFirstSurrogate(u16 cp)
 {
-	return (CodePoint(cp) >= CodePoint::LeadSurrogateStart
-		&& CodePoint(cp) <= CodePoint::LeadSurrogateEnd);
+	return (CodePoint(cp) >= CodePoint::LeadSurrogateStart &&
+	        CodePoint(cp) <= CodePoint::LeadSurrogateEnd);
 }
 
 //! Check if code point is second surrogate
 inline bool isSecondSurrogate(u16 cp)
 {
-	return (CodePoint(cp) >= CodePoint::TailSurrogateStart
-		&& CodePoint(cp) <= CodePoint::TailSurrogateEnd);
+	return (CodePoint(cp) >= CodePoint::TailSurrogateStart &&
+	        CodePoint(cp) <= CodePoint::TailSurrogateEnd);
 }
 
 inline size_t width(u32 cp) {
-	if(cp < 0x10000) {
+	if(cp < 0x10000)
 		return 1;
-	}
+
 	return 2;
-}
-
-template<typename Iterator>
-inline Iterator append(u32 cp, Iterator output)
-{
-	if(isValidCodepoint(cp)) {
-		if(cp < 0x10000) {
-			*(output++) = cp;
-		} else {
-			cp -= 0x10000;
-			*(output++) = 0xDC00 + (cp >> 10);
-			*(output++) = 0xDC00 + (cp & 0x3FF);
-		}
-	}
-
-	return output;
-}
-
-template<typename Iterator>
-inline u32 get(Iterator& input, Iterator end)
-{
-	u16 first = *(input++);
-
-	if(!isSurrogate(first)) {
-		return first;
-	}
-
-	if(isFirstSurrogate(first)) {
-		u16 second = *(input++);
-		if(isSecondSurrogate(second)) {
-			return ((first & 0x3FF) << 10) +
-				(second & 0x3FF) + 0x10000;
-		}
-	} 
-
-	return -1;
 }
 
 template<typename Iterator>
@@ -272,16 +234,52 @@ inline Iterator append_unchecked(u32 cp, Iterator output)
 }
 
 template<typename Iterator>
-inline u32 get_unchecked(Iterator& input, Iterator end)
+inline Iterator append(u32 cp, Iterator output)
+{
+	if(isValidCodepoint(cp))
+		append_unchecked(cp, output);
+
+	return output;
+}
+
+template<typename Iterator>
+inline Iterator get(Iterator input, Iterator end)
 {
 	u16 first = *(input++);
 
-	if(!isSurrogate(first)) {
-		return first;
+	if (!isSurrogate(first)) {
+		cp = first;
+		return input;
 	}
+
+	if (isFirstSurrogate(first)) {
+		u16 second = *(input++);
+		if (isSecondSurrogate(second)) {
+			cp = ((first  & 0x3FF) << 10) +
+			      (second & 0x3FF) + 0x10000;
+			return input;
+		}
+	} 
+
+	cp = -1;
+	return input;
+}
+
+
+template<typename Iterator>
+inline Iterator get_unchecked(Iterator input, Iterator end, u32& cp)
+{
+	u16 first = *(input++);
+
+	if (!isSurrogate(first)) {
+		cp = first;
+		return input;
+	}
+
 	u16 second = *(input++);
 
-	return ((first & 0x3FF) << 10) + (second & 0x3FF) + 0x10000;
+	cp = ((first & 0x3FF) << 10) + (second & 0x3FF) + 0x10000;
+	return input;
 }
 } // namespace utf16
 } // namespace unicode
