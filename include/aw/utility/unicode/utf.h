@@ -88,81 +88,10 @@ inline bool isOverlong(u32 cp, size_t length)
 	return width(cp) != length;
 }
 
-template<typename Iterator>
-Iterator append(u32 cp, Iterator output)
-{
-	if(isValidCodepoint(cp)) {
-		if(cp < 0x80) {
-			*(output++) = u8(cp);
-		} else if(cp < 0x800) {
-			*(output++) = u8((cp >> 6)   | 0xC0);
-			*(output++) = u8((cp & 0x3F) | 0x80);
-		} else if(cp < 0x10000) {
-			*(output++) = u8((cp >> 12)         | 0xE0);
-			*(output++) = u8(((cp >> 6) & 0x3F) | 0x80);
-			*(output++) = u8((cp & 0x3F)        | 0x80);
-		} else {
-			*(output++) = u8((cp >> 18)          | 0xF0);
-			*(output++) = u8(((cp >> 12) & 0x3F) | 0x80);
-			*(output++) = u8(((cp >> 6) & 0x3F)  | 0x80);
-			*(output++) = u8((cp & 0x3F)         | 0x80);
-		}
-	}
-
-	return output;
-}
-
-template<typename Iterator>
-u32 get(Iterator& input, Iterator end)
-{
-	u32 cp = *(input++);
-	size_t length = sequenceLength(math::mask8(cp));
-
-	if(length == 1) {
-		return cp;
-	}
-
-	cp = cp & (0xFF >> (length + 1));
-
-	u8 octet;
-
-	switch(length) {
-		case 4:
-			if(input == end) {
-				return -1;
-			}
-			octet = *(input++);
-			if(!isTrail(octet)) {
-				return -1;
-			}
-			cp = (cp << 6) + (octet & 0x3F);
-		case 3:
-			if(input == end) {
-				return -1;
-			}
-			octet = *(input++);
-			if(!isTrail(octet)) {
-				return -1;
-			}
-			cp = (cp << 6) + (octet & 0x3F);
-		case 2:
-			if(input == end) {
-				return -1;
-			}
-			octet = *(input++);
-			if(!isTrail(octet)) {
-				return -1;
-			}
-			cp = (cp << 6) + (octet & 0x3F);
-			break;
-		case 0:
-			cp = -1;
-			break;
-	}
-
-	return cp;
-}
-
+/*!
+ * Append UTF-8 encoded code point to string
+ * (without checking for validity)
+ */
 template<typename Iterator>
 Iterator append_unchecked(u32 cp, Iterator output)
 {
@@ -178,26 +107,37 @@ Iterator append_unchecked(u32 cp, Iterator output)
 	} else {
 		*(output++) = u8((cp >> 18)          | 0xF0);
 		*(output++) = u8(((cp >> 12) & 0x3F) | 0x80);
-		*(output++) = u8(((cp >> 6) & 0x3F)  | 0x80);
+		*(output++) = u8(((cp >> 6)  & 0x3F) | 0x80);
 		*(output++) = u8((cp & 0x3F)         | 0x80);
 	}
 
 	return output;
 }
 
+/*!
+ * Append UTF-8 encded code point to string, if code point is valid
+ */
 template<typename Iterator>
-u32 get_unchecked(Iterator& input, Iterator end)
+Iterator append(u32 cp, Iterator output)
 {
-	u32 cp = *(input++);
+	if(isValidCodepoint(cp))
+		return append_unchecked(cp, output);
+
+	return output;
+}
+
+template<typename Iterator>
+Iterator get_unchecked(Iterator iter, Iterator end, u32& cp)
+{
+	cp = *(input++);
 	size_t length = sequenceLength(math::mask8(cp));
 
-	if(length == 1) {
-		return cp;
-	}
+	if (length == 1)
+		return iter;
 
 	cp = cp & (0x7F >> (length + 1));
 
-	switch(length) {
+	switch (length) {
 		case 4:
 			cp = (cp << 6) + (*(input++) & 0x3F);
 		case 3:
@@ -208,6 +148,44 @@ u32 get_unchecked(Iterator& input, Iterator end)
 
 	return cp;
 }
+
+template<typename Iterator>
+u32 get(Iterator input, Iterator end, u32& cp)
+{
+	auto error = [&cp] 
+	u32 cp = *(input++);
+	size_t length = sequenceLength(math::mask8(cp));
+
+	if (length == 1)
+		return cp;
+
+	// Decrement length, because we incremented input by 1
+	// so (end - input) is less by one
+	--length;
+	if (end - input < length) {
+		cp = -1;
+		return input;
+	}
+
+	cp = cp & (0xFF >> (length + 1));
+
+	// There's no perfromance difference between manually unrolled loop
+	// and this loop (this loop is even faster, if I can trust my benchmark)
+	u8 octet;
+	do {
+		u8 octet = *(input++);
+		if (!isTrail(octet)) {
+			cp = -1;
+			break;
+		}
+
+		cp = (cp << 6) + (octet & 0x3F);
+	} while (--length > 0);
+
+	return input;
+}
+
+
 } // namespace utf8
 
 namespace utf16 {
