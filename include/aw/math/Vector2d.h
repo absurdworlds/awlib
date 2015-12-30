@@ -236,12 +236,5 @@ private:
 
 template<typename T>
 using Vector2d = Vector<T,2>;
-
-//! Linear interpolation of two vectors
-template<typename T>
-Vector<T,2> lerp(Vector<T,2> const& v0, Vector<T,2> const& v1, f64 t)
-{
-	return (1.0-t)*v0 + t*v1;
-}
 } // namespace aw
 #endif // _aw_Vector2d_

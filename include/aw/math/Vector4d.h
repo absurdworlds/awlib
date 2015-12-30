@@ -267,19 +267,5 @@ inline Vector4d<i32>& Vector4d<i32>::operator /= (i32 const val)
 	coord[3] /= val;
 	return *this;
 }
-
-/*! Interpolate two vectors
-	\param v0 The first vector to interpolate
-	\param v1 The other vector to interpolate with.
-	\param t The value to use to interpolate between v0 and v1
-	Must be in range [0,1].
-	\return Interpolated vector
- */
-template<typename T>
-Vector<T,4> lerp(Vector<T,4> const& v0, Vector<T,4> const& v1, f64 t)
-{
-	return (1.0 - t)*v0 + t*v1;
-}
-
 } // namespace aw
 #endif//_aw_Vector4d_
