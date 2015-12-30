@@ -9,7 +9,7 @@
  */
 #ifndef _aw_math_
 #define _aw_math_
-#include <math.h>
+#include <cmath>
 #include <stdlib.h>
 #include <limits.h>
 #include <float.h>
@@ -21,39 +21,6 @@
 
 namespace aw {
 namespace math {
-
-//! π (mathematical constant)
-f64 const Pi	= 3.14159265358979323846; //26433832795028841971693993751;
-//! e (mathematical constant)
-f64 const e	= 2.71828182845904523536; //02874713526624977572470936999595
-
-f64 const ReciprocalPi	= 1.0/Pi;
- 
-f64 const HalfPi		= Pi/2.0;
-f64 const QuarterPi		= Pi/4.0;
-          
-f64 const DoublePi		= Pi*2.0;
-
-// Constant defining ratio of degrees to radians
-f64 const DegreesInRadian = 180.0 / Pi;
-
-// Constant defining ratio of radians to degrees
-f64 const RadiansInDegree = Pi / 180.0;
-
-//! Convert degrees to radians
-template<typename T>
-inline T degToRad(T deg)
-{
-	return deg * RadiansInDegree;
-}
-
-//! Convert radians to degrees
-template<typename T>
-inline T radToDeg(T rad)
-{
-	return rad * DegreesInRadian;
-}
-
 namespace RoundingError {
 i32 const integer = 0;
 f32 const float32 = 0.000001f;
@@ -121,101 +88,6 @@ inline f64 clamp(f64 value, f64 lower, f64 upper)
 {
 	return fmax(lower, fmin(value, upper));
 }
-
-/*!
- * Normalize angle between -180 and 180 degrees
- * \param angle
- *    angle to normalize, in degrees
- * \return
- *    input angle normalized to (-180;180] range
- */
-inline f32 normalizeAngle(f32 angle)
-{
-	angle = fmod(angle, 360.0f);
-	return    angle >   180.0f ? angle - 360.0f
-		: angle <= -180.0f ? angle + 360.0f 
-		: angle;
-}
-
-/*! Alias for normalizeAngle */
-inline f32 wrapAngle(f32 angle)
-{
-	return normalizeAngle(angle);
-}
-
-/*!
- * Normalize angle between -Pi and Pi radians
- * \param angle Value in radians to normalize
- * \return Angle in (-Pi;Pi] range
- */
-inline f32 wrapAngleRad(f32 angle)
-{
-	angle = fmod(f64(angle), DoublePi);
-	return    angle >   Pi ? angle - DoublePi
-		: angle <= -Pi ? angle + DoublePi 
-		: angle;
-}
-
-//! Check if value is a power of 2
-inline bool isPowerOf2(u32 value)
-{
-	return value && !(value & (value - 1));
-}
-
-//! Truncate integer to 8 bits
-template<typename integer_type>
-inline u8 mask8(integer_type val)
-{
-	return u8(val & 0xFF);
-}
-
-//! Truncate integer to 16 bits
-template<typename integer_type>
-inline u16 mask16(integer_type val)
-{
-	return u16(val & 0xFFFF);
-}
-
-//! Truncate integer to 32 bits
-template<typename integer_type>
-inline u32 mask32(integer_type val)
-{
-	return u32(val & 0xFFFFFFFF);
-}
-
-#if defined(_MSC_VER)
-/*!
- * Rotate 32-bit integer to the left
- */
-inline u32 rotl32 (u32 x, i8 r)
-{
-	  return _rotl(x,y);
-}
-
-/*!
- * Rotate 64-bit integer to the left
- */
-inline u64 rotl64 (u64 x, i8 r)
-{
-	  return _rotl64(x,y);
-}
-#else
-/*!
- * Rotate 32-bit integer to the left
- */
-inline u32 rotl32 (u32 x, i8 r)
-{
-  return (x << r) | (x >> (32 - r));
-}
-
-/*!
- * Rotate 64-bit integer to the left
- */
-inline u64 rotl64 (u64 x, i8 r)
-{
-  return (x << r) | (x >> (64 - r));
-}
-#endif
 
 /*! Interpolate two values
  *      \param v0 First value to interpolate
