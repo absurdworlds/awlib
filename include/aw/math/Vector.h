@@ -74,5 +74,33 @@ Vector<T,N> operator / (Vector<T,N> vec, Scalar const v)
 	vec /= v;
 	return vec;
 }
+
+template<typename T, size_t N, typename Scalar>
+Vector<T,N> operator + (Scalar const v, Vector<T,N> vec)
+{
+	vec += v;
+	return vec;
+}
+
+template<typename T, size_t N, typename Scalar>
+Vector<T,N> operator - (Scalar const v, Vector<T,N> vec)
+{
+	vec -= v;
+	return vec;
+}
+
+template<typename T, size_t N, typename Scalar>
+Vector<T,N> operator * (Scalar const v, Vector<T,N> vec)
+{
+	vec *= v;
+	return vec;
+}
+
+template<typename T, size_t N, typename Scalar>
+Vector<T,N> operator / (Scalar const v, Vector<T,N> vec)
+{
+	vec /= v;
+	return vec;
+}
 } // namespace aw
 #endif//aw_math_Vector_h

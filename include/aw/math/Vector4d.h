@@ -291,13 +291,6 @@ inline Vector4d<i32>& Vector4d<i32>::operator /= (i32 const val)
 	return *this;
 }
 
-//! Multiply scalar and vector
-template<class S, class T>
-Vector<T,4> operator * (S const scalar, Vector<T,4> const& vector)
-{
-	return vector * scalar; 
-}
-
 /*! Interpolate two vectors
 	\param v0 The first vector to interpolate
 	\param v1 The other vector to interpolate with.
