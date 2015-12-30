@@ -10,9 +10,6 @@
 #define _aw_macro_
 #include <aw/config/config.h>
 
-/*! Make a bit mask of a desired bit */
-#define BIT(x) (1<<(x))
-
 #define __FUNC__ __func__ 
 
 /*! Stringize */

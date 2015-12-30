@@ -9,8 +9,13 @@
  */
 #ifndef _aw_math_bitwise
 #define _aw_math_bitwise
+#include <aw/math/math.h>
 namespace aw {
 namespace math {
+
+template<size_t N>
+constexpr u64 bit = 1 << N;
+
 //! Check if value is a power of 2
 inline bool isPowerOf2(u32 value)
 {
