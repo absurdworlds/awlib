@@ -105,6 +105,11 @@ public:
 		return *this;
 	}
 
+	Vector<T,2>& invert()
+	{
+		return (*this *= -1);
+	}
+
 	//! Get the dot product of this vector with another
 	T dot(Vector<T,2> const& other) const
 	{
@@ -231,12 +236,6 @@ private:
 
 template<typename T>
 using Vector2d = Vector<T,2>;
-
-template<typename T>
-Vector<T,2> operator - (Vector<T,2> const& vec)
-{
-	return Vector<T,2>(-vec[0], -vec[1]);
-}
 
 //! Linear interpolation of two vectors
 template<typename T>

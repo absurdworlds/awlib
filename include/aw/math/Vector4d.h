@@ -147,15 +147,6 @@ public:
 		return *this; 
 	}
 
-	Vector<T,4> operator - () const
-	{
-		return Vector<T,4>(
-			-coord[0],
-			-coord[1],
-			-coord[2],
-			-coord[3]);
-	}
-
 	/*!
 	 * Check if vectors are identical.
 	 * \return
@@ -206,29 +197,19 @@ public:
 	Vector<T,4>& setLength(T const newlength)
 	{
 		normalize();
-		coord[0] *= newlength;
-		coord[1] *= newlength;
-		coord[2] *= newlength;
-		coord[3] *= newlength;
-		return *this;
+		return *(this *= newlength);
 	}
 
 	//! Normalize the vector
 	Vector<T,4>& normalize()
 	{
 		f64 length = lengthSquared();
-		if (length == 0) {
+		if (length == 0)
 			return *this;
-		}
 
 		length = math::invSqrt(length);
 
-		coord[0] = T(coord[0] * length);
-		coord[1] = T(coord[1] * length);
-		coord[2] = T(coord[2] * length);
-		coord[3] = T(coord[3] * length);
-
-		return *this;
+		return *(this *= length);
 	}
 
 	//! Get a normalized version of a vector without modifying it
@@ -243,11 +224,7 @@ public:
 	// Invert the vector.
 	Vector<T,4>& invert()
 	{
-		coord[0] *= -1;
-		coord[1] *= -1;
-		coord[2] *= -1;
-		coord[3] *= -1;
-		return *this;
+		return (*this *= -1);
 	}
 
 	//! Fill an array of 4 values with the vector data

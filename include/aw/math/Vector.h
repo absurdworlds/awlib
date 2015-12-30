@@ -20,6 +20,13 @@ class Vector {
 };
 
 template<typename T, size_t N>
+Vector<T,N> operator - (Vector<T,N> vec)
+{
+	vec.invert();
+	return vec;
+}
+
+template<typename T, size_t N>
 Vector<T,N> operator + (Vector<T,N> v1, Vector<T,N> const& v2)
 {
 	v1 += v2;

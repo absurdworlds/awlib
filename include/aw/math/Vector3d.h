@@ -113,13 +113,6 @@ public:
 		return *this;
 	}
 
-	Vector<T,3> operator / (Vector<T,3> const& other) const
-	{
-		return Vector<T,3>(coord[0] / other[0],
-		                   coord[1] / other[1],
-		                   coord[2] / other[2]);
-	}
-
 	Vector<T,3>& operator /= (Vector<T,3> const& other)
 	{
 		coord[0] /= other[0];
@@ -131,19 +124,7 @@ public:
 	Vector<T,3>& operator /= (T const val)
 	{
 		T const inv = T(1.0/val);
-		coord[0] *= inv; 
-		coord[1] *= inv; 
-		coord[2] *= inv; 
-		return *this; 
-	}
-
-
-	Vector<T,3> operator - () const
-	{
-		return Vector<T,3>(
-			-coord[0],
-			-coord[1],
-			-coord[2]);
+		return (*this *= inv);
 	}
 
 	/*!
@@ -157,7 +138,6 @@ public:
 		        math::equals(coord[1], other[1]) &&
 		        math::equals(coord[2], other[2]));
 	}
-
 
 	//! Calculate the dot product with another vector
 	T dot(Vector<T,3> const& other) const
@@ -231,10 +211,7 @@ public:
 	//! Invert the vector.
 	Vector<T,3>& invert()
 	{
-		coord[0] *= -1;
-		coord[1] *= -1;
-		coord[2] *= -1;
-		return *this;
+		return (*this *= -1);
 	}
 
 	/*!
