@@ -11,167 +11,104 @@
 #define _aw_Vector2d_
 #include <array>
 
-#include <aw/math/math.h>
+#include <aw/math/Vector.h>
 
 namespace aw {
 //! Represents positions and directions in 2D space
 template <typename T>
-class Vector2d {
+class Vector<T,2> {
 public:
 	//! Default constructor. Constructs zero vector.
-	Vector2d()
-		: coord_()
+	Vector()
+		: coord()
 	{
 	}
 
 	//! Construct vector with same both coordinates 
-	explicit Vector2d(T v)
-		: coord_({v, v})
+	explicit Vector(T v)
+		: coord({v, v})
 	{
 	}
 
 	//! Construct vector with individual coodrinates
-	Vector2d(T x, T y)
-		: coord_({x, y})
+	Vector(T x, T y)
+		: coord({x, y})
 	{
 	}
-
 
 	//! Copy constructor
-	Vector2d(Vector2d<T> const& other)
-		: coord_({other[0], other[1]})
+	Vector(Vector<T,2> const& other)
+		: coord({other[0], other[1]})
 	{
 	}
 
-	//! Predefined instance of zero vector
-	static Vector2d<T> const zero;
-
-	Vector2d<T>& operator = (Vector2d<T> const& other)
+	Vector<T,2>& operator = (Vector<T,2> const& other)
 	{
-		coord_[0] = other[0];
-		coord_[1] = other[1];
+		coord[0] = other[0];
+		coord[1] = other[1];
 		return *this;
 	}
 
-	Vector2d<T> operator - () const
+	Vector<T,2>& operator += (Vector<T,2> const& other)
 	{
-		return Vector2d<T>(
-			-coord_[0],
-			-coord_[1]);
-	}
-
-	Vector2d<T> operator + (Vector2d<T> const& other) const
-	{
-		return Vector2d<T>(coord_[0] + other[0], coord_[1] + other[1]);
-	}
-
-	Vector2d<T>& operator += (Vector2d<T> const& other)
-	{
-		coord_[0] += other[0];
-		coord_[1] += other[1];
+		coord[0] += other[0];
+		coord[1] += other[1];
 		return *this;
 	}
 
-	Vector2d<T> operator + (T const v) const
+	Vector<T,2>& operator += (T const v)
 	{
-		return Vector2d<T>(coord_[0] + v, coord_[1] + v);
-	}
-
-	Vector2d<T>& operator += (T const v)
-	{
-		coord_[0] += v;
-		coord_[1] += v;
+		coord[0] += v;
+		coord[1] += v;
 		return *this;
 	}
 
-	Vector2d<T> operator - (Vector2d<T> const& other) const
+	Vector<T,2>& operator -= (Vector<T,2> const& other)
 	{ 
-		return Vector2d<T>(
-			coord_[0] - other[0],
-			coord_[1] - other[1]);
-	}
-
-	Vector2d<T>& operator -= (Vector2d<T> const& other)
-	{ 
-		coord_[0] -= other[0];
-		coord_[1] -= other[1];
+		coord[0] -= other[0];
+		coord[1] -= other[1];
 		return *this;
 	}
 
-	Vector2d<T> operator - (T const v) const
+	Vector<T,2>& operator -= (T const v)
 	{ 
-		return Vector2d<T>(
-			coord_[0] - v,
-			coord_[1] - v);
-	}
-
-	Vector2d<T>& operator -= (T const v)
-	{ 
-		coord_[0] -= v;
-		coord_[1] -= v;
+		coord[0] -= v;
+		coord[1] -= v;
 		return *this;
 	}
 
-	Vector2d<T> operator * (Vector2d<T> const& other) const
+	Vector<T,2>& operator *= (Vector<T,2> const& other)
 	{ 
-		return Vector2d<T>(
-			coord_[0] * other[0],
-			coord_[1] * other[1]);
-	}
-
-	Vector2d<T>& operator *= (Vector2d<T> const& other)
-	{ 
-		coord_[0] *= other[0];
-		coord_[1] *= other[1];
+		coord[0] *= other[0];
+		coord[1] *= other[1];
 		return *this;
 	}
 
-	Vector2d<T> operator * (T const v) const
-	{ 
-		return Vector2d<T>(
-			coord_[0] * v,
-			coord_[1] * v);
-	}
-
-	Vector2d<T>& operator *= (T const v)
+	Vector<T,2>& operator *= (T const v)
 	{
-		coord_[0] *= v;
-		coord_[1] *= v;
+		coord[0] *= v;
+		coord[1] *= v;
 		return *this;
 	}
 
-	Vector2d<T> operator / (Vector2d<T> const& other) const
+	Vector<T,2>& operator /= (Vector<T,2> const& other)
 	{
-		return Vector2d<T>(
-			coord_[0] / other[0],
-			coord_[1] / other[1]);
-	}
-
-	Vector2d<T>& operator /= (Vector2d<T> const& other)
-	{
-		coord_[0] /= other[0];
-		coord_[1] /= other[1];
+		coord[0] /= other[0];
+		coord[1] /= other[1];
 		return *this;
 	}
 
-	Vector2d<T> operator / (const T v) const
+	Vector<T,2>& operator /= (const T v)
 	{
-		return Vector2d<T>(
-			coord_[0] / v,
-			coord_[1] / v);
-	}
-
-	Vector2d<T>& operator /= (const T v)
-	{
-		coord_[0] /= v;
-		coord_[1] /= v;
+		coord[0] /= v;
+		coord[1] /= v;
 		return *this;
 	}
 
 	//! Get the dot product of this vector with another
-	T dot(Vector2d<T> const& other) const
+	T dot(Vector<T,2> const& other) const
 	{
-		return coord_[0]*other[0] + coord_[1]*other[1];
+		return coord[0]*other[0] + coord[1]*other[1];
 	}
 
 	//! Get squared length of the vector.
@@ -187,13 +124,13 @@ public:
 	}
 
 	//! Get distance from another point.
-	T distance(Vector2d<T> const& other) const
+	T distance(Vector<T,2> const& other) const
 	{
 		return (*this - other).length();
 	}
 
 	//! Get squared distance from another point.
-	T distanceSquared(Vector2d<T> const& other) const
+	T distanceSquared(Vector<T,2> const& other) const
 	{
 		return (*this - other).lengthSquared();
 	}
@@ -201,7 +138,7 @@ public:
 	//! Calculates angle of the vector
 	T angle() const
 	{
-		T yaw = T(atan2(f64(coord_[0]), f64(coord_[1])));
+		T yaw = T(atan2(f64(coord[0]), f64(coord[1])));
 
 		if (yaw <= -math::Pi) {
 			yaw += math::DoublePi;
@@ -213,15 +150,16 @@ public:
 	}
 
 	//! Make the vector of unit length
-	Vector2d<T>& normalize()
+	Vector<T,2>& normalize()
 	{
 		f32 length = lengthSquared();
 		if (length == 0)
 			return *this;
 
 		length = math::invSqrt(length);
-		coord_[0] = T(coord_[0] * length);
-		coord_[1] = T(coord_[1] * length);
+		
+		this *= length;
+
 		return *this;
 	}
 
@@ -229,20 +167,20 @@ public:
 	//! Access elements of the vector by subscript
 	T& operator [] (size_t elem)
 	{
-		return coord_[elem];
+		return coord[elem];
 	}
 
 	//! Access elements of the vector by subscript
 	T const& operator [] (size_t elem) const
 	{
-		return coord_[elem];
+		return coord[elem];
 	}
 
 	//! Fill an array of 4 values with the vector data
 	void toArrayOf4(T* array) const
 	{
-		array[0] = coord_[0];
-		array[1] = coord_[1];
+		array[0] = coord[0];
+		array[1] = coord[1];
 		array[2] = 0;
 		array[3] = 0;
 	}
@@ -250,53 +188,59 @@ public:
 	//! Fill an array of 3 values with the vector data
 	void toArrayOf3(T* array) const
 	{
-		array[0] = coord_[0];
-		array[1] = coord_[1];
+		array[0] = coord[0];
+		array[1] = coord[1];
 		array[2] = 0;
 	}
 
 	//! Fill an array of 2 values with the vector data
 	void toArrayOf2(T* array) const
 	{
-		array[0] = coord_[0];
-		array[1] = coord_[1];
+		array[0] = coord[0];
+		array[1] = coord[1];
 	}
 
 	//! Get coordinate along X axis
 	T& x()
 	{
-		return coord_[0];
+		return coord[0];
 	}
 
 	//! Get coordinate along Y axis
 	T& y()
 	{
-		return coord_[1];
+		return coord[1];
 	}
 
 	//! Get coordinate along X axis
 	T const& x() const
 	{
-		return coord_[0];
+		return coord[0];
 	}
 
 	//! Get coordinate along Y axis
 	T const& y() const
 	{
-		return coord_[1];
+		return coord[1];
 	}
+	
 private:
 	//! Coordinates of the vector
-	std::array<T, 2> coord_;
+	std::array<T,2> coord;
 };
 
-// Initialization of static member
 template<typename T>
-Vector2d<T> const Vector2d<T>::zero = Vector2d(0);
+using Vector2d = Vector<T,2>;
+
+template<typename T>
+Vector<T,2> operator - (Vector<T,2> const& vec)
+{
+	return Vector<T,2>(-vec[0], -vec[1]);
+}
 
 //! Linear interpolation of two vectors
 template<typename T>
-Vector2d<T> lerp(Vector2d<T> const& v0, Vector2d<T> const& v1, f64 t)
+Vector<T,2> lerp(Vector<T,2> const& v0, Vector<T,2> const& v1, f64 t)
 {
 	return (1.0-t)*v0 + t*v1;
 }
