@@ -12,12 +12,9 @@
 #include <aw/common/types.h>
 
 namespace aw {
-template <typename T>
-class Vector2d;
-template <typename T>
-class Vector3d;
-template <typename T>
-class Vector4d;
+template <typename T, size_t N>
+class Vector;
+
 
 namespace hdf {
 /*!
@@ -81,17 +78,17 @@ struct typeof<std::string> {
 };
 
 template<>
-struct typeof<Vector2d<f32>> {
+struct typeof<Vector<f32,2>> {
 	static Type const value = Type::Vector2d;
 };
 
 template<>
-struct typeof<Vector3d<f32>> {
+struct typeof<Vector<f32,3>> {
 	static Type const value = Type::Vector3d;
 };
 
 template<>
-struct typeof<Vector4d<f32>> {
+struct typeof<Vector<f32,4>> {
 	static Type const value = Type::Vector4d;
 };
 

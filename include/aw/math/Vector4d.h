@@ -10,215 +10,141 @@
 #define _aw_Vector4d_
 #include <array>
 
-#include <aw/math/math.h>
+#include <aw/math/Vector.h>
 
 namespace aw {
 //! Represents a 4-dimensional vector
 template <class T>
-class Vector4d {
+class Vector<T,4> {
 public:
 	//! Default constructor. Constructs zero vector.
-	Vector4d()
-		: coord_()
+	Vector()
+		: coord()
 	{
 	}
 
 	//! Construct vector specifying individual coodrinates
-	Vector4d(T const x, T const y, T const z, T const w)
-		: coord_({x,y,z,w})
+	Vector(T const x, T const y, T const z, T const w)
+		: coord({x,y,z,w})
 	{
 	}
 
 	//! Construct vector with same value for coordinates
-	explicit Vector4d(T const v)
-		: coord_({v,v,v,v})
+	explicit Vector(T const v)
+		: coord({v,v,v,v})
 	{
 	}
 
 	//! Copy constructor
-	Vector4d(Vector4d<T> const& other) 
-		: coord_({other[0],other[1],other[2],other[3]})
+	Vector(Vector<T,4> const& other) 
+		: coord({other[0],other[1],other[2],other[3]})
 	{
 	}
 
 	//! Set vector's components
 	void set(T const x, T const y, T const z, T const w)
 	{
-		coord_[0] = x;
-		coord_[1] = y;
-		coord_[2] = z;
-		coord_[3] = w;
+		coord[0] = x;
+		coord[1] = y;
+		coord[2] = z;
+		coord[3] = w;
 	}
 
-	void set(Vector4d<T> const& other)
+	void set(Vector<T,4> const& other)
 	{
-		coord_[0] = other[0];
-		coord_[1] = other[1];
-		coord_[2] = other[2];
-		coord_[3] = other[3];
+		coord[0] = other[0];
+		coord[1] = other[1];
+		coord[2] = other[2];
+		coord[3] = other[3];
 	}
 
-	Vector4d<T>& operator = (Vector4d<T> const& other)
+	Vector<T,4>& operator = (Vector<T,4> const& other)
 	{
 		set(other);
 		return *this;
 	}
 
-	Vector4d<T> operator + (Vector4d<T> const& other) const
+	Vector<T,4> operator + (Vector<T,4> const& other) const
 	{
-		return Vector4d<T>(
-			coord_[0] + other[0],
-			coord_[1] + other[1],
-			coord_[2] + other[2],
-			coord_[3] + other[3]);
+		return Vector<T,4>(
+			coord[0] + other[0],
+			coord[1] + other[1],
+			coord[2] + other[2],
+			coord[3] + other[3]);
 	}
 
 	//! Component-wise addition
-	Vector4d<T>& operator += (Vector4d<T> const& other)
+	Vector<T,4>& operator += (Vector<T,4> const& other)
 	{ 
-		coord_[0] += other[0];
-		coord_[1] += other[1];
-		coord_[2] += other[2];
-		coord_[3] += other[3];
+		coord[0] += other[0];
+		coord[1] += other[1];
+		coord[2] += other[2];
+		coord[3] += other[3];
 		return *this;
 	}
 
-	Vector4d<T> operator + (T const val) const
+	Vector<T,4>& operator += (T const val)
 	{
-		return Vector4d<T>(
-			coord_[0] + val,
-			coord_[1] + val,
-			coord_[2] + val,
-			coord_[3] + val);
-	}
-
-	Vector4d<T>& operator += (T const val)
-	{
-		coord_[0] += val;
-		coord_[1] += val;
-		coord_[2] += val;
-		coord_[3] += val;
+		coord[0] += val;
+		coord[1] += val;
+		coord[2] += val;
+		coord[3] += val;
 		return *this;
 	}
 
-	Vector4d<T> operator - (Vector4d<T> const& other) const
+	Vector<T,4>& operator -= (Vector<T,4> const& other)
 	{
-		return Vector4d<T>(
-			coord_[0] - other[0],
-			coord_[1] - other[1],
-			coord_[2] - other[2],
-			coord_[3] - other[3]);
-	}
-
-	Vector4d<T>& operator -= (Vector4d<T> const& other)
-	{
-		coord_[0] -= other[0];
-		coord_[1] -= other[1];
-		coord_[2] -= other[2];
-		coord_[3] -= other[3];
+		coord[0] -= other[0];
+		coord[1] -= other[1];
+		coord[2] -= other[2];
+		coord[3] -= other[3];
 		return *this;
 	}
 
-	Vector4d<T> operator - (T const val) const
+	Vector<T,4>& operator -= (T const val)
 	{
-		return Vector4d<T>(
-			coord_[0] - val,
-			coord_[1] - val,
-			coord_[2] - val,
-			coord_[3] - val);
-	}
-
-	Vector4d<T>& operator -= (T const val)
-	{
-		coord_[0] -= val;
-		coord_[1] -= val;
-		coord_[2] -= val;
-		coord_[3] -= val;
+		coord[0] -= val;
+		coord[1] -= val;
+		coord[2] -= val;
+		coord[3] -= val;
 		return *this;
 	}
 
-	Vector4d<T> operator * (Vector4d<T> const& other) const
+	Vector<T,4>& operator *= (Vector<T,4> const& other)
 	{
-		return Vector4d<T>(
-			coord_[0] * other[0],
-			coord_[1] * other[1],
-			coord_[2] * other[2],
-			coord_[3] * other[3]);
-	}
-
-	Vector4d<T>& operator *= (Vector4d<T> const& other)
-	{
-		coord_[0] *= other[0];
-		coord_[1] *= other[1];
-		coord_[2] *= other[2];
-		coord_[3] *= other[3];
+		coord[0] *= other[0];
+		coord[1] *= other[1];
+		coord[2] *= other[2];
+		coord[3] *= other[3];
 		return *this;
 	}
 
-	Vector4d<T> operator * (T const v) const
+	Vector<T,4>& operator *= (T const v)
 	{
-		return Vector4d<T>(
-			coord_[0] * v,
-			coord_[1] * v,
-			coord_[2] * v,
-			coord_[3] * v);
-	}
-
-	Vector4d<T>& operator *= (T const v)
-	{
-		coord_[0] *= v;
-		coord_[1] *= v;
-		coord_[2] *= v;
-		coord_[3] *= v;
+		coord[0] *= v;
+		coord[1] *= v;
+		coord[2] *= v;
+		coord[3] *= v;
 		return *this;
 	}
 
-	Vector4d<T> operator / (Vector4d<T> const& other) const
+	Vector<T,4>& operator /= (Vector<T,4> const& other)
 	{
-		return Vector4d<T>(
-			coord_[0] / other[0],
-			coord_[1] / other[1],
-			coord_[2] / other[2],
-			coord_[3] / other[3]);
-	}
-
-	Vector4d<T>& operator /= (Vector4d<T> const& other)
-	{
-		coord_[0] /= other[0];
-		coord_[1] /= other[1];
-		coord_[2] /= other[2];
-		coord_[3] /= other[3];
+		coord[0] /= other[0];
+		coord[1] /= other[1];
+		coord[2] /= other[2];
+		coord[3] /= other[3];
 		return *this;
 	}
 
-	Vector4d<T> operator / (T const val) const
-	{
-		T inv = T(1.0/val);
-		return Vector4d<T>(
-			coord_[0] * inv,
-			coord_[1] * inv,
-			coord_[2] * inv,
-			coord_[3] * inv);
-	}
-
-	Vector4d<T>& operator /= (T const val)
+	Vector<T,4>& operator /= (T const val)
 	{
 		T const inv = T(1.0/val);
-		coord_[0] *= inv; 
-		coord_[1] *= inv; 
-		coord_[2] *= inv; 
-		coord_[3] *= inv; 
+		coord[0] *= inv; 
+		coord[1] *= inv; 
+		coord[2] *= inv; 
+		coord[3] *= inv; 
 		return *this; 
-	}
-
-
-	Vector4d<T> operator - () const
-	{
-		return Vector4d<T>(
-			-coord_[0],
-			-coord_[1],
-			-coord_[2],
-			-coord_[3]);
 	}
 
 	/*!
@@ -226,21 +152,21 @@ public:
 	 * \return
 	 * 	`true` if vectors are identical, otherwise `false`.
 	 */
-	bool operator == (Vector4d<T> const& other) const
+	bool operator == (Vector<T,4> const& other) const
 	{
-		return (math::equals(coord_[0], other[0]) &&
-		        math::equals(coord_[1], other[1]) &&
-		        math::equals(coord_[2], other[2]) &&
-		        math::equals(coord_[3], other[3]));
+		return (math::equals(coord[0], other[0]) &&
+		        math::equals(coord[1], other[1]) &&
+		        math::equals(coord[2], other[2]) &&
+		        math::equals(coord[3], other[3]));
 	}
 
 	//! Calculate the dot product with another vector
-	T dot(Vector4d<T> const& other) const
+	T dot(Vector<T,4> const& other) const
 	{
-		return coord_[0]*other[0] +
-		       coord_[1]*other[1] +
-		       coord_[2]*other[2] +
-		       coord_[3]*other[3];
+		return coord[0]*other[0] +
+		       coord[1]*other[1] +
+		       coord[2]*other[2] +
+		       coord[3]*other[3];
 	}
 	
 	//! Get squared length of the vector.
@@ -256,134 +182,90 @@ public:
 	}
 
 	//! Get distance from another point
-	T distance(Vector4d<T> const& other) const
+	T distance(Vector<T,4> const& other) const
 	{
 		return (*this - other).length();
 	}
 
 	//! Get squared distance from another point
-	T distanceSquared(Vector4d<T> const& other) const
+	T distanceSquared(Vector<T,4> const& other) const
 	{
 		return (*this - other).lengthSquared();
 	}
 
 	//! Set the length of the vector to a new value
-	Vector4d<T>& setLength(T const newlength)
+	Vector<T,4>& setLength(T const newlength)
 	{
 		normalize();
-		coord_[0] *= newlength;
-		coord_[1] *= newlength;
-		coord_[2] *= newlength;
-		coord_[3] *= newlength;
-		return *this;
+		return *(this *= newlength);
 	}
 
 	//! Normalize the vector
-	Vector4d<T>& normalize()
+	Vector<T,4>& normalize()
 	{
 		f64 length = lengthSquared();
-		if (length == 0) {
+		if (length == 0)
 			return *this;
-		}
 
 		length = math::invSqrt(length);
 
-		coord_[0] = T(coord_[0] * length);
-		coord_[1] = T(coord_[1] * length);
-		coord_[2] = T(coord_[2] * length);
-		coord_[3] = T(coord_[3] * length);
-
-		return *this;
+		return *(this *= length);
 	}
 
 	//! Get a normalized version of a vector without modifying it
-	Vector4d<T> normalized() const
+	Vector<T,4> normalized() const
 	{
-		Vector4d<T> temp(*this);
+		Vector<T,4> temp(*this);
 		temp.normalize();
 
 		return temp;
 	}
 
 	// Invert the vector.
-	Vector4d<T>& invert()
+	Vector<T,4>& invert()
 	{
-		coord_[0] *= -1;
-		coord_[1] *= -1;
-		coord_[2] *= -1;
-		coord_[3] *= -1;
-		return *this;
+		return (*this *= -1);
 	}
 
 	//! Fill an array of 4 values with the vector data
 	void toArrayOf4(T* array) const
 	{
-		array[0] = coord_[0];
-		array[1] = coord_[1];
-		array[2] = coord_[2];
-		array[3] = coord_[3];
+		array[0] = coord[0];
+		array[1] = coord[1];
+		array[2] = coord[2];
+		array[3] = coord[3];
 	}
 
 	//! Access elements of the vector by subscript
 	T& operator [] (size_t elem)
 	{
-		return coord_[elem];
+		return coord[elem];
 	}
 
 	//! Access elements of the vector by subscript
 	T const& operator [] (size_t elem) const
 	{
-		return coord_[elem];
+		return coord[elem];
 	}
 
 private:
 	//! Coordinates of the vector
-	std::array<T, 4> coord_;
+	std::array<T, 4> coord;
 };
 
-//! Partial specialization for integer vectors
-//! Divide integer vector by scalar
-template <>
-inline Vector4d<i32> Vector4d<i32>::operator / (i32 const val) const 
-{
-	return Vector4d<i32>(
-		coord_[0]/val,
-		coord_[1]/val,
-		coord_[2]/val,
-		coord_[3]/val);
-}
+template<typename T>
+using Vector4d = Vector<T,4>;
 
 //! Partial specialization for integer vectors
 //! Divide integer vector by scalar
 template <>
 inline Vector4d<i32>& Vector4d<i32>::operator /= (i32 const val) 
 {
-	coord_[0] /= val;
-	coord_[1] /= val;
-	coord_[2] /= val;
-	coord_[3] /= val;
+	coord[0] /= val;
+	coord[1] /= val;
+	coord[2] /= val;
+	coord[3] /= val;
 	return *this;
 }
-
-//! Multiply scalar and vector
-template<class S, class T>
-Vector4d<T> operator * (S const scalar, Vector4d<T> const& vector)
-{
-	return vector * scalar; 
-}
-
-/*! Interpolate two vectors
-	\param v0 The first vector to interpolate
-	\param v1 The other vector to interpolate with.
-	\param t The value to use to interpolate between v0 and v1
-	Must be in range [0,1].
-	\return Interpolated vector
- */
-template<typename T>
-Vector4d<T> lerp(Vector4d<T> const& v0, Vector4d<T> const& v1, f64 t)
-{
-	return (1.0 - t)*v0 + t*v1;
-}
-
 } // namespace aw
 #endif//_aw_Vector4d_
