@@ -12,7 +12,11 @@
 #include <aw/math/math.h>
 namespace aw {
 namespace math {
-
+/*!
+ * Value with Nth bit set and other bits cleared,
+ * counting from 0.
+ * (0 is lsb, 31 is msb)
+ */
 template<size_t N>
 constexpr u64 bit = 1 << N;
 

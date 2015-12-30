@@ -40,7 +40,7 @@ FORCEINLINE f64 sqrt(f64 const x)
 }
 
 //! Calculate square root of an integer
-FORCEINLINE i32 sqrt(const i32 x)
+FORCEINLINE i32 sqrt(i32 const x)
 {
 	return static_cast<i32>(::sqrt(static_cast<f32>(x)));
 }
