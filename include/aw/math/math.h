@@ -159,7 +159,7 @@ inline f32 wrapAngleRad(f32 angle)
 //! Check if value is a power of 2
 inline bool isPowerOf2(u32 value)
 {
-	return (value & (value - 1)) && value;
+	return value && !(value & (value - 1));
 }
 
 //! Truncate integer to 8 bits
