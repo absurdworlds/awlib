@@ -344,13 +344,5 @@ inline Vector3d<i32>& Vector3d<i32>::operator /= (i32 const val)
 	coord[2] /= val;
 	return *this;
 }
-
-//! Multiply scalar and vector
-template<class S, class T>
-Vector<T,3> operator * (S const scalar, Vector<T,3> const& vector)
-{
-	return vector * scalar; 
-}
-
 } // namespace aw
 #endif//_aw_Vector3d_
