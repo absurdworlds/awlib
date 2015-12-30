@@ -10,7 +10,7 @@
 #define _aw_Vector4d_
 #include <array>
 
-#include <aw/math/math.h>
+#include <aw/math/Vector.h>
 
 namespace aw {
 //! Represents a 4-dimensional vector

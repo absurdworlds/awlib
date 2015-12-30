@@ -8,9 +8,7 @@
  */
 #ifndef _aw_Vector3d_
 #define _aw_Vector3d_
-#include <array>
-
-#include <aw/math/math.h>
+#include <aw/math/Vector.h>
 
 namespace aw {
 //! Represents vector in 3D space

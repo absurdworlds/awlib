@@ -9,8 +9,6 @@
  */
 #ifndef _aw_Vector2d_
 #define _aw_Vector2d_
-#include <array>
-
 #include <aw/math/Vector.h>
 
 namespace aw {

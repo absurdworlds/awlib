@@ -12,6 +12,7 @@
 #include <array>
 
 #include <aw/math/math.h>
+#include <aw/math/angle.h>
 
 namespace aw {
 //! Represents positions and directions
