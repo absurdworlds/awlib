@@ -156,12 +156,6 @@ inline f32 wrapAngleRad(f32 angle)
 		: angle;
 }
 
-//! Interpolate values v0 and v1 by parameter t
-inline f32 lerp(f32 v0, f32 v1, f64 t)
-{
-	return (1-t)*v0 + t*v1;
-}
-
 //! Check if value is a power of 2
 inline bool isPowerOf2(u32 value)
 {
@@ -223,6 +217,18 @@ inline u64 rotl64 (u64 x, i8 r)
 }
 #endif
 
+/*! Interpolate two values
+ *      \param v0 First value to interpolate
+ *      \param v1 Second value to interpolate
+ *      \param t  Interpolation parameter
+ *      Must be in range [0,1].
+ *      \return Interpolated vector
+ */
+template<typename T>
+T lerp(T const& v0, T const& v1, f64 t)
+{
+	return (1.0 - t)*v0 + t*v1;
+}
 } //namespace math
 } //namespace aw
 #endif //_aw_math_
