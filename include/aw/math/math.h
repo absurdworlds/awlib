@@ -16,7 +16,6 @@
 
 #include <algorithm>
 
-#include <aw/utility/macro.h>
 #include <aw/common/types.h>
 
 namespace aw {
@@ -28,45 +27,45 @@ f64 const float64 = 0.00000001;
 }
 
 //! Calculate square root of a number
-FORCEINLINE f32 sqrt(f32 const x)
+inline f32 sqrt(f32 const x)
 {
 	return ::sqrtf(x);
 }
 
 //! Calculate square root of a number
-FORCEINLINE f64 sqrt(f64 const x)
+inline f64 sqrt(f64 const x)
 {
 	return ::sqrt(x);
 }
 
 //! Calculate square root of an integer
-FORCEINLINE i32 sqrt(i32 const x)
+inline i32 sqrt(i32 const x)
 {
 	return static_cast<i32>(::sqrt(static_cast<f32>(x)));
 }
 
 //! Calculate inverse square root of a double
-FORCEINLINE f64 invSqrt(const f64 x)
+inline f64 invSqrt(const f64 x)
 {
 	return 1.0 / sqrt(x);
 }
 
-FORCEINLINE bool equals(const i32 a, const i32 b, const i32 tolerance = RoundingError::integer)
+inline bool equals(const i32 a, const i32 b, const i32 tolerance = RoundingError::integer)
 {
 	return (a + tolerance >= b) && (a - tolerance <= b);
 }
 
-FORCEINLINE bool equals(const u32 a, const u32 b, const u32 tolerance = RoundingError::integer)
+inline bool equals(const u32 a, const u32 b, const u32 tolerance = RoundingError::integer)
 {
 	return (a + tolerance >= b) && (a - tolerance <= b);
 }
 
-FORCEINLINE bool equals(const f32 a, const f32 b, const f32 tolerance = RoundingError::float32)
+inline bool equals(const f32 a, const f32 b, const f32 tolerance = RoundingError::float32)
 {
 	return (a + tolerance >= b) && (a - tolerance <= b);
 }
 
-FORCEINLINE bool equals(const f64 a, const f64 b, const f64 tolerance = RoundingError::float64)
+inline bool equals(const f64 a, const f64 b, const f64 tolerance = RoundingError::float64)
 {
 	return (a + tolerance >= b) && (a - tolerance <= b);
 }
