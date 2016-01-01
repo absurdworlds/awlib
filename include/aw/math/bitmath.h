@@ -52,11 +52,12 @@ inline u32 mask32(integer_type val)
 /*!
  * Rotate 32-bit integer to the left
  */
-inline u32 rotl(u32 x, i8 r)
+inline u32 rotl(u32 x, size_t r)
 {
 #if defined(_MSC_VER)
 	return _rotl(x,r);
 #else
+	assert(r < 33);
 	return (x << r) | (x >> (32 - r));
 #endif
 }
@@ -64,11 +65,12 @@ inline u32 rotl(u32 x, i8 r)
 /*!
  * Rotate 64-bit integer to the left
  */
-inline u64 rotl(u64 x, i8 r)
+inline u64 rotl(u64 x, size_t r)
 {
 #if defined(_MSC_VER)
 	return _rotl64(x,r);
 #else
+	assert(r < 65);
 	return (x << r) | (x >> (64 - r));
 #endif
 }
