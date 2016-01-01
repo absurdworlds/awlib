@@ -74,6 +74,32 @@ inline u64 rotl(u64 x, size_t r)
 	return (x << r) | (x >> (64 - r));
 #endif
 }
+
+/*!
+ * Rotate 32-bit integer to the right
+ */
+inline u32 rotr(u32 x, size_t r)
+{
+#if defined(_MSC_VER)
+	return _rotl(x,r);
+#else
+	assert(r < 33);
+	return (x >> r) | (x << (32 - r));
+#endif
+}
+
+/*!
+ * Rotate 64-bit integer to the right
+ */
+inline u64 rotl(u64 x, size_t r)
+{
+#if defined(_MSC_VER)
+	return _rotr64(x,r);
+#else
+	assert(r < 65);
+	return (x >> r) | (x << (64 - r));
+#endif
+}
 } //namespace math
 } //namespace aw
 #endif //_aw_math_
