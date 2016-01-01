@@ -17,8 +17,10 @@ namespace math {
  * counting from 0.
  * (0 is lsb, 31 is msb)
  */
-template<size_t N>
-constexpr u64 bit = 1 << N;
+constexpr u64 bit(size_t N)
+{
+	return 1 << N;
+}
 
 //! Check if value is a power of 2
 inline bool isPowerOf2(u32 value)
