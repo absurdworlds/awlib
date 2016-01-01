@@ -49,39 +49,29 @@ inline u32 mask32(integer_type val)
 	return u32(val & 0xFFFFFFFF);
 }
 
+/*!
+ * Rotate 32-bit integer to the left
+ */
+inline u32 rotl(u32 x, i8 r)
+{
 #if defined(_MSC_VER)
-/*!
- * Rotate 32-bit integer to the left
- */
-inline u32 rotl (u32 x, i8 r)
-{
-	  return _rotl(x,r);
-}
-
-/*!
- * Rotate 64-bit integer to the left
- */
-inline u64 rotl (u64 x, i8 r)
-{
-	  return _rotl64(x,r);
-}
+	return _rotl(x,r);
 #else
-/*!
- * Rotate 32-bit integer to the left
- */
-inline u32 rotl (u32 x, i8 r)
-{
-  return (x << r) | (x >> (32 - r));
+	return (x << r) | (x >> (32 - r));
+#endif
 }
 
 /*!
  * Rotate 64-bit integer to the left
  */
-inline u64 rotl (u64 x, i8 r)
+inline u64 rotl(u64 x, i8 r)
 {
-  return (x << r) | (x >> (64 - r));
-}
+#if defined(_MSC_VER)
+	return _rotl64(x,r);
+#else
+	return (x << r) | (x >> (64 - r));
 #endif
+}
 } //namespace math
 } //namespace aw
 #endif //_aw_math_
