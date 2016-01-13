@@ -179,18 +179,37 @@ Iterator get(Iterator input, Iterator end, u32& cp)
 		return end;
 	}
 
-	// There's no perfromance difference between manually unrolled loop
-	// and this loop (this loop is even faster, if I can trust my benchmark)
 	u8 octet;
-	do {
-		u8 octet = *(input++);
+	switch(length) {
+	case 3:
+		octet = *(input++);
 		if (!isTrail(octet)) {
 			cp = -1;
 			break;
 		}
 
 		cp = (cp << 6) + (octet & 0x3F);
-	} while (--length > 0);
+	case 2:
+		octet = *(input++);
+		if (!isTrail(octet)) {
+			cp = -1;
+			break;
+		}
+
+		cp = (cp << 6) + (octet & 0x3F);
+	case 1:
+		octet = *(input++);
+		if (!isTrail(octet)) {
+			cp = -1;
+			break;
+		}
+
+		cp = (cp << 6) + (octet & 0x3F);
+		break;
+	case 0:
+		cp = -1;
+		break;
+	}
 
 	return input;
 }
