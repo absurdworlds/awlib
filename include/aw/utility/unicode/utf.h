@@ -163,8 +163,7 @@ Iterator get_unchecked(Iterator input, Iterator end, u32& cp)
 template<typename Iterator>
 Iterator get(Iterator input, Iterator end, u32& cp)
 {
-	auto error = [&cp] 
-	u32 cp = *(input++);
+	cp = *(input++);
 	size_t length = sequenceLength(math::mask8(cp));
 
 	if (length == 1)
