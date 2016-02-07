@@ -91,7 +91,7 @@ inline u32 rotr(u32 x, size_t r)
 /*!
  * Rotate 64-bit integer to the right
  */
-inline u64 rotl(u64 x, size_t r)
+inline u64 rotr(u64 x, size_t r)
 {
 #if defined(_MSC_VER)
 	return _rotr64(x,r);
