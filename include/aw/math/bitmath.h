@@ -33,7 +33,7 @@ constexpr size_t log2(u64 value)
 }
 
 //! Check if value is a power of 2
-inline bool isPowerOf2(u32 value)
+constexpr bool isPowerOf2(u64 value)
 {
 	return value && !(value & (value - 1));
 }
