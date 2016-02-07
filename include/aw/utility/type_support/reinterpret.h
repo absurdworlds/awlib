@@ -24,7 +24,7 @@ namespace aw {
  *     Good compilers optimize this to a single instruction.
  */
 template<typename Output, typename Input>
-Output reinterpret(Input const& in) {
+Output reinterpret(Input&& in) {
 	static_assert(sizeof(Output) == sizeof(Input),
 	              "cannot reinterpret type: sizes don't match");
 	Output out;
