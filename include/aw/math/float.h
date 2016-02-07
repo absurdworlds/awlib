@@ -10,6 +10,7 @@
 #ifndef aw_math_float_h
 #define aw_math_float_h
 #include <aw/math/math.h>
+#include <aw/utility/type_support/reinterpret.h>
 namespace aw {
 namespace math {
 namespace detail {
@@ -51,8 +52,8 @@ inline bool almostEqualUlps(F a, F b, f2u<F> maxUlpsDiff)
 	}
 
 	// Find the difference in ULPs.
-	f2u<F> ulps_a = *reinterpret_cast<u32*>(&a);
-	f2u<F> ulps_b = *reinterpret_cast<u32*>(&b);
+	f2u<F> ulps_a = reinterpret<f2u<F>>(a);
+	f2u<F> ulps_b = reinterpret<f2u<F>>(b);
 
 	f2u<F> ulpsDiff = abs(ulps_a - ulps_b);
 	if (ulpsDiff <= maxUlpsDiff)
