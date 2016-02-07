@@ -22,6 +22,16 @@ constexpr u64 bit(size_t N)
 	return 1 << N;
 }
 
+//! Compute log2 of an integer value
+constexpr size_t log2(u64 value)
+{
+	if (value == 0) return -1;
+	size_t ret = 0;
+	while (value >>= 1)
+		++ ret;
+	return ret - 1;
+}
+
 //! Check if value is a power of 2
 inline bool isPowerOf2(u32 value)
 {
