@@ -37,12 +37,12 @@ struct FileInfo {
 /*!
  * Get information about file
  */
-AW_SYS_EXP i32 fileStat (std::string const & path, FileInfo& result);
+AW_SYS_EXP i32 fileStat(std::string const & path, FileInfo& result);
 
 /*!
  * Get type (e.g. regular file or directory) of a file
  */
-inline FileType fileType (std::string const & path)
+inline FileType fileType(std::string const & path)
 {
 	FileInfo info;
 	fileStat(path, info);
@@ -52,7 +52,7 @@ inline FileType fileType (std::string const & path)
 /*!
  * Get file size in bytes
  */
-inline size_t fileSize (std::string const & path)
+inline size_t fileSize(std::string const & path)
 {
 	FileInfo info;
 	fileStat(path, info);
