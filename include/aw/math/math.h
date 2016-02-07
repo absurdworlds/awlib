@@ -10,22 +10,16 @@
 #ifndef _aw_math_
 #define _aw_math_
 #include <cmath>
-#include <stdlib.h>
-#include <limits.h>
-#include <float.h>
+#include <cassert>
+#include <cstdlib>
 
+#include <type_traits>
 #include <algorithm>
 
 #include <aw/common/types.h>
 
 namespace aw {
 namespace math {
-namespace RoundingError {
-i32 const integer = 0;
-f32 const float32 = 0.000001f;
-f64 const float64 = 0.00000001;
-}
-
 //! Calculate square root of a number
 inline f32 sqrt(f32 const x)
 {
@@ -48,26 +42,6 @@ inline i32 sqrt(i32 const x)
 inline f64 invSqrt(const f64 x)
 {
 	return 1.0 / sqrt(x);
-}
-
-inline bool equals(const i32 a, const i32 b, const i32 tolerance = RoundingError::integer)
-{
-	return (a + tolerance >= b) && (a - tolerance <= b);
-}
-
-inline bool equals(const u32 a, const u32 b, const u32 tolerance = RoundingError::integer)
-{
-	return (a + tolerance >= b) && (a - tolerance <= b);
-}
-
-inline bool equals(const f32 a, const f32 b, const f32 tolerance = RoundingError::float32)
-{
-	return (a + tolerance >= b) && (a - tolerance <= b);
-}
-
-inline bool equals(const f64 a, const f64 b, const f64 tolerance = RoundingError::float64)
-{
-	return (a + tolerance >= b) && (a - tolerance <= b);
 }
 
 template <typename T>
