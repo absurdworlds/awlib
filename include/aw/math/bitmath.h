@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2014      absurdworlds
- * Copyright (C) 2014-2015 hedede <haddayn@gmail.com>
+ * Copyright (C) 2014-2016 hedede <haddayn@gmail.com>
  *
  * License LGPLv3 or later:
  * GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
@@ -20,6 +20,16 @@ namespace math {
 constexpr u64 bit(size_t N)
 {
 	return 1 << N;
+}
+
+/*!
+ * Create mask with upper half bits set to 1
+ * and lower bits set to 0.
+ * Example: halfMask(4) = 0xFF00
+ */
+constexpr u64 halfMask(size_t bits)
+{
+	return ((u64(1) << bits) - 1) << bits;
 }
 
 /*!
@@ -49,11 +59,24 @@ constexpr Int swapBits(Int val, size_t idx1, size_t idx2)
 template <typename Int>
 constexpr size_t log2(Int value)
 {
-	if (value == 0) return -1;
-	size_t ret = 0;
-	while (value >>= 1)
-		++ ret;
-	return ret - 1;
+	constexpr u64 powers[] = {
+		0, 1, 2, 4, 8, 16, 32
+	};
+	constexpr u64 lookup[] = {
+	       0,
+	       halfMask(1), halfMask(2),  halfMask(4),
+	       halfMask(8), halfMask(16), halfMask(32)
+	};
+
+	Int result = 0;
+	for (size_t i = 6; i > 0; --i) {
+		if (value & lookup[i]) {
+			value >>= powers[i];
+			result |= powers[i];
+		}
+	}
+
+	return result;
 }
 
 //! Check if value is a power of 2
