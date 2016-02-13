@@ -36,7 +36,7 @@ constexpr u64 halfMask(size_t bits)
  * Extract bit value from integer
  */
 template <typename Int>
-constexpr Int getBit(Int val, size_t idx)
+constexpr bool getBit(Int val, size_t idx)
 {
 	assert(idx < std::numeric_limits<Int>::digits);
 	return (val >> idx) & 1;
@@ -51,7 +51,7 @@ constexpr Int swapBits(Int val, size_t idx1, size_t idx2)
 {
 	assert(idx1 < std::numeric_limits<Int>::digits);
 	assert(idx2 < std::numeric_limits<Int>::digits);
-	Int diff = getBit(val, idx1) ^ getBit(val, idx2);
+	Int diff = getBit(val, idx1) != getBit(val, idx2);
 	return val ^ ((diff << idx1) | (diff << idx2));
 }
 
