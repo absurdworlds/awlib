@@ -48,25 +48,4 @@
 	       GET_MACRO(__VA_ARGS__, FE_6, FE_5, FE_4, FE_3, FE_2, FE_1) \
 	       (NAME, __VA_ARGS__) \
 	)
-
-
-// Branch prediction hints, works only with GCC
-#ifdef __GNUC__
-	#define BRANCH_LIKEY(X)		__builtin_expect((X),1)
-	#define BRANCH_UNLIKELY(X)	__builtin_expect((X),0)
-	#define BRANCH_EXPECT(X, V)	__builtin_expect((X),(V))
-#else
-	#define BRANCH_LIKELY(X)	X
-	#define BRANCH_UNLIKELY(X)	X
-	#define BRANCH_EXPECT(X, V)	X
-#endif
-
-// Force inline macro
-#ifndef FORCEINLINE
-	#ifdef _MSC_VER
-		#define FORCEINLINE __forceinline
-	#else
-		#define FORCEINLINE inline __attribute__((always_inline))
-	#endif
-#endif
 #endif//_aw_macro_
