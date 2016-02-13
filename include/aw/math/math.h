@@ -16,6 +16,7 @@
 #include <type_traits>
 #include <algorithm>
 
+#include <aw/config.h>
 #include <aw/common/types.h>
 
 namespace aw {

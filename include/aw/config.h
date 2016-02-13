@@ -53,8 +53,10 @@
 /* Windows platform */
 #if defined(_WIN64) // check win64 first, as win32 defined for both
 	#define AW_PLATFORM AW_PLATFORM_WIN64
+	#define AW_WINDOWS
 #elif defined(_WIN32)
 	#define AW_PLATFORM AW_PLATFORM_WIN32
+	#define AW_WINDOWS
 #elif defined(__gnu_linux__)
 	#define AW_PLATFORM AW_PLATFORM_LINUX
 #elif defined(BSD)

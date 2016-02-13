@@ -17,10 +17,10 @@
 	#define AW_ARCH AW_ARCH_i686
 #endif
 
-#if (AW_CVER_X > 4) || (AW_CWER_X == 4 AW_CVER_Y >= 8)
+#if (AW_CVER_X > 4) || (AW_CWER_X == 4 && AW_CVER_Y >= 8)
 #define AW_HAS__builtin_bswap16
 #endif
-#if (AW_CVER_X > 4) || (AW_CWER_X == 4 AW_CVER_Y >= 3)
+#if (AW_CVER_X > 4) || (AW_CWER_X == 4 && AW_CVER_Y >= 3)
 #define AW_HAS__builtin_bswap32
 #define AW_HAS__builtin_bswap64
 #endif

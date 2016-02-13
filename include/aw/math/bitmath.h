@@ -112,7 +112,7 @@ inline u32 mask32(Int val)
  */
 inline u32 rotl(u32 x, size_t r)
 {
-#if defined(_MSC_VER)
+#if AW_COMPILER == AW_COMPILER_MSVC
 	return _rotl(x,r);
 #else
 	assert(r < 33);
@@ -125,7 +125,7 @@ inline u32 rotl(u32 x, size_t r)
  */
 inline u64 rotl(u64 x, size_t r)
 {
-#if defined(_MSC_VER)
+#if AW_COMPILER == AW_COMPILER_MSVC
 	return _rotl64(x,r);
 #else
 	assert(r < 65);
@@ -138,7 +138,7 @@ inline u64 rotl(u64 x, size_t r)
  */
 inline u32 rotr(u32 x, size_t r)
 {
-#if defined(_MSC_VER)
+#if AW_COMPILER == AW_COMPILER_MSVC
 	return _rotl(x,r);
 #else
 	assert(r < 33);
@@ -151,7 +151,7 @@ inline u32 rotr(u32 x, size_t r)
  */
 inline u64 rotr(u64 x, size_t r)
 {
-#if defined(_MSC_VER)
+#if AW_COMPILER == AW_COMPILER_MSVC
 	return _rotr64(x,r);
 #else
 	assert(r < 65);
