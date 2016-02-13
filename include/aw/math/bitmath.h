@@ -22,6 +22,29 @@ constexpr u64 bit(size_t N)
 	return 1 << N;
 }
 
+/*!
+ * Extract bit value from integer
+ */
+template <typename Int>
+constexpr Int getBit(Int val, size_t idx)
+{
+	assert(idx < std::numeric_limits<Int>::digits);
+	return (val >> idx) & 1;
+}
+
+/*!
+ * Swap to bits in an integer:
+ * swapBits(0b01000, 3, 4) -> 0b10000
+ */
+template <typename Int>
+constexpr Int swapBits(Int val, size_t idx1, size_t idx2)
+{
+	assert(idx1 < std::numeric_limits<Int>::digits);
+	assert(idx2 < std::numeric_limits<Int>::digits);
+	Int diff = getBit(val, idx1) ^ getBit(val, idx2);
+	return val ^ ((diff << idx1) | (diff << idx2));
+}
+
 //! Compute log2 of an integer value
 template <typename Int>
 constexpr size_t log2(Int value)
