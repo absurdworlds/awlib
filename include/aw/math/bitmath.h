@@ -59,9 +59,11 @@ constexpr Int swapBits(Int val, size_t idx1, size_t idx2)
 template <typename Int>
 constexpr size_t log2(Int value)
 {
+	static_assert(std::numeric_limits<Int>::digits <= 64, "Type too large.");
 	constexpr u64 powers[] = {
 		0, 1, 2, 4, 8, 16, 32
 	};
+
 	constexpr u64 lookup[] = {
 	       0,
 	       halfMask(1), halfMask(2),  halfMask(4),
