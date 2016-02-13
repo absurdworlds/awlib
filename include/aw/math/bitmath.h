@@ -23,7 +23,8 @@ constexpr u64 bit(size_t N)
 }
 
 //! Compute log2 of an integer value
-constexpr size_t log2(u64 value)
+template <typename Int>
+constexpr size_t log2(Int value)
 {
 	if (value == 0) return -1;
 	size_t ret = 0;
@@ -33,28 +34,29 @@ constexpr size_t log2(u64 value)
 }
 
 //! Check if value is a power of 2
-constexpr bool isPowerOf2(u64 value)
+template <typename Int>
+constexpr bool isPowerOf2(Int value)
 {
 	return value && !(value & (value - 1));
 }
 
 //! Truncate integer to 8 bits
-template<typename integer_type>
-inline u8 mask8(integer_type val)
+template<typename Int>
+inline u8 mask8(Int val)
 {
 	return u8(val & 0xFF);
 }
 
 //! Truncate integer to 16 bits
-template<typename integer_type>
-inline u16 mask16(integer_type val)
+template<typename Int>
+inline u16 mask16(Int val)
 {
 	return u16(val & 0xFFFF);
 }
 
 //! Truncate integer to 32 bits
-template<typename integer_type>
-inline u32 mask32(integer_type val)
+template<typename Int>
+inline u32 mask32(Int val)
 {
 	return u32(val & 0xFFFFFFFF);
 }
