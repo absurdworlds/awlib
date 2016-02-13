@@ -17,8 +17,7 @@
  */
 #ifndef _aw_graphics_
 #define _aw_graphics_
-
-#include <aw/config/visibility.h>
+#include <aw/config.h>
 
 #ifdef AW_MODULE_GRAPHICS
 	#define AW_GX_EXP AW_EXPORT

@@ -17,7 +17,7 @@
  */
 #ifndef _aw_gui_
 #define _aw_gui_
-#include <aw/config/visibility.h>
+#include <aw/config.h>
 
 #ifdef AW_MODULE_GUI
 	#define AW_GUI_EXP AW_EXPORT

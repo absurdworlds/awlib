@@ -17,7 +17,7 @@
  */
 #ifndef _aw_sound_
 #define _aw_sound_
-#include <aw/config/visibility.h>
+#include <aw/config.h>
 
 #ifdef AW_MODULE_SOUND
 	#define AW_SND_EXP AW_EXPORT

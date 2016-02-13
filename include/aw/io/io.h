@@ -17,7 +17,7 @@
  */
 #ifndef _aw_io_
 #define _aw_io_
-#include <aw/config/visibility.h>
+#include <aw/config.h>
 
 #ifdef AW_MODULE_IO
 	#define AW_IO_EXP AW_EXPORT

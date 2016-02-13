@@ -17,8 +17,7 @@
  */
 #ifndef _aw_core_
 #define _aw_core_
-
-#include <aw/config/visibility.h>
+#include <aw/config.h>
 
 #ifdef AW_MODULE_CORE
 	#define AW_CORE_EXP AW_EXPORT

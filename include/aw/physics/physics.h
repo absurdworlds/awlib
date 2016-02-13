@@ -17,7 +17,7 @@
  */
 #ifndef _aw_physics_
 #define _aw_physics_
-#include <aw/config/visibility.h>
+#include <aw/config.h>
 
 #ifdef AW_MODULE_PHYSICS
 	#define AW_PHYS_EXP AW_EXPORT

@@ -17,8 +17,7 @@
  */
 #ifndef _aw_platform_
 #define _aw_platform_
-
-#include <aw/config/visibility.h>
+#include <aw/config.h>
 
 #ifdef AW_MODULE_PLATFORM
 	#define AW_SYS_EXP AW_EXPORT

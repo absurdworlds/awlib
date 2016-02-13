@@ -17,8 +17,7 @@
  */
 #ifndef _aw_scene_
 #define _aw_scene_
-
-#include <aw/common/visibility.h>
+#include <aw/common.h>
 
 #ifdef HR_MODULE_SCENE
 	#define HR_SCG_EXP HR_EXPORT

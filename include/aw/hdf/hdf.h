@@ -19,7 +19,7 @@
  */
 #ifndef _aw_hdf_
 #define _aw_hdf_
-#include <aw/config/visibility.h>
+#include <aw/config.h>
 
 #ifdef AW_MODULE_HDF
 	#define AW_HDF_EXP AW_EXPORT

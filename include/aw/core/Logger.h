@@ -10,9 +10,6 @@
 #define _aw_Logger_
 #include <string>
 
-#include <aw/config/config.h>
-#include <aw/utility/macro.h>
-
 #include <aw/core/core.h>
 
 namespace aw {

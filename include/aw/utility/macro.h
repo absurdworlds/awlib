@@ -8,7 +8,7 @@
  */
 #ifndef _aw_macro_
 #define _aw_macro_
-#include <aw/config/config.h>
+#include <aw/config.h>
 
 #define __FUNC__ __func__ 
 
