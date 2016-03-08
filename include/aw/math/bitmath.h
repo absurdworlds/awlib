@@ -43,6 +43,18 @@ constexpr bool getBit(Int val, size_t idx)
 }
 
 /*!
+ * Set bit in position \a idx to \a bitval.
+ */
+template <typename Int>
+constexpr Int setBit(Int val, size_t idx, bool bitval)
+{
+	assert(idx < std::numeric_limits<Int>::digits);
+	Int flag = (bitval << idx);
+	val ^= (val ^ flag) ^ flag;
+	return val;
+}
+
+/*!
  * Swap to bits in an integer:
  * swapBits(0b01000, 3, 4) -> 0b10000
  */
