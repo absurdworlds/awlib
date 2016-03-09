@@ -64,15 +64,6 @@ public:
 		return *this;
 	}
 
-	Vector<T,4> operator + (Vector<T,4> const& other) const
-	{
-		return Vector<T,4>(
-			coord[0] + other[0],
-			coord[1] + other[1],
-			coord[2] + other[2],
-			coord[3] + other[3]);
-	}
-
 	//! Component-wise addition
 	Vector<T,4>& operator += (Vector<T,4> const& other)
 	{ 
