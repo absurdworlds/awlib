@@ -117,7 +117,7 @@ public:
 	//! Get squared length of the vector.
 	T lengthSquared() const
 	{
-		return dot(this);
+		return dot(*this);
 	}
 
 	//! Get length of the vector.

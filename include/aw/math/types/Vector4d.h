@@ -172,7 +172,7 @@ public:
 	//! Get squared length of the vector.
 	T lengthSquared() const
 	{
-		return dot(this);
+		return dot(*this);
 	}
 
 	//! Get length of the vector.
@@ -237,13 +237,13 @@ public:
 	}
 
 	//! Access elements of the vector by subscript
-	T& operator [] (size_t elem)
+	T& operator[] (size_t elem)
 	{
 		return coord[elem];
 	}
 
 	//! Access elements of the vector by subscript
-	T const& operator [] (size_t elem) const
+	T const& operator[] (size_t elem) const
 	{
 		return coord[elem];
 	}

@@ -34,7 +34,7 @@ public:
 	}
 
 	//! Copy constructor
-	Vector(Vector<T,3> const& other) 
+	Vector(Vector<T,3> const& other)
 		: coord({other[0], other[1], other[2]})
 	{
 	}
@@ -140,15 +140,15 @@ public:
 	//! Calculate the dot product with another vector
 	T dot(Vector<T,3> const& other) const
 	{
-		return coord[0]*other[0] + 
-		       coord[1]*other[1] + 
+		return coord[0]*other[0] +
+		       coord[1]*other[1] +
 		       coord[2]*other[2];
 	}
 
 	//! Get squared length of the vector.
 	T lengthSquared() const
 	{
-		return dot(this);
+		return dot(*this);
 	}
 
 	//! Get length of the vector.
