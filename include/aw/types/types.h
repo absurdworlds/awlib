@@ -1,37 +1,37 @@
 /*
- * Copyright (C) 2014  absurdworlds
+ * Copyright (C) 2014-2016 absurdworlds
  *
- * License LGPLv3-only:
+ * License LGPLv3 or later:
  * GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _aw_types_
-#define _aw_types_
+#ifndef aw_types_
+#define aw_types_
 #include <cstddef>
 #include <cstdint>
 #include <memory>
 #include <experimental/optional>
-
 namespace aw {
 // Shorthands for integer types
-typedef uint8_t        u8;
-typedef  int8_t        i8;
+using u8  = std::uint8_t;
+using i8  = std::int8_t;
 
-typedef uint16_t       u16;
-typedef  int16_t       i16;
+using u16 = std::uint16_t;
+using i16 = std::int16_t;
 
-typedef uint32_t       u32;
-typedef  int32_t       i32;
+using u32 = std::uint32_t;
+using i32 = std::int32_t;
 
-typedef uint64_t       u64;
-typedef  int64_t       i64;
+using u64 = std::uint64_t;
+using i64 = std::int64_t;
 
-typedef ptrdiff_t      diff_t;
+using size_t = std::size_t;
+using diff_t = std::ptrdiff_t;
 
 //        ... for floating point types
-typedef float          f32;
-typedef double         f64;
+using f32 = float;
+using f64 = double;
 
 //! Shorthand for std::unique_ptr template
 template <typename T>
@@ -45,4 +45,4 @@ using nullopt_t = std::experimental::nullopt_t;
 
 constexpr nullopt_t nullopt = std::experimental::nullopt;
 } // namespace aw
-#endif //_aw_types_
+#endif //aw_types_
