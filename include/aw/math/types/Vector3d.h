@@ -163,7 +163,7 @@ public:
 		f32 const cx = coord[1] * other[2] - coord[2] * other[1];
 		f32 const cy = coord[2] * other[0] - coord[0] * other[2];
 		f32 const cz = coord[0] * other[1] - coord[1] * other[0];
-		return Vector<T,3>(cx, cy, cz);
+		return {cx, cy, cz};
 	}
 
 	//! Get distance from another point
@@ -257,7 +257,7 @@ public:
 	 */
 	Vector<T,3> horizontalAngle() const
 	{
-		return Vector<T,3>(yaw(), pitch(), 0);
+		return {yaw(), pitch(), 0};
 	}
 
 	//! Fill an array of 4 values with the vector data
