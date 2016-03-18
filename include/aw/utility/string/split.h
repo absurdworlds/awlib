@@ -1,58 +1,25 @@
 /*
- * Copyright (C) 2014-2015  absurdworlds
- * Copyright (C) 2015       Hedede <hededrk@gmail.com>
+ * Copyright (C) 2014-2016  absurdworlds
+ * Copyright (C) 2015-2016  Hedede <haddayn@gmail.com>
  *
- * License LGPLv3-only:
+ * License LGPLv3 or later:
  * GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _aw_stringutils_
-#define _aw_stringutils_
-#include <cstring>
-
+#ifndef aw_string_split_h
+#define aw_string_split_h
 #include <string>
 #include <vector>
 #include <algorithm>
-
-#include <aw/core/core.h>
-
 namespace aw {
-//! Generic strlen
-template<typename char_type>
-size_t strlen_g(char_type const* str)
-{
-	char_type const* s = str;
-	while(*s++)
-		++s;
-
-	return s - str;
-}
-
-//! Get file extension from string
-inline std::string getFileExtension(std::string& dest, std::string const& path)
-{
-	size_t extpos = path.find_last_of(".");
-
-	if(extpos == std::string::npos) {
-		dest = "";
-	}
-
-	dest = path.substr(extpos+1);
-
-	std::transform(dest.begin(), dest.end(), dest.begin(), ::tolower);
-
-	return dest;
-}
-
-
 namespace string {
 /*!
  * \brief
  * 	join strings together
  * \param source
  * 	vector of strings to be joined
- * \param delim 
+ * \param delim
  * 	delimiting sequence which will be inserted between 
  * 	joined strings
  * \return
@@ -70,16 +37,16 @@ inline std::string join(std::vector<std::string>& source,
 }
 
 /*!
- * \brief 
- * 	Split string into tokens. Ignores empty tokens.
- * 	For example, `split("/ab/cde//fgh/", "/")` will produce 
- * 	three tokens: {"ab", "cde", "fgh"}
+ * \brief
+ *      Split string into tokens. Ignores empty tokens.
+ *      For example, `split("/ab/cde//fgh/", "/")` will produce 
+ *      three tokens: {"ab", "cde", "fgh"}
  * \param source
- * 	Source string to split
+ *      Source string to split
  * \param delim
- * 	Delimiting sequence
+ *      String containing possible delimiters.
  * \return
- * 	Vector with found tokens.
+ *      Vector with found tokens.
  */
 inline std::vector<std::string>
 split(std::string const& source, std::string const& delim)
@@ -102,15 +69,15 @@ split(std::string const& source, std::string const& delim)
 }
 
 /*!
- * \brief 
- * 	Split string into tokens, bearing in mind empty tokens.
- * 	For example, explode("/") produces {"", ""}.
+ * \brief
+ *      Split string into tokens, including empty tokens
+ *      For example, explode("/") produces {"", ""}.
  * \param source
- * 	Source string to split
+ *      Source string to split
  * \param delim
- * 	Delimiting sequence
+ *      Delimiting sequence
  * \return
- * 	Vector of found tokens.
+ *      Vector of found tokens.
  */
 inline std::vector<std::string>
 explode(std::string const& source, std::string const& delim)
@@ -123,7 +90,6 @@ explode(std::string const& source, std::string const& delim)
 		pos2 = source.find(delim, pos1);
 		holder.push_back(source.substr(pos1, pos2 - pos1));
 
-		// I really hate duplicate code, so I have to do this.
 		if (pos2 == std::string::npos)
 			break;
 
@@ -134,4 +100,4 @@ explode(std::string const& source, std::string const& delim)
 }
 } // namespace string
 } // namespace aw
-#endif //_aw_stringutils_
+#endif//aw_string_split_h
