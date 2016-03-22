@@ -35,11 +35,19 @@ public:
 	}
 
 	//! Copy constructor
-	Vector(Vector<T,2> const& other)
-		: coord({other[0], other[1]})
+	Vector(Vector<Tp,2> const& other)
+		: coord{other[0], other[1]}
 	{
 	}
 
+	//! Convert from vector of another datatype
+	template<typename Tp>
+	Vector(Vector<Tp,2> const& other)
+		: coord{static_cast<T>(other[0]), static_cast<T>(other[1])}
+	{
+	}
+
+	//! Copy vector
 	Vector<T,2>& operator = (Vector<T,2> const& other)
 	{
 		coord[0] = other[0];

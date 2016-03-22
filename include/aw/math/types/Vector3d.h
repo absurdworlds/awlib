@@ -27,6 +27,12 @@ public:
 	{
 	}
 
+	//! Construct vector with x, y coordinates of \a vec2
+	explicit Vector(Vector<T,2> const& vec2)
+		: coord({vec2[0], vec2[1], 0})
+	{
+	}
+
 	//! Construct vector with individual coodrinates
 	Vector(T const x, T const y, T const z)
 		: coord({x, y, z})
@@ -35,7 +41,16 @@ public:
 
 	//! Copy constructor
 	Vector(Vector<T,3> const& other)
-		: coord({other[0], other[1], other[2]})
+		: coord{other[0], other[1], other[2]}
+	{
+	}
+
+	//! Convert from vector of another datatype
+	template<typename Tp>
+	Vector(Vector<Tp,3> const& other)
+		: coord{static_cast<T>(other[0]),
+		        static_cast<T>(other[1]),
+		        static_cast<T>(other[2])}
 	{
 	}
 
@@ -95,6 +110,7 @@ public:
 		return *this;
 	}
 
+	//! Element-by-element multiplication
 	Vector<T,3>& operator *= (Vector<T,3> const& other)
 	{
 		coord[0] *= other[0];
@@ -111,6 +127,7 @@ public:
 		return *this;
 	}
 
+	//! Element-by-element division
 	Vector<T,3>& operator /= (Vector<T,3> const& other)
 	{
 		coord[0] /= other[0];
@@ -125,6 +142,7 @@ public:
 		return (*this *= inv);
 	}
 
+#if 0
 	/*!
 	 * Check if vectors are identical.
 	 * \return
@@ -136,6 +154,7 @@ public:
 		        math::equals(coord[1], other[1]) &&
 		        math::equals(coord[2], other[2]));
 	}
+#endif
 
 	//! Calculate the dot product with another vector
 	T dot(Vector<T,3> const& other) const
