@@ -17,7 +17,7 @@
 #include <algorithm>
 
 #include <aw/config.h>
-#include <aw/common/types.h>
+#include <aw/types/types.h>
 
 namespace aw {
 namespace math {
