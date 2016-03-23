@@ -13,6 +13,7 @@
 #include <aw/archive/OutputArchive.h>
 namespace aw {
 namespace arc {
+inline namespace v2 {
 template<typename A, typename B>
 void save(OutputArchive& arc, std::pair<A, B> const& pair)
 {
@@ -26,6 +27,7 @@ void load(InputArchive& arc, std::pair<A, B>& pair)
 	arc("first",  pair.first);
 	arc("second", pair.second);
 }
+} // inline namespace v2
 } // namespace arc
 } // namespace aw
 #endif//aw_archive_pair

@@ -14,6 +14,7 @@
 #include <aw/archive/types/std_pair.h>
 namespace aw {
 namespace arc {
+inline namespace v2 {
 namespace detail {
 template <typename...Args> struct IsContainer<std::map<Args...>> : std::true_type{};
 } // namespace detail
@@ -33,6 +34,7 @@ void load(InputArchive& arc, std::map<A,B>& map)
 	while (!arc.at_end())
 		map.insert([&arc] {val_type v; arc("", v); return v;}());
 }
+} // inline namespace v2
 } // namespace arc
 } // namespace aw
 #endif//aw_archive_types_map

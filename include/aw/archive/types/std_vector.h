@@ -13,6 +13,7 @@
 #include <aw/archive/OutputArchive.h>
 namespace aw {
 namespace arc {
+inline namespace v2 {
 namespace detail {
 template <typename...Args> struct IsContainer<std::vector<Args...>> : std::true_type{};
 } // namespace detail
@@ -31,6 +32,7 @@ void load(InputArchive& arc, std::vector<T>& vec)
 	while (!arc.at_end())
 		vec.push_back([&arc] {T v; arc("value", v); return v;} ());
 }
+} // inline namespace v2
 } // namespace arc
 } // namespace aw
 #endif//aw_archive_vector

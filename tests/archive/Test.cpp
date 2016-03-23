@@ -269,7 +269,7 @@ class Cinner : public InputArchive {
 };
 
 struct Base {
-	using ClassDef = aw::ClassDef<Base, Base*(char)>;
+	using ClassDef = aw::arc::ClassDef<Base, Base*(char)>;
 
 	static ClassDef classdef;
 	virtual ClassDef& classDef() const
@@ -383,7 +383,7 @@ int main()
 	Couter arc;
 	Cinner arc2;
 
-	Base* test  = 0;
+	Base* test  = new Derived(100);
 	Base* test2 = 0;
 
 	std::vector<i64> vec1{1,2,3,4,5};
@@ -404,6 +404,8 @@ int main()
 
 	Vector4d<f32> v4{0.0, 1.0, 2.0, 1.0};
 	arc("v3", v4);
+
+	arc("test", test);
 /*
 	arc2("test",  test,  std::make_tuple(111));
 	arc2("test2", test2, std::make_tuple(99));

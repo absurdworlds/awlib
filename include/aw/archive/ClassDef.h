@@ -14,6 +14,8 @@
 #include <aw/utility/StaticObject.h>
 
 namespace aw {
+namespace arc {
+inline namespace v2 {
 template <class Base, class CreatorSignature>
 struct ClassDef {
 private:
@@ -95,5 +97,7 @@ private:
 		return cd; \
 	}
 #endif
+} // inline namespace v2
+} // namespace arc
 } // namespace aw
 #endif//aw_archive_ClassDef_base

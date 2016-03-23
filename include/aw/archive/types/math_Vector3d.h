@@ -13,6 +13,7 @@
 #include <aw/archive/OutputArchive.h>
 namespace aw {
 namespace arc {
+inline namespace v2 {
 template<typename T>
 void save(OutputArchive& arc, Vector3d<T> const& vec3)
 {
@@ -28,6 +29,7 @@ void load(InputArchive& arc, Vector3d<T>& vec3)
 	arc("y", vec3.y());
 	arc("z", vec3.z());
 }
+} // inline namespace v2
 } // namespace arc
 } // namespace aw
 #endif//aw_archive_math_Vector3d

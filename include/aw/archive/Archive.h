@@ -16,6 +16,7 @@
 #include <aw/types/traits/basic_traits.h>
 namespace aw {
 namespace arc {
+inline namespace v2 {
 namespace detail {
 template <typename T> struct IsContainer : std::false_type{};
 } // namespace detail
@@ -69,6 +70,7 @@ struct kind_of<T, void_if<arc::IsContainer<T>>> {
 
 template<typename T>
 constexpr ObjectKind kind_of = detail::kind_of<T>::value;
+} // inline namespace v2
 } // namespace arc
 } // namespace aw
 #endif//aw_Archive_base

@@ -13,6 +13,7 @@
 #include <aw/archive/OutputArchive.h>
 namespace aw {
 namespace arc {
+inline namespace v2 {
 template<typename T>
 void save(OutputArchive& arc, Vector2d<T> const& vec2)
 {
@@ -26,6 +27,7 @@ void load(InputArchive& arc, Vector2d<T>& vec2)
 	arc("x", vec2.x());
 	arc("y", vec2.y());
 }
+} // inline namespace v2
 } // namespace arc
 } // namespace aw
 #endif//aw_archive_math_Vector2d
