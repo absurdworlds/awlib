@@ -148,6 +148,12 @@ public:
 		return *this; 
 	}
 
+#if 0
+	comparisons are complicated:
+		how much tolerance for fp vectors?
+		how to handle close-to-zero coordinates?
+		how to compare?
+		lexicographicaly? by length? by sum?
 	/*!
 	 * Check if vectors are identical.
 	 * \return
@@ -160,6 +166,7 @@ public:
 		        math::equals(coord[2], other[2]) &&
 		        math::equals(coord[3], other[3]));
 	}
+#endif
 
 	//! Calculate the dot product with another vector
 	T dot(Vector<T,4> const& other) const
