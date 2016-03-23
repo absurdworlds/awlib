@@ -1,20 +1,20 @@
 /*
- * Copyright (C) 2014  absurdworlds
+ * Copyright (C) 2014-2016 absurdworlds
  *
- * License LGPLv3-only:
+ * License LGPLv3 or later:
  * GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _aw_hdf_Type_
-#define _aw_hdf_Type_
+#ifndef aw_hdf_Type_h
+#define aw_hdf_Type_h
 #include <string>
-#include <aw/common/types.h>
+#include <aw/types/traits/basic_traits.h>
+#include <aw/types/types.h>
 
 namespace aw {
 template <typename T, size_t N>
 class Vector;
-
 
 namespace hdf {
 /*!
@@ -37,38 +37,18 @@ struct typeof {
 	static Type const value = Type::Unknown;
 };
 
-template<>
-struct typeof<i32> {
+template<typename T>
+struct typeof<enable_if<is_int<T>, T>> {
 	static Type const value = Type::Integer;
 };
 
-template<>
-struct typeof<u32> {
-	static Type const value = Type::Integer;
-};
-
-template<>
-struct typeof<i64> {
-	static Type const value = Type::Integer;
-};
-
-template<>
-struct typeof<u64> {
-	static Type const value = Type::Integer;
-};
-
-template<>
-struct typeof<f32> {
+template<typename T>
+struct typeof<enable_if<is_float<T>, T>> {
 	static Type const value = Type::Float;
 };
 
-template<>
-struct typeof<f64> {
-	static Type const value = Type::Float;
-};
-
-template<>
-struct typeof<bool> {
+template<typename T>
+struct typeof<enable_if<is_bool<T>, T>> {
 	static Type const value = Type::Boolean;
 };
 
@@ -127,7 +107,6 @@ inline bool operator == (hdf::Type type, T val)
 {
 	return compareType(type, val) ;
 }
-
 } // namespace hdf
 } // namespace aw
-#endif//_aw_hdf_Type_
+#endif//aw_hdf_Type_h
