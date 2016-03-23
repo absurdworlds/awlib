@@ -11,10 +11,9 @@
 #include <string>
 #include <utility>
 #include <type_traits>
+#include <aw/types/traits/void_t.h>
 namespace aw {
 namespace detail {
-template<typename... Ts> struct make_void { typedef void type;};
-template<typename... Ts> using void_t = typename make_void<Ts...>::type;
 
 template<typename T>
 struct IsInt : std::integral_constant<
