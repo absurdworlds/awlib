@@ -1,7 +1,7 @@
 #include <iostream>
 #include <aw/archive/ClassDef.h>
-#include <aw/archive/InputArchive.h>
 #include <aw/archive/OutputArchive.h>
+#include <aw/archive/InputArchive.h>
 
 namespace aw {
 namespace arc {

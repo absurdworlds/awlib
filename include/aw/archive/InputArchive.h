@@ -11,10 +11,13 @@
 #include <tuple>
 #include <aw/archive/Archive.h>
 namespace aw {
-AW_DECLARE_HAS_MEMBER(load);
-AW_DECLARE_HAS_NON_MEMBER(load);
 namespace arc {
 inline namespace v2 {
+template<class T, class A> using member_load = decltype(std::declval<T>().load(std::declval<A&>()));
+template<class T, class A> using non_member_load = decltype(load(std::declval<A&>(),std::declval<T&>()));
+template<class T> constexpr auto has_member_load = is_detected<member_load, T, class InputArchive>;
+template<class T> constexpr auto has_non_member_load = is_detected<non_member_load, T, class InputArchive>;
+
 /*!
  * Base class for Input Archive.
  * TODO: description
@@ -81,13 +84,13 @@ private:
 	}
 
 	template<typename T>
-	auto process(T& value) -> void_if<has_member_load<T,InputArchive>>
+	auto process(T& value) -> void_if<has_member_load<T>>
 	{
 		value.load(*this);
 	}
 
 	template<typename T>
-	auto process(T& value) -> void_if<has_non_member_load<InputArchive,T>>
+	auto process(T& value) -> void_if<has_non_member_load<T>>
 	{
 		load(*this, value);
 	}

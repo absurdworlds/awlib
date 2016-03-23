@@ -12,7 +12,7 @@
 #include <utility>
 #include <aw/types/types.h>
 #include <aw/types/traits/enable_if.h>
-#include <aw/types/traits/has_a.h>
+#include <aw/types/traits/detect.h>
 #include <aw/types/traits/basic_traits.h>
 namespace aw {
 namespace arc {
