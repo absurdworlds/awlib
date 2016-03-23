@@ -249,6 +249,53 @@ public:
 		return coord[elem];
 	}
 
+	//! Get X coordinate
+	T& x()
+	{
+		return coord[0];
+	}
+
+	//! Get Y coordinate
+	T& y()
+	{
+		return coord[1];
+	}
+
+	//! Get Z coordinate
+	T& z()
+	{
+		return coord[2];
+	}
+
+	//! Get W coordinate
+	T& w()
+	{
+		return coord[3];
+	}
+
+	//! Get X coordinate
+	T x() const
+	{
+		return coord[0];
+	}
+
+	//! Get Y coordinate
+	T y() const
+	{
+		return coord[1];
+	}
+
+	//! Get Z coordinate
+	T z() const
+	{
+		return coord[2];
+	}
+
+	//! Get W coordinate
+	T w() const
+	{
+		return coord[3];
+	}
 private:
 	//! Coordinates of the vector
 	std::array<T, 4> coord;
