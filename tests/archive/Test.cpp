@@ -399,6 +399,8 @@ Derived2::ClassDef Derived2::classdef = Derived2::ClassDef::derived<Base>(
 } // namespace aw
 
 #include <aw/archive/types/std_vector.h>
+#include <aw/archive/types/std_map.h>
+#include <aw/archive/types/math_Vector4d.h>
 int main()
 {
 	using namespace aw;
@@ -413,9 +415,22 @@ int main()
 	std::vector<i64> vec1{1,2,3,4,5};
 	std::vector<f64> vec2{1,2,3,4,5};
 
+	std::map<int,int> map;
+	map[1] = 10;
+	map[2] = 100;
+	map[3] = 1000;
+	map[4] = 10000;
+
+	//std::cout << IsContainer<decltype(map)> << std::endl;
+
+	arc("map", map);
+
 	arc("vec", vec1);
 	arc("vec", vec2);
 
+	Vector4d<f32> v4{0.0, 1.0, 2.0, 1.0};
+	arc("v3", v4);
+/*
 	arc2("test",  test,  std::make_tuple(111));
 	arc2("test2", test2, std::make_tuple(99));
 
@@ -424,7 +439,7 @@ int main()
 
 	arc2("vec", vec1);
 	arc2("vec", vec2);
-
+	
 	arc("vec", vec1);
-	arc("vec", vec2);
+	arc("vec", vec2);*/
 }
