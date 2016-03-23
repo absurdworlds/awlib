@@ -30,7 +30,7 @@ void load(InputArchive& arc, std::map<A,B>& map)
 {
 	using val_type = typename decltype(map)::value_type;
 	map.clear();
-	while (!arc.list_atend())
+	while (!arc.at_end())
 		map.insert([&arc] {val_type v; arc("", v); return v;}());
 }
 } // namespace arc

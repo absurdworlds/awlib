@@ -5,70 +5,54 @@
 
 namespace aw {
 namespace arc {
-template <typename T, EnableIf<is_float<T>> = dummy>
-constexpr auto typeName(T const&) -> char const* {
+template <typename T>
+constexpr auto typeName(T const&) -> enable_if<is_float<T>, char const*> {
 	return "float";
 };
 
-template <typename T, EnableIf<is_bool<T>> = dummy>
-constexpr auto typeName(T const&) -> char const* {
+template <typename T>
+constexpr auto typeName(T const&) -> enable_if<is_bool<T>, char const*> {
 	return "bool";
 };
 
-template <typename T, EnableIf<is_string<T>> = dummy>
-constexpr auto typeName(T const&) -> char const* {
+template <typename T>
+constexpr auto typeName(T const&) -> enable_if<is_string<T>, char const*> {
 	return "string";
 };
 
-template <typename T, EnableIf<is_int<T>> = dummy>
-constexpr auto typeName(T const&) -> char const* {
+template <typename T>
+constexpr auto typeName(T const&) -> enable_if<is_int<T>, char const*> {
 	return "int";
 };
 
 
 class Couter : public OutputArchive {
-	virtual void object_start(char const* name)
+	virtual void start(ObjectKind kind, char const* name)
 	{
 		printIndent();
+		if (kind == ObjectKind::Basic) {
+			std::cout << name << " = ";
+			return;
+		}
 		std::cout << "[" << name << "\n";
 		addIndent();
 	}
 
-	virtual void object_start(char const* name, char const* type)
+	virtual void start(ObjectKind kind, char const* name, char const* type)
 	{
 		printIndent();
 		std::cout << "[" << name << " : " << type << "\n";
 		addIndent();
 	}
 
-	virtual void object_end(char const* name)
+	virtual void end(ObjectKind kind, char const* name)
 	{
+		if (kind == ObjectKind::Basic)
+			return;
 		removeIndent();
 		printIndent();
 		std::cout << "]" << "\n";
 	}
-
-	virtual void list_start(char const* name)
-	{
-		printIndent();
-		std::cout << "[" << name << "\n";
-		addIndent();
-	}
-
-	virtual void list_end(char const* name)
-	{
-		removeIndent();
-		printIndent();
-		std::cout << "]" << "\n";
-	}
-
-	virtual void value_start(char const* name)
-	{
-		printIndent();
-		std::cout << name << " = ";
-	}
-
-	virtual void value_end(char const* name) { }
 
 	virtual void write(char const& value)
 	{
@@ -182,28 +166,25 @@ using namespace std::literals::string_literals;
 
 class Cinner : public InputArchive {
 
-	virtual void object_start(char const* name)
+	virtual void start(ObjectKind kind, char const* name)
 	{
+		if (kind == ObjectKind::Basic) {
+			std::cin >> skip(name);
+			return;
+		}
+		if (kind == ObjectKind::List)
+			atend = false;
 		std::cin >> skip("[") >> skip(name);
 	}
 
-	virtual void object_end(char const* name)
+	virtual void end(ObjectKind kind, char const* name)
 	{
+		if (kind == ObjectKind::Basic)
+			return;
 		std::cin >> skip("]");
 	}
 
-	virtual void list_start(char const* name)
-	{
-		atend = false;
-		std::cin >> skip("[") >> skip(name);
-	}
-
-	virtual void list_end(char const* name)
-	{
-		std::cin >> skip("]");
-	}
-
-	virtual bool list_atend()
+	virtual bool at_end()
 	{
 		char c = std::cin.peek();
 		if (std::isspace(c))
@@ -214,20 +195,13 @@ class Cinner : public InputArchive {
 		return atend;
 	}
 
-	virtual char const* polymorphic_type()
+	virtual char const* read_type()
 	{
 		static std::string type;
 		std::cin >> skip(":");
 		std::cin >> type;
 		return type.c_str();
 	}
-
-	virtual void value_start(char const* name)
-	{
-		std::cin >> skip(name);
-	}
-
-	virtual void value_end(char const* name) {}
 
 	virtual void read(char& value)
 	{

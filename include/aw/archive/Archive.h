@@ -24,10 +24,51 @@ template<typename T>
 constexpr auto IsContainer = detail::IsContainer<T>::value;
 
 template<typename T>
-constexpr auto IsPrimitive = is_arithmetic<T> || is_string<T>;
+constexpr auto IsBasic = is_arithmetic<T> || is_string<T>;
 
 template<typename T>
-constexpr auto IsObject = !IsContainer<T> && !IsPrimitive<T> && !is_pointer<T>;
+constexpr auto IsCompound = !IsContainer<T> && !IsBasic<T> && !is_pointer<T>;
+
+template<typename T>
+constexpr auto IsPolymorphic = is_polymorphic<T>;
+
+enum class ObjectKind {
+	Unknown,
+	Basic,
+	Compound,
+	List,
+	Polymorphic
+};
+
+namespace detail {
+template<typename T, typename = void>
+struct kind_of {
+	constexpr static auto value = ObjectKind::Unknown;
+};
+
+template<typename T>
+struct kind_of<T*, void_if<IsPolymorphic<T>>> {
+	constexpr static auto value = ObjectKind::Polymorphic;
+};
+
+template<typename T>
+struct kind_of<T, void_if<IsBasic<T>>> {
+	constexpr static auto value = ObjectKind::Basic;
+};
+
+template<typename T>
+struct kind_of<T, void_if<IsCompound<T>>> {
+	constexpr static auto value = ObjectKind::Compound;
+};
+
+template<typename T>
+struct kind_of<T, void_if<arc::IsContainer<T>>> {
+	constexpr static auto value = ObjectKind::List;
+};
+} // namespace detail
+
+template<typename T>
+constexpr ObjectKind kind_of = detail::kind_of<T>::value;
 } // namespace arc
 } // namespace aw
 #endif//aw_Archive_base

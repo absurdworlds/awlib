@@ -11,11 +11,13 @@
 #include <utility>
 #include <type_traits>
 namespace aw {
-enum class dummy_ {};
+template<bool expr, typename T>
+using enable_if = typename std::enable_if<expr, T>::type;
 
-static const dummy_ dummy = {};
+template<bool expr, typename T>
+using disable_if = typename std::enable_if<!expr, T>::type;
 
 template<bool expr>
-using EnableIf = typename std::enable_if<expr, dummy_>::type;
+using void_if = enable_if<expr,void>;
 } // namespace aw
 #endif//aw_traits_enable_if

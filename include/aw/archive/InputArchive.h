@@ -20,107 +20,89 @@ inline namespace v2 {
  * TODO: description
  */
 struct InputArchive {
-	template<class T, EnableIf<IsPrimitive<T>> = dummy>
-	void operator()(char const* name, T& value)
-	{
-		value_start(name);
-		read(value);
-		value_end(name);
-	}
-
-	template<class T, EnableIf<IsObject<T>> = dummy>
-	void operator()(char const* name, T& value)
-	{
-		object_start(name);
-		object_read(value);
-		object_end(name);
-	}
-
-	template<class T, EnableIf<IsContainer<T>> = dummy>
-	void operator()(char const* name, T& value)
-	{
-		list_start(name);
-		object_read(value);
-		list_end(name);
-	}
-
 	template<class T>
-	void operator()(char const* name, T*& value)
+	auto operator()(char const* name, T& value) -> void_if<!is_pointer<T>>
 	{
-		auto classDef = polymorphic_start(name, value);
-		if (classDef.isAbstract())
-			return;
-
-		value = classDef.create();
-
-		polymorphic_read(value);
-		object_end(name);
+		start(kind_of<T>, name);
+		process(value);
+		end(kind_of<T>, name);
 	}
 
 	template<class T, typename... Args>
 	void operator()(char const* name, T*& value, std::tuple<Args...>&& args)
 	{
-		auto classDef = polymorphic_start(name, value);
-		if (classDef.isAbstract())
-			return;
-
 		using Tuple = std::tuple<Args...>;
-		constexpr auto size  = sizeof...(Args);
+		constexpr auto size = sizeof...(Args);
 		constexpr auto index = std::make_index_sequence<size>{};
+		unpack(name, value, std::forward<Tuple>(args), index);
+	}
 
-		construct(value, classDef, std::forward<Tuple&&>(args), index);
-
-		polymorphic_read(value);
-		object_end(name);
+	template<class T, typename... Args>
+	void operator()(char const* name, T*& value, Args&&... args)
+	{
+		polymorphic(name, value, std::forward<Args>(args)...);
 	}
 
 public:
-	virtual bool list_atend() = 0;
+	virtual bool at_end() = 0;
+
 private:
-	/* Objects */
-	virtual void object_start(char const* name) = 0;
-	virtual void object_end(char const* name) = 0;
-
-	virtual void list_start(char const* name) = 0;
-	virtual void list_end(char const* name) = 0;
-
-	template<typename T, EnableIf<has_member_load<T,InputArchive>> = dummy>
-	void object_read(T& value) { value.load(*this); }
-
-	template<typename T, EnableIf<has_non_member_load<InputArchive,T>> = dummy>
-	void object_read(T& value) { load(*this, value); }
 
 	/* Polymorphic */
-	virtual char const* polymorphic_type() = 0;
+	virtual char const* read_type() = 0;
 
-	template<class T, typename ClassDef, typename Tuple, std::size_t... I>
-	void construct(T*& v, ClassDef& c, Tuple&& a, std::index_sequence<I...>)
+	template<class T, typename Tuple, std::size_t... I>
+	void unpack(char const* n, T*& v, Tuple&& a, std::index_sequence<I...>)
 	{
-		v = c.create(std::get<I>(std::forward<Tuple&&>(a))...);
+		polymorphic(n, v, std::get<I>(std::forward<Tuple>(a))...);
 	}
 
-	template<class T>
-	auto polymorphic_start(char const* name, T*) -> typename T::ClassDef&
+	template<typename T, typename... Args>
+	void polymorphic(char const* name, T*& value, Args&&... args)
 	{
 		static_assert(is_polymorphic<T>, "Pointer must be of polymorphic type!");
 
-		object_start(name);
-		auto type = polymorphic_type();
+		start(kind_of<T*>, name);
+
+		auto type = read_type();
 
 		auto classDef = T::ClassDef::findClassDef(type);
 
-		assert(classDef && "Could not find classdef!");
+		assert(classDef && "Could not find classdef! Forgot to register class?");
 
-		return *classDef;
+		if (classDef->isAbstract())
+			return;
+
+		value = classDef->create(std::forward<Args>(args)...);
+
+		process(value);
+
+		end(kind_of<T>, name);
+	}
+
+	template<typename T>
+	auto process(T& value) -> void_if<has_member_load<T,InputArchive>>
+	{
+		value.load(*this);
+	}
+
+	template<typename T>
+	auto process(T& value) -> void_if<has_non_member_load<InputArchive,T>>
+	{
+		load(*this, value);
 	}
 
 	template<class T>
-	void polymorphic_read(T* value) { value->load(*this); }
+	void process(T*& value)
+	{
+		value->load(*this);
+	}
+
+	/* Objects */
+	virtual void start(ObjectKind kind, char const* name) = 0;
+	virtual void end(ObjectKind kind, char const* name) = 0;
 
 	/* Primitive types */
-	virtual void value_start(char const* name) = 0;
-	virtual void value_end(char const* name)   = 0;
-
 	virtual void read(char& value) = 0;
 	virtual void read(std::string& value) = 0;
 

@@ -19,28 +19,12 @@ inline namespace v2 {
  * TODO: proper description
  */
 struct OutputArchive {
-	template<class T, EnableIf<IsPrimitive<T>> = dummy>
-	void operator()(char const* name, T const& value)
+	template<class T>
+	auto operator()(char const* name, T const& value) -> void_if<!is_pointer<T>>
 	{
-		value_start(name);
-		write(value);
-		value_end(name);
-	}
-
-	template<class T, EnableIf<IsObject<T>> = dummy>
-	void operator()(char const* name, T const& value)
-	{
-		object_start(name);
-		object_write(value);
-		object_end(name);
-	}
-
-	template<class T, EnableIf<IsContainer<T>> = dummy>
-	void operator()(char const* name, T const& value)
-	{
-		list_start(name);
-		object_write(value);
-		list_end(name);
+		start(kind_of<T>, name);
+		process(value);
+		end(kind_of<T>, name);
 	}
 
 	template<class T>
@@ -53,44 +37,37 @@ struct OutputArchive {
 			return;
 
 		auto type = value->classDef().className();
-		object_start(name, type);
+		start(kind_of<T*>, name, type);
 
-		polymorphic_write(value);
+		process(value);
 
-		object_end(name);
+		end(kind_of<T*>, name);
 	}
 
 private:
-	virtual void object_start(char const* name) = 0;
-	virtual void object_start(char const* name, char const* type) = 0;
-	virtual void object_end(char const* name) = 0;
+	virtual void start(ObjectKind kind, char const* name) = 0;
+	virtual void start(ObjectKind kind, char const* name, char const* type) = 0;
+	virtual void end(ObjectKind kind, char const* name) = 0;
 
-	virtual void list_start(char const* name) = 0;
-	virtual void list_end(char const* name) = 0;
-
-	/* Polymorphic */
-	template<typename T, EnableIf<has_member_save<T,OutputArchive>> = dummy>
-	void object_write(T const& value)
+	template<typename T>
+	auto process(T const& value) -> void_if<has_member_save<T,OutputArchive>>
 	{
 		value.save(*this);
 	}
 
-	template<typename T, EnableIf<has_non_member_save<OutputArchive,T>> = dummy>
-	void object_write(T const& value)
+	template<typename T>
+	auto process(T const& value) -> void_if<has_non_member_save<OutputArchive,T>>
 	{
 		save(*this, value);
 	}
 
 	template<typename T>
-	void polymorphic_write(T const* value)
+	void process(T const*& value)
 	{
 		value->save(*this);
 	}
 
 	/* Basic types */
-	virtual void value_start(char const* name) = 0;
-	virtual void value_end(char const* name)   = 0;
-
 	virtual void write(char const& value)        = 0;
 	virtual void write(std::string const& value) = 0;
 

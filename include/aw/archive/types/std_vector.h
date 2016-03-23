@@ -28,7 +28,7 @@ template<typename T>
 void load(InputArchive& arc, std::vector<T>& vec)
 {
 	vec.clear();
-	while (!arc.list_atend())
+	while (!arc.at_end())
 		vec.push_back([&arc] {T v; arc("value", v); return v;} ());
 }
 } // namespace arc
