@@ -16,18 +16,18 @@
 #include <aw/types/traits/basic_traits.h>
 namespace aw {
 namespace arc {
-template<typename T>
-constexpr auto IsPrimitive = is_arithmetic<T> || is_string<T>;
-
-template<typename T>
-constexpr auto IsObject = !IsPrimitive<T> && !is_pointer<T>;
-
 namespace detail {
 template <typename T> struct IsContainer : std::false_type{};
 } // namespace detail
 
 template<typename T>
 constexpr auto IsContainer = detail::IsContainer<T>::value;
+
+template<typename T>
+constexpr auto IsPrimitive = is_arithmetic<T> || is_string<T>;
+
+template<typename T>
+constexpr auto IsObject = !IsContainer<T> && !IsPrimitive<T> && !is_pointer<T>;
 } // namespace arc
 } // namespace aw
 #endif//aw_Archive_base

@@ -74,6 +74,8 @@ struct InputArchive {
 		object_end(name);
 	}
 
+public:
+	virtual bool list_atend() = 0;
 private:
 	/* Objects */
 	virtual void object_start(char const* name) = 0;
@@ -81,7 +83,6 @@ private:
 
 	virtual void list_start(char const* name) = 0;
 	virtual void list_end(char const* name) = 0;
-	virtual bool list_atend() = 0;
 
 	template<typename T, EnableIf<has_member_load<T,InputArchive>> = dummy>
 	void object_read(T& value) { value.load(*this); }
@@ -123,25 +124,25 @@ private:
 	virtual void read(char& value) = 0;
 	virtual void read(std::string& value) = 0;
 
-	virtual void read(i8 const& value) = 0;
-	virtual void read(u8 const& value) = 0;
+	virtual void read(i8& value) = 0;
+	virtual void read(u8& value) = 0;
 
-	virtual void read(i16 const& value) = 0;
-	virtual void read(u16 const& value) = 0;
+	virtual void read(i16& value) = 0;
+	virtual void read(u16& value) = 0;
 
-	virtual void read(i32 const& value) = 0;
-	virtual void read(u32 const& value) = 0;
+	virtual void read(i32& value) = 0;
+	virtual void read(u32& value) = 0;
 
-	virtual void read(i64 const& value) = 0;
-	virtual void read(u64 const& value) = 0;
+	virtual void read(i64& value) = 0;
+	virtual void read(u64& value) = 0;
 
-	virtual void read(f32 const& value) = 0;
-	virtual void read(f64 const& value) = 0;
+	virtual void read(f32& value) = 0;
+	virtual void read(f64& value) = 0;
 
 
 	/* load() declarations */
 	template<class T>
-	friend void load(InputArchive& arc, T& value);
+	friend void load(InputArchive& arc, T&);
 
 	friend void load(InputArchive& arc, char& value)        { arc.read(value); }
 	friend void load(InputArchive& arc, std::string& value) { arc.read(value); }

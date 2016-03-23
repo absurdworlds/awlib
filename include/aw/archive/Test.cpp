@@ -152,6 +152,7 @@ struct skip {
 	skip(std::string text) : text(text) {}
 };
 
+bool atend = false;
 std::istream & operator >> (std::istream & stream, const skip & x)
 {
 	using namespace std::literals::string_literals;
@@ -162,9 +163,9 @@ std::istream & operator >> (std::istream & stream, const skip & x)
 	auto text = x.text.begin();
 	while (stream && *text) {
 		stream >> c;
-		std::cerr << c << "|";
-		std::cerr << *text;
-		if (c != *text) std::cerr << "fuck";
+		if (c == ']') atend = true;
+		std::cerr << *text << "|" << c;
+		if (c != *text) std::cerr << " !fuck";
 		/*
 			std::string x = ""s + "'" + *text + "'" + " / '" + c + "'";
 			std::cerr << "fuck: " << x << std::endl;
@@ -177,7 +178,10 @@ std::istream & operator >> (std::istream & stream, const skip & x)
 	return stream;
 }
 
+using namespace std::literals::string_literals;
+
 class Cinner : public InputArchive {
+
 	virtual void object_start(char const* name)
 	{
 		std::cin >> skip("[") >> skip(name);
@@ -190,6 +194,7 @@ class Cinner : public InputArchive {
 
 	virtual void list_start(char const* name)
 	{
+		atend = false;
 		std::cin >> skip("[") >> skip(name);
 	}
 
@@ -200,7 +205,13 @@ class Cinner : public InputArchive {
 
 	virtual bool list_atend()
 	{
-		return false;
+		char c = std::cin.peek();
+		if (std::isspace(c))
+			std::cin.get(c);
+
+		if (std::cin.peek() == ']')
+			return true;
+		return atend;
 	}
 
 	virtual char const* polymorphic_type()
@@ -221,58 +232,65 @@ class Cinner : public InputArchive {
 	virtual void read(char& value)
 	{
 		int val;
-		std::cin >> skip("=") >> skip(typeName(value)) >> skip(":") >> val;
+		std::cin >> skip("="s + typeName(value) + ":");
+		std::cin >> val;
 		value = val;
 	}
 
 	virtual void read(std::string& value)
 	{
-		std::cin >> skip("=") >> skip(typeName(value)) >> skip(":") >> value;
+		std::cin >> skip("="s + typeName(value) + ":") >> value;
 	}
 
-	virtual void read(i8 const& value)
+	virtual void read(i8& value)
 	{
-		std::cin >> skip("=") >> skip(typeName(value)) >> skip(":") >> value;
+		std::cin >> skip("="s + typeName(value) + ":") >> value;
 	}
-	virtual void read(u8 const& value)
+	virtual void read(u8& value)
 	{
-		std::cin >> skip("=") >> skip(typeName(value)) >> skip(":") >> value;
-	}
-
-	virtual void read(i16 const& value)
-	{
-		std::cin >> skip("=") >> skip(typeName(value)) >> skip(":") >> value;
-	}
-	virtual void read(u16 const& value)
-	{
-		std::cin >> skip("=") >> skip(typeName(value)) >> skip(":") >> value;
+		std::cin >> skip("="s + typeName(value) + ":") >> value;
 	}
 
-	virtual void read(i32 const& value)
+	virtual void read(i16& value)
 	{
-		std::cin >> skip("=") >> skip(typeName(value)) >> skip(":") >> value;
+		std::cin >> skip("="s + typeName(value) + ":") >> value;
 	}
-	virtual void read(u32 const& value)
+	virtual void read(u16& value)
 	{
-		std::cin >> skip("=") >> skip(typeName(value)) >> skip(":") >> value;
-	}
-
-	virtual void read(i64 const& value)
-	{
-		std::cin >> skip("=") >> skip(typeName(value)) >> skip(":") >> value;
-	}
-	virtual void read(u64 const& value)
-	{
-		std::cin >> skip("=") >> skip(typeName(value)) >> skip(":") >> value;
+		std::cin >> skip("="s + typeName(value) + ":") >> value;
 	}
 
-	virtual void read(f32 const& value)
+	virtual void read(i32& value)
 	{
-		std::cin >> skip("=") >> skip(typeName(value)) >> skip(":") >> value;
+		std::cin >> skip("="s + typeName(value) + ":") >> value;
 	}
-	virtual void read(f64 const& value)
+	virtual void read(u32& value)
 	{
-		std::cin >> skip("=") >> skip(typeName(value)) >> skip(":") >> value;
+		std::cin >> skip("="s + typeName(value) + ":") >> value;
+	}
+
+	virtual void read(i64& value)
+	{
+		i64 val;
+		std::cin >> skip("="s + typeName(value) + ":");
+		std::cin >> val;
+		value = val;
+	}
+	virtual void read(u64& value)
+	{
+		std::cin >> skip("="s + typeName(value) + ":") >> value;
+	}
+
+	virtual void read(f32& value)
+	{
+		std::cin >> skip("="s + typeName(value) + ":") >> value;
+	}
+	virtual void read(f64& value)
+	{
+		f64 val;
+		std::cin >> skip("="s + typeName(value) + ":");
+		std::cin >> val;
+		value = val;
 	}
 };
 
@@ -380,8 +398,10 @@ Derived2::ClassDef Derived2::classdef = Derived2::ClassDef::derived<Base>(
 } // namespace arc
 } // namespace aw
 
+#include <aw/archive/types/std_vector.h>
 int main()
 {
+	using namespace aw;
 	using namespace aw::arc;
 
 	Couter arc;
@@ -390,9 +410,21 @@ int main()
 	Base* test  = 0;
 	Base* test2 = 0;
 
+	std::vector<i64> vec1{1,2,3,4,5};
+	std::vector<f64> vec2{1,2,3,4,5};
+
+	arc("vec", vec1);
+	arc("vec", vec2);
+
 	arc2("test",  test,  std::make_tuple(111));
 	arc2("test2", test2, std::make_tuple(99));
 
 	arc("test",  test);
 	arc("test2", test2);
+
+	arc2("vec", vec1);
+	arc2("vec", vec2);
+
+	arc("vec", vec1);
+	arc("vec", vec2);
 }
