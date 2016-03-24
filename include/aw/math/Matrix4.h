@@ -6,18 +6,18 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _aw_Matrix4_
-#define _aw_Matrix4_
+#ifndef aw_math_Matrix4_h
+#define aw_math_Matrix4_h
 #include <aw/math/Vector3d.h>
 #include <aw/math/Vector4d.h>
 #include <aw/math/Matrix3.h>
-
 namespace aw {
 //! Represents a 4x4 matrix, which has a column-major layout
 template<typename T>
 class Matrix4 {
+	using column_type = Vector4d<T>;
+	column_type col_[4];
 public:
-	typedef Vector4d<T> col_type;
 
 	//! Construct zero matrix
 	Matrix4()
@@ -156,6 +156,7 @@ public:
 		return M;
 	}
 
+#if 0
 	/*!
 	 * Compare two matrices
 	 * \return
@@ -168,6 +169,7 @@ public:
 		        col_[2] == other.col_[2] &&
 		        col_[3] == other.col_[3]);
 	}
+#endif
 
 	/*!
 	 * Get matrix inverse of this matrix
@@ -315,7 +317,7 @@ public:
 
 		rot.y = asin(-col_[2][0]);
 
-		T const test = T(1.0 - math::RoundingError::float64);
+		T const test = T(1.0 /*- math::RoundingError::float64*/);
 
 		if (rot.y >= test || rot.y <= -test) {
 			rot.x = atan2(col_[2][1]*scale[2], col_[2][2]);
@@ -334,7 +336,7 @@ public:
 	Vector3d<T> rotation() const
 	{
 		Vector3d<T> const scale = scale();
-		return getRotation(scale);
+		return rotation(scale);
 	}
 
 	/*! Get rotation in radians, assuming that matrix is not scaled
@@ -343,7 +345,7 @@ public:
 	Vector3d<T> rotationUnscaled() const
 	{
 		Vector3d<T> const scale(1.0, 1.0, 1.0);
-		return getRotationRadians(scale);
+		return rotationRadians(scale);
 	}
 
 	//! Access an element by its index
@@ -369,8 +371,6 @@ public:
 	{
 		return col_[col];
 	}
-private:
-	col_type col_[4];
 };
 
 //! Multiply two matrices
@@ -402,7 +402,7 @@ Matrix4<T> operator * (Matrix4<T> const& m, Vector4d<T> const& v)
 }
 
 /*!
- * Extract arbitary 3x3 submatrix
+ * Extract arbitary 3x3 sub-matrix
  *  \param mat
  * 	Matrix to extract from
  *  \param col
@@ -410,10 +410,10 @@ Matrix4<T> operator * (Matrix4<T> const& m, Vector4d<T> const& v)
  *  \param row
  * 	Row to exclude
  *  \return 3x3
- * 	Submatrix of a matrix mat
+ * 	Sub-matrix of a matrix mat
  */
 template<typename T>
-Matrix3<T> getSubMatrix3x3(Matrix4<T> const& mat, u32 col, u32 row)
+Matrix3<T> subMatrix(Matrix4<T> const& mat, u32 col, u32 row)
 {
 	// Temporary array to gain linear access, it allows to avoid
 	// unnecessary usage of % operator

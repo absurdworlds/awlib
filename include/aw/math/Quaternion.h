@@ -10,6 +10,7 @@
 #define _aw_Quaternion_
 //#include <complex>
 #include <aw/math/math.h>
+#include <aw/math/float.h>
 #include <aw/math/Vector3d.h>
 #include <aw/math/Vector4d.h>
 
@@ -291,8 +292,10 @@ public:
 		if(!math::equals(sqrMag, T(1.0))) {
 			T const invMag = math::invSqrt(sqrMag);
 
-			return Quaternion<T>(T(x*invMag),
-				T(y*invMag), T(z*invMag), T(w*invMag));
+			return Quaternion<T>{
+				T(x*invMag), T(y*invMag),
+				T(z*invMag), T(w*invMag)
+			};
 		}
 
 		return Quaternion<T>();
