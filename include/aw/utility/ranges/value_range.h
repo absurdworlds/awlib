@@ -7,11 +7,11 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _aw_value_range_
-#define _aw_value_range_
+#ifndef aw_value_range_h
+#define aw_value_range_h
 #include <cassert>
-#include <iterator>
 #include <type_traits>
+#include <aw/types/types.h>
 namespace aw {
 template <typename T>
 struct Range {
@@ -20,42 +20,44 @@ struct Range {
 	{
 	}
 
-	class iterator :
-	      public std::iterator<std::random_access_iterator_tag, T> {
-	public:
-	typedef T value_type;
-	typedef T& reference;
-	iterator(value_type v)
-		: value(v)
-	{
-	}
+	struct iterator {
+		using difference_type = std::ptrdiff_t;
+		using value_type = T;
+		using reference  = T&;
+		using pointer    = T*;
+		using iterator_category = std::random_access_iterator_tag;
 
-	reference operator * ()
-	{
-		return value;
-	}
+		iterator(value_type v)
+			: value(v)
+		{
+		}
 
-	iterator& operator ++ ()
-	{
-		++value;
-		return *this;
-	}
+		reference operator * ()
+		{
+			return value;
+		}
 
-	iterator& operator -- ()
-	{
-		--value;
-		return *this;
-	}
+		iterator& operator ++ ()
+		{
+			++value;
+			return *this;
+		}
 
-	bool operator == (iterator const& other)
-	{
-		return value == other.value;
-	}
+		iterator& operator -- ()
+		{
+			--value;
+			return *this;
+		}
 
-	bool operator != (iterator const& other)
-	{
-		return value != other.value;
-	}
+		bool operator == (iterator const& other)
+		{
+			return value == other.value;
+		}
+
+		bool operator != (iterator const& other)
+		{
+			return value != other.value;
+		}
 
 	private:
 		value_type value;
@@ -70,6 +72,7 @@ struct Range {
 	{
 		return iterator(last);
 	}
+
 private:
 	T first;
 	T last;
@@ -85,7 +88,7 @@ Range<T> range(T a, T z)
 template<typename T>
 Range<T> range(T end)
 {
-	return Range<T>(T(), end);
+	return Range<T>(T{}, end);
 }
 
 Range<unsigned char> char_range(unsigned char a, unsigned char z)
@@ -93,6 +96,5 @@ Range<unsigned char> char_range(unsigned char a, unsigned char z)
 	assert(a < z);
 	return Range<unsigned char>(a, z + 1);
 }
-
 } // namespace aw
-#endif//_aw_value_range_
+#endif//aw_value_range_h
