@@ -1,13 +1,13 @@
 /*
- * Copyright (C) 2014-2015  absurdworlds
+ * Copyright (C) 2014-2016  absurdworlds
  *
- * License LGPLv3-only:
+ * License LGPLv3 or later:
  * GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _aw_Vector3d_
-#define _aw_Vector3d_
+#ifndef aw_Vector3d_h
+#define aw_Vector3d_h
 #include <aw/math/Vector.h>
 
 namespace aw {
@@ -142,7 +142,6 @@ public:
 		return (*this *= inv);
 	}
 
-#if 0
 	/*!
 	 * Check if vectors are identical.
 	 * \return
@@ -154,7 +153,6 @@ public:
 		        math::equals(coord[1], other[1]) &&
 		        math::equals(coord[2], other[2]));
 	}
-#endif
 
 	//! Calculate the dot product with another vector
 	T dot(Vector<T,3> const& other) const

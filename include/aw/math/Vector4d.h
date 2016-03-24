@@ -1,15 +1,14 @@
 /*
- * Copyright (C) 2014-2015  absurdworlds
+ * Copyright (C) 2014-2016  absurdworlds
  *
- * License LGPLv3-only:
+ * License LGPLv3 or later:
  * GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _aw_Vector4d_
-#define _aw_Vector4d_
+#ifndef aw_Vector4d_h
+#define aw_Vector4d_h
 #include <array>
-
 #include <aw/math/Vector.h>
 
 namespace aw {
@@ -148,12 +147,6 @@ public:
 		return *this; 
 	}
 
-#if 0
-	comparisons are complicated:
-		how much tolerance for fp vectors?
-		how to handle close-to-zero coordinates?
-		how to compare?
-		lexicographicaly? by length? by sum?
 	/*!
 	 * Check if vectors are identical.
 	 * \return
@@ -166,7 +159,6 @@ public:
 		        math::equals(coord[2], other[2]) &&
 		        math::equals(coord[3], other[3]));
 	}
-#endif
 
 	//! Calculate the dot product with another vector
 	T dot(Vector<T,4> const& other) const
@@ -323,4 +315,4 @@ inline Vector4d<i32>& Vector4d<i32>::operator /= (i32 const val)
 	return *this;
 }
 } // namespace aw
-#endif//_aw_Vector4d_
+#endif//aw_Vector4d_h

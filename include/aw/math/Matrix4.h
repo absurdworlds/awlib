@@ -156,7 +156,6 @@ public:
 		return M;
 	}
 
-#if 0
 	/*!
 	 * Compare two matrices
 	 * \return
@@ -169,7 +168,6 @@ public:
 		        col_[2] == other.col_[2] &&
 		        col_[3] == other.col_[3]);
 	}
-#endif
 
 	/*!
 	 * Get matrix inverse of this matrix
