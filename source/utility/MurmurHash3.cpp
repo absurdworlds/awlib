@@ -9,22 +9,21 @@
 //-----------------------------------------------------------------------------
 // MurmurHash3 was written by Austin Appleby, and is placed in the public
 // domain. The author hereby disclaims copyright to this source code.
-
 #include <aw/utility/macro.h>
-#include <aw/math/bitmath.h>
-#include <aw/core/hash.h>
+#include <aw/utility/bitmath.h>
+#include <aw/utility/hash.h>
 
 namespace aw {
 /*!
  * Block read - if your platform needs to do endian-swapping or can only 
  * handle aligned reads, do the conversion here
  */
-FORCEINLINE u32 getblock32 (u32 const * p, int i)
-{                                               
-	return p[i];                                  
-}                                               
+u32 getblock32(u32 const* p, int i)
+{
+	return p[i];
+}
 
-FORCEINLINE u64 getblock64 (u64 const * p, int i)
+u64 getblock64(u64 const* p, int i)
 {
 	return p[i];
 }
@@ -32,7 +31,7 @@ FORCEINLINE u64 getblock64 (u64 const * p, int i)
 /*!
  * Finalization mix - force all bits of a hash block to avalanche
  */
-FORCEINLINE u32 fmix32 (u32 h)
+u32 fmix32 (u32 h)
 {
 	h ^= h >> 16;
 	h *= 0x85ebca6b;
@@ -43,7 +42,7 @@ FORCEINLINE u32 fmix32 (u32 h)
 	return h;
 }
 
-FORCEINLINE u64 fmix64 (u64 k)
+u64 fmix64 (u64 k)
 {
 	k ^= k >> 33;
 	k *= 0xff51afd7ed558ccdULL;
@@ -54,7 +53,7 @@ FORCEINLINE u64 fmix64 (u64 k)
 	return k;
 }
 
-void MurmurHash3_x86_32 (void const * key, size_t len, u32 seed, void * out)
+void MurmurHash3_x86_32 (void const* key, size_t len, u32 seed, void* out)
 {
 	u8 const * data = (u8 const*)key;
 	size_t const nblocks = len / 4;
@@ -69,7 +68,7 @@ void MurmurHash3_x86_32 (void const * key, size_t len, u32 seed, void * out)
 
 	u32 const * blocks = (u32 const *)(data + nblocks*4);
 
-	for(int i = -nblocks; i; i++) {
+	for (int i = -nblocks; i; i++) {
 		u32 k1 = getblock32(blocks,i);
 
 		k1 *= c1;
@@ -88,8 +87,7 @@ void MurmurHash3_x86_32 (void const * key, size_t len, u32 seed, void * out)
 
 	u32 k1 = 0;
 
-	switch(len & 3)
-	{
+	switch (len & 3) {
 	case 3: k1 ^= tail[2] << 16;
 	case 2: k1 ^= tail[1] << 8;
 	case 1: k1 ^= tail[0];
@@ -108,7 +106,7 @@ void MurmurHash3_x86_32 (void const * key, size_t len, u32 seed, void * out)
 	*(u32*)out = h1;
 } 
 
-void MurmurHash3_x86_128 (void const * key, size_t len, u128 seed, void * out)
+void MurmurHash3_x86_128 (void const* key, size_t len, u128 seed, void* out)
 {
 	u8 const * data = (u8 const*)key;
 	size_t nblocks = len / 16;
@@ -128,7 +126,7 @@ void MurmurHash3_x86_128 (void const * key, size_t len, u128 seed, void * out)
 
 	u32 const * blocks = (u32 const *)(data + nblocks*16);
 
-	for(int i = -nblocks; i; i++) {
+	for (int i = -nblocks; i; i++) {
 		u32 k1 = getblock32(blocks,i*4+0);
 		u32 k2 = getblock32(blocks,i*4+1);
 		u32 k3 = getblock32(blocks,i*4+2);
@@ -180,7 +178,7 @@ void MurmurHash3_x86_128 (void const * key, size_t len, u128 seed, void * out)
 	u32 k3 = 0;
 	u32 k4 = 0;
 
-	switch(len & 15) {
+	switch (len & 15) {
 	case 15: k4 ^= tail[14] << 16;
 	case 14: k4 ^= tail[13] << 8;
 	case 13: k4 ^= tail[12] << 0;
@@ -250,7 +248,7 @@ void MurmurHash3_x86_128 (void const * key, size_t len, u128 seed, void * out)
 	((u32*)out)[3] = h4;
 }
 
-void MurmurHash3_x64_128 (void const * key, size_t len, u128 seed, void * out)
+void MurmurHash3_x64_128 (void const* key, size_t len, u128 seed, void* out)
 {
 	u8 const * data = (u8 const*)key;
 	size_t const nblocks = len / 16;
@@ -266,7 +264,7 @@ void MurmurHash3_x64_128 (void const * key, size_t len, u128 seed, void * out)
 
 	u64 const * blocks = (u64 const *)(data);
 
-	for(int i = 0; i < nblocks; i++) {
+	for (int i = 0; i < nblocks; i++) {
 		u64 k1 = getblock64(blocks,i*2+0);
 		u64 k2 = getblock64(blocks,i*2+1);
 
@@ -297,7 +295,7 @@ void MurmurHash3_x64_128 (void const * key, size_t len, u128 seed, void * out)
 	u64 k1 = 0;
 	u64 k2 = 0;
 
-	switch(len & 15) {
+	switch (len & 15) {
 	case 15: k2 ^= (u64(tail[14])) << 48;
 	case 14: k2 ^= (u64(tail[13])) << 40;
 	case 13: k2 ^= (u64(tail[12])) << 32;

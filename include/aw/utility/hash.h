@@ -6,10 +6,10 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _aw_hash_
-#define _aw_hash_
+#ifndef aw_utility_hash_h
+#define aw_utility_hash_h
 #include <aw/types/types.h>
-#include <aw/core/core.h>
+#include <aw/utility/utility.h>
 
 namespace aw {
 /*!
@@ -29,14 +29,14 @@ union u128 {
 // compile and run any of them on any platform, but your performance with the
 // non-native version will be less than optimal.
 
-AW_CORE_EXP
-void MurmurHash3_x86_32(void const * key, size_t len, u32 seed, void * out);
+AW_UTILS_EXP
+void MurmurHash3_x86_32(void const * key,  size_t len, u32 seed, void* out);
 
-AW_CORE_EXP
-void MurmurHash3_x86_128(void const * key, size_t len, u128 seed, void * out);
+AW_UTILS_EXP
+void MurmurHash3_x86_128(void const * key, size_t len, u128 seed, void* out);
 
-AW_CORE_EXP
-void MurmurHash3_x64_128(void const * key, size_t len, u128 seed, void * out);
+AW_UTILS_EXP
+void MurmurHash3_x64_128(void const * key, size_t len, u128 seed, void* out);
 
 } // namespace aw
-#endif//_aw_hash_
+#endif//aw_utility_hash_h
