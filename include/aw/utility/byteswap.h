@@ -9,7 +9,7 @@
 #ifndef aw_utility_byteswap
 #define aw_utility_byteswap
 #include <aw/utility/utility.h>
-#include <aw/common/types.h>
+#include <aw/types/types.h>
 namespace aw {
 /*!
  * Switch endiannes of an integer value

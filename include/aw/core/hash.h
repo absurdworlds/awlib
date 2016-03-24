@@ -8,7 +8,7 @@
  */
 #ifndef _aw_hash_
 #define _aw_hash_
-#include <aw/common/types.h>
+#include <aw/types/types.h>
 #include <aw/core/core.h>
 
 namespace aw {

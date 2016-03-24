@@ -7,9 +7,9 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _aw_CharacterStream_
-#define _aw_CharacterStream_
-#include <aw/common/types.h>
+#ifndef _aw_IStream_
+#define _aw_IStream_
+#include <aw/types/types.h>
 
 #include <aw/io/io.h>
 
@@ -49,4 +49,4 @@ public:
 };
 } // namespace io
 } // namespace aw
-#endif//_aw_CharacterStream_
+#endif//_aw_IStream_

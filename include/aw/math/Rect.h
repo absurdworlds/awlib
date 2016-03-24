@@ -7,11 +7,10 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _aw_Rect_
-#define _aw_Rect_
-#include <aw/common/types.h>
+#ifndef aw_math_Rect_h
+#define aw_math_Rect_h
+#include <aw/types/types.h>
 #include <aw/math/Vector2d.h>
-
 namespace aw {
 //! Represents a 2D rectangle, used mostly for GUI rendering
 template <class T>
@@ -129,6 +128,7 @@ public:
 
 };
 
+// TODO: rename to contains, and swap arguments
 /*!
  * Check if point is inside a rectangle.
  * \param point
@@ -147,4 +147,4 @@ bool pointWithinRect(Vector2d<T> point, Rect<T> rect)
 	return isInside;
 }
 } // namespace aw
-#endif//_aw_Rect_
+#endif//aw_math_Rect_h

@@ -11,7 +11,7 @@
 #define _aw_OStream_
 #include <string>
 
-#include <aw/common/types.h>
+#include <aw/types/types.h>
 
 namespace aw {
 namespace io {

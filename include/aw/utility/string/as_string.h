@@ -7,10 +7,10 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _aw_string_as_string_
-#define _aw_string_as_string_
+#ifndef aw_string_as_string_h
+#define aw_string_as_string_h
 #include <string>
-#include <aw/common/types.h>
+#include <aw/types/types.h>
 namespace aw {
 /*
  * Convert value to string. There may be specializations
@@ -82,4 +82,4 @@ std::string as_string(opt<T> value)
 }
 
 } // namespace aw
-#endif//_aw_string_as_string_
+#endif//aw_string_as_string_h
