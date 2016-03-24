@@ -71,7 +71,7 @@ private:
 	ClassDef(ClassDef* parent, std::string name, Creator creator)
 		: parent(parent), name(name), creator(creator)
 	{
-		ClassDefMap::instance()[name] = this;
+		ClassDefMap::instance().insert({name, this});
 	}
 };
 
