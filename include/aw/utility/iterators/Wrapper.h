@@ -8,22 +8,27 @@
  */
 #ifndef aw_IteratorWrapper_h
 #define aw_IteratorWrapper_h
+#include <aw/types/types.h>
 namespace aw {
 /*!
  * Helper class to wrap iterator of one type into
  * iterator of another type.
  * Main use is to wrap iterator<std::unique_ptr<T>> into iterator<T>.
+ * TODO: dereferencer
  */
-template <typename Base, typename T>
-class IteratorWrapper :
-      public std::iterator<std::random_access_iterator_tag, T> {
+template <typename Iterator, typename T>
+class IteratorWrapper {
 public:
-	typedef Base base_type;
-	typedef IteratorWrapper<Base, T> self_type;
+	using base_type = Iterator;
+	using self_type = IteratorWrapper<Iterator, T>;
 
-	typedef std::iterator<std::random_access_iterator_tag, T> std_type;
-	using typename std_type::reference;
-	using typename std_type::pointer;
+	using difference_type = std::ptrdiff_t;
+
+	using value_type = T;
+	using reference  = T&;
+	using pointer    = T*;
+
+	using iterator_category = typename Iterator::iterator_category;
 
 	IteratorWrapper(base_type base)
 		: base(base)
