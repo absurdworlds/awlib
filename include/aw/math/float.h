@@ -10,7 +10,7 @@
 #ifndef aw_math_float_h
 #define aw_math_float_h
 #include <aw/math/math.h>
-#include <aw/utility/type_support/reinterpret.h>
+#include <aw/types/support/reinterpret.h>
 namespace aw {
 namespace math {
 namespace detail {
@@ -31,10 +31,10 @@ struct float_traits<f64> {
 };
 
 template <typename T>
-using f2i = float_traits<T>::int_type;
+using f2i = typename float_traits<T>::int_type;
 
 template <typename T>
-using f2u = float_traits<T>::uint_type;
+using f2u = typename float_traits<T>::uint_type;
 
 /* 
  * See
@@ -65,13 +65,11 @@ inline bool almostEqualUlps(F a, F b, f2u<F> maxUlpsDiff)
 template <typename F>
 inline bool almostEqualRelative(F a, F b, F maxRelDiff)
 {
-	// Calculate the difference.
 	F diff = fabs(a - b);
 
-	a = fabs(A);
-	b = fabs(B);
+	a = fabs(a);
+	b = fabs(b);
 
-	// Find the largest
 	F largest = std::max(a, b);
 
 	if (diff <= largest * maxRelDiff)
@@ -95,12 +93,12 @@ inline bool almostEqualEpsilon(F a, F b, F maxDiff)
 
 inline bool equals(f32 a, f32 b)
 {
-	return almostEqualUlps(a, b, 4);
+	return detail::almostEqualUlps(a, b, 4);
 }
 
 inline bool equals(f64 a, f64 b)
 {
-	return almostEqualUlps(a, b, 4);
+	return detail::almostEqualUlps(a, b, 4);
 }
 } //namespace math
 } //namespace aw
