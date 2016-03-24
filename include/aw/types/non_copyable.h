@@ -7,20 +7,20 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _aw_NonCopyable_
-#define _aw_NonCopyable_
+#ifndef aw_non_copyable_h
+#define aw_non_copyable_h
 namespace aw {
 /*!
- * Utility class, supposed to be used as base, to explicitly define classes,
- * which are derived from this class non-copyable.
+ * Utility class, deriving from which renders the derived class
+ * non-copyable.
  */
-class NonCopyable {
+class non_copyable {
 protected:
-	NonCopyable() = default;
-	~NonCopyable() = default;
+	non_copyable() = default;
+	~non_copyable() = default;
 private:
-	NonCopyable(NonCopyable const&) = delete;
-	NonCopyable& operator = (NonCopyable const&) = delete;
+	non_copyable(NonCopyable const&) = delete;
+	non_copyable& operator = (NonCopyable const&) = delete;
 };
 } // namespace aw
-#endif//_aw_NonCopyable_
+#endif//aw_non_copyable_h
