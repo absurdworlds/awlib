@@ -11,17 +11,21 @@
 #include <map>
 #include <string>
 #include <functional>
-#include <aw/utility/StaticObject.h>
+#include <aw/utility/static_object.h>
 
 namespace aw {
 namespace arc {
 inline namespace v2 {
-template <class Base, class CreatorSignature>
-struct ClassDef {
+template <class Base, class>
+struct ClassDef;
+
+template <class Base, typename...Args>
+struct ClassDef<Base, Base*(Args...)> {
 private:
 	ClassDef               const* parent;
 	std::string            const  name;
 
+	using CreatorSignature = Base*(Args...);
 	std::function<CreatorSignature> const creator;
 	using Creator = decltype(creator);
 public:
@@ -41,7 +45,6 @@ public:
 		return name.c_str();
 	}
 
-	template<typename... Args>
 	Base* create(Args... args) const
 	{
 		return creator(args...);
@@ -53,7 +56,7 @@ public:
 	}
 
 	using ClassDefMapType = std::map<std::string, ClassDef*>;
-	using ClassDefMap = StaticObject<ClassDefMapType>;
+	using ClassDefMap = static_object<ClassDefMapType>;
 
 	static ClassDef* findClassDef(std::string const& name)
 	{
