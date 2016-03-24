@@ -12,17 +12,17 @@
 #include <utility>
 #include <aw/types/types.h>
 #include <aw/types/traits/enable_if.h>
-#include <aw/types/traits/has_a.h>
+#include <aw/types/traits/detect.h>
 #include <aw/types/traits/basic_traits.h>
 namespace aw {
 namespace arc {
 namespace v1 {
-AW_DECLARE_HAS_MEMBER(save);
-AW_DECLARE_HAS_MEMBER(load);
-AW_DECLARE_HAS_MEMBER(archive);
-AW_DECLARE_HAS_NON_MEMBER(save);
-AW_DECLARE_HAS_NON_MEMBER(load);
-AW_DECLARE_HAS_NON_MEMBER(archive);
+template<class T, class A> using m_load     = decltype(std::declval<T>().load(std::declval<A&>()));
+template<class T, class A> using m_save     = decltype(std::declval<T>().save(std::declval<A&>()));
+template<class T, class A> using m_archive  = decltype(std::declval<T>().archive(std::declval<A&>()));
+template<class T, class A> using nm_load    = decltype(load(std::declval<A&>(),std::declval<T&>()));
+template<class T, class A> using nm_save    = decltype(save(std::declval<A&>(),std::declval<T&>()));
+template<class T, class A> using nm_archive = decltype(archive(std::declval<A&>(),std::declval<T&>()));
 
 template <typename Derived>
 class OutputArchive {
@@ -75,25 +75,25 @@ public:
 
 private:
 	template<typename T>
-	auto call_archive(T& value) -> void_if<has_member_archive<T,Derived>>
+	auto call_archive(T& value) -> void_if<is_detected<m_archive,T,Derived>>
 	{
 		value.archive(derived);
 	}
 
 	template<typename T>
-	auto call_archive(T& value) -> void_if<has_non_member_archive<Derived,T>>
+	auto call_archive(T& value) -> void_if<is_detected<nm_archive,T,Derived>>
 	{
 		archive(derived, value);
 	}
 
 	template<typename T>
-	auto call_archive(T& value) -> void_if<has_member_save<T,Derived>>
+	auto call_archive(T& value) -> void_if<is_detected<m_save,T,Derived>>
 	{
 		value.save(derived);
 	}
 
 	template<typename T>
-	auto call_archive(T& value) -> void_if<has_non_member_save<T,Derived>>
+	auto call_archive(T& value) -> void_if<is_detected<nm_save,T,Derived>>
 	{
 		save(derived, value);
 	}
@@ -150,25 +150,25 @@ public:
 
 private:
 	template<typename T>
-	auto call_archive(T& value) -> void_if<has_member_archive<T,Derived>>
+	auto call_archive(T& value) -> void_if<is_detected<m_archive,T,Derived>>
 	{
 		value.archive(derived);
 	}
 
 	template<typename T>
-	auto call_archive(T& value) -> void_if<has_non_member_archive<Derived,T>>
+	auto call_archive(T& value) -> void_if<is_detected<nm_archive,T,Derived>>
 	{
 		archive(derived, value);
 	}
 
 	template<typename T>
-	auto call_archive(T& value) -> void_if<has_member_load<T,Derived>>
+	auto call_archive(T& value) -> void_if<is_detected<m_load,T,Derived>>
 	{
 		value.load(derived);
 	}
 
 	template<typename T>
-	auto call_archive(T& value) -> void_if<has_non_member_load<Derived,T>>
+	auto call_archive(T& value) -> void_if<is_detected<nm_load,T,Derived>>
 	{
 		load(derived, value);
 	}
