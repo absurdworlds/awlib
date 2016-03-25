@@ -285,18 +285,21 @@ private:
 };
 
 //! Negate vector (reverse direction)
+template<typename T, size_t N>
 Vector<T,N> operator - (Vector<T,N> vec)
 {
 	return vec.negate();
 }
 
 //! Identity
+template<typename T, size_t N>
 Vector<T,N> operator + (Vector<T,N> vec)
 {
 	return vec;
 }
 
 //! Sum of two vectors
+template<typename T, size_t N>
 Vector<T,N> operator + (Vector<T,N> v1, Vector<T,N> const& v2)
 {
 	v1 += v2;
@@ -304,6 +307,7 @@ Vector<T,N> operator + (Vector<T,N> v1, Vector<T,N> const& v2)
 }
 
 //! Difference of two vectors
+template<typename T, size_t N>
 Vector<T,N> operator - (Vector<T,N> v1, Vector<T,N> const& v2)
 {
 	v1 -= v2;
@@ -311,7 +315,7 @@ Vector<T,N> operator - (Vector<T,N> v1, Vector<T,N> const& v2)
 }
 
 //! Scalar-vector product
-template<typename Scalar>
+template<typename T, size_t N, typename Scalar>
 Vector<T,N> operator * (Vector<T,N> vec, Scalar const v)
 {
 	vec *= v;
@@ -319,7 +323,7 @@ Vector<T,N> operator * (Vector<T,N> vec, Scalar const v)
 }
 
 //! Scalar-vector product
-template<typename Scalar>
+template<typename T, size_t N, typename Scalar>
 Vector<T,N> operator / (Vector<T,N> vec, Scalar const v)
 {
 	vec /= v;
@@ -327,7 +331,7 @@ Vector<T,N> operator / (Vector<T,N> vec, Scalar const v)
 }
 
 //! Scalar-vector product
-template<typename Scalar>
+template<typename T, size_t N, typename Scalar>
 Vector<T,N> operator * (Scalar const v, Vector<T,N> vec)
 {
 	vec *= v;
@@ -335,6 +339,7 @@ Vector<T,N> operator * (Scalar const v, Vector<T,N> vec)
 }
 
 //! Get a normalized version of a vector
+template<typename T, size_t N>
 Vector<T,N> normalize(Vector<T,N> vec)
 {
 	return vec.normalize();
@@ -353,7 +358,5 @@ T distanceSq(Vector<T,N> vec1, Vector<T,N> const& vec2)
 {
 	return (vec1 - vec2).lengthSq();
 }
-
-
 } // namespace aw
 #endif//aw_math_Vector_h
