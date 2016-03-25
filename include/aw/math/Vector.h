@@ -213,6 +213,54 @@ struct Vector {
 		for_all([&] (size_t i) { func(elems[i]); });
 	}
 
+	T& x()
+	{
+		static_assert(N <= 4, "No such method!");
+		return get<Vec::X>();
+	}
+
+	T& y()
+	{
+		static_assert(N <= 4, "No such method!");
+		return get<Vec::Y>();
+	}
+
+	T& z()
+	{
+		static_assert(N >= 3 && N <= 4, "No such method!");
+		return get<Vec::Z>();
+	}
+
+	T& w()
+	{
+		static_assert(N == 4, "No such method!");
+		return get<Vec::W>();
+	}
+
+	T x() const
+	{
+		static_assert(N <= 4, "No such method!");
+		return get<Vec::X>();
+	}
+
+	T y() const
+	{
+		static_assert(N <= 4, "No such method!");
+		return get<Vec::Y>();
+	}
+
+	T z() const
+	{
+		static_assert(N >= 3 && N <= 4, "No such method!");
+		return get<Vec::Z>();
+	}
+
+	T w() const
+	{
+		static_assert(N == 4, "No such method!");
+		return get<Vec::W>();
+	}
+
 private:
 	base_type elems;
 
