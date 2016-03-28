@@ -15,101 +15,60 @@
 
 #include <aw/math/math.h>
 #include <aw/math/angle.h>
+#include <aw/types/support/array.h>
 #include <aw/types/traits/enable_if.h>
+#include <aw/utility/index_sequence.h>
 
 namespace aw {
-namespace detail {
-template<typename T, size_t... I>
-std::array<T,sizeof...(I)+1>
-extend_array(std::array<T,sizeof...(I)>&& array, std::index_sequence<I...>)
-{
-	return {array[I]..., 0};
-}
+template <typename T, size_t N>
+struct Vector;
 
-template<typename L, typename T, size_t... I>
-std::array<L,sizeof...(I)>
-convert_array(std::array<T,sizeof...(I)>&& array, std::index_sequence<I...>)
-{
-	return {array[I]...};
-}
-} // namespace detail
+template<size_t I, typename T, size_t N>
+T& get(Vector<T,N>& vec);
 
-template<typename T, size_t N>
-std::array<T,N+1> extend_array(std::array<T,N>&& array)
-{
-	auto index = std::make_index_sequence<N>{};
-	return detail::extend_array(std::forward<std::array<T,N>>(array), index);
-}
+template<size_t I, typename T, size_t N>
+T const& get(Vector<T,N> const& vec);
 
-template<typename L, typename T, size_t N>
-std::array<L,N> convert_array(std::array<T,N>&& array)
-{
-	auto index = std::make_index_sequence<N>{};
-	return detail::convert_array<L>(std::forward<std::array<T,N>>(array), index);
-}
 
 namespace Vec {
 enum Coordinate {
 	X, Y, Z, W
 };
-}
+} // namespace Vec
 
 template <typename T, size_t N>
 struct Vector {
-	static_assert(N >= 2, "Vector must have 2 or more dimensions");
+	static_assert(N > 0, "Vector must have non-zero number of dimensions");
 
 	constexpr static size_t vector_size = N;
 
 	using value_type = T;
-	using base_type = std::array<T,N>;
+	using array_type = std::array<T,N>;
+	using tuple_type = decltype(aw::to_tuple(std::declval<array_type>()));
 
-	//! Default constructor. Constructs zero vector.
-	Vector()
-		: elems()
+	value_type elems[N];
+
+	/*
+	template<typename...Args>
+	Vector(Args... args)
+		: elems{args...}
 	{ }
 
-	//! Construct vector with same value for elemsinates
-	explicit Vector(T const v)
-	{
-		elems.fill(v);
-	}
+	Vector(Vector<T,N> const& other)
+		: elems(other.to_array())
+	{ }
 
-	explicit Vector(Vector<T,N-1> const& vec)
-		: elems(extend_array(vec.to_array()))
-	{
-	}
-
-	//! Construct vector with individual coodrinates
-	template<typename...Args>
-	Vector(Args const... args)
-		: elems{args...}
-	{
-	}
-
-	//! Copy array of same size
+	//! Copy vector of same size
 	template<typename U>
 	Vector(Vector<U,N> const& other)
 		: elems(convert_array<T>(other.to_array()))
-	{
-	}
+	{ }*/
 
-	//! Set elements of the vector
-	template<typename...Args>
-	void set(Args const... args)
-	{
-		elems = {args...};
-	}
-
-	//! Copy elemsinates of other vector
-	void set(Vector<T,N> const& other)
-	{
-		elems = other.elems;
-	}
-
-	//! Copy elemsinates of other vector
+	//! Copy elements of other vector
 	Vector<T,N>& operator = (Vector<T,N> const& other)
 	{
-		set(other);
+		auto const& oth = other.elems;
+		std::copy(std::begin(oth), std::end(oth), std::begin(elems));
 		return *this;
 	}
 
@@ -133,8 +92,7 @@ struct Vector {
 
 	Vector<T,N>& operator/=(T const v)
 	{
-		T inv = 1 / v;
-		for_all([&] (size_t i) { elems[i] *= inv; });
+		for_all([&] (size_t i) { elems[i] /= v; });
 		return *this;
 	}
 
@@ -172,39 +130,24 @@ struct Vector {
 		return (*this *= length);
 	}
 
-	template<size_t I>
-	T& get()
+	T& operator[](size_t idx)
 	{
-		static_assert(I < vector_size, "Index out of bounds.");
-		return elems[I];
+		return elems[idx];
 	}
 
-	template<size_t I>
-	T const& get() const
+	T const& operator[](size_t idx) const
 	{
-		static_assert(I < vector_size, "Index out of bounds.");
-		return elems[I];
+		return elems[idx];
 	}
 
-	T& operator[](size_t index)
-	{
-		return elems[index];
-	}
-
-	T const& operator[](size_t index) const
-	{
-		return elems[index];
-	}
-
-	std::array<T,vector_size> to_array() const
+	array_type to_array() const
 	{
 		return elems;
 	}
-	
-	auto to_tuple() const
+
+	tuple_type to_tuple() const
 	{
-		auto index = std::make_index_sequence<N>{};
-		to_tuple(index);
+		return aw::to_tuple(elems);
 	}
 
 	template<typename Func>
@@ -215,65 +158,51 @@ struct Vector {
 
 	T& x()
 	{
-		static_assert(N <= 4, "No such method!");
-		return get<Vec::X>();
+		return get<Vec::X>(*this);
 	}
 
 	T& y()
 	{
-		static_assert(N <= 4, "No such method!");
-		return get<Vec::Y>();
+		return get<Vec::Y>(*this);
 	}
 
 	T& z()
 	{
-		static_assert(N >= 3 && N <= 4, "No such method!");
-		return get<Vec::Z>();
+		return get<Vec::Z>(*this);
 	}
 
 	T& w()
 	{
-		static_assert(N == 4, "No such method!");
-		return get<Vec::W>();
+		return get<Vec::W>(*this);
 	}
 
 	T x() const
 	{
-		static_assert(N <= 4, "No such method!");
-		return get<Vec::X>();
+		return get<Vec::X>(*this);
 	}
 
 	T y() const
 	{
-		static_assert(N <= 4, "No such method!");
-		return get<Vec::Y>();
+		return get<Vec::Y>(*this);
 	}
 
 	T z() const
 	{
-		static_assert(N >= 3 && N <= 4, "No such method!");
-		return get<Vec::Z>();
+		return get<Vec::Z>(*this);
 	}
 
 	T w() const
 	{
-		static_assert(N == 4, "No such method!");
-		return get<Vec::W>();
+		return get<Vec::W>(*this);
 	}
+
 
 private:
-	base_type elems;
-
-	template <size_t... I>
-	auto to_tuple(std::index_sequence<I...>)
-	{
-		return std::make_tuple(elems[I]...);
-	}
+	constexpr static auto index = std::make_index_sequence<N>{};
 
 	template <typename Func>
 	static void for_all(Func func)
 	{
-		auto index = std::make_index_sequence<N>{};
 		eval(func, index);
 	}
 
@@ -283,6 +212,20 @@ private:
 		int dummy[] = { (func(I), 0) ... };
 	}
 };
+
+template<size_t I, typename T, size_t N>
+T& get(Vector<T,N>& vec)
+{
+	static_assert(I < N, "Index out of bounds.");
+	return vec[I];
+}
+
+template<size_t I, typename T, size_t N>
+T const& get(Vector<T,N> const& vec)
+{
+	static_assert(I < N, "Index out of bounds.");
+	return vec[I];
+}
 
 //! Negate vector (reverse direction)
 template<typename T, size_t N>
