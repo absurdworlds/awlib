@@ -96,6 +96,13 @@ struct Vector {
 		return *this;
 	}
 
+	bool operator == (Vector<T,N> const& other) const
+	{
+		bool equal = true;
+		for_all([&] (size_t i) {equal = equal && elems[i] == other[i];});
+		return equal;
+	}
+
 	Vector<T,N>& negate()
 	{
 		return (*this *= -1);
@@ -227,6 +234,25 @@ T const& get(Vector<T,N> const& vec)
 	return vec[I];
 }
 
+namespace detail {
+template<size_t... Is, typename T, size_t N>
+Vector<T,N-1> make_sub(Vector<T,N> const& vec, index_sequence<Is...>)
+{
+	return {get<Is>(vec)...};
+}
+} // namespace detail
+
+template<size_t Index, typename T, size_t N>
+Vector<T,N-1> sub(Vector<T,N> const& vec)
+{
+	auto range = index_cat<
+	        make_index_range<0,Index>,
+	        make_index_range<Index+1,N>
+	>{};
+
+	return detail::make_sub(vec, range);
+}
+
 //! Negate vector (reverse direction)
 template<typename T, size_t N>
 Vector<T,N> operator - (Vector<T,N> vec)
@@ -300,6 +326,12 @@ template<typename T, size_t N>
 T distanceSq(Vector<T,N> vec1, Vector<T,N> const& vec2)
 {
 	return (vec1 - vec2).lengthSq();
+}
+
+template<typename T, size_t N>
+void fill(Vector<T,N>& vec, T const value)
+{
+	std::fill(std::begin(vec.elems), std::end(vec.elems), value);
 }
 } // namespace aw
 #endif//aw_math_Vector_h
