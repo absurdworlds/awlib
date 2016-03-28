@@ -10,25 +10,21 @@
 
 int main()
 {
-	aw::Matrix4<double> A(
-		1,2,3,4,
-		5,6,7,8,
-		9,1,1,2,
-		3,4,5,1);
+	aw::Matrix4<double> A{{
+		{1,5,9,3},
+		{2,6,1,4},
+		{3,7,1,5},
+		{4,8,2,1}
+	}};
 
-	auto inv = A.inverse();
+	auto inv = inverse(A);
 	if(!inv)
 		return 2;
 
 	aw::Matrix4<double> B = inv.value();
 
 	aw::Matrix4<double> I = A * B;
-	aw::Matrix4<double> I2;
+	aw::Matrix4<double> I2 = aw::makeIdentity<double,4>();
 
-	I2.setIdentity();
-
-	if (I == I2)
-		return 0;
-
-	return 1;
+	assert(I == I2);
 }
