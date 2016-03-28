@@ -26,8 +26,8 @@ struct float_traits<f32> {
 
 template <>
 struct float_traits<f64> {
-	typedef i32 int_type;
-	typedef u32 uint_type;
+	typedef i64 int_type;
+	typedef u64 uint_type;
 };
 
 template <typename T>
