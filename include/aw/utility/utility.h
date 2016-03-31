@@ -16,9 +16,9 @@
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/>. 
  */
-#ifndef aw_utils_h_
-#define aw_utils_h_
-#include <aw/config/visibility.h>
+#ifndef aw_utility_exp_h
+#define aw_utility_exp_h
+#include <aw/config.h>
 
 #ifdef AW_MODULE_UTILS
 	#define AW_UTILS_EXP AW_EXPORT
@@ -34,4 +34,4 @@ namespace aw {
  */
 namespace utils {}
 }
-#endif//aw_utils_h_
+#endif//aw_utility_exp_h

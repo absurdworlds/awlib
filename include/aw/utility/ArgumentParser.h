@@ -11,9 +11,8 @@
 #define _aw_ArgumentParser_
 #include <string>
 
-#include <aw/core/core.h>
-#include <aw/common/types.h>
-
+#include <aw/utility/utility.h>
+#include <aw/types/types.h>
 namespace aw {
 namespace core {
 /*!
@@ -47,10 +46,7 @@ struct Argument {
 	std::string name;
 
 	//! Returns true if Argument is GNU long option
-	bool longOpt() const
-	{
-		return type == Option && name.size() == 1;
-	}
+	bool longOpt;
 };
 
 /*!
@@ -73,7 +69,7 @@ struct Argument {
  * - It doesn't support '`--option=argument`' syntax,
  * - Options following '`--`' aren't treated as non-option arguments.
  */
-class AW_CORE_EXP ArgumentParser {
+class AW_UTILS_EXP ArgumentParser {
 public:
 	/*!
 	 * Create an argument parser

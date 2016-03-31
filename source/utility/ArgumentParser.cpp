@@ -40,6 +40,7 @@ Argument ArgumentParser::nextArg(char const* arg)
 		if (*arg == 0) {
 			tok.type = Argument::Delim;
 			tok.name = "--";
+			tok.longOpt = true;
 		} else {
 			tok.type = Argument::Option;
 			tok.name = std::string(arg);
