@@ -1,4 +1,14 @@
-#include <iostream>
+/*
+ * Copyright (C) 2014-2015  absurdworlds
+ * Copyright (C)      2016  hedede <haddayn@gmail.com>
+ *
+ * License LGPLv3 or later:
+ * GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
+ * This is free software: you are free to change and redistribute it.
+ * There is NO WARRANTY, to the extent permitted by law.
+ */
+#ifndef aw_math_Matrix_h
+#define aw_math_Matrix_h
 #include <aw/math/Vector.h>
 namespace aw {
 template<typename T, size_t N, size_t M>
@@ -28,30 +38,6 @@ struct Matrix {
 	//using base_type = column_type[N];
 
 	column_type columns[N];
-
-/*	Matrix()
-		: columns{}
-	{ }
-
-	/*
-	Matrix(base_type const& array)
-		: columns(array)
-	{ }* /
-
-	template<typename...Args>
-	Matrix(Vector<Args,M> const&... args)
-		: columns{args...}
-	{
-	}
-
-	Matrix(Matrix<T,N,M> const& other)
-		: columns(other.columns)
-	{ }
-
-	template<typename U>
-	Matrix(Matrix<U,N,M> const& other)
-		: columns(convert_array<Vector<T,M>>(other.columns))
-	{}*/
 
 	Matrix<T,N,M>& operator=(Matrix<T,N,M> const& other)
 	{
@@ -93,33 +79,6 @@ struct Matrix {
 		return *this;
 	}
 
-	bool operator == (Matrix<T,N,M> const& other) const
-	{
-		bool equal = true;
-		for_all([&] (size_t i) {equal = equal && columns[i] == other[i];});
-		return equal;
-	}
-
-#if 0
-	template<size_t... Cols, size_t Row>
-	Matrix<T,N-1,M-1> subMatrix(index_sequence<Cols...>c, index_sequence<Rows...>r)
-	{
-		/* Matrix<T,N-1,M-1> sub;
-		size_t cols[] = {Cols...};
-		size_t rows[] = {Rows...};
-		eval([&] (size_t i) {
-			eval([&] (size_t j) {
-				sub[i][j] = columns[cols[i]][rows[j]];
-			}, make_index_sequence<M-1>{});
-		}, make_index_sequence<N-1>{});
-
-		return sub;*/
-		// return { get<Rows>(get<Cols>(*this)) ...};
-		return { columns[cols].sub(Row) };
-	};
-#endif
-
-
 	template<typename Func>
 	void for_each_column(Func func/*void(func)(T)*/)
 	{
@@ -144,6 +103,41 @@ struct Matrix {
 		int dummy[] = { (func(I), 0) ... };
 	}
 
+	T& get(size_t i, size_t j) const
+	{
+		assert(i < N);
+		assert(j < M);
+
+		return columns[i][j];
+	}
+
+	T get(size_t i, size_t j)
+	{
+		assert(i < N);
+		assert(j < M);
+
+		return columns[i][j];
+	}
+
+	Vector<T,M>& col(size_t i)
+	{
+		assert(i < N);
+		return columns[i];
+	}
+
+	Vector<T,M> const& col(size_t i) const
+	{
+		assert(i < N);
+		return mat.columns[Index];
+	}
+
+	Vector<T,N> row(size_t j) const
+	{
+		Vector<T,N> the_row;
+		eval([&] (size_t i) { the_row[i] = col(i)[j] },
+		     make_index_sequence<N>{});
+		return the_row;
+	}
 };
 
 template<size_t I, size_t J, typename T, size_t N, size_t M>
@@ -258,9 +252,6 @@ private:
 	template <size_t I, size_t J>
 	void multiply2()
 	{
-		//std::cout << "xyzw"[I] << " += ";
-		//std::cout << "xyzw"[J] << "×" << "abcpqruvw"[J + I*3];
-		//std::cout << "\n";
 		get<I>(result) += get<J,I>(mat) * get<J>(vec);
 	}
 };
@@ -331,4 +322,6 @@ void fill(Matrix<T,N,M>& mat, T const value)
 }
 } // namespace aw
 
-#include "SquareMatrix.h"
+#include "bits/SquareMatrix.h"
+
+#endif//aw_math_Matrix_h
