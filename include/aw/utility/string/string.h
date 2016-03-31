@@ -18,7 +18,7 @@
  */
 #ifndef aw_string_h
 #define aw_string_h
-#include <aw/config/visibility.h>
+#include <aw/config.h>
 
 #ifdef AW_MODULE_STRING
 	#define AW_STRING_EXP AW_EXPORT
