@@ -22,12 +22,13 @@ struct ClassDef;
 template <class Base, typename...Args>
 struct ClassDef<Base, Base*(Args...)> {
 private:
+	using CreatorSignature = Base*(Args...);
+	using Creator = std::function<CreatorSignature>;
+	Creator const creator;
+
 	ClassDef               const* parent;
 	std::string            const  name;
 
-	using CreatorSignature = Base*(Args...);
-	std::function<CreatorSignature> const creator;
-	using Creator = decltype(creator);
 public:
 	static ClassDef base(std::string name, Creator creator)
 	{
