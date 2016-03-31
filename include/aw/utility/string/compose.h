@@ -7,13 +7,12 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _aw_string_compose_
-#define _aw_string_compose_
+#ifndef aw_string_compose_h
+#define aw_string_compose_h
 #include <vector>
 #include <string>
 
-#include <aw/utility/utility.h>
-
+#include <aw/utility/string/string.h>
 #include <aw/utility/string/as_string.h>
 
 namespace aw {
@@ -21,7 +20,7 @@ namespace string {
 /*!
  * Compose parametrized string (parameter substitution).
  */
-AW_UTILS_EXP
+AW_STRING_EXP
 std::string compose(std::string const& fmt,
                     std::vector<std::string> const& args);
 
@@ -62,4 +61,4 @@ std::string compose(std::string const& fmt, Args const&... args)
 }
 } // namespace string
 } // namespace aw
-#endif//_aw_string_compose_
+#endif//aw_string_compose_h
