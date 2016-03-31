@@ -10,10 +10,9 @@
 #define _aw_Quaternion_
 //#include <complex>
 #include <aw/math/math.h>
-#include <aw/math/float.h>
+#include <aw/math/equals.h>
 #include <aw/math/Vector3d.h>
 #include <aw/math/Vector4d.h>
-
 namespace aw {
 //! Quaternion for representing rotations
 template<typename T>
@@ -36,40 +35,23 @@ public:
 	}
 
 	/*! Constructor
-	\brief Construct quaternion from euler angles.
+	 * \brief Construct quaternion from euler angles.
 	 */
-	Quaternion(T const pitch, T const yaw, T const roll)
+	static Quaternion<T> euler(T const pitch, T const yaw, T const roll)
 	{
-		setEuler(pitch, yaw, roll);
+		return Quaternion<T>{}.setEuler(pitch, yaw, roll);
 	}
 
 	/*! Constructor
-	\brief Construct quaternion from euler angles.
+	 * \brief Construct quaternion using axis and rotation around given axis.
 	 */
-	Quaternion(Vector3d<T> const& euler)
+	static Quaternion<T> axisAngle(Vector3d<T> const& axis, T const angle)
 	{
-		setEuler(euler.x, euler.y, euler.z);
-	}
-
-	/*! Constructor
-	\brief Construct quaternion using axis and rotation around given axis.
-	 */
-	Quaternion(Vector3d<T> const& axis, T const angle)
-	{
-		setAxisAngle(axis, angle);
-	}
-
-	//! Set quaternion by individual components
-	void set(T const w, T const x, T const y, T const z)
-	{
-		x = x;
-		y = y;
-		z = z;
-		w = w;
+		return Quaternion<T>{}.setAxisAngle(axis, angle);
 	}
 
 	//! Copy components from other quaternion
-	void set(Quaternion<T> const& other)
+	Quaternion<T>& operator =(Quaternion<T> const& other)
 	{
 		x = other.x;
 		y = other.y;
@@ -77,10 +59,11 @@ public:
 		w = other.w;
 	}
 
+
 	//! Get a result of component-wise addition of two quaternions
 	Quaternion<T> operator + (Quaternion<T> const& other) const
 	{
-		return Quaternion<T>(w + other.w, x + other.x, y + other.y, z + other.z); 
+		return {w + other.w, x + other.x, y + other.y, z + other.z};
 	}
 
 	//! Component-wise addition
@@ -95,7 +78,7 @@ public:
 
 	Quaternion<T> operator + (T const val) const
 	{
-		return Quaternion<T>(w + val, x + val, y + val, z + val);
+		return {w + val, x + val, y + val, z + val};
 	}
 
 	Quaternion<T>& operator += (T const val)
@@ -110,7 +93,7 @@ public:
 	//! Get a result of component-wise subtraction of two quaternions
 	Quaternion<T> operator - (Quaternion<T> const& other) const
 	{
-		return Quaternion<T>(w - other.w, x - other.x, y - other.y, z - other.z);
+		return {w - other.w, x - other.x, y - other.y, z - other.z};
 	}
 
 	//! Component-wise subtraction
@@ -125,7 +108,7 @@ public:
 
 	Quaternion<T> operator - (T const val) const
 	{
-		return Quaternion<T>(w - val, x - val, y - val, z - val);
+		return {w - val, x - val, y - val, z - val};
 	}
 
 	Quaternion<T>& operator -= (T const val)
@@ -139,20 +122,14 @@ public:
 
 	Quaternion<T> operator - () const
 	{
-		return Quaternion<T>(-w, -x, -y, -z);
+		return {-w, -x, -y, -z};
 	}
 
 	//! Quaternion multiplication
 	Quaternion<T> operator * (Quaternion<T> const& other) const
 	{
 		Quaternion<T> q0;
-
-		q0.x = (x * other.w) + (w * other.x) + (z * other.y) - (y * other.z);
-		q0.y = (y * other.w) - (z * other.x) + (w * other.y) + (x * other.z);
-		q0.z = (z * other.w) + (y * other.x) - (x * other.y) + (w * other.z);
-		q0.w = (w * other.w) - (x * other.x) - (y * other.y) - (z * other.z);
-
-		return q0;
+		return q0 *= other;
 	}
 
 	Quaternion<T>& operator *= (Quaternion<T> const& other)
@@ -167,7 +144,7 @@ public:
 
 	Quaternion<T> operator * (T const val) const
 	{
-		return Quaternion<T>(w*val, x*val, y*val, z*val);
+		return {w*val, x*val, y*val, z*val};
 	}
 
 	Quaternion<T>& operator *= (T const val)
@@ -181,7 +158,7 @@ public:
 	}
 
 	//! Set quaternion from euler angles
-	void setEuler(T x, T y, T z)
+	Quaternion<T>& setEuler(T x, T y, T z)
 	{
 		x *= T(math::degToRad(0.5));
 		y *= T(math::degToRad(0.5));
@@ -200,9 +177,11 @@ public:
 		y = sx*cy*cz + cx*sy*sz;
 		z = cx*sy*cz - sx*cy*sz;
 		w = cx*cy*cz - sx*sy*sz;
+
+		return *this;
 	}
 
-	void setAxisAngle(Vector3d<T> const& axis, T angle)
+	Quaternion<T>& setAxisAngle(Vector3d<T> const& axis, T angle)
 	{
 		angle /= T(2.0);
 		angle *= math::RadiansInDegree;
@@ -210,11 +189,15 @@ public:
 		Vector3d<T> const v = axis.normalized() * sin(angle);
 
 		set(cos(angle), v.x, v.y, v.z);
+
+		return *this;
 	}
 
 	//! Get quaternion as euler angles
-	void toEuler(Vector3d<T>& euler)
+	auto toEuler()
 	{
+		Vector3d<T> euler = {};
+
 		// singularity test
 		f32 const test = x*y + z*w;
 		if (math::equals(test, 0.5f)) { // north pole
@@ -236,29 +219,36 @@ public:
 		}
 
 		euler *= math::DegreesInRadian;
+
+		return euler.to_tuple();
 	}
 
 	//! Get quaternion in axis-angle representation
-	void toAxisAngle(Vector3d<T>& axis, T& angle) const
+	std::tuple<Vector3d<T>, T> toAxisAngle()
 	{
+		Vector3d<T> axis = {};
+		T angle = {};
+
 		T const tCos = w;
-		T tSin = T(1.0) - w*w;
+		T tSin = T{1} - w*w;
 		// T tSin = x*x + y*y + z*z;
 
-		if(tSin > T(0.0)) {
+		if (tSin > T{0}) {
 			tSin = T(sqrt(tSin));
 			T invSin = 1 / tSin;
 
-			angle = T(math::radToDeg(2.0 * atan2(tSin, tCos)));
+			angle = T(math::radToDeg(2 * atan2(tSin, tCos)));
 			axis.x = x * invSin;
 			axis.y = y * invSin;
 			axis.z = z * invSin;
 		} else {
-			axis.x = T(0.0);
-			axis.y = T(1.0);
-			axis.z = T(0.0);
-			angle  = T(0.0);
+			axis.x = T{0};
+			axis.y = T{1};
+			axis.z = T{0};
+			angle  = T{0};
 		}
+
+		return {axis, angle}
 	}
 
 	//! Calculate dot product with other quaternion
@@ -267,12 +257,22 @@ public:
 		return x*other.x + y*other.y + z*other.z + w*other.w;
 	}
 
+	T magnitudeSq() const
+	{
+		return dot(*this);
+	}
+
+	T magnitude() const
+	{
+		return math::sqrt(magnitudeSq());
+	}
+
 	//! Normalize quaternion
 	Quaternion<T>& normalize()
 	{
-		T const sqrMag = x*x + y*y + z*z + w*w;
+		T const sqrMag = magnitudeSq();
 
-		if(!math::equals(sqrMag, T(1.0))) {
+		if (!math::equals(sqrMag, T{1})) {
 			T const invMag = math::invSqrt(sqrMag);
 
 			x *= invMag;
@@ -284,22 +284,6 @@ public:
 		return *this;
 	}
 
-	//! Get normalized quaterion
-	Quaternion<T> normalized() const
-	{
-		T const sqrMag = x*x + y*y + z*z + w*w;
-
-		if(!math::equals(sqrMag, T(1.0))) {
-			T const invMag = math::invSqrt(sqrMag);
-
-			return Quaternion<T>{
-				T(x*invMag), T(y*invMag),
-				T(z*invMag), T(w*invMag)
-			};
-		}
-
-		return Quaternion<T>();
-	}
 
 	//! Scalar component
 	T w;
@@ -316,7 +300,13 @@ public:
 template<class S, class T>
 Quaternion<T> operator * (S const scalar, Quaternion<T> const& quat)
 {
-	return quat * scalar; 
+	return quat * scalar;
+}
+
+//! Get normalized quaterion
+Quaternion<T> normalize(Quaternion<T> const& quat)
+{
+	return Quaternion<T>{quat}.normalize();
 }
 
 //! Linear interpolation of quaternion
@@ -368,6 +358,5 @@ Quaternion<T> slerp (Quaternion<T> const& q0, Quaternion<T> const& q1,
 	return sin(theta)*q0 + cos(theta)*q2;
 #endif
 }
-
 } // namespace aw
 #endif//_aw_Quaternion_
