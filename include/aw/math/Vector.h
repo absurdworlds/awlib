@@ -48,60 +48,37 @@ struct Vector {
 
 	value_type elems[N];
 
-	/*
-	template<typename...Args>
-	Vector(Args... args)
-		: elems{args...}
-	{ }
-
-	Vector(Vector<T,N> const& other)
-		: elems(other.to_array())
-	{ }
-
-	//! Copy vector of same size
-	template<typename U>
-	Vector(Vector<U,N> const& other)
-		: elems(convert_array<T>(other.to_array()))
-	{ }*/
-
-	//! Copy elements of other vector
-	Vector<T,N>& operator = (Vector<T,N> const& other)
+	Vector<T,N>& operator =(Vector<T,N> const& other)
 	{
 		auto const& oth = other.elems;
 		std::copy(std::begin(oth), std::end(oth), std::begin(elems));
 		return *this;
 	}
 
-	Vector<T,N>& operator+=(Vector<T,N> const& other)
+	Vector<T,N>& operator +=(Vector<T,N> const& other)
 	{
 		for_all([&] (size_t i) { elems[i] += other[i]; });
 		return *this;
 	}
 
-	Vector<T,N>& operator-=(Vector<T,N> const& other)
+	Vector<T,N>& operator -=(Vector<T,N> const& other)
 	{
 		for_all([&] (size_t i) { elems[i] -= other[i]; });
 		return *this;
 	}
 
-	Vector<T,N>& operator*=(T const v)
+	Vector<T,N>& operator *=(T const v)
 	{
 		for_all([&] (size_t i) { elems[i] *= v; });
 		return *this;
 	}
 
-	Vector<T,N>& operator/=(T const v)
+	Vector<T,N>& operator /=(T const v)
 	{
 		for_all([&] (size_t i) { elems[i] /= v; });
 		return *this;
 	}
 
-	bool operator == (Vector<T,N> const& other) const
-	{
-		bool equal = true;
-		for_all([&] (size_t i) {equal = equal && elems[i] == other[i];});
-		return equal;
-	}
 
 	Vector<T,N>& negate()
 	{
