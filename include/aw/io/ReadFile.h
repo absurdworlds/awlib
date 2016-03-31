@@ -6,10 +6,9 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _aw_ReadFile_
-#define _aw_ReadFile_
+#ifndef aw_io_ReadFile_h
+#define aw_io_ReadFile_h
 #include <aw/io/File.h>
-
 namespace aw {
 namespace io {
 /*!
@@ -22,7 +21,7 @@ public:
 	{
 	}
 
-	virtual ~ReadFile() = default;
+	~ReadFile() = default;
 
 	using File::isOpen;
 	using File::read;
@@ -34,4 +33,4 @@ public:
 
 } // namespace io
 } // namespace aw
-#endif//_aw_ReadFile_
+#endif//aw_io_ReadFile_h

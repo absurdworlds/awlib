@@ -6,10 +6,9 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _aw_WriteFile_
-#define _aw_WriteFile_
+#ifndef aw_io_WriteFile_h
+#define aw_io_WriteFile_h
 #include <aw/io/File.h>
-
 namespace aw {
 namespace io {
 /*!
@@ -32,7 +31,7 @@ public:
 	/*!
 	 * Destructor automatically closes the file
 	 */
-	virtual ~WriteFile() = default;
+	~WriteFile() = default;
 
 	using File::isOpen;
 	using File::write;
@@ -44,4 +43,4 @@ public:
 
 } // namespace io
 } // namespace aw
-#endif//_aw_WriteFile_
+#endif//aw_io_WriteFile_h

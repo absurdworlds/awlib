@@ -14,7 +14,6 @@
 
 namespace aw {
 namespace io {
-
 char const* getMode(File::Mode mode)
 {
 	switch(mode) {
@@ -48,7 +47,7 @@ struct File::Details {
 };
 
 File::File(std::string const& path, File::Mode mode)
-	: path(path), details(std::make_unique<File::Details>())
+	: path_(path), details(std::make_unique<File::Details>())
 {
 	if (path.size() == 0) {
 		return;
@@ -61,11 +60,18 @@ File::File(std::string const& path, File::Mode mode)
 	}
 
 	details->file = fopen(path.c_str(), mode_string);
+
+	if (!details->file)
+		return;
+
+	seek(0, SeekMode::Reverse);
+	size_ = tell();
+	seek(0, SeekMode::Set);
 }
 
 File::~File()
 {
-	if(isOpen()) {
+	if (isOpen()) {
 		close();
 	}
 }
@@ -73,7 +79,7 @@ File::~File()
 
 File::File(File&& other)
 {
-	path = std::move(other.path);
+	path_ = std::move(other.path_);
 	details = std::move(other.details);
 }
 
@@ -81,7 +87,7 @@ File& File::operator = (File&& other)
 {
 	close();
 
-	path = std::move(other.path);
+	path_ = std::move(other.path_);
 	details = std::move(other.details);
 	return *this;
 }
@@ -118,22 +124,25 @@ diff_t File::seek(diff_t offset, SeekMode mode)
 
 diff_t File::tell() const
 {
-	if (!isOpen()) {
+	if (!isOpen())
 		return -1;
-	}
 
 	return ftell(details->file);
 }
 
-size_t File::getSize() const
+size_t File::size() const
 {
-	size_t size = fileSize(path);
-	return size;
+	//size_t size = fileSize(path);
+
+	if (!isOpen())
+		return 0;
+
+	return size_;
 }
 
-std::string const& File::getPath() const
+std::string const& File::path() const
 {
-	return path;
+	return path_;
 }
 
 bool File::isOpen() const

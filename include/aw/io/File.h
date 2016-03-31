@@ -1,14 +1,14 @@
 /*
- * Copyright (C) 2014  absurdworlds
- * Copyright (C) 2015  hedede <haddayn@gmail.com>
+ * Copyright (C) 2014       absurdworlds
+ * Copyright (C) 2015-2016  hedede <haddayn@gmail.com>
  *
  * License LGPLv3 or later:
  * GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _aw_File_
-#define _aw_File_
+#ifndef aw_io_File_h
+#define aw_io_File_h
 #include <string>
 #include <memory>
 
@@ -41,10 +41,10 @@ public:
 	};
 
 	File(std::string const& path, Mode mode);
-	virtual ~File();
+	~File();
 
 	File(File&& other);
-	File& operator = (File&& other);
+	File& operator =(File&& other);
 
 	/*!
 	 * Check if file is open
@@ -74,12 +74,12 @@ public:
 	/*!
 	 * Get size of file in bytes
 	 */
-	size_t getSize() const;
+	size_t size() const;
 
 	/*!
 	 * Get full path to file
 	 */
-	std::string const& getPath() const;
+	std::string const& path() const;
 
 private:
 	/*!
@@ -87,11 +87,12 @@ private:
 	 */
 	void close();
 
-	std::string path;
+	std::string path_;
+	size_t size_;
 
 	class Details;
 	std::unique_ptr<Details> details;
 };
 } // namespace io
 } // namespace aw
-#endif//_aw_File_
+#endif//aw_io_File_h
