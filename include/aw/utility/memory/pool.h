@@ -12,6 +12,7 @@
 #include <cassert>
 #include <new>
 #include <aw/types/types.h>
+#include <aw/utility/ranges/value_range.h>
 namespace aw {
 namespace memory {
 /*!
@@ -40,14 +41,10 @@ struct pool {
 
 
 		// almost forgot this part
-		auto a = (void*)begin();
-		auto b = (void*)((char*)(a) + (num_blocks-1)*block_size);
-		while (a != b) {
-			char* next = static_cast<char*>(a) + block_size;
-			*static_cast<void**>(a) = static_cast<void*>(next);
-			a = static_cast<void*>(next);
-		}
-		*static_cast<void**>(a) = nullptr;
+		for (auto i : range(0ul, num_blocks-1))
+			next_of(index_to_ptr(i)) = index_to_ptr(i+1);
+
+		next_of(index_to_ptr(num_blocks-1)) = nullptr;
 	}
 
 	~pool()
@@ -58,7 +55,7 @@ struct pool {
 	/*
 	 * Pointer to the first byte of pool
 	 */
-	char* begin()
+	char* begin() const
 	{
 		return static_cast<char*>(start);
 	}
@@ -66,7 +63,7 @@ struct pool {
 	/*
 	 * Pointer past the last byte of the pool
 	 */
-	char* end()
+	char* end() const
 	{
 		return static_cast<char*>(start) + num_blocks*block_size;
 	}
@@ -93,12 +90,30 @@ struct pool {
 	 */
 	void* dealloc(void* ptr)
 	{
-		assert(static_cast<char*>(ptr) >= begin() && static_cast<char*>(ptr) < end());
-		*static_cast<void**>(ptr) = next;
+		assert(belongs_to(ptr));
+		next_of(ptr) = next;
 		next = ptr;
 	}
 
 private:
+	static void*& next_of(void* ptr)
+	{
+		return *static_cast<void**>(ptr);
+	}
+
+	void* index_to_ptr(size_t idx) const
+	{
+		assert(idx < num_blocks);
+		return begin() + block_size*idx;
+	}
+
+
+	bool belongs_to(void* ptr) const
+	{
+		return static_cast<char*>(ptr) >= begin() &&
+		       static_cast<char*>(ptr) < end();
+	}
+
 	size_t num_blocks;
 
 	void* start;
