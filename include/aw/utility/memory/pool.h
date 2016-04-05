@@ -46,9 +46,31 @@ struct pool {
 		next_of(index_to_ptr(num_blocks-1)) = nullptr;
 	}
 
+	pool(pool const&) = delete;
+	pool(pool&& p)
+		: num_blocks(p.num_blocks), start(p.start), next(p.next)
+	{
+		p.num_blocks = 0;
+		p.start = nullptr;
+		p.next  = nullptr;
+	}
+
+	pool& operator=(pool const&) = delete;
+	pool& operator=(pool&& p)
+	{
+		num_blocks = p.num_blocks;
+		start = p.start;
+		end   = p.end;
+
+		p.num_blocks = 0;
+		p.start = nullptr;
+		p.next  = nullptr;
+	}
+
 	~pool()
 	{
-		::operator delete(start, std::nothrow);
+		if (start)
+			::operator delete(start, std::nothrow);
 	}
 
 	/*
