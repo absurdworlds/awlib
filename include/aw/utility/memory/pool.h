@@ -25,8 +25,7 @@ struct pool {
 	 * Pool stores freelist inside beginning of each block,
 	 * so each block must be big enough to hold a pointer.
 	 */
-	static constexpr size_t block_size =
-	        Size > sizeof(void*) ? Size : sizeof(void*);
+	static constexpr size_t block_size = std::max(Size, sizeof(void*));
 
 	/*!
 	 * Create bool with num_objects blocks of memory
