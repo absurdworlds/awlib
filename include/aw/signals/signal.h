@@ -120,9 +120,7 @@ private:
 	friend signal_type;
 
 	template<typename F>
-	connection_impl(signal_type* sender, slot_type* receiver, F func)
-		: sender(sender), receiver(receiver), callback(func)
-	{ }
+	connection_impl(signal_type* sender, slot_type* receiver, F func);
 
 	virtual void notify_signal();
 	virtual void notify_slot();
@@ -222,11 +220,6 @@ struct signal<void(Args...), threading_policy> : threading_policy {
 	connection_ref connect(T& obj, member_func<T,void()> func)
 	{
 		auto conn = new connection_type{this, &obj, std::bind(func, &obj)};
-
-		// TODO: check for deadlocks
-		this->regcon(conn);
-		  obj.regcon(conn);
-
 		return {*conn};
 	}
 
@@ -254,30 +247,40 @@ private:
 
 	friend connection_type;
 
-	void regcon(impl::connection* conn)
+	void regcon(connection* conn)
 	{
 		auto lock = threading_policy::lock();
 		connections.emplace(conn, true);
 	}
 
-	void remove(impl::connection* conn)
+	void remove(connection* conn)
 	{
 		auto lock = threading_policy::lock();
 		connections.erase(conn);
 	}
 
 	struct on_destruct {
-		void operator()(impl::connection* conn)
+		void operator()(connection* conn)
 		{
 			conn->notify_slot();
 		}
 	};
 
-	using connection_holder = impl::holder<impl::connection, on_destruct>;
+	using connection_holder = impl::holder<connection, on_destruct>;
 	std::set<connection_holder> connections;
 };
 
 namespace impl {
+template<typename... Args, class threading_policy>
+template<typename F>
+cconnection_impl<void(Args...), threading_policy>::connection_impl(
+                signal_type* sender, slot_type* receiver, F func)
+	: sender(sender), receiver(receiver), callback(func)
+{
+	sender->regcon(this);
+	receiver->regcon(this);
+}
+
 template<typename... Args, class threading_policy>
 void connection_impl<void(Args...), threading_policy>::disconnect()
 {
