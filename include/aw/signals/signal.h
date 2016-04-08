@@ -44,8 +44,8 @@ namespace impl {
 /*
  * Helper to automatically notify signals/slots
  * that connectionwas erased.
- * Not the nicest solution, but I didn't come up
- * with anything else.
+ * Not the nicest solution, but all other solutions
+ * weren't nice either.
  */
 template<class T, class F>
 struct holder {
@@ -135,8 +135,12 @@ private:
 } // namespace impl
 
 /*!
- * Wrapper around pointer to impl::connection.
- *	
+ * Wrapper around pointer to connection.
+ */
+/*
+ * Could've used reference_wrapper, but it needs to be empty.
+ * Could've used plain reference, but then user needs to take ptr
+ * And I don't want
  */
 struct connection_ref {
 	connection_ref() = default;
