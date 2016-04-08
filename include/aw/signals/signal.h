@@ -104,32 +104,22 @@ bool operator<(holder<T,F> const& a, holder<T,E> const& b)
 	return a.ptr < b.ptr;
 }
 
-template<class signature, class threading_policy = default_policy>
-struct connection_impl;
+template<class Signature>
+struct connection_base;
 
-template<typename...Args, class threading_policy>
-struct connection_impl<void(Args...), threading_policy> : connection {
-	virtual void disconnect();
+template<typename...Args>
+struct connection_base<void(Args...)> : connection {
+	virtual void operator()(Args...) const = 0;
 	
 	using signature = void(Args...);
-
-private:
-	using signal_type = signal<signature, threading_policy>;
-	using slot_type   = slot<threading_policy>;
-
-	friend signal_type;
-
-	template<typename F>
-	connection_impl(signal_type* sender, slot_type* receiver, F func);
-
-	virtual void notify_signal();
-	virtual void notify_slot();
-
-	signal_type* sender;
-	slot_type* receiver;
-
-	std::function<signature> callback;
 };
+
+template<typename S, typename T, typename... Args>
+connection_base<void(Args...)>*
+make_connection(S* signal, T* slot, member_func<T,void(Args...)> callback);
+
+template<class S, class T, class Signature>
+struct connection_impl;
 } // namespace impl
 
 /*!
@@ -173,7 +163,7 @@ struct slot : threading_policy {
 	}
 
 private:
-	template<class signature, class policy> friend class impl::connection_impl;
+	template<class S, class T, class signature> friend class impl::connection_impl;
 	template<class signature, class policy> friend class signal;
 
 	void regcon(connection* conn)
@@ -216,11 +206,21 @@ struct signal<void(Args...), threading_policy> : threading_policy {
 		connections.clear();
 	}
 
+	/*
+	template<class T>
+	connection_ref connect(T* obj, member_func<T,void()> func)
+	{
+		auto conn = make_connection(this, obj, func);
+		return {*conn};
+	}
+	*/
+
 	template<class T>
 	connection_ref connect(T& obj, member_func<T,void()> func)
 	{
-		auto conn = new connection_type{this, &obj, std::bind(func, &obj)};
+		auto conn = impl::make_connection(this, &obj, func);
 		return {*conn};
+		//return connect(&obj, func);
 	}
 
 	void emit(Args...args)
@@ -232,8 +232,8 @@ struct signal<void(Args...), threading_policy> : threading_policy {
 			// values are inserted only in connect() method,
 			// which emplaces value of connection_type into
 			// set
-			auto ptr = static_cast<connection_type const*>(conn.ptr);
-			ptr->callback(args...);
+			auto& ref = *static_cast<connection_type const*>(conn.ptr);
+			ref(args...);
 		}
 	}
 
@@ -243,9 +243,9 @@ struct signal<void(Args...), threading_policy> : threading_policy {
 	}
 
 private:
-	using connection_type = impl::connection_impl<signature, threading_policy>;
+	template<class S, class T, class signature> friend class impl::connection_impl;
 
-	friend connection_type;
+	using connection_type = impl::connection_base<signature>;
 
 	void regcon(connection* conn)
 	{
@@ -271,41 +271,65 @@ private:
 };
 
 namespace impl {
-template<typename... Args, class threading_policy>
-template<typename F>
-cconnection_impl<void(Args...), threading_policy>::connection_impl(
-                signal_type* sender, slot_type* receiver, F func)
-	: sender(sender), receiver(receiver), callback(func)
-{
-	sender->regcon(this);
-	receiver->regcon(this);
-}
-
-template<typename... Args, class threading_policy>
-void connection_impl<void(Args...), threading_policy>::disconnect()
-{
-	if (sender && receiver)
-		sender->remove(this);
-}
-
-template<typename... Args, class threading_policy>
-void connection_impl<void(Args...), threading_policy>::notify_slot()
-{
-	if (receiver) {
-		sender = nullptr;
-		receiver->remove(this);
-		delete this;
+template<class S, class T, typename...Args>
+struct connection_impl<S,T,void(Args...)> : connection_base<void(Args...)> {
+	virtual void disconnect()
+	{
+		if (sender)
+			sender->remove(this);
 	}
-}
 
-template<typename... Args, class threading_policy>
-void connection_impl<void(Args...), threading_policy>::notify_signal()
-{
-	if (sender) {
-		receiver = nullptr;
-		sender->remove(this);
-		delete this;
+	virtual void operator()(Args... args) const
+	{
+		(receiver->*callback)(args...);
 	}
+
+	using signature = typename connection_base<void(Args...)>::signature;
+
+private:
+	using signal_type = S;
+	using slot_type   = T;
+	using callback_type = member_func<T,signature>;
+	using base_type = connection_base<void(Args...)>;
+
+	friend base_type* make_connection<S,T,Args...>(S*, T*, callback_type);
+
+	connection_impl(S* sender, T* receiver, callback_type func)
+		: sender(sender), receiver(receiver), callback(func)
+	{
+		sender->regcon(this);
+		receiver->regcon(this);
+	}
+
+	virtual void notify_signal()
+	{
+		if (sender) {
+			receiver = nullptr;
+			sender->remove(this);
+			delete this;
+		}
+	}
+
+	virtual void notify_slot()
+	{
+		if (receiver) {
+			sender = nullptr;
+			receiver->remove(this);
+			delete this;
+		}
+	}
+
+	signal_type* sender;
+	slot_type* receiver;
+
+	callback_type callback;
+};
+
+template<typename S, typename T, typename... Args>
+connection_base<void(Args...)>*
+make_connection(S* signal, T* slot, member_func<T,void(Args...)> callback)
+{
+	return new connection_impl<S,T,void(Args...)>(signal, slot, callback);
 }
 } // namespace impl
 } // namespace signals
