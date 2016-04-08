@@ -40,6 +40,20 @@ struct slot;
 template<class signature, class threading_policy = default_policy>
 struct signal;
 
+struct connection {
+	virtual void disconnect() = 0;
+
+private:
+	template<class threading_policy>
+	friend class aw::slot;
+
+	template<class signature, class threading_policy>
+	friend class aw::signal;
+
+	virtual void notify_signal() = 0;
+	virtual void notify_slot()   = 0;
+};
+
 namespace impl {
 /*
  * Helper to automatically notify signals/slots
@@ -90,20 +104,6 @@ bool operator<(holder<T,F> const& a, holder<T,E> const& b)
 	return a.ptr < b.ptr;
 }
 
-struct connection {
-	virtual void disconnect() = 0;
-
-private:
-	template<class threading_policy>
-	friend class aw::slot;
-
-	template<class signature, class threading_policy>
-	friend class aw::signal;
-
-	virtual void notify_signal() = 0;
-	virtual void notify_slot()   = 0;
-};
-
 template<class signature, class threading_policy = default_policy>
 struct connection_impl;
 
@@ -148,7 +148,7 @@ struct connection_ref {
 	connection_ref(connection_ref const&) = default;
 	connection_ref& operator=(connection_ref const&) = default;
 
-	connection_ref(impl::connection& conn)
+	connection_ref(connection& conn)
 		: conn(&conn)
 	{}
 
@@ -158,7 +158,7 @@ struct connection_ref {
 	}
 
 private:
-	impl::connection* conn = nullptr;
+	connection* conn = nullptr;
 };
 
 template<class threading_policy>
@@ -178,26 +178,26 @@ private:
 	template<class signature, class policy> friend class impl::connection_impl;
 	template<class signature, class policy> friend class signal;
 
-	void regcon(impl::connection* conn)
+	void regcon(connection* conn)
 	{
 		auto lock = threading_policy::lock();
 		connections.emplace(conn, true);
 	}
 
-	void remove(impl::connection* conn)
+	void remove(connection* conn)
 	{
 		auto lock = threading_policy::lock();
 		connections.erase(conn);
 	}
 
 	struct on_destruct {
-		void operator()(impl::connection* conn)
+		void operator()(connection* conn)
 		{
 			conn->notify_signal();
 		}
 	};
 
-	using connection_holder = impl::holder<impl::connection, on_destruct>;
+	using connection_holder = impl::holder<connection, on_destruct>;
 
 	std::set<connection_holder> connections;
 
