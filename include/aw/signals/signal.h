@@ -219,7 +219,7 @@ struct connection_impl : connection_base<Args...> {
 	virtual void disconnect()
 	{
 		if (sender)
-			sender->remove(this);
+			sender->disconnect(*this);
 	}
 
 	virtual void operator()(Args... args) const
@@ -227,16 +227,12 @@ struct connection_impl : connection_base<Args...> {
 		(receiver->*callback)(args...);
 	}
 
-	virtual slot* target() const
+	virtual slot_type* target() const
 	{
 		return receiver;
 	}
 
 private:
-	using signal_type = signal<signature>;
-	using slot_type   = T;
-	using callback_type = member_func<T,signature>;
-
 	friend signal_type;
 
 	connection_impl(signal_type* sender, T* receiver, callback_type func)
