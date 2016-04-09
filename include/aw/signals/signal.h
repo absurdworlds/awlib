@@ -49,6 +49,9 @@ struct slot : threading_policy {
 		disconnect_all();
 	}
 
+	/*!
+	 * Disconnect all signals from this slot
+	 */
 	void disconnect_all()
 	{
 		auto lock = threading_policy::lock();
@@ -80,6 +83,9 @@ private:
 template<class policy, class T, typename...Args>
 struct connection_impl;
 
+/*
+ * See attorney idiom (or something like that)
+ */
 class slot_access {
 	template<class policy, class signature>
 	friend class signal;
@@ -106,15 +112,43 @@ struct signal<policy, void(Args...)> {
 
 	~signal() = default;
 
+	/*!
+	 * Add member function to list of observers.
+	 * Each time signal is called, it will call each of callbacks.
+	 */
 	template<class T>
 	connection& connect(T& obj, member_func<T,void()> func);
 
+	/*!
+	 * Destroy particular connection
+	 */
 	void disconnect(connection& conn)
 	{
 		auto lock = impl->lock();
 		impl->connections.erase(&conn);
 	}
 
+	/*!
+	 * Disconnect particular class
+	 */
+	void disconnect(slot<policy>& s)
+	{
+		auto lock = impl->lock();
+
+		auto iter = std::begin(impl->connections);
+		auto end  = std::end(impl->connections);
+		while (iter != end) {
+			if (iter->second->target() == &s) {
+				impl->connections.erase(iter++);
+			} else {
+				++iter;
+			}
+		}
+	}
+
+	/*!
+	 * Destroy all connections
+	 */
 	void disconnect_all()
 	{
 		auto lock = impl->lock();
@@ -188,6 +222,8 @@ struct connection_impl : connection_base<Args...> {
 	{
 		return receiver;
 	}
+
+
 
 private:
 	friend signal_type;
