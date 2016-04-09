@@ -104,21 +104,14 @@ bool operator<(holder<T,F> const& a, holder<T,E> const& b)
 	return a.ptr < b.ptr;
 }
 
-template<class Signature>
-struct connection_base;
-
 template<typename...Args>
-struct connection_base<void(Args...)> : connection {
+struct connection_base : connection {
 	virtual void operator()(Args...) const = 0;
 	
 	using signature = void(Args...);
 };
 
-template<typename S, typename T, typename... Args>
-connection_base<void(Args...)>*
-make_connection(S* signal, T* slot, member_func<T,void(Args...)> callback);
-
-template<class S, class T, class Signature>
+template<class T, typename...Args>
 struct connection_impl;
 } // namespace impl
 
@@ -163,8 +156,8 @@ struct slot : threading_policy {
 	}
 
 private:
-	template<class S, class T, class signature> friend class impl::connection_impl;
-	template<class signature, class policy> friend class signal;
+	template< class T, class Args...> friend class impl::connection_impl;
+	template<class signature> friend class signal;
 
 	void regcon(connection* conn)
 	{
@@ -206,22 +199,8 @@ struct signal<void(Args...), threading_policy> : threading_policy {
 		connections.clear();
 	}
 
-	/*
 	template<class T>
-	connection_ref connect(T* obj, member_func<T,void()> func)
-	{
-		auto conn = make_connection(this, obj, func);
-		return {*conn};
-	}
-	*/
-
-	template<class T>
-	connection_ref connect(T& obj, member_func<T,void()> func)
-	{
-		auto conn = impl::make_connection(this, &obj, func);
-		return {*conn};
-		//return connect(&obj, func);
-	}
+	connection_ref connect(T& obj, member_func<T,void()> func);
 
 	void emit(Args...args)
 	{
@@ -243,7 +222,7 @@ struct signal<void(Args...), threading_policy> : threading_policy {
 	}
 
 private:
-	template<class S, class T, class signature> friend class impl::connection_impl;
+	template<class T, class...A> friend class impl::connection_impl;
 
 	using connection_type = impl::connection_base<signature>;
 
@@ -271,8 +250,8 @@ private:
 };
 
 namespace impl {
-template<class S, class T, typename...Args>
-struct connection_impl<S,T,void(Args...)> : connection_base<void(Args...)> {
+template<class T, typename...Args>
+struct connection_impl<T,Args...> : connection_base<Args...> {
 	virtual void disconnect()
 	{
 		if (sender)
@@ -287,14 +266,14 @@ struct connection_impl<S,T,void(Args...)> : connection_base<void(Args...)> {
 	using signature = typename connection_base<void(Args...)>::signature;
 
 private:
-	using signal_type = S;
+	using signal_type = signal<signature>;
 	using slot_type   = T;
 	using callback_type = member_func<T,signature>;
 	using base_type = connection_base<void(Args...)>;
 
 	friend base_type* make_connection<S,T,Args...>(S*, T*, callback_type);
 
-	connection_impl(S* sender, T* receiver, callback_type func)
+	connection_impl(signal_type* sender, T* receiver, callback_type func)
 		: sender(sender), receiver(receiver), callback(func)
 	{
 		sender->regcon(this);
@@ -324,14 +303,18 @@ private:
 
 	callback_type callback;
 };
-
-template<typename S, typename T, typename... Args>
-connection_base<void(Args...)>*
-make_connection(S* signal, T* slot, member_func<T,void(Args...)> callback)
-{
-	return new connection_impl<S,T,void(Args...)>(signal, slot, callback);
-}
 } // namespace impl
+
+template<typename...Args>
+template<class T>
+connection_ref signal<void(Args...)>::connect(T& obj, member_func<T,void()> func)
+{
+	auto conn = new impl::connection_impl<T,Args...>{
+		this, &obj, func
+	};
+
+	return {*conn};
+}
 } // namespace signals
 } // namespace aw
 #endif//aw_signals_signal_h
