@@ -203,10 +203,7 @@ template<typename...Args, class threading_policy>
 struct signal<void(Args...), threading_policy> : threading_policy {
 	using signature = void(Args...);
 
-	~signal()
-	{
-		disconnect_all();
-	}
+	~signal() = default;
 
 	template<class T>
 	connection_ref connect(T& obj, member_func<T,void()> func);
