@@ -27,8 +27,8 @@ public:
 	using File::read;
 	using File::seek;
 	using File::tell;
-	using File::getSize;
-	using File::getPath;
+	using File::size;
+	using File::path;
 };
 
 } // namespace io

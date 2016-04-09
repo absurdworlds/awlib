@@ -13,7 +13,7 @@
 #include <memory>
 
 #include <aw/io/io.h>
-#include <aw/common/types.h>
+#include <aw/types/types.h>
 
 namespace aw {
 namespace io {

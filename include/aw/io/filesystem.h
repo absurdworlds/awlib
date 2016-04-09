@@ -10,7 +10,7 @@
 #define _aw_filesystem_
 #include <string>
 
-#include <aw/common/types.h>
+#include <aw/types/types.h>
 #include <aw/platform/platform.h>
 
 namespace aw {
