@@ -1,7 +1,7 @@
 #ifndef aw_signals_signal_h
 #define aw_signals_signal_h
 #include <set>
-#include <functional>
+#include <map>
 #include <memory>
 #include <mutex>
 
@@ -31,27 +31,21 @@ struct multi_threaded {
 	std::mutex mtx;
 };
 
-using default_policy = single_threaded;
-
-
-template<class threading_policy = default_policy>
+template<class threading_policy>
 struct slot;
 
-template<class signature, class threading_policy = default_policy>
+template<class signature, class threading_policy>
 struct signal;
 
 struct connection {
+	virtual ~connection() = default;
 	virtual void disconnect() = 0;
 
 private:
 	template<class threading_policy>
 	friend class aw::slot;
 
-	template<class signature, class threading_policy>
-	friend class aw::signal;
-
 	virtual void notify_signal() = 0;
-	virtual void notify_slot()   = 0;
 };
 
 namespace impl {
@@ -106,9 +100,11 @@ bool operator<(holder<T,F> const& a, holder<T,E> const& b)
 
 template<typename...Args>
 struct connection_base : connection {
-	virtual void operator()(Args...) const = 0;
-	
 	using signature = void(Args...);
+
+	virtual ~connection_base() = default;
+	virtual void operator()(Args...) const = 0;
+	virtual slot* target() const = 0;
 };
 
 template<class T, typename...Args>
@@ -206,13 +202,9 @@ struct signal<void(Args...), threading_policy> : threading_policy {
 	{
 		auto lock = threading_policy::lock();
 
-		for (auto& conn : connections) {
-			// Guaranteed to be of connection_type, because
-			// values are inserted only in connect() method,
-			// which emplaces value of connection_type into
-			// set
-			auto& ref = *static_cast<connection_type const*>(conn.ptr);
-			ref(args...);
+		for (auto& pair : connections) {
+			auto& func = *pair.second;
+			func(args...);
 		}
 	}
 
@@ -224,12 +216,13 @@ struct signal<void(Args...), threading_policy> : threading_policy {
 private:
 	template<class T, class...A> friend class impl::connection_impl;
 
-	using connection_type = impl::connection_base<signature>;
+	using connection_type = connection_base<Args...>;
+	using connection_ptr = std::unique_ptr<connection_type>;
 
 	void regcon(connection* conn)
 	{
 		auto lock = threading_policy::lock();
-		connections.emplace(conn, true);
+		connections.emplace(conn, connection_ptr(conn));
 	}
 
 	void remove(connection* conn)
@@ -238,20 +231,28 @@ private:
 		connections.erase(conn);
 	}
 
-	struct on_destruct {
-		void operator()(connection* conn)
-		{
-			conn->notify_slot();
-		}
-	};
 
-	using connection_holder = impl::holder<connection, on_destruct>;
-	std::set<connection_holder> connections;
+	// map<T*, uptr<T>> is used here, as it's easier to
+	// use than std::set of unique_ptrs with custom deleter,
+	// and uses same amount of space anyway
+	// (extra pointer vs pointer to non-empty deleter)
+	std::map<connection*, std::unique_ptr<connection_type>> connections;
 };
 
 namespace impl {
 template<class T, typename...Args>
 struct connection_impl<T,Args...> : connection_base<Args...> {
+	using base_type = connection_base<Args...>;
+
+	using signature = typename connection_base<Args...>::signature;
+
+	virtual ~connection_impl()
+	{
+		sender = nullptr;
+		if (receiver)
+			receiver->remove(this);
+	}
+
 	virtual void disconnect()
 	{
 		if (sender)
@@ -263,15 +264,17 @@ struct connection_impl<T,Args...> : connection_base<Args...> {
 		(receiver->*callback)(args...);
 	}
 
-	using signature = typename connection_base<void(Args...)>::signature;
+	virtual slot* target() const
+	{
+		return receiver;
+	}
 
 private:
 	using signal_type = signal<signature>;
 	using slot_type   = T;
 	using callback_type = member_func<T,signature>;
-	using base_type = connection_base<void(Args...)>;
 
-	friend base_type* make_connection<S,T,Args...>(S*, T*, callback_type);
+	friend signal_type;
 
 	connection_impl(signal_type* sender, T* receiver, callback_type func)
 		: sender(sender), receiver(receiver), callback(func)
@@ -285,16 +288,6 @@ private:
 		if (sender) {
 			receiver = nullptr;
 			sender->remove(this);
-			delete this;
-		}
-	}
-
-	virtual void notify_slot()
-	{
-		if (receiver) {
-			sender = nullptr;
-			receiver->remove(this);
-			delete this;
 		}
 	}
 
