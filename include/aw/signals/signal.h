@@ -106,9 +106,6 @@ struct connection_base : connection {
 	virtual void operator()(Args...) const = 0;
 	virtual slot* target() const = 0;
 };
-
-template<class T, typename...Args>
-struct connection_impl;
 } // namespace impl
 
 /*!
@@ -152,10 +149,9 @@ struct slot : threading_policy {
 	}
 
 private:
-	template< class T, class Args...> friend class impl::connection_impl;
-	template<class signature> friend class signal;
+	friend class slot_access;
 
-	void regcon(connection* conn)
+	void add(connection* conn)
 	{
 		auto lock = threading_policy::lock();
 		connections.emplace(conn, true);
@@ -177,7 +173,30 @@ private:
 	using connection_holder = impl::holder<connection, on_destruct>;
 
 	std::set<connection_holder> connections;
+};
 
+namespace impl {
+template<class T, typename...Args>
+struct connection_impl;
+}
+
+class slot_access {
+	template<class signature, class policy>
+	friend class signal;
+
+	template<class T, class...Args, class policy>
+	friend class impl::connection_impl;
+
+	template<typename threading_policy>
+	static void connect(slot<threading_policy>* s, connection* c)
+	{
+		s->add(c);
+	}
+
+	static void disconnect(slot<threading_policy>* s, connection* c)
+	{
+		s->remove(c);
+	}
 };
 
 template<typename...Args, class threading_policy>
@@ -250,7 +269,7 @@ struct connection_impl<T,Args...> : connection_base<Args...> {
 	{
 		sender = nullptr;
 		if (receiver)
-			receiver->remove(this);
+			slot_access::disconnect(receiver, this);
 	}
 
 	virtual void disconnect()
@@ -280,7 +299,7 @@ private:
 		: sender(sender), receiver(receiver), callback(func)
 	{
 		sender->regcon(this);
-		receiver->regcon(this);
+		slot_access::connect(&obj, conn);
 	}
 
 	virtual void notify_signal()
