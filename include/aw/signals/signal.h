@@ -211,20 +211,20 @@ struct signal<void(Args...), threading_policy> : threading_policy {
 	void disconnect(connection& conn)
 	{
 		auto lock = threading_policy::lock();
-		connections.erase(&conn);
+		connections->erase(&conn);
 	}
 
 	void disconnect_all()
 	{
 		auto lock = threading_policy::lock();
-		connections.clear();
+		connections->.clear();
 	}
 
 	void emit(Args...args)
 	{
 		auto lock = threading_policy::lock();
 
-		for (auto& pair : connections) {
+		for (auto& pair : *connections) {
 			auto& func = *pair.second;
 			func(args...);
 		}
@@ -243,7 +243,11 @@ private:
 	// use than std::set of unique_ptrs with custom deleter,
 	// and uses same amount of space anyway
 	// (extra pointer vs pointer to non-empty deleter)
-	std::map<connection*, std::unique_ptr<connection_type>> connections;
+	using conn_map = std::map<connection*, std::unique_ptr<connection_type>>;
+	// std::map can be quite large (24 - 56 bytes on different implementations)
+	// and one class can have several signals, so I'm willing to sacrifice
+	// data locality for reduced class size
+	std::unique_ptr<conn_map> connections;
 };
 
 namespace impl {
@@ -313,7 +317,7 @@ connection_ref signal<void(Args...)>::connect(T& obj, member_func<T,void()> func
 
 	{
 		auto lock = threading_policy::lock();
-		connections.emplace(conn, connection_ptr(conn));
+		connections->emplace(conn, connection_ptr(conn));
 	}
 
 	slot_access::connect(&obj, conn);
