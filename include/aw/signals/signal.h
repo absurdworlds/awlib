@@ -208,14 +208,20 @@ struct signal<void(Args...), threading_policy> : threading_policy {
 		disconnect_all();
 	}
 
+	template<class T>
+	connection_ref connect(T& obj, member_func<T,void()> func);
+
+	void disconnect(connection& conn)
+	{
+		auto lock = threading_policy::lock();
+		connections.erase(&conn);
+	}
+
 	void disconnect_all()
 	{
 		auto lock = threading_policy::lock();
 		connections.clear();
 	}
-
-	template<class T>
-	connection_ref connect(T& obj, member_func<T,void()> func);
 
 	void emit(Args...args)
 	{
@@ -233,23 +239,8 @@ struct signal<void(Args...), threading_policy> : threading_policy {
 	}
 
 private:
-	template<class T, class...A> friend class impl::connection_impl;
-
 	using connection_type = connection_base<Args...>;
 	using connection_ptr = std::unique_ptr<connection_type>;
-
-	void regcon(connection* conn)
-	{
-		auto lock = threading_policy::lock();
-		connections.emplace(conn, connection_ptr(conn));
-	}
-
-	void remove(connection* conn)
-	{
-		auto lock = threading_policy::lock();
-		connections.erase(conn);
-	}
-
 
 	// map<T*, uptr<T>> is used here, as it's easier to
 	// use than std::set of unique_ptrs with custom deleter,
@@ -298,8 +289,6 @@ private:
 	connection_impl(signal_type* sender, T* receiver, callback_type func)
 		: sender(sender), receiver(receiver), callback(func)
 	{
-		sender->regcon(this);
-		slot_access::connect(&obj, conn);
 	}
 
 	virtual void notify_signal()
@@ -324,6 +313,13 @@ connection_ref signal<void(Args...)>::connect(T& obj, member_func<T,void()> func
 	auto conn = new impl::connection_impl<T,Args...>{
 		this, &obj, func
 	};
+
+	{
+		auto lock = threading_policy::lock();
+		connections.emplace(conn, connection_ptr(conn));
+	}
+
+	slot_access::connect(&obj, conn);
 
 	return {*conn};
 }
