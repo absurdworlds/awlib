@@ -77,7 +77,7 @@ struct growing_pool {
 	 * Result of passing \a ptr that wasn't returned by alloc()
 	 * is undefined.
 	 */
-	void* dealloc(void* ptr) noexcept
+	void dealloc(void* ptr) noexcept
 	{
 		next_of(ptr) = next;
 		next = ptr;

@@ -60,7 +60,7 @@ struct pool {
 	{
 		num_blocks = p.num_blocks;
 		start = p.start;
-		end   = p.end;
+		next  = p.next;
 
 		p.num_blocks = 0;
 		p.start = nullptr;
@@ -100,7 +100,7 @@ struct pool {
 		auto ret = next;
 
 		if (next != nullptr)
-			next = *static_cast<void**>(next);
+			next = next_of(next);
 
 		return ret;
 	}
