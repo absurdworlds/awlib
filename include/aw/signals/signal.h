@@ -40,63 +40,7 @@ struct signal;
 struct connection {
 	virtual ~connection() = default;
 	virtual void disconnect() = 0;
-
-private:
-	template<class threading_policy>
-	friend class aw::slot;
-
-	virtual void notify_signal() = 0;
 };
-
-namespace impl {
-/*
- * Helper to automatically notify signals/slots
- * that connectionwas erased.
- * Not the nicest solution, but all other solutions
- * weren't nice either.
- */
-template<class T, class F>
-struct holder {
-	holder(T* ptr, bool do_call = false)
-		: ptr(ptr), do_call(do_call)
-	{}
-
-	~holder()
-	{
-		if (do_call)
-			F{}(ptr);
-	}
-
-	holder(holder const&) = delete;
-	holder& operator=(holder const&) = delete;
-
-	holder(holder&& other)
-		: ptr(other.ptr), do_call(other.do_call)
-	{
-		other.do_call = false;
-	}
-
-	holder& operator=(holder&& other)
-	{
-		ptr = other.ptr;
-		do_call = other.do_call;
-		other.do_call = false;
-	}
-
-	T* operator->()
-	{
-		return ptr;
-	}
-
-	T* ptr;
-	bool do_call;
-};
-
-template<class T, class F, class E>
-bool operator<(holder<T,F> const& a, holder<T,E> const& b)
-{
-	return a.ptr < b.ptr;
-}
 
 template<typename...Args>
 struct connection_base : connection {
@@ -106,7 +50,6 @@ struct connection_base : connection {
 	virtual void operator()(Args...) const = 0;
 	virtual slot* target() const = 0;
 };
-} // namespace impl
 
 /*!
  * Wrapper around pointer to connection.
@@ -137,6 +80,10 @@ private:
 
 template<class threading_policy>
 struct slot : threading_policy {
+	/*!
+	 * Destructor is non-virtual, do not store pointers
+	 * to derived classes as "slot*".
+	 */
 	~slot()
 	{
 		disconnect_all();
@@ -145,6 +92,10 @@ struct slot : threading_policy {
 	void disconnect_all()
 	{
 		auto lock = threading_policy::lock();
+
+		for (auto conn : connections)
+			conn->disconnect();
+
 		connections.clear();
 	}
 
@@ -154,7 +105,7 @@ private:
 	void add(connection* conn)
 	{
 		auto lock = threading_policy::lock();
-		connections.emplace(conn, true);
+		connections.insert(conn);
 	}
 
 	void remove(connection* conn)
@@ -163,16 +114,7 @@ private:
 		connections.erase(conn);
 	}
 
-	struct on_destruct {
-		void operator()(connection* conn)
-		{
-			conn->notify_signal();
-		}
-	};
-
-	using connection_holder = impl::holder<connection, on_destruct>;
-
-	std::set<connection_holder> connections;
+	std::set<connection*> connections;
 };
 
 namespace impl {
@@ -289,16 +231,7 @@ private:
 
 	connection_impl(signal_type* sender, T* receiver, callback_type func)
 		: sender(sender), receiver(receiver), callback(func)
-	{
-	}
-
-	virtual void notify_signal()
-	{
-		if (sender) {
-			receiver = nullptr;
-			sender->remove(this);
-		}
-	}
+	{ }
 
 	signal_type* sender;
 	slot_type* receiver;
