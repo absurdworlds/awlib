@@ -51,33 +51,6 @@ struct connection_base : connection {
 	//virtual slot* target() const = 0;
 };
 
-/*!
- * Wrapper around pointer to connection.
- */
-/*
- * Could've used reference_wrapper, but it needs to be empty.
- * Could've used plain reference, but then user needs to take ptr
- * And I don't want
- */
-struct connection_ref {
-	connection_ref() = default;
-	~connection_ref() = default;
-	connection_ref(connection_ref const&) = default;
-	connection_ref& operator=(connection_ref const&) = default;
-
-	connection_ref(connection& conn)
-		: conn(&conn)
-	{}
-
-	void disconnect()
-	{
-		conn->disconnect();
-	}
-
-private:
-	connection* conn = nullptr;
-};
-
 template<class threading_policy>
 struct slot : threading_policy {
 	/*!
@@ -149,7 +122,7 @@ struct signal<policy, void(Args...)> {
 	~signal() = default;
 
 	template<class T>
-	connection_ref connect(T& obj, member_func<T,void()> func);
+	connection& connect(T& obj, member_func<T,void()> func);
 
 	void disconnect(connection& conn)
 	{
@@ -248,7 +221,7 @@ private:
 
 template<class P, typename...Args>
 template<class T>
-connection_ref signal<P,void(Args...)>::connect(T& obj, member_func<T,void()> func)
+connection& signal<P,void(Args...)>::connect(T& obj, member_func<T,void()> func)
 {
 	auto conn = new impl::connection_impl<P,T,Args...>{
 		this, &obj, func
@@ -261,7 +234,7 @@ connection_ref signal<P,void(Args...)>::connect(T& obj, member_func<T,void()> fu
 
 	slot_access::connect(&obj, conn);
 
-	return {*conn};
+	return *conn;
 }
 } // namespace signals
 } // namespace aw
