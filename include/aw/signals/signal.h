@@ -11,6 +11,8 @@
 #include <set>
 #include <map>
 #include <memory>
+#include <aw/utility/static_object.h>
+#include <aw/utility/memory/type_pool.h>
 
 #include "memfun.h"
 namespace aw {
@@ -236,6 +238,29 @@ private:
 	slot_type* receiver;
 
 	callback_type callback;
+
+public:
+	void* operator new(size_t count)
+	{
+		constexpr size_t size = sizeof(connection_impl);
+		auto& p = static_object<pool>::instance();
+		return p.alloc();
+	}
+
+	void operator delete(void* ptr)
+	{
+		constexpr size_t size = sizeof(connection_impl);
+		auto& p = static_object<pool>::instance();
+		p.dealloc(ptr);
+	}
+
+private:
+	struct pool : memory::growing_pool<sizeof(connection_impl)> {
+		using base = memory::growing_pool<sizeof(connection_impl)>;
+		pool()
+			: base(4096)
+		{}
+	};
 };
 
 template<class P, typename...Args>
