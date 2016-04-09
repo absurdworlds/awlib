@@ -48,7 +48,7 @@ struct connection_base : connection {
 
 	virtual ~connection_base() = default;
 	virtual void operator()(Args...) const = 0;
-	virtual slot* target() const = 0;
+	//virtual slot* target() const = 0;
 };
 
 /*!
@@ -118,31 +118,32 @@ private:
 };
 
 namespace impl {
-template<class T, typename...Args>
+template<class policy, class T, typename...Args>
 struct connection_impl;
 }
 
 class slot_access {
-	template<class signature, class policy>
+	template<class policy, class signature>
 	friend class signal;
 
-	template<class T, class...Args, class policy>
+	template<class policy, class T, class...Args>
 	friend class impl::connection_impl;
 
-	template<typename threading_policy>
-	static void connect(slot<threading_policy>* s, connection* c)
+	template<class policy>
+	static void connect(slot<policy>* s, connection* c)
 	{
 		s->add(c);
 	}
 
-	static void disconnect(slot<threading_policy>* s, connection* c)
+	template<class policy>
+	static void disconnect(slot<policy>* s, connection* c)
 	{
 		s->remove(c);
 	}
 };
 
-template<typename...Args, class threading_policy>
-struct signal<void(Args...), threading_policy> : threading_policy {
+template<class policy, typename...Args>
+struct signal<policy, void(Args...)> {
 	using signature = void(Args...);
 
 	~signal() = default;
@@ -198,11 +199,15 @@ private:
 };
 
 namespace impl {
-template<class T, typename...Args>
-struct connection_impl<T,Args...> : connection_base<Args...> {
+template<class threading_policy, class T, typename...Args>
+struct connection_impl : connection_base<Args...> {
 	using base_type = connection_base<Args...>;
 
 	using signature = typename connection_base<Args...>::signature;
+
+	using signal_type = signal<threading_policy, signature>;
+	using slot_type   = T;
+	using callback_type = member_func<T,signature>;
 
 	virtual ~connection_impl()
 	{
@@ -245,11 +250,11 @@ private:
 };
 } // namespace impl
 
-template<typename...Args>
+template<class P, typename...Args>
 template<class T>
-connection_ref signal<void(Args...)>::connect(T& obj, member_func<T,void()> func)
+connection_ref signal<P,void(Args...)>::connect(T& obj, member_func<T,void()> func)
 {
-	auto conn = new impl::connection_impl<T,Args...>{
+	auto conn = new impl::connection_impl<P,T,Args...>{
 		this, &obj, func
 	};
 
