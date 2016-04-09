@@ -7,35 +7,14 @@
 
 #include "memfun.h"
 namespace aw {
-inline namespace signals {
-struct single_threaded {
-	struct lock_dummy {};
-	struct mutex_dummy {};
-
-	using lock_type = lock_dummy;
-
-	lock_type lock()
-	{
-		return lock_dummy{};
-	}
-};
-
-struct multi_threaded {
-	using lock_type = std::unique_lock<std::mutex>;
-
-	lock_type lock()
-	{
-		return lock_type(mtx);
-	}
-
-	std::mutex mtx;
-};
-
+namespace signals {
+namespace impl {
 template<class threading_policy>
 struct slot;
 
 template<class signature, class threading_policy>
 struct signal;
+} // namespace impl;
 
 struct connection {
 	virtual ~connection() = default;
@@ -51,6 +30,7 @@ struct connection_base : connection {
 	//virtual slot* target() const = 0;
 };
 
+namespace impl {
 template<class threading_policy>
 struct slot : threading_policy {
 	/*!
@@ -90,10 +70,8 @@ private:
 	std::set<connection*> connections;
 };
 
-namespace impl {
 template<class policy, class T, typename...Args>
 struct connection_impl;
-}
 
 class slot_access {
 	template<class policy, class signature>
@@ -171,7 +149,6 @@ private:
 	std::unique_ptr<Data> impl{new Data};
 };
 
-namespace impl {
 template<class threading_policy, class T, typename...Args>
 struct connection_impl : connection_base<Args...> {
 	using base_type = connection_base<Args...>;
@@ -217,7 +194,6 @@ private:
 
 	callback_type callback;
 };
-} // namespace impl
 
 template<class P, typename...Args>
 template<class T>
@@ -236,6 +212,7 @@ connection& signal<P,void(Args...)>::connect(T& obj, member_func<T,void()> func)
 
 	return *conn;
 }
+} // namespace impl
 } // namespace signals
 } // namespace aw
 #endif//aw_signals_signal_h
