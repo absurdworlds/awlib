@@ -112,7 +112,31 @@ template<class policy, typename...Args>
 struct signal<policy, void(Args...)> {
 	using signature = void(Args...);
 
+	signal() = default;
 	~signal() = default;
+
+	signal(signal const&) = delete;
+	signal& operator=(signal const&) = delete;
+
+
+	signal(signal&& other)
+	{
+		move_from(other);
+	}
+
+	signal& operator=(signal&& other)
+	{
+		impl.reset(new signal_impl);
+		move_from(other);
+	}
+
+	signal clone() const
+	{
+		signal temp;
+		for (auto& conn : impl->connections)
+			temp.connect(*conn.receiver, conn.callback);
+		return temp;
+	}
 
 	/*!
 	 * Add member function to list of observers.
@@ -176,6 +200,15 @@ private:
 	using connection_type = connection_base<Args...>;
 	using connection_ptr = std::unique_ptr<connection_type>;
 
+	void move_from(signal&& other)
+	{
+		impl.swap(other.impl);
+		// TODO: store pointer to signal_impl in
+		// connection_impl to make this unnecessary
+		for (auto& conn : impl->connections)
+			conn->sender = this;
+	}
+
 	// map<T*, uptr<T>> is used here, as it's easier to
 	// use than std::set of unique_ptrs with custom deleter,
 	// and uses same amount of space anyway
@@ -185,11 +218,11 @@ private:
 	// std::map can be quite large (24 - 56 bytes on different implementations)
 	// and one class can have several signals, so I'm willing to sacrifice
 	// data locality for reduced class size
-	struct Data : policy {
+	struct signal_impl : policy {
 		conn_map connections;
 	};
 
-	std::unique_ptr<Data> impl{new Data};
+	std::unique_ptr<signal_impl> impl{new signal_impl};
 };
 
 template<class threading_policy, class T, typename...Args>
