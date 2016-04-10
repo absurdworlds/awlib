@@ -17,6 +17,7 @@
 #include "memfun.h"
 namespace aw {
 namespace signals {
+inline namespace v1 {
 namespace impl {
 template<class threading_policy>
 struct slot;
@@ -301,8 +302,6 @@ struct connection_impl : connection_base<Args...> {
 		return receiver;
 	}
 
-
-
 private:
 	friend S;
 
@@ -353,6 +352,7 @@ connection& signal<P,void(Args...)>::connect(T& obj, member_func<T,void()> func)
 
 	return *conn;
 }
+} // namespace v1
 } // namespace impl
 } // namespace signals
 } // namespace aw
