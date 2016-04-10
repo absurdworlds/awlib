@@ -115,21 +115,45 @@ struct signal<policy, void(Args...)> {
 	signal() = default;
 	~signal() = default;
 
+	/*!
+	 * To copy a signal use clone()
+	 *
+	 * I see only two reasonable behaviours when copying an object
+	 * with signals:
+	 * A. Copy the object, default-initialize signals
+	 * B. Copy the object, and connect signals to same slots
+	 *    that originals were connected to.
+	 */
 	signal(signal const&) = delete;
 	signal& operator=(signal const&) = delete;
 
 
+	/*!
+	 * Move \a other signal into this signal.
+	 * Other signal becomes empty, as though it
+	 * was default-constructed.
+	 */
 	signal(signal&& other)
 	{
 		move_from(other);
 	}
 
+	/*!
+	 * Move \a other signal into this signal.
+	 * Other signal becomes empty, as though it
+	 * was default-constructed.
+	 */
 	signal& operator=(signal&& other)
 	{
 		impl.reset(new signal_impl);
 		move_from(other);
 	}
 
+	/*!
+	 * Clone a signal.
+	 * Creates a signal and connects it to each slot
+	 * this signal is connected to.
+	 */
 	signal clone() const
 	{
 		signal temp;
@@ -181,6 +205,10 @@ struct signal<policy, void(Args...)> {
 		impl->connections.clear();
 	}
 
+	/*!
+	 * Emitting signal causes it to call each of connected
+	 * slots.
+	 */
 	void emit(Args...args)
 	{
 		auto lock = impl->lock();
@@ -191,6 +219,10 @@ struct signal<policy, void(Args...)> {
 		}
 	}
 
+	/*!
+	 * Emit signal.
+	 * \see emit
+	 */
 	void operator()(Args...args)
 	{
 		emit(args...);
