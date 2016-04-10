@@ -18,15 +18,24 @@
 namespace aw {
 namespace signals {
 struct single_threaded {
-	struct lock_dummy {};
 	struct mutex_dummy {};
 
-	using lock_type = lock_dummy;
+	template<class...Mutex>
+	struct lock_dummy {
+		lock_dummy(Mutex const&...)
+		{}
+	};
 
-	lock_type lock()
-	{
-		return lock_dummy{};
-	}
+	using mutex_type = mutex_dummy;
+
+	using lock_type    = lock_dummy<single_threaded>;
+	using lock_n_type  = lock_dummy<single_threaded, single_threaded>;
+
+	void lock()
+	{ }
+
+	void unlock()
+	{ }
 };
 
 using slot = impl::slot<single_threaded>;

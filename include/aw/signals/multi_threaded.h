@@ -18,21 +18,30 @@
 
 namespace aw {
 namespace signals {
+inline namespace v1 {
 struct multi_threaded {
-	using lock_type = std::unique_lock<std::mutex>;
+	using mutex_type  = std::mutex;
+	using lock_type   = std::lock_guard<multi_threaded>;
+	using lock_n_type = std::lock_guard<multi_threaded, multi_threaded>;
 
-	lock_type lock()
+	void lock()
 	{
-		return lock_type(mtx);
+		mtx.lock();
 	}
 
-	std::mutex mtx;
+	void unlock()
+	{
+		mtx.unlock();
+	}
+
+	mutex_type mtx;
 };
 
 using slot = impl::slot<multi_threaded>;
 
 template<class signature>
 using signal = impl::signal<multi_threaded, signature>;
+} // namespace v1
 } // namespace signals
 } // namespace aw
 #endif //aw_signals_multi_threaded_h

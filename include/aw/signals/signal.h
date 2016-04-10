@@ -62,7 +62,7 @@ struct slot : threading_policy {
 	 */
 	slot(slot&& other)
 	{
-		auto lock = threading_policy::lock();
+		typename threading_policy::lock_type lock(other);
 		connections = std::move(other.connections);
 	}
 
@@ -71,7 +71,7 @@ struct slot : threading_policy {
 	 */
 	void disconnect_all()
 	{
-		auto lock = threading_policy::lock();
+		typename threading_policy::lock_type lock(*this);
 
 		for (auto conn : connections)
 			conn->disconnect();
@@ -84,13 +84,15 @@ private:
 
 	void add(connection* conn)
 	{
-		auto lock = threading_policy::lock();
+		typename threading_policy::lock_type lock(*this);
+
 		connections.insert(conn);
 	}
 
 	void remove(connection* conn)
 	{
-		auto lock = threading_policy::lock();
+		typename threading_policy::lock_type lock(*this);
+
 		connections.erase(conn);
 	}
 
@@ -150,7 +152,9 @@ struct signal<policy, void(Args...)> {
 	 */
 	signal(signal&& other)
 	{
-		move_from(other);
+		typename policy::lock_type lock(*other.impl);
+
+		impl.swap(other.impl);
 	}
 
 	/*!
@@ -160,8 +164,38 @@ struct signal<policy, void(Args...)> {
 	 */
 	signal& operator=(signal&& other)
 	{
-		impl.reset(new signal_impl);
-		move_from(other);
+		/*
+		 * This code is supposed to safely swap impls.
+		 *
+		 * Because attempt to destruct a locked mutex
+		 * results in undefined behavior, I can't release
+		 * impl while it's locked.
+		 */
+		/*
+		 * Another thought:
+		 * will this cause problems?
+		 * thread1: sig1 = std::move(sig2);
+		 * thread1: { ...
+		 * thread1:     impl.swap(temp);
+		 *
+		 * threadA: sig1.connect(...); // attempts to lock temp
+		 *
+		 * thread1: releases lock
+		 *
+		 * threadB: sig2.connect(...); // locks temp
+		 *
+		 * threadA: still waiting on temp
+		 */
+		auto temp = std::make_unique<signal_impl>();
+
+		typename policy::lock_type lock2(*temp);
+
+		{
+			typename policy::lock_n_type lock(*impl, *other.impl);
+
+			impl.swap(temp);
+			impl.swap(other.impl);
+		}
 	}
 
 	/*!
@@ -171,6 +205,8 @@ struct signal<policy, void(Args...)> {
 	 */
 	signal clone() const
 	{
+		typename policy::lock_type lock(*impl);
+
 		signal temp;
 		for (auto& conn : impl->connections)
 			temp.connect(*conn.receiver, conn.callback);
@@ -197,7 +233,7 @@ struct signal<policy, void(Args...)> {
 	 */
 	void disconnect(slot<policy>& s)
 	{
-		auto lock = impl->lock();
+		typename policy::lock_type lock(*impl);
 
 		auto iter = std::begin(impl->connections);
 		auto end  = std::end(impl->connections);
@@ -215,7 +251,7 @@ struct signal<policy, void(Args...)> {
 	 */
 	void disconnect_all()
 	{
-		auto lock = impl->lock();
+		typename policy::lock_type lock(*impl);
 		impl->connections.clear();
 	}
 
@@ -225,7 +261,7 @@ struct signal<policy, void(Args...)> {
 	 */
 	void emit(Args...args)
 	{
-		auto lock = impl->lock();
+		typename policy::lock_type lock(*impl);
 
 		for (auto& pair : impl->connections) {
 			auto& func = *pair.second;
@@ -246,13 +282,6 @@ private:
 	using connection_type = connection_base<Args...>;
 	using connection_ptr = std::unique_ptr<connection_type>;
 
-	void move_from(signal&& other)
-	{
-		impl.swap(other.impl);
-		/* for (auto& conn : impl->connections)
-			conn->sender = this;*/
-	}
-
 	// map<T*, uptr<T>> is used here, as it's easier to
 	// use than std::set of unique_ptrs with custom deleter,
 	// and uses same amount of space anyway
@@ -266,13 +295,15 @@ public:
 	struct signal_impl : policy {
 		void insert(connection_type* conn)
 		{
-			auto lock = this->lock();
+			typename policy::lock_type lock(*this);
+
 			connections.emplace(conn, connection_ptr(conn));
 		}
 
 		void remove(connection* conn)
 		{
-			auto lock = this->lock();
+			typename policy::lock_type lock(*this);
+
 			connections.erase(conn);
 		}
 
