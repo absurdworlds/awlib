@@ -43,6 +43,8 @@ struct connection_base : connection {
 namespace impl {
 template<class threading_policy>
 struct slot : threading_policy {
+	slot() = default;
+
 	/*!
 	 * Destructor is non-virtual, do not store pointers
 	 * to derived classes as "slot*".
@@ -50,6 +52,18 @@ struct slot : threading_policy {
 	~slot()
 	{
 		disconnect_all();
+	}
+
+	slot(slot const&) = delete;
+	slot& operator=(slot const&) = delete;
+
+	/*
+	 * TODO: ?
+	 */
+	slot(slot&& other)
+	{
+		auto lock = threading_policy::lock();
+		connections = std::move(other.connections);
 	}
 
 	/*!
