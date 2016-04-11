@@ -37,5 +37,23 @@ Output reinterpret(Input&& in) {
 	std::memcpy(&out, &in, sizeof(Input));
 	return out;
 }
+
+/*!
+ * Reinterpret value of type Input as a value of type Output.
+ *
+ * \note
+ *     Usually compilers optimize it to few mov instructions.
+ */
+template<typename Output, typename Input>
+Output reinterpret_any(Input&& in) {
+	static_assert(std::is_trivially_copyable(Input),
+	              "Input type must be trivially copyable");
+	static_assert(std::is_trivially_copyable(Output),
+	              "Output type must be trivially copyable");
+	constexpr size_t size = std::min(sizeof(Output), sizeof(Input));
+	Output out{};
+	std::memcpy(&out, &in, size);
+	return out;
+}
 } // namespace aw
 #endif//aw_reinterpret_type
