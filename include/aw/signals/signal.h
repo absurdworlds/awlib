@@ -11,6 +11,7 @@
 #include <set>
 #include <map>
 #include <memory>
+#include <aw/types/support/reinterpret.h>
 #include <aw/utility/static_object.h>
 #include <aw/utility/memory/type_pool.h>
 
@@ -310,6 +311,22 @@ private:
 	std::unique_ptr<signal_impl> impl{new signal_impl};
 };
 
+template<class policy, typename...Args>
+struct func {
+	using storage = typename std::aligned_storage<
+	        sizeof(unknown_mem_fn<void,Args...>),
+	        alignof(unknown_mem_fn<void,Args...>)
+	>::type;
+
+	template<class T> static
+	void invoke(storage const& data, observer<policy>* obj, Args... args)
+	{
+		auto func = reinterpret_any<member_func<T,void(Args...)>>(data);
+		T* ptr = static_cast<T*>(obj);
+		(ptr->*func)(args...);
+	}
+};
+
 template<class policy, class T, typename...Args>
 struct connection_impl : connection_base<policy,Args...> {
 	using base_type = connection_base<policy,Args...>;
@@ -318,8 +335,12 @@ struct connection_impl : connection_base<policy,Args...> {
 
 	using signal_type   = signal<policy,signature>;
 	using signal_impl   = typename signal_type::signal_impl;
-	using observer_type = T;
+	using observer_type = observer<policy>;
+
 	using callback_type = member_func<T,signature>;
+
+	using storage_type = typename func<policy,Args...>::storage;
+	using invoker_type = void(*)(storage_type const&, observer_type*, Args...);
 
 	virtual ~connection_impl()
 	{
@@ -340,7 +361,7 @@ struct connection_impl : connection_base<policy,Args...> {
 
 	virtual void operator()(Args... args) const
 	{
-		(receiver->*callback)(args...);
+		invoke(storage, receiver, args...);
 	}
 
 	virtual observer_type* target() const
@@ -351,14 +372,18 @@ struct connection_impl : connection_base<policy,Args...> {
 private:
 	friend signal_type;
 
-	connection_impl(signal_impl* sender, T* receiver, callback_type func)
-		: sender(sender), receiver(receiver), callback(func)
-	{ }
+	connection_impl(signal_impl* sender, T* receiver, callback_type fn)
+		: base_type(receiver), sender(sender)
+	{
+		invoke  = func<policy,Args...>::template invoke<T>;
+		storage = reinterpret_any<storage_type>(fn);
+	}
 
 	signal_impl* sender;
 	observer_type* receiver;
 
-	callback_type callback;
+	storage_type storage;
+	invoker_type invoke;
 
 public:
 	void* operator new(size_t count)
