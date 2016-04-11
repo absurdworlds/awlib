@@ -37,7 +37,7 @@ struct multi_threaded {
 	mutex_type mtx;
 };
 
-using slot = impl::slot<multi_threaded>;
+using observer = impl::observer<multi_threaded>;
 
 template<class signature>
 using signal = impl::signal<multi_threaded, signature>;

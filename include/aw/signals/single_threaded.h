@@ -17,6 +17,7 @@
 
 namespace aw {
 namespace signals {
+inline namespace v1 {
 struct single_threaded {
 	struct mutex_dummy {};
 
@@ -38,10 +39,11 @@ struct single_threaded {
 	{ }
 };
 
-using slot = impl::slot<single_threaded>;
+using observer = impl::observer<single_threaded>;
 
 template<class signature>
 using signal = impl::signal<single_threaded, signature>;
+} // namespace v1
 } // namespace signals
 } // namespace aw
 #endif//aw_signals_single_threaded_h

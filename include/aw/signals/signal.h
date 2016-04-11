@@ -20,7 +20,7 @@ namespace signals {
 inline namespace v1 {
 namespace impl {
 template<class threading_policy>
-struct slot;
+struct observer;
 
 template<class signature, class threading_policy>
 struct signal;
@@ -42,25 +42,25 @@ struct connection_base : connection {
 
 namespace impl {
 template<class threading_policy>
-struct slot : threading_policy {
-	slot() = default;
+struct observer : threading_policy {
+	observer() = default;
 
 	/*!
 	 * Destructor is non-virtual, do not store pointers
-	 * to derived classes as "slot*".
+	 * to derived classes as "observer*".
 	 */
-	~slot()
+	~observer()
 	{
 		disconnect_all();
 	}
 
-	slot(slot const&) = delete;
-	slot& operator=(slot const&) = delete;
+	observer(observer const&) = delete;
+	observer& operator=(observer const&) = delete;
 
 	/*
 	 * TODO: ?
 	 */
-	slot(slot&& other)
+	observer(observer&& other)
 	{
 		typename threading_policy::lock_type lock(other);
 		connections = std::move(other.connections);
@@ -80,7 +80,7 @@ struct slot : threading_policy {
 	}
 
 private:
-	friend class slot_access;
+	friend class observer_access;
 
 	void add(connection* conn)
 	{
@@ -101,7 +101,7 @@ struct connection_impl;
 /*
  * See attorney idiom (or something like that)
  */
-class slot_access {
+class observer_access {
 	template<class policy, class signature>
 	friend class signal;
 
@@ -109,13 +109,13 @@ class slot_access {
 	friend class impl::connection_impl;
 
 	template<class policy>
-	static void connect(slot<policy>* s, connection* c)
+	static void connect(observer<policy>* s, connection* c)
 	{
 		s->add(c);
 	}
 
 	template<class policy>
-	static void disconnect(slot<policy>* s, connection* c)
+	static void disconnect(observer<policy>* s, connection* c)
 	{
 		s->remove(c);
 	}
@@ -228,7 +228,7 @@ struct signal<policy, void(Args...)> {
 	/*!
 	 * Disconnect particular class
 	 */
-	void disconnect(slot<policy>& s)
+	void disconnect(observer<policy>& s)
 	{
 		typename policy::lock_type lock(*impl);
 
@@ -316,7 +316,7 @@ struct connection_impl : connection_base<Args...> {
 
 	using signal_type = signal<policy,signature>;
 	using signal_impl = typename signal_type::signal_impl;
-	using slot_type   = T;
+	using observer_type   = T;
 	using callback_type = member_func<T,signature>;
 
 	virtual ~connection_impl()
@@ -324,7 +324,7 @@ struct connection_impl : connection_base<Args...> {
 		sender = nullptr;
 		if (receiver) {
 			typename policy::lock_type lock(*receiver);
-			slot_access::disconnect(receiver, this);
+			observer_access::disconnect(receiver, this);
 		}
 	}
 
@@ -341,7 +341,7 @@ struct connection_impl : connection_base<Args...> {
 		(receiver->*callback)(args...);
 	}
 
-	virtual slot_type* target() const
+	virtual observer_type* target() const
 	{
 		return receiver;
 	}
@@ -354,7 +354,7 @@ private:
 	{ }
 
 	signal_impl* sender;
-	slot_type* receiver;
+	observer_type* receiver;
 
 	callback_type callback;
 
@@ -394,7 +394,7 @@ connection& signal<P,void(Args...)>::connect(T& obj, member_func<T,void()> func)
 
 	impl->insert(conn);
 
-	slot_access::connect(&obj, conn);
+	observer_access::connect(&obj, conn);
 
 	return *conn;
 }
