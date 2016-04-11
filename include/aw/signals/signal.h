@@ -28,16 +28,31 @@ struct signal;
 
 template<class threading_policy>
 struct connection {
+	template<typename T>
+	connection(T& obj)
+		: receiver(&obj)
+	{}
+
 	virtual ~connection() = default;
 	virtual void disconnect() = 0;
 
-	virtual observer<threading_policy>* target() const = 0;
+	observer<threading_policy>* target() const
+	{
+		return receiver;
+	}
+
+private:
+	observer<threading_policy>* receiver;
 };
 
 template<class threading_policy, typename...Args>
 struct connection_base : connection<threading_policy> {
 	using signature = void(Args...);
 
+	template<typename T>
+	connection_base(T& obj)
+		: connection<threading_policy>(obj)
+	{}
 	virtual ~connection_base() = default;
 	virtual void operator()(Args...) const = 0;
 };
@@ -347,7 +362,7 @@ struct connection_impl : connection_base<policy,Args...> {
 		sender = nullptr;
 		if (receiver) {
 			typename policy::lock_type lock(*receiver);
-			observer_access::disconnect(receiver, this);
+			observer_access::disconnect(target(), this);
 		}
 	}
 
@@ -361,12 +376,7 @@ struct connection_impl : connection_base<policy,Args...> {
 
 	virtual void operator()(Args... args) const
 	{
-		invoke(storage, receiver, args...);
-	}
-
-	virtual observer_type* target() const
-	{
-		return receiver;
+		invoke(storage, target(), args...);
 	}
 
 private:
@@ -380,7 +390,6 @@ private:
 	}
 
 	signal_impl* sender;
-	observer_type* receiver;
 
 	storage_type storage;
 	invoker_type invoke;
@@ -403,9 +412,7 @@ public:
 private:
 	struct pool : memory::growing_pool<sizeof(connection_impl)> {
 		using base = memory::growing_pool<sizeof(connection_impl)>;
-		pool()
-			: base(4096)
-		{}
+		pool() : base(4096) {}
 	};
 };
 
