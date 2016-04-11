@@ -22,17 +22,17 @@ namespace impl {
 template<class threading_policy>
 struct observer;
 
-template<class signature, class threading_policy>
+template<class threading_policy, class signature>
 struct signal;
-} // namespace impl;
 
+template<class threading_policy>
 struct connection {
 	virtual ~connection() = default;
 	virtual void disconnect() = 0;
 };
 
-template<typename...Args>
-struct connection_base : connection {
+template<class threading_policy, typename...Args>
+struct connection_base : connection<threading_policy> {
 	using signature = void(Args...);
 
 	virtual ~connection_base() = default;
@@ -40,7 +40,6 @@ struct connection_base : connection {
 	//virtual slot* target() const = 0;
 };
 
-namespace impl {
 template<class threading_policy>
 struct observer : threading_policy {
 	observer() = default;
@@ -82,17 +81,19 @@ struct observer : threading_policy {
 private:
 	friend class observer_access;
 
-	void add(connection* conn)
+	using connection_type = connection<threading_policy>;
+
+	void add(connection_type* conn)
 	{
 		connections.insert(conn);
 	}
 
-	void remove(connection* conn)
+	void remove(connection_type* conn)
 	{
 		connections.erase(conn);
 	}
 
-	std::set<connection*> connections;
+	std::set<connection_type*> connections;
 };
 
 template<class policy, class T, typename...Args>
@@ -109,13 +110,13 @@ class observer_access {
 	friend class impl::connection_impl;
 
 	template<class policy>
-	static void connect(observer<policy>* s, connection* c)
+	static void connect(observer<policy>* s, connection<policy>* c)
 	{
 		s->add(c);
 	}
 
 	template<class policy>
-	static void disconnect(observer<policy>* s, connection* c)
+	static void disconnect(observer<policy>* s, connection<policy>* c)
 	{
 		s->remove(c);
 	}
@@ -214,12 +215,12 @@ struct signal<policy, void(Args...)> {
 	 * Each time signal is called, it will call each of callbacks.
 	 */
 	template<class T>
-	connection& connect(T& obj, member_func<T,void()> func);
+	connection<policy>& connect(T& obj, member_func<T,void()> func);
 
 	/*!
 	 * Destroy particular connection
 	 */
-	void disconnect(connection& conn)
+	void disconnect(connection<policy>& conn)
 	{
 		typename policy::lock_type lock(*impl);
 		impl->remove(&conn);
@@ -276,14 +277,14 @@ struct signal<policy, void(Args...)> {
 	}
 
 private:
-	using connection_type = connection_base<Args...>;
+	using connection_type = connection_base<policy, Args...>;
 	using connection_ptr = std::unique_ptr<connection_type>;
 
 	// map<T*, uptr<T>> is used here, as it's easier to
 	// use than std::set of unique_ptrs with custom deleter,
 	// and uses same amount of space anyway
 	// (extra pointer vs pointer to non-empty deleter)
-	using conn_map = std::map<connection*, std::unique_ptr<connection_type>>;
+	using conn_map = std::map<connection<policy>*, std::unique_ptr<connection_type>>;
 
 public:
 	// std::map can be quite large (24 - 56 bytes on different implementations)
@@ -296,7 +297,7 @@ public:
 			connections.emplace(conn, connection_ptr(conn));
 		}
 
-		void remove(connection* conn)
+		void remove(connection<policy>* conn)
 		{
 			connections.erase(conn);
 		}
@@ -309,14 +310,14 @@ private:
 };
 
 template<class policy, class T, typename...Args>
-struct connection_impl : connection_base<Args...> {
-	using base_type = connection_base<Args...>;
+struct connection_impl : connection_base<policy,Args...> {
+	using base_type = connection_base<policy,Args...>;
 
-	using signature = typename connection_base<Args...>::signature;
+	using signature = typename base_type::signature;
 
-	using signal_type = signal<policy,signature>;
-	using signal_impl = typename signal_type::signal_impl;
-	using observer_type   = T;
+	using signal_type   = signal<policy,signature>;
+	using signal_impl   = typename signal_type::signal_impl;
+	using observer_type = T;
 	using callback_type = member_func<T,signature>;
 
 	virtual ~connection_impl()
@@ -384,7 +385,7 @@ private:
 
 template<class P, typename...Args>
 template<class T>
-connection& signal<P,void(Args...)>::connect(T& obj, member_func<T,void()> func)
+connection<P>& signal<P,void(Args...)>::connect(T& obj, member_func<T,void()> func)
 {
 	auto conn = new impl::connection_impl<P,T,Args...>{
 		impl.get(), &obj, func

@@ -41,6 +41,8 @@ struct single_threaded {
 
 using observer = impl::observer<single_threaded>;
 
+using connection = impl::connection<single_threaded>;
+
 template<class signature>
 using signal = impl::signal<single_threaded, signature>;
 } // namespace v1

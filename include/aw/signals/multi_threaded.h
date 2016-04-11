@@ -39,6 +39,8 @@ struct multi_threaded {
 
 using observer = impl::observer<multi_threaded>;
 
+using connection = impl::connection<multi_threaded>;
+
 template<class signature>
 using signal = impl::signal<multi_threaded, signature>;
 } // namespace v1
