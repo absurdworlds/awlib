@@ -46,8 +46,8 @@ struct growing_pool {
 
 	~growing_pool() noexcept
 	{
-		for (auto start : pools)
-			::operator delete(start, std::nothrow);
+		for (auto pool : pools)
+			::operator delete(pool, std::nothrow);
 	}
 
 	/*!
