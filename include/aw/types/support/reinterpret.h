@@ -10,6 +10,8 @@
 #ifndef aw_reinterpret_type
 #define aw_reinterpret_type
 #include <cstring>
+#include <type_traits>
+#include <algorithm>
 namespace aw {
 /*!
  * Reinterpret value of type Input as a value of type Output.
@@ -21,10 +23,14 @@ namespace aw {
  * \note
  *     Sizes of both types must match.
  * \note
- *     Good compilers optimize this to a single instruction.
+ *     Usually compilers optimize it to few mov instructions.
  */
 template<typename Output, typename Input>
 Output reinterpret(Input&& in) {
+	static_assert(std::is_trivially_copyable(Input),
+	              "Input type must be trivially copyable");
+	static_assert(std::is_trivially_copyable(Output),
+	              "Output type must be trivially copyable");
 	static_assert(sizeof(Output) == sizeof(Input),
 	              "cannot reinterpret type: sizes don't match");
 	Output out;
