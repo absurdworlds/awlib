@@ -194,17 +194,29 @@ private:
 
 };
 
-template<size_t size>
+template<class policy, size_t size>
 struct connection_pool : policy, memory::growing_pool<size> {
 	using base = memory::growing_pool<size>;
 	connection_pool() : base(4096) { }
+
+	void* alloc()
+	{
+		typename policy::lock_type lock(*this);
+		return base::alloc();
+	}
+
+	void dealloc(void* ptr)
+	{
+		typename policy::lock_type lock(*this);
+		return base::dealloc(ptr);
+	}
 };
 
 template<class policy, typename... Args>
 void* connection_base<policy,Args...>::operator new(size_t count)
 {
 	constexpr size_t size = sizeof(connection_base);
-	using conn_pool = static_object<connection_pool<size>>;
+	using conn_pool = static_object<connection_pool<policy,size>>;
 	static auto& p = conn_pool::instance();
 	return p.alloc();
 }
@@ -213,7 +225,7 @@ template<class policy, typename... Args>
 void connection_base<policy,Args...>::operator delete(void* ptr)
 {
 	constexpr size_t size = sizeof(connection_base);
-	using conn_pool = static_object<connection_pool<size>>;
+	using conn_pool = static_object<connection_pool<policy,size>>;
 	static auto& p = conn_pool::instance();
 	p.dealloc(ptr);
 }
