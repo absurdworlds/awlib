@@ -8,227 +8,14 @@
  */
 #ifndef aw_signals_signal_h
 #define aw_signals_signal_h
-#include <set>
 #include <map>
 #include <memory>
-#include <aw/types/support/reinterpret.h>
-#include <aw/utility/static_object.h>
-#include <aw/utility/memory/type_pool.h>
+#include <aw/signals/connection_impl.h>
 
-#include "memfun.h"
 namespace aw {
 namespace signals {
 inline namespace v1 {
 namespace impl {
-template<class threading_policy>
-struct observer;
-
-template<class threading_policy, class signature>
-struct signal;
-
-template<class threading_policy>
-struct connection {
-	template<typename T>
-	connection(T& obj)
-		: receiver(&obj)
-	{}
-
-	virtual void disconnect() = 0;
-
-	observer<threading_policy>& target() const
-	{
-		return *receiver;
-	}
-
-private:
-	observer<threading_policy>* receiver;
-};
-
-
-template<class threading_policy>
-struct observer : threading_policy {
-	observer() = default;
-
-	/*!
-	 * Destructor is non-virtual, do not store pointers
-	 * to derived classes as "observer*".
-	 */
-	~observer()
-	{
-		disconnect_all();
-	}
-
-	observer(observer const&) = delete;
-	observer& operator=(observer const&) = delete;
-
-	/*
-	 * TODO: ?
-	 */
-	observer(observer&& other)
-	{
-		typename threading_policy::lock_type lock(other);
-		connections = std::move(other.connections);
-	}
-
-	/*!
-	 * Disconnect all signals from this slot
-	 */
-	void disconnect_all()
-	{
-		typename threading_policy::lock_type lock(*this);
-
-		for (auto conn : connections)
-			conn->disconnect();
-
-		connections.clear();
-	}
-
-private:
-	friend class observer_access;
-
-	using connection_type = connection<threading_policy>;
-
-	void add(connection_type* conn)
-	{
-		connections.insert(conn);
-	}
-
-	void remove(connection_type* conn)
-	{
-		connections.erase(conn);
-	}
-
-	std::set<connection_type*> connections;
-};
-
-template<class policy, typename...Args>
-struct connection_base;
-
-/*
- * See attorney idiom (or something like that)
- */
-class observer_access {
-	template<class policy, class signature>
-	friend class signal;
-
-	template<class policy, class...Args>
-	friend class connection_base;
-
-	template<class policy>
-	static void connect(observer<policy>* s, connection<policy>* c)
-	{
-		s->add(c);
-	}
-
-	template<class policy>
-	static void disconnect(observer<policy>& s, connection<policy>* c)
-	{
-		s.remove(c);
-	}
-};
-
-template<class polcy, class signature>
-struct func;
-
-template<class policy, typename...Args>
-struct func<policy, void(Args...)> {
-	using storage = typename std::aligned_storage<
-	        sizeof(unknown_mem_fn<void,Args...>),
-	        alignof(unknown_mem_fn<void,Args...>)
-	>::type;
-
-	template<class T> static
-	void invoke(storage const& data, observer<policy>* obj, Args... args)
-	{
-		auto func = reinterpret_any<member_func<T,void(Args...)>>(data);
-		T* ptr = static_cast<T*>(obj);
-		(ptr->*func)(args...);
-	}
-};
-
-template<class policy, typename...Args>
-struct connection_base : connection<policy> {
-	using signature = void(Args...);
-
-	using signal_type   = signal<policy,signature>;
-	using signal_impl   = typename signal_type::signal_impl;
-
-	using storage_type = typename func<policy,void(Args...)>::storage;
-	using invoker_type = void(*)(storage_type const&, observer<policy>*, Args...);
-
-	~connection_base()
-	{
-		auto& receiver = connection<policy>::target();
-		{
-			typename policy::lock_type lock(receiver);
-			observer_access::disconnect(receiver, this);
-		}
-	}
-
-	virtual void disconnect();
-
-	void operator()(Args... args) const
-	{
-		auto& receiver = connection<policy>::target();
-		invoke(storage, &receiver, args...);
-	}
-
-	void* operator new(size_t count);
-	void operator delete(void* ptr);
-
-private:
-	friend signal_type;
-
-	template<typename T>
-	connection_base(signal_impl* sender, T& obj, member_func<T,signature> fn)
-		: connection<policy>(obj), sender(sender)
-	{
-		invoke  = func<policy,void(Args...)>::template invoke<T>;
-		storage = reinterpret_any<storage_type>(fn);
-	}
-
-	signal_impl* sender;
-
-	storage_type storage;
-	invoker_type invoke;
-
-};
-
-template<class policy, size_t size>
-struct connection_pool : policy, memory::growing_pool<size> {
-	using base = memory::growing_pool<size>;
-	connection_pool() : base(4096) { }
-
-	void* alloc()
-	{
-		typename policy::lock_type lock(*this);
-		return base::alloc();
-	}
-
-	void dealloc(void* ptr)
-	{
-		typename policy::lock_type lock(*this);
-		return base::dealloc(ptr);
-	}
-};
-
-template<class policy, typename... Args>
-void* connection_base<policy,Args...>::operator new(size_t count)
-{
-	constexpr size_t size = sizeof(connection_base);
-	using conn_pool = static_object<connection_pool<policy,size>>;
-	static auto& p = conn_pool::instance();
-	return p.alloc();
-}
-
-template<class policy, typename... Args>
-void connection_base<policy,Args...>::operator delete(void* ptr)
-{
-	constexpr size_t size = sizeof(connection_base);
-	using conn_pool = static_object<connection_pool<policy,size>>;
-	static auto& p = conn_pool::instance();
-	p.dealloc(ptr);
-}
 
 template<class policy, typename...Args>
 struct signal<policy, void(Args...)> {
@@ -323,7 +110,20 @@ struct signal<policy, void(Args...)> {
 	 * Each time signal is called, it will call each of callbacks.
 	 */
 	template<class T>
-	connection<policy>& connect(T& obj, member_func<T,void()> func);
+	connection<policy>& connect(T& obj, member_func<T,void()> func)
+	{
+		auto conn = new impl::connection_base<policy,Args...>{
+			impl.get(), obj, func
+		};
+
+		typename policy::lock_n_type lock(*impl, obj);
+
+		impl->insert(conn);
+
+		observer_access::connect(&obj, conn);
+
+		return *conn;
+	}
 
 	/*!
 	 * Destroy particular connection
@@ -385,6 +185,7 @@ struct signal<policy, void(Args...)> {
 	}
 
 private:
+	using key_type = connection<policy>*;
 	using connection_type = connection_base<policy, Args...>;
 	using connection_ptr = std::unique_ptr<connection_type>;
 
@@ -392,7 +193,7 @@ private:
 	// use than std::set of unique_ptrs with custom deleter,
 	// and uses same amount of space anyway
 	// (extra pointer vs pointer to non-empty deleter)
-	using conn_map = std::map<connection<policy>*, std::unique_ptr<connection_type>>;
+	using conn_map = std::map<key_type, std::unique_ptr<connection_type>>;
 
 public:
 	// std::map can be quite large (24 - 56 bytes on different implementations)
@@ -401,7 +202,6 @@ public:
 	struct signal_impl : policy {
 		void insert(connection_type* conn)
 		{
-
 			connections.emplace(conn, connection_ptr(conn));
 		}
 
@@ -422,23 +222,6 @@ void connection_base<policy,Args...>::disconnect()
 {
 	typename policy::lock_type lock(*sender);
 	sender->remove(this);
-}
-
-template<class P, typename...Args>
-template<class T>
-connection<P>& signal<P,void(Args...)>::connect(T& obj, member_func<T,void()> func)
-{
-	auto conn = new impl::connection_base<P,Args...>{
-		impl.get(), obj, func
-	};
-
-	typename P::lock_n_type lock(*impl, obj);
-
-	impl->insert(conn);
-
-	observer_access::connect(&obj, conn);
-
-	return *conn;
 }
 } // namespace v1
 } // namespace impl
