@@ -29,6 +29,8 @@ template<class threading_policy>
 struct connection {
 	virtual ~connection() = default;
 	virtual void disconnect() = 0;
+
+	virtual observer<threading_policy>* target() const = 0;
 };
 
 template<class threading_policy, typename...Args>
@@ -37,7 +39,6 @@ struct connection_base : connection<threading_policy> {
 
 	virtual ~connection_base() = default;
 	virtual void operator()(Args...) const = 0;
-	//virtual slot* target() const = 0;
 };
 
 template<class threading_policy>
