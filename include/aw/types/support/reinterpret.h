@@ -27,9 +27,9 @@ namespace aw {
  */
 template<typename Output, typename Input>
 Output reinterpret(Input&& in) {
-	static_assert(std::is_trivially_copyable(Input),
+	static_assert(std::is_trivially_copyable<Input>::value,
 	              "Input type must be trivially copyable");
-	static_assert(std::is_trivially_copyable(Output),
+	static_assert(std::is_trivially_copyable<Output>::value,
 	              "Output type must be trivially copyable");
 	static_assert(sizeof(Output) == sizeof(Input),
 	              "cannot reinterpret type: sizes don't match");
@@ -46,9 +46,9 @@ Output reinterpret(Input&& in) {
  */
 template<typename Output, typename Input>
 Output reinterpret_any(Input&& in) {
-	static_assert(std::is_trivially_copyable(Input),
+	static_assert(std::is_trivially_copyable<Input>::value,
 	              "Input type must be trivially copyable");
-	static_assert(std::is_trivially_copyable(Output),
+	static_assert(std::is_trivially_copyable<Output>::value,
 	              "Output type must be trivially copyable");
 	constexpr size_t size = std::min(sizeof(Output), sizeof(Input));
 	Output out{};
