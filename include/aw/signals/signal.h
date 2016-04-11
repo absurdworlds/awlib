@@ -84,8 +84,6 @@ private:
 
 	void add(connection* conn)
 	{
-		typename threading_policy::lock_type lock(*this);
-
 		connections.insert(conn);
 	}
 
@@ -295,7 +293,6 @@ public:
 	struct signal_impl : policy {
 		void insert(connection_type* conn)
 		{
-			typename policy::lock_type lock(*this);
 
 			connections.emplace(conn, connection_ptr(conn));
 		}
@@ -390,6 +387,8 @@ connection& signal<P,void(Args...)>::connect(T& obj, member_func<T,void()> func)
 	auto conn = new impl::connection_impl<signal,T,Args...>{
 		impl.get(), &obj, func
 	};
+
+	typename P::lock_n_type lock(*impl, obj);
 
 	impl->insert(conn);
 
