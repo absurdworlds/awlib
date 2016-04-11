@@ -89,8 +89,6 @@ private:
 
 	void remove(connection* conn)
 	{
-		typename threading_policy::lock_type lock(*this);
-
 		connections.erase(conn);
 	}
 
@@ -223,6 +221,7 @@ struct signal<policy, void(Args...)> {
 	 */
 	void disconnect(connection& conn)
 	{
+		typename policy::lock_type lock(*impl);
 		impl->remove(&conn);
 	}
 
@@ -299,8 +298,6 @@ public:
 
 		void remove(connection* conn)
 		{
-			typename policy::lock_type lock(*this);
-
 			connections.erase(conn);
 		}
 
@@ -311,27 +308,32 @@ private:
 	std::unique_ptr<signal_impl> impl{new signal_impl};
 };
 
-template<class S, class T, typename...Args>
+template<class policy, class T, typename...Args>
 struct connection_impl : connection_base<Args...> {
 	using base_type = connection_base<Args...>;
 
 	using signature = typename connection_base<Args...>::signature;
 
-	using signal_type = typename S::signal_impl;
+	using signal_type = signal<policy,signature>;
+	using signal_impl = typename signal_type::signal_impl;
 	using slot_type   = T;
 	using callback_type = member_func<T,signature>;
 
 	virtual ~connection_impl()
 	{
 		sender = nullptr;
-		if (receiver)
+		if (receiver) {
+			typename policy::lock_type lock(*receiver);
 			slot_access::disconnect(receiver, this);
+		}
 	}
 
 	virtual void disconnect()
 	{
-		if (sender)
+		if (sender) {
+			typename policy::lock_type lock(*sender);
 			sender->remove(this);
+		}
 	}
 
 	virtual void operator()(Args... args) const
@@ -345,13 +347,13 @@ struct connection_impl : connection_base<Args...> {
 	}
 
 private:
-	friend S;
+	friend signal_type;
 
-	connection_impl(signal_type* sender, T* receiver, callback_type func)
+	connection_impl(signal_impl* sender, T* receiver, callback_type func)
 		: sender(sender), receiver(receiver), callback(func)
 	{ }
 
-	signal_type* sender;
+	signal_impl* sender;
 	slot_type* receiver;
 
 	callback_type callback;
@@ -384,7 +386,7 @@ template<class P, typename...Args>
 template<class T>
 connection& signal<P,void(Args...)>::connect(T& obj, member_func<T,void()> func)
 {
-	auto conn = new impl::connection_impl<signal,T,Args...>{
+	auto conn = new impl::connection_impl<P,T,Args...>{
 		impl.get(), &obj, func
 	};
 
