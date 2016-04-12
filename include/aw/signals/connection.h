@@ -15,33 +15,41 @@ namespace impl {
 template<class threading_policy>
 struct observer;
 
-template<class threading_policy, class signature>
-struct signal;
+template<class threading_policy>
+struct signal_impl;
+
+template<class threading_policy>
+struct signal_base;
 
 template<class threading_policy>
 struct connection {
+	using signal_type = signal_base<threading_policy>;
+	using signal_impl = signal_impl<threading_policy>;
 	using observer_type = observer<threading_policy>;
 
-	connection(observer_type& obj)
-		: receiver(&obj)
-	{}
+	virtual ~connection() = default;
 
-	virtual void disconnect() = 0;
+	void disconnect();
 
-	/*
-	signal<threading_policy>& signal() const
-	{
-		return *sender;
-	}
-	*/
+	signal_type& signal() const;
 
 	observer_type& target() const
 	{
 		return *receiver;
 	}
 
+protected:
+	connection(signal_impl* impl, observer_type& obj)
+		: sender(impl), receiver(&obj)
+	{}
+
+	signal_impl* sender_impl() const
+	{
+		return sender;
+	}
+
 private:
-	//signal<threading_policy>* sender;
+	signal_impl* sender;
 	observer_type* receiver;
 };
 } // namespace v1

@@ -83,8 +83,11 @@ class observer_access {
 	template<class policy, class signature>
 	friend class signal;
 
+	template<class policy>
+	friend class signal_base;
+
 	template<class policy, class...Args>
-	friend class connection_base;
+	friend class connection_impl;
 
 	template<class policy>
 	static void connect(observer<policy>* s, connection<policy>* c)

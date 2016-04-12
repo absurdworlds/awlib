@@ -54,16 +54,19 @@ struct func<policy, void(Args...)> {
 };
 
 template<class policy, typename...Args>
-struct connection_base : connection<policy> {
+struct connection_impl : connection<policy> {
 	using signature = void(Args...);
 
-	using signal_type   = signal<policy,signature>;
-	using signal_impl   = typename signal_type::signal_impl;
+	using base_type = connection<policy>;
+	using observer_type = observer<policy>;
+
+	using signal_type = signal<policy,signature>;
+	using signal_impl = signal_impl<policy>;
 
 	using storage_type = typename func<policy,void(Args...)>::storage;
 	using invoker_type = void(*)(storage_type const&, observer<policy>*, Args...);
 
-	~connection_base()
+	virtual ~connection_impl()
 	{
 		auto& receiver = connection<policy>::target();
 		{
@@ -71,8 +74,6 @@ struct connection_base : connection<policy> {
 			observer_access::disconnect(receiver, this);
 		}
 	}
-
-	virtual void disconnect();
 
 	void operator()(Args... args) const
 	{
@@ -86,19 +87,31 @@ struct connection_base : connection<policy> {
 private:
 	friend signal_type;
 
+	connection_impl(signal_impl* s, observer_type& o,
+	                storage_type t, invoker_type i)
+	        : base_type(o, s), invoke(i)
+	{
+		std::copy(std::begin(t), std::end(t), std::begin(storage));
+	}
+
+	connection_impl* clone(signal_type& temp) const
+	{
+		auto& sender = base_type::sender_impl();
+		auto& target = base_type::target();
+		return new connection_impl{sender, target, storage, invoke};
+	}
+
+
 	template<typename T>
-	connection_base(signal_impl* sender, T& obj, member_func<T,signature> fn)
-		: connection<policy>(obj), sender(sender)
+	connection_impl(signal_impl* sender, T& obj, member_func<T,signature> fn)
+		: base_type(sender, obj)
 	{
 		invoke  = func<policy,void(Args...)>::template invoke<T>;
 		storage = reinterpret_any<storage_type>(fn);
 	}
 
-	signal_impl* sender;
-
 	storage_type storage;
 	invoker_type invoke;
-
 };
 
 template<class policy, size_t size>
@@ -120,18 +133,18 @@ struct connection_pool : policy, memory::growing_pool<size> {
 };
 
 template<class policy, typename... Args>
-void* connection_base<policy,Args...>::operator new(size_t count)
+void* connection_impl<policy,Args...>::operator new(size_t count)
 {
-	constexpr size_t size = sizeof(connection_base);
+	constexpr size_t size = sizeof(connection_impl);
 	using conn_pool = static_object<connection_pool<policy,size>>;
 	static auto& p = conn_pool::instance();
 	return p.alloc();
 }
 
 template<class policy, typename... Args>
-void connection_base<policy,Args...>::operator delete(void* ptr)
+void connection_impl<policy,Args...>::operator delete(void* ptr)
 {
-	constexpr size_t size = sizeof(connection_base);
+	constexpr size_t size = sizeof(connection_impl);
 	using conn_pool = static_object<connection_pool<policy,size>>;
 	static auto& p = conn_pool::instance();
 	p.dealloc(ptr);
