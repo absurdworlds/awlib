@@ -40,6 +40,25 @@ struct observer : threading_policy {
 	}
 
 	/*!
+	 * Disconnect particular signal
+	 */
+	void disconnect(signal_base<threading_policy>& s)
+	{
+		typename threading_policy::lock_type lock(*this);
+
+		auto iter = std::begin(connections);
+		auto end  = std::end(connections);
+		while (iter != end) {
+			auto* sender = iter->second->signal();
+			if (&sender == &s) {
+				connections.erase(iter++);
+			} else {
+				++iter;
+			}
+		}
+	}
+
+	/*!
 	 * Disconnect all signals from this slot
 	 */
 	void disconnect_all()
