@@ -57,7 +57,7 @@ public:
 	 * Each time signal is called, it will call each of callbacks.
 	 */
 	template<class T>
-	connection<policy>& connect(T& obj, member_func<T,void()> func)
+	connection<policy>& connect(T& obj, mem_fn<void(T*,Args...)> func)
 	{
 		auto conn = new connection_type{impl.get(), obj, func};
 

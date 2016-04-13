@@ -8,6 +8,7 @@
  */
 #ifndef aw_signals_connection_impl_h
 #define aw_signals_connection_impl_h
+#include <aw/types/mem_fn.h>
 #include <aw/types/support/reinterpret.h>
 #include <aw/utility/static_object.h>
 #include <aw/utility/memory/growing_pool.h>
@@ -19,35 +20,23 @@ namespace impl {
 template<class threading_policy, class signature>
 struct signal;
 
-template<class T, class sig>
-struct memfun;
-
-template<class T, typename R, typename...Args>
-struct memfun<T, R(Args...)> {
-	using type = R (T::*)(Args...);
-};
-
-template<class T, class sig>
-using member_func = typename memfun<T,sig>::type;
-
-class _unknown;
-template<typename R, typename... Args>
-using unknown_mem_fn = R(_unknown::*)(Args...);
 
 template<class polcy, class signature>
 struct func;
 
 template<class policy, typename...Args>
 struct func<policy, void(Args...)> {
+	using unknown_mem_fn = mem_fn<void(_unknown*,Args...)>;
+
 	using storage = typename std::aligned_storage<
-	        sizeof(unknown_mem_fn<void,Args...>),
-	        alignof(unknown_mem_fn<void,Args...>)
+	        sizeof(unknown_mem_fn),
+	        alignof(unknown_mem_fn)
 	>::type;
 
 	template<class T> static
 	void invoke(storage const& data, observer<policy>* obj, Args... args)
 	{
-		auto func = reinterpret_any<member_func<T,void(Args...)>>(data);
+		auto func = reinterpret_any<mem_fn<void(T*,Args...)>>(data);
 		T* ptr = static_cast<T*>(obj);
 		(ptr->*func)(args...);
 	}
@@ -103,7 +92,7 @@ private:
 
 
 	template<typename T>
-	connection_impl(signal_impl* sender, T& obj, member_func<T,signature> fn)
+	connection_impl(signal_impl* sender, T& obj, mem_fn<void(T*,Args...)> fn)
 		: base_type(sender, obj)
 	{
 		invoke  = func<policy,void(Args...)>::template invoke<T>;
