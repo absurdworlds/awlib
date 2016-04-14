@@ -19,5 +19,8 @@ using disable_if = typename std::enable_if<!expr, T>::type;
 
 template<bool expr>
 using void_if = enable_if<expr,void>;
+
+template<bool expr>
+using bool_if = enable_if<expr,bool>;
 } // namespace aw
 #endif//aw_traits_enable_if
