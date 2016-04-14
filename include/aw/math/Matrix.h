@@ -57,6 +57,11 @@ struct MatrixOps<Matrix<T,N,M>, index_sequence<Is...>, index_sequence<Js...>>
 	{
 		int dummy[] = { 0, ((a[Is] /= v), 0)... };
 	}
+
+	static Vector<T,N> row(MatrixT const& a, size_t j)
+	{
+		return { col<Is>(a)[j]... };
+	}
 };
 
 template<typename T, size_t N, size_t M>
@@ -167,15 +172,12 @@ struct Matrix {
 	Vector<T,M> const& col(size_t i) const
 	{
 		assert(i < N);
-		return mat.columns[Index];
+		return columns[i];
 	}
 
 	Vector<T,N> row(size_t j) const
 	{
-		Vector<T,N> the_row;
-		eval([&] (size_t i) { the_row[i] = col(i)[j] },
-		     make_index_sequence<N>{});
-		return the_row;
+		return MatrixOps<Matrix,indices>::row(*this, j);
 	}
 };
 
