@@ -27,15 +27,53 @@ T& get(Matrix<T,N,M>& mat);
 template<size_t I, size_t J, typename T, size_t N, size_t M>
 T get(Matrix<T,N,M> const& mat);
 
+template<class MatrixT,
+         class = typename MatrixT::column_indices,
+         class = typename MatrixT::row_indices
+>
+struct MatrixOps;
+
+template<class T, size_t N, size_t M, size_t...Is, size_t...Js>
+struct MatrixOps<Matrix<T,N,M>, index_sequence<Is...>, index_sequence<Js...>>
+{
+	using MatrixT = Matrix<T,N,M>;
+
+	static void add(MatrixT& a, MatrixT const& b)
+	{
+		int dummy[] = { 0, ((a[Is] += b[Is]), 0)... };
+	}
+
+	static void sub(MatrixT& a, MatrixT const& b)
+	{
+		int dummy[] = { 0, ((a[Is] -= b[Is]), 0)... };
+	}
+
+	static void mul(MatrixT& a, T const v)
+	{
+		int dummy[] = { 0, ((a[Is] *= v), 0)... };
+	}
+
+	static void div(MatrixT& a, T const v)
+	{
+		int dummy[] = { 0, ((a[Is] /= v), 0)... };
+	}
+};
+
 template<typename T, size_t N, size_t M>
 struct Matrix {
 	constexpr static size_t matrix_width = N;
 	constexpr static size_t matrix_height = M;
+	constexpr static size_t num_columns = N;
+	constexpr static size_t num_rows = M;
+	using indices = make_index_sequence<N>;
+	using row_indices = make_index_sequence<N>;
+	using column_indices = make_index_sequence<M>;
 
 	using value_type = T;
 	using column_type = Vector<T, M>;
-	using base_type = std::array<column_type,N>;
-	//using base_type = column_type[N];
+	using row_type    = Vector<T, N>;
+	//using base_type = std::array<column_type,N>;
+	using base_type = column_type[N];
 
 	column_type columns[N];
 
@@ -55,46 +93,47 @@ struct Matrix {
 		return columns[idx];
 	}
 
-	Matrix<T,N,M>& operator += (Matrix<T,N,M> const& other)
+	Matrix<T,N,M>& operator+=(Matrix<T,N,M> const& other)
 	{
-		for_all([&] (size_t i) {columns[i] += other[i];});
+		MatrixOps<Matrix,indices>::add(*this, other);
 		return *this;
 	}
 
-	Matrix<T,N,M>& operator -= (Matrix<T,N,M> const& other)
+
+	Matrix<T,N,M>& operator-=(Matrix<T,N,M> const& other)
 	{
-		for_all([&] (size_t i) {columns[i] -= other[i];});
+		MatrixOps<Matrix,indices>::sub(*this, other);
 		return *this;
 	}
 
-	Matrix<T,N,M>& operator *= (T const v)
+	Matrix<T,N,M>& operator*=(T const v)
 	{
-		for_all([&] (size_t i) {columns[i] *= v;});
+		MatrixOps<Matrix,indices>::mul(*this, v);
 		return *this;
 	}
 
 	Matrix<T,N,M>& operator /= (T const v)
 	{
-		for_all([&] (size_t i) {columns[i] /= v;});
+		MatrixOps<Matrix,indices>::div(*this, v);
 		return *this;
 	}
 
 	template<typename Func>
 	void for_each_column(Func func/*void(func)(T)*/)
 	{
-		for_all([&] (size_t i) { func(columns[i]); });
+		eval([&] (size_t i) { func(col(i)); }, indices{});
+	}
+
+	template<typename Func>
+	void for_each_row(Func func/*void(func)(T)*/)
+	{
+		eval([&] (size_t i) { func(row(i)); }, indices{});
 	}
 
 	template<typename Func>
 	void for_each(Func func/*void(func)(T)*/)
 	{
-		for_all([&] (size_t i) { columns[i].for_each(func); });
-	}
-
-	template <typename Func>
-	static void for_all(Func func)
-	{
-		eval(func, make_index_sequence<N>{});
+		eval([&] (size_t i) { columns[i].for_each(func); }, indices{});
 	}
 
 	template <typename Func, size_t... I>
@@ -301,18 +340,6 @@ Matrix<T,N,M> operator / (Matrix<T,N,M> mat, T const v)
 	return mat;
 }
 
-template<typename Func, typename T, size_t N, size_t M, size_t...Is>
-void for_each_row(Func func, Matrix<T,N,M> const& mat,index_sequence<Is...>)
-{
-	eat( (func(row<Is>(mat)), 0)...);
-}
-
-template<typename Func, typename T, size_t N, size_t M>
-void for_each_row(Matrix<T,N,M> const& mat, Func func)
-{
-	for_each_row(func, mat, make_index_sequence<M>{});
-}
-
 template<typename T, size_t N, size_t M>
 void fill(Matrix<T,N,M>& mat, T const value)
 {
@@ -323,5 +350,4 @@ void fill(Matrix<T,N,M>& mat, T const value)
 } // namespace aw
 
 #include "bits/SquareMatrix.h"
-
 #endif//aw_math_Matrix_h
