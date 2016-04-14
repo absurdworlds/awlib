@@ -9,16 +9,18 @@
  */
 #ifndef aw_math_equals_h
 #define aw_math_equals_h
+#include <aw/types/traits/enable_if.h>
 #include <aw/math/float.h>
 namespace aw {
+namespace math {
 template <typename T>
-auto equals(T a, T b) -> enable_if<is_float<T>, bool>
+auto equals(T const& a, T const& b) -> enable_if<is_float<T>, bool>
 {
 	return compare_ulps(a, b);
 }
 
 template <typename T>
-auto equals(T a, T b) -> enable_if<!is_float<T>, bool>
+auto equals(T const& a, T const& b) -> enable_if<!is_float<T>, bool>
 {
 	return a == b;
 }
