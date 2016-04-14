@@ -2,7 +2,8 @@
 #define aw_math_MatrixNN_h
 #include <algorithm>
 namespace aw {
-namespace detail {
+
+namespace _impl {
 template<size_t... Is, typename T, size_t N>
 Matrix<T,N,N>& setIdentity(Matrix<T,N,N>& mat, index_sequence<Is...>)
 {
@@ -10,12 +11,12 @@ Matrix<T,N,N>& setIdentity(Matrix<T,N,N>& mat, index_sequence<Is...>)
 	int dummy[] = { (mat[Is][Is] = 1, 0)... };
 	return mat;
 }
-} // namespace detail
+} // namespace _impl
 
 template<typename T, size_t N>
 Matrix<T,N,N> setIdentity(Matrix<T,N,N>& mat)
 {
-	return detail::setIdentity(mat,make_index_sequence<N>{});
+	return _impl::setIdentity(mat,make_index_sequence<N>{});
 }
 
 template<typename T, size_t N>
@@ -32,7 +33,7 @@ T matrixMinor(Matrix<T,N,N> const& mat)
 	return determinant(submatrix);
 }
 
-namespace detail {
+namespace _impl {
 template<size_t I, typename T, size_t N>
 T factor(Matrix<T,N,N> const& mat)
 {
@@ -45,21 +46,24 @@ T factor(Matrix<T,N,N> const& mat)
 template<size_t...Is, typename T, size_t N>
 T determinant(Matrix<T,N,N> const& mat, index_sequence<Is...>)
 {
-	T factors[] = { factor<Is>(mat)... };
-	return std::accumulate(std::begin(factors), std::end(factors), 0);
+	T val = {};
+	int dummy[] = {
+		((val += factor<Is>(mat)), 0)...
+	};
+	return val;
 }
-} // namespace detail
+} // namespace _impl
 
 template<typename T, size_t N>
 T determinant(Matrix<T,N,N> const& mat)
 {
-	return detail::determinant(mat, make_index_sequence<N>{});
+	return _impl::determinant(mat, make_index_sequence<N>{});
 }
 
 template <typename T>
 T determinant(Matrix<T,2,2> mat)
 {
-	return get<0,0>(mat) * get<1, 1>(mat) - get<0, 1>(mat) * get<1, 0>(mat);
+	return get<0,0>(mat) * get<1,1>(mat) - get<0,1>(mat) * get<1,0>(mat);
 }
 
 template <typename T>
@@ -68,52 +72,37 @@ T determinant(Matrix<T,1,1> mat)
 	return get<0,0>(mat);
 }
 
-namespace detail {
-struct eat {
-	template<typename...Args>
-	eat(Args&&... args) {}
-};
+namespace _impl {
+template<size_t I, size_t J, class MatrixT>
+void inv(MatrixT& result, MatrixT const& mat)
+{
+	using T = typename MatrixT::value_type;
 
-template<typename T, size_t N>
-struct Inverse {
-	Inverse(Matrix<T,N,N> const& mat)
-		: mat(mat)
-	{
-		inverse1(make_index_sequence<N>{});
-	}
+	T minor = matrixMinor<J,I>(mat);
 
-	operator Matrix<T,N,N>()
-	{
-		return result;
-	}
-	
-private:
-	Matrix<T,N,N> const& mat;
-	Matrix<T,N,N> result = {};
+	T factor = ((I+J) % 2) ? -1 : 1;
 
-	template<size_t...Is>
-	void inverse1(index_sequence<Is...>)
-	{
-		eat( (inverse2<Is>(make_index_sequence<N>{}), 0)...);
-	}
+	get<I,J>(result) = factor * minor;
+}
 
-	template<size_t I, size_t... Js>
-	void inverse2(index_sequence<Js...>)
-	{
-		eat( (inverse3<I,Js>(), 0)...);
-	}
+template<size_t I, size_t...Js, class MatrixT>
+void inv1(MatrixT& result, MatrixT const& mat)
+{
+	int dummy[] = {
+		(inv<I,Js>(result, mat), 0)...
+	};
+}
 
-	template<size_t I, size_t J>
-	void inverse3()
-	{
-		T minor = matrixMinor<J,I>(mat);
-
-		T factor = ((I+J) % 2) ? -1 : 1;
-
-		get<I,J>(result) = factor * minor;
-	}
-};
-} // namespace detail
+template<class MatrixT, size_t...Is>
+MatrixT inv2(MatrixT const& mat, index_sequence<Is...>)
+{
+	MatrixT result = {};
+	int dummy[] = {
+		(inv1<Is,Is...>(result, mat), 0)...
+	};
+	return result;
+}
+} // namespace _impl
 
 template<typename T, size_t N>
 opt<Matrix<T,N,N>> inverse(Matrix<T,N,N> const& mat)
@@ -123,7 +112,7 @@ opt<Matrix<T,N,N>> inverse(Matrix<T,N,N> const& mat)
 	if (det == T{})
 		return nullopt;
 
-	Matrix<T,N,N> result = detail::Inverse<T,N>(mat);
+	Matrix<T,N,N> result = _impl::inv2(mat, make_index_sequence<N>{});
 
 	result /= det;
 
