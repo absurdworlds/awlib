@@ -70,12 +70,8 @@ struct MatrixOps<Matrix<T,M,N>, index_sequence<Is...>, index_sequence<Js...>>
 	}
 
 	template <size_t P>
-	static Matrix<T,M,P> mul(Matrix<T,M,N> const& A, Matrix<T,N,P> const& B)
+	static Matrix<T,M,P> mul(MatrixT const& A, Matrix<T,N,P> const& B)
 	{
-		int dummy[] = {
-			((std::cout << Is << " "),0)...
-		};
-		std::cout<<"\n";
 		return { A.row(Is) * B ... };
 	}
 
@@ -87,6 +83,24 @@ struct MatrixOps<Matrix<T,M,N>, index_sequence<Is...>, index_sequence<Js...>>
 	static MatrixT transpose(Matrix<T,M,N> const& mat)
 	{
 		return { col<Js>(mat)... };
+	}
+
+	template<typename Func>
+	static void for_each_column(Matrix<T,M,N>& mat, Func func)
+	{
+		int dummy[] = { (func(mat[Js]), 0)... };
+	}
+
+	template<typename Func>
+	static void for_each_row(Matrix<T,M,N>& mat, Func func)
+	{
+		int dummy[] = { (func(mat[Is]), 0)... };
+	}
+
+	template<typename Func>
+	static void for_each(Matrix<T,M,N>& mat, Func func)
+	{
+		int dummy[] = { (mat[Is].for_each(func), 0)... };
 	}
 };
 
@@ -148,27 +162,21 @@ struct Matrix {
 	}
 
 	template<typename Func>
-	void for_each_column(Func func/*void(func)(T)*/)
+	void for_each_column(Func func)
 	{
-		eval([&] (size_t i) { func(col(i)); }, column_indices{});
+		MatrixOps<Matrix>::for_each_column(*this, func);
 	}
 
 	template<typename Func>
-	void for_each_row(Func func/*void(func)(T)*/)
+	void for_each_row(Func func)
 	{
-		eval([&] (size_t i) { func(row(i)); }, row_indices{});
+		MatrixOps<Matrix>::for_each_row(*this, func);
 	}
 
 	template<typename Func>
-	void for_each(Func func/*void(func)(T)*/)
+	void for_each(Func func)
 	{
-		eval([&] (size_t i) { rows[i].for_each(func); }, row_indices{});
-	}
-
-	template <typename Func, size_t... I>
-	static void eval(Func func, std::index_sequence<I...>)
-	{
-		int dummy[] = { (func(I), 0) ... };
+		MatrixOps<Matrix>::for_each(*this, func);
 	}
 
 	T& get(size_t i, size_t j)
@@ -236,13 +244,13 @@ Vector<T,M> col(Matrix<T,M,N> const& mat)
 	return MatrixOps<MatrixT>::row(mat, Index);
 }
 
-namespace detail {
+namespace _impl {
 template<size_t Col, size_t... Rows, typename T, size_t M, size_t N>
 Matrix<T,N-1,M-1> make_sub(Matrix<T,M,N> const& mat, index_sequence<Rows...>)
 {
 	return { sub<Col>(row<Rows>(mat))... };
 }
-} // namespace detail
+} // namespace _impl
 
 template<size_t Row, size_t Col, typename T, size_t M, size_t N>
 Matrix<T,N-1,M-1> subMatrix(Matrix<T,M,N> const& mat)
@@ -252,7 +260,7 @@ Matrix<T,N-1,M-1> subMatrix(Matrix<T,M,N> const& mat)
 	        make_index_range<Row+1,N>
 	>{};
 
-	return detail::make_sub<Col>(mat,range);
+	return _impl::make_sub<Col>(mat,range);
 }
 
 //! Transpose a matrix
