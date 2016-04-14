@@ -273,7 +273,7 @@ Vector<T,M> operator * (Matrix<T,N,M> const& A, Vector<T,N> const& B)
 }
 
 template<typename T, size_t N, size_t M, size_t P>
-Matrix<T,N,P> operator * (Matrix<T,N,M> const& A, Matrix<T,P,N> const& B)
+Matrix<T,P,M> operator * (Matrix<T,N,M> const& A, Matrix<T,P,N> const& B)
 {
 	using MatrixT = Matrix<T,P,N>;
 	return MatrixOps<MatrixT>::mul(A, B);
