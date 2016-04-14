@@ -13,41 +13,30 @@
 #include <type_traits>
 #include <aw/types/traits/void_t.h>
 namespace aw {
-namespace detail {
-
+namespace _impl {
 template<typename T>
-struct IsInt : std::integral_constant<
+struct is_int : std::integral_constant<
 	bool,
 	std::is_integral<T>::value
 > { };
 template<>
-struct IsInt<bool> : std::false_type { };
-
-template<typename T>
-struct IsFloat : std::integral_constant<
-	bool,
-	std::is_floating_point<T>::value
-> { };
-
+struct is_int<bool> : std::false_type { };
 
 template<typename>
-struct IsString : std::false_type{ };
+struct is_string : std::false_type{ };
 template<class CharT, class Traits, class Alloc>
-struct IsString<std::basic_string<CharT, Traits, Alloc>> : std::true_type{ };
-
-template<typename T>
-struct IsBool  :  std::is_same<T, bool>{};
-} // namespace detail
+struct is_string<std::basic_string<CharT, Traits, Alloc>> : std::true_type{ };
+} // namespace impl
 
 /* Basic type classes (yes, std::string is considered “basic”) */
 template<typename T>
-constexpr auto is_int       = detail::IsInt<T>::value;
+constexpr auto is_int       = _impl::is_int<T>::value;
 template<typename T>
-constexpr auto is_float     = detail::IsFloat<T>::value;
+constexpr auto is_float     = std::is_floating_point<T>::value;
 template<typename T>
-constexpr auto is_string    = detail::IsString<T>::value;
+constexpr auto is_string    = _impl::is_string<T>::value;
 template<typename T>
-constexpr auto is_bool      = detail::IsBool<T>::value;
+constexpr auto is_bool      = std::is_same<T, bool>::value;
 template<typename T>
 constexpr auto is_pointer   = std::is_pointer<T>::value;
 
