@@ -58,6 +58,11 @@ struct MatrixOps<Matrix<T,N,M>, index_sequence<Is...>, index_sequence<Js...>>
 		int dummy[] = { 0, ((a[Is] /= v), 0)... };
 	}
 
+	static Vector<T,M> mul(MatrixT const& mat, Vector<T,N> const& vec)
+	{
+		return { dot(mat.row(Is), vec) ... };
+	}
+
 	template <size_t P>
 	static Matrix<T,N,P> mul(Matrix<T,M,P> const& A, MatrixT const& B)
 	{
@@ -260,50 +265,11 @@ Matrix<T,M,N> transpose(Matrix<T,N,M> const& mat)
 }
 
 
-namespace detail {
 template<typename T, size_t N, size_t M>
-struct VecProduct {
-	VecProduct(Matrix<T,N,M> const& mat, Vector<T,M> const& vec)
-		: mat(mat), vec(vec)
-	{
-		multiply(make_index_sequence<N>{});
-	}
-
-	operator Vector<T,N>()
-	{
-		return result;
-	}
-
-private:
-	Matrix<T,N,M> const& mat;
-	Vector<T,M>   const& vec;
-	Vector<T,N>   result = {};
-
-
-	template <size_t... Is>
-	void multiply(index_sequence<Is...>)
-	{
-		eat( (multiply1<Is>(make_index_sequence<M>{}), 0)... );
-	}
-
-	template <size_t I, size_t... Js>
-	void multiply1(index_sequence<Js...>)
-	{
-		eat( (multiply2<I,Js>(), 0)... );
-	}
-
-	template <size_t I, size_t J>
-	void multiply2()
-	{
-		get<I>(result) += get<J,I>(mat) * get<J>(vec);
-	}
-};
-} // namespace detail
-
-template<typename T, size_t N, size_t M>
-Vector<T,N> operator * (Matrix<T,N,M> const& A, Vector<T,M> const& B)
+Vector<T,M> operator * (Matrix<T,N,M> const& A, Vector<T,N> const& B)
 {
-	return detail::VecProduct<T,N,M>(A,B);
+	using MatrixT = Matrix<T,N,M>;
+	return MatrixOps<MatrixT>::mul(A, B);
 }
 
 template<typename T, size_t N, size_t M, size_t P>

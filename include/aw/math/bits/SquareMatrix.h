@@ -69,6 +69,11 @@ T determinant(Matrix<T,1,1> mat)
 }
 
 namespace detail {
+struct eat {
+	template<typename...Args>
+	eat(Args&&... args) {}
+};
+
 template<typename T, size_t N>
 struct Inverse {
 	Inverse(Matrix<T,N,N> const& mat)
