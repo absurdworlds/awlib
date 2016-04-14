@@ -9,8 +9,8 @@
 #ifndef _aw_Quaternion_
 #define _aw_Quaternion_
 //#include <complex>
-#include <aw/math/math.h>
 #include <aw/math/equals.h>
+#include <aw/math/math.h>
 #include <aw/math/Vector3d.h>
 #include <aw/math/Vector4d.h>
 namespace aw {
@@ -248,7 +248,7 @@ public:
 			angle  = T{0};
 		}
 
-		return {axis, angle}
+		return {axis, angle};
 	}
 
 	//! Calculate dot product with other quaternion
@@ -304,6 +304,7 @@ Quaternion<T> operator * (S const scalar, Quaternion<T> const& quat)
 }
 
 //! Get normalized quaterion
+template <typename T>
 Quaternion<T> normalize(Quaternion<T> const& quat)
 {
 	return Quaternion<T>{quat}.normalize();
