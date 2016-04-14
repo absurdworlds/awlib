@@ -11,32 +11,33 @@
 #define aw_math_Matrix_h
 #include <aw/math/Vector.h>
 namespace aw {
-template<typename T, size_t N, size_t M>
+template<typename T, size_t M, size_t N>
 struct Matrix;
 
-template<size_t Index, typename T, size_t N, size_t M>
-Vector<T,M>& col(Matrix<T,N,M>& mat);
-template<size_t Index, typename T, size_t N, size_t M>
-Vector<T,M> const& col(Matrix<T,N,M> const& mat);
+template<size_t Index, typename T, size_t M, size_t N>
+Vector<T,N>& row(Matrix<T,M,N>& mat);
+template<size_t Index, typename T, size_t M, size_t N>
+Vector<T,N> const& row(Matrix<T,M,N> const& mat);
 
-template<size_t Index, typename T, size_t N, size_t M>
-Vector<T,N> row(Matrix<T,N,M> const& mat);
+template<size_t Index, typename T, size_t M, size_t N>
+Vector<T,M> col(Matrix<T,M,N> const& mat);
 
-template<size_t I, size_t J, typename T, size_t N, size_t M>
-T& get(Matrix<T,N,M>& mat);
-template<size_t I, size_t J, typename T, size_t N, size_t M>
-T get(Matrix<T,N,M> const& mat);
+template<size_t I, size_t J, typename T, size_t M, size_t N>
+T& get(Matrix<T,M,N>& mat);
+template<size_t I, size_t J, typename T, size_t M, size_t N>
+T get(Matrix<T,M,N> const& mat);
 
 template<class MatrixT,
-         class = typename MatrixT::column_indices,
-         class = typename MatrixT::row_indices
+         class = typename MatrixT::row_indices,
+         class = typename MatrixT::column_indices
 >
 struct MatrixOps;
 
-template<class T, size_t N, size_t M, size_t...Is, size_t...Js>
-struct MatrixOps<Matrix<T,N,M>, index_sequence<Is...>, index_sequence<Js...>>
+template<class T, size_t M, size_t N, size_t...Is, size_t...Js>
+struct MatrixOps<Matrix<T,M,N>, index_sequence<Is...>, index_sequence<Js...>>
 {
-	using MatrixT = Matrix<T,N,M>;
+	using MatrixT = Matrix<T,M,N>;
+	using column_type = typename MatrixT::column_type;
 
 	static void add(MatrixT& a, MatrixT const& b)
 	{
@@ -63,93 +64,105 @@ struct MatrixOps<Matrix<T,N,M>, index_sequence<Is...>, index_sequence<Js...>>
 		return { dot(mat.row(Is), vec) ... };
 	}
 
-	template <size_t P>
-	static Matrix<T,N,P> mul(Matrix<T,M,P> const& A, MatrixT const& B)
+	static Vector<T,N> mul(Vector<T,M> const& vec, MatrixT const& mat)
 	{
-		return { A * col<Js>(B)... };
+		return { dot(mat.col(Js), vec) ... };
 	}
 
-	static Vector<T,N> row(MatrixT const& a, size_t j)
+	template <size_t P>
+	static Matrix<T,M,P> mul(Matrix<T,M,N> const& A, Matrix<T,N,P> const& B)
 	{
-		return { col<Is>(a)[j]... };
+		int dummy[] = {
+			((std::cout << Is << " "),0)...
+		};
+		std::cout<<"\n";
+		return { A.row(Is) * B ... };
+	}
+
+	static column_type col(MatrixT const& a, size_t j)
+	{
+		return { row<Is>(a)[j]... };
+	}
+
+	static MatrixT transpose(Matrix<T,M,N> const& mat)
+	{
+		return { col<Js>(mat)... };
 	}
 };
 
-template<typename T, size_t N, size_t M>
+template<typename T, size_t M, size_t N>
 struct Matrix {
 	constexpr static size_t matrix_width = N;
 	constexpr static size_t matrix_height = M;
 	constexpr static size_t num_columns = N;
 	constexpr static size_t num_rows = M;
-	using indices = make_index_sequence<N>;
-	using row_indices = make_index_sequence<N>;
-	using column_indices = make_index_sequence<M>;
+
+	using row_indices    = make_index_sequence<M>;
+	using column_indices = make_index_sequence<N>;
 
 	using value_type = T;
 	using column_type = Vector<T, M>;
 	using row_type    = Vector<T, N>;
-	//using base_type = std::array<column_type,N>;
-	using base_type = column_type[N];
 
-	column_type columns[N];
+	row_type rows[M];
 
-	Matrix<T,N,M>& operator=(Matrix<T,N,M> const& other)
+	Matrix<T,M,N>& operator=(Matrix<T,N,M> const& other)
 	{
-		columns = other.columns;
+		rows = other.rows;
 		return *this;
 	}
 
-	Vector<T,M> const& operator[](size_t idx) const
+	row_type const& operator[](size_t idx) const
 	{
-		return columns[idx];
+		return rows[idx];
 	}
 
-	Vector<T,M>& operator[](size_t idx)
+	row_type& operator[](size_t idx)
 	{
-		return columns[idx];
+		return rows[idx];
 	}
 
-	Matrix<T,N,M>& operator+=(Matrix<T,N,M> const& other)
+	Matrix<T,M,N>& operator+=(Matrix<T,N,M> const& other)
 	{
-		MatrixOps<Matrix,indices>::add(*this, other);
+		MatrixOps<Matrix>::add(*this, other);
 		return *this;
 	}
 
 
-	Matrix<T,N,M>& operator-=(Matrix<T,N,M> const& other)
+	Matrix<T,M,N>& operator-=(Matrix<T,N,M> const& other)
 	{
-		MatrixOps<Matrix,indices>::sub(*this, other);
+		MatrixOps<Matrix>::sub(*this, other);
 		return *this;
 	}
 
-	Matrix<T,N,M>& operator*=(T const v)
+	Matrix<T,M,N>& operator*=(T const v)
 	{
-		MatrixOps<Matrix,indices>::mul(*this, v);
+		MatrixOps<Matrix>::mul(*this, v);
 		return *this;
 	}
 
-	Matrix<T,N,M>& operator /= (T const v)
+	Matrix<T,M,N>& operator /= (T const v)
 	{
-		MatrixOps<Matrix,indices>::div(*this, v);
+		MatrixOps<Matrix>::div(*this, v);
 		return *this;
 	}
 
 	template<typename Func>
 	void for_each_column(Func func/*void(func)(T)*/)
 	{
-		eval([&] (size_t i) { func(col(i)); }, indices{});
+		eval([&] (size_t i) { func(col(i)); }, column_indices{});
 	}
 
 	template<typename Func>
 	void for_each_row(Func func/*void(func)(T)*/)
 	{
-		eval([&] (size_t i) { func(row(i)); }, indices{});
+		eval([&] (size_t i) { func(row(i)); }, row_indices{});
 	}
 
 	template<typename Func>
 	void for_each(Func func/*void(func)(T)*/)
 	{
-		eval([&] (size_t i) { columns[i].for_each(func); }, indices{});
+		eval([&] (size_t i) { rows[i].for_each(func); }, row_indices{});
 	}
 
 	template <typename Func, size_t... I>
@@ -158,154 +171,146 @@ struct Matrix {
 		int dummy[] = { (func(I), 0) ... };
 	}
 
-	T& get(size_t i, size_t j) const
+	T& get(size_t i, size_t j)
 	{
-		assert(i < N);
-		assert(j < M);
+		assert(i < M);
+		assert(j < N);
 
-		return columns[i][j];
+		return rows[i][j];
 	}
 
-	T get(size_t i, size_t j)
+	T get(size_t i, size_t j) const
 	{
-		assert(i < N);
-		assert(j < M);
+		assert(i < M);
+		assert(j < N);
 
-		return columns[i][j];
+		return rows[i][j];
 	}
 
-	Vector<T,M>& col(size_t i)
+	row_type& row(size_t i)
 	{
-		assert(i < N);
-		return columns[i];
+		assert(i < M);
+		return rows[i];
 	}
 
-	Vector<T,M> const& col(size_t i) const
+	row_type const& row(size_t i) const
 	{
-		assert(i < N);
-		return columns[i];
+		assert(i < M);
+		return rows[i];
 	}
 
-	Vector<T,N> row(size_t j) const
+	column_type col(size_t j) const
 	{
-		return MatrixOps<Matrix,indices>::row(*this, j);
+		return MatrixOps<Matrix>::col(*this, j);
 	}
 };
 
-template<size_t I, size_t J, typename T, size_t N, size_t M>
-T get(Matrix<T,N,M> const& mat)
+template<size_t I, size_t J, typename T, size_t M, size_t N>
+T get(Matrix<T,M,N> const& mat)
 {
-	return mat.columns[I][J];
+	return mat.rows[I][J];
 }
 
-template<size_t I, size_t J, typename T, size_t N, size_t M>
-T& get(Matrix<T,N,M>& mat)
+template<size_t I, size_t J, typename T, size_t M, size_t N>
+T& get(Matrix<T,M,N>& mat)
 {
-	return mat.columns[I][J];
+	return mat.rows[I][J];
 }
 
-template<size_t Index, typename T, size_t N, size_t M>
-Vector<T,M>& col(Matrix<T,N,M>& mat)
+template<size_t Index, typename T, size_t M, size_t N>
+Vector<T,N>& row(Matrix<T,M,N>& mat)
 {
-	return mat.columns[Index];
+	return mat.rows[Index];
 }
 
-template<size_t Index, typename T, size_t N, size_t M>
-Vector<T,M> const& col(Matrix<T,N,M> const& mat)
+template<size_t Index, typename T, size_t M, size_t N>
+Vector<T,N> const& row(Matrix<T,M,N> const& mat)
 {
-	return mat.columns[Index];
+	return mat.rows[Index];
 }
 
-namespace detail {
-template<size_t Index, size_t... Is, typename T, size_t N, size_t M>
-Vector<T,N> row(Matrix<T,N,M> const& mat, index_sequence<Is...>)
+template<size_t Index, typename T, size_t M, size_t N>
+Vector<T,M> col(Matrix<T,M,N> const& mat)
 {
-	return { col<Is>(mat)[Index]... };
-}
-} // namespace detail
-
-template<size_t Index, typename T, size_t N, size_t M>
-Vector<T,N> row(Matrix<T,N,M> const& mat)
-{
-	return detail::row<Index>(mat, make_index_sequence<N>{});
+	using MatrixT = Matrix<T,M,N>;
+	return MatrixOps<MatrixT>::row(mat, Index);
 }
 
 namespace detail {
-template<size_t Row, size_t... Cols, typename T, size_t N, size_t M>
-Matrix<T,N-1,M-1> make_sub(Matrix<T,N,M> const& mat, index_sequence<Cols...>)
+template<size_t Col, size_t... Rows, typename T, size_t M, size_t N>
+Matrix<T,N-1,M-1> make_sub(Matrix<T,M,N> const& mat, index_sequence<Rows...>)
 {
-	return { sub<Row>(col<Cols>(mat))... };
+	return { sub<Col>(row<Rows>(mat))... };
 }
 } // namespace detail
 
-template<size_t Col, size_t Row, typename T, size_t N, size_t M>
-Matrix<T,N-1,M-1> subMatrix(Matrix<T,N,M> const& mat)
+template<size_t Row, size_t Col, typename T, size_t M, size_t N>
+Matrix<T,N-1,M-1> subMatrix(Matrix<T,M,N> const& mat)
 {
 	auto range = index_cat<
-	        make_index_range<0,Col>,
-	        make_index_range<Col+1,N>
+	        make_index_range<0,Row>,
+	        make_index_range<Row+1,N>
 	>{};
 
-	return detail::make_sub<Row>(mat,range);
+	return detail::make_sub<Col>(mat,range);
 }
-
-namespace detail {
-template<size_t... Is, typename T, size_t N, size_t M>
-Matrix<T,M,N> transpose(Matrix<T,N,M> const& mat, index_sequence<Is...>)
-{
-	return { row<Is>(mat)... };
-}
-} // namespace detail
 
 //! Transpose a matrix
-template<typename T, size_t N, size_t M>
-Matrix<T,M,N> transpose(Matrix<T,N,M> const& mat)
+template<typename T, size_t M, size_t N>
+Matrix<T,N,M> transpose(Matrix<T,M,N> const& mat)
 {
-	return detail::transpose(mat, make_index_sequence<M>{});
+	using MatrixT = Matrix<T,M,N>;
+	return MatrixOps<MatrixT>::transpose(mat);
 }
 
-
-template<typename T, size_t N, size_t M>
-Vector<T,M> operator * (Matrix<T,N,M> const& A, Vector<T,N> const& B)
+template<typename T, size_t M, size_t N>
+Vector<T,M> operator * (Matrix<T,M,N> const& A, Vector<T,N> const& B)
 {
-	using MatrixT = Matrix<T,N,M>;
+	using MatrixT = Matrix<T,M,N>;
 	return MatrixOps<MatrixT>::mul(A, B);
 }
 
-template<typename T, size_t N, size_t M, size_t P>
-Matrix<T,P,M> operator * (Matrix<T,N,M> const& A, Matrix<T,P,N> const& B)
+template<typename T, size_t M, size_t N>
+Vector<T,N> operator * (Vector<T,M> const& vec, Matrix<T,M,N> const& mat)
 {
-	using MatrixT = Matrix<T,P,N>;
+	using MatrixT = Matrix<T,M,N>;
+	return MatrixOps<MatrixT>::mul(vec, mat);
+}
+
+template<typename T, size_t M, size_t N, size_t P>
+Matrix<T,M,P> operator * (Matrix<T,M,N> const& A, Matrix<T,N,P> const& B)
+{
+	using MatrixT = Matrix<T,M,N>;
 	return MatrixOps<MatrixT>::mul(A, B);
 }
 
-template<typename T, size_t N, size_t M>
-Matrix<T,N,M> operator * (Matrix<T,N,M> mat, T const v)
+template<typename T, size_t M, size_t N>
+Matrix<T,M,N> operator * (Matrix<T,N,M> mat, T const v)
 {
 	mat *= v;
 	return mat;
 }
 
-template<typename T, size_t N, size_t M>
-Matrix<T,N,M> operator * (T const v, Matrix<T,N,M> mat)
+template<typename T, size_t M, size_t N>
+Matrix<T,M,N> operator * (T const v, Matrix<T,N,M> mat)
 {
 	mat *= v;
 	return mat;
 }
 
-template<typename T, size_t N, size_t M>
-Matrix<T,N,M> operator / (Matrix<T,N,M> mat, T const v)
+template<typename T, size_t M, size_t N>
+Matrix<T,M,N> operator / (Matrix<T,N,M> mat, T const v)
 {
 	mat /= v;
 	return mat;
 }
 
-template<typename T, size_t N, size_t M>
-void fill(Matrix<T,N,M>& mat, T const value)
+template<typename T, size_t M, size_t N>
+void fill(Matrix<T,M,N>& mat, T const value)
 {
-	Vector<T,M> column = {};
-	fill(column, value);
-	std::fill(std::begin(mat.columns), std::end(mat.columns), column);
+	Vector<T,N> row = {};
+	fill(row, value);
+	std::fill(std::begin(mat.rows), std::end(mat.rows), row);
 }
 } // namespace aw
 
