@@ -261,24 +261,24 @@ Vector<T,N> operator - (Vector<T,N> v1, Vector<T,N> const& v2)
 }
 
 //! Scalar-vector product
-template<typename T, size_t N, typename Scalar>
-Vector<T,N> operator * (Vector<T,N> vec, Scalar const v)
+template<typename T, size_t N>
+Vector<T,N> operator * (Vector<T,N> vec, T const v)
 {
 	vec *= v;
 	return vec;
 }
 
 //! Scalar-vector product
-template<typename T, size_t N, typename Scalar>
-Vector<T,N> operator / (Vector<T,N> vec, Scalar const v)
+template<typename T, size_t N>
+Vector<T,N> operator / (Vector<T,N> vec, T const v)
 {
 	vec /= v;
 	return vec;
 }
 
 //! Scalar-vector product
-template<typename T, size_t N, typename Scalar>
-Vector<T,N> operator * (Scalar const v, Vector<T,N> vec)
+template<typename T, size_t N>
+Vector<T,N> operator * (T const v, Vector<T,N> vec)
 {
 	vec *= v;
 	return vec;
