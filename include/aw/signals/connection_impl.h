@@ -50,7 +50,7 @@ struct connection_impl : connection<policy> {
 	using observer_type = observer<policy>;
 
 	using signal_type = signal<policy,signature>;
-	using signal_impl = signal_impl<policy>;
+	using signal_imp = signal_impl<policy>;
 
 	using storage_type = typename func<policy,void(Args...)>::storage;
 	using invoker_type = void(*)(storage_type const&, observer<policy>*, Args...);
@@ -76,7 +76,7 @@ struct connection_impl : connection<policy> {
 private:
 	friend signal_type;
 
-	connection_impl(signal_impl* s, observer_type& o,
+	connection_impl(signal_imp* s, observer_type& o,
 	                storage_type t, invoker_type i)
 	        : base_type(o, s), invoke(i)
 	{
@@ -92,7 +92,7 @@ private:
 
 
 	template<typename T>
-	connection_impl(signal_impl* sender, T& obj, mem_fn<void(T*,Args...)> fn)
+	connection_impl(signal_imp* sender, T& obj, mem_fn<void(T*,Args...)> fn)
 		: base_type(sender, obj)
 	{
 		invoke  = func<policy,void(Args...)>::template invoke<T>;

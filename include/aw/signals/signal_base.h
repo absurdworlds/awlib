@@ -53,7 +53,7 @@ struct signal_impl : policy {
 
 template<class policy>
 struct signal_base {
-	using signal_impl = signal_impl<policy>;
+	using signal_imp = signal_impl<policy>;
 
 	signal_base() = default;
 	~signal_base() = default;
@@ -113,7 +113,7 @@ struct signal_base {
 		 *
 		 * threadA: still waiting on temp
 		 */
-		auto temp = std::make_unique<signal_impl>();
+		auto temp = std::make_unique<signal_imp>();
 
 		typename policy::lock_type lock2(*temp);
 
@@ -167,7 +167,7 @@ protected:
 	// std::map can be quite large (24 - 56 bytes on different implementations)
 	// and one class can have several signals, so I'm willing to sacrifice
 	// data locality for reduced class size
-	std::unique_ptr<signal_impl> impl{new signal_impl{this}};
+	std::unique_ptr<signal_imp> impl{new signal_imp{this}};
 };
 
 template<class policy>

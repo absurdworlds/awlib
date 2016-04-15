@@ -24,7 +24,7 @@ struct signal_base;
 template<class threading_policy>
 struct connection {
 	using signal_type = signal_base<threading_policy>;
-	using signal_impl = signal_impl<threading_policy>;
+	using signal_imp = signal_impl<threading_policy>;
 	using observer_type = observer<threading_policy>;
 
 	virtual ~connection() = default;
@@ -39,17 +39,17 @@ struct connection {
 	}
 
 protected:
-	connection(signal_impl* impl, observer_type& obj)
+	connection(signal_imp* impl, observer_type& obj)
 		: sender(impl), receiver(&obj)
 	{}
 
-	signal_impl* sender_impl() const
+	signal_imp* sender_impl() const
 	{
 		return sender;
 	}
 
 private:
-	signal_impl* sender;
+	signal_imp* sender;
 	observer_type* receiver;
 };
 } // namespace v1
