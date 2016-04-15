@@ -36,6 +36,57 @@ enum Coordinate {
 };
 } // namespace Vec
 
+template <class VectorT, class = typename VectorT::indices>
+struct VectorOps;
+
+template <class T, size_t N, size_t...Is>
+struct VectorOps<Vector<T,N>,index_sequence<Is...>>
+{
+	using VectorT = Vector<T,N>;
+
+	void set(VectorT& vec, VectorT const& other)
+	{
+		int dummy[] = { ((vec[Is] = other[Is]), 0)...  };
+	}
+
+	void add(VectorT& vec, VectorT const& other)
+	{
+		int dummy[] = { ((vec[Is] += other[Is]), 0)...  };
+	}
+
+	void sub(VectorT& vec, VectorT const& other)
+	{
+		int dummy[] = { ((vec[Is] -= other[Is]), 0)...  };
+	}
+
+	void mul(VectorT& vec, T const& val)
+	{
+		int dummy[] = { ((vec[Is] *= val), 0)...  };
+	}
+
+	void div(VectorT& vec, T const& val)
+	{
+		int dummy[] = { ((vec[Is] /= val), 0)...  };
+	}
+
+	T dot(VectorT const& vec1, VectorT const& vec2)
+	{
+		T product = {};
+		int dummy[] = {
+			((product += vec1[Is] * vec2[Is]), 0)...
+		};
+		return product;
+	}
+
+	template<typename Func>
+	void for_each(VectorT& vec, Func func)
+	{
+		int dummy[] = {
+			(func(vec[Is]), 0)...
+		};
+	}
+};
+
 template <typename T, size_t N>
 struct Vector {
 	static_assert(N > 0, "Vector must have non-zero number of dimensions");
@@ -46,55 +97,53 @@ struct Vector {
 	using array_type = std::array<T,N>;
 	using tuple_type = decltype(aw::to_tuple(std::declval<array_type>()));
 
+	using indices = std::make_index_sequence<N>;
+
 	value_type elems[N];
 
-	Vector<T,N>& operator =(Vector<T,N> const& other)
+	Vector<T,N>& operator=(Vector<T,N> const& other)
 	{
-		auto const& oth = other.elems;
-		std::copy(std::begin(oth), std::end(oth), std::begin(elems));
+		VectorOps<Vector<T,N>>::set(*this, other);
 		return *this;
 	}
 
 	Vector<T,N>& operator +=(Vector<T,N> const& other)
 	{
-		for_all([&] (size_t i) { elems[i] += other[i]; });
+		VectorOps<Vector<T,N>>::add(*this, other);
 		return *this;
 	}
 
 	Vector<T,N>& operator -=(Vector<T,N> const& other)
 	{
-		for_all([&] (size_t i) { elems[i] -= other[i]; });
+		VectorOps<Vector<T,N>>::sub(*this, other);
 		return *this;
 	}
 
 	Vector<T,N>& operator *=(T const v)
 	{
-		for_all([&] (size_t i) { elems[i] *= v; });
+		VectorOps<Vector<T,N>>::mul(*this, v);
 		return *this;
 	}
 
 	Vector<T,N>& operator /=(T const v)
 	{
-		for_all([&] (size_t i) { elems[i] /= v; });
+		VectorOps<Vector<T,N>>::div(*this, v);
 		return *this;
 	}
-
 
 	Vector<T,N>& negate()
 	{
 		return (*this *= -1);
 	}
 
-	friend T dot (Vector<T,N> const& vec1, Vector<T,N> const& vec2)
+	T dot(Vector<T,N> const& vec2) const
 	{
-		T product = {};
-		for_all([&] (size_t i) { product += vec1[i] * vec2[i]; } );
-		return product;
+		return VectorOps<Vector<T,N>>::dot(*this, other);
 	}
 
 	T lengthSq() const
 	{
-		return dot(*this,*this);
+		return dot(*this);
 	}
 
 	T length() const
@@ -137,7 +186,7 @@ struct Vector {
 	template<typename Func>
 	void for_each(Func func/*void(func)(T)*/)
 	{
-		for_all([&] (size_t i) { func(elems[i]); });
+		VectorOps<Vector<T,N>>::for_each(*this, func);
 	}
 
 	T& x()
@@ -179,23 +228,13 @@ struct Vector {
 	{
 		return get<Vec::W>(*this);
 	}
-
-
-private:
-	constexpr static auto index = std::make_index_sequence<N>{};
-
-	template <typename Func>
-	static void for_all(Func func)
-	{
-		eval(func, index);
-	}
-
-	template <typename Func, size_t... I>
-	static void eval(Func func, std::index_sequence<I...>)
-	{
-		int dummy[] = { (func(I), 0) ... };
-	}
 };
+
+template<typename T, size_t N>
+T dot(Vector<T,N> const& vec1, Vector<T,N> const& vec2)
+{
+	return vec1.dot(vec2);
+}
 
 template<size_t I, typename T, size_t N>
 T& get(Vector<T,N>& vec)
