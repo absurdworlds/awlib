@@ -44,32 +44,32 @@ struct VectorOps<Vector<T,N>,index_sequence<Is...>>
 {
 	using VectorT = Vector<T,N>;
 
-	void set(VectorT& vec, VectorT const& other)
+	static void set(VectorT& vec, VectorT const& other)
 	{
 		int dummy[] = { ((vec[Is] = other[Is]), 0)...  };
 	}
 
-	void add(VectorT& vec, VectorT const& other)
+	static void add(VectorT& vec, VectorT const& other)
 	{
 		int dummy[] = { ((vec[Is] += other[Is]), 0)...  };
 	}
 
-	void sub(VectorT& vec, VectorT const& other)
+	static void sub(VectorT& vec, VectorT const& other)
 	{
 		int dummy[] = { ((vec[Is] -= other[Is]), 0)...  };
 	}
 
-	void mul(VectorT& vec, T const& val)
+	static void mul(VectorT& vec, T const& val)
 	{
 		int dummy[] = { ((vec[Is] *= val), 0)...  };
 	}
 
-	void div(VectorT& vec, T const& val)
+	static void div(VectorT& vec, T const& val)
 	{
 		int dummy[] = { ((vec[Is] /= val), 0)...  };
 	}
 
-	T dot(VectorT const& vec1, VectorT const& vec2)
+	static T dot(VectorT const& vec1, VectorT const& vec2)
 	{
 		T product = {};
 		int dummy[] = {
@@ -79,7 +79,7 @@ struct VectorOps<Vector<T,N>,index_sequence<Is...>>
 	}
 
 	template<typename Func>
-	void for_each(VectorT& vec, Func func)
+	static void for_each(VectorT& vec, Func func)
 	{
 		int dummy[] = {
 			(func(vec[Is]), 0)...
@@ -136,7 +136,7 @@ struct Vector {
 		return (*this *= -1);
 	}
 
-	T dot(Vector<T,N> const& vec2) const
+	T dot(Vector<T,N> const& other) const
 	{
 		return VectorOps<Vector<T,N>>::dot(*this, other);
 	}
