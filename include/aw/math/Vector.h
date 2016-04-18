@@ -18,6 +18,7 @@
 #include <aw/types/support/array.h>
 #include <aw/types/traits/enable_if.h>
 #include <aw/utility/index_sequence.h>
+#include <aw/utility/parameter_pack.h>
 
 namespace aw {
 template <typename T, size_t N>
@@ -46,33 +47,43 @@ struct VectorOps<Vector<T,N>,index_sequence<Is...>>
 
 	static void set(VectorT& vec, VectorT const& other)
 	{
-		int dummy[] = { ((vec[Is] = other[Is]), 0)...  };
+		(void) fold_dummy {
+			((vec[Is] = other[Is]), 0)...
+		};
 	}
 
 	static void add(VectorT& vec, VectorT const& other)
 	{
-		int dummy[] = { ((vec[Is] += other[Is]), 0)...  };
+		(void) fold_dummy {
+			((vec[Is] += other[Is]), 0)...
+		};
 	}
 
 	static void sub(VectorT& vec, VectorT const& other)
 	{
-		int dummy[] = { ((vec[Is] -= other[Is]), 0)...  };
+		(void) fold_dummy {
+			((vec[Is] -= other[Is]), 0)...
+		};
 	}
 
 	static void mul(VectorT& vec, T const& val)
 	{
-		int dummy[] = { ((vec[Is] *= val), 0)...  };
+		(void) fold_dummy {
+			((vec[Is] *= val), 0)...
+		};
 	}
 
 	static void div(VectorT& vec, T const& val)
 	{
-		int dummy[] = { ((vec[Is] /= val), 0)...  };
+		(void) fold_dummy {
+			((vec[Is] /= val), 0)...
+		};
 	}
 
 	static T dot(VectorT const& vec1, VectorT const& vec2)
 	{
 		T product = {};
-		int dummy[] = {
+		(void) fold_dummy {
 			((product += vec1[Is] * vec2[Is]), 0)...
 		};
 		return product;

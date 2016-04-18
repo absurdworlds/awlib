@@ -41,22 +41,30 @@ struct MatrixOps<Matrix<T,M,N>, index_sequence<Is...>, index_sequence<Js...>>
 
 	static void add(MatrixT& a, MatrixT const& b)
 	{
-		int dummy[] = { 0, ((a[Is] += b[Is]), 0)... };
+		(void) fold_dummy {
+			((a[Is] += b[Is]), 0)...
+		};
 	}
 
 	static void sub(MatrixT& a, MatrixT const& b)
 	{
-		int dummy[] = { 0, ((a[Is] -= b[Is]), 0)... };
+		(void) fold_dummy {
+			((a[Is] -= b[Is]), 0)...
+		};
 	}
 
 	static void mul(MatrixT& a, T const v)
 	{
-		int dummy[] = { 0, ((a[Is] *= v), 0)... };
+		(void) fold_dummy {
+			((a[Is] *= v), 0)...
+		};
 	}
 
 	static void div(MatrixT& a, T const v)
 	{
-		int dummy[] = { 0, ((a[Is] /= v), 0)... };
+		(void) fold_dummy {
+			((a[Is] /= v), 0)...
+		};
 	}
 
 	static Vector<T,M> mul(MatrixT const& mat, Vector<T,N> const& vec)
@@ -88,28 +96,35 @@ struct MatrixOps<Matrix<T,M,N>, index_sequence<Is...>, index_sequence<Js...>>
 	template<typename Func>
 	static void for_each_column(Matrix<T,M,N>& mat, Func func)
 	{
-		int dummy[] = { (func(mat[Js]), 0)... };
+		(void) fold_dummy {
+			(func(mat[Js]), 0)...
+		};
 	}
 
 	template<typename Func>
 	static void for_each_row(Matrix<T,M,N>& mat, Func func)
 	{
-		int dummy[] = { (func(mat[Is]), 0)... };
+		(void) fold_dummy {
+			(func(mat[Is]), 0)...
+		};
 	}
 
 	template<typename Func>
 	static void for_each(Matrix<T,M,N>& mat, Func func)
 	{
-		int dummy[] = { (mat[Is].for_each(func), 0)... };
+		(void) fold_dummy {
+			(mat[Is].for_each(func), 0)...
+		};
 	}
 };
 
 template<typename T, size_t M, size_t N>
 struct Matrix {
-	constexpr static size_t matrix_width = N;
-	constexpr static size_t matrix_height = M;
 	constexpr static size_t num_columns = N;
 	constexpr static size_t num_rows = M;
+
+	static_assert(num_columns > 0, "Matrix must have at least one column.");
+	static_assert(num_rows > 0, "Matrix must have at least one row.");
 
 	using row_indices    = make_index_sequence<M>;
 	using column_indices = make_index_sequence<N>;

@@ -8,7 +8,9 @@ template<size_t... Is, typename T, size_t N>
 Matrix<T,N,N>& setIdentity(Matrix<T,N,N>& mat, index_sequence<Is...>)
 {
 	fill(mat, T{});
-	int dummy[] = { (mat[Is][Is] = 1, 0)... };
+	(void) fold_dummy {
+		(mat[Is][Is] = 1, 0)...
+	};
 	return mat;
 }
 } // namespace _impl
@@ -47,7 +49,7 @@ template<size_t...Is, typename T, size_t N>
 T determinant(Matrix<T,N,N> const& mat, index_sequence<Is...>)
 {
 	T val = {};
-	int dummy[] = {
+	(void) fold_dummy {
 		((val += factor<Is>(mat)), 0)...
 	};
 	return val;
@@ -78,9 +80,9 @@ void inv(MatrixT& result, MatrixT const& mat)
 {
 	using T = typename MatrixT::value_type;
 
-	T minor = matrixMinor<J,I>(mat);
+	T const minor = matrixMinor<J,I>(mat);
 
-	T factor = ((I+J) % 2) ? -1 : 1;
+	T const factor = ((I+J) % 2) ? -1 : 1;
 
 	get<I,J>(result) = factor * minor;
 }
@@ -88,7 +90,7 @@ void inv(MatrixT& result, MatrixT const& mat)
 template<size_t I, size_t...Js, class MatrixT>
 void inv1(MatrixT& result, MatrixT const& mat)
 {
-	int dummy[] = {
+	(void) fold_dummy {
 		(inv<I,Js>(result, mat), 0)...
 	};
 }
@@ -97,7 +99,7 @@ template<class MatrixT, size_t...Is>
 MatrixT inv2(MatrixT const& mat, index_sequence<Is...>)
 {
 	MatrixT result = {};
-	int dummy[] = {
+	(void) fold_dummy {
 		(inv1<Is,Is...>(result, mat), 0)...
 	};
 	return result;
