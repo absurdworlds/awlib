@@ -269,7 +269,7 @@ class Cinner : public InputArchive {
 };
 
 struct Base {
-	using ClassDef = aw::arc::ClassDef<Base, Base*(char)>;
+	using ClassDef = aw::arc::ClassDef<Base*(char)>;
 
 	static ClassDef classdef;
 	virtual ClassDef& classDef() const
@@ -290,7 +290,7 @@ struct Base {
 
 	char var1;
 };
-Base::ClassDef Base::classdef = Base::ClassDef::base("Base", nullptr);
+Base::ClassDef Base::classdef = Base::ClassDef::create<Base>("Base");
 
 void Base::load(InputArchive& arc)
 {
@@ -327,12 +327,7 @@ struct Derived : Base {
 	char var2;
 };
 
-Derived::ClassDef Derived::classdef = Derived::ClassDef::derived<Base>(
-	"Derived",
-	[] (char c) -> Base* {
-		return new Derived(c);
-	}
-);
+Base::ClassDef Derived::classdef = Base::ClassDef::create<Derived>("Derived");
 
 struct Derived2 : Base {
 	using ClassDef = Base::ClassDef;
@@ -363,12 +358,7 @@ struct Derived2 : Base {
 	char var2;
 };
 
-Derived2::ClassDef Derived2::classdef = Derived2::ClassDef::derived<Base>(
-	"Derived2",
-	[] (char c) -> Base* {
-		return new Derived2(c);
-	}
-);
+Base::ClassDef Derived2::classdef = Base::ClassDef::create<Derived2>("Derived2");
 } // namespace arc
 } // namespace aw
 
