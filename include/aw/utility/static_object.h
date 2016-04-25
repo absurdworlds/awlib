@@ -9,9 +9,15 @@
 #ifndef aw_static_object_h
 #define aw_static_object_h
 //#include <aw/utility/tags/EmptyTag.h>
-namespace aw {
 //struct EmptyTag {};
-
+namespace aw {
+/*!
+ * Creates single instance of specified class.
+ * Created object is initialized before main().
+ *
+ * \param T
+ *    Class to instantiate. Must be DefaultConstructible.
+ */
 template <class T> //, class Tag = EmptyTag>
 class static_object {
 	static T& ref;
@@ -39,6 +45,5 @@ public:
 
 template <class T>
 T& static_object<T>::ref = static_object<T>::create();
-
 } // namespace aw
 #endif//aw_static_object_h

@@ -9,6 +9,7 @@
  */
 #ifndef Daedalus_string
 #define Daedalus_string
+#include <cctype>
 #include <cstring>
 #include <algorithm>
 #include <string>
@@ -20,7 +21,7 @@ namespace string {
 inline void tolower(std::string& str)
 {
 	std::transform(std::begin(str), std::end(str),
-	               std::begin(str), std::tolower);
+	               std::begin(str), ::tolower);
 }
 
 /*!
@@ -29,7 +30,7 @@ inline void tolower(std::string& str)
 inline void toupper(std::string& str)
 {
 	std::transform(std::begin(str), std::end(str),
-	               std::begin(str), std::toupper);
+	               std::begin(str), ::toupper);
 }
 
 /*!
@@ -39,7 +40,7 @@ inline void capitalize(std::string& str)
 {
 	auto begin = std::begin(str);
 	std::toupper(*begin++);
-	std::transform(begin, std::end(str), begin, std::tolower);
+	std::transform(begin, std::end(str), begin, ::tolower);
 }
 } // namespace string
 } // namespace aw

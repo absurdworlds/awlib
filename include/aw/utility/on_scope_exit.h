@@ -28,7 +28,6 @@ public:
 	{
 		if (func) func();
 	}
-
 };
 
 template <class Callable>
