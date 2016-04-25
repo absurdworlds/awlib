@@ -13,6 +13,18 @@
 #include <type_traits>
 #include <aw/types/traits/void_t.h>
 namespace aw {
+template<typename T>
+constexpr auto is_arithmetic = std::is_arithmetic<T>::value;
+
+template<typename T>
+constexpr auto is_polymorphic = std::is_polymorphic<T>::value;
+
+template<typename T>
+constexpr auto is_trivially_copyable = std::is_trivially_copyable<T>::value;
+
+template<class Base, class Derived>
+constexpr auto is_base_of = std::is_base_of<Base,Derived>::value;
+
 namespace _impl {
 template<typename T>
 struct is_int : std::integral_constant<
@@ -28,7 +40,7 @@ template<class CharT, class Traits, class Alloc>
 struct is_string<std::basic_string<CharT, Traits, Alloc>> : std::true_type{ };
 } // namespace impl
 
-/* Basic type classes (yes, std::string is considered “basic”) */
+/* Basic type categories (yes, std::string is considered “basic”) */
 template<typename T>
 constexpr auto is_int       = _impl::is_int<T>::value;
 template<typename T>
@@ -39,14 +51,5 @@ template<typename T>
 constexpr auto is_bool      = std::is_same<T, bool>::value;
 template<typename T>
 constexpr auto is_pointer   = std::is_pointer<T>::value;
-
-template<typename T>
-constexpr auto is_arithmetic = std::is_arithmetic<T>::value;
-
-template<typename T>
-constexpr auto is_polymorphic = std::is_polymorphic<T>::value;
-
-template<typename T>
-constexpr auto is_trivially_copyable = std::is_trivially_copyable<T>::value;
 } // namespace aw
 #endif//aw_traits_basic_traits
