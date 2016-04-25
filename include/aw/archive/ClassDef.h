@@ -12,6 +12,7 @@
 #include <string>
 #include <functional>
 #include <aw/types/traits/basic_traits.h>
+#include <aw/types/traits/enable_if.h>
 #include <aw/utility/static_object.h>
 
 namespace aw {
@@ -29,13 +30,31 @@ private:
 	Creator     const creator;
 	std::string const  name;
 
+	template<class Class>
+	static auto
+	get_creator() -> enable_if<is_abstract<Class>, CreatorSignature*>
+	{
+		return nullptr;
+	}
+
+	template<class Class>
+	static auto
+	get_creator() -> enable_if<!is_abstract<Class>, CreatorSignature*>
+	{
+		return [] (Args...args) -> Base*
+		{
+			return new Class(std::forward<Args>(args)...);
+		};
+	}
+
 public:
 	/*!
 	 * Create classdef. It is necessary in order
 	 * to load polymorphic classes with aw archiver.
 	 */
 	template<class Class>
-	static ClassDef create(std::string name)
+	static auto
+	create(std::string name)
 	{
 		static_assert(is_polymorphic<Class>,
 		              "Class must be polymorphic.");
@@ -45,16 +64,7 @@ public:
 		// using meta_class = reflexpr(Class);
 		// std::string name = std::meta::get_name_v<meta_class>;
 
-		auto create = [] (Args...args) -> Base*
-		{
-			return new Class(std::forward<Args>(args)...);
-		};
-
-		Creator creator = std::is_abstract<Class>::value ?
-			nullptr : create;
-
-
-		return ClassDef(name, creator);
+		return ClassDef(name, get_creator<Class>());
 	}
 
 	char const* className() const

@@ -18,6 +18,8 @@ constexpr auto is_arithmetic = std::is_arithmetic<T>::value;
 
 template<typename T>
 constexpr auto is_polymorphic = std::is_polymorphic<T>::value;
+template<typename T>
+constexpr auto is_abstract = std::is_abstract<T>::value;
 
 template<typename T>
 constexpr auto is_trivially_copyable = std::is_trivially_copyable<T>::value;
