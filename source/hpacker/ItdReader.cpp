@@ -1,7 +1,7 @@
 /*
  * Copyright (C) 2014  absurdworlds
  *
- * License LGPLv3-only:
+ * License LGPLv3 or later:
  * GNU Lesser GPL version 2.1 <http://gnu.org/licenses/lgpl-2.1.html>
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
