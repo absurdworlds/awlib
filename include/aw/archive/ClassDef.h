@@ -26,46 +26,34 @@ private:
 	using Creator = std::function<CreatorSignature>;
 
 	Creator     const creator;
-	ClassDef    const* parent;
 	std::string const  name;
 
 public:
 	/*!
 	 * Create classdef. It is necessary in order
 	 * to load polymorphic classes with aw archiver.
-	 *
-	 * \param Parent
-	 *    Parent class of \a Class. If \a Class is Base,
-	 *    then \a Parent must also be Base.
 	 */
-	template<class Parent, class Class>
+	template<class Class>
 	static ClassDef create(std::string name)
 	{
 		static_assert(std::is_polymorphic<Class>,
-		              "Class must by polymorphic.");
-		static_assert(std::is_base_of<Base, Parent>,
-		              "Parent must be derived from Base.")
-		static_assert(std::is_base_of<Parent, Class>,
-		              "Class must be derived from Parent.")
-		static_assert(std::is_same<Base,Class> || !is_same<Parent,Class>,
-		              "Parent can't be same as Class");
-		static_assert(!std::is_same<Base,Class> || is_same<Parent,Base>,
-		              "Base class can't have Parent.");
+		              "Class must be polymorphic.");
+		static_assert(std::is_base_of<Base, Class>,
+		              "Class must be derived from Base.")
 
 		// using meta_class = reflexpr(Class);
 		// std::string name = std::meta::get_name_v<meta_class>;
 
-		ClassDef const* parent = std::is_same<Base,Class>::value ?
-			nullptr : &Parent::classdef;
+		auto create = [] (Args...args) -> Base*
+		{
+			return new Class(std::forward<Args>(args)...);
+		};
 
-		Create const creator = std::is_abstract<Class>::value ?
-			nullptr : [] (Args...args) -> Base*
-			{
-				return new Class(std::forward<Args>(args)...);
-			}
+		Creator creator = std::is_abstract<Class>::value ?
+			nullptr : create;
 
 
-		return ClassDef(parent, name, creator);
+		return ClassDef(name, creator);
 	}
 
 	char const* className() const
@@ -96,38 +84,12 @@ public:
 	}
 
 private:
-	ClassDef(ClassDef* parent, std::string name, Creator creator)
-		: parent(parent), name(name), creator(creator)
+	ClassDef(std::string name, Creator creator)
+		: name(name), creator(creator)
 	{
 		ClassDefMap::instance().insert({name, this});
 	}
 };
-
-#if 0
-#define AW_CLASSDEF_BASE_HEADER(Base, Signature)      \
-	using ClassDef = ::ClassDef<Base, Signature>; \
-	static ClassDef& classdef;                    \
-	virtual ClassDef& classDef() const            \
-	{                                             \
-		return classdef;                      \
-	}
-
-#define AW_CLASSDEF_ABSTRACT_BASE(Base, Signature) \
-	AW_CLASSDEF_BASE_HEADER(Base, Signature)   \
-	static ClassDef& classDef_()               \
-	{                                          \
-		static auto cd = ClassDef::base(#base, nullptr); \
-		return cd; \
-	}
-
-#define AW_CLASSDEF_BASE(Base, Signature) \
-	AW_CLASSDEF_BASE_HEADER(Base, Signature)   \
-	static ClassDef& classDef_()               \
-	{                                          \
-		static auto cd = ClassDef::base(#base, [] ); \
-		return cd; \
-	}
-#endif
 } // inline namespace v2
 } // namespace arc
 } // namespace aw
