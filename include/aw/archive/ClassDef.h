@@ -16,29 +16,56 @@
 namespace aw {
 namespace arc {
 inline namespace v2 {
-template <class Base, class>
+template <class>
 struct ClassDef;
 
 template <class Base, typename...Args>
-struct ClassDef<Base, Base*(Args...)> {
+struct ClassDef<Base*(Args...)> {
 private:
 	using CreatorSignature = Base*(Args...);
 	using Creator = std::function<CreatorSignature>;
-	Creator const creator;
 
-	ClassDef               const* parent;
-	std::string            const  name;
+	Creator     const creator;
+	ClassDef    const* parent;
+	std::string const  name;
 
 public:
-	static ClassDef base(std::string name, Creator creator)
+	/*!
+	 * Create classdef. It is necessary in order
+	 * to load polymorphic classes with aw archiver.
+	 *
+	 * \param Parent
+	 *    Parent class of \a Class. If \a Class is Base,
+	 *    then \a Parent must also be Base.
+	 */
+	template<class Parent, class Class>
+	static ClassDef create(std::string name)
 	{
-		return ClassDef(nullptr, name, creator);
-	}
+		static_assert(std::is_polymorphic<Class>,
+		              "Class must by polymorphic.");
+		static_assert(std::is_base_of<Base, Parent>,
+		              "Parent must be derived from Base.")
+		static_assert(std::is_base_of<Parent, Class>,
+		              "Class must be derived from Parent.")
+		static_assert(std::is_same<Base,Class> || !is_same<Parent,Class>,
+		              "Parent can't be same as Class");
+		static_assert(!std::is_same<Base,Class> || is_same<Parent,Base>,
+		              "Base class can't have Parent.");
 
-	template<typename Parent>
-	static ClassDef derived(std::string name, Creator creator)
-	{
-		return ClassDef(&Parent::classdef, name, creator);
+		// using meta_class = reflexpr(Class);
+		// std::string name = std::meta::get_name_v<meta_class>;
+
+		ClassDef const* parent = std::is_same<Base,Class>::value ?
+			nullptr : &Parent::classdef;
+
+		Create const creator = std::is_abstract<Class>::value ?
+			nullptr : [] (Args...args) -> Base*
+			{
+				return new Class(std::forward<Args>(args)...);
+			}
+
+
+		return ClassDef(parent, name, creator);
 	}
 
 	char const* className() const
