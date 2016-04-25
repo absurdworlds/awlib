@@ -14,7 +14,7 @@
 namespace aw {
 namespace io {
 InputFileStream::InputFileStream(ReadFile& source)
-	: pos(0), source(source), size(source.getSize())
+	: pos(0), source(source), size(source.size())
 {
 	if (size > 0) {
 		source.read(&cur, 1);
