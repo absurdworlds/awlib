@@ -18,9 +18,28 @@
 namespace aw {
 namespace arc {
 inline namespace v2 {
-template <class>
+/*!
+ * ClassDef contains information about a polymorphic class,
+ * which is required to instantiate it with archiver.
+ *
+ * \param Signature
+ *    Signature of the factory function. Must return pointer to base class.
+ *    Example: `<Base*(size_t, std::string)>`.
+ */
+template <class Signature>
 struct ClassDef;
+/* TODO:
+ *
+ * Base class of polymorhic class hierarhy must contain
+ * using ClassDef = ClassDef<Base*(...)>;
+ * and
+ * virtual ClassDef* classdef() const;
+ * in order to be FORGOTWORDable by archiver.
+ */
 
+/*!
+ * Partial specialization of ClassDef.
+ */
 template <class Base, typename...Args>
 struct ClassDef<Base*(Args...)> {
 private:
