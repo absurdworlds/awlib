@@ -11,6 +11,7 @@
 #include <map>
 #include <string>
 #include <functional>
+#include <aw/types/traits/basic_traits.h>
 #include <aw/utility/static_object.h>
 
 namespace aw {
@@ -36,10 +37,10 @@ public:
 	template<class Class>
 	static ClassDef create(std::string name)
 	{
-		static_assert(std::is_polymorphic<Class>,
+		static_assert(is_polymorphic<Class>,
 		              "Class must be polymorphic.");
-		static_assert(std::is_base_of<Base, Class>,
-		              "Class must be derived from Base.")
+		static_assert(is_base_of<Base, Class>,
+		              "Class must be derived from Base.");
 
 		// using meta_class = reflexpr(Class);
 		// std::string name = std::meta::get_name_v<meta_class>;
