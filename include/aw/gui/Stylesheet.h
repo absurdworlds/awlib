@@ -6,40 +6,39 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _aw_GUI_Style_
-#define _aw_GUI_Style_
+#ifndef _aw_GUI_Stylesheet_
+#define _aw_GUI_Stylesheet_
 #include <string>
 #include <map>
 
 #include <aw/gui/gui.h>
-#include <aw/gui/style/ElementStyle.h>
+#include <aw/gui/Style.h>
 
 namespace aw {
 namespace gui {
-class AW_GUI_EXP Style {
-public:
-	virtual ~Style() = default;
+struct Stylesheet {
+	~Stylesheet() = default;
 
-	void initDefaults();
-
-	ElementStyle* getElementStyle(std::string element)
+	Style* lookup(std::string element)
 	{
-		auto found = properties.find(element);
+		auto found = styles.find(element);
 
-		if (found != properties.end()) {
+		if (found != std::end(styles))
 			return &found->second;
-		}
 
 		return nullptr;
 	}
 
-	void setElementStyle(std::string element, ElementStyle style)
+	void set(std::string element, Style style)
 	{
-		properties[element] = std::move(style);
+		styles[element] = std::move(style);
 	}
+
 private:
-	std::map<std::string, ElementStyle> properties;
+	using Key = std::string;
+
+	std::map<Key, Style> styles;
 };
 } // namespace gui
 } // namespace aw
-#endif //_aw_GUI_Style_
+#endif //_aw_GUI_Stylesheet_
