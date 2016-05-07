@@ -47,54 +47,71 @@ struct VectorOps<Vector<T,N>,index_sequence<Is...>>
 
 	static void set(VectorT& vec, VectorT const& other)
 	{
-		(void) fold_dummy {
-			((vec[Is] = other[Is]), 0)...
-		};
+#if __cplusplus >= 201500L
+		(void(vec[Is] = other[Is]), ...);
+#else
+		(void) fold_dummy { ((vec[Is] = other[Is]), 0)...  };
+#endif
 	}
 
 	static void add(VectorT& vec, VectorT const& other)
 	{
-		(void) fold_dummy {
-			((vec[Is] += other[Is]), 0)...
-		};
+#if __cplusplus >= 201500L
+		(void(vec[Is] += other[Is]), ...);
+#else
+		(void) fold_dummy { ((vec[Is] += other[Is]), 0)...  };
+#endif
 	}
 
 	static void sub(VectorT& vec, VectorT const& other)
 	{
-		(void) fold_dummy {
-			((vec[Is] -= other[Is]), 0)...
-		};
+#if __cplusplus >= 201500L
+		(void(vec[Is] -= other[Is]), ...);
+#else
+		(void) fold_dummy { ((vec[Is] -= other[Is]), 0)...  };
+#endif
 	}
 
 	static void mul(VectorT& vec, T const& val)
 	{
-		(void) fold_dummy {
-			((vec[Is] *= val), 0)...
-		};
+#if __cplusplus >= 201500L
+		(void(vec[Is] *= val), ...);
+#else
+		(void) fold_dummy { ((vec[Is] *= val), 0)...  };
+#endif
 	}
 
 	static void div(VectorT& vec, T const& val)
 	{
-		(void) fold_dummy {
-			((vec[Is] /= val), 0)...
-		};
+#if __cplusplus >= 201500L
+		(void(vec[Is] /= val), ...);
+#else
+		(void) fold_dummy { ((vec[Is] /= val), 0)...  };
+#endif
 	}
 
 	static T dot(VectorT const& vec1, VectorT const& vec2)
 	{
+#if __cplusplus >= 201500L
+		// FIXME: T{} workaround for GCC 6.1 bug
+		T product = (T{vec1[Is]*vec2[Is]} + ...);
+#else
 		T product = {};
 		(void) fold_dummy {
 			((product += vec1[Is] * vec2[Is]), 0)...
 		};
+#endif
 		return product;
 	}
 
 	template<typename Func>
 	static void for_each(VectorT& vec, Func func)
 	{
-		int dummy[] = {
-			(func(vec[Is]), 0)...
-		};
+#if __cplusplus >= 201500L
+		(func(vec[Is]), ...);
+#else
+		(void) fold_dummy { (func(vec[Is]), 0)...  };
+#endif
 	}
 };
 

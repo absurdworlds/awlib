@@ -41,30 +41,38 @@ struct MatrixOps<Matrix<T,M,N>, index_sequence<Is...>, index_sequence<Js...>>
 
 	static void add(MatrixT& a, MatrixT const& b)
 	{
-		(void) fold_dummy {
-			((a[Is] += b[Is]), 0)...
-		};
+#if __cplusplus >= 201500L
+		(void(a[Is] += b[Is]), ...);
+#else
+		(void) fold_dummy { ((a[Is] += b[Is]), 0)...  };
+#endif
 	}
 
 	static void sub(MatrixT& a, MatrixT const& b)
 	{
-		(void) fold_dummy {
-			((a[Is] -= b[Is]), 0)...
-		};
+#if __cplusplus >= 201500L
+		(void(a[Is] -= b[Is]), ...);
+#else
+		(void) fold_dummy { ((a[Is] -= b[Is]), 0)...  };
+#endif
 	}
 
 	static void mul(MatrixT& a, T const v)
 	{
-		(void) fold_dummy {
-			((a[Is] *= v), 0)...
-		};
+#if __cplusplus >= 201500L
+		(void(a[Is] *= v), ...);
+#else
+		(void) fold_dummy { ((a[Is] *= v), 0)...  };
+#endif
 	}
 
 	static void div(MatrixT& a, T const v)
 	{
-		(void) fold_dummy {
-			((a[Is] /= v), 0)...
-		};
+#if __cplusplus >= 201500L
+		(void(a[Is] /= v), ...);
+#else
+		(void) fold_dummy { ((a[Is] /= v), 0)...  };
+#endif
 	}
 
 	static Vector<T,M> mul(MatrixT const& mat, Vector<T,N> const& vec)
@@ -96,25 +104,31 @@ struct MatrixOps<Matrix<T,M,N>, index_sequence<Is...>, index_sequence<Js...>>
 	template<typename Func>
 	static void for_each_column(Matrix<T,M,N>& mat, Func func)
 	{
-		(void) fold_dummy {
-			(func(mat[Js]), 0)...
-		};
+#if __cplusplus >= 201500L
+		(func(mat[Js]), ...);
+#else
+		(void) fold_dummy { (func(mat[Js]), 0)...  };
+#endif
 	}
 
 	template<typename Func>
 	static void for_each_row(Matrix<T,M,N>& mat, Func func)
 	{
-		(void) fold_dummy {
-			(func(mat[Is]), 0)...
-		};
+#if __cplusplus >= 201500L
+		(func(mat[Is]), ...);
+#else
+		(void) fold_dummy { (func(mat[Is]), 0)...  };
+#endif
 	}
 
 	template<typename Func>
 	static void for_each(Matrix<T,M,N>& mat, Func func)
 	{
-		(void) fold_dummy {
-			(mat[Is].for_each(func), 0)...
-		};
+#if __cplusplus >= 201500L
+		(mat[Is].for_each(func), ...);
+#else
+		(void) fold_dummy { (mat[Is].for_each(func), 0)...  };
+#endif
 	}
 };
 
