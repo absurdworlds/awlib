@@ -104,7 +104,7 @@ template<size_t I, size_t...Js, class MatrixT>
 void inv1(MatrixT& result, MatrixT const& mat)
 {
 #if __cplusplus >= 201500L
-	(void(inv<I,Js>(result, mat)), ...);
+	(inv<I,Js>(result, mat), ...);
 #else
 	(void) fold_dummy { (inv<I,Js>(result, mat), 0)...  };
 #endif
@@ -115,7 +115,7 @@ MatrixT inv2(MatrixT const& mat, index_sequence<Is...>)
 {
 	MatrixT result = {};
 #if __cplusplus >= 201500L
-	(void(inv1<Is,Is...>(result, mat)), ...);
+	(inv1<Is,Is...>(result, mat), ...);
 #else
 	(void) fold_dummy { (inv1<Is,Is...>(result, mat), 0)...  };
 #endif

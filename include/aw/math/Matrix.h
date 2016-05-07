@@ -105,7 +105,7 @@ struct MatrixOps<Matrix<T,M,N>, index_sequence<Is...>, index_sequence<Js...>>
 	static void for_each_column(Matrix<T,M,N>& mat, Func func)
 	{
 #if __cplusplus >= 201500L
-		(func(mat[Js]), ...);
+		(void(func(mat[Js])), ...);
 #else
 		(void) fold_dummy { (func(mat[Js]), 0)...  };
 #endif
@@ -115,7 +115,7 @@ struct MatrixOps<Matrix<T,M,N>, index_sequence<Is...>, index_sequence<Js...>>
 	static void for_each_row(Matrix<T,M,N>& mat, Func func)
 	{
 #if __cplusplus >= 201500L
-		(func(mat[Is]), ...);
+		(void(func(mat[Is])), ...);
 #else
 		(void) fold_dummy { (func(mat[Is]), 0)...  };
 #endif
