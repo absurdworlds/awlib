@@ -51,13 +51,13 @@ ExtraLibraryPaths = $(addprefix -L$(RootPath)/,$(CONFIG_LIBRARY_PATHS))
 MKDIR_P = mkdir -p
 ECHO = @echo
 
-CXXFLAGS  = -std=c++14
+CXXFLAGS  = -std=c++1z
 CXXFLAGS += -fPIC
 CXXFLAGS += -fno-exceptions
 CXXFLAGS += -fvisibility=default
 CXXFLAGS += -fdiagnostics-color=auto
 CXXFLAGS_DEBUG   = -g -DDEBUG -D_DEBUG
-CXXFLAGS_RELEASE = -O3 -DNDEBUG
+CXXFLAGS_RELEASE = -g -O3 -DNDEBUG
 
 CCFLAGS  = -std=c11
 CPPFLAGS = $(ProjectDefines) $(Includes) $(ExtraIncludePaths)
