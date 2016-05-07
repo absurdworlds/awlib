@@ -13,6 +13,12 @@
 namespace aw {
 using fold_dummy = int[];
 
+#if __cplusplus >= 201500L
+#define AW_FOLD(expr) (void(expr), ...);
+#else
+#define AW_FOLD(expr) (void) fold_dummy { ((expr), 0)...  };
+#endif
+
 template <class Func, class... Args>
 void for_each_argument(Func f, Args&&... args) {
 	(void) fold_dummy{
