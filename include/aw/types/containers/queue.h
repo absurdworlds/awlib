@@ -13,6 +13,9 @@
 #include <iterator>
 #include <algorithm>
 
+// TODO: exception handling
+// TODO: insert and remove
+
 namespace aw {
 namespace _impl {
 template <typename Traits>
@@ -311,6 +314,11 @@ private:
 		impl.end   = std::uninitialized_copy(first, last, impl.head);
 	}
 
+	size_type allocated_size() const noexcept
+	{
+		return static_cast<size_type>(impl.end - impl.begin);
+	}
+
 public:
 	/*! Create empty queue */
 	queue() /*noexcept(noexcept(Allocator()))*/ = default;
@@ -396,6 +404,7 @@ public:
 		return {end()};
 	}
 
+
 	/*! Reverse iterator to the end of queue */
 	const_reverse_iterator rbegin() const
 	{
@@ -435,7 +444,10 @@ public:
 	/*! Get queue capacity */
 	size_type capacity() const noexcept
 	{
-		return static_cast<size_type>(impl.end - impl.begin);
+		size_type cap = allocated_size();
+		// need to keep one element free, so that
+		// head doesn't step on its tail
+		return cap ? cap - 1 : 0;
 	}
 
 	/*!
@@ -480,8 +492,8 @@ public:
 	void pop_back()
 	{
 		if (!empty()) {
-			allocator_traits::destroy(alloc(), impl.tail);
 			impl.tail = prev_p(impl.tail);
+			allocator_traits::destroy(alloc(), impl.tail);
 		}
 	}
 
@@ -490,8 +502,7 @@ public:
 	 */
 	void push_front(const_reference val)
 	{
-		if (prev_p(impl.head) == impl.tail)
-			grow();
+		check_capacity();
 
 		impl.head = prev_p(impl.head);
 		allocator_traits::construct(alloc(), impl.head, val);
@@ -502,8 +513,7 @@ public:
 	 */
 	void push_back(const_reference val)
 	{
-		if (next_p(impl.tail) == impl.head)
-			grow();
+		check_capacity();
 
 		allocator_traits::construct(alloc(), impl.tail, val);
 		impl.tail = next_p(impl.tail);
@@ -531,8 +541,7 @@ public:
 	template <typename... Args>
 	void emplace_front(Args... args)
 	{
-		if (prev_p(impl.head) == impl.tail)
-			grow();
+		check_capacity();
 
 		impl.head = prev_p(impl.head);
 		allocator_traits::construct(alloc(), impl.head, std::forward<Args>(args)...);
@@ -544,8 +553,7 @@ public:
 	template <typename... Args>
 	void emplace_back(Args... args)
 	{
-		if (next_p(impl.tail) == impl.head)
-			grow();
+		check_capacity();
 
 		allocator_traits::construct(alloc(), impl.tail, std::forward<Args>(args)...);
 		impl.tail = next_p(impl.tail);
@@ -599,7 +607,7 @@ private:
 		// [h=============t|] => [H==============t]
 		// [=====t|  h======] => [======t| h======]
 		// [=======t|h======] => [========tH======]
-		if (p + 1 > impl.end)
+		if (p + 1 == impl.end)
 			return impl.begin;
 		return p + 1;
 	}
@@ -608,7 +616,7 @@ private:
 	P prev_p(P p) const noexcept
 	{
 		if (p == impl.begin)
-			return impl.end;
+			return impl.end - 1;
 		return p - 1;
 	}
 
@@ -620,15 +628,15 @@ private:
 			return p + n;
 
 		// [xx|=========|++]xx
-		return p + n - capacity(); // == begin + n - (end - p)
+		return p + n - allocated_size(); // == begin + n - (end - p)
 	}
 
 	template<typename P>
 	P sub_p(P p, difference_type n) const noexcept
 	{
-		if (n < p - impl.begin)
+		if (n <= p - impl.begin)
 			return p - n;
-		return p - n + capacity(); // == end - n + (p - begin)
+		return p - n + allocated_size(); // == end - n + (p - begin)
 	}
 
 	//! Map pointer from circular to linear space
@@ -645,20 +653,20 @@ private:
 	size_type next_size() const
 	{
 		constexpr size_type min_size = 16;
-		size_type const old_size = capacity();
+		size_type const old_size = allocated_size();
 		return old_size + std::max(old_size, min_size);
 	}
 
 	void reallocate(size_type new_size)
 	{
-		pointer new_begin{ allocate(new_size + 1) };
+		pointer new_begin{ allocate(new_size) };
 
 		auto beg_it = std::make_move_iterator(begin());
 		auto end_it = std::make_move_iterator(end());
 		auto new_tail = std::uninitialized_copy(beg_it, end_it, new_begin);
 
 		destroy(impl.head, impl.tail);
-		deallocate(impl.begin, impl.end - impl.begin + 1);
+		deallocate(impl.begin, allocated_size());
 
 		impl.begin = new_begin;
 		impl.end   = new_begin + new_size;
@@ -667,9 +675,10 @@ private:
 		impl.tail = new_tail;
 	}
 
-	void grow()
+	void check_capacity()
 	{
-		reallocate(next_size());
+		if (size() == capacity())
+			reallocate(next_size());
 	}
 };
 } // namespace aw
