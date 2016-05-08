@@ -143,25 +143,23 @@ public:
 
 	bool operator==(iterator const& other) const noexcept
 	{
-		assert(q == other.q);
-		return (map() == other.map());
+		//return (map() == other.map());
+		return p == other.p;
 	}
 
 	bool operator!=(iterator const& other) const noexcept
 	{
-		assert(q == other.q);
-		return (map() != other.map());
+		//return (map() != other.map());
+		return p != other.p;
 	}
 
 	bool operator<(iterator const& other) const noexcept
 	{
-		assert(q == other.q);
 		return (map() < other.map());
 	}
 
 	bool operator>(iterator const& other) const noexcept
 	{
-		assert(q == other.q);
 		return (map() > other.map());
 	}
 
