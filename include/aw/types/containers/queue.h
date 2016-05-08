@@ -34,17 +34,9 @@ public:
 
 	using iterator = queue_iterator;
 
+private:
 	Queue const* q = nullptr;
 	pointer p      = nullptr;
-
-/*
-	friend queue;
-
-	pointer ptr() const
-	{
-		return p;
-	}
-*/
 
 	pointer map() const noexcept
 	{
