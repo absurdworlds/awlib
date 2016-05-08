@@ -452,7 +452,8 @@ public:
 
 	/*!
 	 * Reserve space for n elements.
-	 * Invalidates all iterators and refreneces.
+	 * Invalidates all iterators and refreneces if
+	 * reallocation occurs.
 	 */
 	void reserve(size_type n)
 	{
@@ -460,12 +461,31 @@ public:
 			reallocate(n);
 	}
 
-	/*
-	void shrink_to_fit()
-	{
-		reallocate(size());
-	}
+	/*!
+	 * Free up extra capacity.
+	 *
+	 * Invalidates all iterators and refreneces.
 	 */
+	bool shrink_to_fit()
+	{
+		if (capacity() > size())
+			reallocate(size() + 1);
+		return true;
+	}
+
+	/*!
+	 * Erases all elements in queue.
+	 *
+	 * \note
+	 * It does not free allocated memory.
+	 * If elements are pointers, memory pointed-to by them
+	 * is not freed.
+	 */
+	void clear()
+	{
+		destroy(impl.head, impl.tail);
+		impl.tail = impl.head;
+	}
 
 	/*!
 	 * Check if queue is empty
