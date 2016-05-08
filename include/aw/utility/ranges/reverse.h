@@ -12,12 +12,12 @@
 #include <utility>
 #include <iterator>
 namespace aw {
-template <typename Container>
+template <typename Range>
 struct reverse_adapter {
-	reverse_adapter(Container&& range)
+	reverse_adapter(Range&& range)
 		: range(range)
 	{}
-	Container& range;
+	Range& range;
 };
 
 template <typename T>
@@ -32,10 +32,10 @@ auto end(reverse_adapter<T> v)
 	return std::rend(v.range);
 }
 
-template <typename Container>
-auto make_reverse(Container&& container)
+template<typename Range>
+auto reverse(Range&& range)
 {
-	return reverse_adapter<Container>(std::forward<Container>(container));
+	return reverse_adapter<Range>(std::forward<Range>(range));
 }
 } // namespace aw
 #endif//aw_reverse_adapter_h
