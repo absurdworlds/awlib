@@ -429,10 +429,7 @@ public:
 	/*! Get number of elements in queue */
 	size_type size() const noexcept
 	{
-		if (impl.tail < impl.head)
-			return (impl.end - impl.head) + (impl.tail - impl.begin);
-
-		return impl.tail - impl.head;
+		return end() - begin();
 	}
 
 	/*! Get queue capacity */
