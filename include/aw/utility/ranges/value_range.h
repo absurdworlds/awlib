@@ -17,44 +17,47 @@ template <typename T>
 struct Range {
 	Range(T begin, T end)
 		: first(begin), last(end)
-	{
-	}
+	{ }
 
 	struct iterator {
 		using difference_type = std::ptrdiff_t;
 		using value_type = T;
 		using reference  = T&;
 		using pointer    = T*;
-		using iterator_category = std::random_access_iterator_tag;
+		using iterator_category = std::input_iterator_tag;
 
 		iterator(value_type v)
 			: value(v)
-		{
-		}
+		{ }
 
-		reference operator * ()
+		reference operator*()
 		{
 			return value;
 		}
 
-		iterator& operator ++ ()
+		pointer operator->()
+		{
+			return &value;
+		}
+
+		iterator& operator++()
 		{
 			++value;
 			return *this;
 		}
 
-		iterator& operator -- ()
+		iterator& operator--()
 		{
 			--value;
 			return *this;
 		}
 
-		bool operator == (iterator const& other)
+		bool operator==(iterator const& other)
 		{
 			return value == other.value;
 		}
 
-		bool operator != (iterator const& other)
+		bool operator!=(iterator const& other)
 		{
 			return value != other.value;
 		}
@@ -62,6 +65,8 @@ struct Range {
 	private:
 		value_type value;
 	};
+
+	using reverse_iterator = std::reverse_iterator<iterator>;
 
 	iterator begin()
 	{
@@ -71,6 +76,16 @@ struct Range {
 	iterator end()
 	{
 		return iterator(last);
+	}
+
+	reverse_iterator rbegin()
+	{
+		return reverse_iterator{end()};
+	}
+
+	reverse_iterator rend()
+	{
+		return reverse_iterator{begin()};
 	}
 
 private:
