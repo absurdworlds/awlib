@@ -206,14 +206,35 @@ struct queue_base {
 	}
 
 protected:
+	queue_base() noexcept = default;
+	queue_base(allocator_type const& a) noexcept
+		: impl(a)
+	{}
+
+	queue_base(allocator_type&& a)
+	noexcept(std::is_nothrow_copy_constructible<Allocator>::value)
+		: impl(std::move(a))
+	{}
+
+	queue_base(queue_base&& other) noexcept
+		: impl(std::move(other.alloc()))
+	{
+		impl.swap(other.impl);
+	}
+
+	~queue_base() noexcept
+	{
+		deallocate(impl.begin, allocated_size());
+	}
+
 	allocator_type& alloc() noexcept
 	{
-		return *static_cast<allocator_type*>(&impl);
+		return *static_cast<Allocator*>(&impl);
 	}
 
 	allocator_type const& alloc() const noexcept
 	{
-		return *static_cast<allocator_type*>(&impl);
+		return *static_cast<Allocator const*>(&impl);
 	}
 
 	pointer allocate(size_type len)
@@ -229,31 +250,11 @@ protected:
 			allocator_traits::deallocate(alloc(), p, n);
 	}
 
-	queue_base() noexcept = default;
-	queue_base(allocator_type const& a) noexcept
-		: impl(a)
-	{}
-
-	queue_base(allocator_type&& a) noexcept
-		: impl(std::move(a))
-	{}
-
-	queue_base(queue_base&& other)
-		: impl(std::move(other.alloc()))
+	size_type allocated_size() const noexcept
 	{
-		impl.swap(other.impl);
+		return static_cast<size_type>(impl.end - impl.begin);
 	}
 
-	queue_base(queue_base&& other, allocator_type const a)
-		: impl(a)
-	{
-		impl.swap(other.impl);
-	}
-
-	~queue_base() noexcept
-	{
-		deallocate(impl.begin, impl.end - impl.begin + 1);
-	}
 
 	struct impl : Allocator {
 		impl() noexcept = default;
@@ -318,6 +319,7 @@ private:
 	using Base::alloc;
 	using Base::allocate;
 	using Base::deallocate;
+	using Base::allocated_size;
 
 	template<typename Iterator, typename Sentinel>
 	void range_init(Iterator first, Sentinel last, std::input_iterator_tag)
@@ -334,11 +336,6 @@ private:
 		impl.end   = impl.begin + size;
 		impl.head  = impl.begin;
 		impl.end   = std::uninitialized_copy(first, last, impl.head);
-	}
-
-	size_type allocated_size() const noexcept
-	{
-		return static_cast<size_type>(impl.end - impl.begin);
 	}
 
 public:
