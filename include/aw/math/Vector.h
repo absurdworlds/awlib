@@ -16,7 +16,7 @@
 #include <aw/math/math.h>
 #include <aw/math/angle.h>
 #include <aw/types/support/array.h>
-#include <aw/types/traits/enable_if.h>
+#include <aw/types/traits/conditional.h>
 #include <aw/utility/index_sequence.h>
 #include <aw/utility/parameter_pack.h>
 

@@ -9,7 +9,7 @@
  */
 #ifndef aw_math_equals_h
 #define aw_math_equals_h
-#include <aw/types/traits/enable_if.h>
+#include <aw/types/traits/conditional.h>
 #include <aw/math/float.h>
 namespace aw {
 namespace math {
