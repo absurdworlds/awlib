@@ -16,7 +16,7 @@
 #include <aw/types/traits/conditional.h>
 
 // TODO: insert and remove
-// TODO: assign
+// TODO: assign & assignment operators
 // TODO: cleanup (allocation)
 
 namespace aw {
@@ -419,7 +419,6 @@ public:
 		destroy(impl.head, impl.tail);
 	}
 
-	// TODO: assignment operators
 
 	/*! Iterator to the front of queue */
 	iterator begin()
@@ -686,10 +685,6 @@ private:
 	template<typename P>
 	P next_p(P p) const noexcept
 	{
-		// [h===========t|  ] => [h============t| ]
-		// [h=============t|] => [H==============t]
-		// [=====t|  h======] => [======t| h======]
-		// [=======t|h======] => [========tH======]
 		if (p + 1 == impl.end)
 			return impl.begin;
 		return p + 1;
@@ -706,12 +701,10 @@ private:
 	template<typename P>
 	P add_p(P p, difference_type n) const noexcept
 	{
-		// [=========|++++ ]
 		if (n < impl.end - p)
 			return p + n;
 
-		// [xx|=========|++]xx
-		return p + n - allocated_size(); // == begin + n - (end - p)
+		return p + n - allocated_size();
 	}
 
 	template<typename P>
@@ -719,17 +712,15 @@ private:
 	{
 		if (n <= p - impl.begin)
 			return p - n;
-		return p - n + allocated_size(); // == end - n + (p - begin)
+		return p - n + allocated_size();
 	}
 
 	//! Map pointer from circular to linear space
 	template<typename P>
 	P map_p(P p) const noexcept
 	{
-		// [----p==t      h++++] => [----++++p
 		if (p < impl.head)
 			return p + (impl.end - impl.head);
-		// [  h---------p==t   ] => [--------p
 		return impl.begin + (p - impl.head);
 	}
 
