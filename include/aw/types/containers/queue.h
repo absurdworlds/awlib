@@ -119,6 +119,7 @@ public:
 	iterator& operator+=(difference_type n) noexcept
 	{
 		p = q->add_p(p, n);
+		return *this;
 	}
 
 	friend iterator operator+(iterator i, difference_type n) noexcept
