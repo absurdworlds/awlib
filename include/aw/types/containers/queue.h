@@ -219,11 +219,13 @@ struct queue_base : protected queue_base_common {
 	using difference_type  = typename allocator_type::difference_type;
 	using pointer          = typename allocator_type::pointer;
 
+	/*! Get the allocator associated with the container. */
 	allocator_type get_allocator() const noexcept
 	{
 		return {alloc()};
 	}
 
+	/*! Get the maximum number of elements that queue is able to hold. */
 	size_type max_size() const noexcept
 	{
 		return allocator_traits::max_size(alloc());
@@ -359,6 +361,11 @@ public:
 		: Base(a)
 	{ }
 
+	/*!
+	 * Copy constructor.
+	 * All ellements in \a q are copied into newly created queue.
+	 * Extra space is not copied.
+	 */
 	queue(queue const& q)
 		: Base(q.impl)
 	{
@@ -366,14 +373,24 @@ public:
 		std::uninitialized_copy(q.begin(), q.end(), begin());
 	}
 
+	/*!
+	 * Move constructor.
+	 * Newly-created queue receives contents of \a q,
+	 * \a q is left in a valid state.
+	 */
 	queue(queue&& q) noexcept
 		: Base(std::move(q))
 	{ }
 
+	/*!
+	 * Move constructor with alternative allocator.
+	 * \note
+	 * If `!(alloc == q.get_allocator())`, then operation is O(n).
+	 */
 	queue(queue&& q, Allocator const& alloc) noexcept
 		: Base(alloc)
 	{
-		if (alloc == Allocator(q.alloc())) {
+		if (alloc == q.get_allocator()) {
 			swap(q);
 		} else {
 			// Can't use alloc to manage different memory ):
@@ -383,6 +400,9 @@ public:
 		}
 	}
 
+	/*!
+	 * Create queue with \a n default-constructed elements
+	 */
 	queue(size_type n, Allocator const& alloc = Allocator())
 		: Base(alloc)
 	{
@@ -392,6 +412,9 @@ public:
 			emplace_back();
 	}
 
+	/*!
+	 * Create queue with \a n copies of prototype \a val.
+	 */
 	queue(size_type n, const_reference val,
 	      Allocator const& alloc = Allocator())
 		: Base(alloc)
@@ -402,6 +425,9 @@ public:
 			emplace_back(val);
 	}
 
+	/*!
+	 * Create queue from an initializer list.
+	 */
 	queue(std::initializer_list<value_type> list,
 	      Allocator const& alloc = Allocator())
 		: Base(alloc)
@@ -409,6 +435,9 @@ public:
 		range_init(std::begin(list), std::end(list));
 	}
 
+	/*!
+	 * Create from range
+	 */
 	template<typename Iterator, typename = _impl::is_input_iter<Iterator>>
 	queue(Iterator first, Iterator last,
 	      Allocator const& a = Allocator())
@@ -421,6 +450,7 @@ public:
 	{
 		destroy(impl.head, impl.tail);
 	}
+
 
 
 	/*! Iterator to the front of queue */
