@@ -199,8 +199,19 @@ public:
 	}
 };
 
+struct queue_base_common {
+	void length_error() const
+	{
+#if __cpp_exceptions
+		throw std::length_error("aw::queue");
+#else
+		assert(!"length_error");
+#endif
+	}
+};
+
 template<typename T, typename Allocator>
-struct queue_base {
+struct queue_base : protected queue_base_common {
 	using allocator_type   = Allocator;
 	using allocator_traits = std::allocator_traits<Allocator>;
 	using reference        = typename allocator_type::reference;
@@ -272,14 +283,6 @@ protected:
 		return static_cast<size_type>(impl.end - impl.begin);
 	}
 
-	void length_error() const
-	{
-#if __cpp_exceptions
-		throw std::length_error("aw::queue");
-#else
-		assert(!"length_error");
-#endif
-	}
 
 	struct impl : Allocator {
 		impl() noexcept = default;
