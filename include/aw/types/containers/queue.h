@@ -12,12 +12,33 @@
 #include <memory>
 #include <iterator>
 #include <algorithm>
+#include <aw/utility/exceptions.h>
+#include <aw/types/traits/conditional.h>
 
-// TODO: exception handling
 // TODO: insert and remove
+// TODO: assign
+// TODO: cleanup (allocation)
 
 namespace aw {
 namespace _impl {
+template<typename InputIt, typename ForwardIt>
+ForwardIt try_uninit_move(InputIt begin, InputIt end, ForwardIt output)
+{
+	using T = typename std::iterator_traits<InputIt>::value_type;
+	static_assert(std::is_nothrow_move_constructible<T>::value ||
+	              std::is_copy_constructible<T>::value,
+	              "Remove throw from your move constructor, you doofus!");
+
+	constexpr bool do_move = std::is_nothrow_move_constructible<T>::value;
+
+	using Iter = conditional<do_move, InputIt, std::move_iterator<InputIt>>;
+
+	auto beg_it = Iter{begin};
+	auto end_it = Iter{end};
+
+	return std::uninitialized_copy(beg_it, end_it, output);
+}
+
 template <typename Traits>
 struct const_traits {
 	using value_type        = typename Traits::value_type;
@@ -45,6 +66,7 @@ private:
 	{
 		return q->map_p(p);
 	}
+
 public:
 	queue_iterator() noexcept = default;
 
@@ -323,7 +345,8 @@ public:
 	/*! Create empty queue */
 	queue() /*noexcept(noexcept(Allocator()))*/ = default;
 
-	explicit queue(Allocator const& a) noexcept
+	explicit queue(Allocator const& a)
+	noexcept(std::is_nothrow_copy_constructible<Allocator>::value)
 		: Base(a)
 	{ }
 
@@ -670,7 +693,7 @@ private:
 		return impl.begin + (p - impl.head);
 	}
 
-	size_type next_size() const
+	size_type next_size() const noexcept
 	{
 		constexpr size_type min_size = 16;
 		size_type const old_size = allocated_size();
@@ -680,10 +703,18 @@ private:
 	void reallocate(size_type new_size)
 	{
 		pointer new_begin{ allocate(new_size) };
+		pointer new_tail = nullptr;
 
-		auto beg_it = std::make_move_iterator(begin());
-		auto end_it = std::make_move_iterator(end());
-		auto new_tail = std::uninitialized_copy(beg_it, end_it, new_begin);
+		AW__try {
+			new_tail = _impl::try_uninit_move(begin(), end(), new_begin);
+		} AW__catch(...) {
+			if (new_tail)
+				destroy(new_begin, new_tail);
+
+			deallocate(new_begin, new_size);
+
+			AW__rethrow;
+		}
 
 		destroy(impl.head, impl.tail);
 		deallocate(impl.begin, allocated_size());
