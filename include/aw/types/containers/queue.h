@@ -21,6 +21,14 @@
 
 namespace aw {
 namespace _impl {
+template<typename Iterator>
+using is_input_iter = void_if<std::is_convertible
+	<
+		typename std::iterator_traits<Iterator>::iterator_category,
+		 std::input_iterator_tag
+	>::value
+>;
+
 template<typename InputIt, typename ForwardIt>
 ForwardIt try_uninit_move(InputIt begin, InputIt end, ForwardIt output)
 {
@@ -339,23 +347,6 @@ private:
 	using Base::deallocate;
 	using Base::allocated_size;
 
-	template<typename Iterator, typename Sentinel>
-	void range_init(Iterator first, Sentinel last, std::input_iterator_tag)
-	{
-		for (; first != last; ++first)
-			emplace_back(*first);
-	}
-
-	template<typename Iterator, typename Sentinel>
-	void range_init(Iterator first, Sentinel last, std::forward_iterator_tag)
-	{
-		size_type const size = std::distance(first, last);
-		impl.begin = allocate(size);
-		impl.end   = impl.begin + size;
-		impl.head  = impl.begin;
-		impl.end   = std::uninitialized_copy(first, last, impl.head);
-	}
-
 public:
 	/*! Create empty queue */
 	queue() /*noexcept(noexcept(Allocator()))*/ = default;
@@ -373,24 +364,54 @@ public:
 	}
 
 	queue(queue&& q) noexcept
-		: Base(q)
+		: Base(std::move(q))
 	{ }
 
-	queue(std::initializer_list<value_type> l,
-	      Allocator const& a = Allocator())
-		: Base(a)
+	queue(queue&& q, Allocator const& alloc) noexcept
+		: Base(alloc)
 	{
-		for (auto& val : l)
+		if (alloc == Allocator(q.alloc())) {
+			swap(q);
+		} else {
+			// Can't use alloc to manage different memory ):
+			preallocate(std::distance(q.begin(), q.end()));
+
+			impl.tail = try_uninit_move(q.begin(), q.end(), impl.head);
+		}
+	}
+
+	queue(size_type n, Allocator const& alloc = Allocator())
+		: Base(alloc)
+	{
+		preallocate(n);
+
+		for (; n > 0; --n)
+			emplace_back();
+	}
+
+	queue(size_type n, const_reference val,
+	      Allocator const& alloc = Allocator())
+		: Base(alloc)
+	{
+		preallocate(n);
+
+		for (; n > 0; --n)
 			emplace_back(val);
 	}
 
-	template<typename Iterator, typename Sentinel>
-	queue(Iterator first, Sentinel last,
+	queue(std::initializer_list<value_type> list,
+	      Allocator const& alloc = Allocator())
+		: Base(alloc)
+	{
+		range_init(std::begin(list), std::end(list));
+	}
+
+	template<typename Iterator, typename = _impl::is_input_iter<Iterator>>
+	queue(Iterator first, Iterator last,
 	      Allocator const& a = Allocator())
 		: Base(a)
 	{
-		using iter_cat = typename std::iterator_traits<Iterator>::iterator_category;
-		range_init(first, last, iter_cat{});
+		range_init(first, last);
 	}
 
 	~queue()
@@ -538,21 +559,19 @@ public:
 	 */
 	void pop_front()
 	{
-		if (!empty()) {
-			allocator_traits::destroy(alloc(), impl.head);
-			impl.head = next_p(impl.head);
-		}
-
+		assert(!empty() && "pop_front() on empty queue.");
+		allocator_traits::destroy(alloc(), impl.head);
+		impl.head = next_p(impl.head);
 	}
+
 	/*!
 	 * Destroy element at the back of queue
 	 */
 	void pop_back()
 	{
-		if (!empty()) {
-			impl.tail = prev_p(impl.tail);
-			allocator_traits::destroy(alloc(), impl.tail);
-		}
+		assert(!empty() && "pop_back() on empty queue.");
+		impl.tail = prev_p(impl.tail);
+		allocator_traits::destroy(alloc(), impl.tail);
 	}
 
 	/*!
@@ -560,10 +579,7 @@ public:
 	 */
 	void push_front(const_reference val)
 	{
-		check_capacity();
-
-		impl.head = prev_p(impl.head);
-		allocator_traits::construct(alloc(), impl.head, val);
+		emplace_front(val);
 	}
 
 	/*!
@@ -571,10 +587,7 @@ public:
 	 */
 	void push_back(const_reference val)
 	{
-		check_capacity();
-
-		allocator_traits::construct(alloc(), impl.tail, val);
-		impl.tail = next_p(impl.tail);
+		emplace_back(val);
 	}
 
 	/*!
@@ -597,61 +610,73 @@ public:
 	 * Construct element at the front of queue
 	 */
 	template <typename... Args>
-	void emplace_front(Args... args)
+	void emplace_front(Args&&... args)
 	{
 		check_capacity();
 
 		impl.head = prev_p(impl.head);
-		allocator_traits::construct(alloc(), impl.head, std::forward<Args>(args)...);
+		construct(impl.head, std::forward<Args>(args)...);
 	}
 
 	/*!
 	 * Construct element at the end of queue
 	 */
 	template <typename... Args>
-	void emplace_back(Args... args)
+	void emplace_back(Args&&... args)
 	{
 		check_capacity();
 
-		allocator_traits::construct(alloc(), impl.tail, std::forward<Args>(args)...);
+		construct(impl.tail, std::forward<Args>(args)...);
 		impl.tail = next_p(impl.tail);
 	}
 
 	/*! Get element at the head of queue */
-	value_type front() const
+	const_reference front() const noexcept
 	{
+		assert(!empty() && "front() on empty queue.");
 		return *begin();
 	}
 
 	/*! Get element at the head of queue */
-	value_type& front() noexcept
+	reference front() noexcept
 	{
+		assert(!empty() && "front() on empty queue.");
 		return *begin();
 	}
 
 	/*! Get element at the tail of queue */
-	value_type back() const
+	const_reference back() const noexcept
 	{
+		assert(!empty() && "back() on empty queue.");
 		return *(end() - 1);
 	}
 
 	/*! Get element at the tail of queue */
-	value_type& back() noexcept
+	reference back() noexcept
 	{
+		assert(!empty() && "back() on empty queue.");
 		return *(end() - 1);
 	}
 
-	value_type operator[](size_type n) const
+	const_reference operator[](size_type n) const noexcept
 	{
+		assert(n < size() && "Index out of bounds.");
 		return begin()[n];
 	}
 
-	value_type& operator[](size_type n) noexcept
+	reference operator[](size_type n) noexcept
 	{
+		assert(n < size() && "Index out of bounds.");
 		return begin()[n];
 	}
 
 private:
+	template <typename... Args>
+	void construct(pointer p, Args&&... args)
+	{
+		allocator_traits::construct(alloc(), p, std::forward<Args>(args)...);
+	}
+
 	void destroy(pointer head, pointer tail)
 	{
 		for (; head != tail; head = next_p(head))
@@ -715,6 +740,14 @@ private:
 		return old_size + std::max(old_size, min_size);
 	}
 
+	void preallocate(size_type size)
+	{
+		impl.begin = allocate(size + 1);
+		impl.end   = impl.begin + size + 1;
+		impl.head  = impl.begin;
+		impl.tail  = impl.begin;
+	}
+
 	void reallocate(size_type new_size)
 	{
 		pointer new_begin{ allocate(new_size) };
@@ -740,6 +773,33 @@ private:
 		impl.head = new_begin;
 		impl.tail = new_tail;
 	}
+
+
+	template<typename Iterator, typename Sentinel>
+	void range_init_a(Iterator first, Sentinel last, std::input_iterator_tag)
+	{
+		preallocate(std::distance(first, last));
+
+		for (; first != last; ++first)
+			emplace_back(*first);
+	}
+
+	template<typename Iterator, typename Sentinel>
+	void range_init_a(Iterator first, Sentinel last, std::forward_iterator_tag)
+	{
+		preallocate(std::distance(first, last));
+
+		impl.tail  = std::uninitialized_copy(first, last, impl.head);
+	}
+
+	template<typename Iterator, typename Sentinel>
+	void range_init(Iterator first, Sentinel last)
+	{
+		using iter_cat = typename std::iterator_traits<Iterator>::iterator_category;
+		range_init_a(first, last, iter_cat{});
+	}
+
+
 
 	void check_capacity()
 	{
