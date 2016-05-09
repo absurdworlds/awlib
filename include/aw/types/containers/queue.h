@@ -205,6 +205,11 @@ struct queue_base {
 		return {alloc()};
 	}
 
+	size_type max_size() const noexcept
+	{
+		return allocator_traits::max_size(alloc());
+	}
+
 protected:
 	queue_base() noexcept = default;
 	queue_base(allocator_type const& a) noexcept
@@ -241,6 +246,10 @@ protected:
 	{
 		if (len == 0)
 			return nullptr;
+
+		if (len > max_size())
+			length_error();
+
 		return allocator_traits::allocate(alloc(), len);
 	}
 
@@ -255,6 +264,14 @@ protected:
 		return static_cast<size_type>(impl.end - impl.begin);
 	}
 
+	void length_error() const
+	{
+#if __cpp_exceptions
+		throw std::length_error("aw::queue");
+#else
+		assert(!"length_error");
+#endif
+	}
 
 	struct impl : Allocator {
 		impl() noexcept = default;
@@ -313,6 +330,7 @@ public:
 	friend const_iterator;
 
 	using Base::get_allocator;
+	using Base::max_size;
 
 private:
 	using Base::impl;
