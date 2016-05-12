@@ -10,6 +10,7 @@
 #ifndef aw_parameter_pack_h
 #define aw_parameter_pack_h
 #include <aw/utility/index_sequence.h>
+#include <aw/types/traits/conditional.h>
 namespace aw {
 using fold_dummy = int[];
 
@@ -31,5 +32,8 @@ void for_each_index(Func f, index_sequence<Is...>)
 {
 	for_each_argument(f, Is...);
 }
+
+template <class T, typename... Ts>
+constexpr bool is_in_pack = bool_or<std::is_same<T,Ts>::value...>;
 } // namespace aw
 #endif//aw_parameter_pack_h
