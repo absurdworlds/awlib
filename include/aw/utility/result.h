@@ -122,6 +122,28 @@ struct result {
 		destroy();
 	}
 
+	template<typename OtherT, typename OtherE>
+	result& operator=(result<OtherT,OtherE> const& other)
+	{
+		destroy();
+		is_error = other.is_error;
+		if (!is_error)
+			construct_value(other.value());
+		else
+			construct_error(other.error());
+	}
+
+	template<typename OtherT, typename OtherE>
+	result& operator=(result<OtherT,OtherE>&& other)
+	{
+		destroy();
+		is_error = other.is_error;
+		if (!is_error)
+			construct_value(std::move(other.value()));
+		else
+			construct_error(std::move(other.error()));
+	}
+
 	bool has_error() const
 	{
 		return is_error;
