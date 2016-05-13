@@ -345,7 +345,7 @@ public:
 	queue(queue const& q)
 		: Base(q.impl)
 	{
-		reallocate(q.size());
+		create_storage(q.size());
 		std::uninitialized_copy(q.begin(), q.end(), begin());
 	}
 
