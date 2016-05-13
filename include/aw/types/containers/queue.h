@@ -525,7 +525,7 @@ public:
 	void reserve(size_type n)
 	{
 		if (n < capacity())
-			reallocate(n);
+			reallocate(n + 1);
 	}
 
 	/*!
