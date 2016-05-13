@@ -748,6 +748,20 @@ private:
 		impl.tail  = impl.begin;
 	}
 
+	void set_storage(pointer begin, pointer end)
+	{
+		destroy(impl.head, impl.tail);
+		deallocate(impl.begin, allocated_size());
+
+		impl.begin = begin;
+		impl.end   = end;
+	}
+
+	void do_emplace_back()
+	{
+
+	}
+
 	void reallocate(size_type new_size)
 	{
 		pointer new_begin{ allocate(new_size) };
@@ -760,19 +774,15 @@ private:
 				destroy(new_begin, new_tail);
 
 			deallocate(new_begin, new_size);
-
 			AW__rethrow;
 		}
 
-		destroy(impl.head, impl.tail);
-		deallocate(impl.begin, allocated_size());
-
-		impl.begin = new_begin;
-		impl.end   = new_begin + new_size;
+		set_storage(new_begin, new_begin + new_size);
 
 		impl.head = new_begin;
 		impl.tail = new_tail;
 	}
+
 
 
 	template<typename Iterator, typename Sentinel>
@@ -798,7 +808,6 @@ private:
 		using iter_cat = typename std::iterator_traits<Iterator>::iterator_category;
 		range_init_a(first, last, iter_cat{});
 	}
-
 
 
 	void check_capacity()
