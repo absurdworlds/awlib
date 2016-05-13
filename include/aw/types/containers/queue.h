@@ -370,7 +370,7 @@ public:
 			swap(q);
 		} else {
 			// Can't use alloc to manage different memory ):
-			preallocate(std::distance(q.begin(), q.end()));
+			create_storage(std::distance(q.begin(), q.end()));
 
 			impl.tail = try_uninit_move(q.begin(), q.end(), impl.head);
 		}
@@ -382,7 +382,7 @@ public:
 	queue(size_type n, Allocator const& alloc = Allocator())
 		: Base(alloc)
 	{
-		preallocate(n);
+		create_storage(n);
 
 		for (; n > 0; --n)
 			emplace_back();
@@ -395,7 +395,7 @@ public:
 	      Allocator const& alloc = Allocator())
 		: Base(alloc)
 	{
-		preallocate(n);
+		create_storage(n);
 
 		for (; n > 0; --n)
 			emplace_back(val);
@@ -740,7 +740,7 @@ private:
 		return old_size + std::max(old_size, min_size);
 	}
 
-	void preallocate(size_type size)
+	void create_storage(size_type size)
 	{
 		impl.begin = allocate(size + 1);
 		impl.end   = impl.begin + size + 1;
@@ -778,7 +778,7 @@ private:
 	template<typename Iterator, typename Sentinel>
 	void range_init_a(Iterator first, Sentinel last, std::input_iterator_tag)
 	{
-		preallocate(std::distance(first, last));
+		create_storage(std::distance(first, last));
 
 		for (; first != last; ++first)
 			emplace_back(*first);
@@ -787,7 +787,7 @@ private:
 	template<typename Iterator, typename Sentinel>
 	void range_init_a(Iterator first, Sentinel last, std::forward_iterator_tag)
 	{
-		preallocate(std::distance(first, last));
+		create_storage(std::distance(first, last));
 
 		impl.tail  = std::uninitialized_copy(first, last, impl.head);
 	}
