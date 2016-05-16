@@ -396,8 +396,7 @@ public:
 	queue(size_type n, Allocator const& alloc = Allocator())
 		: Base(alloc, n + 1)
 	{
-		for (; n > 0; --n)
-			emplace_back();
+		impl.tail = std::uninitialized_fill_n(impl.begin, n, T{});
 	}
 
 	/*!
@@ -407,8 +406,7 @@ public:
 	      Allocator const& alloc = Allocator())
 		: Base(alloc, n + 1)
 	{
-		for (; n > 0; --n)
-			emplace_back(val);
+		impl.tail = std::uninitialized_fill_n(impl.begin, n, val);
 	}
 
 	/*!
