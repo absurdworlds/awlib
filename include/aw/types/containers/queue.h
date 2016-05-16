@@ -213,6 +213,13 @@ protected:
 		: impl(a)
 	{}
 
+	queue_base(allocator_type const& a, size_type n)
+	noexcept(std::is_nothrow_copy_constructible<Allocator>::value)
+		: impl(a)
+	{
+		create_storage(n);
+	}
+
 	queue_base(allocator_type&& a)
 	noexcept(std::is_nothrow_copy_constructible<Allocator>::value)
 		: impl(std::move(a))
@@ -259,6 +266,13 @@ protected:
 	size_type allocated_size() const noexcept
 	{
 		return static_cast<size_type>(impl.end - impl.begin);
+	}
+
+	void create_storage(size_type size)
+	{
+		impl.begin = allocate(size);
+		impl.end   = impl.begin + size;
+		impl.head  = impl.tail = impl.begin;
 	}
 
 
@@ -327,6 +341,7 @@ private:
 	using Base::allocate;
 	using Base::deallocate;
 	using Base::allocated_size;
+	using Base::create_storage;
 
 public:
 	/*! Create empty queue */
@@ -343,9 +358,8 @@ public:
 	 * Extra space is not copied.
 	 */
 	queue(queue const& q)
-		: Base(q.impl)
+		: Base(q.impl, q.size() + 1)
 	{
-		create_storage(q.size());
 		std::uninitialized_copy(q.begin(), q.end(), begin());
 	}
 
@@ -370,7 +384,7 @@ public:
 			swap(q);
 		} else {
 			// Can't use alloc to manage different memory ):
-			create_storage(std::distance(q.begin(), q.end()));
+			create_storage(std::distance(q.begin(), q.end()) + 1);
 
 			impl.tail = try_uninit_move(q.begin(), q.end(), impl.head);
 		}
@@ -380,10 +394,8 @@ public:
 	 * Create queue with \a n default-constructed elements
 	 */
 	queue(size_type n, Allocator const& alloc = Allocator())
-		: Base(alloc)
+		: Base(alloc, n + 1)
 	{
-		create_storage(n);
-
 		for (; n > 0; --n)
 			emplace_back();
 	}
@@ -393,10 +405,8 @@ public:
 	 */
 	queue(size_type n, const_reference val,
 	      Allocator const& alloc = Allocator())
-		: Base(alloc)
+		: Base(alloc, n + 1)
 	{
-		create_storage(n);
-
 		for (; n > 0; --n)
 			emplace_back(val);
 	}
@@ -406,7 +416,7 @@ public:
 	 */
 	queue(std::initializer_list<value_type> list,
 	      Allocator const& alloc = Allocator())
-		: Base(alloc)
+		: Base(alloc, list.size() + 1)
 	{
 		range_init(std::begin(list), std::end(list));
 	}
@@ -415,9 +425,8 @@ public:
 	 * Create from range
 	 */
 	template<typename Iterator, typename = _impl::is_input_iter<Iterator>>
-	queue(Iterator first, Iterator last,
-	      Allocator const& a = Allocator())
-		: Base(a)
+	queue(Iterator first, Iterator last, Allocator const& a = Allocator())
+		: Base(a, std::distance(first, last) + 1)
 	{
 		range_init(first, last);
 	}
@@ -740,14 +749,6 @@ private:
 		return old_size + std::max(old_size, min_size);
 	}
 
-	void create_storage(size_type size)
-	{
-		impl.begin = allocate(size + 1);
-		impl.end   = impl.begin + size + 1;
-		impl.head  = impl.begin;
-		impl.tail  = impl.begin;
-	}
-
 	void set_storage(pointer begin, pointer end)
 	{
 		destroy(impl.head, impl.tail);
@@ -788,8 +789,6 @@ private:
 	template<typename Iterator, typename Sentinel>
 	void range_init_a(Iterator first, Sentinel last, std::input_iterator_tag)
 	{
-		create_storage(std::distance(first, last));
-
 		for (; first != last; ++first)
 			emplace_back(*first);
 	}
@@ -797,8 +796,6 @@ private:
 	template<typename Iterator, typename Sentinel>
 	void range_init_a(Iterator first, Sentinel last, std::forward_iterator_tag)
 	{
-		create_storage(std::distance(first, last));
-
 		impl.tail  = std::uninitialized_copy(first, last, impl.head);
 	}
 
