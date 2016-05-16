@@ -231,6 +231,22 @@ protected:
 		impl.swap(other.impl);
 	}
 
+	/*
+	 * Move-construct with alternative allocator.
+	 *
+	 * If alloc != other.alloc, derived class must
+	 * move other's data into new storage.
+	 *
+	 */
+	queue_base(queue_base&& other, Allocator const& alloc) noexcept
+		: impl(alloc)
+	{
+		if (alloc == other.alloc)
+			impl.swap(other.impl);
+		else
+			create_storage(other.allocated_size());
+	}
+
 	~queue_base() noexcept
 	{
 		deallocate(impl.begin, allocated_size());
@@ -268,14 +284,6 @@ protected:
 		return static_cast<size_type>(impl.end - impl.begin);
 	}
 
-	void create_storage(size_type size)
-	{
-		impl.begin = allocate(size);
-		impl.end   = impl.begin + size;
-		impl.head  = impl.tail = impl.begin;
-	}
-
-
 	struct impl : Allocator {
 		impl() noexcept = default;
 
@@ -300,6 +308,14 @@ protected:
 		pointer begin = nullptr;
 		pointer end   = nullptr;
 	} impl;
+
+private:
+	void create_storage(size_type size)
+	{
+		impl.begin = allocate(size);
+		impl.end   = impl.begin + size;
+		impl.head  = impl.tail = impl.begin;
+	}
 };
 } // namespace _impl
 
@@ -341,7 +357,6 @@ private:
 	using Base::allocate;
 	using Base::deallocate;
 	using Base::allocated_size;
-	using Base::create_storage;
 
 public:
 	/*! Create empty queue */
@@ -378,14 +393,12 @@ public:
 	 * If `!(alloc == q.get_allocator())`, then operation is O(n).
 	 */
 	queue(queue&& q, Allocator const& alloc) noexcept
-		: Base(alloc)
+		: Base(q, alloc)
 	{
-		if (alloc == q.get_allocator()) {
-			swap(q);
-		} else {
-			// Can't use alloc to manage different memory ):
-			create_storage(std::distance(q.begin(), q.end()) + 1);
-
+		if (alloc != q.get_allocator()) {
+			// If memory can't be managed with new allocator,
+			// queue_base allocates new memory, but doesn't
+			// move its contents.
 			impl.tail = try_uninit_move(q.begin(), q.end(), impl.head);
 		}
 	}
