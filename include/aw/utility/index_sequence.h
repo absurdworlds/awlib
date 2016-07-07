@@ -13,7 +13,7 @@ namespace aw {
 template<size_t... I>
 using index_sequence = std::index_sequence<I...>;
 
-namespace detail {
+namespace _impl {
 template<size_t Amount, typename Ind2>
 struct index_shift;
 
@@ -29,13 +29,13 @@ template<size_t... I1, size_t... I2>
 struct index_cat<index_sequence<I1...>, index_sequence<I2...>> {
 	using type = index_sequence<I1..., I2...>;
 };
-} // namespace detail
+} // namespace _impl
 
 template <size_t Size, typename Ind>
-using index_shift = typename detail::index_shift<Size, Ind>::type;
+using index_shift = typename _impl::index_shift<Size, Ind>::type;
 
 template <typename Ind1, typename Ind2>
-using index_cat  = typename detail::index_cat<Ind1, Ind2>::type;
+using index_cat  = typename _impl::index_cat<Ind1, Ind2>::type;
 
 //! Alias for std::make_index_sequence, for consistency
 template <size_t Size>

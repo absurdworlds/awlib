@@ -278,13 +278,13 @@ T const& get(Vector<T,N> const& vec)
 	return vec[I];
 }
 
-namespace detail {
+namespace _impl {
 template<size_t... Is, typename T, size_t N>
 Vector<T,N-1> make_sub(Vector<T,N> const& vec, index_sequence<Is...>)
 {
 	return {get<Is>(vec)...};
 }
-} // namespace detail
+} // namespace _impl
 
 template<size_t Index, typename T, size_t N>
 Vector<T,N-1> sub(Vector<T,N> const& vec)
@@ -294,7 +294,7 @@ Vector<T,N-1> sub(Vector<T,N> const& vec)
 	        make_index_range<Index+1,N>
 	>{};
 
-	return detail::make_sub(vec, range);
+	return _impl::make_sub(vec, range);
 }
 
 //! Negate vector (reverse direction)

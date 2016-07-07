@@ -13,7 +13,7 @@
 #include <tuple>
 #include <utility>
 namespace aw {
-namespace detail {
+namespace _impl {
 template<typename T, size_t... I>
 std::array<T,sizeof...(I)+1>
 extend_array(std::array<T,sizeof...(I)>&& array, std::index_sequence<I...>)
@@ -27,20 +27,20 @@ convert_array(std::array<T,sizeof...(I)>&& array, std::index_sequence<I...>)
 {
 	return {array[I]...};
 }
-} // namespace detail
+} // namespace _impl
 
 template<typename T, size_t N>
 std::array<T,N+1> extend_array(std::array<T,N>&& array)
 {
 	auto index = std::make_index_sequence<N>{};
-	return detail::extend_array(std::forward<std::array<T,N>>(array), index);
+	return _impl::extend_array(std::forward<std::array<T,N>>(array), index);
 }
 
 template<typename L, typename T, size_t N>
 std::array<L,N> convert_array(std::array<T,N>&& array)
 {
 	auto index = std::make_index_sequence<N>{};
-	return detail::convert_array<L>(std::forward<std::array<T,N>>(array), index);
+	return _impl::convert_array<L>(std::forward<std::array<T,N>>(array), index);
 }
 
 template <typename Head, typename...Tail>
@@ -50,18 +50,18 @@ auto make_array(Head arg, Tail...args)
 	return values;
 }
 
-namespace detail {
+namespace _impl {
 template <size_t... I, typename T, size_t N>
 auto to_tuple(std::array<T,N> array, std::index_sequence<I...>)
 {
 	return std::make_tuple(array[I]...);
 }
-} // namespace detail
+} // namespace _impl
 
 template <typename T, size_t N>
 auto to_tuple(std::array<T,N> array)
 {
-	return detail::to_tuple(array, std::make_index_sequence<N>{});
+	return _impl::to_tuple(array, std::make_index_sequence<N>{});
 }
 } // namespace aw
 #endif//aw_types_array_h

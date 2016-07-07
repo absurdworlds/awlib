@@ -10,7 +10,7 @@
 #define aw_types_promote
 #include<aw/types/types.h>
 namespace aw {
-namespace detail {
+namespace _impl {
 template <typename T> struct Promote;
 
 template<> struct Promote<i8>  { using type = i16; };
@@ -25,10 +25,10 @@ template<> struct Promote<u64> { using type = u64; };
 
 template<> struct Promote<f32> { using type = f64; };
 template<> struct Promote<f64> { using type = f64; };
-} // namespace detail
+} // namespace _impl
 
 //! Promote arithmetic type to a next larger type (if available)
 template <typename T>
-using Promote = typename detail::Promote<T>::type;
+using Promote = typename _impl::Promote<T>::type;
 } // namespace aw
 #endif//aw_types_promote

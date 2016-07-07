@@ -35,8 +35,7 @@ using remove_reference_cv = std::remove_reference_t<std::remove_cv_t<T>>;
 template<typename T>
 using remove_reference_const = std::remove_reference_t<std::remove_const_t<T>>;
 
-
-namespace detail {
+namespace _impl {
 template <typename T> struct strip_pointers { using type = T; };
 template <typename T> struct strip_pointers<T*> {
 	using type = typename strip_pointers<T>::type;
@@ -47,9 +46,9 @@ template <typename T> struct strip_pointers<T const*> {
 template <typename T> struct strip_pointers<T volatile*> {
 	using type = typename strip_pointers<T>::type;
 };
-} // namespace detail
-template <typename T>
-using strip_pointers = typename detail::strip_pointers<T>::type;
+} // namespace _impl
 
+template <typename T>
+using strip_pointers = typename _impl::strip_pointers<T>::type;
 } // namespace aw
 #endif//aw_traits_strip

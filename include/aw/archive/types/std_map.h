@@ -15,9 +15,9 @@
 namespace aw {
 namespace arc {
 inline namespace v2 {
-namespace detail {
+namespace _impl {
 template <typename...Args> struct IsContainer<std::map<Args...>> : std::true_type{};
-} // namespace detail
+} // namespace _impl
 
 template<typename A, typename B>
 void save(OutputArchive& arc, std::map<A,B> const& map)

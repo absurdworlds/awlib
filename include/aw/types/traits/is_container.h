@@ -11,7 +11,7 @@
 #include <utility>
 #include <type_traits>
 namespace aw {
-namespace detail {
+namespace _impl {
 template<typename, typename = void>
 struct IsContainer : std::false_type {};
 
@@ -31,8 +31,8 @@ struct IsContainer<
 		decltype(std::declval<T>().cend())
 	>
 > : public std::true_type {};
-} // namespace detail
+} // namespace _impl
 
-constexpr auto IsContainer = detail::IsContainer<T>::value;
+constexpr auto IsContainer = _impl::IsContainer<T>::value;
 } // namespace aw
 #endif//aw_traits_is_container

@@ -11,15 +11,15 @@
 //#include <experimental/type_traits>
 #include <aw/types/traits/void_t.h>
 namespace aw {
-namespace detail {
+namespace _impl {
 template <class, template<class...> class Op, class... Args>
 struct detector : std::false_type {};
 
 template <template<class...> class Op, class... Args>
 struct detector<void_t<Op<Args...>>, Op, Args...> : std::true_type {};
-} // namespace detail
+} // namespace _impl
 
 template <template<class...> class Op, class... Args>
-constexpr auto is_detected = detail::detector<void, Op, Args...>::value;
+constexpr auto is_detected = _impl::detector<void, Op, Args...>::value;
 } // namespace aw
 #endif//aw_traits_detection

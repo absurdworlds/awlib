@@ -17,12 +17,12 @@
 namespace aw {
 namespace arc {
 inline namespace v2 {
-namespace detail {
+namespace _impl {
 template <typename T> struct IsContainer : std::false_type{};
-} // namespace detail
+} // namespace _impl
 
 template<typename T>
-constexpr auto IsContainer = detail::IsContainer<T>::value;
+constexpr auto IsContainer = _impl::IsContainer<T>::value;
 
 template<typename T>
 constexpr auto IsBasic = is_arithmetic<T> || is_string<T>;
@@ -41,7 +41,7 @@ enum class ObjectKind {
 	Polymorphic
 };
 
-namespace detail {
+namespace _impl {
 template<typename T, typename = void>
 struct kind_of {
 	constexpr static auto value = ObjectKind::Unknown;
@@ -66,10 +66,10 @@ template<typename T>
 struct kind_of<T, void_if<arc::IsContainer<T>>> {
 	constexpr static auto value = ObjectKind::List;
 };
-} // namespace detail
+} // namespace _impl
 
 template<typename T>
-constexpr ObjectKind kind_of = detail::kind_of<T>::value;
+constexpr ObjectKind kind_of = _impl::kind_of<T>::value;
 } // inline namespace v2
 } // namespace arc
 } // namespace aw
