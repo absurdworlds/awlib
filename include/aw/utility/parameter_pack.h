@@ -9,22 +9,14 @@
  */
 #ifndef aw_parameter_pack_h
 #define aw_parameter_pack_h
-#include <aw/utility/index_sequence.h>
+#include <aw/types/types.h>
 #include <aw/types/traits/conditional.h>
+#include <aw/utility/index_sequence.h>
+#include <aw/utility/fold.h>
 namespace aw {
-using fold_dummy = int[];
-
-#if __cplusplus >= 201500L
-#define AW_FOLD(expr) (void(expr), ...);
-#else
-#define AW_FOLD(expr) (void) fold_dummy { ((expr), 0)...  };
-#endif
-
 template <class Func, class... Args>
 void for_each_argument(Func f, Args&&... args) {
-	(void) fold_dummy{
-		(f(std::forward<Args>(args)), 0)...
-	};
+	AW_FOLD(f(std::forward<Args>(args)));
 }
 
 template<class Func, size_t...Is>
