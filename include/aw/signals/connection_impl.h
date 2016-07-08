@@ -103,9 +103,9 @@ private:
 	invoker_type invoke;
 };
 
-template<class policy, size_t size>
-struct connection_pool : policy, memory::growing_pool<size> {
-	using base = memory::growing_pool<size>;
+template<class policy, size_t size, size_t align>
+struct connection_pool : policy, memory::pool<size, align> {
+	using base = memory::pool<size, align>;
 	connection_pool() : base(4096) { }
 
 	void* alloc()
@@ -124,7 +124,8 @@ struct connection_pool : policy, memory::growing_pool<size> {
 template<class policy, typename... Args>
 void* connection_impl<policy,Args...>::operator new(size_t count)
 {
-	constexpr size_t size = sizeof(connection_impl);
+	constexpr size_t size  = sizeof(connection_impl);
+	constexpr size_t align = alignof(connection_impl);
 	using conn_pool = static_object<connection_pool<policy,size>>;
 	static auto& p = conn_pool::instance();
 	return p.alloc();
