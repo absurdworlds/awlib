@@ -7,139 +7,152 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef aw_memory_pool_h
-#define aw_memory_pool_h
+#ifndef aw_memory_growing_pool_h
+#define aw_memory_growing_pool_h
 #include <cassert>
 #include <new>
+#include <memory>
 #include <aw/types/types.h>
-#include <aw/utility/ranges/value_range.h>
 namespace aw {
 namespace memory {
+struct slab {
+	size_t size;
+	slab* next;
+};
+
+inline void*& next_of(void* ptr)
+{
+	return *static_cast<void**>(ptr);
+}
+
 /*!
- * Simplest memory pool implementation.
- * Allocates fixed-size chunks of memory, up to specified limit.
+ * Memory pool allocates fixed-size chunks of memory
+ * from a contiguous memory area, size of which is specified
+ * by user.
  */
-template<size_t Size>
+template<size_t Size, size_t Align>
 struct pool {
-	/*!
+	/*
 	 * Pool stores freelist inside beginning of each block,
 	 * so each block must be big enough to hold a pointer.
 	 */
-	static constexpr size_t block_size = std::max(Size, sizeof(void*));
+	static constexpr size_t size  = std::max(Size,  sizeof(void*));
+	static constexpr size_t align = std::max(Align, alignof(void*));
+	static constexpr size_t block_size = std::max(size, align);
 
 	/*!
-	 * Create bool with num_objects blocks of memory
+	 * Create pool with blocks allocated in
+	 * \a num_blocks sized slabs.
 	 */
-	pool(size_t num_objects)
-		: num_blocks(num_objects)
-	{
-		auto size = block_size*num_blocks;
-
-		start  = ::operator new(size, std::nothrow);
-		next   = start;
-
-
-		// almost forgot this part
-		for (auto i : range(0ul, num_blocks-1))
-			next_of(index_to_ptr(i)) = index_to_ptr(i+1);
-
-		next_of(index_to_ptr(num_blocks-1)) = nullptr;
-	}
+	pool(size_t num_blocks) noexcept
+		: num_blocks(num_blocks)
+	{ }
 
 	pool(pool const&) = delete;
-	pool(pool&& p)
-		: num_blocks(p.num_blocks), start(p.start), next(p.next)
-	{
-		p.num_blocks = 0;
-		p.start = nullptr;
-		p.next  = nullptr;
-	}
-
 	pool& operator=(pool const&) = delete;
-	pool& operator=(pool&& p)
-	{
-		num_blocks = p.num_blocks;
-		start = p.start;
-		next  = p.next;
-
-		p.num_blocks = 0;
-		p.start = nullptr;
-		p.next  = nullptr;
-	}
 
 	~pool()
 	{
-		if (start)
-			::operator delete(start, std::nothrow);
-	}
-
-	/*
-	 * Pointer to the first byte of pool
-	 */
-	char* begin() const
-	{
-		return static_cast<char*>(start);
-	}
-
-	/*
-	 * Pointer past the last byte of the pool
-	 */
-	char* end() const
-	{
-		return static_cast<char*>(start) + num_blocks*block_size;
+		deallocate_slabs();
 	}
 
 	/*!
 	 * Allocate memory from pool.
 	 * \return
-	 *    Pointer to allocated memory, or nullptr if
-	 *    no more space is left in the pool.
+	 *    Pointer to allocated memory, or nullptr
+	 *    on allocation failure (i.e. system is out of memory).
 	 */
-	void* alloc()
+	void* alloc() noexcept
 	{
+		if (next == nullptr)
+			next = create_slab();
+
+		if (next == nullptr)
+			return nullptr;
+
 		auto ret = next;
 
-		if (next != nullptr)
-			next = next_of(next);
+		next = next_of(next);
 
 		return ret;
 	}
 
 	/*!
 	 * Return memory, pointed by \a ptr to the pool.
-	 * \a ptr must point to memory, returned by alloc().
+	 * Result of passing \a ptr that wasn't returned by alloc()
+	 * is undefined.
 	 */
-	void* dealloc(void* ptr)
+	void dealloc(void* ptr) noexcept
 	{
-		assert(belongs_to(ptr));
 		next_of(ptr) = next;
 		next = ptr;
 	}
 
 private:
-	static void*& next_of(void* ptr)
-	{
-		return *static_cast<void**>(ptr);
-	}
-
-	void* index_to_ptr(size_t idx) const
-	{
-		assert(idx < num_blocks);
-		return begin() + block_size*idx;
-	}
-
-
-	bool belongs_to(void* ptr) const
-	{
-		return static_cast<char*>(ptr) >= begin() &&
-		       static_cast<char*>(ptr) < end();
-	}
-
 	size_t num_blocks;
 
-	void* start;
-	void* next;
+	slab* current = nullptr;
+	void* next    = nullptr;
+
+	void* get_ptr(void* begin, size_t idx) const
+	{
+		assert(idx < num_blocks);
+		return static_cast<char*>(begin) + block_size*idx;
+	}
+
+	void init_blocks(void* ptr)
+	{
+		for (auto i : range(0ul, num_blocks-1))
+			next_of(get_ptr(ptr, i)) = get_ptr(ptr, i+1);
+
+		next_of(get_ptr(ptr, num_blocks-1)) = nullptr;
+	}
+
+	void* create_slab()
+	{
+		static constexpr size_t slab_size {
+			std::max(sizeof(slab), alignof(slab))
+		};
+
+		auto full_size = slab_size + block_size * (num_blocks + 1);
+
+		slab* new_slab = (slab*)::operator new(full_size, std::nothrow);
+		new_slab->size = full_size;
+		new_slab->next = current;
+		current = new_slab;
+
+		void* ptr = (char*)new_slab + sizeof(slab);
+
+		std::align(align, size, ptr, full_size);
+
+		init_blocks(ptr);
+
+		return ptr;
+	}
+
+	void deallocate_slabs()
+	{
+		while (current) {
+			auto next = current->next;
+			::operator delete((void*)current);
+			current = next;
+		}
+	}
 };
+
+/*!
+ * Memory pool for objects of specific type.
+ */
+template<typename T>
+struct specific_pool : pool<sizeof(T), alignof(T)> {
+	using base_type = pool<sizeof(T), alignof(T)>;
+	using base_type::block_size;
+
+	specific_pool(size_t num_objects)
+		: pool(num_objects)
+	{}
+};
+
 } // namespace memory
 } // namespace aw
-#endif//aw_memory_pool_h
+#endif//aw_memory_growing_pool_h
