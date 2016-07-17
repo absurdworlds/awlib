@@ -4,6 +4,7 @@ ipch/*
 ipch/*/
 ipch/*/*
 build/*
+docs/documentation
 a.out
 *.o
 *.so
