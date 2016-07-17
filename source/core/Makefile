@@ -1,9 +1,9 @@
 RootPath = ../..
-Sources = Logger.cpp SettingsManager.cpp
-#	  SettingsManager.cpp HDFSettingsLoader.cpp ModelLoader.cpp \
-#	  FileSystem.cpp HrenginShell.cpp \
+Sources = SettingsManager.cpp
+#	  HDFSettingsLoader.cpp ModelLoader.cpp \
+#	  FileSystem.cpp HrenginShell.cpp
 Defines = AW_MODULE_CORE
-Libraries = 
+Libraries = awlogger
 ProjectName = awcore
 Executable = false
 
