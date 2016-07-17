@@ -20,6 +20,9 @@ platform:
 utility:
 	@ $(MAKE) -C 'source/utility' $(TARGET)
 
+logger:
+	@ $(MAKE) -C 'source/logger' $(TARGET)
+
 # tools
 hpacker:
 	@ $(MAKE) -C 'source/hpacker' $(TARGET)
