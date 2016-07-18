@@ -46,22 +46,31 @@ struct connection {
 	void* operator new(size_t count);
 	void operator delete(void* ptr);
 
-protected:
+private:
 	template<class P, typename S>
 	friend class signal;
 
+	/*!
+	 * Constructs connection between signal and observer,
+	 * which automatically registers itself.
+	 * Should never be called manually.
+	 */
+	connection(signal_type& sig, observer_type& obs);
+
 	template<typename T, typename...Args>
 	connection(signal_type& sig, T& obj, mem_fn<void(T*,Args...)> fn)
-		: sender(&sig), receiver(&obj)
+		: connection(sig, obj)
 	{
 		invoker = (void*)Invoker<Args...>::template invoke<T>;
 		storage = reinterpret_any<storage_type>(fn);
 	}
 
-	connection(signal_type& impl, connection& other)
-	        : sender(&impl), receiver(other.receiver), invoker(other.invoker),
-		  storage_type(other.storage)
-	{ }
+	connection(signal_type& sig, connection const& other)
+	        : connection(sig, *other.observer)
+	{
+		invoker = other.invoker;
+		storage = other.storage;
+	}
 
 	connection* clone(signal_type& temp) const
 	{
@@ -74,7 +83,6 @@ protected:
 		sizeof(unknown_mem_fn),
 		alignof(unknown_mem_fn)
 	>::type;
-
 
 	template<typename...Args>
 	struct Invoker {
@@ -94,21 +102,18 @@ protected:
 		}
 	};
 
-
 	template<typename... Args>
 	void invoke(Args&&...args)
 	{
-		auto inv = Invoker<Args...>::cast(invoker);
-		inv(storage, receiver, std::forward<Args>(args)...);
+		auto invoker = Invoker<Args...>::cast(this->invoker);
+		invoker(storage, receiver, std::forward<Args>(args)...);
 	}
 
-private:
 	signal_type* sender;
 	observer_type* receiver;
 
 	void* invoker;
 	storage_type storage;
-
 };
 
 template<class policy>

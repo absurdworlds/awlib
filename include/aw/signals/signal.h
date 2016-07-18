@@ -39,10 +39,8 @@ public:
 		typename policy::lock_type lock(*impl);
 
 		signal temp;
-		for (auto& pair : impl->connections) {
-			auto& conn = pair.first;
-			temp.impl->insert(conn.clone(temp.impl));
-		}
+		for (auto& pair : impl->connections)
+			pair.first.clone(temp.impl);
 		return temp;
 	}
 
@@ -53,15 +51,7 @@ public:
 	template<class T>
 	connection<policy>& connect(T& obj, mem_fn<void(T*,Args...)> func)
 	{
-		auto conn = new connection<policy>{*impl, obj, func};
-
-		typename policy::lock_n_type lock(*impl, obj);
-
-		impl->insert(conn);
-
-		observer_access::connect(&obj, conn);
-
-		return *conn;
+		return *new connection<policy>{*impl, obj, func};
 	}
 
 	/*!
@@ -87,6 +77,23 @@ public:
 };
 
 template<class policy>
+connection<policy>::connection(signal_type& sig, observer_type& obs)
+	: sender(&sig), receiver(&obs)
+{
+	typename policy::lock_n_type lock(sig, obs);
+
+	sig.insert(this);
+	observer_access::connect(*receiver, this);
+}
+
+template<class policy>
+connection<policy>::~connection()
+{
+	typename policy::lock_type lock(*receiver);
+	observer_access::disconnect(*receiver, this);
+}
+
+template<class policy>
 void connection<policy>::disconnect()
 {
 	typename policy::lock_type lock(*sender);
@@ -97,13 +104,6 @@ template<class policy>
 signal_base<policy>& connection<policy>::source() const
 {
 	return *sender->parent;
-}
-
-template<class policy>
-connection<policy>::~connection()
-{
-	typename policy::lock_type lock(*receiver);
-	observer_access::disconnect(*receiver, this);
 }
 } // namespace impl
 } // namespace v1

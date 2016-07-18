@@ -169,7 +169,6 @@ protected:
 	// data locality for reduced class size
 	std::unique_ptr<signal_impl<policy>> impl{new signal_impl<policy>{this}};
 };
-
 } // namespace v1
 } // namespace impl
 } // namespace signals

@@ -95,23 +95,20 @@ struct signal;
 template<class policy, typename...Args>
 struct connection_base;
 
-/*
- * See attorney idiom (or something like that)
+/*!
+ * Ensures that only connection can add and remove itself
+ * to/from observer.
+ *
+ * See attorney idiom.
  */
 class observer_access {
-	template<class policy, class signature>
-	friend class signal;
-
-	template<class policy>
-	friend class signal_base;
-
 	template<class policy>
 	friend class connection;
 
 	template<class policy>
-	static void connect(observer<policy>* s, connection<policy>* c)
+	static void connect(observer<policy>& s, connection<policy>* c)
 	{
-		s->add(c);
+		s.add(c);
 	}
 
 	template<class policy>
