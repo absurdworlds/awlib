@@ -49,10 +49,9 @@ public:
 	 * Each time signal is called, it will call each of callbacks.
 	 */
 	template<class T>
-	auto connect(T& obj, mem_fn<void(T*,Args...)> fn)
-	-> connection_ref<policy, signature>
+	connection<policy>& connect(T& obj, mem_fn<void(T*,Args...)> fn)
 	{
-		return {*connection_access::make(*impl, obj, fn)};
+		return *connection_access::make(*impl, obj, fn);
 	}
 
 	/*!
