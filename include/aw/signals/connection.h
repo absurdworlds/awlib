@@ -30,14 +30,13 @@ struct signal;
 
 template<class policy>
 struct connection {
-	using signal_type   = signal_base<policy>;
-	using signal_i_type = signal_impl<policy>;
+	using signal_type   = signal_impl<policy>;
 	using observer_type = observer<policy>;
 
 	~connection();
 	void disconnect();
 
-	signal_type& source() const;
+	signal_base<policy>& source() const;
 
 	observer_type& target() const
 	{
@@ -85,25 +84,25 @@ protected:
 	friend class signal;
 
 	template<typename T, typename...Args>
-	connection(signal_i_type& sig, T& obj, mem_fn<void(T*,Args...)> fn)
+	connection(signal_type& sig, T& obj, mem_fn<void(T*,Args...)> fn)
 		: sender(&sig), receiver(&obj)
 	{
 		invoker = (void*)Invoker<Args...>::template invoke<T>;
 		storage = reinterpret_any<storage_type>(fn);
 	}
 
-	connection(signal_i_type& impl, connection& other)
+	connection(signal_type& impl, connection& other)
 	        : sender(&impl), receiver(other.receiver), invoker(other.invoker),
 		  storage_type(other.storage)
 	{ }
 
-	connection* clone(signal_i_type& temp) const
+	connection* clone(signal_type& temp) const
 	{
 		return new connection{temp, *this};
 	}
 
 private:
-	signal_i_type* sender;
+	signal_type* sender;
 	observer_type* receiver;
 
 	void* invoker;
