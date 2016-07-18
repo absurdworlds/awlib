@@ -89,7 +89,7 @@ private:
 	std::set<connection_type*> connections;
 };
 
-template<class threading_policy, class signature>
+template<class policy, class signature>
 struct signal;
 
 template<class policy, typename...Args>
@@ -105,8 +105,8 @@ class observer_access {
 	template<class policy>
 	friend class signal_base;
 
-	template<class policy, class...Args>
-	friend class connection_impl;
+	template<class policy>
+	friend class connection;
 
 	template<class policy>
 	static void connect(observer<policy>* s, connection<policy>* c)

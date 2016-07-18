@@ -113,7 +113,7 @@ struct signal_base {
 		 *
 		 * threadA: still waiting on temp
 		 */
-		auto temp = std::make_unique<signal_imp>();
+		auto temp = std::make_unique<signal_impl<policy>>();
 
 		typename policy::lock_type lock2(*temp);
 
@@ -167,21 +167,9 @@ protected:
 	// std::map can be quite large (24 - 56 bytes on different implementations)
 	// and one class can have several signals, so I'm willing to sacrifice
 	// data locality for reduced class size
-	std::unique_ptr<signal_imp> impl{new signal_imp{this}};
+	std::unique_ptr<signal_impl<policy>> impl{new signal_impl<policy>{this}};
 };
 
-template<class policy>
-void connection<policy>::disconnect()
-{
-	typename policy::lock_type lock(*sender);
-	sender->remove(this);
-}
-
-template<class policy>
-signal_base<policy>& connection<policy>::signal() const
-{
-	return *sender->parent;
-}
 } // namespace v1
 } // namespace impl
 } // namespace signals

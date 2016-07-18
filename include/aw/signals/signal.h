@@ -9,7 +9,7 @@
 #ifndef aw_signals_signal_h
 #define aw_signals_signal_h
 #include <aw/signals/signal_base.h>
-#include <aw/signals/connection_impl.h>
+#include <aw/signals/observer.h>
 namespace aw {
 namespace signals {
 inline namespace v1 {
@@ -23,17 +23,11 @@ class signal<policy, void(Args...)> : signal_base<policy> {
 	using base_type::impl;
 public:
 	using signature = void(Args...);
-	using connection_type = connection_impl<policy, Args...>;
 
 	signal() = default;
 	~signal() = default;
 
 	signal(signal&& other) = default;
-
-	static connection_type& conn_cast(connection<policy>* conn)
-	{
-		return *static_cast<connection_type*>(conn);
-	}
 
 	/*!
 	 * Clone a signal.
@@ -46,8 +40,8 @@ public:
 
 		signal temp;
 		for (auto& pair : impl->connections) {
-			auto conn = conn_cast(pair.first);
-			temp->impl->insert(conn.clone(temp));
+			auto& conn = pair.first;
+			temp.impl->insert(conn.clone(temp.impl));
 		}
 		return temp;
 	}
@@ -59,7 +53,7 @@ public:
 	template<class T>
 	connection<policy>& connect(T& obj, mem_fn<void(T*,Args...)> func)
 	{
-		auto conn = new connection_type{impl.get(), obj, func};
+		auto conn = new connection<policy>{*impl, obj, func};
 
 		typename policy::lock_n_type lock(*impl, obj);
 
@@ -74,27 +68,45 @@ public:
 	 * Emitting signal causes it to call each of connected
 	 * slots.
 	 */
-	void emit(Args...args)
+	void emit(Args&&...args)
 	{
 		typename policy::lock_type lock(*impl);
 
-		for (auto& pair : impl->connections) {
-			auto& func = conn_cast(pair.first);
-			func(args...);
-		}
+		for (auto& pair : impl->connections)
+			pair.first->invoke(std::forward<Args>(args)...);
 	}
 
 	/*!
 	 * Emit signal.
-	 * \see emit
+	 * \see emit()
 	 */
-	void operator()(Args...args)
+	void operator()(Args&&...args)
 	{
-		emit(args...);
+		emit(std::forward<Args>(args)...);
 	}
 };
-} // namespace v1
+
+template<class policy>
+void connection<policy>::disconnect()
+{
+	typename policy::lock_type lock(*sender);
+	sender->remove(this);
+}
+
+template<class policy>
+signal_base<policy>& connection<policy>::source() const
+{
+	return *sender->parent;
+}
+
+template<class policy>
+connection<policy>::~connection()
+{
+	typename policy::lock_type lock(*receiver);
+	observer_access::disconnect(*receiver, this);
+}
 } // namespace impl
+} // namespace v1
 } // namespace signals
 } // namespace aw
 #endif//aw_signals_signal_h

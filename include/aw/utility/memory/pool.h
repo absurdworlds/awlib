@@ -102,7 +102,7 @@ private:
 
 	void init_blocks(void* ptr)
 	{
-		for (auto i : range(0ul, num_blocks-1))
+		for (auto i = 0ul; i < num_blocks-1; ++i)
 			next_of(get_ptr(ptr, i)) = get_ptr(ptr, i+1);
 
 		next_of(get_ptr(ptr, num_blocks-1)) = nullptr;
@@ -149,7 +149,7 @@ struct specific_pool : pool<sizeof(T), alignof(T)> {
 	using base_type::block_size;
 
 	specific_pool(size_t num_objects)
-		: pool(num_objects)
+		: base_type(num_objects)
 	{}
 };
 
