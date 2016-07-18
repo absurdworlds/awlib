@@ -8,7 +8,8 @@
  */
 #ifndef aw_signals_observer_h
 #define aw_signals_observer_h
-#include <set>
+#include <vector>
+#include <algorithm>
 #include <aw/signals/connection.h>
 namespace aw {
 namespace signals {
@@ -42,20 +43,21 @@ struct observer : threading_policy {
 	/*!
 	 * Disconnect particular signal
 	 */
-	void disconnect(signal_base<threading_policy>& s)
+	void disconnect(signal_base<threading_policy>& sig)
 	{
 		typename threading_policy::lock_type lock(*this);
 
-		auto iter = std::begin(connections);
-		auto end  = std::end(connections);
-		while (iter != end) {
-			auto* sender = iter->second->signal();
-			if (&sender == &s) {
-				connections.erase(iter++);
-			} else {
-				++iter;
-			}
-		}
+		auto begin = std::begin(connections);
+		auto end   = std::end(connections);
+		auto pred  = [&sig] (connection_type* conn) {
+			auto& sender = conn->source();
+			return &sender == &sig;
+		};
+
+		begin = std::remove_if(begin, end, pred);
+
+		if (begin != end(connections))
+			connections.erase(begin, end(connections));
 	}
 
 	/*!
@@ -78,15 +80,18 @@ private:
 
 	void add(connection_type* conn)
 	{
-		connections.insert(conn);
+		connections.push_back(conn);
 	}
 
 	void remove(connection_type* conn)
 	{
-		connections.erase(conn);
+		auto iter = std::find(begin(connections), end(connections), conn);
+
+		if (iter != end(connections))
+			connections.erase(iter);
 	}
 
-	std::set<connection_type*> connections;
+	std::vector<connection_type*> connections;
 };
 
 template<class policy, class signature>
