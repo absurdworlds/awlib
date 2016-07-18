@@ -40,7 +40,7 @@ public:
 
 		signal temp;
 		for (auto& pair : impl->connections)
-			pair.first.clone(temp.impl);
+			connection_access::clone(pair.first, temp.impl);
 		return temp;
 	}
 
@@ -51,7 +51,7 @@ public:
 	template<class T>
 	connection<policy>& connect(T& obj, mem_fn<void(T*,Args...)> func)
 	{
-		return *new connection<policy>{*impl, obj, func};
+		return *connection_access::make(*impl, obj, func);
 	}
 
 	/*!
@@ -62,8 +62,10 @@ public:
 	{
 		typename policy::lock_type lock(*impl);
 
-		for (auto& pair : impl->connections)
-			pair.first->invoke(std::forward<Args>(args)...);
+		for (auto& pair : impl->connections) {
+			auto& conn = *pair.first;
+			connection_access::invoke(conn, std::forward<Args>(args)...);
+		}
 	}
 
 	/*!

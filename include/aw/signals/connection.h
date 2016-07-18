@@ -47,8 +47,7 @@ struct connection {
 	void operator delete(void* ptr);
 
 private:
-	template<class P, typename S>
-	friend class signal;
+	friend class connection_access;
 
 	/*!
 	 * Constructs connection between signal and observer,
@@ -70,11 +69,6 @@ private:
 	{
 		invoker = other.invoker;
 		storage = other.storage;
-	}
-
-	connection* clone(signal_type& temp) const
-	{
-		return new connection{temp, *this};
 	}
 
 	using unknown_mem_fn = mem_fn<void(_unknown*)>;
@@ -114,6 +108,35 @@ private:
 
 	void* invoker;
 	storage_type storage;
+};
+
+class connection_access {
+	template<class policy>
+	friend class signal_base;
+
+	template<class policy, class signature>
+	friend class signal;
+
+	template<class policy, typename... Args> static
+	void invoke(connection<policy>& conn, Args&&...args)
+	{
+		conn.invoke(std::forward<Args>(args)...);
+	}
+
+	template<class policy> static
+	auto clone(connection<policy> const& conn, signal_impl<policy>& sig)
+	{
+		return new connection<policy>{sig, conn};
+	}
+
+	template<class policy, typename T, typename...Args>
+	static auto
+	make(signal_impl<policy>& sig, T& obj, mem_fn<void(T*,Args...)> fn)
+	{
+		return new connection<policy>{sig, obj, fn};
+	}
+
+
 };
 
 template<class policy>
