@@ -15,8 +15,8 @@ namespace aw {
 namespace signals {
 inline namespace v1 {
 namespace impl {
-template<class threading_policy>
-struct observer : threading_policy {
+template<class policy>
+struct observer : policy {
 	observer() = default;
 
 	/*!
@@ -36,16 +36,16 @@ struct observer : threading_policy {
 	 */
 	observer(observer&& other)
 	{
-		typename threading_policy::lock_type lock(other);
+		typename policy::lock_type lock(other);
 		connections = std::move(other.connections);
 	}
 
 	/*!
 	 * Disconnect particular signal
 	 */
-	void disconnect(signal_base<threading_policy>& sig)
+	void disconnect(signal_base<policy>& sig)
 	{
-		typename threading_policy::lock_type lock(*this);
+		typename policy::lock_type lock(*this);
 
 		auto begin = std::begin(connections);
 		auto end   = std::end(connections);
@@ -65,7 +65,7 @@ struct observer : threading_policy {
 	 */
 	void disconnect_all()
 	{
-		typename threading_policy::lock_type lock(*this);
+		typename policy::lock_type lock(*this);
 
 		for (auto conn : connections)
 			conn->disconnect();
@@ -76,7 +76,7 @@ struct observer : threading_policy {
 private:
 	friend class observer_access;
 
-	using connection_type = connection<threading_policy>;
+	using connection_type = connection<policy>;
 
 	void add(connection_type* conn)
 	{

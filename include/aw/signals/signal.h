@@ -15,7 +15,7 @@ namespace signals {
 inline namespace v1 {
 namespace impl {
 template<class policy, typename signature>
-struct signal;
+class signal;
 
 template<class policy, typename...Args>
 class signal<policy, void(Args...)> : signal_base<policy> {
