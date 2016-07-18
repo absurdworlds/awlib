@@ -43,11 +43,29 @@ struct connection {
 		return *receiver;
 	}
 
-	template<typename... Args>
-	void invoke(Args&&...args)
+	void* operator new(size_t count);
+	void operator delete(void* ptr);
+
+protected:
+	template<class P, typename S>
+	friend class signal;
+
+	template<typename T, typename...Args>
+	connection(signal_type& sig, T& obj, mem_fn<void(T*,Args...)> fn)
+		: sender(&sig), receiver(&obj)
 	{
-		auto inv = Invoker<Args...>::cast(invoker);
-		inv(storage, receiver, std::forward<Args>(args)...);
+		invoker = (void*)Invoker<Args...>::template invoke<T>;
+		storage = reinterpret_any<storage_type>(fn);
+	}
+
+	connection(signal_type& impl, connection& other)
+	        : sender(&impl), receiver(other.receiver), invoker(other.invoker),
+		  storage_type(other.storage)
+	{ }
+
+	connection* clone(signal_type& temp) const
+	{
+		return new connection{temp, *this};
 	}
 
 	using unknown_mem_fn = mem_fn<void(_unknown*)>;
@@ -76,29 +94,12 @@ struct connection {
 		}
 	};
 
-	void* operator new(size_t count);
-	void operator delete(void* ptr);
 
-protected:
-	template<class P, typename S>
-	friend class signal;
-
-	template<typename T, typename...Args>
-	connection(signal_type& sig, T& obj, mem_fn<void(T*,Args...)> fn)
-		: sender(&sig), receiver(&obj)
+	template<typename... Args>
+	void invoke(Args&&...args)
 	{
-		invoker = (void*)Invoker<Args...>::template invoke<T>;
-		storage = reinterpret_any<storage_type>(fn);
-	}
-
-	connection(signal_type& impl, connection& other)
-	        : sender(&impl), receiver(other.receiver), invoker(other.invoker),
-		  storage_type(other.storage)
-	{ }
-
-	connection* clone(signal_type& temp) const
-	{
-		return new connection{temp, *this};
+		auto inv = Invoker<Args...>::cast(invoker);
+		inv(storage, receiver, std::forward<Args>(args)...);
 	}
 
 private:
