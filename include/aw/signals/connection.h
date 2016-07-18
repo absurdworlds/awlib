@@ -48,6 +48,7 @@ struct connection {
 
 private:
 	friend class connection_access;
+	friend class connection_invoker;
 
 	/*!
 	 * Constructs connection between signal and observer,
@@ -117,12 +118,6 @@ class connection_access {
 	template<class policy, class signature>
 	friend class signal;
 
-	template<class policy, typename... Args> static
-	void invoke(connection<policy>& conn, Args&&...args)
-	{
-		conn.invoke(std::forward<Args>(args)...);
-	}
-
 	template<class policy> static
 	auto clone(connection<policy> const& conn, signal_impl<policy>& sig)
 	{
@@ -135,8 +130,62 @@ class connection_access {
 	{
 		return new connection<policy>{sig, obj, fn};
 	}
+};
 
+class connection_invoker {
+	template<class policy, class signature>
+	friend class signal;
 
+	template<class policy, class signature>
+	friend class connection_ref;
+
+	template<class policy, typename... Args> static
+	void invoke(connection<policy>& conn, Args&&...args)
+	{
+		conn.invoke(std::forward<Args>(args)...);
+	}
+};
+
+/*!
+ * Connection_ref allows to invoke a single connection.
+ */
+template<class policy, class signature>
+struct connection_ref;
+
+template<class policy, typename...Args>
+struct connection_ref<policy, void(Args...)> {
+	connection_ref(connection<policy>& conn)
+		: conn(&conn)
+	{}
+
+	connection_ref& operator=(connection_ref const& other) = default;
+	connection_ref& operator=(connection<policy>& conn)
+	{
+		this->conn = conn;
+	}
+
+	void disconnect()
+	{
+		conn->disconnect();
+	}
+
+	void operator()(Args&&...args)
+	{
+		connection_invoker::invoke(*conn, std::forward<Args>(args)...);
+	}
+
+	operator connection<policy>&()
+	{
+		return *conn;
+	}
+
+	operator connection<policy> const&() const
+	{
+		return *conn;
+	}
+
+private:
+	connection<policy>* conn;
 };
 
 template<class policy>

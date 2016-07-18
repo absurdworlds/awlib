@@ -49,9 +49,10 @@ public:
 	 * Each time signal is called, it will call each of callbacks.
 	 */
 	template<class T>
-	connection<policy>& connect(T& obj, mem_fn<void(T*,Args...)> func)
+	auto connect(T& obj, mem_fn<void(T*,Args...)> fn)
+	-> connection_ref<policy, signature>
 	{
-		return *connection_access::make(*impl, obj, func);
+		return {*connection_access::make(*impl, obj, fn)};
 	}
 
 	/*!
@@ -64,7 +65,7 @@ public:
 
 		for (auto& pair : impl->connections) {
 			auto& conn = *pair.first;
-			connection_access::invoke(conn, std::forward<Args>(args)...);
+			connection_invoker::invoke(conn, std::forward<Args>(args)...);
 		}
 	}
 
