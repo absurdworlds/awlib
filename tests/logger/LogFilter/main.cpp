@@ -44,4 +44,9 @@ int main()
 	filter.log(Log::Info, "test6()", "starting");
 	filter.log(Log::Info, "test6()", "test: annoying_message");
 	filter.log(Log::Info, "test6()", "test: annoying_message");
+
+	filter.setMinLevel(Log::Warning);
+	filter.log(Log::Info,    "main()", "test7");
+	filter.log(Log::Warning, "main()", "test8");
+	filter.log(Log::Error,   "main()", "test9");
 }

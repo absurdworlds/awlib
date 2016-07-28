@@ -44,6 +44,17 @@ struct AW_LOG_EXP LogFilter : MultiLog {
 	 * By default LogFilter matches any message.
 	 */
 	LogFilter() = default;
+
+	/*!
+	 * Construct LogFilter with minimum logging level.
+	 */
+	LogFilter(Log::Level minLevel)
+		: minLevel(minLevel)
+	{}
+
+	/*!
+	 * Construct LogFilter with specified filters.
+	 */
 	LogFilter(Filter src, Filter msg)
 		: src_filter(src), msg_filter(msg)
 	{}
@@ -68,7 +79,18 @@ struct AW_LOG_EXP LogFilter : MultiLog {
 		msg_filter = regex;
 	}
 
+	void setMinLevel(Log::Level level)
+	{
+		minLevel = level;
+	}
+
+	Log::Level getMinLevel() const
+	{
+		return minLevel;
+	}
+
 private:
+	Log::Level minLevel = Log::Info;
 	Filter src_filter;
 	Filter msg_filter;
 };

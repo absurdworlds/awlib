@@ -27,6 +27,8 @@ bool LogFilter::Filter::apply(std::string msg)
 
 void LogFilter::log(Log::Level level, std::string const& src, std::string const& msg)
 {
+	if (level < minLevel)
+		return;
 	if (!src_filter.apply(src) || !msg_filter.apply(msg))
 		return;
 	MultiLog::log(level, src, msg);
