@@ -30,6 +30,7 @@ template <typename U, typename... Ts>
 constexpr size_t get_index = _impl::get_index<U, Ts...>::value;
 
 struct variant_shared {
+protected:
 	struct Destroy {
 		using return_type = void;
 
@@ -41,87 +42,104 @@ struct variant_shared {
 	};
 };
 
+
 template <typename... Ts>
 struct variant : variant_shared {
 	static constexpr size_t size  = std::max({sizeof(Ts)...});
 	static constexpr size_t align = std::max({alignof(Ts)...});
 
-	using Storage = typename std::aligned_storage<size, align>::type;
-
+	/*!
+	 * Constructs empty variant.
+	 */
 	variant() = default;
 
+	/*!
+	 * Construct variant holding a value of type T.
+	 *
+	 * \note
+	 * I decided to not allow constructing variant from types,
+	 * which are not included in type list, but can be converted
+	 * to one of these types.
+	 * (It requires either complicated template magic to fire static assert
+	 *  when this is ambiguous, reshuffle template list like in Loki library,
+	 *  or just live with unexpected types being constructed)
+	 */
 	template<typename T>
 	variant(T const& value)
 	{
 		construct<T>(value);
 	}
 
+	/*!
+	 * Copy variant from another
+	 */
+	variant(variant const& other)
+	{
+		if (other.empty()) {
+			reset();
+			return;
+		}
+
+		other.apply(Copy{*this});
+
+	}
+
+	/*!
+	 * Move variant from another
+	 */
+	variant(variant&& other)
+	{
+		if (other.empty()) {
+			reset();
+			return;
+		}
+
+		other.apply(Move{*this});
+		other.reset();
+	}
+
+	/*!
+	 * Move variant from a subset variant type
+	 */
 	template<typename... Os>
 	variant(variant<Os...> const& other)
 	{
-		if (other.empty())
-			return;
+		static_assert(!is_same<variant<Ts...>, variant<Os...>>,
+		              "Non-template constructor should be used for variant of same type.");
 
-		index = other.apply(GetIndex{});
+		if (other.empty()) {
+			reset();
+			return;
+		}
+
 		other.apply(Copy{*this});
 
 	}
 
+	/*!
+	 * Move variant from a subset variant type
+	 */
 	template<typename... Os>
 	variant(variant<Os...>&& other)
 	{
-		if (other.empty())
+		static_assert(!is_same<variant<Ts...>, variant<Os...>>,
+		              "Non-template constructor should be used for variant of same type.");
+
+		if (other.empty()) {
+			reset();
 			return;
-
-		index = other.apply(GetIndex{});
-		other.apply(Move{*this});
-		other.reset();
-	}
-
-	variant(variant const& other)
-	{
-		if (other.empty())
-			return;
-
-		other.apply(Copy{*this});
-
-	}
-
-	variant(variant&& other)
-	{
-		if (other.empty())
-			return;
+		}
 
 		other.apply(Move{*this});
 		other.reset();
-	}
-
-	template<typename... Os>
-	variant& operator=(variant<Os...> const& other)
-	{
-		if (other.empty())
-			return *this;
-
-		index = other.apply(GetIndex{});
-		other.apply(Copy{*this});
-		return *this;
-	}
-
-	template<typename... Os>
-	variant& operator=(variant<Os...>&& other)
-	{
-		if (other.empty())
-			return *this;
-
-		other.apply(Move{*this});
-		other.reset();
-		return *this;
 	}
 
 	variant& operator=(variant const& other)
 	{
-		if (other.empty())
+		if (other.empty()) {
+			reset();
 			return *this;
+		}
 
 		other.apply(Copy{*this});
 		return *this;
@@ -129,15 +147,52 @@ struct variant : variant_shared {
 
 	variant& operator=(variant&& other)
 	{
-		if (other.empty())
+		if (other.empty()) {
+			reset();
 			return *this;
+		}
 
 		other.apply(Move{*this});
 		other.reset();
 		return *this;
 	}
 
+	template<typename... Os>
+	variant& operator=(variant<Os...> const& other)
+	{
+		static_assert(!is_same<variant<Ts...>, variant<Os...>>,
+		              "Non-template operator should be used for variant of same type.");
 
+		if (other.empty()) {
+			reset();
+			return *this;
+		}
+
+		other.apply(Copy{*this});
+		return *this;
+	}
+
+	template<typename... Os>
+	variant& operator=(variant<Os...>&& other)
+	{
+		static_assert(!is_same<variant<Ts...>, variant<Os...>>,
+		              "Non-template operator should be used for variant of same type.");
+
+		if (other.empty()) {
+			reset();
+			return *this;
+		}
+
+		other.apply(Move{*this});
+		other.reset();
+		return *this;
+	}
+
+	/*!
+	 * Set variant to value v of type T.
+	 * Uses assignments if variant already contains a value of type T,
+	 * or destroys current value if it is of a different type.
+	 */
 	template<typename T>
 	void set(T const& v)
 	{
@@ -149,6 +204,9 @@ struct variant : variant_shared {
 		}
 	}
 
+	/*!
+	 * Sets variant only when types match, or variant is empty.
+	 */
 	template<typename T>
 	bool try_set(T const& v)
 	{
@@ -163,6 +221,11 @@ struct variant : variant_shared {
 		return false;
 	}
 
+	/*!
+	 * Extract value from variant.
+	 * \return
+	 *     true if types match and \a target was modified, false otherwise.
+	 */
 	template<typename T>
 	bool get(T& target) const
 	{
@@ -173,6 +236,9 @@ struct variant : variant_shared {
 		return false;
 	}
 
+	/*!
+	 * Extract value from variant.
+	 */
 	template<typename T>
 	std::experimental::optional<T> get() const
 	{
@@ -182,6 +248,9 @@ struct variant : variant_shared {
 		return std::experimental::nullopt;
 	}
 
+	/*!
+	 * Destroy current value and mark variant as empty.
+	 */
 	void reset()
 	{
 		if (empty())
@@ -197,17 +266,26 @@ struct variant : variant_shared {
 	enum class index_t : size_t { };
 	static constexpr index_t invalid = index_t(std::numeric_limits<size_t>::max());
 
+	/*!
+	 * Check if variant is empty.
+	 */
 	bool empty() const
 	{
 		return index == invalid;
 	}
 
+	/*!
+	 * Check if variant contains type T.
+	 */
 	template<typename T>
 	bool check_type() const
 	{
 		return index == index_t(get_index<T, Ts...>);
 	}
 
+	/*
+	 * Get index of currently stored type.
+	 */
 	index_t type_index() const
 	{
 		return index;
@@ -257,6 +335,9 @@ private:
 	friend class variant;
 
 	// Helpers
+	/*
+	 * Constructs new object of type T and marks T as current type.
+	 */
 	template<typename T, typename... Args>
 	void construct(Args&&... args)
 	{
@@ -264,18 +345,22 @@ private:
 		new (&storage) T(std::forward<Args>(args)...);
 	}
 
+	/*
+	 * Calls assignment operator on currently held object.
+	 * Doesn't do typechecking, that should be done by public interface.
+	 */
 	template<typename T>
 	void assign(T const& other)
 	{
 		*reinterpret_cast<T*>(&storage) = other;
 	}
 
+	/*
+	 * Destroys currently held value by applying Destroy functor.
+	 */
 	void destroy()
 	{
 		apply(Destroy{});
-
-		if (_DEBUG)
-			memset(&storage, sizeof(storage), 0);
 	}
 
 	// Functors
@@ -328,6 +413,12 @@ private:
 		return f(*reinterpret_cast<T const*>(storage), std::forward<Args>(args)...);
 	}
 
+	/*
+	 * TODO: check for degenerate cases: variant<> and variant<T>
+	 */
+	/*
+	 * Uses dispatch table to select appropriate functor.
+	 */
 	template<typename Functor, typename...Args>
 	auto apply_impl(Functor f, Args&&... args) -> typename Functor::return_type
 	{
@@ -357,6 +448,8 @@ private:
 	}
 
 	// Storage
+	using Storage = typename std::aligned_storage<size, align>::type;
+
 	index_t index = invalid;
 	Storage storage;
 };
