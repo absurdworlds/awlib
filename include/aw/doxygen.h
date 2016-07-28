@@ -16,8 +16,14 @@
  *
  */
 
+/*!
+ * \defgroup logging Loggers
+ *
+ * Logging facilities.
+ */
 
 /*!
+ * \brief
  * Primary namespace. Contains everything else.
  */
 namespace aw {
@@ -64,6 +70,7 @@ namespace itd {}
 namespace io {}
 
 /*!
+ * \ingroup logging
  * \brief
  * Interfaces/tools for logging.
  */

@@ -16,11 +16,35 @@ inline namespace log {
  * LogFilter redirects messages that match the regex to other log.
  */
 struct AW_LOG_EXP LogFilter : MultiLog {
+	struct Filter {
+		/*!
+		 * By default Filter inlcudes everything and excludes nothing
+		 */
+		Filter() = default;
+		Filter(std::regex include)
+			: include{include}
+		{}
+		Filter(std::regex include, std::regex exclude)
+			: include{include}, exclude{exclude}
+		{}
+
+		Filter(Filter const& other) = default;
+		Filter(Filter&& other) = default;
+
+		Filter& operator=(Filter const& other) = default;
+		Filter& operator=(Filter&& other) = default;
+
+		bool apply(std::string msg);
+
+		std::regex include{".?"};
+		std::regex exclude{};
+	};
+
 	/*!
 	 * By default LogFilter matches any message.
 	 */
 	LogFilter() = default;
-	LogFilter(std::regex src, std::regex msg)
+	LogFilter(Filter src, Filter msg)
 		: src_filter(src), msg_filter(msg)
 	{}
 
@@ -34,19 +58,19 @@ struct AW_LOG_EXP LogFilter : MultiLog {
 	         std::string const& src,
 	         std::string const& msg) override;
 
-	void setSourceFilter(std::regex regex)
+	void setSourceFilter(Filter regex)
 	{
 		src_filter = regex;
 	}
 
-	void setMessageFilter(std::regex regex)
+	void setMessageFilter(Filter regex)
 	{
 		msg_filter = regex;
 	}
 
 private:
-	std::regex src_filter{".?"};
-	std::regex msg_filter{".?"};
+	Filter src_filter;
+	Filter msg_filter;
 };
 } // namespace log
 } // namespace aw

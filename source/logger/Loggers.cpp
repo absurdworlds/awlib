@@ -15,11 +15,19 @@ void MultiLog::log(Log::Level level, std::string const& src, std::string const& 
 		recv->log(level, src, msg);
 }
 
+bool LogFilter::Filter::apply(std::string msg)
+{
+	if (!std::regex_search(msg, include))
+		return false;;
+	if (std::regex_search(msg, exclude))
+		return false;
+	return true;
+}
+
+
 void LogFilter::log(Log::Level level, std::string const& src, std::string const& msg)
 {
-	if (!std::regex_search(src, src_filter))
-		return;
-	if (!std::regex_search(msg, msg_filter))
+	if (!src_filter.apply(src) || !msg_filter.apply(msg))
 		return;
 	MultiLog::log(level, src, msg);
 }

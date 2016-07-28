@@ -32,7 +32,7 @@ struct Log {
 	/*!
 	 * Write message to log.
 	 * \param level
-	 *    \see Log::Level
+	 *    See Log::Level.
 	 * \param src
 	 *    Name of the message fource (e.g. `main()`), allows
 	 *    implementations to filter messages by source.

@@ -27,4 +27,21 @@ int main()
 	filter.setMessageFilter(std::regex("[a-z]+[0-9]"));
 	filter.log(Log::Info, "main()", "test4");
 	filter.log(Log::Info, "main()", "testX");
+
+	filter.setMessageFilter(std::regex("[a-z]+[A-Z]"));
+	filter.log(Log::Info, "main()", "test4");
+	filter.log(Log::Info, "main()", "testX");
+
+	filter.setSourceFilter({});
+	filter.setMessageFilter({std::regex{".?"}, std::regex{"annoying_message"}});
+	filter.log(Log::Info, "main()", "annoying_message");
+	filter.log(Log::Info, "test5()", "starting");
+	filter.log(Log::Info, "test5()", "test: annoying_message");
+	filter.log(Log::Info, "test5()", "test: annoying_message");
+	filter.log(Log::Info, "test5()", "test: annoying_message");
+	filter.log(Log::Info, "test5()", "test: annoying_message");
+	filter.log(Log::Info, "test5()", "test: annoying_message");
+	filter.log(Log::Info, "test6()", "starting");
+	filter.log(Log::Info, "test6()", "test: annoying_message");
+	filter.log(Log::Info, "test6()", "test: annoying_message");
 }
