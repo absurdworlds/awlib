@@ -46,6 +46,8 @@ protected:
 
 template <typename... Ts>
 struct variant : variant_shared {
+	static_assert(sizeof...(Ts) >= 2, "variant must consist of at least 2 types");
+
 	static constexpr size_t size  = std::max({sizeof(Ts)...});
 	static constexpr size_t align = std::max({alignof(Ts)...});
 
@@ -107,7 +109,7 @@ struct variant : variant_shared {
 	{
 		static_assert(!is_same<variant<Ts...>, variant<Os...>>,
 		              "Non-template constructor should be used for variant of same type.");
-		static_assert(all_in_pack<Os...,Ts...>,
+		static_assert(all_in_pack<Os...>::template check<Ts...>,
 		              "Other variant type must be a subset.");
 
 		if (other.empty()) {
@@ -127,7 +129,7 @@ struct variant : variant_shared {
 	{
 		static_assert(!is_same<variant<Ts...>, variant<Os...>>,
 		              "Non-template constructor should be used for variant of same type.");
-		static_assert(all_in_pack<Os...,Ts...>,
+		static_assert(all_in_pack<Os...>::template check<Ts...>,
 		              "Other variant type must be a subset.");
 
 		if (other.empty()) {
@@ -167,7 +169,7 @@ struct variant : variant_shared {
 	{
 		static_assert(!is_same<variant<Ts...>, variant<Os...>>,
 		              "Non-template operator should be used for variant of same type.");
-		static_assert(all_in_pack<Os...,Ts...>,
+		static_assert(all_in_pack<Os...>::template check<Ts...>,
 		              "Other variant type must be a subset.");
 
 		if (other.empty()) {
@@ -184,7 +186,7 @@ struct variant : variant_shared {
 	{
 		static_assert(!is_same<variant<Ts...>, variant<Os...>>,
 		              "Non-template operator should be used for variant of same type.");
-		static_assert(all_in_pack<Os...,Ts...>,
+		static_assert(all_in_pack<Os...>::template check<Ts...>,
 		              "Other variant type must be a subset.");
 
 		if (other.empty()) {
@@ -422,9 +424,6 @@ private:
 		return f(*reinterpret_cast<T const*>(storage), std::forward<Args>(args)...);
 	}
 
-	/*
-	 * TODO: check for degenerate cases: variant<> and variant<T>
-	 */
 	/*
 	 * Uses dispatch table to select appropriate functor.
 	 */
