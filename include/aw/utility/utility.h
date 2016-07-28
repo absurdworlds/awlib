@@ -1,20 +1,10 @@
 /*
- * AWengine Utility Library
- * Copyright (C) 2013-2015  absurdworlds
- * 
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version. 
+ * Copyright (C) 2013-2016  absurdworlds
  *
- * This program is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
- * 
- * You should have received a copy of the GNU Lesser General Public
- * License along with this program.  If not, see
- * <http://www.gnu.org/licenses/>. 
+ * License LGPLv3 or later:
+ * GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
+ * This is free software: you are free to change and redistribute it.
+ * There is NO WARRANTY, to the extent permitted by law.
  */
 #ifndef aw_utility_exp_h
 #define aw_utility_exp_h
@@ -25,13 +15,4 @@
 #else
 	#define AW_UTILS_EXP AW_IMPORT
 #endif
-
-// Namespace descriptions for Doxygen
-namespace aw {
-/*!
- * Namespace for aw utility library.
- * Contains miscellaneous helpers and utilities.
- */
-namespace utils {}
-}
 #endif//aw_utility_exp_h

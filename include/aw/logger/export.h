@@ -14,9 +14,4 @@
 #else
 	#define AW_LOG_EXP AW_IMPORT
 #endif
-// Namespace descriptions for Doxygen
-namespace aw {
-//! This namespace contains interfaces/tools for logging.
-inline namespace log {}
-}
 #endif//aw_log_export_h

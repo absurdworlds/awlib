@@ -24,10 +24,4 @@
 #else
 	#define AW_SND_EXP AW_IMPORT
 #endif
-
-// Namespace descriptions for Doxygen
-namespace aw {
-//! Everything related to audio output is contained in this namespace
-namespace sound {}
-}
 #endif//_aw_sound_

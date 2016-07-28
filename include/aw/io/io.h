@@ -15,10 +15,4 @@
 #else
 	#define AW_IO_EXP AW_IMPORT
 #endif
-
-// Namespace descriptions for Doxygen
-namespace aw {
-//! Everything related to file & console io is found in this namespace
-namespace io {}
-}
 #endif//aw_io_exp_h
