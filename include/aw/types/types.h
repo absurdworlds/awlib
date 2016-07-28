@@ -33,7 +33,6 @@ using diff_t = std::ptrdiff_t;
 
 //!@{
 //! Shorthands for floating point types
- types
 using f32 = float;
 using f64 = double;
 //!@}
