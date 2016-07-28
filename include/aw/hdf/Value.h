@@ -10,10 +10,9 @@
 #ifndef _aw_hdf_value_
 #define _aw_hdf_value_
 #include <cstring>
-
 #include <string>
 
-#include <aw/common/types.h>
+#include <aw/types/variant.h>
 #include <aw/math/Vector2d.h>
 #include <aw/math/Vector3d.h>
 #include <aw/math/Vector4d.h>
@@ -25,8 +24,7 @@
 namespace aw {
 namespace hdf {
 //! Class for holding any HDF Value.
-class Value {
-public:
+struct Value {
 	Value()
 	{
 	}
@@ -75,7 +73,7 @@ public:
 	//! Returns type of currently held value
 	hdf::Type getType() const
 	{
-		return holder.type;
+		return convertType();
 	}
 
 	//! Set value if types are matching
@@ -91,7 +89,7 @@ public:
 
 	//! Set value, resetting type
 	template<typename val_type>
-	void set(val_type const v)
+	void set(val_type const& v)
 	{
 		holder.set<val_type>(v);
 	}
@@ -103,109 +101,30 @@ public:
 	}
 
 private:
-	template <typename... Ts>
-	struct Helper;
+	using holder_t = variant<bool, i64, f64, std::string,
+	       Vector2d<f32>, Vector3d<f32>, Vector4d<f32>>;
 
-	template <typename T, typename... Ts>
-	struct Helper<T, Ts...> {
-		static void destroy(Type type, void* data)
-		{
-			if (checkType<T>(type))
-				reinterpret_cast<T*>(data)->~T();
-			else
-				Helper<Ts...>::destroy(type, data);
-		}
-		static void copy(Type type, void const* from, void* to)
-		{
-			if (checkType<T>(type))
-				new (to) T(*reinterpret_cast<T const*>(from));
-			else
-				Helper<Ts...>::copy(type, from, to);
-		}
-		static void move(Type type, void* from, void* to)
-		{
-			if (checkType<T>(type))
-				new (to) T(std::move(from));
-			else
-				Helper<Ts...>::move(type, from, to);
-		}
-	};
-
-
-	template <typename... Ts>
-	struct Holder {
-		static size_t const size = std::max({sizeof(Ts)...});
-		static size_t const align = std::max({alignof(Ts)...});
-
-		typedef typename std::aligned_storage<size, align>::type storage;
-		typedef Helper<Ts...> helper;
-
-		hdf::Type type;
-		storage data;
-
-		Holder()
-			: type(Type::Unknown)
-		{
-		}
-
-		template<typename T, typename... Args>
-		Holder(Args&&... args)
-		{
-			set<T>(std::forward<Args>(args)...);
-		}
-
-		Holder(Holder<Ts...> const& other)
-			: type(other.type)
-		{
-			helper::copy(other.type, &other.data, &data);
-		}
-
-		Holder(Holder<Ts...>&& other)
-			: type(other.type)
-		{
-			helper::move(other.type, &other.data, &data);
-		}
-
-		Holder<Ts...>& operator=(Holder<Ts...> const& other)
-		{
-			helper::destroy(type, &data);
-			helper::copy(other.type, &other.data, &data);
-			type = other.type;
-			return *this;
-		}
-
-		~Holder()
-		{
-			reset();
-		}
-
-		template<typename T, typename... Args>
-		void set(Args&&... args)
-		{
-			helper::destroy(type, &data);
-			new (&data) T(std::forward<Args>(args)...);
-			type = typeof<T>::value;	
-		}
-
-		template<typename T>
-		bool get(T& target) const
-		{
-			if (checkType<T>(type)) {
-				target = *reinterpret_cast<T const*>(&data);
-				return true;
-			}
-			return false;
-		}
-
-		void reset()
-		{
-			helper::destroy(type, &data);
-		}
-	};
-
-	typedef Holder<bool, i64, f64, std::string,
-	       Vector2d<f32>, Vector3d<f32>, Vector4d<f32>> holder_t;
 	holder_t holder;
+
+	void convertType() const
+	{
+		switch (holder.type_index()) {
+		case holder_t::type_of<bool>:
+			return hdf::Type::Boolean;
+		case holder_t::type_of<i64>:
+			return hdf::Type::Integer;
+		case holder_t::type_of<f64>:
+			return hdf::Type::Float;
+		case holder_t::type_of<std::string>:
+			return hdf::Type::String;
+		case holder_t::type_of<Vector2d<f32>>:
+			return hdf::Type::Vector2d;
+		case holder_t::type_of<Vector3d<f32>>:
+			return hdf::Type::Vector3d;
+		case holder_t::type_of<Vector4d<f32>>:
+			return hdf::Type::Vector4d;
+		};
+	}
 };
 
 template <>
