@@ -27,6 +27,9 @@ constexpr auto is_trivially_copyable = std::is_trivially_copyable<T>::value;
 template<class Base, class Derived>
 constexpr auto is_base_of = std::is_base_of<Base,Derived>::value;
 
+template<class A, class B>
+constexpr auto is_same = std::is_same<A,B>::value;
+
 namespace _impl {
 template<typename T>
 struct is_int : std::integral_constant<

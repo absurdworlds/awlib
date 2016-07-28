@@ -10,6 +10,7 @@
 #define aw_variant_h
 #include <aw/types/types.h>
 #include <aw/types/traits/basic_traits.h>
+#include <aw/utility/parameter_pack.h>
 #include <string.h>
 #include <limits>
 #include <algorithm>
@@ -106,6 +107,8 @@ struct variant : variant_shared {
 	{
 		static_assert(!is_same<variant<Ts...>, variant<Os...>>,
 		              "Non-template constructor should be used for variant of same type.");
+		static_assert(all_in_pack<Os...,Ts...>,
+		              "Other variant type must be a subset.");
 
 		if (other.empty()) {
 			reset();
@@ -124,6 +127,8 @@ struct variant : variant_shared {
 	{
 		static_assert(!is_same<variant<Ts...>, variant<Os...>>,
 		              "Non-template constructor should be used for variant of same type.");
+		static_assert(all_in_pack<Os...,Ts...>,
+		              "Other variant type must be a subset.");
 
 		if (other.empty()) {
 			reset();
@@ -162,6 +167,8 @@ struct variant : variant_shared {
 	{
 		static_assert(!is_same<variant<Ts...>, variant<Os...>>,
 		              "Non-template operator should be used for variant of same type.");
+		static_assert(all_in_pack<Os...,Ts...>,
+		              "Other variant type must be a subset.");
 
 		if (other.empty()) {
 			reset();
@@ -177,6 +184,8 @@ struct variant : variant_shared {
 	{
 		static_assert(!is_same<variant<Ts...>, variant<Os...>>,
 		              "Non-template operator should be used for variant of same type.");
+		static_assert(all_in_pack<Os...,Ts...>,
+		              "Other variant type must be a subset.");
 
 		if (other.empty()) {
 			reset();

@@ -28,6 +28,9 @@ void for_each_index(Func f, index_sequence<Is...>)
 template <class T, typename... Ts>
 constexpr bool is_in_pack = bool_or<std::is_same<T,Ts>::value...>;
 
+template <typename... Os, typename... Ts>
+constexpr bool all_in_pack = bool_and<is_in_pack<Os,Ts...>...>;
+
 namespace _impl {
 template<class A, template<class...> class B>
 struct rename_pack;
