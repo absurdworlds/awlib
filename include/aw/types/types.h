@@ -13,7 +13,8 @@
 #include <memory>
 #include <experimental/optional>
 namespace aw {
-// Shorthands for integer types
+//!@{
+//! Shorthands for integer types
 using u8  = std::uint8_t;
 using i8  = std::int8_t;
 
@@ -28,21 +29,27 @@ using i64 = std::int64_t;
 
 using size_t = std::size_t;
 using diff_t = std::ptrdiff_t;
+//!@}
 
-//        ... for floating point types
+//!@{
+//! Shorthands for floating point types
+ types
 using f32 = float;
 using f64 = double;
+//!@}
 
 //! Shorthand for std::unique_ptr template
 template <typename T>
 using uptr = std::unique_ptr<T>;
 
-//! Shorthand for std::experimental::optional template
+//!@{
+//! Shorthand for std::experimental::optional
 template <typename T>
 using opt = std::experimental::optional<T>;
 
 using nullopt_t = std::experimental::nullopt_t;
-
+//using std::experimental::nullopt;
 constexpr nullopt_t nullopt = std::experimental::nullopt;
+//!@}
 } // namespace aw
 #endif //aw_types_

@@ -11,9 +11,26 @@
 #include <utility>
 #include <type_traits>
 namespace aw {
+/*!
+ * \addtogroup traits
+ * @{
+ */
+
+/*!
+ * Shorthand for std::enable_if
+ *
+ * Acts as type \a T if condition \a expr is met,
+ * or as undefined type if it is not met.
+ *
+ * It is used to exclude template instantiations or overloads
+ * from function overload resolution via SFINAE.
+ *
+ * See reference for std::enable_if.
+ */
 template<bool expr, typename T>
 using enable_if = typename std::enable_if<expr, T>::type;
 
+/*! Shorthand for enable_if with negated condition. */
 template<bool expr, typename T>
 using disable_if = typename std::enable_if<!expr, T>::type;
 
@@ -30,7 +47,7 @@ using bool_if = enable_if<expr,bool>;
 template<bool expr, typename T, typename F>
 using conditional = typename std::conditional<expr, T, F>::type;
 
-#if __cplusplus >= 201500L
+#if __cpp_fold_expressions >= 201411L
 template<bool... Bools>
 constexpr bool bool_and = (Bools && ...);
 
@@ -56,11 +73,19 @@ struct bool_or<Bool, Bools...>
 { };
 } // namespace _impl
 
+/*!
+ * @{
+ * Apply logical operators to list of \a Bools.
+ * Used to substitute fold expressions when those are not available.
+ */
 template<bool... Bools>
 constexpr bool bool_and = _impl::bool_and<Bools...>::value;
 
 template<bool... Bools>
 constexpr bool bool_or = _impl::bool_or<Bools...>::value;
+//!@}
 #endif
+
+/*! @} group traits */
 } // namespace aw
 #endif//aw_traits_conditional

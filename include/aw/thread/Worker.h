@@ -12,8 +12,13 @@
 #include <mutex>
 #include <condition_variable>
 namespace aw {
-class Worker {
-public:
+namespace thread {
+/*!
+ * Simple worker thread, which continues running until destroyed or
+ * manually killed.
+ * Executes signle task and waits until next one.
+ */
+struct Worker {
 	typedef std::function<void()> Task;
 
 	Worker();
@@ -51,5 +56,6 @@ private:
 
 	std::thread thread;
 };
+} // namespace thread
 } // namespace aw
 #endif//aw_thread_Worker
