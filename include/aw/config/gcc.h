@@ -30,4 +30,8 @@
 #define AW_HAS_EXT__builtin_ctz 1
 #define AW_HAS_EXT__builtin_clzll 1
 #define AW_HAS_EXT__builtin_ctzll 1
+
+#ifdef __SIZEOF_INT128__
+#define AW_HAS_EXT__int128 1
+#endif
 #endif //aw_compiler_setup_2
