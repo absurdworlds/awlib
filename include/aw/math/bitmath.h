@@ -7,8 +7,8 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _aw_math_bitwise
-#define _aw_math_bitwise
+#ifndef aw_math_bitwise_h
+#define aw_math_bitwise_h
 #include <aw/math/math.h>
 namespace aw {
 namespace math {
@@ -173,5 +173,123 @@ inline u64 rotr(u64 x, size_t r)
 #endif
 }
 } //namespace math
+
+inline size_t leading_zeros(u32 x)
+{
+	size_t n = 0;
+
+#if AW_EXT(__builtin_clz)
+	if (x != 0)
+		n = __builtin_clz(x);
+	else
+		n = 32;
+#else
+	if (x <= 0x0000ffff) {
+		n +=  16;
+		x <<= 16;
+	}
+	if (x <= 0x00ffffff) {
+		n +=  8;
+		x <<= 8;
+	}
+	if (x <= 0x0fffffff) {
+		n +=  4;
+		x <<= 4;
+	}
+	if (x <= 0x3fffffff) {
+		n +=  2;
+		x <<= 2;
+	}
+
+	n += (x <= 0x7fffffff);
+#endif
+
+	return n;
+}
+
+inline size_t leading_zeros(u64 x)
+{
+	size_t n = 0;
+#if AW_EXT(__builtin_clzll)
+	if (x != 0)
+		n = __builtin_clzll(x);
+	else
+		n = 64;
+#else
+	if (x <= 0x00000000'ffffffff) {
+		n +=  32;
+		x <<= 32;
+
+		n += leading_zeros(u32(lower_half(x)));
+	} else {
+		n += leading_zeros(u32(upper_half(x)));
+	}
+#endif
+
+	return n;
+}
+
+
+inline size_t trailing_zeros(u32 x)
+{
+	size_t n = 0;
+
+#if AW_EXT(__builtin_ctz)
+	if (x != 0)
+		n = __builtin_clz(x);
+	else
+		n = 32;
+#else
+	if (x & 0x1)
+		return 0;
+
+	if ((x & 0xffff) == 0) {
+		x >>= 16;
+		n  += 16;
+	}
+	if ((x & 0xff) == 0) {
+		x >>= 8;
+		n  += 8;
+	}
+	if ((x & 0xf) == 0) {
+		x >>= 4;
+		n  += 4;
+	}
+	if ((x & 0x3) == 0) {
+		x >>= 2;
+		n  += 2;
+	}
+	n += x & 0x1;
+#endif
+
+	return n;
+}
+
+inline size_t trailing_zeros(u64 x)
+{
+	size_t n = 0;
+
+#if AW_EXT(__builtin_ctzll)
+	if (x != 0)
+		n = __builtin_ctzll(x);
+	else
+		n = 64;
+#else
+	if (x & 0x1)
+		return 0;
+
+	if ((x & 0xffffffff) == 0) {
+		x >>= 32;
+		n  += 32;
+
+		n += trailing_zeros(u32(upper_half(x)));
+	} else {
+		n += trailing_zeros(u32(lower_half(x)));
+	}
+#endif
+
+	return n;
+}
+
 } //namespace aw
-#endif //_aw_math_
+#endif //aw_math_bitwise_h

@@ -21,4 +21,9 @@
 #define AW_HAS_EXT__builtin_bswap16 __has_builtin(__builtin_bswap16)
 #define AW_HAS_EXT__builtin_bswap32 __has_builtin(__builtin_bswap32)
 #define AW_HAS_EXT__builtin_bswap64 __has_builtin(__builtin_bswap64)
+
+#define AW_HAS_EXT__builtin_clz   __has_builtin(__builtin_clz)
+#define AW_HAS_EXT__builtin_ctz   __has_builtin(__builtin_ctz)
+#define AW_HAS_EXT__builtin_clzll __has_builtin(__builtin_clzll)
+#define AW_HAS_EXT__builtin_ctzll __has_builtin(__builtin_ctzll)
 #endif //aw_compiler_setup_2

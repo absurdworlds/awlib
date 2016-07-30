@@ -24,4 +24,10 @@
 #define AW_HAS_EXT__builtin_bswap32 1
 #define AW_HAS_EXT__builtin_bswap64 1
 #endif
+
+// TODO: minimal compiler version
+#define AW_HAS_EXT__builtin_clz 1
+#define AW_HAS_EXT__builtin_ctz 1
+#define AW_HAS_EXT__builtin_clzll 1
+#define AW_HAS_EXT__builtin_ctzll 1
 #endif //aw_compiler_setup_2
