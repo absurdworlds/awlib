@@ -94,4 +94,11 @@
 		#define AW_LOCAL
 	#endif
 #endif
+
+/**** NON-STANDARD FEATURE TESTING ****/
+#define AW_EXT(x) AW_HAS_EXT##x
+// #define AW_HAS(x) __has_builtin(x)
+
+#define AW_FEATURE(x) AW_HAS_FEATURE_##x
+
 #endif//aw_compiler_setup_

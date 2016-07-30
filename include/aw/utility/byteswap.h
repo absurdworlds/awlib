@@ -16,7 +16,7 @@ namespace aw {
  */
 u16 byteswap(u16 val)
 {
-#if   defined(AW_HAS__builtin_bswap16)
+#if   AW_EXT(__builtin_bswap16)
 	return __builtin_bswap16(val);
 #elif defined(AW_WINDOWS)
 	return _byteswap_ushort(val);
@@ -31,7 +31,7 @@ u16 byteswap(u16 val)
  */
 u32 byteswap(u32 val)
 {
-#if   defined(AW_HAS__builtin_bswap32)
+#if   AW_EXT(__builtin_bswap32)
 	return __builtin_bswap32(val);
 #elif defined(AW_WINDOWS)
 	return _byteswap_uint(val);
@@ -48,7 +48,7 @@ u32 byteswap(u32 val)
  */
 u64 byteswap(u64 val)
 {
-#if   defined(AW_HAS__builtin_bswap64)
+#if   AW_EXT(__builtin_bswap64)
 	return __builtin_bswap64(val);
 #elif defined(AW_WINDOWS)
 	return _byteswap_ulong(val);

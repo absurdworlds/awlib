@@ -18,10 +18,10 @@
 #endif
 
 #if (AW_CVER_X > 4) || (AW_CWER_X == 4 && AW_CVER_Y >= 8)
-#define AW_HAS__builtin_bswap16
+#define AW_HAS_EXT__builtin_bswap16 1
 #endif
 #if (AW_CVER_X > 4) || (AW_CWER_X == 4 && AW_CVER_Y >= 3)
-#define AW_HAS__builtin_bswap32
-#define AW_HAS__builtin_bswap64
+#define AW_HAS_EXT__builtin_bswap32 1
+#define AW_HAS_EXT__builtin_bswap64 1
 #endif
 #endif //aw_compiler_setup_2
