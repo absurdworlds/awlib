@@ -8,27 +8,49 @@
  */
 #ifndef aw_types_promote
 #define aw_types_promote
-#include<aw/types/types.h>
+#include <aw/types/types.h>
+#include <aw/types/int128.h>
+#include <aw/types/traits/void_t.h>
 namespace aw {
 namespace _impl {
-template <typename T> struct Promote;
+template <typename T> struct promote;
 
-template<> struct Promote<i8>  { using type = i16; };
-template<> struct Promote<i16> { using type = i32; };
-template<> struct Promote<i32> { using type = i64; };
-template<> struct Promote<i64> { using type = i64; };
+template<> struct promote<i8>  { using type = i16; };
+template<> struct promote<i16> { using type = i32; };
+template<> struct promote<i32> { using type = i64; };
+#if AW_FEATURE(SIGNED128)
+template<> struct promote<i64> { using type = i128; };
+#endif
 
-template<> struct Promote<u8>  { using type = u16; };
-template<> struct Promote<u16> { using type = u32; };
-template<> struct Promote<u32> { using type = u64; };
-template<> struct Promote<u64> { using type = u64; };
+template<> struct promote<u8>  { using type = u16; };
+template<> struct promote<u16> { using type = u32; };
+template<> struct promote<u32> { using type = u64; };
+#if AW_FEATURE(UNSIGNED128)
+template<> struct promote<u64> { using type = u128; };
+#endif
 
-template<> struct Promote<f32> { using type = f64; };
-template<> struct Promote<f64> { using type = f64; };
+template<> struct promote<f32> { using type = f64; };
 } // namespace _impl
+
+
 
 //! Promote arithmetic type to a next larger type (if available)
 template <typename T>
-using Promote = typename _impl::Promote<T>::type;
+using promote = typename _impl::promote<T>::type;
+
+
+
+namespace _impl {
+template <typename T, typename = void>
+struct can_promote : std::false_type {};
+
+template <typename T>
+struct can_promote<T, void_t<aw::promote<T>>> : std::true_type {};
+} // namespace _impl
+
+
+//! True if promote<T> can be used
+template<typename T>
+constexpr bool can_promote = _impl::can_promote<T>::value;
 } // namespace aw
 #endif//aw_types_promote
