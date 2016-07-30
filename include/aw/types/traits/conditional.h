@@ -27,11 +27,11 @@ namespace aw {
  *
  * See reference for std::enable_if.
  */
-template<bool expr, typename T>
+template<bool expr, typename T = void>
 using enable_if = typename std::enable_if<expr, T>::type;
 
 /*! Shorthand for enable_if with negated condition. */
-template<bool expr, typename T>
+template<bool expr, typename T = void>
 using disable_if = typename std::enable_if<!expr, T>::type;
 
 /*! Shorthand for enable_if<expr, void> */
