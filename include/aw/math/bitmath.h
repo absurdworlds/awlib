@@ -69,7 +69,7 @@ constexpr Int lower_to_upper(Int value)
  * Extract bit value from integer
  */
 template <typename Int>
-constexpr bool getBit(Int val, size_t idx)
+constexpr bool get_bit(Int val, size_t idx)
 {
 	assert(idx < std::numeric_limits<Int>::digits);
 	return (val >> idx) & 1;
@@ -79,7 +79,7 @@ constexpr bool getBit(Int val, size_t idx)
  * Set bit in position \a idx to \a bitval.
  */
 template <typename Int>
-constexpr Int setBit(Int val, size_t idx, bool bitval)
+constexpr Int set_bit(Int val, size_t idx, bool bitval)
 {
 	assert(idx < std::numeric_limits<Int>::digits);
 	Int flag = (bitval << idx);
@@ -88,11 +88,11 @@ constexpr Int setBit(Int val, size_t idx, bool bitval)
 }
 
 /*!
- * Swap to bits in an integer:
+ * Swap two bits in an integer:
  * swapBits(0b01000, 3, 4) -> 0b10000
  */
 template <typename Int>
-constexpr Int swapBits(Int val, size_t idx1, size_t idx2)
+constexpr Int swap_bits(Int val, size_t idx1, size_t idx2)
 {
 	assert(idx1 < std::numeric_limits<Int>::digits);
 	assert(idx2 < std::numeric_limits<Int>::digits);
@@ -182,7 +182,6 @@ inline u64 rotr(u64 x, size_t r)
 	return (x >> r) | (x << (64 - r));
 #endif
 }
-} //namespace math
 
 inline size_t leading_zeros(u32 x)
 {
@@ -301,5 +300,17 @@ inline size_t trailing_zeros(u64 x)
 	return n;
 }
 
+template <typename T>
+size_t clz(T value)
+{
+	return leading_zeros(value);
+}
+
+template <typename T>
+size_t ctz(T value)
+{
+	return trailing_zeros(value);
+}
+} //namespace math
 } //namespace aw
 #endif //aw_math_bitwise_h
