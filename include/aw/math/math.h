@@ -21,6 +21,27 @@
 
 namespace aw {
 namespace math {
+namespace _impl {
+template <typename T>
+constexpr T sign(T x, std::false_type)
+{
+	return T{0} < x;
+}
+
+template <typename T>
+constexpr T sign(T x, std::true_type)
+{
+	return (T{0} < x) - (x < T{0});
+}
+} // namespace _impl
+
+template <typename T>
+constexpr T sign(T x)
+{
+	return _impl::sign(x, std::is_signed<T>());
+}
+
+
 //! Calculate square root of a number
 inline f32 sqrt(f32 const x)
 {
