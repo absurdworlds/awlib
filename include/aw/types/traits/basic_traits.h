@@ -15,6 +15,10 @@
 namespace aw {
 template<typename T>
 constexpr auto is_arithmetic = std::is_arithmetic<T>::value;
+template<typename T>
+constexpr auto is_signed = std::is_signed<T>::value;
+template<typename T>
+constexpr auto is_unsigned = std::is_unsigned<T>::value;
 
 template<typename T>
 constexpr auto is_polymorphic = std::is_polymorphic<T>::value;

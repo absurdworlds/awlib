@@ -52,5 +52,19 @@ struct can_promote<T, void_t<aw::promote<T>>> : std::true_type {};
 //! True if promote<T> can be used
 template<typename T>
 constexpr bool can_promote = _impl::can_promote<T>::value;
+
+/*!
+ * Unsigned counterpart to T.
+ * If T is already unsigned, T is unchanged.
+ */
+template<typename T>
+using make_unsigned = typename std::make_unsigned<T>::type;
+
+/*!
+ * Signed counterpart to T.
+ * If T is already signed, T is unchanged.
+ */
+template<typename T>
+using make_signed = typename std::make_signed<T>::type;
 } // namespace aw
 #endif//aw_types_promote
