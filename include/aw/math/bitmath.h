@@ -10,6 +10,7 @@
 #ifndef aw_math_bitwise_h
 #define aw_math_bitwise_h
 #include <aw/math/math.h>
+#include <aw/math/numeric.h>
 namespace aw {
 namespace math {
 /*!
@@ -17,19 +18,51 @@ namespace math {
  * counting from 0.
  * (0 is lsb, 31 is msb)
  */
-constexpr u64 bit(size_t N)
+constexpr uintmax_t bit(size_t N)
 {
 	return 1 << N;
 }
 
 /*!
+ * Create mask with lower half bits set to 1
+ * and upper bits set to 0.
+ * Example: lower_mask(4) = 0x00FF
+ */
+template<typename Int>
+constexpr Int lower_mask(size_t bits)
+{
+	return (Int(1) << bits) - 1;
+}
+
+/*!
  * Create mask with upper half bits set to 1
  * and lower bits set to 0.
- * Example: halfMask(4) = 0xFF00
+ * Example: halfMask(4) = 0x00FF
  */
-constexpr u64 halfMask(size_t bits)
+template<typename Int>
+constexpr Int upper_mask(size_t bits)
 {
-	return ((u64(1) << bits) - 1) << bits;
+	return (lower_mask<Int>(bits)) << bits;
+}
+
+template<typename Int>
+constexpr Int lower_half(Int value)
+{
+	static_assert(is_even(num_digits<Int>), "");
+	return value & lower_mask<Int>(num_digits<Int> / 2);
+}
+
+template<typename Int>
+constexpr Int upper_half(Int value)
+{
+	static_assert(is_even(num_digits<Int>), "");
+	return value >> (num_digits<Int> / 2);
+}
+
+template<typename Int>
+constexpr Int lower_to_upper(Int value)
+{
+	return lower_half(value) << (num_digits<Int> / 2);
 }
 
 /*!
@@ -71,15 +104,13 @@ constexpr Int swapBits(Int val, size_t idx1, size_t idx2)
 template <typename Int>
 constexpr size_t log2(Int value)
 {
-	static_assert(std::numeric_limits<Int>::digits <= 64, "Type too large.");
-	constexpr u64 powers[] = {
-		0, 1, 2, 4, 8, 16, 32
-	};
-
+	static_assert(num_digits<Int> <= num_digits<u64>, "Type is too large.");
+	constexpr u64 powers[] = { 0, 1, 2, 4, 8, 16, 32 };
 	constexpr u64 lookup[] = {
 	       0,
-	       halfMask(1), halfMask(2),  halfMask(4),
-	       halfMask(8), halfMask(16), halfMask(32)
+	       upper_mask<u64>(1),  upper_mask<u64>(2),
+	       upper_mask<u64>(4),  upper_mask<u64>(8),
+	       upper_mask<u64>(16), upper_mask<u64>(32)
 	};
 
 	Int result = 0;
@@ -98,27 +129,6 @@ template <typename Int>
 constexpr bool isPowerOf2(Int value)
 {
 	return value && !(value & (value - 1));
-}
-
-//! Truncate integer to 8 bits
-template<typename Int>
-inline u8 mask8(Int val)
-{
-	return u8(val & 0xFF);
-}
-
-//! Truncate integer to 16 bits
-template<typename Int>
-inline u16 mask16(Int val)
-{
-	return u16(val & 0xFFFF);
-}
-
-//! Truncate integer to 32 bits
-template<typename Int>
-inline u32 mask32(Int val)
-{
-	return u32(val & 0xFFFFFFFF);
 }
 
 /*!
