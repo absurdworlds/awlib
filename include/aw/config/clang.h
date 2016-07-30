@@ -18,13 +18,7 @@
 	#define AW_ARCH AW_ARCH_i686
 #endif
 
-#if (__has_builtin(__builtin_bswap16))
-#define AW_HAS__builtin_bswap16 1
-#endif
-#if (__has_builtin(__builtin_bswap32))
-#define AW_HAS__builtin_bswap32 1
-#endif
-#if (__has_builtin(__builtin_bswap64))
-#define AW_HAS__builtin_bswap64 1
-#endif
+#define AW_HAS_EXT__builtin_bswap16 __has_builtin(__builtin_bswap16)
+#define AW_HAS_EXT__builtin_bswap32 __has_builtin(__builtin_bswap32)
+#define AW_HAS_EXT__builtin_bswap64 __has_builtin(__builtin_bswap64)
 #endif //aw_compiler_setup_2
