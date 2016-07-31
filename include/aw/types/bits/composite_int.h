@@ -6,7 +6,42 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
+#include <aw/utility/string/conv/integer.h>
 namespace aw {
+template<typename T>
+std::string as_string(composite_int<T> val)
+{
+	using U = make_unsigned<T>;
+
+	composite_int<U> tmp;
+	bool sign;
+
+	if (val.sign() < 0) {
+		sign = 1;
+		tmp = -val;
+	} else {
+		sign = 0;
+		tmp = val;
+	}
+
+	constexpr size_t base = 10;
+	constexpr size_t dg = composite_int<U>::digits;
+	size_t lz = tmp.leading_zeros();
+	tmp <<= lz;
+
+	constexpr size_t size_needed = composite_int<T>::digits / math::log2(base) + 1;
+
+	int_converter<base, size_needed> result;
+	result.sign = sign;
+	for (size_t i = lz; i < dg; ++i) {
+		bool carry = math::top_bit(tmp.high_part());
+		tmp <<= 1;
+		result.add_digit(carry);
+	}
+
+	return result.to_string();
+}
+
 namespace _impl {
 template<typename T>
 auto div(composite_int<T> const& a, composite_int<T> const& b)

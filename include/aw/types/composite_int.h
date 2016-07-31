@@ -406,6 +406,9 @@ auto composite_int<T>::mul(U a, U b) -> composite_int<T>
 
 	return {T(hi), lo};
 }
+
+template<typename T>
+std::string as_string(composite_int<T> val);
 } // namespace aw
 
 #include "bits/composite_int.h"
