@@ -66,13 +66,22 @@ constexpr Int lower_to_upper(Int value)
 }
 
 /*!
- * Extract bit value from integer
+ * Extract value of a single bit from integer
  */
 template <typename Int>
 constexpr bool get_bit(Int val, size_t idx)
 {
 	assert(idx < std::numeric_limits<Int>::digits);
 	return (val >> idx) & 1;
+}
+
+/*!
+ * Extract top bit from integer
+ */
+template <typename Int>
+constexpr bool top_bit(Int val)
+{
+	return get_bit(val, std::numeric_limits<Int>::digits - 1);
 }
 
 /*!
