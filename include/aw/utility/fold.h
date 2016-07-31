@@ -10,10 +10,11 @@
 #ifndef aw_fold_h
 #define aw_fold_h
 namespace aw {
-#if __cplusplus >= 201500L
+#if __cpp_fold_expressions
 #define AW_FOLD(expr) (void(expr), ...);
 #else
 using fold_dummy = int[];
+//! Substitution for fold expressions in C++11/14
 #define AW_FOLD(expr) (void) fold_dummy { 0, (void(expr), 0)...  };
 #endif
 } // namespace aw
