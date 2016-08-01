@@ -247,6 +247,14 @@ protected:
 			create_storage(other.allocated_size());
 	}
 
+	template<typename Iterator>
+	queue(Iterator first, Iterator last, Allocator const& alloc) noexcept
+		: impl(alloc)
+	{
+		if (is_forward_iter<Iterator>)
+			create_storage(std::distance(first, last) + 1);
+	}
+
 	~queue_base() noexcept
 	{
 		deallocate(impl.begin, allocated_size());
@@ -404,47 +412,34 @@ public:
 	}
 
 	/*!
-	 * Create queue with \a n copies of prototype \a val.
+	 * Construct queue from range
 	 */
-	queue(size_type n, const_reference val,
-	      Allocator const& alloc = Allocator())
-		: Base(alloc, n + 1)
+	template<typename Iterator>
+	queue(Iterator first, Iterator last, Allocator const& alloc = Allocator())
+		: Base(first, last, alloc)
 	{
-		impl.tail = std::uninitialized_fill_n(impl.begin, n, val);
-	}
+		static_assert(_impl::is_input_iter<Iterator>, "InputIterator is required.");
 
-	/*!
-	 * Create queue with \a n default-constructed elements
-	 */
-	queue(size_type n, Allocator const& alloc = Allocator())
-		: queue(n, T{}, alloc)
-	{ }
+		using iter_traits = std::iterator_traits<Iterator>;
+		using iter_cat    = typename iter_traits::iterator_category;
+		range_init(first, last, iter_cat{});
+	}
 
 	/*!
 	 * Create queue from an initializer list.
 	 */
-	queue(std::initializer_list<value_type> list,
-	      Allocator const& alloc = Allocator())
+	queue(std::initializer_list<T> list, Allocator const& alloc = Allocator())
 		: Base(alloc, list.size() + 1)
 	{
-		range_init(std::begin(list), std::end(list));
-	}
-
-	/*!
-	 * Create from range
-	 */
-	template<typename Iterator, typename = _impl::is_input_iter<Iterator>>
-	queue(Iterator first, Iterator last, Allocator const& a = Allocator())
-		: Base(a, std::distance(first, last) + 1)
-	{
-		range_init(first, last);
+		auto first = std::begin(list);
+		auto last  = std::end(list);
+		impl.tail  = std::uninitialized_copy(first, last, impl.head);
 	}
 
 	~queue()
 	{
 		destroy(impl.head, impl.tail);
 	}
-
 
 
 	/*! Iterator to the front of queue */
@@ -793,28 +788,18 @@ private:
 		impl.tail = new_tail;
 	}
 
-
-
 	template<typename Iterator, typename Sentinel>
-	void range_init_a(Iterator first, Sentinel last, std::input_iterator_tag)
+	void range_init(Iterator first, Sentinel last, std::input_iterator_tag)
 	{
 		for (; first != last; ++first)
 			emplace_back(*first);
 	}
 
 	template<typename Iterator, typename Sentinel>
-	void range_init_a(Iterator first, Sentinel last, std::forward_iterator_tag)
+	void range_init(Iterator first, Sentinel last, std::forward_iterator_tag)
 	{
-		impl.tail  = std::uninitialized_copy(first, last, impl.head);
+		impl.tail = std::uninitialized_copy(first, last, impl.head);
 	}
-
-	template<typename Iterator, typename Sentinel>
-	void range_init(Iterator first, Sentinel last)
-	{
-		using iter_cat = typename std::iterator_traits<Iterator>::iterator_category;
-		range_init_a(first, last, iter_cat{});
-	}
-
 
 	void check_capacity()
 	{

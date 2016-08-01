@@ -11,12 +11,10 @@
 namespace aw {
 namespace _impl {
 template<typename Iterator>
-using is_input_iter = void_if<std::is_convertible
-	<
-		typename std::iterator_traits<Iterator>::iterator_category,
-		 std::input_iterator_tag
-	>::value
->;
+constexpr bool is_input_iter = std::is_convertible<
+	typename std::iterator_traits<Iterator>::iterator_category,
+	std::input_iterator_tag
+>::value;
 
 template<typename InputIt, typename ForwardIt>
 ForwardIt try_uninit_move(InputIt begin, InputIt end, ForwardIt output)
