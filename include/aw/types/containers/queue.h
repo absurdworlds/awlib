@@ -412,6 +412,24 @@ public:
 	}
 
 	/*!
+	 * Create queue with \a n copies of prototype \a val.
+	 */
+	queue(size_type n, const_reference val,
+	      Allocator const& alloc = Allocator())
+		: Base(alloc, n + 1)
+	{
+		impl.tail = std::uninitialized_fill_n(impl.begin, n, val);
+	}
+
+	/*!
+	 * Create queue with \a n default-constructed elements
+	 */
+	queue(size_type n, Allocator const& alloc = Allocator())
+		: queue(n, T{}, alloc)
+	{ }
+
+
+	/*!
 	 * Construct queue from range
 	 */
 	template<typename Iterator>
