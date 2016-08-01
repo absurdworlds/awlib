@@ -16,6 +16,12 @@ constexpr bool is_input_iter = std::is_convertible<
 	std::input_iterator_tag
 >::value;
 
+template<typename Iterator>
+constexpr bool is_forward_iter = std::is_convertible<
+	typename std::iterator_traits<Iterator>::iterator_category,
+	std::forward_iterator_tag
+>::value;
+
 template<typename InputIt, typename ForwardIt>
 ForwardIt try_uninit_move(InputIt begin, InputIt end, ForwardIt output)
 {
