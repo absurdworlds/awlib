@@ -26,11 +26,12 @@ struct int_converter {
 			digit *= 2;
 			digit += carry;
 			carry = digit > (R - 1);
-			if (carry) {
+			if (carry)
 				digit -= R;
-				top_digit += i == top_digit;
-			}
 		} while (i++ < top_digit);
+
+		if (carry)
+			++digits[++top_digit];
 	}
 
 	std::string to_string()
