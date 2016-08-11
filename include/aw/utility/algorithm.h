@@ -25,7 +25,7 @@ size_t common_prefix_length(Iterator first, Iterator last)
 
 	auto a_first = std::begin(*first);
 	auto a_last  = std::end(*first);
-	while (++first < last) {
+	while (++first != last) {
 		auto b_first = std::begin(*first);
 		auto b_last  = std::end(*first);
 		auto a_last = std::mismatch( a_first, a_last, b_first, b_last ).first;
@@ -35,6 +35,39 @@ size_t common_prefix_length(Iterator first, Iterator last)
 
 	return size_t(a_last - a_first);
 }
+
+/*!
+ * Same as previous overload, but allows to specify initial prefix length.
+ */
+template <typename Iterator>
+size_t common_prefix_length(Iterator first, Iterator last, size_t start_at)
+{
+	static_assert(is_forward_iterator<Iterator>, "");
+	if (first == last)
+		return 0;
+
+	auto a_first = std::begin(*first);
+	auto a_last  = std::end(*first);
+
+	assert(size_t(std::distance(a_first, a_last)) >= start_at);
+	std::advance(a_first, start_at);
+
+	while (++first != last) {
+		auto b_first = std::begin(*first);
+		auto b_last  = std::end(*first);
+
+		assert(std::distance(b_first, b_last) >= start_at);
+		std::advance(b_first, start_at);
+
+		auto a_last = std::mismatch( a_first, a_last, b_first, b_last ).first;
+		if (a_first == a_last)
+			break;
+	}
+
+	return size_t(a_last - std::begin(*first));
+}
+
+
 
 /*!
  * Finds the first element in the range [first, last) that matches value \a val
