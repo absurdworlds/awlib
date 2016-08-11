@@ -13,6 +13,7 @@
 #include <iterator>
 #include <algorithm>
 #include <aw/utility/exceptions.h>
+#include <aw/types/traits/iterators.h>
 #include <aw/types/traits/conditional.h>
 #include <aw/types/containers/bits/shared.h>
 
@@ -248,7 +249,7 @@ protected:
 	}
 
 	template<typename Iterator>
-	queue(Iterator first, Iterator last, Allocator const& alloc) noexcept
+	queue_base(Iterator first, Iterator last, Allocator const& alloc) noexcept
 		: impl(alloc)
 	{
 		if (is_forward_iter<Iterator>)
@@ -436,7 +437,7 @@ public:
 	queue(Iterator first, Iterator last, Allocator const& alloc = Allocator())
 		: Base(first, last, alloc)
 	{
-		static_assert(_impl::is_input_iter<Iterator>, "InputIterator is required.");
+		static_assert(is_input_iter<Iterator>, "InputIterator is required.");
 
 		using iter_traits = std::iterator_traits<Iterator>;
 		using iter_cat    = typename iter_traits::iterator_category;
