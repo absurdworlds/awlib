@@ -252,7 +252,7 @@ protected:
 	queue_base(Iterator first, Iterator last, Allocator const& alloc) noexcept
 		: impl(alloc)
 	{
-		if (is_forward_iter<Iterator>)
+		if (is_forward_iterator<Iterator>)
 			create_storage(std::distance(first, last) + 1);
 	}
 
@@ -437,7 +437,7 @@ public:
 	queue(Iterator first, Iterator last, Allocator const& alloc = Allocator())
 		: Base(first, last, alloc)
 	{
-		static_assert(is_input_iter<Iterator>, "InputIterator is required.");
+		static_assert(is_input_iterator<Iterator>, "InputIterator is required.");
 
 		using iter_traits = std::iterator_traits<Iterator>;
 		using iter_cat    = typename iter_traits::iterator_category;

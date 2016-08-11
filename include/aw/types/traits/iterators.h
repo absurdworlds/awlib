@@ -12,15 +12,27 @@
 #include <aw/types/traits/basic_traits.h>
 namespace aw {
 template<typename Iterator>
-constexpr bool is_input_iter = std::is_convertible<
+constexpr bool is_input_iterator = std::is_convertible<
 	typename std::iterator_traits<Iterator>::iterator_category,
 	std::input_iterator_tag
 >::value;
 
 template<typename Iterator>
-constexpr bool is_forward_iter = std::is_convertible<
+constexpr bool is_forward_iterator = std::is_convertible<
 	typename std::iterator_traits<Iterator>::iterator_category,
 	std::forward_iterator_tag
+>::value;
+
+template<typename Iterator>
+constexpr bool is_bidirectional_iterator = std::is_convertible<
+	typename std::iterator_traits<Iterator>::iterator_category,
+	std::bidirectional_iterator_tag
+>::value;
+
+template<typename Iterator>
+constexpr bool is_random_access_iterator = std::is_convertible<
+	typename std::iterator_traits<Iterator>::iterator_category,
+	std::random_access_iterator_tag
 >::value;
 } // namespace aw
 #endif//aw_traits_iterators
