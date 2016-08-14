@@ -10,6 +10,7 @@
 #define aw_algorithm_h
 #include <cassert>
 #include <algorithm>
+#include <functional>
 #include <types/traits/iterator.h>
 namespace aw {
 /*!
@@ -67,32 +68,29 @@ size_t common_prefix_length(Iterator first, Iterator last, size_t start_at)
 	return size_t(a_last - std::begin(*first));
 }
 
-
-
 /*!
  * Finds the first element in the range [first, last) that matches value \a val
  *
  * Requires that the input range is at least partially ordered.
+ *
+ * Takes a comparator function \a comp.
  */
-template <typename Iterator, typename T>
-Iterator binary_find(Iterator begin, Iterator end, T const& val)
+template <typename Iterator, typename Comparator>
+Iterator binary_find(Iterator begin, Iterator end, T const& val, Comparator comp)
 {
-	Iterator pos = std::lower_bound(begin, end, key);
-	if (pos == end || *pos < val)
+	Iterator pos = std::lower_bound(begin, end, val, comp);
+	if (pos == end || comp(*pos, val))
 		return end;
 	return pos;
 }
 
 /*!
- * Same as binary_find, but takes a predicate \a pred.
+ * Same as previous overload, but uses operator< instead of comparator.
  */
-template <typename Iterator, typename Predicate>
-Iterator binary_find_if(Iterator begin, Iterator end, Predicate pred)
+template <typename Iterator, typename T>
+Iterator binary_find(Iterator begin, Iterator end, T const& val)
 {
-	Iterator pos = std::lower_bound(begin, end,  pred);
-	if (pos == end || pred(*pos))
-		return end;
-	return pos;
+	return binary_find(begin, end, val, std::less<T>{});
 }
 } // namespace aw
 #endif//aw_algorithm_h
