@@ -6,8 +6,8 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef aw_thread_Worker
-#define aw_thread_Worker
+#ifndef aw_thread_worker_h
+#define aw_thread_worker_h
 #include <thread>
 #include <mutex>
 #include <condition_variable>
@@ -18,11 +18,11 @@ namespace thread {
  * manually killed.
  * Executes signle task and waits until next one.
  */
-struct Worker {
+struct worker {
 	typedef std::function<void()> Task;
 
-	Worker();
-	~Worker();
+	worker();
+	~worker();
 
 	/*!
 	 * Runs the task in this worker thread
@@ -58,4 +58,4 @@ private:
 };
 } // namespace thread
 } // namespace aw
-#endif//aw_thread_Worker
+#endif//aw_thread_worker_h
