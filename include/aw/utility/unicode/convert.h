@@ -8,65 +8,36 @@
  */
 #ifndef _aw_utf_convert_
 #define _aw_utf_convert_
-#include <string>
-
 #include <aw/utility/string/string.h>
-#include <aw/utility/unicode/utf.h>
+#include <aw/utility/unicode/utf8.h>
+#include <aw/utility/unicode/utf16.h>
 
 namespace aw {
 namespace unicode {
-//! Convert utf-16 string to utf-8 string
-inline std::string narrow(std::u16string const& str)
+//! Convert string between different Unicode envodings
+template<typename In, typename Out>
+auto convert(typename In::string const& str) -> typename Out::string
 {
-	typedef typename std::u16string::const_iterator in_iterator_type;
-	typedef typename std::back_insert_iterator<std::string> out_iterator_type;
+	auto begin = std::begin(str);
+	auto end   = std::end(str);
 
-	std::string result;
-
-	in_iterator_type begin(str.begin());
-	in_iterator_type end(str.end());
-	out_iterator_type out(result);
+	typename Out::string result;
+	auto out = std::back_inserter(result);
 
 	while (begin != end) {
-		u32 cp;
+		code_point cp;
 
-		begin = utf16::get(begin, end, cp);
-
-		if (cp == -1)
+		begin = In::template decode(begin, end, cp);
+		if ( !isValidCodepoint(cp) )
 			continue;
-
-		utf8::append(cp, out);
+		out   = Out::template encode(cp, out);
 	}
 
 	return result;
 }
 
-//! Convert utf-8 string to utf-16 u16string
-inline std::u16string widen(std::string const& str)
-{
-	typedef typename std::string::const_iterator in_iterator_type;
-	typedef typename std::back_insert_iterator<std::u16string> out_iterator_type;
-
-	std::u16string result;
-
-	in_iterator_type begin(str.begin());
-	in_iterator_type end(str.end());
-	out_iterator_type out(result);
-
-	while (begin != end) {
-		u32 cp;
-
-		begin = utf8::get(begin, end, cp);
-
-		if (cp == -1)
-			continue;
-
-		utf16::append(cp, out);
-	}
-
-	return result;
-}
-
+constexpr auto& narrow = convert<utf16, utf8>;
+constexpr auto& widen  = convert<utf8, utf16>;
 } // namespace unicode
 } // namespace aw
 #endif//_aw_utf_convert_

@@ -6,35 +6,38 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef aw_utility_utf16_
-#define aw_utility_utf16_
-#include <aw/utility/unicode/utf.h>
+#ifndef aw_utility_utf16_h
+#define aw_utility_utf16_h
+#include <aw/utility/unicode/unicode.h>
 namespace aw {
 namespace unicode {
-namespace utf16 {
+struct utf16 {
+using char_type   = char16_t;
+using string      = std::u16string;
+
 //! Check if code point is first surrogate
-inline bool isFirstSurrogate(u32 cp)
+static bool isFirstSurrogate(code_point cp)
 {
 	return (cp >= 0xD800 &&
 	        cp <= 0xDBFF);
 }
 
 //! Check if code point is second surrogate
-inline bool isSecondSurrogate(u32 cp)
+static bool isSecondSurrogate(code_point cp)
 {
 	return (cp >= 0xDC00 &&
 	        cp <= 0xDFFF);
 }
 
-inline size_t width(u32 cp) {
+static size_t width(code_point cp) {
 	if (cp < 0x10000)
 		return 1;
 
 	return 2;
 }
 
-template<typename Iterator>
-inline Iterator encode(u32 cp, Iterator output)
+template<typename Iterator> static
+inline Iterator encode(code_point cp, Iterator output)
 {
 	if (cp < 0x10000) {
 		*(output++) = cp;
@@ -47,18 +50,20 @@ inline Iterator encode(u32 cp, Iterator output)
 	return output;
 }
 
-template<typename Iterator>
-inline Iterator decode(Iterator input, Iterator end, u32& cp)
+template<typename Iterator> static
+inline Iterator decode(Iterator input, Iterator end, code_point& cp)
 {
 	auto error = [&cp] (Iterator ret) {
 		cp = -1;
 		return ret;
 	};
 
-	u16 first = *(input++);
+	char16_t first = *(input++);
 	if (isFirstSurrogate(first)) {
-		u16 second = *(input++);
+		if (input == end)
+			return error(end);
 
+		char16_t second = *(input++);
 		if (!isSecondSurrogate(second))
 			return error(input);
 
@@ -72,9 +77,9 @@ inline Iterator decode(Iterator input, Iterator end, u32& cp)
 		return error(input);
 	
 	cp = first;
-	return first;
+	return input;
 }
-} // namespace utf16
+}; // namespace utf16
 } // namespace unicode
 } // namespace aw
-#endif//aw_utility_utf16_
+#endif//aw_utility_utf16_h

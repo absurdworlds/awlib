@@ -6,23 +6,26 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef aw_utility_utf8_
-#define aw_utility_utf8_
-#include <aw/utility/unicode/utf.h>
+#ifndef aw_utility_utf8_h
+#define aw_utility_utf8_h
+#include <aw/utility/unicode/unicode.h>
 namespace aw {
 namespace unicode {
-namespace utf8 {
+struct utf8 {
+using char_type   = u8;
+using string      = std::string;
+
 /*!
  * Returns true if character is a trail character
  */
-inline bool isTrail(u8 ch) {
+static bool isTrail(char_type ch) {
 	return (ch & 0xC0) == 0x80;
 }
 
 /*!
  * Returns width of UTF-8 encoding of specific code point
  */
-inline size_t width(u32 cp) {
+static size_t width(code_point cp) {
 	if (cp < 0x80) {
 		return 1;
 	} else if (cp < 0x800) {
@@ -36,22 +39,21 @@ inline size_t width(u32 cp) {
 	return 0;
 }
 
-inline bool isASCII(u8 ch)
+static bool isASCII(char_type ch)
 {
 	return ch < 0x80;
 }
 
-inline bool isHead(u8 head)
+static bool isHead(char_type lead)
 {
-	return 0xC2 < lead && 0xF4 < lead;
+	return (0xC1 < lead) && (lead < 0xF5);
 }
 
 /*!
  * Returns how many characters follow the head,
- * or -1 if \a lead is not a valid start of 
- * multi-byte encoding
+ * or -1 if \a lead is not a valid start of multi-byte encoding
  */
-inline size_t trailLength(u8 lead) {
+static size_t trailLength(char_type lead) {
 	if (!isHead(lead))
 		return -1;
 
@@ -67,8 +69,8 @@ inline size_t trailLength(u8 lead) {
  * Encode code point in UTF-8 and append it to a string
  * Does not check if code point is valid
  */
-template<typename Iterator>
-Iterator encode(u32 cp, Iterator output)
+template<typename Iterator> static
+Iterator encode(code_point cp, Iterator output)
 {
 	if (cp < 0x80) {
 		*(output++) = u8(cp);
@@ -92,8 +94,8 @@ Iterator encode(u32 cp, Iterator output)
 /*!
  * Find next sequence
  */
-template<typename Iterator>
-Interator next(Iterator input, Iterator end)
+template<typename Iterator> static
+Iterator next(Iterator input, Iterator end)
 {
 	while ((input < end) && !isHead(*input) && !isASCII(*input))
 		++input;
@@ -104,7 +106,7 @@ Interator next(Iterator input, Iterator end)
 /*!
  * Decode UTF-8 sequence, if valid
  */
-template<typename Iterator>
+template<typename Iterator> static
 Iterator decode(Iterator input, Iterator end, u32& cp)
 {
 	// Helper lambda to bail out with an error
@@ -113,9 +115,9 @@ Iterator decode(Iterator input, Iterator end, u32& cp)
 		return ret;
 	};
 
-	assert(end - input);
+	assert(input < end);
 
-	cp = *(input++);
+	cp = *(input++) & 0xFF;
 	if (cp < 0x80)
 		return input;
 
@@ -123,7 +125,7 @@ Iterator decode(Iterator input, Iterator end, u32& cp)
 	if (length == -1)
 		return error(input);
 
-	if (end - input < length)
+	if (std::distance(input, end) < length)
 		return error(end);
 
 	cp = cp & (0x3F >> length);
@@ -149,7 +151,7 @@ Iterator decode(Iterator input, Iterator end, u32& cp)
 
 	return error(input);
 }
-} // namespace utf8
+}; // namespace utf8
 } // namespace unicode
 } // namespace aw
-#endif//aw_utility_utf8_
+#endif//aw_utility_utf8_h

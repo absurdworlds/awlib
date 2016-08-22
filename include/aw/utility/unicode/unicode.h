@@ -9,22 +9,29 @@
 #ifndef _aw_utf_
 #define _aw_utf_
 #include <cassert>
+#include <string>
 #include <aw/types/types.h>
 #include <aw/utility/macro.h>
 #include <aw/math/math.h>
 namespace aw {
 namespace unicode {
+/*!
+ * Unsigned integer type capable of holding
+ * a single unicode code point.
+ */
+using code_point = std::uint_least32_t;
+constexpr code_point invalid = -1;
+
 //! Check if code point is a surrogate
-inline bool isSurrogate(u32 cp)
+inline bool isSurrogate(code_point cp)
 {
-	return (CodePoint(cp) >= 0xD800 &&
-		CodePoint(cp) <= 0xDFFF);
+	return code_point(cp) >= 0xD800 && code_point(cp) <= 0xDFFF;
 }
 
 //! Check if code point is valid
-inline bool isValidCodepoint(u32 cp)
+inline bool isValidCodepoint(code_point cp)
 {
-	return CodePoint(cp) < 0x110000 && !isSurrogate(cp);
+	return code_point(cp) < 0x110000 && !isSurrogate(cp);
 }
 } // namespace unicode
 } // namespace aw
