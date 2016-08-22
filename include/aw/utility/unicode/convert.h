@@ -14,30 +14,37 @@
 
 namespace aw {
 namespace unicode {
-//! Convert string between different Unicode envodings
-template<typename In, typename Out>
-auto convert(typename In::string const& str) -> typename Out::string
+//! Convert string between different Unicode encodings
+template<typename Output, typename Input, typename InEnc, typename OutEnc>
+auto convert(Input const& str, InEnc, OutEnc) -> Output
 {
 	auto begin = std::begin(str);
 	auto end   = std::end(str);
 
-	typename Out::string result;
+	Output result;
 	auto out = std::back_inserter(result);
 
 	while (begin != end) {
 		code_point cp;
 
-		begin = In::template decode(begin, end, cp);
+		begin = InEnc::template decode(begin, end, cp);
 		if ( !isValidCodepoint(cp) )
 			continue;
-		out   = Out::template encode(cp, out);
+		out   = OutEnc::template encode(cp, out);
 	}
 
 	return result;
 }
 
-constexpr auto& narrow = convert<utf16, utf8>;
-constexpr auto& widen  = convert<utf8, utf16>;
+//! Convert string between different Unicode encodings
+template<typename In, typename Out>
+auto convert(typename In::string const& str) -> typename Out::string
+{
+	return convert<typename Out::string>(str, In{}, Out{});
+}
+
+constexpr utf8::string(&narrow)(utf16::string const&) = convert<utf16, utf8>;
+constexpr utf16::string(&widen)(utf8::string const&)  = convert<utf8, utf16>;
 } // namespace unicode
 } // namespace aw
 #endif//_aw_utf_convert_
