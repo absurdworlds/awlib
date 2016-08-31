@@ -8,7 +8,7 @@
  */
 #ifndef aw_containers_shared
 #define aw_containers_shared
-#include <aw/types/traits/iterators.h>
+#include <aw/types/traits/iterator.h>
 namespace aw {
 namespace _impl {
 template<typename InputIt, typename ForwardIt>
