@@ -29,12 +29,14 @@ size_t common_prefix_length(Iterator first, Iterator last)
 	while (++first != last) {
 		auto b_first = std::begin(*first);
 		auto b_last  = std::end(*first);
-		auto a_last = std::mismatch( a_first, a_last, b_first, b_last ).first;
+		a_last = std::mismatch( a_first, a_last, b_first, b_last ).first;
 		if (a_first == a_last)
 			break;
 	}
 
-	return size_t(a_last - a_first);
+	auto dist = std::distance(a_first, a_last);
+	assert(dist >= 0);
+	return size_t(dist);
 }
 
 /*!
@@ -60,12 +62,14 @@ size_t common_prefix_length(Iterator first, Iterator last, size_t start_at)
 		assert(std::distance(b_first, b_last) >= start_at);
 		std::advance(b_first, start_at);
 
-		auto a_last = std::mismatch( a_first, a_last, b_first, b_last ).first;
+		a_last = std::mismatch( a_first, a_last, b_first, b_last ).first;
 		if (a_first == a_last)
 			break;
 	}
 
-	return size_t(a_last - std::begin(*first));
+	auto dist = std::distance(a_first, a_last);
+	assert(dist >= 0);
+	return size_t(dist) + start_at;
 }
 
 /*!
@@ -75,7 +79,7 @@ size_t common_prefix_length(Iterator first, Iterator last, size_t start_at)
  *
  * Takes a comparator function \a comp.
  */
-template <typename Iterator, typename Comparator>
+template <typename Iterator, typename T, typename Comparator>
 Iterator binary_find(Iterator begin, Iterator end, T const& val, Comparator comp)
 {
 	Iterator pos = std::lower_bound(begin, end, val, comp);
