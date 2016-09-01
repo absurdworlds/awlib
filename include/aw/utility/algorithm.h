@@ -11,7 +11,7 @@
 #include <cassert>
 #include <algorithm>
 #include <functional>
-#include <types/traits/iterator.h>
+#include <aw/types/traits/iterator.h>
 namespace aw {
 /*!
  * Calculate length of common prefix for a set of containers,
