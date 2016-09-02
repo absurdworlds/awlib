@@ -27,6 +27,9 @@ struct flat_map_base : Compare {
 		: Compare(comp)
 	{ }
 
+	flat_map_base& operator=(flat_map_base const& other) = default;
+	flat_map_base& operator=(flat_map_base&& other) = default;
+
 	Compare key_comp() const
 	{
 		return *this;
@@ -172,7 +175,7 @@ public:
 	         Allocator const& alloc = Allocator())
 		: base(first, last, alloc), comp_storage(comp)
 	{
-		std::sort(begin(), end(), value_comp());
+		normalize();
 	}
 
 	/*!
@@ -183,20 +186,52 @@ public:
 	         Allocator const& alloc = Allocator())
 		: base(list, alloc), comp_storage(comp)
 	{
-		sort();
+		normalize();
 	}
 
 	/*!
 	 * Create map from an initializer list.
 	 */
 	flat_map(std::initializer_list<value_type> list,
-	         Allocator const& alloc = Allocator())
+	         Allocator const& alloc)
 		: base(list, alloc), comp_storage( Compare() )
 	{
-		sort();
+		normalize();
 	}
 
 	~flat_map() = default;
+
+	/*!
+	 * Replaces contents with copy of \a other's contents.
+	 */
+	flat_map& operator=(flat_map const& other)
+	{
+		base = other.base;
+		comp_storage::operator=(other);
+		return *this;
+	}
+
+	/*!
+	 * Moves contents of \a other's into *this;
+	 */
+	flat_map& operator=(flat_map&& other)
+	{
+		base = std::move(other.base);
+		comp_storage::operator=(std::move(other));
+		return *this;
+	}
+
+	/*!
+	 * Replaces the contents with those identified by initializer list \a ilist.
+	 */
+	flat_map& operator=(std::initializer_list<value_type> ilist)
+	{
+		clear();
+		base.reserve(ilist.size());
+		std::copy(std::begin(ilist), std::end(ilist), std::back_inserter(base));
+		normalize();
+		return *this;
+	}
 
 	/*! Iterator to the front of map */
 	iterator begin()
@@ -321,30 +356,38 @@ public:
 		base.clear();
 	}
 
+	/*!
+	 * Find first element that with key not less than \a key.
+	 */
 	iterator lower_bound(key_type const& key)
 	{
-		auto compare =
-		[cmp = key_comp()] (value_type const& v, key_type const& key)
-		{
-			return cmp(v.first, key);
-		};
+		auto compare = equiv{key_comp()};
 		return std::lower_bound(begin(), end(), key, compare);
 	}
 
+	/*!
+	 * Find first element that with key not less than \a key.
+	 */
 	const_iterator lower_bound(key_type const& key) const
 	{
 		// ugly, but DRY
 		return const_cast<flat_map*>(this)->lower_bound(key);
 	}
 
+	/*!
+	 * Find element with key equivalent to \a key.
+	 */
 	iterator find(key_type const& key)
 	{
 		iterator pos = lower_bound(key);
-		if (pos == end() || !equiv_key(key, pos->first))
+		if (pos == end() || !equivalent(key, pos->first))
 			return end();
 		return pos;
 	}
 
+	/*!
+	 * Find element with key equivalent to \a key.
+	 */
 	const_iterator find(key_type const& key) const
 	{
 		return const_cast<flat_map*>(this)->find(key);
@@ -368,12 +411,38 @@ public:
 			success = true;
 		}
 
-		if (!equiv(pair, *pos)) {
+		if (!equivalent(pair, *pos)) {
 			pos = base.insert( pos, pair );
 			success = true;
 		}
 
 		return {pos, success};
+	}
+
+	/*!
+	 * Insert elements from range [first, last) into map.
+	 */
+	template<typename InputIt>
+	void insert( InputIt first, InputIt last )
+	{
+		size_t len = size();
+		/*
+		if constexpr(is_forward_iterator<InputIt>)
+			base.reserve(len + std::distance(first, last));
+		 */
+		std::copy(first, last, std::back_inserter(base));
+
+		auto a_begin  = begin();
+		auto a_middle = begin() + len;
+		auto a_end    = end();
+
+		std::inplace_merge(a_begin, a_middle, a_end, value_comp());
+		remove_duplicates();
+	}
+
+	void insert( std::initializer_list<value_type> ilist )
+	{
+		insert(begin(ilist), end(ilist));
 	}
 
 	/*!
@@ -412,33 +481,66 @@ public:
 		}
 #endif
 
-		if (!equiv_key(key, pos->first))
+		if (!equivalent(key, pos->first))
 			pos = base.emplace( pos, value_type{key, T{}} );
 
 		return pos->second;
 	}
 
 private:
-	bool equiv(value_type const& a, value_type const& b)
+	struct equiv {
+		friend class flat_map;
+	protected:
+		key_compare comp;
+
+		equiv(key_compare comp)
+			: comp(comp)
+		{}
+
+	public:
+		bool operator()(value_type const& a, value_type const& b)
+		{
+			return operator()(a.first, b.first);
+		}
+
+		bool operator()(value_type const& v, key_type const& k)
+		{
+			return operator()(v.first, k);
+		}
+
+		bool operator()(key_type const& a, key_type const& b)
+		{
+			return !comp(a, b) && !comp(b, a);
+		}
+	};
+
+	bool equivalent(value_type const& a, value_type const& b)
 	{
 		auto comp = value_comp();
 		return !comp(a, b) && !comp(b, a);
 	}
 
-	bool equiv_key(key_type const& a, key_type const& b)
+	bool equivalent(key_type const& a, key_type const& b)
 	{
 		auto comp = key_comp();
 		return !comp(a, b) && !comp(b, a);
 	}
 
+	void remove_duplicates()
+	{
+		auto compare = equiv{key_comp()};
+		base.erase( std::unique( begin(), end(), compare ), end() );
+	}
+
 	void sort()
 	{
 		std::sort( begin(), end(), value_comp() );
-		// remove dublicate entries
-		auto equiv = [this] (value_type const& a, value_type const& b) {
-			return this->equiv(a, b);
-		};
-		base.erase( std::unique( begin(), end(), equiv ), end() );
+	}
+
+	void normalize()
+	{
+		sort();
+		remove_duplicates();
 	}
 };
 } // namespace aw
