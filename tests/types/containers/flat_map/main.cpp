@@ -31,6 +31,29 @@ void print_map(aw::flat_map<K,V,C,A> const& map)
 	std::cout << '}';
 }
 
+template<typename K, typename V, typename C, typename A, typename K2>
+void print_find(aw::flat_map<K,V,C,A> const& map, K2&& key)
+{
+	auto it = map.find( std::forward<K2>(key) );
+	if (it == map.end()) {
+		std::cout << "not found: " << key << '\n';
+	} else {
+		std::cout << "found: ";
+		print_pair(*it);
+		std::cout << '\n';
+	}
+}
+
+void test_find()
+{
+	separator();
+	using namespace std;
+	aw::flat_map<string, int> map{{"abc",10}, {"abe",20}, {"abf",0}, {"bcd",11}};
+	print_find(map, "ccc");
+	print_find(map, "bcd");
+	print_find(map, "bcda");
+}
+
 
 void test_merge()
 {
@@ -49,6 +72,7 @@ void test_merge()
 	std::cout << '\n';
 
 	aw::flat_map<string, int> map3{{"aba",8}, {"ada",9}, {"baa",0}, {"cac",10}};
+	map1.insert(begin(map3), end(map3));
 	map1.insert(begin(map3), end(map3));
 	print_map(map1);
 	std::cout << '\n';
@@ -98,19 +122,6 @@ int main()
 	std::cout << map["abf"] << "\n";
 	std::cout << map["bcd"] << "\n";
 
-	std::cout << "--------------\n";
-
-	aw::flat_map<string,int>::iterator it = map.find("ccc");
-	if (it == map.end())
-		std::cout << "notfund\n";
-	else
-		std::cout << "dounf: " << it->second << "\n";
-
-	it = map.find("bcd");
-	if (it == map.end())
-		std::cout << "notfund\n";
-	else
-		std::cout << "found: " << it->second << "\n";
 
 	std::cout << "--------------\n";
 
@@ -124,6 +135,7 @@ int main()
 	print_map(map);
 	std::cout << '\n';
 
+	test_find();
 	test_merge();
 	test_assignment();
 }

@@ -74,9 +74,14 @@ struct flat_map : private _impl::flat_map_base<Compare> {
 	using const_reverse_iterator = typename base_container::const_reverse_iterator;
 
 private:
+	base_container base;
+
 	// TODO: get rid of comp_storage, use special pair type
 	using comp_storage = _impl::flat_map_base<Compare>;
-	base_container base;
+	bool compare_key(key_type const& a, key_type const& b)
+	{
+		return comp_storage::operator()(a, b);
+	}
 
 public:
 	using key_compare = Compare;
@@ -361,7 +366,11 @@ public:
 	 */
 	iterator lower_bound(key_type const& key)
 	{
-		auto compare = equiv{key_comp()};
+		auto compare =
+		[this] (value_type const& v, key_type const& k)
+		{
+			return this->compare_key(v.first, k);
+		};
 		return std::lower_bound(begin(), end(), key, compare);
 	}
 
@@ -380,7 +389,7 @@ public:
 	iterator find(key_type const& key)
 	{
 		iterator pos = lower_bound(key);
-		if (pos == end() || !equivalent(key, pos->first))
+		if (pos == end() || compare_key(key, pos->first))
 			return end();
 		return pos;
 	}
@@ -404,19 +413,17 @@ public:
 	std::pair<iterator,bool> insert(value_type const& pair)
 	{
 		iterator pos = lower_bound(pair.first);
-		bool success = false;
 		if (pos == end()) {
 			base.push_back( pair );
-			pos = end() - 1;
-			success = true;
+			return {end() - 1, true};
 		}
 
-		if (!equivalent(pair, *pos)) {
+		if (compare_key(pair.first, pos->first)) {
 			pos = base.insert( pos, pair );
-			success = true;
+			return {pos, true};
 		}
 
-		return {pos, success};
+		return {pos, false};
 	}
 
 	/*!
@@ -440,9 +447,41 @@ public:
 		remove_duplicates();
 	}
 
+	/*!
+	 * Insert elements denoted by \a ilist into the map.
+	 */
 	void insert( std::initializer_list<value_type> ilist )
 	{
 		insert(begin(ilist), end(ilist));
+	}
+
+	/*!
+	 * Construct element from \a args, and insert into the map.
+	 */
+	template<typename... Args>
+	void emplace( Args&&... args )
+	{
+		// No idea how to optimize it.
+		insert( value_type{ std::forward<Args>... } );
+	}
+
+	template<typename M>
+	std::pair<iterator,bool> insert_or_assign(key_type const& key, M&& obj)
+	{
+		iterator pos = lower_bound(key);
+		bool inserted = false;
+		if (pos == end()) {
+			base.push_back( value_type{key, std::forward<M>(obj)} );
+			return {end() - 1, true};
+		}
+
+		if (compare_key(key, pos->first)) {
+			pos = base.insert( pos, value_type{key, std::forward<M>(obj)} );
+			return {pos, true};
+		}
+
+		*pos->second = std::forward<M>(obj);
+		return {pos, false};
 	}
 
 	/*!
@@ -481,54 +520,21 @@ public:
 		}
 #endif
 
-		if (!equivalent(key, pos->first))
+		if (compare_key(key, pos->first))
 			pos = base.emplace( pos, value_type{key, T{}} );
 
 		return pos->second;
 	}
 
 private:
-	struct equiv {
-		friend class flat_map;
-	protected:
-		key_compare comp;
-
-		equiv(key_compare comp)
-			: comp(comp)
-		{}
-
-	public:
-		bool operator()(value_type const& a, value_type const& b)
-		{
-			return operator()(a.first, b.first);
-		}
-
-		bool operator()(value_type const& v, key_type const& k)
-		{
-			return operator()(v.first, k);
-		}
-
-		bool operator()(key_type const& a, key_type const& b)
-		{
-			return !comp(a, b) && !comp(b, a);
-		}
-	};
-
-	bool equivalent(value_type const& a, value_type const& b)
-	{
-		auto comp = value_comp();
-		return !comp(a, b) && !comp(b, a);
-	}
-
-	bool equivalent(key_type const& a, key_type const& b)
-	{
-		auto comp = key_comp();
-		return !comp(a, b) && !comp(b, a);
-	}
-
 	void remove_duplicates()
 	{
-		auto compare = equiv{key_comp()};
+		auto compare =
+		[this] (value_type const& a, value_type const& b)
+		{
+			return !compare_key(a.first, b.first) &&
+			       !compare_key(b.first, a.first);
+		};
 		base.erase( std::unique( begin(), end(), compare ), end() );
 	}
 
