@@ -12,7 +12,7 @@
 #include <string>
 #include <vector>
 #include <numeric>
-#include <aw/utility/algorithm.h>
+#include <aw/algorithm/join.h>
 namespace aw {
 namespace string {
 /*!
