@@ -9,33 +9,14 @@
 #ifndef aw_containers_flat_map
 #define aw_containers_flat_map
 #include <cassert>
-#include <memory>
 #include <vector>
 #include <iterator>
 #include <algorithm>
-#include <aw/utility/exceptions.h>
 #include <aw/types/traits/iterator.h>
-#include <aw/types/traits/conditional.h>
-#include <aw/types/containers/bits/shared.h>
 
 namespace aw {
 namespace _impl {
-// Empty-base optimization
-template<typename Compare>
-struct flat_map_base : Compare {
-	flat_map_base( Compare const& comp )
-		: Compare(comp)
-	{ }
-
-	flat_map_base& operator=(flat_map_base const& other) = default;
-	flat_map_base& operator=(flat_map_base&& other) = default;
-
-	Compare key_comp() const
-	{
-		return *this;
-	}
-};
-}
+} // namespace _impl
 /*!
  * flat_map (sorted_vector) is a sorted associative container,
  * that contains key-value pairs with unqiue keys. Keys are sorted
@@ -50,7 +31,7 @@ template<typename Key,
          typename Compare = std::less<Key>,
          typename Allocator = std::allocator<std::pair<Key const, T>>
         >
-struct flat_map : private _impl::flat_map_base<Compare> {
+struct flat_map {
 	using key_type    = Key;
 	using mapped_type = T;
 	//need to solve this somehow
@@ -73,17 +54,6 @@ struct flat_map : private _impl::flat_map_base<Compare> {
 	using reverse_iterator       = typename base_container::reverse_iterator;
 	using const_reverse_iterator = typename base_container::const_reverse_iterator;
 
-private:
-	base_container base;
-
-	// TODO: get rid of comp_storage, use special pair type
-	using comp_storage = _impl::flat_map_base<Compare>;
-	bool compare_key(key_type const& a, key_type const& b)
-	{
-		return comp_storage::operator()(a, b);
-	}
-
-public:
 	using key_compare = Compare;
 	struct value_compare {
 		friend class flat_map;
@@ -101,14 +71,20 @@ public:
 		}
 	};
 
+private:
+	// TODO: use special pair type to conserve space
+	key_compare _key_comp;
+	base_container base;
+
+public:
 	key_compare key_comp() const
 	{
-		return comp_storage::key_comp();
+		return _key_comp;
 	}
 
 	value_compare value_comp() const
 	{
-		return {key_comp()};
+		return {_key_comp};
 	}
 
 	/*! Get the allocator associated with the container. */
@@ -125,18 +101,18 @@ public:
 
 	/*! Create empty map */
 	flat_map()
-		: base{}, comp_storage( Compare() )
+		: base{}, _key_comp( Compare() )
 	{ }
 
 	explicit
 	flat_map(Compare const& comp,
 	         Allocator const& alloc = Allocator())
-		: base(alloc), comp_storage( comp )
+		: base(alloc), _key_comp( comp )
 	{ }
 
 	explicit
 	flat_map(Allocator const& alloc)
-		: base(alloc), comp_storage( Compare() )
+		: base(alloc), _key_comp( Compare() )
 	{ }
 
 	/*!
@@ -145,11 +121,11 @@ public:
 	 * Extra space is not copied.
 	 */
 	flat_map(flat_map const& other)
-		: base(other.base), comp_storage(other)
+		: base(other.base), _key_comp(other)
 	{ }
 
 	flat_map(flat_map const& other, Allocator const& alloc) noexcept
-		: base(other.base, alloc), comp_storage(other)
+		: base(other.base, alloc), _key_comp(other._key_comp)
 	{ }
 
 	/*!
@@ -158,7 +134,7 @@ public:
 	 * \a other is left in a valid (but unspecified) state.
 	 */
 	flat_map(flat_map&& other) noexcept
-		: base(std::move(other.base)), comp_storage(other)
+		: base(std::move(other.base)), _key_comp(other._key_comp)
 	{ }
 
 	/*!
@@ -167,7 +143,7 @@ public:
 	 * If `!(alloc == q.get_allocator())`, then operation is O(n).
 	 */
 	flat_map(flat_map&& other, Allocator const& alloc) noexcept
-		: base(std::move(other), alloc), comp_storage(other)
+		: base(std::move(other), alloc), _key_comp(other._key_comp)
 	{ }
 
 
@@ -178,7 +154,7 @@ public:
 	flat_map(Iterator first, Iterator last,
 	         Compare const& comp = Compare(),
 	         Allocator const& alloc = Allocator())
-		: base(first, last, alloc), comp_storage(comp)
+		: base(first, last, alloc), _key_comp(comp._key_comp)
 	{
 		normalize();
 	}
@@ -189,7 +165,7 @@ public:
 	flat_map(std::initializer_list<value_type> list,
 	         Compare const& comp = Compare(),
 	         Allocator const& alloc = Allocator())
-		: base(list, alloc), comp_storage(comp)
+		: base(list, alloc), _key_comp{ comp }
 	{
 		normalize();
 	}
@@ -199,7 +175,7 @@ public:
 	 */
 	flat_map(std::initializer_list<value_type> list,
 	         Allocator const& alloc)
-		: base(list, alloc), comp_storage( Compare() )
+		: base(list, alloc), _key_comp( Compare() )
 	{
 		normalize();
 	}
@@ -212,7 +188,7 @@ public:
 	flat_map& operator=(flat_map const& other)
 	{
 		base = other.base;
-		comp_storage::operator=(other);
+		_key_comp = other._key_comp;
 		return *this;
 	}
 
@@ -222,7 +198,7 @@ public:
 	flat_map& operator=(flat_map&& other)
 	{
 		base = std::move(other.base);
-		comp_storage::operator=(std::move(other));
+		_key_comp = std::move(other._key_comp);
 		return *this;
 	}
 
@@ -361,6 +337,12 @@ public:
 		base.clear();
 	}
 
+	void swap(flat_map& other)
+	{
+		base.swap(other.base);
+		std::swap(_key_comp, other._key_comp);
+	}
+
 	/*!
 	 * Find first element that with key not less than \a key.
 	 */
@@ -369,7 +351,7 @@ public:
 		auto compare =
 		[this] (value_type const& v, key_type const& k)
 		{
-			return this->compare_key(v.first, k);
+			return this->_key_comp(v.first, k);
 		};
 		return std::lower_bound(begin(), end(), key, compare);
 	}
@@ -384,12 +366,36 @@ public:
 	}
 
 	/*!
+	 * Find first element that with key greater than \a key.
+	 */
+	iterator upper_bound(key_type const& key)
+	{
+		auto compare =
+		[this] (key_type const& k, value_type const& v)
+		{
+			return this->_key_comp(k, v.first);
+		};
+		return std::upper_bound(begin(), end(), key, compare);
+	}
+
+	/*!
+	 * Find first element that with key not less than \a key.
+	 */
+	const_iterator upper_bound(key_type const& key) const
+	{
+		// ugly, but DRY
+		return const_cast<flat_map*>(this)->upper_bound(key);
+	}
+
+
+
+	/*!
 	 * Find element with key equivalent to \a key.
 	 */
 	iterator find(key_type const& key)
 	{
 		iterator pos = lower_bound(key);
-		if (pos == end() || compare_key(key, pos->first))
+		if (pos == end() || _key_comp(key, pos->first))
 			return end();
 		return pos;
 	}
@@ -418,7 +424,7 @@ public:
 			return {end() - 1, true};
 		}
 
-		if (compare_key(pair.first, pos->first)) {
+		if (_key_comp(pair.first, pos->first)) {
 			pos = base.insert( pos, pair );
 			return {pos, true};
 		}
@@ -459,10 +465,10 @@ public:
 	 * Construct element from \a args, and insert into the map.
 	 */
 	template<typename... Args>
-	void emplace( Args&&... args )
+	auto emplace( Args&&... args )
 	{
 		// No idea how to optimize it.
-		insert( value_type{ std::forward<Args>... } );
+		return insert( value_type{ std::forward<Args>(args)... } );
 	}
 
 	template<typename M>
@@ -475,7 +481,7 @@ public:
 			return {end() - 1, true};
 		}
 
-		if (compare_key(key, pos->first)) {
+		if (_key_comp(key, pos->first)) {
 			pos = base.insert( pos, value_type{key, std::forward<M>(obj)} );
 			return {pos, true};
 		}
@@ -485,11 +491,19 @@ public:
 	}
 
 	/*!
-	 * Erase element pointed-to by interator \a pos.
+	 * Erase element pointed-to by iterator \a pos.
 	 */
 	iterator erase(const_iterator pos)
 	{
 		return base.erase(pos);
+	}
+
+	/*!
+	 * Erase elements in range [first, last).
+	 */
+	iterator erase(const_iterator first, const_iterator last)
+	{
+		return base.erase(first, last);
 	}
 
 	/*!
@@ -520,7 +534,7 @@ public:
 		}
 #endif
 
-		if (compare_key(key, pos->first))
+		if (_key_comp(key, pos->first))
 			pos = base.emplace( pos, value_type{key, T{}} );
 
 		return pos->second;
@@ -532,8 +546,8 @@ private:
 		auto compare =
 		[this] (value_type const& a, value_type const& b)
 		{
-			return !compare_key(a.first, b.first) &&
-			       !compare_key(b.first, a.first);
+			return !_key_comp(a.first, b.first) &&
+			       !_key_comp(b.first, a.first);
 		};
 		base.erase( std::unique( begin(), end(), compare ), end() );
 	}
