@@ -11,7 +11,8 @@
 #define aw_string_join_h
 #include <string>
 #include <vector>
-#include <algorithm>
+#include <numeric>
+#include <aw/utility/algorithm.h>
 namespace aw {
 namespace string {
 /*!
@@ -25,14 +26,25 @@ namespace string {
  * \return
  *      resulting string concatenated together
  */
-inline std::string join(std::vector<std::string>& source,
-                        std::string const& delim = "")
+inline std::string
+join(std::vector<std::string> const& source, std::string const& delim = "")
 {
-	std::string result;
-	for (auto const& str : source)
-		result.append(delim + str);
+	auto begin = source.begin();
+	auto end   = source.end();
 
-	return result;
+	if (begin == end)
+		return {};
+
+	size_t size = 0;
+	auto adder = [] (size_t a, std::string const& b) {
+		return a + b.size();
+	};
+	size = std::accumulate(begin, end, size, adder);
+
+	std::string sink;
+	sink.reserve(size);
+	sink += *begin++;
+	return aw::join(begin, end, sink, delim);
 }
 } // namespace string
 } // namespace aw

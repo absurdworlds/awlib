@@ -1,6 +1,6 @@
 RootPath = ../../..
 Sources = split.cpp
-Libraries = awcore
+Libraries =
 ProjectName = string_split
 Executable = true
 

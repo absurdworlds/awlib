@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <utility>
 
+#include <aw/utility/string/join.h>
 #include <aw/utility/string/split.h>
 
 int main(int c, char** a)
@@ -14,18 +15,22 @@ int main(int c, char** a)
 	std::string delim = a[2];
 
 	auto test = [&] (auto func) {
-				
 		auto bits = func(string, delim);
 
-		for (auto bit : bits) {
-			printf("%s\n", bit.c_str());
-		}
+		for (auto bit : bits)
+			puts(bit.c_str());
 	};
 
-	printf("split():\n");
+	puts("split():");
 	test(split);
-	printf("explode():\n");
+	puts("explode():");
 	test(explode);
+
+	puts("join():");
+	auto bits  = split(string, delim);
+	auto joined = join(bits, delim);
+
+	puts(joined.c_str());
 
 	return 0;
 }

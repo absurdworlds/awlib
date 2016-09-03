@@ -16,28 +16,6 @@ namespace aw {
 namespace string {
 /*!
  * \brief
- * 	join strings together
- * \param source
- * 	vector of strings to be joined
- * \param delim
- * 	delimiting sequence which will be inserted between 
- * 	joined strings
- * \return
- * 	resulting string concatenated together
- */
-inline std::string join(std::vector<std::string>& source, 
-		std::string const& delim)
-{
-	std::string result;
-	for (auto const& str : source) {
-		result.append(delim + str);
-	}
-
-	return result;
-}
-
-/*!
- * \brief
  *      Split string into tokens. Ignores empty tokens.
  *      For example, `split("/ab/cde//fgh/", "/")` will produce 
  *      three tokens: {"ab", "cde", "fgh"}

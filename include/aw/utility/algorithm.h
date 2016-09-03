@@ -96,5 +96,30 @@ Iterator binary_find(Iterator begin, Iterator end, T const& val)
 {
 	return binary_find(begin, end, val, std::less<T>{});
 }
+
+/*!
+ * Join elements in range [begin, end) into single element,
+ * starting with \a sink.
+ * T::operator+= is used.
+ */
+template <typename Iterator, typename T>
+T join(Iterator begin, Iterator end, T sink, T const& delim)
+{
+	while (begin != end) {
+		sink += delim;
+		sink += *begin++;
+	}
+	return sink;
+}
+
+template <typename Iterator, typename T>
+T join(Iterator begin, Iterator end, T const& delim)
+{
+	T sink;
+	if (begin == end)
+		return sink;
+	sink += *begin++;
+	return join(begin, end, sink, delim);
+}
 } // namespace aw
 #endif//aw_algorithm_h
