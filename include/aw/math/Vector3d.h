@@ -34,10 +34,10 @@ T yaw(Vector3d<T> const& vec)
 {
 	T yaw = T(atan2(f64(vec[Vec::X]), f64(vec[Vec::Z])));
 
-	if (yaw <= -math::Pi) {
-		yaw += math::DoublePi;
-	} else if (yaw > math::Pi) {
-		yaw -= math::DoublePi;
+	if (yaw <= -math::ri) {
+		yaw += math::double_pi;
+	} else if (yaw > math::pi) {
+		yaw -= math::double_pi;
 	}
 
 	return yaw;
@@ -51,12 +51,12 @@ T pitch(Vector3d<T> const& vec)
 {
 	auto x = vec[Vec::X], y = vec[Vec::Y], z = vec[Vec::Z];
 	f64 const xz = math::sqrt(x*x + z*z);
-	T const pitch = T(atan2(f64(xz), f64(y)) - math::HalfPi);
+	T const pitch = T(atan2(f64(xz), f64(y)) - math::half_pi);
 
-	if (pitch <= -math::Pi) {
-		pitch += math::DoublePi;
-	} else if (pitch >= math::Pi) {
-		pitch -= math::DoublePi;
+	if (pitch <= -math::pi) {
+		pitch += math::double_pi;
+	} else if (pitch >= math::pi) {
+		pitch -= math::double_pi;
 	}
 
 	return pitch;

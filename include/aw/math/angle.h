@@ -18,14 +18,14 @@ namespace math {
 template<typename T>
 inline T degToRad(T deg)
 {
-	return deg * RadiansInDegree;
+	return deg * radians_in_degree;
 }
 
 //! Convert radians to degrees
 template<typename T>
 inline T radToDeg(T rad)
 {
-	return rad * DegreesInRadian;
+	return rad * degrees_in_radian;
 }
 
 /*!
@@ -50,15 +50,17 @@ inline f32 wrapAngle(f32 angle)
 }
 
 /*!
- * Normalize angle between -Pi and Pi radians
- * \param angle Value in radians to normalize
- * \return Angle in (-Pi;Pi] range
+ * Map \a angle to (-π; π] range.
+ * \param angle
+ *     Value in radians to normalize
+ * \return
+ *     Value between -π and π radians.
  */
 inline f32 wrapAngleRad(f32 angle)
 {
-	angle = fmod(f64(angle), DoublePi);
-	return    angle >   Pi ? angle - DoublePi
-		: angle <= -Pi ? angle + DoublePi 
+	angle = fmod(f64(angle), double_pi);
+	return    angle >   pi ? angle - double_pi
+		: angle <= -pi ? angle + double_pi
 		: angle;
 }
 } //namespace math

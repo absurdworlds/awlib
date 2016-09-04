@@ -21,10 +21,10 @@ T angle(Vector2d<T> const& vec)
 {
 	T yaw = T(atan2(f64(vec[Vec::X]), f64(vec[Vec::Y])));
 
-	if (yaw <= -math::Pi) {
-		yaw += math::DoublePi;
-	} else if (yaw > math::Pi) {
-		yaw -= math::DoublePi;
+	if (yaw <= -math::pi) {
+		yaw += math::double_pi;
+	} else if (yaw > math::pi) {
+		yaw -= math::double_pi;
 	}
 
 	return math::radToDeg(yaw);

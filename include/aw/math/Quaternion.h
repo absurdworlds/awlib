@@ -203,11 +203,11 @@ public:
 		if (math::equals(test, 0.5f)) { // north pole
 			euler.x = 0;
 			euler.y = 2 * atan2(x, w);
-			euler.z = math::HalfPi;
+			euler.z = math::half_pi;
 		} else if (math::equals(test, -0.5f)) { // south pole
 			euler.x = 0;
 			euler.y = -2 * atan2(x,w);
-			euler.z = -math::HalfPi;
+			euler.z = -math::half_pi;
 		} else {
 			f32 const sX = x * x;
 			f32 const sY = y * y;
