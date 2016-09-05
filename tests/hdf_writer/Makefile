@@ -1,7 +1,7 @@
 RootPath = ../..
 Sources = main.cpp
 # Defines = AW_MODULE_UI
-Libraries = awcore awplatform hdf
+Libraries = awlogger awstring awio hdf
 ProjectName = hdf_writer
 Executable = true
 

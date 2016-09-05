@@ -15,7 +15,7 @@ static char const CompositionChar = '%';
 
 std::string compose(
         std::string const& fmt,
-       	std::vector<std::string> const& args)
+        std::vector<std::string> const& args)
 {
 	char const delim = CompositionChar;
 

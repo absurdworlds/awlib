@@ -3,11 +3,11 @@
 #include <string>
 #include <vector>
 
-#include <awengine/io/WriteFile.h>
-#include <awengine/io/WriteStream.h>
-#include <awengine/hdf/Writer.h>
+#include <aw/io/WriteFile.h>
+#include <aw/io/WriteStream.h>
+#include <aw/hdf/Writer.h>
 
-using namespace awrts;
+using namespace aw;
 using namespace io;
 using namespace hdf;
 
@@ -54,14 +54,13 @@ int main(int,char**)
 	//io::WriteFile file("../../data/misc/messages.hdf", false);
 	TestWriteStream stream;
 	// create the parser
-	hdf::Writer* writer = hdf::createWriter(stream);
+	hdf::Writer writer {stream};
 
-	writer->startNode("shape");
-	hdf::Value type("sphere");
-	writer->writeValue("type"s,type);
+	using namespace std::string_literals;
+	writer.startNode("shape"s);
+	hdf::Value type("sphere"s);
+	writer.writeValue("type"s,type);
 	hdf::Value radius(1.0);
-	writer->writeValue("radius"s,radius);
-	writer->endNode();
-
-	delete writer;
+	writer.writeValue("radius"s,radius);
+	writer.endNode();
 }
