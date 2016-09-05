@@ -306,10 +306,7 @@ struct variant : variant_shared {
 	 * Get index of particular type
 	 */
 	template<typename T>
-	static constexpr index_t index_of()
-	{
-		return index_t(get_index<T, Ts...>);
-	}
+	static constexpr index_t index_of = index_t(get_index<T, Ts...>);
 
 	/*!
 	 * Apply a functor to variant.
