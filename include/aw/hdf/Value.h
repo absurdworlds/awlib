@@ -13,6 +13,7 @@
 #include <string>
 
 #include <aw/types/variant.h>
+#include <aw/types/optional.h>
 #include <aw/math/Vector2d.h>
 #include <aw/math/Vector3d.h>
 #include <aw/math/Vector4d.h>
@@ -60,7 +61,7 @@ struct Value {
 	}
 
 	template<typename val_type>
-	opt<val_type> get() const
+	optional<val_type> get() const
 	{
 		val_type tmp;
 
