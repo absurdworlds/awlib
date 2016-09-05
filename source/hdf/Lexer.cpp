@@ -12,22 +12,12 @@
 
 #include <aw/io/InputStream.h>
 #include <aw/utility/string/compose.h>
+#include <aw/algorithm/in.h>
 
 #include "Lexer.h"
 
 namespace aw {
 namespace hdf {
-bool in (char c, char c1)
-{
-	return c == c1;
-}
-
-template<typename... Args>
-bool in (char c, char c1, Args... chars)
-{
-	return c == c1 || in(c, chars...);
-}
-
 inline bool isDigit (char c) {
 	return (c >= '0' && c <= '9');
 }
