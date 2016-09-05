@@ -51,11 +51,7 @@ void Lexer::skip(Func condition)
 
 void Lexer::skipLine()
 {
-	skip(
-		[] (char c) {
-			return c != '\n';
-		}
-	);
+	skip( [] (char c) { return c != '\n'; });
 }
 
 void Lexer::skipWhitespace()

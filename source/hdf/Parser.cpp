@@ -182,7 +182,8 @@ void Parser::skipNode()
 
 void Parser::error(size_t pos, std::string msg)
 {
-	printf("[HDF:%u]: %s\n", pos, msg.c_str());
+	// TODO: use aw::log
+	printf("[HDF:%zu]: %s\n", pos, msg.c_str());
 }
 
 void Parser::readValue(Value& var)
@@ -257,7 +258,6 @@ Value Parser::convertValue(Token tok)
 	case Token::Name:
 		if (tok.value == "true" || tok.value == "false")
 			return Value(bool(parseBoolean(tok.value)));
-
 		return Value(tok.value);
 	case Token::VecBegin:
 		return parseVector();
@@ -315,11 +315,11 @@ Value Parser::parseVector()
 	case 1:
 		return Value();
 	case 2:
-		return Value(Vector2d<f32>(vec[0], vec[1]));
+		return Value(Vector2d<f32>{vec[0], vec[1]});
 	case 3:
-		return Value(Vector3d<f32>(vec[0], vec[1], vec[2]));
+		return Value(Vector3d<f32>{vec[0], vec[1], vec[2]});
 	case 4:
-		return Value(Vector4d<f32>(vec[0], vec[1], vec[2], vec[3]));
+		return Value(Vector4d<f32>{vec[0], vec[1], vec[2], vec[3]});
 	}
 }
 

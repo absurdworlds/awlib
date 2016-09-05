@@ -8,7 +8,7 @@
  * There is NO WARRANTY, to the extent permitted by law.
  */
 #include <aw/io/WriteStream.h>
-#include <aw/core/Logger.h>
+#include <aw/logger/Log.h>
 
 #include <aw/hdf/shared.h>
 #include <aw/hdf/Writer.h>
@@ -143,7 +143,8 @@ void Writer::addComment(std::string comment_text)
 /*! Report an error */
 void Writer::error(u32 type, std::string msg)
 {
-	core::Logger::debug("error: " + msg);
+	// TODO: new logger
+	// core::Logger::debug("error: " + msg);
 }
 
 /*! Set the indentation style for the document */
