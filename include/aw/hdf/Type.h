@@ -10,6 +10,7 @@
 #define aw_hdf_Type_h
 #include <string>
 #include <aw/types/traits/basic_traits.h>
+#include <aw/types/traits/conditional.h>
 #include <aw/types/types.h>
 
 namespace aw {
@@ -34,42 +35,35 @@ enum class Type {
 
 template<typename T>
 struct typeof {
-	static Type const value = Type::Unknown;
+	static constexpr Type value =
+	is_int<T>   ? Type::Integer :
+	is_float<T> ? Type::Float   : Type::Unknown;
 };
 
-template<typename T>
-struct typeof<enable_if<is_int<T>, T>> {
-	static Type const value = Type::Integer;
-};
 
-template<typename T>
-struct typeof<enable_if<is_float<T>, T>> {
-	static Type const value = Type::Float;
-};
-
-template<typename T>
-struct typeof<enable_if<is_bool<T>, T>> {
-	static Type const value = Type::Boolean;
+template<>
+struct typeof<bool> {
+	static constexpr Type value = Type::Boolean;
 };
 
 template<>
 struct typeof<std::string> {
-	static Type const value = Type::String;
+	static constexpr Type value = Type::String;
 };
 
 template<>
 struct typeof<Vector<f32,2>> {
-	static Type const value = Type::Vector2d;
+	static constexpr Type value = Type::Vector2d;
 };
 
 template<>
 struct typeof<Vector<f32,3>> {
-	static Type const value = Type::Vector3d;
+	static constexpr Type value = Type::Vector3d;
 };
 
 template<>
 struct typeof<Vector<f32,4>> {
-	static Type const value = Type::Vector4d;
+	static constexpr Type value = Type::Vector4d;
 };
 
 /*!
@@ -103,9 +97,9 @@ inline bool compareType(hdf::Type type, T val)
  * Compare type of a value \a val to the type \a type.
  */
 template<typename T>
-inline bool operator == (hdf::Type type, T val)
+inline bool operator==(hdf::Type type, T val)
 {
-	return compareType(type, val) ;
+	return compareType(type, val);
 }
 } // namespace hdf
 } // namespace aw
