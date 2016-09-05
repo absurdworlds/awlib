@@ -6,11 +6,10 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef aw_algorithm_h
-#define aw_algorithm_h
+#ifndef aw_algorithm_common_prefix_length_h
+#define aw_algorithm_common_prefix_length_h
 #include <cassert>
 #include <algorithm>
-#include <functional>
 #include <aw/types/traits/iterator.h>
 namespace aw {
 /*!
@@ -71,30 +70,5 @@ size_t common_prefix_length(Iterator first, Iterator last, size_t start_at)
 	assert(dist >= 0);
 	return size_t(dist) + start_at;
 }
-
-/*!
- * Finds the first element in the range [first, last) that matches value \a val
- *
- * Requires that the input range is at least partially ordered.
- *
- * Takes a comparator function \a comp.
- */
-template <typename Iterator, typename T, typename Comparator>
-Iterator binary_find(Iterator begin, Iterator end, T const& val, Comparator comp)
-{
-	Iterator pos = std::lower_bound(begin, end, val, comp);
-	if (pos == end || comp(*pos, val))
-		return end;
-	return pos;
-}
-
-/*!
- * Same as previous overload, but uses operator< instead of comparator.
- */
-template <typename Iterator, typename T>
-Iterator binary_find(Iterator begin, Iterator end, T const& val)
-{
-	return binary_find(begin, end, val, std::less<T>{});
-}
 } // namespace aw
-#endif//aw_algorithm_h
+#endif//aw_algorithm_common_prefix_length_h
