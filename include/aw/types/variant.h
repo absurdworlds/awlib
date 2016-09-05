@@ -17,18 +17,23 @@
 
 namespace aw {
 namespace _impl {
-template <typename Type, typename... Ts>
-struct get_index;
+template <typename T>
+constexpr size_t get_index(size_t)
+{
+	return std::numeric_limits<size_t>::max();
+}
 
-template <typename Type, typename... Ts>
-struct get_index<Type, Type, Ts...> : std::integral_constant<std::size_t, 0> {};
-
-template <typename Type, typename Head, typename... Ts>
-struct get_index<Type, Head, Ts...> : std::integral_constant<std::size_t, 1 + get_index<Type, Ts...>::value> {};
+template <typename T, typename Head, typename...Tail>
+constexpr size_t get_index(size_t idx)
+{
+	if (is_same<T, Head>)
+		return idx;
+	return get_index<T, Tail...>(idx + 1);
+}
 } // namespace _impl
 
 template <typename U, typename... Ts>
-constexpr size_t get_index = _impl::get_index<U, Ts...>::value;
+constexpr size_t get_index = _impl::get_index<U, Ts...>(0);
 
 struct variant_shared {
 protected:
@@ -275,7 +280,11 @@ struct variant : variant_shared {
 	 * indices from different variant types.
 	 */
 	enum class index_t : size_t { };
+	//! Invalid index (empty variant)
 	static constexpr index_t invalid = index_t(std::numeric_limits<size_t>::max());
+	//! Index of particular type
+	template<typename T>
+	static constexpr index_t index_of = index_t(get_index<T, Ts...>);
 
 	/*!
 	 * Check if variant is empty.
@@ -301,12 +310,6 @@ struct variant : variant_shared {
 	{
 		return index;
 	}
-
-	/*!
-	 * Get index of particular type
-	 */
-	template<typename T>
-	static constexpr index_t index_of = index_t(get_index<T, Ts...>);
 
 	/*!
 	 * Apply a functor to variant.
@@ -349,7 +352,8 @@ private:
 	template<typename T, typename... Args>
 	void construct(Args&&... args)
 	{
-		index = index_t(get_index<T, Ts...>);
+		static_assert(index_of<T> != invalid, "Invalid type");
+		index = index_of<T>;
 		new (&storage) T(std::forward<Args>(args)...);
 	}
 
@@ -427,6 +431,8 @@ private:
 	template<typename Functor, typename...Args>
 	auto apply_impl(Functor f, Args&&... args) -> typename Functor::return_type
 	{
+		// TODO: use linear search (like in old variant)
+		// when there are not many types
 		using return_type = typename Functor::return_type;
 		using func_type   = return_type(void* storage, Functor f, Args...);
 
