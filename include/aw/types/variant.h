@@ -256,12 +256,22 @@ struct variant : variant_shared {
 	 * Extract value from variant.
 	 */
 	template<typename T>
-	std::experimental::optional<T> get() const
+	T* get()
 	{
 		if (check_type<T>())
-			return *reinterpret_cast<T const*>(&storage);
+			return reinterpret_cast<T*>(&storage);
+		return nullptr;
+	}
 
-		return std::experimental::nullopt;
+	/*!
+	 * Extract value from variant.
+	 */
+	template<typename T>
+	T const* get() const
+	{
+		if (check_type<T>())
+			return reinterpret_cast<T const*>(&storage);
+		return nullptr;
 	}
 
 	/*!
