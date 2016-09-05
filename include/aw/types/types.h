@@ -6,12 +6,11 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef aw_types_
-#define aw_types_
+#ifndef aw_types_h
+#define aw_types_h
 #include <cstddef>
 #include <cstdint>
 #include <memory>
-#include <experimental/optional>
 namespace aw {
 //!@{
 //! Shorthands for integer types
@@ -40,15 +39,5 @@ using f64 = double;
 //! Shorthand for std::unique_ptr template
 template <typename T>
 using uptr = std::unique_ptr<T>;
-
-//!@{
-//! Shorthand for std::experimental::optional
-template <typename T>
-using opt = std::experimental::optional<T>;
-
-using nullopt_t = std::experimental::nullopt_t;
-//using std::experimental::nullopt;
-constexpr nullopt_t nullopt = std::experimental::nullopt;
-//!@}
 } // namespace aw
-#endif //aw_types_
+#endif //aw_types_h
