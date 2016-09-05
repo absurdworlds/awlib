@@ -17,7 +17,7 @@
 #include <aw/math/Vector3d.h>
 #include <aw/math/Vector4d.h>
 #include <aw/utility/string/as_string.h>
-#include <aw/math/as_string.h>
+#include <aw/math/utils/as_string.h>
 
 #include <aw/hdf/Type.h>
 
@@ -80,7 +80,7 @@ struct Value {
 	template<typename val_type>
 	bool trySet(val_type const& v)
 	{
-		if(compareType(holder.type, v)) {
+		if(compareType(holder.type_index(), v)) {
 			holder.set<val_type>(v);
 			return true;
 		}
@@ -106,32 +106,27 @@ private:
 
 	holder_t holder;
 
-	void convertType() const
+	hdf::Type convertType() const
 	{
 		switch (holder.type_index()) {
-		case holder_t::type_of<bool>:
+		case holder_t::index_of<bool>:
 			return hdf::Type::Boolean;
-		case holder_t::type_of<i64>:
+		case holder_t::index_of<i64>:
 			return hdf::Type::Integer;
-		case holder_t::type_of<f64>:
+		case holder_t::index_of<f64>:
 			return hdf::Type::Float;
-		case holder_t::type_of<std::string>:
+		case holder_t::index_of<std::string>:
 			return hdf::Type::String;
-		case holder_t::type_of<Vector2d<f32>>:
+		case holder_t::index_of<Vector2d<f32>>:
 			return hdf::Type::Vector2d;
-		case holder_t::type_of<Vector3d<f32>>:
+		case holder_t::index_of<Vector3d<f32>>:
 			return hdf::Type::Vector3d;
-		case holder_t::type_of<Vector4d<f32>>:
+		case holder_t::index_of<Vector4d<f32>>:
 			return hdf::Type::Vector4d;
+		case holder_t::invalid:
+			return hdf::Type::Unknown;
 		};
 	}
-};
-
-template <>
-struct Value::Helper<> {
-	static void destroy(Type type, void* data) { }
-	static void copy(Type type, void const* from, void* to) { }
-	static void move(Type type, void* from, void* to) { }
 };
 } // namespace hdf
 
