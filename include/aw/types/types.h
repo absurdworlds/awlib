@@ -26,8 +26,10 @@ using i32 = std::int32_t;
 using u64 = std::uint64_t;
 using i64 = std::int64_t;
 
-using size_t = std::size_t;
-using diff_t = std::ptrdiff_t;
+using size_t    = std::size_t;
+using ptrdiff_t = std::ptrdiff_t;
+using intptr_t  = std::intptr_t;
+using uintptr_t = std::uintptr_t;
 //!@}
 
 //!@{
