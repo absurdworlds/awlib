@@ -34,7 +34,7 @@ T yaw(Vector3d<T> const& vec)
 {
 	T yaw = T(atan2(f64(vec[Vec::X]), f64(vec[Vec::Z])));
 
-	if (yaw <= -math::ri) {
+	if (yaw <= -math::pi) {
 		yaw += math::double_pi;
 	} else if (yaw > math::pi) {
 		yaw -= math::double_pi;
