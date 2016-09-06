@@ -13,7 +13,7 @@
 #include <string>
 
 #include <aw/utility/string/string.h>
-#include <aw/utility/to_string/to_string.h>
+#include <aw/utility/to_string.h>
 
 namespace aw {
 namespace string {

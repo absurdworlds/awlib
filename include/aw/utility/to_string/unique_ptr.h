@@ -10,7 +10,7 @@
 #ifndef aw_unique_ptr_to_string_h
 #define aw_unique_ptr_to_string_h
 #include <memory>
-#include <aw/utility/to_string/to_string.h>
+#include <aw/utility/to_string.h>
 namespace aw {
 /*!
  * Convert unique_ptr to string

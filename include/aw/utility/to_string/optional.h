@@ -10,7 +10,7 @@
 #ifndef aw_optional_to_string_h
 #define aw_optional_to_string_h
 #include <aw/types/optional.h>
-#include <aw/utility/to_string/to_string.h>
+#include <aw/utility/to_string.h>
 namespace aw {
 //! Convert nullopt_t to string.
 template <>

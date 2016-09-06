@@ -303,7 +303,7 @@ void check(Evaluator eval, Args&&... args)
 } // namespace test
 } // namespace aw
 
-#include <aw/utility/string/as_string.h>
+#include <aw/utility/to_string.h>
 
 namespace aw {
 namespace test {
@@ -311,8 +311,8 @@ struct equal {
 	template<typename A, typename B>
 	bool operator()(A const& got, B const& expected)
 	{
-		this->got      = as_string(got);
-		this->expected = as_string(expected);
+		this->got      = to_string(got);
+		this->expected = to_string(expected);
 		return got == expected;
 	}
 
