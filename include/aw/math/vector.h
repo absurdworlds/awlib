@@ -175,13 +175,13 @@ struct vector {
 
 	T length() const
 	{
-		return math::sqrt(lengthSq());
+		return math::sqrt(length_sq());
 	}
 
 	//! Normalize the vector
 	vector& normalize()
 	{
-		T length = lengthSq();
+		T length = length_sq();
 		if (length == 0)
 			return *this;
 

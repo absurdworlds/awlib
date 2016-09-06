@@ -6,32 +6,33 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef aw_math_Matrix4_h
-#define aw_math_Matrix4_h
+#ifndef aw_math_matrix4_h
+#define aw_math_matrix4_h
 #include <aw/math/vector3d.h>
 #include <aw/math/vector4d.h>
-#include <aw/math/Matrix3.h>
+#include <aw/math/matrix3.h>
 namespace aw {
+namespace math {
 template<typename T>
-using Matrix4 = Matrix<T,4,4>;
+using matrix4 = matrix<T,4,4>;
 
 //! Extract translation from matrix
 template<typename T>
-vector3d<T> translation(Matrix4<T> const& mat)
+vector3d<T> translation(matrix4<T> const& mat)
 {
 	return { get<3,0>(mat), get<3,1>(mat), get<3,2>(mat) };
 }
 
 //! Extract scale from matrix
 template<typename T>
-vector3d<T> scale(Matrix4<T> const& mat)
+vector3d<T> scale(matrix4<T> const& mat)
 {
-	return scale( subMatrix<3,3>(mat) );
+	return scale( sub_matrix<3,3>(mat) );
 }
 
 //! Extract scale, assuming it is positive
 template<typename T>
-vector3d<T> scalePositive(Matrix4<T> const& mat)
+vector3d<T> scalePositive(matrix4<T> const& mat)
 {
 	vector3d<T> const row1 = sub<3>( row<0>(mat) );
 	vector3d<T> const row2 = sub<3>( row<1>(mat) );
@@ -49,7 +50,7 @@ vector3d<T> scalePositive(Matrix4<T> const& mat)
  *  \return Vector consisting of euler angles (in radians)
  */
 template<typename T>
-vector3d<T> rotation(Matrix4<T> const& mat, vector3d<T> const& scale)
+vector3d<T> rotation(matrix4<T> const& mat, vector3d<T> const& scale)
 {
 	vector3d<T> rot;
 
@@ -72,7 +73,7 @@ vector3d<T> rotation(Matrix4<T> const& mat, vector3d<T> const& scale)
  *  \return Vector consisting of euler angles (in radians)
  */
 template<typename T>
-vector3d<T> rotation(Matrix4<T> const& mat)
+vector3d<T> rotation(matrix4<T> const& mat)
 {
 	return rotation(mat, scale(mat));
 }
@@ -81,10 +82,11 @@ vector3d<T> rotation(Matrix4<T> const& mat)
  *  \return Vector consisting of euler angles (in radians)
  */
 template<typename T>
-vector3d<T> rotationUnscaled(Matrix4<T> const& mat)
+vector3d<T> rotationUnscaled(matrix4<T> const& mat)
 {
 	static vector3d<T> const scale = {1, 1, 1};
 	return rotation(mat, scale);
 }
+} // namespace math
 } // namespace aw
-#endif //_aw_Matrix4_
+#endif //aw_math_matrix4_h

@@ -6,18 +6,19 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef aw_math_Matrix3_h
-#define aw_math_Matrix3_h
+#ifndef aw_math_matrix3_h
+#define aw_math_matrix3_h
 #include <aw/math/vector3d.h>
 #include <aw/math/Quaternion.h>
-#include <aw/math/Matrix.h>
+#include <aw/math/matrix.h>
 namespace aw {
+namespace math {
 template<typename T>
-using Matrix3 = Matrix<T,3,3>;
+using matrix3 = matrix<T,3,3>;
 
 //! Extract scale from matrix
 template<typename T>
-vector3d<T> scale(Matrix3<T> const& mat)
+vector3d<T> scale(matrix3<T> const& mat)
 {
 	auto const row1 = row<0>(mat);
 	auto const row2 = row<1>(mat);
@@ -34,7 +35,7 @@ vector3d<T> scale(Matrix3<T> const& mat)
 
 //! Extract scale, assuming it is positive
 template<typename T>
-vector3d<T> scalePositive(Matrix3<T> const& mat)
+vector3d<T> scale_positive(matrix3<T> const& mat)
 {
 	auto const row1 = row<0>(mat);
 	auto const row2 = row<1>(mat);
@@ -49,7 +50,7 @@ vector3d<T> scalePositive(Matrix3<T> const& mat)
 
 //! Convert rotation matrix to quaternion
 template<typename T>
-Quaternion<T> asQuaternion(Matrix3<T> const& mat)
+Quaternion<T> as_quaternion(matrix3<T> const& mat)
 {
 	Quaternion<T> quat = {};
 
@@ -67,7 +68,7 @@ Quaternion<T> asQuaternion(Matrix3<T> const& mat)
 
 //! Convert matrix to quaternion
 template<typename T>
-Quaternion<T> asQuaternionScaled(Matrix3<T> const& mat)
+Quaternion<T> as_quaternion_scaled(matrix3<T> const& mat)
 {
 	Quaternion<T> quat;
 
@@ -84,5 +85,6 @@ Quaternion<T> asQuaternionScaled(Matrix3<T> const& mat)
 
 	return quat;
 }
+} // namespace math
 } // namespace aw
-#endif //aw_math_Matrix3_h
+#endif //aw_math_matrix3_h
