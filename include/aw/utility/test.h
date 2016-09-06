@@ -80,6 +80,8 @@ private:
 
 	stage st = stage::start;
 
+	std::vector<std::string> messages;
+
 	size_t failed   = 0;
 	size_t succeded = 0;
 };
@@ -183,13 +185,13 @@ private:
 		tests.push_back(std::move(tst));
 	}
 
-	void check_fail(char const* msg)
+	void check_fail(std::string const& msg)
 	{
-		messages.push_back(msg);
+		cur->messages.push_back(msg);
 		++cur->failed;
 	}
 
-	void check_succeed(char const* msg)
+	void check_succeed(std::string const&)
 	{
 		++cur->succeded;
 	}
@@ -197,7 +199,6 @@ private:
 private:
 	test* cur;
 	std::vector<test> tests;
-	std::vector<char const*> messages;
 	unsigned failed = 0;
 };
 
@@ -227,10 +228,10 @@ void context::run_test(test& tst)
 		print(red, "failed checks: ", bold, cur->failed, reset);
 		print(green, ", succeded checks: ", bold, cur->succeded, reset, '\n');
 
-		for (auto msg : messages)
-			print(bold, red, "test failed: ", white, msg, '\n');
+		for (auto msg : cur->messages)
+			print(bold, red, "test failed: ", reset, msg, '\n');
 	}
-	messages.clear();
+	cur->messages.clear();
 }
 
 namespace {
@@ -249,14 +250,14 @@ void context::segvhandler(int signum)
 
 namespace {
 class context_check {
-	template<template <typename...> class Checker, typename... Args>
-	friend void check(char const*, Args&&... args);
+	template<typename Evaluator, typename... Args>
+	friend void check(Evaluator eval, Args&&... args);
 
-	static void check_fail(char const* msg)
+	static void check_fail(std::string const& msg)
 	{
 		file_context.check_fail(msg);
 	}
-	static void check_succeed(char const* msg)
+	static void check_succeed(std::string const& msg)
 	{
 		file_context.check_succeed(msg);
 	}
@@ -291,22 +292,48 @@ bool preconditions()  { context_block::enter(stage::preconditions); return true;
 bool checks()         { context_block::enter(stage::checks); return true; }
 bool postconditions() { context_block::enter(stage::postconditions); return true; }
 
-template<template <typename...> class Checker, typename... Args>
-void check(char const* msg, Args&&... args)
+template<typename Evaluator, typename... Args>
+void check(Evaluator eval, Args&&... args)
 {
-	Checker<Args...> check;
-	check(std::forward<Args>(args)...) ?
-		context_check::check_succeed(msg) :
-		context_check::check_fail(msg);
+	eval(std::forward<Args>(args)...) ?
+		context_check::check_succeed(eval.msg()) :
+		context_check::check_fail(eval.msg());
 }
 } // namespace
+} // namespace test
+} // namespace aw
 
-template<typename A, typename B>
+#include <aw/utility/string/as_string.h>
+
+namespace aw {
+namespace test {
 struct equal {
-	bool operator()(A const& a, B const& b)
+	template<typename A, typename B>
+	bool operator()(A const& got, B const& expected)
 	{
-		return a == b;
+		this->got      = as_string(got);
+		this->expected = as_string(expected);
+		return got == expected;
 	}
+
+	std::string msg()
+	{
+		using namespace std::string_literals;
+		return "\""s + expected + "\" == \""s + got + "\""s;
+	}
+
+	std::string expected;
+	std::string got;
+};
+
+struct _assert {
+	bool operator()(bool expr)
+	{
+		return expr;
+	}
+
+	std::string msg() { return {_msg}; }
+	char const* _msg;
 };
 } // namespace test
 } // namespace aw
@@ -328,6 +355,8 @@ struct equal {
 
 #include <aw/utility/macro.h>
 #define TestEqual(...) \
-aw::test::check<aw::test::equal>("equal: " #__VA_ARGS__, __VA_ARGS__)
+aw::test::check(aw::test::equal{}, __VA_ARGS__)
+#define TestAssert(...) \
+aw::test::check(aw::test::_assert{"assert: " #__VA_ARGS__}, (__VA_ARGS__))
 
 #endif//aw_test_test_h
