@@ -34,4 +34,18 @@ Test(compose) {
 		TestEqual(actual[2], actual[2]);
 	}
 }
+
+Test(special_cases) {
+	std::string percent = "% %% %%% %0 %%1";
+	std::string not_enough_args = "%0 %1 %5 %100";
+	std::string too_many_args   = "%0";
+	std::string select_third    = "%2";
+
+	Checks {
+		TestEqual(string::compose(percent), "% % %%  %1");
+		TestEqual(string::compose(not_enough_args, "a", "b"), "a b  ");
+		TestEqual(string::compose(too_many_args, "a", "b"), "a");
+		TestEqual(string::compose(select_third, "a", "b", "c"), "c");
+	}
+}
 } // namespace aw
