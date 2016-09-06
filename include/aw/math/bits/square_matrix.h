@@ -10,6 +10,7 @@
 #ifndef aw_math_matrixNN_h
 #define aw_math_matrixNN_h
 #include <algorithm>
+#include <aw/types/optional.h>
 namespace aw {
 namespace math {
 namespace _impl {
@@ -124,7 +125,7 @@ MatrixT inv2(MatrixT const& mat, index_sequence<Is...>)
 } // namespace _impl
 
 template<typename T, size_t N>
-opt<matrix<T,N,N>> inverse(matrix<T,N,N> const& mat)
+optional<matrix<T,N,N>> inverse(matrix<T,N,N> const& mat)
 {
 	T det = determinant(mat);
 
