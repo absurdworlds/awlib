@@ -88,10 +88,16 @@ private:
 
 struct test_failed : std::exception {};
 
-template<typename... Args>
+template<typename...Args>
 void print(Args&&...args)
 {
 	( std::cerr << ... << std::forward<Args>(args) );
+}
+
+template<typename...Args>
+void println(Args&&...args)
+{
+	( std::cerr << ... << std::forward<Args>(args) ) << '\n';
 }
 
 namespace {

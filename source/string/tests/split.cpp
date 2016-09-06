@@ -54,11 +54,11 @@ Test(split_words) {
 
 	Postconditions {
 		std::vector<std::string> e1{"word1", "word2", "word3"};
-		test::check<test::equal>(v1, e1);
+		TestAssert(v1 == e1);
 		std::vector<std::string> e2{"word1", "", "word2,", "word3"};
-		test::check<test::equal>(v2, e2);
+		TestAssert(v2 == e2);
 		std::vector<std::string> e3{"word1  word2", "word3"};
-		test::check<test::equal>(v3, e3);
+		TestAssert(v3 == e3);
 	}
 }
 } // namespace aw
