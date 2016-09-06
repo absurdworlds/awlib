@@ -7,8 +7,8 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef aw_math_Vector_h
-#define aw_math_Vector_h
+#ifndef aw_math_vector_h
+#define aw_math_vector_h
 #include <array>
 #include <tuple>
 #include <utility>
@@ -21,33 +21,32 @@
 #include <aw/utility/parameter_pack.h>
 
 namespace aw {
+namespace math {
 template <typename T, size_t N>
-struct Vector;
+struct vector;
 
 template<size_t I, typename T, size_t N>
-T& get(Vector<T,N>& vec);
+T& get(vector<T,N>& vec);
 
 template<size_t I, typename T, size_t N>
-T const& get(Vector<T,N> const& vec);
+T const& get(vector<T,N> const& vec);
 
 
-namespace Vec {
-enum Coordinate {
-	X, Y, Z, W
+enum class axis {
+	x, y, z, w
 };
-} // namespace Vec
 
 template <class VectorT, class = typename VectorT::indices>
-struct VectorOps;
+struct vector_ops;
 
 template <class T, size_t N, size_t...Is>
-struct VectorOps<Vector<T,N>,index_sequence<Is...>>
+struct vector_ops<vector<T,N>,index_sequence<Is...>>
 {
-	using VectorT = Vector<T,N>;
+	using VectorT = vector<T,N>;
 
 	static void set(VectorT& vec, VectorT const& other)
 	{
-#if __cplusplus >= 201500L
+#if __cpp_fold_expressions
 		(void(vec[Is] = other[Is]), ...);
 #else
 		(void) fold_dummy { ((vec[Is] = other[Is]), 0)...  };
@@ -56,7 +55,7 @@ struct VectorOps<Vector<T,N>,index_sequence<Is...>>
 
 	static void add(VectorT& vec, VectorT const& other)
 	{
-#if __cplusplus >= 201500L
+#if __cpp_fold_expressions
 		(void(vec[Is] += other[Is]), ...);
 #else
 		(void) fold_dummy { ((vec[Is] += other[Is]), 0)...  };
@@ -65,7 +64,7 @@ struct VectorOps<Vector<T,N>,index_sequence<Is...>>
 
 	static void sub(VectorT& vec, VectorT const& other)
 	{
-#if __cplusplus >= 201500L
+#if __cpp_fold_expressions
 		(void(vec[Is] -= other[Is]), ...);
 #else
 		(void) fold_dummy { ((vec[Is] -= other[Is]), 0)...  };
@@ -74,7 +73,7 @@ struct VectorOps<Vector<T,N>,index_sequence<Is...>>
 
 	static void mul(VectorT& vec, T const& val)
 	{
-#if __cplusplus >= 201500L
+#if __cpp_fold_expressions
 		(void(vec[Is] *= val), ...);
 #else
 		(void) fold_dummy { ((vec[Is] *= val), 0)...  };
@@ -83,7 +82,7 @@ struct VectorOps<Vector<T,N>,index_sequence<Is...>>
 
 	static void div(VectorT& vec, T const& val)
 	{
-#if __cplusplus >= 201500L
+#if __cpp_fold_expressions
 		(void(vec[Is] /= val), ...);
 #else
 		(void) fold_dummy { ((vec[Is] /= val), 0)...  };
@@ -92,7 +91,7 @@ struct VectorOps<Vector<T,N>,index_sequence<Is...>>
 
 	static T dot(VectorT const& vec1, VectorT const& vec2)
 	{
-#if __cplusplus >= 201500L
+#if __cpp_fold_expressions
 		// FIXME: T{} workaround for GCC 6.1 bug
 		T product = (T{vec1[Is]*vec2[Is]} + ...);
 #else
@@ -107,7 +106,7 @@ struct VectorOps<Vector<T,N>,index_sequence<Is...>>
 	template<typename Func>
 	static void for_each(VectorT& vec, Func func)
 	{
-#if __cplusplus >= 201500L
+#if __cpp_fold_expressions
 		(func(vec[Is]), ...);
 #else
 		(void) fold_dummy { (func(vec[Is]), 0)...  };
@@ -116,7 +115,7 @@ struct VectorOps<Vector<T,N>,index_sequence<Is...>>
 };
 
 template <typename T, size_t N>
-struct Vector {
+struct vector {
 	static_assert(N > 0, "Vector must have non-zero number of dimensions");
 
 	constexpr static size_t vector_size = N;
@@ -129,47 +128,47 @@ struct Vector {
 
 	value_type elems[N];
 
-	Vector<T,N>& operator=(Vector<T,N> const& other)
+	vector& operator=(vector const& other)
 	{
-		VectorOps<Vector<T,N>>::set(*this, other);
+		vector_ops<vector>::set(*this, other);
 		return *this;
 	}
 
-	Vector<T,N>& operator +=(Vector<T,N> const& other)
+	vector& operator+=(vector const& other)
 	{
-		VectorOps<Vector<T,N>>::add(*this, other);
+		vector_ops<vector>::add(*this, other);
 		return *this;
 	}
 
-	Vector<T,N>& operator -=(Vector<T,N> const& other)
+	vector& operator-=(vector const& other)
 	{
-		VectorOps<Vector<T,N>>::sub(*this, other);
+		vector_ops<vector>::sub(*this, other);
 		return *this;
 	}
 
-	Vector<T,N>& operator *=(T const v)
+	vector& operator*=(T const v)
 	{
-		VectorOps<Vector<T,N>>::mul(*this, v);
+		vector_ops<vector>::mul(*this, v);
 		return *this;
 	}
 
-	Vector<T,N>& operator /=(T const v)
+	vector& operator/=(T const v)
 	{
-		VectorOps<Vector<T,N>>::div(*this, v);
+		vector_ops<vector>::div(*this, v);
 		return *this;
 	}
 
-	Vector<T,N>& negate()
+	vector& negate()
 	{
 		return (*this *= -1);
 	}
 
-	T dot(Vector<T,N> const& other) const
+	T dot(vector const& other) const
 	{
-		return VectorOps<Vector<T,N>>::dot(*this, other);
+		return vector_ops<vector>::dot(*this, other);
 	}
 
-	T lengthSq() const
+	T length_sq() const
 	{
 		return dot(*this);
 	}
@@ -180,7 +179,7 @@ struct Vector {
 	}
 
 	//! Normalize the vector
-	Vector<T,N>& normalize()
+	vector& normalize()
 	{
 		T length = lengthSq();
 		if (length == 0)
@@ -214,65 +213,65 @@ struct Vector {
 	template<typename Func>
 	void for_each(Func func/*void(func)(T)*/)
 	{
-		VectorOps<Vector<T,N>>::for_each(*this, func);
+		vector_ops<vector>::for_each(*this, func);
 	}
 
 	T& x()
 	{
-		return get<Vec::X>(*this);
+		return get<axis::x>(*this);
 	}
 
 	T& y()
 	{
-		return get<Vec::Y>(*this);
+		return get<axis::y>(*this);
 	}
 
 	T& z()
 	{
-		return get<Vec::Z>(*this);
+		return get<axis::z>(*this);
 	}
 
 	T& w()
 	{
-		return get<Vec::W>(*this);
+		return get<axis::w>(*this);
 	}
 
 	T x() const
 	{
-		return get<Vec::X>(*this);
+		return get<axis::x>(*this);
 	}
 
 	T y() const
 	{
-		return get<Vec::Y>(*this);
+		return get<axis::y>(*this);
 	}
 
 	T z() const
 	{
-		return get<Vec::Z>(*this);
+		return get<axis::z>(*this);
 	}
 
 	T w() const
 	{
-		return get<Vec::W>(*this);
+		return get<axis::w>(*this);
 	}
 };
 
 template<typename T, size_t N>
-T dot(Vector<T,N> const& vec1, Vector<T,N> const& vec2)
+T dot(vector<T,N> const& vec1, vector<T,N> const& vec2)
 {
 	return vec1.dot(vec2);
 }
 
 template<size_t I, typename T, size_t N>
-T& get(Vector<T,N>& vec)
+T& get(vector<T,N>& vec)
 {
 	static_assert(I < N, "Index out of bounds.");
 	return vec[I];
 }
 
 template<size_t I, typename T, size_t N>
-T const& get(Vector<T,N> const& vec)
+T const& get(vector<T,N> const& vec)
 {
 	static_assert(I < N, "Index out of bounds.");
 	return vec[I];
@@ -280,14 +279,14 @@ T const& get(Vector<T,N> const& vec)
 
 namespace _impl {
 template<size_t... Is, typename T, size_t N>
-Vector<T,N-1> make_sub(Vector<T,N> const& vec, index_sequence<Is...>)
+vector<T,N-1> make_sub(vector<T,N> const& vec, index_sequence<Is...>)
 {
 	return {get<Is>(vec)...};
 }
 } // namespace _impl
 
 template<size_t Index, typename T, size_t N>
-Vector<T,N-1> sub(Vector<T,N> const& vec)
+vector<T,N-1> sub(vector<T,N> const& vec)
 {
 	auto range = index_cat<
 	        make_index_range<0,Index>,
@@ -299,21 +298,21 @@ Vector<T,N-1> sub(Vector<T,N> const& vec)
 
 //! Negate vector (reverse direction)
 template<typename T, size_t N>
-Vector<T,N> operator - (Vector<T,N> vec)
+vector<T,N> operator-(vector<T,N> vec)
 {
 	return vec.negate();
 }
 
 //! Identity
 template<typename T, size_t N>
-Vector<T,N> operator + (Vector<T,N> vec)
+vector<T,N> operator+(vector<T,N> vec)
 {
 	return vec;
 }
 
 //! Sum of two vectors
 template<typename T, size_t N>
-Vector<T,N> operator + (Vector<T,N> v1, Vector<T,N> const& v2)
+vector<T,N> operator+(vector<T,N> v1, vector<T,N> const& v2)
 {
 	v1 += v2;
 	return v1;
@@ -321,7 +320,7 @@ Vector<T,N> operator + (Vector<T,N> v1, Vector<T,N> const& v2)
 
 //! Difference of two vectors
 template<typename T, size_t N>
-Vector<T,N> operator - (Vector<T,N> v1, Vector<T,N> const& v2)
+vector<T,N> operator-(vector<T,N> v1, vector<T,N> const& v2)
 {
 	v1 -= v2;
 	return v1;
@@ -329,7 +328,7 @@ Vector<T,N> operator - (Vector<T,N> v1, Vector<T,N> const& v2)
 
 //! Scalar-vector product
 template<typename T, size_t N>
-Vector<T,N> operator * (Vector<T,N> vec, T const v)
+vector<T,N> operator*(vector<T,N> vec, T const v)
 {
 	vec *= v;
 	return vec;
@@ -337,7 +336,7 @@ Vector<T,N> operator * (Vector<T,N> vec, T const v)
 
 //! Scalar-vector product
 template<typename T, size_t N>
-Vector<T,N> operator / (Vector<T,N> vec, T const v)
+vector<T,N> operator/(vector<T,N> vec, T const v)
 {
 	vec /= v;
 	return vec;
@@ -345,7 +344,7 @@ Vector<T,N> operator / (Vector<T,N> vec, T const v)
 
 //! Scalar-vector product
 template<typename T, size_t N>
-Vector<T,N> operator * (T const v, Vector<T,N> vec)
+vector<T,N> operator*(T const v, vector<T,N> vec)
 {
 	vec *= v;
 	return vec;
@@ -353,29 +352,30 @@ Vector<T,N> operator * (T const v, Vector<T,N> vec)
 
 //! Get a normalized version of a vector
 template<typename T, size_t N>
-Vector<T,N> normalize(Vector<T,N> vec)
+vector<T,N> normalize(vector<T,N> vec)
 {
 	return vec.normalize();
 }
 
 //! Get distance between two points
 template<typename T, size_t N>
-T distance(Vector<T,N> vec1, Vector<T,N> const& vec2)
+T distance(vector<T,N> vec1, vector<T,N> const& vec2)
 {
 	return (vec1 - vec2).length();
 }
 
 //! Get squared distance between two points
 template<typename T, size_t N>
-T distanceSq(Vector<T,N> vec1, Vector<T,N> const& vec2)
+T distance_sq(vector<T,N> vec1, vector<T,N> const& vec2)
 {
-	return (vec1 - vec2).lengthSq();
+	return (vec1 - vec2).length_sq();
 }
 
 template<typename T, size_t N>
-void fill(Vector<T,N>& vec, T const value)
+void fill(vector<T,N>& vec, T const value)
 {
 	std::fill(std::begin(vec.elems), std::end(vec.elems), value);
 }
+} // namespace math
 } // namespace aw
-#endif//aw_math_Vector_h
+#endif//aw_math_vector_h

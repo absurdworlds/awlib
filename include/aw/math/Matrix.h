@@ -9,18 +9,18 @@
  */
 #ifndef aw_math_Matrix_h
 #define aw_math_Matrix_h
-#include <aw/math/Vector.h>
+#include <aw/math/vector.h>
 namespace aw {
 template<typename T, size_t M, size_t N>
 struct Matrix;
 
 template<size_t Index, typename T, size_t M, size_t N>
-Vector<T,N>& row(Matrix<T,M,N>& mat);
+vector<T,N>& row(Matrix<T,M,N>& mat);
 template<size_t Index, typename T, size_t M, size_t N>
-Vector<T,N> const& row(Matrix<T,M,N> const& mat);
+vector<T,N> const& row(Matrix<T,M,N> const& mat);
 
 template<size_t Index, typename T, size_t M, size_t N>
-Vector<T,M> col(Matrix<T,M,N> const& mat);
+vector<T,M> col(Matrix<T,M,N> const& mat);
 
 template<size_t I, size_t J, typename T, size_t M, size_t N>
 T& get(Matrix<T,M,N>& mat);
@@ -75,12 +75,12 @@ struct MatrixOps<Matrix<T,M,N>, index_sequence<Is...>, index_sequence<Js...>>
 #endif
 	}
 
-	static Vector<T,M> mul(MatrixT const& mat, Vector<T,N> const& vec)
+	static vector<T,M> mul(MatrixT const& mat, vector<T,N> const& vec)
 	{
 		return { dot(mat.row(Is), vec) ... };
 	}
 
-	static Vector<T,N> mul(Vector<T,M> const& vec, MatrixT const& mat)
+	static vector<T,N> mul(vector<T,M> const& vec, MatrixT const& mat)
 	{
 		return { dot(mat.col(Js), vec) ... };
 	}
@@ -144,8 +144,8 @@ struct Matrix {
 	using column_indices = make_index_sequence<N>;
 
 	using value_type = T;
-	using column_type = Vector<T, M>;
-	using row_type    = Vector<T, N>;
+	using column_type = vector<T, M>;
+	using row_type    = vector<T, N>;
 
 	row_type rows[M];
 
@@ -255,19 +255,19 @@ T& get(Matrix<T,M,N>& mat)
 }
 
 template<size_t Index, typename T, size_t M, size_t N>
-Vector<T,N>& row(Matrix<T,M,N>& mat)
+vector<T,N>& row(Matrix<T,M,N>& mat)
 {
 	return mat.rows[Index];
 }
 
 template<size_t Index, typename T, size_t M, size_t N>
-Vector<T,N> const& row(Matrix<T,M,N> const& mat)
+vector<T,N> const& row(Matrix<T,M,N> const& mat)
 {
 	return mat.rows[Index];
 }
 
 template<size_t Index, typename T, size_t M, size_t N>
-Vector<T,M> col(Matrix<T,M,N> const& mat)
+vector<T,M> col(Matrix<T,M,N> const& mat)
 {
 	using MatrixT = Matrix<T,M,N>;
 	return MatrixOps<MatrixT>::row(mat, Index);
@@ -301,14 +301,14 @@ Matrix<T,N,M> transpose(Matrix<T,M,N> const& mat)
 }
 
 template<typename T, size_t M, size_t N>
-Vector<T,M> operator * (Matrix<T,M,N> const& A, Vector<T,N> const& B)
+vector<T,M> operator * (Matrix<T,M,N> const& A, vector<T,N> const& B)
 {
 	using MatrixT = Matrix<T,M,N>;
 	return MatrixOps<MatrixT>::mul(A, B);
 }
 
 template<typename T, size_t M, size_t N>
-Vector<T,N> operator * (Vector<T,M> const& vec, Matrix<T,M,N> const& mat)
+vector<T,N> operator * (vector<T,M> const& vec, Matrix<T,M,N> const& mat)
 {
 	using MatrixT = Matrix<T,M,N>;
 	return MatrixOps<MatrixT>::mul(vec, mat);
@@ -345,7 +345,7 @@ Matrix<T,M,N> operator / (Matrix<T,N,M> mat, T const v)
 template<typename T, size_t M, size_t N>
 void fill(Matrix<T,M,N>& mat, T const value)
 {
-	Vector<T,N> row = {};
+	vector<T,N> row = {};
 	fill(row, value);
 	std::fill(std::begin(mat.rows), std::end(mat.rows), row);
 }

@@ -16,23 +16,6 @@
 #include <aw/utility/string/compose.h>
 
 namespace aw {
-template<typename T>
-std::string as_string(Vector2d<T> value)
-{
-	return string::compose("{%0, %1}", value[0], value[1]);
-}
 
-template<typename T>
-std::string as_string(Vector3d<T> value)
-{
-	return string::compose("{%0, %1, %2}", value[0], value[1], value[2]);
-}
-
-template<typename T>
-std::string as_string(Vector4d<T> value)
-{
-	return string::compose("{%0, %1, %2, %4}",
-	        value[0], value[1], value[2], value[3]);
-}
 } // namespace aw
 #endif//_aw_math_as_string_

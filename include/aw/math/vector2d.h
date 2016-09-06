@@ -7,19 +7,20 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef aw_Vector2d_h
-#define aw_Vector2d_h
-#include <aw/math/Vector.h>
+#ifndef aw_math_vector2d_h
+#define aw_math_vector2d_h
+#include <aw/math/vector.h>
 namespace aw {
+namespace math {
 //! Geometric object characterized by magnitude and direction
 template<typename T>
-using Vector2d = Vector<T,2>;
+using vector2d = vector<T,2>;
 
 //! Calculates angle of the vector
 template<typename T>
-T angle(Vector2d<T> const& vec)
+T angle(vector2d<T> const& vec)
 {
-	T yaw = T(atan2(f64(vec[Vec::X]), f64(vec[Vec::Y])));
+	T yaw = T(atan2(f64(vec[axis::x]), f64(vec[axis::y])));
 
 	if (yaw <= -math::pi) {
 		yaw += math::double_pi;
@@ -29,5 +30,6 @@ T angle(Vector2d<T> const& vec)
 
 	return math::radToDeg(yaw);
 }
+} // namespace math
 } // namespace aw
-#endif//aw_Vector2d_h
+#endif//aw_math_vector2d_h

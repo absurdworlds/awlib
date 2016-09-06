@@ -6,19 +6,20 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef aw_Vector3d_h
-#define aw_Vector3d_h
-#include <aw/math/Vector2d.h>
+#ifndef aw_math_vector3d_h
+#define aw_math_vector3d_h
+#include <aw/math/vector2d.h>
 namespace aw {
+namespace math {
 //! Vector in 3D space
 template<typename T>
-using Vector3d = Vector<T,3>;
+using vector3d = vector<T,3>;
 
 /*!
  * Calculate cross-product of two 3D vectors
  */
 template<typename T>
-Vector3d<T> cross(Vector3d<T> const& vec1, Vector3d<T> const& vec2)
+vector3d<T> cross(vector3d<T> const& vec1, vector3d<T> const& vec2)
 {
 	T const cx = vec1[1] * vec2[2] - vec1[2] * vec2[1];
 	T const cy = vec1[2] * vec2[0] - vec1[0] * vec2[2];
@@ -30,9 +31,9 @@ Vector3d<T> cross(Vector3d<T> const& vec1, Vector3d<T> const& vec2)
  * Get rotation around Y axis
  */
 template<typename T>
-T yaw(Vector3d<T> const& vec)
+T yaw(vector3d<T> const& vec)
 {
-	T yaw = T(atan2(f64(vec[Vec::X]), f64(vec[Vec::Z])));
+	T yaw = T(atan2(f64(vec[axis::x]), f64(vec[axis::z])));
 
 	if (yaw <= -math::pi) {
 		yaw += math::double_pi;
@@ -47,9 +48,9 @@ T yaw(Vector3d<T> const& vec)
  * Get rotation around X axis
  */
 template<typename T>
-T pitch(Vector3d<T> const& vec)
+T pitch(vector3d<T> const& vec)
 {
-	auto x = vec[Vec::X], y = vec[Vec::Y], z = vec[Vec::Z];
+	auto x = vec[axis::x], y = vec[axis::y], z = vec[axis::z];
 	f64 const xz = math::sqrt(x*x + z*z);
 	T const pitch = T(atan2(f64(xz), f64(y)) - math::half_pi);
 
@@ -71,9 +72,10 @@ T pitch(Vector3d<T> const& vec)
  *     rotations in degrees, of this vector.
  */
 template<typename T>
-Vector2d<T> horizontalAngle(Vector3d<T> const& vec)
+vector2d<T> horizontal_angle(vector3d<T> const& vec)
 {
 	return {yaw(vec), pitch(vec)};
 }
+} // namespace math
 } // namespace aw
-#endif//_aw_Vector3d_
+#endif//aw_math_vector3d_h

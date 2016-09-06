@@ -8,7 +8,7 @@
  */
 #ifndef aw_math_Matrix3_h
 #define aw_math_Matrix3_h
-#include <aw/math/Vector3d.h>
+#include <aw/math/vector3d.h>
 #include <aw/math/Quaternion.h>
 #include <aw/math/Matrix.h>
 namespace aw {
@@ -17,7 +17,7 @@ using Matrix3 = Matrix<T,3,3>;
 
 //! Extract scale from matrix
 template<typename T>
-Vector3d<T> scale(Matrix3<T> const& mat)
+vector3d<T> scale(Matrix3<T> const& mat)
 {
 	auto const row1 = row<0>(mat);
 	auto const row2 = row<1>(mat);
@@ -34,7 +34,7 @@ Vector3d<T> scale(Matrix3<T> const& mat)
 
 //! Extract scale, assuming it is positive
 template<typename T>
-Vector3d<T> scalePositive(Matrix3<T> const& mat)
+vector3d<T> scalePositive(Matrix3<T> const& mat)
 {
 	auto const row1 = row<0>(mat);
 	auto const row2 = row<1>(mat);

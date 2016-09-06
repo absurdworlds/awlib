@@ -6,12 +6,14 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef aw_Vector4d_h
-#define aw_Vector4d_h
-#include <aw/math/Vector.h>
+#ifndef aw_math_vector4d_h
+#define aw_math_vector4d_h
+#include <aw/math/vector.h>
 namespace aw {
+namespace math {
 //! A 4-dimensional vector
 template<typename T>
-using Vector4d = Vector<T,4>;
+using vector4d = vector<T,4>;
+} // namespace math
 } // namespace aw
-#endif//aw_Vector4d_h
+#endif//aw_math_vector4d_h

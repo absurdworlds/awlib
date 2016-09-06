@@ -8,8 +8,8 @@
  */
 #ifndef aw_math_Matrix4_h
 #define aw_math_Matrix4_h
-#include <aw/math/Vector3d.h>
-#include <aw/math/Vector4d.h>
+#include <aw/math/vector3d.h>
+#include <aw/math/vector4d.h>
 #include <aw/math/Matrix3.h>
 namespace aw {
 template<typename T>
@@ -17,25 +17,25 @@ using Matrix4 = Matrix<T,4,4>;
 
 //! Extract translation from matrix
 template<typename T>
-Vector3d<T> translation(Matrix4<T> const& mat)
+vector3d<T> translation(Matrix4<T> const& mat)
 {
 	return { get<3,0>(mat), get<3,1>(mat), get<3,2>(mat) };
 }
 
 //! Extract scale from matrix
 template<typename T>
-Vector3d<T> scale(Matrix4<T> const& mat)
+vector3d<T> scale(Matrix4<T> const& mat)
 {
 	return scale( subMatrix<3,3>(mat) );
 }
 
 //! Extract scale, assuming it is positive
 template<typename T>
-Vector3d<T> scalePositive(Matrix4<T> const& mat)
+vector3d<T> scalePositive(Matrix4<T> const& mat)
 {
-	Vector3d<T> const row1 = sub<3>( row<0>(mat) );
-	Vector3d<T> const row2 = sub<3>( row<1>(mat) );
-	Vector3d<T> const row3 = sub<3>( row<2>(mat) );
+	vector3d<T> const row1 = sub<3>( row<0>(mat) );
+	vector3d<T> const row2 = sub<3>( row<1>(mat) );
+	vector3d<T> const row3 = sub<3>( row<2>(mat) );
 
 	T const scaleX = row1.length();
 	T const scaleY = row2.length();
@@ -49,9 +49,9 @@ Vector3d<T> scalePositive(Matrix4<T> const& mat)
  *  \return Vector consisting of euler angles (in radians)
  */
 template<typename T>
-Vector3d<T> rotation(Matrix4<T> const& mat, Vector3d<T> const& scale)
+vector3d<T> rotation(Matrix4<T> const& mat, vector3d<T> const& scale)
 {
-	Vector3d<T> rot;
+	vector3d<T> rot;
 
 	rot.y = asin(-get<2,0>(mat));
 
@@ -72,7 +72,7 @@ Vector3d<T> rotation(Matrix4<T> const& mat, Vector3d<T> const& scale)
  *  \return Vector consisting of euler angles (in radians)
  */
 template<typename T>
-Vector3d<T> rotation(Matrix4<T> const& mat)
+vector3d<T> rotation(Matrix4<T> const& mat)
 {
 	return rotation(mat, scale(mat));
 }
@@ -81,9 +81,9 @@ Vector3d<T> rotation(Matrix4<T> const& mat)
  *  \return Vector consisting of euler angles (in radians)
  */
 template<typename T>
-Vector3d<T> rotationUnscaled(Matrix4<T> const& mat)
+vector3d<T> rotationUnscaled(Matrix4<T> const& mat)
 {
-	static Vector3d<T> const scale = {1, 1, 1};
+	static vector3d<T> const scale = {1, 1, 1};
 	return rotation(mat, scale);
 }
 } // namespace aw
