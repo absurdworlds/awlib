@@ -13,7 +13,7 @@
 #include <string>
 
 #include <aw/utility/string/string.h>
-#include <aw/utility/string/as_string.h>
+#include <aw/utility/to_string/to_string.h>
 
 namespace aw {
 namespace string {
@@ -55,7 +55,7 @@ std::string compose(std::string const& fmt,
 template<typename... Args>
 std::string compose(std::string const& fmt, Args const&... args)
 {
-	std::vector<std::string> bits{as_string(args)...};
+	std::vector<std::string> bits{to_string(args)...};
 
 	return compose(fmt, bits);
 }

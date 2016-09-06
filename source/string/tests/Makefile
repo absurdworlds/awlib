@@ -1,7 +1,7 @@
 RootPath = ../../..
-Sources = split.cpp join.cpp main.cpp
-Libraries =
-ProjectName = test_string_join
+Sources = split.cpp join.cpp compose.cpp main.cpp
+Libraries = awstring
+ProjectName = test_string
 Executable = true
 
 include $(RootPath)/Rules.mk

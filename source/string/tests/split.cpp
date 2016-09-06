@@ -10,20 +10,13 @@ Test(split_empty) {
 	std::vector<std::string> v1;
 	std::vector<std::string> v2;
 
-	Setup {}
-	Preconditions {
-		TestEqual(s.empty(), true);
-		TestEqual(v1.empty(), true);
-		TestEqual(v2.empty(), true);
-	}
-
 	Checks {
 		v1 = string::split(s, "abcd");
 		v2 = string::explode(s, " ");
 	}
 
 	Postconditions {
-		TestEqual(v1.empty(), true);
+		TestAssert(v1.empty());
 		TestEqual(v2[0], "");
 	}
 }
@@ -34,13 +27,6 @@ Test(split_word) {
 	std::vector<std::string> v1;
 	std::vector<std::string> v2;
 
-	Setup {}
-	Preconditions {
-		TestEqual(s, "word");
-		TestEqual(v1.empty(), true);
-		TestEqual(v2.empty(), true);
-	}
-
 	Checks {
 		v1 = string::split(s, " ");
 		v2 = string::explode(s, " ");
@@ -48,8 +34,8 @@ Test(split_word) {
 
 	Postconditions {
 		std::vector<std::string> expected{"word"};
-		TestEqual(v1, expected);
-		TestEqual(v2, expected);
+		TestAssert(v1 == expected);
+		TestAssert(v2 == expected);
 	}
 }
 
@@ -59,11 +45,6 @@ Test(split_words) {
 	std::vector<std::string> v1;
 	std::vector<std::string> v2;
 	std::vector<std::string> v3;
-
-	Setup {}
-	Preconditions {
-		// who am I kidding
-	}
 
 	Checks {
 		v1 = string::split(s, ", ");

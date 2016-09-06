@@ -10,17 +10,14 @@ Test(join_empty) {
 	std::string s1;
 	std::string s2;
 
-	Setup {}
-	Preconditions { }
-
 	Checks {
 		s1 = string::join(v);
 		s2 = string::join(v, "  ");
 	}
 
 	Postconditions {
-		TestEqual(s1.empty(), true);
-		TestEqual(s2.empty(), true);
+		TestAssert(s1.empty());
+		TestAssert(s2.empty());
 	}
 }
 
@@ -29,9 +26,6 @@ Test(join_word) {
 
 	std::string s1;
 	std::string s2;
-
-	Setup {}
-	Preconditions { }
 
 	Checks {
 		s1 = string::join(v);
@@ -43,7 +37,7 @@ Test(join_word) {
 		TestEqual(s2, "word");
 
 		TestEqual(v.size(), 1);
-		TestEqual(v[0] == "word", 1);
+		TestEqual(v[0], "word");
 	}
 }
 

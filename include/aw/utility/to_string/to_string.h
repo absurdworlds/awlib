@@ -66,6 +66,11 @@ inline std::string to_string(long double value)
 	return std::to_string(value);
 }
 
+inline std::string to_string(char* value)
+{
+	return {value};
+}
+
 inline std::string to_string(char const* value)
 {
 	return {value};

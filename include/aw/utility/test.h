@@ -12,6 +12,7 @@
 #include <functional>
 #include <exception>
 #include <vector>
+#include <string>
 #include <iostream>
 #include <aw/config.h>
 #include <aw/utility/static_object.h>
