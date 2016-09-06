@@ -16,7 +16,7 @@ Test(split_and_join) {
 
 	Preconditions {
 		std::vector<std::string> e{"word1", "word2", "word3"};
-		test::check<test::equal>(v, e);
+		TestEqual(v, e);
 	}
 
 	Checks {
@@ -24,7 +24,7 @@ Test(split_and_join) {
 	}
 
 	Postconditions {
-		test::check<test::equal>(r, s);
+		TestEqual(r, s);
 	}
 }
 
@@ -38,7 +38,7 @@ Test(join_and_split) {
 	}
 
 	Preconditions {
-		test::check<test::equal>(s, "word1, word2, word3");
+		TestEqual(s, "word1, word2, word3");
 	}
 
 	Checks {
@@ -46,7 +46,7 @@ Test(join_and_split) {
 	}
 
 	Postconditions {
-		test::check<test::equal>(r, v);
+		TestEqual(r, v);
 	}
 }
 
@@ -60,7 +60,7 @@ Test(join_and_split2) {
 	}
 
 	Preconditions {
-		test::check<test::equal>(s, "word1, word2, word3");
+		TestEqual(s, "word1, word2, word3");
 	}
 
 	Checks {
@@ -68,7 +68,7 @@ Test(join_and_split2) {
 	}
 
 	Postconditions {
-		test::check<test::equal>(r, v);
+		TestEqual(r, v);
 	}
 }
 } // namespace aw

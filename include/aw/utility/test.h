@@ -182,12 +182,13 @@ private:
 		tests.push_back(std::move(tst));
 	}
 
-	void check_fail()
+	void check_fail(char const* msg)
 	{
+		messages.push_back(msg);
 		++cur->failed;
 	}
 
-	void check_succeed()
+	void check_succeed(char const* msg)
 	{
 		++cur->succeded;
 	}
@@ -195,6 +196,7 @@ private:
 private:
 	test* cur;
 	std::vector<test> tests;
+	std::vector<char const*> messages;
 	unsigned failed = 0;
 };
 
@@ -223,7 +225,11 @@ void context::run_test(test& tst)
 		print(bold, red, " failed: (", stage_name[size_t(cur->st)], ") ", reset);
 		print(red, "failed checks: ", bold, cur->failed, reset);
 		print(green, ", succeded checks: ", bold, cur->succeded, reset, '\n');
+
+		for (auto msg : messages)
+			print(bold, red, "test failed: ", white, msg, '\n');
 	}
+	messages.clear();
 }
 
 namespace {
@@ -243,15 +249,15 @@ void context::segvhandler(int signum)
 namespace {
 class context_check {
 	template<template <typename...> class Checker, typename... Args>
-	friend void check(Args&&... args);
+	friend void check(char const*, Args&&... args);
 
-	static void check_fail()
+	static void check_fail(char const* msg)
 	{
-		file_context.check_fail();
+		file_context.check_fail(msg);
 	}
-	static void check_succeed()
+	static void check_succeed(char const* msg)
 	{
-		file_context.check_succeed();
+		file_context.check_succeed(msg);
 	}
 };
 
@@ -285,12 +291,12 @@ bool checks()         { context_block::enter(stage::checks); return true; }
 bool postconditions() { context_block::enter(stage::postconditions); return true; }
 
 template<template <typename...> class Checker, typename... Args>
-void check(Args&&... args)
+void check(char const* msg, Args&&... args)
 {
 	Checker<Args...> check;
 	check(std::forward<Args>(args)...) ?
-		context_check::check_succeed() :
-		context_check::check_fail();
+		context_check::check_succeed(msg) :
+		context_check::check_fail(msg);
 }
 } // namespace
 
@@ -318,5 +324,9 @@ struct equal {
 #define Checks         if (aw::test::checks())
 #define Postconditions if (aw::test::postconditions())
 #define RunTests()     int main(int,char**) { return aw::test::registry::run(); }
+
+#include <aw/utility/macro.h>
+#define TestEqual(...) \
+aw::test::check<aw::test::equal>("equal: " #__VA_ARGS__, __VA_ARGS__)
 
 #endif//aw_test_test_h

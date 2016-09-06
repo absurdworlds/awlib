@@ -12,9 +12,9 @@ Test(split_empty) {
 
 	Setup {}
 	Preconditions {
-		test::check<test::equal>(s.empty(), true);
-		test::check<test::equal>(v1.empty(), true);
-		test::check<test::equal>(v2.empty(), true);
+		TestEqual(s.empty(), true);
+		TestEqual(v1.empty(), true);
+		TestEqual(v2.empty(), true);
 	}
 
 	Checks {
@@ -23,8 +23,8 @@ Test(split_empty) {
 	}
 
 	Postconditions {
-		test::check<test::equal>(v1.empty(), true);
-		test::check<test::equal>(v2[0], "");
+		TestEqual(v1.empty(), true);
+		TestEqual(v2[0], "");
 	}
 }
 
@@ -36,9 +36,9 @@ Test(split_word) {
 
 	Setup {}
 	Preconditions {
-		test::check<test::equal>(s, "word");
-		test::check<test::equal>(v1.empty(), true);
-		test::check<test::equal>(v2.empty(), true);
+		TestEqual(s, "word");
+		TestEqual(v1.empty(), true);
+		TestEqual(v2.empty(), true);
 	}
 
 	Checks {
@@ -48,8 +48,8 @@ Test(split_word) {
 
 	Postconditions {
 		std::vector<std::string> expected{"word"};
-		test::check<test::equal>(v1, expected);
-		test::check<test::equal>(v2, expected);
+		TestEqual(v1, expected);
+		TestEqual(v2, expected);
 	}
 }
 

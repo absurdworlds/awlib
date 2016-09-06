@@ -11,11 +11,7 @@ Test(join_empty) {
 	std::string s2;
 
 	Setup {}
-	Preconditions {
-		test::check<test::equal>(v.empty(), true);
-		test::check<test::equal>(s1.empty(), true);
-		test::check<test::equal>(s2.empty(), true);
-	}
+	Preconditions { }
 
 	Checks {
 		s1 = string::join(v);
@@ -23,8 +19,8 @@ Test(join_empty) {
 	}
 
 	Postconditions {
-		test::check<test::equal>(s1.empty(), true);
-		test::check<test::equal>(s2.empty(), true);
+		TestEqual(s1.empty(), true);
+		TestEqual(s2.empty(), true);
 	}
 }
 
@@ -35,12 +31,7 @@ Test(join_word) {
 	std::string s2;
 
 	Setup {}
-	Preconditions {
-		test::check<test::equal>(v.size(), 1);
-		test::check<test::equal>(v[0], "word");
-		test::check<test::equal>(s1.empty(), true);
-		test::check<test::equal>(s2.empty(), true);
-	}
+	Preconditions { }
 
 	Checks {
 		s1 = string::join(v);
@@ -48,11 +39,11 @@ Test(join_word) {
 	}
 
 	Postconditions {
-		test::check<test::equal>(s1, "word");
-		test::check<test::equal>(s2, "word");
+		TestEqual(s1, "word");
+		TestEqual(s2, "word");
 
-		test::check<test::equal>(v.size(), 1);
-		test::check<test::equal>(v[0] == "word", 1);
+		TestEqual(v.size(), 1);
+		TestEqual(v[0] == "word", 1);
 	}
 }
 
@@ -63,12 +54,7 @@ Test(join_words) {
 	std::string s2;
 
 	Setup {}
-	Preconditions {
-		test::check<test::equal>(v.size(), 4);
-
-		test::check<test::equal>(s1.empty(), true);
-		test::check<test::equal>(s2.empty(), true);
-	}
+	Preconditions { }
 
 	Checks {
 		s1 = string::join(v);
@@ -76,10 +62,10 @@ Test(join_words) {
 	}
 
 	Postconditions {
-		test::check<test::equal>(s1, "Abcd?");
-		test::check<test::equal>(s2, "A, b, c, d?");
+		TestEqual(s1, "Abcd?");
+		TestEqual(s2, "A, b, c, d?");
 
-		test::check<test::equal>(v.size(), 4);
+		TestEqual(v.size(), 4);
 	}
 }
 } // namespace aw
