@@ -8,7 +8,6 @@
  */
 #ifndef aw_math_matrix4_h
 #define aw_math_matrix4_h
-#include <aw/math/vector3d.h>
 #include <aw/math/vector4d.h>
 #include <aw/math/matrix3.h>
 namespace aw {

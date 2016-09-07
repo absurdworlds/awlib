@@ -40,6 +40,15 @@ struct matrix_ops<matrix<T,M,N>, index_sequence<Is...>, index_sequence<Js...>>
 	using MatrixT = matrix<T,M,N>;
 	using column_type = typename MatrixT::column_type;
 
+	static void set(MatrixT& a, MatrixT const& b)
+	{
+#if __cpp_fold_expressions
+		(void(a[Is] = b[Is]), ...);
+#else
+		(void) fold_dummy { ((a[Is] = b[Is]), 0)...  };
+#endif
+	}
+
 	static void add(MatrixT& a, MatrixT const& b)
 	{
 #if __cplusplus >= 201500L
@@ -152,7 +161,7 @@ struct matrix {
 
 	matrix& operator=(matrix const& other)
 	{
-		rows = other.rows;
+		matrix_ops<matrix>::set(*this, other);
 		return *this;
 	}
 

@@ -11,9 +11,10 @@
 //#include <complex>
 #include <aw/math/equals.h>
 #include <aw/math/math.h>
-#include <aw/math/Vector3d.h>
-#include <aw/math/Vector4d.h>
+#include <aw/math/vector3d.h>
+#include <aw/math/vector4d.h>
 namespace aw {
+namespace math {
 //! Quaternion for representing rotations
 template<typename T>
 class Quaternion {
@@ -45,7 +46,7 @@ public:
 	/*! Constructor
 	 * \brief Construct quaternion using axis and rotation around given axis.
 	 */
-	static Quaternion<T> axisAngle(Vector3d<T> const& axis, T const angle)
+	static Quaternion<T> axisAngle(vector3d<T> const& axis, T const angle)
 	{
 		return Quaternion<T>{}.setAxisAngle(axis, angle);
 	}
@@ -181,12 +182,12 @@ public:
 		return *this;
 	}
 
-	Quaternion<T>& setAxisAngle(Vector3d<T> const& axis, T angle)
+	Quaternion<T>& setAxisAngle(vector3d<T> const& axis, T angle)
 	{
 		angle /= T(2.0);
-		angle *= math::RadiansInDegree;
+		angle *= math::radians_in_degree;
 
-		Vector3d<T> const v = axis.normalized() * sin(angle);
+		vector3d<T> const v = axis.normalized() * sin(angle);
 
 		set(cos(angle), v.x, v.y, v.z);
 
@@ -196,7 +197,7 @@ public:
 	//! Get quaternion as euler angles
 	auto toEuler()
 	{
-		Vector3d<T> euler = {};
+		vector3d<T> euler = {};
 
 		// singularity test
 		f32 const test = x*y + z*w;
@@ -218,15 +219,15 @@ public:
 			euler.z = asin(2*test);
 		}
 
-		euler *= math::DegreesInRadian;
+		euler *= math::degrees_in_radian;
 
 		return euler.to_tuple();
 	}
 
 	//! Get quaternion in axis-angle representation
-	std::tuple<Vector3d<T>, T> toAxisAngle()
+	std::tuple<vector3d<T>, T> toAxisAngle()
 	{
-		Vector3d<T> axis = {};
+		vector3d<T> axis = {};
 		T angle = {};
 
 		T const tCos = w;
@@ -359,5 +360,6 @@ Quaternion<T> slerp (Quaternion<T> const& q0, Quaternion<T> const& q1,
 	return sin(theta)*q0 + cos(theta)*q2;
 #endif
 }
+} // namespace math
 } // namespace aw
 #endif//_aw_Quaternion_

@@ -6,14 +6,14 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef aw_math_Vector_compare_h
-#define aw_math_Vector_compare_h
+#ifndef aw_math_vector_compare_h
+#define aw_math_vector_compare_h
 #include <aw/math/equals.h>
-#include <aw/math/Vector.h>
-
+#include <aw/math/vector.h>
 namespace aw {
+namespace math {
 template<typename T, size_t N>
-auto operator==(Vector<T,N> const& a, Vector<T,N> const& b) -> enable_if<!is_float<T>,bool>
+auto operator==(vector<T,N> const& a, vector<T,N> const& b) -> enable_if<!is_float<T>,bool>
 {
 	for (size_t i = 0; i < N; ++i)
 		if (a[i] != b[i])
@@ -22,7 +22,7 @@ auto operator==(Vector<T,N> const& a, Vector<T,N> const& b) -> enable_if<!is_flo
 }
 
 template<typename T, size_t N>
-auto operator==(Vector<T,N> const& a, Vector<T,N> const& b) -> enable_if<is_float<T>,bool>
+auto operator==(vector<T,N> const& a, vector<T,N> const& b) -> enable_if<is_float<T>,bool>
 {
 	for (size_t i = 0; i < N; ++i)
 		if (!math::equals(a[i], b[i]))
@@ -31,9 +31,10 @@ auto operator==(Vector<T,N> const& a, Vector<T,N> const& b) -> enable_if<is_floa
 }
 
 template<typename T, size_t N>
-bool operator!=(Vector<T,N> const& a, Vector<T,N> const& b)
+bool operator!=(vector<T,N> const& a, vector<T,N> const& b)
 {
 	return !(a == b);
 }
+} // namespace math
 } // namespace aw
-#endif //aw_math_Vector_compare_h
+#endif //aw_math_vector_compare_h
