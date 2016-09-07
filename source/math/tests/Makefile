@@ -1,8 +1,8 @@
 RootPath = ../../..
-Sources = vector.cpp
+Sources = vector.cpp matrix.cpp
 
 Libraries    = awstring
-ProjectName  = test_vector
+ProjectName  = test_math
 ProjectFlags = -fprofile-arcs -ftest-coverage
 Executable   = true
 
