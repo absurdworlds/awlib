@@ -10,6 +10,7 @@
 #define aw_test_test_h
 #include <utility>
 #include <functional>
+#include <algorithm>
 #include <exception>
 #include <vector>
 #include <string>
@@ -310,6 +311,7 @@ void check(Evaluator eval, Args&&... args)
 } // namespace aw
 
 #include <aw/utility/to_string.h>
+#include <aw/types/strip.h>
 
 namespace aw {
 namespace test {
@@ -317,6 +319,7 @@ struct equal {
 	template<typename A, typename B>
 	bool operator()(A const& got, B const& expected)
 	{
+		using aw::to_string;
 		this->got      = to_string(got);
 		this->expected = to_string(expected);
 		return got == expected;
@@ -330,6 +333,26 @@ struct equal {
 
 	std::string expected;
 	std::string got;
+};
+
+struct equal_v {
+	template<typename T, typename...Args>
+	bool operator()(T&& arg, Args&&...args)
+	{
+		using aw::to_string;
+		std::vector<remove_reference<T>> tmp = { arg, args... };
+		auto it = std::adjacent_find( begin(tmp), end(tmp), std::not_equal_to<T>() );
+		values = to_string(tmp);
+		return it == end(tmp);
+	}
+
+	std::string msg()
+	{
+		using namespace std::string_literals;
+		return "values: "s + values;
+	}
+
+	std::string values;
 };
 
 struct _assert {
@@ -362,6 +385,8 @@ struct _assert {
 #include <aw/utility/macro.h>
 #define TestEqual(...) \
 aw::test::check(aw::test::equal{}, __VA_ARGS__)
+#define TestEqualV(...) \
+aw::test::check(aw::test::equal_v{}, __VA_ARGS__)
 #define TestAssert(...) \
 aw::test::check(aw::test::_assert{"assert: " #__VA_ARGS__}, (__VA_ARGS__))
 
