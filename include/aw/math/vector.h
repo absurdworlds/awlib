@@ -32,9 +32,11 @@ template<size_t I, typename T, size_t N>
 T const& get(vector<T,N> const& vec);
 
 
-enum class axis {
+namespace axis {
+enum axis : size_t {
 	x, y, z, w
 };
+}
 
 template <class VectorT, class = typename VectorT::indices>
 struct vector_ops;
