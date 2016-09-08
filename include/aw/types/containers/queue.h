@@ -13,8 +13,8 @@
 #include <iterator>
 #include <algorithm>
 #include <aw/utility/exceptions.h>
+#include <aw/meta/conditional.h>
 #include <aw/types/traits/iterator.h>
-#include <aw/types/traits/conditional.h>
 #include <aw/types/containers/bits/shared.h>
 
 // TODO: insert and remove

@@ -11,11 +11,7 @@
 #include <utility>
 #include <type_traits>
 namespace aw {
-/*!
- * \addtogroup traits
- * @{
- */
-
+inline namespace meta {
 /*!
  * Shorthand for std::enable_if
  *
@@ -85,7 +81,6 @@ template<bool... Bools>
 constexpr bool bool_or = _impl::bool_or<Bools...>::value;
 //!@}
 #endif
-
-/*! @} group traits */
+} // inline namespace meta
 } // namespace aw
 #endif//aw_traits_conditional

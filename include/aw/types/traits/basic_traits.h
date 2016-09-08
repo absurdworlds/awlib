@@ -11,7 +11,7 @@
 #include <string>
 #include <utility>
 #include <type_traits>
-#include <aw/types/traits/void_t.h>
+#include <aw/meta/void_t.h>
 namespace aw {
 template<typename T>
 constexpr auto is_arithmetic = std::is_arithmetic<T>::value;
@@ -27,6 +27,9 @@ constexpr auto is_abstract = std::is_abstract<T>::value;
 
 template<typename T>
 constexpr auto is_trivially_copyable = std::is_trivially_copyable<T>::value;
+
+template<typename T, typename...Args>
+constexpr auto is_constructible = std::is_constructible<T, Args...>::value;
 
 template<class Base, class Derived>
 constexpr auto is_base_of = std::is_base_of<Base,Derived>::value;

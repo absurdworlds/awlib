@@ -10,7 +10,7 @@
 #ifndef aw_parameter_pack_h
 #define aw_parameter_pack_h
 #include <aw/types/types.h>
-#include <aw/types/traits/conditional.h>
+#include <aw/meta/conditional.h>
 #include <aw/utility/index_sequence.h>
 #include <aw/utility/fold.h>
 namespace aw {

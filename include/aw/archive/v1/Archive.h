@@ -11,8 +11,8 @@
 #include <cassert>
 #include <utility>
 #include <aw/types/types.h>
-#include <aw/types/traits/conditional.h>
-#include <aw/types/traits/detect.h>
+#include <aw/meta/conditional.h>
+#include <aw/meta/detect.h>
 #include <aw/types/traits/basic_traits.h>
 namespace aw {
 namespace arc {

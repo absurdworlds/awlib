@@ -12,8 +12,8 @@
 #include <string>
 #include <aw/types/types.h>
 #include <aw/types/traits/basic_traits.h>
-#include <aw/types/traits/conditional.h>
-#include <aw/types/traits/detect.h>
+#include <aw/meta/conditional.h>
+#include <aw/meta/detect.h>
 namespace aw {
 inline std::string to_string(bool value)
 {

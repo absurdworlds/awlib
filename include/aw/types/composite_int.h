@@ -8,8 +8,8 @@
  */
 #ifndef aw_types_composite_int
 #define aw_types_composite_int
+#include <aw/meta/conditional.h>
 #include <aw/types/traits/basic_traits.h>
-#include <aw/types/traits/conditional.h>
 #include <aw/types/promote.h>
 #include <aw/math/numeric.h>
 #include <aw/math/bitmath.h>

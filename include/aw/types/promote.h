@@ -8,9 +8,9 @@
  */
 #ifndef aw_types_promote
 #define aw_types_promote
+#include <aw/meta/void_t.h>
 #include <aw/types/types.h>
 #include <aw/types/int128.h>
-#include <aw/types/traits/void_t.h>
 namespace aw {
 namespace _impl {
 template <typename T> struct promote;

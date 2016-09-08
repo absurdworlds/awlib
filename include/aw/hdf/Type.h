@@ -9,8 +9,8 @@
 #ifndef aw_hdf_Type_h
 #define aw_hdf_Type_h
 #include <string>
+#include <aw/meta/conditional.h>
 #include <aw/types/traits/basic_traits.h>
-#include <aw/types/traits/conditional.h>
 #include <aw/types/types.h>
 
 namespace aw {

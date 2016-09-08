@@ -9,7 +9,7 @@
  */
 #ifndef aw_math_matrix_to_string_h
 #define aw_math_matrix_to_string_h
-#include <aw/utility/to_string.h>
+#include <aw/utility/to_string/math/vector.h>
 #include <aw/math/matrix.h>
 namespace aw {
 namespace math {

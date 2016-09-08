@@ -12,7 +12,7 @@
 #include <string>
 #include <functional>
 #include <aw/types/traits/basic_traits.h>
-#include <aw/types/traits/conditional.h>
+#include <aw/meta/conditional.h>
 #include <aw/utility/static_object.h>
 
 namespace aw {
