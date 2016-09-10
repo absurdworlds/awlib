@@ -232,8 +232,8 @@ void context::run_test(test& tst)
 	} catch (test_failed& ex) {
 		++failed;
 		print(bold, red, " failed: (", stage_name[size_t(cur->st)], ") ", reset);
-		print(red, "failed checks: ", bold, cur->failed, reset);
-		print(green, ", succeded checks: ", bold, cur->succeded, reset, '\n');
+		print(red, "failed: ", bold, cur->failed, reset);
+		print(green, ", succeded: ", bold, cur->succeded, reset, '\n');
 
 		for (auto msg : cur->messages)
 			print(bold, red, "test failed: ", reset, msg, '\n');
