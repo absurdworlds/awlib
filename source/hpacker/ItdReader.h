@@ -6,13 +6,12 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _aw_ItdReader_
-#define _aw_ItdReader_
+#ifndef aw_internal_ItdReader_h
+#define aw_internal_ItdReader_h
 #include <vector>
 #include <fstream>
 #include <memory>
 
-#include <aw/common/types.h>
 #include <aw/itd/HPKIndexReader.h>
 
 namespace aw {
@@ -32,4 +31,4 @@ private:
 };
 } // namespace itd
 } // namespace aw
-#endif//_aw_ItdReadere_
+#endif//aw_internal_ItdReader_h

@@ -6,21 +6,19 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _aw_ItdPacker_
-#define _aw_ItdPacker_
+#ifndef aw_internal_ItdPacker_h
+#define aw_internal_ItdPacker_h
 #include <string>
 #include <vector>
 #include <fstream>
 
-#include <aw/common/types.h>
+#include <aw/types/types.h>
 #include <aw/itd/itd.h>
 #include <aw/itd/HPKIndexWriter.h>
 
 namespace aw {
 namespace itd {
-
-class ItdPacker {
-public:	
+struct ItdPacker {
 	ItdPacker (std::string const& archive_name, bool verbose = false);
 	~ItdPacker ();
 
@@ -57,4 +55,4 @@ private:
 };
 } // namespace itd
 } // namespace aw
-#endif//_aw_ItdPacker_
+#endif//aw_internal_ItdPacker_h

@@ -6,11 +6,11 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _aw_HPKHtableWriter_
-#define _aw_HPKHtableWriter_
+#ifndef aw_internal_HPKHtableWriter_h
+#define aw_internal_HPKHtableWriter_h
 #include <vector>
 
-#include <aw/core/hash.h>
+#include <aw/utility/hash.h>
 
 #include "HPKListWriter.h"
 
@@ -68,4 +68,4 @@ private:
 
 } //namespace itd
 } //namespace aw
-#endif//_aw_HPKHtableWriter_
+#endif//aw_internal_HPKHtableWriter_h

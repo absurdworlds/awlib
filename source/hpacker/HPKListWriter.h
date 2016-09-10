@@ -6,8 +6,8 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _aw_HPKListWriter_
-#define _aw_HPKListWriter_
+#ifndef aw_HPKListWriter_h
+#define aw_HPKListWriter_h
 #include <vector>
 
 #include <aw/itd/HPKIndexWriter.h>

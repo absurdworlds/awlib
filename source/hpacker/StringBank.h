@@ -6,20 +6,19 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _aw_StringBank_
-#define _aw_StringBank_
+#ifndef aw_internal_StringBank_h
+#define aw_internal_StringBank_h
 #include <string>
 #include <vector>
 #include <ostream>
 
-#include <aw/common/types.h>
+#include <aw/types/types.h>
 
 namespace aw {
 namespace itd {
 // This class is used to collect strings,
 // referred by filename pointers, together
-class StringBank {
-public:
+struct StringBank {
 	StringBank();
 	~StringBank() = default;
 
@@ -34,4 +33,4 @@ private:
 };
 } //namespace itd
 } //namespace aw
-#endif//_aw_StringBank_
+#endif//aw_internal_StringBank_h

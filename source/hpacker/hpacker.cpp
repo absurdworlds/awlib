@@ -8,8 +8,9 @@
  */
 #include <cstdio>
 
-#include <aw/utility/ArgumentParser.h>
-#include <aw/utility/string/string.h>
+#include <aw/utility/argv_parser.h>
+#include <aw/utility/string/split.h>
+#include <aw/utility/filesystem.h>
 
 #include "hpacker.h"
 
@@ -31,7 +32,10 @@ void printUsage()
 
 i32 main (char** args)
 {
-	core::ArgumentParser argp(args+1);
+	if (!*(args+1))
+		printUsage();
+
+	utils::argv_parser argp(args+1);
 
 	enum Action {
 		None,
@@ -45,10 +49,10 @@ i32 main (char** args)
 	std::vector<std::string> files;
 	bool verbose = false;
 
-	opt<core::Argument> optArg;
-	while (optArg = argp.parseArgument()) {
-		core::Argument& arg = optArg.value();
-		if (arg.type == core::Argument::Option) {
+	optional<utils::argument> opt_arg;
+	while (opt_arg = argp.parse_argument()) {
+		utils::argument& arg = opt_arg.value();
+		if (arg.type == utils::argument::option) {
 			if(arg.name == "c" || arg.name == "create") {
 				action = Create;
 			} else if (arg.name == "l" || arg.name == "list") {
@@ -56,7 +60,7 @@ i32 main (char** args)
 			} else if (arg.name == "e" || arg.name == "extract") {
 				action = Extract;
 			} else if (arg.name == "f" || arg.name == "file") {
-				filename = argp.getParam();
+				filename = argp.get_param();
 			} else if (arg.name == "v" || arg.name == "verbose") {
 				verbose = true;
 			}
@@ -69,7 +73,7 @@ i32 main (char** args)
 			if (arg.name == "h" || arg.name == "help") {
 				printUsage();
 			}
-		} else if (arg.type == core::Argument::Operand) {
+		} else if (arg.type == utils::argument::operand) {
 			if (!action) {
 				fprintf(stderr, "No action selected\n");
 				fprintf(stderr, "Type hpacker -h or hpacker --help for usage.\n");

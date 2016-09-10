@@ -6,10 +6,10 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _aw_itd_
-#define _aw_itd_
+#ifndef aw_itd_itd_h
+#define aw_itd_itd_h
 #include <string>
-#include <aw/common/types.h>
+#include <aw/types/types.h>
 
 namespace aw {
 // ITD : Intelligently Trampled Data
@@ -100,10 +100,12 @@ enum FileFlags : u16 {
 
 //! Represents a file entry
 struct FileEntry {
+	FileEntry() = default;
+	FileEntry(u64 offset, u64 size) : offset(offset), size(size) {}
 	//! Position of first element from beginning of the package
-	u64 offset;
+	u64 offset = -1;
 	//! Size of file in bytes
-	u64 size;
+	u64 size   = 0;
 };
 
 #if 0
@@ -116,4 +118,4 @@ struct PackageIndexEntry {
 
 } // namespace itd
 } // namespace aw
-#endif//_aw_hitd_
+#endif//aw_itd_itd_h

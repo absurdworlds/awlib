@@ -6,9 +6,8 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _aw_HPKIndexReader_
-#define _aw_HPKIndexReader_
-#include <aw/common/types.h>
+#ifndef aw_internal_HPKIndexReader_h
+#define aw_internal_HPKIndexReader_h
 #include <aw/itd/itd.h>
 
 namespace aw {
@@ -16,8 +15,7 @@ namespace itd {
 /*!
  * Interface for reading HPKA index
  */
-class HPKIndexReader {
-public:
+struct HPKIndexReader {
 	virtual ~HPKIndexReader() = default;
 
 	/*!
@@ -39,4 +37,4 @@ public:
 
 } //namespace itd
 } //namespace aw
-#endif//_aw_HPKIndexReader_
+#endif//aw_internal_HPKIndexReader_h

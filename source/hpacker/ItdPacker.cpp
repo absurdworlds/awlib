@@ -10,10 +10,7 @@
 #include <memory>
 #include <sstream>
 #include <chrono>
-#include <aw/algorithm/in.h>
-#include <experimental/filesystem>
-
-using namespace std::experimental::filesystem = fs;
+#include <aw/utility/filesystem.h>
 
 #include "ItdPacker.h"
 #include "HPKTreeWriter.h"
@@ -39,21 +36,21 @@ void ItdPacker::addFile(std::string const& name)
 
 	switch(status.type()) {
 	case fs::file_type::none:
-		log.error("Error reading file" + name + ": " + ec.message());
+		//log.error("Error reading file" + name + ": " + ec.message());
 		break;
 	case fs::file_type::regular:
 		try {
 			index_.emplace_back(0, fs::file_size(name));
 			fileList_.push_back(name);
 		} catch (fs::filesystem_error) {
-			log.error("Error retrieving file size: " + name);
+			//log.error("Error retrieving file size: " + name);
 		}
 		break;
 	case fs::file_type::directory:
 		addDir(name);
 		break;
 	default:
-		log.error(name + " is not a file or directory.");
+		//log.error(name + " is not a file or directory.");
 		break;
 	}
 }
@@ -109,8 +106,8 @@ void ItdPacker::buildIndex()
 i32 ItdPacker::addDir(std::string const& path)
 {
 	// TODO: testing and improvements
-	for (auto& file : fs::directory_iterator)
-		add_file(file.path);
+	for (auto& file : fs::directory_iterator(path))
+		addFile(file.path().generic_u8string());
 	return 0;
 }
 
@@ -126,10 +123,13 @@ void ItdPacker::writeHeader()
 	archive_.write((char *)&main.flags,2);
 	archive_.write((char *)&main.numFiles,8);
 
+	using namespace std::chrono;
+	auto now = steady_clock::now().time_since_epoch();
+
 	itd::HPKHeader second;
 	second.version = 5;
 	second.flags = itd::HPK_HasFileTree;
-	second.ptime = getTime();
+	second.ptime = duration_cast<nanoseconds>(now).count();
 
 	archive_.write((char *)&second.id,4);
 	archive_.write((char *)&second.version,2);

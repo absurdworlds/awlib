@@ -6,9 +6,9 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _aw_hpacker_
-#define _aw_hpacker_
-#include <aw/common/types.h>
+#ifndef aw_internal_hpacker_h
+#define aw_internal_hpacker_h
+#include <aw/types/types.h>
 #include <aw/itd/itd.h>
 
 #include "ItdPacker.h"
@@ -17,4 +17,4 @@
 // TODO: make Packer read directories on addition
 // TODO: refactor FileTree
 
-#endif//_aw_hpacker_
+#endif//aw_internal_hpacker_h

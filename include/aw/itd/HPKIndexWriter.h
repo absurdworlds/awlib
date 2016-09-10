@@ -6,12 +6,11 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _aw_HPKIndexWriter_
-#define _aw_HPKIndexWriter_
+#ifndef aw_internal_HPKIndexWriter_h
+#define aw_internal_HPKIndexWriter_h
 #include <ostream>
 #include <string>
 
-#include <aw/common/types.h>
 #include <aw/itd/itd.h>
 
 namespace aw {
@@ -36,4 +35,4 @@ public:
 
 } //namespace itd
 } //namespace aw
-#endif//_aw_HPKIndexWriter_
+#endif//aw_internal_HPKIndexWriter_h
