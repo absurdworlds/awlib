@@ -10,7 +10,6 @@
 #define aw_types_h
 #include <cstddef>
 #include <cstdint>
-#include <memory>
 namespace aw {
 //!@{
 //! Shorthands for integer types
@@ -38,8 +37,5 @@ using f32 = float;
 using f64 = double;
 //!@}
 
-//! Shorthand for std::unique_ptr template
-template <typename T>
-using uptr = std::unique_ptr<T>;
 } // namespace aw
 #endif //aw_types_h
