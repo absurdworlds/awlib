@@ -136,6 +136,9 @@ enum class Key {
 	Count,
 };
 
+/*!
+ * Provides methods to query the keyboard state.
+ */
 namespace Keyboard {
 /*!
  * Check if \a key is pressed on keyboard;
