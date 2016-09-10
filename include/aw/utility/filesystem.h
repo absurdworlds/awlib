@@ -26,6 +26,6 @@ using namespace std::experimental::filesystem;
 using namespace std::filesystem;
 #endif
 } // namespace filesystem
-using namespace filesystem = fs;
+namespace fs = filesystem;
 } // namespace aw
 #endif//aw_utility_filesystem_h
