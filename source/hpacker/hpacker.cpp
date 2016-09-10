@@ -22,7 +22,8 @@ void printUsage()
 	printf("hpacker is a utility which packs files together into ITD archive.\n");
 	printf("\n");
 	printf("  -c, --create         Create an archive\n");
-	printf("  -e, --extract        Extract contents of archive\n");
+	printf("  -x, --extract-all    Extract contents of archive\n");
+	printf("  -e, --extract        Extract files from FILE list\n");
 	printf("  -l, --list           List contents of archive\n");
 	printf("  -f, --file NAME      Perform actions on file NAME\n");
 	printf("  -v, --verbose        Show verbose output\n");
@@ -42,6 +43,7 @@ i32 main (char** args)
 		Create,
 		Unpack,
 		Extract,
+		ExtractAll,
 		List
 	} action;
 
@@ -57,6 +59,8 @@ i32 main (char** args)
 				action = Create;
 			} else if (arg.name == "l" || arg.name == "list") {
 				action = List;
+			} else if (arg.name == "x" || arg.name == "extract-all") {
+				action = ExtractAll;
 			} else if (arg.name == "e" || arg.name == "extract") {
 				action = Extract;
 			} else if (arg.name == "f" || arg.name == "file") {
@@ -101,6 +105,19 @@ i32 main (char** args)
 
 		for (auto file : files) {
 			std::ofstream f(string::split(file,"/").back(), std::ios::binary);
+			auto v = reader.getFileContents(file);
+			f.write((char*)v.data(),v.size());
+		}
+	} else if (action == ExtractAll) {
+		ItdReader reader(filename, verbose);
+		auto list = reader.list("");
+
+		for (auto file : list) {
+			fs::path path(file);
+			std::error_code ec;
+			fs::create_directories(path.relative_path().parent_path(), ec);
+			printf("%s\n",file.c_str());
+			std::ofstream f(path.relative_path().u8string(), std::ios::binary);
 			auto v = reader.getFileContents(file);
 			f.write((char*)v.data(),v.size());
 		}
