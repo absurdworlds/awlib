@@ -1,27 +1,27 @@
 /*
- * Copyright (C) 2014-2015  absurdworlds
- * Copyright (C) 2015       Hedede <hededrk@gmail.com>
+ * Copyright (C) 2014-2016  absurdworlds
+ * Copyright (C) 2016       Hedede <hededrk@gmail.com>
  *
  * License LGPLv3 or later:
  * GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#include <aw/utility/ArgumentParser.h>
+#include <aw/utility/argv_parser.h>
 
 namespace aw {
-namespace core {
+namespace utils {
 namespace {
-// Dummy variable for pointer-to-null initialization
+// Used to avoid extra branching
 char const dummy = 0;
 }
 
-ArgumentParser::ArgumentParser(char const* const* argv)
+argv_parser::argv_parser(char const* const* argv)
 	: argv(argv), args(&dummy)
 {
 }
 
-Argument ArgumentParser::nextArg(char const* arg)
+argument argv_parser::next_arg(char const* arg)
 {
 	using namespace std::string_literals;
 
@@ -30,7 +30,7 @@ Argument ArgumentParser::nextArg(char const* arg)
 
 	++arg; // Eat '-'
 
-	Argument tok;
+	argument tok;
 
 	switch (*arg) {
 	case 0:
@@ -38,16 +38,16 @@ Argument ArgumentParser::nextArg(char const* arg)
 	case '-':
 		++arg;
 		if (*arg == 0) {
-			tok.type = Argument::Delim;
+			tok.type = argument::delim;
 			tok.name = "--";
-			tok.longOpt = true;
+			tok.long_option = true;
 		} else {
-			tok.type = Argument::Option;
+			tok.type = argument::option;
 			tok.name = std::string(arg);
 		}
 		break;
 	default:
-		tok.type = Argument::Option;
+		tok.type = argument::option;
 		tok.name = *(arg++);
 		args = arg;
 	}
@@ -55,11 +55,11 @@ Argument ArgumentParser::nextArg(char const* arg)
 	return tok;
 }
 
-opt<Argument> ArgumentParser::parseArgument()
+optional<argument> argv_parser::parse_argument()
 {
 	if (*args != 0) {
-		Argument tok;
-		tok.type = Argument::Option;
+		argument tok;
+		tok.type = argument::option;
 		tok.name = *(args++);
 		return tok;
 	}
@@ -67,10 +67,10 @@ opt<Argument> ArgumentParser::parseArgument()
 	if (*argv == 0)
 		return nullopt;
 
-	return nextArg(*argv++);
+	return next_arg(*argv++);
 }
 
-std::string ArgumentParser::getParam()
+std::string argv_parser::get_param()
 {
 	if (*args != 0) {
 		std::string tmp(args);
@@ -83,5 +83,5 @@ std::string ArgumentParser::getParam()
 
 	return std::string(*argv++);
 }
-} //namespace core
+} //namespace utils
 } //namespace aw

@@ -1,52 +1,52 @@
 /*
- * Copyright (C) 2014-2015  absurdworlds
- * Copyright (C) 2015       Hedede <hededrk@gmail.com>
+ * Copyright (C) 2014-2016  absurdworlds
+ * Copyright (C) 2016       Hedede <hededrk@gmail.com>
  *
  * License LGPLv3 or later:
  * GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _aw_ArgumentParser_
-#define _aw_ArgumentParser_
+#ifndef aw_utility_argv_parser_h
+#define aw_utility_argv_parser_h
 #include <string>
 
 #include <aw/utility/utility.h>
 #include <aw/types/types.h>
+#include <aw/types/optional.h>
 namespace aw {
-namespace core {
+namespace utils {
 /*!
  * Command line argument,
  * represents a single option or argument
  */
-struct Argument {
-	Argument()
-		: type(Invalid)
+struct argument {
+	argument()
+		: type(invalid)
 	{ }
 
-	Argument(std::string str)
-		: type(Operand),
-		  name(str)
+	argument(std::string str)
+		: type(operand), name(str)
 	{ }
+
+	std::string name;
 
 	/*!
 	 * List of types of arguments:
 	 */
-	enum Type : u8 {
+	enum type : u8 {
 		//! Invalid argument (unused)
-		Invalid,
+		invalid,
 		//! Option ('-o') or ('--option')
-		Option,
+		option,
 		//! Argument or operand
-		Operand,
+		operand,
 		//! End of arguments delimiter: "--"
-		Delim
+		delim
 	} type;
 
-	std::string name;
-
-	//! Returns true if Argument is GNU long option
-	bool longOpt;
+	//! Returns true if argument is GNU long option
+	bool long_option;
 };
 
 /*!
@@ -69,16 +69,15 @@ struct Argument {
  * - It doesn't support '`--option=argument`' syntax,
  * - Options following '`--`' aren't treated as non-option arguments.
  */
-class AW_UTILS_EXP ArgumentParser {
-public:
+struct AW_UTILS_EXP argv_parser {
 	/*!
 	 * Create an argument parser
 	 * \param argv
 	 *      Pointer to the first element of array of
 	 *      zero-terminated strings.
-	 *      Last element of array msut be nullptr.
+	 *      Last element of array must be nullptr.
 	 */
-	ArgumentParser(char const* const* argv);
+	argv_parser(char const* const* argv);
 
 	/*!
 	 * Get the next argument from the command line
@@ -87,21 +86,22 @@ public:
 	 *     An \a Argument object or \a nullopt in case
 	 *     there is no more arguments.
 	 */
-	opt<Argument> parseArgument();
+	optional<argument> parse_argument();
 
 	/*!
 	 * Returns either the next parameter, or the rest of
 	 * current argument group. If there are no more
 	 * arguments left, returns empty string
 	 */
-	std::string getParam();
+	std::string get_param();
+
 private:
-	Argument nextArg(char const* arg);
+	argument next_arg(char const* arg);
 
 	char const* const* argv;
 	// Needed to avoid modifying pointers in argv array
 	char const* args;
 };
-} //namespace core
+} //namespace utils
 } //namespace aw
-#endif//_aw_ArgumentParser_
+#endif//aw_utility_argv_parser_h
