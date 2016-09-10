@@ -18,7 +18,7 @@
 #include <aw/types/support/array.h>
 #include <aw/meta/conditional.h>
 #include <aw/utility/index_sequence.h>
-#include <aw/utility/parameter_pack.h>
+#include <aw/meta/parameter_pack.h>
 
 namespace aw {
 namespace math {
