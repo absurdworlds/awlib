@@ -9,11 +9,11 @@
 #include <cstdio>
 #include <memory>
 #include <sstream>
+#include <chrono>
+#include <aw/algorithm/in.h>
+#include <experimental/filesystem>
 
-#include <aw/platform/time.h>
-
-#include <aw/io/filesystem.h>
-#include <aw/io/Directory.h>
+using namespace std::experimental::filesystem = fs;
 
 #include "ItdPacker.h"
 #include "HPKTreeWriter.h"
@@ -34,36 +34,34 @@ ItdPacker::~ItdPacker()
 
 void ItdPacker::addFile(std::string const& name)
 {
-	if (checkFile(name, io::FM_Read) < 0) {
-		// log warning
-		return;
-	}
+	std::error_code ec;
+	fs::file_status status = fs::status(name, ec);
 
-	io::FileInfo finfo;
-	io::fileStat(name, finfo);
-
-	switch(finfo.type) {
-	case io::FileType::File:
-		fileList_.push_back(name);
-		FileEntry e;
-		e.size = finfo.size;
-		index_.push_back(e);
+	switch(status.type()) {
+	case fs::file_type::none:
+		log.error("Error reading file" + name + ": " + ec.message());
 		break;
-
-	case io::FileType::Directory:
+	case fs::file_type::regular:
+		try {
+			index_.emplace_back(0, fs::file_size(name));
+			fileList_.push_back(name);
+		} catch (fs::filesystem_error) {
+			log.error("Error retrieving file size: " + name);
+		}
+		break;
+	case fs::file_type::directory:
 		addDir(name);
 		break;
-
 	default:
+		log.error(name + " is not a file or directory.");
 		break;
 	}
 }
 
 void ItdPacker::addList(std::vector<std::string> const& files)
 {
-	for (auto const & filename : files) {
+	for (auto const & filename : files)
 		addFile(filename);
-	}
 }
 
 i32 ItdPacker::pack()
@@ -110,20 +108,9 @@ void ItdPacker::buildIndex()
 
 i32 ItdPacker::addDir(std::string const& path)
 {
-	io::Directory* dir = io::openDirectory(path);
-	if (!dir) {
-		return -1;
-	}
-
-	io::Dirent file;
-	while (dir->read(file)) {
-		if (file.name == "." || file.name == "..")
-			continue;
-
-
-		addFile(path + "/" + file.name);
-	};
-
+	// TODO: testing and improvements
+	for (auto& file : fs::directory_iterator)
+		add_file(file.path);
 	return 0;
 }
 
