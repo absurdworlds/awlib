@@ -37,5 +37,6 @@ using f32 = float;
 using f64 = double;
 //!@}
 
+using std::nullptr_t;
 } // namespace aw
 #endif //aw_types_h
