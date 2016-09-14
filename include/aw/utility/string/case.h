@@ -18,29 +18,32 @@ namespace string {
 /*!
  * Transform the string to lower case.
  */
-inline void tolower(std::string& str)
+inline std::string& tolower(std::string& str)
 {
 	std::transform(std::begin(str), std::end(str),
 	               std::begin(str), ::tolower);
+	return str;
 }
 
 /*!
  * Transform the string to upper case.
  */
-inline void toupper(std::string& str)
+inline std::string& toupper(std::string& str)
 {
 	std::transform(std::begin(str), std::end(str),
 	               std::begin(str), ::toupper);
+	return str;
 }
 
 /*!
  * Make first letter upper case and lower rest.
  */
-inline void capitalize(std::string& str)
+inline std::string& capitalize(std::string& str)
 {
 	auto begin = std::begin(str);
 	std::toupper(*begin++);
 	std::transform(begin, std::end(str), begin, ::tolower);
+	return str;
 }
 } // namespace string
 } // namespace aw
