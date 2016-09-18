@@ -6,8 +6,8 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef aw_utility_utf16_h
-#define aw_utility_utf16_h
+#ifndef aw_utility_utf32_h
+#define aw_utility_utf32_h
 #include <aw/utility/unicode/unicode.h>
 namespace aw {
 namespace unicode {
@@ -32,7 +32,7 @@ inline Iterator decode(Iterator input, Iterator end, code_point& cp)
 	cp = -1;
 	return end;
 }
-}; // namespace utf16
+}; // namespace utf32
 } // namespace unicode
 } // namespace aw
-#endif//aw_utility_utf16_h
+#endif//aw_utility_utf32_h
