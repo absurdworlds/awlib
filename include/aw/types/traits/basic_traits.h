@@ -54,14 +54,14 @@ struct is_string<std::basic_string<CharT, Traits, Alloc>> : std::true_type{ };
 
 /* Basic type categories (yes, std::string is considered “basic”) */
 template<typename T>
-constexpr auto is_int       = _impl::is_int<T>::value;
+constexpr bool is_int       = _impl::is_int<T>::value;
 template<typename T>
-constexpr auto is_float     = std::is_floating_point<T>::value;
+constexpr bool is_float     = std::is_floating_point<T>::value;
 template<typename T>
-constexpr auto is_string    = _impl::is_string<T>::value;
+constexpr bool is_string    = _impl::is_string<T>::value;
 template<typename T>
-constexpr auto is_bool      = std::is_same<T, bool>::value;
+constexpr bool is_bool      = std::is_same<T, bool>::value;
 template<typename T>
-constexpr auto is_pointer   = std::is_pointer<T>::value;
+constexpr bool is_pointer   = std::is_pointer<T>::value;
 } // namespace aw
 #endif//aw_traits_basic_traits
