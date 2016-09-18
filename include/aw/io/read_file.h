@@ -6,31 +6,29 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef aw_io_ReadFile_h
-#define aw_io_ReadFile_h
-#include <aw/io/File.h>
+#ifndef aw_io_read_file_h
+#define aw_io_read_file_h
+#include <aw/io/file_mode.h>
+#include <aw/utility/filesystem.h>
 namespace aw {
 namespace io {
-/*!
- * Provides interface for reading files
- */
-class AW_IO_EXP ReadFile : private File {
-public:
-	ReadFile (std::string const& path)
-		: File(path, File::Read)
-	{
-	}
+/*! Provides interface for reading files */
+template<typename File>
+struct read_file : private File {
+	read_file(fs::path const& _path)
+		: File(_path, file_mode::read)
+	{ }
 
-	~ReadFile() = default;
+	~read_file() = default;
 
-	using File::isOpen;
+	using File::is_open;
+	using File::close;
 	using File::read;
 	using File::seek;
 	using File::tell;
 	using File::size;
 	using File::path;
 };
-
 } // namespace io
 } // namespace aw
-#endif//aw_io_ReadFile_h
+#endif//aw_io_read_file_h
