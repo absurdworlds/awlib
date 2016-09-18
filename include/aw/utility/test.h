@@ -17,7 +17,7 @@
 #include <iostream>
 #include <aw/config.h>
 #include <aw/utility/static_object.h>
-#if AW_PLATFORM < AW_PLATFORM_WIN32
+#if (AW_PLATFORM == AW_PLATFORM_POSIX)
 #include <sys/types.h>
 #include <signal.h>
 #include <unistd.h>
@@ -33,7 +33,7 @@
 int main(int,char**);
 
 namespace aw {
-#if AW_PLATFORM < AW_PLATFORM_WIN32
+#if (AW_PLATFORM != AW_PLATFORM_WIN32)
 char const bold[]  = "\033[1m";
 char const red[]   = "\033[31m";
 char const green[] = "\033[32m";
@@ -169,7 +169,7 @@ private:
 
 	void install_handler()
 	{
-#if AW_PLATFORM < AW_PLATFORM_WIN32
+#if (AW_PLATFORM == AW_PLATFORM_POSIX)
 		signal(SIGSEGV, segvhandler);
 #endif
 	}
@@ -247,7 +247,7 @@ extern context file_context;
 
 void context::segvhandler(int signum)
 {
-#if AW_PLATFORM < AW_PLATFORM_WIN32
+#if (AW_PLATFORM == AW_PLATFORM_POSIX)
 	static constexpr char desc[] = "\nCaught SIGSEGV, aborting tests.\n";
 	std::fwrite(desc, sizeof(desc), 1, stderr);
 	signal(signum, SIG_DFL);

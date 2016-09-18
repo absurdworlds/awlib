@@ -24,8 +24,9 @@
 #define AW_PLATFORM_POSIX 0
 #define AW_PLATFORM_LINUX 1
 #define AW_PLATFORM_BSD   2
-#define AW_PLATFORM_WIN32 3
-#define AW_PLATFORM_WIN64 4
+#define AW_PLATFORM_OSX   3
+#define AW_PLATFORM_WIN32 4
+#define AW_PLATFORM_WIN64 5
 
 /**** COMPILER VERSION ****/
 #ifdef AW_COMPILER
@@ -47,22 +48,24 @@
 #endif
 
 /**** PLATFORM ****/
-#ifdef AW_PLATFORM
-	#undef AW_PLATFORM
-#endif
 /* Windows platform */
 #if defined(_WIN64) // check win64 first, as win32 defined for both
-	#define AW_PLATFORM AW_PLATFORM_WIN64
+	#define AW_PLATFORM          AW_PLATFORM_WIN32
+	#define AW_PLATFORM_SPECIFIC AW_PLATFORM_WIN64
 	#define AW_WINDOWS
 #elif defined(_WIN32)
-	#define AW_PLATFORM AW_PLATFORM_WIN32
+	#define AW_PLATFORM          AW_PLATFORM_WIN32
+	#define AW_PLATFORM_SPECIFIC AW_PLATFORM_WIN32
 	#define AW_WINDOWS
 #elif defined(__gnu_linux__)
-	#define AW_PLATFORM AW_PLATFORM_LINUX
+	#define AW_PLATFORM          AW_PLATFORM_POSIX
+	#define AW_PLATFORM_SPECIFIC AW_PLATFORM_LINUX
 #elif defined(BSD)
-	#define AW_PLATFORM AW_PLATFORM_BSD
+	#define AW_PLATFORM          AW_PLATFORM_POSIX
+	#define AW_PLATFORM_SPECIFIC AW_PLATFORM_BSD
 #elif defined(__unix__) || defined(POSIX)
-	#define AW_PLATFORM AW_PLATFORM_POSIX
+	#define AW_PLATFORM          AW_PLATFORM_POSIX
+	#define AW_PLATFORM_SPECIFIC AW_PLATFORM_POSIX
 #endif
 
 /**** IMPORTS/EXPORTS ****/
