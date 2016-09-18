@@ -16,6 +16,10 @@ static_assert(false, "Do not include this file directly");
 #include <aw/io/io.h>
 namespace aw {
 namespace io {
+/* Forward-declaration of public file interface */
+struct file;
+
+
 namespace _impl {
 #if   (AW_PLATFORM == AW_PLATFORM_POSIX)
 namespace posix {

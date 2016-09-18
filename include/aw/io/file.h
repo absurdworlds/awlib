@@ -10,55 +10,13 @@
 #ifndef aw_io_file_h
 #define aw_io_file_h
 #include <mutex>
+#include <algorithm>
 
 #include <aw/types/types.h>
 #include <aw/utility/filesystem.h>
+#include <aw/io/file_mode.h>
 
-namespace aw {
-namespace io {
-/* Forward declaration of file */
-struct file;
-
-/*! File seek direction */
-enum class seek_mode {
-	set,
-	end,
-	cur,
-};
-
-/*! Specifies how to treat a file */
-enum class file_mode : unsigned {
-	//! Open file for reading
-	read      = 1,
-	//! Open file for writing
-	write     = 1 << 1,
-	//! Causes all writes to happen at the end of file
-	append    = 1 << 2,
-	//! Create file if it is does not exist
-	create    = 1 << 3,
-	//! Clear the file contents
-	truncate  = 1 << 4,
-	//! Fail if file already exists
-	exclusive = 1 << 5
-};
-
-constexpr file_mode operator|(file_mode a, file_mode b)
-{
-	return file_mode(unsigned(a) | unsigned(b));
-}
-
-constexpr file_mode operator&(file_mode a, file_mode b)
-{
-	return file_mode(unsigned(a) & unsigned(b));
-}
-
-constexpr bool operator!(file_mode a)
-{
-	return !bool(a);
-}
-} // namespace io
-} // namespace aw
-
+/* internal */
 #include <aw/io/bits/file.h>
 
 namespace aw {
@@ -70,21 +28,15 @@ using file_descriptor = _impl::file_descriptor;
  * Provides raw unbuffered file IO.
  */
 struct file {
-	/*!
-	 * Construct object not representing a file.
-	 */
+	/*! Construct object not representing a file.  */
 	file() = default;
 
-	/*!
-	 * Construct a file from a system file descriptor.
-	 */
+	/*! Construct a file from a system file descriptor. */
 	file(file_descriptor fd)
 		: data(fd)
 	{ }
 
-	/*!
-	 * Open file identified by \a path.
-	 */
+	/*! Open file identified by \a path. */
 	file(fs::path const& path, file_mode fm)
 		: _path(path), data(path, fm)
 	{ }
@@ -105,12 +57,14 @@ struct file {
 	void swap(file& other) noexcept
 	{
 		std::lock_guard<std::mutex> guard{mutex};
+		std::swap(_path, other._path);
 		data.swap(other.data);
 	}
 
 	void swap(file&& other) noexcept
 	{
 		std::lock_guard<std::mutex> guard{mutex};
+		std::swap(_path, other._path);
 		data.swap(other.data);
 	}
 
