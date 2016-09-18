@@ -7,7 +7,8 @@ build/*
 docs/documentation
 a.out
 *.o
-*.so
+*.so*
+*.dll
 *.[0-9]
 *.swp
 *.sln
