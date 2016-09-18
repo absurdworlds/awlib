@@ -17,10 +17,20 @@ static_assert(false, "Do not include this file directly");
 namespace aw {
 namespace io {
 namespace _impl {
-#if (AW_PLATFORM == AW_PLATFORM_POSIX)
+#if   (AW_PLATFORM == AW_PLATFORM_POSIX)
 namespace posix {
+#elif (AW_PLATFORM == AW_PLATFORM_WIN32)
+namespace win32 {
+#endif
+
+#if   (AW_PLATFORM == AW_PLATFORM_POSIX)
+using file_descriptor = int;
+#elif (AW_PLATFORM == AW_PLATFORM_WIN32)
+using file_descriptor = intptr_t;
+#else /* unknown platform */
 using file_descriptor = int;
 #endif
+
 /* Internal file implementation */
 class AW_IO_EXP file {
 	friend struct aw::io::file;
@@ -43,12 +53,20 @@ class AW_IO_EXP file {
 	uintmax_t size() const;
 
 	file_descriptor fd = -1;
+
+#if (AW_PLATFORM == AW_PLATFORM_WIN32)
+	file_mode mode;
+#endif
 };
 
 #if (AW_PLATFORM == AW_PLATFORM_POSIX)
 } // namespace posix
 using posix::file_descriptor;
 using posix::file;
+#elif (AW_PLATFORM == AW_PLATFORM_WIN32)
+} // namespace win32
+using win32::file_descriptor;
+using win32::file;
 #endif
 } // namespace _impl
 } // namespace io
