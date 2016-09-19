@@ -94,5 +94,3 @@ Test(basic_buf_rw) {
 	fs::remove( filename );
 };
 } // namespace aw
-
-RunTests();
