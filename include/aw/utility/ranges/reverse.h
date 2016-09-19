@@ -17,20 +17,12 @@ struct reverse_adapter {
 	reverse_adapter(Range&& range)
 		: range(range)
 	{}
+
+	auto begin() { return std::rbegin(range); }
+	auto end()   { return std::rend(range); }
+
 	Range& range;
 };
-
-template <typename T>
-auto begin(reverse_adapter<T> v)
-{
-	return std::rbegin(v.range);
-}
-
-template <typename T>
-auto end(reverse_adapter<T> v)
-{
-	return std::rend(v.range);
-}
 
 template<typename Range>
 auto reverse(Range&& range)
