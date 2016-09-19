@@ -17,11 +17,9 @@
 #include <aw/hdf/Value.h>
 #include <aw/hdf/shared.h>
 
-namespace aw {
-namespace io {
-class InputStream;
-}
+#include <aw/io/input_stream.h>
 
+namespace aw {
 namespace hdf {
 /*!
  * Object returned by HDF parser
@@ -34,7 +32,7 @@ struct Object {
 		Value,
 		Directive
 	};
-	
+
 	Object(Kind type)
 		: type(type)
 	{ }
@@ -42,7 +40,7 @@ struct Object {
 	Object(Kind type, std::string val)
 		: type(type), name(val)
 	{ }
-		
+
 	Kind type;
 	std::string name;
 };
@@ -50,9 +48,9 @@ struct Object {
 /*!
  * \class Parser
  * \brief Interface for reading aw's HDF files. This parser provides a read-only access to documents in HDF 1.1.1 format.
- * 
+ *
  * It can read only in forward mode, it is not able to rewind. The design goal of this parser is to quickly read HDF document without usage of any intermediate data structures.
- * 
+ *
  * \see createParser
  * Also, see an example in 'examples' directory
 */
@@ -83,7 +81,7 @@ struct Parser {
 	 * Add message to the parser's error log
 	 * HDF_ERR_NOTICE - an unimportant message
 	 * HDF_ERR_WARNING - warning, non-critical error
-	 * HDF_ERR_ERROR - critical error, stops the parsing
+	 * HDF_ERR_ERROR -Â critical error, stops the parsing
 	 */
 	virtual void error(size_t pos, std::string msg) = 0;
 };
@@ -96,4 +94,4 @@ struct Parser {
 AW_HDF_EXP Parser* createParser(io::InputStream& stream);
 } // namespace io
 } // namespace aw
-#endif//_aw_HDFReader_
+#endif//aw_HDFReader_h
