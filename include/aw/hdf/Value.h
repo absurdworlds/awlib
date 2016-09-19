@@ -7,18 +7,17 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _aw_hdf_value_
-#define _aw_hdf_value_
+#ifndef aw_hdf_value_h
+#define aw_hdf_value_h
 #include <cstring>
 #include <string>
 
 #include <aw/types/variant.h>
-#include <aw/types/optional.h>
-#include <aw/math/Vector2d.h>
-#include <aw/math/Vector3d.h>
-#include <aw/math/Vector4d.h>
-#include <aw/utility/string/as_string.h>
-#include <aw/math/utils/as_string.h>
+#include <aw/math/vector2d.h>
+#include <aw/math/vector3d.h>
+#include <aw/math/vector4d.h>
+#include <aw/utility/to_string.h>
+#include <aw/utility/to_string/math/vector.h>
 
 #include <aw/hdf/Type.h>
 
@@ -61,14 +60,9 @@ struct Value {
 	}
 
 	template<typename val_type>
-	optional<val_type> get() const
+	val_type const* get() const
 	{
-		val_type tmp;
-
-		if (holder.get(tmp))
-			return tmp;
-
-		return nullopt;
+		return holder.get<val_type>();
 	}
 
 	//! Returns type of currently held value
@@ -102,8 +96,13 @@ struct Value {
 	}
 
 private:
-	using holder_t = variant<bool, i64, f64, std::string,
-	       Vector2d<f32>, Vector3d<f32>, Vector4d<f32>>;
+	using holder_t = variant<
+		bool, i64, f64,
+		std::string,
+		math::vector2d<f32>,
+		math::vector3d<f32>,
+		math::vector4d<f32>
+	>;
 
 	holder_t holder;
 
@@ -118,42 +117,43 @@ private:
 			return hdf::Type::Float;
 		case holder_t::index_of<std::string>:
 			return hdf::Type::String;
-		case holder_t::index_of<Vector2d<f32>>:
+		case holder_t::index_of<math::vector2d<f32>>:
 			return hdf::Type::Vector2d;
-		case holder_t::index_of<Vector3d<f32>>:
+		case holder_t::index_of<math::vector3d<f32>>:
 			return hdf::Type::Vector3d;
-		case holder_t::index_of<Vector4d<f32>>:
+		case holder_t::index_of<math::vector4d<f32>>:
 			return hdf::Type::Vector4d;
 		case holder_t::invalid:
 			return hdf::Type::Unknown;
 		};
 	}
 };
-} // namespace hdf
 
 //! Convert Value to string
-inline std::string as_string(hdf::Value const& val)
+inline std::string to_string(Value const& val)
 {
+	using aw::to_string;
 	switch (val.getType()) {
 	case hdf::Type::String:
-		return as_string(val.get<std::string>());
+		return to_string(*val.get<std::string>());
 	case hdf::Type::Float:
-		return as_string(val.get<f64>());
+		return to_string(*val.get<f64>());
 	case hdf::Type::Integer:
-		return as_string(val.get<i64>());
+		return to_string(*val.get<i64>());
 	case hdf::Type::Boolean:
-		return as_string(val.get<bool>());
+		return to_string(*val.get<bool>());
 	case hdf::Type::Vector2d:
-		return as_string(val.get<Vector2d<f32>>());
+		return to_string(*val.get<math::vector2d<f32>>());
 	case hdf::Type::Vector3d:
-		return as_string(val.get<Vector3d<f32>>());
+		return to_string(*val.get<math::vector3d<f32>>());
 	case hdf::Type::Vector4d:
-		return as_string(val.get<Vector4d<f32>>());
+		return to_string(*val.get<math::vector4d<f32>>());
 	default:
 		break;
 	}
 
 	return "null";
 }
+} // namespace hdf
 } // namespace aw
-#endif//_aw_hdf_value_
+#endif//aw_hdf_value_h

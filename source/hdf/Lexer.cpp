@@ -10,7 +10,7 @@
 #include <cassert>
 #include <cstdio>
 
-#include <aw/io/InputStream.h>
+#include <aw/io/input_stream.h>
 #include <aw/utility/string/compose.h>
 #include <aw/algorithm/in.h>
 
