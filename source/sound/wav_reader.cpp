@@ -148,19 +148,27 @@ void reader::read_data_chunk()
 	//check_equal(count, data_size);
 }
 
-bool read(io::input_stream& stream, wave_data& sample) noexcept try
-{
+bool read(io::input_stream& stream, wave_data& sample) noexcept
+try {
 	reader wv{stream, sample};
 	wv.read_riff_header();
 	wv.read_format_chunk();
 	wv.read_data_chunk();
 	return true;
 } catch(format_error& e) {
-	// wave loading failed:
+	// log.warning("aw::wav", e.what());
 	return false;
 } catch(std::exception& e) {
-	// error reading file:
+	// log.warning("aw::wav", "error reading file:" + e.what());
 	return false;
+}
+
+optional<wave_data> read(io::input_stream& stream) noexcept
+{
+	wave_data data;
+	if (!read(stream, data))
+		return nullopt;
+	return data;
 }
 } // namespace wav
 } // namespace aw

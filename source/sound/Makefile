@@ -1,8 +1,8 @@
 RootPath = ../..
 Sources = wav_reader.cpp
 Defines = HR_MODULE_SOUND
-Libraries =
+Libraries = awio
 ProjectName = awaudio
-Executable = false
+Executable  = false
 
 include $(RootPath)/Rules.mk
