@@ -21,6 +21,8 @@ enum class seek_mode {
 
 /*! Specifies how to treat a file */
 enum class file_mode : unsigned {
+	//! Not a valid file mode
+	none      = 0,
 	//! Open file for reading
 	read      = 1,
 	//! Open file for writing

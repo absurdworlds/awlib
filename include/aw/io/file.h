@@ -52,6 +52,7 @@ struct file {
 	file& operator=(file&& other) noexcept
 	{
 		swap(other);
+		return *this;
 	}
 
 	void swap(file& other) noexcept

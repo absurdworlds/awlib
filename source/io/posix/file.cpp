@@ -35,6 +35,7 @@ file::file(fs::path const& path, file_mode fm)
 	case file_mode::read|file_mode::write:
 		flags |= O_RDWR;   break;
 	}
+
 	if (bool(fm & file_mode::append))
 		flags |= O_APPEND;
 	if (bool(fm & file_mode::create))

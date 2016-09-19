@@ -37,7 +37,7 @@
 #define AW_FILESYSTEM AW_EXP_FILESYSTEM
 //-----------------------------------------------
 #elif __has_include(<boost/filesystem.hpp>) && defined(AW_BOOST_FILESYSTEM)
-#include <boost/filesystem.hpp>
+//#include <boost/filesystem.hpp>
 #define AW_FILESYSTEM AW_BOOST_FILESYSTEM
 //-----------------------------------------------
 #elif defined(AW_FALLBACK_FILESYSTEM)
@@ -49,7 +49,7 @@
 #endif
 
 //------------------------------------------------------------------------------
-#ifndef AW_NO_FILESYSTEM
+#if (AW_FILESYSTEM != AW_NO_FILESYSTEM)
 #include <aw/config.h>
 namespace aw {
 namespace filesystem {

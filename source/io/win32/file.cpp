@@ -19,32 +19,38 @@ file::file(file_descriptor fd)
 	this->fd = fd;
 }
 
-file::file(fs::path const& path, file_mode fm)
+file::file(fs::path const& path, file_mode mode)
 	: mode(fm)
 {
+	using fm = file_mode;
+
 	int access = 0;
-	if (bool(fm & file_mode::read))
+	if (bool(mode & fm::read))
 		access |= GENERIC_READ;
-	if (bool(fm & file_mode::write))
+	if (bool(mode & fm::write))
 		access |= GENERIC_WRITE;
 
 	int openmode = 0;
-	if (bool(fm & file_mode::create)) {
-		if (bool(fm & file_mode::exclusive))
-			openmode = CREATE_NEW;
-		else if (bool(fm & file_mode::truncate))
-			openmode = CREATE_ALWAYS;
-		else
-			openmode = OPEN_ALWAYS;
-	} else if (bool(fm & file_mode::truncate)) {
-		openmode = TRUNCATE_EXISTING;
-	} else {
+	switch (mode & (fm::create|fm::exclusive|fm::truncate)) {
+	case fm::create:
+		openmode = OPEN_ALWAYS;   break;
+	case fm::create|fm::truncate:
+		openmode = CREATE_ALWAYS; break;
+	case fm::create|fm::exclusive:
+	case fm::create|fm::exclusive|fm::truncate:
+		openmode = CREATE_NEW;    break;
+	case fm::truncate:
+	case fm::truncate|fm::exclusive:
+		openmode = CREATE_NEW;
+	case fm::exclusive:
+	case fm::none:
 		openmode = OPEN_EXISTING;
-	}
+	};
 
+	char const* p = path.wstring().data();
 	int sharemode = FILE_SHARE_DELETE|FILE_SHARE_READ|FILE_SHARE_WRITE;
 	int attrib = FILE_ATTRIBUTE_NORMAL;
-	auto handle = CreateFileW(path.wstring().data(), access, sharemode, NULL, openmode, attrib, NULL);
+	auto handle = CreateFileW(p, access, sharemode, NULL, openmode, attrib, NULL);
 
 	if (handle == INVALID_HANDLE_VALUE)
 		return;
