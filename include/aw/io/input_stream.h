@@ -32,8 +32,7 @@ struct input_stream {
 	 */
 	bool peek(char& c) const
 	{
-		c = cur_char;
-		return buffer->eof();
+		return buffer->peek(c);
 	}
 
 	/*!
@@ -42,9 +41,7 @@ struct input_stream {
 	 */
 	bool get(char& c)
 	{
-		bool ret = peek(c);
-		buffer->get(cur_char);
-		return ret;
+		return buffer->get(c);
 	}
 
 	/*!
@@ -53,9 +50,8 @@ struct input_stream {
 	 */
 	bool next(char& c)
 	{
-		bool ret = buffer->get(cur_char);
-		c = cur_char;
-		return ret;
+		buffer->get(c);
+		return peek(c);
 	}
 
 	/*! Read \a count bytes to buffer \a buf. */
@@ -90,12 +86,10 @@ protected:
 	void init_buffer(input_buffer& buffer)
 	{
 		this->buffer = &buffer;
-		next(cur_char);
 	}
 
 private:
 	input_buffer* buffer;
-	char cur_char;
 };
 
 struct input_stream_iterator {

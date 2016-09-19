@@ -70,15 +70,28 @@ struct input_buffer {
 	 * \return
 	 *    true if a character was extracted, false on end of stream
 	 */
-	bool get(char& out)
+	bool peek(char& out)
 	{
 		if (ptr() == end() && !fill_buffer()) {
 			out = 0;
 			return false;
 		}
 		out = *ptr();
-		bump_ptr(1);
 		return true;
+	}
+
+	/*
+	 * Read single character from buffer
+	 * \return
+	 *    true if a character was extracted, false on end of stream
+	 */
+	bool get(char& out)
+	{
+		if (peek(out)) {
+			move_ptr(1);
+			return true;
+		}
+		return false;
 	}
 
 	bool eof() const

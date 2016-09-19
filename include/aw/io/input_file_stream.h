@@ -16,14 +16,19 @@ namespace aw {
 namespace io {
 /*! Buffer for input_file_stream */
 struct input_file_buffer : input_buffer {
-	input_file_buffer(fs::path const& path)
-		: _file(path, file_mode::read|file_mode::create)
+	input_file_buffer(fs::path const& path, size_t size)
+		: _file(path, file_mode::read|file_mode::create),
+		  size(size)
 	{
-		size = 4096;
 		buf = new char[size];
 		auto nend = buf + size;
 		set_ptr(buf,nend,nend);
 	}
+
+	input_file_buffer(fs::path const& path)
+		: input_file_buffer(path, 4096)
+	{ }
+
 
 	~input_file_buffer() override
 	{
