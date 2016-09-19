@@ -1,5 +1,5 @@
 RootPath = ../../..
-Sources = file.cpp
+Sources = buffer.cpp file.cpp
 
 Libraries    = awio stdc++fs
 ProjectName  = test_io
