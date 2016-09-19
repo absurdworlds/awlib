@@ -102,29 +102,23 @@ void Writer::writeValueValue(hdf::Value value)
 {
 	switch (value.getType()) {
 	default:
-		ostream.put(as_string(value));
+		ostream.put(to_string(value));
 		break;
 	case hdf::Type::String:
 		ostream.put('"');
-		ostream.put(as_string(value));
+		ostream.put(to_string(value));
 		ostream.put('"');
 		break;
 	case hdf::Type::Vector2d:
-		ostream.put('{');
-		ostream.put(as_string(value));
-		ostream.put('}');
+		ostream.put(to_string(value));
 		break;
 	case hdf::Type::Vector3d:
 		ostream.put("vec3:");
-		ostream.put('{');
-		ostream.put(as_string(value));
-		ostream.put('}');
+		ostream.put(to_string(value));
 		break;
 	case hdf::Type::Vector4d:
 		ostream.put("vec4:");
-		ostream.put('{');
-		ostream.put(as_string(value));
-		ostream.put('}');
+		ostream.put(to_string(value));
 		break;
 	}
 }

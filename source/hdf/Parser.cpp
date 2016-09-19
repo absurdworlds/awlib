@@ -13,7 +13,7 @@
 #include <aw/utility/string/compose.h>
 #include <aw/io/InputStream.h>
 #include <aw/hdf/Type.h>
-#include <aw/math/Vector4d.h>
+#include <aw/math/vector4d.h>
 
 #include "Parser.h"
 
@@ -315,11 +315,11 @@ Value Parser::parseVector()
 	case 1:
 		return Value();
 	case 2:
-		return Value(Vector2d<f32>{vec[0], vec[1]});
+		return Value(math::vector2d<f32>{vec[0], vec[1]});
 	case 3:
-		return Value(Vector3d<f32>{vec[0], vec[1], vec[2]});
+		return Value(math::vector3d<f32>{vec[0], vec[1], vec[2]});
 	case 4:
-		return Value(Vector4d<f32>{vec[0], vec[1], vec[2], vec[3]});
+		return Value(math::vector4d<f32>{vec[0], vec[1], vec[2], vec[3]});
 	}
 }
 

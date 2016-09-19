@@ -51,8 +51,7 @@ struct Token {
 	size_t pos;
 };
 
-class Lexer {
-public:
+struct Lexer {
 	Lexer(io::InputStream& stream)
 		: stream(stream)
 	{
@@ -77,7 +76,7 @@ private:
 	void skipLine();
 	void skipWhitespace();
 	void skipInlineWhitespace();
-	template<typename Func> 
+	template<typename Func>
 	void skip(Func condition);
 
 	io::InputStream& stream;

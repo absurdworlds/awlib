@@ -7,11 +7,11 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _aw_HDFReader_
-#define _aw_HDFReader_
+#ifndef aw_HDFReader_h
+#define aw_HDFReader_h
 #include <string>
 
-#include <aw/math/Vector3d.h>
+#include <aw/math/vector3d.h>
 
 #include <aw/hdf/hdf.h>
 #include <aw/hdf/Value.h>
@@ -56,8 +56,7 @@ struct Object {
  * \see createParser
  * Also, see an example in 'examples' directory
 */
-class Parser {
-public:
+struct Parser {
 	virtual ~Parser() = default;
 
 	//! Fast-forward to the next object
