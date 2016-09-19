@@ -11,7 +11,6 @@
 #include <cstdio>
 
 #include <aw/utility/string/compose.h>
-#include <aw/io/InputStream.h>
 #include <aw/hdf/Type.h>
 #include <aw/math/vector4d.h>
 
@@ -66,13 +65,13 @@ Value parseInteger(std::string const& str)
 		return Value(f64(stod(str)));
 }
 
-Parser* createParser(io::InputStream& stream)
+Parser* createParser(io::input_stream& stream)
 {
 	return new impl_::Parser(stream);
 }
 
 namespace impl_ {
-Parser::Parser(io::InputStream& stream)
+Parser::Parser(io::input_stream& stream)
 	: depth(0), state(State::Idle), lex(stream)
 {
 }

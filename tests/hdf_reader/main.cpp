@@ -13,8 +13,7 @@
 #include <iostream>
 #include <chrono>
 
-#include <aw/io/ReadFile.h>
-#include <aw/io/InputFileStream.h>
+#include <aw/io/input_file_stream.h>
 #include <aw/hdf/Parser.h>
 
 using namespace aw;
@@ -90,8 +89,7 @@ int main(int,char** arg)
 		return 1;
 
 	// open a file
-	io::ReadFile file(arg[1]);
-	InputFileStream stream(file);
+	io::input_file_stream stream(arg[1]);
 	// create the parser
 	Parser* hdf = hdf::createParser(stream);
 

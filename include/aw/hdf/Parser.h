@@ -91,7 +91,7 @@ struct Parser {
  * \param stream Stream to parse.
  * \see io::CharacterStream
 */
-AW_HDF_EXP Parser* createParser(io::InputStream& stream);
+AW_HDF_EXP Parser* createParser(io::input_stream& stream);
 } // namespace io
 } // namespace aw
 #endif//aw_HDFReader_h

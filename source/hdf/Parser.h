@@ -22,7 +22,7 @@ namespace hdf {
 namespace impl_ {
 class Parser : public hdf::Parser {
 public:
-	Parser(io::InputStream& stream);
+	Parser(io::input_stream& stream);
 	virtual ~Parser() = default;
 
 	virtual void skipNode();

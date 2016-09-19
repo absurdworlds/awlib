@@ -52,7 +52,7 @@ struct Token {
 };
 
 struct Lexer {
-	Lexer(io::InputStream& stream)
+	Lexer(io::input_stream& stream)
 		: stream(stream)
 	{
 		getToken();
@@ -79,7 +79,7 @@ private:
 	template<typename Func>
 	void skip(Func condition);
 
-	io::InputStream& stream;
+	io::input_stream& stream;
 
 	Token tok;
 };
