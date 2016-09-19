@@ -45,8 +45,10 @@ private:
  */
 struct input_memory_stream : input_stream {
 	input_memory_stream(char const* begin, char const* end)
-		: input_stream(buffer), buffer(begin, end)
-	{}
+		: buffer{begin, end}
+	{
+		input_stream::init_buffer(buffer);
+	}
 
 	virtual ~input_memory_stream() = default;
 

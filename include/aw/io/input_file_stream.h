@@ -78,8 +78,10 @@ private:
  */
 struct input_file_stream : input_stream {
 	input_file_stream(fs::path const& path)
-		: input_stream(buffer), buffer(path)
-	{}
+		: buffer{path}
+	{
+		input_stream::init_buffer(buffer);
+	}
 
 	virtual ~input_file_stream() = default;
 

@@ -75,9 +75,12 @@ struct input_stream {
 	}
 
 protected:
-	input_stream(input_buffer& buffer)
-		: buffer(&buffer)
-	{}
+	input_stream() = default;
+	void init_buffer(input_buffer& buffer)
+	{
+		this->buffer = &buffer;
+		next(cur_char);
+	}
 
 private:
 	input_buffer* buffer;
