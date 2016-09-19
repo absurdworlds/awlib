@@ -13,6 +13,9 @@
  * \brief Setup compiler and platform specific settings
  */
 
+// TODO: improve this, to make platforms non-mutually-exclusive
+// (i.e. make both win32 and posix available under winelib)
+
 /**** DEFINITIONS ****/
 #define AW_COMPILER_GCC   1
 #define AW_COMPILER_CLANG 2
@@ -21,12 +24,21 @@
 #define AW_ARCH_i686   686
 #define AW_ARCH_x86_64 8664
 
-#define AW_PLATFORM_POSIX 0
-#define AW_PLATFORM_LINUX 1
-#define AW_PLATFORM_BSD   2
-#define AW_PLATFORM_OSX   3
-#define AW_PLATFORM_WIN32 4
-#define AW_PLATFORM_WIN64 5
+#define AW_PLATFORM_POSIX  0
+#define AW_PLATFORM_LINUX  1
+#define AW_PLATFORM_BSD    2
+#define AW_PLATFORM_OSX    3
+#define AW_PLATFORM_WIN32  4
+#define AW_PLATFORM_WIN64  5
+
+// When compiling for winelib, both win32 api and posix api can be used
+#if   defined(AW_WINE_POSIX)
+#define AW_PLATFORM_WINE   AW_PLATFORM_POSIX
+#elif defined(AW_WINE_WIN32)
+#define AW_PLATFORM_WINE   AW_PLATFORM_WIN32
+#else
+#define AW_PLATFORM_WINE   6
+#endif
 
 /**** COMPILER VERSION ****/
 #ifdef AW_COMPILER
@@ -48,15 +60,26 @@
 #endif
 
 /**** PLATFORM ****/
-/* Windows platform */
-#if defined(_WIN64) // check win64 first, as win32 defined for both
-	#define AW_PLATFORM          AW_PLATFORM_WIN32
+/* Winelib */
+#if defined(__WINE__)
+	#define AW_PLATFORM          AW_PLATFORM_WINE
+
+	#if defined(_WIN64)
 	#define AW_PLATFORM_SPECIFIC AW_PLATFORM_WIN64
-	#define AW_WINDOWS
-#elif defined(_WIN32)
-	#define AW_PLATFORM          AW_PLATFORM_WIN32
+	#else
 	#define AW_PLATFORM_SPECIFIC AW_PLATFORM_WIN32
+	#endif
+#endif
+/* Windows platform */
+#elif defined(_WIN32)
 	#define AW_WINDOWS
+	#define AW_PLATFORM          AW_PLATFORM_WIN32
+	#if defined(_WIN64)
+	#define AW_PLATFORM_SPECIFIC AW_PLATFORM_WIN64
+	#else
+	#define AW_PLATFORM_SPECIFIC AW_PLATFORM_WIN32
+	#endif
+/* Unix-like */
 #elif defined(__gnu_linux__)
 	#define AW_PLATFORM          AW_PLATFORM_POSIX
 	#define AW_PLATFORM_SPECIFIC AW_PLATFORM_LINUX
