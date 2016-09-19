@@ -57,7 +57,7 @@ struct input_buffer {
 			out = 0;
 			return false;
 		}
-		out = *begin();
+		out = *ptr();
 		bump_ptr(1);
 		return true;
 	}
