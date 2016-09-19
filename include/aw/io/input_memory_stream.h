@@ -17,9 +17,37 @@ namespace io {
 /*! Buffer for input_memory_stream */
 struct input_memory_buffer : input_buffer {
 	input_memory_buffer(char const* _begin, char const* _end)
-		: buf(_begin), size(_end - _begin)
+		: b_begin(_begin), b_end(_end)
 	{
-		set_ptr(_begin,_begin,_end);
+		set_ptr(_begin, _begin, _end);
+	}
+
+	void seekpos(size_t offset) override
+	{
+		if (offset > b_size()) {
+			set_ptr(b_begin, b_end, b_end);
+		} else {
+			set_ptr(b_begin, b_begin + offset, b_end);
+		}
+	}
+
+	void seekend(size_t offset) override
+	{
+		if (offset > b_size()) {
+			set_ptr(b_begin, b_end, b_end);
+		} else {
+			set_ptr(b_begin, b_end - offset, b_end);
+		}
+	}
+
+	void seekoff(ptrdiff_t offset) override
+	{
+		auto newpos = ptr() + offset;
+		if ((newpos < b_begin) || (newpos > b_end)) {
+			set_ptr(b_begin, b_end, b_end);
+		} else {
+			set_ptr(b_begin, newpos, b_end);
+		}
 	}
 
 	size_t position() const override
@@ -30,14 +58,20 @@ struct input_memory_buffer : input_buffer {
 protected:
 	bool fill_buffer() override
 	{
-		if (ptr() == end())
+		if (ptr() == b_end)
 			return false;
 		return true;
 	}
 
+	/*! Size of the source buffer */
+	size_t b_size() const
+	{
+		return b_end - b_begin;
+	}
+
 private:
-	char const* buf;
-	size_t size;
+	char const* b_begin;
+	char const* b_end;
 };
 
 /*!

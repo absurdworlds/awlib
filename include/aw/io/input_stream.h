@@ -21,6 +21,11 @@ namespace io {
 struct input_stream {
 	virtual ~input_stream() = default;
 
+	bool eof() const
+	{
+		return buffer->eof();
+	}
+
 	/*!
 	 * Get byte at current position
 	 * Equivalent to: *stream_iter
@@ -67,6 +72,12 @@ struct input_stream {
 		              "T must be trivially copyable.");
 		size_t cnt = read(reinterpret_cast<char*>(&object), sizeof(object));
 		return cnt == sizeof(object);
+	}
+
+	/*! Advance position by \a characters */
+	size_t skip(size_t count)
+	{
+		return buffer->skip(count);
 	}
 
 	size_t position() const

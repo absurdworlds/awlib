@@ -41,9 +41,28 @@ struct input_buffer {
 			count += len;
 			out   += len;
 
-			bump_ptr(len);
+			move_ptr(len);
 		}
 		return count;
+	}
+
+	size_t skip(size_t count)
+	{
+		size_t skipped = 0;
+		while (skipped < count) {
+			if (ptr() == end() && !fill_buffer())
+				break;
+
+			size_t len = end() - ptr();
+			size_t req = count - skipped;
+
+			len = std::min(len, req);
+
+			skipped += len;
+			move_ptr(len);
+		}
+
+		return skipped;
 	}
 
 	/*
@@ -67,7 +86,11 @@ struct input_buffer {
 		return !ptr();
 	}
 
-	virtual size_t position() const = 0;
+	virtual void seekpos(size_t offset) {}
+	virtual void seekend(size_t offset) {}
+	virtual void seekoff(ptrdiff_t offset) {}
+
+	virtual size_t position() const { return size_t(-1); }
 
 protected:
 	virtual bool fill_buffer() = 0;
@@ -76,7 +99,7 @@ protected:
 	char const* ptr()   const { return _ptr; };
 	char const* end()   const { return _end; };
 
-	void bump_ptr(size_t len) { _ptr += len; }
+	void move_ptr(ptrdiff_t offset) { _ptr += offset; }
 	void set_ptr(char const* new_b, char const* new_p, char const* new_e)
 	{
 		_beg = new_b;

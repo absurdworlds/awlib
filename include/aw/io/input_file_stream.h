@@ -30,6 +30,29 @@ struct input_file_buffer : input_buffer {
 		delete[] buf;
 	}
 
+	void seekpos(size_t offset) override
+	{
+		_file.seek(offset, seek_mode::set);
+		read_more();
+	}
+
+	void seekend(size_t offset) override
+	{
+		_file.seek(offset, seek_mode::end);
+		read_more();
+	}
+
+	void seekoff(ptrdiff_t offset) override
+	{
+		auto newpos = ptr() + offset;
+		if ( newpos < begin() || newpos >= end() ) {
+			_file.seek(offset, seek_mode::cur);
+			read_more();
+		} else {
+			set_ptr(begin(), newpos, end());
+		}
+	}
+
 	size_t position() const override
 	{
 		// TODO
@@ -43,31 +66,36 @@ protected:
 		if (!ptr())
 			return false;
 
-		if (ptr() == end()) {
-			auto count = _file.read(buf, size);
+		if (ptr() == end())
+			return read_more();
 
-			if (count > 0) {
-				char* beg  = buf;
-				char* nend = buf + count;
-				set_ptr(beg, beg, nend);
-				return true;
-			}
-
-			if (count == 0) {
-				set_ptr(0, 0, 0);
-				return false;
-			}
-
-			throw std::system_error{
-				/* TODO */
-				std::make_error_code(std::errc::io_error),
-				"error reading from file"
-			};
-		}
 		return true;
 	}
 
 private:
+	bool read_more()
+	{
+		auto count = _file.read(buf, size);
+
+		if (count > 0) {
+			char* beg  = buf;
+			char* nend = buf + count;
+			set_ptr(beg, beg, nend);
+			return true;
+		}
+
+		if (count == 0) {
+			set_ptr(0, 0, 0);
+			return false;
+		}
+
+		throw std::system_error{
+			/* TODO */
+			std::make_error_code(std::errc::io_error),
+			"error reading from file"
+		};
+	}
+
 	file _file;
 	char* buf;
 	size_t size;
