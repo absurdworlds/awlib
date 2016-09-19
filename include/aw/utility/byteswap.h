@@ -87,5 +87,5 @@ i64 byteswap(i64 val)
 {
 	return i64(byteswap(u64(val)));
 }
-// namespace aw
+} // namespace aw
 #endif//aw_utility_byteswap
