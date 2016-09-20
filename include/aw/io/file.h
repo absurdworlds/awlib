@@ -15,15 +15,12 @@
 #include <aw/types/types.h>
 #include <aw/utility/filesystem.h>
 #include <aw/io/file_mode.h>
+#include <aw/io/file_descriptor.h>
 
-/* internal */
-#include <aw/io/bits/file.h>
+#include <aw/io/native_file.h>
 
 namespace aw {
 namespace io {
-/*! Platform-dependent file descriptor */
-using file_descriptor = _impl::file_descriptor;
-
 /*!
  * Provides raw unbuffered file IO.
  */
@@ -41,12 +38,18 @@ struct file {
 		: _path(path), data(path, fm)
 	{ }
 
-	~file() { close(); }
+	/*! Destructor automatically closes the file */
+	~file()
+	try {
+		close();
+	} catch(...) {
+		//log.warning("aw::io", "could not close file " + path.u8string());
+	}
 
 	file(file&& other) noexcept
-		: data(other.data)
+		: data(std::move(other.data))
 	{
-		other.data = _impl::file{};
+		_path = std::move(other._path);
 	}
 
 	file& operator=(file&& other) noexcept
@@ -58,22 +61,18 @@ struct file {
 	void swap(file& other) noexcept
 	{
 		std::lock_guard<std::mutex> guard{mutex};
-		std::swap(_path, other._path);
-		data.swap(other.data);
-	}
-
-	void swap(file&& other) noexcept
-	{
-		std::lock_guard<std::mutex> guard{mutex};
-		std::swap(_path, other._path);
+		_path.swap(other._path);
 		data.swap(other.data);
 	}
 
 	void close()
 	{
+		std::error_code ec;
 		std::lock_guard<std::mutex> guard{mutex};
-		if (data.is_open())
-			data.close();
+
+		data.close(ec);
+
+		check_error(ec, "cannot close file");
 	}
 
 	/*!
@@ -90,10 +89,16 @@ struct file {
 	 * \return
 	 *     number of bytes read, or -1 on failure.
 	 */
-	intmax_t read(char* buffer, uintmax_t count)
+	uintmax_t read(char* buffer, uintmax_t count)
 	{
+		std::error_code ec;
 		std::lock_guard<std::mutex> guard{mutex};
-		return data.read(buffer, count);
+
+		auto ret = data.read(buffer, count, ec);
+
+		check_error(ec, "cannot read from file");
+
+		return uintmax_t(ret);
 	}
 
 	/*!
@@ -101,34 +106,56 @@ struct file {
 	 * \return
 	 *     number of bytes written, negative on failure
 	 */
-	intmax_t write(char const* buffer, uintmax_t count)
+	uintmax_t write(char const* buffer, uintmax_t count)
 	{
+		std::error_code ec;
 		std::lock_guard<std::mutex> guard{mutex};
-		return data.write(buffer, count);
+
+		auto ret = data.write(buffer, count, ec);
+
+		check_error(ec, "cannot write to file");
+
+		return uintmax_t(ret);
 	}
 
 	/*!
 	 * Set pointer position
 	 */
-	intmax_t seek(intmax_t count, seek_mode mode)
+	uintmax_t seek(intmax_t count, seek_mode mode)
 	{
+		std::error_code ec;
 		std::lock_guard<std::mutex> guard{mutex};
-		return data.seek(count, mode);
+
+		auto ret = data.seek(count, mode, ec);
+
+		check_error(ec, "cannot set file position");
+
+		return uintmax_t(ret);
 	}
 
 	/*!
 	 * Get pointer position
 	 */
-	intmax_t tell()
+	uintmax_t tell() const
 	{
+		std::error_code ec;
 		std::lock_guard<std::mutex> guard{mutex};
-		return data.tell();
+
+		auto ret = data.tell(ec);
+
+		check_error(ec, "cannot get file position");
+
+		return uintmax_t(ret);
 	}
 
 	/*!
 	 * Get size of file in bytes
 	 */
-	uintmax_t size() const noexcept { return data.size(); }
+	uintmax_t size() const
+	{
+		std::lock_guard<std::mutex> guard{mutex};
+		return data.size();
+	}
 
 	/*!
 	 * Get full path to file
@@ -136,9 +163,15 @@ struct file {
 	fs::path const& path() const noexcept { return _path; }
 
 private:
+	void check_error(std::error_code& ec, char const* what) const
+	{
+		if (ec.default_error_condition() != ec)
+			throw fs::filesystem_error{what, path(), ec};
+	}
+
 	mutable std::mutex mutex;
 	fs::path _path;
-	_impl::file data;
+	native::file data;
 };
 } // namespace io
 } // namespace aw

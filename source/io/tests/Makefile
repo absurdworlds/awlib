@@ -1,9 +1,9 @@
 RootPath = ../../..
-Sources = buffer.cpp file.cpp
+Sources = native_file.cpp main.cpp
 
 Libraries    = awio stdc++fs
 ProjectName  = test_io
-ProjectFlags = -fprofile-arcs -ftest-coverage
+ProjectFlags =
 Executable   = true
 
 include $(RootPath)/Rules.mk
