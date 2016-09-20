@@ -6,35 +6,18 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef aw_variant_h
-#define aw_variant_h
+#ifndef aw_types_variant_h
+#define aw_types_variant_h
 #include <aw/types/types.h>
 #include <aw/types/traits/basic_traits.h>
-#include <aw/meta/parameter_pack.h>
-#include <string.h>
+#include <aw/meta/conditional.h>
+#include <aw/meta/list_ops.h>
+#include <aw/meta/index_of.h>
 #include <limits>
 #include <algorithm>
+#include <cassert>
 
 namespace aw {
-namespace _impl {
-template <typename T>
-constexpr size_t get_index(size_t)
-{
-	return std::numeric_limits<size_t>::max();
-}
-
-template <typename T, typename Head, typename...Tail>
-constexpr size_t get_index(size_t idx)
-{
-	if (is_same<T, Head>)
-		return idx;
-	return get_index<T, Tail...>(idx + 1);
-}
-} // namespace _impl
-
-template <typename U, typename... Ts>
-constexpr size_t get_index = _impl::get_index<U, Ts...>(0);
-
 struct variant_shared {
 protected:
 	struct Destroy {
@@ -112,9 +95,9 @@ struct variant : variant_shared {
 	template<typename... Os>
 	variant(variant<Os...> const& other)
 	{
-		static_assert(!is_same<variant<Ts...>, variant<Os...>>,
+		static_assert(!is_same<variant<Os...>, variant<Ts...>>,
 		              "Non-template constructor should be used for variant of same type.");
-		static_assert(all_in_pack<Os...>::template check<Ts...>,
+		static_assert(is_subset<meta::list<Os...>, meta::list<Ts...>>,
 		              "Other variant type must be a subset.");
 
 		if (other.empty()) {
@@ -123,7 +106,6 @@ struct variant : variant_shared {
 		}
 
 		other.apply(Copy{*this});
-
 	}
 
 	/*!
@@ -132,9 +114,9 @@ struct variant : variant_shared {
 	template<typename... Os>
 	variant(variant<Os...>&& other)
 	{
-		static_assert(!is_same<variant<Ts...>, variant<Os...>>,
+		static_assert(!is_same<variant<Os...>, variant<Ts...>>,
 		              "Non-template constructor should be used for variant of same type.");
-		static_assert(all_in_pack<Os...>::template check<Ts...>,
+		static_assert(is_subset<meta::list<Os...>, meta::list<Ts...>>,
 		              "Other variant type must be a subset.");
 
 		if (other.empty()) {
@@ -159,23 +141,24 @@ struct variant : variant_shared {
 
 	variant& operator=(variant&& other)
 	{
+		assert(&other != this);
+
 		if (other.empty()) {
 			reset();
 			return *this;
 		}
 
 		other.apply(Move{*this});
-		if (&other != this)
-			other.reset();
+		other.reset();
 		return *this;
 	}
 
 	template<typename... Os>
 	variant& operator=(variant<Os...> const& other)
 	{
-		static_assert(!is_same<variant<Ts...>, variant<Os...>>,
+		static_assert(!is_same<variant<Os...>, variant<Ts...>>,
 		              "Non-template operator should be used for variant of same type.");
-		static_assert(all_in_pack<Os...>::template check<Ts...>,
+		static_assert(is_subset<meta::list<Os...>, meta::list<Ts...>>,
 		              "Other variant type must be a subset.");
 
 		if (other.empty()) {
@@ -190,9 +173,9 @@ struct variant : variant_shared {
 	template<typename... Os>
 	variant& operator=(variant<Os...>&& other)
 	{
-		static_assert(!is_same<variant<Ts...>, variant<Os...>>,
+		static_assert(!is_same<variant<Os...>, variant<Ts...>>,
 		              "Non-template operator should be used for variant of same type.");
-		static_assert(all_in_pack<Os...>::template check<Ts...>,
+		static_assert(is_subset<meta::list<Os...>, meta::list<Ts...>>,
 		              "Other variant type must be a subset.");
 
 		if (other.empty()) {
@@ -295,7 +278,7 @@ struct variant : variant_shared {
 	static constexpr index_t invalid = index_t(std::numeric_limits<size_t>::max());
 	//! Index of particular type
 	template<typename T>
-	static constexpr index_t index_of = index_t(get_index<T, Ts...>);
+	static constexpr index_t index_of = index_t(aw::index_of<T, Ts...>);
 
 	/*!
 	 * Check if variant is empty.
@@ -311,7 +294,7 @@ struct variant : variant_shared {
 	template<typename T>
 	bool check_type() const
 	{
-		return index == index_t(get_index<T, Ts...>);
+		return !empty() && (index == index_of<T>);
 	}
 
 	/*
@@ -476,4 +459,4 @@ private:
 	Storage storage;
 };
 } // namespace aw
-#endif//aw_variant_h
+#endif//aw_types_variant_h
