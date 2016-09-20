@@ -10,6 +10,7 @@
 #ifndef aw_parameter_pack_h
 #define aw_parameter_pack_h
 #include <aw/types/types.h>
+#include <aw/types/basic_traits.h>
 #include <aw/meta/conditional.h>
 #include <aw/utility/index_sequence.h>
 #include <aw/utility/fold.h>
@@ -24,22 +25,6 @@ void for_each_index(Func f, index_sequence<Is...>)
 {
 	for_each_argument(f, Is...);
 }
-
-template <class T, typename... Ts>
-constexpr bool is_in_pack = bool_or<std::is_same<T,Ts>::value...>;
-
-#if 0
-// Appears to be GCC feature, clang complains
-template <typename... Os, typename... Ts>
-constexpr bool all_in_pack = bool_and<is_in_pack<Os,Ts...>...>;
-#endif
-
-template <typename... Os>
-struct all_in_pack {
-	template <typename... Ts>
-	static constexpr bool check = bool_and<is_in_pack<Os,Ts...>...>;
-};
-
 
 namespace _impl {
 template<class A, template<class...> class B>
