@@ -82,23 +82,16 @@ private:
 	{
 		auto count = _file.read(buf, size);
 
-		if (count > 0) {
-			char* beg  = buf;
-			char* nend = buf + count;
-			set_ptr(beg, beg, nend);
-			return true;
-		}
-
+		// end of file reached
 		if (count == 0) {
 			set_ptr(0, 0, 0);
 			return false;
 		}
 
-		throw std::system_error{
-			/* TODO */
-			std::make_error_code(std::errc::io_error),
-			"error reading from file"
-		};
+		char* beg  = buf;
+		char* nend = buf + count;
+		set_ptr(beg, beg, nend);
+		return true;
 	}
 
 	file _file;
