@@ -19,9 +19,7 @@ template <template<class...> class Op, class... Args>
 struct detector<void_t<Op<Args...>>, Op, Args...> : std::true_type {};
 } // namespace _impl
 
-inline namespace meta {
 template <template<class...> class Op, class... Args>
-constexpr auto is_detected = aw::_impl::detector<void, Op, Args...>::value;
-} // namespace meta
+constexpr bool is_detected = aw::_impl::detector<void, Op, Args...>::value;
 } // namespace aw
 #endif//aw_traits_detection
