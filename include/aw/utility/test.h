@@ -183,9 +183,7 @@ private:
 		cur->st = st;
 	}
 
-	void leave()
-	{
-	}
+	void test_failure();
 
 	void add_test(test&& tst)
 	{
@@ -220,6 +218,18 @@ int registry::run()
 	return res > 0xFF ? 0xFF : res;
 }
 
+void context::test_failure()
+{
+	++failed;
+
+	print(bold, red, " failed: (", stage_name[size_t(cur->st)], ") ", reset);
+	print(red, "failed: ", bold, cur->failed, reset);
+	print(green, ", succeded: ", bold, cur->succeded, reset, '\n');
+
+	for (auto msg : cur->messages)
+		print(bold, red, "test failed: ", reset, msg, '\n');
+}
+
 void context::run_test(test& tst)
 {
 	cur = &tst;
@@ -229,15 +239,17 @@ void context::run_test(test& tst)
 		cur->func();
 		enter(stage::end);
 		print(bold, green, " succeded, checks: ", cur->succeded, reset, '\n');
+		return;
 	} catch (test_failed& ex) {
-		++failed;
-		print(bold, red, " failed: (", stage_name[size_t(cur->st)], ") ", reset);
-		print(red, "failed: ", bold, cur->failed, reset);
-		print(green, ", succeded: ", bold, cur->succeded, reset, '\n');
-
-		for (auto msg : cur->messages)
-			print(bold, red, "test failed: ", reset, msg, '\n');
+		test_failure();
+	} catch (std::exception& e) {
+		test_failure();
+		print(bold, red, "exception: ", reset, e.what(), '\n');
+	} catch (...) {
+		test_failure();
+		print(bold, red, "caught unknown exception", reset, '\n');
 	}
+
 	cur->messages.clear();
 }
 
@@ -279,10 +291,6 @@ class context_block {
 	static void enter(stage st)
 	{
 		file_context.enter(st);
-	}
-	static void leave()
-	{
-		file_context.leave();
 	}
 };
 
