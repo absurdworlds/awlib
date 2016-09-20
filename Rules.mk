@@ -35,7 +35,8 @@ else
 endif
 BuildDir = $(RootPath)/build/$(ProjectName)
 Includes = -I$(RootPath)/include
-Objects = $(patsubst %.cpp, $(BuildDir)/%.o, $(Sources))
+SourceExt ?= cpp
+Objects = $(patsubst %.$(SourceExt), $(BuildDir)/%.o, $(Sources))
 Depends = $(Objects:.o=.d)
 ProjectDefines = $(addprefix -D,$(Defines))
 ProjectDependencies = $(addprefix -l,$(Libraries))
@@ -88,7 +89,9 @@ debug: Build
 release: CXXFLAGS+=$(CXXFLAGS_RELEASE)
 release: Build
 
-$(BuildDir)/%.o: %.cpp
+.c++:
+
+$(BuildDir)/%.o: %.$(SourceExt)
 	$(PRINTF_BOLD)
 	$(ECHO) [Build] Compiling $@
 	$(PRINTF_RESET)
