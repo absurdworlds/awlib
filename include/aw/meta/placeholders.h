@@ -15,5 +15,9 @@ namespace aw {
 struct _1 {};
 struct _2 {};
 /*\}*/
+
+namespace meta {
+struct nonesuch {};
+} // namespace meta
 } // namespace aw
 #endif//aw_meta_placeholders_h

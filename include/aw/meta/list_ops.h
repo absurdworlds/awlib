@@ -9,28 +9,34 @@
 #ifndef aw_meta_list_ops_h
 #define aw_meta_list_ops_h
 #include <aw/meta/list.h>
+#include <aw/meta/expand.h>
+#include <aw/types/traits/basic_traits.h>
 namespace aw {
 /*! Check if type T is present in parameter pack Ts */
 template <class T, typename... Ts>
-constexpr bool is_in_pack = (is_same<T,Ts> || ...);
+constexpr bool is_in_pack      = (is_same<T,Ts> || ...);
 /*! Count how many times T occurs in parameter pack Ts */
 template <class T, typename... Ts>
 constexpr size_t count_in_pack = (size_t(is_same<T,Ts>) + ...);
 
 namespace meta {
-template <typename T, typename L>
-struct is_in;
-template <typename T, typename... Ts>
-struct is_in<T,list<Ts...>> {
-	static constexpr bool value = is_in_pack<T,Ts...>;
-};
+template<typename F, typename...Ts>
+constexpr bool match_any = (expand<F, Ts>::value || ...);
 
-template <typename T, typename L>
-struct count;
-template <typename T, typename... Ts>
-struct count<T,list<Ts...>> {
-	static constexpr bool value = count_in_pack<T,Ts...>;
-};
+template<typename F, typename...Ts>
+constexpr bool match_all = (expand<F, Ts>::value && ...);
+
+template<typename F, typename...Ts>
+constexpr size_t count_if = (size_t(expand<F, Ts>::value) + ...);
+
+
+
+
+template<typename L>
+using head = typename _impl::head<L>::type;
+template<typename L>
+using tail = typename _impl::tail<L>::type;
+
 
 /*! Checks that L1 is subset of L2.*/
 template<typename L1, typename L2>
