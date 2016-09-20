@@ -13,13 +13,17 @@
 #include <aw/meta/expand.h>
 namespace aw {
 namespace _impl {
+/*
 template<typename Pred>
-struct find;
-
+struct find_index;
 template<template <typename...> class Pred, typename...Args>
-struct find<Pred<Args...>> {
+struct find_index<Pred<Args...>> {
+*/
+
+template<typename Pred>
+struct find_index {
 	template<typename T>
-	using F = aw::expand<Pred<Args...>, T>;
+	using F = aw::expand<Pred, T>;
 
 	template <size_t N, typename...Ts>
 	struct index;
@@ -59,7 +63,7 @@ struct find<Pred<Args...>> {
 };
 } // namespace impl
 
-template<typename Predicate, typename...Ts>
-constexpr size_t find = _impl::find<Predicate>::template index<0, Ts...>::value;
+template<typename Pred, typename...Ts>
+constexpr size_t find_index = _impl::find_index<Pred>::template index<0,Ts...>::value;
 } // namespace aw
 #endif//aw_meta_find_index_h
