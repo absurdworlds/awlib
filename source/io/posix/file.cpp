@@ -6,7 +6,7 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#include <aw/io/file.h>
+#include <aw/io/native_file.h>
 
 #include <unistd.h>
 #include <fcntl.h>
@@ -14,17 +14,17 @@
 #include <sys/stat.h>
 namespace aw {
 namespace io {
-namespace _impl {
 namespace posix {
-file::file(file_descriptor fd)
+void set_error_if(bool cond, std::error_code& ec)
 {
-	if ((fcntl(fd, F_GETFD) == -1) && errno == EBADF)
-		return;
-
-	this->fd = fd;
+	if (cond) {
+		ec.assign(errno, std::generic_category());
+	} else {
+		ec.clear();
+	}
 }
 
-file::file(fs::path const& path, file_mode fm)
+file_descriptor open(fs::path const& path, file_mode fm, std::error_code& ec)
 {
 	int flags = 0;
 	switch (fm & (file_mode::read | file_mode::write)) {
@@ -46,53 +46,51 @@ file::file(fs::path const& path, file_mode fm)
 		flags |= O_EXCL;
 
 	constexpr mode_t default_mode = 0644;
-	fd = open(path.u8string().data(), flags, default_mode);
+	auto fd = ::open(path.u8string().data(), flags, default_mode);
+
+	set_error_if(fd == -1, ec);
+
+	return {fd};
 }
 
-void file::swap(file& other) noexcept
+int close(file_descriptor fd, std::error_code& ec)
 {
-	std::swap(fd, other.fd);
+	int ret = ::close(fd);
+	set_error_if(fd == -1, ec);
+	return ret;
 }
 
-void file::close()
-{
-	::close(fd);
-	fd   = -1;
-}
-
-
-bool file::is_open() const noexcept
-{
-	return fd != -1;
-}
-
-intmax_t file::read(char* buffer, uintmax_t count)
+intmax_t read(file_descriptor fd, char* buffer, uintmax_t count, std::error_code& ec)
 {
 	intmax_t ret;
 	do {
 		ret = ::read(fd, buffer, count);
 	} while (ret == -1 && errno == EINTR);
+	set_error_if(ret == -1, ec);
 	return ret;
 }
 
-intmax_t file::write(char const* buffer, uintmax_t count)
+intmax_t write(file_descriptor fd, char const* buffer, uintmax_t count, std::error_code& ec)
 {
+	intmax_t ret = 0;
 	uintmax_t left = count;
 	do {
-		auto ret = ::write(fd, buffer, left);
+		ret = ::write(fd, buffer, left);
 		if (ret == -1 && errno == EINTR)
 			continue;
 		else if (ret == -1)
-			return -(count - left);
+			break;
 
 		left   -= ret;
 		buffer += ret;
 	} while (left != 0);
 
+	set_error_if(ret == -1, ec);
+
 	return count - left;
 }
 
-intmax_t file::seek(intmax_t count, seek_mode mode)
+intmax_t seek(file_descriptor fd, intmax_t count, seek_mode mode, std::error_code& ec)
 {
 	int whence;
 	switch (mode) {
@@ -107,24 +105,26 @@ intmax_t file::seek(intmax_t count, seek_mode mode)
 		break;
 	}
 
-	return ::lseek(fd, count, whence);
+	auto ret = ::lseek(fd, count, whence);
+	set_error_if(ret == -1, ec);
+
+	return ret;
 }
 
-intmax_t file::tell()
+intmax_t tell(file_descriptor fd, std::error_code& ec)
 {
-	return seek(0, seek_mode::cur);
+	return seek(fd, 0, seek_mode::cur, ec);
 }
 
-uintmax_t file::size() const
+uintmax_t size(file_descriptor fd, std::error_code& ec)
 {
-	if (!is_open())
-		return 0;
-
 	struct stat info;
-	fstat(fd, &info);
-	return info.st_size;
+	int ret = ::fstat(fd, &info);
+
+	set_error_if(ret == -1, ec);
+
+	return (ret == -1) ? uintmax_t(-1) : info.st_size;
 }
 } // namespace posix
-} // namespace _impl
 } // namespace io
 } // namespace aw
