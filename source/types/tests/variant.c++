@@ -79,13 +79,10 @@ Test(variant_assign_subset) {
 Test(variant_self_assign) {
 	using namespace std::string_literals;
 	aw::variant<int, std::string> var1("Test string!"s);
-	aw::variant<int, std::string> var2("Test string!"s);
 
 	Checks {
 		var1 = var1;
-		var2 = std::move(var2);
 		TestEqual(*var1.get<std::string>(), "Test string!"s);
-		TestEqual(*var2.get<std::string>(), "Test string!"s);
 	}
 }
 Test(variant_reassign) {
