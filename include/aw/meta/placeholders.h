@@ -9,13 +9,11 @@
 #ifndef aw_meta_placeholders_h
 #define aw_meta_placeholders_h
 namespace aw {
-inline namespace meta {
 /*\{
  * Placeholders to use in metafunctions.
  */
 struct _1 {};
 struct _2 {};
 /*\}*/
-} // namespace meta
 } // namespace aw
 #endif//aw_meta_placeholders_h

@@ -10,30 +10,15 @@
 #define aw_meta_expand_h
 #include <aw/meta/placeholders.h>
 namespace aw {
-inline namespace meta {
 namespace _impl {
 template<typename F, typename...Args>
 struct expand {
 	using type = F;
 };
-} // namespace impl
 
-/*!
- * Expand placeholders in metafunction.
- * For example:
- *     expand< is_same<_1, int>, int >
- * results in
- *     is_same<int, int>
- */
-template<typename F, typename...Args>
-using expand = typename expand<F,Args...>::type;
-
-
-//-----------------------------------------------
-namespace _impl {
 template<template <typename...> class F, typename...Ts, typename...Args>
 struct expand<F<Ts...>, Args...> {
-	using type = F<expand<Ts,Args...>...>
+	using type = F<typename expand<Ts,Args...>::type...>;
 };
 
 template<typename T, typename...Args>
@@ -47,7 +32,17 @@ struct expand<_2, T, U, Args...>
 {
 	using type = U;
 };
-} // namespace _impl
-} // namespace meta
+} // namespace impl
+//-----------------------------------------------
+
+/*!
+ * Expand placeholders in metafunction.
+ * For example:
+ *     expand< is_same<_1, int>, int >
+ * results in
+ *     is_same<int, int>
+ */
+template<typename F, typename...Args>
+using expand = typename aw::_impl::expand<F,Args...>::type;
 } // namespace aw
 #endif//aw_meta_expand_h

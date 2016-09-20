@@ -11,7 +11,6 @@
 #include <utility>
 #include <type_traits>
 namespace aw {
-inline namespace meta {
 /*!
  * Shorthand for std::enable_if
  *
@@ -66,6 +65,5 @@ struct bool_or<Bool, Bools...>
 	: conditional<Bool, std::true_type, bool_or<Bools...>>
 { };
 #endif
-} // inline namespace meta
 } // namespace aw
 #endif//aw_traits_conditional
