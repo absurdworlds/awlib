@@ -29,8 +29,27 @@ constexpr bool match_all = (expand<F, Ts>::value && ...);
 template<typename F, typename...Ts>
 constexpr size_t count_if = (size_t(expand<F, Ts>::value) + ...);
 
+namespace _impl {
+template<typename L>
+struct head {
+	using type = nonesuch;
+};
 
+template<typename L, typename...Ls>
+struct head<list<L,Ls...>> {
+	using type = L;
+};
 
+template<typename L>
+struct tail {
+	using type = list<>;
+};
+
+template<typename L, typename...Ls>
+struct tail<list<L,Ls...>> {
+	using type = list<Ls...>;
+};
+} // namespace _impl
 
 template<typename L>
 using head = typename _impl::head<L>::type;
