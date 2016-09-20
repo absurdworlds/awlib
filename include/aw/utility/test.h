@@ -260,8 +260,8 @@ extern context file_context;
 void context::segvhandler(int signum)
 {
 #if (AW_PLATFORM == AW_PLATFORM_POSIX)
-	static constexpr char desc[] = "\nCaught SIGSEGV, aborting tests.\n";
-	std::fwrite(desc, sizeof(desc), 1, stderr);
+	file_context.test_failure();
+	print(bold, red, "caught SIGSEGV, aborting tests", reset, '\n');
 	signal(signum, SIG_DFL);
 	kill(getpid(), signum);
 #endif
