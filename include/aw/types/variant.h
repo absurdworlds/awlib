@@ -55,10 +55,16 @@ struct variant : variant_shared {
 	 *  when this is ambiguous, reshuffle template list like in Loki library,
 	 *  or just live with unexpected types being constructed)
 	 */
-	template<typename T>
+	template<typename T, typename = enable_if<is_in_pack<T,Ts...>>>
 	variant(T const& value)
 	{
 		construct<T>(value);
+	}
+
+	template<typename T, typename = enable_if<is_in_pack<T,Ts...>>>
+	variant(T&& value)
+	{
+		construct<T>(std::move(value));
 	}
 
 	/*!
