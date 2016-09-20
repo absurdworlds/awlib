@@ -165,7 +165,8 @@ struct variant : variant_shared {
 		}
 
 		other.apply(Move{*this});
-		other.reset();
+		if (&other != this)
+			other.reset();
 		return *this;
 	}
 
