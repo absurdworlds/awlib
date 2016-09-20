@@ -24,13 +24,12 @@ protected:
 		using return_type = void;
 
 		template<typename T>
-			void operator()(T& data)
-			{
-				data.~T();
-			}
+		void operator()(T& data)
+		{
+			data.~T();
+		}
 	};
 };
-
 
 template <typename... Ts>
 struct variant : variant_shared {
@@ -46,14 +45,6 @@ struct variant : variant_shared {
 
 	/*!
 	 * Construct variant holding a value of type T.
-	 *
-	 * \note
-	 * I decided to not allow constructing variant from types,
-	 * which are not included in type list, but can be converted
-	 * to one of these types.
-	 * (It requires either complicated template magic to fire static assert
-	 *  when this is ambiguous, reshuffle template list like in Loki library,
-	 *  or just live with unexpected types being constructed)
 	 */
 	template<typename T, typename = enable_if<is_in_pack<T,Ts...>>>
 	variant(T const& value)
@@ -78,7 +69,6 @@ struct variant : variant_shared {
 		}
 
 		other.apply(Copy{*this});
-
 	}
 
 	/*!
