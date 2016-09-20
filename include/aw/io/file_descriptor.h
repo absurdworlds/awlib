@@ -11,12 +11,13 @@
 #include <aw/config.h>
 namespace aw {
 namespace io {
-#if   (AW_PLATFORM == AW_PLATFORM_POSIX)
+#if defined(AW_SUPPORT_PLATFORM_POSIX)
 namespace posix {
 using file_descriptor = int;
 constexpr file_descriptor invalid_fd = file_descriptor(-1);
 } // namespace posix
-#elif (AW_PLATFORM == AW_PLATFORM_WIN32)
+#endif
+#if defined(AW_SUPPORT_PLATFORM_WIN32)
 namespace win32 {
 using file_descriptor = void*;
 constexpr file_descriptor invalid_fd = file_descriptor(-1);
@@ -31,6 +32,7 @@ using win32::file_descriptor;
 using win32::invalid_fd;
 #else
 using file_descriptor = int;
+constexpr file_descriptor invalid_fd = -1;
 #endif
 } // namespace io
 } // namespace aw

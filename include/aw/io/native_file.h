@@ -14,7 +14,7 @@
 #include <aw/utility/filesystem.h>
 namespace aw {
 namespace io {
-#if   (AW_PLATFORM == AW_PLATFORM_POSIX)
+#if defined(AW_SUPPORT_PLATFORM_POSIX)
 namespace posix {
 AW_IO_EXP file_descriptor open(fs::path const& path, file_mode fm, std::error_code& ec);
 AW_IO_EXP int close(file_descriptor fd, std::error_code& ec);
@@ -63,7 +63,9 @@ private:
 	file_descriptor fd = invalid_fd;
 };
 } // namespace posix
-#elif (AW_PLATFORM == AW_PLATFORM_WIN32)
+#endif
+
+#if defined(AW_SUPPORT_PLATFORM_WIN32)
 namespace win32 {
 AW_IO_EXP file_descriptor open(fs::path const& path, file_mode fm, std::error_code& ec);
 AW_IO_EXP int close(file_descriptor fd, std::error_code& ec);

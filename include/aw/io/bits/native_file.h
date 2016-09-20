@@ -42,7 +42,7 @@ uintmax_t ns::file::size() const noexcept \
 	return size(ec); \
 }
 
-#if   (AW_PLATFORM == AW_PLATFORM_POSIX)
+#if defined(AW_SUPPORT_PLATFORM_POSIX)
 posix::file::file(fs::path const& path, file_mode fm, std::error_code& ec) noexcept
 {
 	fd = posix::open(path, fm, ec);
@@ -93,8 +93,9 @@ uintmax_t posix::file::size(std::error_code& ec) const noexcept
 }
 
 AW_DEFINE_ERRORCODELESS_OVERLOADS(posix)
+#endif
 
-#elif (AW_PLATFORM == AW_PLATFORM_WIN32)
+#if defined(AW_SUPPORT_PLATFORM_WIN32)
 win32::file::file(fs::path const& path, file_mode fm, std::error_code& ec) noexcept
 {
 	fd = win32::open(path, fm, ec);
