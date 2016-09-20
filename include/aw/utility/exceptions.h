@@ -9,15 +9,21 @@
  */
 #ifndef aw_utility_exceptions_h
 #define aw_utility_exceptions_h
+/*!
+ * \{
+ * Set of macros to remove exception handling code
+ * when exceptions are disabled.
+ */
 #if __cpp_exceptions
-#define AW__try try
-#define AW__catch(...) catch(_VA_ARGS_)
-#define AW__throw throw
-#define AW__rethrow throw
+#define aw_try        try
+#define aw_catch(...) catch(_VA_ARGS_)
+#define aw_throw      throw
+#define aw_rethrow    throw
 #else
-#define AW__try if (true)
-#define AW__catch(...) else
-#define AW__throw
-#define AW__rethrow
-#endif
+#define aw_try        if (true)
+#define aw_catch(...) else
+#define aw_throw
+#define aw_rethrow
+#endif//__cpp_exceptions
+/*! \} */
 #endif//aw_utility_exceptions_h

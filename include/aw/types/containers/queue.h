@@ -791,14 +791,14 @@ private:
 		pointer new_begin{ allocate(new_size) };
 		pointer new_tail = nullptr;
 
-		AW__try {
+		aw_try {
 			new_tail = _impl::try_uninit_move(begin(), end(), new_begin);
-		} AW__catch(...) {
+		} aw_catch(...) {
 			if (new_tail)
 				destroy(new_begin, new_tail);
 
 			deallocate(new_begin, new_size);
-			AW__rethrow;
+			aw_rethrow;
 		}
 
 		set_storage(new_begin, new_begin + new_size);
