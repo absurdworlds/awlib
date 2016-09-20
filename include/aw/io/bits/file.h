@@ -27,14 +27,6 @@ namespace posix {
 namespace win32 {
 #endif
 
-#if   (AW_PLATFORM == AW_PLATFORM_POSIX)
-using file_descriptor = int;
-#elif (AW_PLATFORM == AW_PLATFORM_WIN32)
-using file_descriptor = intptr_t;
-#else /* unknown platform */
-using file_descriptor = int;
-#endif
-
 /* Internal file implementation */
 class AW_IO_EXP file {
 	friend struct aw::io::file;
@@ -65,11 +57,9 @@ class AW_IO_EXP file {
 
 #if (AW_PLATFORM == AW_PLATFORM_POSIX)
 } // namespace posix
-using posix::file_descriptor;
 using posix::file;
 #elif (AW_PLATFORM == AW_PLATFORM_WIN32)
 } // namespace win32
-using win32::file_descriptor;
 using win32::file;
 #endif
 } // namespace _impl
