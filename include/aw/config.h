@@ -6,8 +6,8 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef aw_compiler_setup_
-#define aw_compiler_setup_
+#ifndef aw_compiler_setup_h
+#define aw_compiler_setup_h
 /*!
  * \file compiler_setup
  * \brief Setup compiler and platform specific settings
@@ -69,7 +69,6 @@
 	#else
 	#define AW_PLATFORM_SPECIFIC AW_PLATFORM_WIN32
 	#endif
-#endif
 /* Windows platform */
 #elif defined(_WIN32)
 	#define AW_WINDOWS
@@ -127,4 +126,4 @@
 
 #define AW_FEATURE(x) AW_HAS_FEATURE_##x
 
-#endif//aw_compiler_setup_
+#endif//aw_compiler_setup_h
