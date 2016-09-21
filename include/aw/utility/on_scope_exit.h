@@ -16,12 +16,12 @@ class on_scope_exit : non_copyable {
 	bool enabled = true;
 	Callable func;
 public:
-	on_scope_exit(Callable func)
-		: func(func)
+	on_scope_exit(Callable func) noexcept
+		: func{func}
 	{}
 
-	on_scope_exit(on_scope_exit&& other)
-		: func(std::move(other.func))
+	on_scope_exit(on_scope_exit&& other) noexcept
+		: func{std::move(other.func)}, enabled{other.enabled}
 	{
 		other.enabled = false;
 	}
