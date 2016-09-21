@@ -61,7 +61,7 @@ CXXFLAGS_RELEASE = -g -O3 -DNDEBUG
 CXXFLAGS += $(ProjectFlags)
 
 CCFLAGS  = -std=c11
-CPPFLAGS = $(ProjectDefines) $(Includes) $(ExtraIncludePaths)
+CPPFLAGS = $(ProjectDefines) $(Includes) $(ExtraIncludePaths) $(EXTRA_DEFINES)
 LDFLAGS  = -Wl,-rpath-link,$(RootPath)/lib,-R,'$$ORIGIN/../lib' -L$(RootPath)/lib
 LDFLAGS += $(ExtraLibraryPaths)
 LDFLAGS += $(ProjectDependencies)
@@ -85,7 +85,7 @@ all: debug install
 debug: CXXFLAGS+=$(CXXFLAGS_DEBUG)
 debug: Build
 
-.PHONY: release  
+.PHONY: release
 release: CXXFLAGS+=$(CXXFLAGS_RELEASE)
 release: Build
 
