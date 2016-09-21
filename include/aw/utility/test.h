@@ -24,6 +24,21 @@
 #include <cstdio>
 #endif
 
+#if (AW_COMPILER == AW_COMPILER_GCC) || (AW_COMPILER == AW_COMPILER_CLANG)
+#include <cxxabi.h>
+std::string demangle(const char* name)
+{
+	int status;
+	auto demangled = abi::__cxa_demangle(name, nullptr, nullptr, &status);
+	std::string ret = demangled ? demangled : "";
+	free(demangled);
+	return ret;
+}
+#else
+std::string demangle(const char* name) { return {}; }
+#endif
+
+
 /*!
  * This header is made for awlib internal tests.
  * It is so simple and crude, that it doesn't even
@@ -364,15 +379,21 @@ struct _catch {
 	template <typename F>
 	bool operator()(F func)
 	{
+		using namespace std::string_literals;
 		try {
 			func();
 		} catch(Ex&) {
 			return true;
+		} catch(std::exception& e) {
+			auto name = demangle(typeid(e).name());
+			auto what = " - \""s + e.what() + '"';
+			_msg = "caught wrong exception: " + name + what;
+			return false;
 		} catch(...) {
-			_msg = "Caught wrong exception.";
+			_msg = "caught wrong exception";
 			return false;
 		}
-		_msg = "Didn't catch any exception.";
+		_msg = "didn't catch any exception";
 		return false;
 	}
 
