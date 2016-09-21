@@ -16,7 +16,7 @@
  */
 #if __cpp_exceptions
 #define aw_try        try
-#define aw_catch(...) catch(_VA_ARGS_)
+#define aw_catch(...) catch(__VA_ARGS__)
 #define aw_throw      throw
 #define aw_rethrow    throw
 #else
