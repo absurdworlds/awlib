@@ -1,10 +1,13 @@
 #include <aw/fileformat/wav/reader.h>
+#include <aw/fileformat/wav/log.h>
 
 #include <aw/io/endian.h>
 #include <aw/utility/endian.h>
 
 namespace aw {
 namespace wav {
+log_provider log;
+
 enum class tag : u32 {
 	riff   = "RIFF"_le32,
 	wave   = "WAVE"_le32,
@@ -40,7 +43,7 @@ struct format_error : std::logic_error {
 private:
 	std::string what_str = [this] {
 		using namespace std::string_literals;
-		return "error reading wav file: "s + std::logic_error::what();
+		return "invalid file format: "s + std::logic_error::what();
 	}();
 };
 
@@ -53,9 +56,16 @@ struct reader {
 	void read_format_chunk();
 	void read_data_chunk();
 
+	void check_equal(u32 value, u32 expected, std::string const& msg)
+	{
+		if (value != expected)
+			log.warning("aw::wav", msg);
+	}
+
 private:
 	io::input_stream& stream;
 	wave_data& sample;
+	uintmax_t size_check;
 };
 
 void reader::read_riff_header()
@@ -72,6 +82,8 @@ void reader::read_riff_header()
 		throw format_error{ "Not a RIFF file." };
 	if (tag(format) != tag::wave)
 		throw format_error{ "Not a WAVE file." };
+
+	size_check = file_size - 4;
 }
 
 void reader::read_format_chunk()
@@ -99,9 +111,11 @@ void reader::read_format_chunk()
 
 	constexpr size_t min_size = 16;
 	stream.skip(header_length - min_size);
+	size_check -= 8 + header_length;
 
-	//check_equal(byte_rate, sample_rate * bytes_per_sample);
-	//check_equal(bytes_per_sample, num_channels * bits_per_sample/8);
+	check_equal(byte_rate, sample_rate * bytes_per_sample, "incorrect byte_rate");
+	check_equal(bytes_per_sample, num_channels * bits_per_sample/8,
+	            "bps doesn't match expected value");
 	
 	sample.bits_per_sample = bits_per_sample;
 	sample.channels    = num_channels;
@@ -145,7 +159,9 @@ void reader::read_data_chunk()
 	sample.data.resize(data_size);
 	size_t count = stream.read(sample.data.data(), data_size);
 
-	//check_equal(count, data_size);
+	check_equal(count, data_size, "data is shorter than expected");
+	size_check -= 8 + count;
+	check_equal(size_check, 0, "chunk_size doesn't match actual file size");
 }
 
 bool read(io::input_stream& stream, wave_data& sample) noexcept
@@ -156,10 +172,10 @@ try {
 	wv.read_data_chunk();
 	return true;
 } catch(format_error& e) {
-	// log.warning("aw::wav", e.what());
+	log.error("aw::wav", e.what());
 	return false;
 } catch(std::exception& e) {
-	// log.warning("aw::wav", "error reading file:" + e.what());
+	log.error("aw::wav", e.what());
 	return false;
 }
 
