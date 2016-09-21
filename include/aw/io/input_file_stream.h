@@ -17,7 +17,7 @@ namespace io {
 /*! Buffer for input_file_stream */
 struct input_file_buffer : input_buffer {
 	input_file_buffer(fs::path const& path, size_t size)
-		: _file(path, file_mode::read|file_mode::create),
+		: _file(path, file_mode::read),
 		  size(size)
 	{
 		buf = new char[size];
