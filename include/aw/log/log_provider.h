@@ -8,7 +8,7 @@
  */
 #ifndef aw_log_log_provider_h
 #define aw_log_log_provider_h
-#include <aw/logger/log.h>
+#include <aw/log/log.h>
 namespace aw {
 inline namespace v1 {
 #if defined(AW_DISABLE_LOGGER)
@@ -55,7 +55,7 @@ struct log_provider {
 
 	void fatal(std::string const& src, std::string const& msg)
 	{
-		message(log::fatal, src, msg);
+		message(log::critical, src, msg);
 	}
 
 	/*! \} */
