@@ -160,6 +160,17 @@ struct context {
 		return failed;
 	}
 
+	void check_fail(std::string const& msg)
+	{
+		cur->messages.push_back(msg);
+		++cur->failed;
+	}
+
+	void check_succeed(std::string const&)
+	{
+		++cur->succeded;
+	}
+
 private:
 	friend class aw::test::context_check;
 	friend class aw::test::context_block;
@@ -188,17 +199,6 @@ private:
 	void add_test(test&& tst)
 	{
 		tests.push_back(std::move(tst));
-	}
-
-	void check_fail(std::string const& msg)
-	{
-		cur->messages.push_back(msg);
-		++cur->failed;
-	}
-
-	void check_succeed(std::string const&)
-	{
-		++cur->succeded;
 	}
 
 private:
@@ -268,20 +268,6 @@ void context::segvhandler(int signum)
 }
 
 namespace {
-class context_check {
-	template<typename Evaluator, typename... Args>
-	friend void check(Evaluator eval, Args&&... args);
-
-	static void check_fail(std::string const& msg)
-	{
-		file_context.check_fail(msg);
-	}
-	static void check_succeed(std::string const& msg)
-	{
-		file_context.check_succeed(msg);
-	}
-};
-
 class context_block {
 	friend bool setup();
 	friend bool preconditions();
@@ -311,8 +297,8 @@ template<typename Evaluator, typename... Args>
 void check(Evaluator eval, Args&&... args)
 {
 	eval(std::forward<Args>(args)...) ?
-		context_check::check_succeed(eval.msg()) :
-		context_check::check_fail(eval.msg());
+		file_context.check_succeed(eval.msg()) :
+		file_context.check_fail(eval.msg());
 }
 } // namespace
 } // namespace test
@@ -397,5 +383,7 @@ aw::test::check(aw::test::equal{}, __VA_ARGS__)
 aw::test::check(aw::test::equal_v{}, __VA_ARGS__)
 #define TestAssert(...) \
 aw::test::check(aw::test::_assert{"assert: " #__VA_ARGS__}, (__VA_ARGS__))
+#define TestFail(msg) \
+aw::test::file_context.check_fail(msg)
 
 #endif//aw_test_test_h
