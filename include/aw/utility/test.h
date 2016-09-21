@@ -358,6 +358,27 @@ struct _assert {
 	std::string msg() { return {_msg}; }
 	char const* _msg;
 };
+
+template<typename Ex>
+struct _catch {
+	template <typename F>
+	bool operator()(F func)
+	{
+		try {
+			func();
+		} catch(Ex&) {
+			return true;
+		} catch(...) {
+			_msg = "Caught wrong exception.";
+			return false;
+		}
+		_msg = "Didn't catch any exception.";
+		return false;
+	}
+
+	std::string msg() { return _msg; }
+	std::string _msg;
+};
 } // namespace test
 } // namespace aw
 
@@ -385,5 +406,7 @@ aw::test::check(aw::test::equal_v{}, __VA_ARGS__)
 aw::test::check(aw::test::_assert{"assert: " #__VA_ARGS__}, (__VA_ARGS__))
 #define TestFail(msg) \
 aw::test::file_context.check_fail(msg)
+#define TestCatch(exception, ...) \
+aw::test::check(aw::test::_catch<exception>{}, [&] {__VA_ARGS__;} )
 
 #endif//aw_test_test_h
