@@ -8,13 +8,13 @@
  */
 #ifndef aw_on_scope_exit_h
 #define aw_on_scope_exit_h
-#include <functional>
 #include <utility>
 #include <aw/types/non_copyable.h>
 namespace aw {
 template <class Callable>
 class on_scope_exit : non_copyable {
-	std::function<void()> func;
+	bool enabled = true;
+	Callable func;
 public:
 	on_scope_exit(Callable func)
 		: func(func)
@@ -22,11 +22,13 @@ public:
 
 	on_scope_exit(on_scope_exit&& other)
 		: func(std::move(other.func))
-	{}
+	{
+		other.enabled = false;
+	}
 
 	~on_scope_exit()
 	{
-		if (func) func();
+		if (enabled) func();
 	}
 };
 
