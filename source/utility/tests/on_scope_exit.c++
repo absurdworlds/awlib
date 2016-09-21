@@ -15,6 +15,16 @@ Test(scope_basic_test)
 	}
 	TestAssert(x == 0);
 }
+
+Test(throw_in_dtor)
+{
+	struct ex {};
+	auto func = [] {
+		auto on_exit = aw::call_on_exit([] { throw ex{}; });
+	};
+
+	TestCatch( ex, func() );
+}
 } // namespace aw
 
 RunTests();
