@@ -194,7 +194,7 @@ private:
 		cur->st = st;
 	}
 
-	void test_failure();
+	inline void test_failure();
 
 	void add_test(test&& tst)
 	{
