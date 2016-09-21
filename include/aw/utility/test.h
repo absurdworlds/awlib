@@ -30,12 +30,12 @@ std::string demangle(const char* name)
 {
 	int status;
 	auto demangled = abi::__cxa_demangle(name, nullptr, nullptr, &status);
-	std::string ret = demangled ? demangled : "";
+	std::string ret = demangled ? demangled : name;
 	free(demangled);
 	return ret;
 }
 #else
-std::string demangle(const char* name) { return {}; }
+std::string demangle(const char* name) { return name; }
 #endif
 
 
