@@ -6,24 +6,25 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef aw_MultiLog_h
-#define aw_MultiLog_h
+#ifndef aw_multi_log_h
+#define aw_multi_log_h
 #include <vector>
-#include <aw/logger/Log.h>
-#include <aw/logger/export.h>
+#include <algorithm>
+#include <aw/log/log.h>
+#include <aw/log/export.h>
 namespace aw {
-inline namespace log {
+inline namespace v1 {
 /*!
- * MultiLog redirects message to multiple logs.
+ * Redirects message to multiple logs.
  */
-struct AW_LOG_EXP MultiLog : Log {
-	~MultiLog() = default;
+struct multi_log : log {
+	~multi_log() = default;
 
 	/*!
 	 * Sends log to recipients;
-	 * \see Log::log()
+	 * \see log::message()
 	 */
-	void log(Log::Level level,
+	void message(log::level level,
 	         std::string const& src,
 	         std::string const& msg) override;
 
@@ -34,24 +35,24 @@ struct AW_LOG_EXP MultiLog : Log {
 	 *
 	 * When deleted, recipient must be removed manually with remove().
 	 */
-	void add(Log& log)
+	void add(log& inst)
 	{
-		recipients.push_back(&log);
+		loggers.push_back(&inst);
 	}
 
 	/*!
 	 * Remove recipient.
 	 */
-	void remove(Log& log)
+	void remove(log& inst)
 	{
-		auto to_erase = std::remove(begin(recipients), end(recipients), &log);
-		if (to_erase != end(recipients))
-			recipients.erase(to_erase, end(recipients));
+		auto to_erase = std::remove(begin(loggers), end(loggers), &inst);
+		if (to_erase != end(loggers))
+			loggers.erase(to_erase, end(loggers));
 	}
 
 private:
-	std::vector<Log*> recipients;
+	std::vector<log*> loggers;
 };
-} // namespace log
+} // namespace v1
 } // namespace aw
-#endif//aw_MultiLog_h
+#endif//aw_multi_log_h

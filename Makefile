@@ -21,7 +21,7 @@ utility:
 	@ $(MAKE) -C 'source/utility' $(TARGET)
 
 logger:
-	@ $(MAKE) -C 'source/logger' $(TARGET)
+	@ $(MAKE) -C 'source/log' $(TARGET)
 
 # tools
 hpacker:

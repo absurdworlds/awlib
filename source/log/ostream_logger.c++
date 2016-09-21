@@ -6,21 +6,36 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#include <aw/logger/OstreamLogger.h>
+#include <aw/log/ostream_logger.h>
 namespace aw {
-inline namespace log {
-void OstreamLogger::log(Log::Level level, std::string const& src, std::string const& msg)
+inline namespace v1 {
+namespace {
+char const* describe(log::level level)
 {
-	// TODO: dedicated function
-	std::string lev = [&] {
-		switch (level) {
-		case Log::Info:     return "info    ";
-		case Log::Warning:  return "warning ";
-		case Log::Error:    return "error   ";
-		case Log::Critical: return "critical";
-		};
-	}();
-	stream << "[" << src << "] " << lev << ": " << msg << "\n";
+	switch (level) {
+	case log::info:     return "info:    ";
+	case log::warning:  return "warning: ";
+	case log::error:    return "error:   ";
+	case log::critical: return "critical:";
+	};
 }
-} // namespace log
+} // namespace
+
+std::string format_message(log::level lvl, std::string const& src, std::string const& msg)
+{
+	std::string fmt;
+	fmt.append(1,'[');
+	fmt.append(src);
+	fmt.append(1,']');
+	fmt.append(1,' ');
+	fmt.append(describe(lvl));
+	fmt.append(msg);
+	return fmt;
+}
+
+void ostream_logger::message(log::level level, std::string const& src, std::string const& msg)
+{
+	stream << format_message(level, src, msg) << '\n';
+}
+} // namespace v1
 } // namespace aw

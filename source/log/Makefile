@@ -1,8 +1,9 @@
 RootPath = ../..
-Sources = Loggers.cpp OstreamLogger.cpp
+SourceExt = c++
+Sources = log_base.c++ ostream_logger.c++
 Defines = AW_MODULE_LOG
-Libraries = 
-ProjectName = awlogger
+Libraries =
+ProjectName = awlog
 Executable = false
 
 include $(RootPath)/Rules.mk

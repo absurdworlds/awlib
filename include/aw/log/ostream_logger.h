@@ -7,34 +7,33 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef aw_OstreamLogger_h
-#define aw_OstreamLogger_h
+#ifndef aw_log_ostream_logger_h
+#define aw_log_ostream_logger_h
 #include <ostream>
-#include <aw/logger/Log.h>
-#include <aw/logger/export.h>
+#include <aw/log/log.h>
+#include <aw/log/export.h>
 namespace aw {
-inline namespace log {
+inline namespace v1 {
 /*!
  * Prints log to ostream.
  */
-struct AW_LOG_EXP OstreamLogger : Log {
-	~OstreamLogger() = default;
+struct AW_LOG_EXP ostream_logger : log {
+	~ostream_logger() = default;
 
-	OstreamLogger(std::ostream& stream)
-		: stream(stream)
+	ostream_logger(std::ostream& stream)
+		: stream{stream}
 	{}
 
 	/*!
 	 * Write message to ostream.
-	 * \see Log::log()
+	 * \see log::log()
 	 */
-	void log(Log::Level level,
+	void message(log::level level,
 	         std::string const& src,
 	         std::string const& msg) override;
-
 private:
 	std::ostream& stream;
 };
-} // namespace core
+} // namespace v1
 } // namespace aw
-#endif//aw_OstreamLogger_h
+#endif//aw_log_ostream_logger_h

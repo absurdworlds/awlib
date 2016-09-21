@@ -7,43 +7,43 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef aw_Logger_h
-#define aw_Logger_h
+#ifndef aw_log_log_h
+#define aw_log_log_h
 #include <string>
 namespace aw {
-inline namespace log {
+inline namespace v1 {
 /*!
- * Interface for loggers.
- * All awlibs use this class for logging.
+ * Basic logger interface.
+ * This interfacce is used by all aw libraries.
  */
-struct Log {
+struct log {
 	/*!
 	 * Level of importance of the message.
 	 */
-	enum Level {
-		Info,
-		Warning,
-		Error,
-		Critical
+	enum level {
+		info,
+		warning,
+		error,
+		critical
 	};
 
-	virtual ~Log() = default;
+	virtual ~log() = default;
 
 	/*!
 	 * Write message to log.
-	 * \param level
-	 *    See Log::Level.
+	 * \param lvl
+	 *    See log::level.
 	 * \param src
 	 *    Name of the message fource (e.g. `main()`), allows
 	 *    implementations to filter messages by source.
 	 * \param msg
 	 *    Text of the message.
 	 */
-	virtual void log(
-	        Log::Level level,
+	virtual void message(
+	        log::level lvl,
 	        std::string const& src,
 	        std::string const& msg) = 0;
 };
-} // namespace core
+} // namespace v1
 } // namespace aw
 #endif//aw_Logger_h

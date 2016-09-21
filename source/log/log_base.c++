@@ -6,32 +6,33 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#include <aw/logger/LogFilter.h>
+#include <aw/log/log_filter.h>
+#include <aw/log/regex_filter.h>
 namespace aw {
-inline namespace log {
-void MultiLog::log(Log::Level level, std::string const& src, std::string const& msg)
+inline namespace v1 {
+void multi_log::message(log::level level, std::string const& src, std::string const& msg)
 {
-	for (auto recv : recipients)
-		recv->log(level, src, msg);
+	for (auto recv : loggers)
+		recv->message(level, src, msg);
 }
 
-bool LogFilter::Filter::apply(std::string msg)
+bool regex_filter::operator()(std::string const& msg)
 {
 	if (!std::regex_search(msg, include))
-		return false;;
+		return false;
 	if (std::regex_search(msg, exclude))
 		return false;
 	return true;
 }
 
 
-void LogFilter::log(Log::Level level, std::string const& src, std::string const& msg)
+void log_filter::message(log::level level, std::string const& src, std::string const& msg)
 {
-	if (level < minLevel)
+	if (level < min_level)
 		return;
-	if (!src_filter.apply(src) || !msg_filter.apply(msg))
+	if (!src_filter(src) || !msg_filter(msg))
 		return;
-	MultiLog::log(level, src, msg);
+	multi_log::message(level, src, msg);
 }
-} // namespace log
+} // namespace v1
 } // namespace aw

@@ -6,34 +6,35 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef aw_RAIILogWrapper_h
-#define aw_RAIILogWrapper_h
+#ifndef aw_log_ml_raii_wrapper_h
+#define aw_log_ml_raii_wrapper_h
 #include <aw/types/traits/basic_traits.h>
-#include <aw/logger/MultiLog.h>
+#include <aw/log/multi_log.h>
 namespace aw {
-inline namespace log {
+inline namespace v1 {
 /*!
  * Automatically adds and removes itself to/from MultiLog.
  */
 template<class LogType>
-struct RAIILog : LogType {
-	static_assert(is_base_of<Log, LogType>,
-	              "RAIILogWrapper must be derived from aw::Log");
+struct raii_log : LogType {
+	static_assert(is_base_of<log, LogType>,
+	              "LogType must be derived from aw::log");
 
-	RAIILog(MultiLog& sender)
-		: sender(sender)
+	template<typename...Args>
+	raii_log(multi_log& sender, Args&&...args)
+		: LogType{std::forward<Args>(args)...}, sender{sender}
 	{
 		sender.add(*this);
 	}
 
-	~RAIILog()
+	~raii_log()
 	{
 		sender.remove(*this);
 	}
 
 private:
-	MultiLog& sender;
+	multi_log& sender;
 };
-} // namespace log
+} // namespace v1
 } // namespace aw
 #endif//aw_RAIILogWrapper_h

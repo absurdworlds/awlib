@@ -6,94 +6,75 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef aw_LogFilter_h
-#define aw_LogFilter_h
-#include <regex>
-#include <aw/logger/MultiLog.h>
+#ifndef aw_log_filter_h
+#define aw_log_filter_h
+#include <aw/log/multi_log.h>
+#include <functional>
+#include <aw/utility/functional/trivial.h>
 namespace aw {
-inline namespace log {
+inline namespace v1 {
 /*!
- * LogFilter redirects messages that match the regex to other log.
+ * log_filter applies an arbitrary filter to messages,
+ * and then redirects them to recipients
  */
-struct AW_LOG_EXP LogFilter : MultiLog {
-	struct Filter {
-		/*!
-		 * By default Filter inlcudes everything and excludes nothing
-		 */
-		Filter() = default;
-		Filter(std::regex include)
-			: include{include}
-		{}
-		Filter(std::regex include, std::regex exclude)
-			: include{include}, exclude{exclude}
-		{}
-
-		Filter(Filter const& other) = default;
-		Filter(Filter&& other) = default;
-
-		Filter& operator=(Filter const& other) = default;
-		Filter& operator=(Filter&& other) = default;
-
-		bool apply(std::string msg);
-
-		std::regex include{".?"};
-		std::regex exclude{};
-	};
+struct AW_LOG_EXP log_filter : multi_log {
+	using filter_func = bool(std::string const&);
+	using filter = std::function<filter_func>;
 
 	/*!
 	 * By default LogFilter matches any message.
 	 */
-	LogFilter() = default;
+	log_filter() = default;
 
 	/*!
 	 * Construct LogFilter with minimum logging level.
 	 */
-	LogFilter(Log::Level minLevel)
-		: minLevel(minLevel)
+	log_filter(log::level min_level)
+		: min_level(min_level)
 	{}
 
 	/*!
 	 * Construct LogFilter with specified filters.
 	 */
-	LogFilter(Filter src, Filter msg)
+	log_filter(filter src, filter msg)
 		: src_filter(src), msg_filter(msg)
 	{}
 
-	~LogFilter() = default;
+	~log_filter() = default;
 
 	/*!
 	 * Check for any match of regexes and send message to recipients.
-	 * \see Log::log()
+	 * \see log::message()
 	 */
-	void log(Log::Level level,
+	void message(log::level level,
 	         std::string const& src,
 	         std::string const& msg) override;
 
-	void setSourceFilter(Filter regex)
+	void set_source_filter(filter fn)
 	{
-		src_filter = regex;
+		src_filter = fn;
 	}
 
-	void setMessageFilter(Filter regex)
+	void set_message_filter(filter fn)
 	{
-		msg_filter = regex;
+		msg_filter = fn;
 	}
 
-	void setMinLevel(Log::Level level)
+	void set_min_level(log::level level)
 	{
-		minLevel = level;
+		min_level = level;
 	}
 
-	Log::Level getMinLevel() const
+	log::level get_min_level() const
 	{
-		return minLevel;
+		return min_level;
 	}
 
 private:
-	Log::Level minLevel = Log::Info;
-	Filter src_filter;
-	Filter msg_filter;
+	log::level min_level = log::info;
+	filter src_filter{ true_func<std::string const&>{} };
+	filter msg_filter{ true_func<std::string const&>{} };
 };
-} // namespace log
+} // namespace v1
 } // namespace aw
 #endif//aw_LogFilter_h
