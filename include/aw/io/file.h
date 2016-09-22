@@ -23,33 +23,40 @@ namespace aw {
 namespace io {
 /*!
  * Provides raw unbuffered file IO.
+ *
+ * Methods not marked as noexcept throw fs::filesystem_error
+ * with error code supplied by the operating system.
  */
 struct file {
 	/*! Construct object not representing a file.  */
-	file() = default;
+	file() noexcept = default;
 
 	/*! Construct a file from a system file descriptor. */
 	file(file_descriptor fd)
-		: data(fd)
+		: data{fd}
 	{ }
 
 	/*! Open file identified by \a path. */
 	file(fs::path const& path, file_mode fm)
-		: _path(path), data(path, fm)
-	{ }
+		: _path{path}, data{path, fm}
+	{
+	}
 
 	/*! Destructor automatically closes the file */
-	~file()
-	try {
+	~file() noexcept
+	try
+	{
 		close();
-	} catch(...) {
+	}
+	catch(...)
+	{
 		//log.warning("aw::io", "could not close file " + path.u8string());
 	}
 
 	file(file&& other) noexcept
-		: data(std::move(other.data))
+		: data{std::move(other.data)},
+		 _path{std::move(other._path)}
 	{
-		_path = std::move(other._path);
 	}
 
 	file& operator=(file&& other) noexcept
@@ -153,8 +160,14 @@ struct file {
 	 */
 	uintmax_t size() const
 	{
+		std::error_code ec;
 		std::lock_guard<std::mutex> guard{mutex};
-		return data.size();
+
+		auto ret = data.size();
+
+		check_error(ec, "cannot get file size");
+
+		return uintmax_t(ret);
 	}
 
 	/*!
