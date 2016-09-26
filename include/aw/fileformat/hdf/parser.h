@@ -11,9 +11,9 @@
 #define aw_fileformat_hdf_reader_h
 #include <string>
 
-#include <aw/fileformat/hdf/export.h>
 #include <aw/fileformat/hdf/value.h>
 #include <aw/fileformat/hdf/shared.h>
+#include <aw/fileformat/hdf/lexer.h>
 
 #include <aw/io/input_stream.h>
 
@@ -53,43 +53,60 @@ struct Object {
  * Also, see an example in 'examples' directory
 */
 struct Parser {
+	Parser(io::input_stream& stream, aw::log* logger = nullptr)
+		: lex{stream, logger}
+	{}
+
 	virtual ~Parser() = default;
 
 	//! Fast-forward to the next object
-	virtual bool read() = 0;
+	bool read();
 
 	/*!
 	 * Get next object.
 	 * \return
 	 *     Returns struct containing object's kind and name.
 	 */
-	virtual Object getObject() = 0;
+	Object getObject();
 
 	/*!
 	 * Read value into variable \a out.
 	 */
-	virtual void readValue(Value& out) = 0;
+	void readValue(Value& out);
 
 	//! Skip current value
-	virtual void skipValue() = 0;
+	void skipValue();
 	//! Skip current node (with all subnodes)
-	virtual void skipNode() = 0;
+	void skipNode();
 
-	/*!
-	 * Add message to the parser's error log
-	 * HDF_ERR_NOTICE - an unimportant message
-	 * HDF_ERR_WARNING - warning, non-critical error
-	 * HDF_ERR_ERROR - critical error, stops the parsing
-	 */
-	virtual void error(size_t pos, std::string msg) = 0;
+protected:
+	void processCommand();
+
+	Value convertValue(Type type);
+	Value convertValue(token tok);
+	Value parseVector(Type type);
+	Value parseVector();
+
+	template <typename T>
+	bool parseVector(T& vec, size_t vecsize);
+
+	void message() {  }
+
+	enum class State {
+		Idle = 0,
+		Object,
+		Node,
+		Command,
+		Value,
+		Data,
+		Panic
+	};
+
+private:
+	Lexer lex;
+	State state = State::Idle;
+	size_t depth = 0;
 };
-
-/*!
- * \brief Make an instance of HDF parser.
- * \param stream Stream to parse.
- * \see io::CharacterStream
-*/
-AW_HDF_EXP Parser* createParser(io::input_stream& stream);
 } // namespace io
 } // namespace aw
 #endif//aw_fileformat_hdf_reader_h

@@ -13,12 +13,11 @@
 #include <cstdio>
 
 #include <aw/utility/string/compose.h>
-#include <aw/hdf/Type.h>
-#include <aw/math/vector4d.h>
+#include <aw/fileformat/hdf/type.h>
 
 namespace aw {
 namespace hdf {
-hdf::Type tokenToType(Token const& token) 
+hdf::Type tokenToType(token const& token)
 {
 	if (token.value == "bool" || token.value == "b") {
 		return Type::Boolean;
@@ -63,17 +62,6 @@ Value parseInteger(std::string const& str)
 		return Value(i64(stoll(str)));
 	else
 		return Value(f64(stod(str)));
-}
-
-Parser* createParser(io::input_stream& stream)
-{
-	return new impl_::Parser(stream);
-}
-
-namespace impl_ {
-Parser::Parser(io::input_stream& stream)
-	: depth(0), state(State::Idle), lex(stream)
-{
 }
 
 bool Parser::read() {
@@ -371,6 +359,5 @@ void Parser::processCommand() {
 		bool strict = parseBoolean(tok.value);
 	}
 }
-} // namespace impl_
 } // namespace hdf
 } // namespace aw
