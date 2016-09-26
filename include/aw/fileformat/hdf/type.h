@@ -14,8 +14,10 @@
 #include <aw/types/types.h>
 
 namespace aw {
+namespace math {
 template <typename T, size_t N>
 class Vector;
+} // namespace math
 
 namespace hdf {
 /*!
@@ -52,17 +54,17 @@ struct typeof<std::string> {
 };
 
 template<>
-struct typeof<Vector<f32,2>> {
+struct typeof<math::vector<f32,2>> {
 	static constexpr Type value = Type::Vector2d;
 };
 
 template<>
-struct typeof<Vector<f32,3>> {
+struct typeof<math::vector<f32,3>> {
 	static constexpr Type value = Type::Vector3d;
 };
 
 template<>
-struct typeof<Vector<f32,4>> {
+struct typeof<math::vector<f32,4>> {
 	static constexpr Type value = Type::Vector4d;
 };
 

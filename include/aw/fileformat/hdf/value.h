@@ -19,7 +19,7 @@
 #include <aw/utility/to_string.h>
 #include <aw/utility/to_string/math/vector.h>
 
-#include <aw/hdf/Type.h>
+#include <aw/fileformat/hdf/type.h>
 
 namespace aw {
 namespace hdf {

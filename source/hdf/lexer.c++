@@ -10,11 +10,11 @@
 #include <cassert>
 #include <cstdio>
 
+#include <aw/fileformat/hdf/lexer.h>
+
 #include <aw/io/input_stream.h>
 #include <aw/utility/string/compose.h>
 #include <aw/algorithm/in.h>
-
-#include "Lexer.h"
 
 namespace aw {
 namespace hdf {

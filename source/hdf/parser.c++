@@ -7,14 +7,14 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
+#include <aw/fileformat/hdf/parser.h>
+
 #include <cassert>
 #include <cstdio>
 
 #include <aw/utility/string/compose.h>
 #include <aw/hdf/Type.h>
 #include <aw/math/vector4d.h>
-
-#include "Parser.h"
 
 namespace aw {
 namespace hdf {

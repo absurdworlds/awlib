@@ -7,11 +7,12 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
+#include <aw/fileformat/hdf/writer.h>
+
 #include <aw/io/WriteStream.h>
 #include <aw/logger/Log.h>
 
 #include <aw/hdf/shared.h>
-#include <aw/hdf/Writer.h>
 
 namespace aw {
 namespace hdf {

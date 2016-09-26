@@ -7,15 +7,13 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef aw_HDFReader_h
-#define aw_HDFReader_h
+#ifndef aw_fileformat_hdf_reader_h
+#define aw_fileformat_hdf_reader_h
 #include <string>
 
-#include <aw/math/vector3d.h>
-
-#include <aw/hdf/hdf.h>
-#include <aw/hdf/Value.h>
-#include <aw/hdf/shared.h>
+#include <aw/fileformat/hdf/export.h>
+#include <aw/fileformat/hdf/value.h>
+#include <aw/fileformat/hdf/shared.h>
 
 #include <aw/io/input_stream.h>
 
@@ -94,4 +92,4 @@ struct Parser {
 AW_HDF_EXP Parser* createParser(io::input_stream& stream);
 } // namespace io
 } // namespace aw
-#endif//aw_HDFReader_h
+#endif//aw_fileformat_hdf_reader_h

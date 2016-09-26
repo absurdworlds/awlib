@@ -7,12 +7,12 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _aw_HDF_Writer_
-#define _aw_HDF_Writer_
+#ifndef aw_fileformat_hdf_writer_h
+#define aw_fileformat_hdf_writer_h
 #include <string>
 
-#include <aw/hdf/hdf.h>
-#include <aw/hdf/Value.h>
+#include <aw/fileformat/hdf/export.h>
+#include <aw/fileformat/hdf/value.h>
 namespace aw {
 namespace io {
 class WriteStream;
@@ -29,8 +29,7 @@ enum IndentationStyle {
 };
 
 //! Interface for writing HDF files. Supports HDF 1.2.0 format.
-class AW_HDF_EXP Writer {
-public:
+struct AW_HDF_EXP Writer {
 	//! Create writer outputting to \a out.
 	Writer(io::WriteStream& out);
 
@@ -55,6 +54,7 @@ public:
 
 	/*! Set the indentation style for the document */
 	virtual void setIndentationStyle(IndentationStyle style);
+
 private:
 	void writeValueValue(hdf::Value value);
 	void startLine();
@@ -66,4 +66,4 @@ private:
 };
 } // namespace io
 } // namespace aw
-#endif//_aw_HDF_Writer_
+#endif//aw_fileformat_hdf_writer_h

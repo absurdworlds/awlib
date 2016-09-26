@@ -6,20 +6,19 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _aw_hdf_node_
-#define _aw_hdf_node_
+#ifndef aw_hdf_node_h
+#define aw_hdf_node_h
 #include <vector>
 #include <string>
 #include <algorithm>
 
 #include <aw/utility/string/string.h>
-#include <aw/hdf/Value.h>
+#include <aw/fileformat/hdf/Value.h>
 
 namespace aw {
 namespace hdf {
 template <typename Node, bool strict = false>
-class List : std::vector<std::pair<std::string, Node>> {
-public:
+struct List : private std::vector<std::pair<std::string, Node>> {
 	typedef std::vector<std::pair<std::string, Node>> base;
 
 	using typename base::value_type;
@@ -59,15 +58,12 @@ public:
 	 */
 	iterator find(std::string name, iterator startAt)
 	{
-		auto comparator = 
-		[&name] (value_type const& pair)
-		{
+		auto comparator =
+		[&name] (value_type const& pair) {
 			return (pair.first == name);
 		};
 
-		return std::find_if(startAt,
-		                    base::end(),
-		                    comparator);
+		return std::find_if(startAt, base::end(), comparator);
 	}
 
 	/*!
@@ -94,8 +90,7 @@ public:
 /*!
  * This class is used to represend HDF document structure
  */
-class Node : List<Node>, List<Value> {
-public:
+struct Node : List<Node>, List<Value> {
 	auto addNode(std::string name, Node node)
 	{
 		return List<Node>::add(name, node);
@@ -145,12 +140,10 @@ public:
 	{
 		return List<Value>::get(id);
 	}
-private:
 };
 
 //! Used for storage of an arbitary HDF document
-class Document : public List<Node> {
-public:
+struct Document : List<Node> {
 	auto addNode(std::string name, Node node)
 	{
 		return List<Node>::add(name, node);
@@ -178,4 +171,4 @@ public:
 };
 } // namespace hdf
 } // namespace aw
-#endif//_aw_hdf_node_
+#endif//aw_hdf_node_h

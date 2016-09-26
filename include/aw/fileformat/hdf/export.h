@@ -7,8 +7,8 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _aw_hdf_
-#define _aw_hdf_
+#ifndef aw_fileformat_hdf_export_h
+#define aw_fileformat_hdf_export_h
 #include <aw/config.h>
 
 #ifdef AW_MODULE_HDF
@@ -16,4 +16,4 @@
 #else
 	#define AW_HDF_EXP AW_IMPORT
 #endif
-#endif//_aw_hdf_
+#endif//aw_fileformat_hdf_export_h
