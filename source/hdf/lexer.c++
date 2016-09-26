@@ -18,6 +18,7 @@
 
 namespace aw {
 namespace hdf {
+namespace {
 inline bool isDigit (char c) {
 	return (c >= '0' && c <= '9');
 }
@@ -30,52 +31,65 @@ inline bool isNameChar (char c) {
 	return isNameBeginChar(c) || isDigit(c) || c == '-' || c == '_';
 }
 
-inline bool isWhitespace (char c) {
-	return (in(c, ' ', '\t', '\r', '\n'));
+bool whitespace (char c)
+{
+	return in(c, ' ', '\t', '\r', '\n');
+}
+} // namespace
+
+char Lexer::get()
+{
+	char c;
+	stream.get(c);
+	if (c == '\n') {
+		++pos.line;
+		pos.col = 1;
+	} else if (c != 0) {
+		++pos.col;
+	}
+	return c;
 }
 
-bool junk(char c)
+char Lexer::peek()
 {
-	return isWhitespace(c) || c == '/';
+	char c;
+	stream.peek(c);
+	return c;
+}
+
+char Lexer::next()
+{
+	return get(), peek();
 }
 
 template<typename Func>
-void Lexer::skip(Func condition)
+char Lexer::skip(Func condition)
 {
-	char c;
-	stream.peek(c);
-
+	char c = peek();
 	while(condition(c) && c != 0)
-		stream.next(c);
+		c = next();
+	return c;
 }
 
-void Lexer::skipLine()
+char Lexer::fastForward()
 {
-	skip( [] (char c) { return c != '\n'; });
-}
+	auto line       = [] (char c) { return c != '\n'; };
 
-void Lexer::skipWhitespace()
-{
-	skip(isWhitespace);
-}
-
-void Lexer::fastForward()
-{
-	char c;
-	stream.peek(c);
-
-	if (isWhitespace(c)) {
-		skipWhitespace();
-	} else if (c == '/') {
-		stream.next(c);
-
+	char c = peek();
+	while (whitespace(c) || c == '/') {
+		c = skip( whitespace );
 		if (c == '/') {
-			skipLine();
-		} else {
-			stream.get(c);
-			error("unexpected token: /");
+			if (next() == '/') {
+				c = skip( line );
+			} else {
+				error("unexpected token: " + get(), pos);
+				c = peek();
+			}
 		}
 	}
+
+	return c;
+
 }
 
 std::string Lexer::readNumber()
@@ -137,7 +151,7 @@ std::string Lexer::readIllegalToken()
 
 	std::string name;
 
-	while(!isWhitespace(c) && !in(c, '[', ']', '=', ':', ',')) {
+	while(!whitespace(c) && !in(c, '[', ']', '=', ':', ',')) {
 		name += c;
 
 		stream.next(c);
@@ -148,13 +162,8 @@ std::string Lexer::readIllegalToken()
 
 token Lexer::readToken()
 {
-	char c;
-	stream.peek(c);
-
-	while (junk(c)) {
-		fastForward();
-		stream.peek(c);
-	}
+	// skip comments and whitespace
+	char c = fastForward();
 
 	auto getChar = [&] () {
 		stream.get(c);

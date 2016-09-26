@@ -92,12 +92,14 @@ private:
 	std::string readName();
 	std::string readIllegalToken();
 
-	void fastForward();
-	void skipLine();
-	void skipWhitespace();
-	void skipInlineWhitespace();
+	char get();
+	char next();
+	char peek();
+
 	template<typename Func>
-	void skip(Func condition);
+	char skip(Func condition);
+
+	char fastForward();
 
 private:
 	io::input_stream& stream;
