@@ -85,10 +85,33 @@ private:
 		}
 	}
 
+	void count_line(char c)
+	{
+		if (c == '\n') {
+			++pos.line;
+			pos.col = 1;
+		} else if (c != 0) {
+			++pos.col;
+		}
+	}
 
-	char get();
-	char next();
-	char peek();
+	char get()
+	{
+		char c;
+		stream.get(c);
+		count_line(c);
+		return c;
+	}
+	char peek()
+	{
+		char c;
+		stream.peek(c);
+		return c;
+	}
+	char next()
+	{
+		return get(), peek();
+	}
 
 	template<typename Func>
 	char skip(Func condition);

@@ -50,30 +50,6 @@ bool is_not_punct(char c)
 }
 } // namespace
 
-char Lexer::get()
-{
-	char c;
-	stream.get(c);
-	if (c == '\n') {
-		++pos.line;
-		pos.col = 1;
-	} else if (c != 0) {
-		++pos.col;
-	}
-	return c;
-}
-
-char Lexer::peek()
-{
-	char c;
-	stream.peek(c);
-	return c;
-}
-
-char Lexer::next()
-{
-	return get(), peek();
-}
 
 template<typename Func>
 char Lexer::skip(Func condition)
