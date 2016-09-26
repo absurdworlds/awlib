@@ -25,12 +25,10 @@ namespace aw {
 namespace hdf {
 //! Class for holding any HDF Value.
 struct Value {
-	Value()
-	{
-	}
+	Value() = default;
 
 	template<typename val_type>
-	Value(val_type v)
+	explicit Value(val_type v)
 		: holder()
 	{
 		holder.set<val_type>(v);
@@ -39,7 +37,7 @@ struct Value {
 	/*! Assignment operator. Copies content from another
 	 *  Value class, overwriting existing contents.
 	 */
-	Value& operator = (Value const& other)
+	Value& operator=(Value const& other)
 	{
 		holder = other.holder;
 		return *this;
