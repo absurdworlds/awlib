@@ -14,7 +14,7 @@
 #include <chrono>
 
 #include <aw/io/input_file_stream.h>
-#include <aw/hdf/Parser.h>
+#include <aw/fileformat/hdf/parser.h>
 
 using namespace aw;
 using namespace aw::io;
@@ -91,12 +91,12 @@ int main(int,char** arg)
 	// open a file
 	io::input_file_stream stream(arg[1]);
 	// create the parser
-	Parser* hdf = hdf::createParser(stream);
+	Parser hdf(stream);
 
 	Document doc;
 
 	auto begin = std::chrono::steady_clock::now();
-	parseDocument(hdf, doc);
+	parseDocument(&hdf, doc);
 	auto end = std::chrono::steady_clock::now();
 
 	std::cerr << std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin).count() << '\n';
@@ -112,6 +112,4 @@ int main(int,char** arg)
 
 		std::cout << " = " << to_string(pair.second) << "\n";
 	}
-
-	delete hdf;
 }
