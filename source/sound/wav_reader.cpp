@@ -79,9 +79,9 @@ void reader::read_riff_header()
 	read_le(stream, format);
 
 	if (tag(chunk_id) != tag::riff)
-		throw format_error{ "Not a RIFF file." };
+		throw format_error{ "not a RIFF file" };
 	if (tag(format) != tag::wave)
-		throw format_error{ "Not a WAVE file." };
+		throw format_error{ "not a WAVE file" };
 
 	size_check = file_size - 4;
 }
@@ -91,9 +91,14 @@ void reader::read_format_chunk()
 	u32 format_tag;
 	read_le(stream, format_tag);
 	if (tag(format_tag) != tag::format)
-		throw format_error{ "Expected \"fmt \"." };
+		throw format_error{ "expected \"fmt \"" };
+
 
 	u32 header_length;
+
+	constexpr size_t min_header_length = 16;
+	// minimal header consists of following 6 variables.
+
 	u16 type;
 	u16 num_channels;
 	u32 sample_rate;
@@ -109,8 +114,10 @@ void reader::read_format_chunk()
 	read_le(stream, bytes_per_sample);
 	read_le(stream, bits_per_sample);
 
-	constexpr size_t min_size = 16;
-	stream.skip(header_length - min_size);
+	if (header_length < min_header_length)
+		throw format_error{ "format header is too short" };
+
+	stream.skip(header_length - min_header_length);
 	size_check -= 8 + header_length;
 
 	check_equal(byte_rate, sample_rate * bytes_per_sample, "incorrect byte_rate");
@@ -124,7 +131,7 @@ void reader::read_format_chunk()
 	// Check with -Wswitch-enum that all cases are covered
 	switch(format(type)) {
 	default:
-		throw format_error{ "Unknown wave format." };
+		throw format_error{ "unknown wave format" };
 	case format::pcm:
 		break;
 	case format::ieee:
@@ -136,7 +143,7 @@ void reader::read_format_chunk()
 	case format::gsm610:
 	case format::mpeg:
 	case format::extensible:
-		throw format_error{ "Unsupported wave format." };
+		throw format_error{ "unsupported wave format" };
 	}
 }
 
