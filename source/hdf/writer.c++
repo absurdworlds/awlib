@@ -9,18 +9,8 @@
  */
 #include <aw/fileformat/hdf/writer.h>
 
-#include <aw/io/WriteStream.h>
-#include <aw/logger/Log.h>
-
-#include <aw/hdf/shared.h>
-
 namespace aw {
 namespace hdf {
-Writer::Writer(io::WriteStream& out)
-	: ostream(out), depth(0), indentation(IndentationStyle::DoubleSpace)
-{
-}
-
 /*! Create a new node and write a header for it. */
 bool Writer::startNode(std::string name)
 {
@@ -32,13 +22,14 @@ bool Writer::startNode(std::string name)
 	++depth;
 
 	endLine();
+	return true;
 }
 
 /*! End current (bottom level) node. */
 bool Writer::endNode()
 {
 	if (depth == 0) {
-		error(HDF_LOG_ERROR, "‘]’ mismatch");
+		error(log::error, "‘]’ mismatch");
 		return false;
 	}
 
@@ -57,22 +48,24 @@ bool Writer::endNode()
 std::string spellType(hdf::Value value)
 {
 	switch (value.getType()) {
+	case hdf::Type::Unknown:
+		return {};
+	case hdf::Type::Enum:
+		return {"enum:"};
 	case hdf::Type::Integer:
-		return("int:");
+		return {"int:"};
 	case hdf::Type::Float:
-		return("float:");
+		return {"float:"};
 	case hdf::Type::Boolean:
-		return("bool:");
+		return {"bool:"};
 	case hdf::Type::String:
-		return("string:");
+		return {"string:"};
 	case hdf::Type::Vector2d:
-		return("vec2:");
+		return {"vec2:"};
 	case hdf::Type::Vector3d:
-		return("vec3:");
+		return {"vec3:"};
 	case hdf::Type::Vector4d:
-		return("vec4:");
-	default:
-		break;
+		return {"vec4:"};
 	}
 }
 
@@ -80,7 +73,7 @@ std::string spellType(hdf::Value value)
 bool Writer::writeValue(std::string name, hdf::Value value, bool typed)
 {
 	if (depth == 0) {
-		error(HDF_LOG_ERROR, "field outside node");
+		error(log::error, "field outside node");
 		return false;
 	}
 
@@ -136,10 +129,10 @@ void Writer::addComment(std::string comment_text)
 }
 
 /*! Report an error */
-void Writer::error(u32 type, std::string msg)
+void Writer::error(log::level lvl, std::string msg)
 {
-	// TODO: new logger
-	// core::Logger::debug("error: " + msg);
+	if (logger)
+		logger->message(lvl, "HDF", msg);
 }
 
 /*! Set the indentation style for the document */

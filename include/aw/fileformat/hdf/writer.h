@@ -13,10 +13,10 @@
 
 #include <aw/fileformat/hdf/export.h>
 #include <aw/fileformat/hdf/value.h>
+
+#include <aw/io/WriteStream.h>
+#include <aw/log/log.h>
 namespace aw {
-namespace io {
-class WriteStream;
-}
 namespace hdf {
 /*! List of Writer indentation styles */
 enum IndentationStyle {
@@ -31,29 +31,30 @@ enum IndentationStyle {
 //! Interface for writing HDF files. Supports HDF 1.2.0 format.
 struct AW_HDF_EXP Writer {
 	//! Create writer outputting to \a out.
-	Writer(io::WriteStream& out);
+	Writer(io::WriteStream& out, log* logger = nullptr)
+		: ostream{out}, logger{logger}
+	{}
 
-	virtual ~Writer() = default;
+	~Writer() = default;
 
 	/*! Create a new node and write a header for it. */
-	virtual bool startNode(std::string name);
+	bool startNode(std::string name);
 
 	/*! End current (bottom level) node.  */
-	virtual bool endNode();
+	bool endNode();
 
 	/*! Write a value object. */
-	virtual bool writeValue(std::string name,
-	                        hdf::Value value,
-	                        bool typed = true);
+	bool writeValue(std::string name, hdf::Value value, bool typed = true);
 
 	/*! Write a comment */
-	virtual void addComment(std::string comment_text);
-
-	/*! Report an error */
-	virtual void error(u32 type, std::string msg);
+	void addComment(std::string comment_text);
 
 	/*! Set the indentation style for the document */
-	virtual void setIndentationStyle(IndentationStyle style);
+	void setIndentationStyle(IndentationStyle style);
+
+private:
+	/*! Report an error */
+	void error(log::level type, std::string msg);
 
 private:
 	void writeValueValue(hdf::Value value);
@@ -61,8 +62,9 @@ private:
 	void endLine();
 
 	io::WriteStream& ostream;
-	IndentationStyle indentation;
-	size_t depth;
+	log* logger;
+	IndentationStyle indentation = IndentationStyle::DoubleSpace;
+	size_t depth = 0;
 };
 } // namespace io
 } // namespace aw
