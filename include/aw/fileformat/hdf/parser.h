@@ -57,7 +57,7 @@ struct Parser {
 		: lex{stream, logger}
 	{}
 
-	virtual ~Parser() = default;
+	~Parser() = default;
 
 	//! Fast-forward to the next object
 	bool read();
