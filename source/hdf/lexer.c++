@@ -212,10 +212,5 @@ token Lexer::getToken()
 	tok = readToken();
 	return tmp;
 }
-
-void Lexer::error(std::string msg)
-{
-	printf("[HDF:%u]: %s\n", stream.position(), msg.c_str());
-}
 } // namespace hdf
 } // namespace aw

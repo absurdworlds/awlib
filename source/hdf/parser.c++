@@ -75,7 +75,7 @@ bool Parser::read() {
 		return false;
 	case token::bang:
 		if (depth > 0) {
-			error(tok.pos, "Unexpected ! inside node.");
+			lex.error("Unexpected ! inside node.", tok.pos);
 			break;
 		}
 		lex.getToken();
@@ -86,7 +86,7 @@ bool Parser::read() {
 		return true;
 	case token::node_end:
 		if (depth == 0) {
-			error(tok.pos, "Unexpected ].");
+			lex.error("Unexpected ].", tok.pos);
 			break;
 		}
 		state = State::Object;
@@ -94,20 +94,18 @@ bool Parser::read() {
 	case token::name:
 		if (depth == 0) {
 			lex.getToken();
-			error(tok.pos, "Value must be inside node.");
+			lex.error("Value must be inside node.", tok.pos);
 			break;
 		}
 		state = State::Object;
 		return true;
 	case token::invalid:
 		lex.getToken();
-		error(tok.pos,
-		      string::compose("read(): illegal token: %0", tok.value));
+		lex.error(string::compose("read(): illegal token: %0", tok.value), tok.pos);
 		break;
 	default:
 		lex.getToken();
-		error(tok.pos,
-		      string::compose("read(): unexpected token: %0", tok.value));
+		lex.error(string::compose("read(): unexpected token: %0", tok.value), tok.pos);
 	}
 
 	return read();
@@ -118,7 +116,7 @@ Object Parser::getObject()
 	token tok = lex.getToken();
 
 	if (state != State::Object) {
-		error(tok.pos, "there is no object");
+		lex.error("there is no object", tok.pos);
 		return Object::Null;
 	}
 
@@ -137,7 +135,7 @@ Object Parser::getObject()
 		state = State::Value;
 		return Object(Object::Value, tok.value);
 	default:
-		error(tok.pos, "Unexpected token.");
+		lex.error("Unexpected token.", tok.pos);
 	}
 
 	return Object(Object::Null);
@@ -167,22 +165,16 @@ void Parser::skipNode()
 	read();
 }
 
-void Parser::error(size_t pos, std::string msg)
-{
-	// TODO: use aw::log
-	printf("[HDF:%zu]: %s\n", pos, msg.c_str());
-}
-
 void Parser::readValue(Value& var)
 {
 	if (state != State::Value) {
-		error(0, "Call getObject() before callin readValue");
+		lex.error("Call getObject() before callin readValue", {0,0});
 		return;
 	}
 	token tok = lex.getToken();
 
 	if (tok.kind != token::equals) {
-		error(tok.pos, string::compose("Expected '=', got %0", tok.value));
+		lex.error(string::compose("Expected '=', got %0", tok.value), tok.pos);
 		return;
 	}
 	token id = lex.getToken();
@@ -294,7 +286,7 @@ Value Parser::parseVector()
 	}
 
 	if (tok.kind == token::eof)
-		error(tok.pos, "parseVector: Reached end looking for '}'");
+		lex.error("parseVector: Reached end looking for '}'", tok.pos);
 
 	size_t size = it - vec.begin();
 	switch (size) {
@@ -312,11 +304,10 @@ Value Parser::parseVector()
 
 // TODO: rewrite
 void Parser::processCommand() {
-	Token tok = lex.getToken();
+	token tok = lex.getToken();
 
 	if (tok.kind != token::name) {
-		error(tok.pos,
-		      string::compose("Unexpected token: %0", tok.value));
+		lex.error(string::compose("Unexpected token: %0", tok.value), tok.pos);
 		return;
 	}
 
@@ -324,35 +315,33 @@ void Parser::processCommand() {
 		tok = lex.getToken();
 
 		if (tok.kind != token::string) {
-			error(tok.pos, "Expected string after \"hdf_version\".");
+			lex.error("Expected string after \"hdf_version\".", tok.pos);
 			return;
 		}
 
 		std::string ver = tok.value.substr(0,3);
 		if (ver == "1.2") {
-			error(tok.pos, "HDF version: 1.2");
+			lex.message("HDF version: 1.2", tok.pos);
 		} else if (ver == "1.1") {
-			error(tok.pos, "Version 1.1 is not supported.");
+			lex.error("Version 1.1 is not supported.", tok.pos);
 			return;
 		} else if (ver == "1.0") {
-			error(tok.pos, "Version 1.0 is not supported.");
+			lex.error("Version 1.0 is not supported.", tok.pos);
 			return;
 		} else {
-			error(tok.pos,
-			      string::compose(
-			              "hdf_version: invalid version %0.",
-			               tok.value));
+			lex.error(string::compose("hdf_version: invalid version %0.",
+			               tok.value), tok.pos);
 			return;
 		}
 	}
 
 	if (tok.value == "strict") {
-		error(tok.pos, "Strict mode: not implemented");
+		lex.error("Strict mode: not implemented", tok.pos);
 
 		tok = lex.getToken();
 
-		if (tok.type != Token::Name && tok.type != Token::Number) {
-			error(tok.pos, "Expected true/false value.");
+		if (tok.kind != token::name && tok.kind != token::number) {
+			lex.error("Expected true/false value.", tok.pos);
 			return;
 		}
 
