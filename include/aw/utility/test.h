@@ -28,11 +28,16 @@
 #include <cxxabi.h>
 std::string demangle(const char* name)
 {
+	static thread_local size_t size  = 1024;
+	static thread_local char* memory = (char*)malloc(size);
+
 	int status;
-	auto demangled = abi::__cxa_demangle(name, nullptr, nullptr, &status);
-	std::string ret = demangled ? demangled : name;
-	free(demangled);
-	return ret;
+	auto demangled = abi::__cxa_demangle(name, memory, &size, &status);
+	if (demangled) {
+		memory = demangled;
+		return demangled;
+	}
+	return name;
 }
 #else
 std::string demangle(const char* name) { return name; }
