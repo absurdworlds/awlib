@@ -34,7 +34,7 @@ struct file {
 
 	file(file const& other) = delete;
 	file(file&& other) noexcept { swap(other); }
-	file& operator=(file&& other) noexcept { swap(other); }
+	file& operator=(file&& other) noexcept { swap(other); return *this; }
 
 	bool is_open() const noexcept { return fd != invalid_fd; }
 
