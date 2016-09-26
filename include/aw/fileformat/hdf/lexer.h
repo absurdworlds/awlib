@@ -7,46 +7,31 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _aw_hdf_Lexer_impl_
-#define _aw_hdf_Lexer_impl_
+#ifndef aw_fileformat_hdf_lexer_h
+#define aw_fileformat_hdf_lexer_h
 #include <string>
 
 namespace aw {
 namespace hdf {
-struct Token {
-	enum Kind {
-		Invalid,
-		Eof,
-		Name,
-		Number,
-		String,
-		Equals,
-		Colon,
-		Comma,
-		Bang,
-		NodeBegin,
-		NodeEnd,
-		VecBegin,
-		VecEnd,
-	};
+struct token {
 
-	Token()
-		: type(Kind::Invalid)
-	{ }
-	
-	Token(Kind type)
-		: type(type)
-	{ }
 
-	Token(Kind type, std::string val)
-		: type(type), value(val)
-	{ }
+	enum {
+		invalid,
+		eof,
+		name,
+		number,
+		string,
+		equals,
+		colon,
+		comma,
+		bang,
+		node_begin,
+		node_end,
+		vec_begin,
+		vec_end,
+	} kind = invalid;
 
-	Token(Kind type, std::string val, size_t pos)
-		: type(type), value(val), pos(pos)
-	{ }
-
-	Kind type;
 	std::string value;
 	size_t pos;
 };
@@ -60,12 +45,12 @@ struct Lexer {
 
 	virtual ~Lexer() = default;
 
-	Token getToken();
-	Token peekToken();
+	token getToken();
+	token peekToken();
 
 	void error(std::string msg);
 private:
-	Token readToken();
+	token readToken();
 
 	std::string readString();
 	std::string readNumber();
@@ -81,8 +66,8 @@ private:
 
 	io::input_stream& stream;
 
-	Token tok;
+	token tok;
 };
 } // namespace io
 } // namespace aw
-#endif//_aw_hdf_Lexer_impl_
+#endif//aw_fileformat_hdf_lexer_h

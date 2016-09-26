@@ -146,7 +146,7 @@ std::string Lexer::readIllegalToken()
 	return name;
 }
 
-Token Lexer::readToken()
+token Lexer::readToken()
 {
 	char c;
 	stream.peek(c);
@@ -161,19 +161,15 @@ Token Lexer::readToken()
 		return std::string(1, c);
 	};
 
-	auto retToken = [&] (Token::Kind kind, std::string str) {
-		return Token(kind, str, stream.position());
-	};
-
 	switch (c) {
 	case 0:
-		return Token(Token::Eof);
+		return token{token::eof};
 	case '0': case '1': case '2': case '3': case '4':
 	case '5': case '6': case '7': case '8': case '9':
-		return retToken(Token::Number, readNumber());
+		return token{token::number, readNumber(), pos};
 	case '"':
 		stream.next(c); // consume '"'
-		return retToken(Token::String, readString());
+		return token{token::string, readString(), pos};
 	case 'A': case 'B': case 'C': case 'D': case 'E': case 'F': case 'G':
 	case 'H': case 'I': case 'J': case 'K': case 'L': case 'M': case 'N':
 	case 'O': case 'P': case 'Q': case 'R': case 'S': case 'T': case 'U':
@@ -182,37 +178,37 @@ Token Lexer::readToken()
 	case 'h': case 'i': case 'j': case 'k': case 'l': case 'm': case 'n':
 	case 'o': case 'p': case 'q': case 'r': case 's': case 't': case 'u':
 	case 'v': case 'w': case 'x': case 'y': case 'z':
-		return retToken(Token::Name, readName());
+		return token{token::name, readName(), pos};
 	case '=':
-		return retToken(Token::Equals, getChar());
+		return token{token::equals, getChar(), pos};
 	case ':':
-		return retToken(Token::Colon, getChar());
+		return token{token::colon, getChar(), pos};
 	case ',':
-		return retToken(Token::Comma, getChar());
+		return token{token::comma, getChar(), pos};
 	case '!':
-		return retToken(Token::Bang, getChar());
+		return token{token::bang, getChar(), pos};
 	case '[':
 		stream.next(c); // consume '['
-		return retToken(Token::NodeBegin, readName());
+		return token{token::node_begin, readName(), pos};
 	case ']':
-		return retToken(Token::NodeEnd, getChar());
+		return token{token::node_end, getChar(), pos};
 	case '{':
-		return retToken(Token::VecBegin, getChar());
+		return token{token::vec_begin, getChar(), pos};
 	case '}':
-		return retToken(Token::VecEnd, getChar());
+		return token{token::vec_end, getChar(), pos};
 	default:
-		return retToken(Token::Invalid, readIllegalToken());
+		return token{token::invalid, readIllegalToken(), pos};
 	}
 }
 
-Token Lexer::peekToken()
+token Lexer::peekToken()
 {
 	return tok;
 }
 
-Token Lexer::getToken()
+token Lexer::getToken()
 {
-	Token tmp = tok;
+	token tmp = tok;
 	tok = readToken();
 	return tmp;
 }

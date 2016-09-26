@@ -65,15 +65,15 @@ Value parseInteger(std::string const& str)
 }
 
 bool Parser::read() {
-	Token tok = lex.peekToken();
+	token tok = lex.peekToken();
 
-	if (tok.type == Token::Eof)
+	if (tok.kind == token::eof)
 		return false;
 
-	switch (tok.type) {
-	case Token::Eof:
+	switch (tok.kind) {
+	case token::eof:
 		return false;
-	case Token::Bang:
+	case token::bang:
 		if (depth > 0) {
 			error(tok.pos, "Unexpected ! inside node.");
 			break;
@@ -81,17 +81,17 @@ bool Parser::read() {
 		lex.getToken();
 		processCommand();
 		break;
-	case Token::NodeBegin:
+	case token::node_begin:
 		state = State::Object;
 		return true;
-	case Token::NodeEnd:
+	case token::node_end:
 		if (depth == 0) {
 			error(tok.pos, "Unexpected ].");
 			break;
 		}
 		state = State::Object;
 		return true;
-	case Token::Name:
+	case token::name:
 		if (depth == 0) {
 			lex.getToken();
 			error(tok.pos, "Value must be inside node.");
@@ -99,7 +99,7 @@ bool Parser::read() {
 		}
 		state = State::Object;
 		return true;
-	case Token::Invalid:
+	case token::invalid:
 		lex.getToken();
 		error(tok.pos,
 		      string::compose("read(): illegal token: %0", tok.value));
@@ -115,25 +115,25 @@ bool Parser::read() {
 
 Object Parser::getObject()
 {
-	Token tok = lex.getToken();
+	token tok = lex.getToken();
 
 	if (state != State::Object) {
 		error(tok.pos, "there is no object");
 		return Object::Null;
 	}
 
-	switch (tok.type) {
-	case Token::NodeBegin:
+	switch (tok.kind) {
+	case token::node_begin:
 		++depth;
 
 		state = State::Idle;
 		return Object(Object::Node, tok.value);
-	case Token::NodeEnd:
+	case token::node_end:
 		--depth;
 
 		state = State::Idle;
 		return Object(Object::NodeEnd);
-	case Token::Name:
+	case token::name:
 		state = State::Value;
 		return Object(Object::Value, tok.value);
 	default:
@@ -151,14 +151,14 @@ void Parser::skipValue()
 
 void Parser::skipNode() 
 {
-	Token tok = lex.peekToken();
+	token tok = lex.peekToken();
 
 	size_t depth = 1;
 
 	do {
-		if (tok.type == Token::NodeBegin) {
+		if (tok.kind == token::node_begin) {
 			++depth;
-		} else if (tok.type == Token::NodeEnd) {
+		} else if (tok.kind == token::node_end) {
 			--depth;
 		}
 		tok = lex.getToken();
@@ -179,16 +179,16 @@ void Parser::readValue(Value& var)
 		error(0, "Call getObject() before callin readValue");
 		return;
 	}
-	Token tok = lex.getToken();
+	token tok = lex.getToken();
 
-	if (tok.type != Token::Equals) {
+	if (tok.kind != token::equals) {
 		error(tok.pos, string::compose("Expected '=', got %0", tok.value));
 		return;
 	}
-	Token id = lex.getToken();
+	token id = lex.getToken();
 	tok = lex.peekToken();
 
-	bool hasType = tok.type == Token::Colon;
+	bool hasType = tok.kind == token::colon;
 	if (hasType) {
 		tok = lex.getToken();
 		var = convertValue(tokenToType(id));
@@ -202,27 +202,27 @@ void Parser::readValue(Value& var)
 
 Value Parser::convertValue(Type type)
 {
-	Token tok = lex.getToken();
+	token tok = lex.getToken();
 
 	switch (type) {
 	case Type::Enum:
 	case Type::String:
-		if (!(tok.type == Token::String || tok.type == Token::Name))
+		if (!(tok.kind == token::string || tok.kind == token::name))
 			break;
 
 		return Value(tok.value);
 	case Type::Float:
-		if (tok.type != Token::Number)
+		if (tok.kind != token::number)
 			break;
 
 		return Value(std::stod(tok.value));
 	case Type::Integer:
-		if (tok.type != Token::Number)
+		if (tok.kind != token::number)
 			break;
 
 		return Value(i64(std::stoll(tok.value)));
 	case Type::Boolean:
-		if (tok.type != Token::Name)
+		if (tok.kind != token::name)
 			break;
 
 		return Value(parseBoolean(tok.value));
@@ -235,18 +235,18 @@ Value Parser::convertValue(Type type)
 	return Value();
 }
 
-Value Parser::convertValue(Token tok)
+Value Parser::convertValue(token tok)
 {
-	switch (tok.type) {
-	case Token::String:
+	switch (tok.kind) {
+	case token::string:
 		return Value(tok.value);
-	case Token::Number:
+	case token::number:
 		return parseInteger(tok.value);
-	case Token::Name:
+	case token::name:
 		if (tok.value == "true" || tok.value == "false")
 			return Value(bool(parseBoolean(tok.value)));
 		return Value(tok.value);
-	case Token::VecBegin:
+	case token::vec_begin:
 		return parseVector();
 	}
 
@@ -255,9 +255,9 @@ Value Parser::convertValue(Token tok)
 
 Value Parser::parseVector(Type type)
 {
-	Token tok = lex.peekToken();
+	token tok = lex.peekToken();
 
-	if (tok.type != Token::VecBegin)
+	if (tok.kind != token::vec_begin)
 		return Value();
 
 	Value tmp = parseVector();
@@ -270,15 +270,15 @@ Value Parser::parseVector(Type type)
 
 Value Parser::parseVector()
 {
-	Token tok = lex.peekToken();
+	token tok = lex.peekToken();
 
 	// Damn it, why is it so messy …
 	std::array<f32, 4> vec;
 	auto it = vec.begin();
 
-	while (tok.type != Token::Eof) {
+	while (tok.kind != token::eof) {
 		tok = lex.getToken();
-		if (tok.type != Token::Number)
+		if (tok.kind != token::number)
 			return Value();
 
 		if (it < vec.end())
@@ -286,14 +286,14 @@ Value Parser::parseVector()
 
 		tok = lex.getToken();
 		
-		if (tok.type == Token::VecEnd)
+		if (tok.kind == token::vec_end)
 			break;
 
-		if (tok.type != Token::Comma)
+		if (tok.kind != token::comma)
 			return Value();
 	}
 
-	if (tok.type == Token::Eof)
+	if (tok.kind == token::eof)
 		error(tok.pos, "parseVector: Reached end looking for '}'");
 
 	size_t size = it - vec.begin();
@@ -314,7 +314,7 @@ Value Parser::parseVector()
 void Parser::processCommand() {
 	Token tok = lex.getToken();
 
-	if (tok.type != Token::Name) {
+	if (tok.kind != token::name) {
 		error(tok.pos,
 		      string::compose("Unexpected token: %0", tok.value));
 		return;
@@ -323,7 +323,7 @@ void Parser::processCommand() {
 	if (tok.value == "hdf_version") {
 		tok = lex.getToken();
 
-		if (tok.type != Token::String) {
+		if (tok.kind != token::string) {
 			error(tok.pos, "Expected string after \"hdf_version\".");
 			return;
 		}
