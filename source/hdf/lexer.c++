@@ -19,21 +19,34 @@
 namespace aw {
 namespace hdf {
 namespace {
-inline bool isDigit (char c) {
+bool is_digit(char c)
+{
 	return (c >= '0' && c <= '9');
 }
 
-inline bool isNameBeginChar (char c) {
+bool is_num_char(char c)
+{
+	return is_digit(c) || in(c, '.', 'e', 'E', '+', '-');
+}
+
+bool is_name_begin_char(char c)
+{
 	return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z');
 }
 
-inline bool isNameChar (char c) {
-	return isNameBeginChar(c) || isDigit(c) || c == '-' || c == '_';
+bool is_name_char(char c)
+{
+	return is_name_begin_char(c) || is_digit(c) || in(c, '-', '_');
 }
 
-bool whitespace (char c)
+bool is_whitespace(char c)
 {
-	return in(c, ' ', '\t', '\r', '\n');
+	return in(c, ' ', '\v', '\t', '\r', '\n');
+}
+
+bool is_not_punct(char c)
+{
+	return !is_whitespace(c) && !in(c, '[', ']', '=', ':', ',');
 }
 } // namespace
 
@@ -71,114 +84,75 @@ char Lexer::skip(Func condition)
 	return c;
 }
 
-char Lexer::fastForward()
+char Lexer::skip_comment()
 {
-	auto line       = [] (char c) { return c != '\n'; };
+	using namespace std::string_literals;
+	auto line = [] (char c) { return c != '\n'; };
 
 	char c = peek();
-	while (whitespace(c) || c == '/') {
-		c = skip( whitespace );
-		if (c == '/') {
-			if (next() == '/') {
-				c = skip( line );
-			} else {
-				error("unexpected token: " + get(), pos);
-				c = peek();
-			}
+	while (c == '/') {
+		if (next() == '/') {
+			c = skip( line );
+			c = get(); // consume '\n'
+		} else {
+			error("unexpected token: "s + c, pos);
+			c = next(); // skip '/'
 		}
 	}
-
 	return c;
-
 }
 
-std::string Lexer::readNumber()
+template<typename Func>
+std::string Lexer::read(Func condition)
 {
-	char c;
-	stream.peek(c);
-
 	std::string val;
 
-	while ((c >= '0' && c <= '9') || in(c, '.', 'e', 'E', '+', '-')) {
+	char c = peek();
+	while (condition(c)) {
 		val += c;
-		stream.next(c);
+		c = next();
 	}
 
 	return val;
 }
 
-std::string Lexer::readString() {
-	char c;
-	stream.peek(c);
-
+std::string Lexer::read_string() {
 	std::string val;
 
+	char c = peek();
 	while (c != '"') {
 		// When '\' is encountered in a string, skip the '\' and read
 		// next character as it is.
 		if (c == '\\')
-			stream.next(c);
-
+			c = next();
 		val += c;
-		stream.next(c);
+		c = next();
 	}
 
 	// consume "
-	stream.get(c);
+	get();
 	return val;
 }
 
-std::string Lexer::readName()
-{
-	char c;
-	stream.peek(c);
-
-	std::string name;
-
-	while (isNameChar(c)) {
-		name += c;
-
-		stream.next(c);
-	}
-
-	return name;
-}
-
-std::string Lexer::readIllegalToken()
-{
-	char c;
-	stream.peek(c);
-
-	std::string name;
-
-	while(!whitespace(c) && !in(c, '[', ']', '=', ':', ',')) {
-		name += c;
-
-		stream.next(c);
-	}
-
-	return name;
-}
 
 token Lexer::readToken()
 {
-	// skip comments and whitespace
-	char c = fastForward();
-
-	auto getChar = [&] () {
-		stream.get(c);
-		return std::string(1, c);
-	};
-
-	switch (c) {
+	char c = peek();
+	while (true) switch (c) {
+	case '/':
+		c = skip_comment();
+		continue;
+	case ' ': case '\v': case '\t': case '\r': case '\n':
+		c = skip( is_whitespace );
+		continue;
 	case 0:
 		return token{token::eof};
 	case '0': case '1': case '2': case '3': case '4':
 	case '5': case '6': case '7': case '8': case '9':
-		return token{token::number, readNumber(), pos};
+		return token{token::number, read(is_num_char), pos};
 	case '"':
-		stream.next(c); // consume '"'
-		return token{token::string, readString(), pos};
+		c = next(); // consume '"'
+		return token{token::string, read_string(), pos};
 	case 'A': case 'B': case 'C': case 'D': case 'E': case 'F': case 'G':
 	case 'H': case 'I': case 'J': case 'K': case 'L': case 'M': case 'N':
 	case 'O': case 'P': case 'Q': case 'R': case 'S': case 'T': case 'U':
@@ -187,26 +161,26 @@ token Lexer::readToken()
 	case 'h': case 'i': case 'j': case 'k': case 'l': case 'm': case 'n':
 	case 'o': case 'p': case 'q': case 'r': case 's': case 't': case 'u':
 	case 'v': case 'w': case 'x': case 'y': case 'z':
-		return token{token::name, readName(), pos};
+		return token{token::name, read(is_name_char), pos};
 	case '=':
-		return token{token::equals, getChar(), pos};
+		return token{token::equals, {1, get()}, pos};
 	case ':':
-		return token{token::colon, getChar(), pos};
+		return token{token::colon, {1, get()}, pos};
 	case ',':
-		return token{token::comma, getChar(), pos};
+		return token{token::comma, {1, get()}, pos};
 	case '!':
-		return token{token::bang, getChar(), pos};
+		return token{token::bang, {1, get()}, pos};
 	case '[':
 		stream.next(c); // consume '['
-		return token{token::node_begin, readName(), pos};
+		return token{token::node_begin, read(is_name_char), pos};
 	case ']':
-		return token{token::node_end, getChar(), pos};
+		return token{token::node_end, {1, get()}, pos};
 	case '{':
-		return token{token::vec_begin, getChar(), pos};
+		return token{token::vec_begin, {1, get()}, pos};
 	case '}':
-		return token{token::vec_end, getChar(), pos};
+		return token{token::vec_end, {1, get()}, pos};
 	default:
-		return token{token::invalid, readIllegalToken(), pos};
+		return token{token::invalid, read(is_not_punct), pos};
 	}
 }
 

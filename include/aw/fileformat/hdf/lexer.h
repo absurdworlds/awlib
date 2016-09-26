@@ -85,12 +85,6 @@ private:
 		}
 	}
 
-	token readToken();
-
-	std::string readString();
-	std::string readNumber();
-	std::string readName();
-	std::string readIllegalToken();
 
 	char get();
 	char next();
@@ -98,8 +92,13 @@ private:
 
 	template<typename Func>
 	char skip(Func condition);
+	char skip_comment();
 
-	char fastForward();
+	template<typename Func>
+	std::string read(Func condition);
+	std::string read_string();
+
+	token readToken();
 
 private:
 	io::input_stream& stream;
