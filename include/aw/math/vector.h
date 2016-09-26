@@ -18,7 +18,7 @@
 #include <aw/types/support/array.h>
 #include <aw/meta/conditional.h>
 #include <aw/utility/index_sequence.h>
-#include <aw/meta/parameter_pack.h>
+#include <aw/meta/list_ops.h>
 
 namespace aw {
 namespace math {
@@ -33,10 +33,11 @@ T const& get(vector<T,N> const& vec);
 
 
 namespace axis {
-enum axis : size_t {
-	x, y, z, w
-};
-}
+constexpr size_t x = 0;
+constexpr size_t y = 1;
+constexpr size_t z = 2;
+constexpr size_t w = 3;
+} // namespace axis
 
 template <class VectorT, class = typename VectorT::indices>
 struct vector_ops;
@@ -48,71 +49,40 @@ struct vector_ops<vector<T,N>,index_sequence<Is...>>
 
 	static void set(VectorT& vec, VectorT const& other)
 	{
-#if __cpp_fold_expressions
 		(void(vec[Is] = other[Is]), ...);
-#else
-		(void) fold_dummy { ((vec[Is] = other[Is]), 0)...  };
-#endif
 	}
 
 	static void add(VectorT& vec, VectorT const& other)
 	{
-#if __cpp_fold_expressions
 		(void(vec[Is] += other[Is]), ...);
-#else
-		(void) fold_dummy { ((vec[Is] += other[Is]), 0)...  };
-#endif
 	}
 
 	static void sub(VectorT& vec, VectorT const& other)
 	{
-#if __cpp_fold_expressions
 		(void(vec[Is] -= other[Is]), ...);
-#else
-		(void) fold_dummy { ((vec[Is] -= other[Is]), 0)...  };
-#endif
 	}
 
 	static void mul(VectorT& vec, T const& val)
 	{
-#if __cpp_fold_expressions
 		(void(vec[Is] *= val), ...);
-#else
-		(void) fold_dummy { ((vec[Is] *= val), 0)...  };
-#endif
 	}
 
 	static void div(VectorT& vec, T const& val)
 	{
-#if __cpp_fold_expressions
 		(void(vec[Is] /= val), ...);
-#else
-		(void) fold_dummy { ((vec[Is] /= val), 0)...  };
-#endif
 	}
 
 	static T dot(VectorT const& vec1, VectorT const& vec2)
 	{
-#if __cpp_fold_expressions
 		// FIXME: T{} workaround for GCC 6.1 bug
 		T product = (T{vec1[Is]*vec2[Is]} + ...);
-#else
-		T product = {};
-		(void) fold_dummy {
-			((product += vec1[Is] * vec2[Is]), 0)...
-		};
-#endif
 		return product;
 	}
 
 	template<typename Func>
 	static void for_each(VectorT& vec, Func func)
 	{
-#if __cpp_fold_expressions
 		(func(vec[Is]), ...);
-#else
-		(void) fold_dummy { (func(vec[Is]), 0)...  };
-#endif
 	}
 };
 
