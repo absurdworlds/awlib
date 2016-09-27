@@ -13,6 +13,7 @@
 #include <iostream>
 #include <chrono>
 
+#include <aw/log/ostream_logger.h>
 #include <aw/io/input_file_stream.h>
 #include <aw/fileformat/hdf/parser.h>
 
@@ -73,10 +74,11 @@ int main(int,char** arg)
 	if (arg[1] == 0)
 		return 1;
 
+	ostream_logger log{std::cout};
 	// open a file
-	io::input_file_stream stream(arg[1]);
+	io::input_file_stream stream{arg[1]};
 	// create the parser
-	Parser hdf(stream);
+	Parser hdf{stream, &log};
 
 	Document doc;
 
