@@ -120,6 +120,11 @@ struct Value {
 		holder.reset();
 	}
 
+	operator bool() const
+	{
+		return !empty();
+	}
+
 	friend std::string to_string(Value const& val)
 	{
 		using aw::to_string;
