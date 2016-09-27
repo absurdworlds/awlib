@@ -23,48 +23,45 @@ namespace hdf {
 //! Class for holding any HDF Value.
 struct Value {
 	Value() = default;
+	Value(Value const&) = default;
+	Value(Value&&) = default;
 
-	template<typename T, bool_if<is_bool<T>> = true>
-	explicit Value(T v)
-		: holder()
-	{
-		holder.set<bool>(v);
-	}
+	explicit Value(bool v)
+		: holder{ v }
+	{ }
 
 	template<typename T, bool_if<is_int<T>> = true>
 	explicit Value(T v)
-		: holder()
-	{
-		holder.set<intmax_t>(v);
-	}
+		: holder{ intmax_t(v) }
+	{ }
 
 	template<typename T, bool_if<is_float<T>> = true>
 	explicit Value(T v)
-		: holder()
-	{
-		holder.set<double>(v);
-	}
+		: holder{ double{v} }
+	{ }
 
 	template<typename T, bool_if<is_constructible<std::string,T>> = true>
 	explicit Value(T&& v)
 		: holder()
 	{
-		holder.set<std::string>(std::forward<T>(v));
+		holder.emplace<std::string>(std::forward<T>(v));
 	}
 
 	template<typename T, bool_if<is_vector<T>> = true>
-	explicit Value(T const& v)
-		: holder()
+	explicit Value(T&& v)
+		: holder(v)
 	{
-		holder.set(v);
 	}
 
-	/*! Assignment operator. Copies content from another
-	 *  Value class, overwriting existing contents.
-	 */
 	Value& operator=(Value const& other)
 	{
 		holder = other.holder;
+		return *this;
+	}
+
+	Value& operator=(Value&& other)
+	{
+		holder = std::move(other.holder);
 		return *this;
 	}
 
