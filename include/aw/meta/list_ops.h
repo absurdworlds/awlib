@@ -68,5 +68,11 @@ struct is_subset<list<L1...>, list<L2...>> {
 
 template<typename L1, typename L2>
 constexpr bool is_subset = meta::is_subset<L1, L2>::value;
+
+
+template<typename List>
+size_t list_size = 0;
+template<template <typename...> typename List, typename...Ts>
+size_t list_size<List<Ts...>> = sizeof...(Ts);
 } // namespace aw
 #endif//aw_meta_list_ops_h
