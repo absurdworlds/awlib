@@ -39,6 +39,27 @@ Test(variant_basic_copy) {
 	}
 }
 
+Test(variant_copy_5types) {
+	using namespace std::string_literals;
+	aw::variant<int, float, bool, unsigned, std::string> var1;
+	aw::variant<int, float, bool, unsigned, std::string> var2;
+
+	auto test_val = "Test string!"s;
+
+	var1.set(test_val);
+
+	Preconditions {
+		TestEqual(*var1.get<std::string>(), test_val);
+		TestAssert(var2.empty());
+	}
+
+	Checks {
+		var2 = var1;
+		TestEqual(*var1.get<std::string>(), *var2.get<std::string>());
+		TestEqual(*var1.get<std::string>(), test_val);
+	}
+}
+
 Test(variant_basic_move) {
 	using namespace std::string_literals;
 	aw::variant<int, float, std::string> var1;

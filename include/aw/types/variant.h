@@ -13,26 +13,20 @@
 #include <aw/meta/conditional.h>
 #include <aw/meta/list_ops.h>
 #include <aw/meta/index_of.h>
+#include <aw/meta/at_index.h>
 #include <limits>
 #include <algorithm>
 #include <cassert>
 
+#include <aw/types/bits/variant.h>
+
 namespace aw {
-struct variant_shared {
-protected:
-	struct Destroy {
-		using return_type = void;
-
-		template<typename T>
-		void operator()(T& data)
-		{
-			data.~T();
-		}
-	};
-};
-
+/*!
+ * Variant type a.k.a. type-safe union.
+ * Holds one type out of the list.
+ */
 template <typename... Ts>
-struct variant : variant_shared {
+struct variant {
 	static_assert(sizeof...(Ts) >= 2, "variant must consist of at least 2 types");
 
 	static constexpr size_t size  = std::max({sizeof(Ts)...});
@@ -275,6 +269,9 @@ struct variant : variant_shared {
 	//! Index of particular type
 	template<typename T>
 	static constexpr index_t index_of = index_t(aw::index_of<T, Ts...>);
+	//! Convert index to type
+	template<size_t I>
+	using type_at = aw::at_index<I, Ts...>;
 
 	/*!
 	 * Check if variant is empty.
@@ -310,21 +307,21 @@ struct variant : variant_shared {
 	 *
 	 * \arg func
 	 *    Instance of a functor.
-	 * \arg args
-	 *    Other arguments that should be passed to the functor.
 	 * \return
 	 *    Return value of the functor, if present.
 	 */
-	template<typename Functor, typename...Args>
-	auto apply(Functor func, Args&&... args) -> typename Functor::return_type
+	template<typename Functor>
+	auto apply(Functor func) -> typename Functor::return_type
 	{
-		return apply_impl(func, std::forward<Args>(args)...);
+		auto sptr = reinterpret_cast<void*>(&storage);
+		return _impl::apply_dispatch(*this, sptr, func);
 	}
 
-	template<typename Functor, typename...Args>
-	auto apply(Functor func, Args&&... args) const -> typename Functor::return_type
+	template<typename Functor>
+	auto apply(Functor func) const -> typename Functor::return_type
 	{
-		return apply_impl(func, std::forward<Args>(args)...);
+		auto sptr = reinterpret_cast<void const*>(&storage);
+		return _impl::apply_dispatch(*this, sptr, func);
 	}
 
 private:
@@ -362,11 +359,8 @@ private:
 	 */
 	void destroy()
 	{
-		apply(Destroy{});
+		apply(_impl::variant_destroy_visitor{});
 	}
-
-	// Functors
-	using variant_shared::Destroy;
 
 	struct Copy {
 		using return_type = void;
@@ -401,52 +395,6 @@ private:
 	private:
 		variant& self;
 	};
-
-	// Functor dispatch
-	template<typename Functor, typename T, typename... Args> static auto
-	apply_functor(void* storage, Functor f, Args&&...args) -> typename Functor::return_type
-	{
-		return f(*reinterpret_cast<T*>(storage), std::forward<Args>(args)...);
-	}
-
-	template<typename Functor, typename T, typename... Args> static auto
-	apply_functor(void const* storage, Functor f, Args&&...args) -> typename Functor::return_type
-	{
-		return f(*reinterpret_cast<T const*>(storage), std::forward<Args>(args)...);
-	}
-
-	/*
-	 * Uses dispatch table to select appropriate functor.
-	 */
-	template<typename Functor, typename...Args>
-	auto apply_impl(Functor f, Args&&... args) -> typename Functor::return_type
-	{
-		// TODO: use linear search (like in old variant)
-		// when there are not many types
-		using return_type = typename Functor::return_type;
-		using func_type   = return_type(void* storage, Functor f, Args...);
-
-		static func_type* table[sizeof...(Ts)] = {
-			(apply_functor<Functor, Ts, Args...>)...
-		};
-
-		size_t index = size_t(this->index);
-		return table[index](reinterpret_cast<void*>(&storage), f, std::forward<Args>(args)...);
-	}
-
-	template<typename Functor, typename...Args>
-	auto apply_impl(Functor f, Args&&... args) const -> typename Functor::return_type
-	{
-		using return_type = typename Functor::return_type;
-		using func_type   = return_type(void const* storage, Functor f, Args...);
-
-		static func_type* table[sizeof...(Ts)] = {
-			(apply_functor<Functor, Ts, Args...>)...
-		};
-
-		size_t index = size_t(this->index);
-		return table[index](reinterpret_cast<void const*>(&storage), f, std::forward<Args>(args)...);
-	}
 
 	// Storage
 	using Storage = typename std::aligned_storage<size, align>::type;
