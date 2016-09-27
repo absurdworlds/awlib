@@ -37,6 +37,12 @@ constexpr auto is_base_of = std::is_base_of<Base,Derived>::value;
 template<class A, class B>
 constexpr auto is_same = std::is_same<A,B>::value;
 
+template<typename T>
+constexpr bool is_const = std::is_const<T>::value;
+
+template<typename Call>
+using result_of = std::result_of<Call>;
+
 namespace _impl {
 template<typename T>
 struct is_int : std::integral_constant<
