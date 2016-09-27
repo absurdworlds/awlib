@@ -195,6 +195,16 @@ struct variant {
 	}
 
 	/*!
+	 * Construct value of type T from Args.
+	 */
+	template<typename T, typename...Args>
+	void emplace(Args&&...args)
+	{
+		reset();
+		construct<T>(std::forward<Args>(args)...);
+	}
+
+	/*!
 	 * Sets variant only when types match, or variant is empty.
 	 */
 	template<typename T>
