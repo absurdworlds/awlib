@@ -24,11 +24,39 @@ namespace hdf {
 struct Value {
 	Value() = default;
 
-	template<typename val_type>
-	explicit Value(val_type v)
+	template<typename T, bool_if<is_bool<T>> = true>
+	explicit Value(T v)
 		: holder()
 	{
-		holder.set<val_type>(v);
+		holder.set<bool>(v);
+	}
+
+	template<typename T, bool_if<is_int<T>> = true>
+	explicit Value(T v)
+		: holder()
+	{
+		holder.set<intmax_t>(v);
+	}
+
+	template<typename T, bool_if<is_float<T>> = true>
+	explicit Value(T v)
+		: holder()
+	{
+		holder.set<double>(v);
+	}
+
+	template<typename T, bool_if<is_constructible<std::string,T>> = true>
+	explicit Value(T&& v)
+		: holder()
+	{
+		holder.set<std::string>(std::forward<T>(v));
+	}
+
+	template<typename T, bool_if<is_vector<T>> = true>
+	explicit Value(T const& v)
+		: holder()
+	{
+		holder.set(v);
 	}
 
 	/*! Assignment operator. Copies content from another
