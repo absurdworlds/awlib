@@ -28,30 +28,17 @@ struct Object {
 		Node,
 		NodeEnd,
 		Value,
-		Directive
 	};
 
-	Object(Kind type)
-		: type(type)
-	{ }
-
-	Object(Kind type, std::string val)
-		: type(type), name(val)
-	{ }
-
-	Kind type;
+	Kind type = Null;
 	std::string name;
+	struct Value val;
 };
 
 /*!
- * \class Parser
- * \brief Interface for reading aw's HDF files. This parser provides a read-only access to documents in HDF 1.1.1 format.
- *
- * It can read only in forward mode, it is not able to rewind. The design goal of this parser is to quickly read HDF document without usage of any intermediate data structures.
- *
- * \see createParser
- * Also, see an example in 'examples' directory
-*/
+ * HDF 1.3 parser, provides a simple interface for reading
+ * aw::hdf files.
+ */
 struct Parser {
 	Parser(io::input_stream& stream, aw::log* logger = nullptr)
 		: lex{stream, logger}
@@ -59,29 +46,16 @@ struct Parser {
 
 	~Parser() = default;
 
-	//! Fast-forward to the next object
-	bool read();
+	//! Read an object
+	bool read(Object& obj);
 
-	/*!
-	 * Get next object.
-	 * \return
-	 *     Returns struct containing object's kind and name.
-	 */
-	Object getObject();
-
-	/*!
-	 * Read value into variable \a out.
-	 */
-	void readValue(Value& out);
-
-	//! Skip current value
-	void skipValue();
-	//! Skip current node (with all subnodes)
-	void skipNode();
+	//! Skip current node
+	void skip_node();
 
 protected:
 	void processCommand();
 
+	Value read_value();
 	Value convertValue(Type type);
 	Value convertValue(token tok);
 	Value parseVector(Type type);

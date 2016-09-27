@@ -12,6 +12,8 @@
 #include <cassert>
 #include <cstdio>
 
+#include <aw/algorithm/in.h>
+#include <aw/utility/string_view.h>
 #include <aw/utility/string/compose.h>
 #include <aw/fileformat/hdf/type.h>
 
@@ -64,95 +66,56 @@ Value parseInteger(std::string const& str)
 		return Value(f64(stod(str)));
 }
 
-bool Parser::read() {
-	token tok = lex.peekToken();
-
-	if (tok.kind == token::eof)
-		return false;
+bool Parser::read(Object& object)
+{
+	using namespace std::string_literals;
+	token tok = lex.getToken();
 
 	switch (tok.kind) {
 	case token::eof:
+		object = {};
 		return false;
 	case token::bang:
 		if (depth > 0) {
 			lex.error("Unexpected ! inside node.", tok.pos);
 			break;
 		}
-		lex.getToken();
 		processCommand();
 		break;
 	case token::node_begin:
-		state = State::Object;
+		++depth;
+		object = Object{Object::Node, tok.value};
 		return true;
 	case token::node_end:
 		if (depth == 0) {
-			lex.error("Unexpected ].", tok.pos);
+			lex.error("Unexpected ']'.", tok.pos);
 			break;
 		}
-		state = State::Object;
+		--depth;
+		object = Object{Object::NodeEnd};
 		return true;
 	case token::name:
 		if (depth == 0) {
-			lex.getToken();
 			lex.error("Value must be inside node.", tok.pos);
 			break;
 		}
-		state = State::Object;
+		object = Object{Object::Value, tok.value, read_value()};
 		return true;
 	case token::invalid:
-		lex.getToken();
-		lex.error(string::compose("read(): illegal token: %0", tok.value), tok.pos);
+		lex.error("read(): illegal token: %0"s + tok.value, tok.pos);
 		break;
 	default:
-		lex.getToken();
-		lex.error(string::compose("read(): unexpected token: %0", tok.value), tok.pos);
+		lex.error("read(): unexpected token: %0"s + tok.value, tok.pos);
 	}
 
-	return read();
+	return read(object);
 }
 
-Object Parser::getObject()
-{
-	token tok = lex.getToken();
-
-	if (state != State::Object) {
-		lex.error("there is no object", tok.pos);
-		return Object::Null;
-	}
-
-	switch (tok.kind) {
-	case token::node_begin:
-		++depth;
-
-		state = State::Idle;
-		return Object(Object::Node, tok.value);
-	case token::node_end:
-		--depth;
-
-		state = State::Idle;
-		return Object(Object::NodeEnd);
-	case token::name:
-		state = State::Value;
-		return Object(Object::Value, tok.value);
-	default:
-		lex.error("Unexpected token.", tok.pos);
-	}
-
-	return Object(Object::Null);
-}
-
-void Parser::skipValue() 
-{
-	Value trash;
-	readValue(trash);
-}
-
-void Parser::skipNode() 
+void Parser::skip_node()
 {
 	token tok = lex.peekToken();
 
 	size_t depth = 1;
-
 	do {
 		if (tok.kind == token::node_begin) {
 			++depth;
@@ -161,22 +124,16 @@ void Parser::skipNode()
 		}
 		tok = lex.getToken();
 	} while (depth > 0);
-
-	read();
 }
 
-void Parser::readValue(Value& var)
+Value Parser::read_value()
 {
-	if (state != State::Value) {
-		lex.error("Call getObject() before callin readValue", {0,0});
-		return;
-	}
 	token tok = lex.getToken();
-
 	if (tok.kind != token::equals) {
 		lex.error(string::compose("Expected '=', got %0", tok.value), tok.pos);
-		return;
+		return {};
 	}
+
 	token id = lex.getToken();
 	tok = lex.peekToken();
 
