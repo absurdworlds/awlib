@@ -115,13 +115,15 @@ std::string Lexer::read_string() {
 token Lexer::readToken()
 {
 	char c = peek();
-	while (true) switch (c) {
-	case '/':
-		c = skip_comment();
-		continue;
-	case ' ': case '\v': case '\t': case '\r': case '\n':
-		c = skip( is_whitespace );
-		continue;
+
+	while (c == '/' || is_whitespace(c)) {
+		if (is_whitespace(c)) c = skip( is_whitespace );
+		if (c == '/')         c = skip_comment();
+	}
+
+	auto pos = this->pos;
+
+	switch (c) {
 	case 0:
 		return token{token::eof};
 	case '0': case '1': case '2': case '3': case '4':
@@ -140,22 +142,22 @@ token Lexer::readToken()
 	case 'v': case 'w': case 'x': case 'y': case 'z':
 		return token{token::name, read(is_name_char), pos};
 	case '=':
-		return token{token::equals, {1, get()}, pos};
+		return token{token::equals, {get()}, pos};
 	case ':':
-		return token{token::colon, {1, get()}, pos};
+		return token{token::colon, {get()}, pos};
 	case ',':
-		return token{token::comma, {1, get()}, pos};
+		return token{token::comma, {get()}, pos};
 	case '!':
-		return token{token::bang, {1, get()}, pos};
+		return token{token::bang, {get()}, pos};
 	case '[':
 		stream.next(c); // consume '['
 		return token{token::node_begin, read(is_name_char), pos};
 	case ']':
-		return token{token::node_end, {1, get()}, pos};
+		return token{token::node_end, {get()}, pos};
 	case '{':
-		return token{token::vec_begin, {1, get()}, pos};
+		return token{token::vec_begin, {get()}, pos};
 	case '}':
-		return token{token::vec_end, {1, get()}, pos};
+		return token{token::vec_end, {get()}, pos};
 	default:
 		return token{token::invalid, read(is_not_punct), pos};
 	}

@@ -55,10 +55,10 @@ bool Parser::read(Object& object)
 		object = Object{Object::Value, tok.value, read_value()};
 		return true;
 	case token::invalid:
-		lex.error("read(): illegal token: %0"s + tok.value, tok.pos);
+		lex.error("illegal token: \""s + tok.value + "\"", tok.pos);
 		break;
 	default:
-		lex.error("read(): unexpected token: %0"s + tok.value, tok.pos);
+		lex.error("unexpected token: \""s + tok.value + "\"", tok.pos);
 	}
 
 	return read(object);
