@@ -52,20 +52,17 @@ std::string spellType(hdf::Value value)
 		return {};
 	case hdf::Type::Enum:
 		return {"enum:"};
+	case hdf::Type::int_vector:
 	case hdf::Type::Integer:
 		return {"int:"};
+	case hdf::Type::float_vector:
 	case hdf::Type::Float:
 		return {"float:"};
 	case hdf::Type::Boolean:
 		return {"bool:"};
+	case hdf::Type::string_vector:
 	case hdf::Type::String:
 		return {"string:"};
-	case hdf::Type::Vector2d:
-		return {"vec2:"};
-	case hdf::Type::Vector3d:
-		return {"vec3:"};
-	case hdf::Type::Vector4d:
-		return {"vec4:"};
 	}
 }
 
@@ -102,17 +99,6 @@ void Writer::writeValueValue(hdf::Value value)
 		ostream.put('"');
 		ostream.put(to_string(value));
 		ostream.put('"');
-		break;
-	case hdf::Type::Vector2d:
-		ostream.put(to_string(value));
-		break;
-	case hdf::Type::Vector3d:
-		ostream.put("vec3:");
-		ostream.put(to_string(value));
-		break;
-	case hdf::Type::Vector4d:
-		ostream.put("vec4:");
-		ostream.put(to_string(value));
 		break;
 	}
 }
