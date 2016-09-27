@@ -56,29 +56,21 @@ protected:
 	void processCommand();
 
 	Value read_value();
-	Value convertValue(Type type);
-	Value convertValue(token tok);
-	Value parseVector(Type type);
-	Value parseVector();
 
 	template <typename T>
-	bool parseVector(T& vec, size_t vecsize);
+	Value parse_value();
+	Value parse_value(token id);
+	Value deduce_value(token tok);
 
-	void message() {  }
+	void skip_vector();
 
-	enum class State {
-		Idle = 0,
-		Object,
-		Node,
-		Command,
-		Value,
-		Data,
-		Panic
-	};
+	template <typename T>
+	std::vector<T> parse_vector();
+	Value parse_vector(token id);
+	Value deduce_vector();
 
 private:
 	Lexer lex;
-	State state = State::Idle;
 	size_t depth = 0;
 };
 } // namespace io

@@ -19,53 +19,6 @@
 
 namespace aw {
 namespace hdf {
-hdf::Type tokenToType(token const& token)
-{
-	if (token.value == "bool" || token.value == "b") {
-		return Type::Boolean;
-	} else if (token.value == "int" || token.value == "i") {
-		return Type::Integer;
-	} else if (token.value == "float" || token.value == "f") {
-		return Type::Float;
-	} else if (token.value == "vec3" || token.value == "v3") {
-		return Type::Vector3d;
-	} else if (token.value == "vec2" || token.value == "v2") {
-		return Type::Vector2d;
-	} else if (token.value == "string" || token.value == "s") {
-		return Type::String;
-	} else {
-		return Type::Unknown;
-	}
-}
-
-bool parseBoolean(std::string const& str)
-{
-	bool val;
-
-	if (str == "true" || str == "1") {
-		val = true;
-	} else if (str == "false" || str == "0") {
-		val = false;
-	}
-
-	return val;
-}
-
-Value parseInteger(std::string const& str)
-{
-	auto type = Type::Integer;
-	for (char c : str) {
-		if (c == '.') {
-			type = Type::Float;
-		}
-	}
-
-	if (type == Type::Integer)
-		return Value(i64(stoll(str)));
-	else
-		return Value(f64(stod(str)));
-}
-
 bool Parser::read(Object& object)
 {
 	using namespace std::string_literals;
@@ -135,129 +88,198 @@ Value Parser::read_value()
 	}
 
 	token id = lex.getToken();
+	if (id.kind == token::vec_begin)
+		return deduce_vector();
+
 	tok = lex.peekToken();
+	if (tok.kind != token::colon)
+		return deduce_value(id);
 
-	bool hasType = tok.kind == token::colon;
-	if (hasType) {
-		tok = lex.getToken();
-		var = convertValue(tokenToType(id));
-	} else {
-		var = convertValue(id);
-	}
-
-	state = State::Idle;
+	tok = lex.getToken(); // skip ':'
+	if (tok.kind == token::vec_begin)
+		return parse_vector(id);
+	return parse_value(id);
 }
 
-
-Value Parser::convertValue(Type type)
+hdf::Type parse_type(string_view token)
 {
-	token tok = lex.getToken();
+	if (token == "bool" || token == "b")
+		return Type::Boolean;
+	if (token == "int" || token == "i")
+		return Type::Integer;
+	if (token == "float" || token == "f")
+		return Type::Float;
+	if (token == "string" || token == "s")
+		return Type::String;
+	return Type::Unknown;
+}
+
+template<>
+Value Parser::parse_value<std::string>()
+{
+	auto tok = lex.getToken();
+	if (!in(tok.kind, tok.string, tok.name, tok.number)) {
+		lex.error("Invalid string token", tok.pos);
+		return {};
+	}
+	return Value{tok.value};
+}
+
+template<>
+Value Parser::parse_value<double>()
+{
+	auto tok = lex.getToken();
+	if (tok.kind != token::number) {
+		lex.error("Expected number", tok.pos);
+		return {};
+	}
+	return Value{std::stod(tok.value)};
+}
+
+template<>
+Value Parser::parse_value<intmax_t>()
+{
+	auto tok = lex.getToken();
+	if (tok.kind != token::number) {
+		lex.error("Expected number", tok.pos);
+		return {};
+	}
+	return Value{std::stoll(tok.value)};
+}
+
+template<>
+Value Parser::parse_value<bool>()
+{
+	auto tok = lex.getToken();
+	if (in(tok.value, "true", "1"))
+		return Value{true};
+	if (in(tok.value, "false", "0"))
+		return Value{false};
+	lex.error("Invalid bool token: " + tok.value, tok.pos);
+	return {};
+}
+
+Value Parser::parse_value(token id)
+{
+	auto type = parse_type(id.value);
 
 	switch (type) {
 	case Type::Enum:
 	case Type::String:
-		if (!(tok.kind == token::string || tok.kind == token::name))
-			break;
-
-		return Value(tok.value);
+		return parse_value<std::string>();
 	case Type::Float:
-		if (tok.kind != token::number)
-			break;
-
-		return Value(std::stod(tok.value));
+		return parse_value<double>();
 	case Type::Integer:
-		if (tok.kind != token::number)
-			break;
-
-		return Value(i64(std::stoll(tok.value)));
+		return parse_value<intmax_t>();
 	case Type::Boolean:
-		if (tok.kind != token::name)
-			break;
-
-		return Value(parseBoolean(tok.value));
-	case Type::Vector2d:
-	case Type::Vector3d:
-	case Type::Vector4d:
-		return parseVector(type);
+		return parse_value<bool>();
+	default:
+		lex.error("Invalid type", id.pos);
 	}
-
-	return Value();
+	return {};
 }
 
-Value Parser::convertValue(token tok)
+Value Parser::deduce_value(token tok)
 {
 	switch (tok.kind) {
-	case token::string:
-		return Value(tok.value);
 	case token::number:
-		return parseInteger(tok.value);
+		if (tok.value.find('.') == std::string::npos)
+			return Value{std::stoll(tok.value)};
+		return Value{std::stod(tok.value)};
 	case token::name:
-		if (tok.value == "true" || tok.value == "false")
-			return Value(bool(parseBoolean(tok.value)));
-		return Value(tok.value);
-	case token::vec_begin:
-		return parseVector();
+		if (tok.value == "true")
+			return Value{true};
+		if (tok.value == "false")
+			return Value{false};
+	case token::string:
+		return Value{tok.value};
+	default:
+		lex.error("Invalid token", tok.pos);
 	}
-
-	return Value();
+	return {};
 }
 
-Value Parser::parseVector(Type type)
+void Parser::skip_vector()
 {
-	token tok = lex.peekToken();
-
-	if (tok.kind != token::vec_begin)
-		return Value();
-
-	Value tmp = parseVector();
-
-	if (tmp.getType() != type)
-		return Value();
-
-	return tmp;
+	auto tok = lex.getToken();
+	while (tok.kind != token::vec_end) {
+		tok = lex.getToken();
+		if (tok.kind == token::eof) {
+			lex.error("Reached end of file searching for '}'", tok.pos);
+			break;
+		}
+	}
 }
 
-Value Parser::parseVector()
+template<typename T>
+std::vector<T> Parser::parse_vector()
 {
-	token tok = lex.peekToken();
+	auto beg = lex.getToken();
+	assert(beg.kind == token::vec_begin);
 
-	// Damn it, why is it so messy …
-	std::array<f32, 4> vec;
-	auto it = vec.begin();
+	auto tok = lex.peekToken();
+	std::vector<T> temp;
+	while (tok.kind != tok.eof) {
+		Value val = parse_value<T>();
+		if (val.empty()) {
+			skip_vector();
+			return temp;
+		}
+		temp.push_back(*val.get<T>());
 
-	while (tok.kind != token::eof) {
-		tok = lex.getToken();
-		if (tok.kind != token::number)
-			return Value();
-
-		if (it < vec.end())
-			*(it++) = stof(tok.value);
-
-		tok = lex.getToken();
-		
+		auto tok = lex.getToken();
 		if (tok.kind == token::vec_end)
 			break;
-
-		if (tok.kind != token::comma)
-			return Value();
+		if (tok.kind != token::comma) {
+			lex.error("Expected ','", tok.pos);
+			skip_vector();
+			return temp;
+		}
 	}
 
 	if (tok.kind == token::eof)
-		lex.error("parseVector: Reached end looking for '}'", tok.pos);
+		lex.error("Unmatched '{'", beg.pos);
 
-	size_t size = it - vec.begin();
-	switch (size) {
-	default:
-	case 1:
-		return Value();
-	case 2:
-		return Value(math::vector2d<f32>{vec[0], vec[1]});
-	case 3:
-		return Value(math::vector3d<f32>{vec[0], vec[1], vec[2]});
-	case 4:
-		return Value(math::vector4d<f32>{vec[0], vec[1], vec[2], vec[3]});
-	}
+	return temp;
 }
+
+Value Parser::parse_vector(token id)
+{
+	auto type = parse_type(id.value);
+	switch (type) {
+	case Type::String:
+		return Value{parse_vector<std::string>()};
+	case Type::Integer:
+		return Value{parse_vector<intmax_t>()};
+	case Type::Float:
+		return Value{parse_vector<double>()};
+	case Type::Boolean:
+		lex.error("Boolean vector is not supported", id.pos);
+		break;
+	default:
+		lex.error("Invalid type", id.pos);
+	}
+	skip_vector();
+	return {};
+}
+
+Value Parser::deduce_vector()
+{
+	auto tok = lex.peekToken();
+	switch (tok.kind) {
+	case token::name:
+	case token::string:
+		return Value{parse_vector<std::string>()};
+	case token::number:
+		if (tok.value.find('.') == std::string::npos)
+			return Value{parse_vector<intmax_t>()};
+		return Value{parse_vector<double>()};
+	default:
+		lex.error("Invalid token", tok.pos);
+	}
+	return {};
+}
+
 
 // TODO: rewrite
 void Parser::processCommand() {
@@ -302,7 +324,7 @@ void Parser::processCommand() {
 			return;
 		}
 
-		bool strict = parseBoolean(tok.value);
+		auto val = parse_value<bool>();
 	}
 }
 } // namespace hdf

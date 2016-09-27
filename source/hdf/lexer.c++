@@ -83,6 +83,7 @@ std::string Lexer::read(Func condition)
 {
 	std::string val;
 
+
 	char c = peek();
 	while (condition(c)) {
 		val += c;
