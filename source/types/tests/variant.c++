@@ -127,4 +127,15 @@ Test(variant_construct_from_subset) {
 		TestEqual(*varx.get<std::string>(), *vary.get<std::string>());
 	}
 }
+
+Test(variant_construct_in_place) {
+	using namespace std::string_literals;
+	aw::variant<std::string, int> varx{ "asdasd" };
+	aw::variant<std::string, char const*> vary{ +"asdasd" };
+
+	Checks {
+		TestEqual(*varx.get<std::string>(), "asdasd");
+		TestEqual(*vary.get<char const*>(), "asdasd");
+	}
+}
 RunTests();

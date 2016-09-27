@@ -9,9 +9,11 @@
 #ifndef aw_types_variant_h
 #define aw_types_variant_h
 #include <aw/types/types.h>
+#include <aw/types/strip.h>
 #include <aw/types/traits/basic_traits.h>
 #include <aw/meta/conditional.h>
 #include <aw/meta/list_ops.h>
+#include <aw/meta/find_type.h>
 #include <aw/meta/index_of.h>
 #include <aw/meta/at_index.h>
 #include <limits>
@@ -40,16 +42,31 @@ struct variant {
 	/*!
 	 * Construct variant holding a value of type T.
 	 */
-	template<typename T, typename = enable_if<is_in_pack<T,Ts...>>>
+	template<typename T, bool_if<is_in_pack<T,Ts...>> = true>
 	variant(T const& value)
 	{
 		construct<T>(value);
 	}
 
-	template<typename T, typename = enable_if<is_in_pack<T,Ts...>>>
+	template<typename T, bool_if<is_in_pack<T,Ts...>> = true>
 	variant(T&& value)
 	{
 		construct<T>(std::move(value));
+	}
+
+	/*
+	 * Active only if there is one variant alternative that
+	 * can be constructed from (args...).
+	 */
+	template<typename...Args,
+	         bool_if<meta::count_if<
+	                 std::is_constructible<_1, Args...>, Ts...> == 1
+	         > = true>
+	// TODO: when C++17 is released, use std::in_place
+	variant(Args&&... args)
+	{
+		using Predicate = std::is_constructible<_1, Args...>;
+		construct<find_type<Predicate, Ts...>>(std::forward<Args>(args)...);
 	}
 
 	/*!
@@ -57,12 +74,8 @@ struct variant {
 	 */
 	variant(variant const& other)
 	{
-		if (other.empty()) {
-			reset();
-			return;
-		}
-
-		other.apply(Copy{*this});
+		if (!other.empty())
+			other.apply(copy_construct_visitor{*this});
 	}
 
 	/*!
@@ -70,13 +83,23 @@ struct variant {
 	 */
 	variant(variant&& other)
 	{
-		if (other.empty()) {
-			reset();
-			return;
+		if (!other.empty()) {
+			other.apply(move_construct_visitor{*this});
+			other.reset();
 		}
+	}
 
-		other.apply(Move{*this});
-		other.reset();
+	variant& operator=(variant const& other)
+	{
+		copy_from(other);
+		return *this;
+	}
+
+	variant& operator=(variant&& other)
+	{
+		assert(&other != this);
+		move_from(other);
+		return *this;
 	}
 
 	/*!
@@ -85,17 +108,10 @@ struct variant {
 	template<typename... Os>
 	variant(variant<Os...> const& other)
 	{
-		static_assert(!is_same<variant<Os...>, variant<Ts...>>,
-		              "Non-template constructor should be used for variant of same type.");
-		static_assert(is_subset<meta::list<Os...>, meta::list<Ts...>>,
-		              "Other variant type must be a subset.");
+		_impl::assert_subset(other, *this);
 
-		if (other.empty()) {
-			reset();
-			return;
-		}
-
-		other.apply(Copy{*this});
+		if (!other.empty())
+			other.apply(copy_construct_visitor{*this});
 	}
 
 	/*!
@@ -104,77 +120,29 @@ struct variant {
 	template<typename... Os>
 	variant(variant<Os...>&& other)
 	{
-		static_assert(!is_same<variant<Os...>, variant<Ts...>>,
-		              "Non-template constructor should be used for variant of same type.");
-		static_assert(is_subset<meta::list<Os...>, meta::list<Ts...>>,
-		              "Other variant type must be a subset.");
+		_impl::assert_subset(other, *this);
 
-		if (other.empty()) {
-			reset();
-			return;
+		if (!other.empty()) {
+			other.apply(move_construct_visitor{*this});
+			other.reset();
 		}
-
-		other.apply(Move{*this});
-		other.reset();
-	}
-
-	variant& operator=(variant const& other)
-	{
-		if (other.empty()) {
-			reset();
-			return *this;
-		}
-
-		other.apply(Copy{*this});
-		return *this;
-	}
-
-	variant& operator=(variant&& other)
-	{
-		assert(&other != this);
-
-		if (other.empty()) {
-			reset();
-			return *this;
-		}
-
-		other.apply(Move{*this});
-		other.reset();
-		return *this;
 	}
 
 	template<typename... Os>
 	variant& operator=(variant<Os...> const& other)
 	{
-		static_assert(!is_same<variant<Os...>, variant<Ts...>>,
-		              "Non-template operator should be used for variant of same type.");
-		static_assert(is_subset<meta::list<Os...>, meta::list<Ts...>>,
-		              "Other variant type must be a subset.");
+		_impl::assert_subset(other, *this);
 
-		if (other.empty()) {
-			reset();
-			return *this;
-		}
-
-		other.apply(Copy{*this});
+		copy_from(other);
 		return *this;
 	}
 
 	template<typename... Os>
 	variant& operator=(variant<Os...>&& other)
 	{
-		static_assert(!is_same<variant<Os...>, variant<Ts...>>,
-		              "Non-template operator should be used for variant of same type.");
-		static_assert(is_subset<meta::list<Os...>, meta::list<Ts...>>,
-		              "Other variant type must be a subset.");
+		_impl::assert_subset(other, *this);
 
-		if (other.empty()) {
-			reset();
-			return *this;
-		}
-
-		other.apply(Move{*this});
-		other.reset();
+		move_from(other);
 		return *this;
 	}
 
@@ -191,6 +159,20 @@ struct variant {
 		} else {
 			reset();
 			construct<T>(v);
+		}
+	}
+
+	/*!
+	 * Move value v into variant.
+	 */
+	template<typename T>
+	auto set(T&& v) -> void_if< !is_reference<T> >
+	{
+		if (check_type<T>()) {
+			assign(std::move(v));
+		} else {
+			reset();
+			construct<T>(std::move(v));
 		}
 	}
 
@@ -214,8 +196,26 @@ struct variant {
 			construct<T>(v);
 			return true;
 		}
+		// TODO: is_assignable
 		if (check_type<T>()) {
 			assign(v);
+			return true;
+		}
+		return false;
+	}
+
+	/*!
+	 * Move value v into variant if it holds same type
+	 */
+	template<typename T>
+	auto try_set(T&& v) -> bool_if< !is_reference<T> >
+	{
+		if (empty()) {
+			construct<T>(std::move(v));
+			return true;
+		}
+		if (check_type<T>()) {
+			assign(std::move(v));
 			return true;
 		}
 		return false;
@@ -279,9 +279,6 @@ struct variant {
 	//! Index of particular type
 	template<typename T>
 	static constexpr index_t index_of = index_t(aw::index_of<T, Ts...>);
-	//! Convert index to type
-	template<size_t I>
-	using type_at = aw::at_index<I, Ts...>;
 
 	/*!
 	 * Check if variant is empty.
@@ -342,6 +339,7 @@ private:
 	template<typename... Os>
 	friend class variant;
 
+
 	// Helpers
 	/*
 	 * Constructs new object of type T and marks T as current type.
@@ -372,10 +370,33 @@ private:
 		apply(_impl::variant_destroy_visitor{});
 	}
 
-	struct Copy {
+	template<typename Variant>
+	void copy_from(Variant&& other)
+	{
+		using Visitor = _impl::variant_copy_assign_visitor<variant>;
+		if (other.empty())
+			reset();
+		else
+			other.apply(Visitor{*this});
+	}
+
+	template<typename Variant>
+	void move_from(Variant&& other)
+	{
+		using Visitor = _impl::variant_copy_assign_visitor<variant>;
+		if (other.empty()) {
+			reset();
+		} else {
+			other.apply(Visitor{*this});
+			other.reset();
+		}
+	}
+
+	// Copies value held by one variant into another
+	struct copy_construct_visitor {
 		using return_type = void;
 
-		Copy(variant& self)
+		copy_construct_visitor(variant& self)
 			: self(self)
 		{}
 
@@ -389,12 +410,14 @@ private:
 		variant& self;
 	};
 
-	struct Move {
+	// Moves value held by one variant into another
+	struct move_construct_visitor {
 		using return_type = void;
 
-		Move(variant& self)
+		move_construct_visitor(variant& self)
 			: self(self)
-		{}
+		{
+		}
 
 		template<typename T>
 		void operator()(T& value)
@@ -406,11 +429,30 @@ private:
 		variant& self;
 	};
 
+private:
 	// Storage
 	using Storage = typename std::aligned_storage<size, align>::type;
 
 	index_t index = invalid;
 	Storage storage;
 };
+
+template<typename>
+constexpr size_t variant_size = -1;
+template<typename...Ts>
+constexpr size_t variant_size<variant<Ts...>> = sizeof...(Ts);
+
+template<size_t I, typename Variant>
+struct variant_alternative_t;
+template<size_t I, typename...Ts>
+struct variant_alternative_t<I,variant<Ts...>> {
+	using type = at_index<I,Ts...>;
+};
+
+//! Convert index to type
+template<size_t I, typename Variant>
+using variant_alternative = typename variant_alternative_t<I,Variant>::type;
 } // namespace aw
+
+#include <aw/types/bits/variant_dispatch.h>
 #endif//aw_types_variant_h

@@ -21,6 +21,13 @@ template<typename T>
 constexpr auto is_unsigned = std::is_unsigned<T>::value;
 
 template<typename T>
+constexpr bool is_reference = std::is_reference<T>::value;
+template<typename T>
+constexpr bool is_lvalue_reference = std::is_lvalue_reference<T>::value;
+template<typename T>
+constexpr bool is_rvalue_reference = std::is_rvalue_reference<T>::value;
+
+template<typename T>
 constexpr auto is_polymorphic = std::is_polymorphic<T>::value;
 template<typename T>
 constexpr auto is_abstract = std::is_abstract<T>::value;
