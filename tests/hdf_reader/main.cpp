@@ -35,30 +35,29 @@ void parseValue(Parser* hdf, std::string name, std::string node, Document& doc);
 
 void parseDocument(Parser* hdf, Document& doc)
 {
-	while (hdf->read()) {
-		hdf::Object obj = hdf->getObject();
-		std::string& name = obj.name;
-
+	hdf::Object obj;
+	while (hdf->read(obj)) {
 		if (obj.type != hdf::Object::Node)
 			continue;
 
-		doc[name] = Value();
-		parseObject(hdf, name, doc);
+		doc[obj.name] = Value();
+		parseObject(hdf, obj.name, doc);
 	}
 }
 
 void parseObject(Parser* hdf, std::string parent, Document& doc)
 {
-	while (hdf->read()) {
-		hdf::Object obj = hdf->getObject();
+	hdf::Object obj;
+	while (hdf->read(obj)) {
 		std::string& name = obj.name;
 
 		switch (obj.type) {
 		case hdf::Object::Node:
-			parseNode(hdf, name, parent, doc);
+			parseObject(hdf, parent + "." + name, doc);
+			doc[parent + "." + name] = Value();
 			break;
 		case hdf::Object::Value:
-			parseValue(hdf, name, parent, doc);
+			doc[parent + "." + name] = obj.val;
 			break;
 		case hdf::Object::NodeEnd:
 			return;
@@ -68,20 +67,6 @@ void parseObject(Parser* hdf, std::string parent, Document& doc)
 	}
 }
 
-void parseNode(Parser* hdf, std::string name, std::string node, Document& doc)
-{
-	parseObject(hdf, node + "." + name, doc);
-
-	doc[node + "." + name] = Value();
-}
-
-void parseValue(Parser* hdf, std::string name, std::string node, Document& doc)
-{
-	Value v;
-	hdf->readValue(v);
-
-	doc[node + "." + name] = v;
-}
 
 int main(int,char** arg)
 {
@@ -102,7 +87,7 @@ int main(int,char** arg)
 	std::cerr << std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin).count() << '\n';
 	std::cerr << std::chrono::duration_cast<std::chrono::duration<double>>(end - begin).count() << '\n';
 
-	for (auto pair : doc) {
+	for (auto& pair : doc) {
 		std::cout << pair.first;
 		std::string const val = to_string(pair.second);
 		if (val == "") {
