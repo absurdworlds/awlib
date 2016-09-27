@@ -13,11 +13,8 @@
 #include <string>
 
 #include <aw/types/variant.h>
-#include <aw/math/vector2d.h>
-#include <aw/math/vector3d.h>
-#include <aw/math/vector4d.h>
 #include <aw/utility/to_string.h>
-#include <aw/utility/to_string/math/vector.h>
+#include <aw/utility/to_string/variant.h>
 
 #include <aw/fileformat/hdf/type.h>
 
@@ -87,19 +84,30 @@ struct Value {
 		holder.set<val_type>(v);
 	}
 
+	bool empty() const
+	{
+		return holder.empty();
+	}
+
 	//! Reset value to <Unknown>
 	void reset()
 	{
 		holder.reset();
 	}
 
+	friend std::string to_string(Value const& val)
+	{
+		using aw::to_string;
+		return to_string(val.holder);
+	}
+
 private:
 	using holder_t = variant<
-		bool, i64, f64,
+		bool, intmax_t, double,
 		std::string,
-		math::vector2d<f32>,
-		math::vector3d<f32>,
-		math::vector4d<f32>
+		std::vector<intmax_t>,
+		std::vector<double>,
+		std::vector<std::string>
 	>;
 
 	holder_t holder;
@@ -109,49 +117,23 @@ private:
 		switch (holder.type_index()) {
 		case holder_t::index_of<bool>:
 			return hdf::Type::Boolean;
-		case holder_t::index_of<i64>:
+		case holder_t::index_of<intmax_t>:
 			return hdf::Type::Integer;
-		case holder_t::index_of<f64>:
+		case holder_t::index_of<double>:
 			return hdf::Type::Float;
 		case holder_t::index_of<std::string>:
 			return hdf::Type::String;
-		case holder_t::index_of<math::vector2d<f32>>:
-			return hdf::Type::Vector2d;
-		case holder_t::index_of<math::vector3d<f32>>:
-			return hdf::Type::Vector3d;
-		case holder_t::index_of<math::vector4d<f32>>:
-			return hdf::Type::Vector4d;
+		case holder_t::index_of<std::vector<intmax_t>>:
+			return hdf::Type::int_vector;
+		case holder_t::index_of<std::vector<double>>:
+			return hdf::Type::float_vector;
+		case holder_t::index_of<std::vector<std::string>>:
+			return hdf::Type::string_vector;
 		case holder_t::invalid:
 			return hdf::Type::Unknown;
 		};
 	}
 };
-
-//! Convert Value to string
-inline std::string to_string(Value const& val)
-{
-	using aw::to_string;
-	switch (val.getType()) {
-	case hdf::Type::String:
-		return to_string(*val.get<std::string>());
-	case hdf::Type::Float:
-		return to_string(*val.get<f64>());
-	case hdf::Type::Integer:
-		return to_string(*val.get<i64>());
-	case hdf::Type::Boolean:
-		return to_string(*val.get<bool>());
-	case hdf::Type::Vector2d:
-		return to_string(*val.get<math::vector2d<f32>>());
-	case hdf::Type::Vector3d:
-		return to_string(*val.get<math::vector3d<f32>>());
-	case hdf::Type::Vector4d:
-		return to_string(*val.get<math::vector4d<f32>>());
-	default:
-		break;
-	}
-
-	return "null";
-}
 } // namespace hdf
 } // namespace aw
 #endif//aw_hdf_value_h

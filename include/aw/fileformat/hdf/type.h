@@ -9,15 +9,21 @@
 #ifndef aw_hdf_Type_h
 #define aw_hdf_Type_h
 #include <string>
+#include <vector>
 #include <aw/meta/conditional.h>
 #include <aw/types/traits/basic_traits.h>
 #include <aw/types/types.h>
 
 namespace aw {
-namespace math {
-template <typename T, size_t N>
-class Vector;
-} // namespace math
+namespace _impl {
+template<typename>
+struct is_vector : std::false_type{ };
+template<class T, class Alloc>
+struct is_vector<std::vector<T, Alloc>> : std::true_type{ };
+} // namespace impl
+
+template<typename T>
+constexpr bool is_vector = _impl::is_vector<T>::value;
 
 namespace hdf {
 /*!
@@ -25,14 +31,14 @@ namespace hdf {
  */
 enum class Type {
 	Unknown,
+	Enum,
 	Integer,
 	Float,
 	Boolean,
 	String,
-	Vector2d,
-	Vector3d,
-	Vector4d,
-	Enum,
+	int_vector,
+	float_vector,
+	string_vector,
 };
 
 template<typename T>
@@ -41,7 +47,6 @@ struct typeof {
 	is_int<T>   ? Type::Integer :
 	is_float<T> ? Type::Float   : Type::Unknown;
 };
-
 
 template<>
 struct typeof<bool> {
@@ -54,18 +59,18 @@ struct typeof<std::string> {
 };
 
 template<>
-struct typeof<math::vector<f32,2>> {
-	static constexpr Type value = Type::Vector2d;
+struct typeof<std::vector<intmax_t>> {
+	static constexpr Type value = Type::int_vector;
 };
 
 template<>
-struct typeof<math::vector<f32,3>> {
-	static constexpr Type value = Type::Vector3d;
+struct typeof<std::vector<double>> {
+	static constexpr Type value = Type::float_vector;
 };
 
 template<>
-struct typeof<math::vector<f32,4>> {
-	static constexpr Type value = Type::Vector4d;
+struct typeof<std::vector<std::string>> {
+	static constexpr Type value = Type::string_vector;
 };
 
 /*!
