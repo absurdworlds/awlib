@@ -18,11 +18,7 @@ template<size_t... Is, typename T, size_t N>
 matrix<T,N,N>& set_identity(matrix<T,N,N>& mat, index_sequence<Is...>)
 {
 	fill(mat, T{});
-#if __cplusplus >= 201500L
 	(void(mat[Is][Is] = 1), ...);
-#else
-	(void) fold_dummy { ((mat[Is][Is] = 1), 0)...  };
-#endif
 	return mat;
 }
 } // namespace _impl
@@ -60,13 +56,7 @@ T factor(matrix<T,N,N> const& mat)
 template<size_t...Is, typename T, size_t N>
 T determinant(matrix<T,N,N> const& mat, index_sequence<Is...>)
 {
-#if __cplusplus >= 201500L
-	T val = (factor<Is>(mat) + ...);
-#else
-	T val = {};
-	(void) fold_dummy { ((val += factor<Is>(mat)), 0)...  };
-#endif
-	return val;
+	return (factor<Is>(mat) + ...);
 }
 } // namespace _impl
 
@@ -104,22 +94,14 @@ void inv(MatrixT& result, MatrixT const& mat)
 template<size_t I, size_t...Js, class MatrixT>
 void inv1(MatrixT& result, MatrixT const& mat)
 {
-#if __cplusplus >= 201500L
 	(inv<I,Js>(result, mat), ...);
-#else
-	(void) fold_dummy { (inv<I,Js>(result, mat), 0)...  };
-#endif
 }
 
 template<class MatrixT, size_t...Is>
 MatrixT inv2(MatrixT const& mat, index_sequence<Is...>)
 {
 	MatrixT result = {};
-#if __cplusplus >= 201500L
 	(inv1<Is,Is...>(result, mat), ...);
-#else
-	(void) fold_dummy { (inv1<Is,Is...>(result, mat), 0)...  };
-#endif
 	return result;
 }
 } // namespace _impl

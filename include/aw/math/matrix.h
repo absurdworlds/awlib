@@ -42,47 +42,27 @@ struct matrix_ops<matrix<T,M,N>, index_sequence<Is...>, index_sequence<Js...>>
 
 	static void set(MatrixT& a, MatrixT const& b)
 	{
-#if __cpp_fold_expressions
 		(void(a[Is] = b[Is]), ...);
-#else
-		(void) fold_dummy { ((a[Is] = b[Is]), 0)...  };
-#endif
 	}
 
 	static void add(MatrixT& a, MatrixT const& b)
 	{
-#if __cplusplus >= 201500L
 		(void(a[Is] += b[Is]), ...);
-#else
-		(void) fold_dummy { ((a[Is] += b[Is]), 0)...  };
-#endif
 	}
 
 	static void sub(MatrixT& a, MatrixT const& b)
 	{
-#if __cplusplus >= 201500L
 		(void(a[Is] -= b[Is]), ...);
-#else
-		(void) fold_dummy { ((a[Is] -= b[Is]), 0)...  };
-#endif
 	}
 
 	static void mul(MatrixT& a, T const v)
 	{
-#if __cplusplus >= 201500L
 		(void(a[Is] *= v), ...);
-#else
-		(void) fold_dummy { ((a[Is] *= v), 0)...  };
-#endif
 	}
 
 	static void div(MatrixT& a, T const v)
 	{
-#if __cplusplus >= 201500L
 		(void(a[Is] /= v), ...);
-#else
-		(void) fold_dummy { ((a[Is] /= v), 0)...  };
-#endif
 	}
 
 	static vector<T,M> mul(MatrixT const& mat, vector<T,N> const& vec)
@@ -114,31 +94,19 @@ struct matrix_ops<matrix<T,M,N>, index_sequence<Is...>, index_sequence<Js...>>
 	template<typename Func>
 	static void for_each_column(matrix<T,M,N>& mat, Func func)
 	{
-#if __cplusplus >= 201500L
 		(void(func(mat[Js])), ...);
-#else
-		(void) fold_dummy { (func(mat[Js]), 0)...  };
-#endif
 	}
 
 	template<typename Func>
 	static void for_each_row(matrix<T,M,N>& mat, Func func)
 	{
-#if __cplusplus >= 201500L
 		(void(func(mat[Is])), ...);
-#else
-		(void) fold_dummy { (func(mat[Is]), 0)...  };
-#endif
 	}
 
 	template<typename Func>
 	static void for_each(matrix<T,M,N>& mat, Func func)
 	{
-#if __cplusplus >= 201500L
 		(mat[Is].for_each(func), ...);
-#else
-		(void) fold_dummy { (mat[Is].for_each(func), 0)...  };
-#endif
 	}
 };
 
