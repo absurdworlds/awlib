@@ -26,5 +26,3 @@ Test(throw_in_dtor)
 	TestCatch( ex, func() );
 }
 } // namespace aw
-
-RunTests();
