@@ -31,5 +31,39 @@ Test(matrix_inverse) {
 		TestEqual(I1, I2);
 	}
 };
+
+Test(matrix_product) {
+	matrix<int,4,2> _4x2{
+		1,3,
+		2,2,
+		3,1,
+		5,7,
+	};
+
+	matrix<int,2,3> _2x3{
+		3,5,2,
+		4,6,1,
+	};
+
+	Setup {
+		TestAssert(decltype(_4x2)::num_columns == 2);
+		TestAssert(decltype(_4x2)::num_rows    == 4);
+
+		TestAssert(decltype(_2x3)::num_columns == 3);
+		TestAssert(decltype(_2x3)::num_rows    == 2);
+	}
+
+	matrix<int,4,3> const _4x3{
+		15, 23, 5,
+		14, 22, 6,
+		13, 21, 7,
+		43, 67, 17,
+	};
+
+	Checks {
+		auto mat = (_4x2 * _2x3);
+		TestEqual(_4x3, mat);
+	}
+};
 } // namespace math
 } // namespace aw
