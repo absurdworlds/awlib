@@ -13,7 +13,7 @@
 #include <cstdio>
 
 #include <aw/algorithm/in.h>
-#include <aw/utility/string_view.h>
+#include <aw/types/string_view.h>
 #include <aw/utility/string/compose.h>
 #include <aw/fileformat/hdf/type.h>
 

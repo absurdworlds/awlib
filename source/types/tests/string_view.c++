@@ -1,4 +1,4 @@
-#include <aw/utility/string_view.h>
+#include <aw/types/string_view.h>
 #include <aw/utility/test.h>
 
 TestFile( "aw::sv_literals" );
