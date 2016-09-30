@@ -26,7 +26,7 @@
 
 #if (AW_COMPILER == AW_COMPILER_GCC) || (AW_COMPILER == AW_COMPILER_CLANG)
 #include <cxxabi.h>
-std::string demangle(const char* name)
+inline std::string demangle(const char* name)
 {
 	static thread_local size_t size  = 1024;
 	static thread_local char* memory = (char*)malloc(size);
@@ -40,7 +40,7 @@ std::string demangle(const char* name)
 	return name;
 }
 #else
-std::string demangle(const char* name) { return name; }
+inline std::string demangle(const char* name) { return name; }
 #endif
 
 
