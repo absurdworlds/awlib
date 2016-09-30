@@ -8,15 +8,11 @@
  */
 #ifndef aw_types_variant_h
 #define aw_types_variant_h
-#include <aw/types/types.h>
-#include <aw/types/strip.h>
 #include <aw/types/traits/basic_traits.h>
 #include <aw/meta/conditional.h>
 #include <aw/meta/list_ops.h>
-#include <aw/meta/find_type.h>
 #include <aw/meta/index_of.h>
 #include <aw/meta/at_index.h>
-#include <limits>
 #include <algorithm>
 #include <cassert>
 
@@ -31,46 +27,20 @@ template <typename... Ts>
 struct variant {
 	static_assert(sizeof...(Ts) >= 2, "variant must consist of at least 2 types");
 
+private:
 	static constexpr size_t size  = std::max({sizeof(Ts)...});
 	static constexpr size_t align = std::max({alignof(Ts)...});
 
+	using FUN  = _impl::choose_t<Ts...>;
+
+public:
 	/*!
-	 * Constructs empty variant.
+	 * Construct empty variant.
 	 */
 	variant() = default;
 
 	/*!
-	 * Construct variant holding a value of type T.
-	 */
-	template<typename T, bool_if<is_in_pack<T,Ts...>> = true>
-	variant(T const& value)
-	{
-		construct<T>(value);
-	}
-
-	template<typename T, bool_if<is_in_pack<T,Ts...>> = true>
-	variant(T&& value)
-	{
-		construct<T>(std::move(value));
-	}
-
-	/*
-	 * Active only if there is one variant alternative that
-	 * can be constructed from (args...).
-	 */
-	template<typename...Args,
-	         bool_if<meta::count_if<
-	                 std::is_constructible<_1, Args...>, Ts...> == 1
-	         > = true>
-	// TODO: when C++17 is released, use std::in_place
-	variant(Args&&... args)
-	{
-		using Predicate = std::is_constructible<_1, Args...>;
-		construct<find_type<Predicate, Ts...>>(std::forward<Args>(args)...);
-	}
-
-	/*!
-	 * Copy variant from another
+	 * Copy value stored in another variant.
 	 */
 	variant(variant const& other)
 	{
@@ -79,7 +49,7 @@ struct variant {
 	}
 
 	/*!
-	 * Move variant from another
+	 * Move value stored in another variant.
 	 */
 	variant(variant&& other)
 	{
@@ -87,6 +57,23 @@ struct variant {
 			other.apply(move_construct_visitor{*this});
 			other.reset();
 		}
+	}
+
+	/*!
+	 * Construct variant with value of alternative T.
+	 */
+	template<typename T,
+	         typename Type = decltype(FUN{}(std::forward<T>(std::declval<T&&>())))>
+	variant(T&& value)
+	{
+		construct<Type>(std::forward<T>(value));
+	}
+
+	// TODO: when C++17 is released, use std::in_place
+	template<typename T, typename...Args>
+	variant(T, Args&&... args)
+	{
+		construct<T>(std::forward<Args>(args)...);
 	}
 
 	~variant()
@@ -154,32 +141,21 @@ struct variant {
 	}
 
 	/*!
-	 * Set variant to value v of type T.
-	 * Uses assignments if variant already contains a value of type T,
-	 * or destroys current value if it is of a different type.
+	 * Set value held by variant to v.
+	 * If it is same type as currently held value, calls assignment,
+	 * otherwise it destroys current value and constructs new value
+	 * of type T.
 	 */
 	template<typename T>
-	void set(T const& v)
+	void set(T&& v)
 	{
-		if (check_type<T>()) {
-			assign(v);
-		} else {
-			reset();
-			construct<T>(v);
-		}
-	}
+		using Type = decltype(FUN{}(std::forward<T>(v)));
 
-	/*!
-	 * Move value v into variant.
-	 */
-	template<typename T>
-	auto set(T&& v) -> void_if< !is_reference<T> >
-	{
-		if (check_type<T>()) {
-			assign(std::move(v));
+		if (check_type<Type>()) {
+			get_ref<Type>() = std::forward<T>(v);
 		} else {
 			reset();
-			construct<T>(std::move(v));
+			construct<Type>(std::forward<T>(v));
 		}
 	}
 
@@ -197,32 +173,17 @@ struct variant {
 	 * Sets variant only when types match, or variant is empty.
 	 */
 	template<typename T>
-	bool try_set(T const& v)
+	bool try_set(T&& v)
 	{
+		using Type = decltype(FUN{}(std::forward<T>(v)));
+
 		if (empty()) {
-			construct<T>(v);
+			construct<Type>(std::forward<T>(v));
 			return true;
 		}
 		// TODO: is_assignable
-		if (check_type<T>()) {
-			assign(v);
-			return true;
-		}
-		return false;
-	}
-
-	/*!
-	 * Move value v into variant if it holds same type
-	 */
-	template<typename T>
-	auto try_set(T&& v) -> bool_if< !is_reference<T> >
-	{
-		if (empty()) {
-			construct<T>(std::move(v));
-			return true;
-		}
-		if (check_type<T>()) {
-			assign(std::move(v));
+		if (check_type<Type>()) {
+			get_ref<Type>() = std::forward<T>(v);
 			return true;
 		}
 		return false;
@@ -237,7 +198,7 @@ struct variant {
 	bool get(T& target) const
 	{
 		if (check_type<T>()) {
-			target = *reinterpret_cast<T const*>(&storage);
+			target = get_ref<T>();
 			return true;
 		}
 		return false;
@@ -250,7 +211,7 @@ struct variant {
 	T* get()
 	{
 		if (check_type<T>())
-			return reinterpret_cast<T*>(&storage);
+			return get_ptr<T>();
 		return nullptr;
 	}
 
@@ -261,7 +222,7 @@ struct variant {
 	T const* get() const
 	{
 		if (check_type<T>())
-			return reinterpret_cast<T const*>(&storage);
+			return get_ptr<T>();
 		return nullptr;
 	}
 
@@ -327,14 +288,14 @@ struct variant {
 	template<typename Functor>
 	auto apply(Functor func) -> typename Functor::return_type
 	{
-		auto sptr = reinterpret_cast<void*>(&storage);
+		auto sptr = get_ptr<void>();
 		return _impl::apply_dispatch(*this, sptr, func);
 	}
 
 	template<typename Functor>
 	auto apply(Functor func) const -> typename Functor::return_type
 	{
-		auto sptr = reinterpret_cast<void const*>(&storage);
+		auto sptr = get_ptr<void const>();
 		return _impl::apply_dispatch(*this, sptr, func);
 	}
 
@@ -360,22 +321,43 @@ private:
 	}
 
 	/*
-	 * Calls assignment operator on currently held object.
-	 * Doesn't do typechecking, that should be done by public interface.
-	 */
-	template<typename T>
-	void assign(T const& other)
-	{
-		*reinterpret_cast<T*>(&storage) = other;
-	}
-
-	/*
 	 * Destroys currently held value by applying Destroy functor.
 	 */
 	void destroy()
 	{
 		apply(_impl::variant_destroy_visitor{});
 	}
+
+	/*!
+	 * \{
+	 * Get pointer or reference to value of type T.
+	 * Doesn't do typechecking, that should be done by
+	 * the public interface
+	 */
+	template<typename T>
+	T* get_ptr()
+	{
+		return reinterpret_cast<T*>(&storage);
+	}
+
+	template<typename T>
+	T const* get_ptr() const
+	{
+		return reinterpret_cast<T const*>(&storage);
+	}
+
+	template<typename T>
+	T& get_ref()
+	{
+		return *get_ptr<T>();
+	}
+
+	template<typename T>
+	T const& get_ref() const
+	{
+		return *get_ptr<T>();
+	}
+	/* \} */
 
 	template<typename Variant>
 	void copy_from(Variant&& other)

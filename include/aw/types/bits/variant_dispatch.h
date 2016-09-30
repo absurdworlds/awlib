@@ -10,7 +10,13 @@
 static_assert(false, "Do not include this file directly.");
 #endif//aw_types_variant_h
 
+#include <aw/types/strip.h>
+
 namespace aw {
+/*! Copies constness of type A to type B*/
+template<typename A, typename B>
+using copy_const = conditional<is_const<A>, B const, remove_const<B>>;
+
 namespace _impl {
 //-------------------------------------
 // Variant visitor dispatch

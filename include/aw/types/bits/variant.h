@@ -10,26 +10,13 @@
 static_assert(false, "Do not include this file directly.");
 #endif//aw_types_variant_h
 
-namespace aw {
-/*! Copies constness of type A to type B*/
-template<typename A, typename B>
-using copy_const = conditional<is_const<A>, B const, remove_const<B>>;
 
+namespace aw {
 //
 template <typename... Ts>
 struct variant;
 
 namespace _impl {
-// Assert that Os... is subset of Ts...
-template<typename...Os,typename...Ts>
-static void assert_subset(variant<Os...> const&, variant<Ts...> const&)
-{
-	static_assert(!is_same<variant<Os...>, variant<Ts...>>,
-	              "Non-template overload should've been used.");
-	static_assert(is_subset<meta::list<Os...>, meta::list<Ts...>>,
-	              "Other variant type must be a subset.");
-}
-
 //-------------------------------------
 // Variant functors
 //-------------------------------------
@@ -96,5 +83,44 @@ private:
 template<typename...Ts, typename Storage, typename Functor>
 auto apply_dispatch(variant<Ts...> const& var, Storage storage, Functor f) ->
 	typename Functor::return_type;
+
+
+//-------------------------------------
+// Variant helpers
+//-------------------------------------
+/*! Builds a set of overloads F(T_i) used to choose correct type. */
+template<typename T, typename...Ts>
+struct choose_t : choose_t<Ts...> {
+	using choose_t<Ts...>::operator();
+	T operator()(T);
+};
+
+template<typename T>
+struct choose_t<T> {
+	T operator()(T);
+};
+
+/*! Builds a set of overloads F(Args...) used to choose correct type. */
+template<typename T, typename...Ts>
+struct construct_t : construct_t<T>, construct_t<Ts...> {
+	using construct_t<T>::operator();
+	using construct_t<Ts...>::operator();
+};
+
+template<typename T>
+struct construct_t<T> {
+	template<typename...Args>
+	auto operator()(Args&&...) -> enable_if<is_constructible<T,Args...>, T>;
+};
+
+// Assert that Os... is subset of Ts...
+template<typename...Os,typename...Ts>
+static void assert_subset(variant<Os...> const&, variant<Ts...> const&)
+{
+	static_assert(!is_same<variant<Os...>, variant<Ts...>>,
+	              "Non-template overload should've been used.");
+	static_assert(is_subset<meta::list<Os...>, meta::list<Ts...>>,
+	              "Other variant type must be a subset.");
+}
 } // namespace _impl
 } // namespace aw
