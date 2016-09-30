@@ -1,6 +1,7 @@
 RootPath = ../..
 
-Sources = argv_parser.cpp MurmurHash3.cpp
+SourceExt = c++
+Sources = argv_parser.c++ murmur_hash3.c++
 
 Defines     = AW_MODULE_UTILS
 Libraries   =

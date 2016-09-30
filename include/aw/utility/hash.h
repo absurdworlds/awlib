@@ -9,34 +9,36 @@
 #ifndef aw_utility_hash_h
 #define aw_utility_hash_h
 #include <aw/types/types.h>
+#include <aw/types/int128.h>
 #include <aw/utility/utility.h>
 
+#include <array>
+
 namespace aw {
+using seed128_32 = std::array<u32,4>;
+using seed128_64 = std::array<u64,2>;
+
 /*!
- * Helper union to hold 128-bit values
+ * \{
+ * Set of MurmurHash3 hashing algorithms written by Austin Appleby.
+ *
+ * \note
+ * Note - The x86 and x64 versions do _not_ produce the same results, as the
+ * algorithms are optimized for their respective platforms. You can still
+ * compile and run any of them on any platform, but your performance with the
+ * non-native version will be less than optimal.
  */
-union u128 {
-	u64 as64[2];
-	u32 as32[4];
-};
-
-//-----------------------------------------------------------------------------
-// MurmurHash3 was written by Austin Appleby, and is placed in the public
-// domain. The author hereby disclaims copyright to this source code.
-//-----------------------------------------------------------------------------
-// Note - The x86 and x64 versions do _not_ produce the same results, as the
-// algorithms are optimized for their respective platforms. You can still
-// compile and run any of them on any platform, but your performance with the
-// non-native version will be less than optimal.
 
 AW_UTILS_EXP
-void MurmurHash3_x86_32(void const * key,  size_t len, u32 seed, void* out);
+u32 MurmurHash3_x86_32(char const* key,  size_t len, u32 seed);
 
 AW_UTILS_EXP
-void MurmurHash3_x86_128(void const * key, size_t len, u128 seed, void* out);
+seed128_32 MurmurHash3_x86_128(char const* key, size_t len, seed128_32 seed);
 
 AW_UTILS_EXP
-void MurmurHash3_x64_128(void const * key, size_t len, u128 seed, void* out);
+seed128_64 MurmurHash3_x64_128(char const* key, size_t len, seed128_64 seed);
+
+/* \} */
 
 } // namespace aw
 #endif//aw_utility_hash_h
