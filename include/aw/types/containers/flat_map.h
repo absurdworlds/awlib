@@ -541,6 +541,11 @@ public:
 		return pos->second;
 	}
 
+	friend bool operator==(flat_map const& a, flat_map const& b)
+	{
+		return a.base == b.base;
+	}
+
 private:
 	void remove_duplicates()
 	{
