@@ -89,6 +89,13 @@ struct variant {
 		}
 	}
 
+	~variant()
+	{
+		if (!empty()) {
+			destroy();
+		}
+	}
+
 	variant& operator=(variant const& other)
 	{
 		copy_from(other);
