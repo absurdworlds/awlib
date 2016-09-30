@@ -121,7 +121,7 @@ public:
 	 * Extra space is not copied.
 	 */
 	flat_map(flat_map const& other)
-		: base(other.base), _key_comp(other)
+		: base(other.base), _key_comp(other._key_comp)
 	{ }
 
 	flat_map(flat_map const& other, Allocator const& alloc) noexcept
