@@ -10,12 +10,19 @@
 #define aw_traits_iterators
 #include <iterator>
 #include <aw/types/traits/basic_traits.h>
+#include <aw/meta/conditional.h>
 namespace aw {
 template<typename Iterator>
-constexpr bool is_input_iterator = std::is_convertible<
+using require_input_iterator = enable_if<is_convertible<
 	typename std::iterator_traits<Iterator>::iterator_category,
 	std::input_iterator_tag
->::value;
+>>;
+
+template<typename Iterator>
+constexpr bool is_input_iterator = is_convertible<
+	typename std::iterator_traits<Iterator>::iterator_category,
+	std::input_iterator_tag
+>;
 
 template<typename Iterator>
 constexpr bool is_forward_iterator = std::is_convertible<

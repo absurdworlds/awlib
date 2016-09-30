@@ -433,12 +433,11 @@ public:
 	/*!
 	 * Construct queue from range
 	 */
-	template<typename Iterator>
+	template<typename Iterator,
+	         typename = require_input_iterator<Iterator>>
 	queue(Iterator first, Iterator last, Allocator const& alloc = Allocator())
 		: Base(first, last, alloc)
 	{
-		static_assert(is_input_iterator<Iterator>, "InputIterator is required.");
-
 		using iter_traits = std::iterator_traits<Iterator>;
 		using iter_cat    = typename iter_traits::iterator_category;
 		range_init(first, last, iter_cat{});

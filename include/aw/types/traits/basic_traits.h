@@ -38,6 +38,9 @@ constexpr auto is_trivially_copyable = std::is_trivially_copyable<T>::value;
 template<typename T, typename...Args>
 constexpr auto is_constructible = std::is_constructible<T, Args...>::value;
 
+template<typename A, typename B>
+constexpr bool is_convertible = std::is_convertible<A, B>::value;
+
 template<class Base, class Derived>
 constexpr auto is_base_of = std::is_base_of<Base,Derived>::value;
 
