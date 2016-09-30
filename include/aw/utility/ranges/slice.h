@@ -38,8 +38,7 @@ auto end(slice_adapter<T>& v)
 template <typename Container>
 auto slice_range(Container&& container, size_t start)
 {
-	if (start > container.size())
-		start = container.size();
+	assert(start < container.size());
 
 	return slice_adapter<Container> {
 		std::forward<Container>(container),
@@ -51,10 +50,8 @@ auto slice_range(Container&& container, size_t start)
 template <typename Container>
 auto slice_range(Container&& container, size_t start, size_t length)
 {
-	if (start > container.size())
-		start = container.size();
-	if (start+length > container.size())
-		length = container.size() - start;
+	assert(start < container.size());
+	assert(start+length <= container.size());
 
 	return slice_adapter<Container>{
 		std::forward<Container>(container),
