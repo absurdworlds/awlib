@@ -5,19 +5,31 @@
 TestFile( "MurmurHash3" );
 
 namespace aw {
+
+using namespace sv_literals;
+constexpr string_view input1[] = {
+	"ohohohohoh"_s,
+	"MurmurHash3"_s,
+	"/data/models/"_s
+};
+
+constexpr string_view input2[] = {
+	"astreeeng"_s,
+	"MurmurHash3"_s,
+	"test testing tests of tests"_s,
+	"/some/random/path"_s
+};
+
 Test(murmur_32_1)
 {
 	constexpr u32 seed = 50819250;
-	string_view input[] = {
-		"ohohohohoh", "MurmurHash3", "/data/models/"
-	};
 	constexpr u32 expect[] = {
 		1360569315, 2310193428, 4095911732
 	};
 
 	Checks {
 		unsigned i = 0;
-		for (auto str : input) {
+		for (auto str : input1) {
 			auto result = MurmurHash3_x86_32(str.data(), str.size(), seed);
 			TestEqual(result, expect[i++]);
 		}
@@ -27,33 +39,26 @@ Test(murmur_32_1)
 Test(murmur_32_2)
 {
 	constexpr u32 seed = 0;
-	constexpr string_view input[] = {
-		"ohohohohoh", "MurmurHash3", "/data/models/"
-	};
 	constexpr u32 expect[] = {
 		2605200336, 1473193682, 902246934
 	};
 
 	Checks {
 		unsigned i = 0;
-		for (auto str : input) {
+		for (auto str : input1) {
 			auto result = MurmurHash3_x86_32(str.data(), str.size(), seed);
 			TestEqual(result, expect[i++]);
 		}
 	};
 }
 
+
 Test(murmur_32_128_1)
 {
 	// Original murmur3 hash used 32-bit seed
 	constexpr seed128_32 seed { 0xc96847a4, 0xc96847a4, 0xc96847a4, 0xc96847a4 };
 
-	constexpr string_view input[] = {
-		"astreeeng",
-		"MurmurHash3",
-		"test testing tests of tests",
-		"/some/random/path"
-	};
+
 	constexpr seed128_32 expect[] = {
 		{359583446,  2196904450, 3153459002, 2636245123},
 		{3602426735, 1544128708, 4203506069, 710541404},
@@ -63,7 +68,7 @@ Test(murmur_32_128_1)
 
 	Checks {
 		unsigned i = 0;
-		for (auto str : input) {
+		for (auto str : input2) {
 			auto result = MurmurHash3_x86_128(str.data(), str.size(), seed);
 			TestEqual(result, expect[i++]);
 		}
@@ -75,12 +80,6 @@ Test(murmur_64_128_1)
 	// Original murmur3 hash used 32-bit seed
 	constexpr seed128_64 seed { 0xc96847a4, 0xc96847a4 };
 
-	constexpr string_view input[] = {
-		"astreeeng",
-		"MurmurHash3",
-		"test testing tests of tests",
-		"/some/random/path"
-	};
 	constexpr seed128_64 expect[] = {
 		{0xca621b080a8cc524ull, 0xe104d28fb55bb99ull},
 		{0x1109d3f799826fd9ull, 0xd35546df1860d952ull},
@@ -90,7 +89,7 @@ Test(murmur_64_128_1)
 
 	Checks {
 		unsigned i = 0;
-		for (auto str : input) {
+		for (auto str : input2) {
 			auto result = MurmurHash3_x64_128(str.data(), str.size(), seed);
 			TestEqual(result, expect[i++]);
 		}
