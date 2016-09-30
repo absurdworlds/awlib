@@ -14,7 +14,6 @@
 
 #include <aw/algorithm/in.h>
 #include <aw/types/string_view.h>
-#include <aw/utility/string/compose.h>
 #include <aw/fileformat/hdf/type.h>
 
 namespace aw {
@@ -86,7 +85,7 @@ Value Parser::read_value()
 {
 	token tok = lex.getToken();
 	if (tok.kind != token::equals) {
-		lex.error(string::compose("Expected '=', got %0", tok.value), tok.pos);
+		lex.error("Expected '=', got " + tok.value, tok.pos);
 		return {};
 	}
 
@@ -289,7 +288,7 @@ void Parser::processCommand() {
 	token tok = lex.getToken();
 
 	if (tok.kind != token::name) {
-		lex.error(string::compose("Unexpected token: %0", tok.value), tok.pos);
+		lex.error("Unexpected token:" + tok.value, tok.pos);
 		return;
 	}
 
@@ -311,8 +310,8 @@ void Parser::processCommand() {
 			lex.error("Version 1.0 is not supported.", tok.pos);
 			return;
 		} else {
-			lex.error(string::compose("hdf_version: invalid version %0.",
-			               tok.value), tok.pos);
+			lex.error("hdf_version: invalid version: " +
+			               tok.value + ".", tok.pos);
 			return;
 		}
 	}
