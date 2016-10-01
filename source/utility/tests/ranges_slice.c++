@@ -1,7 +1,7 @@
 #include <aw/utility/ranges/slice.h>
 #include <aw/utility/test.h>
 
-TestFile( "on_scope_exit" );
+TestFile( "ranges::slice" );
 
 namespace aw {
 Test(slice_test) {

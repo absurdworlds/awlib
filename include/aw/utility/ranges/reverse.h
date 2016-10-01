@@ -7,21 +7,21 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef aw_reverse_adapter_h
-#define aw_reverse_adapter_h
+#ifndef aw_utility_ranges_reverse_h
+#define aw_utility_ranges_reverse_h
 #include <utility>
 #include <iterator>
 namespace aw {
 template <typename Range>
 struct reverse_adapter {
 	reverse_adapter(Range&& range)
-		: range(range)
+		: range{range}
 	{}
 
 	auto begin() { return std::rbegin(range); }
 	auto end()   { return std::rend(range); }
 
-	Range& range;
+	Range&& range;
 };
 
 template<typename Range>
@@ -30,4 +30,4 @@ auto reverse(Range&& range)
 	return reverse_adapter<Range>(std::forward<Range>(range));
 }
 } // namespace aw
-#endif//aw_reverse_adapter_h
+#endif//aw_utility_ranges_reverse_h
