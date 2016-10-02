@@ -50,6 +50,9 @@ Test(to_string) {
 		TestAssert(to_string(lst3) == "{{1, 0, 0}}"s);
 		TestAssert(to_string(vec3) == "{0, 0, 0}"s);
 		TestAssert(to_string(mat4) == "{{0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}}"s);
+
+		auto tuple = std::make_tuple( 10, "xyz", false );
+		TestAssert(to_string(tuple) == "{10, xyz, false}");
 	}
 
 	Postconditions {

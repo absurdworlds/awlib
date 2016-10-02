@@ -10,6 +10,7 @@
 #ifndef aw_to_string_all_extras_h
 #define aw_to_string_all_extras_h
 #include "pair.h"
+#include "tuple.h"
 #include "optional.h"
 #include "unique_ptr.h"
 #include "math/vector.h"
