@@ -30,7 +30,7 @@ template<typename Output, typename Input>
 Output reinterpret(Input&& in) {
 	static_assert(is_trivially_copyable<remove_reference<Input>>,
 	              "Input type must be trivially copyable");
-	static_assert(is_trivially_copyable<remove_reference<Output>>,
+	static_assert(is_trivially_copyable<Output>,
 	              "Output type must be trivially copyable");
 	static_assert(sizeof(Output) == sizeof(Input),
 	              "cannot reinterpret type: sizes don't match");
@@ -49,11 +49,23 @@ template<typename Output, typename Input>
 Output reinterpret_any(Input&& in) {
 	static_assert(is_trivially_copyable<remove_reference<Input>>,
 	              "Input type must be trivially copyable");
-	static_assert(is_trivially_copyable<remove_reference<Output>>,
+	static_assert(is_trivially_copyable<Output>,
 	              "Output type must be trivially copyable");
 	constexpr size_t size = std::min(sizeof(Output), sizeof(Input));
 	Output out{};
 	std::memcpy(&out, &in, size);
+	return out;
+}
+
+/*!
+ * Reinterpret raw memory as a value of type Output.
+ */
+template<typename Output>
+Output reinterpret_memory(char const* in) {
+	static_assert(is_trivially_copyable<Output>,
+	              "Output type must be trivially copyable");
+	Output out{};
+	std::memcpy(&out, in, sizeof(Output));
 	return out;
 }
 } // namespace aw
