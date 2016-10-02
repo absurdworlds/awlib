@@ -31,7 +31,7 @@ else
 	InstallDir = $(RootPath)/lib
 	OutputShortName = lib$(ProjectName).so
 	OutputName = $(OutputShortName).$(Version)
-	EXTRAFLAGS += -shared 
+	EXTRAFLAGS += -shared
 endif
 BuildDir = $(RootPath)/build/$(ProjectName)
 Includes = -I$(RootPath)/include
@@ -62,7 +62,8 @@ CXXFLAGS += $(ProjectFlags)
 
 CCFLAGS  = -std=c11
 CPPFLAGS = $(ProjectDefines) $(Includes) $(ExtraIncludePaths) $(EXTRA_DEFINES)
-LDFLAGS  = -Wl,-rpath-link,$(RootPath)/lib,-R,'$$ORIGIN/../lib' -L$(RootPath)/lib
+LDFLAGS += -fuse-ld=gold
+LDFLAGS += -Wl,-rpath-link,$(RootPath)/lib,-R,'$$ORIGIN/../lib' -L$(RootPath)/lib
 LDFLAGS += $(ExtraLibraryPaths)
 LDFLAGS += $(ProjectDependencies)
 
