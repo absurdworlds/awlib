@@ -19,7 +19,7 @@ struct index_shift;
 
 template <size_t Amount, size_t... I>
 struct index_shift<Amount, index_sequence<I...>> {
-	using type = index_sequence<Amount + I...>;
+	using type = index_sequence<(Amount + I)...>;
 };
 
 template<typename Ind1, typename Ind2>
