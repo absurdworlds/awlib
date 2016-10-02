@@ -8,6 +8,7 @@
  */
 #ifndef aw_log_regex_filte_h
 #define aw_log_regex_filte_h
+#include <aw/types/string_view.h>
 #include <regex>
 namespace aw {
 inline namespace v1 {
@@ -29,7 +30,7 @@ struct regex_filter {
 	regex_filter& operator=(regex_filter const& other) = default;
 	regex_filter& operator=(regex_filter&& other) = default;
 
-	bool operator()(std::string const& msg);
+	bool operator()(string_view msg);
 
 	std::regex include{".?"};
 	std::regex exclude{};

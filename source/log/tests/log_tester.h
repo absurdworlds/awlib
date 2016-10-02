@@ -1,24 +1,26 @@
 #pragma once
 #include <aw/types/containers/queue.h>
+#include <aw/utility/to_string/tuple.h>
 #include <tuple>
 
 namespace aw {
 struct log_tester : log {
-	void message(log::level lvl, std::string const& src, std::string const& msg) override
+	void message(log::level lvl, string_view src, string_view msg) override
 	{
+		auto received = std::make_tuple(lvl, src, msg);
 		if (expected.empty()) {
-			TestFail("Unexpected message: " + msg);
+			TestFail("Unexpected message: " + to_string(received));
 			return;
 		}
-		TestAssert(std::make_tuple(lvl, src, msg) == expected.front());
+		TestAssert(received == expected.front());
 		expected.pop_front();
 	}
 
-	void expect(log::level lvl, std::string const& src, std::string const& msg)
+	void expect(log::level lvl, string_view src, string_view msg)
 	{
 		expected.emplace_back(lvl, src, msg);
 	}
 
-	queue<std::tuple<log::level, std::string, std::string>> expected;
+	queue<std::tuple<log::level, string_view, string_view>> expected;
 };
 } // namespace aw

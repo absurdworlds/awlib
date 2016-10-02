@@ -24,9 +24,7 @@ struct multi_log : log {
 	 * Sends log to recipients;
 	 * \see log::message()
 	 */
-	void message(log::level level,
-	         std::string const& src,
-	         std::string const& msg) override;
+	void message(log::level lvl, string_view src, string_view msg) override;
 
 	/*!
 	 * Add a recipient.

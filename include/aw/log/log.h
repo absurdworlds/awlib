@@ -9,7 +9,7 @@
  */
 #ifndef aw_log_log_h
 #define aw_log_log_h
-#include <string>
+#include <aw/types/string_view.h>
 namespace aw {
 inline namespace v1 {
 /*!
@@ -39,10 +39,7 @@ struct log {
 	 * \param msg
 	 *    Text of the message.
 	 */
-	virtual void message(
-	        log::level lvl,
-	        std::string const& src,
-	        std::string const& msg) = 0;
+	virtual void message(level lvl, string_view src, string_view msg) = 0;
 };
 } // namespace v1
 } // namespace aw

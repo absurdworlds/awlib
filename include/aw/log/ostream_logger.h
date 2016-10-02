@@ -17,7 +17,7 @@ inline namespace v1 {
 /*!
  * Prints log to ostream.
  */
-struct AW_LOG_EXP ostream_logger : log {
+struct AW_LOG_EXP ostream_logger final : log {
 	~ostream_logger() = default;
 
 	ostream_logger(std::ostream& stream)
@@ -28,9 +28,8 @@ struct AW_LOG_EXP ostream_logger : log {
 	 * Write message to ostream.
 	 * \see log::log()
 	 */
-	void message(log::level level,
-	         std::string const& src,
-	         std::string const& msg) override;
+	void message(log::level level, string_view src, string_view msg) override;
+
 private:
 	std::ostream& stream;
 };

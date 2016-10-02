@@ -40,7 +40,7 @@ Test(regex_filter) {
 	filter.message(log::info, "main()", "test4");
 	filter.message(log::info, "main()", "testX");
 
-	filter.set_source_filter(true_func<std::string const&>{});
+	filter.set_source_filter(true_func<string_view>{});
 	filter.set_message_filter(regex_filter{std::regex{".?"}, std::regex{"annoying_message"}});
 	filter.message(log::info, "main()", "annoying_message");
 	filter.message(log::info, "test5()", "starting");
@@ -58,8 +58,8 @@ Test(regex_filter) {
 	filter.message(log::warning, "main()", "test8");
 	filter.message(log::error,   "main()", "test9");
 
-	filter.set_source_filter(false_func<std::string const&>{});
-	filter.set_message_filter(false_func<std::string const&>{});
+	filter.set_source_filter(false_func<string_view>{});
+	filter.set_message_filter(false_func<string_view>{});
 	filter.message(log::error,   "main()", "test10");
 	filter.message(log::critical,"main()", "test11");
 };

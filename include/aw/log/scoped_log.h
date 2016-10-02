@@ -20,34 +20,34 @@ struct scoped_log : log_provider {
 	 * \{
 	 * \see log::message()
 	 */
-	void message(log::level lvl, std::string const& src, std::string const& msg)
+	void message(log::level lvl, string_view src, string_view msg)
 	{
 		log_provider::message(lvl, src, indent + msg);
 	}
 
-	void info(std::string const& src, std::string const& msg)
+	void info(string_view src, string_view msg)
 	{
 		message(log::info, src, msg);
 	}
 
-	void warning(std::string const& src, std::string const& msg)
+	void warning(string_view src, string_view msg)
 	{
 		message(log::warning, src, msg);
 	}
 
-	void error(std::string const& src, std::string const& msg)
+	void error(string_view src, string_view msg)
 	{
 		message(log::error, src, msg);
 	}
 
-	void fatal(std::string const& src, std::string const& msg)
+	void fatal(string_view src, string_view msg)
 	{
 		message(log::critical, src, msg);
 	}
 
 	/*! \} */
 
-	void enter_scope(char const* src)
+	void enter_scope(string_view src)
 	{
 		if (disable_logger) return;
 		info(src, "enter {");
@@ -68,9 +68,9 @@ struct scoped_log : log_provider {
 		indent.resize(scope_stack.size()*2, ' ');
 		info(src, "}");
 	}
+
 private:
-	/* TODO: replace by string_view */
-	std::vector<char const*> scope_stack;
+	std::vector<string_view> scope_stack;
 	std::string indent;
 };
 } // namespace log
