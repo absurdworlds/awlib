@@ -342,7 +342,7 @@ struct equal {
 	std::string msg()
 	{
 		using namespace std::string_literals;
-		return "\""s + expected + "\" == \""s + got + "\""s;
+		return expected + " == "s + got;
 	}
 
 	std::string expected;
