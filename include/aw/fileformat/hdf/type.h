@@ -15,15 +15,21 @@
 #include <aw/types/types.h>
 
 namespace aw {
-namespace _impl {
 template<typename>
-struct is_vector : std::false_type{ };
+struct is_vector_t : std::false_type{ };
 template<class T, class Alloc>
-struct is_vector<std::vector<T, Alloc>> : std::true_type{ };
-} // namespace impl
+struct is_vector_t<std::vector<T, Alloc>> : std::true_type{ };
+
+template<typename, template <typename> typename>
+struct is_vector_of_t : std::false_type{ };
+template<class T, class Alloc, template <typename> typename Pred>
+struct is_vector_of_t<std::vector<T, Alloc>, Pred> : Pred<T> { };
 
 template<typename T>
-constexpr bool is_vector = _impl::is_vector<T>::value;
+constexpr bool is_vector = is_vector_t<T>::value;
+
+template<typename T, template <typename> typename Pred>
+constexpr bool is_vector_of = is_vector_of_t<T, Pred>::value;
 
 namespace hdf {
 /*!
@@ -31,82 +37,63 @@ namespace hdf {
  */
 enum class Type {
 	Unknown,
-	Enum,
+	Boolean,
 	Integer,
 	Float,
-	Boolean,
 	String,
-	int_vector,
-	float_vector,
-	string_vector,
+	BooleanVector,
+	IntegerVector,
+	FloatVector,
+	StringVector
 };
 
+namespace _impl {
 template<typename T>
-struct typeof {
-	static constexpr Type value =
-	is_int<T>   ? Type::Integer :
-	is_float<T> ? Type::Float   : Type::Unknown;
-};
-
-template<>
-struct typeof<bool> {
-	static constexpr Type value = Type::Boolean;
-};
-
-template<>
-struct typeof<std::string> {
-	static constexpr Type value = Type::String;
-};
-
-template<>
-struct typeof<std::vector<intmax_t>> {
-	static constexpr Type value = Type::int_vector;
-};
-
-template<>
-struct typeof<std::vector<double>> {
-	static constexpr Type value = Type::float_vector;
-};
-
-template<>
-struct typeof<std::vector<std::string>> {
-	static constexpr Type value = Type::string_vector;
-};
-
-/*!
- * Template function used to deduce HDF type from C++ type
- */
+constexpr auto typeof() -> enable_if<is_int<T>, Type>   { return Type::Integer; }
 template<typename T>
-inline hdf::Type deduceType(T)
+constexpr auto typeof() -> enable_if<is_vector_of<T, is_int_t>, Type>
 {
-	return typeof<T>::value;
+	return Type::IntegerVector;
 }
 
+template<typename T>
+constexpr auto typeof() -> enable_if<is_float<T>, Type> { return Type::Float; }
+template<typename T>
+constexpr auto typeof() -> enable_if<is_vector_of<T, is_float_t>, Type>
+{
+	return Type::FloatVector;
+}
+
+template<typename T>
+constexpr Type typeof()
+{
+	return Type::Unknown;
+}
+
+template<>
+constexpr Type typeof<std::string>()              { return Type::String; }
+template<>
+constexpr Type typeof<std::vector<std::string>>() { return Type::String; }
+
+template<>
+constexpr Type typeof<bool>()              { return Type::Boolean; }
+template<>
+constexpr Type typeof<std::vector<bool>>() { return Type::Boolean; }
+} // namespace _impl
+
 /*!
- * Template function used to check if C++ type corresponds to HDF type \a type
+ * HDF type corresponding to type T
  */
 template<typename T>
-inline bool checkType(hdf::Type type)
-{
-	return typeof<T>::value == type;
-}
+constexpr Type typeof = _impl::typeof<T>();
 
 /*!
  * Compare type of a value \a val to the type \a type.
  */
 template<typename T>
-inline bool compareType(hdf::Type type, T val)
+inline bool operator==(hdf::Type type, T const& val)
 {
-	return type == deduceType(val);
-}
-
-/*!
- * Compare type of a value \a val to the type \a type.
- */
-template<typename T>
-inline bool operator==(hdf::Type type, T val)
-{
-	return compareType(type, val);
+	return type == typeof<T>;
 }
 } // namespace hdf
 } // namespace aw
