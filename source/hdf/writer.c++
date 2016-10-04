@@ -12,21 +12,20 @@
 namespace aw {
 namespace hdf {
 /*! Create a new node and write a header for it. */
-bool Writer::startNode(std::string name)
+bool Writer::start_node(string_view name)
 {
-	startLine();
-
+	ostream.put(getIndent());
 	ostream.put('[');
 	ostream.put(name);
 
 	++depth;
 
-	endLine();
+	end_line();
 	return true;
 }
 
 /*! End current (bottom level) node. */
-bool Writer::endNode()
+bool Writer::end_node()
 {
 	if (depth == 0) {
 		error(log::error, "‘]’ mismatch");
@@ -35,43 +34,39 @@ bool Writer::endNode()
 
 	--depth;
 
-	startLine();
-
+	ostream.put(getIndent());
 	ostream.put(']');
 
-	endLine();
+	end_line();
 
 	return true;
 }
 
 //! Spell the type of value
-std::string spellType(hdf::Value value)
+string_view spellType(hdf::Value const& value)
 {
 	switch (value.getType()) {
-	case hdf::Type::Unknown:
+	case Type::Unknown:
 		return {};
-	case hdf::Type::Enum:
-		return {"enum:"};
-	case hdf::Type::int_vector:
-	case hdf::Type::Integer:
-		return {"int:"};
-	case hdf::Type::float_vector:
-	case hdf::Type::Float:
-		return {"float:"};
-	case hdf::Type::Boolean:
-		return {"bool:"};
-	case hdf::Type::string_vector:
-	case hdf::Type::String:
-		return {"string:"};
+	case Type::IntegerVector:
+	case Type::Integer:
+		return "int:";
+	case Type::FloatVector:
+	case Type::Float:
+		return "float:";
+	case Type::BooleanVector:
+	case Type::Boolean:
+		return "bool:";
+	case Type::StringVector:
+	case Type::String:
+		return "string:";
 	}
 }
 
 /*! Write a value object. */
-bool Writer::writeValue(std::string name, hdf::Value value, bool typed)
+bool Writer::write_value(string_view name, Value const& value, bool typed)
 {
-
-	startLine();
-
+	ostream.put(getIndent());
 	ostream.put(name);
 	ostream.put(" = ");
 
@@ -80,12 +75,12 @@ bool Writer::writeValue(std::string name, hdf::Value value, bool typed)
 
 	writeValueValue(value);
 
-	endLine();
+	end_line();
 
 	return true;
 }
 
-void Writer::writeValueValue(hdf::Value value)
+void Writer::writeValueValue(hdf::Value const& value)
 {
 	switch (value.getType()) {
 	default:
@@ -100,33 +95,46 @@ void Writer::writeValueValue(hdf::Value value)
 }
 
 /*! Write a comment */
-void Writer::addComment(std::string comment_text)
+void Writer::add_comment(string_view comment)
 {
-	startLine();
+	if (comment.empty())
+		return;
 
-	ostream.put("//");
-	ostream.put(comment_text);
+	std::string indent = getIndent();
+	size_t pos1 = 0;
+	size_t pos2;
 
-	endLine();
+	do {
+		pos2 = comment.find('\n', pos1);
+		ostream.put(indent);
+		ostream.put("//");
+		ostream.put(comment.substr(pos1, pos2 - pos1));
+		ostream.put('\n');
+
+		if (pos2 == comment.npos)
+			break;
+
+		pos1 = pos2 + 1;
+	} while (true);
 }
 
 /*! Report an error */
-void Writer::error(log::level lvl, std::string msg)
+void Writer::error(log::level lvl, string_view msg)
 {
 	if (logger)
 		logger->message(lvl, "HDF", msg);
 }
 
 /*! Set the indentation style for the document */
-void Writer::setIndentationStyle(IndentationStyle newStyle)
+void Writer::set_indentation_style(IndentationStyle newStyle)
 {
 	indentation = newStyle;
 }
 
-void Writer::startLine()
+std::string Writer::getIndent() const
 {
-	if (indentation == IndentationStyle::None)
-		return;
+	if (indentation == None)
+		return {};
 
 	size_t indent_size = 0;
 	char indent_char = ' ';
@@ -154,14 +162,11 @@ void Writer::startLine()
 	indent_size *= depth;
 
 	if (indent_size == 0)
-		return;
-
-	std::string indent(indent_size, indent_char);
-
-	ostream.put(indent);
+		return {};
+	return std::string(indent_size, indent_char);
 }
 
-void Writer::endLine()
+void Writer::end_line()
 {
 	ostream.put('\n');
 }

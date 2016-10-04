@@ -9,7 +9,7 @@
  */
 #ifndef aw_fileformat_hdf_writer_h
 #define aw_fileformat_hdf_writer_h
-#include <string>
+#include <aw/types/string_view.h>
 
 #include <aw/fileformat/hdf/export.h>
 #include <aw/fileformat/hdf/value.h>
@@ -38,28 +38,28 @@ struct AW_HDF_EXP Writer {
 	~Writer() = default;
 
 	/*! Create a new node and write a header for it. */
-	bool startNode(std::string name);
+	bool start_node(string_view name);
 
 	/*! End current (bottom level) node.  */
-	bool endNode();
+	bool end_node();
 
 	/*! Write a value object. */
-	bool writeValue(std::string name, hdf::Value value, bool typed = true);
+	bool write_value(string_view name, Value const& value, bool typed = true);
 
 	/*! Write a comment */
-	void addComment(std::string comment_text);
+	void add_comment(string_view comment_text);
 
 	/*! Set the indentation style for the document */
-	void setIndentationStyle(IndentationStyle style);
+	void set_indentation_style(IndentationStyle style);
 
 private:
 	/*! Report an error */
-	void error(log::level type, std::string msg);
+	void error(log::level type, string_view msg);
 
 private:
-	void writeValueValue(hdf::Value value);
-	void startLine();
-	void endLine();
+	void writeValueValue(Value const& value);
+	void end_line();
+	std::string getIndent() const;
 
 	io::WriteStream& ostream;
 	log* logger;

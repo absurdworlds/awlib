@@ -24,7 +24,9 @@ public:
 	virtual i32 put(char c) = 0;
 
 	/*! Write a string into the output stream */
-	virtual i32 put(std::string str) = 0;
+	virtual i32 put(string_view str) = 0;
+
+	virtual i32 write(const char* data, size_t size) = 0;
 
 	/*!
 	 * Get current position in the stream.
