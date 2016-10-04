@@ -28,7 +28,7 @@ enum IndentationStyle {
 	None
 };
 
-//! Interface for writing HDF files. Supports HDF 1.2.0 format.
+//! Interface for writing HDF files. Supports HDF 1.4.0 format.
 struct AW_HDF_EXP Writer {
 	//! Create writer outputting to \a out.
 	Writer(io::WriteStream& out, log* logger = nullptr)

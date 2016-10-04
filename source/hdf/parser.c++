@@ -249,8 +249,7 @@ Value Parser::parse_vector(token id)
 	case Type::Float:
 		return Value{parse_vector<double>(tok.pos)};
 	case Type::Boolean:
-		lex.error("Boolean vector is not supported", id.pos);
-		break;
+		return Value{parse_vector<bool>(tok.pos)};
 	default:
 		lex.error("Invalid type", id.pos);
 	}
@@ -263,6 +262,8 @@ Value Parser::deduce_vector(token::position beg)
 	auto tok = lex.peekToken();
 	switch (tok.kind) {
 	case token::name:
+		if (in(tok.value, "true", "false"))
+			return Value{parse_vector<bool>(beg)};
 	case token::string:
 		return Value{parse_vector<std::string>(beg)};
 	case token::number:

@@ -135,6 +135,7 @@ private:
 	using holder_t = variant<
 		bool, intmax_t, double,
 		std::string,
+		std::vector<bool>,
 		std::vector<intmax_t>,
 		std::vector<double>,
 		std::vector<std::string>
@@ -153,12 +154,14 @@ private:
 			return hdf::Type::Float;
 		case holder_t::index_of<std::string>:
 			return hdf::Type::String;
+		case holder_t::index_of<std::vector<bool>>:
+			return hdf::Type::BooleanVector;
 		case holder_t::index_of<std::vector<intmax_t>>:
-			return hdf::Type::int_vector;
+			return hdf::Type::IntegerVector;
 		case holder_t::index_of<std::vector<double>>:
-			return hdf::Type::float_vector;
+			return hdf::Type::FloatVector;
 		case holder_t::index_of<std::vector<std::string>>:
-			return hdf::Type::string_vector;
+			return hdf::Type::StringVector;
 		case holder_t::invalid:
 			return hdf::Type::Unknown;
 		};
