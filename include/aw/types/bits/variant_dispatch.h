@@ -79,8 +79,9 @@ template<typename...Ts, typename Storage, typename Functor>
 auto apply_dispatch(variant<Ts...> const& var, Storage storage, Functor f) ->
 	typename Functor::return_type
 {
+	constexpr size_t min_jumptable = 9;
 	constexpr size_t num_types = sizeof...(Ts);
-	using dispatch_type = conditional<num_types < 5,
+	using dispatch_type = conditional<(num_types < min_jumptable),
 		vh_recursive<variant<Ts...>, 0, num_types>,
 		vh_jumptable<Ts...>
 	>;
