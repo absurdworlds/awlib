@@ -55,13 +55,17 @@ struct Lexer {
 	Lexer(io::input_stream& stream, log* logger = nullptr)
 		: stream{stream}, logger{logger}
 	{
-		getToken();
+		tok = readToken();
 	}
 
 	~Lexer() = default;
 
 	token getToken();
 	token peekToken();
+	token nextToken()
+	{
+		return tok = readToken();
+	}
 
 	void message(std::string const& msg, token::position pos)
 	{

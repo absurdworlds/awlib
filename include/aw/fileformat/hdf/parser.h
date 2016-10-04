@@ -65,9 +65,9 @@ protected:
 	void skip_vector();
 
 	template <typename T>
-	std::vector<T> parse_vector();
+	std::vector<T> parse_vector(token::position beg);
 	Value parse_vector(token id);
-	Value deduce_vector();
+	Value deduce_vector(token::position beg);
 
 private:
 	Lexer lex;

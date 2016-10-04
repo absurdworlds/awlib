@@ -51,7 +51,7 @@ bool Parser::read(Object& object)
 			lex.error("Value must be inside node.", tok.pos);
 			break;
 		}
-		if (auto value = read_value()) {
+		if (auto&& value = read_value()) {
 			object = Object{Object::Value, tok.value, std::move(value)};
 			return true;
 		}
@@ -91,13 +91,13 @@ Value Parser::read_value()
 
 	token id = lex.getToken();
 	if (id.kind == token::vec_begin)
-		return deduce_vector();
+		return deduce_vector(id.pos);
 
 	tok = lex.peekToken();
 	if (tok.kind != token::colon)
 		return deduce_value(id);
 
-	tok = lex.getToken(); // skip ':'
+	tok = lex.nextToken(); // skip ':'
 	if (tok.kind == token::vec_begin)
 		return parse_vector(id);
 	return parse_value(id);
@@ -166,7 +166,6 @@ Value Parser::parse_value(token id)
 	auto type = parse_type(id.value);
 
 	switch (type) {
-	case Type::Enum:
 	case Type::String:
 		return parse_value<std::string>();
 	case Type::Float:
@@ -214,11 +213,8 @@ void Parser::skip_vector()
 }
 
 template<typename T>
-std::vector<T> Parser::parse_vector()
+std::vector<T> Parser::parse_vector(token::position beg)
 {
-	auto beg = lex.getToken();
-	assert(beg.kind == token::vec_begin);
-
 	auto tok = lex.peekToken();
 	std::vector<T> temp;
 	while (tok.kind != tok.eof) {
@@ -240,7 +236,7 @@ std::vector<T> Parser::parse_vector()
 	}
 
 	if (tok.kind == token::eof)
-		lex.error("Unmatched '{'", beg.pos);
+		lex.error("Unmatched '{'", beg);
 
 	return temp;
 }
@@ -248,13 +244,14 @@ std::vector<T> Parser::parse_vector()
 Value Parser::parse_vector(token id)
 {
 	auto type = parse_type(id.value);
+	auto tok = lex.getToken();
 	switch (type) {
 	case Type::String:
-		return Value{parse_vector<std::string>()};
+		return Value{parse_vector<std::string>(tok.pos)};
 	case Type::Integer:
-		return Value{parse_vector<intmax_t>()};
+		return Value{parse_vector<intmax_t>(tok.pos)};
 	case Type::Float:
-		return Value{parse_vector<double>()};
+		return Value{parse_vector<double>(tok.pos)};
 	case Type::Boolean:
 		lex.error("Boolean vector is not supported", id.pos);
 		break;
@@ -265,20 +262,24 @@ Value Parser::parse_vector(token id)
 	return {};
 }
 
-Value Parser::deduce_vector()
+Value Parser::deduce_vector(token::position beg)
 {
 	auto tok = lex.peekToken();
 	switch (tok.kind) {
 	case token::name:
 	case token::string:
-		return Value{parse_vector<std::string>()};
+		return Value{parse_vector<std::string>(beg)};
 	case token::number:
 		if (tok.value.find('.') == std::string::npos)
-			return Value{parse_vector<intmax_t>()};
-		return Value{parse_vector<double>()};
+			return Value{parse_vector<intmax_t>(beg)};
+		return Value{parse_vector<double>(beg)};
+	case token::vec_end:
+		lex.warning("Empty vector", tok.pos);
+		break;
 	default:
 		lex.error("Invalid token", tok.pos);
 	}
+	skip_vector();
 	return {};
 }
 

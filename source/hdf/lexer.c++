@@ -150,7 +150,7 @@ token Lexer::readToken()
 	case '!':
 		return token{token::bang, {get()}, pos};
 	case '[':
-		stream.next(c); // consume '['
+		c = next(); // consume '['
 		return token{token::node_begin, read(is_name_char), pos};
 	case ']':
 		return token{token::node_end, {get()}, pos};
