@@ -69,10 +69,6 @@ std::string spellType(hdf::Value value)
 /*! Write a value object. */
 bool Writer::writeValue(std::string name, hdf::Value value, bool typed)
 {
-	if (depth == 0) {
-		error(log::error, "field outside node");
-		return false;
-	}
 
 	startLine();
 

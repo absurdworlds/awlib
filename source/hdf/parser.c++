@@ -47,10 +47,6 @@ bool Parser::read(Object& object)
 		object = Object{Object::NodeEnd};
 		return true;
 	case token::name:
-		if (depth == 0) {
-			lex.error("Value must be inside node.", tok.pos);
-			break;
-		}
 		if (auto&& value = read_value()) {
 			object = Object{Object::Value, tok.value, std::move(value)};
 			return true;
