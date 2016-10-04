@@ -13,6 +13,8 @@
 #include <type_traits>
 #include <aw/meta/void_t.h>
 namespace aw {
+using std::declval;
+
 template<typename T>
 constexpr auto is_arithmetic = std::is_arithmetic<T>::value;
 template<typename T>
@@ -53,28 +55,30 @@ constexpr bool is_const = std::is_const<T>::value;
 template<typename Call>
 using result_of = std::result_of<Call>;
 
-namespace _impl {
 template<typename T>
-struct is_int : std::integral_constant<
-	bool,
-	std::is_integral<T>::value
-> { };
-template<>
-struct is_int<bool> : std::false_type { };
+struct is_float_t : std::is_floating_point<T> { };
+
+template<typename T>
+struct is_int_t : std::is_integral<T> { };
+/*!
+ * Specialization for bool — most of the time I want
+ * special treatment for boolean type
+ */
+template<> struct is_int_t<bool> : std::false_type { };
+
 
 template<typename>
-struct is_string : std::false_type{ };
+struct is_string_t : std::false_type{ };
 template<class CharT, class Traits, class Alloc>
-struct is_string<std::basic_string<CharT, Traits, Alloc>> : std::true_type{ };
-} // namespace impl
+struct is_string_t<std::basic_string<CharT, Traits, Alloc>> : std::true_type{ };
 
 /* Basic type categories (yes, std::string is considered “basic”) */
 template<typename T>
-constexpr bool is_int       = _impl::is_int<T>::value;
+constexpr bool is_int       = is_int_t<T>::value;
 template<typename T>
 constexpr bool is_float     = std::is_floating_point<T>::value;
 template<typename T>
-constexpr bool is_string    = _impl::is_string<T>::value;
+constexpr bool is_string    = is_string_t<T>::value;
 template<typename T>
 constexpr bool is_bool      = std::is_same<T, bool>::value;
 template<typename T>
