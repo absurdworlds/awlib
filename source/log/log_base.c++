@@ -10,23 +10,23 @@
 #include <aw/log/regex_filter.h>
 namespace aw {
 inline namespace v1 {
-void multi_log::message(log::level level, std::string const& src, std::string const& msg)
+void multi_log::message(log::level level, string_view src, string_view msg)
 {
 	for (auto recv : loggers)
 		recv->message(level, src, msg);
 }
 
-bool regex_filter::operator()(std::string const& msg)
+bool regex_filter::operator()(string_view msg)
 {
-	if (!std::regex_search(msg, include))
+	if (!std::regex_search(std::string{msg}, include))
 		return false;
-	if (std::regex_search(msg, exclude))
+	if (std::regex_search(std::string{msg}, exclude))
 		return false;
 	return true;
 }
 
 
-void log_filter::message(log::level level, std::string const& src, std::string const& msg)
+void log_filter::message(log::level level, string_view src, string_view msg)
 {
 	if (level < min_level)
 		return;

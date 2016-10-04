@@ -21,19 +21,19 @@ char const* describe(log::level level)
 }
 } // namespace
 
-std::string format_message(log::level lvl, std::string const& src, std::string const& msg)
+std::string format_message(log::level lvl, string_view src, string_view msg)
 {
 	std::string fmt;
 	fmt.append(1,'[');
-	fmt.append(src);
+	fmt.append(src.data(), src.size());
 	fmt.append(1,']');
 	fmt.append(1,' ');
 	fmt.append(describe(lvl));
-	fmt.append(msg);
+	fmt.append(msg.data(), msg.size());
 	return fmt;
 }
 
-void ostream_logger::message(log::level level, std::string const& src, std::string const& msg)
+void ostream_logger::message(log::level level, string_view src, string_view msg)
 {
 	stream << format_message(level, src, msg) << '\n';
 }
