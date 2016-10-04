@@ -9,7 +9,6 @@
  */
 #ifndef aw_fileformat_hdf_lexer_h
 #define aw_fileformat_hdf_lexer_h
-#include <aw/utility/to_string.h>
 #include <aw/io/input_stream.h>
 #include <aw/log/log.h>
 #include <aw/fileformat/hdf/export.h>
@@ -20,15 +19,7 @@ struct token {
 		unsigned line = 0;
 		unsigned col  = 0;
 
-		friend std::string to_string(position pos)
-		{
-			using aw::to_string;
-			std::string ret;
-			ret.append(to_string(pos.line));
-			ret.append(1,',');
-			ret.append(to_string(pos.col));
-			return ret;
-		}
+		friend std::string aw::hdf::to_string(position pos);
 	};
 
 	enum {
@@ -50,6 +41,8 @@ struct token {
 	std::string value;
 	position pos;
 };
+
+AW_HDF_EXP std::string to_string(token::position pos);
 
 struct Lexer {
 	Lexer(io::input_stream& stream, log* logger = nullptr)

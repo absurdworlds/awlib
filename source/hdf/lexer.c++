@@ -12,12 +12,23 @@
 
 #include <aw/fileformat/hdf/lexer.h>
 
-#include <aw/io/input_stream.h>
+#include <aw/utility/to_string.h>
 #include <aw/utility/string/compose.h>
+
 #include <aw/algorithm/in.h>
 
 namespace aw {
 namespace hdf {
+std::string to_string(token::position pos)
+{
+	using aw::to_string;
+	std::string ret;
+	ret.append(to_string(pos.line));
+	ret.append(1,',');
+	ret.append(to_string(pos.col));
+	return ret;
+}
+
 namespace {
 bool is_digit(char c)
 {
