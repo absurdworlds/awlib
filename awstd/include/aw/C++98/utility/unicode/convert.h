@@ -6,17 +6,17 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _aw_utf_convert_
-#define _aw_utf_convert_
-#include <aw/utility/unicode/utf8.h>
-#include <aw/utility/unicode/utf16.h>
-#include <aw/utility/unicode/utf32.h>
-#include <aw/config.h>
+#ifndef aw98_utf_convert_h
+#define aw98_utf_convert_h
+#include <_c++config>
+#include <aw/C++98/utility/unicode/utf8.h>
+#include <aw/C++98/utility/unicode/utf16.h>
+#include <aw/C++98/utility/unicode/utf32.h>
 namespace aw {
 namespace unicode {
 //! Convert string between different Unicode encodings
-template<typename Output, typename Input, typename InEnc, typename OutEnc>
-Output convert(Output& result, Input const& str, InEnc, OutEnc)
+template<typename Input, typename Output, typename InEnc, typename OutEnc>
+Output& convert(Input const& str, Output& result, InEnc, OutEnc)
 {
 	typedef typename Input::const_iterator InIter;
 	typedef typename std::back_insert_iterator<Output> OutIter;
@@ -37,14 +37,14 @@ Output convert(Output& result, Input const& str, InEnc, OutEnc)
 	return result;
 }
 
-utf8 getenc(utf8::string const&) { return utf8(); }
-utf16 getenc(utf16::string const&) { return utf16(); }
-utf32 getenc(utf32::string const&) { return utf32(); }
+inline utf8 getenc(utf8::string const&) { return utf8(); }
+inline utf16 getenc(utf16::string const&) { return utf16(); }
+inline utf32 getenc(utf32::string const&) { return utf32(); }
 
 #if (AW_PLATFORM == AW_PLATFORM_WIN32)
-utf16 getenc(std::wstring const&) { return utf16(); }
+inline utf16 getenc(std::wstring const&) { return utf16(); }
 #else
-utf32 getenc(std::wstring const&) { return utf32(); }
+inline utf32 getenc(std::wstring const&) { return utf32(); }
 #endif
 
 inline std::wstring widen(std::string s)
@@ -61,4 +61,4 @@ inline std::string narrow(std::wstring w)
 }
 } // namespace unicode
 } // namespace aw
-#endif//_aw_utf_convert_
+#endif//aw98_utf_convert_h

@@ -6,9 +6,9 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef aw_utility_utf16_h
-#define aw_utility_utf16_h
-#include <aw/utility/unicode/unicode.h>
+#ifndef aw98_utility_utf16_h
+#define aw98_utility_utf16_h
+#include <aw/C++98/utility/unicode/unicode.h>
 namespace aw {
 namespace unicode {
 struct utf16 {
@@ -81,4 +81,4 @@ inline Iterator decode(Iterator input, Iterator end, code_point& cp)
 }; // namespace utf16
 } // namespace unicode
 } // namespace aw
-#endif//aw_utility_utf16_h
+#endif//aw98_utility_utf16_h

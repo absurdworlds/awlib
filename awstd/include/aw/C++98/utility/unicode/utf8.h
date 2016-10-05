@@ -6,9 +6,9 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef aw_utility_utf8_h
-#define aw_utility_utf8_h
-#include <aw/utility/unicode/unicode.h>
+#ifndef aw98_utility_utf8_h
+#define aw98_utility_utf8_h
+#include <aw/C++98/utility/unicode/unicode.h>
 namespace aw {
 namespace unicode {
 struct utf8 {
@@ -121,7 +121,7 @@ Iterator decode(Iterator input, Iterator end, code_point& cp)
 		return input;
 	}
 
-	if (std::distance(input, end) < length) {
+	if (std::distance(input, end) < ptrdiff_t(length)) {
 		cp = -1;
 		return end;
 	}
@@ -153,4 +153,4 @@ Iterator decode(Iterator input, Iterator end, code_point& cp)
 }; // namespace utf8
 } // namespace unicode
 } // namespace aw
-#endif//aw_utility_utf8_h
+#endif//aw98_utility_utf8_h
