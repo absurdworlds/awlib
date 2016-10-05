@@ -9,18 +9,16 @@
 #ifndef _aw_utf_
 #define _aw_utf_
 #include <cassert>
+#include <cstddef>
 #include <string>
-#include <aw/types/types.h>
-#include <aw/utility/macro.h>
-#include <aw/math/math.h>
 namespace aw {
 namespace unicode {
 /*!
  * Unsigned integer type capable of holding
  * a single unicode code point.
  */
-using code_point = std::uint_least32_t;
-constexpr code_point invalid = -1;
+typedef unsigned code_point;
+static const code_point invalid = -1;
 
 //! Check if code point is a surrogate
 inline bool isSurrogate(code_point cp)

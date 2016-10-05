@@ -12,8 +12,8 @@
 namespace aw {
 namespace unicode {
 struct utf32 {
-using char_type   = char32_t;
-using string      = std::u32string;
+typedef code_point char_type;
+typedef std::basic_string<char_type> string;
 
 template<typename Iterator> static
 inline Iterator encode(code_point cp, Iterator output)

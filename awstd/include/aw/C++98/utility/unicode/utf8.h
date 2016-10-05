@@ -12,8 +12,8 @@
 namespace aw {
 namespace unicode {
 struct utf8 {
-using char_type   = u8;
-using string      = std::string;
+typedef unsigned char char_type;
+typedef std::string string;
 
 /*!
  * Returns true if character is a trail character
@@ -73,19 +73,19 @@ template<typename Iterator> static
 Iterator encode(code_point cp, Iterator output)
 {
 	if (cp < 0x80) {
-		*(output++) = u8(cp);
+		*(output++) = char_type(cp);
 	} else if(cp < 0x800) {
-		*(output++) = u8((cp >> 6)   | 0xC0);
-		*(output++) = u8((cp & 0x3F) | 0x80);
+		*(output++) = char_type((cp >> 6)   | 0xC0);
+		*(output++) = char_type((cp & 0x3F) | 0x80);
 	} else if(cp < 0x10000) {
-		*(output++) = u8((cp  >> 12)        | 0xE0);
-		*(output++) = u8(((cp >> 6) & 0x3F) | 0x80);
-		*(output++) = u8((cp & 0x3F)        | 0x80);
+		*(output++) = char_type((cp  >> 12)        | 0xE0);
+		*(output++) = char_type(((cp >> 6) & 0x3F) | 0x80);
+		*(output++) = char_type((cp & 0x3F)        | 0x80);
 	} else {
-		*(output++) = u8((cp  >> 18)         | 0xF0);
-		*(output++) = u8(((cp >> 12) & 0x3F) | 0x80);
-		*(output++) = u8(((cp >> 6)  & 0x3F) | 0x80);
-		*(output++) = u8((cp & 0x3F)         | 0x80);
+		*(output++) = char_type((cp  >> 18)         | 0xF0);
+		*(output++) = char_type(((cp >> 12) & 0x3F) | 0x80);
+		*(output++) = char_type(((cp >> 6)  & 0x3F) | 0x80);
+		*(output++) = char_type((cp & 0x3F)         | 0x80);
 	}
 
 	return output;
@@ -107,14 +107,8 @@ Iterator next(Iterator input, Iterator end)
  * Decode UTF-8 sequence, if valid
  */
 template<typename Iterator> static
-Iterator decode(Iterator input, Iterator end, u32& cp)
+Iterator decode(Iterator input, Iterator end, code_point& cp)
 {
-	// Helper lambda to bail out with an error
-	auto error = [&cp] (Iterator ret) {
-		cp = -1;
-		return ret;
-	};
-
 	assert(input < end);
 
 	cp = *(input++) & 0xFF;
@@ -122,11 +116,15 @@ Iterator decode(Iterator input, Iterator end, u32& cp)
 		return input;
 
 	size_t length = trailLength(cp);
-	if (length == -1)
-		return error(input);
+	if (length == -1) {
+		cp = -1;
+		return input;
+	}
 
-	if (std::distance(input, end) < length)
-		return error(end);
+	if (std::distance(input, end) < length) {
+		cp = -1;
+		return end;
+	}
 
 	cp = cp & (0x3F >> length);
 
@@ -149,7 +147,8 @@ Iterator decode(Iterator input, Iterator end, u32& cp)
 		return input;
 	}
 
-	return error(input);
+	cp = -1;
+	return input;
 }
 }; // namespace utf8
 } // namespace unicode

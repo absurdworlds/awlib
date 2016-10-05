@@ -12,8 +12,8 @@
 namespace aw {
 namespace unicode {
 struct utf16 {
-using char_type   = char16_t;
-using string      = std::u16string;
+typedef unsigned short char_type;
+typedef std::basic_string<char_type> string;
 
 //! Check if code point is first surrogate
 static bool isFirstSurrogate(code_point cp)
@@ -53,17 +53,14 @@ inline Iterator encode(code_point cp, Iterator output)
 template<typename Iterator> static
 inline Iterator decode(Iterator input, Iterator end, code_point& cp)
 {
-	auto error = [&cp] (Iterator ret) {
-		cp = -1;
-		return ret;
-	};
-
-	char16_t first = *(input++);
+	char_type first = *(input++);
 	if (isFirstSurrogate(first)) {
-		if (input == end)
-			return error(end);
+		if (input == end) {
+			cp = -1;
+			return input;
+		}
 
-		char16_t second = *(input++);
+		char_type second = *(input++);
 		if (!isSecondSurrogate(second))
 			return error(input);
 
@@ -73,8 +70,10 @@ inline Iterator decode(Iterator input, Iterator end, code_point& cp)
 		return input;
 	}
 
-	if (isSecondSurrogate(first))
-		return error(input);
+	if (isSecondSurrogate(first)) {
+		cp = -1;
+		return input;
+	}
 	
 	cp = first;
 	return input;
