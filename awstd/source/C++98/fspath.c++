@@ -4,21 +4,31 @@ namespace awstd {
 namespace filesystem {
 namespace {
 #if (AW_PLATFORM == AW_PLATFORM_WIN32)
-const string_view _path_separators("/\\", 2);
+const string_view _path_separators("/\\",2);
 #else
-const string_view _path_separators("/", 1);
+const string_view _path_separators("/",1);
 #endif
+
+template <typename CharT>
+bool is_path_separator(CharT c)
+{
+#if (AW_PLATFORM == AW_PLATFORM_WIN32)
+	return c == CharT('/') || c == CharT('\\');
+#else
+	return c == CharT('/');
+#endif
+}
 
 std::string& conv_generic(std::string& p)
 {
 #if __cplusplus >= 201103L
 	for (char& c : p) {
-		if (_path_separators.find(c))
+		if (is_path_separator(c))
 			c = '/';
 	}
 #else
 	for (size_t i = 0, e = p.size(); i < e; ++i) {
-		if (_path_separators.find(p[i]))
+		if (is_path_separator(p[i]))
 			p[i] = '/';
 	}
 #endif
@@ -30,12 +40,12 @@ std::basic_string<CharT>& conv_preferred(std::basic_string<CharT>& p)
 {
 #if __cplusplus >= 201103L
 	for (CharT& c : p) {
-		if (_path_separators.find(c))
+		if (is_path_separator(c))
 			c = static_cast<CharT>(path::preferred_separator);
 	}
 #else
 	for (size_t i = 0, e = p.size(); i < e; ++i) {
-		if (_path_separators.find(p[i]))
+		if (is_path_separator(p[i]))
 			p[i] = static_cast<CharT>(path::preferred_separator);
 	}
 #endif
