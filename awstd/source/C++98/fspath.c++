@@ -8,21 +8,44 @@ const string_view _path_separators("/\\", 2);
 #else
 const string_view _path_separators("/", 1);
 #endif
-}
 
-path& path::make_preferred()
+std::string& conv_generic(std::string& p)
 {
 #if __cplusplus >= 201103L
 	for (char& c : p) {
 		if (_path_separators.find(c))
-			c = preferred_separator;
+			c = '/';
 	}
 #else
 	for (size_t i = 0, e = p.size(); i < e; ++i) {
 		if (_path_separators.find(p[i]))
-			p[i] = preferred_separator;
+			p[i] = '/';
 	}
 #endif
+	return p;
+}
+
+template <typename CharT>
+std::basic_string<CharT>& conv_preferred(std::basic_string<CharT>& p)
+{
+#if __cplusplus >= 201103L
+	for (CharT& c : p) {
+		if (_path_separators.find(c))
+			c = static_cast<CharT>(path::preferred_separator);
+	}
+#else
+	for (size_t i = 0, e = p.size(); i < e; ++i) {
+		if (_path_separators.find(p[i]))
+			p[i] = static_cast<CharT>(path::preferred_separator);
+	}
+#endif
+	return p;
+}
+} // namespace
+
+path& path::make_preferred()
+{
+	conv_preferred(p);
 	return *this;
 }
 
@@ -66,6 +89,23 @@ string_view path::stem_view() const
 string_view path::extension_view() const
 {
 	return split_filename(filename_view()).ext;
+}
+
+std::string path::generic_string() const
+{
+	std::string s = string();
+	return conv_generic(s);
+}
+
+std::string path::generic_u8string() const
+{
+	return generic_string();
+}
+
+std::wstring path::native() const
+{
+	std::wstring str = wstring();
+	return conv_preferred(str);
 }
 
 } // namespace awstd

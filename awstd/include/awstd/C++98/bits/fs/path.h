@@ -50,10 +50,16 @@ struct path {
 	//! Extract extension: "file.txt" -> ".txt"
 	path extension() const;
 
+	std::string generic_string() const;
+	std::string generic_u8string() const;
+
 	std::string string()   const  { return p; }
 	std::string u8string() const  { return p; }
 
 	std::wstring wstring() const { return aw::unicode::widen(p); }
+
+	std::string generic() const { return generic_u8string(); }
+	std::wstring native() const;
 
 	bool empty() const { return p.empty(); }
 
