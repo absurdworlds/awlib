@@ -72,6 +72,11 @@ Test(compare_with_std) {
 	TestEqual(std::string(sv1.substr(sv1.size())), std::string(sv2.substr(sv2.size())));
 }
 
+Test(constructor_test) {
+	e::string_view sv1("new test", 11);
+	z::string_view sv2("new test", 11);
+}
+
 int main(int,char**)
 {
 	return aw::test::registry::run();

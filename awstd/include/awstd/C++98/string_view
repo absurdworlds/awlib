@@ -25,7 +25,7 @@ struct is_char_pointer<char*> { static const bool value = true; };
 template <>
 struct is_char_pointer<char const*> { static const bool value = true; };
 
-struct sfinae {} _dummy;
+enum _sfinae { _dummy };
 
 struct string_view {
 	static const size_t npos = -1;
@@ -43,7 +43,7 @@ struct string_view {
 	{}
 
 	template<typename T>
-	string_view(T ptr, typename enable_if<is_char_pointer<T>::value, sfinae>::type = _dummy)
+	string_view(T ptr, typename enable_if<is_char_pointer<T>::value, _sfinae>::type = _dummy)
 		: _data(ptr), _size(strlen(ptr))
 	{ }
 
