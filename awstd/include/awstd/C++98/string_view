@@ -1,7 +1,6 @@
 #ifndef awstd_string_view_h
 #define awstd_string_view_h
 #include <cassert>
-#include <cstdint>
 #include <cstddef>
 #include <string>
 #include <cstring>
@@ -53,7 +52,7 @@ struct string_view {
 	{ }
 
 	string_view(std::string const& str)
-		: _data(str.data()), _size(str.size())
+		: _data(str.c_str()), _size(str.size())
 	{ }
 
 	void swap(string_view& other)
