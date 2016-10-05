@@ -8,7 +8,7 @@
  */
 #ifndef aw_utility_fallback_filesystem_h
 #define aw_utility_fallback_filesystem_h
-#include <aw/config.h>
+#include <_c++config>
 
 #ifdef AWSTD_MODULE_FS
 #define AW_FS_EXP AW_EXPORT

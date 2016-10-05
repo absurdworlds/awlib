@@ -14,13 +14,16 @@ namespace awstd {
 namespace filesystem {
 struct path {
 #if (AW_PLATFORM == AW_PLATFORM_WIN32)
-	static const char preferred_separator = '\\';
+	static aw_constexpr char preferred_separator = '\\';
 #else
-	static const char preferred_separator = '/';
+	static aw_constexpr char preferred_separator = '/';
 #endif
 
 	path() {}
 	path(path const& other) : p(other.p) {}
+#if __cplusplus >= 201103L
+	path(path&& other) : p{std::move(other.p)} {}
+#endif
 
 	path(string_view source)
 		: p(std::string(source))
