@@ -9,7 +9,7 @@
 
 #include "type_traits"
 
-namespace z {
+namespace awstd {
 template<size_t N>
 inline /*constexpr*/ size_t stringsize(const char (&array)[N])
 {
@@ -239,5 +239,5 @@ private:
 	char const* _data;
 	size_t _size;
 };
-} // namespace z
+} // namespace awstd
 #endif//awstd_string_view_h
