@@ -29,8 +29,10 @@ enum _sfinae { _dummy };
 struct string_view {
 	static const size_t npos = -1;
 
-	typedef char const* iterator;
-	typedef std::reverse_iterator<iterator> reverse_iterator;
+	typedef char const*    const_iterator;
+	typedef const_iterator iterator;
+	typedef std::reverse_iterator<const_iterator> const_reverse_iterator;
+	typedef const_reverse_iterator reverse_iterator;
 
 	string_view()
 		: _data(0), _size(0)
