@@ -94,9 +94,10 @@ struct string_view {
 		if (len > size())
 			return npos;
 
-		for (; pos <= size() - len; ++pos) {
+		while ( pos <= size() - len ) {
 			if (str == substr(pos, len))
 				return pos;
+			pos = find(str[0], pos+1);
 		}
 
 		return npos;
@@ -110,7 +111,7 @@ struct string_view {
 		iterator it = std::find(beg, end(), c);
 		if (it == end())
 			return npos;
-		return static_cast<size_t>(it - beg);
+		return static_cast<size_t>(it - begin());
 	}
 
 
@@ -123,10 +124,12 @@ struct string_view {
 			return npos;
 
 		pos = std::min(size() - len, pos) + 1;
-		while ( pos > 0 ) {
-			if (str == substr(--pos, len))
+		do {
+			pos = rfind(str[0], pos - 1);
+			if (str == substr(pos, len))
 				return pos;
-		}
+
+		} while ( pos > 0 );
 
 		return npos;
 	}
@@ -155,7 +158,7 @@ struct string_view {
 		iterator it = std::find_first_of(beg, end(), str.begin(), str.end());
 		if (it == end())
 			return npos;
-		return static_cast<size_t>(it - beg);
+		return static_cast<size_t>(it - begin());
 	}
 
 	size_t find_last_of(string_view str, size_t pos = npos) const

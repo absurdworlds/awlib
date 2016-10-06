@@ -70,11 +70,19 @@ Test(compare_with_std) {
 	TestEqual(std::string(sv1.substr(3,5)), std::string(sv2.substr(3,5)));
 	TestEqual(std::string(sv1.substr(0)), std::string(sv2.substr(0)));
 	TestEqual(std::string(sv1.substr(sv1.size())), std::string(sv2.substr(sv2.size())));
+
+	TestEqual(sv1.find('/',1), sv2.find('/',1));
+	TestEqual(sv1.rfind('/',1), sv2.rfind('/',1));
+	TestEqual(sv1.find('/',6), sv2.find('/',6));
+	TestEqual(sv1.rfind('/',6), sv2.rfind('/',6));
 }
 
-Test(constructor_test) {
+Test(compare_with_std2) {
 	e::string_view sv1("new test", 11);
 	z::string_view sv2("new test", 11);
+
+	TestEqual(sv1.find('t', 2), sv2.find('t',2));
+	TestEqual(sv1.rfind('t', 2), sv2.rfind('t',2));
 }
 
 int main(int,char**)
