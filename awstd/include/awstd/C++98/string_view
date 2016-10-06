@@ -201,6 +201,19 @@ struct string_view {
 		return npos;
 	}
 
+	void remove_prefix(size_t n)
+	{
+		assert(n <= size());
+		_data += n;
+		_size -= n;
+	}
+
+	void remove_suffix(size_t n)
+	{
+		assert(n <= size());
+		_size -= n;
+	}
+
 	friend bool operator==(string_view a, string_view b)
 	{
 		if (a.size() != b.size()) return false;
