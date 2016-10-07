@@ -36,34 +36,5 @@ using void_if = enable_if<expr,void>;
 /*! Shorthand for enable_if<expr, bool> */
 template<bool expr>
 using bool_if = enable_if<expr,bool>;
-
-
-/*! Alias for std::conditional */
-template<bool expr, typename T, typename F>
-using conditional = typename std::conditional<expr, T, F>::type;
-
-template<bool... Bools>
-constexpr bool bool_and = (Bools && ...);
-
-template<bool... Bools>
-constexpr bool bool_or  = (Bools || ...);
-
-#if 0
-template<bool... Bools>
-struct bool_and : std::true_type { };
-
-template<bool Bool, bool... Bools>
-struct bool_and<Bool, Bools...>
-	: conditional<Bool, bool_and<Bools...>, std::false_type>
-{ };
-
-template<bool... Bools>
-struct bool_or : std::false_type { };
-
-template<bool Bool, bool... Bools>
-struct bool_or<Bool, Bools...>
-	: conditional<Bool, std::true_type, bool_or<Bools...>>
-{ };
-#endif
 } // namespace aw
 #endif//aw_traits_conditional
