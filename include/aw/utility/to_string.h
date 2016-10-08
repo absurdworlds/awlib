@@ -10,6 +10,7 @@
 #ifndef aw_to_string_h
 #define aw_to_string_h
 #include <string>
+#include <initializer_list>
 #include <aw/types/types.h>
 #include <aw/types/string_view.h>
 #include <aw/types/traits/basic_traits.h>
@@ -90,8 +91,23 @@ auto to_string(T const& value, Formatter&& fmt = Formatter{}) ->
 	return string_converter<T>{value}(fmt);
 }
 
+
 template<typename T, typename Formatter = format::pretty_print>
 auto to_string(T const& range, Formatter&& fmt = Formatter{}) ->
+	enable_if<is_const_iterable<T>, std::string>;
+
+template<typename InputIt, typename Formatter = format::pretty_print>
+std::string to_string(InputIt begin, InputIt end, Formatter&& fmt);
+
+
+template<typename T, typename Formatter = format::pretty_print>
+std::string to_string(std::initializer_list<T> ilist, Formatter&& fmt = Formatter{})
+{
+	return to_string(begin(ilist), end(ilist), fmt);
+}
+
+template<typename T, typename Formatter>
+auto to_string(T const& range, Formatter&& fmt) ->
 	enable_if<is_const_iterable<T>, std::string>
 {
 	fmt.list_start();
@@ -101,8 +117,8 @@ auto to_string(T const& range, Formatter&& fmt = Formatter{}) ->
 	return fmt;
 }
 
-template<typename InputIt, typename Formatter = format::pretty_print>
-std::string to_string(InputIt begin, InputIt end, Formatter&& fmt = Formatter{})
+template<typename InputIt, typename Formatter>
+std::string to_string(InputIt begin, InputIt end, Formatter&& fmt)
 {
 	fmt.list_start();
 	while (begin != end)
