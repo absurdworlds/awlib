@@ -19,15 +19,16 @@ namespace aw {
  */
 template <typename T1, typename T2>
 struct string_converter<std::pair<T1, T2>> {
-	std::string operator()( std::pair<T1, T2> const& pair ) const
+	std::pair<T1, T2> const& pair;
+
+	template<typename Formatter>
+	std::string operator()( Formatter& fmt ) const
 	{
-		std::string str;
-		str.append(1,'{');
-		str.append( to_string(pair.first) );
-		str.append(", ");
-		str.append( to_string(pair.second) );
-		str.append(1,'}');
-		return str;
+		fmt.compound_start();
+		fmt.value(pair.first);
+		fmt.value(pair.second);
+		fmt.compound_end();
+		return fmt;
 	}
 };
 } // namespace aw

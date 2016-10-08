@@ -9,8 +9,8 @@
  */
 #ifndef aw_math_vector_to_string_h
 #define aw_math_vector_to_string_h
-#include <aw/utility/to_string.h>
 #include <aw/math/vector.h>
+#include <aw/utility/to_string.h>
 namespace aw {
 namespace math {
 /*!
@@ -18,19 +18,14 @@ namespace math {
  * \return
  *    String in format "{vec[0], vec[1], ..., vec[N]}"
  */
-template<typename T, size_t N>
-std::string to_string(vector<T,N> const& vec)
+template<typename T, size_t N, typename Formatter = format::pretty_print>
+std::string to_string(vector<T,N> const& vec, Formatter&& fmt = Formatter{})
 {
-	using aw::to_string;
-	std::string str;
-	str.append(1,'{');
-	str.append( to_string(get<0>(vec)) );
-	for (size_t i = 1; i < N; ++i) {
-		str.append(", ");
-		str.append( to_string(vec[i]) );
-	}
-	str.append(1,'}');
-	return str;
+	fmt.compound_start();
+	for (size_t i = 0; i < N; ++i)
+		fmt.value( vec[i] );
+	fmt.compound_end();
+	return fmt;
 }
 } // namespace math
 } // namespace aw

@@ -9,8 +9,8 @@
  */
 #ifndef aw_math_matrix_to_string_h
 #define aw_math_matrix_to_string_h
-#include <aw/utility/to_string/math/vector.h>
 #include <aw/math/matrix.h>
+#include <aw/utility/to_string/math/vector.h>
 namespace aw {
 namespace math {
 /*!
@@ -19,19 +19,14 @@ namespace math {
  *    String in format
  *    "{{mat.get(0,0), ..., mat.get(0,N)}, ..., {mat.get(M,0), ..., mat.get(M,N)}}"
  */
-template<typename T, size_t M, size_t N>
-std::string to_string(matrix<T,M,N> const& mat)
+template<typename T, size_t M, size_t N, typename Formatter = format::pretty_print>
+std::string to_string(matrix<T,M,N> const& mat, Formatter&& fmt = Formatter{})
 {
-	using aw::to_string;
-	std::string str;
-	str.append(1,'{');
-	str.append( to_string(row<0>(mat)) );
-	for (size_t i = 1; i < M; ++i) {
-		str.append(", ");
-		str.append( to_string(mat.row(i)) );
-	}
-	str.append(1,'}');
-	return str;
+	fmt.compound_start();
+	for (size_t i = 0; i < M; ++i)
+		fmt.value( mat.row(i) );
+	fmt.compound_end();
+	return fmt;
 }
 } // namespace math
 } // namespace aw

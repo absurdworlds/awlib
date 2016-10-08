@@ -19,9 +19,12 @@ namespace aw {
  */
 template <typename T>
 struct string_converter<std::unique_ptr<T>> {
-	std::string operator()( std::unique_ptr<T> const& ptr ) const
+	std::unique_ptr<T> const& ptr;
+
+	template<typename Formatter>
+	std::string operator()( Formatter& fmt ) const
 	{
-		return to_string(ptr.get());
+		return fmt.value( ptr.get() );
 	}
 };
 

@@ -16,32 +16,23 @@ namespace aw {
 /*! Converts tuple to string. */
 template<typename... Ts>
 struct string_converter<std::tuple<Ts...>> {
-	std::string operator()( std::tuple<Ts...> const& tuple )
+	std::tuple<Ts...> const& tuple;
+
+	template<typename Formatter>
+	std::string operator()( Formatter& fmt ) const
 	{
-		str.append(1,'{');
-		print_each( tuple, make_index_sequence<sizeof...(Ts)>() );
-		str.append(1,'}');
-		return str;
+		fmt.compound_start();
+		print_each( fmt, make_index_sequence<sizeof...(Ts)>() );
+		fmt.compound_end();
+		return fmt;
 	}
 
 private:
-	template<size_t I>
-	void do_print( std::tuple<Ts...> const& tuple )
+	template<typename Formatter, size_t...Is>
+	void print_each( Formatter& fmt, index_sequence<Is...> ) const
 	{
-		using aw::to_string;
-		if (I != 0)
-			str.append(", ");
-		str += to_string(std::get<I>(tuple));
-
+		(void(fmt.value(std::get<Is>(tuple))), ...);
 	}
-
-	template<size_t...Is>
-	void print_each( std::tuple<Ts...> const& tuple, index_sequence<Is...> )
-	{
-		(do_print<Is>(tuple), ...);
-	}
-
-	std::string str;
 };
 } // namespace aw
 #endif//aw_std_tuple_to_string_h

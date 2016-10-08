@@ -32,27 +32,29 @@ Test(to_string) {
 		TestAssert(to_string(1000u) == "1000"s);
 		TestAssert(to_string(200000000000000000l) == "200000000000000000"s);
 		TestAssert(to_string(18000000000000000000ul) == "18000000000000000000"s);
-		TestAssert(to_string(std::make_pair(10, "abc")) == "{10, abc}"s);
+		TestAssert(to_string(std::make_pair(10, "abc")) == R"({10, "abc"})"s);
 		// no control over precision yet
 		//TestAssert(to_string(1000000.0f) == "1000000.0"s);
 		//TestAssert(to_string(1000000.0) == "1000000.0"s);
 
 		std::list<std::vector<std::string>> lst{{"set", "time", "h", "[m]"}, {"get", "time"}, {"print", "time"}, {"set", "var", "x", "=", "value"}, {"get", "var", "x"}};
 
-		TestAssert(to_string(lst) == "{{set, time, h, [m]}, {get, time}, {print, time}, {set, var, x, =, value}, {get, var, x}}"s);
+		TestAssert(to_string(lst) == R"({{"set", "time", "h", "[m]"}, {"get", "time"}, {"print", "time"}, {"set", "var", "x", "=", "value"}, {"get", "var", "x"}})"s);
 
+		std::list<bool> lst1{ true, true, true };
 		std::list<optional<bool>> lst2{ true, true, true };
 		std::list<math::vector3d<int>> lst3{ {1, 0, 0} };
 		math::vector3d<int> vec3 {};
 		math::matrix<int,4,4> mat4 {};
 
+		TestAssert(to_string(lst1) == "{true, true, true}"s);
 		TestAssert(to_string(lst2) == "{true, true, true}"s);
 		TestAssert(to_string(lst3) == "{{1, 0, 0}}"s);
 		TestAssert(to_string(vec3) == "{0, 0, 0}"s);
 		TestAssert(to_string(mat4) == "{{0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}}"s);
 
 		auto tuple = std::make_tuple( 10, "xyz", false );
-		TestAssert(to_string(tuple) == "{10, xyz, false}");
+		TestAssert(to_string(tuple) == R"({10, "xyz", false})");
 	}
 
 	Postconditions {

@@ -10,17 +10,20 @@
 #ifndef aw_variant_to_string_h
 #define aw_variant_to_string_h
 #include <aw/types/variant.h>
+#include <aw/utility/to_string.h>
 namespace aw {
 namespace _impl {
+template<typename Formatter>
 struct variant_to_string_visitor {
 	using return_type = std::string;
 
 	template<typename T>
 	std::string operator()(T const& data)
 	{
-		using aw::to_string;
-		return to_string(data);
+		return fmt.value(data);
 	}
+
+	Formatter&& fmt;
 };
 
 } // namespace _impl
@@ -31,12 +34,13 @@ struct variant_to_string_visitor {
  *    Contained value, converted to string,
  *    or empty string if optional is empty.
  */
-template<typename... Args>
-std::string to_string(variant<Args...> const& var)
+template<typename... Args, typename Formatter = format::pretty_print>
+std::string to_string(variant<Args...> const& var, Formatter&& fmt = Formatter{})
 {
 	if (var.empty())
-		return {};
-	return var.apply(_impl::variant_to_string_visitor{});
+		return fmt.empty_value();
+	auto&& vis = _impl::variant_to_string_visitor{std::forward<Formatter>(fmt)};
+	return var.apply(vis);
 }
 } // namespace aw
 #endif//aw_variant_to_string_h

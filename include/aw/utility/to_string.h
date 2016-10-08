@@ -11,134 +11,106 @@
 #define aw_to_string_h
 #include <string>
 #include <aw/types/types.h>
+#include <aw/types/string_view.h>
 #include <aw/types/traits/basic_traits.h>
+#include <aw/types/traits/is_iterable.h>
 #include <aw/meta/conditional.h>
-#include <aw/meta/detect.h>
+
 namespace aw {
-inline std::string to_string(bool value)
-{
-	using namespace std::string_literals;
-	return value ? "true"s : "false"s;
+namespace format {
+struct pretty_print;
 }
 
-inline std::string to_string(int value)
+template<typename Formatter = format::pretty_print>
+std::string to_string(string_view str, Formatter&& fmt = Formatter{})
 {
-	return std::to_string(value);
+	return fmt.value(str);
 }
 
-inline std::string to_string(long value)
+template<typename Formatter = format::pretty_print>
+std::string to_string(std::string const& str, Formatter&& fmt = Formatter{})
 {
-	return std::to_string(value);
+	return fmt.value(str);
 }
 
-inline std::string to_string(long long value)
+template<typename Formatter = format::pretty_print>
+std::string to_string(char const* str, Formatter&& fmt = Formatter{})
 {
-	return std::to_string(value);
+	return fmt.value(str);
 }
 
-inline std::string to_string(unsigned value)
+template<typename Formatter = format::pretty_print>
+std::string to_string(char ch, Formatter&& fmt = Formatter{})
 {
-	return std::to_string(value);
+	return fmt.value(ch);
 }
 
-inline std::string to_string(unsigned long value)
+template<typename T, typename Formatter = format::pretty_print>
+auto to_string(T value, Formatter&& fmt = Formatter{}) ->
+	enable_if<is_int<T>, std::string>
 {
-	return std::to_string(value);
+	return fmt.value(value);
 }
 
-inline std::string to_string(unsigned long long value)
+template<typename T, typename Formatter = format::pretty_print>
+auto to_string(T value, Formatter&& fmt = Formatter{}) ->
+	enable_if<is_float<T>, std::string>
 {
-	return std::to_string(value);
+	return fmt.value(value);
 }
 
-inline std::string to_string(float value)
+template<typename Formatter = format::pretty_print>
+std::string to_string(bool value, Formatter&& fmt = Formatter{})
 {
- 	return std::to_string(value);
+	using namespace sv_literals;
+	return fmt.literal(value ? "true"_s : "false"_s);
 }
 
-inline std::string to_string(double value)
+template<typename Formatter = format::pretty_print>
+std::string to_string(nullptr_t, Formatter&& fmt = Formatter{})
 {
-	return std::to_string(value);
+	using namespace sv_literals;
+	return fmt.literal("nullptr"_s);
 }
 
-inline std::string to_string(long double value)
+template<typename T, typename Formatter = format::pretty_print>
+std::string to_string(T const* ptr, Formatter&& fmt = Formatter{})
 {
-	return std::to_string(value);
-}
-
-inline std::string to_string(char* value)
-{
-	return {value};
-}
-
-inline std::string to_string(char const* value)
-{
-	return {value};
-}
-
-inline std::string to_string(std::string const& value)
-{
-	return value;
-}
-
-inline std::string to_string(nullptr_t)
-{
-	return "nullptr";
-}
-
-template<typename T>
-std::string to_string(T* ptr)
-{
-	return to_string(uintptr_t(ptr));
+	return fmt.value(reinterpret_cast<void const*>(ptr));
 }
 
 
-using std::declval;
 template<typename T>
 struct string_converter;
-template <typename T>
-auto to_string(T const& value) ->
-	decltype( declval<string_converter<T>>()(value) )
+
+template <typename T, typename Formatter = format::pretty_print>
+auto to_string(T const& value, Formatter&& fmt = Formatter{}) ->
+	decltype( declval<string_converter<T>>()(fmt) )
 {
-	return string_converter<T>{ }(value);
+	return string_converter<T>{value}(fmt);
 }
 
-
-template<typename InputIterator>
-std::string to_string(InputIterator begin, InputIterator end);
-
-namespace _impl {
-template<class T> using op_std_begin = decltype(std::begin(declval<T>()));
-template<class T> using op_std_end   = decltype(std::end(declval<T>()));
-template<class T> using op_begin     = decltype(begin(declval<T>()));
-template<class T> using op_end       = decltype(end(declval<T>()));
-template<class T> using op_m_begin   = decltype(declval<T>().begin());
-template<class T> using op_m_end     = decltype(declval<T>().end());
-} // namespace _impl
-template<class T> constexpr auto has_begin = is_detected<_impl::op_std_begin, T>;
-template<class T> constexpr auto has_end   = is_detected<_impl::op_std_end, T>;
-
-template<typename T>
-auto to_string(T const& value) -> enable_if<has_begin<T> && has_end<T>, std::string>
+template<typename T, typename Formatter = format::pretty_print>
+auto to_string(T const& range, Formatter&& fmt = Formatter{}) ->
+	enable_if<is_const_iterable<T>, std::string>
 {
-	return to_string(std::begin(value), std::end(value));
+	fmt.list_start();
+	for (auto const& value : range)
+		fmt.value(value);
+	fmt.list_end();
+	return fmt;
 }
 
-template<typename InputIterator>
-std::string to_string(InputIterator begin, InputIterator end)
+template<typename InputIt, typename Formatter = format::pretty_print>
+std::string to_string(InputIt begin, InputIt end, Formatter&& fmt = Formatter{})
 {
-	std::string out;
-	out.append(1,'{');
-	if (begin != end) {
-		out.append(to_string(*begin++));
-		while (begin != end) {
-			out.append(", ");
-			out.append(to_string(*begin++));
-		}
-	}
-
-	out.append(1,'}');
-	return out;
+	fmt.list_start();
+	while (begin != end)
+		fmt.value(*begin++);
+	fmt.list_end();
+	return fmt;
 }
 } // namespace aw
+
+#include <aw/utility/to_string/formatters/pretty-print.h>
 #endif//aw_string_to_string_h

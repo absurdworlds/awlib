@@ -15,9 +15,12 @@ namespace aw {
 //! Convert nullopt_t to string.
 template <>
 struct string_converter<nullopt_t> {
-	std::string  operator()( nullopt_t ) const
+	string_converter(nullopt_t) {}
+
+	template<typename Formatter>
+	std::string operator()( Formatter& fmt ) const
 	{
-		return "nullopt";
+		return fmt.literal("nullopt");
 	}
 };
 
@@ -29,11 +32,13 @@ struct string_converter<nullopt_t> {
  */
 template <typename T>
 struct string_converter<optional<T>> {
-	std::string operator()( optional<T> const& opt ) const
+	optional<T> const& opt;
+
+	template<typename Formatter>
+	std::string operator()( Formatter& fmt ) const
 	{
-		if (opt)
-			return to_string( *opt );
-		return "";
+		if (opt) fmt.convert( *opt );
+		return fmt;
 	}
 };
 
