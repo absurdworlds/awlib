@@ -107,7 +107,7 @@ Iterator next(Iterator input, Iterator end)
  * Decode UTF-8 sequence, if valid
  */
 template<typename Iterator> static
-Iterator decode(Iterator input, Iterator end, u32& cp)
+Iterator decode(Iterator input, Iterator end, code_point& cp)
 {
 	// Helper lambda to bail out with an error
 	auto error = [&cp] (Iterator ret) {
