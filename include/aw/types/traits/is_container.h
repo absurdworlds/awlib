@@ -11,28 +11,45 @@
 #include <utility>
 #include <type_traits>
 namespace aw {
-namespace _impl {
-template<typename, typename = void>
-struct IsContainer : std::false_type {};
+template<class, typename = void>
+struct is_basic_container_t : std::false_type {};
 
-template<typename T>
-struct IsContainer<
+template<class T>
+struct is_basic_container_t<
 	T,
 	void_t<
 		typename T::value_type,
 		typename T::size_type,
-		typename T::allocator_type,
 		typename T::iterator,
 		typename T::const_iterator,
-		decltype(std::declval<T>().size()),
-		decltype(std::declval<T>().begin()),
-		decltype(std::declval<T>().end()),
-		decltype(std::declval<T>().cbegin()),
-		decltype(std::declval<T>().cend())
+		decltype( declval<T>().size() ),
+		decltype( declval<T>().empty() ),
+		decltype( declval<T>().begin() ),
+		decltype( declval<T>().end() ),
+		decltype( declval<T>().cbegin() ),
+		decltype( declval<T>().cend() )
 	>
-> : public std::true_type {};
-} // namespace _impl
+> : std::true_type {};
 
-constexpr auto IsContainer = _impl::IsContainer<T>::value;
+template<class, typename = void>
+struct is_allocator_aware_t : std::false_type {};
+
+template<class T>
+struct is_allocator_aware_t<
+	T,
+	void_t<
+		typename T::allocator_type,
+		decltype( declval<T>().get_allocator() ),
+	>
+> : std::true_type {};
+
+template<class T>
+constexpr bool is_allocator_aware = is_basic_container_t<T>::value;
+
+template<class T>
+constexpr bool is_basic_container = is_basic_container_t<T>::value;
+
+template<class T> constexpr bool is_allocator_aware_container =
+	is_basic_container<T> && is_allocator_aware<T>;
 } // namespace aw
 #endif//aw_traits_is_container
