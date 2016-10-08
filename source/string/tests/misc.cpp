@@ -114,5 +114,3 @@ Test(join_and_split2) {
 	}
 }
 } // namespace aw
-
-RunTests();
