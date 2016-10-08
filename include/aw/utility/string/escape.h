@@ -12,7 +12,7 @@
 #include <string>
 namespace aw {
 namespace string {
-std::string& escape_quotes(std::string const& src, std::string& dest)
+inline std::string& escape_quotes(std::string const& src, std::string& dest)
 {
 	dest.reserve(dest.size() + src.size());
 	for (char c : src) switch (c) {
@@ -26,7 +26,7 @@ std::string& escape_quotes(std::string const& src, std::string& dest)
 	return dest;
 }
 
-std::string escape_quotes(std::string const& src)
+inline std::string escape_quotes(std::string const& src)
 {
 	std::string dest;
 	escape_quotes(src, dest);

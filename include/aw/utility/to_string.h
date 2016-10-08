@@ -80,7 +80,6 @@ std::string to_string(T const* ptr, Formatter&& fmt = Formatter{})
 	return fmt.value(reinterpret_cast<void const*>(ptr));
 }
 
-
 template<typename T>
 struct string_converter;
 

@@ -1,4 +1,3 @@
-#include <aw/utility/test.h>
 #include <aw/utility/to_string/all.h>
 //#include <aw/types/traits/basic_traits.h>
 
@@ -7,6 +6,8 @@
 #include <vector>
 #include <list>
 
+#include <aw/utility/test.h>
+
 TestFile("to_string tests");
 
 namespace aw {
@@ -14,7 +15,9 @@ namespace aw {
 Test(to_string) {
 	using namespace std::string_literals;
 	Checks {
+		TestEqual(to_string(""), "");
 		TestAssert(to_string("raw string") == "raw string"s);
+		TestAssert(to_string({"raw \"string\""}) == R"({"raw \"string\""})"s);
 		TestAssert(to_string("string"s) == "string"s);
 		TestAssert(to_string(std::vector<int>{1,2,3,-1,100,15,22}) == "{1, 2, 3, -1, 100, 15, 22}"s);
 		TestAssert(to_string((void*)0) == "0"s);
@@ -61,3 +64,5 @@ Test(to_string) {
 	}
 }
 } // namespace aw
+
+RunTests();

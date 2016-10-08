@@ -9,6 +9,8 @@
  */
 #ifndef aw_to_string_formatters_pretty_print_h
 #define aw_to_string_formatters_pretty_print_h
+#include <aw/algorithm/in.h>
+#include <aw/utility/string/escape.h>
 namespace aw {
 namespace format {
 struct pretty_print {
@@ -72,16 +74,19 @@ struct pretty_print {
 
 	void convert(char val)
 	{
-		if (in_compound) result.push_back('\'');
-		result.push_back(val);
-		if (in_compound) result.push_back('\'');
+		// TODO: non-printable chars
+		if (in_compound)
+			add_escaped(val);
+		else
+			result.push_back(val);
 	}
 
 	void convert(string_view val)
 	{
-		if (in_compound) result.push_back('"');
-		result.append(val.data(), val.size());
-		if (in_compound) result.push_back('"');
+		if (in_compound)
+			add_escaped(std::string(val));
+		else
+			result.append(val.data(), val.size());
 	}
 
 	void convert(char const* val) { convert(string_view(val)); }
@@ -95,6 +100,22 @@ struct pretty_print {
 	}
 
 private:
+	void add_escaped(char c)
+	{
+		result.push_back('\'');
+		if (in(c, '\\', '\''))
+			result.push_back('\\');
+		result.push_back(c);
+		result.push_back('\'');
+	}
+
+	void add_escaped(std::string&& s)
+	{
+		result.push_back('"');
+		string::escape_quotes(s, result);
+		result.push_back('"');
+	}
+
 	std::string result;
 	bool in_compound = false;
 	bool first_value = true;
