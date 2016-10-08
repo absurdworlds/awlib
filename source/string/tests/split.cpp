@@ -1,7 +1,7 @@
 #include <aw/utility/string/split.h>
 #include <aw/utility/test.h>
 
-TestFile( "string::join" );
+TestFile( "string::split" );
 
 namespace aw {
 Test(split_empty) {
