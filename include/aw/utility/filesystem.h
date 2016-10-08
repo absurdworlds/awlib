@@ -41,7 +41,7 @@
 #define AW_FILESYSTEM AW_BOOST_FILESYSTEM
 //-----------------------------------------------
 #elif defined(AW_FALLBACK_FILESYSTEM)
-#include <aw/utility/fallback/filesystem.h>
+#include <awstd/filesystem>
 #define AW_FILESYSTEM AW_FALLBACK_FILESYSTEM
 //-----------------------------------------------
 #else
@@ -68,7 +68,7 @@ using namespace std::experimental::filesystem;
 using namespace boost::filesystem;
 //-----------------------------------------------
 #elif defined(AW_FALLBACK_FILESYSTEM) && (AW_FILESYSTEM == AW_FALLBACK_FILESYSTEM)
-using namespace aw::filesystem::fallback;
+using namespace awstd::filesystem;
 #endif
 } // namespace filesystem
 namespace fs = filesystem;
