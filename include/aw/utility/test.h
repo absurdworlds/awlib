@@ -342,9 +342,10 @@ struct equal {
 	std::string msg()
 	{
 		using namespace std::string_literals;
-		return expected + " == "s + got;
+		return vargs + ": "s + expected + " == "s + got;
 	}
 
+	char const* vargs;
 	std::string expected;
 	std::string got;
 };
@@ -363,9 +364,10 @@ struct equal_v {
 	std::string msg()
 	{
 		using namespace std::string_literals;
-		return "values: "s + values;
+		return vargs + " values: "s + values;
 	}
 
+	char const* vargs;
 	std::string values;
 };
 
@@ -425,9 +427,9 @@ struct _catch {
 
 #include <aw/utility/macro.h>
 #define TestEqual(...) \
-aw::test::check(aw::test::equal{}, __VA_ARGS__)
+aw::test::check(aw::test::equal{#__VA_ARGS__}, __VA_ARGS__)
 #define TestEqualV(...) \
-aw::test::check(aw::test::equal_v{}, __VA_ARGS__)
+aw::test::check(aw::test::equal_v{#__VA_ARGS__}, __VA_ARGS__)
 #define TestAssert(...) \
 aw::test::check(aw::test::_assert{"assert: " #__VA_ARGS__}, (__VA_ARGS__))
 #define TestFail(msg) \
