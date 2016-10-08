@@ -45,11 +45,22 @@ constexpr Int upper_mask(size_t bits)
 	return (lower_mask<Int>(bits)) << bits;
 }
 
+namespace _impl {
+template<typename Int>
+struct mask {
+	static_assert(is_even(num_digits<Int>), "");
+	static constexpr Int lower_bits = lower_mask(num_digits<Int> / 2);
+	static constexpr Int upper_bits = upper_mask(num_digits<Int> / 2);
+};
+} // namespace _impl
+
+template<typename Int> constexpr Int lower_bits = _impl::mask<Int>::lower_bits;
+template<typename Int> constexpr Int upper_bits = _impl::mask<Int>::upper_bits;
+
 template<typename Int>
 constexpr Int lower_half(Int value)
 {
-	static_assert(is_even(num_digits<Int>), "");
-	return value & lower_mask<Int>(num_digits<Int> / 2);
+	return value & lower_bits<Int>;
 }
 
 template<typename Int>
