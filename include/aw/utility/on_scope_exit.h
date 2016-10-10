@@ -26,7 +26,7 @@ public:
 		other.enabled = false;
 	}
 
-	~on_scope_exit() noexcept(false)
+	~on_scope_exit() noexcept( noexcept(func()) )
 	{
 		if (enabled) func();
 	}
