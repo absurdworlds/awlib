@@ -45,12 +45,8 @@ inline bool almostEqualUlps(F a, F b, size_t maxUlpsDiff)
 	using uint_type = typename float_traits<F>::uint_type;
 
 	// Different signs means they do not match.
-	if ((a < 0) != (b < 0)) {
-		if (a == b)
-			return true;
-
-		return false;
-	}
+	if ((a < 0) != (b < 0))
+		return a == b;
 
 	// Find the difference in ULPs.
 	uint_type ulps_a = reinterpret<uint_type>(a);
@@ -59,28 +55,18 @@ inline bool almostEqualUlps(F a, F b, size_t maxUlpsDiff)
 	if (ulps_a > ulps_b)
 		std::swap(ulps_a, ulps_b);
 
-	uint_type ulpsDiff = ulps_a - ulps_b;
-
-	if (ulpsDiff <= maxUlpsDiff)
-		return true;
-
-	return false;
+	return (ulps_a - ulps_b) <= maxUlpsDiff;
 }
 
 template <typename F>
 inline bool almostEqualRelative(F a, F b, F maxRelDiff)
 {
-	F diff = fabs(a - b);
+	const F diff = fabs(a - b);
 
 	a = fabs(a);
 	b = fabs(b);
 
-	F largest = std::max(a, b);
-
-	if (diff <= largest * maxRelDiff)
-		return true;
-
-	return false;
+	return diff <= std::max(a, b) * maxRelDiff;
 }
 
 template <typename F>
@@ -88,10 +74,22 @@ inline bool almostEqualEpsilon(F a, F b, F maxDiff)
 {
 	// Check if the numbers are really close -- needed
 	// when comparing numbers near zero.
-	F absDiff = fabs(a - b);
-	if (absDiff <= maxDiff)
-		return true;
+	return fabs(a - b) <= maxDiff;
+}
 
+template <typename F>
+bool less_epsilon(F a, F b, F maxDiff)
+{
+	if (a < (b - maxDiff))
+		return true;
+	return false;
+}
+
+template <typename F>
+bool greater_epsilon(F a, F b, F maxDiff)
+{
+	if (a < (b + maxDiff))
+		return true;
 	return false;
 }
 } // namespace _impl
