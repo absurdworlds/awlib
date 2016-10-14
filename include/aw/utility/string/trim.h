@@ -9,8 +9,8 @@
  */
 #ifndef aw_string_trim_h
 #define aw_string_trim_h
-#include <string>
 #include <algorithm>
+#include <aw/types/string_view.h>
 namespace aw {
 namespace string {
 /*!
@@ -20,8 +20,8 @@ namespace string {
 template <typename Predicate>
 std::string& ltrim(std::string& str, Predicate pred)
 {
-	auto first_not = std::find_if_not(std::begin(str), std::end(str), pred);
-	str.erase(std::begin(str), first_not);
+	auto first_not = std::find_if_not(begin(str), end(str), pred);
+	str.erase(begin(str), first_not);
 	return str;
 }
 
@@ -32,8 +32,8 @@ std::string& ltrim(std::string& str, Predicate pred)
 template <typename Predicate>
 std::string& rtrim(std::string& str, Predicate pred)
 {
-	auto last_not = std::find_if_not(std::rbegin(str), std::rend(str), pred);
-	str.erase(last_not.base(), std::end(str));
+	auto last_not = std::find_if_not(rbegin(str), rend(str), pred);
+	str.erase(last_not.base(), end(str));
 	return str;
 }
 
@@ -51,31 +51,65 @@ std::string& trim(std::string& str, Predicate pred)
  * Create a l-trimmed copy of a string \a str
  */
 template <typename Predicate>
-std::string ltrimmed(std::string const& str, Predicate pred)
+std::string ltrimmed(std::string str, Predicate pred)
 {
-	std::string copy = {str};
-	return ltrim(copy, pred);
+	return ltrim(str, pred);
 }
 
 /*!
  * Create a r-trimmed copy of a string \a str
  */
 template <typename Predicate>
-std::string rtrimmed(std::string const& str, Predicate pred)
+std::string rtrimmed(std::string str, Predicate pred)
 {
-	std::string copy = {str};
-	return rtrim(copy, pred);
+	return rtrim(str, pred);
 }
 
 /*!
  * Create a trimmed copy of a string \a str
  */
 template <typename Predicate>
-std::string trimmed(std::string const& str, Predicate pred)
+std::string trimmed(std::string str, Predicate pred)
 {
-	auto first = std::find_if_not(std::begin(str), std::end(str), pred);
-	auto last = std::find_if_not(std::rbegin(str), std::rend(str), pred);
-	return str.substr(first - std::begin(str), last.base() - first);
+	auto first = std::find_if_not(begin(str), end(str), pred);
+	auto last = std::find_if_not(rbegin(str), rend(str), pred);
+	return str.substr(first - begin(str), last.base() - first);
+}
+
+/*!
+ * Remove characters matching predicate \a pred
+ * from the *beginning* of the string \a str.
+ */
+template <typename Predicate>
+string_view ltrim(string_view str, Predicate pred)
+{
+	auto first_not = std::find_if_not(begin(str), end(str), pred);
+	str.remove_suffix(first_not - begin(str));
+	return str;
+}
+
+/*!
+ * Remove characters matching predicate \a pred
+ * from the *end* of the string \a str.
+ */
+template <typename Predicate>
+string_view rtrim(string_view str, Predicate pred)
+{
+	auto last_not = std::find_if_not(rbegin(str), rend(str), pred);
+	str.remove_suffix(last_not - rbegin(str));
+	return str;
+}
+
+/*!
+ * Remove characters matching predicate \a pred
+ * from both end of the string \a str.
+ */
+template <typename Predicate>
+string_view trim(string_view str, Predicate pred)
+{
+	auto first = std::find_if_not(begin(str), end(str), pred);
+	auto last = std::find_if_not(rbegin(str), rend(str), pred);
+	return str.substr(first - begin(str), last - rbegin(str));
 }
 } // namespace string
 } // namespace aw
