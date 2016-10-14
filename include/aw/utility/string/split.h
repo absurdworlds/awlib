@@ -9,9 +9,9 @@
  */
 #ifndef aw_string_split_h
 #define aw_string_split_h
-#include <string>
 #include <vector>
 #include <algorithm>
+#include <aw/types/string_view.h>
 namespace aw {
 namespace string {
 /*!
@@ -27,7 +27,7 @@ namespace string {
  *      Vector with found tokens.
  */
 inline std::vector<std::string>
-split(std::string const& source, std::string const& delim)
+split(string_view source, string_view delim)
 {
 	std::vector<std::string> holder;
 	size_t num_tokens = 0;
@@ -36,7 +36,7 @@ split(std::string const& source, std::string const& delim)
 	size_t delim_pos = source.find_first_of(delim, pos);
 
 	while (pos != std::string::npos) {
-		holder.push_back(source.substr(pos, delim_pos - pos));
+		holder.push_back((std::string)source.substr(pos, delim_pos - pos));
 		++num_tokens;
 
 		pos = source.find_first_not_of(delim, delim_pos);
@@ -58,7 +58,7 @@ split(std::string const& source, std::string const& delim)
  *      Vector of found tokens.
  */
 inline std::vector<std::string>
-explode(std::string const& source, std::string const& delim)
+explode(string_view source, string_view delim)
 {
 	std::vector<std::string> holder;
 	size_t pos1 = 0;
@@ -66,7 +66,7 @@ explode(std::string const& source, std::string const& delim)
 
 	do {
 		pos2 = source.find(delim, pos1);
-		holder.push_back(source.substr(pos1, pos2 - pos1));
+		holder.push_back((std::string)source.substr(pos1, pos2 - pos1));
 
 		if (pos2 == std::string::npos)
 			break;

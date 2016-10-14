@@ -60,15 +60,15 @@ struct Lexer {
 		return tok = readToken();
 	}
 
-	void message(std::string const& msg, token::position pos)
+	void message(string_view msg, token::position pos)
 	{
 		report(log::info, msg, pos);
 	}
-	void warning(std::string const& msg, token::position pos)
+	void warning(string_view msg, token::position pos)
 	{
 		report(log::warning, msg, pos);
 	}
-	void error(std::string const& msg, token::position pos)
+	void error(string_view msg, token::position pos)
 	{
 		report(log::error, msg, pos);
 	}

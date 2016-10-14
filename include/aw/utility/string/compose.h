@@ -10,8 +10,8 @@
 #ifndef aw_string_compose_h
 #define aw_string_compose_h
 #include <vector>
-#include <string>
 
+#include <aw/types/string_view.h>
 #include <aw/utility/string/string.h>
 #include <aw/utility/to_string.h>
 
@@ -21,8 +21,7 @@ namespace string {
  * Compose parametrized string (parameter substitution).
  */
 AW_STRING_EXP
-std::string compose(std::string const& fmt,
-                    std::vector<std::string> const& args);
+std::string compose(string_view fmt, std::vector<std::string> const& args);
 
 /*!
  * Compose parametrized string (parameter substitution).
@@ -53,7 +52,7 @@ std::string compose(std::string const& fmt,
  * 	the string \a fmt.
  */
 template<typename... Args>
-std::string compose(std::string const& fmt, Args const&... args)
+std::string compose(string_view fmt, Args const&... args)
 {
 	std::vector<std::string> bits{to_string(args)...};
 
