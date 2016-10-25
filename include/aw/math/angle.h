@@ -16,14 +16,14 @@ namespace aw {
 namespace math {
 //! Convert degrees to radians
 template<typename T>
-inline T degToRad(T deg)
+constexpr T deg_to_rad(T deg)
 {
 	return deg * radians_in_degree;
 }
 
 //! Convert radians to degrees
 template<typename T>
-inline T radToDeg(T rad)
+constexpr T rad_to_deg(T rad)
 {
 	return rad * degrees_in_radian;
 }
