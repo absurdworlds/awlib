@@ -84,6 +84,18 @@ struct vector_ops<vector<T,N>,index_sequence<Is...>>
 	{
 		(func(vec[Is]), ...);
 	}
+
+	template<typename Func>
+	static VectorT make(VectorT const& vec, Func func)
+	{
+		return { func(vec[Is]) ... };
+	}
+
+	template<typename Func>
+	static void apply(VectorT& vec, Func func)
+	{
+		set(vec, make(vec, func));
+	}
 };
 
 template <typename T, size_t N>
@@ -183,9 +195,17 @@ struct vector {
 	}
 
 	template<typename Func>
-	void for_each(Func func/*void(func)(T)*/)
+	vector& for_each(Func func)
 	{
 		vector_ops<vector>::for_each(*this, func);
+		return *this;
+	}
+
+	template<typename Func>
+	vector& apply(Func func)
+	{
+		vector_ops<vector>::apply(*this, func);
+		return *this;
 	}
 
 	T& x()
