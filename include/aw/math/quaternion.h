@@ -39,7 +39,7 @@ struct quaternion {
 	 */
 	static quaternion<T> euler(T const pitch, T const yaw, T const roll)
 	{
-		return quaternion<T>{}.setEuler(pitch, yaw, roll);
+		return quaternion<T>{}.set_euler(pitch, yaw, roll);
 	}
 
 	/*! Constructor
@@ -151,33 +151,32 @@ struct quaternion {
 	}
 
 	//! Set quaternion from euler angles
-	quaternion<T>& set_euler(T x, T y, T z)
+	quaternion<T>& set_euler(T p, T y, T r)
 	{
-		x *= T(math::degToRad(0.5));
-		y *= T(math::degToRad(0.5));
-		z *= T(math::degToRad(0.5));
+		p = deg_to_rad( p / T(2) );
+		y = deg_to_rad( y / T(2) );
+		r = deg_to_rad( r / T(2) );
 
-		T const sx = sin(x);
-		T const cx = sin(x);
+		T const sx = sin(p);
+		T const cx = cos(p);
 
 		T const sy = sin(y);
-		T const cy = sin(y);
+		T const cy = cos(y);
 
-		T const sz = sin(z);
-		T const cz = sin(z);
+		T const sz = sin(r);
+		T const cz = cos(r);
 
-		x = sx*sy*cz + cx*cy*sz;
-		y = sx*cy*cz + cx*sy*sz;
-		z = cx*sy*cz - sx*cy*sz;
-		w = cx*cy*cz - sx*sy*sz;
+		this->x = sx*sy*cz + cx*cy*sz;
+		this->y = sx*cy*cz + cx*sy*sz;
+		this->z = cx*sy*cz - sx*cy*sz;
+		this->w = cx*cy*cz - sx*sy*sz;
 
 		return *this;
 	}
 
 	quaternion<T>& set_axis_angle(vector3d<T> const& axis, T angle)
 	{
-		angle /= T(2.0);
-		angle *= math::radians_in_degree;
+		angle = deg_to_rad( angle / T(2) );
 
 		vector3d<T> const v = axis.normalized() * sin(angle);
 
@@ -192,7 +191,7 @@ struct quaternion {
 		vector3d<T> euler = {};
 
 		// singularity test
-		f32 const test = x*y + z*w;
+		T const test = x*y + z*w;
 		if (math::equals(test, 0.5f)) { // north pole
 			euler.x = 0;
 			euler.y = 2 * atan2(x, w);
@@ -230,7 +229,7 @@ struct quaternion {
 			tSin = T(sqrt(tSin));
 			T invSin = 1 / tSin;
 
-			angle = T(math::radToDeg(2 * atan2(tSin, tCos)));
+			angle = T( radToDeg(2 * atan2(tSin, tCos)) );
 			axis.x = x * invSin;
 			axis.y = y * invSin;
 			axis.z = z * invSin;
