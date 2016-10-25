@@ -13,6 +13,7 @@
 #include <aw/math/math.h>
 #include <aw/math/vector3d.h>
 #include <aw/math/vector4d.h>
+#include <aw/math/vector_funcs.h>
 namespace aw {
 namespace math {
 //! Quaternion for representing rotations
@@ -30,7 +31,7 @@ struct quaternion {
 	\brief Construct quaternion using individual components.
 	 */
 	quaternion(T const w, T const x, T const y, T const z)
-		: w(w), x(x), y(y), z(z)
+		: w{w}, x{x}, y{y}, z{z}
 	{
 	}
 
@@ -47,7 +48,7 @@ struct quaternion {
 	 */
 	static quaternion<T> axis_angle(vector3d<T> const& axis, T const angle)
 	{
-		return quaternion<T>{}.setAxisAngle(axis, angle);
+		return quaternion<T>{}.set_axis_angle(axis, angle);
 	}
 
 	//! Copy components from other quaternion
@@ -151,32 +152,24 @@ struct quaternion {
 	}
 
 	//! Set quaternion from euler angles
-	quaternion<T>& set_euler(T p, T y, T r)
+	quaternion<T>& set_euler(T pitch, T yaw, T roll)
 	{
-		p = deg_to_rad( p / T(2) );
-		y = deg_to_rad( y / T(2) );
-		r = deg_to_rad( r / T(2) );
+		vector3d<T> vec{ pitch, yaw, roll };
+		vec /= T(2);
 
-		T const sx = sin(p);
-		T const cx = cos(p);
+		vector3d<T> const s = sin( vec );
+		vector3d<T> const c = cos( vec );
 
-		T const sy = sin(y);
-		T const cy = cos(y);
-
-		T const sz = sin(r);
-		T const cz = cos(r);
-
-		this->x = sx*sy*cz + cx*cy*sz;
-		this->y = sx*cy*cz + cx*sy*sz;
-		this->z = cx*sy*cz - sx*cy*sz;
-		this->w = cx*cy*cz - sx*sy*sz;
-
+		x = s.x * s.y * c.z + c.x * c.y * s.z;
+		y = s.x * c.y * c.z + c.x * s.y * s.z;
+		z = c.x * s.y * c.z - s.x * c.y * s.z;
+		w = c.x * c.y * c.z - s.x * s.y * s.z;
 		return *this;
 	}
 
 	quaternion<T>& set_axis_angle(vector3d<T> const& axis, T angle)
 	{
-		angle = deg_to_rad( angle / T(2) );
+		angle /= T(2);
 
 		vector3d<T> const v = axis.normalized() * sin(angle);
 
@@ -186,37 +179,35 @@ struct quaternion {
 	}
 
 	//! Get quaternion as euler angles
-	auto to_euler()
+	vector3d<T> to_euler()
 	{
 		vector3d<T> euler = {};
 
 		// singularity test
-		T const test = x*y + z*w;
-		if (math::equals(test, 0.5f)) { // north pole
-			euler.x = 0;
+		T const xyzw = x*y + z*w;
+		if ( math::equals(xyzw, 0.5f) ) { // north pole
+			euler.x = math::half_pi;
 			euler.y = 2 * atan2(x, w);
-			euler.z = math::half_pi;
-		} else if (math::equals(test, -0.5f)) { // south pole
-			euler.x = 0;
-			euler.y = -2 * atan2(x,w);
-			euler.z = -math::half_pi;
+			euler.z = 0;
+		} else if ( math::equals(xyzw, -0.5f) ) { // south pole
+			euler.x = -math::half_pi;
+			euler.y = -2 * atan2(x, w);
+			euler.z = 0;
 		} else {
-			f32 const sX = x * x;
-			f32 const sY = y * y;
-			f32 const sZ = z * z;
+			T const sX = x * x;
+			T const sY = y * y;
+			T const sZ = z * z;
 
-			euler.x = atan2(2*(x*w - y*z) , 1 - 2*sX - 2*sZ);
-			euler.y = atan2(2*(y*w - x*z) , 1 - 2*sY - 2*sZ);
-			euler.z = asin(2*test);
+			euler.x = asin(2*xyzw);
+			euler.y = atan2(2*(x*w - y*z), 1 - 2*sX - 2*sZ);
+			euler.z = atan2(2*(y*w - x*z), 1 - 2*sY - 2*sZ);
 		}
 
-		euler *= math::degrees_in_radian;
-
-		return euler.to_tuple();
+		return euler;
 	}
 
 	//! Get quaternion in axis-angle representation
-	std::tuple<vector3d<T>, T> toAxisAngle()
+	std::tuple<vector3d<T>, T> to_axis_angle()
 	{
 		vector3d<T> axis = {};
 		T angle = {};
@@ -229,14 +220,14 @@ struct quaternion {
 			tSin = T(sqrt(tSin));
 			T invSin = 1 / tSin;
 
-			angle = T( radToDeg(2 * atan2(tSin, tCos)) );
+			angle = T( 2 * atan2(tSin, tCos) );
 			axis.x = x * invSin;
 			axis.y = y * invSin;
 			axis.z = z * invSin;
 		} else {
 			axis.x = T{0};
-			axis.y = T{1};
-			axis.z = T{0};
+			axis.y = T{0};
+			axis.z = T{-1};
 			angle  = T{0};
 		}
 
