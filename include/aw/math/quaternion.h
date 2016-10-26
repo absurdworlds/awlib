@@ -160,10 +160,10 @@ struct quaternion {
 		vector3d<T> const s = sin( vec );
 		vector3d<T> const c = cos( vec );
 
-		x = s.x * s.y * c.z + c.x * c.y * s.z;
-		y = s.x * c.y * c.z + c.x * s.y * s.z;
-		z = c.x * s.y * c.z - s.x * c.y * s.z;
-		w = c.x * c.y * c.z - s.x * s.y * s.z;
+		x = s.x() * s.y() * c.z() + c.x() * c.y() * s.z();
+		y = s.x() * c.y() * c.z() + c.x() * s.y() * s.z();
+		z = c.x() * s.y() * c.z() - s.x() * c.y() * s.z();
+		w = c.x() * c.y() * c.z() - s.x() * s.y() * s.z();
 		return *this;
 	}
 
@@ -173,7 +173,7 @@ struct quaternion {
 
 		vector3d<T> const v = axis.normalized() * sin(angle);
 
-		set(cos(angle), v.x, v.y, v.z);
+		set(cos(angle), v.x(), v.y(), v.z());
 
 		return *this;
 	}
@@ -186,21 +186,21 @@ struct quaternion {
 		// singularity test
 		T const xyzw = x*y + z*w;
 		if ( math::equals(xyzw, 0.5f) ) { // north pole
-			euler.x = math::half_pi;
-			euler.y = 2 * atan2(x, w);
-			euler.z = 0;
+			euler[axis::x] = math::half_pi;
+			euler[axis::y] = 2 * atan2(x, w);
+			euler[axis::z] = 0;
 		} else if ( math::equals(xyzw, -0.5f) ) { // south pole
-			euler.x = -math::half_pi;
-			euler.y = -2 * atan2(x, w);
-			euler.z = 0;
+			euler[axis::x] = -math::half_pi;
+			euler[axis::y] = -2 * atan2(x, w);
+			euler[axis::z] = 0;
 		} else {
 			T const sX = x * x;
 			T const sY = y * y;
 			T const sZ = z * z;
 
-			euler.x = asin(2*xyzw);
-			euler.y = atan2(2*(x*w - y*z), 1 - 2*sX - 2*sZ);
-			euler.z = atan2(2*(y*w - x*z), 1 - 2*sY - 2*sZ);
+			euler[axis::x] = asin(2*xyzw);
+			euler[axis::y] = atan2(2*(x*w - y*z), 1 - 2*sX - 2*sZ);
+			euler[axis::z] = atan2(2*(y*w - x*z), 1 - 2*sY - 2*sZ);
 		}
 
 		return euler;

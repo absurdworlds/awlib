@@ -31,7 +31,7 @@ vector3d<T> scale(matrix4<T> const& mat)
 
 //! Extract scale, assuming it is positive
 template<typename T>
-vector3d<T> scalePositive(matrix4<T> const& mat)
+vector3d<T> scale_positive(matrix4<T> const& mat)
 {
 	vector3d<T> const row1 = sub<3>( row<0>(mat) );
 	vector3d<T> const row2 = sub<3>( row<1>(mat) );
@@ -53,16 +53,16 @@ vector3d<T> rotation(matrix4<T> const& mat, vector3d<T> const& scale)
 {
 	vector3d<T> rot;
 
-	rot.y = asin(-get<2,0>(mat));
+	rot.y() = asin(-get<2,0>(mat));
 
 	T const test = T(1.0 /*- math::RoundingError::float64*/);
 
-	if (rot.y >= test || rot.y <= -test) {
-		rot.x = atan2(get<2,1>(mat)*scale[2], get<2,2>(mat));
-		rot.z = atan2(get<1,0>(mat)*scale[0], get<0,0>(mat));
+	if (rot.y() >= test || rot.y() <= -test) {
+		rot[axis::x] = atan2(get<2,1>(mat)*scale[2], get<2,2>(mat));
+		rot[axis::z] = atan2(get<1,0>(mat)*scale[0], get<0,0>(mat));
 	} else {
-		rot.x = T(0.0);
-		rot.z = atan2(get<0,1>(mat)*scale[1], get<1,1>(mat));
+		rot[axis::x] = T(0.0);
+		rot[axis::z] = atan2(get<0,1>(mat)*scale[1], get<1,1>(mat));
 	}
 
 	return rot;
@@ -81,7 +81,7 @@ vector3d<T> rotation(matrix4<T> const& mat)
  *  \return Vector consisting of euler angles (in radians)
  */
 template<typename T>
-vector3d<T> rotationUnscaled(matrix4<T> const& mat)
+vector3d<T> rotation_unscaled(matrix4<T> const& mat)
 {
 	static vector3d<T> const scale = {1, 1, 1};
 	return rotation(mat, scale);

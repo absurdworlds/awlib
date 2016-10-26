@@ -28,7 +28,7 @@ T angle(vector2d<T> const& vec)
 		yaw -= math::double_pi;
 	}
 
-	return math::radToDeg(yaw);
+	return yaw;
 }
 } // namespace math
 } // namespace aw

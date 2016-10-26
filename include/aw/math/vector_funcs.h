@@ -8,20 +8,23 @@
  */
 #ifndef aw_math_vector_funcs_h
 #define aw_math_vector_funcs_h
+#include <cmath>
 #include <aw/math/vector.h>
 namespace aw {
 namespace math {
 
 template<typename T, size_t N>
-Vector<T,N> sin( Vector<T,N> vec )
+vector<T,N> sin( vector<T,N> vec )
 {
+	using std::sin;
 	auto func = [] (T val) { return sin(val); };
 	return vec.apply( func );
 }
 
 template<typename T, size_t N>
-Vector<T,N> sin( Vector<T,N> vec )
+vector<T,N> cos( vector<T,N> vec )
 {
+	using std::cos;
 	auto func = [] (T val) { return cos(val); };
 	return vec.apply( func );
 }

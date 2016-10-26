@@ -78,7 +78,7 @@ vector3d<T> scale_positive(matrix3<T> const& mat)
 
 namespace _impl {
 template<typename T>
-quaternion<T> as_quaternion(matrix3<T> const& mat, T det)
+quaternion<T> to_quaternion(matrix3<T> const& mat, T det)
 {
 	quaternion<T> quat = {};
 
@@ -95,19 +95,19 @@ quaternion<T> as_quaternion(matrix3<T> const& mat, T det)
 }
 } // namespace _impl
 
-//! Convert rotation matrix to quaternion
-template<typename T>
-quaternion<T> as_quaternion(matrix3<T> const& mat)
-{
-	return _impl::as_quaternion(mat, 1);
-}
-
 //! Convert matrix to quaternion
 template<typename T>
-quaternion<T> as_quaternion_scaled(matrix3<T> const& mat)
+quaternion<T> to_quaternion(matrix3<T> const& mat)
 {
-	T const det = T(pow(determinant(mat), 1/3));
-	return _impl::as_quaternion(mat, det);
+	T const det = T(pow(determinant(mat), 1.0/3.0));
+	return _impl::to_quaternion(mat, det);
+}
+
+//! Convert rotation matrix to quaternion
+template<typename T>
+quaternion<T> as_quaternion_unscaled(matrix3<T> const& mat)
+{
+	return _impl::to_quaternion( mat, T(0) );
 }
 } // namespace math
 } // namespace aw
