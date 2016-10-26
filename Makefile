@@ -1,18 +1,12 @@
 all: libs
 
 # core
-libs: utility core hdf gui physics platform
-core:
-	@ $(MAKE) -C 'source/core' $(target)
-
+libs: utility hdf gui platform
 gui:
 	@ $(MAKE) -C 'source/gui' $(target)
 
 hdf:
 	@ $(MAKE) -C 'source/hdf' $(target)
-
-physics:
-	@ $(MAKE) -C 'source/physics-bt' $(target)
 
 platform:
 	@ $(MAKE) -C 'source/platform' $(target)
