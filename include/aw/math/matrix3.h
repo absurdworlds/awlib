@@ -9,12 +9,40 @@
 #ifndef aw_math_matrix3_h
 #define aw_math_matrix3_h
 #include <aw/math/vector3d.h>
+#include <aw/math/vector_funcs.h>
 #include <aw/math/quaternion.h>
 #include <aw/math/matrix.h>
 namespace aw {
 namespace math {
 template<typename T>
 using matrix3 = matrix<T,3,3>;
+
+template<typename T>
+matrix3<T> from_euler(vector3d<T> const& euler)
+{
+	vector3d<T> s = sin( euler );
+	vector3d<T> c = cos( euler );
+
+	using row_type = typename matrix3<T>::row_type;
+
+	row_type const row1{
+		 c.y * c.z,
+		-c.y * s.z,
+		s.y
+	};
+	row_type const row2{
+		 c.x * s.z + s.x * s.y * c.z,
+		 c.x * c.z - s.x * s.y * s.z,
+		-s.x * c.y
+	};
+	row_type const row3{
+		s.x * s.z - c.x * s.y * c.z,
+		s.x * c.z + c.x * s.y * s.z,
+		c.x * c.y
+	};
+
+	return {row1, row2, row3};
+}
 
 //! Extract scale from matrix
 template<typename T>
