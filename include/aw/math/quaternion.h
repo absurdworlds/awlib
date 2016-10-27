@@ -16,7 +16,12 @@
 #include <aw/math/vector_funcs.h>
 namespace aw {
 namespace math {
-//! Quaternion for representing rotations
+template<typename T>
+struct axis_angle {
+	vector3d<T> axis;
+	T angle;
+};
+
 template<typename T>
 struct quaternion {
 	/*! Default constructor
@@ -38,7 +43,7 @@ struct quaternion {
 	/*! Constructor
 	 * \brief Construct quaternion from euler angles.
 	 */
-	static quaternion<T> euler(T const pitch, T const yaw, T const roll)
+	static quaternion<T> from_euler(T const pitch, T const yaw, T const roll)
 	{
 		return quaternion<T>{}.set_euler(pitch, yaw, roll);
 	}
@@ -46,7 +51,7 @@ struct quaternion {
 	/*! Constructor
 	 * \brief Construct quaternion using axis and rotation around given axis.
 	 */
-	static quaternion<T> axis_angle(vector3d<T> const& axis, T const angle)
+	static quaternion<T> from_axis_angle(vector3d<T> const& axis, T const angle)
 	{
 		return quaternion<T>{}.set_axis_angle(axis, angle);
 	}
@@ -207,7 +212,7 @@ struct quaternion {
 	}
 
 	//! Get quaternion in axis-angle representation
-	std::tuple<vector3d<T>, T> to_axis_angle()
+	axis_angle<T> to_axis_angle()
 	{
 		vector3d<T> axis = {};
 		T angle = {};
