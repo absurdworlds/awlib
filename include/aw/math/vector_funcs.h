@@ -8,8 +8,8 @@
  */
 #ifndef aw_math_vector_funcs_h
 #define aw_math_vector_funcs_h
-#include <cmath>
 #include <aw/math/vector.h>
+#include <aw/math/trigonometry.h>
 namespace aw {
 namespace math {
 

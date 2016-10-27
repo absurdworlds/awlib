@@ -18,7 +18,35 @@ template<typename T>
 using matrix3 = matrix<T,3,3>;
 
 template<typename T>
-matrix3<T> from_euler(vector3d<T> const& euler)
+matrix3<T> pitch_matrix( T pitch )
+{
+	auto s = sin( pitch );
+	auto c = cos( pitch );
+	return {{{1, 0, 0}, {0, c, -s}, {0, s, c}}};
+}
+
+template<typename T>
+matrix3<T> yaw_matrix( T yaw )
+{
+	auto s = sin( yaw );
+	auto c = cos( yaw );
+	return {{{c, 0, s}, {0, 1, 0}, {-s, 0, c}}};
+}
+
+template<typename T>
+matrix3<T> roll_matrix( T roll )
+{
+	auto s = sin( roll );
+	auto c = cos( roll );
+	return {{{c, -s, 0}, {s, c, 0}, {0, 0, 1}}};
+}
+
+/*!
+ * Create a matrix from Euler angles, rotations are applied in following order:
+ * rotation around X axis (pitch), Y axis (yaw), Z axis (roll).
+ */
+template<typename T>
+matrix3<T> matrix_from_euler(vector3d<T> const& euler)
 {
 	vector3d<T> s = sin( euler );
 	vector3d<T> c = cos( euler );
@@ -26,19 +54,19 @@ matrix3<T> from_euler(vector3d<T> const& euler)
 	using row_type = typename matrix3<T>::row_type;
 
 	row_type const row1{
-		 c.y * c.z,
-		-c.y * s.z,
-		s.y
+		 c.y() * c.z(),
+		-c.x() * s.z() + c.z() * s.x() * s.y(),
+		 s.x() * s.z() + c.z() * c.x() * s.y()
 	};
 	row_type const row2{
-		 c.x * s.z + s.x * s.y * c.z,
-		 c.x * c.z - s.x * s.y * s.z,
-		-s.x * c.y
+		 c.y() * s.z(),
+		 c.x() * c.z() + s.x() * s.y() * s.z(),
+		-c.z() * s.x() + c.x() * s.y() * s.z()
 	};
 	row_type const row3{
-		s.x * s.z - c.x * s.y * c.z,
-		s.x * c.z + c.x * s.y * s.z,
-		c.x * c.y
+		-s.y(),
+		 c.y() * s.x(),
+		 c.y() * c.x()
 	};
 
 	return {row1, row2, row3};
