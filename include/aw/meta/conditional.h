@@ -36,5 +36,9 @@ using void_if = enable_if<expr,void>;
 /*! Shorthand for enable_if<expr, bool> */
 template<bool expr>
 using bool_if = enable_if<expr,bool>;
+
+/*! Alias for std::conditional */
+template<bool expr, typename T, typename F>
+using conditional = typename std::conditional<expr, T, F>::type;
 } // namespace aw
 #endif//aw_traits_conditional
