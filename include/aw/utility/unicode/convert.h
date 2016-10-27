@@ -6,8 +6,8 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _aw_utf_convert_
-#define _aw_utf_convert_
+#ifndef aw_utf_convert_h
+#define aw_utf_convert_h
 #include <aw/utility/string/string.h>
 #include <aw/utility/unicode/utf8.h>
 #include <aw/utility/unicode/utf16.h>
@@ -15,25 +15,46 @@
 
 #include <aw/meta/conditional.h>
 #include <aw/types/traits/basic_traits.h>
+#include <aw/types/string_view.h>
 namespace aw {
+namespace encoding { struct unknown {}; }
 namespace unicode {
+template<typename CharT>
+constexpr encoding::unknown char_encoding;
+
+template<> constexpr utf8  char_encoding<char>;
+template<> constexpr utf16 char_encoding<char16_t>;
+template<> constexpr utf32 char_encoding<char32_t>;
+
 namespace _impl {
-template<typename String>
-struct encoding_of;
-template<> struct encoding_of<utf8::string>  { using type = utf8; };
-template<> struct encoding_of<utf16::string> { using type = utf16; };
-template<> struct encoding_of<utf32::string> { using type = utf32; };
-template<> struct encoding_of<std::wstring>  {
+#if 0
+constexpr auto wchar_encoding()
+{
+	constexpr max = std::numeric_limits<wchar_t>::max();
+	if constexpr ( max >= utf32::max )
+		return utf32{};
+	else if constexpr ( max >= utf16::max )
+		return utf16{};
+	else if constexpr ( max >= utf8::max )
+		return utf8{};
+	return encoding::unknown;
+}
+#endif
+struct wchar_enc {
 private:
 	static constexpr size_t _wsize = sizeof(std::wstring::value_type);
 public:
-	using type = conditional<_wsize == sizeof(char32_t), utf32,
-	             conditional<_wsize == sizeof(char16_t), utf16,
-	             conditional<_wsize == sizeof(char),     utf8, void>>>;
+	using type = conditional<_wsize >= sizeof(char32_t), utf32,
+	             conditional<_wsize >= sizeof(char16_t), utf16,
+	             conditional<_wsize >= sizeof(char),     utf8, void>>>;
 };
-} // namespace _impl;
+} // namespace _impl
+
+template<> constexpr _impl::wchar_enc::type char_encoding<wchar_t>;
+
+
 template<typename String>
-using encoding_of = typename _impl::encoding_of<String>::type;
+constexpr decltype( char_encoding<typename String::value_type> ) encoding_of;
 
 //! Convert string between different Unicode encodings
 template<typename Output, typename Input, typename InEnc, typename OutEnc>
@@ -57,24 +78,20 @@ auto convert(Input const& str, InEnc, OutEnc) -> Output
 	return result;
 }
 
-//! Convert string between different Unicode encodings
-template<typename In, typename Out>
-auto convert(typename In::string const& str) -> typename Out::string
-{
-	return convert<typename Out::string>(str, In{}, Out{});
-}
-
 template<typename Out, typename In>
-auto convert(In const& str) ->
-	enable_if<is_string<Out> && is_string<In>, Out>
+auto convert(In const& str) -> Out
 {
-	return convert<Out>(str, encoding_of<In>{}, encoding_of<Out>{});
+	return convert<Out>(str, encoding_of<In>, encoding_of<Out>);
 }
 
-namespace {
-constexpr utf8::string(&narrow)(utf16::string const&) = convert<utf16, utf8>;
-constexpr utf16::string(&widen)(utf8::string const&)  = convert<utf8, utf16>;
+inline std::string narrow(wstring_view in)
+{
+	return convert<std::string>(in);
+}
+inline std::wstring widen(string_view in)
+{
+	return convert<std::wstring>(in);
 }
 } // namespace unicode
 } // namespace aw
-#endif//_aw_utf_convert_
+#endif//aw_utf_convert_h
