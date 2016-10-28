@@ -57,10 +57,14 @@ struct pretty_print {
 		return *this;
 	};
 
+	//void convert(signed char val) { result.append(std::to_string(val)); }
+	void convert(short val)  { result.append(std::to_string(val)); }
 	void convert(int val)  { result.append(std::to_string(val)); }
 	void convert(long val) { result.append(std::to_string(val)); }
 	void convert(long long val) { result.append(std::to_string(val)); }
 
+	//void convert(unsigned char val) { result.append(std::to_string(val)); }
+	void convert(unsigned short val) { result.append(std::to_string(val)); }
 	void convert(unsigned val) { result.append(std::to_string(val)); }
 	void convert(unsigned long val) { result.append(std::to_string(val)); }
 	void convert(unsigned long long val) { result.append(std::to_string(val)); }
