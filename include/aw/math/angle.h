@@ -12,6 +12,7 @@
 #include <ratio>
 #include <aw/math/math.h>
 #include <aw/math/constants.h>
+#include <aw/math/equals.h>
 #include <aw/types/traits/basic_traits.h>
 #include <aw/types/traits/common_type.h>
 
@@ -142,6 +143,52 @@ auto operator/(R1 const& a, angle<R2,P2> const& b) ->
 	using result = angle< common_type<R1, R2>, P2 >;
 	result r{ b };
 	return r /= a;
+}
+
+template <typename R1, typename P1, typename R2, typename P2>
+bool operator==(angle<R1,P1> const& a, angle<R2,P2> const& b)
+{
+	using result = angle< common_type<R1, R2>, P2 >;
+	return result{ a }.count() == result{ b }.count();
+}
+
+
+template <typename R1, typename P1, typename R2, typename P2>
+bool operator<(angle<R1,P1> const& a, angle<R2,P2> const& b)
+{
+	using result = angle< common_type<R1, R2>, P2 >;
+	return result{ a }.count() < result{ b }.count();
+}
+
+template <typename R1, typename P1, typename R2, typename P2>
+bool operator>(angle<R1,P1> const& a, angle<R2,P2> const& b)
+{
+	return b < a;
+}
+
+template <typename R1, typename P1, typename R2, typename P2>
+bool operator<=(angle<R1,P1> const& a, angle<R2,P2> const& b)
+{
+	return !(a > b);
+}
+
+template <typename R1, typename P1, typename R2, typename P2>
+bool operator>=(angle<R1,P1> const& a, angle<R2,P2> const& b)
+{
+	return !(a < b);
+}
+
+template <typename R1, typename P1, typename R2, typename P2>
+bool operator!=(angle<R1,P1> const& a, angle<R2,P2> const& b)
+{
+	return !(a == b);
+}
+
+template <typename R1, typename P1, typename R2, typename P2>
+bool equals(angle<R1,P1> const& a, angle<R2,P2> const& b)
+{
+	using result = angle< common_type<R1, R2>, P2 >;
+	return equals(result{ a }.count(), result{ b }.count());
 }
 
 } //namespace aw::math
