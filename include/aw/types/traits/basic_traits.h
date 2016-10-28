@@ -56,7 +56,9 @@ template<typename Call>
 using result_of = std::result_of<Call>;
 
 template<typename T>
-struct is_float_t : std::is_floating_point<T> { };
+struct is_floating_point_t : std::is_floating_point<T> { };
+template<typename T>
+constexpr bool is_floating_point = is_floating_point_t<T>::value;
 
 template<typename T>
 struct is_int_t : std::is_integral<T> { };
@@ -76,7 +78,7 @@ struct is_string_t<std::basic_string<CharT, Traits, Alloc>> : std::true_type{ };
 template<typename T>
 constexpr bool is_int       = is_int_t<T>::value;
 template<typename T>
-constexpr bool is_float     = std::is_floating_point<T>::value;
+constexpr bool is_float     = is_floating_point<T>;
 template<typename T>
 constexpr bool is_string    = is_string_t<T>::value;
 template<typename T>

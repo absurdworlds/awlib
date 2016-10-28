@@ -13,9 +13,10 @@
 #include <aw/math/math.h>
 #include <aw/math/constants.h>
 #include <aw/types/traits/basic_traits.h>
+#include <aw/types/traits/common_type.h>
 
-namespace aw {
-namespace math {
+namespace aw::math {
+
 template<typename T>
 constexpr double extract_unit = T::value;
 
@@ -73,6 +74,20 @@ public:
 	}
 
 	angle normalized() const { return angle{*this}.normalize(); }
+
+	constexpr angle operator-() const { return angle{ -value }; };
+	constexpr angle operator+() const { return *this; };
+
+	constexpr angle& operator++()    { ++value; return *this; };
+	constexpr angle  operator++(int) { return angle{value++}; };
+
+	constexpr angle& operator--()    { --value; return *this; };
+	constexpr angle  operator--(int) { return angle{value--}; };
+
+	constexpr angle& operator+=(angle const& r) { value += r.value; return *this; };
+	constexpr angle& operator-=(angle const& r) { value -= r.value; return *this; };
+	constexpr angle& operator/=(rep const& r) { value /= r; return *this; };
+	constexpr angle& operator*=(rep const& r) { value *= r; return *this; };
 };
 
 template <typename T>
@@ -82,6 +97,52 @@ using turns   = angle<T, std::ratio<1>>;
 template <typename T>
 using degrees = angle<T, std::ratio<360>>;
 
-} //namespace math
-} //namespace aw
+
+template <typename R1, typename P1, typename R2, typename P2>
+auto operator+(angle<R1,P1> const& a, angle<R2,P2> const& b) ->
+	angle< common_type<R1, R2>, P1 >
+{
+	using result = angle< common_type<R1, R2>, P1 >;
+	result r{ a };
+	return r += result{ b };
+}
+
+template <typename R1, typename P1, typename R2, typename P2>
+auto operator-(angle<R1,P1> const& a, angle<R2,P2> const& b) ->
+	angle< common_type<R1, R2>, P1 >
+{
+	using result = angle< common_type<R1, R2>, P1 >;
+	result r{ a };
+	return r -= result{ b };
+}
+
+template <typename R1, typename P1, typename R2, typename P2>
+auto operator/(angle<R1,P1> const& a, angle<R2,P2> const& b) -> common_type<R1, R2>
+{
+	using result = angle< common_type<R1, R2>, P2 >;
+	return result{ result{ a }.count() / result{ b }.count() };
+}
+
+template <typename R1, typename R2, typename P2>
+auto operator*(R1 const& a, angle<R2,P2> const& b) ->
+	angle< common_type<R1, R2>, P2 >
+{
+	using result = angle< common_type<R1, R2>, P2 >;
+	result r{ b };
+	return r *= a;
+}
+
+template <typename R1, typename R2, typename P2>
+auto operator*(angle<R2,P2> const& b, R1 const& a) { return a*b; }
+
+template <typename R1, typename R2, typename P2>
+auto operator/(R1 const& a, angle<R2,P2> const& b) ->
+	angle< common_type<R1, R2>, P2 >
+{
+	using result = angle< common_type<R1, R2>, P2 >;
+	result r{ b };
+	return r /= a;
+}
+
+} //namespace aw::math
 #endif //aw_math_angle_h
