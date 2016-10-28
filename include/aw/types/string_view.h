@@ -13,12 +13,14 @@
 namespace aw {
 using std::basic_string_view;
 using std::string_view;
+using std::wstring_view;
 } // namespace aw;
 #elif __has_include(<experimental/string_view>)
 #include <experimental/string_view>
 namespace aw {
 using std::experimental::basic_string_view;
 using std::experimental::string_view;
+using std::experimental::wstring_view;
 } // namespace aw;
 #endif
 
