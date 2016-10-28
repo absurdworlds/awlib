@@ -18,14 +18,14 @@ using vector2d = vector<T,2>;
 
 //! Calculates angle of the vector
 template<typename T>
-T angle(vector2d<T> const& vec)
+T planar_angle(vector2d<T> const& vec)
 {
 	T yaw = T(atan2(f64(vec[axis::x]), f64(vec[axis::y])));
 
-	if (yaw <= -math::pi) {
-		yaw += math::double_pi;
-	} else if (yaw > math::pi) {
-		yaw -= math::double_pi;
+	if (yaw <= -pi) {
+		yaw += 2*pi;
+	} else if (yaw > pi) {
+		yaw -= 2*pi;
 	}
 
 	return yaw;

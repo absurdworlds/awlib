@@ -1,68 +1,87 @@
 /*
- * Copyright (C) 2014      absurdworlds
- * Copyright (C) 2014-2015 hedede <haddayn@gmail.com>
+ * Copyright (C) 2014-2016 absurdworlds
+ * Copyright (C) 2014-2016 hedede <haddayn@gmail.com>
  *
  * License LGPLv3 or later:
  * GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _aw_math_angle
-#define _aw_math_angle
+#ifndef aw_math_angle_h
+#define aw_math_angle_h
+#include <ratio>
 #include <aw/math/math.h>
 #include <aw/math/constants.h>
+#include <aw/types/traits/basic_traits.h>
 
 namespace aw {
 namespace math {
-//! Convert degrees to radians
 template<typename T>
-constexpr T deg_to_rad(T deg)
-{
-	return deg * radians_in_degree;
-}
+constexpr double extract_unit = T::value;
 
-//! Convert radians to degrees
+template<intmax_t Num, intmax_t Den>
+constexpr double extract_unit<std::ratio<Num,Den>> = double(Num)/Den;
+
+struct radian_unit { static constexpr double value = 2*pi; };
+
+template<typename Rep, typename Period>
+class angle;
+
+namespace _impl {
 template<typename T>
-constexpr T rad_to_deg(T rad)
-{
-	return rad * degrees_in_radian;
+constexpr bool is_angle = false;
+template<typename Rep, typename Period>
+constexpr bool is_angle<angle<Rep,Period>> = true;
 }
 
-/*!
- * Normalize angle between -180 and 180 degrees
- * \param angle
- *    angle to normalize, in degrees
- * \return
- *    input angle normalized to (-180;180] range
- */
-inline f32 normalizeAngle(f32 angle)
-{
-	angle = fmod(angle, 360.0f);
-	return    angle >   180.0f ? angle - 360.0f
-		: angle <= -180.0f ? angle + 360.0f 
-		: angle;
-}
+template<typename Rep, typename Period = radian_unit>
+class angle {
+	Rep value;
+public:
+	// TODO: support integers
+	// Currently, I don't need integer angles (or any other type),
+	// but they should be supported for completeness sake.
+	// However, it is more complicated with angles than with other units,
+	// because of irratinal pi.
+	static_assert( is_floating_point<Rep> );
 
-/*! Alias for normalizeAngle */
-inline f32 wrapAngle(f32 angle)
-{
-	return normalizeAngle(angle);
-}
+	using rep = Rep;
+	using period_type = Period;
+	static constexpr auto period = extract_unit<Period>;
 
-/*!
- * Map \a angle to (-π; π] range.
- * \param angle
- *     Value in radians to normalize
- * \return
- *     Value between -π and π radians.
- */
-inline f32 wrapAngleRad(f32 angle)
-{
-	angle = fmod(f64(angle), double_pi);
-	return    angle >   pi ? angle - double_pi
-		: angle <= -pi ? angle + double_pi
-		: angle;
-}
+	// TODO: proper cast
+	template<typename Rep2, typename = enable_if< is_convertible<Rep2, rep> >>
+	constexpr explicit angle( Rep2 value ) : value(value) {}
+
+	template<typename Ang2, typename = enable_if< _impl::is_angle<Ang2> >>
+	constexpr angle( Ang2 const& other )
+		: value( other.count() / other.period * period )
+	{ }
+
+	constexpr Rep count() const { return value; }
+
+	/*!
+	 * Normalize angle to be in range (-period/2; period/2].
+	 * For example, radians will be normalized to (-π; π], and degrees
+	 * to (-180; 180] range. E.g. 189° will become 9°.
+	 */
+	angle& normalize()
+	{
+		// TODO: guaranteed to be in (-period/2; period/2] range?
+		value = std::remainder(value, period);
+		return *this;
+	}
+
+	angle normalized() const { return angle{*this}.normalize(); }
+};
+
+template <typename T>
+using radians = angle<T, radian_unit>;
+template <typename T>
+using turns   = angle<T, std::ratio<1>>;
+template <typename T>
+using degrees = angle<T, std::ratio<360>>;
+
 } //namespace math
 } //namespace aw
-#endif //_aw_math_
+#endif //aw_math_angle_h

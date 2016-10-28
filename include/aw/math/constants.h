@@ -24,12 +24,6 @@ f64 const half_pi       = pi/2.0;
 f64 const quarter_pi    = pi/4.0;
 
 f64 const double_pi     = 2.0*pi;
-
-// Constant defining ratio of degrees to radians
-f64 const degrees_in_radian = 180.0 / pi;
-
-// Constant defining ratio of radians to degrees
-f64 const radians_in_degree = pi / 180.0;
 } //namespace math
 } //namespace aw
 #endif //aw_math_constants_h
