@@ -226,6 +226,15 @@ public:
 		return nullptr;
 	}
 
+	template<typename T>
+	T try_get(T _default) const
+	{
+		T* ptr = get<T>();
+		if (!ptr)
+			return _default;
+		return *ptr;
+	}
+
 	/*!
 	 * Destroy current value and mark variant as empty.
 	 */
