@@ -44,7 +44,7 @@ struct AW_HDF_EXP Writer {
 	bool end_node();
 
 	/*! Write a value object. */
-	bool write_value(string_view name, Value const& value, bool typed = true);
+	bool write_value(string_view name, value const& val, bool typed = true);
 
 	/*! Write a comment */
 	void add_comment(string_view comment_text);
@@ -57,7 +57,7 @@ private:
 	void error(log::level type, string_view msg);
 
 private:
-	void writeValueValue(Value const& value);
+	void writeValueValue(value const& val);
 	void end_line();
 	std::string getIndent() const;
 

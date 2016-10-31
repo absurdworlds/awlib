@@ -15,10 +15,9 @@
 #include <aw/utility/to_string.h>
 #include <aw/utility/string/compose.h>
 
-#include <aw/algorithm/in.h>
-
 namespace aw {
 namespace hdf {
+inline namespace v1 {
 std::string to_string(token::position pos)
 {
 	using aw::to_string;
@@ -63,7 +62,7 @@ bool is_not_punct(char c)
 
 
 template<typename Func>
-char Lexer::skip(Func condition)
+char lexer::skip(Func condition)
 {
 	char c = peek();
 	while(condition(c) && c != 0)
@@ -71,7 +70,7 @@ char Lexer::skip(Func condition)
 	return c;
 }
 
-char Lexer::skip_comment()
+char lexer::skip_comment()
 {
 	using namespace std::string_literals;
 	auto line = [] (char c) { return c != '\n'; };
@@ -90,7 +89,7 @@ char Lexer::skip_comment()
 }
 
 template<typename Func>
-std::string Lexer::read(Func condition)
+std::string lexer::read(Func condition)
 {
 	std::string val;
 
@@ -104,7 +103,7 @@ std::string Lexer::read(Func condition)
 	return val;
 }
 
-std::string Lexer::read_string() {
+std::string lexer::read_string() {
 	std::string val;
 
 	char c = peek();
@@ -123,7 +122,7 @@ std::string Lexer::read_string() {
 }
 
 
-token Lexer::readToken()
+token lexer::read_token()
 {
 	char c = peek();
 
@@ -174,16 +173,17 @@ token Lexer::readToken()
 	}
 }
 
-token Lexer::peekToken()
+token lexer::peek_token()
 {
 	return tok;
 }
 
-token Lexer::getToken()
+token lexer::get_token()
 {
 	token tmp = tok;
-	tok = readToken();
+	tok = read_token();
 	return tmp;
 }
+} // inline namespace v1
 } // namespace hdf
 } // namespace aw

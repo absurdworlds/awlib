@@ -18,15 +18,15 @@
 
 namespace aw {
 namespace hdf {
-bool Parser::read(Object& object)
+inline namespace v1 {
+object parser::read()
 {
 	using namespace std::string_literals;
-	token tok = lex.getToken();
+	token tok = lex.get_token();
 
 	switch (tok.kind) {
 	case token::eof:
-		object = {};
-		return false;
+		return {};
 	case token::bang:
 		if (depth > 0) {
 			lex.error("Unexpected ! inside node.", tok.pos);
@@ -36,21 +36,17 @@ bool Parser::read(Object& object)
 		break;
 	case token::node_begin:
 		++depth;
-		object = Object{Object::Node, tok.value};
-		return true;
+		return {object::node, tok.value};
 	case token::node_end:
 		if (depth == 0) {
 			lex.error("Unexpected ']'.", tok.pos);
 			break;
 		}
 		--depth;
-		object = Object{Object::NodeEnd};
-		return true;
+		return {object::end};
 	case token::name:
-		if (auto&& value = read_value()) {
-			object = Object{Object::Value, tok.value, std::move(value)};
-			return true;
-		}
+		if (auto&& value = read_value())
+			return {object::value, tok.value, std::move(value)};
 		break;
 	case token::invalid:
 		lex.error("illegal token: \""s + tok.value + "\"", tok.pos);
@@ -59,12 +55,12 @@ bool Parser::read(Object& object)
 		lex.error("unexpected token: \""s + tok.value + "\"", tok.pos);
 	}
 
-	return read(object);
+	return read();
 }
 
-void Parser::skip_node()
+void parser::skip_node()
 {
-	token tok = lex.peekToken();
+	token tok = lex.peek_token();
 
 	size_t depth = 1;
 	do {
@@ -73,27 +69,27 @@ void Parser::skip_node()
 		} else if (tok.kind == token::node_end) {
 			--depth;
 		}
-		tok = lex.getToken();
+		tok = lex.get_token();
 	} while (depth > 0);
 }
 
-Value Parser::read_value()
+value parser::read_value()
 {
-	token tok = lex.getToken();
+	token tok = lex.get_token();
 	if (tok.kind != token::equals) {
 		lex.error("Expected '=', got " + tok.value, tok.pos);
 		return {};
 	}
 
-	token id = lex.getToken();
+	token id = lex.get_token();
 	if (id.kind == token::vec_begin)
 		return deduce_vector(id.pos);
 
-	tok = lex.peekToken();
+	tok = lex.peek_token();
 	if (tok.kind != token::colon)
 		return deduce_value(id);
 
-	tok = lex.nextToken(); // skip ':'
+	tok = lex.next_token(); // skip ':'
 	if (tok.kind == token::vec_begin)
 		return parse_vector(id);
 	return parse_value(id);
@@ -113,51 +109,51 @@ hdf::Type parse_type(string_view token)
 }
 
 template<>
-Value Parser::parse_value<std::string>()
+value parser::parse_value<std::string>()
 {
-	auto tok = lex.getToken();
+	auto tok = lex.get_token();
 	if (!in(tok.kind, tok.string, tok.name, tok.number)) {
 		lex.error("Invalid string token", tok.pos);
 		return {};
 	}
-	return Value{tok.value};
+	return value{tok.value};
 }
 
 template<>
-Value Parser::parse_value<double>()
+value parser::parse_value<double>()
 {
-	auto tok = lex.getToken();
+	auto tok = lex.get_token();
 	if (tok.kind != token::number) {
 		lex.error("Expected number", tok.pos);
 		return {};
 	}
-	return Value{std::stod(tok.value)};
+	return value{std::stod(tok.value)};
 }
 
 template<>
-Value Parser::parse_value<intmax_t>()
+value parser::parse_value<intmax_t>()
 {
-	auto tok = lex.getToken();
+	auto tok = lex.get_token();
 	if (tok.kind != token::number) {
 		lex.error("Expected number", tok.pos);
 		return {};
 	}
-	return Value{std::stoll(tok.value)};
+	return value{std::stoll(tok.value)};
 }
 
 template<>
-Value Parser::parse_value<bool>()
+value parser::parse_value<bool>()
 {
-	auto tok = lex.getToken();
+	auto tok = lex.get_token();
 	if (in(tok.value, "true", "1"))
-		return Value{true};
+		return value{true};
 	if (in(tok.value, "false", "0"))
-		return Value{false};
+		return value{false};
 	lex.error("Invalid bool token: " + tok.value, tok.pos);
 	return {};
 }
 
-Value Parser::parse_value(token id)
+value parser::parse_value(token id)
 {
 	auto type = parse_type(id.value);
 
@@ -176,31 +172,31 @@ Value Parser::parse_value(token id)
 	return {};
 }
 
-Value Parser::deduce_value(token tok)
+value parser::deduce_value(token tok)
 {
 	switch (tok.kind) {
 	case token::number:
 		if (tok.value.find('.') == std::string::npos)
-			return Value{std::stoll(tok.value)};
-		return Value{std::stod(tok.value)};
+			return value{std::stoll(tok.value)};
+		return value{std::stod(tok.value)};
 	case token::name:
 		if (tok.value == "true")
-			return Value{true};
+			return value{true};
 		if (tok.value == "false")
-			return Value{false};
+			return value{false};
 	case token::string:
-		return Value{tok.value};
+		return value{tok.value};
 	default:
 		lex.error("Invalid token", tok.pos);
 	}
 	return {};
 }
 
-void Parser::skip_vector()
+void parser::skip_vector()
 {
-	auto tok = lex.getToken();
+	auto tok = lex.get_token();
 	while (tok.kind != token::vec_end) {
-		tok = lex.getToken();
+		tok = lex.get_token();
 		if (tok.kind == token::eof) {
 			lex.error("Reached end of file searching for '}'", tok.pos);
 			break;
@@ -209,19 +205,19 @@ void Parser::skip_vector()
 }
 
 template<typename T>
-std::vector<T> Parser::parse_vector(token::position beg)
+std::vector<T> parser::parse_vector(token::position beg)
 {
-	auto tok = lex.peekToken();
+	auto tok = lex.peek_token();
 	std::vector<T> temp;
 	while (tok.kind != tok.eof) {
-		Value val = parse_value<T>();
+		value val = parse_value<T>();
 		if (val.empty()) {
 			skip_vector();
 			return temp;
 		}
 		temp.push_back(*val.get<T>());
 
-		auto tok = lex.getToken();
+		auto tok = lex.get_token();
 		if (tok.kind == token::vec_end)
 			break;
 		if (tok.kind != token::comma) {
@@ -237,19 +233,19 @@ std::vector<T> Parser::parse_vector(token::position beg)
 	return temp;
 }
 
-Value Parser::parse_vector(token id)
+value parser::parse_vector(token id)
 {
 	auto type = parse_type(id.value);
-	auto tok = lex.getToken();
+	auto tok = lex.get_token();
 	switch (type) {
 	case Type::String:
-		return Value{parse_vector<std::string>(tok.pos)};
+		return value{parse_vector<std::string>(tok.pos)};
 	case Type::Integer:
-		return Value{parse_vector<intmax_t>(tok.pos)};
+		return value{parse_vector<intmax_t>(tok.pos)};
 	case Type::Float:
-		return Value{parse_vector<double>(tok.pos)};
+		return value{parse_vector<double>(tok.pos)};
 	case Type::Boolean:
-		return Value{parse_vector<bool>(tok.pos)};
+		return value{parse_vector<bool>(tok.pos)};
 	default:
 		lex.error("Invalid type", id.pos);
 	}
@@ -257,19 +253,19 @@ Value Parser::parse_vector(token id)
 	return {};
 }
 
-Value Parser::deduce_vector(token::position beg)
+value parser::deduce_vector(token::position beg)
 {
-	auto tok = lex.peekToken();
+	auto tok = lex.peek_token();
 	switch (tok.kind) {
 	case token::name:
 		if (in(tok.value, "true", "false"))
-			return Value{parse_vector<bool>(beg)};
+			return value{parse_vector<bool>(beg)};
 	case token::string:
-		return Value{parse_vector<std::string>(beg)};
+		return value{parse_vector<std::string>(beg)};
 	case token::number:
 		if (tok.value.find('.') == std::string::npos)
-			return Value{parse_vector<intmax_t>(beg)};
-		return Value{parse_vector<double>(beg)};
+			return value{parse_vector<intmax_t>(beg)};
+		return value{parse_vector<double>(beg)};
 	case token::vec_end:
 		lex.warning("Empty vector", tok.pos);
 		break;
@@ -282,8 +278,8 @@ Value Parser::deduce_vector(token::position beg)
 
 
 // TODO: rewrite
-void Parser::processCommand() {
-	token tok = lex.getToken();
+void parser::processCommand() {
+	token tok = lex.get_token();
 
 	if (tok.kind != token::name) {
 		lex.error("Unexpected token:" + tok.value, tok.pos);
@@ -291,7 +287,7 @@ void Parser::processCommand() {
 	}
 
 	if (tok.value == "hdf_version") {
-		tok = lex.getToken();
+		tok = lex.get_token();
 
 		if (tok.kind != token::string) {
 			lex.error("Expected string after \"hdf_version\".", tok.pos);
@@ -317,7 +313,7 @@ void Parser::processCommand() {
 	if (tok.value == "strict") {
 		lex.error("Strict mode: not implemented", tok.pos);
 
-		tok = lex.getToken();
+		tok = lex.get_token();
 
 		if (tok.kind != token::name && tok.kind != token::number) {
 			lex.error("Expected true/false value.", tok.pos);
@@ -327,5 +323,6 @@ void Parser::processCommand() {
 		auto val = parse_value<bool>();
 	}
 }
+} // inline namespace v1
 } // namespace hdf
 } // namespace aw

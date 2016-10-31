@@ -43,9 +43,9 @@ bool Writer::end_node()
 }
 
 //! Spell the type of value
-string_view spellType(hdf::Value const& value)
+string_view spellType(value const& val)
 {
-	switch (value.getType()) {
+	switch (val.get_type()) {
 	case Type::Unknown:
 		return {};
 	case Type::IntegerVector:
@@ -64,31 +64,31 @@ string_view spellType(hdf::Value const& value)
 }
 
 /*! Write a value object. */
-bool Writer::write_value(string_view name, Value const& value, bool typed)
+bool Writer::write_value(string_view name, value const& val, bool typed)
 {
 	ostream.put(getIndent());
 	ostream.put(name);
 	ostream.put(" = ");
 
 	if (typed)
-		ostream.put(spellType(value));
+		ostream.put(spellType(val));
 
-	writeValueValue(value);
+	writeValueValue(val);
 
 	end_line();
 
 	return true;
 }
 
-void Writer::writeValueValue(hdf::Value const& value)
+void Writer::writeValueValue(value const& val)
 {
-	switch (value.getType()) {
+	switch (val.get_type()) {
 	default:
-		ostream.put(to_string(value));
+		ostream.put(to_string(val));
 		break;
 	case hdf::Type::String:
 		ostream.put('"');
-		ostream.put(to_string(value));
+		ostream.put(to_string(val));
 		ostream.put('"');
 		break;
 	}

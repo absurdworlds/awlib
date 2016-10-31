@@ -11,15 +11,17 @@
 #define aw_fileformat_hdf_lexer_h
 #include <aw/io/input_stream.h>
 #include <aw/log/log.h>
+#include <aw/algorithm/in.h>
 #include <aw/fileformat/hdf/export.h>
 namespace aw {
 namespace hdf {
+inline namespace v1 {
 struct token {
 	struct position {
 		unsigned line = 0;
 		unsigned col  = 0;
 
-		friend std::string aw::hdf::to_string(position pos);
+		friend std::string aw::hdf::v1::to_string(position pos);
 	};
 
 	enum {
@@ -44,41 +46,41 @@ struct token {
 
 AW_HDF_EXP std::string to_string(token::position pos);
 
-struct Lexer {
-	Lexer(io::input_stream& stream, log* logger = nullptr)
-		: stream{stream}, logger{logger}
+struct lexer {
+	lexer(io::input_stream& stream, aw::log* log = nullptr)
+		: stream{stream}, log{log}
 	{
-		tok = readToken();
+		tok = read_token();
 	}
 
-	~Lexer() = default;
+	~lexer() = default;
 
-	token getToken();
-	token peekToken();
-	token nextToken()
+	token get_token();
+	token peek_token();
+	token next_token()
 	{
-		return tok = readToken();
+		return tok = read_token();
 	}
 
 	void message(string_view msg, token::position pos)
 	{
-		report(log::info, msg, pos);
+		report(log::info, std::string{msg}, pos);
 	}
 	void warning(string_view msg, token::position pos)
 	{
-		report(log::warning, msg, pos);
+		report(log::warning, std::string{msg}, pos);
 	}
 	void error(string_view msg, token::position pos)
 	{
-		report(log::error, msg, pos);
+		report(log::error, std::string{msg}, pos);
 	}
 
 private:
 	void report(log::level lvl, std::string msg, token::position pos)
 	{
-		if (logger) {
+		if (log) {
 			msg = to_string(pos) + ':' + msg;
-			logger->message(lvl, "HDF", msg);
+			log->message(lvl, "HDF", msg);
 		}
 	}
 
@@ -118,15 +120,16 @@ private:
 	std::string read(Func condition);
 	std::string read_string();
 
-	token readToken();
+	token read_token();
 
 private:
 	io::input_stream& stream;
-	log* logger;
+	aw::log* log;
 
 	token tok;
 	token::position pos{1, 1};
 };
-} // namespace io
+} // inline namespace v1
+} // namespace hdf
 } // namespace aw
 #endif//aw_fileformat_hdf_lexer_h

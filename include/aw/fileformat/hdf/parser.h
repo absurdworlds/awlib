@@ -12,67 +12,94 @@
 #include <string>
 
 #include <aw/fileformat/hdf/value.h>
-#include <aw/fileformat/hdf/shared.h>
 #include <aw/fileformat/hdf/lexer.h>
 
 #include <aw/io/input_stream.h>
 
 namespace aw {
 namespace hdf {
+inline namespace v1 {
+struct parser;
+
+
 /*!
  * Object returned by HDF parser
  */
-struct Object {
-	enum Kind {
-		Null = 0,
-		Node,
-		NodeEnd,
-		Value,
-	};
-
-	Kind type = Null;
+struct object {
+	enum {
+		/*! No object, represents EOF */
+		null,
+		/*! Start of a [node */
+		node,
+		/*! End of a node ] */
+		end,
+		/*! Value */
+		value,
+	} kind = null;
 	std::string name;
-	struct Value val;
+	struct value val;
+
+	/*! Returns true if this is a real object. */
+	operator bool() const
+	{
+		return in(kind, node, value);
+	}
+
 };
+
+using object_kind = decltype(object::kind);
 
 /*!
  * HDF 1.3 parser, provides a simple interface for reading
  * aw::hdf files.
  */
-struct Parser {
-	Parser(io::input_stream& stream, aw::log* logger = nullptr)
-		: lex{stream, logger}
+struct parser {
+	parser(io::input_stream& stream, aw::log* log = nullptr)
+		: lex{stream, log}
 	{}
 
-	~Parser() = default;
+	~parser() = default;
 
 	//! Read an object
-	bool read(Object& obj);
+	object read();
+	/*!
+	 * Read an object
+	 * \return
+	 * True if something was read, false otherwise.
+	 */
+	bool read(object& obj)
+	{
+		obj = read();
+		return obj.kind != object::null;
+	}
 
 	//! Skip current node
 	void skip_node();
 
 protected:
+	friend struct object;
+
 	void processCommand();
 
-	Value read_value();
+	value read_value();
 
 	template <typename T>
-	Value parse_value();
-	Value parse_value(token id);
-	Value deduce_value(token tok);
+	value parse_value();
+	value parse_value(token id);
+	value deduce_value(token tok);
 
 	void skip_vector();
 
 	template <typename T>
 	std::vector<T> parse_vector(token::position beg);
-	Value parse_vector(token id);
-	Value deduce_vector(token::position beg);
+	value parse_vector(token id);
+	value deduce_vector(token::position beg);
 
 private:
-	Lexer lex;
+	lexer lex;
 	size_t depth = 0;
 };
-} // namespace io
+} // inline namespace v1
+} // namespace hdf
 } // namespace aw
 #endif//aw_fileformat_hdf_reader_h

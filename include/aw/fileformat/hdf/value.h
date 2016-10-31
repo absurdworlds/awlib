@@ -20,46 +20,47 @@
 
 namespace aw {
 namespace hdf {
-//! Class for holding any HDF Value.
-struct Value {
-	Value() = default;
-	Value(Value const&) = default;
-	Value(Value&&) = default;
+inline namespace v1 {
+//! Class for holding any HDF value.
+struct value {
+	value() = default;
+	value(value const&) = default;
+	value(value&&) = default;
 
-	explicit Value(bool v)
+	explicit value(bool v)
 		: holder{ v }
 	{ }
 
 	template<typename T, bool_if<is_int<T>> = true>
-	explicit Value(T v)
-		: holder{ intmax_t(v) }
+	explicit value(T v)
+		: holder{ intmax_t{v} }
 	{ }
 
 	template<typename T, bool_if<is_float<T>> = true>
-	explicit Value(T v)
+	explicit value(T v)
 		: holder{ double{v} }
 	{ }
 
 	template<typename T, bool_if<is_constructible<std::string,T>> = true>
-	explicit Value(T&& v)
+	explicit value(T&& v)
 		: holder()
 	{
 		holder.emplace<std::string>(std::forward<T>(v));
 	}
 
 	template<typename T, bool_if<is_vector<T>> = true>
-	explicit Value(T&& v)
+	explicit value(T&& v)
 		: holder(v)
 	{
 	}
 
-	Value& operator=(Value const& other)
+	value& operator=(value const& other)
 	{
 		holder = other.holder;
 		return *this;
 	}
 
-	Value& operator=(Value&& other)
+	value& operator=(value&& other)
 	{
 		holder = std::move(other.holder);
 		return *this;
@@ -73,33 +74,29 @@ struct Value {
 	 * \return
 	 *     true on success, false on failure.
 	 */
-	template<typename val_type>
-	bool get(val_type& v) const
+	template<typename T>
+	bool get(T& v) const
 	{
 		return holder.get(v);
 	}
 
-	template<typename val_type>
-	val_type const* get() const
+	template<typename T>
+	T const* get() const
 	{
-		return holder.get<val_type>();
+		return holder.get<T>();
+	}
+
+	template<typename T>
+	T try_get(T const& _default)
+	{
+		T tmp;
+		return get(tmp) ? tmp : _default;
 	}
 
 	//! Returns type of currently held value
-	hdf::Type getType() const
+	hdf::Type get_type() const
 	{
-		return convertType();
-	}
-
-	//! Set value if types are matching
-	template<typename val_type>
-	bool trySet(val_type const& v)
-	{
-		if(compareType(holder.type_index(), v)) {
-			holder.set<val_type>(v);
-			return true;
-		}
-		return false;
+		return convert_type();
 	}
 
 	//! Set value, resetting type
@@ -107,6 +104,17 @@ struct Value {
 	void set(val_type const& v)
 	{
 		holder.set<val_type>(v);
+	}
+
+	//! Set value if types are matching
+	template<typename val_type>
+	bool try_set(val_type const& v)
+	{
+		if(compareType(holder.type_index(), v)) {
+			holder.set<val_type>(v);
+			return true;
+		}
+		return false;
 	}
 
 	bool empty() const
@@ -125,7 +133,7 @@ struct Value {
 		return !empty();
 	}
 
-	friend std::string to_string(Value const& val)
+	friend std::string to_string(value const& val)
 	{
 		using aw::to_string;
 		return to_string(val.holder);
@@ -143,7 +151,7 @@ private:
 
 	holder_t holder;
 
-	hdf::Type convertType() const
+	hdf::Type convert_type() const
 	{
 		switch (holder.type_index()) {
 		case holder_t::index_of<bool>:
@@ -167,6 +175,7 @@ private:
 		};
 	}
 };
+} // inline namespace v1
 } // namespace hdf
 } // namespace aw
 #endif//aw_hdf_value_h

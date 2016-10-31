@@ -61,6 +61,9 @@ template<typename T>
 constexpr bool is_floating_point = is_floating_point_t<T>::value;
 
 template<typename T>
+using is_float_t = is_floating_point_t<T>;
+
+template<typename T>
 struct is_int_t : std::is_integral<T> { };
 /*!
  * Specialization for bool — most of the time I want
