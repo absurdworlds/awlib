@@ -9,6 +9,7 @@
 #ifndef aw_io_file_descriptor_h
 #define aw_io_file_descriptor_h
 #include <aw/config.h>
+#include <aw/types/types.h>
 namespace aw {
 namespace io {
 #if defined(AW_SUPPORT_PLATFORM_POSIX)
@@ -19,7 +20,7 @@ constexpr file_descriptor invalid_fd = file_descriptor(-1);
 #endif
 #if defined(AW_SUPPORT_PLATFORM_WIN32)
 namespace win32 {
-using file_descriptor = void*;
+using file_descriptor = uintptr_t;
 constexpr file_descriptor invalid_fd = file_descriptor(-1);
 } // namespace win32
 #endif
