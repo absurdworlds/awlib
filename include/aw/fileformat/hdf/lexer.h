@@ -44,6 +44,8 @@ struct token {
 	position pos;
 };
 
+using tok_kind = decltype(token::kind);
+
 AW_HDF_EXP std::string to_string(token::position pos);
 
 struct lexer {

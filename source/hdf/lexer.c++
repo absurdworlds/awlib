@@ -93,7 +93,6 @@ std::string lexer::read(Func condition)
 {
 	std::string val;
 
-
 	char c = peek();
 	while (condition(c)) {
 		val += c;
@@ -131,14 +130,25 @@ token lexer::read_token()
 		if (c == '/')         c = skip_comment();
 	}
 
+	tok_kind kind;
+	std::string val;
 	auto pos = this->pos;
 
 	switch (c) {
 	case 0:
 		return token{token::eof};
+	case '-': case '+':
+		val += c;
+		if (!is_digit(next())) {
+			kind = token::invalid;
+			val += read(is_not_punct);
+			break;
+		}
 	case '0': case '1': case '2': case '3': case '4':
 	case '5': case '6': case '7': case '8': case '9':
-		return token{token::number, read(is_num_char), pos};
+		kind = token::number;
+		val += read(is_num_char);
+		break;
 	case '"':
 		c = next(); // consume '"'
 		return token{token::string, read_string(), pos};
@@ -171,6 +181,8 @@ token lexer::read_token()
 	default:
 		return token{token::invalid, read(is_not_punct), pos};
 	}
+
+	return {kind, val, pos};
 }
 
 token lexer::peek_token()
