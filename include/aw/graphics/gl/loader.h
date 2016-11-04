@@ -6,8 +6,8 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef aw_internal_gl_loader_h
-#define aw_internal_gl_loader_h
+#ifndef aw_gl_loader_h
+#define aw_gl_loader_h
 #include <aw/types/unknown.h>
 #include <aw/config.h>
 namespace aw {
@@ -56,4 +56,4 @@ void get_proc(R(*& func)(Args...), char const* name)
 };
 } // namespace gl
 } // namespace aw
-#endif//aw_internal_gl_loader_h
+#endif//aw_gl_loader_h

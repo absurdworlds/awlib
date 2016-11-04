@@ -2,7 +2,7 @@
  * Code in this file is placed in public domain.
  * Contact: Hedede <Haddayn@gmail.com>
  */
-#include "loader.h"
+#include <aw/graphics/gl/loader.h>
 
 #ifdef AW_SUPPORT_PLATOFRM_APPLE
 #include <dlfcn.h>

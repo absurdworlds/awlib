@@ -2,8 +2,8 @@
  * Code in this file is placed in public domain.
  * Contact: Hedede <Haddayn@gmail.com>
  */
-#ifndef aw_internal_gl_types
-#define aw_internal_gl_types
+#ifndef aw_gl_types
+#define aw_gl_types
 #include <aw/types/types.h>
 #include <aw/config.h>
 
@@ -59,4 +59,4 @@ using GLDEBUGPROCAMD = void (APIENTRY *)(GLuint id,GLenum category,GLenum severi
 
 using GLhalfNV = unsigned short;
 using GLvdpauSurfaceNV = GLintptr;
-#endif//aw_internal_gl_types
+#endif//aw_gl_types
