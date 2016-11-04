@@ -82,22 +82,6 @@ local function Preamble(hFile)
 ]]
 end
 
-----------------------------------------------------
--- Global styling functions.
-function my_style.WriteLargeHeading(hFile, headingName)
-	hFile:write(string.rep("/", 6 + #headingName), "\n")
-	hFile:write("// ", headingName, "\n")
-	hFile:write(string.rep("/", 6 + #headingName), "\n")
-end
-
-function my_style.WriteSmallHeading(hFile, headingName)
-	hFile:write("// ", headingName, "\n")
-end
-
-function my_style.WriteFilePreamble(hFile, specData, spec, options)
-	common.WriteCPPGeneratorInfo(hFile, specData, spec, options)
-end
-
 
 ------------------------------------------------------
 -- Header styling functions
@@ -144,7 +128,13 @@ function my_style.header.WriteBlockEndDecl(hFile, spec, options)
 	end
 end
 
-	local extVariableTypeDefinition = [[
+
+my_style.header.WriteExtensionComment = ExtensionComment;
+my_style.header.WriteVersionComment   = VersionComment;
+
+function my_style.header.WriteBlockBeginExtVarDecl(hFile, spec, options)
+	StartNamespace(hFile, "ext")
+	hFile:writeblock[[
 struct load_result {
 	explicit operator bool() const
 	{
@@ -163,13 +153,6 @@ private:
 	int  missing = 0;
 };
 ]]
-
-my_style.header.WriteExtensionComment = ExtensionComment;
-my_style.header.WriteVersionComment   = VersionComment;
-
-function my_style.header.WriteBlockBeginExtVarDecl(hFile, spec, options)
-	StartNamespace(hFile, "ext")
-	hFile:writeblock(extVariableTypeDefinition)
 	hFile:write("\n")
 end
 
