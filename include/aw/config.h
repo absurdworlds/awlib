@@ -31,9 +31,10 @@
 #define AW_PLATFORM_POSIX  0
 #define AW_PLATFORM_LINUX  1
 #define AW_PLATFORM_BSD    2
-#define AW_PLATFORM_OSX    3
-#define AW_PLATFORM_WIN32  4
-#define AW_PLATFORM_WIN64  5
+#define AW_PLATFORM_SUN    3
+#define AW_PLATFORM_APPLE  4
+#define AW_PLATFORM_WIN32  5
+#define AW_PLATFORM_WIN64  6
 
 // When compiling for winelib, both win32 api and posix api can be used
 #if    defined(AW_WINE_USE_POSIX)
@@ -90,6 +91,17 @@
 	#define AW_PLATFORM          AW_PLATFORM_POSIX
 	#define AW_PLATFORM_SPECIFIC AW_PLATFORM_LINUX
 	#define AW_SUPPORT_PLATFORM_POSIX 1
+#elif defined (__sun)
+	#define AW_PLATFORM          AW_PLATFORM_POSIX
+	#define AW_PLATFORM_SPECIFIC AW_PLATFORM_SUN
+	#define AW_SUPPORT_PLATFORM_POSIX 1
+	#define AW_SUPPORT_PLATFORM_SUN 1
+#elif defined(__APPLE__)
+	// TODO
+	#define AW_PLATFORM          AW_PLATOFRM_POSIX
+	#define AW_PLATFORM_SPECIFIC AW_PLATOFRM_APPLE
+	#define AW_SUPPORT_PLATFORM_POSIX 1
+	#define AW_SUPPORT_PLATFORM_APPLE 1
 #elif defined(BSD)
 	#define AW_PLATFORM          AW_PLATFORM_POSIX
 	#define AW_PLATFORM_SPECIFIC AW_PLATFORM_BSD
@@ -98,6 +110,10 @@
 	#define AW_PLATFORM          AW_PLATFORM_POSIX
 	#define AW_PLATFORM_SPECIFIC AW_PLATFORM_POSIX
 	#define AW_SUPPORT_PLATFORM_POSIX 1
+#endif
+
+#if (AW_SUPPORT_PLATFORM_POSIX)
+	#define AW_SUPPORT_PLATFORM_X11 1
 #endif
 
 /**** IMPORTS/EXPORTS ****/
