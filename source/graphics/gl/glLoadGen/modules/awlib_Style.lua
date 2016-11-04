@@ -83,6 +83,51 @@ local function Preamble(hFile)
 end
 
 
+
+local function GetCodegenPtrType(options)
+	local str = options.spec:upper() .. "_API"
+	if (options.prefix ~= nil) then
+		str = options.prefix:upper() .. str
+	end
+	return str
+end
+
+local function GenFuncPtrName(func, spec, options)
+	return func.name
+end
+
+local function GenFuncName(func, spec, options)
+	return to_snake(func.name)
+end
+
+local function GenFuncPtrTypedefName(func, spec, options)
+	return GenFuncPtrName(func, spec, options) .. "_ptr"
+end
+
+local function GenEnumName(enum)
+	return common.GetCppEnumName(enum)
+end
+
+local function GenExtensionVarName(extName, spec, options)
+	return "var_" .. extName:lower();
+end
+
+local function GenExtLoaderFuncName(extName, spec, options)
+	return "load_" .. extName:lower();
+end
+
+local function GenQualifiedEnumName(enum, spec, options)
+	return spec.FuncNamePrefix() .. "::" .. GenEnumName(enum, spec, options)
+end
+
+local function GenQualifiedFuncPtrName(func, spec, options)
+	return spec.FuncNamePrefix() .. "::_impl" .. "::" .. GenFuncName(func, spec, options)
+end
+
+local function GenQualifiedFuncName(func, spec, options)
+	return spec.FuncNamePrefix() .. "::" .. GenFuncName(func, spec, options)
+end
+
 ------------------------------------------------------
 -- Header styling functions
 my_style.header.WriteFilePreamble = Preamble
@@ -160,10 +205,6 @@ function my_style.header.WriteBlockEndExtVarDecl(hFile, spec, options)
 	EndNamespace(hFile, "ext")
 end
 
-	local function GenExtensionVarName(extName, spec, options)
-		return "var_" .. extName;
-	end
-
 function my_style.header.WriteExtVariableDecl(hFile, extName,
 	specData, spec, options)
 	hFile:fmt("extern load_result %s;\n",
@@ -179,10 +220,6 @@ function my_style.header.WriteBlockEndEnumDecl(hFile, spec, options)
 	hFile:dec()
 	hFile:write("};\n")
 end
-
-	local function GenEnumName(enum)
-		return common.GetCppEnumName(enum)
-	end
 
 function my_style.header.WriteEnumDecl(hFile, enum, enumTable, spec, options,
 	enumSeen)
@@ -222,26 +259,6 @@ end
 function my_style.header.WriteBlockEndExtFuncPtrDecl(hFile, extName, spec, options)
 	--Block containing all spec function declarations for a particular extension.
 end
-
-	local function GetCodegenPtrType(options)
-		local str = "GL_API"
-		if (options.prefix ~= nil) then
-			str = options.prefix:upper() .. "GL_API"
-		end
-		return str
-	end
-
-	local function GenFuncPtrName(func, spec, options)
-		return func.name
-	end
-
-	local function GenFuncName(func, spec, options)
-		return to_snake(func.name)
-	end
-
-	local function GenFuncPtrTypedefName(func, spec, options)
-		return GenFuncPtrName(func, spec, options) .. "_ptr"
-	end
 
 	local function WriteFuncPtrTypedefStmt(hFile, func, spec, options)
 		hFile:fmt("using %s = %s (%s *)(%s);\n",
@@ -412,10 +429,6 @@ my_style.source.WriteVersionComment = VersionComment;
 function my_style.source.WriteFuncPtrDef(hFile, func, spec, options)
 	hFile:write(GenFuncPtrDefDecltype(func, spec, options), " = 0;\n")
 end
-
-	local function GenExtLoaderFuncName(extName, spec, options)
-		return "Load_" .. extName;
-	end
 
 function my_style.source.WriteBlockBeginExtLoader(hFile, extName, spec, options)
 	hFile:fmt("static int %s()\n", GenExtLoaderFuncName(extName, spec, options))
@@ -640,38 +653,26 @@ void LoadExtByName(std::vector<map_entry>& table, string_view extension)
 ]])
 	hFile:write "\n"
 end
-
-	local function GenQualifiedEnumName(enum, spec, options)
-		return spec.FuncNamePrefix() .. "::" .. GenEnumName(enum, spec, options)
-	end
 	
-	local function GenQualifiedFuncPtrName(func, spec, options)
-		return spec.FuncNamePrefix() .. "::_impl" .. "::" .. GenFuncName(func, spec, options)
-	end
-
-	local function GenQualifiedFuncName(func, spec, options)
-		return spec.FuncNamePrefix() .. "::" .. GenFuncName(func, spec, options)
-	end
-	
-	local function WriteAncillaryFuncs(hFile, specData, spec, options)
-		local indexed = spec.GetIndexedExtStringFunc(options);
-		if(indexed) then
-			for _, func in ipairs(specData.funcData.functions) do
-				if(indexed[1] == func.name) then
-					indexed[1] = func
-				end
-				if(indexed[3] == func.name) then
-					indexed[3] = func
-				end
+local function WriteAncillaryFuncs(hFile, specData, spec, options)
+	local indexed = spec.GetIndexedExtStringFunc(options);
+	if(indexed) then
+		for _, func in ipairs(specData.funcData.functions) do
+			if(indexed[1] == func.name) then
+				indexed[1] = func
 			end
-			for _, enum in ipairs(specData.enumerators) do
-				if(indexed[2] == enum.name) then
-					indexed[2] = enum
-				end
-				if(indexed[4] == enum.name) then
-					indexed[4] = enum
-				end
+			if(indexed[3] == func.name) then
+				indexed[3] = func
 			end
+		end
+		for _, enum in ipairs(specData.enumerators) do
+			if(indexed[2] == enum.name) then
+				indexed[2] = enum
+			end
+			if(indexed[4] == enum.name) then
+				indexed[4] = enum
+			end
+		end
 		
 			hFile:writeblock([[
 static void ProcExtsFromExtList(std::vector<map_entry> &table)
@@ -690,22 +691,22 @@ static void ProcExtsFromExtList(std::vector<map_entry> &table)
 	}
 }
 ]])
-		else
-			hFile:writeblock(common.GetProcessExtsFromStringFunc(
-				"LoadExtByName(table, %s)", ", std::vector<map_entry> &table"))
-		end
-
-		return indexed
+	else
+		hFile:writeblock(common.GetProcessExtsFromStringFunc(
+			"LoadExtByName(table, %s)", ", std::vector<map_entry> &table"))
 	end
+
+	return indexed
+end
 
 	
-	local function WriteInMainFuncLoader(hFile, func, spec, options)
-		hFile:fmt('get_proc(_impl::%s, "%s%s");\n',
-			GenFuncPtrName(func, spec, options),
-			spec.FuncNamePrefix(), func.name)
-		hFile:fmt('if(!_impl::%s) return ext::load_result();\n',
-			GenFuncPtrName(func, spec, options))
-	end
+local function WriteInMainFuncLoader(hFile, func, spec, options)
+	hFile:fmt('get_proc(_impl::%s, "%s%s");\n',
+		GenFuncPtrName(func, spec, options),
+		spec.FuncNamePrefix(), func.name)
+	hFile:fmt('if(!_impl::%s) return ext::load_result();\n',
+		GenFuncPtrName(func, spec, options))
+end
 
 function my_style.source.WriteMainLoaderHelpers(hFile, specData, spec, options)
 	local indexed = WriteAncillaryFuncs(hFile, specData, spec, options)
