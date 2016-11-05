@@ -6,8 +6,8 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef aw_types_composite_int
-#define aw_types_composite_int
+#ifndef aw_types_composite_int_h
+#define aw_types_composite_int_h
 #include <aw/meta/conditional.h>
 #include <aw/types/traits/basic_traits.h>
 #include <aw/types/promote.h>
@@ -407,9 +407,9 @@ auto composite_int<T>::mul(U a, U b) -> composite_int<T>
 	return {T(hi), lo};
 }
 
-template<typename T>
-std::string as_string(composite_int<T> val);
+//template<typename T>
+//std::string to_string(composite_int<T> val);
 } // namespace aw
 
 #include "bits/composite_int.h"
-#endif //aw_types_composite_int
+#endif //aw_types_composite_int_h
