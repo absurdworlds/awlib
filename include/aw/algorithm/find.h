@@ -23,10 +23,10 @@ struct is_not {
 	}
 };
 
-template<typename Iterator>
+template<typename Iterator, typename T>
 Iterator find_not(Iterator begin, Iterator end, T const& val)
 {
-	return find(begin, end, is_not{val});
+	return find_if(begin, end, is_not<T>{val});
 }
 } // namespace aw
 #endif//aw_algorithm_find_h
