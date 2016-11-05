@@ -29,12 +29,5 @@ struct mem_fn<R(T*, Args...)> {
  */
 template<class signature>
 using mem_fn = typename _impl::mem_fn<signature>::type;
-
-/*!
- * Undefined class for use as placeholder in mem_fn.
- * \example
- *    mem_fn<void(aw::_unknown*, Args...)>
- */
-class _unknown;
 } // namespace aw
 #endif//aw_types_mem_fn_h
