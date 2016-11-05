@@ -9,9 +9,9 @@
  */
 #ifndef aw_string_join_h
 #define aw_string_join_h
-#include <string>
 #include <vector>
 #include <numeric>
+#include <aw/types/string_view.h>
 #include <aw/algorithm/join.h>
 namespace aw {
 namespace string {
@@ -27,7 +27,7 @@ namespace string {
  *      resulting string concatenated together
  */
 inline std::string
-join(std::vector<std::string> const& source, std::string const& delim = "")
+join(std::vector<string_view> const& source, string_view delim = "")
 {
 	auto begin = source.begin();
 	auto end   = source.end();
@@ -36,15 +36,20 @@ join(std::vector<std::string> const& source, std::string const& delim = "")
 		return {};
 
 	size_t size = 0;
-	auto adder = [] (size_t a, std::string const& b) {
-		return a + b.size();
+	for (string_view s : source)
+		size += s.size();
+
+	/* TODO: wait for C++17 */
+	auto append = [] (std::string& s, string_view sv)
+	{
+		s.append(sv.data(), sv.size());
 	};
-	size = std::accumulate(begin, end, size, adder);
 
 	std::string sink;
 	sink.reserve(size);
-	sink += *begin++;
-	return aw::join(begin, end, sink, delim);
+	//sink += *begin++;
+	append(sink, *begin++);
+	return aw::join(begin, end, sink, delim, append);
 }
 } // namespace string
 } // namespace aw
