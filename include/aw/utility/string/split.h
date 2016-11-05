@@ -47,18 +47,16 @@ split(string_view source, string_view delim)
 }
 
 /*!
- * \brief
- *      Split string into tokens, including empty tokens
- *      For example, explode("/") produces {"", ""}.
- * \param source
- *      Source string to split
- * \param delim
- *      Delimiting sequence
- * \return
- *      Vector of found tokens.
+ * Split delimited string into substrings, including
+ * empty substrings.
+ * Delimiter may consist of multiple characters.
+ *
+ * Examples:
+ * `explode("x==y==z", "==")` -> `{"x", "y", "z"}`
+ * `explode("/path/", "/", false)` -> `{"", "path", ""}`
  */
 inline std::vector<std::string>
-explode(string_view source, string_view delim)
+cut(string_view source, string_view delim)
 {
 	std::vector<std::string> holder;
 	size_t pos1 = 0;
