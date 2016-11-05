@@ -26,22 +26,21 @@ namespace string {
  * \return
  *      Vector with found tokens.
  */
-inline std::vector<std::string>
+inline std::vector<string_view>
 split(string_view source, string_view delim)
 {
-	std::vector<std::string> holder;
-	size_t num_tokens = 0;
+	std::vector<string_view> holder;
+	size_t delim_pos = 0;
+	size_t pos;
 
-	size_t pos = source.find_first_not_of(delim);
-	size_t delim_pos = source.find_first_of(delim, pos);
-
-	while (pos != std::string::npos) {
-		holder.push_back((std::string)source.substr(pos, delim_pos - pos));
-		++num_tokens;
-
+	do {
 		pos = source.find_first_not_of(delim, delim_pos);
+		if (pos == source.npos)
+			break;
+
 		delim_pos = source.find_first_of(delim, pos);
-	}
+		holder.push_back(source.substr(pos, delim_pos - pos));
+	} while (true);
 
 	return holder;
 }
@@ -55,18 +54,18 @@ split(string_view source, string_view delim)
  * `explode("x==y==z", "==")` -> `{"x", "y", "z"}`
  * `explode("/path/", "/", false)` -> `{"", "path", ""}`
  */
-inline std::vector<std::string>
+inline std::vector<string_view>
 cut(string_view source, string_view delim)
 {
-	std::vector<std::string> holder;
+	std::vector<string_view> holder;
 	size_t pos1 = 0;
 	size_t pos2;
 
 	do {
 		pos2 = source.find(delim, pos1);
-		holder.push_back((std::string)source.substr(pos1, pos2 - pos1));
+		holder.push_back(source.substr(pos1, pos2 - pos1));
 
-		if (pos2 == std::string::npos)
+		if (pos2 == source.npos)
 			break;
 
 		pos1 = pos2 + delim.size();
