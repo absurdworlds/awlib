@@ -1503,10 +1503,10 @@ static void ProcExtsFromExtList(std::vector<map_entry> &table)
 {
 	GLint idx;
 	GLint num = 0;
-	gl::get_integerv(gl::NUM_EXTENSIONS, &num);
+	gl::get_integerv(GL_NUM_EXTENSIONS, &num);
 
 	for(idx = 0; idx < num; ++idx) {
-		const char* strExtensionName = (const char *)gl::get_stringi(gl::EXTENSIONS, idx);
+		const char* strExtensionName = (const char *)gl::get_stringi(GL_EXTENSIONS, idx);
 		LoadExtByName(table, strExtensionName);
 	}
 }

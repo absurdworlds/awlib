@@ -35,10 +35,13 @@ local function Clamp(version)
 	return version
 end
 
-local function GenIncludeGuardName(hFile, spec, options)
+local function GenIncludeGuardName(hFile, spec, options, suffix)
 	local name = spec.GetIncludeGuardString():lower()
 	if (options.version) then
 		name = name .. "_" .. Flatten(options.version)
+	end
+	if (suffix) then
+		name = name .. "_" .. suffix
 	end
 
 	local str = "gl_ext_" .. name .. "_h"
@@ -48,6 +51,22 @@ local function GenIncludeGuardName(hFile, spec, options)
 	end
 	
 	return str
+end
+
+function BeginIncludeGuard(hFile, spec, options, suffix)
+	local inclGuard = GenIncludeGuardName(hFile, spec, options, suffix)
+	
+	hFile:fmt("#ifndef %s\n", inclGuard)
+	hFile:fmt("#define %s\n", inclGuard)
+end
+
+function EndIncludeGuard(hFile, spec, options, suffix)
+	hFile:fmt("#endif//%s\n", GenIncludeGuardName(hFile, spec, options, suffix))
+end
+
+function BaseName(basename)
+	local base, dir = util.ParsePath(basename)
+	return base
 end
 
 local function StartNamespace(hFile, namespaceName)
@@ -66,6 +85,18 @@ local function EndNamespace(hFile, namespaceName)
 	end
 end
 
+local function StartPrefixNamespace(hFile, spec, options)
+	if(#options.prefix > 0) then
+		StartNamespace(hFile, options.prefix)
+	end
+end
+
+local function EndPrefixNamespace(hFile, spec, options)
+	if(#options.prefix > 0) then
+		EndNamespace(hFile, options.prefix)
+	end
+end
+
 local function VersionComment(hFile, version, spec, options)
 	hFile:write("/* " .. options.spec .. " version " .. version .. " */\n")
 end
@@ -81,8 +112,6 @@ local function Preamble(hFile)
  */
 ]]
 end
-
-
 
 local function GetCodegenPtrType(options)
 	local str = options.spec:upper() .. "_API"
@@ -104,8 +133,13 @@ local function GenFuncPtrTypedefName(func, spec, options)
 	return GenFuncPtrName(func, spec, options) .. "_ptr"
 end
 
-local function GenEnumName(enum)
-	return common.GetCppEnumName(enum)
+local function GenEnumNamePrefix(enum, spec, options)
+	return spec.EnumNamePrefix() .. enum.name
+end
+
+local function GenEnumName(enum, spec, options)
+	--return common.GetCppEnumName(enum):lower()
+	return GenEnumNamePrefix(enum, spec, options)
 end
 
 local function GenExtensionVarName(extName, spec, options)
@@ -117,11 +151,12 @@ local function GenExtLoaderFuncName(extName, spec, options)
 end
 
 local function GenQualifiedEnumName(enum, spec, options)
-	return spec.FuncNamePrefix() .. "::" .. GenEnumName(enum, spec, options)
+	-- return spec.FuncNamePrefix() .. "::" .. GenEnumName(enum, spec, options)
+	return GenEnumName(enum, spec, options)
 end
 
 local function GenQualifiedFuncPtrName(func, spec, options)
-	return spec.FuncNamePrefix() .. "::_impl" .. "::" .. GenFuncName(func, spec, options)
+	return spec.FuncNamePrefix() .. "::_impl::" .. GenFuncName(func, spec, options)
 end
 
 local function GenQualifiedFuncName(func, spec, options)
@@ -136,41 +171,44 @@ function my_style.header.GetFilename(basename, options)
 	return basename .. ".h"
 end
 
-
-function my_style.header.WriteBlockBeginIncludeGuard(hFile, spec, options)
-	local inclGuard = GenIncludeGuardName(hFile, spec, options)
-	
-	hFile:fmt("#ifndef %s\n", inclGuard)
-	hFile:fmt("#define %s\n", inclGuard)
+function my_style.header.GetEnumFilename(basename, options)
+	return basename .. "_enum.h"
 end
 
-function my_style.header.WriteBlockEndIncludeGuard(hFile, spec, options)
-	hFile:fmt("#endif//%s\n", GenIncludeGuardName(hFile, spec, options))
+my_style.header.WriteBlockBeginIncludeGuard = BeginIncludeGuard
+my_style.header.WriteBlockEndIncludeGuard   = EndIncludeGuard
+
+function my_style.header.WriteBlockBeginIncludeGuardEnum(hFile, spec, options)
+	BeginIncludeGuard(hFile, spec, options, "enum")
+end
+
+function my_style.header.WriteBlockEndIncludeGuardEnum(hFile, spec, options)
+	EndIncludeGuard(hFile, spec, options, "enum")
 end
 
 function my_style.header.WriteInit(hFile, spec, options)
 	--hFile:rawwrite(spec.GetHeaderInit())
 end
 
-function my_style.header.WriteStdIncludes(hFile, specData, spec, options)
-	hFile:write('#include "types.h"')
+function my_style.header.WriteStdIncludes(hFile, basename, spec, options)
+	hFile:write('#include "types.h"\n')
+	hFile:fmt('#include "%s_enum.h"\n', BaseName(basename))
 end
 
 function my_style.header.WriteSpecTypedefs(hFile, specData, spec, options)
+	--[[for k,v in pairs(specData) do
+		print(k,v)
+	end]]
 end
 
 function my_style.header.WriteBlockBeginDecl(hFile, spec, options)
-	if(#options.prefix > 0) then
-		StartNamespace(hFile, options.prefix)
-	end
+	StartPrefixNamespace(hFile, spec, options)
 	StartNamespace(hFile, spec.FuncNamePrefix())
 end
 
 function my_style.header.WriteBlockEndDecl(hFile, spec, options)
 	EndNamespace(hFile, spec.FuncNamePrefix())
-	if(#options.prefix > 0) then
-		EndNamespace(hFile, options.prefix)
-	end
+	EndPrefixNamespace(hFile, spec, options)
 end
 
 
@@ -212,6 +250,7 @@ function my_style.header.WriteExtVariableDecl(hFile, extName,
 end
 
 function my_style.header.WriteBlockBeginEnumDecl(hFile, spec, options)
+	StartPrefixNamespace(hFile, spec, options)
 	hFile:write("enum {\n")
 	hFile:inc()
 end
@@ -219,15 +258,15 @@ end
 function my_style.header.WriteBlockEndEnumDecl(hFile, spec, options)
 	hFile:dec()
 	hFile:write("};\n")
+	EndPrefixNamespace(hFile, spec, options)
 end
 
-function my_style.header.WriteEnumDecl(hFile, enum, enumTable, spec, options,
-	enumSeen)
+function my_style.header.WriteEnumDecl(hFile, enum, enumTable, spec, options, enumSeen)
 	if(enumSeen[enum.name]) then
 		hFile:fmt("//%s taken from ext: %s\n", enum.name, enumSeen[enum.name])
 	else
 	
-		local enumName = GenEnumName(enum)
+		local enumName = GenEnumName(enum, spec, options)
 		local lenEnum = #enumName
 		local numIndent = 33
 		

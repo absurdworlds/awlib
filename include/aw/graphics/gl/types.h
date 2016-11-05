@@ -7,6 +7,7 @@
 #include <aw/types/types.h>
 #include <aw/config.h>
 
+namespace aw {
 #if (AW_PLATFORM == AW_PLATFORM_APPLE)
 typedef void *GLhandleARB;
 #else
@@ -59,4 +60,5 @@ using GLDEBUGPROCAMD = void (APIENTRY *)(GLuint id,GLenum category,GLenum severi
 
 using GLhalfNV = unsigned short;
 using GLvdpauSurfaceNV = GLintptr;
+} // namespace aw
 #endif//aw_gl_types
