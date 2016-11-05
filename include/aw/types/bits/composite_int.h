@@ -11,6 +11,37 @@ static_assert(false, "Do not include this file directly");
 #endif
 
 namespace aw {
+template<typename T>
+auto composite_int<T>::mul(U a, U b) -> composite_int<T>
+{
+	constexpr auto& upper    = math::upper_half<U>;
+	constexpr auto& lower    = math::lower_half<U>;
+	constexpr auto& to_upper = math::lower_to_upper<U>;
+
+	// Split integers into lower and upper halves
+	U ah = upper(a);
+	U al = lower(a);
+	U bh = upper(b);
+	U bl = lower(b);
+
+	// Multiply halves together
+	U ah_bh = ah * bh;
+	U ah_bl = ah * bl;
+	U al_bh = al * bh;
+	U al_bl = al * bl;
+
+	// Compute middle bits
+	U mid_lo = lower(ah_bl) + lower(al_bh);
+	U mid_hi = upper(ah_bl) + upper(al_bh);
+
+	// Compute carry bit
+	U carry = upper(mid_lo + upper(al_bl));
+
+	// Add all the bits together
+	U hi = ah_bh + mid_hi + carry;
+	U lo = al_bl + to_upper(mid_lo);
+
+	return {T(hi), lo};
 }
 
 namespace _impl {

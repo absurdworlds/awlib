@@ -351,7 +351,7 @@ composite_int<T> operator|(composite_int<T> a, composite_int<T> const& b)
 }
 
 template<typename T>
-composite_int<T> operator&(composite_int<T> a, composite_int<T> const& b)
+constexpr composite_int<T> operator&(composite_int<T> a, composite_int<T> const& b)
 {
 	return a &= b;
 }
@@ -374,38 +374,6 @@ bool operator>=(composite_int<T> const& a, composite_int<T> const& b)
 	return !(a < b);
 }
 
-template<typename T>
-auto composite_int<T>::mul(U a, U b) -> composite_int<T>
-{
-	constexpr auto& upper    = math::upper_half<U>;
-	constexpr auto& lower    = math::lower_half<U>;
-	constexpr auto& to_upper = math::lower_to_upper<U>;
-
-	// Split integers into lower and upper halves
-	U ah = upper(a);
-	U al = lower(a);
-	U bh = upper(b);
-	U bl = lower(b);
-
-	// Multiply halves together
-	U ah_bh = ah * bh;
-	U ah_bl = ah * bl;
-	U al_bh = al * bh;
-	U al_bl = al * bl;
-
-	// Compute middle bits
-	U mid_lo = lower(ah_bl) + lower(al_bh);
-	U mid_hi = upper(ah_bl) + upper(al_bh);
-
-	// Compute carry bit
-	U carry = upper(mid_lo + upper(al_bl));
-
-	// Add all the bits together
-	U hi = ah_bh + mid_hi + carry;
-	U lo = al_bl + to_upper(mid_lo);
-
-	return {T(hi), lo};
-}
 
 //template<typename T>
 //std::string to_string(composite_int<T> val);
