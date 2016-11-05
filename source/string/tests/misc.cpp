@@ -49,15 +49,15 @@ Test(trim) {
 
 Test(split_and_join) {
 	std::string s = "word1 word2 word3";
-	std::vector<std::string> v;
+	std::vector<string_view> v;
 	std::string r;
 
 	Setup {
-		v = string::split(s, " ");
+		v = string::split_by(s, " ");
 	}
 
 	Preconditions {
-		std::vector<std::string> e{"word1", "word2", "word3"};
+		std::vector<string_view> e{"word1", "word2", "word3"};
 		TestAssert(v == e);
 	}
 
@@ -72,8 +72,30 @@ Test(split_and_join) {
 
 Test(join_and_split) {
 	std::string s;
-	std::vector<std::string> v{"word1", "word2", "word3"};
-	std::vector<std::string> r;
+	std::vector<string_view> v{"word1", "word2", "word3"};
+	std::vector<string_view> r;
+
+	Setup {
+		s = string::join(v, ", ");
+	}
+
+	Preconditions {
+		TestEqual(s, "word1, word2, word3");
+	}
+
+	Checks {
+		r = string::split_by(s, ", ");
+	}
+
+	Postconditions {
+		TestAssert(r == v);
+	}
+}
+
+Test(join_and_split2) {
+	std::string s;
+	std::vector<string_view> v{"word1", "word2", "word3"};
+	std::vector<string_view> r;
 
 	Setup {
 		s = string::join(v, ", ");
@@ -85,28 +107,6 @@ Test(join_and_split) {
 
 	Checks {
 		r = string::split(s, ", ");
-	}
-
-	Postconditions {
-		TestAssert(r == v);
-	}
-}
-
-Test(join_and_split2) {
-	std::string s;
-	std::vector<std::string> v{"word1", "word2", "word3"};
-	std::vector<std::string> r;
-
-	Setup {
-		s = string::join(v, ", ");
-	}
-
-	Preconditions {
-		TestEqual(s, "word1, word2, word3");
-	}
-
-	Checks {
-		r = string::explode(s, ", ");
 	}
 
 	Postconditions {
