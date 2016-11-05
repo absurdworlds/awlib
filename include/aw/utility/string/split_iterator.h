@@ -7,15 +7,22 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef aw_string_split_h
-#define aw_string_split_h
+#ifndef aw_string_substr_iterator_h
+#define aw_string_substr_iterator_h
+#include <cassert>
 #include <aw/types/string_view.h>
+#include <aw/utility/iterators/proxy.h>
 namespace aw {
 namespace string {
 struct substring_iterator_base {
 	string_view operator*() const
 	{
 		return source.substr(pos1, pos2 - pos1);
+	}
+
+	iter::proxy<string_view> operator->() const
+	{
+		return {*(*this)};
 	}
 
 	/*
@@ -52,26 +59,26 @@ protected:
 	size_t pos2 = string_view::npos;
 };
 
-struct split_iterator : substring_iterator_base {
-	split_iterator() = default;
-	split_iterator(string_view source, string_view delim)
+struct split_by_iterator : substring_iterator_base {
+	split_by_iterator() = default;
+	split_by_iterator(string_view source, string_view delim)
 		: substring_iterator_base{source, delim}
 	{
 		pos1 = source.find_first_not_of(delim);
 		pos2 = source.find_first_of(delim, pos1);
 	}
 
-	split_iterator& begin()
+	split_by_iterator& begin()
 	{
 		return *this;
 	}
 
-	split_iterator end() const
+	split_by_iterator end() const
 	{
 		return {};
 	}
 
-	split_iterator& operator++()
+	split_by_iterator& operator++()
 	{
 		if (pos1 != npos) {
 			pos1 = source.find_first_not_of(delim, pos2);
@@ -80,69 +87,82 @@ struct split_iterator : substring_iterator_base {
 		return *this;
 	}
 
-	split_iterator operator++(int)
+	split_by_iterator operator++(int)
 	{
-		split_iterator copy = *this;
+		split_by_iterator copy = *this;
 		++*this;
 		return copy;
 	}
 };
 
-struct slice_iterator : substring_iterator_base{
-	slice_iterator() = default;
-	slice_iterator(string_view source, string_view delim)
+template<bool DiscardEmpty>
+struct cut_iterator_base : substring_iterator_base {
+	cut_iterator_base() = default;
+	cut_iterator_base(string_view source, string_view delim)
 		: substring_iterator_base{source, delim}
 	{
+		assert(!delim.empty());
 		pos1 = 0;
-		pos2 = source.find_first_of(delim, pos1);
+		pos2 = source.find(delim, pos1);
+
+		if /*constexpr*/ (DiscardEmpty)
+			discard_empty();
 	}
 
-	slice_iterator& begin()
+	cut_iterator_base& begin()
 	{
 		return *this;
 	}
 
-	slice_iterator end() const
+	cut_iterator_base end() const
 	{
 		return {};
 	}
 
-	slice_iterator& operator++()
+	cut_iterator_base& operator++()
 	{
-		if (pos2 != npos) {
-			pos1 = pos2 + 1;
-			pos2 = source.find_first_of(delim, pos1);
-		} else {
+		if (pos2 == npos) {
 			pos1 = npos;
+			return *this;
 		}
+
+		advance();
+
+		if /*constexpr*/ (DiscardEmpty)
+			discard_empty();
+
 		return *this;
 	}
 
-	slice_iterator operator++(int)
+	cut_iterator_base operator++(int)
 	{
-		slice_iterator copy = *this;
+		cut_iterator_base copy = *this;
 		++*this;
 		return copy;
 	}
+
+private:
+	void advance()
+	{
+		pos1 = pos2 + delim.size();
+		pos2 = source.find(delim, pos1);
+	}
+
+	void discard_empty()
+	{
+		while ( (*this)->empty() ) {
+			if (pos2 != npos) {
+				advance();
+			} else {
+				pos1 = npos;
+				break;
+			}
+		}
+	}
 };
 
-/*
-#include <iostream>
-int main()
-{
-	using namespace aw::string;
-	for (auto s : split_iterator("a/b/c/d", "/"))
-		std::cout << s << '\n';
-	for (auto s : split_iterator("//aa//bb/cc///dd///", "/"))
-		std::cout << s << '\n';
-
-	for (auto s : slice_iterator("a/b/c/d", "/"))
-		std::cout << s << '\n';
-	for (auto s : slice_iterator("//aa//bb/cc///dd///", "/"))
-		std::cout << s << '/';
-	std::cout << "\b \n";
-}
-*/
+using split_iterator = cut_iterator_base<true>;
+using cut_iterator   = cut_iterator_base<false>;
 } // namespace string
 } // namespace aw
-#endif//aw_string_split_h
+#endif//aw_string_substr_iterator_h
