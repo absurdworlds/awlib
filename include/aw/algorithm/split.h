@@ -16,7 +16,7 @@ namespace aw {
  * including empty subranges.
  */
 template <typename Iterator, typename T, typename Store>
-void slice(Iterator begin, Iterator end, T const& delim, Store store)
+void cut(Iterator begin, Iterator end, T const& delim, Store store)
 {
 	do {
 		Iterator pos = find(begin, end, delim);
