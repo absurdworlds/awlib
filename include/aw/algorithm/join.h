@@ -27,8 +27,8 @@ struct assign_plus {
  *    T (T&, U const&)
  * where U must be convertible to T.
  */
-template <typename Iterator, typename T, typename Adder>
-T join(Iterator begin, Iterator end, T sink, T const& delim, Adder add)
+template <typename Iterator, typename T, typename D, typename Adder>
+T join(Iterator begin, Iterator end, T sink, D const& delim, Adder add)
 {
 	while (begin != end) {
 		add(sink, delim);
@@ -40,10 +40,10 @@ T join(Iterator begin, Iterator end, T sink, T const& delim, Adder add)
 /*
  * Same as above, but T::operator+= is used.
  */
-template <typename Iterator, typename T>
-T join(Iterator begin, Iterator end, T sink, T const& delim)
+template <typename Iterator, typename T, typename D>
+T join(Iterator begin, Iterator end, T sink, D const& delim)
 {
-	return join(begin, end, sink, delim, assign_plus<T,T>{});
+	return join(begin, end, sink, delim, assign_plus<T,D>{});
 }
 
 /*
