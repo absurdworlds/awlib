@@ -36,16 +36,18 @@ void cut(Iterator begin, Iterator end, T const& delim, Store store)
 template <typename Iterator, typename T, typename Store>
 void split(Iterator begin, Iterator end, T const& delim, Store store)
 {
+	Iterator pos1;
+	Iterator pos2 = begin;
 
-	auto pos1 = find_not(begin, end, delim);
-	auto pos2 = find(pos1, end, delim);
-
-	while (pos1 != end) {
-		store(pos1, pos2);
-
+	do {
 		pos1 = find_not(pos2, end, delim);
+
+		if (pos1 == end)
+			break;
+
 		pos2 = find(pos1, end, delim);
-	}
+		store(pos1, pos2);
+	} while (true);
 }
 } // namespace aw
 #endif//aw_algorithm_split_h
