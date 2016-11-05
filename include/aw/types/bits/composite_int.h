@@ -51,11 +51,11 @@ auto div(composite_int<T> const& a, composite_int<T> const& b)
 {
 	using U = make_unsigned<T>;
 
-	bool q_sign = (a.high_part() < 0) != (b.high_part() < 0);
-	bool r_sign = (b.high_part() < 0);
+	bool q_sign = (a.high() < 0) != (b.high() < 0);
+	bool r_sign = (b.high() < 0);
 
-	auto aa = a.high_part() < 0 ? -a : a;
-	auto bb = b.high_part() < 0 ? -b : b;
+	auto aa = a.high() < 0 ? -a : a;
+	auto bb = b.high() < 0 ? -b : b;
 
 	auto result = composite_int<U>::div(aa, bb);
 

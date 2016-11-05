@@ -28,12 +28,13 @@ public:
 	using opposite_type = conditional<is_signed<T>, U, S>;
 	static constexpr auto digits = num_digits<T> + num_digits<U>;
 
-	composite_int() = default;
-	composite_int(T hi, U lo)
-		: hi(hi), lo(lo)
+	constexpr composite_int() = default;
+	constexpr composite_int(T hi, U lo)
+		: hi{hi}, lo{lo}
 	{ }
-	composite_int(composite_int const& other) = default;
-	composite_int& operator=(composite_int const& other) = default;
+
+	constexpr composite_int(composite_int const& other) = default;
+	constexpr composite_int& operator=(composite_int const& other) = default;
 
 	/*!
 	 * Construct from basic type.
@@ -42,19 +43,19 @@ public:
 	 *    implicit conversion to bool.
 	 */
 	template<typename I, typename = enable_if<is_same<I,T>>>
-	explicit composite_int(I value)
+	constexpr explicit composite_int(I value)
 		: lo{U(value)}
 	{
 		if (value < 0)
 			hi = -1;
 	}
 
-	operator composite_int<opposite_type>() const
+	constexpr operator composite_int<opposite_type>() const
 	{
 		return {opposite_type(hi), lo};
 	}
 
-	auto& operator++()
+	constexpr auto& operator++()
 	{
 		// If anyone reading this gets annoyed that
 		// I compute (lo + 1) twice: I don't care about that,
@@ -64,14 +65,14 @@ public:
 		return *this;
 	}
 
-	auto& operator--()
+	constexpr auto& operator--()
 	{
 		hi -= (lo - 1) > lo;
 		--lo;
 		return *this;
 	}
 
-	auto& operator+=(composite_int const& other)
+	constexpr auto& operator+=(composite_int const& other)
 	{
 		U carry = (lo + other.lo) < lo;
 		lo += other.lo;
@@ -79,7 +80,7 @@ public:
 		return *this;
 	}
 
-	auto& operator+=(U val)
+	constexpr auto& operator+=(U val)
 	{
 		U carry = (lo + val) < lo;
 		lo += val;
@@ -87,11 +88,75 @@ public:
 		return *this;
 	}
 
-	auto& operator-=(composite_int const& other)
+	constexpr auto& operator-=(composite_int const& other)
 	{
 		U carry = (lo - other.lo) > lo;
 		lo -= other.lo;
 		hi -= other.hi + carry;
+		return *this;
+	}
+
+
+	constexpr auto& operator^=(composite_int const& other)
+	{
+		lo ^= other.lo;
+		hi ^= other.hi;
+		return *this;
+	}
+
+	constexpr auto& operator|=(composite_int const& other)
+	{
+		lo |= other.lo;
+		hi |= other.hi;
+		return *this;
+	}
+
+	constexpr auto& operator|=(U val)
+	{
+		lo |= val;
+		return *this;
+	}
+
+	constexpr auto& operator&=(composite_int const& other)
+	{
+		lo &= other.lo;
+		hi &= other.hi;
+		return *this;
+	}
+
+	constexpr auto& operator<<=(size_t n)
+	{
+		if (n == 0)
+			return *this;
+		if (n == num_digits<T>) {
+			hi = lo;
+			lo = 0;
+		} else if (n > num_digits<T>) {
+			hi = lo << (n - num_digits<T>);
+			lo = 0;
+		} else if (n < num_digits<T>) {
+			hi <<= n;
+			hi |= lo >> (num_digits<T> - n);
+			lo <<= n;
+		}
+		return *this;
+	}
+
+	constexpr auto& operator>>=(size_t n)
+	{
+		if (n == 0)
+			return *this;
+		if (n == num_digits<T>) {
+			lo = hi;
+			hi = 0;
+		} else if (n > num_digits<T>) {
+			lo = hi >> (n - num_digits<T>);
+			hi = 0;
+		} else if (n < num_digits<T>) {
+			lo >>= n;
+			lo |= hi << (num_digits<T> - n);
+			hi >>= n;
+		}
 		return *this;
 	}
 
@@ -131,69 +196,6 @@ public:
 		return *this = *this % other;
 	}
 
-	auto& operator^=(composite_int const& other)
-	{
-		lo ^= other.lo;
-		hi ^= other.hi;
-		return *this;
-	}
-
-	auto& operator|=(composite_int const& other)
-	{
-		lo |= other.lo;
-		hi |= other.hi;
-		return *this;
-	}
-
-	auto& operator|=(U val)
-	{
-		lo |= val;
-		return *this;
-	}
-
-	auto& operator&=(composite_int const& other)
-	{
-		lo &= other.lo;
-		hi &= other.hi;
-		return *this;
-	}
-
-	auto& operator<<=(size_t n)
-	{
-		if (n == 0)
-			return *this;
-		if (n == num_digits<T>) {
-			hi = lo;
-			lo = 0;
-		} else if (n > num_digits<T>) {
-			hi = lo << (n - num_digits<T>);
-			lo = 0;
-		} else if (n < num_digits<T>) {
-			hi <<= n;
-			hi |= lo >> (num_digits<T> - n);
-			lo <<= n;
-		}
-		return *this;
-	}
-
-	auto& operator>>=(size_t n)
-	{
-		if (n == 0)
-			return *this;
-		if (n == num_digits<T>) {
-			lo = hi;
-			hi = 0;
-		} else if (n > num_digits<T>) {
-			lo = hi >> (n - num_digits<T>);
-			hi = 0;
-		} else if (n < num_digits<T>) {
-			lo >>= n;
-			lo |= hi << (num_digits<T> - n);
-			hi >>= n;
-		}
-		return *this;
-	}
-
 	size_t leading_zeros() const
 	{
 		if (hi == 0)
@@ -208,95 +210,73 @@ public:
 		return math::trailing_zeros(lo);
 	}
 
-	T high_part() const
+	constexpr T high() const
 	{
 		return hi;
 	}
 
-	U low_part() const
+	constexpr U low() const
 	{
 		return lo;
 	}
 
-	explicit operator T() const
+	constexpr explicit operator T() const
 	{
 		return T(lo);
 	}
 
-	operator bool() const
+	constexpr operator bool() const
 	{
-		return lo && hi;
+		return lo || hi;
 	}
 
-	friend bool operator!(composite_int<T> const& a)
+	constexpr bool operator!() const
 	{
-		return !bool(a);
+		return !(lo && hi);
 	}
 
-	friend bool operator<(composite_int<T> const& a, composite_int<T> const& b)
+	constexpr auto operator+() const -> composite_int<T>
 	{
-		if (a.hi == b.hi)
-			return a.lo < b.lo;
-		return a.hi < b .hi;
+		return *this;
 	}
 
-	friend bool operator>(composite_int<T> const& a, composite_int<T> const& b)
-	{
-		if (a.hi == b.hi)
-			return a.lo > b.lo;
-		return a.hi > b .hi;
-	}
-
-	friend bool operator==(composite_int<T> const& a, composite_int<T> const& b)
-	{
-		return a.hi == b.hi && a.lo == b.lo;
-	}
-
-	friend auto operator+(composite_int const& a) -> composite_int<T>
-	{
-		return a;
-	}
-
-	friend auto operator~(composite_int const& a) -> composite_int<T>
+	constexpr auto operator~() const -> composite_int<T>
 	{
 		return {~a.hi, ~a.lo};
 	}
 
-	friend auto operator-(composite_int const& a) -> composite_int<make_signed<T>>
+	constexpr auto operator-() const -> composite_int<T>
 	{
-		using S = make_signed<T>;
 		composite_int<S> result = ~a;
-		return ++result;
+		return composite_int<T>{++result};
 	}
 
-	friend auto operator++(composite_int<T>& a, int) -> composite_int<T>
+	constexpr auto operator++(int) const -> composite_int<T>
 	{
-		auto const tmp = a;
-		++a;
-		return tmp;
+		composite_int<T> tmp = *this;
+		return ++tmp;
 	}
 
-	friend auto operator--(composite_int<T>& a, int) -> composite_int<T>
+	constexpr auto operator--(int) const -> composite_int<T>
 	{
-		auto const tmp = a;
-		--a;
-		return tmp;
+		composite_int<T> tmp = *this;
+		return --tmp;
 	}
 
-	T sign() const
+	constexpr T sign() const
 	{
 		return sign(std::integral_constant<bool,is_signed<T>>{});
 	}
 
 private:
-	T sign(std::true_type is_signed) const
+	constexpr T sign(std::true_type is_signed) const
 	{
 		if (hi < 0)
 			return -1;
-		return (hi > 0 && lo > 0);
+		return bool(*this);
 	}
 
-	T sign(std::false_type is_signed) const
+	constexpr T sign(std::false_type is_signed) const
 	{
 		return (hi > 0);
 	}
@@ -315,37 +295,37 @@ composite_int<T> make_composite_int(T hi, make_unsigned<T> lo)
 }
 
 template<typename T>
-composite_int<T> operator+(composite_int<T> a, composite_int<T> const& b)
+constexpr composite_int<T> operator+(composite_int<T> a, composite_int<T> const& b)
 {
 	return a += b;
 }
 
 template<typename T>
-composite_int<T> operator-(composite_int<T> a, composite_int<T> const& b)
+constexpr composite_int<T> operator-(composite_int<T> a, composite_int<T> const& b)
 {
 	return a -= b;
 }
 
 template<typename T>
-composite_int<T> operator>>(composite_int<T> a, size_t n)
+constexpr composite_int<T> operator>>(composite_int<T> a, size_t n)
 {
 	return a >>= n;
 }
 
 template<typename T>
-composite_int<T> operator<<(composite_int<T> a, size_t n)
+constexpr composite_int<T> operator<<(composite_int<T> a, size_t n)
 {
 	return a <<= n;
 }
 
 template<typename T>
-composite_int<T> operator^(composite_int<T> a, composite_int<T> const& b)
+constexpr composite_int<T> operator^(composite_int<T> a, composite_int<T> const& b)
 {
 	return a ^= b;
 }
 
 template<typename T>
-composite_int<T> operator|(composite_int<T> a, composite_int<T> const& b)
+constexpr composite_int<T> operator|(composite_int<T> a, composite_int<T> const& b)
 {
 	return a |= b;
 }
@@ -357,22 +337,45 @@ constexpr composite_int<T> operator&(composite_int<T> a, composite_int<T> const&
 }
 
 template<typename T>
-bool operator!=(composite_int<T> const& a, composite_int<T> const& b)
+constexpr bool operator<(composite_int<T> const& a, composite_int<T> const& b)
+{
+	if (a.high() == b.high())
+		return a.low() < b.low();
+	return a.high() < b.high();
+}
+
+template<typename T>
+constexpr bool operator>(composite_int<T> const& a, composite_int<T> const& b)
+{
+	if (a.high() == b.high())
+		return a.low() > b.low();
+	return a.high() > b.high();
+}
+
+template<typename T>
+constexpr bool operator==(composite_int<T> const& a, composite_int<T> const& b)
+{
+	return a.high() == b.high() && a.low() == b.low();
+}
+
+template<typename T>
+constexpr bool operator!=(composite_int<T> const& a, composite_int<T> const& b)
 {
 	return !(a == b);
 }
 
 template<typename T>
-bool operator<=(composite_int<T> const& a, composite_int<T> const& b)
+constexpr bool operator<=(composite_int<T> const& a, composite_int<T> const& b)
 {
 	return !(a > b);
 }
 
 template<typename T>
-bool operator>=(composite_int<T> const& a, composite_int<T> const& b)
+constexpr bool operator>=(composite_int<T> const& a, composite_int<T> const& b)
 {
 	return !(a < b);
 }
+
 
 
 //template<typename T>
