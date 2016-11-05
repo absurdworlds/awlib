@@ -33,6 +33,12 @@ public:
 		++iters.first, ++iters.second;
 	}
 
+	bool operator!=(pairs_iterator const& it)
+	{
+		return (iters.first  != it.iters.first) &&
+		       (iters.second != it.iters.second);
+	}
+
 	bool operator!=(Base1 const& it)
 	{
 		return iters.first != it;
@@ -41,11 +47,20 @@ public:
 	std::pair<Base1, Base2> iters;
 };
 
+namespace adl {
+using std::begin;
+using std::end;
+template<typename Range>
+using begin_type = decltype( begin(std::declval<Range>()) );
+template<typename Range>
+using end_type   = decltype( begin(std::declval<Range>()) );
+} // namespace
+
 template <typename Range1, typename Range2>
 struct pairs_adapter {
 private:
-	using _iter1 = decltype(std::declval<Range1>().begin());
-	using _iter2 = decltype(std::declval<Range2>().begin());
+	using _iter1 = adl::begin_type<Range1>;
+	using _iter2 = adl::begin_type<Range2>;
 public:
 	using iterator = pairs_iterator<_iter1, _iter2>;
 
@@ -55,12 +70,14 @@ public:
 
 	iterator begin()
 	{
-		return {std::begin(ranges.first), std::begin(ranges.second)};
+		using std::begin;
+		return {begin(ranges.first), begin(ranges.second)};
 	}
 
-	auto end()
+	iterator end()
 	{
-		return std::end(ranges.first);
+		using std::end;
+		return {end(ranges.first), end(ranges.second)};
 	}
 
 	std::pair<Range1&&, Range2&&> ranges;
