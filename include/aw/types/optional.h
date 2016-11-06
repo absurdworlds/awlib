@@ -8,16 +8,19 @@
  */
 #ifndef aw_types_optional_h
 #define aw_types_optional_h
+#if __has_include(<optional>)
+#include <optional>
+namespace aw {
+using std::optional;
+using std::nullopt_t;
+using std::nullopt;
+} // namespace aw
+#elif __has_include(<experimental/optional>)
 #include <experimental/optional>
 namespace aw {
-//!@{
-//! Shorthand for std::experimental::optional
-template <typename T>
-using optional = std::experimental::optional<T>;
-
+using std::experimental::optional;
 using std::experimental::nullopt_t;
-//using std::experimental::nullopt;
 using std::experimental::nullopt;
-//!@}
 } // namespace aw
+#endif
 #endif //aw_types_optional_h
