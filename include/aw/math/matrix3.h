@@ -22,7 +22,7 @@ matrix3<T> pitch_matrix( T pitch )
 {
 	auto s = sin( pitch );
 	auto c = cos( pitch );
-	return {{{1, 0, 0}, {0, c, -s}, {0, s, c}}};
+	return {{ {1, 0, 0}, {0, c, -s}, {0, s, c} }};
 }
 
 template<typename T>
@@ -30,7 +30,7 @@ matrix3<T> yaw_matrix( T yaw )
 {
 	auto s = sin( yaw );
 	auto c = cos( yaw );
-	return {{{c, 0, s}, {0, 1, 0}, {-s, 0, c}}};
+	return {{ {c, 0, s}, {0, 1, 0}, {-s, 0, c} }};
 }
 
 template<typename T>
@@ -38,7 +38,7 @@ matrix3<T> roll_matrix( T roll )
 {
 	auto s = sin( roll );
 	auto c = cos( roll );
-	return {{{c, -s, 0}, {s, c, 0}, {0, 0, 1}}};
+	return {{ {c, -s, 0}, {s, c, 0}, {0, 0, 1} }};
 }
 
 /*!
