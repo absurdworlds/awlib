@@ -33,8 +33,19 @@ public:
 };
 
 template <class Callable>
-on_scope_exit<Callable> call_on_exit(Callable&& func)
+on_scope_exit<Callable> call_on_exit(Callable&& func) noexcept
 {
+	return on_scope_exit<Callable>(std::forward<Callable>(func));
+}
+
+/*!
+ * Executes pair of actions: one immediately, and another at exit
+ */
+template <class Callable>
+on_scope_exit<Callable> scope_guard(Callable&& init, Callable&& func)
+	noexcept( noexcept( init() ))
+{
+	init();
 	return on_scope_exit<Callable>(std::forward<Callable>(func));
 }
 } // namespace aw
