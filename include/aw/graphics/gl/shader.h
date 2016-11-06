@@ -38,12 +38,15 @@ namespace gl3 {
 // — if I make it possible to make invalid shader, do I also provide methods
 // to recompile shader?
 struct shader {
-	// TODO: return "result<shader, status>"
-	// TODO: gl3::compile and gl::4 compile?
-	static optional<shader> compile(gl::shader_type type, string_view code);
 
-	shader() = delete;
-	~shader();
+	shader(gl::shader_type type);
+	shader(gl::shader_type type, string_view source)
+		: shader{type}
+	{
+		compile(source);
+	}
+
+	~shader() { cleanup(); }
 
 	shader(shader const&) = delete;
 	// TODO: currently makes old one invalid, bad
@@ -52,24 +55,29 @@ struct shader {
 	{
 		other._shader = 0;
 	}
-	//TODO: operator=
+
 
 	void swap(shader& other)
 	{
 		std::swap(_shader, other._shader);
 	}
 
-	operator GLuint()
+	shader& operator=(shader&& other)
 	{
-		return _shader;
+		cleanup();
+		swap(other);
 	}
 
-private:
-	shader(GLuint _shader)
-		: _shader{_shader}
-	{}
+	bool compile(string_view code);
 
-	//shader_type type;
+	gl::shader_type type() const;
+	bool is_compiled() const;
+
+	operator struct shader_handle();
+
+private:
+	void cleanup();
+
 	GLuint _shader = 0;
 };
 

@@ -1595,8 +1595,8 @@ static int g_minor_version = 0;
 
 static void get_gl_version()
 {
-	_impl::GetIntegerv(MAJOR_VERSION, &g_major_version);
-	_impl::GetIntegerv(MINOR_VERSION, &g_minor_version);
+	_impl::GetIntegerv(GL_MAJOR_VERSION, &g_major_version);
+	_impl::GetIntegerv(GL_MINOR_VERSION, &g_minor_version);
 }
 
 int get_major_version()
