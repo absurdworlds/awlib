@@ -38,11 +38,11 @@ struct program {
 	// TODO: array_view
 	bool link(std::vector<shader>& shaders);
 
-	// TODO: hide this
-	operator struct program_handle();
 	struct uniform_value uniform(char const* name);
 
 private:
+	friend struct program_handle handle(program&);
+
 	void cleanup();
 	GLuint _program;
 };

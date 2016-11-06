@@ -6,7 +6,7 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#include "shader.h"
+#include <aw/graphics/gl/shader.h>
 #include <aw/graphics/gl/gl_ext33.h>
 #include <iostream> // temporary
 #include <vector>
@@ -76,5 +76,11 @@ bool shader::compile(string_view code)
 
 	return status;
 }
+
+struct shader_handle {
+	GLuint value;
+	operator GLuint() { return value; }
+};
+struct shader_handle handle(shader& prg) { return {prg._shader}; }
 
 } // namespace aw::gl3

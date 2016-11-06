@@ -66,6 +66,7 @@ struct shader {
 	{
 		cleanup();
 		swap(other);
+		return *this;
 	}
 
 	bool compile(string_view code);
@@ -73,9 +74,9 @@ struct shader {
 	gl::shader_type type() const;
 	bool is_compiled() const;
 
-	operator struct shader_handle();
-
 private:
+	friend struct shader_handle handle(shader&);
+
 	void cleanup();
 
 	GLuint _shader = 0;

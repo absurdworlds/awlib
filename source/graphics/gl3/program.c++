@@ -6,14 +6,21 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#include "program.h"
-#include "shader.h"
+#include <aw/graphics/gl/program.h>
+#include <aw/graphics/gl/shader.h>
 #include <aw/graphics/gl/uniform.h>
 #include <aw/graphics/gl/gl_ext33.h>
 #include <aw/utility/on_scope_exit.h>
 #include <iostream> // temporary
 
+
 namespace aw::gl3 {
+
+struct shader_handle {
+	GLuint value;
+	operator GLuint() { return value; }
+};
+
 namespace {
 void report_program_info_log(GLuint _program)
 {
@@ -91,4 +98,11 @@ void uniform_value::set(GLfloat x, GLfloat y, GLfloat z, GLfloat w)
 {
 	gl::uniform4f(location, x, y, z, w);
 }
+
+struct program_handle {
+	GLuint value;
+	operator GLuint() { return value; }
+};
+struct program_handle handle(program& prg) { return {prg._program}; }
+
 } // namespace aw::gl3
