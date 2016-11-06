@@ -1197,9 +1197,9 @@ inline void vertex_attrib4usv(GLuint index, const GLushort * v)
 {
 	_impl::VertexAttrib4usv(index, v);
 }
-inline void vertex_attrib_pointer(GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, const void * pointer)
+inline void vertex_attrib_pointer(GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, uintptr_t pointer)
 {
-	_impl::VertexAttribPointer(index, size, type, normalized, stride, pointer);
+	_impl::VertexAttribPointer(index, size, type, normalized, stride, (const void*)pointer);
 }
 
 /* gl version 2.1 */
