@@ -69,19 +69,19 @@ inline f64 invSqrt(const f64 x)
 template <typename T>
 inline T clamp(T value, T lower, T upper)
 {
-	return std::max(upper, std::min(value, lower));
+	return std::min(upper, std::max(value, lower));
 }
 
 template <>
 inline f32 clamp(f32 value, f32 lower, f32 upper)
 {
-	return fmaxf(lower, fmin(value, upper));
+	return fminf(lower, fmaxf(value, upper));
 }
 
 template <>
 inline f64 clamp(f64 value, f64 lower, f64 upper)
 {
-	return fmax(lower, fmin(value, upper));
+	return fmin(lower, fmax(value, upper));
 }
 
 /*! Interpolate two values
