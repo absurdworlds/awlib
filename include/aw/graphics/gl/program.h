@@ -40,6 +40,7 @@ struct program {
 
 	// TODO: hide this
 	operator struct program_handle();
+	struct uniform_value uniform(char const* name);
 
 private:
 	void cleanup();
