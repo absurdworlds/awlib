@@ -191,11 +191,11 @@ struct quaternion {
 		// singularity test
 		T const xyzw = x*y + z*w;
 		if ( math::equals(xyzw, 0.5f) ) { // north pole
-			euler[axis::x] = math::half_pi;
+			euler[axis::x] = pi/2;
 			euler[axis::y] = 2 * atan2(x, w);
 			euler[axis::z] = 0;
 		} else if ( math::equals(xyzw, -0.5f) ) { // south pole
-			euler[axis::x] = -math::half_pi;
+			euler[axis::x] = -pi/2;
 			euler[axis::y] = -2 * atan2(x, w);
 			euler[axis::z] = 0;
 		} else {
