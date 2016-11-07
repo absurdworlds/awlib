@@ -9,13 +9,10 @@
  */
 #ifndef aw_math_vector_h
 #define aw_math_vector_h
-#include <array>
-#include <tuple>
 #include <utility>
 
 #include <aw/math/math.h>
 #include <aw/math/angle.h>
-#include <aw/types/support/array.h>
 #include <aw/meta/conditional.h>
 #include <aw/utility/index_sequence.h>
 #include <aw/meta/list_ops.h>
@@ -105,8 +102,6 @@ struct vector {
 	constexpr static size_t vector_size = N;
 
 	using value_type = T;
-	using array_type = std::array<T,N>;
-	using tuple_type = decltype(aw::to_tuple(std::declval<array_type>()));
 
 	using indices = std::make_index_sequence<N>;
 
@@ -182,16 +177,6 @@ struct vector {
 	T const& operator[](size_t idx) const
 	{
 		return elems[idx];
-	}
-
-	array_type to_array() const
-	{
-		return elems;
-	}
-
-	tuple_type to_tuple() const
-	{
-		return aw::to_tuple(elems);
 	}
 
 	template<typename Func>
