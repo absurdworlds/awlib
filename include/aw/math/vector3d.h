@@ -19,7 +19,7 @@ using vector3d = vector<T,3>;
  * Calculate cross-product of two 3D vectors
  */
 template<typename T>
-vector3d<T> cross(vector3d<T> const& vec1, vector3d<T> const& vec2)
+constexpr vector3d<T> cross(vector3d<T> const& vec1, vector3d<T> const& vec2)
 {
 	T const cx = vec1[1] * vec2[2] - vec1[2] * vec2[1];
 	T const cy = vec1[2] * vec2[0] - vec1[0] * vec2[2];
