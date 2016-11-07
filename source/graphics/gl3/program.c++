@@ -8,7 +8,6 @@
  */
 #include <aw/graphics/gl/program.h>
 #include <aw/graphics/gl/shader.h>
-#include <aw/graphics/gl/uniform.h>
 #include <aw/graphics/gl/gl_ext33.h>
 #include <aw/utility/on_scope_exit.h>
 #include <iostream> // temporary
@@ -74,29 +73,29 @@ bool program::link(std::vector<shader>& shaders)
 	return status;
 }
 
-uniform_value program::uniform(char const* name)
+uniform_location program::uniform( char const* name )
 {
-	return {gl::get_uniform_location( _program, name )};
+	return uniform_location( gl::get_uniform_location( _program, name ) );
 }
 
-void uniform_value::set(GLfloat x)
+void uniform_proxy::set(GLfloat x)
 {
-	gl::uniform1f(location, x);
+	gl::uniform1f( GLint(location), x);
 }
 
-void uniform_value::set(GLfloat x, GLfloat y)
+void uniform_proxy::set(GLfloat x, GLfloat y)
 {
-	gl::uniform2f(location, x, y);
+	gl::uniform2f( GLint(location), x, y);
 }
 
-void uniform_value::set(GLfloat x, GLfloat y, GLfloat z)
+void uniform_proxy::set(GLfloat x, GLfloat y, GLfloat z)
 {
-	gl::uniform3f(location, x, y, z);
+	gl::uniform3f( GLint(location), x, y, z);
 }
 
-void uniform_value::set(GLfloat x, GLfloat y, GLfloat z, GLfloat w)
+void uniform_proxy::set(GLfloat x, GLfloat y, GLfloat z, GLfloat w)
 {
-	gl::uniform4f(location, x, y, z, w);
+	gl::uniform4f( GLint(location), x, y, z, w);
 }
 
 struct program_handle {

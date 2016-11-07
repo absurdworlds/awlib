@@ -9,6 +9,7 @@
 #ifndef aw_graphics_gl3_program_h
 #define aw_graphics_gl3_program_h
 #include <aw/graphics/gl/shader.h>
+#include <aw/graphics/gl/uniform.h>
 #include <vector>
 namespace aw {
 namespace gl3 {
@@ -38,7 +39,26 @@ struct program {
 	// TODO: array_view
 	bool link(std::vector<shader>& shaders);
 
-	struct uniform_value uniform(char const* name);
+
+	/*!
+	 * Get uniform location
+	 */
+	uniform_location uniform( char const* name );
+
+	/*!
+	 * Creates proxy object for setting and
+	 * retrieving value of an uniform.
+	 *
+	 * Behavior is undefined if this program is not currently active.
+	 */
+	uniform_proxy operator[](uniform_location loc)
+	{
+		return { loc };
+	}
+	uniform_proxy operator[]( char const* name )
+	{
+		return { uniform( name ) };
+	}
 
 private:
 	friend struct program_handle handle(program&);

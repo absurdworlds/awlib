@@ -8,23 +8,26 @@
  */
 #ifndef aw_graphics_gl3_uniform_h
 #define aw_graphics_gl3_uniform_h
-#include <aw/graphics/gl/shader.h>
-#include <vector>
+#include <aw/graphics/gl/types.h>
+#include <aw/graphics/gl/glsl_types.h>
 namespace aw {
 namespace gl3 {
-/*!
- * Helper for setting uniforms, stores location of an uniform
- * in the program it was obtained from.
- * This class can be stored somewhere to change uniform values
- * without having to look it up again, but beware that it does
- * *not* check if correct program is currently active (or if
- * any program is active).
- */
-struct uniform_value {
-	uniform_value() = default;
-	uniform_value(uniform_value const&) = default;
+enum class uniform_location : GLint {};
 
-	bool is_valid() const { return location >= 0; }
+constexpr uniform_location invalid_uniform{ uniform_location(-1) };
+
+struct uniform_proxy {
+	uniform_proxy() = delete;
+	uniform_proxy(uniform_proxy const&) = delete;
+
+	template<typename T>
+	void operator=(T v) { set(v); }
+	template<typename T>
+	void operator=(vec<2,T> v) { set(v[0], v[1]); }
+	template<typename T>
+	void operator=(vec<3,T> v) { set(v[0], v[1], v[2]); }
+	template<typename T>
+	void operator=(vec<4,T> v) { set(v[0], v[1], v[2], v[3]); }
 
 	// TODO: all types
 	void set(GLfloat x);
@@ -34,11 +37,11 @@ struct uniform_value {
 
 private:
 	friend struct program;
-	uniform_value(GLint location)
+	uniform_proxy(uniform_location location)
 		: location{location}
 	{}
 
-	GLint location = -1;
+	uniform_location location = invalid_uniform;
 };
 
 } // namespace gl3
