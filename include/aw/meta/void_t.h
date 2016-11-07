@@ -1,14 +1,12 @@
 /*
- * Copyright (C) 2016  Hedede <Haddayn@gmail.com>
- *
- * License LGPLv3 or later:
- * GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
- * This is free software: you are free to change and redistribute it.
- * There is NO WARRANTY, to the extent permitted by law.
+ * The code in this file is placed in public domain.
+ * Contact: Hedede <Haddayn@gmail.com>
  */
 #ifndef aw_traits_void_t
 #define aw_traits_void_t
+#include <type_traits>
 namespace aw {
+using std::declval;
 template<typename... Ts> struct make_void { using type = void; };
 template<typename... Ts> using void_t = typename make_void<Ts...>::type;
 } // namespace aw
