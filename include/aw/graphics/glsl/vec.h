@@ -6,23 +6,13 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef aw_glsl_types_h
-#define aw_glsl_types_h
-#include <aw/meta/void_t.h>
-#include <aw/types/support/to_array.h>
-#include <aw/types/traits/operations.h>
+#ifndef aw_graphics_glsl_vec_h
+#define aw_graphics_glsl_vec_h
+#include <aw/math/vector.h>
 namespace aw {
+namespace gl3 {
 template<size_t N, typename T>
-struct vec {
-	std::array<T,N> v;
-
-	constexpr vec(vec const&) = default;
-	template<typename V, typename = void_t<ops::subscript<V>> >
-	constexpr vec(V&& v) : v{ array::make<N>(std::forward<V>(v)) } {}
-	template<typename... U>
-	constexpr vec(U...u) : v{T(u)...} {}
-	constexpr T operator[](size_t n) { return v[n]; }
-};
+using vec = math::vector<T, N>;
 
 using vec2 = vec<2, float>;
 using vec3 = vec<3, float>;
@@ -43,6 +33,6 @@ using uvec4 = vec<4, unsigned>;
 using dvec2 = vec<2, double>;
 using dvec3 = vec<3, double>;
 using dvec4 = vec<4, double>;
-
+} // namespace gl3
 } // namespace aw
-#endif//aw_glsl_types_h
+#endif//aw_graphics_glsl_vec_h

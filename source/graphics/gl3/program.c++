@@ -98,6 +98,22 @@ void uniform_proxy::set(GLfloat x, GLfloat y, GLfloat z, GLfloat w)
 	gl::uniform4f( GLint(location), x, y, z, w);
 }
 
+void uniform_proxy::set(mat4 const& m)
+{
+	static_assert( sizeof(vec4) == 4*sizeof(float) );
+	gl::uniform_matrix4fv( GLint(location), 1, GL_TRUE, &m[0][0] );
+/*
+	using namespace math;
+	float mt[16] = {
+		get<0,0>(m), get<1,0>(m), get<2,0>(m), get<3,0>(m),
+		get<0,1>(m), get<1,1>(m), get<2,1>(m), get<3,1>(m),
+		get<0,2>(m), get<1,2>(m), get<2,2>(m), get<3,2>(m),
+		get<0,3>(m), get<1,3>(m), get<2,3>(m), get<3,3>(m),
+	};
+	gl::uniform_matrix4fv( GLint(location), 1, GL_FALSE, mt );
+*/
+}
+
 struct program_handle {
 	GLuint value;
 	operator GLuint() { return value; }

@@ -9,7 +9,8 @@
 #ifndef aw_graphics_gl3_uniform_h
 #define aw_graphics_gl3_uniform_h
 #include <aw/graphics/gl/types.h>
-#include <aw/graphics/gl/glsl_types.h>
+#include <aw/graphics/glsl/vec.h>
+#include <aw/graphics/glsl/mat.h>
 namespace aw {
 namespace gl3 {
 enum class uniform_location : GLint {};
@@ -28,12 +29,16 @@ struct uniform_proxy {
 	void operator=(vec<3,T> v) { set(v[0], v[1], v[2]); }
 	template<typename T>
 	void operator=(vec<4,T> v) { set(v[0], v[1], v[2], v[3]); }
+	template<typename T>
+	void operator=(mat<4,4,T> v) { set(v); }
 
 	// TODO: all types
 	void set(GLfloat x);
 	void set(GLfloat x, GLfloat y);
 	void set(GLfloat x, GLfloat y, GLfloat z);
 	void set(GLfloat x, GLfloat y, GLfloat z, GLfloat w);
+
+	void set(mat4 const& m);
 
 private:
 	friend struct program;
