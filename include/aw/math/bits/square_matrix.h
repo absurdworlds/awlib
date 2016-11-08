@@ -26,7 +26,7 @@ matrix<T,N,N>& set_identity(matrix<T,N,N>& mat, index_sequence<Is...>)
 template<typename T, size_t N>
 matrix<T,N,N> set_identity(matrix<T,N,N>& mat)
 {
-	return _impl::set_identity(mat,make_index_sequence<N>{});
+	return _impl::set_identity(mat, mat.row_indices);
 }
 
 template<typename T, size_t N>
@@ -63,7 +63,7 @@ constexpr T determinant(matrix<T,N,N> const& mat, index_sequence<Is...>)
 template<typename T, size_t N>
 constexpr T determinant(matrix<T,N,N> const& mat)
 {
-	return _impl::determinant(mat, make_index_sequence<N>{});
+	return _impl::determinant(mat, mat.row_indices);
 }
 
 template <typename T>
@@ -114,7 +114,7 @@ constexpr optional<matrix<T,N,N>> inverse(matrix<T,N,N> const& mat)
 	if (det == T{})
 		return nullopt;
 
-	matrix<T,N,N> result = _impl::inv2(mat, make_index_sequence<N>{});
+	matrix<T,N,N> result = _impl::inv2(mat, mat.row_indices);
 
 	result /= det;
 

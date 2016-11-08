@@ -34,81 +34,61 @@ template<class MatrixT,
 >
 struct matrix_ops;
 
-template<class T, size_t M, size_t N, size_t...Is, size_t...Js>
-struct matrix_ops<matrix<T,M,N>, index_sequence<Is...>, index_sequence<Js...>>
+namespace _impl {
+namespace mat {
+
+template<class T, size_t M, size_t N, size_t...Is>
+constexpr vector<T,M> mul(matrix<T,M,N> const& mat, vector<T,N> const& vec, index_sequence<Is...>)
 {
-	using MatrixT = matrix<T,M,N>;
-	using column_type = typename MatrixT::column_type;
+	return { dot(row<Is>(mat), vec) ... };
+}
 
-	static constexpr void set(MatrixT& a, MatrixT const& b)
-	{
-		(void(a[Is] = b[Is]), ...);
-	}
+template<class T, size_t M, size_t N, size_t...Js>
+constexpr vector<T,N> mul(vector<T,M> const& vec, matrix<T,M,N> const& mat, index_sequence<Js...>)
+{
+	return { dot(col<Js>(mat), vec) ... };
+}
 
-	static constexpr void add(MatrixT& a, MatrixT const& b)
-	{
-		(void(a[Is] += b[Is]), ...);
-	}
+template<class T, size_t M, size_t N, size_t P, size_t...Is>
+constexpr matrix<T,M,P> mul(matrix<T,M,N> const& A, matrix<T,N,P> const& B, index_sequence<Is...>)
+{
+	return { row<Is>(A) * B ... };
+}
 
-	static constexpr void sub(MatrixT& a, MatrixT const& b)
-	{
-		(void(a[Is] -= b[Is]), ...);
-	}
 
-	static constexpr void mul(MatrixT& a, T const v)
-	{
-		(void(a[Is] *= v), ...);
-	}
+template<typename M, size_t...Is>
+constexpr typename M::column_type col(M const& a, size_t j, index_sequence<Is...>)
+{
+	return { row<Is>(a)[j]... };
+}
 
-	static constexpr void div(MatrixT& a, T const v)
-	{
-		(void(a[Is] /= v), ...);
-	}
+template<class T, size_t M, size_t N, size_t...Js>
+static constexpr matrix<T,N,M> transpose(matrix<T,M,N> const& mat, index_sequence<Js...>)
+{
+	return { col<Js>(mat)... };
+}
 
-	static constexpr vector<T,M> mul(MatrixT const& mat, vector<T,N> const& vec)
-	{
-		return { dot(mat.row(Is), vec) ... };
-	}
+template<typename M, typename Func, size_t...Js>
+static constexpr void for_each_column(M& mat, Func func, index_sequence<Js...>)
+{
+	(void(func(mat[Js])), ...);
+}
 
-	static constexpr vector<T,N> mul(vector<T,M> const& vec, MatrixT const& mat)
-	{
-		return { dot(mat.col(Js), vec) ... };
-	}
+template<typename M, typename Func, size_t...Is>
+static constexpr void for_each_row(M& mat, Func func, index_sequence<Is...>)
+{
+	(void(func(mat[Is])), ...);
+}
 
-	template <size_t P>
-	static constexpr matrix<T,M,P> mul(MatrixT const& A, matrix<T,N,P> const& B)
-	{
-		return { A.row(Is) * B ... };
-	}
+template<typename M, typename Func, size_t...Is>
+static constexpr void for_each(M& mat, Func func, index_sequence<Is...>)
+{
+	(row<Is>(mat).for_each(func), ...);
+}
 
-	static constexpr column_type col(MatrixT const& a, size_t j)
-	{
-		return { row<Is>(a)[j]... };
-	}
+} // namespace mat
+} // namespace _impl
 
-	static constexpr MatrixT transpose(matrix<T,M,N> const& mat)
-	{
-		return { col<Js>(mat)... };
-	}
-
-	template<typename Func>
-	static constexpr void for_each_column(matrix<T,M,N>& mat, Func func)
-	{
-		(void(func(mat[Js])), ...);
-	}
-
-	template<typename Func>
-	static constexpr void for_each_row(matrix<T,M,N>& mat, Func func)
-	{
-		(void(func(mat[Is])), ...);
-	}
-
-	template<typename Func>
-	static constexpr void for_each(matrix<T,M,N>& mat, Func func)
-	{
-		(mat[Is].for_each(func), ...);
-	}
-};
 
 template<typename T, size_t M, size_t N>
 struct matrix {
@@ -118,8 +98,8 @@ struct matrix {
 	static_assert(num_columns > 0, "Matrix must have at least one column.");
 	static_assert(num_rows > 0, "Matrix must have at least one row.");
 
-	using row_indices    = make_index_sequence<M>;
-	using column_indices = make_index_sequence<N>;
+	static constexpr auto row_indices    = make_index_sequence<M>{};
+	static constexpr auto column_indices = make_index_sequence<N>{};
 
 	using value_type = T;
 	using column_type = vector<T, M>;
@@ -129,7 +109,7 @@ struct matrix {
 
 	constexpr matrix& operator=(matrix const& other)
 	{
-		matrix_ops<matrix>::set(*this, other);
+		_impl::vec::assign(*this, other, row_indices);
 		return *this;
 	}
 
@@ -145,45 +125,45 @@ struct matrix {
 
 	constexpr matrix& operator+=(matrix const& other)
 	{
-		matrix_ops<matrix>::add(*this, other);
+		_impl::vec::add(*this, other, row_indices);
 		return *this;
 	}
 
 
 	constexpr matrix& operator-=(matrix const& other)
 	{
-		matrix_ops<matrix>::sub(*this, other);
+		_impl::vec::sub(*this, other, row_indices);
 		return *this;
 	}
 
 	constexpr matrix& operator*=(T const v)
 	{
-		matrix_ops<matrix>::mul(*this, v);
+		_impl::vec::mul(*this, v, row_indices);
 		return *this;
 	}
 
-	constexpr matrix& operator /= (T const v)
+	constexpr matrix& operator/=(T const v)
 	{
-		matrix_ops<matrix>::div(*this, v);
+		_impl::vec::div(*this, v, row_indices);
 		return *this;
 	}
 
 	template<typename Func>
 	constexpr void for_each_column(Func func)
 	{
-		matrix_ops<matrix>::for_each_column(*this, func);
+		_impl::mat::for_each_column(*this, func, column_indices);
 	}
 
 	template<typename Func>
 	constexpr void for_each_row(Func func)
 	{
-		matrix_ops<matrix>::for_each_row(*this, func);
+		_impl::mat::for_each_row(*this, func, row_indices);
 	}
 
 	template<typename Func>
 	constexpr void for_each(Func func)
 	{
-		matrix_ops<matrix>::for_each(*this, func);
+		_impl::mat::for_each(*this, func, row_indices);
 	}
 
 	constexpr T& get(size_t i, size_t j)
@@ -213,7 +193,7 @@ struct matrix {
 
 	constexpr column_type col(size_t j) const
 	{
-		return matrix_ops<matrix>::col(*this, j);
+		return _impl::mat::col(*this, j, row_indices);
 	}
 };
 
@@ -244,8 +224,7 @@ constexpr vector<T,N> const& row(matrix<T,M,N> const& mat)
 template<size_t Index, typename T, size_t M, size_t N>
 constexpr vector<T,M> col(matrix<T,M,N> const& mat)
 {
-	using MatrixT = matrix<T,M,N>;
-	return matrix_ops<MatrixT>::row(mat, Index);
+	return _impl::mat::col(mat, Index, mat.row_indices);
 }
 
 namespace _impl {
@@ -271,29 +250,25 @@ constexpr matrix<T,N-1,M-1> sub_matrix(matrix<T,M,N> const& mat)
 template<typename T, size_t M, size_t N>
 constexpr matrix<T,N,M> transpose(matrix<T,M,N> const& mat)
 {
-	using MatrixT = matrix<T,M,N>;
-	return matrix_ops<MatrixT>::transpose(mat);
+	return _impl::mat::transpose(mat, mat.column_indices);
 }
 
 template<typename T, size_t M, size_t N>
-constexpr vector<T,M> operator*(matrix<T,M,N> const& A, vector<T,N> const& B)
+constexpr vector<T,M> operator*(matrix<T,M,N> const& m, vector<T,N> const& v)
 {
-	using MatrixT = matrix<T,M,N>;
-	return matrix_ops<MatrixT>::mul(A, B);
+	return _impl::mat::mul(m, v, m.row_indices);
 }
 
 template<typename T, size_t M, size_t N>
-constexpr vector<T,N> operator*(vector<T,M> const& vec, matrix<T,M,N> const& mat)
+constexpr vector<T,N> operator*(vector<T,M> const& v, matrix<T,M,N> const& m)
 {
-	using MatrixT = matrix<T,M,N>;
-	return matrix_ops<MatrixT>::mul(vec, mat);
+	return _impl::mat::mul(v, m, m.column_indices);
 }
 
 template<typename T, size_t M, size_t N, size_t P>
 constexpr matrix<T,M,P> operator*(matrix<T,M,N> const& A, matrix<T,N,P> const& B)
 {
-	using MatrixT = matrix<T,M,N>;
-	return matrix_ops<MatrixT>::mul(A, B);
+	return _impl::mat::mul(A, B, A.row_indices);
 }
 
 template<typename T, size_t M, size_t N>

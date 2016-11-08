@@ -36,64 +36,74 @@ constexpr size_t z = 2;
 constexpr size_t w = 3;
 } // namespace axis
 
-template <class VectorT, class = typename VectorT::indices>
-struct vector_ops;
+namespace _impl {
+namespace vec {
 
-template <class T, size_t N, size_t...Is>
-struct vector_ops<vector<T,N>,index_sequence<Is...>>
+template<typename A, typename B, size_t...Is>
+constexpr void assign(A& a, B const& b, index_sequence<Is...>)
 {
-	using VectorT = vector<T,N>;
+	(void(a[Is] = b[Is]), ...);
+}
 
-	static constexpr void set(VectorT& vec, VectorT const& other)
-	{
-		(void(vec[Is] = other[Is]), ...);
-	}
+template<typename A, typename B, size_t...Is>
+constexpr void add(A& a, B const& b, index_sequence<Is...>)
+{
+	(void(a[Is] += b[Is]), ...);
+}
 
-	static constexpr void add(VectorT& vec, VectorT const& other)
-	{
-		(void(vec[Is] += other[Is]), ...);
-	}
+template<typename A, typename B, size_t...Is>
+constexpr void sub(A& a, B const& b, index_sequence<Is...>)
+{
+	(void(a[Is] -= b[Is]), ...);
+}
 
-	static constexpr void sub(VectorT& vec, VectorT const& other)
-	{
-		(void(vec[Is] -= other[Is]), ...);
-	}
+template<typename V, size_t...Is>
+constexpr void mul(V& a, typename V::value_type const& v, index_sequence<Is...>)
+{
+	(void(a[Is] *= v), ...);
+}
 
-	static constexpr void mul(VectorT& vec, T const& val)
-	{
-		(void(vec[Is] *= val), ...);
-	}
+template<typename V, size_t...Is>
+constexpr void div(V& a, typename V::value_type const& v, index_sequence<Is...>)
+{
+	(void(a[Is] /= v), ...);
+}
 
-	static constexpr void div(VectorT& vec, T const& val)
-	{
-		(void(vec[Is] /= val), ...);
-	}
+template<typename V, size_t...Is>
+constexpr auto dot(V const& vec1, V const& vec2, index_sequence<Is...>)
+{
+	using T = typename V::value_type;
+	// FIXME: T{} workaround for GCC 6.1 bug
+	T product = (T{vec1[Is]*vec2[Is]} + ...);
+	return product;
+}
 
-	static constexpr T dot(VectorT const& vec1, VectorT const& vec2)
-	{
-		// FIXME: T{} workaround for GCC 6.1 bug
-		T product = (T{vec1[Is]*vec2[Is]} + ...);
-		return product;
-	}
+template<typename B, typename A, size_t...Is>
+constexpr B convert(A& a, index_sequence<Is...>)
+{
+	return { a[Is] ... };
+}
 
-	template<typename Func>
-	static constexpr void for_each(VectorT& vec, Func func)
-	{
-		(func(vec[Is]), ...);
-	}
+template<typename V, typename Func, size_t...Is>
+constexpr V make(V& vec, Func func, index_sequence<Is...>)
+{
+	return { func(vec[Is]) ... };
+}
 
-	template<typename Func>
-	static constexpr VectorT make(VectorT const& vec, Func func)
-	{
-		return { func(vec[Is]) ... };
-	}
+template<typename V, typename Func, size_t...Is>
+constexpr void apply(V& vec, Func func, index_sequence<Is...> is)
+{
+	assign(vec, make(vec, func, is), is);
+}
 
-	template<typename Func>
-	static constexpr void apply(VectorT& vec, Func func)
-	{
-		set(vec, make(vec, func));
-	}
-};
+template<typename V, typename Func, size_t...Is>
+constexpr void for_each(V& vec, Func func, index_sequence<Is...>)
+{
+	(func(vec[Is]), ...);
+}
+} // namespace vec
+} // namespace _impl
+
 
 template <typename T, size_t N>
 struct vector {
@@ -103,48 +113,49 @@ struct vector {
 
 	using value_type = T;
 
-	using indices = std::make_index_sequence<N>;
+	static constexpr auto indices = make_index_sequence<N>{};
 
 	value_type elems[N];
 
 	constexpr vector& operator=(vector const& other)
 	{
-		vector_ops<vector>::set(*this, other);
+		_impl::vec::assign(*this, other, indices);
 		return *this;
 	}
 
+
 	constexpr vector& operator+=(vector const& other)
 	{
-		vector_ops<vector>::add(*this, other);
+		_impl::vec::add(*this, other, indices);
 		return *this;
 	}
 
 	constexpr vector& operator-=(vector const& other)
 	{
-		vector_ops<vector>::sub(*this, other);
+		_impl::vec::sub(*this, other, indices);
 		return *this;
 	}
 
 	constexpr vector& operator*=(T const v)
 	{
-		vector_ops<vector>::mul(*this, v);
+		_impl::vec::mul(*this, v, indices);
 		return *this;
 	}
 
 	constexpr vector& operator/=(T const v)
 	{
-		vector_ops<vector>::div(*this, v);
+		_impl::vec::div(*this, v, indices);
 		return *this;
 	}
 
 	constexpr vector& negate()
 	{
-		return (*this *= -1);
+		return (*this *= T(-1));
 	}
 
 	constexpr T dot(vector const& other) const
 	{
-		return vector_ops<vector>::dot(*this, other);
+		return _impl::vec::dot(*this, other, indices);
 	}
 
 	constexpr T length_sq() const
@@ -182,14 +193,14 @@ struct vector {
 	template<typename Func>
 	constexpr vector& for_each(Func func)
 	{
-		vector_ops<vector>::for_each(*this, func);
+		_impl::vec::for_each(*this, func, indices);
 		return *this;
 	}
 
 	template<typename Func>
 	constexpr vector& apply(Func func)
 	{
-		vector_ops<vector>::apply(*this, func);
+		_impl::vec::apply(*this, func, indices);
 		return *this;
 	}
 
