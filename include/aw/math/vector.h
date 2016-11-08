@@ -123,6 +123,13 @@ struct vector {
 		return *this;
 	}
 
+	template<size_t M>
+	constexpr vector& operator=(vector<T,M> const other)
+	{
+		static_assert(N > M);
+		_impl::vec::assign(*this, other, other.indices);
+		return *this;
+	}
 
 	constexpr vector& operator+=(vector const& other)
 	{

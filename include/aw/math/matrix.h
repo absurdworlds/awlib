@@ -113,6 +113,15 @@ struct matrix {
 		return *this;
 	}
 
+	template<size_t M1, size_t N1>
+	constexpr matrix& operator=(matrix<T,M1,N1> const& other)
+	{
+		static_assert(M > M1);
+		static_assert(N > N1);
+		_impl::vec::assign(*this, other, other.row_indices);
+		return *this;
+	}
+
 	constexpr row_type const& operator[](size_t idx) const
 	{
 		return rows[idx];
@@ -225,6 +234,23 @@ template<size_t Index, typename T, size_t M, size_t N>
 constexpr vector<T,M> col(matrix<T,M,N> const& mat)
 {
 	return _impl::mat::col(mat, Index, mat.row_indices);
+}
+
+
+namespace _impl {
+namespace mat {
+template<typename T, size_t M, size_t N, size_t...Is>
+constexpr void set_col(matrix<T,M,N> const& mat, vector<T,N> const& col, size_t j, index_sequence<Is...>)
+{
+	(void(mat[Is][j] = col[Is]), ...);
+}
+} // namespace mat
+} // namespace _impl
+
+template<typename T, size_t M, size_t N>
+constexpr void set_column(matrix<T,M,N> const& mat, vector<T,N> const& col, size_t idx)
+{
+	_impl::mat::set_col(mat, col, idx, mat.row_indices);
 }
 
 namespace _impl {

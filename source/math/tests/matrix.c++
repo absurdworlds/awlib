@@ -9,12 +9,37 @@ TestFile("Matrix");
 
 namespace aw {
 namespace math {
+Test(basic_construct) {
+	matrix<int, 4,4> A {{
+		{1,0,0,0},
+		{0,1,0,0},
+		{0,0,1,0},
+		{0,0,0,1}
+	}};
+
+	matrix<int, 3,3> B {{
+		{1,2,3},
+		{2,2,3},
+		{3,3,3},
+	}};
+
+	matrix<int, 4,4> C {{
+		{1,2,3,0},
+		{2,2,3,0},
+		{3,3,3,0},
+		{0,0,0,1}
+	}};
+
+	A = B;
+	TestEqual(A, C);
+}
+
 Test(matrix_inverse) {
 	matrix<double,4,4> A{
-		1,2,3,4,
-		5,6,7,8,
-		9,1,1,2,
-		3,4,5,1
+		1, 2, 3, 4,
+		5, 6, 7, 8,
+		9, 1, 1, 2,
+		3, 4, 5, 1
 	};
 
 	matrix<double,4,4> B {};

@@ -41,6 +41,16 @@ matrix3<T> roll_matrix( T roll )
 	return {{ {c, -s, 0}, {s, c, 0}, {0, 0, 1} }};
 }
 
+template<typename T>
+matrix3<T> scale_matrix( vector3d<T> const& s )
+{
+	return {
+		s.x(), 0, 0,
+		0, s.y(), 0,
+		0, 0, s.z()
+	};
+}
+
 /*!
  * Create a matrix from Euler angles, rotations are applied in following order:
  * rotation around X axis (pitch), Y axis (yaw), Z axis (roll).

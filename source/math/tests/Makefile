@@ -4,7 +4,7 @@ Sources = vector.c++ matrix.c++ matrix3.c++ angle.c++
 
 Libraries    = awstring
 ProjectName  = test_math
-ProjectFlags = -fprofile-arcs -ftest-coverage
+ProjectFlags = #-fprofile-arcs -ftest-coverage
 Executable   = true
 
 include $(RootPath)/Rules.mk
