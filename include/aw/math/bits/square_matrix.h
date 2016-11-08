@@ -37,7 +37,7 @@ matrix<T,N,N> make_identity()
 }
 
 template <size_t Row, size_t Col, typename T, size_t N>
-T matrix_minor(matrix<T,N,N> const& mat)
+constexpr T matrix_minor(matrix<T,N,N> const& mat)
 {
 	auto submatrix = sub_matrix<Row,Col>(mat);
 	return determinant(submatrix);
@@ -45,7 +45,7 @@ T matrix_minor(matrix<T,N,N> const& mat)
 
 namespace _impl {
 template<size_t I, typename T, size_t N>
-T factor(matrix<T,N,N> const& mat)
+constexpr T factor(matrix<T,N,N> const& mat)
 {
 	T minor = matrix_minor<0,I>(mat);
 	T sign = (I % 2)? -1 : 1;
@@ -54,33 +54,33 @@ T factor(matrix<T,N,N> const& mat)
 }
 
 template<size_t...Is, typename T, size_t N>
-T determinant(matrix<T,N,N> const& mat, index_sequence<Is...>)
+constexpr T determinant(matrix<T,N,N> const& mat, index_sequence<Is...>)
 {
 	return (factor<Is>(mat) + ...);
 }
 } // namespace _impl
 
 template<typename T, size_t N>
-T determinant(matrix<T,N,N> const& mat)
+constexpr T determinant(matrix<T,N,N> const& mat)
 {
 	return _impl::determinant(mat, make_index_sequence<N>{});
 }
 
 template <typename T>
-T determinant(matrix<T,2,2> mat)
+constexpr T determinant(matrix<T,2,2> mat)
 {
 	return get<0,0>(mat) * get<1,1>(mat) - get<0,1>(mat) * get<1,0>(mat);
 }
 
 template <typename T>
-T determinant(matrix<T,1,1> mat)
+constexpr T determinant(matrix<T,1,1> mat)
 {
 	return get<0,0>(mat);
 }
 
 namespace _impl {
 template<size_t I, size_t J, class MatrixT>
-void inv(MatrixT& result, MatrixT const& mat)
+constexpr void inv(MatrixT& result, MatrixT const& mat)
 {
 	using T = typename MatrixT::value_type;
 
@@ -92,13 +92,13 @@ void inv(MatrixT& result, MatrixT const& mat)
 }
 
 template<size_t I, size_t...Js, class MatrixT>
-void inv1(MatrixT& result, MatrixT const& mat)
+constexpr void inv1(MatrixT& result, MatrixT const& mat)
 {
 	(inv<I,Js>(result, mat), ...);
 }
 
 template<class MatrixT, size_t...Is>
-MatrixT inv2(MatrixT const& mat, index_sequence<Is...>)
+constexpr MatrixT inv2(MatrixT const& mat, index_sequence<Is...>)
 {
 	MatrixT result = {};
 	(inv1<Is,Is...>(result, mat), ...);
@@ -107,7 +107,7 @@ MatrixT inv2(MatrixT const& mat, index_sequence<Is...>)
 } // namespace _impl
 
 template<typename T, size_t N>
-optional<matrix<T,N,N>> inverse(matrix<T,N,N> const& mat)
+constexpr optional<matrix<T,N,N>> inverse(matrix<T,N,N> const& mat)
 {
 	T det = determinant(mat);
 
