@@ -16,7 +16,8 @@
 #include <aw/types/traits/basic_traits.h>
 #include <aw/types/traits/common_type.h>
 
-namespace aw::math {
+namespace aw {
+namespace math {
 
 template<typename T>
 constexpr double extract_unit = T::value;
@@ -97,7 +98,6 @@ template <typename T>
 using turns   = angle<T, std::ratio<1>>;
 template <typename T>
 using degrees = angle<T, std::ratio<360>>;
-
 
 template <typename R1, typename P1, typename R2, typename P2>
 auto operator+(angle<R1,P1> const& a, angle<R2,P2> const& b) ->
@@ -191,5 +191,12 @@ bool equals(angle<R1,P1> const& a, angle<R2,P2> const& b)
 	return equals(result{ a }.count(), result{ b }.count());
 }
 
-} //namespace aw::math
+} //namespace math
+
+using math::angle;
+using math::radians;
+using math::degrees;
+using math::turns;
+
+} // namespace aw
 #endif //aw_math_angle_h
