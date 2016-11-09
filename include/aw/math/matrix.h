@@ -145,6 +145,11 @@ struct matrix {
 		return *this;
 	}
 
+	constexpr matrix& operator*=(matrix const& other)
+	{
+		return (*this = *this * other);
+	}
+
 	constexpr matrix& operator*=(T const v)
 	{
 		_impl::vec::mul(*this, v, row_indices);

@@ -9,7 +9,7 @@ TestFile("Matrix");
 
 namespace aw {
 namespace math {
-Test(basic_construct) {
+Test(matrix_basic) {
 	matrix<int, 4,4> A {{
 		{1,0,0,0},
 		{0,1,0,0},
@@ -32,6 +32,10 @@ Test(basic_construct) {
 
 	A = B;
 	TestEqual(A, C);
+
+	auto D = A * C;
+	A *= C;
+	TestEqual(A, D);
 }
 
 Test(matrix_inverse) {
