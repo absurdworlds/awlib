@@ -96,6 +96,18 @@ T lerp(T const& v0, T const& v1, f64 t)
 {
 	return (1.0 - t)*v0 + t*v1;
 }
+
+
+inline float cot(float x)
+{
+	return cos(x) / sin(x);
+}
+
+inline float tan(float x)
+{
+	return std::tan(x);
+}
+
 } //namespace math
 } //namespace aw
 #endif //_aw_math_
