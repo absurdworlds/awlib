@@ -52,8 +52,40 @@ matrix3<T> scale_matrix( vector3d<T> const& s )
 }
 
 /*!
+ * Create a matrix representing rotation around an axis.
+ */
+template<typename T>
+matrix3<T> matrix_from_axis_angle(vector3d<T> const& axis, T angle)
+{
+	auto x = axis.x();
+	auto y = axis.y();
+	auto z = axis.z();
+
+	constexpr matrix3<T> I = identity_matrix<T,3>;
+
+	/* cross-product matrix */
+	matrix3<T> P = {
+		 0, -z,  y,
+		 z,  0, -x,
+		-y,  x,  0
+	};
+
+	/* tensor-product u⊗u (where u = axis) */
+	matrix3<T> U = {
+		x*x, x*y, x*z,
+		x*y, y*y, y*z,
+		x*z, y*z, z*z
+	};
+
+	auto s = sin( angle );
+	auto c = cos( angle );
+	return c*I + s*P + (1 - c)*U;
+}
+
+/*!
  * Create a matrix from Euler angles, rotations are applied in following order:
  * rotation around X axis (pitch), Y axis (yaw), Z axis (roll).
+ * Same as `roll( z ) * yaw( y ) * pitch( x )`.
  */
 template<typename T>
 matrix3<T> matrix_from_euler(vector3d<T> const& euler)
