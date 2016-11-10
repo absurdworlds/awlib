@@ -1,6 +1,6 @@
 RootPath = ../../..
 SourceExt = c++
-Sources = vector.c++ matrix.c++ matrix3.c++ angle.c++
+Sources = vector.c++ matrix.c++ matrix3.c++ matrix4.c++ angle.c++
 
 Libraries    = awstring
 ProjectName  = test_math

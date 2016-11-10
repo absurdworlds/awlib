@@ -15,26 +15,34 @@ namespace aw {
 namespace math {
 namespace _impl {
 template<size_t... Is, typename T, size_t N>
-matrix<T,N,N>& set_identity(matrix<T,N,N>& mat, index_sequence<Is...>)
+constexpr matrix<T,N,N>& set_identity(matrix<T,N,N>& mat, index_sequence<Is...>)
 {
-	fill(mat, T{});
-	(void(mat[Is][Is] = 1), ...);
+	(void(mat[Is][Is] = T{1}), ...);
 	return mat;
+}
+
+template<typename T, size_t N>
+constexpr matrix<T,N,N> make_identity()
+{
+	matrix<T,N,N> tmp = {};
+	return set_identity(tmp, tmp.row_indices);
 }
 } // namespace _impl
 
 template<typename T, size_t N>
-matrix<T,N,N> set_identity(matrix<T,N,N>& mat)
+constexpr matrix<T,N,N> set_identity(matrix<T,N,N>& mat)
 {
+	mat = {};
 	return _impl::set_identity(mat, mat.row_indices);
 }
 
 template<typename T, size_t N>
-matrix<T,N,N> make_identity()
-{
-	matrix<T,N,N> identity;
-	return set_identity(identity);
-}
+constexpr matrix<T,N,N> identity_matrix = _impl::make_identity<T,N>();
+/* [] () constexpr {
+	matrix<T,N,N> tmp = {};
+	return _impl::set_identity(tmp, tmp.row_indices);
+}(); */
+
 
 template <size_t Row, size_t Col, typename T, size_t N>
 constexpr T matrix_minor(matrix<T,N,N> const& mat)

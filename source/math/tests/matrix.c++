@@ -17,6 +17,8 @@ Test(matrix_basic) {
 		{0,0,0,1}
 	}};
 
+	TestEqual(A, identity_matrix<int,4>);
+
 	matrix<int, 3,3> B {{
 		{1,2,3},
 		{2,2,3},
@@ -55,7 +57,7 @@ Test(matrix_inverse) {
 
 	Postconditions {
 		auto I1 = A * B;
-		auto I2 = make_identity<double, 4>();
+		auto I2 = identity_matrix<double, 4>;
 
 		TestEqual(I1, I2);
 	}
