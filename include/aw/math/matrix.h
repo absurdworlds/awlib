@@ -303,6 +303,18 @@ constexpr matrix<T,M,P> operator*(matrix<T,M,N> const& A, matrix<T,N,P> const& B
 }
 
 template<typename T, size_t M, size_t N>
+constexpr matrix<T,M,N> operator+(matrix<T,M,N> A, matrix<T,M,N> const& B)
+{
+	return A += B;
+}
+
+template<typename T, size_t M, size_t N>
+constexpr matrix<T,M,N> operator-(matrix<T,M,N> A, matrix<T,M,N> const& B)
+{
+	return A -= B;
+}
+
+template<typename T, size_t M, size_t N>
 constexpr matrix<T,M,N> operator*(matrix<T,N,M> mat, T const v)
 {
 	mat *= v;
@@ -321,6 +333,18 @@ constexpr matrix<T,M,N> operator/(matrix<T,N,M> mat, T const v)
 {
 	mat /= v;
 	return mat;
+}
+
+template<typename T, size_t M, size_t N>
+constexpr matrix<T,M,N> operator+(matrix<T,N,M> mat)
+{
+	return mat;
+}
+
+template<typename T, size_t M, size_t N>
+constexpr matrix<T,M,N> operator-(matrix<T,N,M> mat)
+{
+	return mat *= T(-1);
 }
 
 template<typename T, size_t M, size_t N>
