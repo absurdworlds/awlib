@@ -9,9 +9,8 @@
  */
 #ifndef aw_input_stream_h
 #define aw_input_stream_h
-#include <aw/types/types.h>
-#include <aw/types/traits/basic_traits.h>
 #include <aw/io/input_buffer.h>
+#include <aw/types/traits/basic_traits.h>
 
 namespace aw {
 namespace io {
@@ -91,6 +90,8 @@ protected:
 private:
 	input_buffer* buffer;
 };
+
+
 
 struct input_stream_iterator {
 	using traits = std::char_traits<char>;
