@@ -40,6 +40,22 @@ split_by(string_view source, string_view delim)
 	return holder;
 }
 
+/*!
+ * Split off first substring from a string.
+ */
+inline std::pair<string_view, string_view>
+split_off(string_view source, string_view delim)
+{
+	size_t pos1 = source.find_first_not_of(delim);
+	if (pos1 == source.npos)
+		return {};
+	size_t pos2 = source.find_first_of(delim, pos1);
+	auto first = source.substr(pos1, pos2 - pos1);
+
+	size_t pos3 = source.find_first_not_of(delim, pos2);
+	return {first, source.substr( std::min(pos3, source.size()) )};
+}
+
 namespace _impl {
 // TODO: move out of _impl?
 template<typename Store>
