@@ -20,17 +20,17 @@ template<typename T>
 T strto(char const* begin, char** end, int base = 0);
 
 template<>
-float strto(char const* begin, char** end, int)
+inline float strto(char const* begin, char** end, int)
 {
 	return std::strtof(begin, end);
 }
 template<>
-double strto(char const* begin, char** end, int)
+inline double strto(char const* begin, char** end, int)
 {
 	return std::strtod(begin, end);
 }
 template<>
-long double strto(char const* begin, char** end, int)
+inline long double strto(char const* begin, char** end, int)
 {
 	return std::strtold(begin, end);
 }
@@ -65,49 +65,49 @@ T _strto(char const* begin, char** end, int base)
 } // namespace _impl
 
 template<>
-unsigned short strto(char const* begin, char** end, int base)
+inline unsigned short strto(char const* begin, char** end, int base)
 {
 	return _impl::_strto<unsigned short, unsigned long>(begin, end, base);
 }
 
 template<>
-unsigned strto(char const* begin, char** end, int base)
+inline unsigned strto(char const* begin, char** end, int base)
 {
 	return _impl::_strto<unsigned, unsigned long>(begin, end, base);
 }
 
 template<>
-unsigned long strto(char const* begin, char** end, int base)
+inline unsigned long strto(char const* begin, char** end, int base)
 {
 	return std::strtoul(begin, end, base);
 }
 
 template<>
-unsigned long long strto(char const* begin, char** end, int base)
+inline unsigned long long strto(char const* begin, char** end, int base)
 {
 	return std::strtoull(begin, end, base);
 }
 
 template<>
-short strto(char const* begin, char** end, int base)
+inline short strto(char const* begin, char** end, int base)
 {
 	return _impl::_strto<short, long>(begin, end, base);
 }
 
 template<>
-int strto(char const* begin, char** end, int base)
+inline int strto(char const* begin, char** end, int base)
 {
 	return _impl::_strto<int, long>(begin, end, base);
 }
 
 template<>
-long strto(char const* begin, char** end, int base)
+inline long strto(char const* begin, char** end, int base)
 {
 	return std::strtol(begin, end, base);
 }
 
 template<>
-long long strto(char const* begin, char** end, int base)
+inline long long strto(char const* begin, char** end, int base)
 {
 	return std::strtoll(begin, end, base);
 }
