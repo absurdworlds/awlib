@@ -6,18 +6,10 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#include <aw/fileformat/obj/loader.h>
-
-#include <aw/io/input_stream_utils.h>
-
-
-#include <aw/types/containers/flat_map.h>
-
-#include <cstdio>
-#include <cstdlib>
-#include <cassert>
-
 #include "shared.h"
+
+#include <aw/algorithm/in.h>
+#include <aw/types/containers/flat_map.h>
 
 namespace aw {
 namespace obj {
@@ -62,53 +54,9 @@ struct parser {
 	using func = void(parser::*)(string_view);
 	static const flat_map<string_view, func> cmds;
 
-	// it makes no sense to assign values
-	// without material, so find it first
-	bool find_newmtl( string_view line )
-	{
-		auto p = string::split_off( line, ws );
-
-		auto cmd  = p.first;
-		auto rest = p.second;
-
-		if (cmd.empty() || cmd != "newmtl")
-			return false;
-
-		new_material( rest );
-		return true;
-	}
-
-	void parse_line( string_view line )
-	{
-		// auto [cmd, rest] = string::split_off( line, ws );
-		auto p = string::split_off( line, ws );
-
-		auto cmd  = p.first;
-		auto rest = p.second;
-
-		if (cmd.empty() || cmd[0] == '#')
-			return;
-
-		auto iter = cmds.find(cmd);
-		if (iter == cmds.end())
-			return;
-		auto func = iter->second;
-		(this->*func)( string::rtrim(rest, ws) );
-	}
-
-	void parse(io::input_stream& file)
-	{
-		std::string tmp;
-
-		while (read_until( file, '\n', tmp )) {
-			if (find_newmtl( tmp ))
-				break;
-		}
-
-		while (read_until( file, '\n', tmp )) {
-			parse_line( tmp );
-		}
-	}
+	bool find_newmtl( string_view line );
+	void parse_line( string_view line );
+	void parse(io::input_stream& file);
 };
 
 const flat_map<string_view, parser::func> parser::cmds = {
@@ -130,55 +78,94 @@ const flat_map<string_view, parser::func> parser::cmds = {
 	{"map_Ks",   &parser::read_specular_map},
 };
 
+bool is_empty_line( string_view str )
+{
+	// Empty or comment. Assumes leading whitespace has been stripped
+	return str.empty() || str[0] == '#';
+}
+
+void read_color( string_view str, double(&color)[3])
+{
+	auto n = parse3( str, color );
+	switch ( n ) {
+	case 1:
+		color[1] = color[0];
+	case 2:
+		color[2] = color[0];
+	case 0:
+	case 3:
+		return;
+	};
+}
+
+void read_path( string_view str, std::string& out )
+{
+	if ( is_empty_line( str ) )
+		return;
+	out = (std::string)str;
+	std::replace( begin(out), end(out), '\\', '/');
+}
+
 void parser::read_ambient( string_view rest )
 {
-	auto& mtl = cur_mtl();
-	parse3( rest, mtl.ambient );
+	read_color( rest, cur_mtl().ambient );
 }
+
 void parser::read_diffuse( string_view rest )
 {
-	auto& mtl = cur_mtl();
-	parse3( rest, mtl.diffuse );
+	read_color( rest, cur_mtl().diffuse );
 }
+
 void parser::read_specular( string_view rest )
 {
-	auto& mtl = cur_mtl();
-	parse3( rest, cur_mtl().specular );
+	read_color( rest, cur_mtl().specular );
 }
 
 void read_params( string_view& rest )
 {
-	while ( !rest.empty() ) {
-		if (rest[0] != '-')
-			break;
+	auto next = [&] { return string::split_off( rest, ws ).second; };
+	auto param = [&] {
 		auto p = string::split_off( rest, ws );
 		rest = p.second;
+		return p.first;
+	};
+	while ( !is_empty_line( rest ) ) {
+		if (rest[0] != '-')
+			break;
+		if ( in(param(), "-blendu", "-blendv", "-boost", "-clamp") ) {
+			rest = next();
+		} else if ( in(param(), "-type", "-bm", "-texres", "-imfchan") ) {
+			rest = next();
+		} else if ( in(param(), "-mm") ) {
+			rest = next();
+			rest = next();
+		} else if ( in(param(), "-o", "-s", "-t") ) {
+			rest = next();
+			if (!rest.empty() && ::isdigit(rest[0])) rest = next();
+			if (!rest.empty() && ::isdigit(rest[0])) rest = next();
+		}
 	}
 }
 
 void parser::read_ambient_map( string_view rest )
 {
 	read_params( rest );
-	if (rest.empty()) return;
-	cur_mtl().ambient_map = std::string(rest);
+	read_path( rest, cur_mtl().ambient_map );
 }
 void parser::read_diffuse_map( string_view rest )
 {
 	read_params( rest );
-	if (rest.empty()) return;
-	cur_mtl().diffuse_map = std::string(rest);
+	read_path( rest, cur_mtl().diffuse_map );
 }
 void parser::read_specular_map( string_view rest )
 {
 	read_params( rest );
-	if (rest.empty()) return;
-	cur_mtl().specular_map = std::string(rest);
+	read_path( rest, cur_mtl().specular_map );
 }
 void parser::read_bump_map( string_view rest )
 {
 	read_params( rest );
-	if (rest.empty()) return;
-	cur_mtl().normal_map = std::string(rest);
+	read_path( rest, cur_mtl().normal_map );
 }
 
 void parser::read_illum( string_view rest )
@@ -209,6 +196,54 @@ void parser::read_refr_index( string_view rest )
 void parser::read_spec_exponent( string_view rest )
 {
 	parse1( rest, cur_mtl().specular_exponent );
+}
+
+// it makes no sense to assign values
+// without material, so find it first
+bool parser::find_newmtl( string_view line )
+{
+	auto p = string::split_off( line, ws );
+
+	auto cmd  = p.first;
+	auto rest = p.second;
+
+	if ( cmd.empty() || cmd != "newmtl" )
+		return false;
+
+	new_material( rest );
+	return true;
+}
+
+void parser::parse_line( string_view line )
+{
+	// auto [cmd, rest] = string::split_off( line, ws );
+	auto p = string::split_off( line, ws );
+
+	auto cmd  = p.first;
+	auto rest = p.second;
+
+	if ( is_empty_line( cmd ) )
+		return;
+
+	auto iter = cmds.find(cmd);
+	if (iter == cmds.end())
+		return;
+	auto func = iter->second;
+	(this->*func)( string::rtrim(rest, ws) );
+}
+
+void parser::parse(io::input_stream& file)
+{
+	std::string tmp;
+
+	while (read_until( file, '\n', tmp )) {
+		if (find_newmtl( tmp ))
+			break;
+	}
+
+	while (read_until( file, '\n', tmp )) {
+		parse_line( tmp );
+	}
 }
 } // namespace
 

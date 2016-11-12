@@ -6,14 +6,7 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#include <aw/fileformat/obj/loader.h>
-
-#include <aw/io/input_stream_utils.h>
-
 #include "shared.h"
-
-#include <cstdlib>
-#include <cassert>
 
 namespace aw {
 namespace obj {

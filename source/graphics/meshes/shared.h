@@ -8,13 +8,17 @@
  */
 #ifndef aw_internal_obj_shared_h
 #define aw_internal_obj_shared_h
-#include <limits>
+#include <aw/fileformat/obj/loader.h>
+
+#include <aw/io/input_stream_utils.h>
 
 #include <aw/utility/string/trim.h>
 #include <aw/utility/string/split.h>
 #include <aw/utility/string/strto.h>
 
-#include <aw/types/promote.h>
+//#include <aw/types/promote.h>
+#include <limits>
+#include <cassert>
 
 namespace aw {
 namespace obj {
@@ -54,8 +58,8 @@ size_t parse3(string_view line, T& _1, T& _2, T& _3, string_view delim = ws)
 		if ( !parse1(substrs[0], _1) ) return num;
 		++num;
 	case 0:
-		return num
-	};
+		return num;
+	}
 }
 
 template<typename T>
