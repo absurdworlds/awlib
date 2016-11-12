@@ -117,7 +117,7 @@ string_view trim(string_view str, Predicate pred)
  * Remove characters in set \a chars
  * from the *beginning* of the string \a str.
  */
-string_view ltrim(string_view str, string_view chars)
+/*constexpr*/ inline string_view ltrim(string_view str, string_view chars)
 {
 	auto first_not = str.find_first_not_of( chars );
 	if (first_not == str.npos) return {};
@@ -129,7 +129,7 @@ string_view ltrim(string_view str, string_view chars)
  * Remove characters in set \a chars
  * from the *end* of the string \a str.
  */
-string_view rtrim(string_view str, string_view chars)
+/*constexpr*/ inline string_view rtrim(string_view str, string_view chars)
 {
 	auto last_not = str.find_last_not_of( chars );
 	if (last_not == str.npos) return {};
@@ -141,7 +141,7 @@ string_view rtrim(string_view str, string_view chars)
  * Remove characters in set \a chars
  * from both end of the string \a str.
  */
-string_view trim(string_view str, string_view chars)
+/*constexpr*/ inline string_view trim(string_view str, string_view chars)
 {
 	auto first = str.find_first_not_of( chars );
 	auto last  = str.find_last_not_of( chars );
