@@ -33,7 +33,7 @@ bool parse1(string_view line, T& v)
 }
 
 template<typename T>
-bool parse3(string_view line, T& _1, T& _2, T& _3, string_view delim = ws)
+size_t parse3(string_view line, T& _1, T& _2, T& _3, string_view delim = ws)
 {
 	auto substrs = string::split_by(line.substr(1), delim);
 	if (substrs.empty())
@@ -41,22 +41,25 @@ bool parse3(string_view line, T& _1, T& _2, T& _3, string_view delim = ws)
 
 	_1 = _2 = _3 = T{0};
 
+	size_t num = 0;
 	switch ( substrs.size() ) {
 	default:
 	case 3:
-		if ( !parse1(substrs[2], _3) ) return false;
+		if ( !parse1(substrs[2], _3) ) return num;
+		++num;
 	case 2:
-		if ( !parse1(substrs[1], _2) ) return false;
+		if ( !parse1(substrs[1], _2) ) return num;
+		++num;
 	case 1:
-		if ( !parse1(substrs[0], _1) ) return false;
-		return true;
+		if ( !parse1(substrs[0], _1) ) return num;
+		++num;
 	case 0:
-		return false;
+		return num
 	};
 }
 
 template<typename T>
-bool parse3(string_view line, T(&arr)[3], string_view delim = ws)
+size_t parse3(string_view line, T(&arr)[3], string_view delim = ws)
 {
 	return parse3(line, arr[0], arr[1], arr[2], delim);
 }
