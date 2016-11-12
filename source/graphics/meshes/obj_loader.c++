@@ -25,32 +25,16 @@ void make_one_based( face_vert& v )
 	++v.texuv;
 }
 
-struct parser {
+struct parser : private obj::mesh {
 	parser()
 	{
-		mesh.meshes.emplace_back();
-		cur_submesh = &mesh.meshes.back();
+		new_submesh();
 	}
 
-	obj::mesh mesh;
-
-	unsigned sg = 0;
-	submesh* cur_submesh;
-
-	void new_submesh( string_view line )
+	mesh& result()
 	{
-		if (line.size() > 0) line.remove_prefix( 1 );
-		mesh.meshes.push_back({ (std::string)string::rtrim(line, ws) });
-		cur_submesh = &mesh.meshes.back();
+		return *this;
 	}
-
-	void add_vert(string_view s);
-	void add_face(string_view s);
-
-	void smoothing_group( string_view line );
-
-	void complex_command( string_view cmd, string_view line );
-	void parse_line( string_view line );
 
 	void parse(io::input_stream& file)
 	{
@@ -59,6 +43,41 @@ struct parser {
 			parse_line( tmp );
 		}
 	}
+
+private:
+	unsigned sg = 0;
+	submesh* cur_submesh;
+
+	string_view cur_group()
+	{
+		return cur_submesh->group;
+	}
+
+	string_view cur_mtl()
+	{
+		return cur_submesh->material;
+	}
+
+	void new_submesh( )
+	{
+		meshes.emplace_back();
+		cur_submesh = &meshes.back();
+	}
+
+	submesh* find_submesh( string_view mtl, string_view group );
+	void select_submesh( string_view mtl, string_view group );
+	void select_group( string_view group );
+	void select_material( string_view mtl );
+
+
+	void add_vert(string_view s);
+	void add_face(string_view s);
+	void set_group( string_view line );
+
+	void smoothing_group( string_view line );
+
+	void complex_command( string_view cmd, string_view line );
+	void parse_line( string_view line );
 };
 
 void parser::parse_line( string_view line )
@@ -68,9 +87,9 @@ void parser::parse_line( string_view line )
 
 	switch (line[0]) {
 	case '#': return;
-	case 'f': add_face( line.substr(1) ); return;
-	case 'v': add_vert( line.substr(1) ); return;
-	case 'g': new_submesh( line.substr(1) ); return;
+	case 'f': return add_face( line.substr(1) );
+	case 'v': return add_vert( line.substr(1) );
+	case 'g': return set_group( line.substr(1) );
 	case 's': smoothing_group( line.substr(1) ); return;
 	};
 
@@ -97,9 +116,9 @@ void parser::add_vert(string_view line)
 		return;
 
 	switch (type) {
-	case ' ': mesh.verts.push_back(vert);
-	case 'n': mesh.normals.push_back(vert);
-	case 't': mesh.texverts.push_back(vert);
+	case ' ': verts.push_back(vert);
+	case 'n': normals.push_back(vert);
+	case 't': texverts.push_back(vert);
 	};
 }
 
@@ -146,21 +165,59 @@ void parser::smoothing_group( string_view line )
 	}
 }
 
+submesh* parser::find_submesh( string_view mtl, string_view group )
+{
+	auto pred  = [=] (submesh& sm) {
+		return sm.group == group && sm.material == mtl;
+	};
+	auto it = std::find_if( begin(meshes), end(meshes), pred );
+	if (it == end(meshes))
+		return nullptr;
+	return &(*it);
+}
+
+void parser::select_submesh( string_view mtl, string_view group )
+{
+	if (auto* sm = find_submesh( mtl, group )) {
+		cur_submesh = sm;
+	} else {
+		new_submesh();
+		cur_submesh->material = (std::string)mtl;
+		cur_submesh->group    = (std::string)group;
+	}
+}
+
+void parser::select_group( string_view group )
+{
+	if (group == cur_group())
+		select_submesh( cur_mtl(), group );
+}
+
+void parser::select_material( string_view mtl )
+{
+	if (mtl != cur_mtl())
+		select_submesh( mtl, cur_group() );
+}
+
+void parser::set_group( string_view line )
+{
+	// TODO: multiple groups
+	if (line.size() > 0) line.remove_prefix( 1 );
+	string_view name = string::rtrim(line, ws);
+	select_group( name );
+}
+
 void parser::complex_command( string_view cmd, string_view line )
 {
 	if (cmd == "mtllib") {
 		auto argv = string::split_by(line, " \v\r\t");
 		if (argv.empty()) return;
 		for (auto str : argv)
-			mesh.matlibs.push_back( (std::string)str );
+			matlibs.push_back( (std::string)str );
 	}
 
 	if (cmd == "usemtl") {
-		if (!cur_submesh->faces.empty()) {
-			meshes.meshes.push_back( *cur_submesh );
-			cur_submesh = &mesh.meshes.back();
-		}
-		cur_submesh->material = (std::string)line;
+		select_material( line );
 	}
 
 	if (cmd == "csh");
@@ -171,9 +228,9 @@ void parser::complex_command( string_view cmd, string_view line )
 
 mesh mesh::parse( io::input_stream& file )
 {
-	parser model;
-	model.parse( file );
-	return model.mesh;
+	parser obj;
+	obj.parse( file );
+	return obj.result();;
 }
 } // namespace obj
 } // namespace aw
@@ -182,10 +239,10 @@ mesh mesh::parse( io::input_stream& file )
 #include <aw/io/input_file_stream.h>
 #include <iostream>
 
-int main()
+int main(int, char**argv)
 {
 	using namespace aw;
-	io::input_file_stream file{ "butruck.obj" };
+	io::input_file_stream file{ argv[1] ? argv[1] : "butruck.obj" };
 
 	auto mesh = obj::mesh::parse( file );
 
@@ -204,9 +261,9 @@ int main()
 
 	string_view cur_group;
 	for (auto& sm : mesh.meshes) {
-		if (!sm.name.empty() && sm.name != cur_group) {
-			cur_group = sm.name;
-			std::cout << "g " << sm.name << '\n';
+		if (!sm.group.empty() && sm.group != cur_group) {
+			cur_group = sm.group;
+			std::cout << "g " << sm.group << '\n';
 		}
 		if (!sm.material.empty())
 			std::cout << "usemtl " << sm.material << '\n';
@@ -218,7 +275,7 @@ int main()
 			}
 			std::cout << "f";
 			for (auto v : f.verts) {
-				make_one_based( v );
+				obj::make_one_based( v );
 				std::cout << ' ' << v.index << '/' << v.normal << '/' << v.texuv;
 			}
 			std::cout << "\n";

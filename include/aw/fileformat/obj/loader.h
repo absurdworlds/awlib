@@ -34,7 +34,7 @@ struct face {
 };
 
 struct submesh {
-	std::string name;
+	std::string group;
 	std::string material;
 	std::vector<face> faces;
 };
