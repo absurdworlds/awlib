@@ -26,20 +26,22 @@ void make_one_based( face_vert& v )
 }
 
 struct parser {
-	obj::mesh mesh;
-	unsigned sg = 0;
-
-	submesh& get_cur_mesh()
+	parser()
 	{
-		if (mesh.meshes.empty())
-			mesh.meshes.emplace_back();
-		return mesh.meshes.back();
+		mesh.meshes.emplace_back();
+		cur_submesh = &mesh.meshes.back();
 	}
+
+	obj::mesh mesh;
+
+	unsigned sg = 0;
+	submesh* cur_submesh;
 
 	void new_submesh( string_view line )
 	{
 		if (line.size() > 0) line.remove_prefix( 1 );
 		mesh.meshes.push_back({ (std::string)string::rtrim(line, ws) });
+		cur_submesh = &mesh.meshes.back();
 	}
 
 	void add_vert(string_view s);
@@ -127,7 +129,7 @@ void parser::add_face(string_view s)
 		faces.push_back({verts[3], verts[2], verts[1], sg}); // winding
 	}
 
-	auto& vec = get_cur_mesh().faces;
+	auto& vec = cur_submesh->faces;
 	vec.insert( vec.end(), faces.begin(), faces.end() );
 }
 
@@ -154,9 +156,11 @@ void parser::complex_command( string_view cmd, string_view line )
 	}
 
 	if (cmd == "usemtl") {
-		if (!get_cur_mesh().faces.empty())
-			mesh.meshes.push_back( get_cur_mesh() );
-		get_cur_mesh().material = (std::string)line;
+		if (!cur_submesh->faces.empty()) {
+			meshes.meshes.push_back( *cur_submesh );
+			cur_submesh = &mesh.meshes.back();
+		}
+		cur_submesh->material = (std::string)line;
 	}
 
 	if (cmd == "csh");
