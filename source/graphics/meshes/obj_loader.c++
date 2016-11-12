@@ -18,7 +18,19 @@
 namespace aw {
 namespace obj {
 namespace {
-constexpr string_view ws (" \t\v\f\r", 4);
+void make_zero_based( face_vert& v )
+{
+	--v.index;
+	--v.normal;
+	--v.texuv;
+}
+
+void make_one_based( face_vert& v )
+{
+	++v.index;
+	++v.normal;
+	++v.texuv;
+}
 
 struct parser {
 	obj::mesh mesh;
@@ -98,11 +110,10 @@ void parser::add_vert(string_view line)
 
 void parser::add_face(string_view s)
 {
-	auto substrs = string::split_by(s, " \v\r\t");
-
 	std::vector< obj::face > faces;
 	std::vector< obj::face_vert > verts;
 
+	auto substrs = string::split_by(s, " \v\r\t");
 	for (auto s : substrs) {
 		auto vert = string::split(s, "/");
 
@@ -110,6 +121,7 @@ void parser::add_face(string_view s)
 		if (!parse3(s, v.index, v.normal, v.texuv, "/"))
 			continue;
 
+		make_zero_based( v );
 		verts.push_back( v );
 	}
 
@@ -201,7 +213,8 @@ int main()
 				std::cout << "s " << (sg ? std::to_string(sg) : "off") << '\n';
 			}
 			std::cout << "f";
-			for (auto& v : f.verts) {
+			for (auto v : f.verts) {
+				make_one_based( v );
 				std::cout << ' ' << v.index << '/' << v.normal << '/' << v.texuv;
 			}
 			std::cout << "\n";
