@@ -153,8 +153,11 @@ void parser::complex_command( string_view cmd, string_view line )
 			mesh.matlibs.push_back( (std::string)str );
 	}
 
-	if (cmd == "usemtl")
+	if (cmd == "usemtl") {
+		if (!get_cur_mesh().faces.empty())
+			mesh.meshes.push_back( get_cur_mesh() );
 		get_cur_mesh().material = (std::string)line;
+	}
 
 	if (cmd == "csh");
 	// TODO: warning: disabled for safety
@@ -194,9 +197,13 @@ int main()
 		std::cout << "vn " << v[0] << ' ' << v[1] << ' ' << v[2] << '\n';
 	for (auto& v : mesh.texverts)
 		std::cout << "vt " << v[0] << ' ' << v[1] << ' ' << v[2] << '\n';
+
+	string_view cur_group;
 	for (auto& sm : mesh.meshes) {
-		if (!sm.name.empty())
+		if (!sm.name.empty() && sm.name != cur_group) {
+			cur_group = sm.name;
 			std::cout << "g " << sm.name << '\n';
+		}
 		if (!sm.material.empty())
 			std::cout << "usemtl " << sm.material << '\n';
 		unsigned sg = -1;
