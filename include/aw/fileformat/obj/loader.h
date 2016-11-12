@@ -49,6 +49,32 @@ struct mesh {
 };
 
 
+struct material {
+	std::string name;
+
+	double ambient[3] {};  // Ka
+	double diffuse[3] {};  // Kd
+	double specular[3] {}; // Ks
+	double specular_exponent = 0; // Ns
+	double optical_density   = 0; // Ni
+	double dissolve = 1; // d, 1 - Tr
+	double illumination = 0;
+	enum {
+		regular,
+		halo,  // d -halo
+	} dissolve_mode;
+
+	std::string ambient_map;  // map_Ka
+	std::string diffuse_map;  // map_Kd
+	std::string specular_map; // map_Ks
+	std::string normal_map;   // bump
+};
+
+struct mtllib {
+	static mtllib parse( io::input_stream& is );
+	std::vector<material> mtls;
+};
+
 } // namespace obj
 } // namespace aw
 #endif//aw_fileformat_obj_loader_h

@@ -32,27 +32,16 @@ struct parser {
 		return mesh.meshes.back();
 	}
 
-	void add_vert(string_view s);
-	void add_face(string_view s);
-
-	void set_smoothing_group( string_view line )
-	{
-		if (line.size() < 2) return;
-		line.remove_prefix( 1 );
-
-		if (line == "off") {
-			sg = 0;
-		} else {
-			std::string s = (std::string)string::trim( line, ws );
-			sg = std::strtoul(s.data(), nullptr, 10);
-		}
-	}
-
 	void new_submesh( string_view line )
 	{
 		if (line.size() > 0) line.remove_prefix( 1 );
 		mesh.meshes.push_back({ (std::string)string::rtrim(line, ws) });
 	}
+
+	void add_vert(string_view s);
+	void add_face(string_view s);
+
+	void smoothing_group( string_view line );
 
 	void complex_command( string_view cmd, string_view line );
 	void parse_line( string_view line );
@@ -76,7 +65,7 @@ void parser::parse_line( string_view line )
 	case 'f': add_face( line.substr(1) ); return;
 	case 'v': add_vert( line.substr(1) ); return;
 	case 'g': new_submesh( line.substr(1) ); return;
-	case 's': set_smoothing_group( line.substr(1) ); return;
+	case 's': smoothing_group( line.substr(1) ); return;
 	};
 
 	auto pos = line.find_first_of(ws);
@@ -95,16 +84,11 @@ void parser::add_vert(string_view line)
 {
 	if (line.empty()) return;
 	char type = line[0];
-	auto substrs = string::split_by(line.substr(1), ws);
+	auto p = string::split_off( line.substr(1), ws );
 
 	obj::vert vert;
-
-	if (substrs.size() < 1) return;
-		vert[0] = std::strtod(std::string(substrs[0]).data(), nullptr);
-	if (substrs.size() >= 2)
-		vert[1] = std::strtod(std::string(substrs[1]).data(), nullptr);
-	if (substrs.size() >= 3)
-		vert[2] = std::strtod(std::string(substrs[2]).data(), nullptr);
+	if (!parse3(p.second, vert[0], vert[1], vert[3]))
+		return;
 
 	switch (type) {
 	case ' ': mesh.verts.push_back(vert);
@@ -142,6 +126,19 @@ void parser::add_face(string_view s)
 
 	auto& vec = get_cur_mesh().faces;
 	vec.insert( vec.end(), faces.begin(), faces.end() );
+}
+
+void parser::smoothing_group( string_view cmd )
+{
+	if (line.size() < 2) return;
+	line.remove_prefix( 1 );
+
+	if (line == "off") {
+		sg = 0;
+	} else {
+		std::string s = (std::string)string::trim( line, ws );
+		sg = std::strtoul(s.data(), nullptr, 10);
+	}
 }
 
 void parser::complex_command( string_view cmd, string_view line )
