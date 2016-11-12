@@ -33,9 +33,9 @@ bool parse1(string_view line, T& v)
 }
 
 template<typename T>
-bool parse3(string_view line, T& _1, T& _2, T& _3)
+bool parse3(string_view line, T& _1, T& _2, T& _3, string_view delim = ws)
 {
-	auto substrs = string::split_by(line.substr(1), ws);
+	auto substrs = string::split_by(line.substr(1), delim);
 	if (substrs.empty())
 		return false;
 
@@ -56,9 +56,9 @@ bool parse3(string_view line, T& _1, T& _2, T& _3)
 }
 
 template<typename T>
-bool parse3(string_view line, T(&arr)[3])
+bool parse3(string_view line, T(&arr)[3], string_view delim = ws)
 {
-	return parse3(line, arr[0], arr[1], arr[2]);
+	return parse3(line, arr[0], arr[1], arr[2], delim);
 }
 } // namespace obj
 } // namespace aw

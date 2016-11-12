@@ -10,8 +10,7 @@
 
 #include <aw/io/input_stream_utils.h>
 
-#include <aw/utility/string/split.h>
-#include <aw/utility/string/trim.h>
+#include "shared.h"
 
 #include <cstdlib>
 #include <cassert>
@@ -108,9 +107,8 @@ void parser::add_face(string_view s)
 		auto vert = string::split(s, "/");
 
 		obj::face_vert v;
-		if (vert.size() >= 1) v.index  = std::strtoul(std::string(vert[0]).data(), nullptr, 10);
-		if (vert.size() >= 2) v.normal = std::strtoul(std::string(vert[1]).data(), nullptr, 10);
-		if (vert.size() >= 3) v.texuv  = std::strtoul(std::string(vert[2]).data(), nullptr, 10);
+		if (!parse3(s, v.index, v.normal, v.texuv, "/"))
+			continue;
 
 		verts.push_back( v );
 	}
@@ -128,7 +126,7 @@ void parser::add_face(string_view s)
 	vec.insert( vec.end(), faces.begin(), faces.end() );
 }
 
-void parser::smoothing_group( string_view cmd )
+void parser::smoothing_group( string_view line )
 {
 	if (line.size() < 2) return;
 	line.remove_prefix( 1 );
