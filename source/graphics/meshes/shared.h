@@ -22,7 +22,7 @@
 
 namespace aw {
 namespace obj {
-constexpr string_view ws (" \t\v\f\r", 4);
+constexpr string_view ws (" \t\v\f\r", 5);
 
 
 template<typename T>
@@ -39,7 +39,7 @@ bool parse1(string_view line, T& v)
 template<typename T>
 size_t parse3(string_view line, T& _1, T& _2, T& _3, string_view delim = ws)
 {
-	auto substrs = string::split_by(line.substr(1), delim);
+	auto substrs = string::split_by(line, delim);
 	if (substrs.empty())
 		return false;
 

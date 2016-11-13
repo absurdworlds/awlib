@@ -108,17 +108,21 @@ void parser::parse_line( string_view line )
 void parser::add_vert(string_view line)
 {
 	if (line.empty()) return;
+
 	char type = line[0];
-	auto p = string::split_off( line.substr(1), ws );
+	if ( ws.find(line[0]) == ws.npos)
+		line = string::split_off( line, ws ).second;
+	else
+		line = string::ltrim( line, ws );
 
 	obj::vert vert;
-	if (!parse3(p.second, vert[0], vert[1], vert[3]))
+	if (!parse3(line, vert[0], vert[1], vert[2]))
 		return;
 
 	switch (type) {
-	case ' ': verts.push_back(vert);
-	case 'n': normals.push_back(vert);
-	case 't': texverts.push_back(vert);
+	case ' ': return verts.push_back(vert);
+	case 'n': return normals.push_back(vert);
+	case 't': return texverts.push_back(vert);
 	};
 }
 
@@ -129,8 +133,6 @@ void parser::add_face(string_view s)
 
 	auto substrs = string::split_by(s, " \v\r\t");
 	for (auto s : substrs) {
-		auto vert = string::split(s, "/");
-
 		obj::face_vert v;
 		if (!parse3(s, v.index, v.normal, v.texuv, "/"))
 			continue;
