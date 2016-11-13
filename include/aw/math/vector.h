@@ -187,15 +187,12 @@ struct vector {
 		return (*this *= length);
 	}
 
-	constexpr T& operator[](size_t idx)
-	{
-		return elems[idx];
-	}
+	constexpr T&       operator[](size_t idx)       { return elems[idx]; }
+	constexpr T const& operator[](size_t idx) const { return elems[idx]; }
 
-	constexpr T const& operator[](size_t idx) const
-	{
-		return elems[idx];
-	}
+	constexpr T*       data()       { return elems; }
+	constexpr T const* data() const { return elems; }
+
 
 	template<typename Func>
 	constexpr vector& for_each(Func func)

@@ -209,6 +209,28 @@ struct matrix {
 	{
 		return _impl::mat::col(*this, j, row_indices);
 	}
+
+	/*!
+	 * \{
+	 * Access matrix data through a pointer. Indended for interfacing
+	 * with C APIs, such as OpenGL.
+	 *
+	 * Caveat emptor: accessing data beyond first row is
+	 * undefined according to C++ standard, but should be OK
+	 * on most platforms.
+	 */
+	constexpr T* data()
+	{
+		static_assert( sizeof(vector<T,N>) == sizeof(T*N) );
+		return rows[0].data();
+	}
+
+	constexpr T const* data() const
+	{
+		static_assert( sizeof(vector<T,N>) == sizeof(T*N) );
+		return rows[0].data();
+	}
+	/* \} */
 };
 
 template<size_t I, size_t J, typename T, size_t M, size_t N>
