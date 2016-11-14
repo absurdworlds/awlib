@@ -18,6 +18,8 @@
 
 #include <aw/config.h>
 #include <aw/types/types.h>
+#include <aw/types/traits/basic_traits.h>
+#include <aw/meta/conditional.h>
 
 namespace aw {
 namespace math {
@@ -41,31 +43,7 @@ constexpr T sign(T x)
 	return _impl::sign(x, std::is_signed<T>());
 }
 
-
-//! Calculate square root of a number
-inline f32 sqrt(f32 const x)
-{
-	return ::sqrtf(x);
-}
-
-//! Calculate square root of a number
-inline f64 sqrt(f64 const x)
-{
-	return ::sqrt(x);
-}
-
-//! Calculate square root of an integer
-inline i32 sqrt(i32 const x)
-{
-	return static_cast<i32>(::sqrt(static_cast<f32>(x)));
-}
-
-//! Calculate inverse square root of a double
-inline f64 invSqrt(const f64 x)
-{
-	return 1.0 / sqrt(x);
-}
-
+using std::sqrt;
 using std::fmin;
 using std::fmax;
 template <typename T>

@@ -182,7 +182,7 @@ struct vector {
 		if (length == 0)
 			return *this;
 
-		length = math::invSqrt(length);
+		length /= sqrt( length );
 
 		return (*this *= length);
 	}
