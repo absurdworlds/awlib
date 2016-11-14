@@ -36,16 +36,23 @@ struct face {
 struct submesh {
 	std::string group;
 	std::string material;
-	std::vector<face> faces;
+	size_t begin = 0;
+	size_t end   = 0;
 };
 
 struct mesh {
+	/*!
+	 * Parse a mesh in .obj format.
+	 *
+	 * Currently does not support full spec.
+	 */
 	static mesh parse( io::input_stream& is );
 	std::vector<std::string> matlibs;
 	std::vector<vert> verts;
 	std::vector<vert> normals;
 	std::vector<vert> texverts;
-	std::vector<submesh> meshes;
+	std::vector<face> faces;
+	std::vector<submesh> meshes{ {"default"} };
 };
 
 
