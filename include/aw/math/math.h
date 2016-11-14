@@ -66,22 +66,12 @@ inline f64 invSqrt(const f64 x)
 	return 1.0 / sqrt(x);
 }
 
+using std::fmin;
+using std::fmax;
 template <typename T>
-inline T clamp(T value, T lower, T upper)
+auto fclamp(T value, T lower, T upper) -> enable_if<is_float<T>, T>
 {
-	return std::min(upper, std::max(value, lower));
-}
-
-template <>
-inline f32 clamp(f32 value, f32 lower, f32 upper)
-{
-	return fminf(lower, fmaxf(value, upper));
-}
-
-template <>
-inline f64 clamp(f64 value, f64 lower, f64 upper)
-{
-	return fmin(lower, fmax(value, upper));
+	return fmax(lower, fmin(value, upper));
 }
 
 /*! Interpolate two values
