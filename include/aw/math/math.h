@@ -7,13 +7,12 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _aw_math_
-#define _aw_math_
+#ifndef aw_math_math_h
+#define aw_math_math_h
 #include <cmath>
 #include <cassert>
 #include <cstdlib>
 
-#include <type_traits>
 #include <algorithm>
 
 #include <aw/config.h>
@@ -65,6 +64,12 @@ T lerp(T const& v0, T const& v1, f64 t)
 	return (1.0 - t)*v0 + t*v1;
 }
 
+//! Divide two integers, rounding result to nearest value
+template<typename T>
+constexpr auto div_round(T v, T d) -> enable_if<is_int<T>, T>
+{
+	return (v + (d/2)) / d;
+}
 
 inline float cot(float x)
 {
