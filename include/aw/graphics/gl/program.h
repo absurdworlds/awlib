@@ -10,7 +10,7 @@
 #define aw_graphics_gl3_program_h
 #include <aw/graphics/gl/shader.h>
 #include <aw/graphics/gl/uniform.h>
-#include <vector>
+#include <aw/types/array_view.h>
 namespace aw {
 namespace gl3 {
 struct program {
@@ -36,8 +36,7 @@ struct program {
 	}
 
 	bool is_linked() const;
-	// TODO: array_view
-	bool link(std::vector<shader>& shaders);
+	bool link( array_ref<shader> shaders);
 
 
 	/*!

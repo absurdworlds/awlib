@@ -11,7 +11,7 @@
 #include <aw/graphics/gl/gl_ext33.h>
 #include <aw/utility/on_scope_exit.h>
 #include <iostream> // temporary
-
+#include <vector>
 
 namespace aw::gl3 {
 
@@ -54,7 +54,7 @@ bool program::is_linked() const
 	return status == GL_TRUE;
 }
 
-bool program::link(std::vector<shader>& shaders)
+bool program::link(array_ref<shader> shaders)
 {
 	for ( auto& shader : shaders )
 		gl::attach_shader( _program, handle(shader) );
