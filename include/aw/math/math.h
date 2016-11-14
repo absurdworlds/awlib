@@ -71,16 +71,18 @@ constexpr auto div_round(T v, T d) -> enable_if<is_int<T>, T>
 	return (v + (d/2)) / d;
 }
 
-inline float cot(float x)
+template<typename T>
+auto remainder(T x, T y) -> enable_if<is_float<T>, T>
 {
-	return cos(x) / sin(x);
+	return std::remainder( x, y );
 }
 
-inline float tan(float x)
+template<typename T>
+constexpr auto remainder(T x, T y) -> enable_if<is_int<T>, T>
 {
-	return std::tan(x);
+	return x - div_round(x, y) * y;
 }
 
 } //namespace math
 } //namespace aw
-#endif //_aw_math_
+#endif//aw_math_math_h
