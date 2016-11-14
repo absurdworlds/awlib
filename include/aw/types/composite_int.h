@@ -50,7 +50,7 @@ public:
 			hi = -1;
 	}
 
-	constexpr operator composite_int<opposite_type>() const
+	constexpr explicit operator composite_int<opposite_type>() const
 	{
 		return {opposite_type(hi), lo};
 	}
@@ -242,12 +242,12 @@ public:
 
 	constexpr auto operator~() const -> composite_int<T>
 	{
-		return {~a.hi, ~a.lo};
+		return {~hi, ~lo};
 	}
 
 	constexpr auto operator-() const -> composite_int<T>
 	{
-		composite_int<S> result = ~a;
+		composite_int<S> result{ ~(*this) };
 		return composite_int<T>{++result};
 	}
 

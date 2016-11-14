@@ -49,8 +49,8 @@ namespace _impl {
 template<typename Int>
 struct mask {
 	static_assert(is_even(num_digits<Int>), "");
-	static constexpr Int lower_bits = lower_mask(num_digits<Int> / 2);
-	static constexpr Int upper_bits = upper_mask(num_digits<Int> / 2);
+	static constexpr Int lower_bits = lower_mask<Int>(num_digits<Int> / 2);
+	static constexpr Int upper_bits = upper_mask<Int>(num_digits<Int> / 2);
 };
 } // namespace _impl
 

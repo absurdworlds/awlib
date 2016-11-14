@@ -54,16 +54,16 @@ auto div(composite_int<T> const& a, composite_int<T> const& b)
 	bool q_sign = (a.high() < 0) != (b.high() < 0);
 	bool r_sign = (b.high() < 0);
 
-	auto aa = a.high() < 0 ? -a : a;
-	auto bb = b.high() < 0 ? -b : b;
+	auto aa = a.high() < 0 ? composite_int<U>(-a) : composite_int<U>(a);
+	auto bb = b.high() < 0 ? composite_int<U>(-b) : composite_int<U>(b);
 
 	auto result = composite_int<U>::div(aa, bb);
 
 	auto& quot = result.first;
 	auto& rem  = result.second;
 
-	return {q_sign ? -quot : composite_int<T>(quot),
-	        r_sign ? -rem  : composite_int<T>(rem)};
+	return {q_sign ? composite_int<T>(-quot) : composite_int<T>(quot),
+	        r_sign ? composite_int<T>(-rem)  : composite_int<T>(rem)};
 }
 
 template<typename T>
