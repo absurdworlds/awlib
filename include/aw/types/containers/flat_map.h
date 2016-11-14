@@ -304,7 +304,7 @@ public:
 	 */
 	bool empty() const noexcept
 	{
-		base.empty();
+		return base.empty();
 	}
 
 	/*!
