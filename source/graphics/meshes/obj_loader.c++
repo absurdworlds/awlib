@@ -26,11 +26,6 @@ void make_one_based( face_vert& v )
 }
 
 struct parser : private obj::mesh {
-	parser()
-	{
-		new_submesh();
-	}
-
 	mesh& result()
 	{
 		return *this;
@@ -46,23 +41,29 @@ struct parser : private obj::mesh {
 
 private:
 	unsigned sg = 0;
-	submesh* cur_submesh;
 
-	string_view cur_group()
+	submesh& cur_submesh()
 	{
-		return cur_submesh->group;
-	}
-
-	string_view cur_mtl()
-	{
-		return cur_submesh->material;
+		return meshes.back();
 	}
 
 	void new_submesh( )
 	{
+		cur_submesh().end   = faces.size();
 		meshes.emplace_back();
-		cur_submesh = &meshes.back();
+		cur_submesh().begin = faces.size();
 	}
+
+	string_view cur_group()
+	{
+		return cur_submesh().group;
+	}
+
+	string_view cur_mtl()
+	{
+		return cur_submesh().material;
+	}
+
 
 	submesh* find_submesh( string_view mtl, string_view group );
 	void select_submesh( string_view mtl, string_view group );
@@ -128,7 +129,6 @@ void parser::add_vert(string_view line)
 
 void parser::add_face(string_view s)
 {
-	std::vector< obj::face > faces;
 	std::vector< obj::face_vert > verts;
 
 	auto substrs = string::split_by(s, " \v\r\t");
@@ -145,13 +145,12 @@ void parser::add_face(string_view s)
 		// TODO: https://www.geometrictools.com/Documentation/TriangulationByEarClipping.pdf
 	if (verts.size() == 3) {
 		faces.push_back({verts[0], verts[1], verts[2], sg});
+		cur_submesh().end += 1;
 	} else if (verts.size() == 4) {
 		faces.push_back({verts[0], verts[1], verts[2], sg});
 		faces.push_back({verts[3], verts[2], verts[1], sg}); // winding
+		cur_submesh().end += 2;
 	}
-
-	auto& vec = cur_submesh->faces;
-	vec.insert( vec.end(), faces.begin(), faces.end() );
 }
 
 void parser::smoothing_group( string_view line )
@@ -169,7 +168,7 @@ void parser::smoothing_group( string_view line )
 
 submesh* parser::find_submesh( string_view mtl, string_view group )
 {
-	auto pred  = [=] (submesh& sm) {
+	auto pred = [=] (submesh& sm) {
 		return sm.group == group && sm.material == mtl;
 	};
 	auto it = std::find_if( begin(meshes), end(meshes), pred );
@@ -180,18 +179,15 @@ submesh* parser::find_submesh( string_view mtl, string_view group )
 
 void parser::select_submesh( string_view mtl, string_view group )
 {
-	if (auto* sm = find_submesh( mtl, group )) {
-		cur_submesh = sm;
-	} else {
+	if (cur_submesh().begin != cur_submesh().end)
 		new_submesh();
-		cur_submesh->material = (std::string)mtl;
-		cur_submesh->group    = (std::string)group;
-	}
+	cur_submesh().material = (std::string)mtl;
+	cur_submesh().group    = (std::string)group;
 }
 
 void parser::select_group( string_view group )
 {
-	if (group == cur_group())
+	if (group != cur_group())
 		select_submesh( cur_mtl(), group );
 }
 
@@ -270,7 +266,8 @@ int main(int, char**argv)
 		if (!sm.material.empty())
 			std::cout << "usemtl " << sm.material << '\n';
 		unsigned sg = -1;
-		for (auto& f : sm.faces) {
+		for (size_t b = sm.begin; b != sm.end; ++b) {
+			auto& f = mesh.faces[b];
 			if (f.smooth != sg) {
 				sg = f.smooth;
 				std::cout << "s " << (sg ? std::to_string(sg) : "off") << '\n';
