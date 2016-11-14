@@ -17,46 +17,46 @@
 #include <aw/math/angle.h>
 namespace aw {
 namespace math {
-template<typename T>
-T sin( radians<T> angle ) { return std::sin( angle.count() ); }
-template<typename T>
-T cos( radians<T> angle ) { return std::cos( angle.count() ); }
-template<typename T>
-T tan( radians<T> angle ) { return std::tan( angle.count() ); }
-template<typename T>
-std::pair<T,T> sincos( radians<T> angle )
+template<typename T, typename U>
+T sin( angle<T,U> angle ) { return std::sin( radians<T>(angle).count() ); }
+template<typename T, typename U>
+T cos( angle<T,U> angle ) { return std::cos( radians<T>(angle).count() ); }
+template<typename T, typename U>
+T tan( angle<T,U> angle ) { return std::tan( radians<T>(angle).count() ); }
+template<typename T, typename U>
+std::pair<T,T> sincos( angle<T,U> angle )
 {
 	return { sin(angle), cos(angle) };
 }
 
 #if defined(_GNU_SOURCE)
-template<>
-std::pair<float,float> sincos( radians<float> angle )
+template<typename U>
+std::pair<float,float> sincos( angle<float, U> angle )
 {
-	T s, c;
-	::sincosf(angle.count(), &s, &c)
+	float s, c;
+	::sincosf( radians<float>(angle).count(), &s, &c);
 	return {s,c};
 }
 
-template<>
-std::pair<double,double> sincos( radians<double> angle )
+template<typename U>
+std::pair<double,double> sincos( angle<double, U> angle )
 {
-	T s, c;
-	::sincos(angle.count(), &s, &c)
+	double s, c;
+	::sincos( radians<double>(angle).count(), &s, &c);
 	return {s,c};
 }
 
-template<>
-std::pair<long double,long double> sincos( radians<long double> angle )
+template<typename U>
+std::pair<long double,long double> sincos( angle<long double, U> angle )
 {
-	T s, c;
-	::sincosl(angle.count(), &s, &c)
+	long double s, c;
+	::sincosl( radians<long double>(angle).count(), &s, &c);
 	return {s,c};
 }
 #endif//_GNU_SOURCE
 
-template<typename T>
-T cot( radians<T> angle )
+template<typename T, typename U>
+T cot( angle<T, U> angle )
 {
 	// auto [sin, cos] = sincos(angle);
 	// return cos / sin;

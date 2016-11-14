@@ -17,24 +17,24 @@ namespace math {
 template<typename T>
 using matrix3 = matrix<T,3,3>;
 
-template<typename T>
-matrix3<T> pitch_matrix( T pitch )
+template<typename T, typename U>
+matrix3<T> pitch_matrix( angle<T,U> pitch )
 {
 	auto s = sin( pitch );
 	auto c = cos( pitch );
 	return {{ {1, 0, 0}, {0, c, -s}, {0, s, c} }};
 }
 
-template<typename T>
-matrix3<T> yaw_matrix( T yaw )
+template<typename T, typename U>
+matrix3<T> yaw_matrix( angle<T,U> yaw )
 {
 	auto s = sin( yaw );
 	auto c = cos( yaw );
 	return {{ {c, 0, s}, {0, 1, 0}, {-s, 0, c} }};
 }
 
-template<typename T>
-matrix3<T> roll_matrix( T roll )
+template<typename T, typename U>
+matrix3<T> roll_matrix( angle<T,U> roll )
 {
 	auto s = sin( roll );
 	auto c = cos( roll );
@@ -54,8 +54,8 @@ matrix3<T> scale_matrix( vector3d<T> const& s )
 /*!
  * Create a matrix representing rotation around an axis.
  */
-template<typename T>
-matrix3<T> matrix_from_axis_angle(vector3d<T> const& axis, T angle)
+template<typename T, typename Pr>
+matrix3<T> matrix_from_axis_angle(vector3d<T> const& axis, angle<T,Pr> angle)
 {
 	auto x = axis.x();
 	auto y = axis.y();
