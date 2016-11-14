@@ -7,6 +7,7 @@
  * There is NO WARRANTY, to the extent permitted by law.
  */
 #include "shared.h"
+#include <aw/types/array_view.h>
 
 namespace aw {
 namespace obj {
@@ -257,6 +258,8 @@ int main(int, char**argv)
 	for (auto& v : mesh.texverts)
 		std::cout << "vt " << v[0] << ' ' << v[1] << ' ' << v[2] << '\n';
 
+	auto face_list = array_view<obj::face>( mesh.faces );
+
 	string_view cur_group;
 	for (auto& sm : mesh.meshes) {
 		if (!sm.group.empty() && sm.group != cur_group) {
@@ -266,8 +269,8 @@ int main(int, char**argv)
 		if (!sm.material.empty())
 			std::cout << "usemtl " << sm.material << '\n';
 		unsigned sg = -1;
-		for (size_t b = sm.begin; b != sm.end; ++b) {
-			auto& f = mesh.faces[b];
+		auto faces = face_list.slice( sm.begin, sm.end );
+		for ( auto& f : faces ) {
 			if (f.smooth != sg) {
 				sg = f.smooth;
 				std::cout << "s " << (sg ? std::to_string(sg) : "off") << '\n';
