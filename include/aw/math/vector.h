@@ -17,8 +17,7 @@
 #include <aw/utility/index_sequence.h>
 #include <aw/meta/list_ops.h>
 
-namespace aw {
-namespace math {
+namespace aw::math {
 template <typename T, size_t N>
 struct vector;
 
@@ -28,7 +27,22 @@ constexpr T& get(vector<T,N>& vec);
 template<size_t I, typename T, size_t N>
 constexpr T const& get(vector<T,N> const& vec);
 
+template<size_t I, typename T, size_t N>
+constexpr T get(vector<T,N>&& vec) { return get<I>( vec ); }
 
+template<size_t I, typename T, size_t N>
+constexpr T get(vector<T,N> const&& vec) { return get<I>( vec ); }
+} // namespace aw::math
+
+namespace std {
+template<typename T, size_t N>
+class tuple_size< aw::math::vector<T,N> > : public std::integral_constant<size_t, N> {};
+template<size_t I, typename T, size_t N>
+class tuple_element< I, aw::math::vector<T,N> > { public: using type = T; };
+} // namespace std
+
+namespace aw {
+namespace math {
 namespace axis {
 constexpr size_t x = 0;
 constexpr size_t y = 1;

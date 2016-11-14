@@ -10,11 +10,14 @@
 #ifndef aw_math_matrix_h
 #define aw_math_matrix_h
 #include <aw/math/vector.h>
-namespace aw {
-namespace math {
+namespace aw::math {
 template<typename T, size_t M, size_t N>
 struct matrix;
 
+/*!
+ * \{
+ * Access matrix rows and columns as vectors.
+ */
 template<size_t Index, typename T, size_t M, size_t N>
 constexpr vector<T,N>& row(matrix<T,M,N>& mat);
 template<size_t Index, typename T, size_t M, size_t N>
@@ -22,18 +25,39 @@ constexpr vector<T,N> const& row(matrix<T,M,N> const& mat);
 
 template<size_t Index, typename T, size_t M, size_t N>
 constexpr vector<T,M> col(matrix<T,M,N> const& mat);
+/* \} */
 
+/* \{
+ * Access element at row \a I and column \a J
+ */
 template<size_t I, size_t J, typename T, size_t M, size_t N>
 constexpr T& get(matrix<T,M,N>& mat);
 template<size_t I, size_t J, typename T, size_t M, size_t N>
-constexpr T get(matrix<T,M,N> const& mat);
+constexpr T const& get(matrix<T,M,N> const& mat);
 
-template<class MatrixT,
-         class = typename MatrixT::row_indices,
-         class = typename MatrixT::column_indices
->
-struct matrix_ops;
+template<size_t I, size_t J, typename T, size_t M, size_t N>
+constexpr T get(matrix<T,M,N>&& mat) { return get<I,J>( mat ); }
+template<size_t I, size_t J, typename T, size_t M, size_t N>
+constexpr T get(matrix<T,M,N> const&& mat) { return get<I,J>( mat ); }
+/*! \} */
 
+/*! \{
+ * Linear access to matrix elements
+ */
+template<size_t I, typename T, size_t M, size_t N>
+constexpr T& get(matrix<T,M,N>& mat) { return get<I / N, I % N>( mat ); }
+template<size_t I, typename T, size_t M, size_t N>
+constexpr T const& get(matrix<T,M,N> const& mat) { return get<I / N, I % N>( mat ); }
+
+template<size_t I, typename T, size_t M, size_t N>
+constexpr T get(matrix<T,M,N>&& mat) { return get<I / N, I % N>( mat ); }
+template<size_t I, typename T, size_t M, size_t N>
+constexpr T get(matrix<T,M,N> const&& mat) { return get<I / N, I % N>( mat ); }
+/* \} */
+} // namespace aw::math
+
+
+namespace aw::math {
 namespace _impl {
 namespace mat {
 
@@ -221,26 +245,26 @@ struct matrix {
 	 */
 	constexpr T* data()
 	{
-		static_assert( sizeof(vector<T,N>) == sizeof(T*N) );
+		static_assert( sizeof(vector<T,N>) == sizeof(T)*N );
 		return rows[0].data();
 	}
 
 	constexpr T const* data() const
 	{
-		static_assert( sizeof(vector<T,N>) == sizeof(T*N) );
+		static_assert( sizeof(vector<T,N>) == sizeof(T)*N );
 		return rows[0].data();
 	}
 	/* \} */
 };
 
 template<size_t I, size_t J, typename T, size_t M, size_t N>
-constexpr T get(matrix<T,M,N> const& mat)
+constexpr T& get(matrix<T,M,N>& mat)
 {
 	return mat.rows[I][J];
 }
 
 template<size_t I, size_t J, typename T, size_t M, size_t N>
-constexpr T& get(matrix<T,M,N>& mat)
+constexpr T const& get(matrix<T,M,N> const& mat)
 {
 	return mat.rows[I][J];
 }
@@ -376,8 +400,7 @@ void fill(matrix<T,M,N>& mat, T const value)
 	fill(row, value);
 	std::fill(std::begin(mat.rows), std::end(mat.rows), row);
 }
-} // namespace math
-} // namespace aw
+} // namespace aw::math
 
 #include "bits/square_matrix.h"
 #endif//aw_math_matrix_h

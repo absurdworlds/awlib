@@ -38,6 +38,8 @@ Test(matrix_basic) {
 	auto D = A * C;
 	A *= C;
 	TestEqual(A, D);
+
+	TestEqual( get<15>(C), get<3,3>(C) );
 }
 
 Test(matrix_inverse) {
