@@ -17,12 +17,32 @@
 #include <aw/math/angle.h>
 namespace aw {
 namespace math {
+namespace _impl {
+template<typename T, bool = is_int<T>>
+struct promote_t { using type = double; };
+template<typename T>
+struct promote_t<T,false> { };
+
+template<> struct promote_t<long double> { using type = long double; };
+template<> struct promote_t<double>      { using type = double; };
+template<> struct promote_t<float>       { using type = float; };
+
+template<typename T>
+using promote = typename promote_t<T>::type;
+
 template<typename T, typename U>
-T sin( angle<T,U> angle ) { return std::sin( radians<T>(angle).count() ); }
+constexpr promote<T> radian_value( angle<T,U> angle )
+{
+	return radians<promote<T>>(angle).count();
+}
+} // namespace _impl
+
 template<typename T, typename U>
-T cos( angle<T,U> angle ) { return std::cos( radians<T>(angle).count() ); }
+T sin( angle<T,U> angle ) { return std::sin( _impl::radian_value( angle ) ); }
 template<typename T, typename U>
-T tan( angle<T,U> angle ) { return std::tan( radians<T>(angle).count() ); }
+T cos( angle<T,U> angle ) { return std::cos( _impl::radian_value( angle ) ); }
+template<typename T, typename U>
+T tan( angle<T,U> angle ) { return std::tan( _impl::radian_value( angle ) ); }
 template<typename T, typename U>
 std::pair<T,T> sincos( angle<T,U> angle )
 {
@@ -60,7 +80,7 @@ T cot( angle<T, U> angle )
 {
 	// auto [sin, cos] = sincos(angle);
 	// return cos / sin;
-	auto sc = sincos(angle);
+	auto sc = sincos( angle );
 	return sc.second / sc.first;
 }
 
