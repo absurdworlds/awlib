@@ -57,7 +57,7 @@ struct camera {
 protected:
 	void recalc_frustum_scale()
 	{
-		float frustum_scale = math::cot(fov.count() / 2.0f);
+		float frustum_scale = math::cot(fov / 2.0f);
 		perspective.get(0,0) = frustum_scale / aspect;
 		perspective.get(1,1) = frustum_scale;
 	}
