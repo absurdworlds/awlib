@@ -29,6 +29,17 @@ struct overloaded<Func> : Func {
 	{}
 };
 
+// TODO: wait for P0195R1 implementation
+// (will replace this whole header)
+#if 0
+template<typename...Fs>
+struct overload : Fs... {
+	overload(Fs... fs) : Fs{ std::move(fs) }...  {}
+	using Fs::operator()...;
+};
+#endif
+
+
 /*!
  * Allows to combine multiple functors into
  * overloaded set of functors.
@@ -38,5 +49,5 @@ overloaded<Fs> overload(Fs&&...fs)
 {
 	return {std::forward<Fs>(fs)...};
 }
-}
+} // namespace aw
 #endif//aw_utility_functional_overload_h
