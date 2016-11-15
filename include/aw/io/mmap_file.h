@@ -48,6 +48,7 @@ struct file_mapping {
 
 AW_IO_EXP
 file_mapping map_file( file_descriptor fd, map_perms perms, std::error_code& ec );
+AW_IO_EXP int unmap_file( file_mapping& map );
 } // namespace posix
 #endif
 
@@ -63,6 +64,7 @@ struct file_mapping {
 
 AW_IO_EXP
 file_mapping map_file( file_descriptor fd, map_perms perms, std::error_code& ec );
+AW_IO_EXP bool unmap_file( file_mapping& map );
 } // namespace win32
 #endif
 
