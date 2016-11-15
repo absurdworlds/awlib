@@ -25,13 +25,16 @@ std::string demangle(const char* name)
 {
 	static thread_local char_buffer buf;
 	int status;
-	char* memory = buf.memory.get();
+	// renounce memory ownership, __cxa_demangle might call realloc()
+	char* memory = buf.memory.release();
 	auto demangled = abi::__cxa_demangle(name, memory, &buf.size, &status);
 	if (demangled) {
-		memory = buf.memory.release();
+		// reclaim ownership
 		buf.memory.reset( demangled );
 		return demangled;
 	}
+	// is old buffer untouched on failure?
+	buf.memory.reset( memory );
 	return name;
 }
 } // namespace aw
