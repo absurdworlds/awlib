@@ -59,7 +59,7 @@ file_descriptor open(fs::path const& path, file_mode fm, std::error_code& ec)
 	return file_descriptor(handle);
 }
 
-int close(file_descriptor fd, std::error_code& ec)
+bool close(file_descriptor fd, std::error_code& ec)
 {
 	return close_handle( fd, ec );
 }

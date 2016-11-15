@@ -24,7 +24,7 @@ enum class file_mode : unsigned {
 	//! Not a valid file mode
 	none      = 0,
 	//! Open file for reading
-	read      = 1,
+	read      = 1 << 0,
 	//! Open file for writing
 	write     = 1 << 1,
 	//! Causes all writes to happen at the end of file
