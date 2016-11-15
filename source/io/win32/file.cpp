@@ -137,7 +137,12 @@ intmax_t tell(file_descriptor fd, std::error_code& ec)
 
 uintmax_t size(file_descriptor fd, std::error_code& ec)
 {
-	return get_file_size( fd, ec );
+	LARGE_INTEGER sz;
+	bool ret = ::GetFileSizeEx( HANDLE(fd), &sz);
+
+	set_error_if(!ret, ec);
+
+	return ret ? sz.QuadPart : uintmax_t(-1);
 }
 } // namespace win32
 } // namespace io
