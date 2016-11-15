@@ -134,6 +134,11 @@ struct mmap_file {
 	}
 	/* \} */
 
+	~mmap_file()
+	{
+		if ( _map.valid()) native::unmap_file( _map );
+	}
+
 	using iterator       = char*;
 	using const_iterator = char const*;
 
