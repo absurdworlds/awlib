@@ -8,6 +8,7 @@
  */
 #include <aw/io/native_file.h>
 #include "winapi_helpers.h"
+#include "path.h"
 namespace aw {
 namespace io {
 namespace win32 {
@@ -51,7 +52,7 @@ file_descriptor open(fs::path const& path, file_mode fm, std::error_code& ec)
 	int sharemode = FILE_SHARE_DELETE|FILE_SHARE_READ|FILE_SHARE_WRITE;
 	int attrib = FILE_ATTRIBUTE_NORMAL;
 
-	auto handle = CreateFileW( path.wstring().data(), access, sharemode, NULL, openmode, attrib, NULL);
+	auto handle = CreateFileW( winapi_path{ path }, access, sharemode, NULL, openmode, attrib, NULL);
 
 	set_error_if(handle == INVALID_HANDLE_VALUE, ec);
 
