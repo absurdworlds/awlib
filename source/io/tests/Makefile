@@ -1,7 +1,7 @@
 RootPath = ../../..
 Sources = native_file.cpp main.cpp
 
-Libraries    = awio stdc++fs
+Libraries    = awio awplatform stdc++fs
 ProjectName  = test_io
 ProjectFlags =
 Executable   = true

@@ -1,6 +1,6 @@
 RootPath = ../../..
 Sources = to_string.cpp split.cpp split_iterator.cpp join.cpp compose.cpp misc.cpp
-Libraries = awstring
+Libraries = awstring awplatform
 ProjectName = test_string
 ProjectFlags = -fprofile-arcs -ftest-coverage
 Executable = true

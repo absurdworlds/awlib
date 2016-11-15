@@ -1,5 +1,5 @@
 RootPath = ../..
-Sources = SFML/Window.cpp
+Sources = os_version.c++ demangle.c++
 Defines = AW_MODULE_PLATFORM
 Libraries =
 ProjectName = awplatform

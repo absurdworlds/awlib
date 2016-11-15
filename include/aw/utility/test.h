@@ -17,32 +17,13 @@
 #include <iostream>
 #include <aw/config.h>
 #include <aw/utility/static_object.h>
+#include <aw/platform/demangle.h>
 #if (AW_PLATFORM == AW_PLATFORM_POSIX)
 #include <sys/types.h>
 #include <signal.h>
 #include <unistd.h>
 #include <cstdio>
 #endif
-
-#if (AW_COMPILER == AW_COMPILER_GCC) || (AW_COMPILER == AW_COMPILER_CLANG)
-#include <cxxabi.h>
-inline std::string demangle(const char* name)
-{
-	static thread_local size_t size  = 1024;
-	static thread_local char* memory = (char*)malloc(size);
-
-	int status;
-	auto demangled = abi::__cxa_demangle(name, memory, &size, &status);
-	if (demangled) {
-		memory = demangled;
-		return demangled;
-	}
-	return name;
-}
-#else
-inline std::string demangle(const char* name) { return name; }
-#endif
-
 
 /*!
  * This header is made for awlib internal tests.
@@ -392,7 +373,7 @@ struct _catch {
 		} catch(Ex&) {
 			return true;
 		} catch(std::exception& e) {
-			auto name = demangle(typeid(e).name());
+			auto name = symbol_name( typeid(e) );
 			auto what = " - \""s + e.what() + '"';
 			_msg = "caught wrong exception: " + name + what;
 			return false;
