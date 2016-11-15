@@ -175,6 +175,11 @@ struct file {
 	 */
 	fs::path const& path() const noexcept { return _path; }
 
+#if 0
+protected:
+	native::file& get_native() { return data; }
+#endif
+
 private:
 	void check_error(std::error_code& ec, char const* what) const
 	{

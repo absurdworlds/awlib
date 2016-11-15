@@ -58,6 +58,8 @@ struct file {
 	uintmax_t size(std::error_code& ec) const noexcept;
 	uintmax_t size() const noexcept;
 
+	file_descriptor descriptor() const noexcept { return fd; }
+
 private:
 	bool owns_fd = true;
 	file_descriptor fd = invalid_fd;
@@ -109,6 +111,7 @@ struct file {
 	uintmax_t size(std::error_code& ec) const noexcept;
 	uintmax_t size() const noexcept;
 
+	file_descriptor descriptor() const noexcept { return fd; }
 
 private:
 	file_mode mode = file_mode::none;
