@@ -28,8 +28,8 @@ AW_IO_EXP uintmax_t size(file_descriptor fd, std::error_code& ec);
 struct file {
 	file() = default;
 	file(file_descriptor fd) : fd{fd}, owns_fd{false} {}
-	inline file(fs::path const& path, file_mode fm, std::error_code& ec) noexcept;
-	inline file(fs::path const& path, file_mode fm) noexcept;
+	file(fs::path const& path, file_mode fm, std::error_code& ec) noexcept;
+	file(fs::path const& path, file_mode fm) noexcept;
 	~file() noexcept { close(); }
 
 	file(file const& other) = delete;
@@ -38,25 +38,25 @@ struct file {
 
 	bool is_open() const noexcept { return fd != invalid_fd; }
 
-	inline void swap(file& other) noexcept;
+	void swap(file& other) noexcept;
 
-	inline void close(std::error_code& ec) noexcept;
-	inline void close() noexcept;
+	void close(std::error_code& ec) noexcept;
+	void close() noexcept;
 
-	inline intmax_t read(char* buffer, uintmax_t count, std::error_code& ec) noexcept;
-	inline intmax_t read(char* buffer, uintmax_t count) noexcept;
+	intmax_t read(char* buffer, uintmax_t count, std::error_code& ec) noexcept;
+	intmax_t read(char* buffer, uintmax_t count) noexcept;
 
-	inline intmax_t write(char const* buffer, uintmax_t count, std::error_code& ec) noexcept;
-	inline intmax_t write(char const* buffer, uintmax_t count) noexcept;
+	intmax_t write(char const* buffer, uintmax_t count, std::error_code& ec) noexcept;
+	intmax_t write(char const* buffer, uintmax_t count) noexcept;
 
-	inline intmax_t seek(intmax_t count, seek_mode mode, std::error_code& ec) noexcept;
-	inline intmax_t seek(intmax_t count, seek_mode mode) noexcept;
+	intmax_t seek(intmax_t count, seek_mode mode, std::error_code& ec) noexcept;
+	intmax_t seek(intmax_t count, seek_mode mode) noexcept;
 
-	inline intmax_t tell(std::error_code& ec) const noexcept;
-	inline intmax_t tell() const noexcept;
+	intmax_t tell(std::error_code& ec) const noexcept;
+	intmax_t tell() const noexcept;
 
-	inline uintmax_t size(std::error_code& ec) const noexcept;
-	inline uintmax_t size() const noexcept;
+	uintmax_t size(std::error_code& ec) const noexcept;
+	uintmax_t size() const noexcept;
 
 private:
 	bool owns_fd = true;
@@ -79,8 +79,8 @@ AW_IO_EXP uintmax_t size(file_descriptor fd, std::error_code& ec);
 struct file {
 	file() = default;
 	file(file_descriptor fd) : fd{fd}, owns_fd{false} {}
-	inline file(fs::path const& path, file_mode fm, std::error_code& ec) noexcept;
-	inline file(fs::path const& path, file_mode fm) noexcept;
+	file(fs::path const& path, file_mode fm, std::error_code& ec) noexcept;
+	file(fs::path const& path, file_mode fm) noexcept;
 	~file() noexcept { close(); }
 
 	file(file const& other) = delete;
@@ -89,25 +89,26 @@ struct file {
 
 	bool is_open() const noexcept { return fd != invalid_fd; }
 
-	inline void swap(file& other) noexcept;
+	void swap(file& other) noexcept;
 
-	inline void close(std::error_code& ec) noexcept;
-	inline void close() noexcept;
+	void close(std::error_code& ec) noexcept;
+	void close() noexcept;
 
-	inline intmax_t read(char* buffer, uintmax_t count, std::error_code& ec) noexcept;
-	inline intmax_t read(char* buffer, uintmax_t count) noexcept;
+	intmax_t read(char* buffer, uintmax_t count, std::error_code& ec) noexcept;
+	intmax_t read(char* buffer, uintmax_t count) noexcept;
 
-	inline intmax_t write(char const* buffer, uintmax_t count, std::error_code& ec) noexcept;
-	inline intmax_t write(char const* buffer, uintmax_t count) noexcept;
+	intmax_t write(char const* buffer, uintmax_t count, std::error_code& ec) noexcept;
+	intmax_t write(char const* buffer, uintmax_t count) noexcept;
 
-	inline intmax_t seek(intmax_t count, seek_mode mode, std::error_code& ec) noexcept;
-	inline intmax_t seek(intmax_t count, seek_mode mode) noexcept;
+	intmax_t seek(intmax_t count, seek_mode mode, std::error_code& ec) noexcept;
+	intmax_t seek(intmax_t count, seek_mode mode) noexcept;
 
-	inline intmax_t tell(std::error_code& ec) const noexcept;
-	inline intmax_t tell() const noexcept;
+	intmax_t tell(std::error_code& ec) const noexcept;
+	intmax_t tell() const noexcept;
 
-	inline uintmax_t size(std::error_code& ec) const noexcept;
-	inline uintmax_t size() const noexcept;
+	uintmax_t size(std::error_code& ec) const noexcept;
+	uintmax_t size() const noexcept;
+
 
 private:
 	file_mode mode = file_mode::none;
