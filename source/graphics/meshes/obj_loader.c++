@@ -149,7 +149,7 @@ void parser::add_face(string_view s)
 		cur_submesh().end += 1;
 	} else if (verts.size() == 4) {
 		faces.push_back({verts[0], verts[1], verts[2], sg});
-		faces.push_back({verts[3], verts[2], verts[1], sg}); // winding
+		faces.push_back({verts[0], verts[2], verts[3], sg}); // winding
 		cur_submesh().end += 2;
 	}
 }

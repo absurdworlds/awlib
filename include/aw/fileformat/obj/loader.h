@@ -24,8 +24,8 @@ struct vert {
 
 struct face_vert {
 	unsigned index;
-	unsigned normal  = 0;
-	unsigned texuv   = 0;
+	unsigned normal  = -1;
+	unsigned texuv   = -1;
 };
 
 struct face {
