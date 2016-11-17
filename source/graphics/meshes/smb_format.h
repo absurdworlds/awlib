@@ -16,8 +16,8 @@
 namespace {
 
 //----------------------------------------------------------
-typedef char int8;
-typedef short int16;
+typedef signed char int8;
+typedef signed short int16;
 typedef unsigned char uint8;
 typedef unsigned short uint16;
 typedef unsigned int uint32;
@@ -49,17 +49,31 @@ struct rTextureHeader
 	uint8* pixels;              //width*height indices into color pallete, or only twice as much with 4bit indices
 
 	void Fill( input_stream& file ) {
-		file.read( (char*)this, 15*4 );
+		file.read( _constHeader );
+		file.read( format );
+		file.read( imgWidth );
+		file.read( imgHeight );
+		file.read( _constNulls );
+		file.read( _unknownFlag );
+		file.read( something );
+		file.read( sorok );
+		file.read( _constEighty );
+		file.read( _constNul );
 
 		uint16 amount = (format == 0x0A) ? 16 : 256;
-		pallete = new unsigned int[ amount ];
-		file.read( (char*)pallete, amount*4 );
+		pallete = new uint32[ amount ];
+		file.read( (char*)pallete, amount*sizeof(uint32) );
 
-		file.read( (char*)&_constMorenulls[0], 8*4 );
+		file.read( _constMorenulls );
+		file.read( someSize1 );
+		file.read( _constFifty );
+		file.read( somesize );
+		file.read( _constEight );
+		file.read( _constNuls );
 
 		uint32 resolution = imgWidth*imgHeight;
 		if( format == 0x0A ) resolution /= 2;
-		pixels = new unsigned char[ resolution ];
+		pixels = new uint8[ resolution ];
 		file.read( (char*)pixels, resolution );
 	}
 
@@ -130,12 +144,12 @@ struct rModelCollision
 	int16 *triangleData;        //triples of parent vertex ids for triangles, [trianglesCount*3]
 
 	void Fill( input_stream& file ) {
-		file.read( (char*)&_constLegacy, sizeof(_constLegacy) );
-		file.read( (char*)&_notlegacy, sizeof(_notlegacy) );
+		file.read( _constLegacy );
+		file.read( _notlegacy );
 
-		file.read( (char*)&_constOne, sizeof(_constOne) );
-		file.read( (char*)&vertexCount, sizeof(vertexCount) );
-		file.read( (char*)&trianglesCount, sizeof(trianglesCount) );
+		file.read( _constOne );
+		file.read( vertexCount );
+		file.read( trianglesCount );
 
 		vertexData = new float[ vertexCount*3 ];
 		file.read( (char*)vertexData, sizeof(float) * vertexCount*3 );
@@ -171,16 +185,16 @@ struct rModelDescriptor
 	uint32 _moosor;             //have no idea what is stored here, seems to be junk
 
 	void Fill( input_stream& file ) {
-		file.read( (char*)meshName, sizeof(meshName) );
-		file.read( (char*)_xz, sizeof(_xz) );
-		file.read( (char*)&_constTwo, sizeof(_constTwo) );
+		file.read( meshName );
+		file.read( _xz );
+		file.read( _constTwo );
 		bbox.Fill( file );
-		file.read( (char*)&_constDva, sizeof(_constDva) );
-		file.read( (char*)&chunksSize, sizeof(chunksSize) );
-		file.read( (char*)&_constSix, sizeof(_constSix) );
-		file.read( (char*)&vertexCount, sizeof(vertexCount) );
-		file.read( (char*)&trianglesCount, sizeof(trianglesCount) );
-		file.read( (char*)&_moosor, sizeof(_moosor) );
+		file.read( _constDva );
+		file.read( chunksSize );
+		file.read( _constSix );
+		file.read( vertexCount );
+		file.read( trianglesCount );
+		file.read( _moosor );
 	}
 };
 
@@ -224,57 +238,57 @@ struct rModelGeometryChunk
 	unsigned int chunkSize;     //size of data for this chunk, including padding
 
 	void Fill( std::istream& file ) {
-		chunkSize = file.tellg();
+		chunkSize = file.position();
 //		chunkSize = 36;
 
-		file.read( (char*)&_constBold, sizeof(_constBold) );
-		file.read( (char*)&HeaderVertexCount, sizeof(HeaderVertexCount) );
-		file.read( (char*)&HeaderQuadsCount, sizeof(HeaderQuadsCount) );
-		file.read( (char*)&HeaderVertex3Count, sizeof(HeaderVertex3Count) );
+		file.read( _constBold );
+		file.read( HeaderVertexCount );
+		file.read( HeaderQuadsCount );
+		file.read( HeaderVertex3Count );
 
-		file.read( (char*)&_constObogoid, 2* sizeof(uint32) );
-		file.read( (char*)&vertexCount, sizeof(vertexCount) );
-		file.read( (char*)&_constDick, sizeof(_constDick) );
+		file.read( _constObogoid );
+		file.read( vertexCount );
+		file.read( _constDick );
 		unsigned char pad = 4 - ( (sizeof(short) * vertexCount*3) %4 ); pad %= 4;
-		vertexData = new short[ vertexCount*3 + pad ];
+		vertexData = new int16[ vertexCount*3 + pad ];
 		file.read( (char*)vertexData, sizeof(short) * vertexCount*3 + pad );
 //		chunkSize += sizeof(short) * vertexCount*3 + pad;
 
-		file.read( (char*)&_constTwelve, sizeof(_constTwelve) );
-		file.read( (char*)&normalsCount, sizeof(normalsCount) );
-		file.read( (char*)&_constRanen, sizeof(_constRanen) );
+		file.read( _constTwelve, );
+		file.read( normalsCount, );
+		file.read( _constRanen, );
 		/*unsigned char*/ pad = 4 - ( normalsCount*3 %4 ); pad %= 4;
 		normalsData = new char[ normalsCount*3 + pad ];
 		file.read( (char*)normalsData, normalsCount*3 + pad );
 //		chunkSize += normalsCount*3 + pad;
 
-		file.read( (char*)&_constThirty, sizeof(_constThirty) );
-		file.read( (char*)&uvCount, sizeof(uvCount) );
-		file.read( (char*)&_constOld, sizeof(_constOld) );
+		file.read( _constThirty );
+		file.read( uvCount );
+		file.read( _constOld );
 		uvData = new unsigned short[ sizeof(short) * uvCount*2 ];
 		file.read( (char*)uvData, sizeof(short) * uvCount*2 );
 //		chunkSize += sizeof(short) * uvCount*2;
 
-		file.read( (char*)&_constOchki, sizeof(_constOchki) );
-		file.read( (char*)&vertex3Count, sizeof(vertex3Count) );
-		file.read( (char*)&_constCoc, sizeof(_constCoc) );
-		file.read( (char*)&quadsCount, sizeof(quadsCount) );
-		file.read( (char*)&_constStalemate, sizeof(_constStalemate) );
+		file.read( _constOchki );
+		file.read( vertex3Count );
+		file.read( _constCoc );
+		file.read( quadsCount );
+		file.read( _constStalemate );
 		quadsData = new unsigned char[ quadsCount*4 ];
 		file.read( (char*)quadsData, quadsCount*4 );
 //		chunkSize += quadsCount*4;
 
-		chunkSize = int(file.tellg()) - chunkSize; //size of seventeen is added in the first run of padding below
-		file.read( (char*)&_constSeventeen, sizeof(_constSeventeen) );
+		chunkSize = int(file.position()) - chunkSize; //size of seventeen is added in the first run of padding below
+		file.read( _constSeventeen );
 		int zero = 0;
 		_debugPadding = -1;
 		while( zero == 0 ) {
 			_debugPadding++;
 			chunkSize += sizeof(zero);
-			file.read( (char*)&zero, sizeof(zero) );
+			file.read( zero );
 			if( file.eof() ) return;
 		}
-		file.seekg( -4, std::ios::cur );
+		file.seekoff( -4 );
 	}
 
 	rModelGeometryChunk() {
