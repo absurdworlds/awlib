@@ -178,6 +178,8 @@ struct rModelDescriptor
 	uint32 _constTwo;           //always 02000000
 	rModelBoundBox bbox;        //min and max coords for object bound box
 	uint32 _constDva;           //always 02000000
+	//mesh submodels packed in chunks of various size, but chunks of whole mesh
+	//always aligned by 16, hence the padding in the last chunk
 	uint32 chunksSize;          //size in bytes of model geometry chunks in which this mesh is described
 	uint32 _constSix;           //always 06000000
 	uint32 vertexCount;         //amount of vertices after welding? only shows real count if mesh has only one chunk, else - less
@@ -232,10 +234,8 @@ struct rModelGeometryChunk
 	//vertex ids begin with 1 and point direct into vertices float structure,
 	//counting floatnum from begining and skipping by 3
 	uint32 _constSeventeen;     //always 00000017
-	int _debugPadding;          //amount of 00000000 before next block //not needed anymore and should be deleted
-	//mesh submodels packed in chunks of various size, but chunks of whole mesh
-	//always aligned by 16, hence the padding in the last chunk
-	unsigned int chunkSize;     //size of data for this chunk, including padding
+
+	size_t chunkSize;           //size of data for this chunk, including padding
 
 	void Fill( std::istream& file ) {
 		chunkSize = file.position();
@@ -277,18 +277,10 @@ struct rModelGeometryChunk
 		quadsData = new unsigned char[ quadsCount*4 ];
 		file.read( (char*)quadsData, quadsCount*4 );
 //		chunkSize += quadsCount*4;
-
-		chunkSize = int(file.position()) - chunkSize; //size of seventeen is added in the first run of padding below
+//
 		file.read( _constSeventeen );
-		int zero = 0;
-		_debugPadding = -1;
-		while( zero == 0 ) {
-			_debugPadding++;
-			chunkSize += sizeof(zero);
-			file.read( zero );
-			if( file.eof() ) return;
-		}
-		file.seekoff( -4 );
+
+		chunkSize = chunkSize - file.position();
 	}
 
 	rModelGeometryChunk() {
@@ -328,19 +320,22 @@ public:
 		boundbox.Fill( file );
 
 		uint32 sizeToRead = 0;
-		for( uint32 i = 0; i < header.meshCount; i++ ) {
+		for( uint32 i = 0; i < header.meshCount; ++i ) {
 			rModelDescriptor* desc = new rModelDescriptor;
 			desc->Fill( file );
 			sizeToRead += desc->chunksSize;
 			descriptors.push_back( desc );
 		}
 
-		uint32 sizeRead = 0;
-		while( sizeRead < sizeToRead ) {
-			rModelGeometryChunk* chunk = new rModelGeometryChunk;
-			chunk->Fill( file );
-			sizeRead += chunk->chunkSize;
-			chunks.push_back( chunk );
+		for (auto desc : descriptors) {
+			size_t sizeToRead = desc->chunksSize;
+			while (sizeToRead > 16) {
+				rModelGeometryChunk* chunk = new rModelGeometryChunk;
+				chunk->Fill( file );
+				sizeToRead -= chunk->chunkSize;
+				chunks.push_back( chunk );
+			}
+			file.skip( sizeToRead );
 		}
 	}
 
