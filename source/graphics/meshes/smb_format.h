@@ -306,7 +306,7 @@ public:
 	rModelHeader header;
 	rModelCollision* collision;
 	rModelBoundBox boundbox;
-	std::vector<rModelDescriptor*> descriptors;
+	std::vector<rModelDescriptor> descriptors;
 	std::vector<rModelGeometryChunk*> chunks;
 
 	void Load( input_stream& file ) {
@@ -319,13 +319,9 @@ public:
 
 		boundbox.Fill( file );
 
-		uint32 sizeToRead = 0;
-		for( uint32 i = 0; i < header.meshCount; ++i ) {
-			rModelDescriptor* desc = new rModelDescriptor;
+		descriptors.resize( header.meshCount );
+		for (auto& desc : descriptors)
 			desc->Fill( file );
-			sizeToRead += desc->chunksSize;
-			descriptors.push_back( desc );
-		}
 
 		for (auto desc : descriptors) {
 			size_t sizeToRead = desc->chunksSize;
@@ -344,8 +340,6 @@ public:
 	}
 	~rModelFormat() {
 		if( collision ) delete collision;
-		for( int i = 0, e = descriptors.size(); i < e; i++ )
-			delete descriptors[i];
 		for( int i = 0, e = chunks.size(); i < e; i++ )
 			delete chunks[i];
 	}
