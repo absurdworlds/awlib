@@ -304,7 +304,7 @@ class rModelFormat
 {
 public:
 	rModelHeader header;
-	rModelCollision* collision;
+	rModelCollision* collision = nullptr;
 	rModelBoundBox boundbox;
 	std::vector<rModelDescriptor> descriptors;
 	std::vector<rModelGeometryChunk*> chunks;
@@ -335,9 +335,6 @@ public:
 		}
 	}
 
-	rModelFormat() {
-		collision = 0;
-	}
 	~rModelFormat() {
 		if( collision ) delete collision;
 		for( int i = 0, e = chunks.size(); i < e; i++ )
