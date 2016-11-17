@@ -9,7 +9,7 @@
 // painstakingly deduced precious model and texture data brought to you by Spectre & HaDDayn
 // latest revision at 2016.02.20
 
-#include <istream>
+#include <aw/io/input_stream.h>
 #include <vector>
 
 
@@ -22,6 +22,7 @@ typedef unsigned char uint8;
 typedef unsigned short uint16;
 typedef unsigned int uint32;
 
+using aw::io::input_stream;
 
 
 //----------------------------------------------------------
@@ -47,7 +48,7 @@ struct rTextureHeader
 	uint32 _constNuls[2];       //always 0
 	uint8* pixels;              //width*height indices into color pallete, or only twice as much with 4bit indices
 
-	void Fill( std::istream& file ) {
+	void Fill( input_stream& file ) {
 		file.read( (char*)this, 15*4 );
 
 		uint16 amount = (format == 0x0A) ? 16 : 256;
@@ -80,9 +81,9 @@ class rTextureFormat
 public:
 	rTextureHeader header;
 
-	void Load( std::istream &file ) {
+	void Load( input_stream& file ) {
 		header.Fill( file );
-	};
+	}
 };
 
 
@@ -93,9 +94,9 @@ struct rModelBoundBox //is this really necessary?
 	float bboxMin[3];           //boundbox dimensions, xyz min xyz max
 	float bboxMax[3];
 
-	void Fill( std::istream& file ) {
-		file.read( (char*)this, sizeof(*this) );
-	};
+	void Fill( input_stream& file ) {
+		file.read( *this );
+	}
 };
 
 
@@ -109,8 +110,8 @@ struct rModelHeader
 	uint32 _constNumbers[6];    //always 1, 1, 6, 0, 0, 0
 	char texName[216];          //name of the used texture
 
-	void Fill( std::istream& file ) {
-		file.read( (char*)this, sizeof(*this) );
+	void Fill( input_stream& file ) {
+		file.read( *this );
 	}
 };
 
@@ -128,7 +129,7 @@ struct rModelCollision
 	float *vertexData;          //xyz triples for vertex positions, [vertexCount*3]
 	int16 *triangleData;        //triples of parent vertex ids for triangles, [trianglesCount*3]
 
-	void Fill( std::istream& file ) {
+	void Fill( input_stream& file ) {
 		file.read( (char*)&_constLegacy, sizeof(_constLegacy) );
 		file.read( (char*)&_notlegacy, sizeof(_notlegacy) );
 
@@ -169,7 +170,7 @@ struct rModelDescriptor
 	uint32 trianglesCount;      //amount of triangles in the mesh
 	uint32 _moosor;             //have no idea what is stored here, seems to be junk
 
-	void Fill( std::istream& file ) {
+	void Fill( input_stream& file ) {
 		file.read( (char*)meshName, sizeof(meshName) );
 		file.read( (char*)_xz, sizeof(_xz) );
 		file.read( (char*)&_constTwo, sizeof(_constTwo) );
@@ -302,7 +303,7 @@ public:
 	std::vector<rModelDescriptor*> descriptors;
 	std::vector<rModelGeometryChunk*> chunks;
 
-	void Load( std::istream &file ) {
+	void Load( input_stream& file ) {
 		header.Fill( file );
 
 		if( header.hasCollision == 1 ) {
