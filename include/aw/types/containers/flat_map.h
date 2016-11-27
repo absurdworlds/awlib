@@ -346,12 +346,13 @@ public:
 	/*!
 	 * Find first element that with key not less than \a key.
 	 */
-	iterator lower_bound(key_type const& key)
+	template<typename K>
+	iterator lower_bound(K const& key)
 	{
 		auto compare =
-		[this] (value_type const& v, key_type const& k)
+		[this] (value_type const& v, K const& k)
 		{
-			return this->_key_comp(v.first, k);
+			return _key_comp(v.first, k);
 		};
 		return std::lower_bound(begin(), end(), key, compare);
 	}
@@ -359,7 +360,8 @@ public:
 	/*!
 	 * Find first element that with key not less than \a key.
 	 */
-	const_iterator lower_bound(key_type const& key) const
+	template<typename K>
+	const_iterator lower_bound(K const& key) const
 	{
 		// ugly, but DRY
 		return const_cast<flat_map*>(this)->lower_bound(key);
@@ -368,12 +370,13 @@ public:
 	/*!
 	 * Find first element that with key greater than \a key.
 	 */
-	iterator upper_bound(key_type const& key)
+	template<typename K>
+	iterator upper_bound(K const& key)
 	{
 		auto compare =
-		[this] (key_type const& k, value_type const& v)
+		[this] (K const& k, value_type const& v)
 		{
-			return this->_key_comp(k, v.first);
+			return _key_comp(k, v.first);
 		};
 		return std::upper_bound(begin(), end(), key, compare);
 	}
@@ -381,18 +384,19 @@ public:
 	/*!
 	 * Find first element that with key not less than \a key.
 	 */
-	const_iterator upper_bound(key_type const& key) const
+	template<typename K>
+	const_iterator upper_bound(K const& key) const
 	{
 		// ugly, but DRY
 		return const_cast<flat_map*>(this)->upper_bound(key);
 	}
 
 
-
 	/*!
 	 * Find element with key equivalent to \a key.
 	 */
-	iterator find(key_type const& key)
+	template<typename K>
+	iterator find(K const& key)
 	{
 		iterator pos = lower_bound(key);
 		if (pos == end() || _key_comp(key, pos->first))
@@ -403,7 +407,8 @@ public:
 	/*!
 	 * Find element with key equivalent to \a key.
 	 */
-	const_iterator find(key_type const& key) const
+	template<typename K>
+	const_iterator find(K const& key) const
 	{
 		return const_cast<flat_map*>(this)->find(key);
 	}
@@ -459,7 +464,7 @@ public:
 	 */
 	void insert( std::initializer_list<value_type> ilist )
 	{
-		insert(begin(ilist), end(ilist));
+		insert(std::begin(ilist), std::end(ilist));
 	}
 
 	/*!
