@@ -10,7 +10,7 @@
 
 #include <aw/utility/argv_parser.h>
 #include <aw/utility/string/split.h>
-#include <aw/utility/filesystem.h>
+#include <aw/io/filesystem.h>
 
 #include "hpacker.h"
 

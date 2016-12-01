@@ -10,8 +10,8 @@
 #define aw_io_native_file_h
 #include <aw/io/file_descriptor.h>
 #include <aw/io/file_mode.h>
+#include <aw/io/filesystem.h>
 #include <aw/io/export.h>
-#include <aw/utility/filesystem.h>
 namespace aw {
 namespace io {
 #if defined(AW_SUPPORT_PLATFORM_POSIX)

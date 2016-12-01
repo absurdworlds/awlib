@@ -12,8 +12,8 @@
 #include <algorithm>
 
 #include <aw/types/types.h>
-#include <aw/utility/filesystem.h>
 #include <aw/io/file_mode.h>
+#include <aw/io/filesystem.h>
 
 #include <cstdio>
 
