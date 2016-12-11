@@ -11,13 +11,11 @@
 
 namespace aw {
 namespace string {
-static char const CompositionChar = '%';
+static constexpr char CompositionChar = '%';
 
-std::string compose(
-        std::string const& fmt,
-        std::vector<std::string> const& args)
+std::string compose(string_view fmt, array_view<std::string> args)
 {
-	char const delim = CompositionChar;
+	constexpr char delim = CompositionChar;
 
 	std::string result;
 	result.reserve(fmt.size());
@@ -32,14 +30,8 @@ std::string compose(
 			break;
 
 		char idx = fmt[++nextpos];
-		if (!isdigit(idx)) {
-			if (idx == delim) {
-				result += delim;
-				++nextpos;
-			} else {
-				result += delim;
-			}
-		} else {
+		// '%0' is replaced by one of positional arguments
+		if (isdigit(idx)) {
 			pos = nextpos;
 
 			while (isdigit(fmt[nextpos]))
@@ -49,6 +41,13 @@ std::string compose(
 
 			if (arg_no < args.size())
 				result += args[arg_no];
+		// '%%' is replaced by a single '%' (for escaping)
+		} else if (idx == delim) {
+			result += delim;
+			++nextpos;
+		// Just a '%' written to output unmodified
+		} else {
+			result += delim;
 		}
 		pos = nextpos;
 	}
