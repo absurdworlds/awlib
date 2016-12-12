@@ -18,6 +18,7 @@
 #include <aw/config.h>
 #include <aw/types/types.h>
 #include <aw/types/traits/basic_traits.h>
+#include <aw/types/traits/common_type.h>
 #include <aw/meta/conditional.h>
 
 namespace aw {
@@ -66,9 +67,53 @@ T lerp(T const& v0, T const& v1, f64 t)
 
 //! Divide two integers, rounding result to nearest value
 template<typename T>
-constexpr auto div_round(T v, T d) -> enable_if<is_int<T>, T>
+constexpr auto div_round(T v, T d) -> enable_if<is_signed<T>, T>
+{
+	return (v > 0) ?
+	     (v + (d/2)) / d :
+	     (v - (d/2)) / d;
+}
+
+template<typename T, typename U>
+constexpr auto div_round(T v, U d) -> enable_if<is_unsigned<T>, T>
 {
 	return (v + (d/2)) / d;
+}
+
+
+namespace _impl {
+template<typename T, typename U>
+constexpr auto was_rounded_up(T r, U d)
+{
+	return (r != 0) && ((r < 0) != (d < 0));
+}
+} // namespace _impl
+
+//! Divide two integers, rounding result towards negative infinity
+template<typename T, typename U>
+constexpr auto div_floor(T v, U d) -> enable_if<is_signed<T>, T>
+{
+	T q = v / d;
+	T r = v % d;
+	if ( _impl::was_rounded_up( r, d ) )
+		--q;
+	return q;
+}
+
+template<typename T, typename U>
+constexpr auto div_floor(T v, U d) -> enable_if<is_unsigned<T>, T>
+{
+	return v / d;
+}
+
+//! Remainder of div_floor
+template<typename T, typename U>
+constexpr auto mod_floor(T v, U d)
+{
+	T r = v % d;
+	if ( _impl::was_rounded_up( r, d ) )
+		r += d;
+	return r;
 }
 
 template<typename T>
