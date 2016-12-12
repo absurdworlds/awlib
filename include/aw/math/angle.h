@@ -68,7 +68,7 @@ public:
 	constexpr void normalize_impl( std::true_type )
 	{
 		constexpr intmax_t num = numerator<Period>;
-		value -= divround(value, num) * num;
+		value = remainder(value, num);
 	}
 
 	/*!
@@ -80,7 +80,9 @@ public:
 	{
 		constexpr bool not_float   = !treat_as_floating_point<Rep>;
 		constexpr bool valid_ratio = is_ratio<Period> && denominator<Period> == 1;
-		normalize_impl( std::integral_constant<bool, valid_ratio>{} );
+		constexpr bool use_integral_func = not_float && valid_ratio;
+		using chooser = std::integral_constant<bool, use_integral_func>;
+		normalize_impl( chooser{} );
 		return *this;
 	}
 

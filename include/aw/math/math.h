@@ -116,16 +116,17 @@ constexpr auto mod_floor(T v, U d)
 	return r;
 }
 
-template<typename T>
-auto remainder(T x, T y) -> enable_if<is_float<T>, T>
+template<typename T, typename U>
+auto remainder(T x, U y) -> require<common_type<T,U>, std::is_floating_point>
 {
-	return std::remainder( x, y );
+	// TODO: edge cases?
+	return x - std::floor( (x + y/2) / y ) * y;
 }
 
-template<typename T>
-constexpr auto remainder(T x, T y) -> enable_if<is_int<T>, T>
+template<typename T, typename U>
+constexpr auto remainder(T x, U y) -> require<common_type<T,U>, std::is_integral>
 {
-	return x - div_round(x, y) * y;
+	return x - div_floor( (x + y/2) , y ) * y;
 }
 
 } //namespace math

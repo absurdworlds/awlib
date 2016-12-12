@@ -47,5 +47,16 @@ Test(angle_arithmetic) {
 	TestEqual( a3.count(), 90 );
 	TestAssert( equals( b3.count(), pi/2 ) );
 }
+
+Test(angle_normalize) {
+	TestEqual( degrees<int>{ -181 }.normalize().count(), 179 );
+	TestEqual( degrees<int>{ -180 }.normalize().count(), -180 );
+	TestEqual( degrees<int>{ -90 }.normalize().count(),  -90 );
+	TestEqual( degrees<int>{ 90 }.normalize().count(), 90 );
+	TestEqual( degrees<int>{ 180 }.normalize().count(), -180 );
+	TestEqual( degrees<int>{ 270 }.normalize().count(), -90 );
+	TestEqual( degrees<int>{ 360 }.normalize().count(), 0 );
+	TestEqual( degrees<int>{ 540 }.normalize().count(), -180 );
+}
 } // namespace math
 } // namespace aw
