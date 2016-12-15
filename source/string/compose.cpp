@@ -25,7 +25,9 @@ std::string compose(string_view fmt, array_view<std::string> args)
 	while (pos != std::string::npos) {
 		size_t nextpos = fmt.find(delim, pos);
 
-		result += fmt.substr(pos, nextpos - pos);
+		// TODO: C++17 string.append(string_view)
+		auto temp = fmt.substr(pos, nextpos - pos);
+		result.append(temp.data(), temp.size());
 		if (nextpos == std::string::npos)
 			break;
 
@@ -37,7 +39,9 @@ std::string compose(string_view fmt, array_view<std::string> args)
 			while (isdigit(fmt[nextpos]))
 				++nextpos;
 
-			size_t arg_no = stoull(fmt.substr(pos, nextpos - pos));
+			// TODO: C++17 from_chars
+			std::string temp(fmt.substr(pos, nextpos - pos));
+			size_t arg_no = stoull(temp);
 
 			if (arg_no < args.size())
 				result += args[arg_no];

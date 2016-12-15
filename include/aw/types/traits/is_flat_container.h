@@ -11,6 +11,8 @@
 #include <utility>
 #include <aw/meta/void_t.h>
 namespace aw {
+using std::declval;
+
 template<class, typename = void>
 struct is_flat_container_t : std::false_type {};
 

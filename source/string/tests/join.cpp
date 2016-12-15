@@ -5,7 +5,7 @@ TestFile( "string::join" );
 
 namespace aw {
 Test(join_empty) {
-	std::vector<std::string> v;
+	std::vector<string_view> v;
 
 	std::string s1;
 	std::string s2;
@@ -22,7 +22,7 @@ Test(join_empty) {
 }
 
 Test(join_word) {
-	std::vector<std::string> v{ "word" };
+	std::vector<string_view> v{ "word" };
 
 	std::string s1;
 	std::string s2;
@@ -42,7 +42,7 @@ Test(join_word) {
 }
 
 Test(join_words) {
-	std::vector<std::string> v{ "A", "b", "c", "d?" };
+	std::vector<string_view> v{ "A", "b", "c", "d?" };
 
 	std::string s1;
 	std::string s2;

@@ -57,7 +57,7 @@ std::string compose(string_view fmt, Args const&... args)
 {
 	std::vector<std::string> bits{to_string(args)...};
 
-	return compose(fmt, bits);
+	return compose(fmt, (array_view<std::string>)bits);
 }
 } // namespace string
 } // namespace aw
