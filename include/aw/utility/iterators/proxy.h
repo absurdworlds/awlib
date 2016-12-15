@@ -11,7 +11,16 @@
 namespace aw {
 namespace iter {
 /*!
- * Helper class for use with overloaded operator->(),
+ * Helper class to return a value from overloaded operator->()
+ *
+ * Example:
+ *
+ * \code
+ * iter::proxy<string_view> operator->()
+ * {
+ *     return { string_view{ begin + pos1, begin + pos2 } };
+ * }
+ * \endcode
  */
 template <typename T>
 struct proxy {
