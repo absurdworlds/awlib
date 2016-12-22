@@ -19,7 +19,7 @@ private:
 	using reference2 = typename std::iterator_traits<Base2>::reference;
 
 public:
-	pairs_iterator(Base1 const& iter1, Base2 const& iter2)
+	pairs_iterator(Base1 iter1, Base2 iter2)
 		: iters{iter1, iter2}
 	{}
 
@@ -33,10 +33,9 @@ public:
 		++iters.first, ++iters.second;
 	}
 
-	bool operator!=(pairs_iterator const& it)
+	bool operator!=(pairs_iterator const& other)
 	{
-		return (iters.first  != it.iters.first) &&
-		       (iters.second != it.iters.second);
+		return iters != other.iters;
 	}
 
 	bool operator!=(Base1 const& it)
@@ -64,7 +63,7 @@ private:
 public:
 	using iterator = pairs_iterator<_iter1, _iter2>;
 
-	pairs_adapter(Range1&& range1, Range2&& range2)
+	pairs_adapter(Range1 range1, Range2 range2)
 		: ranges{range1, range2}
 	{}
 
@@ -80,7 +79,7 @@ public:
 		return {end(ranges.first), end(ranges.second)};
 	}
 
-	std::pair<Range1&&, Range2&&> ranges;
+	std::pair<Range1, Range2> ranges;
 };
 
 /*!
@@ -91,7 +90,6 @@ public:
 template<typename... Ranges>
 auto paired(Ranges&&... ranges)
 {
-	// assert((std::size(ranges) == ...));
 	return pairs_adapter<Ranges...>(std::forward<Ranges>(ranges)...);
 }
 } // namespace aw
