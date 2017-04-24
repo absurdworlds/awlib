@@ -47,6 +47,22 @@ Test(trim) {
 	}
 };
 
+Test(trim_string_view) {
+	string_view str = ".str.";
+
+	using namespace string;
+
+	auto pred = [] (char c) {
+		return c == '.';
+	};
+
+	Checks {
+		TestEqual(trim(str, pred), "str");
+		TestEqual(ltrim(str, pred), "str.");
+		TestEqual(rtrim(str, pred), ".str");
+	}
+};
+
 Test(split_and_join) {
 	std::string s = "word1 word2 word3";
 	std::vector<string_view> v;

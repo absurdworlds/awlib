@@ -84,7 +84,7 @@ template <typename Predicate>
 string_view ltrim(string_view str, Predicate pred)
 {
 	auto first_not = std::find_if_not(begin(str), end(str), pred);
-	str.remove_suffix(first_not - begin(str));
+	str.remove_prefix(first_not - begin(str));
 	return str;
 }
 
@@ -109,7 +109,7 @@ string_view trim(string_view str, Predicate pred)
 {
 	auto first = std::find_if_not(begin(str), end(str), pred);
 	auto last = std::find_if_not(rbegin(str), rend(str), pred);
-	return str.substr(first - begin(str), last - rbegin(str));
+	return str.substr(first - begin(str), last.base() - first);
 }
 
 
