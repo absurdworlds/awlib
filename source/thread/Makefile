@@ -1,5 +1,6 @@
 RootPath = ../..
-Sources = Worker.cpp
+SourceExt = c++
+Sources = worker.c++
 Defines = AW_MODULE_THREAD
 Libraries =
 ProjectName = awthread
