@@ -42,48 +42,48 @@ namespace aw::platform::win32 {
 namespace {
 string_view get_os_name(OSVERSIONINFOEXW& info)
 {
-	using namespace sv_literals;
+	using namespace std::string_view_literals;
 	if (info.dwPlatformId < VER_PLATFORM_WIN32_NT) {
 		if (info.dwMajorVersion == 4 && info.dwMinorVersion == 0)
-			return "Windows 95"_s;
+			return "Windows 95"sv;
 		if (info.dwMajorVersion == 4 && info.dwMinorVersion == 10)
-			return "Windows 98"_s;
+			return "Windows 98"sv;
 		if (info.dwMajorVersion == 4 && info.dwMinorVersion == 90)
-			return "Windows Me"_s;
+			return "Windows Me"sv;
 		return "Windows";
 	}
 
 	if (info.dwMajorVersion >= 10) {
 		bool win_server = info.wProductType != VER_NT_WORKSTATION;
-		return win_server ? "Windows Server 2016"_s : "Windows 10"_s;
+		return win_server ? "Windows Server 2016"sv : "Windows 10"sv;
 	}
 	if (info.dwMajorVersion >= 6) {
 		bool win_server = info.wProductType != VER_NT_WORKSTATION;
 		if (info.dwMinorVersion == 3)
-			return win_server ? "Windows Server 2012 R2"_s : "Windows 8.1"_s;
+			return win_server ? "Windows Server 2012 R2"sv : "Windows 8.1"sv;
 		if (info.dwMinorVersion == 2)
-			return win_server ? "Windows Server 2012"_s : "Windows 8"_s;
+			return win_server ? "Windows Server 2012"sv : "Windows 8"sv;
 		if (info.dwMinorVersion == 1)
-			return win_server ? "Windows Server 2008 R2"_s : "Windows 7"_s;
+			return win_server ? "Windows Server 2008 R2"sv : "Windows 7"sv;
 		if (info.dwMinorVersion == 0)
-			return win_server ? "Windows Server 2008"_s : "Windows Vista"_s;
+			return win_server ? "Windows Server 2008"sv : "Windows Vista"sv;
 	}
 	if (info.dwMajorVersion >= 5) {
 		if (info.dwMinorVersion == 2)	{
 			if (GetSystemMetrics(SM_SERVERR2) != 0)
-				return "Windows Server 2003 R2"_s;
+				return "Windows Server 2003 R2"sv;
 			if (info.wSuiteMask & VER_SUITE_WH_SERVER)
-				return "Windows Home Server"_s;
+				return "Windows Home Server"sv;
 			if (info.wSuiteMask & VER_SUITE_WH_SERVER)
-				return "Windows Server 2003"_s;
-			return "Windows XP Professional";
+				return "Windows Server 2003"sv;
+			return "Windows XP Professional"sv;
 		}
 		if (info.dwMinorVersion == 1)
-			return "Windows XP";
+			return "Windows XP"sv;
 		if (info.dwMinorVersion == 0)
-			return "Windows 2000";
+			return "Windows 2000"sv;
 	}
-	return "Windows NT";
+	return "Windows NT"sv;
 }
 
 string_view get_architecture()
@@ -99,15 +99,15 @@ string_view get_architecture()
 	using namespace sv_literals;
 	switch (sys.wProcessorArchitecture) {
 	case PROCESSOR_ARCHITECTURE_AMD64:
-		return "x86_64"_s;
+		return "x86_64"sv;
 	case PROCESSOR_ARCHITECTURE_ARM:
-		return "arm"_s;
+		return "arm"sv;
 	case PROCESSOR_ARCHITECTURE_IA64:
-		return "ia64"_s;
+		return "ia64"sv;
 	case PROCESSOR_ARCHITECTURE_INTEL:
-		return "x86"_s;
+		return "x86"sv;
 	};
-	return "Unknown"_s;
+	return "Unknown"sv;
 }
 
 std::string get_version(OSVERSIONINFOEXW& info)

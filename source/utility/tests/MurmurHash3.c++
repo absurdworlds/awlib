@@ -6,18 +6,18 @@ TestFile( "MurmurHash3" );
 
 namespace aw {
 
-using namespace sv_literals;
+using namespace std::string_view_literals;
 constexpr string_view input1[] = {
-	"ohohohohoh"_s,
-	"MurmurHash3"_s,
-	"/data/models/"_s
+	"ohohohohoh"sv,
+	"MurmurHash3"sv,
+	"/data/models/"sv
 };
 
 constexpr string_view input2[] = {
-	"astreeeng"_s,
-	"MurmurHash3"_s,
-	"test testing tests of tests"_s,
-	"/some/random/path"_s
+	"astreeeng"sv,
+	"MurmurHash3"sv,
+	"test testing tests of tests"sv,
+	"/some/random/path"sv
 };
 
 Test(murmur_32_1)
