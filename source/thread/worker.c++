@@ -31,7 +31,7 @@ void worker::start(Task task)
 	assert(!done);
 
 	{
-		std::lock_guard<std::mutex> lock(mutex);
+		std::lock_guard lock{mutex};
 		this->task = task;
 	}
 	cond.notify_one();
@@ -41,7 +41,7 @@ void worker::wait()
 {
 	assert(!done);
 
-	std::unique_lock<std::mutex> lock(mutex);
+	std::unique_lock lock{mutex};
 	cond.wait(lock, [this] {return !task;});
 }
 
@@ -50,7 +50,7 @@ void worker::kill()
 	assert(!done && "Attempted to kill thread twice.");
 
 	{
-		std::lock_guard<std::mutex> lock(mutex);
+		std::lock_guard lock{mutex};
 		done = true;
 	}
 	cond.notify_one();
@@ -63,7 +63,7 @@ void worker::loop()
 	assert(!done);
 
 	while (true) {
-		std::unique_lock<std::mutex> lock(mutex);
+		std::unique_lock lock{mutex};
 		cond.wait(lock, [this] {return done || task;});
 
 		if (done)
