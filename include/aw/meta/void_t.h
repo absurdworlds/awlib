@@ -8,8 +8,12 @@
  */
 #ifndef aw_traits_void_t
 #define aw_traits_void_t
+#include <type_traits>
 namespace aw {
-template<typename... Ts> struct make_void { using type = void; };
-template<typename... Ts> using void_t = typename make_void<Ts...>::type;
+using std::declval;
+
+template<typename T, typename...Ts> struct make_type { using type = T; };
+template<typename T, typename...Ts>  using type_t = typename make_type<T,Ts...>::type;
+template<typename... Ts> using void_t = type_t<void,Ts...>;
 } // namespace aw
 #endif//aw_traits_void_t
