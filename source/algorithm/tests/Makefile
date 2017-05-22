@@ -1,7 +1,7 @@
 RootPath = ../../..
 SourceExt = c++
-Sources = split.c++
-Libraries = awplatform
+Sources = split.c++ join.c++
+Libraries =
 ProjectName = test_algo
 ProjectFlags = #-fprofile-arcs -ftest-coverage
 Executable = true

@@ -10,6 +10,8 @@
 #define aw_algorithm_join_h
 #include <algorithm>
 #include <aw/types/traits/iterator.h>
+#include <aw/types/traits/basic_traits.h>
+#include <aw/meta/conditional.h>
 namespace aw {
 //! Assignment operator wrapper functor
 template<typename T1, typename T2>
@@ -41,7 +43,8 @@ T join(Iterator begin, Iterator end, T sink, D const& delim, Adder add)
  * Same as above, but T::operator+= is used.
  */
 template <typename Iterator, typename T, typename D>
-T join(Iterator begin, Iterator end, T sink, D const& delim)
+auto join(Iterator begin, Iterator end, T sink, D const& delim) ->
+	type_t<T, decltype(sink += delim)>
 {
 	return join(begin, end, sink, delim, assign_plus<T,D>{});
 }
@@ -51,7 +54,8 @@ T join(Iterator begin, Iterator end, T sink, D const& delim)
  * where resulting elements are separated by \a delim.
  */
 template <typename Iterator, typename T, typename Adder>
-T join(Iterator begin, Iterator end, T const& delim, Adder add)
+auto join(Iterator begin, Iterator end, T const& delim, Adder add) ->
+	type_t<T, decltype(add(declval<T&>(), *begin++))>
 {
 	T sink;
 	if (begin == end)
