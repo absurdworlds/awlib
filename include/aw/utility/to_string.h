@@ -46,6 +46,24 @@ std::string to_string(char ch, Formatter&& fmt = Formatter{})
 	return fmt.value(ch);
 }
 
+template<typename Formatter = format::pretty_print>
+std::string to_string(char16_t ch, Formatter&& fmt = Formatter{})
+{
+	return fmt.value(ch);
+}
+
+template<typename Formatter = format::pretty_print>
+std::string to_string(char32_t ch, Formatter&& fmt = Formatter{})
+{
+	return fmt.value(ch);
+}
+
+template<typename Formatter = format::pretty_print>
+std::string to_string(wchar_t ch, Formatter&& fmt = Formatter{})
+{
+	return fmt.value(ch);
+}
+
 template<typename T, typename Formatter = format::pretty_print>
 auto to_string(T value, Formatter&& fmt = Formatter{}) ->
 	enable_if<is_int<T>, std::string>

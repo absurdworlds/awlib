@@ -10,6 +10,7 @@
 #define aw_traits_strip
 #include <utility>
 #include <aw/meta/conditional.h>
+#include <aw/types/traits/basic_traits.h>
 namespace aw {
 template<typename T>
 using remove_cv = std::remove_cv_t<T>;

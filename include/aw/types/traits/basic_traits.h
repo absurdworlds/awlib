@@ -43,6 +43,9 @@ constexpr auto is_constructible = std::is_constructible<T, Args...>::value;
 template<typename A, typename B>
 constexpr bool is_convertible = std::is_convertible<A, B>::value;
 
+template<typename Fn, typename...Args>
+constexpr bool is_invocable = std::is_invocable<Fn, Args...>::value;
+
 template<class Base, class Derived>
 constexpr auto is_base_of = std::is_base_of<Base,Derived>::value;
 

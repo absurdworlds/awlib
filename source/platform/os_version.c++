@@ -7,6 +7,7 @@
  * There is NO WARRANTY, to the extent permitted by law.
  */
 #include <aw/platform/os_version.h>
+#include <aw/types/string_view.h>
 
 namespace aw::platform {
 namespace {

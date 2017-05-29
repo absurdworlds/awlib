@@ -30,10 +30,5 @@ constexpr string_view make_string_view(char const (&array)[N])
 {
 	return {array, N};
 }
-
-namespace string_literals {
-using namespace std::string_literals;
-using namespace std::string_view_literals;
-} // namespace string_literals
 } // namespace aw
 #endif//aw_utility_string_view_h
