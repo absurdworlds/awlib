@@ -11,10 +11,20 @@
 #define aw_string_join_h
 #include <numeric>
 #include <aw/types/string_view.h>
-#include <aw/types/array_view.h>
 #include <aw/algorithm/join.h>
 namespace aw {
 namespace string {
+template<typename Iterator>
+std::string reserve_string(Iterator begin, Iterator end)
+{
+	size_t size = 0;
+	while (begin != end)
+		size += (begin++)->size();
+	std::string tmp;
+	tmp.reserve();
+	return tmp;
+}
+
 /*!
  * \brief
  *      join strings together
@@ -26,30 +36,23 @@ namespace string {
  * \return
  *      resulting string concatenated together
  */
-inline std::string
-join(array_view<string_view> source, string_view delim = "")
+template<typename Iterator>
+std::string join(Iterator begin, Iterator end, string_view delim = "")
 {
-	auto begin = source.begin();
-	auto end   = source.end();
-
 	if (begin == end)
 		return {};
 
-	size_t size = 0;
-	for (string_view s : source)
-		size += s.size();
+	std::string sink = reserve_string(begin, end);
+	sink += *begin++;
+	return aw::join(begin, end, sink, delim);
+}
 
-	/* TODO: wait for C++17 */
-	auto append = [] (std::string& s, string_view sv)
-	{
-		s.append(sv.data(), sv.size());
-	};
-
-	std::string sink;
-	sink.reserve(size);
-	//sink += *begin++;
-	append(sink, *begin++);
-	return aw::join(begin, end, sink, delim, append);
+template<template<typename> typename Container, typename StringT>
+std::string join(Container<StringT> const& source, string_view delim = "")
+{
+	auto begin = source.begin();
+	auto end   = source.end();
+	return join(begin, end, delim);
 }
 } // namespace string
 } // namespace aw

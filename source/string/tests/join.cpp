@@ -43,21 +43,25 @@ Test(join_word) {
 
 Test(join_words) {
 	std::vector<string_view> v{ "A", "b", "c", "d?" };
+	array_view<string_view> av = v;
 
 	std::string s1;
 	std::string s2;
+	std::string s3;
 
 	Setup {}
 	Preconditions { }
 
 	Checks {
 		s1 = string::join(v);
-		s2 = string::join(v, ", ");
+		s2 = string::join(v);
+		s3 = string::join(v, ", ");
 	}
 
 	Postconditions {
 		TestEqual(s1, "Abcd?");
-		TestEqual(s2, "A, b, c, d?");
+		TestEqual(s1, s2);
+		TestEqual(s3, "A, b, c, d?");
 
 		TestEqual(v.size(), 4);
 	}
