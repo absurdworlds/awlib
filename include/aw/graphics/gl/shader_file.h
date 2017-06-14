@@ -30,7 +30,7 @@ inline optional<shader> load_shader( gl::shader_type type, fs::path const& path 
 	shader shd{ type };
 	if (!shd.compile( string_view{buf.data(), buf.size()} ))
 		return nullopt;
-	return shd;
+	return {std::move(shd)};
 }
 
 
