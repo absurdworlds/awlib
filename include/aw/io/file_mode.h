@@ -9,7 +9,7 @@
  */
 #ifndef aw_io_file_mode_h
 #define aw_io_file_mode_h
-#include <aw/types/types.h>
+#include <aw/types/enum.h>
 namespace aw {
 namespace io {
 /*! File seek direction */
@@ -39,12 +39,12 @@ enum class file_mode : unsigned {
 
 constexpr file_mode operator|(file_mode a, file_mode b)
 {
-	return file_mode(unsigned(a) | unsigned(b));
+	return file_mode(underlying(a) | underlying(b));
 }
 
 constexpr file_mode operator&(file_mode a, file_mode b)
 {
-	return file_mode(unsigned(a) & unsigned(b));
+	return file_mode(underlying(a) & underlying(b));
 }
 
 constexpr bool operator!(file_mode a)
