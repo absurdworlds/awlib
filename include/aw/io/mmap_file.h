@@ -71,9 +71,11 @@ AW_IO_EXP bool unmap_file( file_mapping& map );
 namespace native {
 #if   (AW_PLATFORM == AW_PLATFORM_POSIX)
 using posix::map_file;
+using posix::unmap_file;
 using posix::file_mapping;
 #elif (AW_PLATFORM == AW_PLATFORM_WIN32)
 using win32::map_file;
+using win32::unmap_file;
 using win32::file_mapping;
 #endif
 } // namespace native
