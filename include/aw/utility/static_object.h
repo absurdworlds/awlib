@@ -12,11 +12,11 @@
 //struct EmptyTag {};
 namespace aw {
 /*!
- * Creates single instance of specified class.
- * Created object is initialized before main().
+ * Creates a single static instance of class T.
+ * T must be DefaultConstructible.
  *
- * \param T
- *    Class to instantiate. Must be DefaultConstructible.
+ * Purpose of this class is to avoid "static initialization
+ * order fiasco" when creating a static object.
  */
 template <class T> //, class Tag = EmptyTag>
 class static_object {
