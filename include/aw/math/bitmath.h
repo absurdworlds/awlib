@@ -103,7 +103,7 @@ constexpr Int set_bit(Int val, size_t idx, bool bitval)
 {
 	assert(idx < std::numeric_limits<Int>::digits);
 	Int flag = (bitval << idx);
-	val ^= (val ^ flag) ^ flag;
+	val ^= (val & flag) ^ flag;
 	return val;
 }
 
