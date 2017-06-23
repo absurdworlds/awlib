@@ -323,7 +323,7 @@ struct equal {
 	std::string msg()
 	{
 		using namespace std::string_literals;
-		return vargs + ": "s + expected + " == "s + got;
+		return vargs + ": "s + got + " == "s + expected;
 	}
 
 	char const* vargs;
