@@ -1,8 +1,8 @@
 RootPath = ../../..
 SourceExt = c++
-Sources = vector.c++ matrix.c++ matrix3.c++ angle.c++
+Sources = vector.c++ matrix.c++ matrix3.c++ angle.c++ bitmath.c++
 
-Libraries    = awstring awplatform
+Libraries    =
 ProjectName  = test_math
 ProjectFlags = -fprofile-arcs -ftest-coverage
 Executable   = true
