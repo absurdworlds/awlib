@@ -27,7 +27,7 @@ template struct call_on_init<+lambda>;
 
 Test(call_on_init)
 {
-	TestEqual( flag1, true );
+	TestEqual( flag2, true );
 }
 
 } // namespace aw
