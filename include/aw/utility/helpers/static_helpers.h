@@ -19,12 +19,24 @@ namespace aw {
  */
 template<auto Function>
 struct call_in_ctor {
-	template<typename...Args>
-	call_in_ctor(Args&&... args)
+	call_in_ctor()
 	{
-		Function(std::forward<Args>(args)...);
+		Function();
 	}
 };
+
+namespace _impl {
+template<typename T>
+struct instantiator {
+	static auto instantiate() { return static_object<T>::instance(); }
+};
+} // namespace _impl
+
+/*!
+ * Forces instantiation of a static object when referenced.
+ */
+template<typename T>
+using force_instantiation = decltype(_impl::instantiator<T>::instantiate());
 
 /*!
  * Calls function during static variable initialization,
@@ -32,12 +44,7 @@ struct call_in_ctor {
  */
 template<auto Function>
 class call_on_init {
-	static const int dummy;
+	using dummy = force_instantiation<call_in_ctor<Function>>;
 };
-
-/* TODO: replace int with void (p0146r1)*/
-template<auto Function>
-const int call_on_init<function>::dummy = (static_object<call_in_ctor<function>>::instance(), 1);
-
 } // namespace aw
 #endif//aw_on_static_helpers_h
