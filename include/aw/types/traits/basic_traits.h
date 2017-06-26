@@ -12,6 +12,7 @@
 #include <utility>
 #include <type_traits>
 #include <aw/meta/void_t.h>
+#include <aw/types/string_view.h>
 namespace aw {
 using std::declval;
 

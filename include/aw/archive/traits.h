@@ -41,6 +41,7 @@ enum class object_kind {
 	string,
 	structure,
 	container,
+	polymorphic,
 };
 
 template<typename T>
@@ -53,6 +54,8 @@ constexpr object_kind kind_of = [] {
 		return object_kind::structure;
 	if constexpr(is_arithmetic<T>)
 		return object_kind::arithmetic;
+	if constexpr(is_polymorphic<T>)
+		return object_kind::polymorphic;
 	return object_kind::unknown;
 }();
 
