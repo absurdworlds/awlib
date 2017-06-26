@@ -82,6 +82,8 @@ template<typename>
 struct is_string_t : std::false_type{ };
 template<class CharT, class Traits, class Alloc>
 struct is_string_t<std::basic_string<CharT, Traits, Alloc>> : std::true_type{ };
+template<class CharT, class Traits>
+struct is_string_t<basic_string_view<CharT, Traits>> : std::true_type{ };
 
 /* Basic type categories (yes, std::string is considered “basic”) */
 template<typename T>
