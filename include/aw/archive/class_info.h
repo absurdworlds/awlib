@@ -128,7 +128,10 @@ void invoke_register_class()
  * name of a type.
  */
 #define aw_register_class( T ) \
-template struct call_on_init<invoke_register_class<T>>;
+namespace _impl { \
+using dummy##T = force_instantiation<call_in_ctor<invoke_register_class<T>>>; \
+} // namespace _impl
+
 } // inline namespace v3
 } // namespace arc
 } // namespace aw
