@@ -51,14 +51,14 @@ struct load_registry {
 	template<typename...Args>
 	using class_load = void*(Archive&, Args...);
 	template<typename...Args>
-	using map = std::map<string_view, class_load<Archive,Args...>*>;
+	using map = std::map<string_view, class_load<Args...>*>;
 	template<typename...Args>
 	using class_map = static_object<map<Args...>>;
 
 	template<typename T, typename...Args>
 	static void register_class_with_args(meta::list<Args...>)
 	{
-		auto map_ref = class_map<Args...>::instance();
+		auto& map_ref = class_map<Args...>::instance();
 		map_ref[T::type_name] = +[] (Archive& arc, Args... args) {
 			auto* tptr = new T(args...);
 			if constexpr( has_member_load<T,Archive> )
