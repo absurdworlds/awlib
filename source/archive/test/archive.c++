@@ -53,9 +53,7 @@ Test(saveload) {
 using namespace std::string_view_literals;
 
 struct Base {
-	static constexpr string_view type_name{"aw::Base"sv};
-	virtual string_view class_name() const { return type_name; }
-
+	aw_register_class( Base );
 	using create_parameters = meta::list<>;
 
 	Base() = default;
@@ -78,11 +76,10 @@ void load(Archive& arc, Base& base)
 	arc.unarchive("i", base.i);
 }
 
-aw_register_class( Base );
 
 struct Derived : Base {
-	static constexpr string_view type_name{"aw::Derived"sv};
-	string_view class_name() const override { return type_name; }
+	aw_register_class( Derived );
+
 
 	Derived() = default;
 	Derived(int i, float f) : Base{i}, f{f} {}
@@ -104,7 +101,6 @@ void load(Archive& arc, Derived& value)
 	load(arc, (Base&) value);
 	arc.unarchive("f", value.f);
 }
-aw_register_class( Derived );
 
 Test(polymorphic) {
 	Base* a = new Derived{15, 37.1};

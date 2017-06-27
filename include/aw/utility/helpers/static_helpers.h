@@ -44,26 +44,19 @@ class instantiate_type {
 	using dummy = force_instantiation<T>;
 };
 
+template<auto Function>
+using force_call_on_init = force_instantiation<call_in_ctor<Function>>;
+
 /*!
  * Calls function during static variable initialization,
  * i.e. before main is called.
  *
- * Can be triggered through
+ * Function is called through instantiating this class:
  * `template struct call_on_init<function>`
- * or through `aw_call_on_init(function)` macro.
  */
 template<auto Function>
-struct call_on_init {
-	using dummy = force_instantiation<call_in_ctor<Function>>;
+class call_on_init {
+	using dummy = force_call_on_init<Function>;
 };
-
-#define aw_call_on_init(Function) \
-namespace _impl {\
-using _dummy_##Function = typename call_on_init<Function>::dummy;\
-}
-
-
-//template<> call_on_init<Function>::call_on_init() = delete;
-//template class call_on_init<Function>;
 } // namespace aw
 #endif//aw_on_static_helpers_h

@@ -119,15 +119,22 @@ void invoke_register_class()
 
 /*!
  * Polymorphic classes must be registered to enable them to be serialized by archives.
+ * Must be placed inside public section of a class.
  *
- * Class must have members
- * `constexpr string_view type_name = <fully qualified class name>`, and
- * `virtual string_view class_name() const`, which returns `type_name`.
+ * It is recommended to supply fully qualified class name to the macro to avoid name
+ * conflicts.
+ *
+ * Adds members
+ * - `constexpr string_view type_name = <class name>`, and
+ * - `virtual string_view class_name() const`, which returns `type_name`.
  *
  * TODO: remove type_name when C++ finally gets an official way to get fully qualified
  * name of a type.
  */
-#define aw_register_class( T ) aw_call_on_init(invoke_register_class<T>)
+#define aw_register_class( ... ) \
+static constexpr string_view type_name{#__VA_ARGS__, sizeof(#__VA_ARGS__)-1}; \
+virtual string_view class_name() const { return type_name; } \
+using _aw_registered = force_call_on_init<invoke_register_class<__VA_ARGS__>>;
 
 } // inline namespace v3
 } // namespace arc
