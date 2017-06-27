@@ -99,6 +99,9 @@ namespace aw {
 namespace arc {
 
 struct testarc : input_archive<testarc>, output_archive<testarc> {
+	using input_archive<testarc>::operator();
+	using output_archive<testarc>::operator();
+
 	template<typename T>
 	static constexpr bool is_directly_serializable {
 		is_arithmetic<T> || is_string<T>
