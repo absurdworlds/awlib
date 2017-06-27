@@ -133,8 +133,10 @@ void invoke_register_class()
  */
 #define aw_register_class( ... ) \
 static constexpr string_view type_name{#__VA_ARGS__, sizeof(#__VA_ARGS__)-1}; \
-virtual string_view class_name() const { return type_name; } \
-using _aw_registered = force_call_on_init<invoke_register_class<__VA_ARGS__>>;
+virtual string_view class_name() const { \
+	using register_dummy = force_call_on_init<invoke_register_class<__VA_ARGS__>>; \
+	return type_name; \
+}
 
 } // inline namespace v3
 } // namespace arc
