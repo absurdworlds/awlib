@@ -78,6 +78,14 @@ struct input_archive {
 	static constexpr bool can_load = true;
 
 	template<typename T>
+	explicit operator T()
+	{
+		using namespace std::string_view_literals;
+		T temp; unarchive(""sv, temp);
+		return temp;
+	}
+
+	template<typename T>
 	void operator()(string_view name, T& value)
 	{
 		unarchive(name, value);
