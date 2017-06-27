@@ -2,38 +2,12 @@
 #include <aw/utility/test.h>
 #include <aw/utility/index_sequence.h>
 #include <aw/utility/to_string/tuple.h>
+#include <aw/archive/types/std/tuple.h>
 
 TestFile("archive");
 
 namespace aw {
 namespace arc {
-inline namespace v3 {
-namespace _impl {
-template<typename Archive, typename Tuple, size_t...Is>
-void tuple_save( Archive& arc, Tuple const& tuple, index_sequence<Is...> )
-{
-	(arc.archive(to_string(Is), std::get<Is>(tuple)), ...);
-}
-template<typename Archive, typename Tuple, size_t...Is>
-void tuple_load( Archive& arc, Tuple& tuple, index_sequence<Is...> )
-{
-	(arc.unarchive(to_string(Is), std::get<Is>(tuple)), ...);
-}
-} // namespace _impl
-} // namespace v3
-
-template<typename Archive, typename...Ts>
-void save( Archive& arc, std::tuple<Ts...> const& tuple)
-{
-	_impl::tuple_save( arc, tuple, make_index_sequence<sizeof...(Ts)>() );
-}
-
-template<typename Archive, typename...Ts>
-void load( Archive& arc, std::tuple<Ts...> & tuple)
-{
-	_impl::tuple_load( arc, tuple, make_index_sequence<sizeof...(Ts)>() );
-}
-
 Test(saveload) {
 	testarc arc;
 	using test = std::tuple<int, bool, std::string>;
