@@ -127,10 +127,7 @@ void invoke_register_class()
  * TODO: remove type_name when C++ finally gets an official way to get fully qualified
  * name of a type.
  */
-#define aw_register_class( T ) \
-namespace _impl { \
-using dummy##T = force_instantiation<call_in_ctor<invoke_register_class<T>>>; \
-} // namespace _impl
+#define aw_register_class( T ) aw_call_on_init(invoke_register_class<T>)
 
 } // inline namespace v3
 } // namespace arc

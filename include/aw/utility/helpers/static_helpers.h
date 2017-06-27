@@ -38,13 +38,32 @@ struct instantiator {
 template<typename T>
 using force_instantiation = decltype(_impl::instantiator<T>::instantiate());
 
+template<typename T>
+class instantiate_type {
+	instantiate_type();
+	using dummy = force_instantiation<T>;
+};
+
 /*!
  * Calls function during static variable initialization,
  * i.e. before main is called.
+ *
+ * Can be triggered through
+ * `template struct call_on_init<function>`
+ * or through `aw_call_on_init(function)` macro.
  */
 template<auto Function>
-class call_on_init {
+struct call_on_init {
 	using dummy = force_instantiation<call_in_ctor<Function>>;
 };
+
+#define aw_call_on_init(Function) \
+namespace _impl {\
+using _dummy_##Function = typename call_on_init<Function>::dummy;\
+}
+
+
+//template<> call_on_init<Function>::call_on_init() = delete;
+//template class call_on_init<Function>;
 } // namespace aw
 #endif//aw_on_static_helpers_h
