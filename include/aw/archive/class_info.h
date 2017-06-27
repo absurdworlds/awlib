@@ -132,8 +132,11 @@ void invoke_register_class()
  * name of a type.
  */
 #define aw_register_class( ... ) \
-static constexpr string_view type_name{#__VA_ARGS__, sizeof(#__VA_ARGS__)-1}; \
-virtual string_view class_name() const { \
+static constexpr std::string_view type_name = [] { \
+	using namespace std::string_view_literals; \
+	return #__VA_ARGS__ ## sv; \
+}(); \
+virtual std::string_view class_name() const { \
 	using register_dummy = force_call_on_init<invoke_register_class<__VA_ARGS__>>; \
 	return type_name; \
 }
