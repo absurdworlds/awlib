@@ -35,29 +35,6 @@ struct archive_traits {
 };
 
 
-enum class object_kind {
-	unknown,
-	arithmetic,
-	string,
-	structure,
-	container,
-	polymorphic,
-};
-
-template<typename T>
-constexpr object_kind kind_of = [] {
-	if constexpr(is_string<T>)
-		return object_kind::string;
-	if constexpr(is_basic_container<T>)
-		return object_kind::container;
-	if constexpr(is_class<T>)
-		return object_kind::structure;
-	if constexpr(is_arithmetic<T>)
-		return object_kind::arithmetic;
-	if constexpr(is_polymorphic<T>)
-		return object_kind::polymorphic;
-	return object_kind::unknown;
-}();
 
 
 

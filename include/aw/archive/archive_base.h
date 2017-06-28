@@ -28,19 +28,23 @@ struct output_archive {
 	template<typename T>
 	void archive(T const& value, opt_string name = nullopt)
 	{
-		if constexpr(is_pointer_type<T>) {
-			using object_type = typename pointer_traits<T>::element_type;
-			if constexpr(is_polymorphic<object_type>)
-				save_virtual(name, *value);
-		} else {
-			constexpr auto kind = kind_of<T>;
-			derived().start_save(kind, name);
-			do_save(value);
-			derived().end_save(kind, name);
-		}
+		if constexpr(is_pointer_type<T>)
+			save_pointer( value, name );
+		else if constexpr( is_directly_serializable<T,Derived> )
+			derived().save( value, name );
+		else
+			save_object( value, name );
 	}
 
 private:
+	template<typename T>
+	void save_pointer(T const& value, opt_string name = nullopt)
+	{
+		using object_type = typename pointer_traits<T>::element_type;
+		if constexpr(is_polymorphic<object_type>)
+			save_virtual(*value, name);
+	}
+
 	template<typename T>
 	void save_virtual(T const& value, opt_string name = nullopt)
 	{
@@ -48,18 +52,17 @@ private:
 		auto save = save_registry<Derived>::find_class(type);
 		auto ptr  = reinterpret_cast<void const*>(&value);
 
-		derived().start_save_virtual(type, name);
+		start_save_virtual(derived(), type, name);
 		save( derived(), ptr );
-		derived().end_save_virtual(type, name);
+		end_save_virtual(derived(), name);
 	}
 
 	template<typename T>
-	void do_save(T const& value)
+	void save_object(T const& value, opt_string name = nullopt)
 	{
-		if constexpr( is_directly_serializable<T,Derived> )
-			derived().save(value);
-		else
-			call_save();
+		start_save_object(derived(), name);
+		call_save( derived(), value );
+		end_save_object(derived(), name);
 	}
 
 	Derived& derived() { return *static_cast<Derived*>(this); }
@@ -86,43 +89,64 @@ struct input_archive {
 	template<typename T>
 	void unarchive(T& value, opt_string name = nullopt)
 	{
-		if constexpr(is_pointer_type<T>) {
-			using object_type = typename pointer_traits<T>::element_type;
-			if constexpr(is_polymorphic<object_type>)
-				value = load_virtual<object_type>(name);
-		} else {
-			constexpr auto kind = kind_of<T>;
-			derived().start_load(kind, name);
-			do_load(value);
-			derived().end_load(kind, name);
-		}
+		if constexpr(is_pointer_type<T>)
+			load_pointer(value, name);
+		else if constexpr( is_directly_serializable<T,Derived> )
+			derived().load(value, name);
+		else
+			load_object(value, name);
 	}
 
 private:
 	template<typename T>
+	void load_pointer(T& value, opt_string name = nullopt)
+	{
+		using object_type = typename pointer_traits<T>::element_type;
+		if constexpr(is_polymorphic<object_type>)
+			value = load_virtual<object_type>(name);
+	}
+
+	template<typename T>
 	T* load_virtual(opt_string name = nullopt)
 	{
 		auto params = typename T::create_parameters{};
-		auto type = derived().start_load_virtual(name);
+		auto type = start_load_virtual(derived(), name);
 		auto load = load_registry<Derived>::find_class(type, params);
 		auto ptr  = load( derived() );
-		derived().end_load_virtual(name);
+		end_load_virtual(derived(), name);
 		return reinterpret_cast<T*>(ptr);
 	}
 
 	template<typename T>
-	void do_load(T& value)
+	void load_object(T& value, opt_string name = nullopt)
 	{
-		if constexpr( is_directly_serializable<T,Derived> )
-			derived().load(value);
-		else
-			call_load();
+		start_load_object(derived(), name);
+		call_load(derived(), value);
+		end_load_object(derived(), name);
 	}
 
 	Derived& derived() { return *static_cast<Derived*>(this); }
 };
 
+template<typename Archive>
+void start_save_virtual(Archive& arc, string_view type, opt_string name = nullopt) { }
+template<typename Archive>
+void end_save_virtual(Archive& arc, opt_string name = nullopt) { }
 
+template<typename Archive>
+std::string start_load_virtual(Archive& arc, opt_string name = nullopt) { }
+template<typename Archive>
+void end_load_virtual(Archive& arc, opt_string name = nullopt) { }
+
+template<typename Archive>
+void start_save_object(Archive& arc, opt_string name = nullopt) { }
+template<typename Archive>
+void end_save_object(Archive& arc, opt_string name = nullopt) { }
+
+template<typename Archive>
+void start_load_object(Archive& arc, opt_string name = nullopt) { }
+template<typename Archive>
+void end_load_object(Archive& arc, opt_string name = nullopt) { }
 
 } // inline namespace v3
 } // namespace arc

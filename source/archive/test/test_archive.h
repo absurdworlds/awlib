@@ -42,26 +42,27 @@ struct testarc : input_archive<testarc>, output_archive<testarc> {
 		}
 	}
 
-	void start_save_virtual(string_view type, string_view name) { save(type); }
-	void end_save_virtual(string_view type, string_view name) { }
-
-	std::string start_load_virtual(string_view name)
+	void clear()
 	{
-		std::string type;
-		load(type);
-		return type;
+		data.clear();
+		iter = 0;
 	}
-	void end_load_virtual(string_view name) { }
-
-	void start_save(object_kind kind, string_view name) { }
-	void end_save(object_kind kind, string_view name) { }
-
-	void start_load(object_kind kind, string_view name) { }
-	void end_load(object_kind kind, string_view name) { }
 
 	std::vector<char> data;
 	size_t iter = 0;
 };
+
+template<>
+void start_save_virtual(testarc& arc, string_view type, opt_string name)
+{
+	arc.save(type);
+}
+
+template<>
+std::string start_load_virtual(testarc& arc, opt_string name)
+{
+	return std::string{ arc };
+}
 
 aw_register_archive( testarc );
 
