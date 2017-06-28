@@ -64,10 +64,8 @@ private:
 	{
 		if constexpr( Derived::template is_directly_serializable<T> )
 			derived().save(value);
-		else if constexpr( has_non_member_save<T,Derived> )
-			save(derived(), value);
-		else if constexpr( has_member_save<T,Derived> )
-			value.save(derived());
+		else
+			call_save();
 	}
 
 	Derived& derived() { return *static_cast<Derived*>(this); }
@@ -129,10 +127,8 @@ private:
 	{
 		if constexpr( Derived::template is_directly_serializable<T> )
 			derived().load(value);
-		else if constexpr( has_non_member_load<T,Derived> )
-			load(derived(), value);
-		else if constexpr( has_member_load<T,Derived> )
-			value.load(derived());
+		else
+			call_load();
 	}
 
 	Derived& derived() { return *static_cast<Derived*>(this); }

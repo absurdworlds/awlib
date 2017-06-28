@@ -29,10 +29,7 @@ struct save_registry {
 
 		map_ref[T::type_name] = +[] (Archive& arc, void const* ptr) {
 			auto tptr = reinterpret_cast<T const*>( ptr );
-			if constexpr( has_member_save<T,Archive> )
-				tptr->save( arc );
-			else if constexpr( has_non_member_save<T,Archive> )
-				save( arc, *tptr );
+			call_save( arc, *tptr );
 		};
 	}
 
@@ -61,10 +58,7 @@ struct load_registry {
 		auto& map_ref = class_map<Args...>::instance();
 		map_ref[T::type_name] = +[] (Archive& arc, Args... args) {
 			auto* tptr = new T(args...);
-			if constexpr( has_member_load<T,Archive> )
-				tptr->load( arc );
-			else if constexpr( has_non_member_load<T,Archive> )
-				load( arc, *tptr );
+			call_load( arc, *tptr );
 			return reinterpret_cast<void*>( tptr );
 		};
 	}

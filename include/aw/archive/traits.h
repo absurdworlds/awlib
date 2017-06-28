@@ -98,6 +98,24 @@ constexpr bool has_non_member_load = is_detected<_impl::non_member_load, T, A>;
 
 template<typename T>
 using get_create_parameters = typename _impl::get_create_parameter_list<T>::type;
+
+template<typename Archive, typename T>
+void call_save(Archive& arc, T const& value)
+{
+	if constexpr( has_non_member_save<T,Archive> )
+		save(arc, value);
+	else if constexpr( has_member_save<T,Archive> )
+		value.save(arc);
+}
+
+template<typename Archive, typename T>
+void call_load(Archive& arc, T& value)
+{
+	if constexpr( has_non_member_load<T,Archive> )
+		load(arc, value);
+	else if constexpr( has_member_load<T,Archive> )
+		value.load(arc);
+}
 } // inline namespace v3
 } // namespace arc
 } // namespace aw
