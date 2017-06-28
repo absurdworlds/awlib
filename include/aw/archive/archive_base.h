@@ -15,6 +15,32 @@ namespace aw {
 namespace arc {
 inline namespace v3 {
 
+/*
+ * These are needed to select correct overload.
+ * I think this solution is a lot nicer than SFINAE,
+ * and it is better than renaming operator() to some "archive_range".
+ */
+template<typename Begin, typename End>
+struct iterator_pair {
+	Begin begin;
+	End   end;
+};
+
+
+template<typename Begin, typename End>
+struct const_iterator_pair {
+	// static_assert( is_const_iterator<Begin> )
+	Begin begin;
+	End   end;
+};
+
+template<typename Begin, typename End>
+iterator_pair(Begin, End)       -> iterator_pair<Begin, End>;
+template<typename Begin, typename End>
+const_iterator_pair(Begin, End) -> const_iterator_pair<Begin, End>;
+
+using opt_string = optional<string_view>;
+
 template<typename Derived>
 struct output_archive {
 	static constexpr bool can_save = true;
@@ -23,6 +49,15 @@ struct output_archive {
 	void operator()(T const& value, opt_string name = nullopt)
 	{
 		archive(value, name);
+	}
+
+	template<typename Iterator, typename Sentinel>
+	void operator()(const_iterator_pair<Iterator,Sentinel> range, opt_string name = nullopt)
+	{
+		start_save_array(derived(), name);
+		while (range.begin != range.end)
+			archive( *range.begin++ );
+		end_save_array(derived(), name);
 	}
 
 	template<typename T>
@@ -65,6 +100,7 @@ private:
 		end_save_object(derived(), name);
 	}
 
+
 	Derived& derived() { return *static_cast<Derived*>(this); }
 };
 
@@ -84,6 +120,15 @@ struct input_archive {
 	void operator()(T& value, opt_string name = nullopt)
 	{
 		unarchive(value, name);
+	}
+
+	template<typename Iterator, typename Sentinel>
+	void operator()(iterator_pair<Iterator,Sentinel> range, opt_string name = nullopt)
+	{
+		start_load_array(derived(), name);
+		while (range.begin != range.end)
+			unarchive( *range.begin++ );
+		end_load_array(derived(), name);
 	}
 
 	template<typename T>
@@ -147,6 +192,16 @@ template<typename Archive>
 void start_load_object(Archive& arc, opt_string name = nullopt) { }
 template<typename Archive>
 void end_load_object(Archive& arc, opt_string name = nullopt) { }
+
+template<typename Archive>
+void start_save_array(Archive& arc, opt_string name = nullopt) { }
+template<typename Archive>
+void end_save_array(Archive& arc, opt_string name = nullopt) { }
+
+template<typename Archive>
+void start_load_array(Archive& arc, opt_string name = nullopt) { }
+template<typename Archive>
+void end_load_array(Archive& arc, opt_string name = nullopt) { }
 
 } // inline namespace v3
 } // namespace arc
