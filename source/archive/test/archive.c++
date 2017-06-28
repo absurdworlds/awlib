@@ -3,6 +3,7 @@
 #include <aw/utility/index_sequence.h>
 #include <aw/utility/to_string/tuple.h>
 #include <aw/archive/types/std/tuple.h>
+#include <aw/archive/types/std/vector.h>
 
 TestFile("archive");
 
@@ -16,11 +17,25 @@ Test(saveload) {
 	};
 
 	test a{proto};
-	arc.archive("", a);
 	test b;
-	arc.unarchive("", b);
 
-	TestEqual(a, b);
+	std::vector<int> vec1{11, 18, 45, 99};
+	std::vector<int> vec2;
+
+	Setup {
+		arc.archive(a);
+		arc.unarchive(b);
+
+		arc.clear();
+
+		arc.archive(vec1);
+		arc.unarchive(vec2);
+	}
+
+	Checks {
+		TestEqual(a, b);
+		TestEqual(vec1, vec2);
+	}
 }
 
 
@@ -41,13 +56,13 @@ struct Base {
 template<typename Archive>
 void save(Archive& arc, Base const& base)
 {
-	arc.archive("i", base.i);
+	arc(base.i);
 }
 
 template<typename Archive>
 void load(Archive& arc, Base& base)
 {
-	arc.unarchive("i", base.i);
+	arc( base.i);
 }
 
 
@@ -66,23 +81,23 @@ template<typename Archive>
 void save(Archive& arc, Derived const& value)
 {
 	save(arc, (Base const&) value);
-	arc.archive("f", value.f);
+	arc(value.f);
 }
 
 template<typename Archive>
 void load(Archive& arc, Derived& value)
 {
 	load(arc, (Base&) value);
-	arc.unarchive("f", value.f);
+	arc(value.f);
 }
 
 Test(polymorphic) {
 	Base* a = new Derived{15, 37.1};
 
 	testarc arc;
-	arc.archive("a", a);
+	arc.archive(a);
 	Base* b = nullptr;
-	arc.unarchive("a", b);
+	arc.unarchive(b);
 
 	TestAssert(b != nullptr);
 	TestEqual(a->i, b->i);
