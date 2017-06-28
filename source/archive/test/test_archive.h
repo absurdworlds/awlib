@@ -14,7 +14,7 @@ struct testarc : input_archive<testarc>, output_archive<testarc> {
 	};
 
 	template<typename T>
-	void save(T const& value)
+	void save(T const& value, opt_string name = nullopt)
 	{
 		if constexpr(is_string<T>) {
 			save(value.size());
@@ -28,7 +28,7 @@ struct testarc : input_archive<testarc>, output_archive<testarc> {
 	}
 
 	template<typename T>
-	void load(T& value)
+	void load(T& value, opt_string name = nullopt)
 	{
 		if constexpr(is_string<T>) {
 			value.clear();

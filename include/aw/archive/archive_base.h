@@ -9,6 +9,7 @@
 #ifndef aw_archive_base_h
 #define aw_archive_base_h
 #include <aw/archive/class_info.h>
+#include <aw/types/optional.h>
 
 namespace aw {
 namespace arc {
@@ -19,25 +20,18 @@ struct output_archive {
 	static constexpr bool can_save = true;
 
 	template<typename T>
-	void operator()(string_view name, T const& value)
+	void operator()(T const& value, opt_string name = nullopt)
 	{
-		archive(name, value);
+		archive(value, name);
 	}
 
 	template<typename T>
-	void operator()(T const& value)
-	{
-		using namespace std::string_view_literals;
-		archive(""sv, value);
-	}
-
-	template<typename T>
-	void archive(string_view name, T const& value)
+	void archive(T const& value, opt_string name = nullopt)
 	{
 		if constexpr(is_pointer_type<T>) {
 			using object_type = typename pointer_traits<T>::element_type;
 			if constexpr(is_polymorphic<object_type>)
-				polymorphic_save(name, *value);
+				save_virtual(name, *value);
 		} else {
 			constexpr auto kind = kind_of<T>;
 			derived().start_save(kind, name);
@@ -48,7 +42,7 @@ struct output_archive {
 
 private:
 	template<typename T>
-	void polymorphic_save(string_view name, T const& value)
+	void save_virtual(T const& value, opt_string name = nullopt)
 	{
 		auto type = value.class_name();
 		auto save = save_registry<Derived>::find_class(type);
@@ -79,30 +73,23 @@ struct input_archive {
 	explicit operator T()
 	{
 		using namespace std::string_view_literals;
-		T temp; unarchive(""sv, temp);
+		T temp; unarchive(temp);
 		return temp;
 	}
 
 	template<typename T>
-	void operator()(string_view name, T& value)
+	void operator()(T& value, opt_string name = nullopt)
 	{
-		unarchive(name, value);
+		unarchive(value, name);
 	}
 
 	template<typename T>
-	void operator()(T& value)
-	{
-		using namespace std::string_view_literals;
-		unarchive(""sv, value);
-	}
-
-	template<typename T>
-	void unarchive(string_view name, T& value)
+	void unarchive(T& value, opt_string name = nullopt)
 	{
 		if constexpr(is_pointer_type<T>) {
 			using object_type = typename pointer_traits<T>::element_type;
 			if constexpr(is_polymorphic<object_type>)
-				value = polymorphic_load<object_type>(name);
+				value = load_virtual<object_type>(name);
 		} else {
 			constexpr auto kind = kind_of<T>;
 			derived().start_load(kind, name);
@@ -113,7 +100,7 @@ struct input_archive {
 
 private:
 	template<typename T>
-	T* polymorphic_load(string_view name)
+	T* load_virtual(opt_string name = nullopt)
 	{
 		auto params = typename T::create_parameters{};
 		auto type = derived().start_load_virtual(name);
