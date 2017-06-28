@@ -40,12 +40,12 @@ struct char_view {
 protected:
 	char& get()
 	{
-		return *reinterpret_cast<char*>(&value);
+		return *(reinterpret_cast<char*>(&value) + index);
 	}
 
 	char const& get() const
 	{
-		return *reinterpret_cast<char const*>(&value);
+		return *(reinterpret_cast<char const*>(&value) + index);
 	}
 
 	void advance() { ++index; }
