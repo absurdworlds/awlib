@@ -62,7 +62,7 @@ private:
 	template<typename T>
 	void do_save(T const& value)
 	{
-		if constexpr( Derived::template is_directly_serializable<T> )
+		if constexpr( is_directly_serializable<T,Derived> )
 			derived().save(value);
 		else
 			call_save();
@@ -115,8 +115,9 @@ private:
 	template<typename T>
 	T* polymorphic_load(string_view name)
 	{
+		auto params = typename T::create_parameters{};
 		auto type = derived().start_load_virtual(name);
-		auto load = load_registry<Derived>::find_class(type, typename T::create_parameters{});
+		auto load = load_registry<Derived>::find_class(type, params);
 		auto ptr  = load( derived() );
 		derived().end_load_virtual(name);
 		return reinterpret_cast<T*>(ptr);
@@ -125,7 +126,7 @@ private:
 	template<typename T>
 	void do_load(T& value)
 	{
-		if constexpr( Derived::template is_directly_serializable<T> )
+		if constexpr( is_directly_serializable<T,Derived> )
 			derived().load(value);
 		else
 			call_load();

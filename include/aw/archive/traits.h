@@ -116,6 +116,11 @@ void call_load(Archive& arc, T& value)
 	else if constexpr( has_member_load<T,Archive> )
 		value.load(arc);
 }
+
+template<typename T, typename Archive>
+constexpr bool is_directly_serializable {
+	Archive::template is_directly_serializable<T>
+};
 } // inline namespace v3
 } // namespace arc
 } // namespace aw
