@@ -2,8 +2,10 @@
 #include <aw/utility/test.h>
 #include <aw/utility/index_sequence.h>
 #include <aw/utility/to_string/tuple.h>
+#include <aw/utility/to_string/pair.h>
 #include <aw/archive/types/std/tuple.h>
 #include <aw/archive/types/std/vector.h>
+#include <aw/archive/types/std/map.h>
 
 TestFile("archive");
 
@@ -22,6 +24,9 @@ Test(saveload) {
 	std::vector<int> vec1{11, 18, 45, 99};
 	std::vector<int> vec2;
 
+	std::map<int,int> map1{{1,2}, {2,4}, {3,6}};
+	std::map<int,int> map2;
+
 	Setup {
 		arc.archive(a);
 		arc.unarchive(b);
@@ -30,11 +35,15 @@ Test(saveload) {
 
 		arc.archive(vec1);
 		arc.unarchive(vec2);
+
+		arc.archive(map1);
+		arc.unarchive(map2);
 	}
 
 	Checks {
 		TestEqual(a, b);
 		TestEqual(vec1, vec2);
+		TestEqual(map1, map2);
 	}
 }
 
