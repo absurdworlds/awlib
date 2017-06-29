@@ -34,7 +34,7 @@ template<typename T>
 using require_iterator = enable_if<is_iterator<T>>;
 
 template<typename Iterator>
-constexpr is_const_iterator = is_const< dereference<Iterator> >;
+constexpr bool is_const_iterator = is_const< dereference<Iterator> >;
 
 template<typename Iterator>
 using require_input_iterator = enable_if<is_convertible<
