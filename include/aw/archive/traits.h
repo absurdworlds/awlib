@@ -11,6 +11,7 @@
 #include <aw/meta/detect.h>
 #include <aw/meta/list.h>
 #include <aw/meta/substitute.h>
+#include <aw/meta/always_false.h>
 #include <aw/types/traits/is_container.h>
 #include <aw/types/traits/pointer_traits.h>
 #include <aw/types/traits/basic_traits.h>
@@ -83,6 +84,8 @@ void call_save(Archive& arc, T const& value)
 		save(arc, value);
 	else if constexpr( has_member_save<T,Archive> )
 		value.save(arc);
+	else
+		static_assert( always_false<T>, "No suitable call to save()");
 }
 
 template<typename Archive, typename T>
@@ -92,6 +95,8 @@ void call_load(Archive& arc, T& value)
 		load(arc, value);
 	else if constexpr( has_member_load<T,Archive> )
 		value.load(arc);
+	else
+		static_assert( always_false<T>, "No suitable call to load()");
 }
 
 template<typename T, typename Archive>
