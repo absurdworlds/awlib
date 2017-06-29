@@ -8,37 +8,13 @@
  */
 #ifndef aw_archive_base_h
 #define aw_archive_base_h
-#include <aw/archive/class_info.h>
 #include <aw/types/optional.h>
+#include <aw/archive/class_info.h>
+#include <aw/archive/types/range_shared.h>
 
 namespace aw {
 namespace arc {
 inline namespace v3 {
-
-/*
- * These are needed to select correct overload.
- * I think this solution is a lot nicer than SFINAE,
- * and it is better than renaming operator() to some "archive_range".
- */
-template<typename Begin, typename End>
-struct iterator_pair {
-	Begin begin;
-	End   end;
-};
-
-
-template<typename Begin, typename End>
-struct const_iterator_pair {
-	// static_assert( is_const_iterator<Begin> )
-	Begin begin;
-	End   end;
-};
-
-template<typename Begin, typename End>
-iterator_pair(Begin, End)       -> iterator_pair<Begin, End>;
-template<typename Begin, typename End>
-const_iterator_pair(Begin, End) -> const_iterator_pair<Begin, End>;
-
 using opt_string = optional<string_view>;
 
 template<typename Derived>
