@@ -11,7 +11,7 @@
 #include <map>
 #include <algorithm>
 #include <aw/archive/types/std/vector.h>
-#include <aw/archive/types/std/pair.h>
+#include <aw/archive/types/map_shared.h>
 namespace aw {
 namespace arc {
 inline namespace v3 {
@@ -20,13 +20,13 @@ template<typename OutputArchive, typename Key, typename Value>
 void save(OutputArchive& arc, std::map<Key,Value> const& map)
 {
 	arc.archive(map.size(), "size");
-	arc( const_iterator_pair{ begin(map), end(map) }, "elements" );
+	arc( const_iterator_pair{kv_begin(map), kv_end(map)}, "elements" );
 }
 
 template<typename InputArchive, typename Key, typename Value>
 void load(InputArchive& arc, std::map<Key,Value>& map)
 {
-	std::vector<std::pair<Key,Value>> vec;
+	std::vector<key_value_pair<Key,Value>> vec;
 	arc( vec );
 
 	/*

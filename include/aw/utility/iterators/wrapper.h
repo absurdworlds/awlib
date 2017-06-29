@@ -46,7 +46,7 @@ struct wrapper : Iterator, protected Convert {
 
 	constexpr value_type operator*() const
 	{
-		return operator()( Iterator::operator*() );
+		return convert( Iterator::operator*() );
 	}
 
 	constexpr proxy<value_type> operator->() const
@@ -81,7 +81,10 @@ struct wrapper : Iterator, protected Convert {
 	}
 
 private:
-	using Convert::operator();
+	value_type convert(typename Iterator::value_type val) const
+	{
+		return Convert::operator()(val);
+	}
 };
 } // namespace iter
 } // namespace aw
