@@ -26,6 +26,11 @@ template <typename T>
 struct proxy {
 	T _temp;
 
+	constexpr operator T()
+	{
+		return _temp;
+	}
+
 	constexpr T* operator->()
 	{
 		return &_temp;
