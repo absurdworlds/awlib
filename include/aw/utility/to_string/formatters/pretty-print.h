@@ -64,9 +64,9 @@ struct pretty_print {
 	void convert(long long val) { result.append(std::to_string(val)); }
 
 	//void convert(unsigned char val) { result.append(std::to_string(val)); }
-	void convert(unsigned short val) { result.append(std::to_string(val)); }
-	void convert(unsigned val) { result.append(std::to_string(val)); }
-	void convert(unsigned long val) { result.append(std::to_string(val)); }
+	void convert(unsigned short val)     { result.append(std::to_string(val)); }
+	void convert(unsigned val)           { result.append(std::to_string(val)); }
+	void convert(unsigned long val)      { result.append(std::to_string(val)); }
 	void convert(unsigned long long val) { result.append(std::to_string(val)); }
 
 	void convert(float val)  { result.append(std::to_string(val)); }
@@ -75,6 +75,10 @@ struct pretty_print {
 
 
 	void convert(void const* ptr) { convert(uintptr_t(ptr)); }
+
+	void convert(char16_t val) { result.append(std::to_string(val)); }
+	void convert(char32_t val) { result.append(std::to_string(val)); }
+	void convert(wchar_t val)  { result.append(std::to_string(val)); }
 
 	void convert(char val)
 	{

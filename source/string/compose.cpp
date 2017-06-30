@@ -11,13 +11,11 @@
 
 namespace aw {
 namespace string {
-static char const CompositionChar = '%';
+static constexpr char CompositionChar = '%';
 
-std::string compose(
-        std::string const& fmt,
-        std::vector<std::string> const& args)
+std::string compose(string_view fmt, array_view<std::string> args)
 {
-	char const delim = CompositionChar;
+	constexpr char delim = CompositionChar;
 
 	std::string result;
 	result.reserve(fmt.size());
@@ -27,28 +25,33 @@ std::string compose(
 	while (pos != std::string::npos) {
 		size_t nextpos = fmt.find(delim, pos);
 
-		result += fmt.substr(pos, nextpos - pos);
+		// TODO: C++17 string.append(string_view)
+		auto temp = fmt.substr(pos, nextpos - pos);
+		result.append(temp.data(), temp.size());
 		if (nextpos == std::string::npos)
 			break;
 
 		char idx = fmt[++nextpos];
-		if (!isdigit(idx)) {
-			if (idx == delim) {
-				result += delim;
-				++nextpos;
-			} else {
-				result += delim;
-			}
-		} else {
+		// '%0' is replaced by one of positional arguments
+		if (isdigit(idx)) {
 			pos = nextpos;
 
 			while (isdigit(fmt[nextpos]))
 				++nextpos;
 
-			size_t arg_no = stoull(fmt.substr(pos, nextpos - pos));
+			// TODO: C++17 from_chars
+			std::string temp(fmt.substr(pos, nextpos - pos));
+			size_t arg_no = stoull(temp);
 
 			if (arg_no < args.size())
 				result += args[arg_no];
+		// '%%' is replaced by a single '%' (for escaping)
+		} else if (idx == delim) {
+			result += delim;
+			++nextpos;
+		// Just a '%' written to output unmodified
+		} else {
+			result += delim;
 		}
 		pos = nextpos;
 	}

@@ -12,6 +12,7 @@
 #include <utility>
 #include <type_traits>
 #include <aw/meta/void_t.h>
+#include <aw/types/string_view.h>
 namespace aw {
 using std::declval;
 
@@ -30,9 +31,12 @@ template<typename T>
 constexpr bool is_rvalue_reference = std::is_rvalue_reference<T>::value;
 
 template<typename T>
+constexpr auto is_class       = std::is_class<T>::value;
+template<typename T>
 constexpr auto is_polymorphic = std::is_polymorphic<T>::value;
 template<typename T>
-constexpr auto is_abstract = std::is_abstract<T>::value;
+constexpr auto is_abstract    = std::is_abstract<T>::value;
+
 
 template<typename T>
 constexpr auto is_trivially_copyable = std::is_trivially_copyable<T>::value;
@@ -42,6 +46,9 @@ constexpr auto is_constructible = std::is_constructible<T, Args...>::value;
 
 template<typename A, typename B>
 constexpr bool is_convertible = std::is_convertible<A, B>::value;
+
+template<typename Fn, typename...Args>
+constexpr bool is_invocable = std::is_invocable<Fn, Args...>::value;
 
 template<class Base, class Derived>
 constexpr auto is_base_of = std::is_base_of<Base,Derived>::value;
@@ -76,6 +83,8 @@ template<typename>
 struct is_string_t : std::false_type{ };
 template<class CharT, class Traits, class Alloc>
 struct is_string_t<std::basic_string<CharT, Traits, Alloc>> : std::true_type{ };
+template<class CharT, class Traits>
+struct is_string_t<basic_string_view<CharT, Traits>> : std::true_type{ };
 
 /* Basic type categories (yes, std::string is considered “basic”) */
 template<typename T>

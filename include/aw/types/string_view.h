@@ -30,12 +30,5 @@ constexpr string_view make_string_view(char const (&array)[N])
 {
 	return {array, N};
 }
-
-namespace sv_literals {
-constexpr string_view operator ""_s(char const* a, size_t n)
-{
-	return {a, n};
-}
-} // namespace sv_literals
 } // namespace aw
 #endif//aw_utility_string_view_h

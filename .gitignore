@@ -9,6 +9,7 @@ a.out
 *.o
 *.so*
 *.dll
+*.exe
 *.[0-9]
 *.swp
 *.sln

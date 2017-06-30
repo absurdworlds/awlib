@@ -9,7 +9,7 @@
 #ifndef aw_traits_is_container
 #define aw_traits_is_container
 #include <utility>
-#include <type_traits>
+#include <aw/meta/void_t.h>
 namespace aw {
 template<class, typename = void>
 struct is_basic_container_t : std::false_type {};
@@ -39,7 +39,7 @@ struct is_allocator_aware_t<
 	T,
 	void_t<
 		typename T::allocator_type,
-		decltype( declval<T>().get_allocator() ),
+		decltype( declval<T>().get_allocator() )
 	>
 > : std::true_type {};
 

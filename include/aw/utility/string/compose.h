@@ -12,6 +12,7 @@
 #include <vector>
 
 #include <aw/types/string_view.h>
+#include <aw/types/array_view.h>
 #include <aw/utility/string/string.h>
 #include <aw/utility/to_string.h>
 
@@ -21,7 +22,7 @@ namespace string {
  * Compose parametrized string (parameter substitution).
  */
 AW_STRING_EXP
-std::string compose(string_view fmt, std::vector<std::string> const& args);
+std::string compose(string_view fmt, array_view<std::string> args);
 
 /*!
  * Compose parametrized string (parameter substitution).
@@ -56,7 +57,7 @@ std::string compose(string_view fmt, Args const&... args)
 {
 	std::vector<std::string> bits{to_string(args)...};
 
-	return compose(fmt, bits);
+	return compose(fmt, (array_view<std::string>)bits);
 }
 } // namespace string
 } // namespace aw

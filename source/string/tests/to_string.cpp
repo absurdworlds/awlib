@@ -35,7 +35,7 @@ Test(to_string) {
 		TestAssert(to_string(1000u) == "1000"s);
 		TestAssert(to_string(200000000000000000l) == "200000000000000000"s);
 		TestAssert(to_string(18000000000000000000ul) == "18000000000000000000"s);
-		TestAssert(to_string(std::make_pair(10, "abc")) == R"({10, "abc"})"s);
+		TestAssert(to_string(std::pair{10, "abc"}) == R"({10, "abc"})"s);
 		// no control over precision yet
 		//TestAssert(to_string(1000000.0f) == "1000000.0"s);
 		//TestAssert(to_string(1000000.0) == "1000000.0"s);
@@ -56,7 +56,7 @@ Test(to_string) {
 		TestAssert(to_string(vec3) == "{0, 0, 0}"s);
 		TestAssert(to_string(mat4) == "{{0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}}"s);
 
-		auto tuple = std::make_tuple( 10, "xyz", false );
+		auto tuple = std::tuple{ 10, "xyz", false };
 		TestAssert(to_string(tuple) == R"({10, "xyz", false})");
 	}
 

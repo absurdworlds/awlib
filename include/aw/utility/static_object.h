@@ -12,18 +12,17 @@
 //struct EmptyTag {};
 namespace aw {
 /*!
- * Creates single instance of specified class.
- * Created object is initialized before main().
+ * Creates a single static instance of class T.
+ * T must be DefaultConstructible.
  *
- * \param T
- *    Class to instantiate. Must be DefaultConstructible.
+ * Purpose of this class is to avoid "static initialization
+ * order fiasco" when creating a static object.
  */
-template <class T> //, class Tag = EmptyTag>
+template<typename T> //, class Tag = EmptyTag>
 class static_object {
-	static T& ref;
-
 	static void use(T const&) {}
 
+	static T& ref;
 	static T& create()
 	{
 		static T object;
@@ -32,18 +31,11 @@ class static_object {
 	}
 
 public:
-	static T& instance()
-	{
-		return create();
-	}
-
-	static T const& const_instance()
-	{
-		return create();
-	}
+	static T&       instance()       { return create(); }
+	static T const& const_instance() { return create(); }
 };
 
-template <class T>
+template<typename T>
 T& static_object<T>::ref = static_object<T>::create();
 } // namespace aw
 #endif//aw_static_object_h

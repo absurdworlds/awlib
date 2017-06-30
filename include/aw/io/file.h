@@ -13,9 +13,9 @@
 #include <algorithm>
 
 #include <aw/types/types.h>
-#include <aw/utility/filesystem.h>
 #include <aw/io/file_mode.h>
 #include <aw/io/file_descriptor.h>
+#include <aw/io/filesystem.h>
 
 #include <aw/io/native_file.h>
 
@@ -174,6 +174,11 @@ struct file {
 	 * Get full path to file
 	 */
 	fs::path const& path() const noexcept { return _path; }
+
+#if 0
+protected:
+	native::file& get_native() { return data; }
+#endif
 
 private:
 	void check_error(std::error_code& ec, char const* what) const

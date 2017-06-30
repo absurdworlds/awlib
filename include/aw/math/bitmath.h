@@ -49,8 +49,8 @@ namespace _impl {
 template<typename Int>
 struct mask {
 	static_assert(is_even(num_digits<Int>), "");
-	static constexpr Int lower_bits = lower_mask(num_digits<Int> / 2);
-	static constexpr Int upper_bits = upper_mask(num_digits<Int> / 2);
+	static constexpr Int lower_bits = lower_mask<Int>(num_digits<Int> / 2);
+	static constexpr Int upper_bits = upper_mask<Int>(num_digits<Int> / 2);
 };
 } // namespace _impl
 
@@ -103,7 +103,7 @@ constexpr Int set_bit(Int val, size_t idx, bool bitval)
 {
 	assert(idx < std::numeric_limits<Int>::digits);
 	Int flag = (bitval << idx);
-	val ^= (val ^ flag) ^ flag;
+	val ^= (val & flag) ^ flag;
 	return val;
 }
 
@@ -116,7 +116,7 @@ constexpr Int swap_bits(Int val, size_t idx1, size_t idx2)
 {
 	assert(idx1 < std::numeric_limits<Int>::digits);
 	assert(idx2 < std::numeric_limits<Int>::digits);
-	Int diff = getBit(val, idx1) != getBit(val, idx2);
+	Int diff = get_bit(val, idx1) != get_bit(val, idx2);
 	return val ^ ((diff << idx1) | (diff << idx2));
 }
 
@@ -144,16 +144,14 @@ constexpr size_t log2(Int value)
 	return result;
 }
 
-//! Check if value is a power of 2
+/*! Check if value is a power of 2 */
 template <typename Int>
-constexpr bool isPowerOf2(Int value)
+constexpr bool is_power_of_2(Int value)
 {
 	return value && !(value & (value - 1));
 }
 
-/*!
- * Rotate 32-bit integer to the left
- */
+/*! Rotate 32-bit integer to the left */
 inline u32 rotl(u32 x, size_t r)
 {
 #if AW_COMPILER == AW_COMPILER_MSVC
@@ -164,9 +162,7 @@ inline u32 rotl(u32 x, size_t r)
 #endif
 }
 
-/*!
- * Rotate 64-bit integer to the left
- */
+/*! Rotate 64-bit integer to the left */
 inline u64 rotl(u64 x, size_t r)
 {
 #if AW_COMPILER == AW_COMPILER_MSVC
@@ -177,9 +173,7 @@ inline u64 rotl(u64 x, size_t r)
 #endif
 }
 
-/*!
- * Rotate 32-bit integer to the right
- */
+/*! Rotate 32-bit integer to the right */
 inline u32 rotr(u32 x, size_t r)
 {
 #if AW_COMPILER == AW_COMPILER_MSVC
@@ -190,9 +184,7 @@ inline u32 rotr(u32 x, size_t r)
 #endif
 }
 
-/*!
- * Rotate 64-bit integer to the right
- */
+/*! Rotate 64-bit integer to the right */
 inline u64 rotr(u64 x, size_t r)
 {
 #if AW_COMPILER == AW_COMPILER_MSVC

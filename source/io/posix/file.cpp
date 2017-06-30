@@ -7,6 +7,7 @@
  * There is NO WARRANTY, to the extent permitted by law.
  */
 #include <aw/io/native_file.h>
+#include "helpers.h"
 
 #include <unistd.h>
 #include <fcntl.h>
@@ -15,14 +16,7 @@
 namespace aw {
 namespace io {
 namespace posix {
-void set_error_if(bool cond, std::error_code& ec)
-{
-	if (cond) {
-		ec.assign(errno, std::generic_category());
-	} else {
-		ec.clear();
-	}
-}
+
 
 file_descriptor open(fs::path const& path, file_mode fm, std::error_code& ec)
 {

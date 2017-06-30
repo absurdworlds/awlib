@@ -10,8 +10,8 @@ using s_i64 = aw::composite_int<aw::i32>;
 s_u64 to_s(u64 v) { return { u32(v >> 32), u32(v) }; }
 s_i64 to_s(i64 v) { return { i32(v >> 32), u32(v) }; }
 
-u64 to_i(s_u64 v) { return v.low_part() | (u64(v.high_part()) << 32); }
-i64 to_i(s_i64 v) { return i64(v.low_part() | (u64(v.high_part()) << 32)); }
+u64 to_i(s_u64 v) { return     v.low() | (u64(v.high()) << 32); }
+i64 to_i(s_i64 v) { return i64(v.low() | (u64(v.high()) << 32)); }
 
 void CUEqual(s_u64 c, u64 u)
 {
@@ -67,12 +67,12 @@ void signed_binary(i64 a, i64 b)
 	const s_i64 c1 = to_s(a);
 	const s_i64 c2 = to_s(b);
 
-	CUEqual(c1 + c2, a + b);
-	CUEqual(c1 - c2, a - b);
-	CUEqual(c2 - c1, b - a);
-	CUEqual(c1 * c2, a * b);
-	CUEqual(c1 / c2, a / b);
-	CUEqual(c2 / c1, b / a);
+	CIEqual(c1 + c2, a + b);
+	CIEqual(c1 - c2, a - b);
+	CIEqual(c2 - c1, b - a);
+	CIEqual(c1 * c2, a * b);
+	CIEqual(c1 / c2, a / b);
+	CIEqual(c2 / c1, b / a);
 
 	TestEqual(c1 + c2, c2 + c1);
 	TestEqual(c1 * c2, c2 * c1);
@@ -82,8 +82,8 @@ void signed_unary(i64 a)
 {
 	const s_i64 c = to_s(a);
 
-	CUEqual(-c, -a);
-	CUEqual(-c, -a);
+	CIEqual(-c, -a);
+	CIEqual(-c, -a);
 }
 
 Test(signed_arithmetic) {

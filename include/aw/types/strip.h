@@ -9,7 +9,8 @@
 #ifndef aw_traits_strip
 #define aw_traits_strip
 #include <utility>
-#include <type_traits>
+#include <aw/meta/conditional.h>
+#include <aw/types/traits/basic_traits.h>
 namespace aw {
 template<typename T>
 using remove_cv = std::remove_cv_t<T>;
@@ -50,5 +51,9 @@ template <typename T> struct strip_pointers<T volatile*> {
 
 template <typename T>
 using strip_pointers = typename _impl::strip_pointers<T>::type;
+
+/*! Copies constness of type A to type B*/
+template<typename A, typename B>
+using copy_const = conditional<is_const<A>, B const, remove_const<B>>;
 } // namespace aw
 #endif//aw_traits_strip

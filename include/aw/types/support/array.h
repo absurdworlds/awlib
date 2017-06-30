@@ -57,7 +57,7 @@ namespace _impl {
 template <size_t... I, typename T, size_t N>
 auto to_tuple(std::array<T,N> array, std::index_sequence<I...>)
 {
-	return std::make_tuple(array[I]...);
+	return std::tuple{array[I]...};
 }
 } // namespace _impl
 

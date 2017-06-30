@@ -10,7 +10,7 @@
 #include <memory>
 #include <sstream>
 #include <chrono>
-#include <aw/utility/filesystem.h>
+#include <aw/io/filesystem.h>
 
 #include "ItdPacker.h"
 #include "HPKTreeWriter.h"

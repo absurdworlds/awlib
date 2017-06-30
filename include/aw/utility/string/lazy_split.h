@@ -15,6 +15,14 @@
 namespace aw {
 namespace string {
 struct substring_iterator_base {
+	using value_type = string_view;
+	using iterator_category = std::forward_iterator_tag;
+
+	// unused, should be removed
+	using difference_type = std::ptrdiff_t;
+	using reference = string_view&;
+	using pointer   = string_view*;
+
 	string_view operator*() const
 	{
 		return source.substr(pos1, pos2 - pos1);
@@ -95,7 +103,12 @@ struct split_by_iterator : substring_iterator_base {
 	}
 };
 
-template<bool DiscardEmpty>
+enum class cut_behavior {
+	discard_empty,
+	keep_empty
+};
+
+template<cut_behavior Behavior>
 struct cut_iterator_base : substring_iterator_base {
 	cut_iterator_base() = default;
 	cut_iterator_base(string_view source, string_view delim)
@@ -105,8 +118,7 @@ struct cut_iterator_base : substring_iterator_base {
 		pos1 = 0;
 		pos2 = source.find(delim, pos1);
 
-		if /*constexpr*/ (DiscardEmpty)
-			discard_empty();
+		discard_empty();
 	}
 
 	cut_iterator_base& begin()
@@ -127,9 +139,7 @@ struct cut_iterator_base : substring_iterator_base {
 		}
 
 		advance();
-
-		if /*constexpr*/ (DiscardEmpty)
-			discard_empty();
+		discard_empty();
 
 		return *this;
 	}
@@ -150,6 +160,9 @@ private:
 
 	void discard_empty()
 	{
+		if /*constexpr*/ (Behavior == cut_behavior::keep_empty)
+			return;
+
 		while ( (*this)->empty() ) {
 			if (pos2 != npos) {
 				advance();
@@ -161,8 +174,35 @@ private:
 	}
 };
 
-using split_iterator = cut_iterator_base<true>;
-using cut_iterator   = cut_iterator_base<false>;
+using split_iterator = cut_iterator_base<cut_behavior::discard_empty>;
+using cut_iterator   = cut_iterator_base<cut_behavior::keep_empty>;
+
+inline auto begin(split_by_iterator& it) { return it.begin(); }
+inline auto end(split_by_iterator& it)   { return it.end(); }
+inline auto begin(split_iterator& it) { return it.begin(); }
+inline auto end(split_iterator& it)   { return it.end(); }
+inline auto begin(cut_iterator& it) { return it.begin(); }
+inline auto end(cut_iterator& it)   { return it.end(); }
+
+/*!
+ * Lazy-evaluation analogs for string algorithms.
+ */
+namespace lazy {
+inline auto split_by(string_view source, string_view delim) -> split_by_iterator
+{
+	return {source, delim};
+}
+
+inline auto split(string_view source, string_view delim) -> split_iterator
+{
+	return {source, delim};
+}
+
+inline auto cut(string_view source, string_view delim) -> cut_iterator
+{
+	return {source, delim};
+}
+} // namespace lazy
 } // namespace string
 } // namespace aw
 #endif//aw_string_substr_iterator_h

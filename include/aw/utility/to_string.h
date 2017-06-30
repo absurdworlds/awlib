@@ -46,6 +46,24 @@ std::string to_string(char ch, Formatter&& fmt = Formatter{})
 	return fmt.value(ch);
 }
 
+template<typename Formatter = format::pretty_print>
+std::string to_string(char16_t ch, Formatter&& fmt = Formatter{})
+{
+	return fmt.value(ch);
+}
+
+template<typename Formatter = format::pretty_print>
+std::string to_string(char32_t ch, Formatter&& fmt = Formatter{})
+{
+	return fmt.value(ch);
+}
+
+template<typename Formatter = format::pretty_print>
+std::string to_string(wchar_t ch, Formatter&& fmt = Formatter{})
+{
+	return fmt.value(ch);
+}
+
 template<typename T, typename Formatter = format::pretty_print>
 auto to_string(T value, Formatter&& fmt = Formatter{}) ->
 	enable_if<is_int<T>, std::string>
@@ -63,15 +81,15 @@ auto to_string(T value, Formatter&& fmt = Formatter{}) ->
 template<typename Formatter = format::pretty_print>
 std::string to_string(bool value, Formatter&& fmt = Formatter{})
 {
-	using namespace sv_literals;
-	return fmt.literal(value ? "true"_s : "false"_s);
+	using namespace std::string_view_literals;
+	return fmt.literal(value ? "true"sv : "false"sv);
 }
 
 template<typename Formatter = format::pretty_print>
 std::string to_string(nullptr_t, Formatter&& fmt = Formatter{})
 {
-	using namespace sv_literals;
-	return fmt.literal("nullptr"_s);
+	using namespace std::string_view_literals;
+	return fmt.literal("nullptr"sv);
 }
 
 template<typename T, typename Formatter = format::pretty_print>

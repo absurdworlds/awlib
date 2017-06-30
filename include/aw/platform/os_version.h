@@ -8,8 +8,8 @@
  */
 #ifndef aw_platform_os_name_h
 #define aw_platform_os_name_h
+#include <string>
 #include <aw/platform/export.h>
-#include <aw/types/string_view.h>
 namespace aw {
 namespace platform {
 /*!

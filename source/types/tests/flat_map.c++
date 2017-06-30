@@ -21,7 +21,7 @@ Test(flat_map_basic)
 	}
 
 	Checks {
-		map.insert(std::make_pair("bcd", 11));
+		map.insert(std::pair{"bcd", 11});
 
 		TestEqual(map["abc"], 10);
 		TestEqual(map["abe"], 20);

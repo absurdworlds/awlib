@@ -5,7 +5,7 @@ TestFile( "string::join" );
 
 namespace aw {
 Test(join_empty) {
-	std::vector<std::string> v;
+	std::vector<string_view> v;
 
 	std::string s1;
 	std::string s2;
@@ -22,7 +22,7 @@ Test(join_empty) {
 }
 
 Test(join_word) {
-	std::vector<std::string> v{ "word" };
+	std::vector<string_view> v{ "word" };
 
 	std::string s1;
 	std::string s2;
@@ -42,22 +42,26 @@ Test(join_word) {
 }
 
 Test(join_words) {
-	std::vector<std::string> v{ "A", "b", "c", "d?" };
+	std::vector<string_view> v{ "A", "b", "c", "d?" };
+	array_view<string_view> av = v;
 
 	std::string s1;
 	std::string s2;
+	std::string s3;
 
 	Setup {}
 	Preconditions { }
 
 	Checks {
 		s1 = string::join(v);
-		s2 = string::join(v, ", ");
+		s2 = string::join(v);
+		s3 = string::join(v, ", ");
 	}
 
 	Postconditions {
 		TestEqual(s1, "Abcd?");
-		TestEqual(s2, "A, b, c, d?");
+		TestEqual(s1, s2);
+		TestEqual(s3, "A, b, c, d?");
 
 		TestEqual(v.size(), 4);
 	}

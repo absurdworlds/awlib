@@ -84,7 +84,7 @@ template <typename Predicate>
 string_view ltrim(string_view str, Predicate pred)
 {
 	auto first_not = std::find_if_not(begin(str), end(str), pred);
-	str.remove_suffix(first_not - begin(str));
+	str.remove_prefix(first_not - begin(str));
 	return str;
 }
 
@@ -109,7 +109,44 @@ string_view trim(string_view str, Predicate pred)
 {
 	auto first = std::find_if_not(begin(str), end(str), pred);
 	auto last = std::find_if_not(rbegin(str), rend(str), pred);
-	return str.substr(first - begin(str), last - rbegin(str));
+	return str.substr(first - begin(str), last.base() - first);
+}
+
+
+/*!
+ * Remove characters in set \a chars
+ * from the *beginning* of the string \a str.
+ */
+/*constexpr*/ inline string_view ltrim(string_view str, string_view chars)
+{
+	auto first_not = str.find_first_not_of( chars );
+	if (first_not == str.npos) return {};
+	str.remove_prefix(first_not);
+	return str;
+}
+
+/*!
+ * Remove characters in set \a chars
+ * from the *end* of the string \a str.
+ */
+/*constexpr*/ inline string_view rtrim(string_view str, string_view chars)
+{
+	auto last_not = str.find_last_not_of( chars );
+	if (last_not == str.npos) return {};
+	str.remove_suffix(str.size() - last_not - 1);
+	return str;
+}
+
+/*!
+ * Remove characters in set \a chars
+ * from both end of the string \a str.
+ */
+/*constexpr*/ inline string_view trim(string_view str, string_view chars)
+{
+	auto first = str.find_first_not_of( chars );
+	auto last  = str.find_last_not_of( chars );
+	if (first == str.npos) return {};
+	return str.substr(first, last - first + 1);
 }
 
 

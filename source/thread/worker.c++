@@ -7,49 +7,50 @@
  * There is NO WARRANTY, to the extent permitted by law.
  */
 #include <cassert>
-#include <aw/thread/Worker.h>
+#include <aw/thread/worker.h>
 namespace aw {
-Worker::Worker()
+namespace thread {
+worker::worker()
 {
-	thread = std::thread(&Worker::loop, this);
+	thread = std::thread(&worker::loop, this);
 }
 
-Worker::~Worker()
+worker::~worker()
 {
 	if (!done)
 		kill();
 }
 
-bool Worker::busy() const
+bool worker::busy() const
 {
-	return task;
+	return (bool)task;
 }
 
-void Worker::start(Task task)
+void worker::start(Task task)
 {
 	assert(!done);
 
 	{
-		std::lock_guard<std::mutex> lock(mutex);
+		std::lock_guard lock{mutex};
 		this->task = task;
 	}
 	cond.notify_one();
 }
 
-void Worker::wait()
+void worker::wait()
 {
 	assert(!done);
 
-	std::unique_lock<std::mutex> lock(mutex);
+	std::unique_lock lock{mutex};
 	cond.wait(lock, [this] {return !task;});
 }
 
-void Worker::kill()
+void worker::kill()
 {
 	assert(!done && "Attempted to kill thread twice.");
 
 	{
-		std::lock_guard<std::mutex> lock(mutex);
+		std::lock_guard lock{mutex};
 		done = true;
 	}
 	cond.notify_one();
@@ -57,12 +58,12 @@ void Worker::kill()
 	thread.join();
 }
 
-void Worker::loop()
+void worker::loop()
 {
 	assert(!done);
 
 	while (true) {
-		std::unique_lock<std::mutex> lock(mutex);
+		std::unique_lock lock{mutex};
 		cond.wait(lock, [this] {return done || task;});
 
 		if (done)
@@ -75,4 +76,5 @@ void Worker::loop()
 		cond.notify_one();
 	}
 }
+} // namespace thread
 } // namespace aw

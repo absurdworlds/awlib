@@ -21,7 +21,7 @@ struct reverse_adapter {
 	auto begin() { return std::rbegin(range); }
 	auto end()   { return std::rend(range); }
 
-	Range&& range;
+	Range range;
 };
 
 template<typename Range>

@@ -9,7 +9,7 @@
 #ifndef aw_io_read_file_h
 #define aw_io_read_file_h
 #include <aw/io/file_mode.h>
-#include <aw/utility/filesystem.h>
+#include <aw/io/filesystem.h>
 namespace aw {
 namespace io {
 /*! Provides interface for reading files */
