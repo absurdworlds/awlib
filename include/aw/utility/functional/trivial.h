@@ -18,5 +18,5 @@ template<typename...Args>
 struct false_func {
 	bool operator()(Args&&...args) const { return false; }
 };
-};
+}
 #endif//aw_utility_functional_trivial_h
