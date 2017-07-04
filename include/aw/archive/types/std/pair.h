@@ -6,28 +6,26 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef aw_archive_pair
-#define aw_archive_pair
+#ifndef aw_archive_pair_h
+#define aw_archive_pair_h
 #include <utility>
-#include <aw/archive/InputArchive.h>
-#include <aw/archive/OutputArchive.h>
 namespace aw {
 namespace arc {
-inline namespace v2 {
-template<typename A, typename B>
+inline namespace v3 {
+template<typename OutputArchive, typename A, typename B>
 void save(OutputArchive& arc, std::pair<A, B> const& pair)
 {
-	arc("first",  pair.first);
-	arc("second", pair.second);
+	arc(pair.first,  "first");
+	arc(pair.second, "second");
 }
 
-template<typename A, typename B>
+template<typename InputArchive, typename A, typename B>
 void load(InputArchive& arc, std::pair<A, B>& pair)
 {
-	arc("first",  pair.first);
-	arc("second", pair.second);
+	arc(pair.first,  "first");
+	arc(pair.second, "second");
 }
-} // inline namespace v2
+} // inline namespace v3
 } // namespace arc
 } // namespace aw
-#endif//aw_archive_pair
+#endif//aw_archive_pair_h
