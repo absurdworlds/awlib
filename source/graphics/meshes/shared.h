@@ -36,10 +36,17 @@ bool parse1(string_view line, T& v)
 	return (end != tmp.data());
 }
 
+using split_func = std::vector<string_view>(string_view, string_view);
 template<typename T>
-size_t parse3(string_view line, T& _1, T& _2, T& _3, string_view delim = ws)
+size_t parse3(string_view line, T& _1, T& _2, T& _3, string_view delim = ws, split_func* split = string::split_by)
 {
-	auto substrs = string::split_by(line, delim);
+	auto get_val = [] (string_view str, T& out) {
+		if (str.empty())
+			return true;
+		return parse1(str, out);
+	};
+
+	auto substrs = split(line, delim);
 	if (substrs.empty())
 		return false;
 
@@ -49,13 +56,13 @@ size_t parse3(string_view line, T& _1, T& _2, T& _3, string_view delim = ws)
 	switch ( substrs.size() ) {
 	default:
 	case 3:
-		if ( !parse1(substrs[2], _3) ) return num;
+		if ( !get_val(substrs[2], _3) ) return num;
 		++num;
 	case 2:
-		if ( !parse1(substrs[1], _2) ) return num;
+		if ( !get_val(substrs[1], _2) ) return num;
 		++num;
 	case 1:
-		if ( !parse1(substrs[0], _1) ) return num;
+		if ( !get_val(substrs[0], _1) ) return num;
 		++num;
 	case 0:
 		return num;

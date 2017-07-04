@@ -135,7 +135,7 @@ void parser::add_face(string_view s)
 	auto substrs = string::split_by(s, " \v\r\t");
 	for (auto s : substrs) {
 		obj::face_vert v;
-		if (!parse3(s, v.index, v.normal, v.texuv, "/"))
+		if (!parse3(s, v.index, v.texuv, v.normal, "/", string::cut))
 			continue;
 
 		make_zero_based( v );
