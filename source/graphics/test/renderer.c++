@@ -16,8 +16,8 @@
 #include <aw/graphics/gl/model.h>
 
 #include <aw/graphics/gl/shader_file.h>
+#include <aw/graphics/gl/utility/model/obj.h>
 #include <aw/graphics/gl/camera.h>
-#include <aw/fileformat/obj/loader.h>
 #include <aw/io/input_file_stream.h>
 #include <aw/utility/to_string/math/vector.h>
 #include <aw/utility/to_string/math/matrix.h>
@@ -84,35 +84,7 @@ void load_model( string_view filename )
 {
 	io::input_file_stream file{ filename };
 	auto data = obj::mesh::parse( file );
-
-	std::vector< float > verts;
-	std::vector< u16 > indices;
-
-	for (auto v : data.verts) {
-		verts.push_back( v[0] );
-		verts.push_back( v[1] );
-		verts.push_back( v[2] );
-	}
-
-	size_t color_offset = verts.size()*sizeof(float);
-
-	for (auto v : data.verts) {
-		verts.push_back( 0.5 );
-		verts.push_back( 0.5 );
-		verts.push_back( 0.5 );
-		verts.push_back( 1.0 );
-	}
-
-	for (auto t : data.faces) {
-		indices.push_back( t.verts[0].index );
-		indices.push_back( t.verts[1].index );
-		indices.push_back( t.verts[2].index );
-	}
-
-	vert_data vd{ verts, 0, color_offset };
-	mesh_data md{ indices };
-
-	models.emplace_back( vd, md );
+	models.emplace_back( model_from_obj(data) );
 }
 
 struct object {
@@ -127,7 +99,7 @@ struct object {
 		mtl.program[mtl.transform_location] = pos;
 
 		for (auto obj : model.objects)
-			gl::draw_elements_base_vertex(GL_TRIANGLES, obj.num_elements, GL_UNSIGNED_SHORT, 0, obj.offset);
+			gl::draw_elements_base_vertex(GL_TRIANGLES, obj.num_elements, GL_UNSIGNED_INT, 0, obj.offset);
 	}
 };
 std::vector<object> objects;

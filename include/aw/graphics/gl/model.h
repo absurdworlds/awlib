@@ -68,7 +68,7 @@ struct vert_data {
 };
 
 struct mesh_data {
-	array_view<GLushort> triangles;
+	array_view<GLuint> triangles;
 	array_view<model::subobject> list;
 	// TODO: materials
 };
