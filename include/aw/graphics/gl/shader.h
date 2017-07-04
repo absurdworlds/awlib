@@ -8,32 +8,14 @@
  */
 #ifndef aw_graphics_gl3_shader_h
 #define aw_graphics_gl3_shader_h
-#include <aw/graphics/gl/types.h>
+#include <aw/graphics/gl/api/types.h>
+#include <aw/graphics/gl/awgl/shader_enum.h>
 #include <aw/types/string_view.h>
 #include <aw/types/optional.h>
 namespace aw {
-enum class shader_handle : GLuint {};
-namespace gl {
-enum class shader_type : GLenum {
-	fragment = 0x8B30,
-	vertex   = 0x8B31,
-	geometry = 0x8DD9,
-};
-
-
-constexpr string_view enum_string( shader_type type )
-{
-	using namespace std::string_view_literals;
-	switch( type ) {
-	case shader_type::fragment: return "fragment"sv;
-	case shader_type::vertex:   return "vertex"sv;
-	case shader_type::geometry: return "geometry"sv;
-	};
-	// unreachable
-}
-} // namespace gl
-
 namespace gl3 {
+using gl::shader_handle;
+
 // TODO: interface is not finalized at this moment, need to make few decisions:
 // — keep invariant or provide "is_compiled" methods?
 // — what infomation to store?
@@ -55,7 +37,7 @@ struct shader {
 	shader(shader&& other)
 		: _shader{other._shader}
 	{
-		other._shader = 0;
+		other._shader = gl::no_shader;
 	}
 
 
@@ -79,10 +61,9 @@ struct shader {
 	explicit operator shader_handle();
 
 private:
-
 	void cleanup();
 
-	GLuint _shader = 0;
+	shader_handle _shader = gl::no_shader;
 };
 
 } // namespace gl3

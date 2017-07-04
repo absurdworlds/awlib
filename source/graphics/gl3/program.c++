@@ -8,7 +8,7 @@
  */
 #include <aw/graphics/gl/program.h>
 #include <aw/graphics/gl/shader.h>
-#include <aw/graphics/gl/gl_ext33.h>
+#include <aw/graphics/gl/awgl/shader_func.h>
 #include <aw/utility/on_scope_exit.h>
 #include <aw/types/enum.h>
 #include <iostream> // temporary
@@ -16,13 +16,13 @@
 
 namespace aw::gl3 {
 namespace {
-void report_program_info_log(GLuint _program)
+void report_info_log( program_handle _program)
 {
 	GLint length;
-	gl::get_programiv( _program, GL_INFO_LOG_LENGTH, &length );
+	gl::get_programiv( _program, gl::program_param::info_log_length, &length );
 
 	std::vector<char> log(length + 1);
-	gl::get_program_info_log( _program, log.size(), nullptr, log.data() );
+	gl::get_info_log( _program, log.size(), nullptr, log.data() );
 
 	std::cerr << string_view{log.data(), log.size()} << '\n';
 }
@@ -36,7 +36,7 @@ program::program()
 void program::cleanup()
 {
 	gl::delete_program(_program);
-	_program = 0;
+	_program = gl::no_program;
 }
 
 bool program::is_linked() const
@@ -44,7 +44,7 @@ bool program::is_linked() const
 	if (!_program) return false;
 
 	GLint status;
-	gl::get_programiv(_program, GL_LINK_STATUS, &status);
+	gl::get_programiv(_program, gl::program_param::link_status, &status);
 
 	return status == GL_TRUE;
 }
@@ -52,18 +52,18 @@ bool program::is_linked() const
 bool program::link(array_ref<shader> shaders)
 {
 	for ( auto& shader : shaders )
-		gl::attach_shader( _program, underlying(shader_handle{shader}) );
+		gl::attach_shader( _program, shader_handle{shader});
 
 	gl::link_program( _program );
 
 	bool status = is_linked();
 	if ( status == false ) {
 		std::cerr << "Failed to link program: " << '\n';
-		report_program_info_log( _program );
+		report_info_log( _program );
 	}
 
 	for ( auto& shader : shaders )
-		gl::detach_shader( _program, underlying(shader_handle{shader}) );
+		gl::detach_shader( _program, shader_handle{shader});
 
 	return status;
 }
@@ -75,28 +75,28 @@ uniform_location program::uniform( char const* name )
 
 void uniform_proxy::set(GLfloat x)
 {
-	gl::uniform1f( GLint(location), x);
+	gl::uniform1f( location, x);
 }
 
 void uniform_proxy::set(GLfloat x, GLfloat y)
 {
-	gl::uniform2f( GLint(location), x, y);
+	gl::uniform2f( location, x, y);
 }
 
 void uniform_proxy::set(GLfloat x, GLfloat y, GLfloat z)
 {
-	gl::uniform3f( GLint(location), x, y, z);
+	gl::uniform3f( location, x, y, z);
 }
 
 void uniform_proxy::set(GLfloat x, GLfloat y, GLfloat z, GLfloat w)
 {
-	gl::uniform4f( GLint(location), x, y, z, w);
+	gl::uniform4f( location, x, y, z, w);
 }
 
 void uniform_proxy::set(mat4 const& m)
 {
 	static_assert( sizeof(vec4) == 4*sizeof(float) );
-	gl::uniform_matrix4fv( GLint(location), 1, GL_TRUE, &m[0][0] );
+	gl::uniform_matrix4fv( location, 1, GL_TRUE, &m[0][0] );
 /*
 	using namespace math;
 	float mt[16] = {

@@ -1,4 +1,4 @@
-#include <aw/graphics/gl/gl_ext33.h>
+#include <aw/graphics/gl/awgl/api.h>
 #include <aw/types/string_view.h>
 #include <aw/utility/string/split.h>
 #include <aw/math/matrix3.h>
@@ -62,7 +62,7 @@ void initialize_program()
 	perspective_location = program.uniform("perspective");
 	transform_location   = program.uniform("transform");
 
-	gl::use_program( underlying(program_handle{program}) );
+	gl::use_program( program_handle{program} );
 
 	cam.set_near_z(1.0f);
 	cam.set_far_z(10000.0f);
@@ -72,7 +72,7 @@ void initialize_program()
 
 	program["perspective"] = cam.projection_matrix();
 
-	gl::use_program( 0 );
+	gl::use_program( gl::no_program );
 }
 
 
@@ -206,7 +206,7 @@ void render()
 
 
 	auto& program = *test_program;
-	gl::use_program( underlying(program_handle{program}) );
+	gl::use_program( program_handle{program} );
 	program[screen_location] = vec2{ float(hx), float(hy) };
 
 	program[perspective_location] = cam.projection_matrix();
@@ -277,7 +277,7 @@ int main()
 
 	sf::Window window(sf::VideoMode(800, 600), "GL tut", sf::Style::Default, settings);
 
-	auto result = gl::sys::load_functions_3_3();
+	auto result = ::gl::sys::load_functions_3_3();
 	std::cout << "GL loaded, missing: " << result.num_missing() << '\n';
 
 	initialize_program();

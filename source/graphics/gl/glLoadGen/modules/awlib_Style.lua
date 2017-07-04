@@ -122,7 +122,7 @@ local function GetCodegenPtrType(options)
 end
 
 local function GenFuncPtrName(func, spec, options)
-	return func.name
+	return to_snake(func.name)
 end
 
 local function GenFuncName(func, spec, options)
@@ -156,7 +156,7 @@ local function GenQualifiedEnumName(enum, spec, options)
 end
 
 local function GenQualifiedFuncPtrName(func, spec, options)
-	return spec.FuncNamePrefix() .. "::_impl::" .. GenFuncName(func, spec, options)
+	return spec.FuncNamePrefix() .. "::" .. GenFuncName(func, spec, options)
 end
 
 local function GenQualifiedFuncName(func, spec, options)
@@ -173,6 +173,10 @@ end
 
 function my_style.header.GetEnumFilename(basename, options)
 	return basename .. "_enum.h"
+end
+
+function my_style.header.GetWrapperFilename(basename, options)
+	return basename .. "_func.h"
 end
 
 my_style.header.WriteBlockBeginIncludeGuard = BeginIncludeGuard
@@ -283,11 +287,9 @@ function my_style.header.WriteEnumDecl(hFile, enum, enumTable, spec, options, en
 end
 
 function my_style.header.WriteBlockBeginFuncPtrDecl(hFile, spec, options)
-	StartNamespace(hFile, "_impl")
 end
 
 function my_style.header.WriteBlockEndFuncPtrDecl(hFile, spec, options)
-	EndNamespace(hFile, "_impl")
 end
 
 function my_style.header.WriteBlockBeginExtFuncPtrDecl(hFile, extName, spec, options)
@@ -355,12 +357,12 @@ function my_style.header.WriteFuncDecl(hFile, func, spec, options)
 	hFile:inc()
 
 	if(common.DoesFuncReturnSomething(func)) then
-		hFile:fmt('_impl::%s(%s);\n',
-			GenFuncPtrName(func, spec, options),
+		hFile:fmt('%s(%s);\n',
+			GenQualifiedFuncPtrName(func, spec, options),
 			common.GetFuncParamCallList(func))
 	else
-		hFile:fmt('return _impl::%s(%s);\n',
-			GenFuncPtrName(func, spec, options),
+		hFile:fmt('return %s(%s);\n',
+			GenQualifiedFuncPtrName(func, spec, options),
 			common.GetFuncParamCallList(func))
 	end
 
@@ -450,11 +452,9 @@ function my_style.source.WriteExtVariableDef(hFile, extName,
 end
 
 function my_style.source.WriteBlockBeginPtrDefs(hFile, spec, options)
-	StartNamespace(hFile, "_impl")
 end
 
 function my_style.source.WriteBlockEndPtrDefs(hFile, spec, options)
-	EndNamespace(hFile, "_impl")
 end
 
 function my_style.source.WriteBlockBeginExtFuncPtrDef(hFile, extName, spec, options)
@@ -634,6 +634,11 @@ bool operator<(map_entry const& a, map_entry const& b)
 {
 	return a.ext_name < b.ext_name;
 }
+
+bool operator==(map_entry const& a, map_entry const& b)
+{
+       return a.ext_name == b.ext_name;
+}
 ]]
 	hFile:write "\n"
 
@@ -644,7 +649,7 @@ bool operator<(map_entry const& a, map_entry const& b)
 	hFile:fmt("table.reserve(%i);\n", #options.extensions)
 	for _, extName in ipairs(options.extensions) do
 		if(#specData.extdefs[extName].funcs > 0) then
-			hFile:fmt('table.emplace_back("%s", ext::%s, _impl::%s);\n',
+			hFile:fmt('table.emplace_back("%s", ext::%s, %s);\n',
 				spec.ExtNamePrefix() .. extName,
 				GenExtensionVarName(extName, spec, options),
 				GenExtLoaderFuncName(extName, spec, options))
@@ -740,10 +745,10 @@ end
 
 	
 local function WriteInMainFuncLoader(hFile, func, spec, options)
-	hFile:fmt('get_proc(_impl::%s, "%s%s");\n',
+	hFile:fmt('get_proc(%s, "%s%s");\n',
 		GenFuncPtrName(func, spec, options),
 		spec.FuncNamePrefix(), func.name)
-	hFile:fmt('if(!_impl::%s) return ext::load_result();\n',
+	hFile:fmt('if(!%s) return ext::load_result();\n',
 		GenFuncPtrName(func, spec, options))
 end
 
@@ -802,7 +807,7 @@ local function WriteMainLoaderFunc(hFile, version, specData, spec, options)
 	hFile:write "{\n"
 	hFile:inc()
 	hFile:write("load_functions();\n\n")
-	hFile:fmt("int num_failed = _impl::%s();\n", loader_func)
+	hFile:fmt("int num_failed = %s();\n", loader_func)
 	
 	hFile:write("return ext::load_result(true, num_failed);\n")
 
@@ -826,8 +831,8 @@ function my_style.source.WriteVersioningFuncs(hFile, specData, spec, options)
 		hFile:writeblock([[
 static void get_gl_version()
 {
-	_impl::GetIntegerv(MAJOR_VERSION, &g_major_version);
-	_impl::GetIntegerv(MINOR_VERSION, &g_minor_version);
+	get_integerv(GL_MAJOR_VERSION, &g_major_version);
+	get_integerv(GL_MINOR_VERSION, &g_minor_version);
 }
 ]])
 	else
@@ -837,7 +842,7 @@ static void get_gl_version()
 		hFile:writeblock([[
 static void get_gl_version()
 {
-	ParseVersionFromString(&g_major_version, &g_minor_version, (const char *)_impl::GetString(VERSION));
+	ParseVersionFromString(&g_major_version, &g_minor_version, (const char *)get_string(VERSION));
 }
 ]])
 	end

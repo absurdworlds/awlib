@@ -8,14 +8,14 @@
  */
 #ifndef aw_graphics_gl3_uniform_h
 #define aw_graphics_gl3_uniform_h
-#include <aw/graphics/gl/types.h>
+#include <aw/graphics/gl/api/types.h>
+#include <aw/graphics/gl/awgl/shader_enum.h>
 #include <aw/graphics/glsl/vec.h>
 #include <aw/graphics/glsl/mat.h>
 namespace aw {
 namespace gl3 {
-enum class uniform_location : GLint {};
-
-constexpr uniform_location invalid_uniform{ uniform_location(-1) };
+using gl::uniform_location;
+using gl::invalid_uniform;
 
 struct uniform_proxy {
 	uniform_proxy() = delete;

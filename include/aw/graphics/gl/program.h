@@ -13,7 +13,7 @@
 #include <aw/types/array_view.h>
 namespace aw {
 namespace gl3 {
-enum class program_handle : GLuint {};
+using gl::program_handle;
 
 struct program {
 	program();
@@ -23,7 +23,7 @@ struct program {
 	program(program&& other)
 		: _program{other._program}
 	{
-		other._program = 0;
+		other._program = gl::no_program;
 	}
 
 	void swap(program& other)
@@ -65,7 +65,7 @@ struct program {
 
 private:
 	void cleanup();
-	GLuint _program;
+	program_handle _program = gl::no_program;
 };
 
 } // namespace gl3

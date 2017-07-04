@@ -7,27 +7,21 @@
  * There is NO WARRANTY, to the extent permitted by law.
  */
 #include <aw/graphics/gl/shader.h>
-#include <aw/graphics/gl/gl_ext33.h>
+#include <aw/graphics/gl/awgl/shader_func.h>
 #include <iostream> // temporary
 #include <vector>
 
 namespace aw::gl3 {
-static_assert(GLenum(gl::shader_type::fragment) == GL_FRAGMENT_SHADER);
-static_assert(GLenum(gl::shader_type::vertex)   == GL_VERTEX_SHADER);
-static_assert(GLenum(gl::shader_type::geometry) == GL_GEOMETRY_SHADER);
-
 
 namespace {
-// TODO:
-// just had an idea of replacing some of inline gl_ext functions
-// with my own wrappers, doing some convenience stuff
-void report_shader_info_log( GLuint shd )
+// TODO: move to aw::gl
+void report_info_log( shader_handle shd )
 {
 	GLint length;
-	gl::get_shaderiv(shd, GL_INFO_LOG_LENGTH, &length);
+	gl::get_shaderiv(shd, gl::shader_param::info_log_length, &length);
 
 	std::vector<char> log(length + 1);
-	gl::get_shader_info_log(shd, log.size(), nullptr, log.data());
+	gl::get_info_log(shd, log.size(), nullptr, log.data());
 
 	// TODO: gl3::journal
 	std::cerr << string_view{log.data(), log.size()} << '\n';
@@ -36,19 +30,19 @@ void report_shader_info_log( GLuint shd )
 
 shader::shader(gl::shader_type type)
 {
-	_shader = gl::create_shader( GLenum(type) );
+	_shader = gl::create_shader( type );
 }
 
 void shader::cleanup()
 {
 	gl::delete_shader(_shader);
-	_shader = 0;
+	_shader = gl::no_shader;
 }
 
 gl::shader_type shader::type() const
 {
 	GLint type;
-	gl::get_shaderiv( _shader, GL_SHADER_TYPE, &type );
+	gl::get_shaderiv( _shader, gl::shader_param::type, &type );
 	return gl::shader_type(type);
 }
 
@@ -56,7 +50,7 @@ bool shader::is_compiled() const
 {
 	if (!_shader) return false;
 	GLint status;
-	gl::get_shaderiv( _shader, GL_COMPILE_STATUS, &status );
+	gl::get_shaderiv( _shader, gl::shader_param::compile_status, &status );
 	return status == GL_TRUE;
 }
 
@@ -71,7 +65,7 @@ bool shader::compile(string_view code)
 	bool status = is_compiled();
 	if (status == false) {
 		std::cout << "Failed to compile " << enum_string( type() ) << " shader:" << '\n';
-		report_shader_info_log( _shader );
+		report_info_log( _shader );
 	}
 
 	return status;
@@ -79,7 +73,7 @@ bool shader::compile(string_view code)
 
 shader::operator shader_handle()
 {
-	return shader_handle{_shader};
+	return _shader;
 }
 
 } // namespace aw::gl3

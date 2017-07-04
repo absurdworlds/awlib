@@ -7,7 +7,7 @@
  * There is NO WARRANTY, to the extent permitted by law.
  */
 #include <aw/graphics/gl/model.h>
-#include <aw/graphics/gl/gl_ext33.h>
+#include <aw/graphics/gl/awgl/api.h>
 
 namespace aw::glh {
 template<typename T>

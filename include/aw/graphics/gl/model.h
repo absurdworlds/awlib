@@ -8,7 +8,7 @@
  */
 #ifndef aw_graphics_gl3_model_h
 #define aw_graphics_gl3_model_h
-#include <aw/graphics/gl/types.h>
+#include <aw/graphics/gl/api/types.h>
 #include <aw/types/array_view.h>
 #include <vector>
 namespace aw {
