@@ -13,7 +13,6 @@
 #include <aw/types/optional.h>
 namespace aw {
 enum class shader_handle : GLuint {};
-
 namespace gl {
 enum class shader_type : GLenum {
 	fragment = 0x8B30,
@@ -76,7 +75,8 @@ struct shader {
 
 	gl::shader_type type() const;
 	bool is_compiled() const;
-	shader_handle handle() const;
+
+	explicit operator shader_handle();
 
 private:
 

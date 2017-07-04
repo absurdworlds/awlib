@@ -52,7 +52,7 @@ bool program::is_linked() const
 bool program::link(array_ref<shader> shaders)
 {
 	for ( auto& shader : shaders )
-		gl::attach_shader( _program, underlying(shader.handle()) );
+		gl::attach_shader( _program, underlying(shader_handle{shader}) );
 
 	gl::link_program( _program );
 
@@ -63,7 +63,7 @@ bool program::link(array_ref<shader> shaders)
 	}
 
 	for ( auto& shader : shaders )
-		gl::detach_shader( _program, underlying(shader.handle()) );
+		gl::detach_shader( _program, underlying(shader_handle{shader}) );
 
 	return status;
 }
@@ -109,7 +109,7 @@ void uniform_proxy::set(mat4 const& m)
 */
 }
 
-program_handle program::handle() const
+program::operator program_handle()
 {
 	return program_handle{_program};
 }

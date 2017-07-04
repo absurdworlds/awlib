@@ -77,7 +77,7 @@ bool shader::compile(string_view code)
 	return status;
 }
 
-shader_handle shader::handle() const
+shader::operator shader_handle()
 {
 	return shader_handle{_shader};
 }

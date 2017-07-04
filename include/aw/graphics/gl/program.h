@@ -61,7 +61,7 @@ struct program {
 		return { uniform( name ) };
 	}
 
-	program_handle handle() const;
+	explicit operator program_handle();
 
 private:
 	void cleanup();
