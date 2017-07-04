@@ -9,6 +9,7 @@
 #ifndef aw_algorithm_binary_find_h
 #define aw_algorithm_binary_find_h
 #include <algorithm>
+#include <functional>
 namespace aw {
 /*!
  * Finds the first element in the range [first, last) that matches value \a val
