@@ -243,6 +243,9 @@ void render()
 		program[mtl.time_location]   = elapsed.count();
 		program[mtl.campos_location] = campos;
 
+		program["light_dir"] = vec3{ 0.577, 0.577, 0.577 };
+		program["light_intensity"] = vec4{ 1.0, 1.0, 1.0, 1.0 };
+
 		for (auto& obj : mtl.objects)
 			objects[obj].render(mtl);
 
