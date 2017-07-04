@@ -28,51 +28,53 @@
 namespace aw::gl3 {
 using namespace std::string_view_literals;
 
-optional<program> test_program;
-uniform_location perspective_location;
-uniform_location transform_location;
-uniform_location screen_location;
-uniform_location time_location;
-uniform_location period_location;
-uniform_location campos_location;
+struct material {
+	// TODO: this isn't a mockup of an actual material
+	// this will be some kind of wrapper over program,
+	// since it makes sense that common uniforms belong
+	// to a program, not to material
+	// TODO: some of them, like screen and time will be
+	// replaced by UBOs
+	gl3::program program;
+	uniform_location perspective_location;
+	uniform_location transform_location;
+	uniform_location screen_location;
+	uniform_location time_location;
+	uniform_location period_location;
+	uniform_location campos_location;
 
-camera cam;
+	//TODO: I wanted to place this outside of class,
+	//but right now that is not very convenient
+	std::vector<size_t> objects;
 
-void initialize_program()
+	void render();
+};
+std::vector<material> materials;
+
+void load_program( string_view v, string_view f)
 {
 	std::vector<shader> shaderList;
 
-	auto vsh = load_shader( gl::shader_type::vertex,   "vert6.glsl" );
-	auto fsh = load_shader( gl::shader_type::fragment, "frag1.glsl" );
+	auto vsh = load_shader( gl::shader_type::vertex,   v );
+	auto fsh = load_shader( gl::shader_type::fragment, f );
 
 	if (vsh && fsh) {
 		shaderList.push_back(std::move(*vsh));
 		shaderList.push_back(std::move(*fsh));
 	}
 
-	test_program = program();
-	test_program->link( shaderList );
+	material tmp;
+	auto& program = tmp.program;
+	program.link( shaderList );
 
-	auto& program = *test_program;
+	tmp.screen_location = program.uniform("screen");
+	tmp.time_location   = program.uniform("time");
+	tmp.period_location = program.uniform("period");
+	tmp.campos_location = program.uniform("camera");
+	tmp.perspective_location = program.uniform("perspective");
+	tmp.transform_location   = program.uniform("transform");
 
-	screen_location = program.uniform("screen");
-	time_location   = program.uniform("time");
-	period_location = program.uniform("period");
-	campos_location = program.uniform("camera");
-	perspective_location = program.uniform("perspective");
-	transform_location   = program.uniform("transform");
-
-	gl::use_program( program_handle{program} );
-
-	cam.set_near_z(1.0f);
-	cam.set_far_z(10000.0f);
-
-	cam.set_aspect_ratio(1.0f);
-	cam.set_fov( degrees<float>{90} );
-
-	program["perspective"] = cam.projection_matrix();
-
-	gl::use_program( gl::no_program );
+	materials.emplace_back( std::move(tmp) );
 }
 
 
@@ -117,23 +119,31 @@ struct object {
 	size_t model_id;
 	mat4   pos;
 
-	void render(gl3::program& program)
+	void render(material& mtl)
 	{
 		auto& model = models[model_id];
 
 		gl::bind_vertex_array(model.vao);
-		program[transform_location] = pos;
+		mtl.program[mtl.transform_location] = pos;
 
 		for (auto obj : model.objects)
 			gl::draw_elements_base_vertex(GL_TRIANGLES, obj.num_elements, GL_UNSIGNED_SHORT, 0, obj.offset);
 	}
 };
 std::vector<object> objects;
+camera cam;
 
 void initialize_scene()
 {
+	load_program( "vert6.glsl", "frag1.glsl" );
 	load_model("testworld.obj");
 	load_model("butruck.obj");
+
+	cam.set_near_z(0.5f);
+	cam.set_far_z(5000.0f);
+
+	cam.set_aspect_ratio(1.0f);
+	cam.set_fov( degrees<float>{90} );
 
 	object world;
 	world.model_id = 0;
@@ -147,7 +157,11 @@ void initialize_scene()
 	objects.push_back(world);
 	objects.push_back(btrk);
 
+	materials[0].objects.push_back(0);
+	materials[0].objects.push_back(1);
+
 	gl::enable(GL_CULL_FACE);
+
 	gl::cull_face(GL_BACK);
 	gl::front_face(GL_CCW);
 
@@ -202,17 +216,6 @@ void render()
 	prev = now;
 
 
-	clear();
-
-
-	auto& program = *test_program;
-	gl::use_program( program_handle{program} );
-	program[screen_location] = vec2{ float(hx), float(hy) };
-
-	program[perspective_location] = cam.projection_matrix();
-	program[period_location] = period.count();
-	program[time_location]   = elapsed.count();
-
 
 	float horiz = (2.0f * mx) / hx - 1.0f;
 	float vert  = 1.0f - (2.0f * my) / hy;
@@ -237,9 +240,9 @@ void render()
 	if (keys.C) S *= 100.0f;
 	vec4 movement{
 		S * (keys.a - keys.d),
-		S * (keys.z - keys.q),
-		S * (keys.w - keys.s),
-		0
+		  S * (keys.z - keys.q),
+		  S * (keys.w - keys.s),
+		  0
 	};
 	auto fvec = float(frame_time.count()) * movement * rot;
 
@@ -253,12 +256,27 @@ void render()
 	forward.get(1,3) += fvec[1];
 	forward.get(2,3) += fvec[2];
 
-	program[campos_location] = rot * forward;
 
-	for (auto& obj : objects)
-		obj.render(program);
-	
-	gl::use_program( 0 );
+	auto campos = rot * forward;
+
+	clear();
+
+	for (auto& mtl : materials) {
+		auto& program = mtl.program;
+		gl::use_program( program_handle{program} );
+		program[mtl.screen_location] = vec2{ float(hx), float(hy) };
+
+		program[mtl.perspective_location] = cam.projection_matrix();
+		program[mtl.period_location] = period.count();
+		program[mtl.time_location]   = elapsed.count();
+		program[mtl.campos_location] = campos;
+
+		for (auto& obj : mtl.objects)
+			objects[obj].render(mtl);
+
+	}
+
+	gl::use_program( gl::no_program );
 }
 
 } // namespace aw::gl3
@@ -280,7 +298,6 @@ int main()
 	auto result = ::gl::sys::load_functions_3_3();
 	std::cout << "GL loaded, missing: " << result.num_missing() << '\n';
 
-	initialize_program();
 	initialize_scene();
 	reshape(800, 600);
 
