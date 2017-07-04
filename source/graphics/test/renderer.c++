@@ -28,42 +28,6 @@
 namespace aw::gl3 {
 using namespace std::string_view_literals;
 
-std::vector<model> models;
-void load_model( string_view filename )
-{
-	io::input_file_stream file{ filename };
-	auto data = obj::mesh::parse( file );
-
-	std::vector< float > verts;
-	std::vector< u16 > indices;
-
-	for (auto v : data.verts) {
-		verts.push_back( v[0] );
-		verts.push_back( v[1] );
-		verts.push_back( v[2] );
-	}
-
-	size_t color_offset = verts.size()*sizeof(float);
-
-	for (auto v : data.verts) {
-		verts.push_back( 0.5 );
-		verts.push_back( 0.5 );
-		verts.push_back( 0.5 );
-		verts.push_back( 1.0 );
-	}
-
-	for (auto t : data.faces) {
-		indices.push_back( t.verts[0].index );
-		indices.push_back( t.verts[1].index );
-		indices.push_back( t.verts[2].index );
-	}
-
-	vert_data vd{ verts, 0, color_offset };
-	mesh_data md{ indices };
-
-	models.emplace_back( vd, md );
-}
-
 optional<program> test_program;
 uniform_location perspective_location;
 uniform_location transform_location;
@@ -111,10 +75,77 @@ void initialize_program()
 	gl::use_program( 0 );
 }
 
+
+
+std::vector<model> models;
+void load_model( string_view filename )
+{
+	io::input_file_stream file{ filename };
+	auto data = obj::mesh::parse( file );
+
+	std::vector< float > verts;
+	std::vector< u16 > indices;
+
+	for (auto v : data.verts) {
+		verts.push_back( v[0] );
+		verts.push_back( v[1] );
+		verts.push_back( v[2] );
+	}
+
+	size_t color_offset = verts.size()*sizeof(float);
+
+	for (auto v : data.verts) {
+		verts.push_back( 0.5 );
+		verts.push_back( 0.5 );
+		verts.push_back( 0.5 );
+		verts.push_back( 1.0 );
+	}
+
+	for (auto t : data.faces) {
+		indices.push_back( t.verts[0].index );
+		indices.push_back( t.verts[1].index );
+		indices.push_back( t.verts[2].index );
+	}
+
+	vert_data vd{ verts, 0, color_offset };
+	mesh_data md{ indices };
+
+	models.emplace_back( vd, md );
+}
+
+struct object {
+	size_t model_id;
+	mat4   pos;
+
+	void render(gl3::program& program)
+	{
+		auto& model = models[model_id];
+
+		gl::bind_vertex_array(model.vao);
+		program[transform_location] = pos;
+
+		for (auto obj : model.objects)
+			gl::draw_elements_base_vertex(GL_TRIANGLES, obj.num_elements, GL_UNSIGNED_SHORT, 0, obj.offset);
+	}
+};
+std::vector<object> objects;
+
 void initialize_scene()
 {
 	load_model("testworld.obj");
 	load_model("butruck.obj");
+
+	object world;
+	world.model_id = 0;
+	world.pos = math::identity_matrix<float,4>;
+	object btrk;
+	btrk.model_id = 1;
+	btrk.pos = math::identity_matrix<float,4>;
+	btrk.pos = math::yaw_matrix( degrees<float>{ 180.0f } );
+	btrk.pos.get(1,3) = 3.0;
+
+	objects.push_back(world);
+	objects.push_back(btrk);
 
 	gl::enable(GL_CULL_FACE);
 	gl::cull_face(GL_BACK);
@@ -224,39 +255,8 @@ void render()
 
 	program[campos_location] = rot * forward;
 
-
-
-	for (auto& model : models) {
-		gl::bind_vertex_array(model.vao);
-		auto offset = math::identity_matrix<float,4>;
-		offset = math::yaw_matrix( degrees<float>( 180.0f ) );
-
-		auto ix = 0;
-		auto iy = 0;
-		auto iz = 0;
-
-		offset.get(2,3) = iz;
-		offset.get(1,3) = iy;
-		offset.get(0,3) = ix;
-		program[transform_location] = offset;
-
-		for (auto obj : model.objects)
-			gl::draw_elements_base_vertex(GL_TRIANGLES, obj.num_elements, GL_UNSIGNED_SHORT, 0, obj.offset);
-	}
-
-#ifdef AMUSE
-	for (auto ix = -5; ix < 10; ix+=5)
-	for (auto iy = -5; iy < 10; iy+=5)
-	for (auto iz = 0; iz<100;++iz)
-	{
-		offset.get(2,3) = 8*iz;
-		offset.get(1,3) = iy;
-		offset.get(0,3) = ix;
-		program[transform_location] = offset;
-		for (auto obj : butruck.model->objects)
-			gl::draw_elements_base_vertex(GL_TRIANGLES, obj.num_elements, GL_UNSIGNED_SHORT, 0, obj.offset);
-	}
-#endif
+	for (auto& obj : objects)
+		obj.render(program);
 	
 	gl::use_program( 0 );
 }
