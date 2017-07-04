@@ -108,8 +108,13 @@ camera cam;
 void initialize_scene()
 {
 	load_program( "vert6.glsl", "frag1.glsl" );
+	load_program( "v_smooth.glsl", "f_smooth.glsl" );
 	load_model("testworld.obj");
 	load_model("butruck.obj");
+	load_model("butruck rexport.obj");
+	load_model("cylinder.obj");
+	load_model("kusok.obj");
+	load_model("kusok2.obj");
 
 	cam.set_near_z(0.5f);
 	cam.set_far_z(5000.0f);
@@ -117,20 +122,59 @@ void initialize_scene()
 	cam.set_aspect_ratio(1.0f);
 	cam.set_fov( degrees<float>{90} );
 
-	object world;
-	world.model_id = 0;
-	world.pos = math::identity_matrix<float,4>;
-	object btrk;
-	btrk.model_id = 1;
-	btrk.pos = math::identity_matrix<float,4>;
-	btrk.pos = math::yaw_matrix( degrees<float>{ 180.0f } );
-	btrk.pos.get(1,3) = 3.0;
-
-	objects.push_back(world);
-	objects.push_back(btrk);
-
-	materials[0].objects.push_back(0);
-	materials[0].objects.push_back(1);
+	auto push_object = [] (object& obj, size_t mtl) {
+		materials[mtl].objects.push_back(objects.size());
+		objects.push_back(obj);
+	};
+	{
+		object world;
+		world.model_id = 0;
+		world.pos = math::identity_matrix<float,4>;
+		push_object(world, 1);
+	}
+	{
+		object btrk;
+		btrk.model_id = 1;
+		btrk.pos = math::identity_matrix<float,4>;
+		btrk.pos.get(1,3) = 3.0;
+		push_object(btrk, 0);
+	}
+	{
+		object btrk;
+		btrk.model_id = 2;
+		btrk.pos = math::identity_matrix<float,4>;
+		btrk.pos.get(0,3) = 4.0;
+		btrk.pos.get(1,3) = 3.0;
+		push_object(btrk, 1);
+	}
+	{
+		object cyl;
+		cyl.model_id = 3;
+		cyl.pos = math::identity_matrix<float,4>;
+		cyl.pos = math::yaw_matrix( degrees<float>{ 180.0f } );
+		cyl.pos.get(0,3) = 4.0;
+		cyl.pos.get(1,3) = 3.0;
+		cyl.pos.get(2,3) = 20.0;
+		push_object(cyl, 1);
+	}
+	{
+		object obj;
+		obj.model_id = 4;
+		obj.pos = math::identity_matrix<float,4>;
+		obj.pos.get(0,3) = 0.0;
+		obj.pos.get(1,3) = 5.0;
+		obj.pos.get(2,3) = 20.0;
+		push_object(obj, 0);
+	}
+	{
+		object obj;
+		obj.model_id = 4;
+		obj.pos = math::identity_matrix<float,4>;
+		obj.pos.get(0,3) = 10.0;
+		obj.pos.get(1,3) = 5.0;
+		obj.pos.get(2,3) = 20.0;
+		push_object(obj, 1);
+	}
 
 	gl::enable(GL_CULL_FACE);
 
