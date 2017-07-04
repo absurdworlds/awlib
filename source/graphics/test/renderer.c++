@@ -28,10 +28,42 @@
 namespace aw::gl3 {
 using namespace std::string_view_literals;
 
-struct program_handle {
-	GLuint value;
-	operator GLuint() { return value; }
-};
+std::vector<model> models;
+void load_model( string_view filename )
+{
+	io::input_file_stream file{ filename };
+	auto data = obj::mesh::parse( file );
+
+	std::vector< float > verts;
+	std::vector< u16 > indices;
+
+	for (auto v : data.verts) {
+		verts.push_back( v[0] );
+		verts.push_back( v[1] );
+		verts.push_back( v[2] );
+	}
+
+	size_t color_offset = verts.size()*sizeof(float);
+
+	for (auto v : data.verts) {
+		verts.push_back( 0.5 );
+		verts.push_back( 0.5 );
+		verts.push_back( 0.5 );
+		verts.push_back( 1.0 );
+	}
+
+	for (auto t : data.faces) {
+		indices.push_back( t.verts[0].index );
+		indices.push_back( t.verts[1].index );
+		indices.push_back( t.verts[2].index );
+	}
+
+	vert_data vd{ verts, 0, color_offset };
+	mesh_data md{ indices };
+
+	models.emplace_back( vd, md );
+}
+
 optional<program> test_program;
 uniform_location perspective_location;
 uniform_location transform_location;
@@ -66,7 +98,7 @@ void initialize_program()
 	perspective_location = program.uniform("perspective");
 	transform_location   = program.uniform("transform");
 
-	gl::use_program( handle(program) );
+	gl::use_program( underlying(program_handle{program}) );
 
 	cam.set_near_z(1.0f);
 	cam.set_far_z(10000.0f);
@@ -79,49 +111,10 @@ void initialize_program()
 	gl::use_program( 0 );
 }
 
-struct {
-	optional<gl3::model> model;
-
-	void load()
-	{
-		io::input_file_stream file{ "testworld.obj" };
-		auto data = obj::mesh::parse( file );
-
-		std::vector< float > verts;
-		std::vector< u16 > indices;
-
-		for (auto v : data.verts) {
-			verts.push_back( v[0] );
-			verts.push_back( v[1] );
-			verts.push_back( v[2] );
-		}
-
-		size_t color_offset = verts.size()*sizeof(float);
-
-		for (auto v : data.verts) {
-			verts.push_back( 0.5 );
-			verts.push_back( 0.5 );
-			verts.push_back( 0.5 );
-			verts.push_back( 1.0 );
-		}
-
-		for (auto t : data.faces) {
-			indices.push_back( t.verts[0].index );
-			indices.push_back( t.verts[1].index );
-			indices.push_back( t.verts[2].index );
-		}
-
-		vert_data vd{ verts, 0, color_offset };
-		mesh_data md{ indices };
-
-		model = std::move(gl3::model( vd, md ));
-	}
-} butruck;
-
-
 void initialize_scene()
 {
-	butruck.load();
+	load_model("testworld.obj");
+	load_model("butruck.obj");
 
 	gl::enable(GL_CULL_FACE);
 	gl::cull_face(GL_BACK);
@@ -182,7 +175,7 @@ void render()
 
 
 	auto& program = *test_program;
-	gl::use_program( handle(program) );
+	gl::use_program( underlying(program_handle{program}) );
 	program[screen_location] = vec2{ float(hx), float(hy) };
 
 	program[perspective_location] = cam.projection_matrix();
@@ -220,9 +213,9 @@ void render()
 	auto fvec = float(frame_time.count()) * movement * rot;
 
 	static size_t frame_ctr = 0;
-	std::cout << "frame: " << frame_ctr++ << '\n';
-	std::cout << to_string(fvec) << '\n';
-	std::cout << 90 * vert << ' ' << 180 * horiz << '\n';
+	//std::cout << "frame: " << frame_ctr++ << '\n';
+	//std::cout << to_string(fvec) << '\n';
+	//std::cout << 90 * vert << ' ' << 180 * horiz << '\n';
 
 	auto& forward = camera_transform;
 	forward.get(0,3) += fvec[0];
@@ -231,25 +224,27 @@ void render()
 
 	program[campos_location] = rot * forward;
 
-	gl::bind_vertex_array(butruck.model->vao);
 
-	auto offset = math::identity_matrix<float,4>;
-	offset = math::yaw_matrix( degrees<float>( 180.0f ) );
 
-#define AMUSE
+	for (auto& model : models) {
+		gl::bind_vertex_array(model.vao);
+		auto offset = math::identity_matrix<float,4>;
+		offset = math::yaw_matrix( degrees<float>( 180.0f ) );
+
+		auto ix = 0;
+		auto iy = 0;
+		auto iz = 0;
+
+		offset.get(2,3) = iz;
+		offset.get(1,3) = iy;
+		offset.get(0,3) = ix;
+		program[transform_location] = offset;
+
+		for (auto obj : model.objects)
+			gl::draw_elements_base_vertex(GL_TRIANGLES, obj.num_elements, GL_UNSIGNED_SHORT, 0, obj.offset);
+	}
+
 #ifdef AMUSE
-	auto ix = 0;
-	auto iy = 0;
-	auto iz = 0;
-
-	offset.get(2,3) = iz;
-	offset.get(1,3) = iy;
-	offset.get(0,3) = ix;
-	program[transform_location] = offset;
-
-	for (auto obj : butruck.model->objects)
-		gl::draw_elements_base_vertex(GL_TRIANGLES, obj.num_elements, GL_UNSIGNED_SHORT, 0, obj.offset);
-#else
 	for (auto ix = -5; ix < 10; ix+=5)
 	for (auto iy = -5; iy < 10; iy+=5)
 	for (auto iz = 0; iz<100;++iz)
