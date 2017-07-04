@@ -10,16 +10,11 @@
 #include <aw/graphics/gl/shader.h>
 #include <aw/graphics/gl/gl_ext33.h>
 #include <aw/utility/on_scope_exit.h>
+#include <aw/types/enum.h>
 #include <iostream> // temporary
 #include <vector>
 
 namespace aw::gl3 {
-
-struct shader_handle {
-	GLuint value;
-	operator GLuint() { return value; }
-};
-
 namespace {
 void report_program_info_log(GLuint _program)
 {
@@ -57,7 +52,7 @@ bool program::is_linked() const
 bool program::link(array_ref<shader> shaders)
 {
 	for ( auto& shader : shaders )
-		gl::attach_shader( _program, handle(shader) );
+		gl::attach_shader( _program, underlying(shader.handle()) );
 
 	gl::link_program( _program );
 
@@ -68,7 +63,7 @@ bool program::link(array_ref<shader> shaders)
 	}
 
 	for ( auto& shader : shaders )
-		gl::detach_shader( _program, handle(shader) );
+		gl::detach_shader( _program, underlying(shader.handle()) );
 
 	return status;
 }
@@ -114,10 +109,9 @@ void uniform_proxy::set(mat4 const& m)
 */
 }
 
-struct program_handle {
-	GLuint value;
-	operator GLuint() { return value; }
-};
-struct program_handle handle(program& prg) { return {prg._program}; }
+program_handle program::handle() const
+{
+	return program_handle{_program};
+}
 
 } // namespace aw::gl3

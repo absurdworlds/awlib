@@ -26,7 +26,7 @@
 #include <SFML/Graphics.hpp>
 #include <aw/utility/to_string.h>
 namespace aw::gl3 {
-using namespace sv_literals;
+using namespace std::string_view_literals;
 
 struct program_handle {
 	GLuint value;

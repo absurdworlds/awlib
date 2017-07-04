@@ -77,10 +77,9 @@ bool shader::compile(string_view code)
 	return status;
 }
 
-struct shader_handle {
-	GLuint value;
-	operator GLuint() { return value; }
-};
-struct shader_handle handle(shader& prg) { return {prg._shader}; }
+shader_handle shader::handle() const
+{
+	return shader_handle{_shader};
+}
 
 } // namespace aw::gl3

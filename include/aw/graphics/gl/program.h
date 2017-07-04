@@ -13,6 +13,8 @@
 #include <aw/types/array_view.h>
 namespace aw {
 namespace gl3 {
+enum class program_handle : GLuint {};
+
 struct program {
 	program();
 	~program() { cleanup(); }
@@ -59,9 +61,9 @@ struct program {
 		return { uniform( name ) };
 	}
 
-private:
-	friend struct program_handle handle(program&);
+	program_handle handle() const;
 
+private:
 	void cleanup();
 	GLuint _program;
 };

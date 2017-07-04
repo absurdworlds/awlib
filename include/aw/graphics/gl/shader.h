@@ -12,6 +12,8 @@
 #include <aw/types/string_view.h>
 #include <aw/types/optional.h>
 namespace aw {
+enum class shader_handle : GLuint {};
+
 namespace gl {
 enum class shader_type : GLenum {
 	fragment = 0x8B30,
@@ -19,13 +21,14 @@ enum class shader_type : GLenum {
 	geometry = 0x8DD9,
 };
 
+
 constexpr string_view enum_string( shader_type type )
 {
-	using namespace sv_literals;
+	using namespace std::string_view_literals;
 	switch( type ) {
-	case shader_type::fragment: return "fragment"_s;
-	case shader_type::vertex:   return "vertex"_s;
-	case shader_type::geometry: return "geometry"_s;
+	case shader_type::fragment: return "fragment"sv;
+	case shader_type::vertex:   return "vertex"sv;
+	case shader_type::geometry: return "geometry"sv;
 	};
 	// unreachable
 }
@@ -73,9 +76,9 @@ struct shader {
 
 	gl::shader_type type() const;
 	bool is_compiled() const;
+	shader_handle handle() const;
 
 private:
-	friend struct shader_handle handle(shader&);
 
 	void cleanup();
 
