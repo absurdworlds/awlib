@@ -7,6 +7,7 @@
 #include <aw/math/angle.h>
 
 #include <iostream>
+#include <fstream>
 #include <algorithm>
 #include <vector>
 #include <chrono>
@@ -107,14 +108,7 @@ camera cam;
 
 void initialize_scene()
 {
-	load_program( "vert6.glsl", "frag1.glsl" );
-	load_program( "v_smooth.glsl", "f_smooth.glsl" );
-	load_model("testworld.obj");
-	load_model("butruck.obj");
-	load_model("butruck rexport.obj");
-	load_model("cylinder.obj");
-	load_model("kusok.obj");
-	load_model("kusok2.obj");
+	std::fstream file{ "scene.txt" };
 
 	cam.set_near_z(0.5f);
 	cam.set_far_z(5000.0f);
@@ -122,58 +116,41 @@ void initialize_scene()
 	cam.set_aspect_ratio(1.0f);
 	cam.set_fov( degrees<float>{90} );
 
+	int count = 0;
+	file >> count;
+	while (count --> 0) {
+		std::string vsh, fsh;
+		file >> vsh >> fsh;
+		load_program( vsh, fsh );
+	}
+
+	file >> count;
+	while (count --> 0) {
+		std::string name;
+		file >> name;
+		load_model( name );
+	}
+
 	auto push_object = [] (object& obj, size_t mtl) {
 		materials[mtl].objects.push_back(objects.size());
 		objects.push_back(obj);
 	};
-	{
-		object world;
-		world.model_id = 0;
-		world.pos = math::identity_matrix<float,4>;
-		push_object(world, 1);
-	}
-	{
-		object btrk;
-		btrk.model_id = 1;
-		btrk.pos = math::identity_matrix<float,4>;
-		btrk.pos.get(1,3) = 3.0;
-		push_object(btrk, 0);
-	}
-	{
-		object btrk;
-		btrk.model_id = 2;
-		btrk.pos = math::identity_matrix<float,4>;
-		btrk.pos.get(0,3) = 4.0;
-		btrk.pos.get(1,3) = 3.0;
-		push_object(btrk, 1);
-	}
-	{
-		object cyl;
-		cyl.model_id = 3;
-		cyl.pos = math::identity_matrix<float,4>;
-		cyl.pos = math::yaw_matrix( degrees<float>{ 180.0f } );
-		cyl.pos.get(0,3) = 4.0;
-		cyl.pos.get(1,3) = 3.0;
-		cyl.pos.get(2,3) = 20.0;
-		push_object(cyl, 1);
-	}
-	{
-		object obj;
-		obj.model_id = 4;
-		obj.pos = math::identity_matrix<float,4>;
-		obj.pos.get(0,3) = 0.0;
-		obj.pos.get(1,3) = 5.0;
-		obj.pos.get(2,3) = 20.0;
-		push_object(obj, 0);
-	}
-	{
-		object obj;
-		obj.model_id = 4;
-		obj.pos = math::identity_matrix<float,4>;
-		obj.pos.get(0,3) = 10.0;
-		obj.pos.get(1,3) = 5.0;
-		obj.pos.get(2,3) = 20.0;
-		push_object(obj, 1);
+	file >> count;
+	while (count --> 0) {
+		vec3 pos, rot;
+		int mat, mdl;
+		file >> mat >> mdl;
+		file >> pos[0] >> pos[1] >> pos[2];
+		file >> rot[0] >> rot[1] >> rot[2];
+		object o;
+		o.model_id = mdl;
+		o.pos = math::identity_matrix<float,4>;
+		auto deg = math::vector3d<degrees<float>>( rot );
+		o.pos = math::matrix_from_euler( deg );
+		o.pos.get(0,3) = pos[0];
+		o.pos.get(1,3) = pos[1];
+		o.pos.get(2,3) = pos[2];
+		push_object(o, mat);
 	}
 
 	gl::enable(GL_CULL_FACE);
@@ -185,6 +162,10 @@ void initialize_scene()
 	gl::depth_mask(GL_TRUE);
 	gl::depth_func(GL_LEQUAL);
 	gl::depth_range(0.0f, 1.0f);
+
+	gl::clear_color( 1.0f, 1.0f, 1.0f, 1.0f );
+	gl::clear_depth( 1.0f );
+	gl::clear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 }
 
 int mx, my;
@@ -202,8 +183,6 @@ void reshape(int x, int y)
 
 void clear()
 {
-	gl::clear_color( 1.0f, 1.0f, 1.0f, 1.0f );
-	gl::clear_depth( 1.0f );
 	gl::clear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 }
 

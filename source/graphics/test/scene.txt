@@ -1,0 +1,29 @@
+2
+vert6.glsl frag1.glsl
+v_smooth.glsl f_smooth.glsl
+6
+testworld.obj
+butruck.obj
+butruck_rexport.obj
+cylinder.obj
+kusok.obj
+kusok2.obj
+6
+0 0
+0 0 0
+0 0 0
+0 1
+0 3 0
+0 0 0
+0 2
+4 3 0
+0 0 0
+0 3
+4 3 20
+0 180 0
+0 4
+0 5 20
+0 0 0
+0 5
+10 5 20
+0 0 0
