@@ -33,14 +33,15 @@ struct camera {
 
 	void set_fov(math::radians<float> value)
 	{
-		fov = value;
-		recalc_frustum_scale();
+		frustum_scale = calc_frustum_scale( value );
+		perspective.get(0,0) = frustum_scale / aspect;
+		perspective.get(1,1) = frustum_scale;
 	}
 
 	void set_aspect_ratio(float value)
 	{
 		aspect = value;
-		recalc_frustum_scale();
+		perspective.get(0,0) = frustum_scale / aspect;
 	}
 
 	math::matrix4<f32> const& projection_matrix() const
@@ -55,11 +56,10 @@ struct camera {
 	}
 
 protected:
-	void recalc_frustum_scale()
+	static constexpr auto default_fov = math::degrees<float>{45};
+	static float calc_frustum_scale( math::angle<float> fov )
 	{
-		float frustum_scale = math::cot(fov / 2.0f);
-		perspective.get(0,0) = frustum_scale / aspect;
-		perspective.get(1,1) = frustum_scale;
+		return math::cot(fov / 2.0f);
 	}
 
 	void recalc_planes()
@@ -74,7 +74,7 @@ protected:
 	}
 
 private:
-	math::radians<float> fov = math::degrees<float>{45};
+	float frustum_scale = calc_frustum_scale( default_fov );
 	float aspect = 1.0f;
 	float zfar   = 1.0f;
 	float znear  = 2.0f;
