@@ -36,6 +36,20 @@ Test(vec_addition) {
 		TestEqualV(d.z(), e.z(), 0);
 	}
 };
+
+Test(vec_apply) {
+	vector3d<int> a{1,2,3};
+	vector3d<float> b{0.5,1,1.5};
+
+	auto func = [] (int x) {
+		return float(x) / 2;
+	};
+
+	auto c = a.apply( func );
+	TestEqual( c[0], b[0] );
+	TestEqual( c[1], b[1] );
+	TestEqual( c[2], b[2] );
+};
 } // namespace math
 } // namespace aw
 

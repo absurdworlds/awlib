@@ -99,15 +99,10 @@ constexpr B convert(A& a, index_sequence<Is...>)
 }
 
 template<typename V, typename Func, size_t...Is>
-constexpr V make(V& vec, Func func, index_sequence<Is...>)
+constexpr auto apply(V const& vec, Func func, index_sequence<Is...> is)
 {
-	return { func(vec[Is]) ... };
-}
-
-template<typename V, typename Func, size_t...Is>
-constexpr void apply(V& vec, Func func, index_sequence<Is...> is)
-{
-	assign(vec, make(vec, func, is), is);
+	using T = decltype( func(vec[0]) );
+	return vector<T,sizeof...(Is)>{ func(vec[Is]) ... };
 }
 
 template<typename V, typename Func, size_t...Is>
@@ -216,10 +211,9 @@ struct vector {
 	}
 
 	template<typename Func>
-	constexpr vector& apply(Func func)
+	constexpr auto apply(Func func) const
 	{
-		_impl::vec::apply(*this, func, indices);
-		return *this;
+		return _impl::vec::apply(*this, func, indices);
 	}
 
 	constexpr T& x()
