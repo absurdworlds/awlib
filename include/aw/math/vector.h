@@ -59,6 +59,12 @@ constexpr void assign(A& a, B const& b, index_sequence<Is...>)
 	(void(a[Is] = b[Is]), ...);
 }
 
+template<typename U, typename A, size_t...Is>
+constexpr vector<U,sizeof...(Is)> cast(A const& a, index_sequence<Is...>)
+{
+	return { U(a[Is])... };
+}
+
 template<typename A, typename B, size_t...Is>
 constexpr void add(A& a, B const& b, index_sequence<Is...>)
 {
@@ -130,6 +136,12 @@ struct vector {
 	{
 		_impl::vec::assign(*this, other, indices);
 		return *this;
+	}
+
+	template<typename U>
+	constexpr explicit operator vector<U,N>() const
+	{
+		return _impl::vec::cast<U>(*this, indices);
 	}
 
 	template<size_t M>
