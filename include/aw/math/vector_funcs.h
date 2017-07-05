@@ -27,6 +27,20 @@ vector<T,N> cos( vector<T,N> vec )
 	return vec.apply( func );
 }
 
+template<typename R, typename P, size_t N>
+vector<R,N> sin( vector<angle<R,P>,N> vec )
+{
+	auto func = [] (angle<R,P> val) { return sin( val ); };
+	return vec.apply( func );
+}
+
+template<typename R, typename P, size_t N>
+vector<R,N> cos( vector<angle<R,P>,N> vec )
+{
+	auto func = [] (angle<R,P> val) { return cos( val ); };
+	return vec.apply( func );
+}
+
 } // namespace math
 } // namespace aw
 #endif//aw_math_vector_funcs_h

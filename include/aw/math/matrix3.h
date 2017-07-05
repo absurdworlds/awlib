@@ -87,8 +87,8 @@ matrix3<T> matrix_from_axis_angle(vector3d<T> const& axis, angle<T,Pr> angle)
  * rotation around X axis (pitch), Y axis (yaw), Z axis (roll).
  * Same as `roll( z ) * yaw( y ) * pitch( x )`.
  */
-template<typename T>
-matrix3<T> matrix_from_euler(vector3d<T> const& euler)
+template<typename T, typename P>
+matrix3<T> matrix_from_euler(vector3d<angle<T,P>> const& euler)
 {
 	vector3d<T> s = sin( euler );
 	vector3d<T> c = cos( euler );
