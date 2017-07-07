@@ -241,25 +241,56 @@ void render()
 	rot = pitch * yaw;
 
 	struct {
+		bool num[10] = {
+			//sf::Keyboard::isKeyPressed(sf::Keyboard::Num0),
+			0,
+			sf::Keyboard::isKeyPressed(sf::Keyboard::Num1),
+			sf::Keyboard::isKeyPressed(sf::Keyboard::Num2),
+			/*sf::Keyboard::isKeyPressed(sf::Keyboard::Num3),
+			sf::Keyboard::isKeyPressed(sf::Keyboard::Num4),
+			sf::Keyboard::isKeyPressed(sf::Keyboard::Num5),
+			sf::Keyboard::isKeyPressed(sf::Keyboard::Num6),
+			sf::Keyboard::isKeyPressed(sf::Keyboard::Num7),
+			sf::Keyboard::isKeyPressed(sf::Keyboard::Num8),
+			sf::Keyboard::isKeyPressed(sf::Keyboard::Num9)*/
+		};
 		bool d = sf::Keyboard::isKeyPressed(sf::Keyboard::D);
 		bool a = sf::Keyboard::isKeyPressed(sf::Keyboard::A);
 		bool q = sf::Keyboard::isKeyPressed(sf::Keyboard::Q);
+		bool e = sf::Keyboard::isKeyPressed(sf::Keyboard::E);
 		bool z = sf::Keyboard::isKeyPressed(sf::Keyboard::Z);
+		bool c = sf::Keyboard::isKeyPressed(sf::Keyboard::C);
 		bool w = sf::Keyboard::isKeyPressed(sf::Keyboard::W);
 		bool s = sf::Keyboard::isKeyPressed(sf::Keyboard::S);
 		bool S = sf::Keyboard::isKeyPressed(sf::Keyboard::LShift);
+		bool A = sf::Keyboard::isKeyPressed(sf::Keyboard::LAlt);
 		bool C = sf::Keyboard::isKeyPressed(sf::Keyboard::LControl);
 	} keys;
-	float S = 1.0f;
+	float S = 10.0f;
 	if (keys.S) S *= 10.0f;
-	if (keys.C) S *= 100.0f;
+	if (keys.A) S *= 100.0f;
+	if (keys.C) S /= 10.0f;
 	vec4 movement{
 		S * (keys.a - keys.d),
-		  S * (keys.z - keys.q),
-		  S * (keys.w - keys.s),
-		  0
+		S * (keys.z - keys.c),
+		S * (keys.w - keys.s),
+		0
 	};
-	auto fvec = float(frame_time.count()) * movement * rot;
+	radians<float> ang { frame_time.count() * 5 * (keys.e - keys.q) };
+	auto fvec = frame_time.count() * movement * rot;
+
+	static degrees<float> fov { 90.0 };
+	auto rate = fov < degrees<float>{ 30 }  ? (fov.count()) :
+	            fov > degrees<float>{ 150 } ? (180 - fov.count()) :
+	            30;
+	if (keys.num[1]) fov -= rate*degrees<float>{ frame_time.count() };
+	if (keys.num[2]) fov += rate*degrees<float>{ frame_time.count() };
+
+	cam.set_fov( fov );
+	if (keys.num[1] - keys.num[2] != 0) {
+		auto proj = cam.projection_matrix();
+		common->set_data(0, array(proj));
+	}
 
 	static size_t frame_ctr = 0;
 	//std::cout << "frame: " << frame_ctr++ << '\n';
@@ -267,9 +298,12 @@ void render()
 	//std::cout << 90 * vert << ' ' << 180 * horiz << '\n';
 
 	auto& forward = camera_transform;
+	auto rmat = math::identity_matrix<float,4>;
+	rmat = math::yaw_matrix(ang);
 	forward.get(0,3) += fvec[0];
 	forward.get(1,3) += fvec[1];
 	forward.get(2,3) += fvec[2];
+	forward = rmat * forward;
 
 
 	auto campos = rot * forward;
