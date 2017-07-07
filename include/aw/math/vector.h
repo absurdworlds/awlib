@@ -214,9 +214,19 @@ struct vector {
 	constexpr T*       data()       { return elems; }
 	constexpr T const* data() const { return elems; }
 
+	constexpr T      (& array())[N]       { return elems; }
+	constexpr T const(& array() const)[N] { return elems; }
+
 
 	template<typename Func>
 	constexpr vector& for_each(Func func)
+	{
+		_impl::vec::for_each(*this, func, indices);
+		return *this;
+	}
+
+	template<typename Func>
+	constexpr vector const& for_each(Func func) const
 	{
 		_impl::vec::for_each(*this, func, indices);
 		return *this;

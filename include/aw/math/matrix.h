@@ -199,9 +199,17 @@ struct matrix {
 	}
 
 	template<typename Func>
-	constexpr void for_each(Func func)
+	constexpr matrix& for_each(Func func)
 	{
 		_impl::mat::for_each(*this, func, row_indices);
+		return *this;
+	}
+
+	template<typename Func>
+	constexpr matrix const& for_each(Func func) const
+	{
+		_impl::mat::for_each(*this, func, row_indices);
+		return *this;
 	}
 
 	constexpr T& get(size_t i, size_t j)
