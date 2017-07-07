@@ -12,17 +12,14 @@
 #include <vector>
 #include <chrono>
 
-#include <aw/graphics/gl/shader.h>
-#include <aw/graphics/gl/program.h>
-#include <aw/graphics/gl/model.h>
+#include <aw/graphics/gl/command_list.h>
+#include <aw/graphics/gl/render_context.h>
 #include <aw/graphics/gl/uniform_buffer.h>
 
-#include <aw/graphics/gl/shader_file.h>
 #include <aw/graphics/gl/utility/model/obj.h>
-#include <aw/graphics/gl/camera.h>
 #include <aw/io/input_file_stream.h>
-#include <aw/utility/to_string/math/vector.h>
-#include <aw/utility/to_string/math/matrix.h>
+//#include <aw/utility/to_string/math/vector.h>
+//#include <aw/utility/to_string/math/matrix.h>
 
 #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
@@ -30,55 +27,8 @@
 namespace aw::gl3 {
 using namespace std::string_view_literals;
 
-struct material {
-	// TODO: this isn't a mockup of an actual material
-	// this will be some kind of wrapper over program,
-	// since it makes sense that common uniforms belong
-	// to a program, not to material
-	// TODO: some of them, like screen and time will be
-	// replaced by UBOs
-	gl3::program program;
-	uniform_location perspective_location;
-	uniform_location transform_location;
-	uniform_location screen_location;
-	uniform_location time_location;
-	uniform_location period_location;
-	uniform_location campos_location;
-
-	//TODO: I wanted to place this outside of class,
-	//but right now that is not very convenient
-	std::vector<size_t> objects;
-
-	void render();
-};
-std::vector<material> materials;
-
-void load_program( string_view v, string_view f)
-{
-	std::vector<shader> shaderList;
-
-	auto vsh = load_shader( gl::shader_type::vertex,   v );
-	auto fsh = load_shader( gl::shader_type::fragment, f );
-
-	if (vsh && fsh) {
-		shaderList.push_back(std::move(*vsh));
-		shaderList.push_back(std::move(*fsh));
-	}
-
-	material tmp;
-	auto& program = tmp.program;
-	program.link( shaderList );
-
-	tmp.screen_location = program.uniform("screen");
-	tmp.time_location   = program.uniform("time");
-	tmp.period_location = program.uniform("period");
-	tmp.campos_location = program.uniform("camera");
-	tmp.perspective_location = program.uniform("perspective");
-	tmp.transform_location   = program.uniform("transform");
-
-	materials.emplace_back( std::move(tmp) );
-}
-
+program_manager pman;
+material_manager mtls;
 
 
 std::vector<model> models;
@@ -93,12 +43,15 @@ struct object {
 	size_t model_id;
 	mat4   pos;
 
-	void render(material& mtl)
+	void render( render_context& ctx)
 	{
+		auto& mtl = *ctx.active_material;
 		auto& model = models[model_id];
 
 		gl::bind_vertex_array(model.vao);
-		mtl.program[mtl.transform_location] = pos;
+		auto& program = *mtl.prg;
+		auto campos = ctx.camera_position;
+		program[mtl.model_to_camera] = campos * pos;
 
 		for (auto obj : model.objects)
 			gl::draw_elements_base_vertex(GL_TRIANGLES, obj.num_elements, GL_UNSIGNED_INT, 0, obj.offset);
@@ -107,6 +60,38 @@ struct object {
 std::vector<object> objects;
 camera cam;
 
+namespace commands {
+struct select_program {
+	void operator()( render_context& ctx )
+	{
+		ctx.use_program( *prg );
+	}
+
+	program_ref prg;
+};
+
+struct select_material {
+	void operator()( render_context& ctx )
+	{
+		ctx.use_material( *mtl );
+	}
+
+	material* mtl;
+};
+
+struct render_simple_object {
+	void operator()( render_context& ctx )
+	{
+		obj->render( ctx );
+	}
+
+	object* obj;
+};
+} // namespace commands
+
+command_list cmds;
+
+render_context ctx;
 GLuint common_block_idx  = 0;
 size_t common_block_size = sizeof(mat4) + sizeof(vec3) + sizeof(vec4);
 optional<uniform_buffer> common;
@@ -121,6 +106,8 @@ void initialize_scene()
 	cam.set_aspect_ratio(1.0f);
 	cam.set_fov( degrees<float>{90} );
 
+	ctx.active_camera = &cam;
+
 	common.emplace(common_block_idx, common_block_size);
 
 	vec4 lint{ 1.0, 1.0, 1.0, 1.0 };
@@ -132,14 +119,20 @@ void initialize_scene()
 	gl::get_integerv(GL_MAX_VERTEX_UNIFORM_BLOCKS, &i);
 	std::cout << i << '\n';
 
+	size_t idx = 0;
 	int count = 0;
 	file >> count;
 	while (count --> 0) {
 		std::string vsh, fsh;
 		file >> vsh >> fsh;
-		load_program( vsh, fsh );
-		common->bind(materials.back().program, block);
+		idx = pman.create_program( vsh, fsh ) + 1;
+		auto& prg  = *pman[idx];
+		auto block = prg.uniform_block("common_data");
+		common->bind(prg, block);
 	}
+
+	while (idx --> 0)
+		mtls.materials.emplace_back(material{ pman[idx] });
 
 	file >> count;
 	while (count --> 0) {
@@ -148,8 +141,15 @@ void initialize_scene()
 		load_model( name );
 	}
 
-	auto push_object = [] (object& obj, size_t mtl) {
-		materials[mtl].objects.push_back(objects.size());
+	struct tmp {
+		size_t mtl;
+		size_t obj;
+	};
+	std::vector<tmp> vec;
+
+
+	auto push_object = [&] (object& obj, size_t mtl) {
+		vec.push_back(tmp{mtl, objects.size()});
 		objects.push_back(obj);
 	};
 	file >> count;
@@ -168,6 +168,20 @@ void initialize_scene()
 		o.pos.get(1,3) = pos[1];
 		o.pos.get(2,3) = pos[2];
 		push_object(o, mat);
+	}
+
+	auto compare = [] (tmp a, tmp b) {
+		return (a.mtl < b.mtl) || (a.mtl == b.mtl && a.obj < b.obj);
+	};
+
+	std::sort(begin(vec),end(vec),compare);
+	tmp prev{size_t(-1),size_t(-1)};
+	for (auto t : vec) {
+		if (prev.mtl != t.mtl) {
+			cmds.cmds.emplace_back( commands::select_program{ mtls.materials[t.mtl].prg } );
+			cmds.cmds.emplace_back( commands::select_material{ &mtls.materials[t.mtl] } );
+		}
+		cmds.add( commands::render_simple_object{ &objects[t.obj] } );
 	}
 
 	gl::enable(GL_CULL_FACE);
@@ -218,6 +232,7 @@ void calc_positions()
 float xx,yy,zz;
 mat4 camera_transform = math::identity_matrix<float,4>;
 vec3 campos {};
+
 
 void render()
 {
@@ -307,26 +322,11 @@ void render()
 
 
 	auto campos = rot * forward;
+	ctx.camera_position = campos;
 
 	clear();
 
-	for (auto& mtl : materials) {
-		auto& program = mtl.program;
-		gl::use_program( program_handle{program} );
-		program[mtl.screen_location] = vec2{ float(hx), float(hy) };
-
-		program[mtl.perspective_location] = cam.projection_matrix();
-		program[mtl.period_location] = period.count();
-		program[mtl.time_location]   = elapsed.count();
-		program[mtl.campos_location] = campos;
-
-		program["light_dir"] = vec3{ 0.577, 0.577, 0.577 };
-		program["light_intensity"] = vec4{ 1.0, 1.0, 1.0, 1.0 };
-
-		for (auto& obj : mtl.objects)
-			objects[obj].render(mtl);
-
-	}
+	cmds.render(ctx);
 
 	gl::use_program( gl::no_program );
 }

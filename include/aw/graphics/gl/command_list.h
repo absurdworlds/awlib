@@ -71,6 +71,12 @@ struct command_storage {
 struct command_list {
 	std::vector< command_storage > cmds;
 
+	template<typename T>
+	void add( T&& cmd )
+	{
+		cmds.emplace_back( std::forward<T>(cmd) );
+	}
+
 	void render(render_context& ctx)
 	{
 		for (auto& cmd : cmds)
