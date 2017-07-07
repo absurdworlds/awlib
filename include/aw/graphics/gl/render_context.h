@@ -22,14 +22,13 @@ struct render_context {
 	camera*   active_camera;
 	mat4      camera_position;
 
-	void use_program( program& prg )
+	void set_program( program& prg )
 	{
-		gl::use_program( program_handle{prg} );
 		active_program  = &prg;
 		active_material = nullptr;
 	}
 
-	void use_material( material& mtl )
+	void set_material( material& mtl )
 	{
 		// assert( active_material == mtl.program )
 		active_material = &mtl;

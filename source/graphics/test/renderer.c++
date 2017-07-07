@@ -64,7 +64,8 @@ namespace commands {
 struct select_program {
 	void operator()( render_context& ctx )
 	{
-		ctx.use_program( *prg );
+		gl::use_program( program_handle{prg} );
+		ctx.set_program( *prg );
 	}
 
 	program_ref prg;
@@ -73,7 +74,7 @@ struct select_program {
 struct select_material {
 	void operator()( render_context& ctx )
 	{
-		ctx.use_material( *mtl );
+		ctx.set_material( *mtl );
 	}
 
 	material* mtl;
