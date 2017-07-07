@@ -38,6 +38,14 @@ struct camera {
 		perspective.get(1,1) = frustum_scale;
 	}
 
+	void set_vfov(math::radians<float> value)
+	{
+		auto vscale = calc_frustum_scale( value );
+		perspective.get(0,0) = vscale;
+		perspective.get(1,1) = vscale * aspect;
+		frustum_scale = perspective.get(1,1);
+	}
+
 	void set_aspect_ratio(float value)
 	{
 		aspect = value;
