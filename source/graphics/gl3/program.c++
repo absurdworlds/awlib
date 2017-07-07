@@ -70,43 +70,12 @@ bool program::link(array_ref<shader> shaders)
 
 uniform_location program::uniform( char const* name )
 {
-	return uniform_location( gl::get_uniform_location( _program, name ) );
+	return gl::get_uniform_location( _program, name );
 }
 
-void uniform_proxy::set(GLfloat x)
+uniform_block_index program::uniform_block( char const* name )
 {
-	gl::uniform1f( location, x);
-}
-
-void uniform_proxy::set(GLfloat x, GLfloat y)
-{
-	gl::uniform2f( location, x, y);
-}
-
-void uniform_proxy::set(GLfloat x, GLfloat y, GLfloat z)
-{
-	gl::uniform3f( location, x, y, z);
-}
-
-void uniform_proxy::set(GLfloat x, GLfloat y, GLfloat z, GLfloat w)
-{
-	gl::uniform4f( location, x, y, z, w);
-}
-
-void uniform_proxy::set(mat4 const& m)
-{
-	static_assert( sizeof(vec4) == 4*sizeof(float) );
-	gl::uniform_matrix4fv( location, 1, GL_TRUE, &m[0][0] );
-/*
-	using namespace math;
-	float mt[16] = {
-		get<0,0>(m), get<1,0>(m), get<2,0>(m), get<3,0>(m),
-		get<0,1>(m), get<1,1>(m), get<2,1>(m), get<3,1>(m),
-		get<0,2>(m), get<1,2>(m), get<2,2>(m), get<3,2>(m),
-		get<0,3>(m), get<1,3>(m), get<2,3>(m), get<3,3>(m),
-	};
-	gl::uniform_matrix4fv( GLint(location), 1, GL_FALSE, mt );
-*/
+	return gl::get_uniform_block_index( _program, name );
 }
 
 program::operator program_handle()

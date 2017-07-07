@@ -47,6 +47,11 @@ struct program {
 	uniform_location uniform( char const* name );
 
 	/*!
+	 * Get uniform block location
+	 */
+	uniform_block_index uniform_block( char const* name );
+
+	/*!
 	 * Creates proxy object for setting and
 	 * retrieving value of an uniform.
 	 *

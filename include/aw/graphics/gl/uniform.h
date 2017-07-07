@@ -14,6 +14,7 @@
 #include <aw/graphics/glsl/mat.h>
 namespace aw {
 namespace gl3 {
+using gl::uniform_block_index;
 using gl::uniform_location;
 using gl::invalid_uniform;
 

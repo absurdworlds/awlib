@@ -999,10 +999,7 @@ inline void get_active_uniformsiv(GLuint program, GLsizei uniformCount, const GL
 {
 	::gl::get_active_uniformsiv(program, uniformCount, uniformIndices, pname, params);
 }
-inline GLuint get_uniform_block_index(GLuint program, const GLchar * uniformBlockName)
-{
-	return ::gl::get_uniform_block_index(program, uniformBlockName);
-}
+
 inline void get_uniform_indices(GLuint program, GLsizei uniformCount, const GLchar *const* uniformNames, GLuint * uniformIndices)
 {
 	::gl::get_uniform_indices(program, uniformCount, uniformNames, uniformIndices);

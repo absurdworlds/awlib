@@ -254,6 +254,19 @@ inline void uniform_matrix4x3fv(uniform_location location, GLsizei count, GLbool
 {
 	::gl::uniform_matrix4x3fv( underlying(location), count, transpose, value);
 }
+
+//------------------------------------------------------------------------------
+inline uniform_block_index get_uniform_block_index(program_handle program, const GLchar* uniformBlockName)
+{
+	return uniform_block_index{
+		::gl::get_uniform_block_index( underlying(program), uniformBlockName)
+	};
+}
+
+inline void uniform_block_binding(program_handle program, uniform_block_index uniformBlockIndex, GLuint uniformBlockBinding)
+{
+	::gl::uniform_block_binding(underlying(program), underlying(uniformBlockIndex), uniformBlockBinding);
+}
 } // namespace gl
 } // namespace aw
 #endif//aw_graphics_awgl_shader_func_h

@@ -15,6 +15,7 @@ namespace gl {
 enum class shader_handle : GLuint {};
 enum class program_handle : GLuint {};
 enum class uniform_location : GLint {};
+enum class uniform_block_index : GLuint {};
 
 constexpr shader_handle    no_shader{ 0 };
 constexpr program_handle   no_program{ 0 };

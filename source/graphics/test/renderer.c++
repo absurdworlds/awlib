@@ -15,6 +15,7 @@
 #include <aw/graphics/gl/shader.h>
 #include <aw/graphics/gl/program.h>
 #include <aw/graphics/gl/model.h>
+#include <aw/graphics/gl/uniform_buffer.h>
 
 #include <aw/graphics/gl/shader_file.h>
 #include <aw/graphics/gl/utility/model/obj.h>
@@ -106,6 +107,10 @@ struct object {
 std::vector<object> objects;
 camera cam;
 
+GLuint common_block_idx  = 0;
+size_t common_block_size = sizeof(mat4) + sizeof(vec3) + sizeof(vec4);
+optional<uniform_buffer> common;
+
 void initialize_scene()
 {
 	std::fstream file{ "scene.txt" };
@@ -116,12 +121,24 @@ void initialize_scene()
 	cam.set_aspect_ratio(1.0f);
 	cam.set_fov( degrees<float>{90} );
 
+	common.emplace(common_block_idx, common_block_size);
+
+	vec4 lint{ 1.0, 1.0, 1.0, 1.0 };
+	vec3 ldir{ 0.577, 0.577, 0.577 };
+	common->set_data(sizeof(mat4), lint.array(), ldir.array());
+
+
+	int i;
+	gl::get_integerv(GL_MAX_VERTEX_UNIFORM_BLOCKS, &i);
+	std::cout << i << '\n';
+
 	int count = 0;
 	file >> count;
 	while (count --> 0) {
 		std::string vsh, fsh;
 		file >> vsh >> fsh;
 		load_program( vsh, fsh );
+		common->bind(materials.back().program, block);
 	}
 
 	file >> count;
@@ -179,6 +196,9 @@ void reshape(int x, int y)
 	hx = x;
 	hy = y;
 	cam.set_aspect_ratio( float(x) / float(y) );
+
+	auto proj = cam.projection_matrix();
+	common->set_data(0, array(proj));
 }
 
 void clear()
