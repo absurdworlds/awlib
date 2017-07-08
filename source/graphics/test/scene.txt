@@ -1,19 +1,26 @@
-1
+2
 vert6.glsl frag1.glsl
-6
+v_tex.glsl f_tex.glsl
+7
 testworld.obj
 butruck.obj
 butruck_rexport.obj
 cylinder.obj
 kusok.obj
 kusok2.obj
-9
+untitled.obj
+10
 0 0
 0 0 0
 0 0 0
-0 1
+
+1 1
 0 3 0
 0 0 0
+1 6
+0 10 0
+0 0 0
+
 0 2
 4 3 0
 0 0 0

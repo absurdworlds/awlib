@@ -15,8 +15,10 @@
 #include <aw/graphics/gl/command_list.h>
 #include <aw/graphics/gl/render_context.h>
 #include <aw/graphics/gl/uniform_buffer.h>
+#include <aw/graphics/gl/texture.h>
 
 #include <aw/graphics/gl/utility/model/obj.h>
+#include <aw/fileformat/png/reader.h>
 #include <aw/io/input_file_stream.h>
 //#include <aw/utility/to_string/math/vector.h>
 //#include <aw/utility/to_string/math/matrix.h>
@@ -127,13 +129,24 @@ void initialize_scene()
 		std::string vsh, fsh;
 		file >> vsh >> fsh;
 		idx = pman.create_program( vsh, fsh ) + 1;
-		auto& prg  = *pman[idx];
-		auto block = prg.uniform_block("common_data");
-		common->bind(prg, block);
 	}
 
-	while (idx --> 0)
-		mtls.materials.emplace_back(material{ pman[idx] });
+	for (int i = 0; i < idx; ++i) {
+		auto& prg  = *pman[i];
+		auto block = prg.uniform_block("common_data");
+		common->bind(prg, block);
+		mtls.materials.emplace_back(material{ pman[i] });
+	}
+
+	io::input_file_stream ts{"butruck.png"};
+	auto img = png::read(ts);
+	texture tex{ *img, 1024, 1024 };
+	gl::use_program( program_handle{pman[1]} );
+	auto unif = pman[1]->uniform("the_textur");
+	gl::uniform1i(unif, 0);
+	gl::active_texture(GL_TEXTURE0 + 0);
+	gl::bind_texture(GL_TEXTURE_2D, texture_handle{tex});
+	gl::use_program( gl::no_program );
 
 	file >> count;
 	while (count --> 0) {
