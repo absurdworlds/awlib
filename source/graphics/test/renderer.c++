@@ -62,6 +62,8 @@ struct object {
 std::vector<object> objects;
 camera cam;
 
+bool disable_rur = false;
+
 namespace commands {
 struct select_program {
 	void operator()( render_context& ctx )
@@ -110,6 +112,7 @@ void initialize_scene()
 	cam.set_fov( degrees<float>{90} );
 
 	ctx.active_camera = &cam;
+	ctx.camera_position = math::identity_matrix<float,4>;
 
 	common.emplace(common_block_idx, common_block_size);
 
@@ -242,25 +245,10 @@ void calc_positions()
 	// gl::bind_buffer( GL_ARRAY_BUFFER, pbo );
 	// gl::buffer_sub_data( GL_ARRAY_BUFFER, 0, sizeof(vertex_positions), vec.data() );
 }
-
-float xx,yy,zz;
 mat4 camera_transform = math::identity_matrix<float,4>;
-vec3 campos {};
 
-
-void render(GLFWwindow* window)
+void update_camera(GLFWwindow* window, std::chrono::duration<float> frame_time)
 {
-	using namespace std::chrono;
-	static duration<double> period{1};
-	static auto begin = steady_clock::now();
-	static auto prev = begin;
-	auto now = steady_clock::now();
-	duration<double> elapsed   = now - begin;
-	duration<float> frame_time = now - prev;
-	prev = now;
-
-
-
 	float horiz = (2.0f * mx) / hx - 1.0f;
 	float vert  = 1.0f - (2.0f * my) / hy;
 	auto pitch = math::pitch_matrix( degrees<float>(90) * vert );
@@ -334,14 +322,25 @@ void render(GLFWwindow* window)
 	forward.get(2,3) += fvec[2];
 	forward = rmat * forward;
 
+	ctx.camera_position = rot * forward;
+}
 
-	auto campos = rot * forward;
-	ctx.camera_position = campos;
+void render(GLFWwindow* window)
+{
+	using namespace std::chrono;
+	static duration<double> period{1};
+	static auto begin = steady_clock::now();
+	static auto prev = begin;
+	auto now = steady_clock::now();
+	duration<double> elapsed   = now - begin;
+	duration<float> frame_time = now - prev;
+	prev = now;
+
+	if (!disable_rur)
+		update_camera(window, frame_time);
 
 	clear();
-
 	cmds.render(ctx);
-
 	gl::use_program( gl::no_program );
 }
 
@@ -381,8 +380,34 @@ int main()
 		glfwGetWindowSize(window, &w, &h);
 		mx = x; my = double(h) - y;
 	};
+	auto on_key   = [] (GLFWwindow*, int key,int, int action, int) {
+		if (action != GLFW_PRESS)
+			return;
+		if (key == GLFW_KEY_P) {
+			auto m = ctx.camera_position;
+			auto m1 = m[0];
+			auto m2 = m[1];
+			auto m3 = m[2];
+			auto m4 = m[3];
+			std::cout << m1[0] << ' ' << m1[1] << ' ' << m1[2] << ' ' << m1[3] << '\n';
+			std::cout << m2[0] << ' ' << m2[1] << ' ' << m2[2] << ' ' << m2[3] << '\n';
+			std::cout << m3[0] << ' ' << m3[1] << ' ' << m3[2] << ' ' << m3[3] << '\n';
+			std::cout << m4[0] << ' ' << m4[1] << ' ' << m4[2] << ' ' << m4[3] << '\n';
+		} else if (key == GLFW_KEY_LEFT_BRACKET) {
+			static unsigned i = 0;
+			i = (i + 1) % objects.size();
+			ctx.camera_position = *inverse(objects[i].pos);
+		} else if (key == GLFW_KEY_RIGHT_BRACKET) {
+			static unsigned i = 0;
+			i = (i - 1) % objects.size();
+			ctx.camera_position = *inverse(objects[i].pos);
+		} else if (key == GLFW_KEY_O) {
+			disable_rur = !disable_rur;
+		}
+	};
 	glfwSetWindowSizeCallback(window, +on_resize );
 	glfwSetCursorPosCallback(window,  +on_mouse );
+	glfwSetKeyCallback(window,        +on_key );
 
 	GLint num;
 	gl::get_integerv(GL_MAX_VERTEX_UNIFORM_COMPONENTS, &num);
