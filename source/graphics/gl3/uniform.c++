@@ -28,9 +28,9 @@ void uniform_buffer::set_data(size_t offset, void const* data, size_t size)
 	gl::bind_buffer(GL_UNIFORM_BUFFER, 0);
 }
 
-void uniform_buffer::bind(program_handle prg, uniform_block_index index)
+void uniform_buffer::bind(program_handle prg, uniform_block_index block)
 {
-	gl::uniform_block_binding(prg, index, ubo);
+	gl::uniform_block_binding(prg, block, index);
 }
 
 void uniform_buffer::bind(program& prg, uniform_block_index index)
