@@ -177,60 +177,14 @@ inline void stencil_op(GLenum fail, GLenum zfail, GLenum zpass)
 {
 	::gl::stencil_op(fail, zfail, zpass);
 }
-inline void tex_image1_d(GLenum target, GLint level, GLint internalformat, GLsizei width, GLint border, GLenum format, GLenum type, const void * pixels)
-{
-	::gl::tex_image1_d(target, level, internalformat, width, border, format, type, pixels);
-}
-inline void tex_image2_d(GLenum target, GLint level, GLint internalformat, GLsizei width, GLsizei height, GLint border, GLenum format, GLenum type, const void * pixels)
-{
-	::gl::tex_image2_d(target, level, internalformat, width, height, border, format, type, pixels);
-}
-inline void tex_parameterf(GLenum target, GLenum pname, GLfloat param)
-{
-	::gl::tex_parameterf(target, pname, param);
-}
-inline void tex_parameterfv(GLenum target, GLenum pname, const GLfloat * params)
-{
-	::gl::tex_parameterfv(target, pname, params);
-}
-inline void tex_parameteri(GLenum target, GLenum pname, GLint param)
-{
-	::gl::tex_parameteri(target, pname, param);
-}
-inline void tex_parameteriv(GLenum target, GLenum pname, const GLint * params)
-{
-	::gl::tex_parameteriv(target, pname, params);
-}
+
 inline void viewport(GLint x, GLint y, GLsizei width, GLsizei height)
 {
 	::gl::viewport(x, y, width, height);
 }
 
 /* gl version 1.1 */
-inline void bind_texture(GLenum target, GLuint texture)
-{
-	::gl::bind_texture(target, texture);
-}
-inline void copy_tex_image1_d(GLenum target, GLint level, GLenum internalformat, GLint x, GLint y, GLsizei width, GLint border)
-{
-	::gl::copy_tex_image1_d(target, level, internalformat, x, y, width, border);
-}
-inline void copy_tex_image2_d(GLenum target, GLint level, GLenum internalformat, GLint x, GLint y, GLsizei width, GLsizei height, GLint border)
-{
-	::gl::copy_tex_image2_d(target, level, internalformat, x, y, width, height, border);
-}
-inline void copy_tex_sub_image1_d(GLenum target, GLint level, GLint xoffset, GLint x, GLint y, GLsizei width)
-{
-	::gl::copy_tex_sub_image1_d(target, level, xoffset, x, y, width);
-}
-inline void copy_tex_sub_image2_d(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint x, GLint y, GLsizei width, GLsizei height)
-{
-	::gl::copy_tex_sub_image2_d(target, level, xoffset, yoffset, x, y, width, height);
-}
-inline void delete_textures(GLsizei n, const GLuint * textures)
-{
-	::gl::delete_textures(n, textures);
-}
+
 inline void draw_arrays(GLenum mode, GLint first, GLsizei count)
 {
 	::gl::draw_arrays(mode, first, count);
@@ -239,74 +193,21 @@ inline void draw_elements(GLenum mode, GLsizei count, GLenum type, const void * 
 {
 	::gl::draw_elements(mode, count, type, indices);
 }
-inline void gen_textures(GLsizei n, GLuint * textures)
-{
-	::gl::gen_textures(n, textures);
-}
-inline GLboolean is_texture(GLuint texture)
-{
-	return ::gl::is_texture(texture);
-}
+
 inline void polygon_offset(GLfloat factor, GLfloat units)
 {
 	::gl::polygon_offset(factor, units);
 }
-inline void tex_sub_image1_d(GLenum target, GLint level, GLint xoffset, GLsizei width, GLenum format, GLenum type, const void * pixels)
-{
-	::gl::tex_sub_image1_d(target, level, xoffset, width, format, type, pixels);
-}
-inline void tex_sub_image2_d(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height, GLenum format, GLenum type, const void * pixels)
-{
-	::gl::tex_sub_image2_d(target, level, xoffset, yoffset, width, height, format, type, pixels);
-}
+
 
 /* gl version 1.2 */
-inline void copy_tex_sub_image3_d(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLint x, GLint y, GLsizei width, GLsizei height)
-{
-	::gl::copy_tex_sub_image3_d(target, level, xoffset, yoffset, zoffset, x, y, width, height);
-}
 inline void draw_range_elements(GLenum mode, GLuint start, GLuint end, GLsizei count, GLenum type, const void * indices)
 {
 	::gl::draw_range_elements(mode, start, end, count, type, indices);
 }
-inline void tex_image3_d(GLenum target, GLint level, GLint internalformat, GLsizei width, GLsizei height, GLsizei depth, GLint border, GLenum format, GLenum type, const void * pixels)
-{
-	::gl::tex_image3_d(target, level, internalformat, width, height, depth, border, format, type, pixels);
-}
-inline void tex_sub_image3_d(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width, GLsizei height, GLsizei depth, GLenum format, GLenum type, const void * pixels)
-{
-	::gl::tex_sub_image3_d(target, level, xoffset, yoffset, zoffset, width, height, depth, format, type, pixels);
-}
 
 /* gl version 1.3 */
-inline void active_texture(GLenum texture)
-{
-	::gl::active_texture(texture);
-}
-inline void compressed_tex_image1_d(GLenum target, GLint level, GLenum internalformat, GLsizei width, GLint border, GLsizei imageSize, const void * data)
-{
-	::gl::compressed_tex_image1_d(target, level, internalformat, width, border, imageSize, data);
-}
-inline void compressed_tex_image2_d(GLenum target, GLint level, GLenum internalformat, GLsizei width, GLsizei height, GLint border, GLsizei imageSize, const void * data)
-{
-	::gl::compressed_tex_image2_d(target, level, internalformat, width, height, border, imageSize, data);
-}
-inline void compressed_tex_image3_d(GLenum target, GLint level, GLenum internalformat, GLsizei width, GLsizei height, GLsizei depth, GLint border, GLsizei imageSize, const void * data)
-{
-	::gl::compressed_tex_image3_d(target, level, internalformat, width, height, depth, border, imageSize, data);
-}
-inline void compressed_tex_sub_image1_d(GLenum target, GLint level, GLint xoffset, GLsizei width, GLenum format, GLsizei imageSize, const void * data)
-{
-	::gl::compressed_tex_sub_image1_d(target, level, xoffset, width, format, imageSize, data);
-}
-inline void compressed_tex_sub_image2_d(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height, GLenum format, GLsizei imageSize, const void * data)
-{
-	::gl::compressed_tex_sub_image2_d(target, level, xoffset, yoffset, width, height, format, imageSize, data);
-}
-inline void compressed_tex_sub_image3_d(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width, GLsizei height, GLsizei depth, GLenum format, GLsizei imageSize, const void * data)
-{
-	::gl::compressed_tex_sub_image3_d(target, level, xoffset, yoffset, zoffset, width, height, depth, format, imageSize, data);
-}
+
 inline void get_compressed_tex_image(GLenum target, GLint level, void * img)
 {
 	::gl::get_compressed_tex_image(target, level, img);
@@ -873,14 +774,7 @@ inline void renderbuffer_storage_multisample(GLenum target, GLsizei samples, GLe
 {
 	::gl::renderbuffer_storage_multisample(target, samples, internalformat, width, height);
 }
-inline void tex_parameter_iiv(GLenum target, GLenum pname, const GLint * params)
-{
-	::gl::tex_parameter_iiv(target, pname, params);
-}
-inline void tex_parameter_iuiv(GLenum target, GLenum pname, const GLuint * params)
-{
-	::gl::tex_parameter_iuiv(target, pname, params);
-}
+
 inline void transform_feedback_varyings(GLuint program, GLsizei count, const GLchar *const* varyings, GLenum bufferMode)
 {
 	::gl::transform_feedback_varyings(program, count, varyings, bufferMode);
@@ -1012,10 +906,7 @@ inline void tex_buffer(GLenum target, GLenum internalformat, GLuint buffer)
 {
 	::gl::tex_buffer(target, internalformat, buffer);
 }
-inline void uniform_block_binding(GLuint program, GLuint uniformBlockIndex, GLuint uniformBlockBinding)
-{
-	::gl::uniform_block_binding(program, uniformBlockIndex, uniformBlockBinding);
-}
+
 
 /* gl version 3.2 */
 inline GLenum client_wait_sync(GLsync sync, GLbitfield flags, GLuint64 timeout)
