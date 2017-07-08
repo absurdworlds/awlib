@@ -18,13 +18,13 @@
 #include <aw/graphics/gl/texture.h>
 
 #include <aw/graphics/gl/utility/model/obj.h>
+#include <aw/utility/on_scope_exit.h>
 #include <aw/fileformat/png/reader.h>
 #include <aw/io/input_file_stream.h>
 //#include <aw/utility/to_string/math/vector.h>
 //#include <aw/utility/to_string/math/matrix.h>
 
-#include <SFML/Window.hpp>
-#include <SFML/Graphics.hpp>
+#include <GLFW/glfw3.h>
 #include <aw/utility/to_string.h>
 namespace aw::gl3 {
 using namespace std::string_view_literals;
@@ -248,7 +248,7 @@ mat4 camera_transform = math::identity_matrix<float,4>;
 vec3 campos {};
 
 
-void render()
+void render(GLFWwindow* window)
 {
 	using namespace std::chrono;
 	static duration<double> period{1};
@@ -270,31 +270,31 @@ void render()
 	rot = pitch * yaw;
 
 	struct {
+		GLFWwindow* window;
 		bool num[10] = {
-			//sf::Keyboard::isKeyPressed(sf::Keyboard::Num0),
-			0,
-			sf::Keyboard::isKeyPressed(sf::Keyboard::Num1),
-			sf::Keyboard::isKeyPressed(sf::Keyboard::Num2),
-			/*sf::Keyboard::isKeyPressed(sf::Keyboard::Num3),
-			sf::Keyboard::isKeyPressed(sf::Keyboard::Num4),
-			sf::Keyboard::isKeyPressed(sf::Keyboard::Num5),
-			sf::Keyboard::isKeyPressed(sf::Keyboard::Num6),
-			sf::Keyboard::isKeyPressed(sf::Keyboard::Num7),
-			sf::Keyboard::isKeyPressed(sf::Keyboard::Num8),
-			sf::Keyboard::isKeyPressed(sf::Keyboard::Num9)*/
+			glfwGetKey(window, GLFW_KEY_0) == GLFW_PRESS,
+			glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS,
+			glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS,
+			glfwGetKey(window, GLFW_KEY_3) == GLFW_PRESS,
+			glfwGetKey(window, GLFW_KEY_4) == GLFW_PRESS,
+			glfwGetKey(window, GLFW_KEY_5) == GLFW_PRESS,
+			glfwGetKey(window, GLFW_KEY_6) == GLFW_PRESS,
+			glfwGetKey(window, GLFW_KEY_7) == GLFW_PRESS,
+			glfwGetKey(window, GLFW_KEY_8) == GLFW_PRESS,
+			glfwGetKey(window, GLFW_KEY_9) == GLFW_PRESS
 		};
-		bool d = sf::Keyboard::isKeyPressed(sf::Keyboard::D);
-		bool a = sf::Keyboard::isKeyPressed(sf::Keyboard::A);
-		bool q = sf::Keyboard::isKeyPressed(sf::Keyboard::Q);
-		bool e = sf::Keyboard::isKeyPressed(sf::Keyboard::E);
-		bool z = sf::Keyboard::isKeyPressed(sf::Keyboard::Z);
-		bool c = sf::Keyboard::isKeyPressed(sf::Keyboard::C);
-		bool w = sf::Keyboard::isKeyPressed(sf::Keyboard::W);
-		bool s = sf::Keyboard::isKeyPressed(sf::Keyboard::S);
-		bool S = sf::Keyboard::isKeyPressed(sf::Keyboard::LShift);
-		bool A = sf::Keyboard::isKeyPressed(sf::Keyboard::LAlt);
-		bool C = sf::Keyboard::isKeyPressed(sf::Keyboard::LControl);
-	} keys;
+		bool d = glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS;
+		bool a = glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS;
+		bool q = glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS;
+		bool e = glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS;
+		bool z = glfwGetKey(window, GLFW_KEY_Z) == GLFW_PRESS;
+		bool c = glfwGetKey(window, GLFW_KEY_C) == GLFW_PRESS;
+		bool w = glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS;
+		bool s = glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS;
+		bool S = glfwGetKey(window, GLFW_KEY_LEFT_SHIFT)   == GLFW_PRESS;
+		bool A = glfwGetKey(window, GLFW_KEY_LEFT_ALT)     == GLFW_PRESS;
+		bool C = glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS;
+	} keys{window};
 	float S = 10.0f;
 	if (keys.S) S *= 10.0f;
 	if (keys.A) S *= 100.0f;
@@ -351,21 +351,38 @@ namespace aw {
 int main()
 {
 	using namespace gl3;
-	sf::ContextSettings settings;
-	settings.depthBits = 24;
-	settings.stencilBits = 8;
-	settings.antialiasingLevel = 4;
-	settings.attributeFlags = sf::ContextSettings::Core;
-	settings.majorVersion = 3;
-	settings.minorVersion = 3;
 
-	sf::Window window(sf::VideoMode(800, 600), "GL tut", sf::Style::Default, settings);
+	glfwInit();
+	auto guard = on_scope_exit{ glfwTerminate };
+
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+	glfwWindowHint(GLFW_SAMPLES, 4);
+
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+
+	glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
+
+	GLFWwindow* window = glfwCreateWindow(800, 600, "OpenGL", nullptr, nullptr); // Windowed
+	glfwMakeContextCurrent(window);
 
 	auto result = ::gl::sys::load_functions_3_3();
 	std::cout << "GL loaded, missing: " << result.num_missing() << '\n';
 
 	initialize_scene();
 	reshape(800, 600);
+
+	auto on_resize = [] (GLFWwindow*, int w, int h) {
+		reshape(w,h);
+	};
+	auto on_mouse = [] (GLFWwindow* window, double x, double y) {
+		int w, h;
+		glfwGetWindowSize(window, &w, &h);
+		mx = x; my = double(h) - y;
+	};
+	glfwSetWindowSizeCallback(window, +on_resize );
+	glfwSetCursorPosCallback(window,  +on_mouse );
 
 	GLint num;
 	gl::get_integerv(GL_MAX_VERTEX_UNIFORM_COMPONENTS, &num);
@@ -380,43 +397,7 @@ int main()
 	int min = std::numeric_limits<int>::max();
 	int max = 0;
 	int avg = 0;
-	while (window.isOpen()) {
-		sf::Event event;
-		int x,y;
-		while (window.pollEvent(event)) {
-			if (event.type == sf::Event::Closed)
-				window.close();
-			if (event.type == sf::Event::Resized) {
-				reshape(event.size.width, event.size.height);
-				x = event.size.width;
-				y = event.size.height;
-			}
-			if (event.type == sf::Event::MouseMoved) {
-				mx = sf::Mouse::getPosition(window).x;
-				my = sf::Mouse::getPosition(window).y;
-
-				my = window.getSize().y - my;
-			}
-			/*if (event.type == sf::Event::KeyPressed) {
-				if (event.key.code == sf::Keyboard::U)
-					zz -= delto;
-				if (event.key.code == sf::Keyboard::J)
-					zz += delto;
-				if (event.key.code == sf::Keyboard::Q)
-					yy -= delto;
-				if (event.key.code == sf::Keyboard::Z)
-					yy += delto;
-				if (event.key.code == sf::Keyboard::D)
-					xx -= delto;
-				if (event.key.code == sf::Keyboard::A)
-					xx += delto;
-				if (event.key.code == sf::Keyboard::R)
-					delto += 0.5;
-				if (event.key.code == sf::Keyboard::T)
-					delto -= 0.5;
-				std::cout << xx << ' ' << yy << ' ' << zz << ' ' << delto << '\n';
-			}*/
-		}
+	while (!glfwWindowShouldClose(window)) {
 		++ctr;
 		auto now = steady_clock::now();
 		if ((now - point) >= seconds{1}) {
@@ -430,16 +411,18 @@ int main()
 				min = cur;
 			if (cur > max)
 				max = cur;
-			window.setTitle( "FPS: " + to_string(avg) + "avg " + to_string(cur) + "cur " + to_string(max) + "max " + to_string(min) + "min");
+			std::string title = "FPS: " + to_string(avg) + "avg " + to_string(cur) + "cur " + to_string(max) + "max " + to_string(min) + "min";
+			glfwSetWindowTitle(window, title.data());
 			prev  = ctr;
 		}
 
-		render();
-
-		window.display();
+		glfwPollEvents();
+		render(window);
+		glfwSwapBuffers(window);
 	}
 
 	std::cout << "FPS (min/max/avg): " << min << '/' << max << '/' << avg << '\n';
+
 }
 } // namespace aw
 
