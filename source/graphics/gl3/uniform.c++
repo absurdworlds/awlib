@@ -7,6 +7,7 @@
  * There is NO WARRANTY, to the extent permitted by law.
  */
 #include <aw/graphics/gl/program.h>
+#include <aw/graphics/gl/uniform.h>
 #include <aw/graphics/gl/uniform_buffer.h>
 #include <aw/graphics/gl/awgl/shader_func.h>
 #include <aw/graphics/gl/awgl/gl_func.h>
@@ -44,6 +45,15 @@ void uniform_buffer::bind(program& prg, uniform_block_index index)
 }
 
 //------------------------------------------------------------------------------
+void uniform_proxy::set(GLint x)
+{
+	gl::uniform1i( location, x);
+}
+void uniform_proxy::set(GLuint x)
+{
+	gl::uniform1i( location, x);
+}
+
 void uniform_proxy::set(GLfloat x)
 {
 	gl::uniform1f( location, x);
