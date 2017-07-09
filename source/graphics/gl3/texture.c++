@@ -20,7 +20,11 @@ texture::texture( array_view<std::byte> data, size_t width, size_t height )
 	gl::tex_parameter_i(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
 	gl::tex_parameter_i(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 0);
 	gl::bind_texture(GL_TEXTURE_2D, gl::no_texture);
+}
 
+void texture::cleanup()
+{
+	gl::delete_textures(1, &handle);
 }
 
 texture::operator texture_handle()

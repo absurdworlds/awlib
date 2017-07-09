@@ -21,6 +21,11 @@ uniform_buffer::uniform_buffer(GLuint index, size_t size)
 	gl::bind_buffer(GL_UNIFORM_BUFFER, 0);
 }
 
+void uniform_buffer::cleanup()
+{
+	gl::delete_buffers(1, &ubo);
+}
+
 void uniform_buffer::set_data(size_t offset, void const* data, size_t size)
 {
 	gl::bind_buffer(GL_UNIFORM_BUFFER, ubo);

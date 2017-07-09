@@ -17,10 +17,12 @@ using gl::texture_handle;
 struct texture {
 	// TODO: various formats
 	texture( array_view<std::byte> data, size_t height, size_t width );
+	~texture() { cleanup(); }
 
 	explicit operator texture_handle();
 
 private:
+	void cleanup();
 	texture_handle handle;
 };
 } // namespace gl3
