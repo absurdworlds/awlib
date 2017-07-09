@@ -19,6 +19,19 @@ struct texture {
 	texture( array_view<std::byte> data, size_t height, size_t width );
 	~texture() { cleanup(); }
 
+	texture(texture&& other)
+		: handle{other.handle}
+	{
+		other.handle = gl::no_texture;
+	}
+
+	texture& operator=(texture&& other)
+	{
+		cleanup();
+		handle = other.handle;
+		other.handle = gl::no_texture;
+	}
+
 	explicit operator texture_handle();
 
 private:

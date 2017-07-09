@@ -12,7 +12,7 @@
 namespace aw {
 namespace gl {
 enum class texture_handle : GLuint {};
-texture_handle no_texture{ 0 };
+constexpr texture_handle no_texture{ 0 };
 } // namespace gl
 } // namespace aw
 #endif//aw_graphics_awgl_texture_enum_h
