@@ -8,14 +8,13 @@
  */
 #ifndef aw_graphics_gl3_render_context_h
 #define aw_graphics_gl3_render_context_h
-#include <vector>
-#include <aw/graphics/gl/program.h>
-#include <aw/graphics/gl/model.h>
-#include <aw/graphics/gl/camera.h>
-#include <aw/graphics/gl/material_manager.h>
+#include <aw/graphics/glsl/mat.h>
 
 namespace aw {
 namespace gl3 {
+struct program;
+struct material;
+struct camera;
 struct render_context {
 	program*  active_program;
 	material* active_material;
