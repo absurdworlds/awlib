@@ -12,14 +12,14 @@
 #include <vector>
 #include <chrono>
 
+#include <aw/graphics/gl/material_manager.h>
 #include <aw/graphics/gl/command_list.h>
+#include <aw/graphics/gl/camera.h>
 #include <aw/graphics/gl/render_context.h>
 #include <aw/graphics/gl/uniform_buffer.h>
-#include <aw/graphics/gl/texture.h>
 
 #include <aw/graphics/gl/utility/model/obj.h>
 #include <aw/utility/on_scope_exit.h>
-#include <aw/fileformat/png/reader.h>
 #include <aw/io/input_file_stream.h>
 //#include <aw/utility/to_string/math/vector.h>
 //#include <aw/utility/to_string/math/matrix.h>
@@ -30,7 +30,8 @@ namespace aw::gl3 {
 using namespace std::string_view_literals;
 
 program_manager pman;
-material_manager mtls;
+texture_manager tman;
+material_manager mman;
 
 
 std::vector<model> models;
@@ -51,7 +52,7 @@ struct object {
 		auto& model = models[model_id];
 
 		gl::bind_vertex_array(model.vao);
-		auto& program = *mtl.prg;
+		gl3::program& program = mtl.prg;
 		auto campos = ctx.camera_position;
 		program[mtl.model_to_camera] = campos * pos;
 
@@ -68,17 +69,19 @@ namespace commands {
 struct select_program {
 	void operator()( render_context& ctx )
 	{
-		gl::use_program( program_handle{prg} );
+		gl::use_program( program_handle{*prg} );
 		ctx.set_program( *prg );
 	}
 
-	program_ref prg;
+	program* prg;
 };
 
 struct select_material {
 	void operator()( render_context& ctx )
 	{
 		ctx.set_material( *mtl );
+		mtl->bind_parameters();
+		mtl->bind_textures();
 	}
 
 	material* mtl;
@@ -135,21 +138,14 @@ void initialize_scene()
 	}
 
 	for (int i = 0; i < idx; ++i) {
-		auto& prg  = *pman[i];
+		auto ref = pman[i];
+		program& prg = ref;
 		auto block = prg.uniform_block("common_data");
 		common->bind(prg, block);
-		mtls.materials.emplace_back(material{ pman[i] });
+		mman.add_resource("rur",material{ pman[i] });
 	}
-
-	io::input_file_stream ts{"materials/butruck.png"};
-	auto img = png::read(ts);
-	texture tex{ *img, 1024, 1024 };
-	gl::use_program( program_handle{pman[1]} );
-	auto unif = pman[1]->uniform("the_textur");
-	gl::uniform1i(unif, 0);
-	gl::active_texture(GL_TEXTURE0 + 0);
-	gl::bind_texture(GL_TEXTURE_2D, texture_handle{tex});
-	gl::use_program( gl::no_program );
+	auto t = tman.create_texture("materials/butruck.png");
+	mman[1].get().add_texture("the_textur", tman[t] );
 
 	file >> count;
 	while (count --> 0) {
@@ -195,8 +191,8 @@ void initialize_scene()
 	tmp prev{size_t(-1),size_t(-1)};
 	for (auto t : vec) {
 		if (prev.mtl != t.mtl) {
-			cmds.cmds.emplace_back( commands::select_program{ mtls.materials[t.mtl].prg } );
-			cmds.cmds.emplace_back( commands::select_material{ &mtls.materials[t.mtl] } );
+			cmds.add( commands::select_program{ mman[t.mtl].get().prg.ptr() } );
+			cmds.add( commands::select_material{ mman[t.mtl].ptr() } );
 		}
 		cmds.add( commands::render_simple_object{ &objects[t.obj] } );
 	}
