@@ -133,7 +133,7 @@ image try_read(io::input_stream& stream)
 	png_read_image(png_ptr, row_pointers.data());
 	png_read_end(png_ptr, info_ptr);
 
-	return vec;
+	return { std::move(vec), width, height };
 }
 
 optional<image> read(io::input_stream& stream) noexcept

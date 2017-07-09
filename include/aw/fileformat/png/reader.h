@@ -14,7 +14,11 @@
 #include <vector>
 namespace aw {
 namespace png {
-using image = std::vector<std::byte>;
+struct image {
+	std::vector<std::byte> data;
+	unsigned width, height;
+};
+
 optional<image> read(io::input_stream& stream) noexcept;
 
 } // namespace png
