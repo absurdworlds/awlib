@@ -1,19 +1,17 @@
 2
-vert6.glsl frag1.glsl
-v_tex.glsl f_tex.glsl
-7
+shaders/vert6.glsl shaders/frag1.glsl
+shaders/v_tex.glsl shaders/f_tex.glsl
+5
 testworld.obj
-butruck.obj
-butruck_rexport.obj
-cylinder.obj
-kusok.obj
-kusok2.obj
-untitled.obj
+models/butruck.obj
+models/cylinder.obj
+models/kusok2.obj
+models/testworld.obj
 13
 0 0
 0 0 0
 0 0 0
-0 6
+0 4
 0 0 0
 0 0 0
 
@@ -27,28 +25,28 @@ untitled.obj
 0 3 -20
 0 0 0
 1 1
-300 16 -2560
+300 15.6 -2560
 0 57 0
 
-0 2
+0 1
 4 3 0
 0 0 0
-0 3
+0 2
 4 3 20
 0 180 0
-0 4
+0 3
 0 5 20
 0 0 0
-0 5
+0 3
 10 5 20
 0 45 0
 
-0 3
+0 2
 -23 4 -75
 0 0 0
-0 3
+0 2
 -28 4.2 -78
 0 0 0
-0 3
+0 2
 -32 4.35 -80
 0 0 0

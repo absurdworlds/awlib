@@ -141,7 +141,7 @@ void initialize_scene()
 		mtls.materials.emplace_back(material{ pman[i] });
 	}
 
-	io::input_file_stream ts{"butruck.png"};
+	io::input_file_stream ts{"materials/butruck.png"};
 	auto img = png::read(ts);
 	texture tex{ *img, 1024, 1024 };
 	gl::use_program( program_handle{pman[1]} );
@@ -384,15 +384,11 @@ int main()
 		if (action != GLFW_PRESS)
 			return;
 		if (key == GLFW_KEY_P) {
-			auto m = ctx.camera_position;
-			auto m1 = m[0];
-			auto m2 = m[1];
-			auto m3 = m[2];
-			auto m4 = m[3];
-			std::cout << m1[0] << ' ' << m1[1] << ' ' << m1[2] << ' ' << m1[3] << '\n';
-			std::cout << m2[0] << ' ' << m2[1] << ' ' << m2[2] << ' ' << m2[3] << '\n';
-			std::cout << m3[0] << ' ' << m3[1] << ' ' << m3[2] << ' ' << m3[3] << '\n';
-			std::cout << m4[0] << ' ' << m4[1] << ' ' << m4[2] << ' ' << m4[3] << '\n';
+			auto m = *inverse(ctx.camera_position);
+			std::cout << m[0][0] << ' ' << m[0][1] << ' ' << m[0][2] << ' ' << m[0][3] << '\n';
+			std::cout << m[1][0] << ' ' << m[1][1] << ' ' << m[1][2] << ' ' << m[1][3] << '\n';
+			std::cout << m[2][0] << ' ' << m[2][1] << ' ' << m[2][2] << ' ' << m[2][3] << '\n';
+			std::cout << m[3][0] << ' ' << m[3][1] << ' ' << m[3][2] << ' ' << m[3][3] << '\n';
 		} else if (key == GLFW_KEY_LEFT_BRACKET) {
 			static unsigned i = 0;
 			i = (i + 1) % objects.size();
