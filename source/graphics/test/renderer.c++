@@ -124,10 +124,6 @@ void initialize_scene()
 	common->set_data(sizeof(mat4), lint.array(), ldir.array());
 
 
-	int i;
-	gl::get_integerv(GL_MAX_VERTEX_UNIFORM_BLOCKS, &i);
-	std::cout << i << '\n';
-
 	size_t idx = 0;
 	int count = 0;
 	file >> count;
@@ -404,6 +400,11 @@ int main()
 	GLint num;
 	gl::get_integerv(GL_MAX_VERTEX_UNIFORM_COMPONENTS, &num);
 	std::cout << "maxvert: " << num << '\n';
+	gl::get_integerv(GL_MAX_ARRAY_TEXTURE_LAYERS, &num);
+	std::cout << "maxlayer: " << num << '\n';
+	gl::get_integerv(GL_MAX_VERTEX_UNIFORM_BLOCKS, &num);
+	std::cout << "maxblocks: " << num << '\n';
+	
 
 	size_t ctr  = 0;
 	size_t prev = 0;
