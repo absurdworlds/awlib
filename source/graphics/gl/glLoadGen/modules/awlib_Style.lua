@@ -11,10 +11,18 @@ my_style.source = {}
 ----------------------------------------------------
 -- Helper styling functions.
 
-local function to_snake(name)
-	local CAPSInCamel = "(.)([A-Z][a-z]+)";
-	local CamelCase   = "([a-z0-9])([A-Z])";
-	return name:gsub(CAPSInCamel,"%1_%2"):gsub(CamelCase, "%1_%2"):lower();
+function to_snake(name)
+	local patterns = {
+		"(.)([A-Z][a-z]+)",
+		"([a-z])([0-9][A-Z])",
+		"([a-z])([A-Z])"
+	};
+
+	for _,pattern in ipairs(patterns) do
+		name = name:gsub(pattern, "%1_%2");
+	end
+
+	return name:lower();
 end
 
 local function Flatten(version)
