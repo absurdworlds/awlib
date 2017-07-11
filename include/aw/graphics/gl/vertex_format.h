@@ -47,7 +47,7 @@ GLenum to_gl(element_type);
 bool   is_normalized(element_type);
 
 /* This is just a convention I'm using. Not required to be used. */
-enum class vertex_attribute_index {
+enum class vertex_attribute_index : size_t {
 	position    = 0,
 	color       = 1,
 	normal      = 2,
@@ -56,15 +56,18 @@ enum class vertex_attribute_index {
 	material_id = 5,
 };
 
-struct vertex_specification {
-	struct attribute {
-		element_type type;
-		size_t size;
-		size_t offset;
-	};
+size_t operator+(vertex_attribute_index i)
+{
+	return size_t(i);
+}
 
-	std::vector< attribute > attributes;
+struct vertex_specification;
+
+struct vertex_attribute {
+	size_t index;
+	element_type type;
 	size_t size;
+	size_t offset;
 };
 
 enum class element_layout {
@@ -74,10 +77,24 @@ enum class element_layout {
 	interleaved
 };
 
+struct vertex_specification {
+	std::vector< vertex_attribute > attributes;
+	element_layout layout;
+	size_t size = 0;
+
+	void add_attribute( vertex_attribute attrib )
+	{
+		attributes.push_back( attrib );
+		// TODO: alignment?
+		attrib.offset = size;
+		// FIXME FIXME FIXME
+		// replace 4 with actual size
+		size += attrib.size * 4;
+	}
+};
 struct vertex_data {
 	array_view<std::byte> data;
 	vertex_specification  format;
-	element_layout layout;
 	size_t count;
 };
 

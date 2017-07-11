@@ -71,29 +71,33 @@ bool is_normalized(element_type type)
 // TODO: merge these two into one... maybe
 void set_attrib_interleaved( vertex_data const& verts )
 {
-	for (auto&& [i, attrib] : ipairs(verts.format.attributes)) {
+	for (auto&& [i,type,size,offset] : verts.format.attributes) {
 		gl::enable_vertex_attrib_array( i );
 		gl::vertex_attrib_pointer( i,
-			attrib.size,
-			to_gl(attrib.type),
-			is_normalized(attrib.type),
+			size,
+			to_gl(type),
+			is_normalized(type),
 			verts.format.size,
-			attrib.offset
+			offset
 		);
 	}
 }
 
 void set_attrib_array( vertex_data const& verts )
 {
-	for (auto&& [i, attrib] : ipairs(verts.format.attributes)) {
+	size_t offset = 0;
+	for (auto&& [i,type,size,_] : verts.format.attributes) {
 		gl::enable_vertex_attrib_array( i );
 		gl::vertex_attrib_pointer( i,
-			attrib.size,
-			to_gl(attrib.type),
-			is_normalized(attrib.type),
+			size,
+			to_gl(type),
+			is_normalized(type),
 			0,
-			i * verts.count
+			offset
 		);
+		// FIXME FIXME FIXME
+		// replace 4 with actual size
+		offset += verts.count * size * 4;
 	}
 }
 
@@ -109,7 +113,7 @@ model::model( vertex_data const& verts, mesh_data const& meshes )
 	gl::bind_buffer( GL_ELEMENT_ARRAY_BUFFER, ibo() );
 	glh::buffer_data( GL_ELEMENT_ARRAY_BUFFER, meshes.triangles, GL_STATIC_DRAW );
 
-	if ( verts.layout == element_layout::interleaved )
+	if ( verts.format.layout == element_layout::interleaved )
 		set_attrib_interleaved( verts );
 	else
 		set_attrib_array( verts );

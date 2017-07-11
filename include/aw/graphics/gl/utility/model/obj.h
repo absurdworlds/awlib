@@ -62,16 +62,40 @@ model model_from_obj( obj::mesh const& data )
 		}
 	}
 
+	vertex_data vd;
+	vd.format.layout = element_layout::packed;
+	vd.format.add_attribute({
+		+vertex_attribute_index::position,
+		element_type::single_float,
+		3
+	});
+	if (normals.size() != 0)
+		vd.format.add_attribute({
+			+vertex_attribute_index::normal,
+			element_type::single_float,
+			3
+		});
+	if (tex.size() != 0)
+		vd.format.add_attribute({
+			+vertex_attribute_index::tex_coord_1,
+			element_type::single_float,
+			2
+		});
+
 	size_t n = verts.size();
+	vd.count = n / 3;
+
 	std::vector<float> soup;
-	soup.reserve(n+n+n);
+	soup.reserve(n*vd.format.attributes.size());
        	soup.insert( end(soup), begin(verts),   end(verts) );
-	size_t n_off = soup.size() * sizeof(float);
 	soup.insert( end(soup), begin(normals), end(normals) );
-	size_t t_off = soup.size() * sizeof(float);
 	soup.insert( end(soup), begin(tex),     end(tex) );
 
-	vert_data vd{ soup, 0, size_t(-1), n_off, t_off };
+	vd.data = array_view<std::byte>{
+		reinterpret_cast<std::byte*>( soup.data() ),
+		soup.size() * sizeof(float)
+	};
+
 	mesh_data md{ tris };
 	return { vd, md };
 }
