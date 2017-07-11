@@ -8,6 +8,7 @@
  */
 #include <aw/graphics/gl/model.h>
 #include <aw/graphics/gl/awgl/api.h>
+#include <aw/utility/ranges/ipairs.h>
 
 namespace aw::glh {
 template<typename T>
@@ -17,8 +18,86 @@ void buffer_data( GLenum type, array_view<T> arr, GLenum mode )
 }
 } // namespace
 
+
 namespace aw::gl3 {
-model::model( vert_data const& verts, mesh_data const& meshes )
+static const GLenum elem_type_value[] = {
+	/**/
+	GL_BYTE,
+	GL_SHORT,
+	GL_INT,
+	GL_UNSIGNED_BYTE,
+	GL_UNSIGNED_SHORT,
+	GL_UNSIGNED_INT,
+	/**/
+	GL_BYTE,
+	GL_SHORT,
+	GL_INT,
+	GL_UNSIGNED_BYTE,
+	GL_UNSIGNED_SHORT,
+	GL_UNSIGNED_INT,
+	/**/
+	GL_HALF_FLOAT,
+	GL_FLOAT,
+	GL_DOUBLE,
+	/*GL_FIXED*/ 0,
+	/**/
+	GL_INT_2_10_10_10_REV,
+	GL_UNSIGNED_INT_2_10_10_10_REV,
+	GL_UNSIGNED_INT_10F_11F_11F_REV
+};
+
+static const bool elem_type_normalized[] = {
+	/**/
+	false, false, false, false, false, false,
+	/**/
+	true, true, true, true, true, true,
+	/**/
+	false, false, false, false,
+	/**/
+	false, false, false
+};
+
+GLenum to_gl(element_type type)
+{
+	return elem_type_value[underlying(type)];
+}
+
+bool is_normalized(element_type type)
+{
+	return elem_type_normalized[underlying(type)];
+}
+
+// TODO: use attribi_pointer for (non-normalized) ints
+// TODO: merge these two into one... maybe
+void set_attrib_interleaved( vertex_data const& verts )
+{
+	for (auto&& [i, attrib] : ipairs(verts.format.attributes)) {
+		gl::enable_vertex_attrib_array( i );
+		gl::vertex_attrib_pointer( i,
+			attrib.size,
+			to_gl(attrib.type),
+			is_normalized(attrib.type),
+			verts.format.size,
+			attrib.offset
+		);
+	}
+}
+
+void set_attrib_array( vertex_data const& verts )
+{
+	for (auto&& [i, attrib] : ipairs(verts.format.attributes)) {
+		gl::enable_vertex_attrib_array( i );
+		gl::vertex_attrib_pointer( i,
+			attrib.size,
+			to_gl(attrib.type),
+			is_normalized(attrib.type),
+			0,
+			i * verts.count
+		);
+	}
+}
+
+model::model( vertex_data const& verts, mesh_data const& meshes )
 {
 	gl::gen_vertex_arrays(1, &vao);
 	gl::bind_vertex_array(vao);
@@ -30,22 +109,11 @@ model::model( vert_data const& verts, mesh_data const& meshes )
 	gl::bind_buffer( GL_ELEMENT_ARRAY_BUFFER, ibo() );
 	glh::buffer_data( GL_ELEMENT_ARRAY_BUFFER, meshes.triangles, GL_STATIC_DRAW );
 
-	if (verts.position_offset != -1) {
-		gl::enable_vertex_attrib_array( 0 );
-		gl::vertex_attrib_pointer( 0, 3, GL_FLOAT, GL_FALSE, 0, verts.position_offset );
-	}
-	if (verts.color_offset != -1) {
-		gl::enable_vertex_attrib_array( 1 );
-		gl::vertex_attrib_pointer( 1, 4, GL_FLOAT, GL_FALSE, 0, verts.color_offset );
-	}
-	if (verts.normal_offset != -1) {
-		gl::enable_vertex_attrib_array( 2 );
-		gl::vertex_attrib_pointer( 2, 3, GL_FLOAT, GL_FALSE, 0, verts.normal_offset );
-	}
-	if (verts.texcoord_offset != -1) {
-		gl::enable_vertex_attrib_array( 3 );
-		gl::vertex_attrib_pointer( 3, 2, GL_FLOAT, GL_FALSE, 0, verts.texcoord_offset );
-	}
+	if ( verts.layout == element_layout::interleaved )
+		set_attrib_interleaved( verts );
+	else
+		set_attrib_array( verts );
+
 	for (auto mesh : meshes.list)
 		objects.push_back( mesh );
 

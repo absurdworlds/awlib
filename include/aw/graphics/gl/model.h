@@ -8,17 +8,14 @@
  */
 #ifndef aw_graphics_gl3_model_h
 #define aw_graphics_gl3_model_h
-#include <aw/graphics/gl/api/types.h>
-#include <aw/types/array_view.h>
-#include <vector>
+#include <aw/graphics/gl/vertex_format.h>
 namespace aw {
 namespace gl3 {
 
-struct vert_data;
 struct mesh_data;
 
 struct model {
-	model( vert_data const& verts, mesh_data const& meshes );
+	model( vertex_data const& verts, mesh_data const& meshes );
 	model( model&& other )
 		: objects{ std::move(other.objects) }
 	{
@@ -54,18 +51,6 @@ struct model {
 	std::vector<subobject> objects;
 };
 
-struct vert_data {
-	array_view<GLfloat> data;
-
-	size_t position_offset = -1;
-	size_t color_offset    = -1;
-	size_t normal_offset   = -1;
-	size_t texcoord_offset = -1;
-
-	// TODO: this is temporary setup, I want user to be able
-	// fully specify format: interleaved or contiguous,
-	// number of vertex attributes, and their format, etc
-};
 
 struct mesh_data {
 	array_view<GLuint> triangles;
