@@ -36,7 +36,7 @@ void material::bind_textures( )
 	for (auto&& [i, t] : ipairs(textures)) {
 		gl::active_texture(GL_TEXTURE0 + i);
 		texture& tex = t.second;
-		gl::bind_texture(GL_TEXTURE_2D, texture_handle{tex});
+		gl::bind_texture(tex.type(), texture_handle{tex});
 		program[t.first] = GLuint(i);
 	}
 	// gl::use_program( gl::no_program );

@@ -17,10 +17,14 @@ using gl::texture_handle;
 struct texture {
 	// TODO: various formats
 	texture( array_view<std::byte> data, size_t height, size_t width );
+
+	// TODO: this is a placeholder until I implement textures properly
+	texture( array_view<std::byte> data, size_t count, size_t width, size_t height );
+
 	~texture() { cleanup(); }
 
 	texture(texture&& other)
-		: handle{other.handle}
+		: handle{other.handle}, _type{other._type}
 	{
 		other.handle = gl::no_texture;
 	}
@@ -30,13 +34,17 @@ struct texture {
 		cleanup();
 		handle = other.handle;
 		other.handle = gl::no_texture;
+		_type = other._type;
 	}
 
 	explicit operator texture_handle();
 
+	GLenum type() const { return _type; }
+
 private:
 	void cleanup();
 	texture_handle handle;
+	GLenum _type;
 };
 } // namespace gl3
 } // namespace aw

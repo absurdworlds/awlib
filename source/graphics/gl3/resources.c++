@@ -43,4 +43,23 @@ size_t texture_manager::create_texture( string_view name )
 
 	return add_resource( name, texture{ img->data, img->width, img->height} );
 }
+
+// TEMPORARY
+size_t texture_manager::create_texture_array( array_view<string_view> names )
+{
+	png::image img;
+	std::optional<png::image> tmp;
+	for (auto name : names) {
+		io::input_file_stream ts{name};
+
+		tmp = png::read(ts);
+		if (!tmp)
+			return -1;
+		img.width  = tmp->width;
+		img.height = tmp->height;
+		img.data.insert( img.data.end(), tmp->data.begin(), tmp->data.end() );
+	}
+
+	return add_resource( names[0], texture{ img.data, names.size(), img.width, img.height} );
+}
 } // namespace aw::gl3

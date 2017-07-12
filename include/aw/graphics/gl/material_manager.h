@@ -24,6 +24,7 @@ using program_ref = program_manager::reference;
 
 struct texture_manager : resource_manager<texture> {
 	size_t create_texture( string_view name );
+	size_t create_texture_array( array_view<string_view> names );
 };
 using texture_ref = texture_manager::reference;
 
