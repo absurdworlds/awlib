@@ -13,6 +13,13 @@
 #include <memory>
 
 namespace aw {
+
+template<typename T>
+struct chain_storage_traits {
+	// TODO: find sweetspot
+	static constexpr size_t block_size = 4;
+};
+
 template<typename T>
 struct unitialized_storage {
 	using storage = typename std::aligned_storage<sizeof(T), alignof(T)>::type;
@@ -44,8 +51,7 @@ private:
 
 template<typename T>
 struct chain_storage {
-	// TODO: find sweetspot
-	static constexpr size_t block_size = 2;
+	static constexpr size_t block_size = chain_storage_traits<T>::block_size;
 	using storage = unitialized_storage<T>;
 	using block_type = std::unique_ptr<storage[]>;
 
@@ -95,7 +101,7 @@ private:
 
 template<typename T>
 struct array_chain_iterator {
-	static constexpr size_t block_size = chain_storage<T>::block_size;
+	static constexpr size_t block_size = chain_storage_traits<T>::block_size;
 	using block_type = typename chain_storage<T>::block_type;
 
 	array_chain_iterator(block_type* array, size_t pos)
@@ -134,8 +140,7 @@ private:
 template<typename T>
 struct array_chain {
 	using iterator = array_chain_iterator<T>;
-	// TODO: find sweetspot
-	static constexpr size_t block_size = chain_storage<T>::block_size;
+	static constexpr size_t block_size = chain_storage_traits<T>::block_size;
 
 	T& operator[](size_t index)
 	{
