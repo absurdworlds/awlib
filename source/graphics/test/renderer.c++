@@ -143,6 +143,44 @@ void initialize_scene()
 	auto t = tman.create_texture("materials/butruck.png");
 	mman[1].get().add_texture("the_textur", tman[t] );
 
+	string_view paths[] {
+		"materials/m/des_dirt1.png",
+		"materials/m/des_redrockbot.png",
+		"materials/m/des_redrockmid.png",
+		"materials/m/des_rocky1.png",
+		"materials/m/des_rocky1_dirt1.png",
+		"materials/m/des_oldrunway.png",
+		"materials/m/des_oldrunwayblend.png",
+		"materials/m/des_panelconc.png",
+		"materials/m/des_dirttrack1r.png",
+		"materials/m/des_dirttrackl.png",
+		"materials/m/des_dirttrackx.png",
+		"materials/m/des_dirttrack1.png",
+		"materials/m/des_1line256.png",
+		"materials/m/des_dirt2blend.png",
+		/*"materials/m/vgs_shopwall01_128.png",
+		"materials/m/vgs_shopwall01_128.png",
+		"materials/m/des_scrub1_dirt1.png",
+		"materials/m/des_scrub1.png",
+		"materials/m/Tar_1line256HV.png",
+		"materials/m/desstones_dirt1.png",
+		"materials/m/parking2plain.png",
+		"materials/m/Tar_lineslipway.png",
+		"materials/m/parking2.png",
+		"materials/m/rocktbrn_dirt2.png",
+		"materials/m/rocktbrn128.png",
+		"materials/m/des_roadedge1.png",
+		"materials/m/des_ranchwall1.png",
+		"materials/m/vgs_shopwall01_128.png",
+		"materials/m/vgs_shopwall01_128.png",
+		"materials/m/des_redrock2.png",
+		"materials/m/des_redrock1.png"*/
+	};
+
+	auto t2 = tman.create_texture_array( paths );
+	mman[2].get().add_texture( "tex", tman[t2] );
+
+
 	file >> count;
 	while (count --> 0) {
 		std::string name;

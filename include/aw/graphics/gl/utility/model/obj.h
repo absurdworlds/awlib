@@ -10,6 +10,7 @@
 #define aw_graphics_model_obj_h
 #include <aw/fileformat/obj/loader.h>
 #include <aw/graphics/gl/model.h>
+#include <aw/utility/ranges/ipairs.h>
 #include <map>
 #include <tuple>
 namespace aw {
@@ -22,6 +23,7 @@ model model_from_obj( obj::mesh const& data )
 	std::vector<float> verts;
 	std::vector<float> normals;
 	std::vector<float> tex;
+	std::vector<float> mid;
 
 	auto push = [] (obj::vert const& v, std::vector<float>& c) {
 		for (float p : v.points)
@@ -48,16 +50,21 @@ model model_from_obj( obj::mesh const& data )
 		}
 	};
 
-	for (auto& tri : data.faces) {
-		for (auto& [v,n,t] : tri.verts) {
-			if (auto p = indices.find({v,n,t}); p != end(indices)) {
-				tris.push_back(p->second);
-			} else {
-				tris.push_back(last_index);
-				indices.insert({{v,n,t}, last_index++});
-				push(data.verts[v], verts);
-				push_normal(n);
-				push_texcoord(t);
+	for (auto&& [i, mesh] : ipairs(data.meshes)) {
+		for (auto j = mesh.begin; j < mesh.end; ++j) {
+			auto tri = data.faces[j];
+			for (auto& [v,n,t] : tri.verts) {
+				if (auto p = indices.find({v,n,t}); p != end(indices)) {
+					tris.push_back(p->second);
+				} else {
+					tris.push_back(last_index);
+					indices.insert({{v,n,t}, last_index++});
+					push(data.verts[v], verts);
+					push_normal(n);
+					push_texcoord(t);
+					if (data.meshes.size() > 1)
+						mid.push_back(i);
+				}
 			}
 		}
 	}
@@ -81,6 +88,12 @@ model model_from_obj( obj::mesh const& data )
 			element_type::single_float,
 			2
 		});
+	if (data.meshes.size() > 1)
+		vd.format.add_attribute({
+			+vertex_attribute_index::material_id,
+			element_type::single_float,
+			1
+		});
 
 	size_t n = verts.size();
 	vd.count = n / 3;
@@ -90,6 +103,9 @@ model model_from_obj( obj::mesh const& data )
        	soup.insert( end(soup), begin(verts),   end(verts) );
 	soup.insert( end(soup), begin(normals), end(normals) );
 	soup.insert( end(soup), begin(tex),     end(tex) );
+	if (data.meshes.size() > 1)
+		soup.insert( end(soup), begin(mid),     end(mid) );
+
 
 	vd.data = array_view<std::byte>{
 		reinterpret_cast<std::byte*>( soup.data() ),

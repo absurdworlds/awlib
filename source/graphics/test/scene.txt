@@ -1,6 +1,7 @@
-2
+3
 shaders/vert6.glsl shaders/frag1.glsl
 shaders/v_tex.glsl shaders/f_tex.glsl
+shaders/v_txa.glsl shaders/f_txa.glsl
 5
 testworld.obj
 models/butruck.obj
@@ -8,7 +9,7 @@ models/cylinder.obj
 models/kusok2.obj
 models/testworld.obj
 13
-0 0
+2 0
 0 0 0
 0 0 0
 0 4

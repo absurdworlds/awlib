@@ -38,6 +38,8 @@ struct parser : private obj::mesh {
 		while (read_until( file, '\n', tmp )) {
 			parse_line( tmp );
 		}
+		if (meshes.size() > 0)
+			cur_submesh().end = faces.size();
 	}
 
 private:
