@@ -158,7 +158,7 @@ void initialize_scene()
 		"materials/m/des_dirttrack1.png",
 		"materials/m/des_1line256.png",
 		"materials/m/des_dirt2blend.png",
-		/*"materials/m/vgs_shopwall01_128.png",
+		"materials/m/vgs_shopwall01_128.png",
 		"materials/m/vgs_shopwall01_128.png",
 		"materials/m/des_scrub1_dirt1.png",
 		"materials/m/des_scrub1.png",
@@ -174,7 +174,7 @@ void initialize_scene()
 		"materials/m/vgs_shopwall01_128.png",
 		"materials/m/vgs_shopwall01_128.png",
 		"materials/m/des_redrock2.png",
-		"materials/m/des_redrock1.png"*/
+		"materials/m/des_redrock1.png"
 	};
 
 	auto t2 = tman.create_texture_array( paths );
