@@ -9,6 +9,7 @@
 #include <aw/fileformat/png/log.h>
 #include <aw/fileformat/png/reader.h>
 #include <aw/utility/on_scope_exit.h>
+#include <aw/algorithm/in.h>
 #include <png.h>
 
 namespace aw {
@@ -106,6 +107,9 @@ image try_read(io::input_stream& stream)
 		else
 			png_set_packing(png_ptr);
 	}
+
+	if ( in(color_type, PNG_COLOR_TYPE_GRAY, PNG_COLOR_TYPE_GRAY_ALPHA) )
+		png_set_gray_to_rgb(png_ptr);
 
 	if (png_get_valid(png_ptr, info_ptr, PNG_INFO_tRNS))
 		png_set_tRNS_to_alpha(png_ptr);	
