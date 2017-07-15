@@ -1,3 +1,5 @@
+#include "camera_controller.h"
+
 #include <aw/graphics/gl/render_context.h>
 #include <aw/graphics/gl/awgl/api.h>
 #include <aw/graphics/glsl/vec.h>
@@ -11,9 +13,9 @@
 namespace aw {
 using namespace std::chrono;
 namespace gl3 {
-extern bool disable_rur;
-extern int mx, my;
 extern render_context ctx;
+extern camera_controller camctl;
+
 void initialize_scene();
 void reshape(int x, int y);
 void render(GLFWwindow*, duration<double>);
@@ -126,7 +128,7 @@ void main()
 	auto on_mouse = [] (GLFWwindow* window, double x, double y) {
 		int w, h;
 		glfwGetWindowSize(window, &w, &h);
-		mx = x; my = double(h) - y;
+		camctl.mouse_input( vec2{x, double(h) - y} );
 	};
 	auto on_key   = [] (GLFWwindow*, int key,int, int action, int) {
 		if (action != GLFW_PRESS)
@@ -142,7 +144,7 @@ void main()
 			i = (i - 1) % objects.size();
 			ctx.camera_position = *inverse(objects[i].pos);*/
 		} else if (key == GLFW_KEY_O) {
-			disable_rur = !disable_rur;
+			camctl.mouse_look = !camctl.mouse_look;
 		}
 	};
 	glfwSetWindowSizeCallback(window, +on_resize );

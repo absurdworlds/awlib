@@ -1,3 +1,5 @@
+#include "camera_controller.h"
+
 #include <aw/graphics/gl/awgl/api.h>
 #include <aw/types/string_view.h>
 #include <aw/utility/string/split.h>
@@ -21,11 +23,9 @@
 #include <aw/graphics/gl/utility/model/obj.h>
 #include <aw/utility/on_scope_exit.h>
 #include <aw/io/input_file_stream.h>
-//#include <aw/utility/to_string/math/vector.h>
-//#include <aw/utility/to_string/math/matrix.h>
 
 #include <GLFW/glfw3.h>
-#include <aw/utility/to_string.h>
+
 namespace aw::gl3 {
 using namespace std::string_view_literals;
 
@@ -62,8 +62,6 @@ struct object {
 };
 std::vector<object> objects;
 camera cam;
-
-bool disable_rur = false;
 
 namespace commands {
 struct select_program {
@@ -246,16 +244,14 @@ void initialize_scene()
 	gl::clear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 }
 
-int mx, my;
-int hx, hy;
+camera_controller camctl{ ctx.camera_position, cam };
 
 
 void reshape(int x, int y)
 {
 	gl::viewport(0, 0, x, y);
 
-	hx = x;
-	hy = y;
+	camctl.screen = vec2{x,y};
 	cam.set_aspect_ratio( float(x) / float(y) );
 
 	auto proj = cam.projection_matrix();
@@ -267,98 +263,9 @@ void clear()
 	gl::clear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 }
 
-void calc_positions()
-{
-	//static std::vector<float> vec;
-	//vec.assign(std::begin(cube), std::end(cube));
-
-	// gl::bind_buffer( GL_ARRAY_BUFFER, pbo );
-	// gl::buffer_sub_data( GL_ARRAY_BUFFER, 0, sizeof(vertex_positions), vec.data() );
-}
-mat4 camera_transform = math::identity_matrix<float,4>;
-
-void update_camera(GLFWwindow* window, std::chrono::duration<float> frame_time)
-{
-	float horiz = (2.0f * mx) / hx - 1.0f;
-	float vert  = 1.0f - (2.0f * my) / hy;
-	auto pitch = math::pitch_matrix( degrees<float>(90) * vert );
-	auto yaw   = math::yaw_matrix( degrees<float>(180)  * horiz );
-
-	mat4 rot = math::identity_matrix<float,4>;
-	rot = pitch * yaw;
-
-	struct {
-		GLFWwindow* window;
-		bool num[10] = {
-			glfwGetKey(window, GLFW_KEY_0) == GLFW_PRESS,
-			glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS,
-			glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS,
-			glfwGetKey(window, GLFW_KEY_3) == GLFW_PRESS,
-			glfwGetKey(window, GLFW_KEY_4) == GLFW_PRESS,
-			glfwGetKey(window, GLFW_KEY_5) == GLFW_PRESS,
-			glfwGetKey(window, GLFW_KEY_6) == GLFW_PRESS,
-			glfwGetKey(window, GLFW_KEY_7) == GLFW_PRESS,
-			glfwGetKey(window, GLFW_KEY_8) == GLFW_PRESS,
-			glfwGetKey(window, GLFW_KEY_9) == GLFW_PRESS
-		};
-		bool d = glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS;
-		bool a = glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS;
-		bool q = glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS;
-		bool e = glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS;
-		bool z = glfwGetKey(window, GLFW_KEY_Z) == GLFW_PRESS;
-		bool c = glfwGetKey(window, GLFW_KEY_C) == GLFW_PRESS;
-		bool w = glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS;
-		bool s = glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS;
-		bool S = glfwGetKey(window, GLFW_KEY_LEFT_SHIFT)   == GLFW_PRESS;
-		bool A = glfwGetKey(window, GLFW_KEY_LEFT_ALT)     == GLFW_PRESS;
-		bool C = glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS;
-	} keys{window};
-	float S = 10.0f;
-	if (keys.S) S *= 10.0f;
-	if (keys.A) S *= 100.0f;
-	if (keys.C) S /= 10.0f;
-	vec4 movement{
-		S * (keys.a - keys.d),
-		S * (keys.z - keys.c),
-		S * (keys.w - keys.s),
-		0
-	};
-	radians<float> ang { frame_time.count() * 5 * (keys.e - keys.q) };
-	auto fvec = frame_time.count() * movement * rot;
-
-	static degrees<float> fov { 90.0 };
-	auto rate = fov < degrees<float>{ 30 }  ? (fov.count()) :
-	            fov > degrees<float>{ 150 } ? (180 - fov.count()) :
-	            30;
-	if (keys.num[1]) fov -= rate*degrees<float>{ frame_time.count() };
-	if (keys.num[2]) fov += rate*degrees<float>{ frame_time.count() };
-
-	cam.set_fov( fov );
-	if (keys.num[1] - keys.num[2] != 0) {
-		auto proj = cam.projection_matrix();
-		common->set_data(0, array(proj));
-	}
-
-	static size_t frame_ctr = 0;
-	//std::cout << "frame: " << frame_ctr++ << '\n';
-	//std::cout << to_string(fvec) << '\n';
-	//std::cout << 90 * vert << ' ' << 180 * horiz << '\n';
-
-	auto& forward = camera_transform;
-	auto rmat = math::identity_matrix<float,4>;
-	rmat = math::yaw_matrix(ang);
-	forward.get(0,3) += fvec[0];
-	forward.get(1,3) += fvec[1];
-	forward.get(2,3) += fvec[2];
-	forward = rmat * forward;
-
-	ctx.camera_position = rot * forward;
-}
-
 void render(GLFWwindow* window, std::chrono::duration<double> dt)
 {
-	if (!disable_rur)
-		update_camera(window, dt);
+	camctl.frame( window, dt );
 
 	clear();
 	cmds.render(ctx);
