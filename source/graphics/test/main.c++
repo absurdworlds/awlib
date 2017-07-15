@@ -3,8 +3,6 @@
 #include <aw/graphics/glsl/vec.h>
 #include <aw/graphics/glsl/mat.h>
 
-#include <aw/utility/on_scope_exit.h>
-
 #include <GLFW/glfw3.h>
 
 #include <iostream>
@@ -22,12 +20,12 @@ void render(GLFWwindow*, duration<double>);
 }
 using namespace gl3;
 
+auto println = [] (auto const&... val) {
+	( std::cout << ... << val ) << '\n';
+};
+
 inline void print_matrix(mat4 const& m)
 {
-	auto println = [] (auto const&... val) {
-		( std::cout << ... << val ) << '\n';
-	};
-
 	println( m[0][0], ' ', m[0][1], ' ', m[0][2], ' ', m[0][3] );
 	println( m[1][0], ' ', m[1][1], ' ', m[1][2], ' ', m[1][3] );
 	println( m[2][0], ' ', m[2][1], ' ', m[2][2], ' ', m[2][3] );
@@ -56,7 +54,6 @@ void frame_ctr( GLFWwindow* window, steady_clock::time_point now )
 
 	++frames;
 
-
 	if (now - last_refresh < refresh_rate)
 		return;
 
@@ -68,11 +65,11 @@ void frame_ctr( GLFWwindow* window, steady_clock::time_point now )
 	avg = frames / run_time.count();
 
 	using std::to_string;
-	std::string title = "FPS: " +
-	                    to_string(avg) + "avg " +
-	                    to_string(cur) + "cur " +
-	                    to_string(max) + "max " +
-	                    to_string(min) + "min";
+	std::string title = "FPS: ";
+	title += to_string(avg) + "avg ";
+	title += to_string(cur) + "cur ";
+	title += to_string(max) + "max ";
+	title += to_string(min) + "min";
 
 	glfwSetWindowTitle(window, title.data());
 
@@ -80,11 +77,8 @@ void frame_ctr( GLFWwindow* window, steady_clock::time_point now )
 	last_frames = frames;
 }
 
-int main()
+GLFWwindow* create_window()
 {
-	glfwInit();
-	auto guard = on_scope_exit{ glfwTerminate };
-
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_SAMPLES, 4);
@@ -93,13 +87,36 @@ int main()
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
 	glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
+	auto window = glfwCreateWindow(800, 600, "OpenGL", nullptr, nullptr);
+	return window;
+}
 
-	GLFWwindow* window = glfwCreateWindow(800, 600, "OpenGL", nullptr, nullptr); // Windowed
+void create_context( GLFWwindow* window )
+{
 	glfwMakeContextCurrent(window);
 
 	auto result = ::gl::sys::load_functions_3_3();
 	std::cout << "GL loaded, missing: " << result.num_missing() << '\n';
+}
 
+void print_capabilities( )
+{
+	GLint num;
+	gl::get_integerv(GL_MAX_VERTEX_UNIFORM_COMPONENTS, &num);
+	println( "GL_MAX_VERTEX_UNIFORM_COMPONENTS: ", num );
+	gl::get_integerv(GL_MAX_ARRAY_TEXTURE_LAYERS, &num);
+	println( "GL_MAX_ARRAY_TEXTURE_LAYERS:      ", num );
+	gl::get_integerv(GL_MAX_VERTEX_UNIFORM_BLOCKS, &num);
+	println( "GL_MAX_VERTEX_UNIFORM_BLOCKS:     ", num );
+}
+
+
+void main()
+{
+	GLFWwindow* window = create_window();
+
+	create_context( window );
+	print_capabilities();
 	initialize_scene();
 	reshape(800, 600);
 
@@ -131,14 +148,6 @@ int main()
 	glfwSetWindowSizeCallback(window, +on_resize );
 	glfwSetCursorPosCallback(window,  +on_mouse );
 	glfwSetKeyCallback(window,        +on_key );
-
-	GLint num;
-	gl::get_integerv(GL_MAX_VERTEX_UNIFORM_COMPONENTS, &num);
-	std::cout << "maxvert: " << num << '\n';
-	gl::get_integerv(GL_MAX_ARRAY_TEXTURE_LAYERS, &num);
-	std::cout << "maxlayer: " << num << '\n';
-	gl::get_integerv(GL_MAX_VERTEX_UNIFORM_BLOCKS, &num);
-	std::cout << "maxblocks: " << num << '\n';
 	
 
 	auto last_frame = steady_clock::now();
@@ -160,5 +169,7 @@ int main()
 
 int main()
 {
-	return aw::main();
+	glfwInit();
+	aw::main();
+	glfwTerminate();
 }
