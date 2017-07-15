@@ -19,6 +19,8 @@ extern camera_controller camctl;
 void initialize_scene();
 void reshape(int x, int y);
 void render(GLFWwindow*, duration<double>);
+void next_object();
+void prev_object();
 }
 using namespace gl3;
 
@@ -136,13 +138,9 @@ void main()
 		if (key == GLFW_KEY_P) {
 			print_inverse_matrix(ctx.camera_position);
 		} else if (key == GLFW_KEY_LEFT_BRACKET) {
-			/*static unsigned i = 0;
-			i = (i + 1) % objects.size();
-			ctx.camera_position = *inverse(objects[i].pos);*/
+			next_object();
 		} else if (key == GLFW_KEY_RIGHT_BRACKET) {
-			/*static unsigned i = 0;
-			i = (i - 1) % objects.size();
-			ctx.camera_position = *inverse(objects[i].pos);*/
+			prev_object();
 		} else if (key == GLFW_KEY_O) {
 			camctl.mouse_look = !camctl.mouse_look;
 		}

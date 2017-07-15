@@ -245,6 +245,18 @@ void initialize_scene()
 }
 
 camera_controller camctl{ ctx.camera_position, cam };
+static size_t cam_obj = 0;
+void next_object()
+{
+	cam_obj = (cam_obj + 1) % objects.size();
+	camctl.transform = *inverse(objects[cam_obj].pos);
+}
+
+void prev_object()
+{
+	cam_obj = (cam_obj - 1) % objects.size();
+	camctl.transform = *inverse(objects[cam_obj].pos);
+}
 
 
 void reshape(int x, int y)
