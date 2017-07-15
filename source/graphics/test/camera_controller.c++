@@ -69,9 +69,9 @@ void camera_controller::frame(GLFWwindow* window, std::chrono::duration<float> f
 	movement *= frame_time.count() * speed;
 	movement = movement * look_dir;
 
-	radians<float> ang { frame_time.count() * 5 * (e - q) };
+	radians<float> ang { frame_time.count() * 5 * (q - e) };
 	auto rotation = math::identity_matrix<float, 4>;
-	rotation = math::yaw_matrix( ang );
+	rotation = math::yaw_matrix( -ang );
 
 	transform.get(0,3) += movement[0];
 	transform.get(1,3) += movement[1];
