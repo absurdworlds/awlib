@@ -9,9 +9,9 @@
  */
 #ifndef aw_std_tuple_to_string_h
 #define aw_std_tuple_to_string_h
-#include <tuple>
 #include <aw/utility/index_sequence.h>
 #include <aw/utility/to_string.h>
+#include <aw/types/tuple.h>
 namespace aw {
 /*! Converts tuple to string. */
 template<typename... Ts>
@@ -22,16 +22,12 @@ struct string_converter<std::tuple<Ts...>> {
 	std::string operator()( Formatter& fmt ) const
 	{
 		fmt.compound_start();
-		print_each( fmt, make_index_sequence<sizeof...(Ts)>() );
+		auto print = [&] (auto const&... ele) {
+			( fmt.value( ele ), ... );
+		};
+		std::apply( print, tuple );
 		fmt.compound_end();
 		return fmt;
-	}
-
-private:
-	template<typename Formatter, size_t...Is>
-	void print_each( Formatter& fmt, index_sequence<Is...> ) const
-	{
-		(void(fmt.value(std::get<Is>(tuple))), ...);
 	}
 };
 } // namespace aw
