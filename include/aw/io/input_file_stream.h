@@ -16,6 +16,7 @@ namespace aw {
 namespace io {
 /*! Buffer for input_file_stream */
 struct input_file_buffer : input_buffer {
+	constexpr static size_t buffer_size = 4096 * 2;
 	input_file_buffer(fs::path const& path, size_t size)
 		: _file(path, file_mode::read),
 		  size(size)
@@ -26,7 +27,7 @@ struct input_file_buffer : input_buffer {
 	}
 
 	input_file_buffer(fs::path const& path)
-		: input_file_buffer(path, 4096)
+		: input_file_buffer{path, buffer_size}
 	{ }
 
 
