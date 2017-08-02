@@ -10,16 +10,22 @@ my_style.source = {}
 
 ----------------------------------------------------
 -- Helper styling functions.
+--
+function replace(a, b)
+	return a .. "_" .. b:lower();
+end
 
 function to_snake(name)
 	local patterns = {
+		-- unfortuately, requires manual input right now
+		"([a-z])([0-9][A-Z]?[0-9a-z]*[a-z])$",
 		"(.)([A-Z][a-z]+)",
 		"([a-z])([0-9][A-Z])",
 		"([a-z])([A-Z])"
 	};
 
 	for _,pattern in ipairs(patterns) do
-		name = name:gsub(pattern, "%1_%2");
+		name = name:gsub(pattern, replace);
 	end
 
 	return name:lower();
