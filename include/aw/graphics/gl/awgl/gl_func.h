@@ -12,71 +12,14 @@
 #include <aw/types/enum.h>
 namespace aw {
 namespace gl {
-/* gl version 1.0 */
-inline void blend_func(GLenum sfactor, GLenum dfactor)
+//------------------------------------------------------------------------------
+
+inline GLenum get_error(void)
 {
-	::gl::blend_func(sfactor, dfactor);
+	return ::gl::get_error();
 }
-inline void clear(GLbitfield mask)
-{
-	::gl::clear(mask);
-}
-inline void clear_color(GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha)
-{
-	::gl::clear_color(red, green, blue, alpha);
-}
-inline void clear_depth(GLdouble depth)
-{
-	::gl::clear_depth(depth);
-}
-inline void clear_stencil(GLint s)
-{
-	::gl::clear_stencil(s);
-}
-inline void color_mask(GLboolean red, GLboolean green, GLboolean blue, GLboolean alpha)
-{
-	::gl::color_mask(red, green, blue, alpha);
-}
-inline void cull_face(GLenum mode)
-{
-	::gl::cull_face(mode);
-}
-inline void depth_func(GLenum func)
-{
-	::gl::depth_func(func);
-}
-inline void depth_mask(GLboolean flag)
-{
-	::gl::depth_mask(flag);
-}
-inline void depth_range(GLdouble ren_near, GLdouble ren_far)
-{
-	::gl::depth_range(ren_near, ren_far);
-}
-inline void disable(GLenum cap)
-{
-	::gl::disable(cap);
-}
-inline void draw_buffer(GLenum buf)
-{
-	::gl::draw_buffer(buf);
-}
-inline void enable(GLenum cap)
-{
-	::gl::enable(cap);
-}
-inline void finish(void)
-{
-	::gl::finish();
-}
-inline void flush(void)
-{
-	::gl::flush();
-}
-inline void front_face(GLenum mode)
-{
-	::gl::front_face(mode);
-}
+//------------------------------------------------------------------------------
+
 inline void get_boolean_v(GLenum pname, GLboolean * data)
 {
 	::gl::get_boolean_v(pname, data);
@@ -85,39 +28,52 @@ inline void get_double_v(GLenum pname, GLdouble * data)
 {
 	::gl::get_double_v(pname, data);
 }
-inline GLenum get_error(void)
+inline void get_float_v(GLenum pname, GLfloat * data)
 {
-	return ::gl::get_error();
+	::gl::get_float_v(pname, data);
 }
-inline void get_floatv(GLenum pname, GLfloat * data)
+inline void get_integer_v(GLenum pname, GLint * data)
 {
-	::gl::get_floatv(pname, data);
+	::gl::get_integer_v(pname, data);
 }
-inline void get_integerv(GLenum pname, GLint * data)
-{
-	::gl::get_integerv(pname, data);
-}
-inline const GLubyte * get_string(GLenum name)
+
+inline const GLubyte* get_string(GLenum name)
 {
 	return ::gl::get_string(name);
 }
-
-inline void hint(GLenum target, GLenum mode)
+//------------------------------------------------------------------------------
+inline void disable(GLenum cap)
 {
-	::gl::hint(target, mode);
+	::gl::disable(cap);
 }
+
+inline void enable(GLenum cap)
+{
+	::gl::enable(cap);
+}
+
 inline GLboolean is_enabled(GLenum cap)
 {
 	return ::gl::is_enabled(cap);
 }
-inline void line_width(GLfloat width)
+
+inline void disable_i(GLenum target, GLuint index)
 {
-	::gl::line_width(width);
+	::gl::disable_i(target, index);
 }
-inline void logic_op(GLenum opcode)
+inline void enable_i(GLenum target, GLuint index)
 {
-	::gl::logic_op(opcode);
+	::gl::enable_i(target, index);
 }
+
+inline GLboolean is_enabled_i(GLenum target, GLuint index)
+{
+	return ::gl::is_enabled_i(target, index);
+}
+//------------------------------------------------------------------------------
+
+#if 0
+
 inline void pixel_storef(GLenum pname, GLfloat param)
 {
 	::gl::pixel_storef(pname, param);
@@ -125,14 +81,6 @@ inline void pixel_storef(GLenum pname, GLfloat param)
 inline void pixel_storei(GLenum pname, GLint param)
 {
 	::gl::pixel_storei(pname, param);
-}
-inline void point_size(GLfloat size)
-{
-	::gl::point_size(size);
-}
-inline void polygon_mode(GLenum face, GLenum mode)
-{
-	::gl::polygon_mode(face, mode);
 }
 inline void read_buffer(GLenum src)
 {
@@ -142,50 +90,16 @@ inline void read_pixels(GLint x, GLint y, GLsizei width, GLsizei height, GLenum 
 {
 	::gl::read_pixels(x, y, width, height, format, type, pixels);
 }
-inline void scissor(GLint x, GLint y, GLsizei width, GLsizei height)
-{
-	::gl::scissor(x, y, width, height);
-}
-inline void stencil_func(GLenum func, GLint ref, GLuint mask)
-{
-	::gl::stencil_func(func, ref, mask);
-}
-inline void stencil_mask(GLuint mask)
-{
-	::gl::stencil_mask(mask);
-}
-inline void stencil_op(GLenum fail, GLenum zfail, GLenum zpass)
-{
-	::gl::stencil_op(fail, zfail, zpass);
-}
 
-inline void viewport(GLint x, GLint y, GLsizei width, GLsizei height)
-{
-	::gl::viewport(x, y, width, height);
-}
+
+
 
 /* gl version 1.1 */
 
-inline void draw_arrays(GLenum mode, GLint first, GLsizei count)
-{
-	::gl::draw_arrays(mode, first, count);
-}
-inline void draw_elements(GLenum mode, GLsizei count, GLenum type, const void * indices)
-{
-	::gl::draw_elements(mode, count, type, indices);
-}
-
-inline void polygon_offset(GLfloat factor, GLfloat units)
-{
-	::gl::polygon_offset(factor, units);
-}
 
 
 /* gl version 1.2 */
-inline void draw_range_elements(GLenum mode, GLuint start, GLuint end, GLsizei count, GLenum type, const void * indices)
-{
-	::gl::draw_range_elements(mode, start, end, count, type, indices);
-}
+
 
 /* gl version 1.3 */
 
@@ -195,26 +109,7 @@ inline void sample_coverage(GLfloat value, GLboolean invert)
 }
 
 /* gl version 1.4 */
-inline void blend_color(GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha)
-{
-	::gl::blend_color(red, green, blue, alpha);
-}
-inline void blend_equation(GLenum mode)
-{
-	::gl::blend_equation(mode);
-}
-inline void blend_func_separate(GLenum sfactorRGB, GLenum dfactorRGB, GLenum sfactorAlpha, GLenum dfactorAlpha)
-{
-	::gl::blend_func_separate(sfactorRGB, dfactorRGB, sfactorAlpha, dfactorAlpha);
-}
-inline void multi_draw_arrays(GLenum mode, const GLint * first, const GLsizei * count, GLsizei drawcount)
-{
-	::gl::multi_draw_arrays(mode, first, count, drawcount);
-}
-inline void multi_draw_elements(GLenum mode, const GLsizei * count, GLenum type, const void *const* indices, GLsizei drawcount)
-{
-	::gl::multi_draw_elements(mode, count, type, indices, drawcount);
-}
+
 inline void point_parameterf(GLenum pname, GLfloat param)
 {
 	::gl::point_parameterf(pname, param);
@@ -271,16 +166,6 @@ inline GLboolean is_query(GLuint id)
 
 
 /* gl version 2.0 */
-
-inline void blend_equation_separate(GLenum modeRGB, GLenum modeAlpha)
-{
-	::gl::blend_equation_separate(modeRGB, modeAlpha);
-}
-inline void draw_buffers(GLsizei n, const GLenum * bufs)
-{
-	::gl::draw_buffers(n, bufs);
-}
-
 inline void get_active_attrib(GLuint program, GLuint index, GLsizei bufSize, GLsizei * length, GLint * size, GLenum * type, GLchar * name)
 {
 	::gl::get_active_attrib(program, index, bufSize, length, size, type, name);
@@ -304,19 +189,6 @@ inline void get_shader_source(GLuint shader, GLsizei bufSize, GLsizei * length, 
 }
 
 
-
-inline void stencil_func_separate(GLenum face, GLenum func, GLint ref, GLuint mask)
-{
-	::gl::stencil_func_separate(face, func, ref, mask);
-}
-inline void stencil_mask_separate(GLenum face, GLuint mask)
-{
-	::gl::stencil_mask_separate(face, mask);
-}
-inline void stencil_op_separate(GLenum face, GLenum sfail, GLenum dpfail, GLenum dppass)
-{
-	::gl::stencil_op_separate(face, sfail, dpfail, dppass);
-}
 
 
 /* gl version 2.1 */
@@ -386,14 +258,6 @@ inline void delete_renderbuffers(GLsizei n, const GLuint * renderbuffers)
 	::gl::delete_renderbuffers(n, renderbuffers);
 }
 
-inline void disablei(GLenum target, GLuint index)
-{
-	::gl::disablei(target, index);
-}
-inline void enablei(GLenum target, GLuint index)
-{
-	::gl::enablei(target, index);
-}
 inline void end_conditional_render(void)
 {
 	::gl::end_conditional_render();
@@ -477,10 +341,6 @@ inline void get_transform_feedback_varying(GLuint program, GLuint index, GLsizei
 }
 
 
-inline GLboolean is_enabled_i(GLenum target, GLuint index)
-{
-	return ::gl::is_enabledi(target, index);
-}
 inline GLboolean is_framebuffer(GLuint framebuffer)
 {
 	return ::gl::is_framebuffer(framebuffer);
@@ -513,14 +373,7 @@ inline void copy_buffer_sub_data(GLenum readTarget, GLenum writeTarget, GLintptr
 {
 	::gl::copy_buffer_sub_data(readTarget, writeTarget, readOffset, writeOffset, size);
 }
-inline void draw_arrays_instanced(GLenum mode, GLint first, GLsizei count, GLsizei instancecount)
-{
-	::gl::draw_arrays_instanced(mode, first, count, instancecount);
-}
-inline void draw_elements_instanced(GLenum mode, GLsizei count, GLenum type, const void * indices, GLsizei instancecount)
-{
-	::gl::draw_elements_instanced(mode, count, type, indices, instancecount);
-}
+
 inline void get_active_uniform_block_name(GLuint program, GLuint uniformBlockIndex, GLsizei bufSize, GLsizei * length, GLchar * uniformBlockName)
 {
 	::gl::get_active_uniform_block_name(program, uniformBlockIndex, bufSize, length, uniformBlockName);
@@ -561,18 +414,7 @@ inline void delete_sync(GLsync sync)
 {
 	::gl::delete_sync(sync);
 }
-inline void draw_elements_base_vertex(GLenum mode, GLsizei count, GLenum type, const void * indices, GLint basevertex)
-{
-	::gl::draw_elements_base_vertex(mode, count, type, indices, basevertex);
-}
-inline void draw_elements_instanced_base_vertex(GLenum mode, GLsizei count, GLenum type, const void * indices, GLsizei instancecount, GLint basevertex)
-{
-	::gl::draw_elements_instanced_base_vertex(mode, count, type, indices, instancecount, basevertex);
-}
-inline void draw_range_elements_base_vertex(GLenum mode, GLuint start, GLuint end, GLsizei count, GLenum type, const void * indices, GLint basevertex)
-{
-	::gl::draw_range_elements_base_vertex(mode, start, end, count, type, indices, basevertex);
-}
+
 inline GLsync fence_sync(GLenum condition, GLbitfield flags)
 {
 	return ::gl::fence_sync(condition, flags);
@@ -704,6 +546,7 @@ inline void sampler_parameter(GLuint sampler, GLenum pname, const GLint * param)
 {
 	::gl::sampler_parameter_iv(sampler, pname, param);
 }
+#endif
 
 
 } //namespace gl

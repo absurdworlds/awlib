@@ -106,11 +106,11 @@ void create_context( GLFWwindow* window )
 void print_capabilities( )
 {
 	GLint num;
-	gl::get_integerv(GL_MAX_VERTEX_UNIFORM_COMPONENTS, &num);
+	gl::get_integer_v(GL_MAX_VERTEX_UNIFORM_COMPONENTS, &num);
 	println( "GL_MAX_VERTEX_UNIFORM_COMPONENTS: ", num );
-	gl::get_integerv(GL_MAX_ARRAY_TEXTURE_LAYERS, &num);
+	gl::get_integer_v(GL_MAX_ARRAY_TEXTURE_LAYERS, &num);
 	println( "GL_MAX_ARRAY_TEXTURE_LAYERS:      ", num );
-	gl::get_integerv(GL_MAX_VERTEX_UNIFORM_BLOCKS, &num);
+	gl::get_integer_v(GL_MAX_VERTEX_UNIFORM_BLOCKS, &num);
 	println( "GL_MAX_VERTEX_UNIFORM_BLOCKS:     ", num );
 }
 
