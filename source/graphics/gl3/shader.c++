@@ -18,7 +18,7 @@ namespace {
 void report_info_log( shader_handle shd )
 {
 	GLint length;
-	gl::get_shaderiv(shd, gl::shader_param::info_log_length, &length);
+	gl::get_shader(shd, gl::shader_param::info_log_length, &length);
 
 	std::vector<char> log(length + 1);
 	gl::get_info_log(shd, log.size(), nullptr, log.data());
@@ -42,7 +42,7 @@ void shader::cleanup()
 gl::shader_type shader::type() const
 {
 	GLint type;
-	gl::get_shaderiv( _shader, gl::shader_param::type, &type );
+	gl::get_shader( _shader, gl::shader_param::type, &type );
 	return gl::shader_type(type);
 }
 
@@ -50,7 +50,7 @@ bool shader::is_compiled() const
 {
 	if (!_shader) return false;
 	GLint status;
-	gl::get_shaderiv( _shader, gl::shader_param::compile_status, &status );
+	gl::get_shader( _shader, gl::shader_param::compile_status, &status );
 	return status == GL_TRUE;
 }
 

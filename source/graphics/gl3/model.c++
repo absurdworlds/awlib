@@ -7,7 +7,8 @@
  * There is NO WARRANTY, to the extent permitted by law.
  */
 #include <aw/graphics/gl/model.h>
-#include <aw/graphics/gl/awgl/api.h>
+#include <aw/graphics/gl/awgl/buffer_func.h>
+#include <aw/graphics/gl/awgl/vertex_func.h>
 #include <aw/utility/ranges/ipairs.h>
 
 namespace aw::glh {

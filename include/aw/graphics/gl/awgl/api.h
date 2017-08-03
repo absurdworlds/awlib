@@ -10,5 +10,6 @@
 #define aw_graphics_awgl_api_h
 #include "shader_func.h"
 #include "texture_func.h"
+#include "buffer_func.h"
 #include "gl_func.h"
 #endif//aw_graphics_awgl_shader_func_h

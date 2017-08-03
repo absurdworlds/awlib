@@ -77,13 +77,13 @@ inline void front_face(GLenum mode)
 {
 	::gl::front_face(mode);
 }
-inline void get_booleanv(GLenum pname, GLboolean * data)
+inline void get_boolean_v(GLenum pname, GLboolean * data)
 {
-	::gl::get_booleanv(pname, data);
+	::gl::get_boolean_v(pname, data);
 }
-inline void get_doublev(GLenum pname, GLdouble * data)
+inline void get_double_v(GLenum pname, GLdouble * data)
 {
-	::gl::get_doublev(pname, data);
+	::gl::get_double_v(pname, data);
 }
 inline GLenum get_error(void)
 {
@@ -101,26 +101,7 @@ inline const GLubyte * get_string(GLenum name)
 {
 	return ::gl::get_string(name);
 }
-inline void get_tex_image(GLenum target, GLint level, GLenum format, GLenum type, void * pixels)
-{
-	::gl::get_tex_image(target, level, format, type, pixels);
-}
-inline void get_tex_level_parameterfv(GLenum target, GLint level, GLenum pname, GLfloat * params)
-{
-	::gl::get_tex_level_parameterfv(target, level, pname, params);
-}
-inline void get_tex_level_parameteriv(GLenum target, GLint level, GLenum pname, GLint * params)
-{
-	::gl::get_tex_level_parameteriv(target, level, pname, params);
-}
-inline void get_tex_parameterfv(GLenum target, GLenum pname, GLfloat * params)
-{
-	::gl::get_tex_parameterfv(target, pname, params);
-}
-inline void get_tex_parameteriv(GLenum target, GLenum pname, GLint * params)
-{
-	::gl::get_tex_parameteriv(target, pname, params);
-}
+
 inline void hint(GLenum target, GLenum mode)
 {
 	::gl::hint(target, mode);
@@ -208,10 +189,6 @@ inline void draw_range_elements(GLenum mode, GLuint start, GLuint end, GLsizei c
 
 /* gl version 1.3 */
 
-inline void get_compressed_tex_image(GLenum target, GLint level, void * img)
-{
-	::gl::get_compressed_tex_image(target, level, img);
-}
 inline void sample_coverage(GLfloat value, GLboolean invert)
 {
 	::gl::sample_coverage(value, invert);
@@ -260,22 +237,8 @@ inline void begin_query(GLenum target, GLuint id)
 {
 	::gl::begin_query(target, id);
 }
-inline void bind_buffer(GLenum target, GLuint buffer)
-{
-	::gl::bind_buffer(target, buffer);
-}
-inline void buffer_data(GLenum target, GLsizeiptr size, const void * data, GLenum usage)
-{
-	::gl::buffer_data(target, size, data, usage);
-}
-inline void buffer_sub_data(GLenum target, GLintptr offset, GLsizeiptr size, const void * data)
-{
-	::gl::buffer_sub_data(target, offset, size, data);
-}
-inline void delete_buffers(GLsizei n, const GLuint * buffers)
-{
-	::gl::delete_buffers(n, buffers);
-}
+
+
 inline void delete_queries(GLsizei n, const GLuint * ids)
 {
 	::gl::delete_queries(n, ids);
@@ -284,25 +247,9 @@ inline void end_query(GLenum target)
 {
 	::gl::end_query(target);
 }
-inline void gen_buffers(GLsizei n, GLuint * buffers)
-{
-	::gl::gen_buffers(n, buffers);
-}
 inline void gen_queries(GLsizei n, GLuint * ids)
 {
 	::gl::gen_queries(n, ids);
-}
-inline void get_buffer_parameteriv(GLenum target, GLenum pname, GLint * params)
-{
-	::gl::get_buffer_parameteriv(target, pname, params);
-}
-inline void get_buffer_pointerv(GLenum target, GLenum pname, void ** params)
-{
-	::gl::get_buffer_pointerv(target, pname, params);
-}
-inline void get_buffer_sub_data(GLenum target, GLintptr offset, GLsizeiptr size, void * data)
-{
-	::gl::get_buffer_sub_data(target, offset, size, data);
 }
 inline void get_query_objectiv(GLuint id, GLenum pname, GLint * params)
 {
@@ -316,45 +263,24 @@ inline void get_queryiv(GLenum target, GLenum pname, GLint * params)
 {
 	::gl::get_queryiv(target, pname, params);
 }
-inline GLboolean is_buffer(GLuint buffer)
-{
-	return ::gl::is_buffer(buffer);
-}
+
 inline GLboolean is_query(GLuint id)
 {
 	return ::gl::is_query(id);
 }
-inline void * map_buffer(GLenum target, GLenum access)
-{
-	return ::gl::map_buffer(target, access);
-}
-inline GLboolean unmap_buffer(GLenum target)
-{
-	return ::gl::unmap_buffer(target);
-}
+
 
 /* gl version 2.0 */
-inline void bind_attrib_location(GLuint program, GLuint index, const GLchar * name)
-{
-	::gl::bind_attrib_location(program, index, name);
-}
+
 inline void blend_equation_separate(GLenum modeRGB, GLenum modeAlpha)
 {
 	::gl::blend_equation_separate(modeRGB, modeAlpha);
-}
-
-inline void disable_vertex_attrib_array(GLuint index)
-{
-	::gl::disable_vertex_attrib_array(index);
 }
 inline void draw_buffers(GLsizei n, const GLenum * bufs)
 {
 	::gl::draw_buffers(n, bufs);
 }
-inline void enable_vertex_attrib_array(GLuint index)
-{
-	::gl::enable_vertex_attrib_array(index);
-}
+
 inline void get_active_attrib(GLuint program, GLuint index, GLsizei bufSize, GLsizei * length, GLint * size, GLenum * type, GLchar * name)
 {
 	::gl::get_active_attrib(program, index, bufSize, length, size, type, name);
@@ -378,30 +304,6 @@ inline void get_shader_source(GLuint shader, GLsizei bufSize, GLsizei * length, 
 }
 
 
-inline void get_uniformfv(GLuint program, GLint location, GLfloat * params)
-{
-	::gl::get_uniformfv(program, location, params);
-}
-inline void get_uniformiv(GLuint program, GLint location, GLint * params)
-{
-	::gl::get_uniformiv(program, location, params);
-}
-inline void get_vertex_attrib_pointerv(GLuint index, GLenum pname, void ** pointer)
-{
-	::gl::get_vertex_attrib_pointerv(index, pname, pointer);
-}
-inline void get_vertex_attribdv(GLuint index, GLenum pname, GLdouble * params)
-{
-	::gl::get_vertex_attribdv(index, pname, params);
-}
-inline void get_vertex_attribfv(GLuint index, GLenum pname, GLfloat * params)
-{
-	::gl::get_vertex_attribfv(index, pname, params);
-}
-inline void get_vertex_attribiv(GLuint index, GLenum pname, GLint * params)
-{
-	::gl::get_vertex_attribiv(index, pname, params);
-}
 
 inline void stencil_func_separate(GLenum face, GLenum func, GLint ref, GLuint mask)
 {
@@ -416,154 +318,6 @@ inline void stencil_op_separate(GLenum face, GLenum sfail, GLenum dpfail, GLenum
 	::gl::stencil_op_separate(face, sfail, dpfail, dppass);
 }
 
-inline void vertex_attrib1d(GLuint index, GLdouble x)
-{
-	::gl::vertex_attrib1d(index, x);
-}
-inline void vertex_attrib1dv(GLuint index, const GLdouble * v)
-{
-	::gl::vertex_attrib1dv(index, v);
-}
-inline void vertex_attrib1f(GLuint index, GLfloat x)
-{
-	::gl::vertex_attrib1f(index, x);
-}
-inline void vertex_attrib1fv(GLuint index, const GLfloat * v)
-{
-	::gl::vertex_attrib1fv(index, v);
-}
-inline void vertex_attrib1s(GLuint index, GLshort x)
-{
-	::gl::vertex_attrib1s(index, x);
-}
-inline void vertex_attrib1sv(GLuint index, const GLshort * v)
-{
-	::gl::vertex_attrib1sv(index, v);
-}
-inline void vertex_attrib2d(GLuint index, GLdouble x, GLdouble y)
-{
-	::gl::vertex_attrib2d(index, x, y);
-}
-inline void vertex_attrib2dv(GLuint index, const GLdouble * v)
-{
-	::gl::vertex_attrib2dv(index, v);
-}
-inline void vertex_attrib2f(GLuint index, GLfloat x, GLfloat y)
-{
-	::gl::vertex_attrib2f(index, x, y);
-}
-inline void vertex_attrib2fv(GLuint index, const GLfloat * v)
-{
-	::gl::vertex_attrib2fv(index, v);
-}
-inline void vertex_attrib2s(GLuint index, GLshort x, GLshort y)
-{
-	::gl::vertex_attrib2s(index, x, y);
-}
-inline void vertex_attrib2sv(GLuint index, const GLshort * v)
-{
-	::gl::vertex_attrib2sv(index, v);
-}
-inline void vertex_attrib3d(GLuint index, GLdouble x, GLdouble y, GLdouble z)
-{
-	::gl::vertex_attrib3d(index, x, y, z);
-}
-inline void vertex_attrib3dv(GLuint index, const GLdouble * v)
-{
-	::gl::vertex_attrib3dv(index, v);
-}
-inline void vertex_attrib3f(GLuint index, GLfloat x, GLfloat y, GLfloat z)
-{
-	::gl::vertex_attrib3f(index, x, y, z);
-}
-inline void vertex_attrib3fv(GLuint index, const GLfloat * v)
-{
-	::gl::vertex_attrib3fv(index, v);
-}
-inline void vertex_attrib3s(GLuint index, GLshort x, GLshort y, GLshort z)
-{
-	::gl::vertex_attrib3s(index, x, y, z);
-}
-inline void vertex_attrib3sv(GLuint index, const GLshort * v)
-{
-	::gl::vertex_attrib3sv(index, v);
-}
-inline void vertex_attrib4_nbv(GLuint index, const GLbyte * v)
-{
-	::gl::vertex_attrib4_nbv(index, v);
-}
-inline void vertex_attrib4_niv(GLuint index, const GLint * v)
-{
-	::gl::vertex_attrib4_niv(index, v);
-}
-inline void vertex_attrib4_nsv(GLuint index, const GLshort * v)
-{
-	::gl::vertex_attrib4_nsv(index, v);
-}
-inline void vertex_attrib4_nub(GLuint index, GLubyte x, GLubyte y, GLubyte z, GLubyte w)
-{
-	::gl::vertex_attrib4_nub(index, x, y, z, w);
-}
-inline void vertex_attrib4_nubv(GLuint index, const GLubyte * v)
-{
-	::gl::vertex_attrib4_nubv(index, v);
-}
-inline void vertex_attrib4_nuiv(GLuint index, const GLuint * v)
-{
-	::gl::vertex_attrib4_nuiv(index, v);
-}
-inline void vertex_attrib4_nusv(GLuint index, const GLushort * v)
-{
-	::gl::vertex_attrib4_nusv(index, v);
-}
-inline void vertex_attrib4bv(GLuint index, const GLbyte * v)
-{
-	::gl::vertex_attrib4bv(index, v);
-}
-inline void vertex_attrib4d(GLuint index, GLdouble x, GLdouble y, GLdouble z, GLdouble w)
-{
-	::gl::vertex_attrib4d(index, x, y, z, w);
-}
-inline void vertex_attrib4dv(GLuint index, const GLdouble * v)
-{
-	::gl::vertex_attrib4dv(index, v);
-}
-inline void vertex_attrib4f(GLuint index, GLfloat x, GLfloat y, GLfloat z, GLfloat w)
-{
-	::gl::vertex_attrib4f(index, x, y, z, w);
-}
-inline void vertex_attrib4fv(GLuint index, const GLfloat * v)
-{
-	::gl::vertex_attrib4fv(index, v);
-}
-inline void vertex_attrib4iv(GLuint index, const GLint * v)
-{
-	::gl::vertex_attrib4iv(index, v);
-}
-inline void vertex_attrib4s(GLuint index, GLshort x, GLshort y, GLshort z, GLshort w)
-{
-	::gl::vertex_attrib4s(index, x, y, z, w);
-}
-inline void vertex_attrib4sv(GLuint index, const GLshort * v)
-{
-	::gl::vertex_attrib4sv(index, v);
-}
-inline void vertex_attrib4ubv(GLuint index, const GLubyte * v)
-{
-	::gl::vertex_attrib4ubv(index, v);
-}
-inline void vertex_attrib4uiv(GLuint index, const GLuint * v)
-{
-	::gl::vertex_attrib4uiv(index, v);
-}
-inline void vertex_attrib4usv(GLuint index, const GLushort * v)
-{
-	::gl::vertex_attrib4usv(index, v);
-}
-inline void vertex_attrib_pointer(GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, uintptr_t pointer)
-{
-	::gl::vertex_attrib_pointer(index, size, type, normalized, stride, (const void*)pointer);
-}
 
 /* gl version 2.1 */
 
@@ -577,14 +331,7 @@ inline void begin_transform_feedback(GLenum primitiveMode)
 {
 	::gl::begin_transform_feedback(primitiveMode);
 }
-inline void bind_buffer_base(GLenum target, GLuint index, GLuint buffer)
-{
-	::gl::bind_buffer_base(target, index, buffer);
-}
-inline void bind_buffer_range(GLenum target, GLuint index, GLuint buffer, GLintptr offset, GLsizeiptr size)
-{
-	::gl::bind_buffer_range(target, index, buffer, offset, size);
-}
+
 inline void bind_frag_data_location(GLuint program, GLuint color, const GLchar * name)
 {
 	::gl::bind_frag_data_location(program, color, name);
@@ -597,10 +344,7 @@ inline void bind_renderbuffer(GLenum target, GLuint renderbuffer)
 {
 	::gl::bind_renderbuffer(target, renderbuffer);
 }
-inline void bind_vertex_array(GLuint ren_array)
-{
-	::gl::bind_vertex_array(ren_array);
-}
+
 inline void blit_framebuffer(GLint srcX0, GLint srcY0, GLint srcX1, GLint srcY1, GLint dstX0, GLint dstY0, GLint dstX1, GLint dstY1, GLbitfield mask, GLenum filter)
 {
 	::gl::blit_framebuffer(srcX0, srcY0, srcX1, srcY1, dstX0, dstY0, dstX1, dstY1, mask, filter);
@@ -641,10 +385,7 @@ inline void delete_renderbuffers(GLsizei n, const GLuint * renderbuffers)
 {
 	::gl::delete_renderbuffers(n, renderbuffers);
 }
-inline void delete_vertex_arrays(GLsizei n, const GLuint * arrays)
-{
-	::gl::delete_vertex_arrays(n, arrays);
-}
+
 inline void disablei(GLenum target, GLuint index)
 {
 	::gl::disablei(target, index);
@@ -693,10 +434,7 @@ inline void gen_renderbuffers(GLsizei n, GLuint * renderbuffers)
 {
 	::gl::gen_renderbuffers(n, renderbuffers);
 }
-inline void gen_vertex_arrays(GLsizei n, GLuint * arrays)
-{
-	::gl::gen_vertex_arrays(n, arrays);
-}
+
 inline void generate_mipmap(GLenum target)
 {
 	::gl::generate_mipmap(target);
@@ -738,15 +476,8 @@ inline void get_transform_feedback_varying(GLuint program, GLuint index, GLsizei
 	::gl::get_transform_feedback_varying(program, index, bufSize, length, size, type, name);
 }
 
-inline void get_vertex_attrib_iiv(GLuint index, GLenum pname, GLint * params)
-{
-	::gl::get_vertex_attrib_iiv(index, pname, params);
-}
-inline void get_vertex_attrib_iuiv(GLuint index, GLenum pname, GLuint * params)
-{
-	::gl::get_vertex_attrib_iuiv(index, pname, params);
-}
-inline GLboolean is_enabledi(GLenum target, GLuint index)
+
+inline GLboolean is_enabled_i(GLenum target, GLuint index)
 {
 	return ::gl::is_enabledi(target, index);
 }
@@ -758,10 +489,7 @@ inline GLboolean is_renderbuffer(GLuint renderbuffer)
 {
 	return ::gl::is_renderbuffer(renderbuffer);
 }
-inline GLboolean is_vertex_array(GLuint ren_array)
-{
-	return ::gl::is_vertex_array(ren_array);
-}
+
 inline void * map_buffer_range(GLenum target, GLintptr offset, GLsizeiptr length, GLbitfield access)
 {
 	return ::gl::map_buffer_range(target, offset, length, access);
@@ -778,90 +506,6 @@ inline void renderbuffer_storage_multisample(GLenum target, GLsizei samples, GLe
 inline void transform_feedback_varyings(GLuint program, GLsizei count, const GLchar *const* varyings, GLenum bufferMode)
 {
 	::gl::transform_feedback_varyings(program, count, varyings, bufferMode);
-}
-inline void vertex_attrib_i1i(GLuint index, GLint x)
-{
-	::gl::vertex_attrib_i1i(index, x);
-}
-inline void vertex_attrib_i1iv(GLuint index, const GLint * v)
-{
-	::gl::vertex_attrib_i1iv(index, v);
-}
-inline void vertex_attrib_i1ui(GLuint index, GLuint x)
-{
-	::gl::vertex_attrib_i1ui(index, x);
-}
-inline void vertex_attrib_i1uiv(GLuint index, const GLuint * v)
-{
-	::gl::vertex_attrib_i1uiv(index, v);
-}
-inline void vertex_attrib_i2i(GLuint index, GLint x, GLint y)
-{
-	::gl::vertex_attrib_i2i(index, x, y);
-}
-inline void vertex_attrib_i2iv(GLuint index, const GLint * v)
-{
-	::gl::vertex_attrib_i2iv(index, v);
-}
-inline void vertex_attrib_i2ui(GLuint index, GLuint x, GLuint y)
-{
-	::gl::vertex_attrib_i2ui(index, x, y);
-}
-inline void vertex_attrib_i2uiv(GLuint index, const GLuint * v)
-{
-	::gl::vertex_attrib_i2uiv(index, v);
-}
-inline void vertex_attrib_i3i(GLuint index, GLint x, GLint y, GLint z)
-{
-	::gl::vertex_attrib_i3i(index, x, y, z);
-}
-inline void vertex_attrib_i3iv(GLuint index, const GLint * v)
-{
-	::gl::vertex_attrib_i3iv(index, v);
-}
-inline void vertex_attrib_i3ui(GLuint index, GLuint x, GLuint y, GLuint z)
-{
-	::gl::vertex_attrib_i3ui(index, x, y, z);
-}
-inline void vertex_attrib_i3uiv(GLuint index, const GLuint * v)
-{
-	::gl::vertex_attrib_i3uiv(index, v);
-}
-inline void vertex_attrib_i4bv(GLuint index, const GLbyte * v)
-{
-	::gl::vertex_attrib_i4bv(index, v);
-}
-inline void vertex_attrib_i4i(GLuint index, GLint x, GLint y, GLint z, GLint w)
-{
-	::gl::vertex_attrib_i4i(index, x, y, z, w);
-}
-inline void vertex_attrib_i4iv(GLuint index, const GLint * v)
-{
-	::gl::vertex_attrib_i4iv(index, v);
-}
-inline void vertex_attrib_i4sv(GLuint index, const GLshort * v)
-{
-	::gl::vertex_attrib_i4sv(index, v);
-}
-inline void vertex_attrib_i4ubv(GLuint index, const GLubyte * v)
-{
-	::gl::vertex_attrib_i4ubv(index, v);
-}
-inline void vertex_attrib_i4ui(GLuint index, GLuint x, GLuint y, GLuint z, GLuint w)
-{
-	::gl::vertex_attrib_i4ui(index, x, y, z, w);
-}
-inline void vertex_attrib_i4uiv(GLuint index, const GLuint * v)
-{
-	::gl::vertex_attrib_i4uiv(index, v);
-}
-inline void vertex_attrib_i4usv(GLuint index, const GLushort * v)
-{
-	::gl::vertex_attrib_i4usv(index, v);
-}
-inline void vertex_attrib_i_pointer(GLuint index, GLint size, GLenum type, GLsizei stride, const void * pointer)
-{
-	::gl::vertex_attrib_i_pointer(index, size, type, stride, pointer);
 }
 
 /* gl version 3.1 */
@@ -973,14 +617,7 @@ inline void sample_maski(GLuint maskNumber, GLbitfield mask)
 {
 	::gl::sample_maski(maskNumber, mask);
 }
-inline void tex_image2_d_multisample(GLenum target, GLsizei samples, GLenum internalformat, GLsizei width, GLsizei height, GLboolean fixedsamplelocations)
-{
-	::gl::tex_image2_d_multisample(target, samples, internalformat, width, height, fixedsamplelocations);
-}
-inline void tex_image3_d_multisample(GLenum target, GLsizei samples, GLenum internalformat, GLsizei width, GLsizei height, GLsizei depth, GLboolean fixedsamplelocations)
-{
-	::gl::tex_image3_d_multisample(target, samples, internalformat, width, height, depth, fixedsamplelocations);
-}
+
 inline void wait_sync(GLsync sync, GLbitfield flags, GLuint64 timeout)
 {
 	::gl::wait_sync(sync, flags, timeout);
@@ -1007,98 +644,67 @@ inline GLint get_frag_data_index(GLuint program, const GLchar * name)
 {
 	return ::gl::get_frag_data_index(program, name);
 }
-inline void get_query_objecti64v(GLuint id, GLenum pname, GLint64 * params)
+inline void get_query_object_i64v(GLuint id, GLenum pname, GLint64 * params)
 {
-	::gl::get_query_objecti64v(id, pname, params);
+	::gl::get_query_object_i64v(id, pname, params);
 }
-inline void get_query_objectui64v(GLuint id, GLenum pname, GLuint64 * params)
+inline void get_query_object_ui64v(GLuint id, GLenum pname, GLuint64 * params)
 {
-	::gl::get_query_objectui64v(id, pname, params);
+	::gl::get_query_object_ui64v(id, pname, params);
 }
-inline void get_sampler_parameter_iiv(GLuint sampler, GLenum pname, GLint * params)
+
+inline void get_sampler_parameter_i(GLuint sampler, GLenum pname, GLint * params)
 {
-	::gl::get_sampler_parameter_iiv(sampler, pname, params);
+	::gl::get_sampler_parameter_i_iv(sampler, pname, params);
 }
-inline void get_sampler_parameter_iuiv(GLuint sampler, GLenum pname, GLuint * params)
+inline void get_sampler_parameter_i(GLuint sampler, GLenum pname, GLuint * params)
 {
-	::gl::get_sampler_parameter_iuiv(sampler, pname, params);
+	::gl::get_sampler_parameter_i_uiv(sampler, pname, params);
 }
-inline void get_sampler_parameterfv(GLuint sampler, GLenum pname, GLfloat * params)
+inline void get_sampler_parameter(GLuint sampler, GLenum pname, GLfloat * params)
 {
 	::gl::get_sampler_parameterfv(sampler, pname, params);
 }
-inline void get_sampler_parameteriv(GLuint sampler, GLenum pname, GLint * params)
+inline void get_sampler_parameter(GLuint sampler, GLenum pname, GLint * params)
 {
-	::gl::get_sampler_parameteriv(sampler, pname, params);
+	::gl::get_sampler_parameter_iv(sampler, pname, params);
 }
+
 inline GLboolean is_sampler(GLuint sampler)
 {
 	return ::gl::is_sampler(sampler);
 }
+
 inline void query_counter(GLuint id, GLenum target)
 {
 	::gl::query_counter(id, target);
 }
-inline void sampler_parameter_iiv(GLuint sampler, GLenum pname, const GLint * param)
+
+inline void sampler_parameter_i(GLuint sampler, GLenum pname, const GLint * param)
 {
-	::gl::sampler_parameter_iiv(sampler, pname, param);
+	::gl::sampler_parameter_i_iv(sampler, pname, param);
 }
-inline void sampler_parameter_iuiv(GLuint sampler, GLenum pname, const GLuint * param)
+inline void sampler_parameter_i(GLuint sampler, GLenum pname, const GLuint * param)
 {
-	::gl::sampler_parameter_iuiv(sampler, pname, param);
+	::gl::sampler_parameter_i_uiv(sampler, pname, param);
 }
-inline void sampler_parameterf(GLuint sampler, GLenum pname, GLfloat param)
+inline void sampler_parameter(GLuint sampler, GLenum pname, GLfloat param)
 {
-	::gl::sampler_parameterf(sampler, pname, param);
+	::gl::sampler_parameter_f(sampler, pname, param);
 }
-inline void sampler_parameterfv(GLuint sampler, GLenum pname, const GLfloat * param)
+inline void sampler_parameter(GLuint sampler, GLenum pname, const GLfloat * param)
 {
-	::gl::sampler_parameterfv(sampler, pname, param);
+	::gl::sampler_parameter_fv(sampler, pname, param);
 }
-inline void sampler_parameteri(GLuint sampler, GLenum pname, GLint param)
+inline void sampler_parameter(GLuint sampler, GLenum pname, GLint param)
 {
-	::gl::sampler_parameteri(sampler, pname, param);
+	::gl::sampler_parameter_i(sampler, pname, param);
 }
-inline void sampler_parameteriv(GLuint sampler, GLenum pname, const GLint * param)
+inline void sampler_parameter(GLuint sampler, GLenum pname, const GLint * param)
 {
-	::gl::sampler_parameteriv(sampler, pname, param);
+	::gl::sampler_parameter_iv(sampler, pname, param);
 }
-inline void vertex_attrib_divisor(GLuint index, GLuint divisor)
-{
-	::gl::vertex_attrib_divisor(index, divisor);
-}
-inline void vertex_attrib_p1ui(GLuint index, GLenum type, GLboolean normalized, GLuint value)
-{
-	::gl::vertex_attrib_p1ui(index, type, normalized, value);
-}
-inline void vertex_attrib_p1uiv(GLuint index, GLenum type, GLboolean normalized, const GLuint * value)
-{
-	::gl::vertex_attrib_p1uiv(index, type, normalized, value);
-}
-inline void vertex_attrib_p2ui(GLuint index, GLenum type, GLboolean normalized, GLuint value)
-{
-	::gl::vertex_attrib_p2ui(index, type, normalized, value);
-}
-inline void vertex_attrib_p2uiv(GLuint index, GLenum type, GLboolean normalized, const GLuint * value)
-{
-	::gl::vertex_attrib_p2uiv(index, type, normalized, value);
-}
-inline void vertex_attrib_p3ui(GLuint index, GLenum type, GLboolean normalized, GLuint value)
-{
-	::gl::vertex_attrib_p3ui(index, type, normalized, value);
-}
-inline void vertex_attrib_p3uiv(GLuint index, GLenum type, GLboolean normalized, const GLuint * value)
-{
-	::gl::vertex_attrib_p3uiv(index, type, normalized, value);
-}
-inline void vertex_attrib_p4ui(GLuint index, GLenum type, GLboolean normalized, GLuint value)
-{
-	::gl::vertex_attrib_p4ui(index, type, normalized, value);
-}
-inline void vertex_attrib_p4uiv(GLuint index, GLenum type, GLboolean normalized, const GLuint * value)
-{
-	::gl::vertex_attrib_p4uiv(index, type, normalized, value);
-}
+
 
 } //namespace gl
 } // namespace aw

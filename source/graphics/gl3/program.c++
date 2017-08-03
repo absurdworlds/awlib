@@ -19,7 +19,7 @@ namespace {
 void report_info_log( program_handle _program)
 {
 	GLint length;
-	gl::get_programiv( _program, gl::program_param::info_log_length, &length );
+	gl::get_program( _program, gl::program_param::info_log_length, &length );
 
 	std::vector<char> log(length + 1);
 	gl::get_info_log( _program, log.size(), nullptr, log.data() );
@@ -44,7 +44,7 @@ bool program::is_linked() const
 	if (!_program) return false;
 
 	GLint status;
-	gl::get_programiv(_program, gl::program_param::link_status, &status);
+	gl::get_program(_program, gl::program_param::link_status, &status);
 
 	return status == GL_TRUE;
 }

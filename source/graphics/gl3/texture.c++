@@ -18,8 +18,8 @@ texture::texture( array_view<std::byte> data, size_t width, size_t height )
 	gl::tex_image_2d(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0,
 		GL_RGBA, GL_UNSIGNED_BYTE, data.data()
 	);
-	gl::tex_parameter_i(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
-	gl::tex_parameter_i(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 0);
+	gl::tex_parameter(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
+	gl::tex_parameter(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 0);
 	gl::bind_texture(GL_TEXTURE_2D, gl::no_texture);
 }
 
@@ -31,8 +31,8 @@ texture::texture( array_view<std::byte> data, size_t count, size_t width, size_t
 	gl::tex_image_3d(GL_TEXTURE_2D_ARRAY, 0, GL_RGBA8, width, height, count, 0,
 		GL_RGBA, GL_UNSIGNED_BYTE, data.data()
 	);
-	gl::tex_parameter_i(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_BASE_LEVEL, 0);
-	gl::tex_parameter_i(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MAX_LEVEL, 0);
+	gl::tex_parameter(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_BASE_LEVEL, 0);
+	gl::tex_parameter(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MAX_LEVEL, 0);
 	gl::bind_texture(GL_TEXTURE_2D_ARRAY, gl::no_texture);
 }
 
