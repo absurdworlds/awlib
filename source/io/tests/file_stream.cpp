@@ -1,13 +1,15 @@
-#include <aw/io/native_file.h>
+#include <aw/io/input_file_stream.h>
 #include <aw/utility/test.h>
 #include <cstdio>
 #include <cstring>
+#include <fstream>
 #include <algorithm>
 
-TestFile("Native file");
+TestFile("file_stream");
 
 namespace aw {
-Test(native_basic_rw) {
+Test(file_stream_rw) {
+
 	char const filename[] { "~temp_io_test.bin" };
 	constexpr size_t buf_size = 0x12023;
 
@@ -16,37 +18,25 @@ Test(native_basic_rw) {
 	std::fill_n(buf1, buf_size, 'a');
 	buf1[buf_size - 0x10] = 'b';
 
-	auto fm = io::file_mode::write|io::file_mode::create|io::file_mode::truncate;
-	io::native::file file(filename, fm);
-
-	Preconditions {
-		TestAssert(file.is_open());
-	}
-
-	Checks {
-		auto ret = file.write(buf1, buf_size);
-		TestAssert(ret > 0);
-	}
-
 	Setup {
-		file.close();
-		file = io::native::file(filename, io::file_mode::read);
+		std::ofstream fs{ filename };
+		fs.write(buf1, buf_size);
 	}
 
+	io::input_file_stream ifs{ filename };
+
 	Preconditions {
-		TestAssert(file.is_open());
+		TestAssert(ifs.is_open());
 	}
 
 	Checks {
-		auto ret = file.read(buf2, buf_size);
-		TestAssert(ret > 0);
+		ifs.read(buf2, buf_size);
 	}
 
 	Postconditions {
 		TestAssert( std::equal(buf1, buf1+buf_size, buf2, buf2 + buf_size) );
 	}
 
-	file.close();
 	fs::remove( filename );
 };
 } // namespace aw

@@ -48,7 +48,7 @@ struct file_mapping {
 
 AW_IO_EXP
 file_mapping map_file( file_descriptor fd, map_perms perms, std::error_code& ec );
-AW_IO_EXP int unmap_file( file_mapping& map );
+AW_IO_EXP int unmap_file( file_mapping& map, std::error_code& ec );
 } // namespace posix
 #endif
 
@@ -104,7 +104,7 @@ inline file_mode get_file_mode(map_perms perms)
  */
 struct mmap_file {
 	/*!
-	 * \param perms
+	 * @param perms
 	 *    Should be used with care, as incorrect use will lead to
 	 *    protection faults. E.g. setting map_perms::write and
 	 *    attempting to read from file may crash the program.
@@ -134,11 +134,11 @@ struct mmap_file {
 	{
 		create_mapping( ec, perms );
 	}
-	/* \} */
 
 	~mmap_file()
 	{
-		if ( _map.valid()) native::unmap_file( _map );
+		std::error_code ec;
+		if ( _map.valid()) native::unmap_file( _map, ec );
 	}
 
 	using iterator       = char*;
@@ -170,7 +170,7 @@ private:
 	native::file_mapping _map;
 };
 
-struct mmap_view : mmap_file {
+struct mmap_view : private mmap_file {
 	using mmap_file::const_iterator;
 	using iterator = const_iterator;
 
@@ -189,6 +189,9 @@ struct mmap_view : mmap_file {
 	mmap_view(fs::path const& path, std::error_code& ec)
 		: mmap_file( path, ec, map_perms::read )
 	{}
+
+	using mmap_file::is_open;
+	using mmap_file::size;
 
 	char const* begin() const { return mmap_file::begin(); }
 	char const* end()   const { return mmap_file::end(); }

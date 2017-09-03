@@ -48,12 +48,12 @@ file_mapping map_file( file_descriptor fd, map_perms perms, std::error_code& ec 
 	return { map, length };
 }
 
-bool unmap_file( file_mapping& map, std::error_code& ec )
+int unmap_file( file_mapping& map, std::error_code& ec )
 {
 	int result = munmap( map.address, map.length );
 	set_error_if( result == -1, ec );
 	return result;
 }
-} // namespace win32
+} // namespace posix
 } // namespace io
 } // namespace aw

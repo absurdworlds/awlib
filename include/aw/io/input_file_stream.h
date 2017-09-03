@@ -36,6 +36,11 @@ struct input_file_buffer : input_buffer {
 		delete[] buf;
 	}
 
+	bool is_open() const
+	{
+		return _file.is_open();
+	}
+
 	void seekpos(size_t offset) override
 	{
 		_file.seek(offset, seek_mode::set);
@@ -111,6 +116,11 @@ struct input_file_stream : input_stream {
 	}
 
 	virtual ~input_file_stream() = default;
+
+	bool is_open() const
+	{
+		return buffer.is_open();
+	}
 
 private:
 	input_file_buffer buffer;

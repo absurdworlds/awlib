@@ -17,9 +17,10 @@ namespace io {
 /*!
  * Read from stream until charavter is encountered.
  */
-inline bool read_until(input_stream& is, char delim, std::string& out)
+[[gnu::noinline]] inline bool read_until(input_stream& is, char delim, std::string& out)
 {
-	out.clear();
+	return is.read_until(out, delim);
+	/*out.clear();
 
 	char c;
 	while (is.get(c)) {
@@ -27,7 +28,7 @@ inline bool read_until(input_stream& is, char delim, std::string& out)
 			return true;
 		out += c;
 	}
-	return false;
+	return false;*/
 }
 
 } // namespace io
