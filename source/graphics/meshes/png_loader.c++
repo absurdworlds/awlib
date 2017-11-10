@@ -168,8 +168,7 @@ image try_read(io::input_stream& stream)
 	png_set_gamma(png_ptr, screen_gamma, image_gamma);
 
 	png_read_update_info(png_ptr, info_ptr);
-	size_t row_bytes = png_get_rowbytes(png_ptr, info_ptr);
-	log.info( "png", "row_bytes: " + to_string(row_bytes));
+	auto row_bytes = png_get_rowbytes(png_ptr, info_ptr);
 	std::vector<std::byte> vec(height * row_bytes);
 	auto begin = reinterpret_cast<png_byte*>(vec.data());
 
