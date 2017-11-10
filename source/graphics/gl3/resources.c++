@@ -10,9 +10,14 @@
 #include <aw/graphics/gl/shader_file.h>
 #include <aw/graphics/gl/awgl/shader_func.h>
 #include <aw/fileformat/png/reader.h>
+#include <aw/fileformat/png/log.h>
+#include <aw/log/ostream_logger.h>
 #include <aw/io/input_file_stream.h>
 
+#include <iostream>
+
 namespace aw::gl3 {
+aw::ostream_logger ologger{std::cerr};
 size_t program_manager::create_program( string_view v, string_view f )
 {
 	std::vector<shader> shaderList;
@@ -47,6 +52,7 @@ size_t texture_manager::create_texture( string_view name )
 // TEMPORARY
 size_t texture_manager::create_texture_array( array_view<string_view> names )
 {
+	png::log.set_logger(&ologger);
 	png::image img;
 	std::optional<png::image> tmp;
 	for (auto name : names) {
