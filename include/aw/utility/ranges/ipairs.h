@@ -40,20 +40,16 @@ struct ipairs_iterator {
 	Base iter;
 };
 
+// TODO: starting index?
 template <typename Range>
-struct ipairs_adapter {
-private:
-	using _iter_base = decltype(std::declval<Range>().begin());
-public:
-	using iterator = ipairs_iterator<_iter_base>;
-
-	ipairs_adapter(Range&& range)
+struct ipairs {
+	ipairs(Range&& range)
 		: range(range)
 	{}
 
-	iterator begin()
+	auto begin()
 	{
-		return {std::begin(range)};
+		return ipairs_iterator{ std::begin(range) };
 	}
 
 	auto end()
@@ -62,16 +58,14 @@ public:
 	}
 
 	Range&& range;
+
+	using iterator = decltype( std::declval<ipairs>().begin() );
 };
 
-// TODO: starting index?
 /*!
  * Keeps track of number of iterations.
  */
 template<typename Range>
-auto ipairs(Range&& range)
-{
-	return ipairs_adapter<Range>(std::forward<Range>(range));
-}
+ipairs(Range&& range) -> ipairs<Range>;
 } // namespace aw
 #endif//aw_utility_ranges_ipairs_h
