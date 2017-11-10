@@ -175,6 +175,11 @@ void initialize_scene()
 		"materials/m/des_redrock1.png"
 	};
 
+	for (auto [i,path] : ipairs(paths))
+	{
+		std::cout << path << ' ' << i << '\n';
+	}
+
 	auto t2 = tman.create_texture_array( paths );
 	mman[2].get().add_texture( "tex", tman[t2] );
 
