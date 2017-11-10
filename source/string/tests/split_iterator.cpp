@@ -43,8 +43,8 @@ Test(split_iter_basic) {
 	for (auto s : split_iterator("//aa//bb/cc///dd///", "/"))
 		result[5].push_back(s);
 
-	for (auto&& r : aw::paired(result, expected))
-		TestEqual(r.first, r.second);
+	for (auto&& [r, e] : aw::paired(result, expected))
+		TestEqual(r, e);
 }
 } // namespace string
 } // namespace aw

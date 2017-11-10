@@ -27,8 +27,8 @@ TestFile("platform::demangle");
 namespace aw {
 Test( demangle )
 {
-	for (auto name : paired(mangled, demangled))
-		TestEqual( demangle( name.first ), name.second );
+	for (auto&& [man, dem] : paired(mangled, demangled))
+		TestEqual( demangle( man ), dem );
 	TestEqual( demangle( mangled_verylong ), demangled_verylong );
 }
 
