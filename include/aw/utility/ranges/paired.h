@@ -19,26 +19,27 @@ private:
 	using reference2 = typename std::iterator_traits<Base2>::reference;
 
 public:
-	pairs_iterator(Base1 iter1, Base2 iter2)
+	constexpr pairs_iterator(Base1 iter1, Base2 iter2)
 		: iters{iter1, iter2}
 	{}
 
-	std::pair<reference1,reference2> operator*()
+	constexpr std::pair<reference1,reference2> operator*()
 	{
 		return {*iters.first, *iters.second};
 	}
 
-	pairs_iterator& operator++()
+	constexpr pairs_iterator& operator++()
 	{
 		++iters.first, ++iters.second;
+		return *this;
 	}
 
-	bool operator!=(pairs_iterator const& other)
+	constexpr bool operator!=(pairs_iterator const& other)
 	{
 		return iters != other.iters;
 	}
 
-	bool operator!=(Base1 const& it)
+	constexpr bool operator!=(Base1 const& it)
 	{
 		return iters.first != it;
 	}
@@ -63,17 +64,17 @@ private:
 public:
 	using iterator = pairs_iterator<_iter1, _iter2>;
 
-	pairs_adapter(Range1 range1, Range2 range2)
+	constexpr pairs_adapter(Range1 range1, Range2 range2)
 		: ranges{range1, range2}
 	{}
 
-	iterator begin()
+	constexpr iterator begin()
 	{
 		using std::begin;
 		return {begin(ranges.first), begin(ranges.second)};
 	}
 
-	iterator end()
+	constexpr iterator end()
 	{
 		using std::end;
 		return {end(ranges.first), end(ranges.second)};
@@ -88,7 +89,7 @@ public:
  * Behavior is undefined if ranges have different sizes.
  */
 template<typename... Ranges>
-auto paired(Ranges&&... ranges)
+constexpr auto paired(Ranges&&... ranges)
 {
 	return pairs_adapter<Ranges...>(std::forward<Ranges>(ranges)...);
 }
