@@ -169,6 +169,7 @@ image try_read(io::input_stream& stream)
 
 	png_read_update_info(png_ptr, info_ptr);
 	auto row_bytes = png_get_rowbytes(png_ptr, info_ptr);
+	log.info( "png", "row_bytes: " + to_string(row_bytes));
 	std::vector<std::byte> vec(height * row_bytes);
 	auto begin = reinterpret_cast<png_byte*>(vec.data());
 
