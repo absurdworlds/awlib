@@ -43,7 +43,7 @@ struct ipairs_iterator {
 template <typename Range>
 struct ipairs_adapter {
 private:
-	using _iter_base = decltype(std::declval<Range>().begin());
+	using _iter_base = decltype(std::begin(std::declval<Range>()));
 public:
 	using iterator = ipairs_iterator<_iter_base>;
 

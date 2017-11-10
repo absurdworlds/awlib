@@ -123,6 +123,7 @@ image try_read(io::input_stream& stream)
 		png_get_gAMA(png_ptr, info_ptr, &image_gamma);
 	png_set_gamma(png_ptr, screen_gamma, image_gamma);
 
+	png_read_update_info(png_ptr, info_ptr);
 	auto row_bytes = png_get_rowbytes(png_ptr, info_ptr);
 	std::vector<std::byte> vec(height * row_bytes);
 
