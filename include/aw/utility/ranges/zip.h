@@ -8,67 +8,53 @@
  * There is NO WARRANTY, to the extent permitted by law.
  */
 #ifndef aw_utility_ranges_zip_h
-#define aw_utility_ranges_zid_h
+#define aw_utility_ranges_zip_h
 #include <aw/utility/index_sequence.h>
 #include <iterator>
 #include <tuple>
 namespace aw {
 template <typename...Iters>
-class zip_iterator {
-	static constexpr make_index_sequence< sizeof...(Iters) > indices{};
-public:
-	zip_iterator(Iters...iters)
+struct zip_iterator {
+	constexpr zip_iterator(Iters...iters)
 		: iters{iters...}
 	{}
 
-	auto operator*()
+	constexpr auto operator*()
 	{
-		return deref( indices );
+		auto dereference = [] (auto&&... ps)
+		{
+			return std::tuple{ (*std::forward<decltype(ps)>(ps)) ... };
+		};
+		return std::apply( dereference, iters );
 	}
 
-	zip_iterator& operator++()
+	constexpr zip_iterator& operator++()
 	{
-		increment( indices );
+		auto increment = [] (auto&&... ps)
+		{
+			return std::tuple{ (++std::forward<decltype(ps)>(ps)) ... };
+		};
+		std::apply( increment, iters );
 		return *this;
 	}
 
 	std::tuple<Iters...> iters;
-
-private:
-	template <size_t...I>
-	void increment( index_sequence<I...> )
-	{
-		( ++std::get<I>(iters), ... );
-	}
-
-	template <size_t...I>
-	auto deref( index_sequence<I...> )
-	{
-		return std::tuple{ *std::get<I>(iters) ... };
-	}
-
-	template <typename...A, typename...B>
-	friend bool operator==(zip_iterator<A...> const&, zip_iterator<B...> const&);
-	template <typename...A, typename...B>
-	friend bool operator!=(zip_iterator<A...> const&, zip_iterator<B...> const&);
-	template <typename...A, typename...B>
-	friend bool operator<(zip_iterator<A...> const&, zip_iterator<B...> const&);
 };
 
 template <typename...Is, typename...Js>
-bool operator==(zip_iterator<Is...> const& a, zip_iterator<Js...> const& b)
+constexpr bool operator==(zip_iterator<Is...> const& a, zip_iterator<Js...> const& b)
 {
 	return a.iters == b.iters;
 }
 
 template <typename...Is, typename...Js>
-bool operator!=(zip_iterator<Is...> const& a, zip_iterator<Js...> const& b)
+constexpr bool operator!=(zip_iterator<Is...> const& a, zip_iterator<Js...> const& b)
 {
 	return a.iters != b.iters;
 }
 
 template <typename...Is, typename...Js>
-bool operator<(zip_iterator<Is...> const& a, zip_iterator<Js...> const& b)
+constexpr bool operator<(zip_iterator<Is...> const& a, zip_iterator<Js...> const& b)
 {
 	return a.iters < b.iters;
 }
@@ -81,34 +67,33 @@ class zip {
 	static constexpr make_index_sequence< sizeof...(Ranges) > indices{};
 
 	template <size_t...I>
-	auto begin( index_sequence<I...> )
+	constexpr auto begin( index_sequence<I...> )
 	{
 		using std::begin;
 		return zip_iterator{ begin( std::get<I>(ranges) )... };
 	}
 
 	template <size_t...I>
-	auto end( index_sequence<I...> )
+	constexpr auto end( index_sequence<I...> )
 	{
 		using std::end;
 		return zip_iterator{ end( std::get<I>(ranges) )... };
 	}
 public:
 
-	zip(Ranges&&... ranges)
+	constexpr zip(Ranges&&... ranges)
 		: ranges{ranges...}
 	{}
 
-	auto begin()
+	constexpr auto begin()
 	{
 		return begin( indices );
 	}
 
-	auto end()
+	constexpr auto end()
 	{
 		return end( indices );
 	}
-
 
 	std::tuple<Ranges&&...> ranges;
 
