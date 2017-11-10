@@ -52,9 +52,12 @@ private:
 
 	void new_submesh( )
 	{
-		cur_submesh().end   = faces.size();
+		size_t last_face = faces.size();
+		cur_submesh().end   = last_face;
+
 		meshes.emplace_back();
-		cur_submesh().begin = faces.size();
+		cur_submesh().begin = last_face;
+		cur_submesh().end   = last_face;
 	}
 
 	string_view cur_group()

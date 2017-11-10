@@ -19,6 +19,8 @@ model model_from_obj( obj::mesh const& data )
 {
 	unsigned last_index = 0;
 	std::map< std::tuple<unsigned, unsigned, unsigned>, unsigned > indices;
+	std::map< std::string, float > matids;
+	float last_matid = 0.0;
 	std::vector<unsigned> tris;
 	std::vector<float> verts;
 	std::vector<float> normals;
@@ -51,6 +53,11 @@ model model_from_obj( obj::mesh const& data )
 	};
 
 	for (auto&& [i, mesh] : ipairs(data.meshes)) {
+		if (matids.find(mesh.material) == end(matids)) {
+			std::cout << mesh.material << ' ' << last_matid << '\n';
+			matids[mesh.material] = last_matid++;
+		}
+		float matid = matids[mesh.material];
 		for (auto j = mesh.begin; j < mesh.end; ++j) {
 			auto tri = data.faces[j];
 			for (auto& [v,n,t] : tri.verts) {
@@ -63,7 +70,7 @@ model model_from_obj( obj::mesh const& data )
 					push_normal(n);
 					push_texcoord(t);
 					if (data.meshes.size() > 1)
-						mid.push_back(i);
+						mid.push_back(matid);
 				}
 			}
 		}
