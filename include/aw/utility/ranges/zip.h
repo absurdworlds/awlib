@@ -9,7 +9,7 @@
  */
 #ifndef aw_utility_ranges_zip_h
 #define aw_utility_ranges_zip_h
-#include <aw/utility/index_sequence.h>
+#include <aw/utility/functional/forward.h>
 #include <iterator>
 #include <tuple>
 namespace aw {
@@ -23,7 +23,7 @@ struct zip_iterator {
 	{
 		auto dereference = [] (auto&&... ps)
 		{
-			return std::tuple{ (*std::forward<decltype(ps)>(ps)) ... };
+			return std::tuple{ (*forward<decltype(ps)>(ps)) ... };
 		};
 		return std::apply( dereference, iters );
 	}
@@ -32,12 +32,20 @@ struct zip_iterator {
 	{
 		auto increment = [] (auto&&... ps)
 		{
-			return std::tuple{ (++std::forward<decltype(ps)>(ps)) ... };
+			return std::tuple{ (++forward<decltype(ps)>(ps)) ... };
 		};
 		std::apply( increment, iters );
 		return *this;
 	}
 
+	template <typename...Is, typename...Js> friend constexpr
+	bool operator==(zip_iterator<Is...> const& a, zip_iterator<Js...> const& b);
+	template <typename...Is, typename...Js> friend constexpr
+	bool operator!=(zip_iterator<Is...> const& a, zip_iterator<Js...> const& b);
+	template <typename...Is, typename...Js> friend constexpr
+	bool operator<(zip_iterator<Is...>  const& a, zip_iterator<Js...> const& b);
+
+private:
 	std::tuple<Iters...> iters;
 };
 
@@ -63,36 +71,29 @@ constexpr bool operator<(zip_iterator<Is...> const& a, zip_iterator<Js...> const
  * Provides a way to iterate over multiple ranges
  */
 template<typename...Ranges>
-class zip {
-	static constexpr make_index_sequence< sizeof...(Ranges) > indices{};
-
-	template <size_t...I>
-	constexpr auto begin( index_sequence<I...> )
-	{
-		using std::begin;
-		return zip_iterator{ begin( std::get<I>(ranges) )... };
-	}
-
-	template <size_t...I>
-	constexpr auto end( index_sequence<I...> )
-	{
-		using std::end;
-		return zip_iterator{ end( std::get<I>(ranges) )... };
-	}
-public:
-
+struct zip {
 	constexpr zip(Ranges&&... ranges)
 		: ranges{ranges...}
 	{}
 
 	constexpr auto begin()
 	{
-		return begin( indices );
+		auto _begin = [] (auto&&... ps)
+		{
+			using std::begin;
+			return zip_iterator{ begin( forward<decltype(ps)>(ps) ) ... };
+		};
+		return std::apply( _begin, ranges );
 	}
 
 	constexpr auto end()
 	{
-		return end( indices );
+		auto _end = [] (auto&&... ps)
+		{
+			using std::end;
+			return zip_iterator{ end( forward<decltype(ps)>(ps) ) ... };
+		};
+		return std::apply( _end, ranges );
 	}
 
 	std::tuple<Ranges&&...> ranges;
