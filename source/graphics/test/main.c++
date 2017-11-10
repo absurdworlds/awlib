@@ -167,9 +167,21 @@ void main()
 }
 } // namespace aw
 
+#include <aw/fileformat/png/log.h>
+#include <aw/log/ostream_logger.h>
+namespace aw {
+ostream_logger ologger{std::cerr};
+
+static void set_loggers()
+{
+	png::log.set_logger(&ologger);
+}
+} // namespace aw
+
 int main()
 {
 	glfwInit();
+	aw::set_loggers();
 	aw::main();
 	glfwTerminate();
 }
