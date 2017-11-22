@@ -19,8 +19,31 @@
 #define CONCAT1(x, y)  CONCAT2(x, y)
 #define CONCAT2(x, y)  x##y
 
-/*! Expand tokens — some preprocessors glue __VA_ARGS__ */
+/*!
+ * Forces macro expansion:
+ *
+ * `SEP_SPACE TUPLE(a,b)` will turn into `IDENTITY2 (a,b)`
+ * but
+ * `EXPAND( SEP_SPACE TUPLE(a,b) )` will expand into `a b`
+ */
 #define EXPAND(x) x
 
+/*!
+ * Call macro NAME with arguments __VA_ARGS__:
+ *
+ * `APPLY( FUNC, a, b, c)` expands into `FUNC(a,b,c)`
+ */
+#define APPLY(NAME,...) NAME(__VA_ARGS__)
+
+/*!
+ * Defer macro expansion:
+ *
+ * `APPLY(SEP_SPACE, (a,b))` will try to call `SEP_SPACE((a,b))`
+ * but
+ * `APPLY(SEP_SPACE DEFER, (a,b))` will expand into `SEP_SPACE (a,b)`
+ * which can then be expanded with `EXPAND()` macro
+ */
+#define DEFER(x) x EMPTY()
+#define EMPTY()
 
 #endif//aw_pp_macro_h
