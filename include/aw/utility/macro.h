@@ -10,8 +10,6 @@
 #define _aw_macro_
 #include <aw/config.h>
 
-#define __FUNC__ __func__ 
-
 /*! Stringize */
 #define TO_STR(x) TO_STR1(x)
 #define TO_STR1(x) #x
