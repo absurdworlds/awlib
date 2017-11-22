@@ -11,13 +11,15 @@
 //#include <aw/config.h>
 
 /*! Stringize */
-#define TO_STR(...) TO_STR1(__VA_ARGS__)
-#define TO_STR1(...) #__VA_ARGS__
+#define TO_STR(...) TO_STR_(__VA_ARGS__)
+#define TO_STR_(...) #__VA_ARGS__
 
 /*! Concatenate */
-#define CONCAT(x, y)   CONCAT1(x, y)
-#define CONCAT1(x, y)  CONCAT2(x, y)
-#define CONCAT2(x, y)  x##y
+#define CONCAT(x, y)   CONCAT_(x, y)
+#define CONCAT_(x, y)  x##y
+
+#define CONCAT2(x, y)    CONCAT(x, y)
+#define CONCAT3(x, y, z) CONCAT(CONCAT(x, y), z)
 
 /*!
  * Forces macro expansion:
