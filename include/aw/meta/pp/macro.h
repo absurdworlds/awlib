@@ -8,24 +8,16 @@
  */
 #ifndef aw_pp_macro_h
 #define aw_pp_macro_h
-#include <aw/config.h>
+//#include <aw/config.h>
 
 /*! Stringize */
-#define TO_STR(x) TO_STR1(x)
-#define TO_STR1(x) #x
+#define TO_STR(...) TO_STR1(__VA_ARGS__)
+#define TO_STR1(...) #__VA_ARGS__
 
 /*! Concatenate */
 #define CONCAT(x, y)   CONCAT1(x, y)
 #define CONCAT1(x, y)  CONCAT2(x, y)
 #define CONCAT2(x, y)  x##y
-
-/*! Insert both arguments separated by space */
-#define SEP_SPACE(x, y) x y
-/*! Insert both arguments separated by semicolon */
-#define SEP_SEMI(x, y) x; y
-/*! Insert both arguments separated by comma */
-#define SEP_COMMA(x, y) x, y
-
 
 /*!
  * Forces macro expansion:
@@ -42,22 +34,6 @@
  * `APPLY( FUNC, a, b, c)` expands into `FUNC(a,b,c)`
  */
 #define APPLY(NAME,...) NAME(__VA_ARGS__)
-
-/*! Encases arguments in (), allowing to be passed as a single argument */
-#define TUPLE(...) (__VA_ARGS__)
-
-/*!
- * Same as apply, but for a TUPLE:
- * `APPLY_T( FUNC, TUPLE(a,b,c) )` expands into `FUNC(a,b,c)`
- */
-#define APPLY_T(NAME,x) EXPAND( NAME x )
-
-#define IDENTITY(...) __VA_ARGS__
-
-#define UNPACK(x) APPLY_T( IDENTITY, x )
-
-#define FIRST(x,y)  x
-#define SECOND(x,y) y
 
 /*!
  * Defer macro expansion:
