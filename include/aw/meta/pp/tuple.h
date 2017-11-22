@@ -20,8 +20,6 @@
  */
 #define APPLY_T(NAME,x) EXPAND( NAME x )
 
-#define IDENTITY(...) __VA_ARGS__
-
 #define UNPACK(x) APPLY_T( IDENTITY, x )
 
 #define FIRST(x,y)  x

@@ -28,7 +28,8 @@
  * but
  * `EXPAND( SEP_SPACE TUPLE(a,b) )` will expand into `a b`
  */
-#define EXPAND(x) x
+#define EXPAND(...) __VA_ARGS__
+#define IDENTITY(...) __VA_ARGS__
 
 /*!
  * Call macro NAME with arguments __VA_ARGS__:
