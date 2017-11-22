@@ -406,7 +406,7 @@ struct _catch {
 #define Postconditions if (aw::test::postconditions())
 #define RunTests()     int main(int,char**) { return aw::test::registry::run(); }
 
-#include <aw/utility/macro.h>
+#include <aw/meta/pp/macro.h>
 #define TestEqual(...) \
 aw::test::check(aw::test::equal{#__VA_ARGS__}, __VA_ARGS__)
 #define TestEqualV(...) \
