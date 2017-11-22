@@ -19,6 +19,14 @@
 #define CONCAT1(x, y)  CONCAT2(x, y)
 #define CONCAT2(x, y)  x##y
 
+/*! Insert both arguments separated by space */
+#define SEP_SPACE(x, y) x y
+/*! Insert both arguments separated by semicolon */
+#define SEP_SEMI(x, y) x; y
+/*! Insert both arguments separated by comma */
+#define SEP_COMMA(x, y) x, y
+
+
 /*!
  * Forces macro expansion:
  *
