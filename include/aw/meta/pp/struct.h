@@ -8,13 +8,13 @@
  */
 #ifndef aw_meta_pp_struct_h
 #define aw_meta_pp_struct_h
-#include "for_each.h"
+#include "foldr.h"
 #include "tuple.h"
 
 #define DEFINE_STRUCT_MEMBERS(NAME,...)\
-	FOR_EACH(SEP_SEMI, SEP_SPACE DEFER, __VA_ARGS__ )
+	FOLD_RIGHT(SEP_SEMI, SEP_SPACE DEFER, __VA_ARGS__ )
 #define DEFINE_STRUCT_TYPES(NAME,...)\
-	FOR_EACH( SEP_COMMA, FIRST DEFER, __VA_ARGS__ )
+	FOLD_RIGHT( SEP_COMMA, FIRST DEFER, __VA_ARGS__ )
 #define DEFINE_STRUCT_TUPLE_TYPE(NAME,...)\
 	using tuple_type = std::tuple< DEFINE_STRUCT_TYPES(__VA_ARGS__) >
 #define DEFINE_STRUCT_TUPLE_OPERATOR(NAME,...)\
@@ -22,9 +22,9 @@
 		return { DEFINE_STRUCT_NAMES( __VA_ARGS__ ) };\
 	}
 #define DEFINE_STRUCT_NAMES(NAME,...)\
-	FOR_EACH( SEP_COMMA, SECOND DEFER, __VA_ARGS__ )
+	FOLD_RIGHT( SEP_COMMA, SECOND DEFER, __VA_ARGS__ )
 #define DEFINE_STRUCT_NAME_STRINGS(NAME,...)\
-	FOR_EACH( SEP_COMMA, SECOND DEFER, __VA_ARGS__ )
+	FOLD_RIGHT( SEP_COMMA, SECOND DEFER, __VA_ARGS__ )
 	
 
 #define DEFINE_STRUCT(NAME,...) \
