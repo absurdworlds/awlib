@@ -6,8 +6,8 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _aw_macro_
-#define _aw_macro_
+#ifndef aw_pp_macro_h
+#define aw_pp_macro_h
 #include <aw/config.h>
 
 /*! Stringize */
@@ -15,9 +15,9 @@
 #define TO_STR1(x) #x
 
 /*! Concatenate */
-#define CONCAT(arg1, arg2)   CONCAT1(arg1, arg2)
-#define CONCAT1(arg1, arg2)  CONCAT2(arg1, arg2)
-#define CONCAT2(arg1, arg2)  arg1##arg2
+#define CONCAT(x, y)   CONCAT1(x, y)
+#define CONCAT1(x, y)  CONCAT2(x, y)
+#define CONCAT2(x, y)  x##y
 
 /*! Expand tokens — some preprocessors glue __VA_ARGS__ */
 #define EXPAND(x) x
@@ -46,4 +46,5 @@
 	       GET_MACRO(__VA_ARGS__, FE_6, FE_5, FE_4, FE_3, FE_2, FE_1) \
 	       (NAME, __VA_ARGS__) \
 	)
-#endif//_aw_macro_
+
+#endif//aw_pp_macro_h
