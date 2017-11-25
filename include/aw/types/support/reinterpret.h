@@ -52,7 +52,7 @@ Output reinterpret_any(Input&& in) {
 	static_assert(is_trivially_copyable<Output>,
 	              "Output type must be trivially copyable");
 	constexpr size_t size = std::min(sizeof(Output), sizeof(Input));
-	Output out{};
+	Output out;
 	std::memcpy(&out, &in, size);
 	return out;
 }
@@ -64,7 +64,7 @@ template<typename Output>
 Output reinterpret_memory(char const* in) {
 	static_assert(is_trivially_copyable<Output>,
 	              "Output type must be trivially copyable");
-	Output out{};
+	Output out;
 	std::memcpy(&out, in, sizeof(Output));
 	return out;
 }
