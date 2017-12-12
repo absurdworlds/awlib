@@ -38,5 +38,6 @@ using f64 = double;
 //!@}
 
 using std::nullptr_t;
+using std::byte;
 } // namespace aw
 #endif //aw_types_h
