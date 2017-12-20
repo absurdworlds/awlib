@@ -10,13 +10,13 @@
 #ifndef aw_utility_functional_trivial_h
 #define aw_utility_functional_trivial_h
 namespace aw {
-template<typename...Args>
 struct true_func {
+	template<typename...Args>
 	bool operator()(Args&&...args) const { return true; }
 };
-template<typename...Args>
 struct false_func {
+	template<typename...Args>
 	bool operator()(Args&&...args) const { return false; }
 };
-};
+}
 #endif//aw_utility_functional_trivial_h

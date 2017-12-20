@@ -69,6 +69,12 @@ struct input_stream {
 		return cnt == sizeof(object);
 	}
 
+	bool read_until(std::string& s, char delim)
+	{
+		s.clear();
+		return buffer->scan(s, delim);
+	}
+
 	/*! Advance position by \a characters */
 	size_t skip(size_t count)
 	{

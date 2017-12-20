@@ -8,34 +8,21 @@
  */
 #ifndef aw_archive_std_tuple
 #define aw_archive_std_tuple
-#include <tuple>
+#include <aw/types/tuple.h>
 #include <aw/archive/archive_base.h>
 namespace aw {
 namespace arc {
 inline namespace v3 {
-namespace _impl {
-template<typename Archive, typename Tuple, size_t...Is>
-void tuple_save( Archive& arc, Tuple const& tuple, index_sequence<Is...> )
-{
-	(arc(std::get<Is>(tuple), std::to_string(Is)), ...);
-}
-template<typename Archive, typename Tuple, size_t...Is>
-void tuple_load( Archive& arc, Tuple& tuple, index_sequence<Is...> )
-{
-	(arc(std::get<Is>(tuple), std::to_string(Is)), ...);
-}
-} // namespace _impl
-
 template<typename Archive, typename...Ts>
 void save( Archive& arc, std::tuple<Ts...> const& tuple)
 {
-	_impl::tuple_save( arc, tuple, make_index_sequence<sizeof...(Ts)>() );
+	for_each(arc, tuple);
 }
 
 template<typename Archive, typename...Ts>
 void load( Archive& arc, std::tuple<Ts...> & tuple)
 {
-	_impl::tuple_load( arc, tuple, make_index_sequence<sizeof...(Ts)>() );
+	for_each(arc, tuple);
 }
 } // inline namespace v3
 } // namespace arc

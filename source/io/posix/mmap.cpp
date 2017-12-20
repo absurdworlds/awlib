@@ -52,8 +52,8 @@ bool unmap_file( file_mapping& map, std::error_code& ec )
 {
 	int result = munmap( map.address, map.length );
 	set_error_if( result == -1, ec );
-	return result;
+	return result == 0;
 }
-} // namespace win32
+} // namespace posix
 } // namespace io
 } // namespace aw
