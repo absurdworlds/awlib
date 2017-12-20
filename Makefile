@@ -1,7 +1,9 @@
 all: libs
 
 # core
-libs: utility hdf gui platform
+libs: utility io platform hdf
+io:
+	@ $(MAKE) -C 'source/io' $(target)
 gui:
 	@ $(MAKE) -C 'source/gui' $(target)
 
