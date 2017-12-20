@@ -48,7 +48,7 @@ struct file_mapping {
 
 AW_IO_EXP
 file_mapping map_file( file_descriptor fd, map_perms perms, std::error_code& ec );
-AW_IO_EXP int unmap_file( file_mapping& map );
+AW_IO_EXP bool unmap_file( file_mapping& map, std::error_code& ec );
 } // namespace posix
 #endif
 
@@ -64,7 +64,7 @@ struct file_mapping {
 
 AW_IO_EXP
 file_mapping map_file( file_descriptor fd, map_perms perms, std::error_code& ec );
-AW_IO_EXP bool unmap_file( file_mapping& map );
+AW_IO_EXP bool unmap_file( file_mapping& map, std::error_code& ec );
 } // namespace win32
 #endif
 
@@ -138,7 +138,8 @@ struct mmap_file {
 
 	~mmap_file()
 	{
-		if ( _map.valid()) native::unmap_file( _map );
+		std::error_code ec;
+		if ( _map.valid()) native::unmap_file( _map, ec );
 	}
 
 	using iterator       = char*;
