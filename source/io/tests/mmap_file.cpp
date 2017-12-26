@@ -32,4 +32,15 @@ Test(mmpa_basic_read) {
 
 	fs::remove( filename );
 };
+
+#if 0// (AW_PLATFORM_SPECIFIC == AW_PLATFORM_LINUX)
+Test(mmap_blkdevide)
+{
+	Checks {
+		std::error_code ec;
+		io::mmap_file file("/dev/sdc1", ec, io::map_perms::read);
+		TestAssert(!ec);
+	}
+}
+#endif
 } // namespace aw
