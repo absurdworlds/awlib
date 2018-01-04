@@ -97,7 +97,7 @@ string_view get_architecture()
 	SYSTEM_INFO sys;
 	GetSystemInfo(&sys);
 
-	using namespace sv_literals;
+	using namespace std::string_view_literals;
 	switch (sys.wProcessorArchitecture) {
 	case PROCESSOR_ARCHITECTURE_AMD64:
 		return "x86_64"sv;
