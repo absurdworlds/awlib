@@ -53,7 +53,7 @@ unsigned get_access( map_perms perms )
 file_mapping map_file( file_descriptor fd, map_perms perms, std::error_code& ec )
 {
 	if (fd == invalid_fd) {
-		ec.assign( ERROR_INVALID_HANDLE, std::system_category() );
+		ec.assign( ERROR_INVALID_HANDLE, winapi_error_category() );
 		return { invalid_mapping };
 	}
 
