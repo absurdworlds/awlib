@@ -119,7 +119,8 @@ struct mmap_file {
 	mmap_file(file_descriptor fd, std::error_code& ec, map_perms perms = map_perms::rdwr)
 		: _file{fd}
 	{
-		create_mapping( ec, perms );
+		if (!ec)
+                      create_mapping( ec, perms );
 	}
 
 	mmap_file(fs::path const& path, map_perms perms = map_perms::rdwr)
@@ -130,9 +131,10 @@ struct mmap_file {
 	}
 
 	mmap_file(fs::path const& path, std::error_code& ec, map_perms perms = map_perms::rdwr)
-		: _file{path, get_file_mode(perms)}
+		: _file{path, get_file_mode(perms), ec}
 	{
-		create_mapping( ec, perms );
+		if (!ec)
+			create_mapping( ec, perms );
 	}
 
 	~mmap_file()
