@@ -6,7 +6,7 @@
 #include <windows.h>
 namespace aw {
 namespace win32 {
-std::errc map_error_code(int code)
+std::errc map_error_code(int code);
 }
 namespace _impl {
 namespace {
