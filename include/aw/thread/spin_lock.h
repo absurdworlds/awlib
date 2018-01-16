@@ -18,7 +18,8 @@ namespace thread {
  */
 struct spin_lock {
 	spin_lock() = default;
-	spin_lock& (spin_lock const&) = delete;
+	spin_lock(spin_lock const&) = delete;
+	spin_lock& operator=(spin_lock const&) = delete;
 	~spin_lock() = default;
 
 	void lock()
