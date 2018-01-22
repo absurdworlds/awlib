@@ -225,7 +225,7 @@ public:
 		return T(lo);
 	}
 
-	constexpr operator bool() const
+	constexpr explicit operator bool() const
 	{
 		return lo || hi;
 	}

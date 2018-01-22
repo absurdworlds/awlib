@@ -40,7 +40,7 @@ struct object {
 	struct value val;
 
 	/*! Returns true if this is a real object. */
-	operator bool() const
+	explicit operator bool() const
 	{
 		return in(kind, node, value);
 	}
