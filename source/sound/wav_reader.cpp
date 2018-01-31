@@ -24,6 +24,8 @@ struct reader {
 	// passed to functions
 	void read_riff_header();
 	void read_format_chunks();
+	tag read_misc_chunks();
+	void read_wave_data( format_chunk const& fmt );
 	void read_pcm_chunks( format_chunk_header& hdr );
 	void read_ima_adpcm_chunks( format_chunk_header& hdr );
 
@@ -115,23 +117,46 @@ void reader::read_format_chunks()
 	};
 }
 
-void reader::read_pcm_chunks( format_chunk_header& hdr )
+tag reader::read_misc_chunks( )
 {
-	pcm_format pcm{ hdr, stream };
-
 	tag id;
 	while ( auto opt = read_tag() ) {
 		id = *opt;
 		if (id == tag::data)
 			break;
+		/*if (id == tag::fact) {
+			fact_chunk fact{ stream };
+			//sample.num_samples = fact.num_samples;
+			continue;
+		}*/
 		skip_chunk( id );
 	}
+
+	return id;
+}
+
+void reader::read_wave_data( format_chunk const& fmt )
+{
+	data_chunk data{stream};
+	size_check -= data.length();
+
+	sample.channels    = fmt.num_channels;
+	sample.sample_rate = fmt.sample_rate;
+	sample.block_align = fmt.block_align;
+	sample.data = std::move( data.samples );
+}
+
+//------------------------------------------------------------------------------
+void reader::read_pcm_chunks( format_chunk_header& hdr )
+{
+	pcm_format pcm{ hdr, stream };
+
+	tag id = read_misc_chunks();
 
 	if (tag(id) != tag::data)
 		throw format_error{ "Expected \"data\" chunk." };
 
-	data_chunk data{stream};
-	size_check -= data.length();
+	read_wave_data( pcm );
 
 	u32 bytes_per_sample = pcm.bits_per_sample / 8;
 
@@ -139,41 +164,18 @@ void reader::read_pcm_chunks( format_chunk_header& hdr )
 	            "block_align doesn't match expected value");
 	check_equal( pcm.byte_rate, pcm.sample_rate * pcm.block_align,
 	            "byte_rate doesn't match expected value");
-
-	sample.channels    = pcm.num_channels;
-	sample.sample_rate = pcm.sample_rate;
-	sample.block_align = pcm.block_align;
-	sample.data = std::move( data.samples );
 }
 
 void reader::read_ima_adpcm_chunks( format_chunk_header& hdr )
 {
 	ima_adpcm_format pcm{ hdr, stream };
 
-
-	tag id;
-	while ( auto opt = read_tag() ) {
-		id = *opt;
-		if (id == tag::data)
-			break;
-		if (id == tag::fact) {
-			fact_chunk fact{ stream };
-			//sample.num_samples = fact.num_samples;
-			continue;
-		}
-		skip_chunk( id );
-	}
+	tag id = read_misc_chunks();
 
 	if (tag(id) != tag::data)
 		throw format_error{ "Expected \"data\" chunk." };
 
-	data_chunk data{stream};
-	size_check -= data.length();
-
-	sample.channels    = pcm.num_channels;
-	sample.sample_rate = pcm.sample_rate;
-	sample.block_align = pcm.block_align;
-	sample.data = std::move( data.samples );
+	read_wave_data( pcm );
 
 	auto samples_per_block = ima_adpcm_samples_per_block( sample );
 

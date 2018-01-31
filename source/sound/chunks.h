@@ -191,18 +191,20 @@ struct data_chunk : chunk {
 //------------------------------------------------------------------------------
 // PCM chunks
 struct pcm_format : format_chunk {
+	static constexpr u32 expected_size = min_size;
 	pcm_format(format_chunk_header const& hdr, io::input_stream& stream)
 		: format_chunk{ hdr, stream }
 	{
 		check_equal( size, min_size, "extra data in format chunk");
-		if (size > min_size)
-			stream.skip(size - min_size);
+		if (size > expected_size)
+			stream.skip(size - expected_size);
 	}
 };
 
 //------------------------------------------------------------------------------
 // IMA ADPCM chunks
 struct ima_adpcm_format : format_chunk {
+	static constexpr u32 expected_size = 20;
 	ima_adpcm_format(format_chunk_header const& hdr, io::input_stream& stream)
 		: format_chunk{ hdr, stream }
 	{
