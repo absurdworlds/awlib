@@ -18,12 +18,14 @@ inline u32 ima_adpcm_samples_per_block( wave_data const& wav )
 {
 	// IMA ADPCM block consists out of header
 	// followed by a even number of compressed samples
-	constexpr auto initial_sample_size = 2;
-	constexpr auto initial_index_size = 2;
+	constexpr auto init_sample_size = 2;
+	constexpr auto init_index_size = 1;
+	constexpr auto padding_size = 1;
 	// header consists of:
 	// - [2 bytes] initial predictor
-	// - [2 bytes] initial index
-	constexpr auto header_size = initial_sample_size + initial_index_size;
+	// - [1 byte ] initial index
+	// - [1 byte ] reserved (always zero)
+	constexpr auto header_size = init_sample_size + init_index_size + padding_size;
 
 	auto bytes_per_channel = wav.block_align / wav.channels;
 
