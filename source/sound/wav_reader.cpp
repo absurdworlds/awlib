@@ -41,7 +41,7 @@ struct reader {
 	void skip_chunk( chunk const& c )
 	{
 		size_check += c.length();
-		stream.skip(c.size);
+		//stream.skip(c.size);
 	}
 
 

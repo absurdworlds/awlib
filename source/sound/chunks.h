@@ -154,6 +154,8 @@ struct list_chunk : chunk {
 	list_chunk(io::input_stream& stream)
 		: chunk{stream}
 	{
+		// TODO:
+		stream.skip(size);
 	}
 };
 
