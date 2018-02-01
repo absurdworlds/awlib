@@ -188,6 +188,8 @@ void reader::check_size()
 	check_equal(size_check, 0, "chunk_size doesn't match actual file size");
 }
 
+//------------------------------------------------------------------------------
+AW_SND_EXP
 bool read(io::input_stream& stream, wave_data& sample) noexcept
 try {
 	reader wv{stream, sample};
@@ -202,6 +204,7 @@ try {
 	return false;
 }
 
+AW_SND_EXP
 optional<wave_data> read(io::input_stream& stream) noexcept
 {
 	wave_data data;
