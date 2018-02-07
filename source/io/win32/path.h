@@ -8,7 +8,7 @@
  */
 #ifndef aw_internal_path_helpers_h
 #define aw_internal_path_helpers_h
-#include <aw/utility/filesystem.h>
+#include <aw/io/filesystem.h>
 namespace aw::io::win32 {
 // workaround: (actually run into this problem)
 // wchar_t is 2 bytes on windows, and 4 bytes in linux

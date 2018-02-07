@@ -13,6 +13,11 @@
 #include <fcntl.h>
 #include <sys/file.h>
 #include <sys/stat.h>
+
+#if (AW_PLATFORM_SPECIFIC == AW_PLATFORM_LINUX)
+#include <sys/ioctl.h>
+#include <linux/fs.h>
+#endif
 namespace aw {
 namespace io {
 namespace posix {
@@ -117,6 +122,15 @@ uintmax_t size(file_descriptor fd, std::error_code& ec)
 
 	set_error_if(ret == -1, ec);
 
+#if (AW_PLATFORM_SPECIFIC == AW_PLATFORM_LINUX)
+	if (S_ISBLK(info.st_mode)) {
+		uint64_t size;
+		int ret = ::ioctl(fd, BLKGETSIZE64, &size);
+		set_error_if(ret == -1, ec);
+		if (ret != -1)
+			return uintmax_t(size);
+	}
+#endif
 	return (ret == -1) ? uintmax_t(-1) : info.st_size;
 }
 } // namespace posix

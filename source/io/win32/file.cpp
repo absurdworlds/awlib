@@ -64,15 +64,23 @@ bool close(file_descriptor fd, std::error_code& ec)
 	return close_handle( fd, ec );
 }
 
+static DWORD clamp_count( uintmax_t count )
+{
+	constexpr uintmax_t max = std::numeric_limits<DWORD>::max();
+	if (count > max)
+		return max;
+	return static_cast<DWORD>( count );
+}
+
 intmax_t read(file_descriptor fd, char* buffer, uintmax_t count, std::error_code& ec)
 {
 	bool ret = true;
 	uintmax_t left = count;
 	do {
-		unsigned toread = left % std::numeric_limits<unsigned>::max();
-		unsigned nread;
+		DWORD toread = clamp_count( left );
+		DWORD nread;
 		ret = ::ReadFile(HANDLE(fd), buffer, toread, &nread, NULL);
-		if (!ret)
+		if (!ret || nread == 0)
 			break;
 
 		left   -= nread;
@@ -89,8 +97,8 @@ intmax_t write(file_descriptor fd, char const* buffer, uintmax_t count, std::err
 	bool ret = true;
 	uintmax_t left = count;
 	do {
-		unsigned towrite = left % std::numeric_limits<unsigned>::max();
-		unsigned written;
+		DWORD towrite = clamp_count( left );
+		DWORD written;
 		ret = ::WriteFile(HANDLE(fd), buffer, towrite, &written, NULL);
 		if (!ret)
 			break;

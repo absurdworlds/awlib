@@ -9,22 +9,16 @@
  */
 #ifndef aw_fileformat_wav_wav_reader_h
 #define aw_fileformat_wav_wav_reader_h
-#include <aw/io/input_stream.h>
+#include <aw/fileformat/wav/data.h>
+
 #include <aw/sound/export.h>
 
+#include <aw/io/input_stream.h>
+
 #include <aw/types/optional.h>
-#include <vector>
 
 namespace aw {
 namespace wav {
-/*! Uncompressed PCM wave data */
-struct wave_data {
-	u16 channels;
-	u16 bits_per_sample;
-	u32 sample_rate;
-	std::vector<char> data;
-};
-
 /*!
  * Load a wave file from stream \a stream.
  * \return

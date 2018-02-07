@@ -10,15 +10,20 @@
 #define aw_internal_winapi_helpers_h
 #include <system_error>
 
+#ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
+#endif//WIN32_LEAN_AND_MEAN
+#ifndef NOMINMAX
 #define NOMINMAX
+#endif//NOMINMAX
 #include <windows.h>
 namespace aw {
+AW_IO_EXP std::error_category const& winapi_error_category();
 namespace io {
 namespace win32 {
 inline void set_error( std::error_code& ec )
 {
-	ec.assign( GetLastError(), std::system_category() );
+	ec.assign( GetLastError(), winapi_error_category() );
 }
 
 inline void set_error_if(bool cond, std::error_code& ec)

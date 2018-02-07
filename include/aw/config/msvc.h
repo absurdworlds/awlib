@@ -16,4 +16,6 @@
 #elif defined(_M_IX86)
 	#define AW_ARCH AW_ARCH_i686
 #endif
+
+#define AW_ATTRIBUTE( ... ) __declspec(__VA_ARGS__)
 #endif //aw_compiler_setup_2

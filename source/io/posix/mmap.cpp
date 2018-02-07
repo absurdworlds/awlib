@@ -14,7 +14,7 @@ namespace aw {
 namespace io {
 namespace posix {
 namespace {
-unsigned get_protection( map_perms perms )
+int get_protection( map_perms perms )
 {
 	using mp = map_perms;
 	int result = 0;
@@ -25,6 +25,25 @@ unsigned get_protection( map_perms perms )
 	if (bool(perms & mp::exec))
 		result |= PROT_EXEC;
 	return result;
+}
+
+struct map_flags {
+	int protection;
+	int flags;
+};
+map_flags get_map_flags( map_perms perms )
+{
+	using mp = map_perms;
+
+	int prot = get_protection( perms );
+	int flags = MAP_PRIVATE;
+
+	// mmapping large files with MAP_PRIVATE will fail
+	// use MAP_SHARED to enable writeback
+	if (bool(perms & mp::write))
+		flags = MAP_SHARED;
+
+	return {prot, flags};
 }
 } // namespace
 
@@ -39,8 +58,8 @@ file_mapping map_file( file_descriptor fd, map_perms perms, std::error_code& ec 
 	if (length == -1)
 		return { };
 
-	int prot = get_protection( perms );
-	void* map = ::mmap( nullptr, length, prot, MAP_PRIVATE, fd, 0 );
+	auto [prot,flags] = get_map_flags( perms );
+	void* map = ::mmap( nullptr, length, prot, flags, fd, 0 );
 	if (map == MAP_FAILED) {
 		set_error( ec );
 		return { };
@@ -52,7 +71,7 @@ int unmap_file( file_mapping& map, std::error_code& ec )
 {
 	int result = munmap( map.address, map.length );
 	set_error_if( result == -1, ec );
-	return result;
+	return result == 0;
 }
 } // namespace posix
 } // namespace io

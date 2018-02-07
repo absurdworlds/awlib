@@ -63,7 +63,7 @@ struct streambuf_adapt : private std::streambuf {
 		: buf{buf}
 	{}
 
-	operator bool() const
+	explicit operator bool() const
 	{
 		return bool(buf);
 	}

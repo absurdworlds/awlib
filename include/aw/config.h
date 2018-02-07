@@ -117,34 +117,22 @@
 #endif
 
 /**** IMPORTS/EXPORTS ****/
-#if defined(AW_WINDOWS) || defined(AW_CYGWIN)
-	#if defined(_MSC_VER)
-		#define AW_EXPORT __declspec(dllexport)
-		#define AW_IMPORT __declspec(dllimport)
-	#elif defined(__GNUC__)
-		#define AW_EXPORT __attribute__ ((dllexport))
-		#define AW_IMPORT __attribute__ ((dllimport))
-	#endif
-	#define AW_PUBLIC
-	#define AW_LOCAL
-#else
-	#if defined(__clang__) || __GNUC__ >= 4
-		#define AW_VISIBILITY_SUPPORT 1
-	#else
-		#define AW_VISIBILITY_SUPPORT 0
-	#endif
-	#if AW_VISIBILITY_SUPPORT == 1
-		#define AW_PUBLIC __attribute__ ((visibility ("default")))
-		#define AW_LOCAL  __attribute__ ((visibility ("hidden")))
-		#define AW_EXPORT AW_PUBLIC
-		#define AW_IMPORT AW_PUBLIC
-	#else
-		#define AW_EXPORT
-		#define AW_IMPORT
+#if !defined(AW_STATIC_BUILD)
+	#if defined(AW_WINDOWS) || defined(AW_CYGWIN)
+		#define AW_EXPORT AW_ATTRIBUTE( dllexport )
+		#define AW_IMPORT AW_ATTRIBUTE( dllimport )
 		#define AW_PUBLIC
 		#define AW_LOCAL
+	#else
+		#define AW_PUBLIC AW_ATTRIBUTE( visibility ("default") )
+		#define AW_LOCAL  AW_ATTRIBUTE( visibility ("hidden")  )
+		#define AW_EXPORT AW_PUBLIC
+		#define AW_IMPORT AW_PUBLIC
 	#endif
-#endif
+#else
+	#define AW_EXPORT
+	#define AW_IMPORT
+#endif //AW_STATIC_BUILD
 
 /**** NON-STANDARD FEATURE TESTING ****/
 #define AW_EXT(x) AW_HAS_EXT##x

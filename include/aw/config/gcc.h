@@ -34,4 +34,6 @@
 #ifdef __SIZEOF_INT128__
 #define AW_HAS_EXT__int128 1
 #endif
+
+#define AW_ATTRIBUTE( ... ) __attribute__((__VA_ARGS__))
 #endif //aw_compiler_setup_2
