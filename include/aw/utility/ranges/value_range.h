@@ -106,7 +106,7 @@ Range<T> range(T end)
 	return Range<T>(T{}, end);
 }
 
-Range<unsigned char> char_range(unsigned char a, unsigned char z)
+inline Range<unsigned char> char_range(unsigned char a, unsigned char z)
 {
 	assert(a < z);
 	return Range<unsigned char>(a, z + 1);
