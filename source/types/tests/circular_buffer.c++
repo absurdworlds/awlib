@@ -48,7 +48,7 @@ Test(circular_buf_push_front) {
 
 	buf.push_back(5);
 	Checks {
-		constexpr std::array prot{4,3,5};
+		constexpr std::array prot{3,2,5};
 		for (auto [e,v] : zip(prot, buf))
 			TestEqual(e,v);
 	}
