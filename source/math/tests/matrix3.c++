@@ -15,11 +15,11 @@ Test(matrix3_pyr) {
 	auto roll  = roll_matrix( degrees<float>{ 15.0f } );
 
 
-	auto p = radians<float>{ degrees<float>{ 45.0f } }.count();
-	auto y = radians<float>{ degrees<float>{ 30.0f } }.count();
-	auto r = radians<float>{ degrees<float>{ 15.0f } }.count();
+	auto p = degrees<float>{ 45.0f };
+	auto y = degrees<float>{ 30.0f };
+	auto r = degrees<float>{ 15.0f };
 
-	auto pyr1 = matrix_from_euler<f32>( { p,y,r } );
+	auto pyr1 = matrix_from_euler( vector{ p,y,r } );
 	auto pyr2 = roll * yaw * pitch;
 
 	TestEqual(pyr1, pyr2);
@@ -27,7 +27,7 @@ Test(matrix3_pyr) {
 
 Test(matrix3_rotation)
 {
-	auto rot = yaw_matrix( static_cast<float>(pi/2) );
+	auto rot = yaw_matrix( degrees<float>( 90.0f ) );
 
 	vector3d<float> vec{1,0,0};
 
