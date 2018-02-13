@@ -19,5 +19,17 @@ Test(matrix3_pyr) {
 
 	TestEqual(pyr1, pyr2);
 };
+
+Test(matrix3_rotation)
+{
+	auto rot = yaw_matrix( static_cast<float>(pi/2) );
+
+	vector3d<float> vec{1,0,0};
+
+	vector3d<float> expected{0,0,-1};
+
+	vec = rot * vec;
+	TestEqual(vec, expected);
+}
 } // namespace math
 } // namespace aw
