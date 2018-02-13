@@ -405,6 +405,9 @@ void fill(vector<T,N>& vec, T const value)
 {
 	std::fill(std::begin(vec.elems), std::end(vec.elems), value);
 }
+
+template<typename...Ts>
+vector(Ts const&...) -> vector<std::common_type_t<Ts...>, sizeof...(Ts)>;
 } // namespace math
 } // namespace aw
 #endif//aw_math_vector_h
