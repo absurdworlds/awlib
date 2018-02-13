@@ -17,36 +17,78 @@ namespace math {
 template<typename T>
 using matrix3 = matrix<T,3,3>;
 
-template<typename T>
-matrix3<T> pitch_matrix( T pitch )
+template<typename T, typename U>
+matrix3<T> pitch_matrix( angle<T,U> pitch )
 {
 	auto s = sin( pitch );
 	auto c = cos( pitch );
 	return {{ {1, 0, 0}, {0, c, -s}, {0, s, c} }};
 }
 
-template<typename T>
-matrix3<T> yaw_matrix( T yaw )
+template<typename T, typename U>
+matrix3<T> yaw_matrix( angle<T,U> yaw )
 {
 	auto s = sin( yaw );
 	auto c = cos( yaw );
 	return {{ {c, 0, s}, {0, 1, 0}, {-s, 0, c} }};
 }
 
-template<typename T>
-matrix3<T> roll_matrix( T roll )
+template<typename T, typename U>
+matrix3<T> roll_matrix( angle<T,U> roll )
 {
 	auto s = sin( roll );
 	auto c = cos( roll );
 	return {{ {c, -s, 0}, {s, c, 0}, {0, 0, 1} }};
 }
 
+template<typename T>
+matrix3<T> scale_matrix( vector3d<T> const& s )
+{
+	return {
+		s.x(), 0, 0,
+		0, s.y(), 0,
+		0, 0, s.z()
+	};
+}
+
+/*!
+ * Create a matrix representing rotation around an axis.
+ */
+template<typename T, typename Pr>
+matrix3<T> matrix_from_axis_angle(vector3d<T> const& axis, angle<T,Pr> angle)
+{
+	auto x = axis.x();
+	auto y = axis.y();
+	auto z = axis.z();
+
+	constexpr matrix3<T> I = identity_matrix<T,3>;
+
+	/* cross-product matrix */
+	matrix3<T> P = {
+		 0, -z,  y,
+		 z,  0, -x,
+		-y,  x,  0
+	};
+
+	/* tensor-product u⊗u (where u = axis) */
+	matrix3<T> U = {
+		x*x, x*y, x*z,
+		x*y, y*y, y*z,
+		x*z, y*z, z*z
+	};
+
+	auto s = sin( angle );
+	auto c = cos( angle );
+	return c*I + s*P + (1 - c)*U;
+}
+
 /*!
  * Create a matrix from Euler angles, rotations are applied in following order:
  * rotation around X axis (pitch), Y axis (yaw), Z axis (roll).
+ * Same as `roll( z ) * yaw( y ) * pitch( x )`.
  */
-template<typename T>
-matrix3<T> matrix_from_euler(vector3d<T> const& euler)
+template<typename T, typename P>
+matrix3<T> matrix_from_euler(vector3d<angle<T,P>> const& euler)
 {
 	vector3d<T> s = sin( euler );
 	vector3d<T> c = cos( euler );

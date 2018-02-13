@@ -9,29 +9,40 @@
  */
 #ifndef aw_math_vector_h
 #define aw_math_vector_h
-#include <array>
-#include <tuple>
 #include <utility>
 
 #include <aw/math/math.h>
 #include <aw/math/angle.h>
-#include <aw/types/support/array.h>
 #include <aw/meta/conditional.h>
 #include <aw/utility/index_sequence.h>
 #include <aw/meta/list_ops.h>
 
-namespace aw {
-namespace math {
+namespace aw::math {
 template <typename T, size_t N>
 struct vector;
 
 template<size_t I, typename T, size_t N>
-T& get(vector<T,N>& vec);
+constexpr T& get(vector<T,N>& vec);
 
 template<size_t I, typename T, size_t N>
-T const& get(vector<T,N> const& vec);
+constexpr T const& get(vector<T,N> const& vec);
 
+template<size_t I, typename T, size_t N>
+constexpr T get(vector<T,N>&& vec) { return get<I>( vec ); }
 
+template<size_t I, typename T, size_t N>
+constexpr T get(vector<T,N> const&& vec) { return get<I>( vec ); }
+} // namespace aw::math
+
+namespace std {
+template<typename T, size_t N>
+class tuple_size< aw::math::vector<T,N> > : public std::integral_constant<size_t, N> {};
+template<size_t I, typename T, size_t N>
+class tuple_element< I, aw::math::vector<T,N> > { public: using type = T; };
+} // namespace std
+
+namespace aw {
+namespace math {
 namespace axis {
 constexpr size_t x = 0;
 constexpr size_t y = 1;
@@ -39,64 +50,75 @@ constexpr size_t z = 2;
 constexpr size_t w = 3;
 } // namespace axis
 
-template <class VectorT, class = typename VectorT::indices>
-struct vector_ops;
+namespace _impl {
+namespace vec {
 
-template <class T, size_t N, size_t...Is>
-struct vector_ops<vector<T,N>,index_sequence<Is...>>
+template<typename A, typename B, size_t...Is>
+constexpr void assign(A& a, B const& b, index_sequence<Is...>)
 {
-	using VectorT = vector<T,N>;
+	(void(a[Is] = b[Is]), ...);
+}
 
-	static void set(VectorT& vec, VectorT const& other)
-	{
-		(void(vec[Is] = other[Is]), ...);
-	}
+template<typename U, typename A, size_t...Is>
+constexpr vector<U,sizeof...(Is)> cast(A const& a, index_sequence<Is...>)
+{
+	return { U(a[Is])... };
+}
 
-	static void add(VectorT& vec, VectorT const& other)
-	{
-		(void(vec[Is] += other[Is]), ...);
-	}
+template<typename A, typename B, size_t...Is>
+constexpr void add(A& a, B const& b, index_sequence<Is...>)
+{
+	(void(a[Is] += b[Is]), ...);
+}
 
-	static void sub(VectorT& vec, VectorT const& other)
-	{
-		(void(vec[Is] -= other[Is]), ...);
-	}
+template<typename A, typename B, size_t...Is>
+constexpr void sub(A& a, B const& b, index_sequence<Is...>)
+{
+	(void(a[Is] -= b[Is]), ...);
+}
 
-	static void mul(VectorT& vec, T const& val)
-	{
-		(void(vec[Is] *= val), ...);
-	}
+template<typename V, size_t...Is>
+constexpr void mul(V& a, typename V::value_type const& v, index_sequence<Is...>)
+{
+	(void(a[Is] *= v), ...);
+}
 
-	static void div(VectorT& vec, T const& val)
-	{
-		(void(vec[Is] /= val), ...);
-	}
+template<typename V, size_t...Is>
+constexpr void div(V& a, typename V::value_type const& v, index_sequence<Is...>)
+{
+	(void(a[Is] /= v), ...);
+}
 
-	static T dot(VectorT const& vec1, VectorT const& vec2)
-	{
-		// FIXME: T{} workaround for GCC 6.1 bug
-		T product = (T{vec1[Is]*vec2[Is]} + ...);
-		return product;
-	}
+template<typename V, size_t...Is>
+constexpr auto dot(V const& vec1, V const& vec2, index_sequence<Is...>)
+{
+	using T = typename V::value_type;
+	// FIXME: T{} workaround for GCC 6.1 bug
+	T product = (T{vec1[Is]*vec2[Is]} + ...);
+	return product;
+}
 
-	template<typename Func>
-	static void for_each(VectorT& vec, Func func)
-	{
-		(func(vec[Is]), ...);
-	}
+template<typename B, typename A, size_t...Is>
+constexpr B convert(A& a, index_sequence<Is...>)
+{
+	return { a[Is] ... };
+}
 
-	template<typename Func>
-	static VectorT make(VectorT const& vec, Func func)
-	{
-		return { func(vec[Is]) ... };
-	}
+template<typename V, typename Func, size_t...Is>
+constexpr auto apply(V const& vec, Func func, index_sequence<Is...> is)
+{
+	using T = decltype( func(vec[0]) );
+	return vector<T,sizeof...(Is)>{ func(vec[Is]) ... };
+}
 
-	template<typename Func>
-	static void apply(VectorT& vec, Func func)
-	{
-		set(vec, make(vec, func));
-	}
-};
+template<typename V, typename Func, size_t...Is>
+constexpr void for_each(V& vec, Func func, index_sequence<Is...>)
+{
+	(func(vec[Is]), ...);
+}
+} // namespace vec
+} // namespace _impl
+
 
 template <typename T, size_t N>
 struct vector {
@@ -105,54 +127,66 @@ struct vector {
 	constexpr static size_t vector_size = N;
 
 	using value_type = T;
-	using array_type = std::array<T,N>;
-	using tuple_type = decltype(aw::to_tuple(std::declval<array_type>()));
 
-	using indices = std::make_index_sequence<N>;
+	static constexpr auto indices = make_index_sequence<N>{};
 
 	value_type elems[N];
 
-	vector& operator=(vector const& other)
+	constexpr vector& operator=(vector const& other)
 	{
-		vector_ops<vector>::set(*this, other);
+		_impl::vec::assign(*this, other, indices);
 		return *this;
 	}
 
-	vector& operator+=(vector const& other)
+	template<typename U>
+	constexpr explicit operator vector<U,N>() const
 	{
-		vector_ops<vector>::add(*this, other);
+		return _impl::vec::cast<U>(*this, indices);
+	}
+
+	template<size_t M>
+	constexpr vector& operator=(vector<T,M> const other)
+	{
+		static_assert(N > M);
+		_impl::vec::assign(*this, other, other.indices);
 		return *this;
 	}
 
-	vector& operator-=(vector const& other)
+	constexpr vector& operator+=(vector const& other)
 	{
-		vector_ops<vector>::sub(*this, other);
+		_impl::vec::add(*this, other, indices);
 		return *this;
 	}
 
-	vector& operator*=(T const v)
+	constexpr vector& operator-=(vector const& other)
 	{
-		vector_ops<vector>::mul(*this, v);
+		_impl::vec::sub(*this, other, indices);
 		return *this;
 	}
 
-	vector& operator/=(T const v)
+	constexpr vector& operator*=(T const v)
 	{
-		vector_ops<vector>::div(*this, v);
+		_impl::vec::mul(*this, v, indices);
 		return *this;
 	}
 
-	vector& negate()
+	constexpr vector& operator/=(T const v)
 	{
-		return (*this *= -1);
+		_impl::vec::div(*this, v, indices);
+		return *this;
 	}
 
-	T dot(vector const& other) const
+	constexpr vector& negate()
 	{
-		return vector_ops<vector>::dot(*this, other);
+		return (*this *= T(-1));
 	}
 
-	T length_sq() const
+	constexpr T dot(vector const& other) const
+	{
+		return _impl::vec::dot(*this, other, indices);
+	}
+
+	constexpr T length_sq() const
 	{
 		return dot(*this);
 	}
@@ -169,101 +203,97 @@ struct vector {
 		if (length == 0)
 			return *this;
 
-		length = math::invSqrt(length);
+		length /= sqrt( length );
 
 		return (*this *= length);
 	}
 
-	T& operator[](size_t idx)
-	{
-		return elems[idx];
-	}
+	constexpr T&       operator[](size_t idx)       { return elems[idx]; }
+	constexpr T const& operator[](size_t idx) const { return elems[idx]; }
 
-	T const& operator[](size_t idx) const
-	{
-		return elems[idx];
-	}
+	constexpr T*       data()       { return elems; }
+	constexpr T const* data() const { return elems; }
 
-	array_type to_array() const
-	{
-		return elems;
-	}
+	constexpr T      (& array())[N]       { return elems; }
+	constexpr T const(& array() const)[N] { return elems; }
 
-	tuple_type to_tuple() const
-	{
-		return aw::to_tuple(elems);
-	}
 
 	template<typename Func>
-	vector& for_each(Func func)
+	constexpr vector& for_each(Func func)
 	{
-		vector_ops<vector>::for_each(*this, func);
+		_impl::vec::for_each(*this, func, indices);
 		return *this;
 	}
 
 	template<typename Func>
-	vector& apply(Func func)
+	constexpr vector const& for_each(Func func) const
 	{
-		vector_ops<vector>::apply(*this, func);
+		_impl::vec::for_each(*this, func, indices);
 		return *this;
 	}
 
-	T& x()
+	template<typename Func>
+	constexpr auto apply(Func func) const
+	{
+		return _impl::vec::apply(*this, func, indices);
+	}
+
+	constexpr T& x()
 	{
 		return get<axis::x>(*this);
 	}
 
-	T& y()
+	constexpr T& y()
 	{
 		return get<axis::y>(*this);
 	}
 
-	T& z()
+	constexpr T& z()
 	{
 		return get<axis::z>(*this);
 	}
 
-	T& w()
+	constexpr T& w()
 	{
 		return get<axis::w>(*this);
 	}
 
-	T x() const
+	constexpr T const& x() const
 	{
 		return get<axis::x>(*this);
 	}
 
-	T y() const
+	constexpr T const& y() const
 	{
 		return get<axis::y>(*this);
 	}
 
-	T z() const
+	constexpr T const& z() const
 	{
 		return get<axis::z>(*this);
 	}
 
-	T w() const
+	constexpr T const& w() const
 	{
 		return get<axis::w>(*this);
 	}
 };
 
 template<typename T, size_t N>
-T dot(vector<T,N> const& vec1, vector<T,N> const& vec2)
+constexpr T dot(vector<T,N> const& vec1, vector<T,N> const& vec2)
 {
 	return vec1.dot(vec2);
 }
 
 template<size_t I, typename T, size_t N>
-T& get(vector<T,N>& vec)
+constexpr T& get(vector<T,N>& vec)
 {
 	static_assert(I < N, "Index out of bounds.");
 	return vec[I];
 }
 
 template<size_t I, typename T, size_t N>
-T const& get(vector<T,N> const& vec)
+constexpr T const& get(vector<T,N> const& vec)
 {
 	static_assert(I < N, "Index out of bounds.");
 	return vec[I];
@@ -271,14 +301,14 @@ T const& get(vector<T,N> const& vec)
 
 namespace _impl {
 template<size_t... Is, typename T, size_t N>
-vector<T,N-1> make_sub(vector<T,N> const& vec, index_sequence<Is...>)
+constexpr vector<T,N-1> make_sub(vector<T,N> const& vec, index_sequence<Is...>)
 {
 	return {get<Is>(vec)...};
 }
 } // namespace _impl
 
 template<size_t Index, typename T, size_t N>
-vector<T,N-1> sub(vector<T,N> const& vec)
+constexpr vector<T,N-1> sub(vector<T,N> const& vec)
 {
 	auto range = index_cat<
 	        make_index_range<0,Index>,
@@ -290,21 +320,21 @@ vector<T,N-1> sub(vector<T,N> const& vec)
 
 //! Negate vector (reverse direction)
 template<typename T, size_t N>
-vector<T,N> operator-(vector<T,N> vec)
+constexpr vector<T,N> operator-(vector<T,N> vec)
 {
 	return vec.negate();
 }
 
 //! Identity
 template<typename T, size_t N>
-vector<T,N> operator+(vector<T,N> vec)
+constexpr vector<T,N> operator+(vector<T,N> vec)
 {
 	return vec;
 }
 
 //! Sum of two vectors
 template<typename T, size_t N>
-vector<T,N> operator+(vector<T,N> v1, vector<T,N> const& v2)
+constexpr vector<T,N> operator+(vector<T,N> v1, vector<T,N> const& v2)
 {
 	v1 += v2;
 	return v1;
@@ -312,7 +342,7 @@ vector<T,N> operator+(vector<T,N> v1, vector<T,N> const& v2)
 
 //! Difference of two vectors
 template<typename T, size_t N>
-vector<T,N> operator-(vector<T,N> v1, vector<T,N> const& v2)
+constexpr vector<T,N> operator-(vector<T,N> v1, vector<T,N> const& v2)
 {
 	v1 -= v2;
 	return v1;
@@ -328,7 +358,7 @@ vector<T,N> operator*(vector<T,N> vec, T const v)
 
 //! Scalar-vector product
 template<typename T, size_t N>
-vector<T,N> operator/(vector<T,N> vec, T const v)
+constexpr vector<T,N> operator/(vector<T,N> vec, T const v)
 {
 	vec /= v;
 	return vec;
@@ -336,17 +366,24 @@ vector<T,N> operator/(vector<T,N> vec, T const v)
 
 //! Scalar-vector product
 template<typename T, size_t N>
-vector<T,N> operator*(T const v, vector<T,N> vec)
+constexpr vector<T,N> operator*(T const v, vector<T,N> vec)
 {
 	vec *= v;
 	return vec;
 }
 
-//! Get a normalized version of a vector
+//! Vector dot product
 template<typename T, size_t N>
-vector<T,N> normalize(vector<T,N> vec)
+constexpr T operator*(vector<T,N> const& a, vector<T,N> const& b)
 {
-	return vec.normalize();
+	return dot(a,b);
+}
+
+//! Get squared distance between two points
+template<typename T, size_t N>
+constexpr T distance_sq(vector<T,N> vec1, vector<T,N> const& vec2)
+{
+	return (vec1 - vec2).length_sq();
 }
 
 //! Get distance between two points
@@ -356,11 +393,11 @@ T distance(vector<T,N> vec1, vector<T,N> const& vec2)
 	return (vec1 - vec2).length();
 }
 
-//! Get squared distance between two points
+//! Get a normalized version of a vector
 template<typename T, size_t N>
-T distance_sq(vector<T,N> vec1, vector<T,N> const& vec2)
+vector<T,N> normalize(vector<T,N> vec)
 {
-	return (vec1 - vec2).length_sq();
+	return vec.normalize();
 }
 
 template<typename T, size_t N>

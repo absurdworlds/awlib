@@ -3,7 +3,6 @@
  */
 #ifndef aw_gl_ext_opengl_3_3_enum_h
 #define aw_gl_ext_opengl_3_3_enum_h
-namespace aw {
 enum {
 	/* gl version 1.1 */
 	GL_ALPHA                         = 0x1906,
@@ -843,7 +842,5 @@ enum {
 	GL_TIMESTAMP                     = 0x8E28,
 	GL_TIME_ELAPSED                  = 0x88BF,
 	GL_VERTEX_ATTRIB_ARRAY_DIVISOR   = 0x88FE,
-	
 };
-} //namespace aw
 #endif//aw_gl_ext_opengl_3_3_enum_h

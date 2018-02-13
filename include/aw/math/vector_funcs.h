@@ -16,16 +16,28 @@ namespace math {
 template<typename T, size_t N>
 vector<T,N> sin( vector<T,N> vec )
 {
-	using std::sin;
-	auto func = [] (T val) { return sin(val); };
+	auto func = [] (T val) { return sin( radians<T>{val} ); };
 	return vec.apply( func );
 }
 
 template<typename T, size_t N>
 vector<T,N> cos( vector<T,N> vec )
 {
-	using std::cos;
-	auto func = [] (T val) { return cos(val); };
+	auto func = [] (T val) { return cos( radians<T>{val} ); };
+	return vec.apply( func );
+}
+
+template<typename R, typename P, size_t N>
+vector<R,N> sin( vector<angle<R,P>,N> vec )
+{
+	auto func = [] (angle<R,P> val) { return sin( val ); };
+	return vec.apply( func );
+}
+
+template<typename R, typename P, size_t N>
+vector<R,N> cos( vector<angle<R,P>,N> vec )
+{
+	auto func = [] (angle<R,P> val) { return cos( val ); };
 	return vec.apply( func );
 }
 

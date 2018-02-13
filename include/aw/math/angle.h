@@ -9,72 +9,84 @@
  */
 #ifndef aw_math_angle_h
 #define aw_math_angle_h
-#include <ratio>
 #include <aw/math/math.h>
 #include <aw/math/constants.h>
 #include <aw/math/equals.h>
+#include <aw/math/units.h>
 #include <aw/types/traits/basic_traits.h>
 #include <aw/types/traits/common_type.h>
 
-namespace aw::math {
-
+namespace aw {
+namespace math {
+// TODO: currently unused
 template<typename T>
-constexpr double extract_unit = T::value;
+struct treat_as_floating_point_t : is_floating_point_t<T> {};
+template<typename T>
+constexpr bool treat_as_floating_point = treat_as_floating_point_t<T>::value;
 
-template<intmax_t Num, intmax_t Den>
-constexpr double extract_unit<std::ratio<Num,Den>> = double(Num)/Den;
-
-struct radian_unit { static constexpr double value = 2*pi; };
 
 template<typename Rep, typename Period>
 class angle;
 
-namespace _impl {
 template<typename T>
 constexpr bool is_angle = false;
 template<typename Rep, typename Period>
 constexpr bool is_angle<angle<Rep,Period>> = true;
-}
+
+struct radian_unit { static constexpr double value = 2*pi; };
 
 template<typename Rep, typename Period = radian_unit>
 class angle {
 	Rep value;
 public:
-	// TODO: support integers
-	// Currently, I don't need integer angles (or any other type),
-	// but they should be supported for completeness sake.
-	// However, it is more complicated with angles than with other units,
-	// because of irratinal pi.
-	static_assert( is_floating_point<Rep> );
-
 	using rep = Rep;
 	using period_type = Period;
-	static constexpr auto period = extract_unit<Period>;
 
 	// TODO: proper cast
 	template<typename Rep2, typename = enable_if< is_convertible<Rep2, rep> >>
 	constexpr explicit angle( Rep2 value ) : value(value) {}
 
-	template<typename Ang2, typename = enable_if< _impl::is_angle<Ang2> >>
+	template<typename Ang2, typename = enable_if< is_angle<Ang2> >>
 	constexpr angle( Ang2 const& other )
-		: value( other.count() / other.period * period )
+		: value{ units::convert(
+			Rep( other.count() ),
+			typename Ang2::period_type{},
+			Period{}
+		)}
 	{ }
 
 	constexpr Rep count() const { return value; }
+
+
+	void normalize_impl( std::false_type )
+	{
+		// TODO: guaranteed to be in (-period/2; period/2] range?
+		constexpr auto period = units::extract< double, Period >;
+		value = remainder(value, period);
+	}
+
+	constexpr void normalize_impl( std::true_type )
+	{
+		constexpr intmax_t num = numerator<Period>;
+		value = remainder(value, num);
+	}
 
 	/*!
 	 * Normalize angle to be in range (-period/2; period/2].
 	 * For example, radians will be normalized to (-π; π], and degrees
 	 * to (-180; 180] range. E.g. 189° will become 9°.
 	 */
-	angle& normalize()
+	constexpr angle& normalize()
 	{
-		// TODO: guaranteed to be in (-period/2; period/2] range?
-		value = std::remainder(value, period);
+		constexpr bool not_float   = !treat_as_floating_point<Rep>;
+		constexpr bool valid_ratio = is_ratio<Period> && denominator<Period> == 1;
+		constexpr bool use_integral_func = not_float && valid_ratio;
+		using chooser = std::integral_constant<bool, use_integral_func>;
+		normalize_impl( chooser{} );
 		return *this;
 	}
 
-	angle normalized() const { return angle{*this}.normalize(); }
+	constexpr angle normalized() const { return angle{*this}.normalize(); }
 
 	constexpr angle operator-() const { return angle{ -value }; };
 	constexpr angle operator+() const { return *this; };
@@ -97,35 +109,56 @@ template <typename T>
 using turns   = angle<T, std::ratio<1>>;
 template <typename T>
 using degrees = angle<T, std::ratio<360>>;
+} // namespace math
 
+using math::angle;
+using math::radians;
+using math::degrees;
+using math::turns;
+} // namespace aw
+
+
+namespace std {
+
+template<typename R1, typename P1, typename R2, typename P2>
+struct common_type<aw::angle<R1, P1>, aw::angle<R2, P2> >
+{
+	using type = aw::angle<common_type_t<R1,R2>, aw::units::common<P1,P2>>;
+};
+
+} // namespace std
+
+#include <iostream>
+namespace aw::math {
 
 template <typename R1, typename P1, typename R2, typename P2>
-auto operator+(angle<R1,P1> const& a, angle<R2,P2> const& b) ->
-	angle< common_type<R1, R2>, P1 >
+constexpr auto operator+(angle<R1,P1> const& a, angle<R2,P2> const& b) ->
+	common_type< angle<R1,P1>, angle<R2,P2> >
 {
-	using result = angle< common_type<R1, R2>, P1 >;
+	using result = common_type< angle<R1,P1>, angle<R2,P2> >;
 	result r{ a };
 	return r += result{ b };
 }
 
 template <typename R1, typename P1, typename R2, typename P2>
-auto operator-(angle<R1,P1> const& a, angle<R2,P2> const& b) ->
-	angle< common_type<R1, R2>, P1 >
+constexpr auto operator-(angle<R1,P1> const& a, angle<R2,P2> const& b) ->
+	common_type< angle<R1,P1>, angle<R2,P2> >
 {
-	using result = angle< common_type<R1, R2>, P1 >;
+	using result = common_type< angle<R1,P1>, angle<R2,P2> >;
 	result r{ a };
 	return r -= result{ b };
 }
 
 template <typename R1, typename P1, typename R2, typename P2>
-auto operator/(angle<R1,P1> const& a, angle<R2,P2> const& b) -> common_type<R1, R2>
+constexpr auto operator/(angle<R1,P1> const& a, angle<R2,P2> const& b)
+	-> common_type<R1,R2>
 {
-	using result = angle< common_type<R1, R2>, P2 >;
+	using result = common_type< angle<R1,P1>, angle<R2,P2> >;
 	return result{ result{ a }.count() / result{ b }.count() };
 }
 
 template <typename R1, typename R2, typename P2>
-auto operator*(R1 const& a, angle<R2,P2> const& b) ->
+constexpr auto operator*(R1 const& a, angle<R2,P2> const& b) ->
 	angle< common_type<R1, R2>, P2 >
 {
 	using result = angle< common_type<R1, R2>, P2 >;
@@ -134,52 +167,52 @@ auto operator*(R1 const& a, angle<R2,P2> const& b) ->
 }
 
 template <typename R1, typename R2, typename P2>
-auto operator*(angle<R2,P2> const& b, R1 const& a) { return a*b; }
+constexpr auto operator*(angle<R2,P2> const& b, R1 const& a) { return a*b; }
 
-template <typename R1, typename R2, typename P2>
-auto operator/(R1 const& a, angle<R2,P2> const& b) ->
-	angle< common_type<R1, R2>, P2 >
+template <typename R1, typename P1, typename R2>
+constexpr auto operator/(angle<R1,P1> const& a, R2 const& b) ->
+	angle< common_type<R1, R2>, P1 >
 {
-	using result = angle< common_type<R1, R2>, P2 >;
-	result r{ b };
-	return r /= a;
+	using result = angle< common_type<R1, R2>, P1 >;
+	result r{ a };
+	return r /= b;
 }
 
 template <typename R1, typename P1, typename R2, typename P2>
-bool operator==(angle<R1,P1> const& a, angle<R2,P2> const& b)
+constexpr bool operator==(angle<R1,P1> const& a, angle<R2,P2> const& b)
 {
-	using result = angle< common_type<R1, R2>, P2 >;
+	using result = common_type< angle<R1,P1>, angle<R2,P2> >;
 	return result{ a }.count() == result{ b }.count();
 }
 
 
 template <typename R1, typename P1, typename R2, typename P2>
-bool operator<(angle<R1,P1> const& a, angle<R2,P2> const& b)
+constexpr bool operator<(angle<R1,P1> const& a, angle<R2,P2> const& b)
 {
-	using result = angle< common_type<R1, R2>, P2 >;
+	using result = common_type< angle<R1,P1>, angle<R2, P2> >;
 	return result{ a }.count() < result{ b }.count();
 }
 
 template <typename R1, typename P1, typename R2, typename P2>
-bool operator>(angle<R1,P1> const& a, angle<R2,P2> const& b)
+constexpr bool operator>(angle<R1,P1> const& a, angle<R2,P2> const& b)
 {
 	return b < a;
 }
 
 template <typename R1, typename P1, typename R2, typename P2>
-bool operator<=(angle<R1,P1> const& a, angle<R2,P2> const& b)
+constexpr bool operator<=(angle<R1,P1> const& a, angle<R2,P2> const& b)
 {
 	return !(a > b);
 }
 
 template <typename R1, typename P1, typename R2, typename P2>
-bool operator>=(angle<R1,P1> const& a, angle<R2,P2> const& b)
+constexpr bool operator>=(angle<R1,P1> const& a, angle<R2,P2> const& b)
 {
 	return !(a < b);
 }
 
 template <typename R1, typename P1, typename R2, typename P2>
-bool operator!=(angle<R1,P1> const& a, angle<R2,P2> const& b)
+constexpr bool operator!=(angle<R1,P1> const& a, angle<R2,P2> const& b)
 {
 	return !(a == b);
 }
@@ -187,9 +220,9 @@ bool operator!=(angle<R1,P1> const& a, angle<R2,P2> const& b)
 template <typename R1, typename P1, typename R2, typename P2>
 bool equals(angle<R1,P1> const& a, angle<R2,P2> const& b)
 {
-	using result = angle< common_type<R1, R2>, P2 >;
+	using result = common_type< angle<R1,P1>, angle<R2, P2> >;
 	return equals(result{ a }.count(), result{ b }.count());
 }
 
-} //namespace aw::math
+} // namespace aw::math
 #endif //aw_math_angle_h

@@ -27,5 +27,18 @@ constexpr bool is_even(T value)
 {
 	return !is_odd(value);
 }
+
+// XXX: temporary until C++17 is around
+constexpr intmax_t gcd(intmax_t x, intmax_t y)
+{
+	if (y == 0)
+		return x == 0 ? 1 : x;
+	return gcd(y, x % y);
+}
+
+constexpr intmax_t lcm(intmax_t x, intmax_t y)
+{
+	return x / gcd(x,y) * y;
+}
 } //namespace aw
 #endif //aw_math_numeric_h

@@ -261,12 +261,12 @@ struct quaternion {
 		T const sqrMag = magnitude_sq();
 
 		if (!math::equals(sqrMag, T{1})) {
-			T const invMag = math::invSqrt(sqrMag);
+			T const mag = math::sqrt(sqrMag);
 
-			x *= invMag;
-			y *= invMag;
-			z *= invMag;
-			w *= invMag;
+			x /= mag;
+			y /= mag;
+			z /= mag;
+			w /= mag;
 		}
 
 		return *this;

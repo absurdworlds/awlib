@@ -10,105 +10,109 @@
 #ifndef aw_math_matrix_h
 #define aw_math_matrix_h
 #include <aw/math/vector.h>
-namespace aw {
-namespace math {
+namespace aw::math {
 template<typename T, size_t M, size_t N>
 struct matrix;
 
+/*!
+ * \{
+ * Access matrix rows and columns as vectors.
+ */
 template<size_t Index, typename T, size_t M, size_t N>
-vector<T,N>& row(matrix<T,M,N>& mat);
+constexpr vector<T,N>& row(matrix<T,M,N>& mat);
 template<size_t Index, typename T, size_t M, size_t N>
-vector<T,N> const& row(matrix<T,M,N> const& mat);
+constexpr vector<T,N> const& row(matrix<T,M,N> const& mat);
 
 template<size_t Index, typename T, size_t M, size_t N>
-vector<T,M> col(matrix<T,M,N> const& mat);
+constexpr vector<T,M> col(matrix<T,M,N> const& mat);
+/* \} */
+
+/* \{
+ * Access element at row \a I and column \a J
+ */
+template<size_t I, size_t J, typename T, size_t M, size_t N>
+constexpr T& get(matrix<T,M,N>& mat);
+template<size_t I, size_t J, typename T, size_t M, size_t N>
+constexpr T const& get(matrix<T,M,N> const& mat);
 
 template<size_t I, size_t J, typename T, size_t M, size_t N>
-T& get(matrix<T,M,N>& mat);
+constexpr T get(matrix<T,M,N>&& mat) { return get<I,J>( mat ); }
 template<size_t I, size_t J, typename T, size_t M, size_t N>
-T get(matrix<T,M,N> const& mat);
+constexpr T get(matrix<T,M,N> const&& mat) { return get<I,J>( mat ); }
+/*! \} */
 
-template<class MatrixT,
-         class = typename MatrixT::row_indices,
-         class = typename MatrixT::column_indices
->
-struct matrix_ops;
+/*! \{
+ * Linear access to matrix elements
+ */
+template<size_t I, typename T, size_t M, size_t N>
+constexpr T& get(matrix<T,M,N>& mat) { return get<I / N, I % N>( mat ); }
+template<size_t I, typename T, size_t M, size_t N>
+constexpr T const& get(matrix<T,M,N> const& mat) { return get<I / N, I % N>( mat ); }
 
-template<class T, size_t M, size_t N, size_t...Is, size_t...Js>
-struct matrix_ops<matrix<T,M,N>, index_sequence<Is...>, index_sequence<Js...>>
+template<size_t I, typename T, size_t M, size_t N>
+constexpr T get(matrix<T,M,N>&& mat) { return get<I / N, I % N>( mat ); }
+template<size_t I, typename T, size_t M, size_t N>
+constexpr T get(matrix<T,M,N> const&& mat) { return get<I / N, I % N>( mat ); }
+/* \} */
+} // namespace aw::math
+
+
+namespace aw::math {
+namespace _impl {
+namespace mat {
+
+template<class T, size_t M, size_t N, size_t...Is>
+constexpr vector<T,M> mul(matrix<T,M,N> const& mat, vector<T,N> const& vec, index_sequence<Is...>)
 {
-	using MatrixT = matrix<T,M,N>;
-	using column_type = typename MatrixT::column_type;
+	return { dot(row<Is>(mat), vec) ... };
+}
 
-	static void set(MatrixT& a, MatrixT const& b)
-	{
-		(void(a[Is] = b[Is]), ...);
-	}
+template<class T, size_t M, size_t N, size_t...Js>
+constexpr vector<T,N> mul(vector<T,M> const& vec, matrix<T,M,N> const& mat, index_sequence<Js...>)
+{
+	return { dot(col<Js>(mat), vec) ... };
+}
 
-	static void add(MatrixT& a, MatrixT const& b)
-	{
-		(void(a[Is] += b[Is]), ...);
-	}
+template<class T, size_t M, size_t N, size_t P, size_t...Is>
+constexpr matrix<T,M,P> mul(matrix<T,M,N> const& A, matrix<T,N,P> const& B, index_sequence<Is...>)
+{
+	return { row<Is>(A) * B ... };
+}
 
-	static void sub(MatrixT& a, MatrixT const& b)
-	{
-		(void(a[Is] -= b[Is]), ...);
-	}
 
-	static void mul(MatrixT& a, T const v)
-	{
-		(void(a[Is] *= v), ...);
-	}
+template<typename M, size_t...Is>
+constexpr typename M::column_type col(M const& a, size_t j, index_sequence<Is...>)
+{
+	return { row<Is>(a)[j]... };
+}
 
-	static void div(MatrixT& a, T const v)
-	{
-		(void(a[Is] /= v), ...);
-	}
+template<class T, size_t M, size_t N, size_t...Js>
+static constexpr matrix<T,N,M> transpose(matrix<T,M,N> const& mat, index_sequence<Js...>)
+{
+	return { col<Js>(mat)... };
+}
 
-	static vector<T,M> mul(MatrixT const& mat, vector<T,N> const& vec)
-	{
-		return { dot(mat.row(Is), vec) ... };
-	}
+template<typename M, typename Func, size_t...Js>
+static constexpr void for_each_column(M& mat, Func func, index_sequence<Js...>)
+{
+	(void(func(mat[Js])), ...);
+}
 
-	static vector<T,N> mul(vector<T,M> const& vec, MatrixT const& mat)
-	{
-		return { dot(mat.col(Js), vec) ... };
-	}
+template<typename M, typename Func, size_t...Is>
+static constexpr void for_each_row(M& mat, Func func, index_sequence<Is...>)
+{
+	(void(func(mat[Is])), ...);
+}
 
-	template <size_t P>
-	static matrix<T,M,P> mul(MatrixT const& A, matrix<T,N,P> const& B)
-	{
-		return { A.row(Is) * B ... };
-	}
+template<typename M, typename Func, size_t...Is>
+static constexpr void for_each(M& mat, Func func, index_sequence<Is...>)
+{
+	(row<Is>(mat).for_each(func), ...);
+}
 
-	static column_type col(MatrixT const& a, size_t j)
-	{
-		return { row<Is>(a)[j]... };
-	}
+} // namespace mat
+} // namespace _impl
 
-	static MatrixT transpose(matrix<T,M,N> const& mat)
-	{
-		return { col<Js>(mat)... };
-	}
-
-	template<typename Func>
-	static void for_each_column(matrix<T,M,N>& mat, Func func)
-	{
-		(void(func(mat[Js])), ...);
-	}
-
-	template<typename Func>
-	static void for_each_row(matrix<T,M,N>& mat, Func func)
-	{
-		(void(func(mat[Is])), ...);
-	}
-
-	template<typename Func>
-	static void for_each(matrix<T,M,N>& mat, Func func)
-	{
-		(mat[Is].for_each(func), ...);
-	}
-};
 
 template<typename T, size_t M, size_t N>
 struct matrix {
@@ -118,8 +122,8 @@ struct matrix {
 	static_assert(num_columns > 0, "Matrix must have at least one column.");
 	static_assert(num_rows > 0, "Matrix must have at least one row.");
 
-	using row_indices    = make_index_sequence<M>;
-	using column_indices = make_index_sequence<N>;
+	static constexpr auto row_indices    = make_index_sequence<M>{};
+	static constexpr auto column_indices = make_index_sequence<N>{};
 
 	using value_type = T;
 	using column_type = vector<T, M>;
@@ -127,66 +131,93 @@ struct matrix {
 
 	row_type rows[M];
 
-	matrix& operator=(matrix const& other)
+	constexpr matrix& operator=(matrix const& other)
 	{
-		matrix_ops<matrix>::set(*this, other);
+		_impl::vec::assign(*this, other, row_indices);
 		return *this;
 	}
 
-	row_type const& operator[](size_t idx) const
+	template<size_t M1, size_t N1>
+	constexpr matrix& operator=(matrix<T,M1,N1> const& other)
+	{
+		static_assert(M > M1);
+		static_assert(N > N1);
+		_impl::vec::assign(*this, other, other.row_indices);
+		return *this;
+	}
+
+	constexpr row_type const& operator[](size_t idx) const
 	{
 		return rows[idx];
 	}
 
-	row_type& operator[](size_t idx)
+	constexpr row_type& operator[](size_t idx)
 	{
 		return rows[idx];
 	}
 
-	matrix& operator+=(matrix const& other)
+	constexpr matrix& operator+=(matrix const& other)
 	{
-		matrix_ops<matrix>::add(*this, other);
+		_impl::vec::add(*this, other, row_indices);
 		return *this;
 	}
 
 
-	matrix& operator-=(matrix const& other)
+	constexpr matrix& operator-=(matrix const& other)
 	{
-		matrix_ops<matrix>::sub(*this, other);
+		_impl::vec::sub(*this, other, row_indices);
 		return *this;
 	}
 
-	matrix& operator*=(T const v)
+	constexpr matrix& operator*=(matrix const& other)
 	{
-		matrix_ops<matrix>::mul(*this, v);
+		return (*this = *this * other);
+	}
+
+	constexpr matrix& operator*=(T const v)
+	{
+		_impl::vec::mul(*this, v, row_indices);
 		return *this;
 	}
 
-	matrix& operator /= (T const v)
+	constexpr matrix& operator/=(T const v)
 	{
-		matrix_ops<matrix>::div(*this, v);
+		_impl::vec::div(*this, v, row_indices);
 		return *this;
 	}
 
 	template<typename Func>
-	void for_each_column(Func func)
+	constexpr void for_each_column(Func func)
 	{
-		matrix_ops<matrix>::for_each_column(*this, func);
+		_impl::mat::for_each_column(*this, func, column_indices);
 	}
 
 	template<typename Func>
-	void for_each_row(Func func)
+	constexpr void for_each_row(Func func)
 	{
-		matrix_ops<matrix>::for_each_row(*this, func);
+		_impl::mat::for_each_row(*this, func, row_indices);
 	}
 
 	template<typename Func>
-	void for_each(Func func)
+	constexpr matrix& for_each(Func func)
 	{
-		matrix_ops<matrix>::for_each(*this, func);
+		_impl::mat::for_each(*this, func, row_indices);
+		return *this;
 	}
 
-	T& get(size_t i, size_t j)
+	template<typename Func>
+	constexpr matrix const& for_each(Func func) const
+	{
+		_impl::mat::for_each(*this, func, row_indices);
+		return *this;
+	}
+
+	constexpr T& get(size_t i, size_t j)
+	{
+		return rows[i][j];
+	}
+
+	constexpr T get(size_t i, size_t j) const
 	{
 		assert(i < M);
 		assert(j < N);
@@ -194,73 +225,103 @@ struct matrix {
 		return rows[i][j];
 	}
 
-	T get(size_t i, size_t j) const
-	{
-		assert(i < M);
-		assert(j < N);
-
-		return rows[i][j];
-	}
-
-	row_type& row(size_t i)
+	constexpr row_type& row(size_t i)
 	{
 		assert(i < M);
 		return rows[i];
 	}
 
-	row_type const& row(size_t i) const
+	constexpr row_type const& row(size_t i) const
 	{
 		assert(i < M);
 		return rows[i];
 	}
 
-	column_type col(size_t j) const
+	constexpr column_type col(size_t j) const
 	{
-		return matrix_ops<matrix>::col(*this, j);
+		return _impl::mat::col(*this, j, row_indices);
 	}
+
+	/*!
+	 * \{
+	 * Access matrix data through a pointer. Indended for interfacing
+	 * with C APIs, such as OpenGL.
+	 *
+	 * Caveat emptor: accessing data beyond first row is
+	 * undefined according to C++ standard, but should be OK
+	 * on most platforms.
+	 */
+	constexpr T* data()
+	{
+		static_assert( sizeof(vector<T,N>) == sizeof(T)*N );
+		return rows[0].data();
+	}
+
+	constexpr T const* data() const
+	{
+		static_assert( sizeof(vector<T,N>) == sizeof(T)*N );
+		return rows[0].data();
+	}
+	/* \} */
 };
 
 template<size_t I, size_t J, typename T, size_t M, size_t N>
-T get(matrix<T,M,N> const& mat)
+constexpr T& get(matrix<T,M,N>& mat)
 {
 	return mat.rows[I][J];
 }
 
 template<size_t I, size_t J, typename T, size_t M, size_t N>
-T& get(matrix<T,M,N>& mat)
+constexpr T const& get(matrix<T,M,N> const& mat)
 {
 	return mat.rows[I][J];
 }
 
 template<size_t Index, typename T, size_t M, size_t N>
-vector<T,N>& row(matrix<T,M,N>& mat)
+constexpr vector<T,N>& row(matrix<T,M,N>& mat)
 {
 	return mat.rows[Index];
 }
 
 template<size_t Index, typename T, size_t M, size_t N>
-vector<T,N> const& row(matrix<T,M,N> const& mat)
+constexpr vector<T,N> const& row(matrix<T,M,N> const& mat)
 {
 	return mat.rows[Index];
 }
 
 template<size_t Index, typename T, size_t M, size_t N>
-vector<T,M> col(matrix<T,M,N> const& mat)
+constexpr vector<T,M> col(matrix<T,M,N> const& mat)
 {
-	using MatrixT = matrix<T,M,N>;
-	return matrix_ops<MatrixT>::row(mat, Index);
+	return _impl::mat::col(mat, Index, mat.row_indices);
+}
+
+
+namespace _impl {
+namespace mat {
+template<typename T, size_t M, size_t N, size_t...Is>
+constexpr void set_col(matrix<T,M,N> const& mat, vector<T,N> const& col, size_t j, index_sequence<Is...>)
+{
+	(void(mat[Is][j] = col[Is]), ...);
+}
+} // namespace mat
+} // namespace _impl
+
+template<typename T, size_t M, size_t N>
+constexpr void set_column(matrix<T,M,N> const& mat, vector<T,N> const& col, size_t idx)
+{
+	_impl::mat::set_col(mat, col, idx, mat.row_indices);
 }
 
 namespace _impl {
 template<size_t Col, size_t... Rows, typename T, size_t M, size_t N>
-matrix<T,N-1,M-1> make_sub(matrix<T,M,N> const& mat, index_sequence<Rows...>)
+constexpr matrix<T,N-1,M-1> make_sub(matrix<T,M,N> const& mat, index_sequence<Rows...>)
 {
 	return { sub<Col>(row<Rows>(mat))... };
 }
 } // namespace _impl
 
 template<size_t Row, size_t Col, typename T, size_t M, size_t N>
-matrix<T,N-1,M-1> sub_matrix(matrix<T,M,N> const& mat)
+constexpr matrix<T,N-1,M-1> sub_matrix(matrix<T,M,N> const& mat)
 {
 	auto range = index_cat<
 	        make_index_range<0,Row>,
@@ -272,52 +333,72 @@ matrix<T,N-1,M-1> sub_matrix(matrix<T,M,N> const& mat)
 
 //! Transpose a matrix
 template<typename T, size_t M, size_t N>
-matrix<T,N,M> transpose(matrix<T,M,N> const& mat)
+constexpr matrix<T,N,M> transpose(matrix<T,M,N> const& mat)
 {
-	using MatrixT = matrix<T,M,N>;
-	return matrix_ops<MatrixT>::transpose(mat);
+	return _impl::mat::transpose(mat, mat.column_indices);
 }
 
 template<typename T, size_t M, size_t N>
-vector<T,M> operator*(matrix<T,M,N> const& A, vector<T,N> const& B)
+constexpr vector<T,M> operator*(matrix<T,M,N> const& m, vector<T,N> const& v)
 {
-	using MatrixT = matrix<T,M,N>;
-	return matrix_ops<MatrixT>::mul(A, B);
+	return _impl::mat::mul(m, v, m.row_indices);
 }
 
 template<typename T, size_t M, size_t N>
-vector<T,N> operator*(vector<T,M> const& vec, matrix<T,M,N> const& mat)
+constexpr vector<T,N> operator*(vector<T,M> const& v, matrix<T,M,N> const& m)
 {
-	using MatrixT = matrix<T,M,N>;
-	return matrix_ops<MatrixT>::mul(vec, mat);
+	return _impl::mat::mul(v, m, m.column_indices);
 }
 
 template<typename T, size_t M, size_t N, size_t P>
-matrix<T,M,P> operator*(matrix<T,M,N> const& A, matrix<T,N,P> const& B)
+constexpr matrix<T,M,P> operator*(matrix<T,M,N> const& A, matrix<T,N,P> const& B)
 {
-	using MatrixT = matrix<T,M,N>;
-	return matrix_ops<MatrixT>::mul(A, B);
+	return _impl::mat::mul(A, B, A.row_indices);
 }
 
 template<typename T, size_t M, size_t N>
-matrix<T,M,N> operator*(matrix<T,N,M> mat, T const v)
+constexpr matrix<T,M,N> operator+(matrix<T,M,N> A, matrix<T,M,N> const& B)
+{
+	return A += B;
+}
+
+template<typename T, size_t M, size_t N>
+constexpr matrix<T,M,N> operator-(matrix<T,M,N> A, matrix<T,M,N> const& B)
+{
+	return A -= B;
+}
+
+template<typename T, size_t M, size_t N>
+constexpr matrix<T,M,N> operator*(matrix<T,N,M> mat, T const v)
 {
 	mat *= v;
 	return mat;
 }
 
 template<typename T, size_t M, size_t N>
-matrix<T,M,N> operator*(T const v, matrix<T,N,M> mat)
+constexpr matrix<T,M,N> operator*(T const v, matrix<T,N,M> mat)
 {
 	mat *= v;
 	return mat;
 }
 
 template<typename T, size_t M, size_t N>
-matrix<T,M,N> operator/(matrix<T,N,M> mat, T const v)
+constexpr matrix<T,M,N> operator/(matrix<T,N,M> mat, T const v)
 {
 	mat /= v;
 	return mat;
+}
+
+template<typename T, size_t M, size_t N>
+constexpr matrix<T,M,N> operator+(matrix<T,N,M> mat)
+{
+	return mat;
+}
+
+template<typename T, size_t M, size_t N>
+constexpr matrix<T,M,N> operator-(matrix<T,N,M> mat)
+{
+	return mat *= T(-1);
 }
 
 template<typename T, size_t M, size_t N>
@@ -327,8 +408,7 @@ void fill(matrix<T,M,N>& mat, T const value)
 	fill(row, value);
 	std::fill(std::begin(mat.rows), std::end(mat.rows), row);
 }
-} // namespace math
-} // namespace aw
+} // namespace aw::math
 
 #include "bits/square_matrix.h"
 #endif//aw_math_matrix_h

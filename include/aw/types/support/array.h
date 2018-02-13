@@ -21,6 +21,7 @@ extend_array(std::array<T,sizeof...(I)>&& array, std::index_sequence<I...>)
 	return {array[I]..., 0};
 }
 
+
 template<typename L, typename T, size_t... I>
 std::array<L,sizeof...(I)>
 convert_array(std::array<T,sizeof...(I)>&& array, std::index_sequence<I...>)
@@ -29,8 +30,9 @@ convert_array(std::array<T,sizeof...(I)>&& array, std::index_sequence<I...>)
 }
 } // namespace _impl
 
+
 template<typename T, size_t N>
-std::array<T,N+1> extend_array(std::array<T,N>&& array)
+[[deprecated]] std::array<T,N+1> extend_array(std::array<T,N>&& array)
 {
 	auto index = std::make_index_sequence<N>{};
 	return _impl::extend_array(std::forward<std::array<T,N>>(array), index);
@@ -42,6 +44,7 @@ std::array<L,N> convert_array(std::array<T,N>&& array)
 	auto index = std::make_index_sequence<N>{};
 	return _impl::convert_array<L>(std::forward<std::array<T,N>>(array), index);
 }
+
 
 template <typename Head, typename...Tail>
 auto make_array(Head arg, Tail...args)

@@ -7,17 +7,19 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _aw_math_
-#define _aw_math_
+#ifndef aw_math_math_h
+#define aw_math_math_h
 #include <cmath>
 #include <cassert>
 #include <cstdlib>
 
-#include <type_traits>
 #include <algorithm>
 
 #include <aw/config.h>
 #include <aw/types/types.h>
+#include <aw/types/traits/basic_traits.h>
+#include <aw/types/traits/common_type.h>
+#include <aw/meta/conditional.h>
 
 namespace aw {
 namespace math {
@@ -41,47 +43,13 @@ constexpr T sign(T x)
 	return _impl::sign(x, std::is_signed<T>());
 }
 
-
-//! Calculate square root of a number
-inline f32 sqrt(f32 const x)
-{
-	return ::sqrtf(x);
-}
-
-//! Calculate square root of a number
-inline f64 sqrt(f64 const x)
-{
-	return ::sqrt(x);
-}
-
-//! Calculate square root of an integer
-inline i32 sqrt(i32 const x)
-{
-	return static_cast<i32>(::sqrt(static_cast<f32>(x)));
-}
-
-//! Calculate inverse square root of a double
-inline f64 invSqrt(const f64 x)
-{
-	return 1.0 / sqrt(x);
-}
-
+using std::sqrt;
+using std::fmin;
+using std::fmax;
 template <typename T>
-inline T clamp(T value, T lower, T upper)
+auto fclamp(T value, T lower, T upper) -> enable_if<is_float<T>, T>
 {
-	return std::min(upper, std::max(value, lower));
-}
-
-template <>
-inline f32 clamp(f32 value, f32 lower, f32 upper)
-{
-	return fminf(lower, fmaxf(value, upper));
-}
-
-template <>
-inline f64 clamp(f64 value, f64 lower, f64 upper)
-{
-	return fmin(lower, fmax(value, upper));
+	return fmax(lower, fmin(value, upper));
 }
 
 /*! Interpolate two values
@@ -96,6 +64,71 @@ T lerp(T const& v0, T const& v1, f64 t)
 {
 	return (1.0 - t)*v0 + t*v1;
 }
+
+//! Divide two integers, rounding result to nearest value
+template<typename T>
+constexpr auto div_round(T v, T d) -> enable_if<is_signed<T>, T>
+{
+	return (v > 0) ?
+	     (v + (d/2)) / d :
+	     (v - (d/2)) / d;
+}
+
+template<typename T, typename U>
+constexpr auto div_round(T v, U d) -> enable_if<is_unsigned<T>, T>
+{
+	return (v + (d/2)) / d;
+}
+
+
+namespace _impl {
+template<typename T, typename U>
+constexpr auto was_rounded_up(T r, U d)
+{
+	return (r != 0) && ((r < 0) != (d < 0));
+}
+} // namespace _impl
+
+//! Divide two integers, rounding result towards negative infinity
+template<typename T, typename U>
+constexpr auto div_floor(T v, U d) -> enable_if<is_signed<T>, T>
+{
+	T q = v / d;
+	T r = v % d;
+	if ( _impl::was_rounded_up( r, d ) )
+		--q;
+	return q;
+}
+
+template<typename T, typename U>
+constexpr auto div_floor(T v, U d) -> enable_if<is_unsigned<T>, T>
+{
+	return v / d;
+}
+
+//! Remainder of div_floor
+template<typename T, typename U>
+constexpr auto mod_floor(T v, U d)
+{
+	T r = v % d;
+	if ( _impl::was_rounded_up( r, d ) )
+		r += d;
+	return r;
+}
+
+template<typename T, typename U>
+auto remainder(T x, U y) -> require<common_type<T,U>, std::is_floating_point>
+{
+	// TODO: edge cases?
+	return x - std::floor( (x + y/2) / y ) * y;
+}
+
+template<typename T, typename U>
+constexpr auto remainder(T x, U y) -> require<common_type<T,U>, std::is_integral>
+{
+	return x - div_floor( (x + y/2) , y ) * y;
+}
+
 } //namespace math
 } //namespace aw
-#endif //_aw_math_
+#endif//aw_math_math_h

@@ -37,6 +37,12 @@ using void_if = enable_if<expr,void>;
 template<bool expr>
 using bool_if = enable_if<expr,bool>;
 
+template<typename T, template<typename> typename P>
+struct require_t : std::enable_if<P<T>::value, T> { };
+
+template<typename T, template<typename> typename P>
+using require = typename require_t<T, P>::type;
+
 /*! Alias for std::conditional */
 template<bool expr, typename T, typename F>
 using conditional = typename std::conditional<expr, T, F>::type;

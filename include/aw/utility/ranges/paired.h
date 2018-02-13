@@ -15,7 +15,6 @@
 #include "zip.h"
 
 namespace aw {
-
 namespace adl {
 using std::begin;
 using std::end;
