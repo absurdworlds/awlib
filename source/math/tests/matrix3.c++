@@ -29,6 +29,21 @@ Test(matrix3_rotation)
 {
 	auto rot = yaw_matrix( degrees<float>( 90.0f ) );
 
+	TestEqual( determinant( rot ), 1.0f );
+
+	/*
+	 *    y                 y    z
+	 *    |                 |   /
+	 *    |                 |  /
+	 *    |                 | /
+	 *    |_________ z  ->  |/_________ x
+	 *    /
+	 *   /
+	 *  /
+	 * /
+	 * x
+	 *
+	 */
 	vector3d<float> vec{1,0,0};
 
 	vector3d<float> expected{0,0,-1};

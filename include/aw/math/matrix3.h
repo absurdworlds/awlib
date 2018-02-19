@@ -63,7 +63,7 @@ matrix3<T> matrix_from_axis_angle(vector3d<T> const& axis, angle<T,Pr> angle)
 
 	constexpr matrix3<T> I = identity_matrix<T,3>;
 
-	/* cross-product matrix */
+	/* cross-product matrix of vector u */
 	matrix3<T> P = {
 		 0, -z,  y,
 		 z,  0, -x,
