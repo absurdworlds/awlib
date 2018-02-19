@@ -73,7 +73,7 @@ constexpr bool operator<(zip_iterator<Is...> const& a, zip_iterator<Js...> const
 template<typename...Ranges>
 struct zip {
 	constexpr zip(Ranges&&... ranges)
-		: ranges{ranges...}
+		: ranges{ forward<Ranges&&>(ranges)... }
 	{}
 
 	constexpr auto begin()
