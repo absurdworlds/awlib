@@ -70,8 +70,8 @@ struct AW_LOG_EXP log_filter : multi_log {
 
 private:
 	log::level min_level = log::info;
-	filter src_filter{ true_func<string_view>{} };
-	filter msg_filter{ true_func<string_view>{} };
+	filter src_filter{ true_func{} };
+	filter msg_filter{ true_func{} };
 };
 } // namespace v1
 } // namespace aw

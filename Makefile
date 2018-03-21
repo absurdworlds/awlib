@@ -1,7 +1,7 @@
 all: libs
 
 # core
-libs: utility io platform hdf graphics obj
+libs: utility io log platform hdf graphics obj
 io:
 	@ $(MAKE) -C 'source/io' $(target)
 gui:
@@ -20,7 +20,7 @@ platform:
 utility:
 	@ $(MAKE) -C 'source/utility' $(target)
 
-logger:
+log:
 	@ $(MAKE) -C 'source/log' $(target)
 
 # tools
