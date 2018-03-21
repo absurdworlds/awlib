@@ -8,28 +8,26 @@
  */
 #ifndef aw_graphics_gl3_render_context_h
 #define aw_graphics_gl3_render_context_h
-#include <vector>
-#include <aw/graphics/gl/program.h>
-#include <aw/graphics/gl/model.h>
-#include <aw/graphics/gl/camera.h>
-#include <aw/graphics/gl/material_manager.h>
+#include <aw/graphics/glsl/mat.h>
 
 namespace aw {
 namespace gl3 {
+struct program;
+struct material;
+struct camera;
 struct render_context {
 	program*  active_program;
 	material* active_material;
 	camera*   active_camera;
 	mat4      camera_position;
 
-	void use_program( program& prg )
+	void set_program( program& prg )
 	{
-		gl::use_program( program_handle{prg} );
 		active_program  = &prg;
 		active_material = nullptr;
 	}
 
-	void use_material( material& mtl )
+	void set_material( material& mtl )
 	{
 		// assert( active_material == mtl.program )
 		active_material = &mtl;

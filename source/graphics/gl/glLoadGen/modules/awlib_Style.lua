@@ -10,11 +10,25 @@ my_style.source = {}
 
 ----------------------------------------------------
 -- Helper styling functions.
+--
+function replace(a, b)
+	return a .. "_" .. b:lower();
+end
 
-local function to_snake(name)
-	local CAPSInCamel = "(.)([A-Z][a-z]+)";
-	local CamelCase   = "([a-z0-9])([A-Z])";
-	return name:gsub(CAPSInCamel,"%1_%2"):gsub(CamelCase, "%1_%2"):lower();
+function to_snake(name)
+	local patterns = {
+		-- unfortuately, requires manual input right now
+		"([a-z])([0-9][A-Z]?[0-9a-z]*[a-z])$",
+		"(.)([A-Z][a-z]+)",
+		"([a-z])([0-9][A-Z])",
+		"([a-z])([A-Z])"
+	};
+
+	for _,pattern in ipairs(patterns) do
+		name = name:gsub(pattern, replace);
+	end
+
+	return name:lower();
 end
 
 local function Flatten(version)

@@ -19,6 +19,23 @@ using gl::uniform_block_index;
 
 struct uniform_buffer {
 	uniform_buffer(GLuint index, size_t size);
+	~uniform_buffer() { cleanup(); }
+
+	uniform_buffer(uniform_buffer&& other)
+		: index{other.index}, ubo{other.ubo}
+	{
+		other.index = 0;
+		other.ubo   = 0;
+	}
+
+	uniform_buffer& operator=(uniform_buffer&& other)
+	{
+		cleanup();
+		index = other.index;
+		ubo   = other.ubo;
+		other.index = 0;
+		other.ubo   = 0;
+	}
 
 	//TODO
 	void set_data(size_t offset, void const* data, size_t size);
@@ -41,6 +58,8 @@ struct uniform_buffer {
 	void bind(program& prg, uniform_block_index);
 
 private:
+	void cleanup();
+
 	GLuint index;
 	GLuint ubo;
 };

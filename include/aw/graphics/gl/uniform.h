@@ -34,6 +34,8 @@ struct uniform_proxy {
 	void operator=(mat<4,4,T> v) { set(v); }
 
 	// TODO: all types
+	void set(GLint x);
+	void set(GLuint x);
 	void set(GLfloat x);
 	void set(GLfloat x, GLfloat y);
 	void set(GLfloat x, GLfloat y, GLfloat z);

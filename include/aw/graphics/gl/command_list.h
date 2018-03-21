@@ -9,7 +9,7 @@
 #ifndef aw_graphics_gl3_command_list_h
 #define aw_graphics_gl3_command_list_h
 #include <vector>
-#include <utility>
+#include <aw/types/strip.h>
 namespace aw {
 namespace gl3 {
 struct render_context;

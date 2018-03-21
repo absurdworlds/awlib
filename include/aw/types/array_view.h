@@ -36,8 +36,7 @@ struct array_ref {
 		: array_ref{cont.data(), cont.size()}
 	{ }
 
-	array_ref& operator=(array_ref const&) = default;
-	//array_ref& operator=(array_ref&&) = default;
+	constexpr array_ref& operator=(array_ref const&) = default;
 
 	constexpr void swap(array_ref& other)
 	{

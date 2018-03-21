@@ -7,9 +7,10 @@
  * There is NO WARRANTY, to the extent permitted by law.
  */
 #include <aw/graphics/gl/program.h>
+#include <aw/graphics/gl/uniform.h>
 #include <aw/graphics/gl/uniform_buffer.h>
 #include <aw/graphics/gl/awgl/shader_func.h>
-#include <aw/graphics/gl/awgl/gl_func.h>
+#include <aw/graphics/gl/awgl/buffer_func.h>
 
 namespace aw::gl3 {
 uniform_buffer::uniform_buffer(GLuint index, size_t size)
@@ -21,6 +22,11 @@ uniform_buffer::uniform_buffer(GLuint index, size_t size)
 	gl::bind_buffer(GL_UNIFORM_BUFFER, 0);
 }
 
+void uniform_buffer::cleanup()
+{
+	gl::delete_buffers(1, &ubo);
+}
+
 void uniform_buffer::set_data(size_t offset, void const* data, size_t size)
 {
 	gl::bind_buffer(GL_UNIFORM_BUFFER, ubo);
@@ -28,9 +34,9 @@ void uniform_buffer::set_data(size_t offset, void const* data, size_t size)
 	gl::bind_buffer(GL_UNIFORM_BUFFER, 0);
 }
 
-void uniform_buffer::bind(program_handle prg, uniform_block_index index)
+void uniform_buffer::bind(program_handle prg, uniform_block_index block)
 {
-	gl::uniform_block_binding(prg, index, ubo);
+	gl::uniform_block_binding(prg, block, index);
 }
 
 void uniform_buffer::bind(program& prg, uniform_block_index index)
@@ -39,30 +45,39 @@ void uniform_buffer::bind(program& prg, uniform_block_index index)
 }
 
 //------------------------------------------------------------------------------
+void uniform_proxy::set(GLint x)
+{
+	gl::uniform_1i( location, x);
+}
+void uniform_proxy::set(GLuint x)
+{
+	gl::uniform_1i( location, x);
+}
+
 void uniform_proxy::set(GLfloat x)
 {
-	gl::uniform1f( location, x);
+	gl::uniform_1f( location, x);
 }
 
 void uniform_proxy::set(GLfloat x, GLfloat y)
 {
-	gl::uniform2f( location, x, y);
+	gl::uniform_2f( location, x, y);
 }
 
 void uniform_proxy::set(GLfloat x, GLfloat y, GLfloat z)
 {
-	gl::uniform3f( location, x, y, z);
+	gl::uniform_3f( location, x, y, z);
 }
 
 void uniform_proxy::set(GLfloat x, GLfloat y, GLfloat z, GLfloat w)
 {
-	gl::uniform4f( location, x, y, z, w);
+	gl::uniform_4f( location, x, y, z, w);
 }
 
 void uniform_proxy::set(mat4 const& m)
 {
 	static_assert( sizeof(vec4) == 4*sizeof(float) );
-	gl::uniform_matrix4fv( location, 1, GL_TRUE, &m[0][0] );
+	gl::uniform_matrix_4fv( location, 1, GL_TRUE, &m[0][0] );
 /*
 	using namespace math;
 	float mt[16] = {

@@ -6,13 +6,10 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef aw_graphics_awgl_api_h
-#define aw_graphics_awgl_api_h
-#include "gl_func.h"
-#include "buffer_func.h"
-#include "shader_func.h"
-#include "texture_func.h"
-#include "vertex_func.h"
-#include "drawbuffer_func.h"
-#include "render_func.h"
-#endif//aw_graphics_awgl_shader_func_h
+#include <aw/graphics/gl/program.h>
+#include <aw/graphics/gl/render_context.h>
+#include <aw/graphics/gl/awgl/shader_func.h>
+
+namespace aw::gl3 {
+
+} // namespace aw::gl3

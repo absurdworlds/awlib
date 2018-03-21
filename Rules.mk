@@ -45,8 +45,8 @@ ProjectDependencies = $(addprefix -l,$(Libraries))
 # User configuration
 include $(RootPath)/Config.mk
 
-ExtraIncludePaths = $(addprefix -I$(RootPath)/,$(CONFIG_INCLUDE_PATHS))
-ExtraLibraryPaths = $(addprefix -L$(RootPath)/,$(CONFIG_LIBRARY_PATHS))
+ExtraIncludePaths = $(addprefix -I,$(CONFIG_INCLUDE_PATHS))
+ExtraLibraryPaths = $(addprefix -L,$(CONFIG_LIBRARY_PATHS))
 
 # Tool configuration
 MKDIR_P = mkdir -p

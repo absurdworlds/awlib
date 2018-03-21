@@ -37,9 +37,9 @@ inline void compile_shader(shader_handle shader)
 	::gl::compile_shader( underlying(shader) );
 }
 
-inline void get_shaderiv(shader_handle shader, shader_param pname, GLint* params)
+inline void get_shader(shader_handle shader, shader_param pname, GLint* params)
 {
-	::gl::get_shaderiv( underlying(shader), underlying(pname), params);
+	::gl::get_shader_iv( underlying(shader), underlying(pname), params);
 }
 
 inline void get_info_log(shader_handle shader, GLsizei bufSize, GLsizei* length, GLchar* infoLog)
@@ -76,9 +76,9 @@ inline void use_program(program_handle program)
 	::gl::use_program( underlying(program) );
 }
 
-inline void get_programiv(program_handle program, program_param pname, GLint* params)
+inline void get_program(program_handle program, program_param pname, GLint* params)
 {
-	::gl::get_programiv(underlying(program), underlying(pname), params);
+	::gl::get_program_iv(underlying(program), underlying(pname), params);
 }
 
 inline void get_info_log(program_handle program, GLsizei bufSize, GLsizei* length, GLchar* infoLog)
@@ -112,147 +112,155 @@ inline uniform_location get_uniform_location(program_handle program, const GLcha
 	};
 }
 
-inline void get_uniformuiv(program_handle program, uniform_location location, GLuint* params)
+inline void get_uniform(GLuint program, GLint location, GLfloat * params)
 {
-	::gl::get_uniformuiv( underlying(program), underlying(location), params);
+	::gl::get_uniform_fv(program, location, params);
+}
+inline void get_uniform(GLuint program, GLint location, GLint * params)
+{
+	::gl::get_uniform_iv(program, location, params);
+}
+inline void get_uniform(program_handle program, uniform_location location, GLuint* params)
+{
+	::gl::get_uniform_uiv( underlying(program), underlying(location), params);
 }
 
 //------------------------------------------------------------------------------
-inline void uniform1f(uniform_location location, GLfloat v0)
+inline void uniform_1f(uniform_location location, GLfloat v0)
 {
-	::gl::uniform1f( underlying(location), v0);
+	::gl::uniform_1f( underlying(location), v0);
 }
-inline void uniform1fv(uniform_location location, GLsizei count, const GLfloat* value)
+inline void uniform_1fv(uniform_location location, GLsizei count, const GLfloat* value)
 {
-	::gl::uniform1fv( underlying(location), count, value);
+	::gl::uniform_1fv( underlying(location), count, value);
 }
-inline void uniform1i(uniform_location location, GLint v0)
+inline void uniform_1i(uniform_location location, GLint v0)
 {
-	::gl::uniform1i( underlying(location), v0);
+	::gl::uniform_1i( underlying(location), v0);
 }
-inline void uniform1iv(uniform_location location, GLsizei count, const GLint* value)
+inline void uniform_1iv(uniform_location location, GLsizei count, const GLint* value)
 {
-	::gl::uniform1iv( underlying(location), count, value);
+	::gl::uniform_1iv( underlying(location), count, value);
 }
-inline void uniform2f(uniform_location location, GLfloat v0, GLfloat v1)
+inline void uniform_2f(uniform_location location, GLfloat v0, GLfloat v1)
 {
-	::gl::uniform2f( underlying(location), v0, v1);
+	::gl::uniform_2f( underlying(location), v0, v1);
 }
-inline void uniform2fv(uniform_location location, GLsizei count, const GLfloat* value)
+inline void uniform_2fv(uniform_location location, GLsizei count, const GLfloat* value)
 {
-	::gl::uniform2fv( underlying(location), count, value);
+	::gl::uniform_2fv( underlying(location), count, value);
 }
-inline void uniform2i(uniform_location location, GLint v0, GLint v1)
+inline void uniform_2i(uniform_location location, GLint v0, GLint v1)
 {
-	::gl::uniform2i( underlying(location), v0, v1);
+	::gl::uniform_2i( underlying(location), v0, v1);
 }
-inline void uniform2iv(uniform_location location, GLsizei count, const GLint* value)
+inline void uniform_2iv(uniform_location location, GLsizei count, const GLint* value)
 {
-	::gl::uniform2iv( underlying(location), count, value);
+	::gl::uniform_2iv( underlying(location), count, value);
 }
-inline void uniform3f(uniform_location location, GLfloat v0, GLfloat v1, GLfloat v2)
+inline void uniform_3f(uniform_location location, GLfloat v0, GLfloat v1, GLfloat v2)
 {
-	::gl::uniform3f( underlying(location), v0, v1, v2);
+	::gl::uniform_3f( underlying(location), v0, v1, v2);
 }
-inline void uniform3fv(uniform_location location, GLsizei count, const GLfloat* value)
+inline void uniform_3fv(uniform_location location, GLsizei count, const GLfloat* value)
 {
-	::gl::uniform3fv( underlying(location), count, value);
+	::gl::uniform_3fv( underlying(location), count, value);
 }
-inline void uniform3i(uniform_location location, GLint v0, GLint v1, GLint v2)
+inline void uniform_3i(uniform_location location, GLint v0, GLint v1, GLint v2)
 {
-	::gl::uniform3i( underlying(location), v0, v1, v2);
+	::gl::uniform_3i( underlying(location), v0, v1, v2);
 }
-inline void uniform3iv(uniform_location location, GLsizei count, const GLint* value)
+inline void uniform_3iv(uniform_location location, GLsizei count, const GLint* value)
 {
-	::gl::uniform3iv( underlying(location), count, value);
+	::gl::uniform_3iv( underlying(location), count, value);
 }
-inline void uniform4f(uniform_location location, GLfloat v0, GLfloat v1, GLfloat v2, GLfloat v3)
+inline void uniform_4f(uniform_location location, GLfloat v0, GLfloat v1, GLfloat v2, GLfloat v3)
 {
-	::gl::uniform4f( underlying(location), v0, v1, v2, v3);
+	::gl::uniform_4f( underlying(location), v0, v1, v2, v3);
 }
-inline void uniform4fv(uniform_location location, GLsizei count, const GLfloat* value)
+inline void uniform_4fv(uniform_location location, GLsizei count, const GLfloat* value)
 {
-	::gl::uniform4fv( underlying(location), count, value);
-}
-
-inline void uniform4i(uniform_location location, GLint v0, GLint v1, GLint v2, GLint v3)
-{
-	::gl::uniform4i( underlying(location), v0, v1, v2, v3);
-}
-inline void uniform4iv(uniform_location location, GLsizei count, const GLint* value)
-{
-	::gl::uniform4iv( underlying(location), count, value);
-}
-inline void uniform1ui(uniform_location location, GLuint v0)
-{
-	::gl::uniform1ui( underlying(location), v0);
-}
-inline void uniform1uiv(uniform_location location, GLsizei count, const GLuint * value)
-{
-	::gl::uniform1uiv( underlying(location), count, value);
-}
-inline void uniform2ui(uniform_location location, GLuint v0, GLuint v1)
-{
-	::gl::uniform2ui( underlying(location), v0, v1);
-}
-inline void uniform2uiv(uniform_location location, GLsizei count, const GLuint * value)
-{
-	::gl::uniform2uiv( underlying(location), count, value);
-}
-inline void uniform3ui(uniform_location location, GLuint v0, GLuint v1, GLuint v2)
-{
-	::gl::uniform3ui( underlying(location), v0, v1, v2);
-}
-inline void uniform3uiv(uniform_location location, GLsizei count, const GLuint * value)
-{
-	::gl::uniform3uiv( underlying(location), count, value);
-}
-inline void uniform4ui(uniform_location location, GLuint v0, GLuint v1, GLuint v2, GLuint v3)
-{
-	::gl::uniform4ui( underlying(location), v0, v1, v2, v3);
-}
-inline void uniform4uiv(uniform_location location, GLsizei count, const GLuint * value)
-{
-	::gl::uniform4uiv( underlying(location), count, value);
+	::gl::uniform_4fv( underlying(location), count, value);
 }
 
+inline void uniform_4i(uniform_location location, GLint v0, GLint v1, GLint v2, GLint v3)
+{
+	::gl::uniform_4i( underlying(location), v0, v1, v2, v3);
+}
+inline void uniform_4iv(uniform_location location, GLsizei count, const GLint* value)
+{
+	::gl::uniform_4iv( underlying(location), count, value);
+}
+inline void uniform_1ui(uniform_location location, GLuint v0)
+{
+	::gl::uniform_1ui( underlying(location), v0);
+}
+inline void uniform_1uiv(uniform_location location, GLsizei count, const GLuint * value)
+{
+	::gl::uniform_1uiv( underlying(location), count, value);
+}
+inline void uniform_2ui(uniform_location location, GLuint v0, GLuint v1)
+{
+	::gl::uniform_2ui( underlying(location), v0, v1);
+}
+inline void uniform_2uiv(uniform_location location, GLsizei count, const GLuint * value)
+{
+	::gl::uniform_2uiv( underlying(location), count, value);
+}
+inline void uniform_3ui(uniform_location location, GLuint v0, GLuint v1, GLuint v2)
+{
+	::gl::uniform_3ui( underlying(location), v0, v1, v2);
+}
+inline void uniform_3uiv(uniform_location location, GLsizei count, const GLuint * value)
+{
+	::gl::uniform_3uiv( underlying(location), count, value);
+}
+inline void uniform_4ui(uniform_location location, GLuint v0, GLuint v1, GLuint v2, GLuint v3)
+{
+	::gl::uniform_4ui( underlying(location), v0, v1, v2, v3);
+}
+inline void uniform_4uiv(uniform_location location, GLsizei count, const GLuint * value)
+{
+	::gl::uniform_4uiv( underlying(location), count, value);
+}
 
-inline void uniform_matrix2fv(uniform_location location, GLsizei count, GLboolean transpose, const GLfloat* value)
+
+inline void uniform_matrix_2fv(uniform_location location, GLsizei count, GLboolean transpose, const GLfloat* value)
 {
-	::gl::uniform_matrix2fv( underlying(location), count, transpose, value);
+	::gl::uniform_matrix_2fv( underlying(location), count, transpose, value);
 }
-inline void uniform_matrix3fv(uniform_location location, GLsizei count, GLboolean transpose, const GLfloat* value)
+inline void uniform_matrix_3fv(uniform_location location, GLsizei count, GLboolean transpose, const GLfloat* value)
 {
-	::gl::uniform_matrix3fv( underlying(location), count, transpose, value);
+	::gl::uniform_matrix_3fv( underlying(location), count, transpose, value);
 }
-inline void uniform_matrix4fv(uniform_location location, GLsizei count, GLboolean transpose, const GLfloat* value)
+inline void uniform_matrix_4fv(uniform_location location, GLsizei count, GLboolean transpose, const GLfloat* value)
 {
-	::gl::uniform_matrix4fv( underlying(location), count, transpose, value);
+	::gl::uniform_matrix_4fv( underlying(location), count, transpose, value);
 }
 
-inline void uniform_matrix2x3fv(uniform_location location, GLsizei count, GLboolean transpose, const GLfloat * value)
+inline void uniform_matrix_2x3fv(uniform_location location, GLsizei count, GLboolean transpose, const GLfloat * value)
 {
-	::gl::uniform_matrix2x3fv( underlying(location), count, transpose, value);
+	::gl::uniform_matrix_2x3fv( underlying(location), count, transpose, value);
 }
-inline void uniform_matrix2x4fv(uniform_location location, GLsizei count, GLboolean transpose, const GLfloat * value)
+inline void uniform_matrix_2x4fv(uniform_location location, GLsizei count, GLboolean transpose, const GLfloat * value)
 {
-	::gl::uniform_matrix2x4fv( underlying(location), count, transpose, value);
+	::gl::uniform_matrix_2x4fv( underlying(location), count, transpose, value);
 }
-inline void uniform_matrix3x2fv(uniform_location location, GLsizei count, GLboolean transpose, const GLfloat * value)
+inline void uniform_matrix_3x2fv(uniform_location location, GLsizei count, GLboolean transpose, const GLfloat * value)
 {
-	::gl::uniform_matrix3x2fv( underlying(location), count, transpose, value);
+	::gl::uniform_matrix_3x2fv( underlying(location), count, transpose, value);
 }
-inline void uniform_matrix3x4fv(uniform_location location, GLsizei count, GLboolean transpose, const GLfloat * value)
+inline void uniform_matrix_3x4fv(uniform_location location, GLsizei count, GLboolean transpose, const GLfloat * value)
 {
-	::gl::uniform_matrix3x4fv( underlying(location), count, transpose, value);
+	::gl::uniform_matrix_3x4fv( underlying(location), count, transpose, value);
 }
-inline void uniform_matrix4x2fv(uniform_location location, GLsizei count, GLboolean transpose, const GLfloat * value)
+inline void uniform_matrix_4x2fv(uniform_location location, GLsizei count, GLboolean transpose, const GLfloat * value)
 {
-	::gl::uniform_matrix4x2fv( underlying(location), count, transpose, value);
+	::gl::uniform_matrix_4x2fv( underlying(location), count, transpose, value);
 }
-inline void uniform_matrix4x3fv(uniform_location location, GLsizei count, GLboolean transpose, const GLfloat * value)
+inline void uniform_matrix_4x3fv(uniform_location location, GLsizei count, GLboolean transpose, const GLfloat * value)
 {
-	::gl::uniform_matrix4x3fv( underlying(location), count, transpose, value);
+	::gl::uniform_matrix_4x3fv( underlying(location), count, transpose, value);
 }
 
 //------------------------------------------------------------------------------
