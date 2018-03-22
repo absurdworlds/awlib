@@ -7,7 +7,7 @@
  * There is NO WARRANTY, to the extent permitted by law.
  */
 #include <aw/graphics/gl/program_manager.h>
-#include <aw/graphics/gl/shader_file.h>
+#include <aw/graphics/gl/utility/program_loader.h>
 #include <aw/graphics/gl/awgl/shader_func.h>
 
 namespace aw::gl3 {
