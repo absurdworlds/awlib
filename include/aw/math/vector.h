@@ -203,9 +203,7 @@ struct vector {
 		if (length == 0)
 			return *this;
 
-		length /= sqrt( length );
-
-		return (*this *= length);
+		return (*this /= sqrt( length ));
 	}
 
 	constexpr T&       operator[](size_t idx)       { return elems[idx]; }
