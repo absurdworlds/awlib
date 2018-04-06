@@ -87,25 +87,25 @@ constexpr typename M::column_type col(M const& a, size_t j, index_sequence<Is...
 }
 
 template<class T, size_t M, size_t N, size_t...Js>
-static constexpr matrix<T,N,M> transpose(matrix<T,M,N> const& mat, index_sequence<Js...>)
+constexpr matrix<T,N,M> transpose(matrix<T,M,N> const& mat, index_sequence<Js...>)
 {
 	return { col<Js>(mat)... };
 }
 
 template<typename M, typename Func, size_t...Js>
-static constexpr void for_each_column(M& mat, Func func, index_sequence<Js...>)
+constexpr void for_each_column(M& mat, Func func, index_sequence<Js...>)
 {
 	(void(func(mat[Js])), ...);
 }
 
 template<typename M, typename Func, size_t...Is>
-static constexpr void for_each_row(M& mat, Func func, index_sequence<Is...>)
+constexpr void for_each_row(M& mat, Func func, index_sequence<Is...>)
 {
 	(void(func(mat[Is])), ...);
 }
 
 template<typename M, typename Func, size_t...Is>
-static constexpr void for_each(M& mat, Func func, index_sequence<Is...>)
+constexpr void for_each(M& mat, Func func, index_sequence<Is...>)
 {
 	(row<Is>(mat).for_each(func), ...);
 }
