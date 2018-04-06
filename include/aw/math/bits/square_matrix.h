@@ -114,7 +114,7 @@ constexpr MatrixT inv2(MatrixT const& mat, index_sequence<Is...>)
 }
 } // namespace _impl
 
-template<typename T, size_t N>
+template<typename T, size_t N> [[nodiscard]]
 constexpr optional<matrix<T,N,N>> inverse(matrix<T,N,N> const& mat)
 {
 	T det = determinant(mat);

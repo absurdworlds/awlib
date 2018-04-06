@@ -332,7 +332,7 @@ constexpr matrix<T,N-1,M-1> sub_matrix(matrix<T,M,N> const& mat)
 }
 
 //! Transpose a matrix
-template<typename T, size_t M, size_t N>
+template<typename T, size_t M, size_t N> [[nodiscard]]
 constexpr matrix<T,N,M> transpose(matrix<T,M,N> const& mat)
 {
 	return _impl::mat::transpose(mat, mat.column_indices);
