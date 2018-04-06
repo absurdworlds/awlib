@@ -66,7 +66,7 @@ matrix3<T> look_at(vector3d<T> forward, vector3d<T> up = {0,1,0})
  * and orients it to ‘look’ at point \a to.
  */
 template<typename T>
-matrix4<T> look_at(vector3d<T> from, vector3d<T> to, vector3d<T> up = {0,1,0})
+matrix4<T> look_at(vector3d<T> from, vector3d<T> to, vector3d<T> up)
 {
 	auto trs = expand_matrix( look_at(to - from, up) );
 	trs[0][3] = from[0];
