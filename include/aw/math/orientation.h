@@ -11,6 +11,7 @@
 #define aw_math_polar_h
 #include <aw/math/trigonometry.h>
 #include <aw/math/vector3d.h>
+#include <aw/math/matrix4.h>
 namespace aw::math {
 /*!
  * Convert spherical coordinates into cartesian coordiantes.
@@ -41,5 +42,38 @@ vector3d<T> spherical_to_cartesian(T r, angle<T,P> phi, angle<T,P> theta)
 	return {x,y,z};
 }
 
+inline namespace rh {
+/*!
+ * Compute matrix which orients an object in such way,
+ * that it faces in direction \a forward.
+ *
+ * \up is a vector perpendicular to the Z axis.
+ * \a forward must not be same as \a up.
+ */
+template<typename T>
+matrix3<T> look_at(vector3d<T> forward, vector3d<T> up = {0,1,0})
+{
+	forward = -forward.normalize();
+	auto right   = cross(up,forward).normalize();
+	up           = cross(forward,right);
+
+	matrix3<T> rot{ right, up, forward };
+	return transpose(rot);
+}
+
+/*!
+ * Compute matrix which translates an object into position \a from,
+ * and orients it to ‘look’ at point \a to.
+ */
+template<typename T>
+matrix4<T> look_at(vector3d<T> from, vector3d<T> to, vector3d<T> up = {0,1,0})
+{
+	auto trs = expand_matrix( look_at(to - from, up) );
+	trs[0][3] = from[0];
+	trs[1][3] = from[1];
+	trs[2][3] = from[2];
+	return trs;
+}
+} //inline namespace rh
 } // namespace aw::math
 #endif//aw_math_polar_h
