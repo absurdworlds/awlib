@@ -43,6 +43,16 @@ constexpr matrix<T,N,N> identity_matrix = _impl::make_identity<T,N>();
 	return _impl::set_identity(tmp, tmp.row_indices);
 }(); */
 
+/*!
+ * Add one more row/column to the matrix.
+ */
+template<typename T, size_t N>
+constexpr matrix<T,N+1,N+1> expand_matrix(matrix<T,N,N> const& sub)
+{
+	matrix<T,N+1,N+1> mat = identity_matrix<T,N+1>;
+	mat = sub;
+	return mat;
+}
 
 template <size_t Row, size_t Col, typename T, size_t N>
 constexpr T matrix_minor(matrix<T,N,N> const& mat)
