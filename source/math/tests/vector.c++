@@ -1,6 +1,7 @@
 #include <aw/utility/test.h>
 #include <aw/utility/to_string/math/vector.h>
 #include <aw/math/vector3d.h>
+#include <aw/math/vector_compare.h>
 #include <algorithm>
 
 TestFile("Vector");
@@ -62,6 +63,24 @@ Test(vec_apply) {
 	TestEqual( c[0], b[0] );
 	TestEqual( c[1], b[1] );
 	TestEqual( c[2], b[2] );
+};
+
+Test(vec_cross) {
+	vector3d<int> x{1,0,0};
+	vector3d<int> y{0,1,0};
+	vector3d<int> z{0,0,1};
+
+	vector3d<int> o{0,0,0};
+
+	auto x_x = cross(x,x);
+	auto x_y = cross(x,y);
+	auto y_x = cross(y,x);
+	auto z_y = cross(z,y);
+
+	TestEqual(x_x, o);
+	TestEqual(x_y, z);
+	TestEqual(x_y, -y_x);
+	TestEqual(z_y, -x);
 };
 } // namespace math
 } // namespace aw
