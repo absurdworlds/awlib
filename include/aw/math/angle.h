@@ -68,6 +68,7 @@ public:
 	constexpr angle& normalize()
 	{
 		constexpr bool not_float   = !treat_as_floating_point<Rep>;
+		// TODO: does denominator<Period> have to be equal to 1?
 		constexpr bool valid_ratio = is_ratio<Period> && denominator<Period> == 1;
 		constexpr bool use_integral_func = not_float && valid_ratio;
 		if constexpr (use_integral_func) {
@@ -111,10 +112,8 @@ using math::radians;
 using math::degrees;
 using math::turns;
 } // namespace aw
-
-
+//------------------------------------------------------------------------------
 namespace std {
-
 template<typename R1, typename P1, typename R2, typename P2>
 struct common_type<aw::angle<R1, P1>, aw::angle<R2, P2> >
 {
@@ -122,10 +121,8 @@ struct common_type<aw::angle<R1, P1>, aw::angle<R2, P2> >
 };
 
 } // namespace std
-
-#include <iostream>
+//------------------------------------------------------------------------------
 namespace aw::math {
-
 template <typename R1, typename P1, typename R2, typename P2>
 constexpr auto operator+(angle<R1,P1> const& a, angle<R2,P2> const& b) ->
 	common_type< angle<R1,P1>, angle<R2,P2> >
