@@ -57,6 +57,12 @@ Test(angle_normalize) {
 	TestEqual( degrees<int>{ 270 }.normalize().count(), -90 );
 	TestEqual( degrees<int>{ 360 }.normalize().count(), 0 );
 	TestEqual( degrees<int>{ 540 }.normalize().count(), -180 );
+
+	TestEqual( degrees<float>{ -181.f }.normalize().count(), 179.f );
+	TestEqual( degrees<float>{ 90.f }.normalize().count(), 90.f );
+	TestEqual( degrees<float>{ -90.f }.normalize().count(), -90.f );
+	TestEqual( degrees<float>{ 360.f }.normalize().count(), 0.f );
+	TestEqual( degrees<float>{ 540.f }.normalize().count(), -180.f );
 }
 } // namespace math
 } // namespace aw

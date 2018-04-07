@@ -33,14 +33,17 @@ constexpr bool is_angle = false;
 template<typename Rep, typename Period>
 constexpr bool is_angle<angle<Rep,Period>> = true;
 
-struct radian_unit { static constexpr double value = 2*pi; };
+struct radian_unit {
+	using type = radian_unit;
+	static constexpr double value = 2*pi;
+};
 
 template<typename Rep, typename Period = radian_unit>
 class angle {
 	Rep value;
 public:
 	using rep = Rep;
-	using period_type = Period;
+	using period = typename Period::type;
 
 	// TODO: proper cast
 	template<typename Rep2, typename = enable_if< is_convertible<Rep2, rep> >>
@@ -50,26 +53,12 @@ public:
 	constexpr angle( Ang2 const& other )
 		: value{ units::convert(
 			Rep( other.count() ),
-			typename Ang2::period_type{},
+			typename Ang2::period{},
 			Period{}
 		)}
 	{ }
 
 	constexpr Rep count() const { return value; }
-
-
-	void normalize_impl( std::false_type )
-	{
-		// TODO: guaranteed to be in (-period/2; period/2] range?
-		constexpr auto period = units::extract< double, Period >;
-		value = remainder(value, period);
-	}
-
-	constexpr void normalize_impl( std::true_type )
-	{
-		constexpr intmax_t num = numerator<Period>;
-		value = remainder(value, num);
-	}
 
 	/*!
 	 * Normalize angle to be in range (-period/2; period/2].
@@ -81,8 +70,14 @@ public:
 		constexpr bool not_float   = !treat_as_floating_point<Rep>;
 		constexpr bool valid_ratio = is_ratio<Period> && denominator<Period> == 1;
 		constexpr bool use_integral_func = not_float && valid_ratio;
-		using chooser = std::integral_constant<bool, use_integral_func>;
-		normalize_impl( chooser{} );
+		if constexpr (use_integral_func) {
+			constexpr intmax_t num = numerator<Period>;
+			value = remainder(value, num);
+		} else {
+			// TODO: guaranteed to be in (-period/2; period/2] range?;
+			constexpr auto period_value = units::extract< double, Period >;
+			value = remainder(value, period_value);
+		}
 		return *this;
 	}
 
