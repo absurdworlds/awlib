@@ -74,8 +74,16 @@ void uniform_proxy::set(GLfloat x, GLfloat y, GLfloat z, GLfloat w)
 	gl::uniform_4f( location, x, y, z, w);
 }
 
+void uniform_proxy::set(mat3 const& m)
+{
+	static_assert( sizeof(mat3) == 3*sizeof(vec3) );
+	static_assert( sizeof(vec3) == 3*sizeof(float) );
+	gl::uniform_matrix_3fv( location, 1, GL_TRUE, &m[0][0] );
+}
+
 void uniform_proxy::set(mat4 const& m)
 {
+	static_assert( sizeof(mat4) == 4*sizeof(vec4) );
 	static_assert( sizeof(vec4) == 4*sizeof(float) );
 	gl::uniform_matrix_4fv( location, 1, GL_TRUE, &m[0][0] );
 /*
