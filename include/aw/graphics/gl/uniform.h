@@ -31,6 +31,8 @@ struct uniform_proxy {
 	template<typename T>
 	void operator=(vec<4,T> v) { set(v[0], v[1], v[2], v[3]); }
 	template<typename T>
+	void operator=(mat<3,3,T> v) { set(v); }
+	template<typename T>
 	void operator=(mat<4,4,T> v) { set(v); }
 
 	// TODO: all types
@@ -41,6 +43,7 @@ struct uniform_proxy {
 	void set(GLfloat x, GLfloat y, GLfloat z);
 	void set(GLfloat x, GLfloat y, GLfloat z, GLfloat w);
 
+	void set(mat3 const& m);
 	void set(mat4 const& m);
 
 private:
