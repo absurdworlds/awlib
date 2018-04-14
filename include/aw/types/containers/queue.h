@@ -16,6 +16,8 @@
 #include <aw/meta/conditional.h>
 #include <aw/types/traits/iterator.h>
 #include <aw/types/containers/bits/shared.h>
+#include <aw/types/containers/bits/traits.h>
+#include <aw/types/containers/bits/cbuffer.h>
 
 // TODO: insert and remove
 // TODO: assign & assignment operators
@@ -24,157 +26,7 @@
 namespace aw {
 namespace _impl {
 template <typename Traits>
-struct const_traits {
-	using value_type        = typename Traits::value_type;
-	using pointer           = typename Traits::const_pointer;
-	using reference         = typename Traits::const_reference;
-	using difference_type   = typename Traits::difference_type;
-};
-
-template <typename Queue, typename Traits>
-class queue_iterator {
-public:
-	using value_type        = typename Traits::value_type;
-	using pointer           = typename Traits::pointer;
-	using reference         = typename Traits::reference;
-	using difference_type   = typename Traits::difference_type;
-	using iterator_category = std::random_access_iterator_tag;
-
-	using iterator = queue_iterator;
-
-private:
-	Queue const* q = nullptr;
-	pointer p      = nullptr;
-
-	pointer map() const noexcept
-	{
-		return q->map_p(p);
-	}
-
-public:
-	queue_iterator() noexcept = default;
-
-	queue_iterator(Queue const& q, pointer p) noexcept
-		: q(&q), p(p)
-	{}
-
-	queue_iterator(iterator const& other) noexcept
-		: q(other.q), p(other.p)
-	{
-	}
-
-	iterator& operator=(iterator const& other)
-	{
-		q = other.q;
-		p = other.p;
-	}
-
-	reference operator*() const noexcept
-	{
-		return *p;
-	}
-
-	pointer operator->() const noexcept
-	{
-		return &(operator*());
-	}
-
-	iterator& operator++() noexcept
-	{
-		p = q->next_p(p);
-		return *this;
-	}
-
-	iterator operator++(int) noexcept
-	{
-		iterator tmp{*this};
-		++(*this);
-		return tmp;
-	}
-
-	iterator& operator+=(difference_type n) noexcept
-	{
-		p = q->add_p(p, n);
-		return *this;
-	}
-
-	friend iterator operator+(iterator i, difference_type n) noexcept
-	{
-		return i += n;
-	}
-
-	friend iterator operator+(difference_type n, iterator i) noexcept
-	{
-		return i += n;
-	}
-
-	reference operator[](difference_type n) const noexcept
-	{
-		return *(*this + n);
-	}
-
-	iterator& operator--() noexcept
-	{
-		p = q->prev_p(p);
-		return *this;
-	}
-
-	iterator operator--(int) noexcept
-	{
-		iterator tmp{*this};
-		--(*this);
-		return tmp;
-	}
-
-	iterator& operator-=(difference_type n) noexcept
-	{
-		p = q->sub_p(p, n);
-		return *this;
-	}
-
-	friend iterator operator-(iterator i, difference_type n) noexcept
-	{
-		return i -= n;
-	}
-
-	friend difference_type
-	operator-(iterator const& a, iterator const& b) noexcept
-	{
-		return a.map() - b.map();
-	}
-
-	bool operator==(iterator const& other) const noexcept
-	{
-		//return (map() == other.map());
-		return p == other.p;
-	}
-
-	bool operator!=(iterator const& other) const noexcept
-	{
-		//return (map() != other.map());
-		return p != other.p;
-	}
-
-	bool operator<(iterator const& other) const noexcept
-	{
-		return (map() < other.map());
-	}
-
-	bool operator>(iterator const& other) const noexcept
-	{
-		return (map() > other.map());
-	}
-
-	friend bool operator>=(iterator const& a, iterator const b) noexcept
-	{
-		return !(a < b);
-	}
-
-	friend bool operator<=(iterator const& a, iterator const b) noexcept
-	{
-		return !(a > b);
-	}
-};
+using queue_iterator = circular_iterator<Traits>;
 
 struct queue_base_common {
 	void length_error() const
@@ -293,7 +145,7 @@ protected:
 		return static_cast<size_type>(impl.end - impl.begin);
 	}
 
-	struct impl : Allocator {
+	struct impl : Allocator, cbuffer_data<T> {
 		impl() noexcept = default;
 
 		impl(Allocator const& a) noexcept
@@ -306,16 +158,8 @@ protected:
 
 		void swap(impl& other) noexcept
 		{
-			std::swap(head,  other.head);
-			std::swap(tail,  other.tail);
-			std::swap(begin, other.begin);
-			std::swap(end,   other.end);
+			cbuffer_data<T>::swap(other);
 		}
-
-		pointer head = nullptr;
-		pointer tail = nullptr;
-		pointer begin = nullptr;
-		pointer end   = nullptr;
 	} impl;
 
 private:
@@ -349,8 +193,8 @@ public:
 	using difference_type  = typename allocator_type::difference_type;
 	using pointer          = typename allocator_type::pointer;
 	using const_pointer    = typename allocator_type::const_pointer;
-	using iterator         = _impl::queue_iterator<queue, Allocator>;
-	using const_iterator   = _impl::queue_iterator<queue, _impl::const_traits<Allocator>>;
+	using iterator         = _impl::queue_iterator<Allocator>;
+	using const_iterator   = _impl::queue_iterator<_impl::const_traits<Allocator>>;
 	using reverse_iterator       = std::reverse_iterator<iterator>;
 	using const_reverse_iterator = std::reverse_iterator<const_iterator>;
 
@@ -463,13 +307,13 @@ public:
 	/*! Iterator to the front of queue */
 	iterator begin()
 	{
-		return {*this, impl.head};
+		return {impl.head, impl};
 	}
 
 	/*! Iterator to the front of queue */
 	const_iterator begin() const
 	{
-		return {*this, impl.head};
+		return {impl.head, impl};
 	}
 
 	/*! Iterator to the front of queue */
@@ -481,13 +325,13 @@ public:
 	/*! Iterator to element past the end of queue */
 	iterator end()
 	{
-		return {*this, impl.tail};
+		return {impl.tail, impl};
 	}
 
 	/*! Iterator to element past the end of queue */
 	const_iterator end() const
 	{
-		return {*this, impl.tail};
+		return {impl.tail, impl};
 	}
 
 	/*! Iterator to element past the end of queue */
@@ -600,7 +444,7 @@ public:
 	{
 		assert(!empty() && "pop_front() on empty queue.");
 		allocator_traits::destroy(alloc(), impl.head);
-		impl.head = next_p(impl.head);
+		impl.head = impl.next_p(impl.head);
 	}
 
 	/*!
@@ -609,7 +453,7 @@ public:
 	void pop_back()
 	{
 		assert(!empty() && "pop_back() on empty queue.");
-		impl.tail = prev_p(impl.tail);
+		impl.tail = impl.prev_p(impl.tail);
 		allocator_traits::destroy(alloc(), impl.tail);
 	}
 
@@ -653,7 +497,7 @@ public:
 	{
 		check_capacity();
 
-		impl.head = prev_p(impl.head);
+		impl.head = impl.prev_p(impl.head);
 		construct(impl.head, std::forward<Args>(args)...);
 	}
 
@@ -666,7 +510,7 @@ public:
 		check_capacity();
 
 		construct(impl.tail, std::forward<Args>(args)...);
-		impl.tail = next_p(impl.tail);
+		impl.tail = impl.next_p(impl.tail);
 	}
 
 	/*! Get element at the head of queue */
@@ -718,50 +562,8 @@ private:
 
 	void destroy(pointer head, pointer tail)
 	{
-		for (; head != tail; head = next_p(head))
+		for (; head != tail; head = impl.next_p(head))
 			allocator_traits::destroy(alloc(), head);
-	}
-
-	template<typename P>
-	P next_p(P p) const noexcept
-	{
-		if (p + 1 == impl.end)
-			return impl.begin;
-		return p + 1;
-	}
-
-	template<typename P>
-	P prev_p(P p) const noexcept
-	{
-		if (p == impl.begin)
-			return impl.end - 1;
-		return p - 1;
-	}
-
-	template<typename P>
-	P add_p(P p, difference_type n) const noexcept
-	{
-		if (n < impl.end - p)
-			return p + n;
-
-		return p + n - allocated_size();
-	}
-
-	template<typename P>
-	P sub_p(P p, difference_type n) const noexcept
-	{
-		if (n <= p - impl.begin)
-			return p - n;
-		return p - n + allocated_size();
-	}
-
-	//! Map pointer from circular to linear space
-	template<typename P>
-	P map_p(P p) const noexcept
-	{
-		if (p < impl.head)
-			return p + (impl.end - impl.head);
-		return impl.begin + (p - impl.head);
 	}
 
 	size_type next_size() const noexcept

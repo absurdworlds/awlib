@@ -23,11 +23,11 @@ Test(queue_ctors) {
 		TestAssert(q0.empty());
 		TestAssert(q4.empty());
 
-		TestAssert(q1.size() == 11);
-		TestAssert(q2.size() == 11);
-		TestAssert(q3.size() == 5);
-		TestAssert(q5.size() == 5);
-		TestAssert(q6.size() == 2);
+		TestEqual(q1.size(), 11);
+		TestEqual(q2.size(), 11);
+		TestEqual(q3.size(), 5);
+		TestEqual(q5.size(), 5);
+		TestEqual(q6.size(), 2);
 	}
 }
 
