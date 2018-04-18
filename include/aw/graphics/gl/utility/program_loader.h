@@ -48,6 +48,7 @@ inline std::optional<program> load_program( string_view v, string_view f )
 	bool linked = program.link( shaderList );
 	if (!linked)
 		return std::nullopt;
+	return {std::move(program)};
 }
 } // namespace gl3
 } // namespace aw
