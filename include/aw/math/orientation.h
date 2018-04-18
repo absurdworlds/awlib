@@ -80,6 +80,16 @@ matrix4<T> look_at(vector3d<T> from, vector3d<T> to, vector3d<T> up)
 	trs[2][3] = from[2];
 	return trs;
 }
+
+template<typename T>
+matrix4<T> look_at_inverse(vector3d<T> from, vector3d<T> to, vector3d<T> up)
+{
+	auto trs = expand_matrix( look_at_inverse(to - from, up) );
+	trs[0][3] = from[0];
+	trs[1][3] = from[1];
+	trs[2][3] = from[2];
+	return trs;
+}
 } //inline namespace rh
 } // namespace aw::math
 #endif//aw_math_polar_h
