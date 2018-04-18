@@ -43,6 +43,17 @@ vector3d<T> spherical_to_cartesian(T r, angle<T,P> phi, angle<T,P> theta)
 }
 
 inline namespace rh {
+template<typename T>
+matrix3<T> look_at_inverse(vector3d<T> forward, vector3d<T> up = {0,1,0})
+{
+	forward = -forward.normalize();
+	auto right   = cross(up,forward).normalize();
+	up           = cross(forward,right);
+
+	matrix3<T> rot{ right, up, forward };
+	return rot;
+}
+
 /*!
  * Compute matrix which orients an object in such way,
  * that it faces in direction \a forward.
@@ -53,12 +64,7 @@ inline namespace rh {
 template<typename T>
 matrix3<T> look_at(vector3d<T> forward, vector3d<T> up = {0,1,0})
 {
-	forward = -forward.normalize();
-	auto right   = cross(up,forward).normalize();
-	up           = cross(forward,right);
-
-	matrix3<T> rot{ right, up, forward };
-	return transpose(rot);
+	return transpose(look_at_inverse);
 }
 
 /*!
