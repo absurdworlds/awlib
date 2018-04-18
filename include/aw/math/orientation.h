@@ -64,7 +64,7 @@ matrix3<T> look_at_inverse(vector3d<T> forward, vector3d<T> up = {0,1,0})
 template<typename T>
 matrix3<T> look_at(vector3d<T> forward, vector3d<T> up = {0,1,0})
 {
-	return transpose(look_at_inverse);
+	return transpose(look_at_inverse(forward,up));
 }
 
 /*!
