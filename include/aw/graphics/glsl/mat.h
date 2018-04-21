@@ -23,11 +23,11 @@ auto array(mat<N,M,T> m)
 {
 	// TODO: better?
 	std::array<T,N*M> arr{};
-	transpose(m);
 	size_t idx = 0;
-	m.for_each([&] (T const& ele) {
+	auto copy_ele = [&] (T const& ele) {
 		arr[idx++] = ele;
-	});
+	};
+	transpose(m).for_each(copy_ele);
 	return arr;
 }
 } // namespace gl3
