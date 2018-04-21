@@ -5,6 +5,7 @@
 #include <aw/utility/string/split.h>
 #include <aw/math/matrix3.h>
 #include <aw/math/matrix4.h>
+#include <aw/math/transform.h>
 #include <aw/math/math.h>
 #include <aw/math/angle.h>
 
@@ -212,10 +213,7 @@ void initialize_scene()
 		object o;
 		o.model_id = mdl;
 		auto deg = math::vector3d<degrees<float>>( rot );
-		o.pos = extend( math::matrix_from_euler( deg ) );
-		o.pos.get(0,3) = pos[0];
-		o.pos.get(1,3) = pos[1];
-		o.pos.get(2,3) = pos[2];
+		o.pos = make_transform( pos, math::matrix_from_euler( deg ) );
 		push_object(o, mat);
 	}
 

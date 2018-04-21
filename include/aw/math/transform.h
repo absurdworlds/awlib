@@ -22,5 +22,13 @@ matrix<T,N+1,N+1> translation_matrix(vector<T,N> const& vec)
 		mat.get(i, N) = vec[i];
 	return mat;
 }
+
+template<typename T, size_t N>
+matrix<T,N+1,N+1> make_transform(vector<T,N> const& vec, matrix<T,N,N> const& rot)
+{
+	auto mat = translation_matrix(vec);
+	mat = rot;
+	return mat;
+}
 } // namespace aw::math
 #endif//aw_math_transform_h
