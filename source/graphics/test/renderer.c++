@@ -211,9 +211,8 @@ void initialize_scene()
 		file >> rot[0] >> rot[1] >> rot[2];
 		object o;
 		o.model_id = mdl;
-		o.pos = math::identity_matrix<float,4>;
 		auto deg = math::vector3d<degrees<float>>( rot );
-		o.pos = math::matrix_from_euler( deg );
+		o.pos = extend( math::matrix_from_euler( deg ) );
 		o.pos.get(0,3) = pos[0];
 		o.pos.get(1,3) = pos[1];
 		o.pos.get(2,3) = pos[2];
