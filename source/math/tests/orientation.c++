@@ -1,5 +1,6 @@
 #include <aw/utility/test.h>
 #include <aw/math/orientation.h>
+#include <aw/math/transform.h>
 #include <aw/math/vector_compare.h>
 #include <aw/math/matrix_compare.h>
 #include <aw/utility/to_string/math/matrix.h>
@@ -54,9 +55,20 @@ Test(look_at) {
 	}*/
 };
 
+using vec3 = math::vector3d<double>;
+// TODO: separate file
+Test(transform) {
+	vec3 pos{1,0,0};
+	auto A = identity_matrix<double, 4>;
+	A[0][3] = -pos[0];
+	A[1][3] = -pos[1];
+	A[2][3] = -pos[2];
+	auto B = translation_matrix(-pos);
+	TestEqual( A, B );
+}
+
 Test(look_at_inverse)
 {
-	using vec3 = math::vector3d<double>;
 	Checks {
 		auto look = look_at_inverse( vec3{-1,0,0} );
 		auto rot  = yaw_matrix( degrees<double>{ 90 } );
@@ -67,12 +79,9 @@ Test(look_at_inverse)
 		vec3 pos{1,0,0};
 		auto rot = yaw_matrix( degrees<double>{ 90 } );
 		//--------------------
-		auto M_r = expand_matrix( rot );
-		auto M_t = identity_matrix<double, 4>;
-		M_t[0][3] = -pos[0];
-		M_t[1][3] = -pos[1];
-		M_t[2][3] = -pos[2];
-		auto trf = transpose( M_r ) * M_t;
+		auto M_r = expand_matrix( transpose( rot ) );
+		auto M_t = translation_matrix( -pos );
+		auto trf = M_r * M_t;
 		//--------------------
 		auto look = look_at_inverse( pos, vec3{0,0,0}, vec3{0,1,0} );
 		//--------------------
