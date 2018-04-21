@@ -169,7 +169,7 @@ quaternion<T> to_quaternion(matrix3<T> const& mat, T det)
 template<typename T>
 quaternion<T> to_quaternion(matrix3<T> const& mat)
 {
-	T const det = T(pow(determinant(mat), 1.0/3.0));
+	T const det = T(cbrt(determinant(mat)));
 	return _impl::to_quaternion(mat, det);
 }
 

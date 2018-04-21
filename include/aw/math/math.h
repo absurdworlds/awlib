@@ -44,6 +44,7 @@ constexpr T sign(T x)
 }
 
 using std::sqrt;
+using std::cbrt;
 using std::fmin;
 using std::fmax;
 template <typename T>
