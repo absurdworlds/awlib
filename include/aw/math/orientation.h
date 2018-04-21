@@ -74,7 +74,7 @@ matrix3<T> look_at(vector3d<T> forward, vector3d<T> up = {0,1,0})
 template<typename T>
 matrix4<T> look_at(vector3d<T> from, vector3d<T> to, vector3d<T> up)
 {
-	auto trs = expand_matrix( look_at(to - from, up) );
+	auto trs = extend( look_at(to - from, up) );
 	trs[0][3] = from[0];
 	trs[1][3] = from[1];
 	trs[2][3] = from[2];
@@ -91,7 +91,7 @@ matrix4<T> look_at_inverse(vector3d<T> from, vector3d<T> to, vector3d<T> up)
 	auto rot = look_at_inverse(to - from, up);
 	auto pos = rot * (-from);
 	//----------------------------------------
-	auto trs = expand_matrix( rot );
+	auto trs = extend( rot );
 	trs[0][3] = pos[0];
 	trs[1][3] = pos[1];
 	trs[2][3] = pos[2];

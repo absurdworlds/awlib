@@ -79,7 +79,7 @@ Test(look_at_inverse)
 		vec3 pos{1,0,0};
 		auto rot = yaw_matrix( degrees<double>{ 90 } );
 		//--------------------
-		auto M_r = expand_matrix( transpose( rot ) );
+		auto M_r = extend( transpose( rot ) );
 		auto M_t = translation_matrix( -pos );
 		auto trf = M_r * M_t;
 		//--------------------
