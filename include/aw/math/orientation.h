@@ -84,10 +84,17 @@ matrix4<T> look_at(vector3d<T> from, vector3d<T> to, vector3d<T> up)
 template<typename T>
 matrix4<T> look_at_inverse(vector3d<T> from, vector3d<T> to, vector3d<T> up)
 {
-	auto trs = expand_matrix( look_at_inverse(to - from, up) );
-	trs[0][3] = from[0];
-	trs[1][3] = from[1];
-	trs[2][3] = from[2];
+	/*
+	 * doing vector by 3×3 matrix multiplication is cheaper than
+	 * multiplying two 4×4 matrices
+	 */
+	auto rot = look_at_inverse(to - from, up);
+	auto pos = rot * (-from);
+	//----------------------------------------
+	auto trs = expand_matrix( rot );
+	trs[0][3] = pos[0];
+	trs[1][3] = pos[1];
+	trs[2][3] = pos[2];
 	return trs;
 }
 } //inline namespace rh
