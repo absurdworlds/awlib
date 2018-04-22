@@ -4,7 +4,9 @@
 #include <cstddef>
 #include <string>
 #include <algorithm>
+#include <initializer_list>
 #include <aw/meta/conditional.h>
+#include <aw/types/strip.h>
 #include <aw/types/traits/is_flat_container.h>
 
 namespace aw {
