@@ -31,9 +31,13 @@ struct array_ref {
 		: _data{ptr}, _size{length}
 	{ }
 
+	constexpr array_ref(std::initializer_list<remove_const<T>> list)
+		: _data{list.begin()}, _size{list.size()}
+	{ }
+
 	template<typename C, typename = enable_if<is_flat_container<C>>>
 	constexpr array_ref( C& cont )
-		: array_ref{cont.data(), cont.size()}
+		: _data{cont.data()}, _size{cont.size()}
 	{ }
 
 	constexpr array_ref& operator=(array_ref const&) = default;
