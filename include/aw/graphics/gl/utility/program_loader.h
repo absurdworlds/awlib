@@ -14,6 +14,14 @@
 #include <vector>
 namespace aw {
 namespace gl3 {
+inline optional<shader> compile_shader( gl::shader_type type, string_view contents )
+{
+	shader shd{ type };
+	if (!shd.compile( contents ))
+		return nullopt;
+	return {std::move(shd)};
+}
+
 inline optional<shader> load_shader( gl::shader_type type, fs::path const& path )
 {
 	std::vector<char> buf;
@@ -26,29 +34,31 @@ inline optional<shader> load_shader( gl::shader_type type, fs::path const& path 
 		return nullopt;
 	}
 
-	shader shd{ type };
-	if (!shd.compile( string_view{buf.data(), buf.size()} ))
-		return nullopt;
-	return {std::move(shd)};
+	return compile_shader( type, string_view{buf.data(), buf.size()} );
 }
 
-inline std::optional<program> load_program( string_view v, string_view f )
+inline optional<program> link_program( array_ref<shader> shader_list )
 {
-	std::vector<shader> shaderList;
+	gl3::program program;
+	bool linked = program.link( shader_list );
+	if (!linked)
+		return std::nullopt;
+	return {std::move(program)};
+}
+
+inline optional<program> load_program( string_view v, string_view f )
+{
+	std::vector<shader> shader_list;
 
 	auto vsh = load_shader( gl::shader_type::vertex,   v );
 	auto fsh = load_shader( gl::shader_type::fragment, f );
 
 	if (vsh && fsh) {
-		shaderList.push_back(std::move(*vsh));
-		shaderList.push_back(std::move(*fsh));
+		shader_list.push_back(std::move(*vsh));
+		shader_list.push_back(std::move(*fsh));
 	}
 
-	gl3::program program;
-	bool linked = program.link( shaderList );
-	if (!linked)
-		return std::nullopt;
-	return {std::move(program)};
+	return link_program(shader_list);
 }
 } // namespace gl3
 } // namespace aw
