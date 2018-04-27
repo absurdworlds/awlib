@@ -74,28 +74,15 @@ matrix3<T> look_at(vector3d<T> forward, vector3d<T> up = {0,1,0})
 template<typename T>
 matrix4<T> look_at(vector3d<T> from, vector3d<T> to, vector3d<T> up)
 {
-	auto trs = extend( look_at(to - from, up) );
-	trs[0][3] = from[0];
-	trs[1][3] = from[1];
-	trs[2][3] = from[2];
-	return trs;
+	auto rot = look_at(to - from, up);
+	return make_transform( from, rot );
 }
 
 template<typename T>
 matrix4<T> look_at_inverse(vector3d<T> from, vector3d<T> to, vector3d<T> up)
 {
-	/*
-	 * doing vector by 3×3 matrix multiplication is cheaper than
-	 * multiplying two 4×4 matrices
-	 */
-	auto rot = look_at_inverse(to - from, up);
-	auto pos = rot * (-from);
-	//----------------------------------------
-	auto trs = extend( rot );
-	trs[0][3] = pos[0];
-	trs[1][3] = pos[1];
-	trs[2][3] = pos[2];
-	return trs;
+	auto rot = look_at(to - from, up);
+	return make_inverse_transform( from, rot );
 }
 } //inline namespace rh
 } // namespace aw::math

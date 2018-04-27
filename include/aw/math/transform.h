@@ -24,11 +24,23 @@ matrix<T,N+1,N+1> translation_matrix(vector<T,N> const& vec)
 }
 
 template<typename T, size_t N>
-matrix<T,N+1,N+1> make_transform(vector<T,N> const& vec, matrix<T,N,N> const& rot)
+matrix<T,N+1,N+1> make_transform(vector<T,N> const& pos, matrix<T,N,N> const& rot)
 {
-	auto mat = translation_matrix(vec);
+	auto mat = translation_matrix(pos);
 	mat = rot;
 	return mat;
+}
+
+template<typename T, size_t N>
+matrix<T,N+1,N+1> make_inverse_transform(vector<T,N> pos, matrix<T,N,N> rot)
+{
+	/*
+	 * doing vector by 3×3 matrix multiplication is cheaper than
+	 * multiplying two 4×4 matrices
+	 */
+	rot = transpose(rot);
+	pos = rot * (-pos);
+	return make_transform( pos, rot );
 }
 } // namespace aw::math
 #endif//aw_math_transform_h
