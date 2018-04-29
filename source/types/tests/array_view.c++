@@ -25,6 +25,7 @@ Test(array_view_1) {
 		for (int i : view2)
 			vec3.push_back( i );
 
+		TestEqual(view1.back(), vec.back());
 		TestEqual(view2, view3);
 		TestEqual(vec2, vec);
 		TestEqual(vec3, std::vector<int>{ std::begin(arr), std::end(arr) });
