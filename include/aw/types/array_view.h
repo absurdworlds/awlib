@@ -72,12 +72,12 @@ struct array_ref {
 	constexpr T& operator[](size_t idx) { return _data[idx]; }
 	constexpr T* data()  { return _data; }
 	constexpr T& front() { return _data[0]; }
-	constexpr T& back()  { return _data[_size]; }
+	constexpr T& back()  { return _data[_size-1]; }
 
 	constexpr T const& operator[](size_t idx) const { return _data[idx]; }
 	constexpr T const* data()  const { return _data; }
 	constexpr T const& front() const { return _data[0]; }
-	constexpr T const& back()  const { return _data[_size]; }
+	constexpr T const& back()  const { return _data[_size-1]; }
 
 	constexpr array_ref slice(size_t pos, size_t end) const
 	{
