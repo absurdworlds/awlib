@@ -10,12 +10,16 @@
 #include <iostream>
 int main()
 {
+#if defined(AW_SUPPORT_PLATFORM_POSIX)
 	{
 		auto ver = aw::platform::posix::get_os_version();
-		std::cout << ver.sysname << ' ' << ver.machine << ' ' << ver.release << ' ' << ver.build << '\n';
+		std::cout << ver.sysname << " / " << ver.machine << " / " << ver.version << " / " << ver.version << '\n';
 	}
+#endif
+#if defined(AW_SUPPORT_PLATFORM_WIN32)
 	{
 		auto ver = aw::platform::win32::get_os_version();
-		std::cout << ver.sysname << ' ' << ver.machine << ' ' << ver.release << ' ' << ver.build << '\n';
+		std::cout << ver.sysname << " / " << ver.machine << " / " << ver.version << " / " << ver.version << '\n';
 	}
+#endif
 }
