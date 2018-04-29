@@ -52,6 +52,8 @@ inline int kill(process_handle pid, int signal)
 #endif
 
 #if   (AW_PLATFORM == AW_PLATFORM_POSIX)
+using posix::process_handle;
+using posix::invalid_process_handle;
 using posix::spawn;
 using posix::kill;
 #endif
