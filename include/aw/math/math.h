@@ -53,12 +53,13 @@ auto fclamp(T value, T lower, T upper) -> enable_if<is_float<T>, T>
 	return fmax(lower, fmin(value, upper));
 }
 
-/*! Interpolate two values
- *      \param v0 First value to interpolate
- *      \param v1 Second value to interpolate
- *      \param t  Interpolation parameter
- *      Must be in range [0,1].
- *      \return Interpolated vector
+/*!
+ * Linearly interpolate two values \a v0 and \a v1.
+ * The parameter \a t (within range [0,1]) specifies how close
+ * the output is to one of inputs. For example:
+ * `t = 0.0` produces output equal to \a v0;
+ * `t = 0.5` produces the arithmetic average of input values;
+ * `t = 1.0` produces output equal to \a v1.
  */
 template<typename T>
 T lerp(T const& v0, T const& v1, f64 t)
