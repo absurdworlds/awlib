@@ -24,5 +24,29 @@ Test(div_round) {
 		TestAssert( div_round(133777, 1111) == 133777/1111 );
 	}
 };
+
+Test(div_floor) {
+	TestEqual( div_floor(1,2), 0 );
+	TestEqual( div_floor(100,2), 50 );
+	TestEqual( div_floor(101,2), 50 );
+	TestEqual( div_floor(102,2), 51 );
+	TestEqual( div_floor(5,3), 1 );
+	TestEqual( div_floor(-5,3), -2 );
+};
+
+Test(sign) {
+	TestEqual( sign(-100), -1 );
+	TestEqual( sign(0), 0 );
+	TestEqual( sign(100), 1 );
+
+	TestEqual( sign(-100.f), -1.f );
+	TestEqual( sign(-0.f), -0.f );
+	TestEqual( sign(0.f), 0.f );
+	TestEqual( sign(100.f), 1.f );
+};
+
+Test(lerp) {
+	TestEqual( lerp(1.0,2.0,0.5), 1.5 );
+};
 } // namespace math
 } // namespace aw

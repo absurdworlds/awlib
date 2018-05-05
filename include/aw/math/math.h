@@ -23,24 +23,17 @@
 
 namespace aw {
 namespace math {
-namespace _impl {
-template <typename T>
-constexpr T sign(T x, std::false_type)
-{
-	return T{0} < x;
-}
-
-template <typename T>
-constexpr T sign(T x, std::true_type)
-{
-	return (T{0} < x) - (x < T{0});
-}
-} // namespace _impl
-
+/*!
+ * Signum function.
+ * Returns value \a x divided by it's modulo if \a x ≠ 0, and zero otherwise.
+ */
 template <typename T>
 constexpr T sign(T x)
 {
-	return _impl::sign(x, std::is_signed<T>());
+	T o = T{0};
+	if constexpr(is_signed<T>)
+		return T( o < x ) - T( x < o );
+	return T( o < x );
 }
 
 using std::sqrt;
@@ -62,24 +55,19 @@ auto fclamp(T value, T lower, T upper) -> enable_if<is_float<T>, T>
  * `t = 1.0` produces output equal to \a v1.
  */
 template<typename T>
-T lerp(T const& v0, T const& v1, f64 t)
+constexpr T lerp(T const& v0, T const& v1, double t)
 {
 	return (1.0 - t)*v0 + t*v1;
 }
 
-//! Divide two integers, rounding result to nearest value
-template<typename T>
-constexpr auto div_round(T v, T d) -> enable_if<is_signed<T>, T>
-{
-	return (v > 0) ?
-	     (v + (d/2)) / d :
-	     (v - (d/2)) / d;
-}
-
+//! Divide two integers, rounding result to the nearest value
 template<typename T, typename U>
-constexpr auto div_round(T v, U d) -> enable_if<is_unsigned<T>, T>
+constexpr T div_round(T v, U d)
 {
-	return (v + (d/2)) / d;
+	U d_h = d/2;
+	if constexpr(is_signed<T>)
+		d_h *= (v < 0) ? -1 : 1;
+	return (v + d_h) / d;
 }
 
 
@@ -119,16 +107,17 @@ constexpr auto mod_floor(T v, U d)
 }
 
 template<typename T, typename U>
-auto remainder(T x, U y) -> require<common_type<T,U>, std::is_floating_point>
+auto remainder(T x, U y) -> T
 {
-	// TODO: edge cases?
-	return x - std::floor( (x + y/2) / y ) * y;
-}
+	using C = common_type<T,U>;
 
-template<typename T, typename U>
-constexpr auto remainder(T x, U y) -> require<common_type<T,U>, std::is_integral>
-{
-	return x - div_floor( (x + y/2) , y ) * y;
+	auto extra = (x + y/2);
+	if constexpr(std::is_floating_point_v< C >)
+		// TODO: edge cases?
+		extra = std::floor( extra / y ) * y;
+	if constexpr(std::is_integral_v< C >)
+		extra = div_floor( extra, y ) * y;
+	return x - extra;
 }
 
 } //namespace math
