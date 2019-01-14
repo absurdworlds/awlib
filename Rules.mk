@@ -56,6 +56,7 @@ CXXFLAGS  = -std=c++1z
 CXXFLAGS += -fPIC
 CXXFLAGS += -fvisibility=default
 CXXFLAGS += -fdiagnostics-color=auto
+CXXFLAGS += -Werror=return-type
 CXXFLAGS_DEBUG   = -g -DDEBUG -D_DEBUG
 CXXFLAGS_RELEASE = -g -O3 -DNDEBUG
 CXXFLAGS += $(ProjectFlags)
