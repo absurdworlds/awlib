@@ -29,6 +29,7 @@ struct ipairs_iterator {
 	ipairs_iterator& operator++()
 	{
 		++iter, ++idx;
+		return *this;
 	}
 
 	bool operator!=(Base const& it)
