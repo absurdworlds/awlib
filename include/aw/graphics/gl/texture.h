@@ -35,6 +35,7 @@ struct texture {
 		handle = other.handle;
 		other.handle = gl::no_texture;
 		_type = other._type;
+		return *this;
 	}
 
 	explicit operator texture_handle();

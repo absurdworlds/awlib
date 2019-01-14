@@ -35,6 +35,7 @@ struct uniform_buffer {
 		ubo   = other.ubo;
 		other.index = 0;
 		other.ubo   = 0;
+		return *this;
 	}
 
 	//TODO

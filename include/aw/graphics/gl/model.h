@@ -32,6 +32,7 @@ struct model {
 		objects = std::move(other.objects);
 		std::swap( vao, other.vao );
 		std::swap( buf, other.buf );
+		return *this;
 	}
 
 	~model();

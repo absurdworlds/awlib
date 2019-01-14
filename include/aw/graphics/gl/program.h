@@ -35,6 +35,7 @@ struct program {
 	{
 		cleanup();
 		swap(other);
+		return *this;
 	}
 
 	bool is_linked() const;
