@@ -11,16 +11,33 @@
 #include <aw/types/types.h>
 #include <aw/types/int128.h>
 #include <aw/utility/utility.h>
-
+#include <aw/math/bitmath.h>
 #include <array>
 
 namespace aw {
+template<typename H>
+H hash_combine( H h1, H h2 )
+{
+	constexpr auto prime32 = 2654435761u;
+	constexpr auto prime64 = 1770082059298694101ull;
+	constexpr auto digits = std::numeric_limits<H>::digits;
+	constexpr auto r = (digits > 32) ? 41 : 19;
+	constexpr auto p = (digits > 32) ? prime64 : prime32;
+
+	h1 = math::rotl(h1,r);
+	h2 += p;
+	h1 ^= (h2 >> 6) + (h2 << 2);
+	return h1;
+}
+
+
 using seed128_32 = std::array<u32,4>;
 using seed128_64 = std::array<u64,2>;
 
 /*!
  * \{
- * Set of MurmurHash3 hashing algorithms written by Austin Appleby.
+ * Set of MurmurHash3 hashing algorithms originally written
+ * by Austin Appleby.
  *
  * \note
  * Note - The x86 and x64 versions do _not_ produce the same results, as the
