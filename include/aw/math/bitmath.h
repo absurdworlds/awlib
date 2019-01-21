@@ -151,49 +151,33 @@ constexpr bool is_power_of_2(Int value)
 	return value && !(value & (value - 1));
 }
 
-/*! Rotate 32-bit integer to the left */
-inline u32 rotl(u32 x, size_t r)
+/*! Rotate unsigned integer towards the left */
+template<typename T> enable_if< is_unsigned<T>, T >
+constexpr rotl(T x, size_t r)
 {
-#if AW_COMPILER == AW_COMPILER_MSVC
-	return _rotl(x,r);
-#else
-	assert(r < 33);
-	return (x << r) | (x >> (32 - r));
-#endif
+	constexpr auto digits = std::numeric_limits<T>::digits;
+
+	// Shift by all bits is UB
+	assert(r < digits);
+
+	constexpr auto mask = digits-1;
+	return (x << r) | (x >> (-r & mask));
 }
 
-/*! Rotate 64-bit integer to the left */
-inline u64 rotl(u64 x, size_t r)
+
+/*! Rotate unsigned integer towards the right */
+template<typename T> enable_if< is_unsigned<T>, T >
+constexpr rotr(T x, size_t r)
 {
-#if AW_COMPILER == AW_COMPILER_MSVC
-	return _rotl64(x,r);
-#else
-	assert(r < 65);
-	return (x << r) | (x >> (64 - r));
-#endif
+	constexpr auto digits = std::numeric_limits<T>::digits;
+
+	// Shift by all bits is UB
+	assert(r < digits);
+
+	constexpr auto mask = digits-1;
+	return (x >> r) | (x << (-r & mask));
 }
 
-/*! Rotate 32-bit integer to the right */
-inline u32 rotr(u32 x, size_t r)
-{
-#if AW_COMPILER == AW_COMPILER_MSVC
-	return _rotl(x,r);
-#else
-	assert(r < 33);
-	return (x >> r) | (x << (32 - r));
-#endif
-}
-
-/*! Rotate 64-bit integer to the right */
-inline u64 rotr(u64 x, size_t r)
-{
-#if AW_COMPILER == AW_COMPILER_MSVC
-	return _rotr64(x,r);
-#else
-	assert(r < 65);
-	return (x >> r) | (x << (64 - r));
-#endif
-}
 
 inline size_t leading_zeros(u32 x)
 {
