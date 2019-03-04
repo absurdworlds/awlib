@@ -24,43 +24,43 @@ using namespace aw::hdf;
 /*!
  * \example hdf_example.cpp
  *
- * This file provides an usage example for hdf::Parser,
+ * This file provides an usage example for hdf::parser,
  * messages.hdf is used as an example document here.
  */
 
-typedef std::map<std::string, Value> Document;
+typedef std::map<std::string, value> Document;
 
-void parseObject(Parser* hdf, std::string parent, Document& doc);
-void parseNode(Parser* hdf, std::string name, std::string node, Document& doc);
-void parseValue(Parser* hdf, std::string name, std::string node, Document& doc);
+void parseObject(parser* hdf, std::string parent, Document& doc);
+void parseNode(parser* hdf, std::string name, std::string node, Document& doc);
+void parsevalue(parser* hdf, std::string name, std::string node, Document& doc);
 
-void parseDocument(Parser* hdf, Document& doc)
+void parseDocument(parser* hdf, Document& doc)
 {
-	hdf::Object obj;
+	hdf::object obj;
 	while (hdf->read(obj)) {
-		if (obj.type != hdf::Object::Node)
+		if (obj.kind != hdf::object::node)
 			continue;
 
-		doc[obj.name] = Value();
+		doc[obj.name] = value();
 		parseObject(hdf, obj.name, doc);
 	}
 }
 
-void parseObject(Parser* hdf, std::string parent, Document& doc)
+void parseObject(parser* hdf, std::string parent, Document& doc)
 {
-	hdf::Object obj;
+	hdf::object obj;
 	while (hdf->read(obj)) {
 		std::string& name = obj.name;
 
-		switch (obj.type) {
-		case hdf::Object::Node:
+		switch (obj.kind) {
+		case hdf::object::node:
 			parseObject(hdf, parent + "." + name, doc);
-			doc[parent + "." + name] = Value();
+			doc[parent + "." + name] = value();
 			break;
-		case hdf::Object::Value:
+		case hdf::object::value:
 			doc[parent + "." + name] = obj.val;
 			break;
-		case hdf::Object::NodeEnd:
+		case hdf::object::end:
 			return;
 		default:
 			break;
@@ -78,7 +78,7 @@ int main(int,char** arg)
 	// open a file
 	io::input_file_stream stream{arg[1]};
 	// create the parser
-	Parser hdf{stream, &log};
+	parser hdf{stream, &log};
 
 	Document doc;
 
