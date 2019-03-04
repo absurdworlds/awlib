@@ -46,8 +46,6 @@ bool Writer::end_node()
 string_view spellType(value const& val)
 {
 	switch (val.get_type()) {
-	case Type::Unknown:
-		return {};
 	case Type::IntegerVector:
 	case Type::Integer:
 		return "int:";
@@ -60,6 +58,9 @@ string_view spellType(value const& val)
 	case Type::StringVector:
 	case Type::String:
 		return "string:";
+	case Type::Unknown:
+	default:
+		return {};
 	}
 }
 

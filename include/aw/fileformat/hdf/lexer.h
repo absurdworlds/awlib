@@ -21,7 +21,7 @@ struct token {
 		unsigned line = 0;
 		unsigned col  = 0;
 
-		friend std::string aw::hdf::v1::to_string(position pos);
+		friend std::string to_string(position pos);
 	};
 
 	enum {

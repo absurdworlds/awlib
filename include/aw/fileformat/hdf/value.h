@@ -171,6 +171,7 @@ private:
 		case holder_t::index_of<std::vector<std::string>>:
 			return hdf::Type::StringVector;
 		case holder_t::invalid:
+		default:
 			return hdf::Type::Unknown;
 		};
 	}
