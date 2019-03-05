@@ -1543,6 +1543,7 @@ ext::load_result load_functions()
 	if(!get_string_i) return ext::load_result();
 	
 	ProcExtsFromExtList(table);
+	return ext::load_result();
 }
 } //namespace
 
