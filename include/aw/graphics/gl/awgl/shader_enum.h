@@ -38,6 +38,7 @@ constexpr string_view enum_string( shader_type type )
 	case shader_type::fragment: return "fragment"sv;
 	case shader_type::vertex:   return "vertex"sv;
 	case shader_type::geometry: return "geometry"sv;
+	default:                    return {};
 	};
 	// unreachable
 }

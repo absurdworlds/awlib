@@ -114,6 +114,8 @@ image try_read(io::input_stream& stream)
 			return "RGB";
 		case PNG_COLOR_TYPE_RGB_ALPHA:
 			return "RGBA";
+		default:
+			return "???";
 		};
 	};
 
