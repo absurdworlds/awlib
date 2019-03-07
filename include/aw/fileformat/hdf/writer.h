@@ -29,13 +29,13 @@ enum IndentationStyle {
 };
 
 //! Interface for writing HDF files. Supports HDF 1.4.0 format.
-struct AW_HDF_EXP Writer {
+struct AW_HDF_EXP writer {
 	//! Create writer outputting to \a out.
-	Writer(io::WriteStream& out, log* logger = nullptr)
+	writer(io::WriteStream& out, log* logger = nullptr)
 		: ostream{out}, logger{logger}
 	{}
 
-	~Writer() = default;
+	~writer() = default;
 
 	/*! Create a new node and write a header for it. */
 	bool start_node(string_view name);
@@ -57,9 +57,9 @@ private:
 	void error(log::level type, string_view msg);
 
 private:
-	void writeValueValue(value const& val);
+	void write_value_value(value const& val);
 	void end_line();
-	std::string getIndent() const;
+	std::string get_indent() const;
 
 	io::WriteStream& ostream;
 	log* logger;

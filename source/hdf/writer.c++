@@ -12,9 +12,9 @@
 namespace aw {
 namespace hdf {
 /*! Create a new node and write a header for it. */
-bool Writer::start_node(string_view name)
+bool writer::start_node(string_view name)
 {
-	ostream.put(getIndent());
+	ostream.put(get_indent());
 	ostream.put('[');
 	ostream.put(name);
 
@@ -25,7 +25,7 @@ bool Writer::start_node(string_view name)
 }
 
 /*! End current (bottom level) node. */
-bool Writer::end_node()
+bool writer::end_node()
 {
 	if (depth == 0) {
 		error(log::error, "‘]’ mismatch");
@@ -34,7 +34,7 @@ bool Writer::end_node()
 
 	--depth;
 
-	ostream.put(getIndent());
+	ostream.put(get_indent());
 	ostream.put(']');
 
 	end_line();
@@ -43,7 +43,7 @@ bool Writer::end_node()
 }
 
 //! Spell the type of value
-string_view spellType(value const& val)
+string_view spell_type(value const& val)
 {
 	switch (val.get_type()) {
 	case Type::IntegerVector:
@@ -65,23 +65,23 @@ string_view spellType(value const& val)
 }
 
 /*! Write a value object. */
-bool Writer::write_value(string_view name, value const& val, bool typed)
+bool writer::write_value(string_view name, value const& val, bool typed)
 {
-	ostream.put(getIndent());
+	ostream.put(get_indent());
 	ostream.put(name);
 	ostream.put(" = ");
 
 	if (typed)
-		ostream.put(spellType(val));
+		ostream.put(spell_type(val));
 
-	writeValueValue(val);
+	write_value_value(val);
 
 	end_line();
 
 	return true;
 }
 
-void Writer::writeValueValue(value const& val)
+void writer::write_value_value(value const& val)
 {
 	switch (val.get_type()) {
 	default:
@@ -96,12 +96,12 @@ void Writer::writeValueValue(value const& val)
 }
 
 /*! Write a comment */
-void Writer::add_comment(string_view comment)
+void writer::add_comment(string_view comment)
 {
 	if (comment.empty())
 		return;
 
-	std::string indent = getIndent();
+	std::string indent = get_indent();
 	size_t pos1 = 0;
 	size_t pos2;
 
@@ -120,19 +120,19 @@ void Writer::add_comment(string_view comment)
 }
 
 /*! Report an error */
-void Writer::error(log::level lvl, string_view msg)
+void writer::error(log::level lvl, string_view msg)
 {
 	if (logger)
 		logger->message(lvl, "HDF", msg);
 }
 
 /*! Set the indentation style for the document */
-void Writer::set_indentation_style(IndentationStyle newStyle)
+void writer::set_indentation_style(IndentationStyle newStyle)
 {
 	indentation = newStyle;
 }
 
-std::string Writer::getIndent() const
+std::string writer::get_indent() const
 {
 	if (indentation == None)
 		return {};
@@ -167,7 +167,7 @@ std::string Writer::getIndent() const
 	return std::string(indent_size, indent_char);
 }
 
-void Writer::end_line()
+void writer::end_line()
 {
 	ostream.put('\n');
 }
