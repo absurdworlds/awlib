@@ -1,6 +1,6 @@
 RootPath = ../..
 SourceExt = c++
-Sources   = lexer.c++ parser.c++ writer.c++
+Sources   = lexer.c++ parser.c++ writer.c++ utility.c++
 Defines   = AW_MODULE_HDF
 Libraries =
 ProjectName = hdf
