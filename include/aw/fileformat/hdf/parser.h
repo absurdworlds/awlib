@@ -19,11 +19,8 @@
 namespace aw {
 namespace hdf {
 inline namespace v1 {
-struct parser;
-
-
 /*!
- * Object returned by HDF parser
+ * Object returned by awhdf parser
  */
 struct object {
 	enum {
@@ -50,8 +47,9 @@ struct object {
 using object_kind = decltype(object::kind);
 
 /*!
- * HDF 1.3 parser, provides a simple interface for reading
- * aw::hdf files.
+ * Provides simple low-level interface for reading an awhdf files.
+ *
+ * For an usage example, see 'tests/reader.c++'.
  */
 struct parser {
 	parser(io::input_stream& stream, aw::log* log = nullptr)
@@ -62,6 +60,7 @@ struct parser {
 
 	//! Read an object
 	object read();
+
 	/*!
 	 * Read an object
 	 * \return
