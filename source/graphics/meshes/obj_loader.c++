@@ -89,15 +89,18 @@ private:
 
 void parser::parse_line( string_view line )
 {
-	if (line.find_first_not_of( ws ) == line.npos)
+	auto begin = line.find_first_not_of( ws );
+	if (begin == line.npos)
 		return;
+
+	line.remove_prefix( begin );
 
 	switch (line[0]) {
 	case '#': return;
 	case 'f': return add_face( line.substr(1) );
 	case 'v': return add_vert( line.substr(1) );
 	case 'g': return set_group( line.substr(1) );
-	case 's': smoothing_group( line.substr(1) ); return;
+	case 's': return smoothing_group( line.substr(1) );
 	};
 
 	auto pos = line.find_first_of(ws);
