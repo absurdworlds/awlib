@@ -20,8 +20,6 @@ struct token {
 	struct position {
 		unsigned line = 0;
 		unsigned col  = 0;
-
-		friend std::string to_string(position pos);
 	};
 
 	enum {
