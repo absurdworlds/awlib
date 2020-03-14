@@ -9,11 +9,11 @@
  */
 #include <cassert>
 #include <fstream>
-#include <aw/fileformat/hdf/utility.h>
-#include <aw/fileformat/hdf/parser.h>
+#include <aw/doc/utility.h>
+#include <aw/doc/parser.h>
 #include <aw/utility/string/split.h>
 namespace aw {
-namespace hdf {
+namespace doc {
 inline namespace v1 {
 namespace {
 bool find_node(parser& parser, string_view name)
@@ -62,7 +62,7 @@ node parse_node(parser& parser)
 
 value find_value(io::input_stream& file, string_view name, log* l)
 {
-	hdf::parser parser(file, l);
+	doc::parser parser(file, l);
 
 	size_t pos = name.rfind('/');
 	if (pos != name.npos) {
@@ -90,7 +90,7 @@ value find_value(io::input_stream& file, string_view name, log* l)
 
 node find_node(io::input_stream& file, string_view name, log* l)
 {
-	hdf::parser parser(file, l);
+	doc::parser parser(file, l);
 	if (find_node(parser, name))
 		return parse_node(parser);
 	return {};
@@ -98,9 +98,9 @@ node find_node(io::input_stream& file, string_view name, log* l)
 
 node parse_file(io::input_stream& file, log* l)
 {
-	hdf::parser parser(file, l);
+	doc::parser parser(file, l);
 	return parse_node(parser);
 }
 } // inline namespace v1
-} // namespace hdf
+} // namespace doc
 } // namespace aw

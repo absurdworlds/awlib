@@ -7,14 +7,14 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef aw_fileformat_hdf_node_h
-#define aw_fileformat_hdf_node_h
+#ifndef aw_fileformat_doc_node_h
+#define aw_fileformat_doc_node_h
 #include <iosfwd>
 #include <string>
 #include <algorithm>
 #include <aw/types/string_view.h>
-#include <aw/fileformat/hdf/value.h>
-namespace aw::hdf {
+#include <aw/doc/value.h>
+namespace aw::doc {
 inline namespace v1 {
 struct parser;
 
@@ -70,5 +70,5 @@ struct node {
 	list<node>  nodes;
 };
 } // inline namespace v1
-} // namespace aw::hdf
-#endif//aw_fileformat_hdf_node_h
+} // namespace aw::doc
+#endif//aw_fileformat_doc_node_h

@@ -7,8 +7,8 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef aw_hdf_value_h
-#define aw_hdf_value_h
+#ifndef aw_doc_value_h
+#define aw_doc_value_h
 #include <cstring>
 #include <string>
 
@@ -16,12 +16,12 @@
 #include <aw/utility/to_string.h>
 #include <aw/utility/to_string/variant.h>
 
-#include <aw/fileformat/hdf/type.h>
+#include <aw/doc/type.h>
 
 namespace aw {
-namespace hdf {
+namespace doc {
 inline namespace v1 {
-//! Class for holding any HDF value.
+//! Class for holding any doc value.
 struct value {
 	value() = default;
 	value(value const&) = default;
@@ -94,7 +94,7 @@ struct value {
 	}
 
 	//! Returns type of currently held value
-	hdf::Type get_type() const
+	doc::type get_type() const
 	{
 		return convert_type();
 	}
@@ -110,7 +110,7 @@ struct value {
 	template<typename val_type>
 	bool try_set(val_type const& v)
 	{
-		if(compareType(holder.type_index(), v)) {
+		if(compare_type(holder.type_index(), v)) {
 			holder.set<val_type>(v);
 			return true;
 		}
@@ -151,32 +151,32 @@ private:
 
 	holder_t holder;
 
-	hdf::Type convert_type() const
+	doc::type convert_type() const
 	{
 		switch (holder.type_index()) {
 		case holder_t::index_of<bool>:
-			return hdf::Type::Boolean;
+			return doc::type::boolean;
 		case holder_t::index_of<intmax_t>:
-			return hdf::Type::Integer;
+			return doc::type::integer;
 		case holder_t::index_of<double>:
-			return hdf::Type::Float;
+			return doc::type::floating_point;
 		case holder_t::index_of<std::string>:
-			return hdf::Type::String;
+			return doc::type::string;
 		case holder_t::index_of<std::vector<bool>>:
-			return hdf::Type::BooleanVector;
+			return doc::type::boolean_vector;
 		case holder_t::index_of<std::vector<intmax_t>>:
-			return hdf::Type::IntegerVector;
+			return doc::type::integer_vector;
 		case holder_t::index_of<std::vector<double>>:
-			return hdf::Type::FloatVector;
+			return doc::type::float_vector;
 		case holder_t::index_of<std::vector<std::string>>:
-			return hdf::Type::StringVector;
+			return doc::type::string_vector;
 		case holder_t::invalid:
 		default:
-			return hdf::Type::Unknown;
+			return doc::type::unknown;
 		};
 	}
 };
 } // inline namespace v1
-} // namespace hdf
+} // namespace doc
 } // namespace aw
-#endif//aw_hdf_value_h
+#endif//aw_doc_value_h

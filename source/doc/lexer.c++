@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2014-2015  absurdworlds
- * Copyright (C) 2015       Hedede <hededrk@gmail.com>
+ * Copyright (C) 2014-2020  absurdworlds
+ * Copyright (C) 2015-2020  Hedede <hededrk@gmail.com>
  *
  * License LGPLv3 or later:
  * GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
@@ -10,13 +10,12 @@
 #include <cassert>
 #include <cstdio>
 
-#include <aw/fileformat/hdf/lexer.h>
-
+#include <aw/doc/lexer.h>
 #include <aw/utility/to_string.h>
 #include <aw/utility/string/compose.h>
 
 namespace aw {
-namespace hdf {
+namespace doc {
 inline namespace v1 {
 std::string to_string(token::position pos)
 {
@@ -197,5 +196,5 @@ token lexer::get_token()
 	return tmp;
 }
 } // inline namespace v1
-} // namespace hdf
+} // namespace doc
 } // namespace aw

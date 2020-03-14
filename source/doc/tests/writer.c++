@@ -5,17 +5,17 @@
 
 #include <aw/io/WriteFile.h>
 #include <aw/io/WriteStream.h>
-#include <aw/hdf/Writer.h>
+#include <aw/doc/Writer.h>
 
 using namespace aw;
 using namespace io;
-using namespace hdf;
+using namespace doc;
 
 /*!
- * \example hdf_writer
+ * \example doc_writer
  *
- * This file provides an usage example for hdf::Writer,
- * messages.hdf is used as an example document here.
+ * This file provides an usage example for doc::Writer,
+ * messages.doc is used as an example document here.
  */
 
 // the struct representing a message
@@ -51,16 +51,16 @@ public:
 int main(int,char**)
 {
 	// open a file
-	//io::WriteFile file("../../data/misc/messages.hdf", false);
+	//io::WriteFile file("../../data/misc/messages.doc", false);
 	TestWriteStream stream;
 	// create the parser
-	hdf::Writer writer {stream};
+	doc::Writer writer {stream};
 
 	using namespace std::string_literals;
 	writer.startNode("shape"s);
-	hdf::Value type("sphere"s);
+	doc::Value type("sphere"s);
 	writer.writeValue("type"s,type);
-	hdf::Value radius(1.0);
+	doc::Value radius(1.0);
 	writer.writeValue("radius"s,radius);
 	writer.endNode();
 }

@@ -1,20 +1,19 @@
 /*
- * Copyright (C) 2014-2015  absurdworlds
- * Copyright (C)      2015  Hedede <haddayn@gmail.com>
+ * Copyright (C) 2014-2020  absurdworlds
+ * Copyright (C)      2020  Hedede <haddayn@gmail.com>
  *
  * License LGPLv3 or later:
  * GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef aw_hdf_utility_h
-#define aw_hdf_utility_h
-#include <aw/fileformat/hdf/node.h>
+#ifndef aw_doc_utility_h
+#define aw_doc_utility_h
+#include <aw/doc/node.h>
 #include <aw/io/input_stream.h>
 #include <aw/log/log.h>
 
-namespace aw {
-namespace hdf {
+namespace aw::doc {
 inline namespace v1 {
 value find_value(io::input_stream& file, string_view name, log* l = nullptr);
 node  find_node(io::input_stream& file,  string_view name, log* l = nullptr);
@@ -42,6 +41,5 @@ inline bool get_numbers(value const& val, T (&out) [N])
 };
 
 } // namespace v1
-} // namespace hdf
-} // namespace aw
-#endif//aw_hdf_utility_h
+} // namespace aw::doc
+#endif//aw_doc_utility_h

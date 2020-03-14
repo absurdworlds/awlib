@@ -7,20 +7,19 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef aw_fileformat_hdf_reader_h
-#define aw_fileformat_hdf_reader_h
+#ifndef aw_fileformat_doc_reader_h
+#define aw_fileformat_doc_reader_h
 #include <string>
 
-#include <aw/fileformat/hdf/value.h>
-#include <aw/fileformat/hdf/lexer.h>
+#include <aw/doc/value.h>
+#include <aw/doc/lexer.h>
 
 #include <aw/io/input_stream.h>
 
-namespace aw {
-namespace hdf {
+namespace aw::doc {
 inline namespace v1 {
 /*!
- * Object returned by awhdf parser
+ * Object returned by awdoc parser
  */
 struct object {
 	enum {
@@ -47,7 +46,7 @@ struct object {
 using object_kind = decltype(object::kind);
 
 /*!
- * Provides simple low-level interface for reading an awhdf files.
+ * Provides simple low-level interface for reading an awdoc files.
  *
  * For an usage example, see 'tests/reader.c++'.
  */
@@ -99,6 +98,5 @@ private:
 	size_t depth = 0;
 };
 } // inline namespace v1
-} // namespace hdf
-} // namespace aw
-#endif//aw_fileformat_hdf_reader_h
+} // namespace aw::doc
+#endif//aw_fileformat_doc_reader_h

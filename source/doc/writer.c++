@@ -7,10 +7,10 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#include <aw/fileformat/hdf/writer.h>
+#include <aw/doc/writer.h>
 
 namespace aw {
-namespace hdf {
+namespace doc {
 /*! Create a new node and write a header for it. */
 bool writer::start_node(string_view name)
 {
@@ -46,19 +46,19 @@ bool writer::end_node()
 string_view spell_type(value const& val)
 {
 	switch (val.get_type()) {
-	case Type::IntegerVector:
-	case Type::Integer:
+	case type::integer_vector:
+	case type::integer:
 		return "int:";
-	case Type::FloatVector:
-	case Type::Float:
+	case type::float_vector:
+	case type::floating_point:
 		return "float:";
-	case Type::BooleanVector:
-	case Type::Boolean:
+	case type::boolean_vector:
+	case type::boolean:
 		return "bool:";
-	case Type::StringVector:
-	case Type::String:
+	case type::string_vector:
+	case type::string:
 		return "string:";
-	case Type::Unknown:
+	case type::unknown:
 	default:
 		return {};
 	}
@@ -87,7 +87,7 @@ void writer::write_value_value(value const& val)
 	default:
 		ostream.put(to_string(val));
 		break;
-	case hdf::Type::String:
+	case doc::type::string:
 		ostream.put('"');
 		ostream.put(to_string(val));
 		ostream.put('"');
@@ -127,37 +127,37 @@ void writer::error(log::level lvl, string_view msg)
 }
 
 /*! Set the indentation style for the document */
-void writer::set_indentation_style(IndentationStyle newStyle)
+void writer::set_indentation_style(indentation_style newStyle)
 {
 	indentation = newStyle;
 }
 
 std::string writer::get_indent() const
 {
-	if (indentation == None)
+	if (indentation == indentation_style::none)
 		return {};
 
 	size_t indent_size = 0;
 	char indent_char = ' ';
 
 	switch (indentation) {
-	case IndentationStyle::Space:
+	case indentation_style::none:
+		break;
+	case indentation_style::space:
 		indent_size = 1;
 		break;
-	case IndentationStyle::DoubleSpace:
+	case indentation_style::double_space:
 		indent_size = 2;
 		break;
-	case IndentationStyle::FourSpaces:
+	case indentation_style::four_spaces:
 		indent_size = 4;
 		break;
-	case IndentationStyle::EightSpaces:
+	case indentation_style::eight_spaces:
 		indent_size = 8;
 		break;
-	case IndentationStyle::Tab:
+	case indentation_style::tab:
 		indent_size = 1;
 		indent_char = '\t';
-	case IndentationStyle::None:
-		break;
 	}
 
 	indent_size *= depth;

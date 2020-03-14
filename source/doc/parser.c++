@@ -1,23 +1,23 @@
 /*
- * Copyright (C) 2014-2015  absurdworlds
- * Copyright (C) 2015       Hedede <hededrk@gmail.com>
+ * Copyright (C) 2014-2020  absurdworlds
+ * Copyright (C) 2015-2020  Hedede <hededrk@gmail.com>
  *
  * License LGPLv3 or later:
  * GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#include <aw/fileformat/hdf/parser.h>
+#include <aw/doc/parser.h>
 
 #include <cassert>
 #include <cstdio>
 
 #include <aw/algorithm/in.h>
 #include <aw/types/string_view.h>
-#include <aw/fileformat/hdf/type.h>
+#include <aw/doc/type.h>
 
 namespace aw {
-namespace hdf {
+namespace doc {
 inline namespace v1 {
 object parser::read()
 {
@@ -95,17 +95,17 @@ value parser::read_value()
 	return parse_value(id);
 }
 
-hdf::Type parse_type(string_view token)
+doc::type parse_type(string_view token)
 {
 	if (token == "bool" || token == "b")
-		return Type::Boolean;
+		return type::boolean;
 	if (token == "int" || token == "i")
-		return Type::Integer;
+		return type::integer;
 	if (token == "float" || token == "f")
-		return Type::Float;
+		return type::floating_point;
 	if (token == "string" || token == "s")
-		return Type::String;
-	return Type::Unknown;
+		return type::string;
+	return type::unknown;
 }
 
 template<>
@@ -158,13 +158,13 @@ value parser::parse_value(token id)
 	auto type = parse_type(id.value);
 
 	switch (type) {
-	case Type::String:
+	case type::string:
 		return parse_value<std::string>();
-	case Type::Float:
+	case type::floating_point:
 		return parse_value<double>();
-	case Type::Integer:
+	case type::integer:
 		return parse_value<intmax_t>();
-	case Type::Boolean:
+	case type::boolean:
 		return parse_value<bool>();
 	default:
 		lex.error("Invalid type", id.pos);
@@ -238,13 +238,13 @@ value parser::parse_vector(token id)
 	auto type = parse_type(id.value);
 	auto tok = lex.get_token();
 	switch (type) {
-	case Type::String:
+	case type::string:
 		return value{parse_vector<std::string>(tok.pos)};
-	case Type::Integer:
+	case type::integer:
 		return value{parse_vector<intmax_t>(tok.pos)};
-	case Type::Float:
+	case type::floating_point:
 		return value{parse_vector<double>(tok.pos)};
-	case Type::Boolean:
+	case type::boolean:
 		return value{parse_vector<bool>(tok.pos)};
 	default:
 		lex.error("Invalid type", id.pos);
@@ -286,26 +286,22 @@ void parser::processCommand() {
 		return;
 	}
 
-	if (tok.value == "hdf_version") {
+	if (tok.value == "awdoc_version") {
 		tok = lex.get_token();
 
 		if (tok.kind != token::string) {
-			lex.error("Expected string after \"hdf_version\".", tok.pos);
+			lex.error("Expected string after \"awdoc_version\".", tok.pos);
 			return;
 		}
 
 		std::string ver = tok.value.substr(0,3);
-		if (ver == "1.2") {
-			lex.message("HDF version: 1.2", tok.pos);
-		} else if (ver == "1.1") {
-			lex.error("Version 1.1 is not supported.", tok.pos);
-			return;
-		} else if (ver == "1.0") {
-			lex.error("Version 1.0 is not supported.", tok.pos);
+		if (ver == "1.4") {
+			lex.message("HDF version: 1.4", tok.pos);
+		} else if (in(ver, "1.0","1.1","1.2","1.3")) {
+			lex.error("Version " + tok.value + " is not supported.", tok.pos);
 			return;
 		} else {
-			lex.error("hdf_version: invalid version: " +
-			               tok.value + ".", tok.pos);
+			lex.error("doc_version: invalid version: " + tok.value + ".", tok.pos);
 			return;
 		}
 	}
@@ -324,5 +320,5 @@ void parser::processCommand() {
 	}
 }
 } // inline namespace v1
-} // namespace hdf
+} // namespace doc
 } // namespace aw

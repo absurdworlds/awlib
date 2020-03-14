@@ -15,52 +15,52 @@
 
 #include <aw/log/ostream_logger.h>
 #include <aw/io/input_file_stream.h>
-#include <aw/fileformat/hdf/parser.h>
+#include <aw/doc/parser.h>
 
 using namespace aw;
 using namespace aw::io;
-using namespace aw::hdf;
+using namespace aw::doc;
 
 /*!
- * \example hdf_example.cpp
+ * \example doc_example.cpp
  *
- * This file provides an usage example for hdf::parser,
- * messages.hdf is used as an example document here.
+ * This file provides an usage example for doc::parser,
+ * messages.doc is used as an example document here.
  */
 
 typedef std::map<std::string, value> Document;
 
-void parseObject(parser* hdf, std::string parent, Document& doc);
-void parseNode(parser* hdf, std::string name, std::string node, Document& doc);
-void parsevalue(parser* hdf, std::string name, std::string node, Document& doc);
+void parseObject(doc::parser* parser, std::string parent, Document& doc);
+void parseNode(doc::parser* parser, std::string name, std::string node, Document& doc);
+void parsevalue(doc::parser* parser, std::string name, std::string node, Document& doc);
 
-void parseDocument(parser* hdf, Document& doc)
+void parseDocument(doc::parser* parser, Document& doc)
 {
-	hdf::object obj;
-	while (hdf->read(obj)) {
-		if (obj.kind != hdf::object::node)
+	doc::object obj;
+	while (parser->read(obj)) {
+		if (obj.kind != doc::object::node)
 			continue;
 
 		doc[obj.name] = value();
-		parseObject(hdf, obj.name, doc);
+		parseObject(parser, obj.name, doc);
 	}
 }
 
-void parseObject(parser* hdf, std::string parent, Document& doc)
+void parseObject(doc::parser* parser, std::string parent, Document& doc)
 {
-	hdf::object obj;
-	while (hdf->read(obj)) {
+	doc::object obj;
+	while (parser->read(obj)) {
 		std::string& name = obj.name;
 
 		switch (obj.kind) {
-		case hdf::object::node:
-			parseObject(hdf, parent + "." + name, doc);
+		case doc::object::node:
+			parseObject(parser, parent + "." + name, doc);
 			doc[parent + "." + name] = value();
 			break;
-		case hdf::object::value:
+		case doc::object::value:
 			doc[parent + "." + name] = obj.val;
 			break;
-		case hdf::object::end:
+		case doc::object::end:
 			return;
 		default:
 			break;
@@ -78,12 +78,12 @@ int main(int,char** arg)
 	// open a file
 	io::input_file_stream stream{arg[1]};
 	// create the parser
-	parser hdf{stream, &log};
+	parser parser{stream, &log};
 
 	Document doc;
 
 	auto begin = std::chrono::steady_clock::now();
-	parseDocument(&hdf, doc);
+	parseDocument(&parser, doc);
 	auto end = std::chrono::steady_clock::now();
 
 	std::cerr << std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin).count() << '\n';

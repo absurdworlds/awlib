@@ -1,13 +1,13 @@
 /*
- * Copyright (C) 2014-2016 absurdworlds
+ * Copyright (C) 2014-2020 absurdworlds
  *
  * License LGPLv3 or later:
  * GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef aw_hdf_Type_h
-#define aw_hdf_Type_h
+#ifndef aw_doc_type_h
+#define aw_doc_type_h
 #include <string>
 #include <vector>
 #include <aw/meta/conditional.h>
@@ -31,70 +31,70 @@ constexpr bool is_vector = is_vector_t<T>::value;
 template<typename T, template <typename> typename Pred>
 constexpr bool is_vector_of = is_vector_of_t<T, Pred>::value;
 
-namespace hdf {
+namespace doc {
 /*!
- * Enumeration of possible HDF value types
+ * Enumeration of possible value types
  */
-enum class Type {
-	Unknown,
-	Boolean,
-	Integer,
-	Float,
-	String,
-	BooleanVector,
-	IntegerVector,
-	FloatVector,
-	StringVector
+enum class type {
+	unknown,
+	boolean,
+	integer,
+	floating_point,
+	string,
+	boolean_vector,
+	integer_vector,
+	float_vector,
+	string_vector
 };
 
 namespace _impl {
 template<typename T>
-constexpr auto typeof() -> enable_if<is_int<T>, Type>   { return Type::Integer; }
+constexpr auto typeof() -> enable_if<is_int<T>, type>   { return type::integer; }
 template<typename T>
-constexpr auto typeof() -> enable_if<is_vector_of<T, is_int_t>, Type>
+constexpr auto typeof() -> enable_if<is_vector_of<T, is_int_t>, type>
 {
-	return Type::IntegerVector;
+	return type::integer_vector;
 }
 
 template<typename T>
-constexpr auto typeof() -> enable_if<is_float<T>, Type> { return Type::Float; }
+constexpr auto typeof() -> enable_if<is_float<T>, type> { return type::floating_point; }
 template<typename T>
-constexpr auto typeof() -> enable_if<is_vector_of<T, is_float_t>, Type>
+constexpr auto typeof() -> enable_if<is_vector_of<T, is_float_t>, type>
 {
-	return Type::FloatVector;
+	return type::float_vector;
 }
 
 template<typename T>
-constexpr Type typeof()
+constexpr type typeof()
 {
-	return Type::Unknown;
+	return type::unknown;
 }
 
 template<>
-constexpr Type typeof<std::string>()              { return Type::String; }
+constexpr type typeof<std::string>()              { return type::string; }
 template<>
-constexpr Type typeof<std::vector<std::string>>() { return Type::String; }
+constexpr type typeof<std::vector<std::string>>() { return type::string; }
 
 template<>
-constexpr Type typeof<bool>()              { return Type::Boolean; }
+constexpr type typeof<bool>()              { return type::boolean; }
 template<>
-constexpr Type typeof<std::vector<bool>>() { return Type::Boolean; }
+constexpr type typeof<std::vector<bool>>() { return type::boolean; }
 } // namespace _impl
 
 /*!
- * HDF type corresponding to type T
+ * Value corresponding to type T
  */
 template<typename T>
-constexpr Type typeof = _impl::typeof<T>();
+constexpr type typeof = _impl::typeof<T>();
 
 /*!
  * Compare type of a value \a val to the type \a type.
  */
 template<typename T>
-inline bool operator==(hdf::Type type, T const& val)
+inline bool operator==(doc::type type, T const& val)
 {
 	return type == typeof<T>;
 }
-} // namespace hdf
+} // namespace doc
 } // namespace aw
-#endif//aw_hdf_Type_h
+#endif//aw_doc_type_h

@@ -1,35 +1,35 @@
 /*
- * Copyright (C) 2014  absurdworlds
- * Copyright (C) 2015  hedede <haddayn@gmail.com>
+ * Copyright (C) 2014-2020  absurdworlds
+ * Copyright (C) 2015-2020  hedede <haddayn@gmail.com>
  *
  * License LGPLv3 or later:
  * GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef aw_fileformat_hdf_writer_h
-#define aw_fileformat_hdf_writer_h
+#ifndef aw_fileformat_doc_writer_h
+#define aw_fileformat_doc_writer_h
 #include <aw/types/string_view.h>
 
-#include <aw/fileformat/hdf/export.h>
-#include <aw/fileformat/hdf/value.h>
+#include <aw/doc/export.h>
+#include <aw/doc/value.h>
 
 #include <aw/io/WriteStream.h>
 #include <aw/log/log.h>
 namespace aw {
-namespace hdf {
+namespace doc {
 /*! List of Writer indentation styles */
-enum IndentationStyle {
-	Tab,
-	Space,
-	DoubleSpace,
-	FourSpaces,
-	EightSpaces,
-	None
+enum class indentation_style {
+	none,
+	tab,
+	space,
+	double_space,
+	four_spaces,
+	eight_spaces,
 };
 
-//! Interface for writing HDF files. Supports HDF 1.4.0 format.
-struct AW_HDF_EXP writer {
+//! Interface for writing doc files. Supports doc 1.4.0 format.
+struct AW_DOC_EXP writer {
 	//! Create writer outputting to \a out.
 	writer(io::WriteStream& out, log* logger = nullptr)
 		: ostream{out}, logger{logger}
@@ -50,7 +50,7 @@ struct AW_HDF_EXP writer {
 	void add_comment(string_view comment_text);
 
 	/*! Set the indentation style for the document */
-	void set_indentation_style(IndentationStyle style);
+	void set_indentation_style(indentation_style style);
 
 private:
 	/*! Report an error */
@@ -63,9 +63,9 @@ private:
 
 	io::WriteStream& ostream;
 	log* logger;
-	IndentationStyle indentation = IndentationStyle::DoubleSpace;
+	indentation_style indentation = indentation_style::double_space;
 	size_t depth = 0;
 };
 } // namespace io
 } // namespace aw
-#endif//aw_fileformat_hdf_writer_h
+#endif//aw_fileformat_doc_writer_h
