@@ -52,7 +52,7 @@ ExtraLibraryPaths = $(addprefix -L,$(CONFIG_LIBRARY_PATHS))
 MKDIR_P = mkdir -p
 ECHO = @echo
 
-CXXFLAGS  = -std=c++1z
+CXXFLAGS  = -std=c++17
 CXXFLAGS += -fPIC
 CXXFLAGS += -fvisibility=default
 CXXFLAGS += -fdiagnostics-color=auto
