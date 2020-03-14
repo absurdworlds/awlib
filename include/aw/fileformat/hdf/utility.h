@@ -11,6 +11,7 @@
 #define aw_hdf_utility_h
 #include <aw/fileformat/hdf/node.h>
 #include <aw/io/input_stream.h>
+#include <aw/log/log.h>
 
 namespace aw {
 namespace hdf {

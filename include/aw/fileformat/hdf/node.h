@@ -14,7 +14,6 @@
 #include <algorithm>
 #include <aw/types/string_view.h>
 #include <aw/fileformat/hdf/value.h>
-#include <aw/log/log_fwd.h>
 namespace aw::hdf {
 inline namespace v1 {
 struct parser;
