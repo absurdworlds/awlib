@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info">
     <mime-type type="application/x-itd">
-        <comment>hrengin itd archive</comment>
+        <comment>awlib itd archive</comment>
         <icon name="application-x-itd"/>
 
 	<magic priority="51">
@@ -10,7 +10,7 @@
 	<!--glob pattern="*.itd"/-->
     </mime-type>
     <mime-type type="application/x-hpk">
-	<comment>hrengin package/archive</comment>
+	<comment>hedede's package/archive</comment>
         <icon name="application-x-hpk"/>
 	<sub-class-of type="application/x-itd"/>
 	<magic priority="52">
@@ -20,18 +20,18 @@
 	</magic>
 	<!--glob pattern="*.hpk"/-->
     </mime-type>
-    <mime-type type="text/x-hrdf">
-	<comment>hrengin document</comment>
-        <acronym>HDF</acronym>
-        <expanded-acronym>hrengin Data Format</expanded-acronym>
-        <icon name="text-x-hrdf"/>
+    <mime-type type="text/x-awdoc">
+	<comment>awlib document</comment>
+        <acronym>awdoc</acronym>
+        <expanded-acronym>awlib document</expanded-acronym>
+        <icon name="text-x-awdoc"/>
 	<sub-class-of type="text/x-itd"/>
 	<magic priority="50">
-            <match value="!hdf-version " type="string" offset="0"/>
-            <match value="!hdf-version\t" type="string" offset="0"/>
+            <match value="!awdoc-version " type="string" offset="0"/>
+            <match value="!awdoc-version\t" type="string" offset="0"/>
 	</magic>
-	<glob pattern="*.hdf">
-	<glob pattern="*.hndf">
-	<glob pattern="*.hrdf">
+	<glob pattern="*.awdoc">
+	<glob pattern="*.awd">
+	<glob pattern="*.wdf">
     </mime-type>
 </mime-info>

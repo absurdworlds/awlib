@@ -53,9 +53,9 @@ namespace gui {}
 
 /*!
  * \brief
- * HDF parser & writer library.
+ * awdoc parser & writer library.
  */
-namespace hdf {}
+namespace doc {}
 
 /*!
  * \brief
