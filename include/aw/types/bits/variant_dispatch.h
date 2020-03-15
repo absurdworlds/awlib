@@ -28,28 +28,26 @@ auto apply_functor(Storage* storage, Functor func) ->
 
 template<class Variant, size_t Start, size_t Length>
 struct vh_recursive {
-
 	template<class Storage, class Functor>
 	static auto dispatch(size_t index, Storage storage, Functor f) ->
 		typename Functor::return_type
 	{
 		constexpr size_t Mid = Length / 2;
-		if (index < Start + Mid)
-			return vh_recursive<Variant,Start,Mid>::template dispatch(index, storage, f);
-		return vh_recursive<Variant,Start+Mid,Length-Mid>::template dispatch(index, storage, f);
-	}
-};
+		if (index == Start) {
+			using T = variant_alternative<Start, Variant>;
+			return apply_functor<T>(storage, f);
+		}
 
-template<class Variant, size_t Start>
-struct vh_recursive<Variant,Start,1> {
-	template<class Storage, class Functor>
-	static auto
-	dispatch(size_t index, Storage* storage, Functor f) ->
-		typename Functor::return_type
-	{
-		assert(index == Start);
-		using T = variant_alternative<Start, Variant>;
-		return apply_functor<T>(storage, f);
+		if constexpr(Length > 1)
+		{
+			if (index < Start + Mid)
+				return vh_recursive<Variant,Start,Mid>::template dispatch(index, storage, f);
+			return vh_recursive<Variant,Start+Mid,Length-Mid>::template dispatch(index, storage, f);
+		}
+		else
+		{
+			assert(index == Start);
+		}
 	}
 };
 
