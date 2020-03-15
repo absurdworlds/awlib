@@ -11,17 +11,19 @@ Test(tmpflag) {
 	Checks {
 		TestAssert( !f );
 
-		f.set( 10s );
+		f.set( 500ms );
 
 		TestAssert( !!f );
 
-		std::this_thread::sleep_for( 10s );
+		std::this_thread::sleep_for( 500ms );
 
 		TestAssert( !f );
 
-		f.set( 5s );
+		f.set( 250ms );
 
-		std::this_thread::sleep_for( 3s );
+		TestAssert( !!f );
+
+		std::this_thread::sleep_for( 200ms );
 
 		TestAssert( f == true );
 
