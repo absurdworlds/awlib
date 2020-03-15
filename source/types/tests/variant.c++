@@ -39,6 +39,26 @@ Test(variant_basic_copy) {
 	}
 }
 
+template<int> struct dummy{};
+template<int i> float operator*(dummy<i>, int) { return {}; }
+
+Test(variant_const_variant) {
+	using namespace std::string_literals;
+	aw::variant<int, float, dummy<0>, dummy<1>, dummy<2>, dummy<3>, dummy<4>, dummy<5>, dummy<6>, dummy<7>, dummy<8>> var1;
+
+	var1.set(10.01f);
+
+	Checks {
+		const auto& cvar = var1;
+
+		float v = cvar.apply([] (auto& v) {
+			return v * 2;
+		});
+
+		TestEqual(v, 10.01f*2);
+	}
+}
+
 Test(variant_copy_5types) {
 	using namespace std::string_literals;
 	aw::variant<int, float, bool, unsigned, std::string> var1;

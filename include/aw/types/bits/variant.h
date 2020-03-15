@@ -22,8 +22,6 @@ namespace _impl {
 //-------------------------------------
 // Destroys currently held value
 struct variant_destroy_visitor {
-	using return_type = void;
-
 	template<typename T>
 	void operator()(T& data)
 	{
@@ -40,8 +38,6 @@ private:
 // Copies value held by one variant into another
 template<typename Variant>
 struct variant_copy_assign_visitor {
-	using return_type = void;
-
 	template<typename T>
 	void operator()(T const& value)
 	{
@@ -60,8 +56,6 @@ private:
 // Moves value held by one variant into another
 template<typename Variant>
 struct variant_move_assign_visitor {
-	using return_type = void;
-
 	template<typename T>
 	void operator()(T& value)
 	{
@@ -81,8 +75,7 @@ private:
 // Variant visitor dispatch
 //-------------------------------------
 template<typename...Ts, typename Storage, typename Functor>
-auto apply_dispatch(variant<Ts...> const& var, Storage storage, Functor f) ->
-	typename Functor::return_type;
+decltype(auto) apply_dispatch(variant<Ts...> const& var, Storage* storage, Functor f);
 
 
 //-------------------------------------

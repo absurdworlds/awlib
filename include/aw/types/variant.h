@@ -295,14 +295,14 @@ public:
 	 *    Return value of the functor, if present.
 	 */
 	template<typename Functor>
-	auto apply(Functor func) -> typename Functor::return_type
+	decltype(auto) apply(Functor func)
 	{
 		auto sptr = get_ptr<void>();
 		return _impl::apply_dispatch(*this, sptr, func);
 	}
 
 	template<typename Functor>
-	auto apply(Functor func) const -> typename Functor::return_type
+	decltype(auto) apply(Functor func) const
 	{
 		auto sptr = get_ptr<void const>();
 		return _impl::apply_dispatch(*this, sptr, func);
