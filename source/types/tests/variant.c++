@@ -78,6 +78,20 @@ Test(variant_copy_5types) {
 		TestEqual(*var1.get<std::string>(), *var2.get<std::string>());
 		TestEqual(*var1.get<std::string>(), test_val);
 	}
+
+	auto test_set = [&] (auto value) {
+		var1.set(value);
+		var2 = var1;
+		TestEqual(*var2.get<decltype(value)>(), value);
+	};
+
+	Checks {
+		test_set(1);
+		test_set(1.0f);
+		test_set(true);
+		test_set(1u);
+		test_set("1"s);
+	}
 }
 
 Test(variant_basic_move) {

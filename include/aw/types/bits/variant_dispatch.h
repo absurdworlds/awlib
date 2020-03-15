@@ -48,7 +48,7 @@ struct vh_linear {
 };
 
 // Recursive (tree) dispatch
-template<size_t Start, size_t Length, typename...Ts>
+template<size_t Start, size_t End, typename...Ts>
 struct vh_recursive {
 	template<class Storage, class Functor>
 	static decltype(auto)
@@ -56,23 +56,27 @@ struct vh_recursive {
 	{
 		using return_type = apply_result<Functor, Ts...>;
 
-		if (index == Start) {
-			using T = at_index<Start, Ts...>;
+		constexpr size_t Length = End - Start;
+		constexpr size_t Mid = Start + Length / 2;
+
+		if (index == Mid) {
+			using T = at_index<Mid, Ts...>;
 			return apply_functor<T, return_type>(storage, f);
 		}
 
-		if constexpr(Length > 1)
-		{
-			constexpr size_t Mid = Length / 2;
+		constexpr size_t Length_left  = Mid - Start;
+		constexpr size_t Length_right = End - Mid;
 
-			if (index < Start + Mid)
-				return vh_recursive<Start,Mid,Ts...>::template dispatch(index, storage, f);
-			return vh_recursive<Start+Mid,Length-Mid,Ts...>::template dispatch(index, storage, f);
-		}
-		else
+		if constexpr (Length_left > 0)
 		{
-			assert(index == Start);
+			if (index < Mid)
+				return vh_recursive<Start,Mid,Ts...>::template dispatch(index, storage, f);
 		}
+
+		if constexpr (Length_right > 1)
+			return vh_recursive<Mid+1,End,Ts...>::template dispatch(index, storage, f);
+
+		assert(index == Mid);
 	}
 };
 
