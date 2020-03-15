@@ -96,10 +96,10 @@ node find_node(io::input_stream& file, string_view name, log* l)
 	return {};
 }
 
-node parse_file(io::input_stream& file, log* l)
+document parse_file(io::input_stream& file, log* l)
 {
 	doc::parser parser(file, l);
-	return parse_node(parser);
+	return document{ parse_node(parser) };
 }
 } // inline namespace v1
 } // namespace doc

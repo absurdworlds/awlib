@@ -9,7 +9,7 @@
  */
 #ifndef aw_doc_utility_h
 #define aw_doc_utility_h
-#include <aw/doc/node.h>
+#include <aw/doc/document.h>
 #include <aw/io/input_stream.h>
 #include <aw/log/log.h>
 
@@ -18,8 +18,8 @@ inline namespace v1 {
 value find_value(io::input_stream& file, string_view name, log* l = nullptr);
 node  find_node(io::input_stream& file,  string_view name, log* l = nullptr);
 
-node parse_node(parser& parser);
-node parse_file(io::input_stream& file, log* l = nullptr);
+node     parse_node(parser& parser);
+document parse_file(io::input_stream& file, log* l = nullptr);
 
 template<typename T, size_t N>
 inline bool get_numbers(value const& val, T (&out) [N])
