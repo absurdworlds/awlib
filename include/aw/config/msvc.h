@@ -17,5 +17,7 @@
 	#define AW_ARCH AW_ARCH_i686
 #endif
 
+#define AW_HAS_EXT__assume 1
+
 #define AW_ATTRIBUTE( ... ) __declspec(__VA_ARGS__)
 #endif //aw_compiler_setup_2

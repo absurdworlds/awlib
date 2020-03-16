@@ -30,10 +30,13 @@
 #define AW_HAS_EXT__builtin_ctz 1
 #define AW_HAS_EXT__builtin_clzll 1
 #define AW_HAS_EXT__builtin_ctzll 1
+#define AW_HAS_EXT__builtin_unreachable 1
 
 #ifdef __SIZEOF_INT128__
 #define AW_HAS_EXT__int128 1
 #endif
+
+#define AW_HAS_IMPL(x) AW_HAS_EXT##x
 
 #define AW_ATTRIBUTE( ... ) __attribute__((__VA_ARGS__))
 #endif //aw_compiler_setup_2

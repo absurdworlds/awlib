@@ -11,6 +11,7 @@ static_assert(false, "Do not include this file directly.");
 #endif//aw_types_variant_h
 
 #include <aw/types/strip.h>
+#include <aw/utility/builtins.h>
 
 namespace aw {
 namespace _impl {
@@ -43,7 +44,7 @@ struct vh_linear {
 		if constexpr (sizeof...(Ts) > 0)
 			return vh_linear<Ts...>::dispatch(--index, storage, f);
 
-		//aw_unreachable();
+		_unreachable();
 	}
 };
 
@@ -76,7 +77,7 @@ struct vh_recursive {
 		if constexpr (Length_right > 1)
 			return vh_recursive<Mid+1,End,Ts...>::template dispatch(index, storage, f);
 
-		assert(index == Mid);
+		_unreachable();
 	}
 };
 

@@ -26,6 +26,7 @@
 #define AW_HAS_EXT__builtin_ctz   __has_builtin(__builtin_ctz)
 #define AW_HAS_EXT__builtin_clzll __has_builtin(__builtin_clzll)
 #define AW_HAS_EXT__builtin_ctzll __has_builtin(__builtin_ctzll)
+#define AW_HAS_EXT__builtin_unreachable __has_builtin(__builtin_unreachable)
 
 #ifdef __SIZEOF_INT128__
 #define AW_HAS_EXT__int128 1

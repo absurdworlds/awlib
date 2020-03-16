@@ -10,6 +10,7 @@
 #define aw_graphics_awgl_shader_enum_h
 #include <aw/graphics/gl/api/types.h>
 #include <aw/types/string_view.h>
+#include <aw/utility/builtins.h>
 namespace aw {
 namespace gl {
 enum class shader_handle : GLuint {};
@@ -41,6 +42,7 @@ constexpr string_view enum_string( shader_type type )
 	default:                    return {};
 	};
 	// unreachable
+	_unreachable();
 }
 
 enum class shader_param : GLenum {
