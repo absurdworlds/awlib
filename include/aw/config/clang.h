@@ -33,4 +33,6 @@
 #endif
 
 #define AW_ATTRIBUTE( ... ) __attribute__((__VA_ARGS__))
+
+#define aw_force_inline AW_ATTRIBUTE(always_inline) inline
 #endif //aw_compiler_setup_2

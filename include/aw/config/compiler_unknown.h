@@ -8,18 +8,5 @@
  */
 #ifndef aw_compiler_setup_2
 #define aw_compiler_setup_2
-#define AW_COMPILER AW_COMPILER_MVSC
-#define AW_CVER_X _MSC_VER
-
-#if defined(_M_X64)
-	#define AW_ARCH AW_ARCH_X86_64
-#elif defined(_M_IX86)
-	#define AW_ARCH AW_ARCH_i686
-#endif
-
-#define AW_HAS_EXT__assume 1
-
-#define AW_ATTRIBUTE( ... ) __declspec(__VA_ARGS__)
-
-#define aw_force_inline __forceinline
+#define AW_COMPILER AW_COMPILER_UNKNOWN
 #endif //aw_compiler_setup_2

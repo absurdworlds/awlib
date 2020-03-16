@@ -19,9 +19,10 @@
  */
 
 /**** DEFINITIONS ****/
-#define AW_COMPILER_GCC   1
-#define AW_COMPILER_CLANG 2
-#define AW_COMPILER_MSVC  3
+#define AW_COMPILER_GCC     1
+#define AW_COMPILER_CLANG   2
+#define AW_COMPILER_MSVC    3
+#define AW_COMPILER_UNKNOWN 0
 
 #define AW_ARCH_i686   686
 #define AW_ARCH_x86_64 8664
@@ -60,6 +61,8 @@
 #include <aw/config/clang.h>
 #elif defined(_MSC_VER)
 #include <aw/config/msvc.h>
+#else
+#include <aw/config/compiler_unknown.h>
 #endif
 
 /**** PLATFORM ****/

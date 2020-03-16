@@ -11,7 +11,7 @@
 #include <aw/config.h>
 namespace aw {
 
-[[noreturn]] inline void _unreachable()
+[[noreturn]] aw_force_inline void _unreachable()
 {
 #if AW_EXT(__builtin_unreachable)
 	__builtin_unreachable();
