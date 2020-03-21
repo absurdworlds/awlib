@@ -17,7 +17,7 @@ doc::node* document::node(string_view path)
 {
 	auto cmpts = aw::string::lazy::split(path, "/");
 
-	doc::node* node = &root;
+	doc::node* node = &_root;
 	for (string_view name : cmpts)
 	{
 		if (!node)
@@ -31,7 +31,7 @@ doc::value* document::value(string_view path)
 {
 	auto divide = path.rfind('/');
 	if (divide == path.npos)
-		return root.values.find(path);
+		return _root.values.find(path);
 
 	auto node_path = path.substr(0, divide);
 

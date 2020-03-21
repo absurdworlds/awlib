@@ -13,6 +13,7 @@
 #include <string>
 #include <algorithm>
 #include <aw/types/string_view.h>
+#include <aw/types/array_view.h>
 #include <aw/doc/value.h>
 namespace aw::doc {
 inline namespace v1 {
@@ -47,6 +48,8 @@ struct list : private std::vector<std::pair<std::string, T>> {
 	{
 		base_type::emplace_back(value_type{std::move(name), node});
 	}
+
+	array_view<value_type> view() const { return *static_cast<base_type const*>(this); }
 };
 
 struct node {

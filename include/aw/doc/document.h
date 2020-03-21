@@ -15,12 +15,18 @@ inline namespace v1 {
 
 struct document {
 	explicit document(doc::node node)
-		: root(std::move(node))
+		: _root(std::move(node))
 	{
 	}
 
-	doc::node*  node(string_view path);
-	doc::value* value(string_view path);
+	doc::node  const& root() const { return _root; }
+	doc::node  const* node(string_view path)  const;
+	doc::value const* value(string_view path) const;
+
+	array_view<std::pair<std::string,doc::node>>  nodes()  const { return _root.nodes.view(); };
+	array_view<std::pair<std::string,doc::value>> values() const { return _root.values.view(); };
+
+	bool empty() { return _root.empty(); }
 
 	template<typename T>
 	T get(string_view path, T def)
@@ -30,10 +36,8 @@ struct document {
 		return def;
 	}
 
-	bool empty() { return root.empty(); }
-
 private:
-	doc::node root;
+	doc::node _root;
 };
 
 } // inline namespace v1

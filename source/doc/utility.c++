@@ -55,7 +55,7 @@ node parse_node(parser& parser)
 			node.values.add(name, obj.val); break;
 		case object::end:
 			return node;
-		};
+		}
 	}
 	return node;
 }
