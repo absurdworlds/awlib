@@ -31,6 +31,23 @@ Test(queue_ctors) {
 	}
 }
 
+Test(queue_comparisons) {
+	queue<unsigned> q0{1,2,3,4};
+	queue<unsigned> q1{1,2,3,4};
+	queue<unsigned> q2{2,2,3,4};
+	queue<unsigned> q3{2,3,3,4};
+	
+	Checks {
+		TestAssert(q0 == q1);
+		TestAssert(q0 < q2);
+		TestAssert(q1 < q2);
+		TestAssert(q3 > q1);
+		TestAssert(q3 > q2);
+		TestAssert(q3 == q3);
+	}
+}
+
+
 Test(queue_push_pop) {
 	queue<long> k;
 
