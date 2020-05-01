@@ -65,6 +65,22 @@ struct cbuffer_data {
 		return begin + (p - head);
 	}
 
+	const_pointer next_p(const_pointer p) const noexcept
+	{
+		return next_p( const_cast<pointer>(p) );
+	}
+	const_pointer prev_p(const_pointer p) const noexcept
+	{
+		return prev_p( const_cast<pointer>(p) );
+	}
+	const_pointer add_p(const_pointer p, difference_type n) const noexcept
+	{
+		return add_p( const_cast<pointer>(p), n );
+	}
+	const_pointer sub_p(const_pointer p, difference_type n) const noexcept
+	{
+		return sub_p( const_cast<pointer>(p), n );
+	}
 	const_pointer map_p(const_pointer p) const noexcept
 	{
 		return map_p( const_cast<pointer>(p) );
