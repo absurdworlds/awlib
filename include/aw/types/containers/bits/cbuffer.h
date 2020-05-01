@@ -29,21 +29,21 @@ struct cbuffer_data {
 		std::swap(tail,  other.tail);
 	}
 
-	pointer next_p(pointer p) const noexcept
+	const_pointer next_p(const_pointer p) const noexcept
 	{
 		if (p + 1 == end)
 			return begin;
 		return p + 1;
 	}
 
-	pointer prev_p(pointer p) const noexcept
+	const_pointer prev_p(const_pointer p) const noexcept
 	{
 		if (p == begin)
 			return end - 1;
 		return p - 1;
 	}
 
-	pointer add_p(pointer p, difference_type n) const noexcept
+	const_pointer add_p(const_pointer p, difference_type n) const noexcept
 	{
 		if (n < end - p)
 			return p + n;
@@ -51,39 +51,49 @@ struct cbuffer_data {
 		return (p + n) - end + begin;
 	}
 
-	pointer sub_p(pointer p, difference_type n) const noexcept
+	const_pointer sub_p(const_pointer p, difference_type n) const noexcept
 	{
 		if (n <= p - begin)
 			return p - n;
 		return (p - n) + (end - begin);
 	}
 
-	pointer map_p(pointer p) const noexcept
+	const_pointer map_p(const_pointer p) const noexcept
 	{
 		if (p < head)
 			return p + (end - head);
 		return begin + (p - head);
 	}
 
-	const_pointer next_p(const_pointer p) const noexcept
+	pointer next_p(pointer p) const noexcept
 	{
-		return next_p( const_cast<pointer>(p) );
+		const_pointer cp = p;
+		cp =  next_p( cp );
+		return const_cast<pointer>(cp);
 	}
-	const_pointer prev_p(const_pointer p) const noexcept
+	pointer prev_p(pointer p) const noexcept
 	{
-		return prev_p( const_cast<pointer>(p) );
+		const_pointer cp = p;
+		cp = prev_p( cp );
+		return const_cast<pointer>(cp);
 	}
-	const_pointer add_p(const_pointer p, difference_type n) const noexcept
+	pointer add_p(pointer p, difference_type n) const noexcept
 	{
-		return add_p( const_cast<pointer>(p), n );
+		const_pointer cp = p;
+		cp = add_p( cp, n );
+		return const_cast<pointer>(cp);
 	}
-	const_pointer sub_p(const_pointer p, difference_type n) const noexcept
+	pointer sub_p(pointer p, difference_type n) const noexcept
 	{
-		return sub_p( const_cast<pointer>(p), n );
+		const_pointer cp = p;
+		cp = sub_p( cp, n );
+		return const_cast<pointer>(cp);
 	}
-	const_pointer map_p(const_pointer p) const noexcept
+	pointer map_p(pointer p) const noexcept
 	{
-		return map_p( const_cast<pointer>(p) );
+		const_pointer cp = p;
+		cp = map_p( cp );
+		return const_cast<pointer>(cp);
 	}
 };
 
