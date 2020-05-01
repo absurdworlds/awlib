@@ -113,6 +113,7 @@ struct circular_iterator {
 	{
 		data = other.data;
 		p = other.p;
+		return *this;
 	}
 
 	//----------------------------------------------------------------

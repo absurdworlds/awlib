@@ -298,11 +298,14 @@ public:
 		impl.tail  = std::uninitialized_copy(first, last, impl.head);
 	}
 
+	/*!
+	 * Destructor.
+	 * Destroys queue and all elements in it.
+	 */
 	~queue()
 	{
 		destroy(impl.head, impl.tail);
 	}
-
 
 	/*! Iterator to the front of queue */
 	iterator begin()
@@ -627,5 +630,51 @@ private:
 			reallocate(next_size());
 	}
 };
+
+/*!
+ * Compare queues.
+ * Queues are considered equal if all elemets within are equal.
+ */
+template<typename T, typename Alloc>
+bool operator==(const queue<T, Alloc>& q1, const queue<T, Alloc>& q2)
+{
+	return (q1.size() == q2.size()) &&
+	        std::equal(q1.begin(), q1.end(), q2.begin());
+}
+
+/*!
+ * Compare queues lexicographically.
+ */
+template<typename T, typename Alloc>
+bool operator<(const queue<T, Alloc>& q1, const queue<T, Alloc>& q2)
+{
+	return std::lexicographical_compare(q1.begin(), q1.end(), q2.begin(), q2.end());
+}
+
+/*! Based on operator== */
+template<typename T, typename Alloc>
+bool operator!=(const queue<T, Alloc>& q1, const queue<T, Alloc>& q2)
+{
+	return !(q1 == q2);
+}
+/*! Based on operator< */
+template<typename T, typename Alloc>
+bool operator>(const queue<T, Alloc>& q1, const queue<T, Alloc>& q2)
+{
+	return q2 < q1;
+}
+/*! Based on operator< */
+template<typename T, typename Alloc>
+bool operator<=(const queue<T, Alloc>& q1, const queue<T, Alloc>& q2)
+{
+	return !(q2 < q1);
+}
+/*! Based on operator< */
+template<typename T, typename Alloc>
+bool operator>=(const queue<T, Alloc>& q1, const queue<T, Alloc>& q2)
+{
+	return !(q1 < q2);
+}
+
 } // namespace aw
 #endif//aw_containers_queue
