@@ -228,7 +228,7 @@ public:
 	queue(queue const& q)
 		: Base(q.impl, q.size() + 1)
 	{
-		std::uninitialized_copy(q.begin(), q.end(), begin());
+		impl.tail = std::uninitialized_copy(q.begin(), q.end(), impl.head);
 	}
 
 	/*!

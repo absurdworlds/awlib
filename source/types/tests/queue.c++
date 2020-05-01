@@ -18,6 +18,7 @@ Test(queue_ctors) {
 	queue<unsigned> q4(std::begin(q3), std::end(q3));
 	queue<unsigned> q5(std::move(q4));
 	queue<unsigned> q6{1,2};
+	queue<unsigned> q7(q3);
 
 	Checks {
 		TestAssert(q0.empty());
@@ -28,6 +29,7 @@ Test(queue_ctors) {
 		TestEqual(q3.size(), 5);
 		TestEqual(q5.size(), 5);
 		TestEqual(q6.size(), 2);
+		TestEqual(q7.size(), q3.size());
 	}
 }
 
@@ -47,6 +49,14 @@ Test(queue_comparisons) {
 	}
 }
 
+Test(queue_ctors_const) {
+	const queue<unsigned> q0{1,2,3,4};
+	queue<unsigned> q1(q0);
+	
+	Checks {
+		TestEqual(q0,q1);
+	}
+}
 
 Test(queue_push_pop) {
 	queue<long> k;
