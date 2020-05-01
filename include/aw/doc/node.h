@@ -32,7 +32,7 @@ struct list : private std::vector<std::pair<std::string, T>> {
 	using base_type::empty;
 	using base_type::size;
 
-	T* find(string_view name)
+	const T* find(string_view name) const
 	{
 		auto compare_name = [name] (value_type const& pair) {
 			return pair.first == name;
@@ -42,6 +42,16 @@ struct list : private std::vector<std::pair<std::string, T>> {
 		if (it == end())
 			return nullptr;
 		return &it->second;
+	}
+
+	const T* const_find(string_view name) const
+	{
+		return find(name);
+	}
+
+	T* find(string_view name)
+	{
+		return const_cast<T*>(const_find(name));
 	}
 
 	void add(std::string name, T const& node)

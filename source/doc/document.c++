@@ -13,11 +13,11 @@
 
 namespace aw {
 inline namespace v1 {
-doc::node* document::node(string_view path)
+doc::node const* document::node(string_view path) const
 {
 	auto cmpts = aw::string::lazy::split(path, "/");
 
-	doc::node* node = &_root;
+	const doc::node* node = &_root;
 	for (string_view name : cmpts)
 	{
 		if (!node)
@@ -27,7 +27,7 @@ doc::node* document::node(string_view path)
 	return node;
 }
 
-doc::value* document::value(string_view path)
+doc::value const* document::value(string_view path) const
 {
 	auto divide = path.rfind('/');
 	if (divide == path.npos)
