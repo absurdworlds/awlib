@@ -108,6 +108,19 @@ private:
 		next_of(get_ptr(ptr, num_blocks-1)) = nullptr;
 	}
 
+	std::byte* allocate(size_t full_size)
+	{
+		// TODO: make this a customization point?
+		auto raw_memory = ::operator new(full_size, std::nothrow);
+
+		return static_cast<std::byte*>(raw_memory);
+	}
+
+	slab* init_slab(void* memory, size_t size, slab* next)
+	{
+		return new (memory) slab{ size, next };
+	}
+
 	void* create_slab()
 	{
 		static constexpr size_t slab_size {
@@ -116,18 +129,16 @@ private:
 
 		auto full_size = slab_size + block_size * (num_blocks + 1);
 
-		slab* new_slab = (slab*)::operator new(full_size, std::nothrow);
-		new_slab->size = full_size;
-		new_slab->next = current;
-		current = new_slab;
+		std::byte* new_slab = allocate(full_size);
+		current = init_slab(new_slab, full_size, current);
 
-		void* ptr = (char*)new_slab + sizeof(slab);
+		void* memory_begin = new_slab + sizeof(slab);
 
-		std::align(align, size, ptr, full_size);
+		std::align(align, size, memory_begin, full_size);
 
-		init_blocks(ptr);
+		init_blocks(memory_begin);
 
-		return ptr;
+		return memory_begin;
 	}
 
 	void deallocate_slabs()
