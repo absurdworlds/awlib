@@ -35,11 +35,16 @@ int main(int,char**);
 
 namespace aw {
 #if (AW_PLATFORM != AW_PLATFORM_WIN32)
-char const bold[]  = "\033[1m";
-char const red[]   = "\033[31m";
-char const green[] = "\033[32m";
-char const white[] = "\033[37m";
-char const reset[] = "\033[0m";
+char const _bold[]  = "\033[1m";
+char const _red[]   = "\033[31m";
+char const _green[] = "\033[32m";
+char const _white[] = "\033[37m";
+char const _reset[] = "\033[0m";
+inline std::ostream& bold(std::ostream& os)  { if (isatty(1)) os << _bold;  return os;}
+inline std::ostream& red(std::ostream& os)   { if (isatty(1)) os << _red;   return os;}
+inline std::ostream& green(std::ostream& os) { if (isatty(1)) os << _green; return os;}
+inline std::ostream& white(std::ostream& os) { if (isatty(1)) os << _white; return os;}
+inline std::ostream& reset(std::ostream& os) { if (isatty(1)) os << _reset; return os;}
 #else
 char const bold[]  = "";
 char const red[]   = "";
