@@ -7,6 +7,26 @@
 TestFile("log_filter");
 
 namespace aw {
+inline namespace v1 {
+
+template<typename Formatter = format::pretty_print>
+std::string to_string(log::level level, Formatter&& fmt = {})
+{
+	switch (level)
+	{
+	case log::info:     return "info";
+	case log::warning:  return "warning";
+	case log::error:    return "error";
+	case log::critical: return "critical";
+	}
+
+	return {};
+}
+
+}
+}
+
+namespace aw {
 Test(regex_filter) {
 	using namespace aw;
 	log_tester log;
@@ -40,7 +60,7 @@ Test(regex_filter) {
 	filter.message(log::info, "main()", "test4");
 	filter.message(log::info, "main()", "testX");
 
-	filter.set_source_filter(true_func<string_view>{});
+	filter.set_source_filter(true_func{});
 	filter.set_message_filter(regex_filter{std::regex{".?"}, std::regex{"annoying_message"}});
 	filter.message(log::info, "main()", "annoying_message");
 	filter.message(log::info, "test5()", "starting");
@@ -58,8 +78,8 @@ Test(regex_filter) {
 	filter.message(log::warning, "main()", "test8");
 	filter.message(log::error,   "main()", "test9");
 
-	filter.set_source_filter(false_func<string_view>{});
-	filter.set_message_filter(false_func<string_view>{});
+	filter.set_source_filter(false_func{});
+	filter.set_message_filter(false_func{});
 	filter.message(log::error,   "main()", "test10");
 	filter.message(log::critical,"main()", "test11");
 };

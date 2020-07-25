@@ -85,6 +85,7 @@ inline file_mode get_file_mode(map_perms perms)
 	using mp = map_perms;
 	switch (perms) {
 	case mp::none:
+	case mp::none|mp::exec:
 		return file_mode::none;
 	case mp::read:
 	case mp::read|mp::exec:
@@ -95,7 +96,9 @@ inline file_mode get_file_mode(map_perms perms)
 	case mp::rdwr:
 	case mp::rdwr|mp::exec:
 		return file_mode::read|file_mode::write;
-	};
+	}
+
+	return file_mode::none;
 }
 
 
