@@ -75,10 +75,17 @@ CXXFLAGS += -MMD -MP
 endif
 
 # Colors
+ifeq ($(color),none)
+PRINTF = @true
+PRINTF_BOLD=$(PRINTF)
+PRINTF_RED=$(PRINTF)
+PRINTF_RESET=$(PRINTF)
+else
 PRINTF = @printf
 PRINTF_BOLD=$(PRINTF) '\033[1m'
 PRINTF_RED=$(PRINTF) '\033[31m'
 PRINTF_RESET=$(PRINTF) '\033[0m'
+endif
 
 # Build rules
 all: debug install
