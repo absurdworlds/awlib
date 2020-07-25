@@ -4,6 +4,25 @@
 #include <tuple>
 
 namespace aw {
+template<>
+struct string_converter<log::level> {
+	log::level level;
+
+	template<typename Formatter>
+	std::string operator()( Formatter& fmt ) const
+	{
+		switch (level)
+		{
+		case log::info:     fmt.convert("info");     break;
+		case log::warning:  fmt.convert("warning");  break;
+		case log::error:    fmt.convert("error");    break;
+		case log::critical: fmt.convert("critical"); break;
+		}
+
+		return fmt;
+	}
+};
+
 struct log_tester : log {
 	void message(log::level lvl, string_view src, string_view msg) override
 	{
@@ -12,8 +31,11 @@ struct log_tester : log {
 			TestFail("Unexpected message: " + to_string(received));
 			return;
 		}
-		TestAssert(received == expected.front());
-		expected.pop_front();
+
+		if (TestEqual(received, expected.front()))
+		{
+			expected.pop_front();
+		}
 	}
 
 	void expect(log::level lvl, string_view src, string_view msg)

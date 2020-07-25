@@ -166,15 +166,17 @@ struct context {
 		return failed;
 	}
 
-	void check_fail(std::string const& msg)
+	bool check_fail(std::string const& msg)
 	{
 		cur->messages.push_back(msg);
 		++cur->failed;
+		return false;
 	}
 
-	void check_succeed(std::string const&)
+	bool check_succeed(std::string const&)
 	{
 		++cur->succeded;
+		return true;
 	}
 
 private:
@@ -300,9 +302,9 @@ bool checks()         { context_block::enter(stage::checks); return true; }
 bool postconditions() { context_block::enter(stage::postconditions); return true; }
 
 template<typename Evaluator, typename... Args>
-void check(Evaluator eval, Args&&... args)
+bool check(Evaluator eval, Args&&... args)
 {
-	eval(std::forward<Args>(args)...) ?
+	return eval(std::forward<Args>(args)...) ?
 		file_context.check_succeed(eval.msg()) :
 		file_context.check_fail(eval.msg());
 }

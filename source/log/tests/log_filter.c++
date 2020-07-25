@@ -7,26 +7,6 @@
 TestFile("log_filter");
 
 namespace aw {
-inline namespace v1 {
-
-template<typename Formatter = format::pretty_print>
-std::string to_string(log::level level, Formatter&& fmt = {})
-{
-	switch (level)
-	{
-	case log::info:     return "info";
-	case log::warning:  return "warning";
-	case log::error:    return "error";
-	case log::critical: return "critical";
-	}
-
-	return {};
-}
-
-}
-}
-
-namespace aw {
 Test(regex_filter) {
 	using namespace aw;
 	log_tester log;

@@ -50,14 +50,17 @@ Test(to_string) {
 		math::vector3d<int> vec3 {};
 		math::matrix<int,4,4> mat4 {};
 
+
 		TestAssert(to_string(lst1) == "{true, true, true}"s);
 		TestAssert(to_string(lst2) == "{true, true, true}"s);
 		TestAssert(to_string(lst3) == "{{1, 0, 0}}"s);
 		TestAssert(to_string(vec3) == "{0, 0, 0}"s);
 		TestAssert(to_string(mat4) == "{{0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}}"s);
 
-		auto tuple = std::tuple{ 10, "xyz", false };
-		TestAssert(to_string(tuple) == R"({10, "xyz", false})");
+		auto tuple1 = std::tuple{ 10, "xyz", false };
+		auto tuple2 = std::tuple{ optional<std::string>{"test"}, "123", "123" };
+		TestAssert(to_string(tuple1) == R"({10, "xyz", false})");
+		TestEqual(to_string(tuple2), R"({"test", "123", "123"})");
 	}
 
 	Postconditions {
