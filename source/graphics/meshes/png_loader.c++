@@ -10,6 +10,9 @@
 #include <aw/fileformat/png/reader.h>
 #include <aw/utility/on_scope_exit.h>
 #include <aw/algorithm/in.h>
+
+#include <stdexcept>
+
 #include <png.h>
 
 namespace aw {
