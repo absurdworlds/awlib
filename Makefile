@@ -1,7 +1,7 @@
 all: libs
 
 # core
-libs: utility io log platform doc graphics obj
+libs: utility string io log platform doc graphics obj
 io:
 	@ $(MAKE) -C 'source/io' $(target)
 gui:
@@ -17,6 +17,8 @@ doc:
 platform:
 	@ $(MAKE) -C 'source/platform' $(target)
 
+string:
+	@ $(MAKE) -C 'source/string' $(target)
 utility:
 	@ $(MAKE) -C 'source/utility' $(target)
 
@@ -36,3 +38,7 @@ all-tests:
 	@ $(MAKE) -C 'source/string/tests'    $(target)
 	@ $(MAKE) -C 'source/types/tests'     $(target)
 	@ $(MAKE) -C 'source/log/tests'       $(target)
+	@ $(MAKE) -C 'source/platform/tests'  $(target)
+	@ $(MAKE) -C 'source/doc/tests'       $(target)
+	@ $(MAKE) -C 'source/algorithm/tests' $(target)
+
