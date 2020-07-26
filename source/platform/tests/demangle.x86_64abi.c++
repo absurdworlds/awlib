@@ -15,9 +15,7 @@ Test( demangle )
 {
 	for (auto&& [man, dem] : paired(mangled, demangled))
 		TestEqual( demangle( man ), dem );
-#if 0 // bug in __cxa_demangle
 	TestEqual( demangle( mangled_verylong ), demangled_verylong );
-#endif
 }
 
 } // namespace aw
