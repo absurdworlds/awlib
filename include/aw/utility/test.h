@@ -12,10 +12,9 @@
 #include <functional>
 #include <algorithm>
 #include <exception>
-#include <vector>
-#include <string>
 #include <iostream>
 #include <aw/config.h>
+#include <aw/test/test_case.h>
 #include <aw/utility/static_object.h>
 #include <aw/platform/demangle.h>
 #if (AW_PLATFORM == AW_PLATFORM_POSIX)
@@ -28,12 +27,13 @@
 /*!
  * This header is made for awlib internal tests.
  * It is so simple and crude, that it doesn't even
- * deserve separate directory.
+ * deserve a separate directory.
  */
 
 int main(int,char**);
 
 namespace aw {
+namespace test {
 #if (AW_PLATFORM != AW_PLATFORM_WIN32)
 char const _bold[]  = "\033[1m";
 char const _red[]   = "\033[31m";
@@ -52,49 +52,6 @@ char const green[] = "";
 char const white[] = "";
 char const reset[] = "";
 #endif
-
-namespace test {
-enum class stage : size_t {
-	start,
-	setup,
-	preconditions,
-	checks,
-	postconditions,
-	end
-};
-
-static char const* stage_name[] {
-	"start",
-	"setup",
-	"preconditions",
-	"checks",
-	"postconditions",
-	"end"
-};
-
-struct check_report {
-	explicit operator bool() const { return status; }
-	bool status;
-	std::string message;
-};
-
-struct test_case {
-	using test_function = void();
-	test_case(char const* name, test_function* func)
-		: name{name}, func{func}
-	{ }
-
-	char const* const name;
-
-private:
-	friend struct context;
-
-	test_function* const func;
-
-	stage st = stage::start;
-
-	std::vector<check_report> checks;
-};
 
 struct test_failed : std::exception {};
 
