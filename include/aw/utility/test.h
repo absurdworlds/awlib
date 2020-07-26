@@ -116,6 +116,17 @@ class context_block;
 class register_test;
 }
 
+
+class report {
+public:
+	virtual void begin_suite(const char* name, int test_count) = 0;
+	virtual void end_suite() = 0;
+
+	virtual void test_success(const char* name, const std::vector<check_report>& checks) = 0;
+	virtual void test_failure(const char* name, const std::vector<check_report>& checks, const char* detail) = 0;
+};
+
+
 class registry {
 	friend int ::main(int, char**);
 	friend struct context;
@@ -132,25 +143,18 @@ class registry {
 		vec.push_back(&ctx);
 	}
 
-	inline static int run();
-};
-
-
-class report {
-public:
-	virtual void begin_suite(const char* name, int test_count) = 0;
-	virtual void end_suite() = 0;
-
-	virtual void test_success(const char* name, const std::vector<check_report>& checks) = 0;
-	virtual void test_failure(const char* name, const std::vector<check_report>& checks, const char* detail) = 0;
+	inline static int run(report* _report);
 };
 
 class report_classic : public report {
 public:
 	void begin_suite(const char* name, int test_count) override
 	{
-		filename = name;
-		total    = test_count;
+		filename  = name;
+		total     = test_count;
+		count     = 0;
+		succeeded = 0;
+		failed    = 0;
 
 		println(bold, '[', filename, ']', ' ', reset, "running tests");
 	}
@@ -260,14 +264,14 @@ struct context {
 	test& current() { return *cur; }
 	char const* const filename;
 
-	int run()
+	int run(report* _report)
 	{
 		install_handler();
 
 		_report->begin_suite(filename, tests.size());
 
 		for (test& test_case : tests)
-			run_test(test_case);
+			run_test(test_case, _report);
 
 		_report->end_suite();
 
@@ -300,7 +304,7 @@ private:
 #endif
 	}
 
-	inline void run_test(test& tst);
+	inline void run_test(test& tst, report* _report);
 
 	void enter(stage st)
 	{
@@ -310,8 +314,8 @@ private:
 		cur->st = st;
 	}
 
-	inline void test_failure();
-	inline void test_success();
+	inline void test_failure(report* _report);
+	inline void test_success(report* _report);
 
 	void add_test(test&& tst)
 	{
@@ -320,36 +324,34 @@ private:
 
 private:
 	test* cur;
-	report_junit rengine;
-	report* _report = &rengine;
 	std::vector<test> tests;
 	unsigned failed = 0;
 };
 
-int registry::run()
+int registry::run(report* reporter)
 {
 	auto& vec = static_object<_ctxs>::instance().ctxs;
 
 	int res = 0;
 	for (auto& ctx : vec)
-		res += ctx->run();
+		res += ctx->run(reporter);
 
 	return res > 0xFF ? 0xFF : res;
 }
 
-void context::test_failure()
+void context::test_failure(report* _report)
 {
 	++failed;
 
 	_report->test_failure( cur->name, cur->checks, stage_name[size_t(cur->st)] );
 }
 
-void context::test_success()
+void context::test_success(report* _report)
 {
 	_report->test_success( cur->name, cur->checks );
 }
 
-void context::run_test(test& tst)
+void context::run_test(test& tst, report* _report)
 {
 	using namespace std::string_literals;
 
@@ -359,21 +361,21 @@ void context::run_test(test& tst)
 		enter(stage::start);
 		cur->func();
 		enter(stage::end);
-		return test_success();
+		return test_success(_report);
 	}
 	catch (test_failed& ex)
 	{
-		test_failure();
+		test_failure(_report);
 	}
 	catch (std::exception& e)
 	{
 		cur->checks.push_back(check_report{ false, "unhandled exception: "s + e.what() });
-		test_failure();
+		test_failure(_report);
 	}
 	catch (...)
 	{
 		cur->checks.push_back(check_report{ false, "caught unknown exception" });
-		test_failure();
+		test_failure(_report);
 	}
 }
 
@@ -384,7 +386,7 @@ extern context file_context;
 void context::segvhandler(int signum)
 {
 #if (AW_PLATFORM == AW_PLATFORM_POSIX)
-	file_context.test_failure();
+	//file_context.test_failure();
 	print(bold, red, "caught SIGSEGV, aborting tests", reset, '\n');
 	signal(signum, SIG_DFL);
 	kill(getpid(), signum);
@@ -416,6 +418,7 @@ bool setup()          { context_block::enter(stage::setup); return true; }
 bool preconditions()  { context_block::enter(stage::preconditions); return true; }
 bool checks()         { context_block::enter(stage::checks); return true; }
 bool postconditions() { context_block::enter(stage::postconditions); return true; }
+} // namespace
 
 template<typename Evaluator, typename... Args>
 bool check(Evaluator eval, Args&&... args)
@@ -424,7 +427,6 @@ bool check(Evaluator eval, Args&&... args)
 		file_context.check_succeed(eval.msg()) :
 		file_context.check_fail(eval.msg());
 }
-} // namespace
 } // namespace test
 } // namespace aw
 
@@ -514,7 +516,7 @@ struct _catch {
 } // namespace test
 } // namespace aw
 
-#define TestFile(name) namespace aw { namespace test { namespace { context file_context{name}; } } }
+#define TestFile(name) namespace aw::test { namespace { context file_context{name}; } }
 #define Test(name)     \
 	void run_test_##name(); \
 	struct Add_test_##name : aw::test::register_test { \
@@ -527,7 +529,6 @@ struct _catch {
 #define Preconditions  if (aw::test::preconditions())
 #define Checks         if (aw::test::checks())
 #define Postconditions if (aw::test::postconditions())
-#define RunTests()     int main(int,char**) { return aw::test::registry::run(); }
 
 #include <aw/meta/pp/macro.h>
 #define TestEqual(...) \

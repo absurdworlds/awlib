@@ -20,4 +20,4 @@ Test(read) {
 };
 } // namespace aw
 
-RunTests();
+#include <aw/test/test_runner.h>

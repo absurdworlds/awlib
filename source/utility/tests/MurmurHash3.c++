@@ -97,4 +97,4 @@ Test(murmur_64_128_1)
 }
 } // namespace aw
 
-RunTests();
+#include <aw/test/test_runner.h>

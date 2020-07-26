@@ -4,7 +4,7 @@
 #include <aw/utility/to_string/math/vector.h>
 #include <algorithm>
 
-TestFile("Vector");
+TestFile("math::quaternion");
 
 namespace aw {
 namespace math {
@@ -20,5 +20,3 @@ Test(quaternion) {
 };
 } // namespace math
 } // namespace aw
-
-RunTests();

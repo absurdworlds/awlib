@@ -68,4 +68,4 @@ Test(mem_buffer) {
 };
 } // namespace aw
 
-RunTests();
+#include <aw/test/test_runner.h>

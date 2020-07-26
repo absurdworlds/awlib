@@ -30,4 +30,3 @@ Test(basic_test) {
 };
 } // namespace aw
 
-RunTests();

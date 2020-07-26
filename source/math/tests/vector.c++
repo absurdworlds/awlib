@@ -85,4 +85,4 @@ Test(vec_cross) {
 } // namespace math
 } // namespace aw
 
-RunTests();
+#include <aw/test/test_runner.h>

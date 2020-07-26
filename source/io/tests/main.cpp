@@ -1,3 +1,3 @@
 #include <aw/utility/test.h>
 TestFile("main");
-RunTests();
+#include <aw/test/test_runner.h>
