@@ -78,9 +78,9 @@ struct check_report {
 	std::string message;
 };
 
-struct test {
+struct test_case {
 	using test_function = void();
-	test(char const* name, test_function* func)
+	test_case(char const* name, test_function* func)
 		: name{name}, func{func}
 	{ }
 
@@ -294,7 +294,7 @@ struct context {
 		registry::add(*this);
 	}
 
-	test& current() { return *cur; }
+	test_case& current() { return *cur; }
 	char const* const filename;
 
 	int run(report* _report)
@@ -303,8 +303,8 @@ struct context {
 
 		_report->begin_suite(filename, tests.size());
 
-		for (test& test_case : tests)
-			run_test(test_case, _report);
+		for (test_case& test : tests)
+			run_test_case(test, _report);
 
 		_report->end_suite();
 
@@ -337,7 +337,7 @@ private:
 #endif
 	}
 
-	inline void run_test(test& tst, report* _report);
+	inline void run_test_case(test_case& tst, report* _report);
 
 	void enter(stage st)
 	{
@@ -350,14 +350,14 @@ private:
 	inline void test_failure(report* _report);
 	inline void test_success(report* _report);
 
-	void add_test(test&& tst)
+	void add_test(test_case&& tst)
 	{
 		tests.push_back(std::move(tst));
 	}
 
 private:
-	test* cur;
-	std::vector<test> tests;
+	test_case* cur;
+	std::vector<test_case> tests;
 	unsigned failed = 0;
 };
 
@@ -384,11 +384,11 @@ void context::test_success(report* _report)
 	_report->test_success( cur->name, cur->checks );
 }
 
-void context::run_test(test& tst, report* _report)
+void context::run_test_case(test_case& test, report* _report)
 {
 	using namespace std::string_literals;
 
-	cur = &tst;
+	cur = &test;
 
 	try {
 		enter(stage::start);
@@ -440,8 +440,14 @@ class context_block {
 };
 
 class register_test {
+public:
+	register_test(const char* test_name, test_case::test_function* test_func)
+	{
+		add_test(aw::test::test_case{test_name, test_func});
+	}
+
 protected:
-	void add_test(test&& tst)
+	void add_test(test_case&& tst)
 	{
 		file_context.add_test(std::move(tst));
 	}
@@ -552,11 +558,7 @@ struct _catch {
 #define TestFile(name) namespace aw::test { namespace { context file_context{name}; } }
 #define Test(name)     \
 	void run_test_##name(); \
-	struct Add_test_##name : aw::test::register_test { \
-		Add_test_##name() { \
-			add_test(aw::test::test{#name, run_test_##name}); \
-		} \
-	} add_test_##name; \
+	aw::test::register_test add_test_##name{#name, run_test_##name}; \
 	void run_test_##name()
 #define Setup          if (aw::test::setup())
 #define Preconditions  if (aw::test::preconditions())
