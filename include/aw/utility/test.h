@@ -72,13 +72,19 @@ static char const* stage_name[] {
 	"end"
 };
 
+struct check_report {
+	explicit operator bool() const { return status; }
+	bool status;
+	std::string message;
+};
+
 struct test {
 	using test_function = void();
 	test(char const* name, test_function* func)
 		: name{name}, func{func}
 	{ }
 
-	char const*    const name;
+	char const* const name;
 
 private:
 	friend struct context;
@@ -87,10 +93,7 @@ private:
 
 	stage st = stage::start;
 
-	std::vector<std::string> messages;
-
-	size_t failed   = 0;
-	size_t succeded = 0;
+	std::vector<check_report> checks;
 };
 
 struct test_failed : std::exception {};
@@ -132,6 +135,121 @@ class registry {
 	inline static int run();
 };
 
+
+class report {
+public:
+	virtual void begin_suite(const char* name, int test_count) = 0;
+	virtual void end_suite() = 0;
+
+	virtual void test_success(const char* name, const std::vector<check_report>& checks) = 0;
+	virtual void test_failure(const char* name, const std::vector<check_report>& checks, const char* detail) = 0;
+};
+
+class report_classic : public report {
+public:
+	void begin_suite(const char* name, int test_count) override
+	{
+		filename = name;
+		total    = test_count;
+
+		println(bold, '[', filename, ']', ' ', reset, "running tests");
+	}
+
+	void end_suite()
+	{
+		print(bold, '[', filename, ']', ' ', reset);
+		print("tests done, failed: ");
+		print(bold, (failed > 0 ? red : white), failed, reset);
+		print(", succeeded: ");
+		print(bold, (succeeded > 0 ? green : white), succeeded, reset);
+		print(reset, '\n');
+
+	}
+
+	void test_success(const char* name, const std::vector<check_report>& checks) override
+	{
+		++succeeded;
+
+		test_start(name);
+
+		println(bold, green, " succeeded, checks: ", checks.size(), reset);
+	}
+
+	void test_failure(const char* name, const std::vector<check_report>& checks, const char* detail) override
+	{
+		++failed;
+
+		test_start(name);
+
+		int checks_failed    = 0;
+		int checks_succeeded = 0;
+
+		for (auto& check : checks)
+		{
+			if (!check)
+				++checks_failed;
+			else
+				++checks_succeeded;
+		}
+
+		print(bold, red, " failed: (", detail, ") ", reset);
+		print(red, "failed: ", bold, checks_failed, reset);
+		print(green, ", succeeded: ", bold, checks_succeeded, reset, '\n');
+
+		for (auto& check : checks)
+		{
+			if (!check)
+				print(bold, red, "check failed: ", reset, check.message, '\n');
+		}
+	}
+
+private:
+	void test_start(const char* name)
+	{
+		print(bold, '[', ++count, '/', total, ']', ' ', reset);
+		print("test \"", bold, name, reset, '"');
+	}
+
+private:
+	int total;
+	int count     = 0;
+	int succeeded = 0;
+	int failed    = 0;
+
+	const char* filename;
+};
+
+class report_junit : public report {
+public:
+	void begin_suite(const char* name, int test_count) override
+	{
+		println("<testsuite tests=\"", test_count, "\" name=\"", name, "\">");
+	}
+
+	void end_suite()
+	{
+		println("</testsuite>");
+
+	}
+
+	void test_success(const char* name, const std::vector<check_report>& checks) override
+	{
+		println("<testcase name=\"", name, "\"/>");
+	}
+
+	void test_failure(const char* name, const std::vector<check_report>& checks, const char* detail) override
+	{
+		println("<testcase name=\"", name, "\">");
+		for (auto& check : checks)
+		{
+			if (check)
+				continue;
+			println("<failure type=\"check_failed\">" + check.message + "\"</failure>");
+		}
+		println("</testcase>");
+	}
+};
+
 struct context {
 	context(char const* filename)
 		: filename(filename)
@@ -146,36 +264,25 @@ struct context {
 	{
 		install_handler();
 
-		print(bold, '[', filename, ']', ' ', reset);
-		print("running tests\n");
+		_report->begin_suite(filename, tests.size());
 
-		for (size_t i = 0, e = tests.size(); i < e; ++i) {
-			print(bold, '[', i+1, '/', e, ']', ' ', reset);
-			run_test(tests[i]);
-		}
+		for (test& test_case : tests)
+			run_test(test_case);
 
-		size_t succeded = tests.size() - failed;
-
-		print(bold, '[', filename, ']', ' ', reset);
-		print("tests done, failed: ");
-		print(bold, (failed > 0 ? red : white), failed, reset);
-		print(", succeeded: ");
-		print(bold, (succeded > 0 ? green : white), succeded, reset);
-		print(reset, '\n');
+		_report->end_suite();
 
 		return failed;
 	}
 
 	bool check_fail(std::string const& msg)
 	{
-		cur->messages.push_back(msg);
-		++cur->failed;
+		cur->checks.push_back(check_report{false, msg});
 		return false;
 	}
 
-	bool check_succeed(std::string const&)
+	bool check_succeed(std::string const& msg)
 	{
-		++cur->succeded;
+		cur->checks.push_back(check_report{true, msg});
 		return true;
 	}
 
@@ -197,12 +304,14 @@ private:
 
 	void enter(stage st)
 	{
-		if (cur->failed > 0)
-			throw test_failed{};
+		for (const auto& check : cur->checks)
+			if (!check)
+				throw test_failed{};
 		cur->st = st;
 	}
 
 	inline void test_failure();
+	inline void test_success();
 
 	void add_test(test&& tst)
 	{
@@ -211,6 +320,8 @@ private:
 
 private:
 	test* cur;
+	report_junit rengine;
+	report* _report = &rengine;
 	std::vector<test> tests;
 	unsigned failed = 0;
 };
@@ -230,35 +341,40 @@ void context::test_failure()
 {
 	++failed;
 
-	print(bold, red, " failed: (", stage_name[size_t(cur->st)], ") ", reset);
-	print(red, "failed: ", bold, cur->failed, reset);
-	print(green, ", succeded: ", bold, cur->succeded, reset, '\n');
+	_report->test_failure( cur->name, cur->checks, stage_name[size_t(cur->st)] );
+}
 
-	for (auto msg : cur->messages)
-		print(bold, red, "test failed: ", reset, msg, '\n');
+void context::test_success()
+{
+	_report->test_success( cur->name, cur->checks );
 }
 
 void context::run_test(test& tst)
 {
+	using namespace std::string_literals;
+
 	cur = &tst;
-	print("test \"", bold, cur->name, reset, '"');
+
 	try {
 		enter(stage::start);
 		cur->func();
 		enter(stage::end);
-		print(bold, green, " succeded, checks: ", cur->succeded, reset, '\n');
-		return;
-	} catch (test_failed& ex) {
-		test_failure();
-	} catch (std::exception& e) {
-		test_failure();
-		print(bold, red, "exception: ", reset, e.what(), '\n');
-	} catch (...) {
-		test_failure();
-		print(bold, red, "caught unknown exception", reset, '\n');
+		return test_success();
 	}
-
-	cur->messages.clear();
+	catch (test_failed& ex)
+	{
+		test_failure();
+	}
+	catch (std::exception& e)
+	{
+		cur->checks.push_back(check_report{ false, "unhandled exception: "s + e.what() });
+		test_failure();
+	}
+	catch (...)
+	{
+		cur->checks.push_back(check_report{ false, "caught unknown exception" });
+		test_failure();
+	}
 }
 
 namespace {
