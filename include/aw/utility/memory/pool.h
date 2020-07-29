@@ -1,9 +1,7 @@
 /*
  * Copyright (C) 2016  absurdworlds
  * Copyright (C) 2016  Hedede <Haddayn@gmail.com>
- *
- * License LGPLv3 or later:
- * GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
+ * License LGPLv3 or later: <http://gnu.org/licenses/lgpl-3.0.html>
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
@@ -13,8 +11,7 @@
 #include <new>
 #include <memory>
 #include <aw/types/types.h>
-namespace aw {
-namespace memory {
+namespace aw::memory {
 struct slab {
 	size_t size;
 	slab* next;
@@ -70,11 +67,7 @@ struct pool {
 		if (next == nullptr)
 			return nullptr;
 
-		auto ret = next;
-
-		next = next_of(next);
-
-		return ret;
+		return std::exchange(next, next_of(next));
 	}
 
 	/*!
@@ -123,9 +116,7 @@ private:
 
 	void* create_slab()
 	{
-		static constexpr size_t slab_size {
-			std::max(sizeof(slab), alignof(slab))
-		};
+		static constexpr size_t slab_size = std::max(sizeof(slab), alignof(slab));
 
 		auto full_size = slab_size + block_size * (num_blocks + 1);
 
@@ -164,6 +155,5 @@ struct specific_pool : pool<sizeof(T), alignof(T)> {
 	{}
 };
 
-} // namespace memory
-} // namespace aw
+} // namespace aw::memory
 #endif//aw_memory_growing_pool_h
