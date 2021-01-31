@@ -1,16 +1,20 @@
-3
+6
 shaders/vert6.glsl shaders/frag1.glsl
 shaders/v_tex.glsl shaders/f_tex.glsl
 shaders/v_txa.glsl shaders/f_txa.glsl
-7
-testworld.obj
+shaders/vert6.glsl shaders/frag1r.glsl
+shaders/vert6.glsl shaders/frag1g.glsl
+shaders/vert6.glsl shaders/frag1b.glsl
+8
+молдаване/молдавадлом.obj
 models/butruck.obj
 models/cylinder.obj
 models/kusok2.obj
 models/testworld.obj
 models/box.obj
 models/mattest.obj
-15
+models/cone2.obj
+21
 2 5
 0 0 -10
 0 0 0
@@ -34,7 +38,7 @@ models/mattest.obj
 0 3 -20
 0 0 0
 1 1
-300 15.6 -2560
+300 15.3 -2560
 0 57 0
 
 0 1
@@ -58,4 +62,25 @@ models/mattest.obj
 0 0 0
 0 2
 -32 4.35 -80
+0 0 0
+
+0 7
+0 -20 0
+0 0 0
+
+0 7
+0 0 0
+0 0 0
+
+0 7
+2 30 0
+0 90 0
+3 7
+0 30 -2
+0 180 0
+4 7
+-2 30 0
+0 270 0
+5 7
+0 30 2
 0 0 0

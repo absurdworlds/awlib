@@ -21,14 +21,29 @@ void reshape(int x, int y);
 void render(GLFWwindow*, duration<double>);
 void next_object();
 void prev_object();
+
+void la_print();
+void la_next();
+void la_prev();
 }
 using namespace gl3;
 
+template<typename T>
+T const& peg(T const& t)
+{
+	if constexpr(std::is_floating_point<T>::value) {
+		static constexpr T o = 0;
+		if (t > -0.0001 && t < 0.0001)
+			return o;
+	}
+	return t;
+}
+
 auto println = [] (auto const&... val) {
-	( std::cout << ... << val ) << '\n';
+	( std::cout << ... << peg(val)  ) << '\n';
 };
 
-inline void print_matrix(mat4 const& m)
+void print_matrix(mat4 const& m)
 {
 	println( m[0][0], ' ', m[0][1], ' ', m[0][2], ' ', m[0][3] );
 	println( m[1][0], ' ', m[1][1], ' ', m[1][2], ' ', m[1][3] );
@@ -142,8 +157,34 @@ void main()
 			next_object();
 		} else if (key == GLFW_KEY_RIGHT_BRACKET) {
 			prev_object();
+		} else if (key == GLFW_KEY_J) {
+			gl3::la_next();
+		} else if (key == GLFW_KEY_K) {
+			gl3::la_prev();
+		} else if (key == GLFW_KEY_L) {
+			gl3::la_print();
 		} else if (key == GLFW_KEY_O) {
 			camctl.mouse_look = !camctl.mouse_look;
+		} else if (key == GLFW_KEY_U) {
+			char axis;
+			int angle;
+			std::cin >> axis >> angle;
+			using namespace math;
+			switch(axis) {
+			case 'x':
+				print_matrix( expand_matrix( pitch_matrix( degrees<float>{angle} ) ) ); break;
+			case 'y':
+				print_matrix( expand_matrix( yaw_matrix( degrees<float>{angle} ) ) ); break;
+			case 'z':
+				print_matrix( expand_matrix( roll_matrix( degrees<float>{angle} ) ) ); break;
+			}
+		} else if (key == GLFW_KEY_I) {
+			int x,y,z;
+			int u,v,w;
+			std::cin >>x>>y>>z >>u>>v>>w;
+			using namespace math;
+			auto c = cross( vector{x,y,z}, vector{u,v,w} );
+			std::cout << c[0] << ' ' << c[1] << ' ' << c[2] << '\n';
 		}
 	};
 	glfwSetWindowSizeCallback(window, +on_resize );

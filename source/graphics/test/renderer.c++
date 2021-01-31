@@ -20,6 +20,8 @@
 #include <aw/graphics/gl/camera.h>
 #include <aw/graphics/gl/render_context.h>
 #include <aw/graphics/gl/uniform_buffer.h>
+#include <aw/math/orientation.h>
+
 
 #include <aw/graphics/gl/utility/model/obj.h>
 #include <aw/utility/on_scope_exit.h>
@@ -231,7 +233,10 @@ void initialize_scene()
 		cmds.add( commands::render_simple_object{ &objects[t.obj] } );
 	}
 
+
 	gl::enable(GL_CULL_FACE);
+
+	gl::enable(GL_MULTISAMPLE);
 
 	gl::cull_face(GL_BACK);
 	gl::front_face(GL_CCW);
@@ -277,12 +282,86 @@ void clear()
 	gl::clear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 }
 
+}
+namespace aw{
+using namespace gl3;
+void print_matrix(mat4 const& m);
+}
+namespace aw::gl3{
+static math::degrees<float> angle{0};
+vec3 la_pos()
+{
+	auto [s,c] = sincos(angle);
+	auto pos =  vec3{-5*s,5,-5*c};
+	return pos;
+}
+
+void la_print()
+{
+	std::cout << "=============\n";
+	std::cout << "angle:  " <<  angle.count() << '\n';
+	std::cout << "-------------\n";
+	std::cout << "pos: \n";
+	auto pos = la_pos();
+	std::cout << pos[0] << ' ' << pos[1] << ' ' << pos[2] << '\n';
+	std::cout << "-------------\n";
+	std::cout << "actual: \n";
+	print_matrix(objects[15].pos);
+	std::cout << "-------------\n";
+	std::cout << "correct: \n";
+	print_matrix(objects[16].pos);
+	std::cout << "=============\n";
+}
+void la_next()
+{
+	angle += decltype(angle){15};
+}
+void la_prev()
+{
+	angle -= decltype(angle){15};
+}
+
+void la_anim()
+{
+	using deg = math::degrees<float>;
+	auto pos =  la_pos();
+	objects[15].pos = math::look_at(vec3{0,0,5}, vec3{0,0,-5}, vec3{0,1,0} );
+	objects[16].pos = math::look_at(vec3{0,0,-5}, vec3{0,0,5}, vec3{0,1,0} );
+	//objects[15].pos = look_at(pos, vec3{0,0,0}, vec3{0,1,0} );
+	//objects[16].pos = look_at(vec3{0,0,0}, pos, vec3{0,1,0} );
+	//objects[16].pos = expand_matrix( math::yaw_matrix(angle /*+ deg{180}*/ ) );
+	//objects[16].pos *= expand_matrix( math::pitch_matrix( deg{45} ) );
+	//objects[16].pos[0][3] = 2;
+	//objects[16].pos = look_at( vec3{0,0,0}, pos, vec3{0,1,0} );
+}
+
+void la_anim2()
+{
+
+	using deg = math::degrees<float>;
+	auto [s,c] = sincos(angle);
+	auto pos =  vec3{5*s,2,5*c};
+	objects[15].pos = math::look_at(pos, vec3{0,0,0}, vec3{0,1,0} );
+	//objects[16].pos = expand_matrix( math::yaw_matrix(angle /*+ deg{180}*/ ) );
+	objects[16].pos = math::look_at( vec3{0,0,0}, pos, vec3{0,1,0} );
+	if (int(angle.count()) % 90 == 0) {
+		std::cout << "=============\n";
+		print_matrix(objects[15].pos);
+		std::cout << "-------------\n";
+		print_matrix(objects[16].pos);
+		std::cout << "=============\n";
+	}
+	angle += decltype(angle){1};
+}
+
 void render(GLFWwindow* window, std::chrono::duration<double> dt)
 {
 	camctl.frame( window, dt );
 
 	clear();
 	cmds.render(ctx);
+
+	la_anim2();
 	gl::use_program( gl::no_program );
 }
 
