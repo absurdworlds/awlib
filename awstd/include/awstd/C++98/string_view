@@ -57,6 +57,17 @@ struct string_view {
 		: _data(str.c_str()), _size(str.size())
 	{ }
 
+	string_view(string_view const& str)
+		: _data(str.data()), _size(str.size())
+	{ }
+
+	string_view& operator=(string_view const& str)
+	{
+		_data = str.data();
+		_size = str.size();
+		return *this;
+	}
+
 	void swap(string_view& other)
 	{
 		std::swap(_data, other._data);
@@ -71,8 +82,8 @@ struct string_view {
 
 	bool empty() const { return begin() == end(); }
 
-	reverse_iterator rbegin() const { return reverse_iterator(begin()); }
-	reverse_iterator rend() const {   return reverse_iterator(end()); }
+	reverse_iterator rbegin() const { return reverse_iterator(end()); }
+	reverse_iterator rend() const {   return reverse_iterator(begin()); }
 
 	char operator[](size_t idx) const { return _data[idx]; }
 
@@ -222,7 +233,16 @@ struct string_view {
 	friend bool operator==(string_view a, string_view b)
 	{
 		if (a.size() != b.size()) return false;
-		return std::equal(a.begin(), a.end(), b.begin());
+		//return std::equal(a.begin(), a.end(), b.begin()); //undisableable warning
+		const_iterator first1 = a.begin();
+		const_iterator last1 = a.end();
+		const_iterator first2 = b.begin();
+		for( ; first1 != last1; ++first1, ++first2 ) {
+			if( !(*first1 == *first2) ) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	friend bool operator!=(string_view a, string_view b)
@@ -256,5 +276,13 @@ private:
 	char const* _data;
 	size_t _size;
 };
+} // namespace awstd
+
+namespace awstd {
+inline std::ostream& operator<<(std::ostream& os, string_view sv)
+{
+	if (!sv.empty()) os.write(sv.data(), sv.size());
+	return os;
+}
 } // namespace awstd
 #endif//awstd_string_view_h
