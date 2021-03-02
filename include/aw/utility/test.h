@@ -12,9 +12,8 @@
 #include <functional>
 #include <algorithm>
 #include <exception>
-#include <iostream>
-#include <aw/config.h>
 #include <aw/test/test_case.h>
+#include <aw/test/test_report.h>
 #include <aw/utility/static_object.h>
 #include <aw/platform/demangle.h>
 #if (AW_PLATFORM == AW_PLATFORM_POSIX)
@@ -34,55 +33,15 @@ int main(int,char**);
 
 namespace aw {
 namespace test {
-#if (AW_PLATFORM != AW_PLATFORM_WIN32)
-char const _bold[]  = "\033[1m";
-char const _red[]   = "\033[31m";
-char const _green[] = "\033[32m";
-char const _white[] = "\033[37m";
-char const _reset[] = "\033[0m";
-inline std::ostream& bold(std::ostream& os)  { if (isatty(1)) os << _bold;  return os;}
-inline std::ostream& red(std::ostream& os)   { if (isatty(1)) os << _red;   return os;}
-inline std::ostream& green(std::ostream& os) { if (isatty(1)) os << _green; return os;}
-inline std::ostream& white(std::ostream& os) { if (isatty(1)) os << _white; return os;}
-inline std::ostream& reset(std::ostream& os) { if (isatty(1)) os << _reset; return os;}
-#else
-char const bold[]  = "";
-char const red[]   = "";
-char const green[] = "";
-char const white[] = "";
-char const reset[] = "";
-#endif
 
 struct test_failed : std::exception {};
 
-template<typename...Args>
-void print(Args&&...args)
-{
-	( std::cout << ... << std::forward<Args>(args) );
-}
-
-template<typename...Args>
-void println(Args&&...args)
-{
-	( std::cout << ... << std::forward<Args>(args) ) << '\n';
-}
 
 namespace {
 class context_check;
 class context_block;
 class register_test;
 }
-
-
-class report {
-public:
-	virtual void begin_suite(const char* name, int test_count) = 0;
-	virtual void end_suite() = 0;
-
-	virtual void test_success(const char* name, const std::vector<check_report>& checks) = 0;
-	virtual void test_failure(const char* name, const std::vector<check_report>& checks, const char* detail) = 0;
-};
-
 
 class registry {
 	friend int ::main(int, char**);
@@ -103,146 +62,7 @@ class registry {
 	inline static int run(report* _report);
 };
 
-class report_classic : public report {
-public:
-	void begin_suite(const char* name, int test_count) override
-	{
-		filename  = name;
-		total     = test_count;
-		count     = 0;
-		succeeded = 0;
-		failed    = 0;
 
-		println(bold, '[', filename, ']', ' ', reset, "running tests");
-	}
-
-	void end_suite()
-	{
-		print(bold, '[', filename, ']', ' ', reset);
-		print("tests done, failed: ");
-		print(bold, (failed > 0 ? red : white), failed, reset);
-		print(", succeeded: ");
-		print(bold, (succeeded > 0 ? green : white), succeeded, reset);
-		print(reset, '\n');
-
-	}
-
-	void test_success(const char* name, const std::vector<check_report>& checks) override
-	{
-		++succeeded;
-
-		test_start(name);
-
-		println(bold, green, " succeeded, checks: ", checks.size(), reset);
-	}
-
-	void test_failure(const char* name, const std::vector<check_report>& checks, const char* detail) override
-	{
-		++failed;
-
-		test_start(name);
-
-		int checks_failed    = 0;
-		int checks_succeeded = 0;
-
-		for (auto& check : checks)
-		{
-			if (!check)
-				++checks_failed;
-			else
-				++checks_succeeded;
-		}
-
-		print(bold, red, " failed: (", detail, ") ", reset);
-		print(red, "failed: ", bold, checks_failed, reset);
-		print(green, ", succeeded: ", bold, checks_succeeded, reset, '\n');
-
-		for (auto& check : checks)
-		{
-			if (!check)
-				print(bold, red, "check failed: ", reset, check.message, '\n');
-		}
-	}
-
-private:
-	void test_start(const char* name)
-	{
-		print(bold, '[', ++count, '/', total, ']', ' ', reset);
-		print("test \"", bold, name, reset, '"');
-	}
-
-private:
-	int total;
-	int count     = 0;
-	int succeeded = 0;
-	int failed    = 0;
-
-	const char* filename;
-};
-
-class report_junit : public report {
-public:
-	void begin_suite(const char* name, int test_count) override
-	{
-		test_cases.clear();
-		succeeded = 0;
-		failed    = 0;
-		this->name = name;
-		this->total = test_count;
-	}
-
-	void end_suite()
-	{
-		int skipped = total - succeeded - failed;
-		print("<testsuite name=\"", name, "\" tests=\"", total, "\" errors=\"0\" ");
-		println("failures=\"", failed, "\" skipped=\"", skipped, "\">");
-		for (const auto& test_case : test_cases)
-		{
-			if (test_case.success)
-			{
-				println("<testcase name=\"", test_case.name, "\" time=\"0\"/>");
-			}
-			else
-			{
-				println("<testcase name=\"", test_case.name, "\" time=\"0\">");
-				for (auto& check : test_case.checks)
-				{
-					if (check)
-						continue;
-					println("<failure type=\"check_failed\">" + check.message + "\"</failure>");
-				}
-				println("</testcase>");
-			}
-		}
-		println("</testsuite>");
-
-	}
-
-	void test_success(const char* name, const std::vector<check_report>& checks) override
-	{
-		++succeeded;
-		test_cases.push_back(test_case{true, name, checks});
-	}
-
-	void test_failure(const char* name, const std::vector<check_report>& checks, const char* detail) override
-	{
-		++failed;
-		test_cases.push_back(test_case{false, name, checks});
-	}
-
-private:
-	struct test_case {
-		bool success;
-		std::string name;
-		std::vector<check_report> checks;
-	};
-	std::vector<test_case> test_cases;
-
-	std::string name;
-	int total;
-	int succeeded = 0;
-	int failed    = 0;
-};
 
 struct context {
 	context(char const* filename)
@@ -258,6 +78,7 @@ struct context {
 	{
 		install_handler();
 
+		// TODO: deprecate report, save data in a structured way
 		_report->begin_suite(filename, tests.size());
 
 		for (test_case& test : tests)
