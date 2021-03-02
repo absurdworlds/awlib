@@ -15,88 +15,39 @@
 
 #include <aw/log/ostream_logger.h>
 #include <aw/io/input_file_stream.h>
+#include <aw/doc/utility.h>
 #include <aw/doc/parser.h>
 
 using namespace aw;
 using namespace aw::io;
 using namespace aw::doc;
 
-/*!
- * \example doc_example.cpp
- *
- * This file provides an usage example for doc::parser,
- * messages.doc is used as an example document here.
- */
-
-typedef std::map<std::string, value> Document;
-
-void parseObject(doc::parser* parser, std::string parent, Document& doc);
-void parseNode(doc::parser* parser, std::string name, std::string node, Document& doc);
-void parsevalue(doc::parser* parser, std::string name, std::string node, Document& doc);
-
-void parseDocument(doc::parser* parser, Document& doc)
+void print_node(const doc::node& n, std::string name = "")
 {
-	doc::object obj;
-	while (parser->read(obj)) {
-		if (obj.kind != doc::object::node)
-			continue;
-
-		doc[obj.name] = value();
-		parseObject(parser, obj.name, doc);
+	for (auto [k,v] : n.values) {
+		std::cout << name << '/';
+		std::cout << k    << '=' << to_string(v) << '\n';
+	}
+	for (auto [k,v] : n.nodes) {
+		print_node( v, name + "/" + k );
 	}
 }
-
-void parseObject(doc::parser* parser, std::string parent, Document& doc)
-{
-	doc::object obj;
-	while (parser->read(obj)) {
-		std::string& name = obj.name;
-
-		switch (obj.kind) {
-		case doc::object::node:
-			parseObject(parser, parent + "." + name, doc);
-			doc[parent + "." + name] = value();
-			break;
-		case doc::object::value:
-			doc[parent + "." + name] = obj.val;
-			break;
-		case doc::object::end:
-			return;
-		default:
-			break;
-		}
-	}
-}
-
 
 int main(int,char** arg)
 {
-	if (arg[1] == 0)
+	if (arg[1] == nullptr)
 		return 1;
 
 	ostream_logger log{std::cout};
 	// open a file
 	io::input_file_stream stream{arg[1]};
 	// create the parser
-	parser parser{stream, &log};
-
-	Document doc;
 
 	auto begin = std::chrono::steady_clock::now();
-	parseDocument(&parser, doc);
+	auto doc = doc::parse_file( stream, &log );
 	auto end = std::chrono::steady_clock::now();
+	print_node( doc.root() );
 
-	std::cerr << std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin).count() << '\n';
-	std::cerr << std::chrono::duration_cast<std::chrono::duration<double>>(end - begin).count() << '\n';
-
-	for (auto& pair : doc) {
-		std::cout << pair.first;
-		std::string const val = to_string(pair.second);
-		if (val == "") {
-			std::cout << "\n";
-			continue;
-		}
-
-		std::cout << " = " << to_string(pair.second) << "\n";
-	}
+	std::cerr << "parse time: " << std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin).count() << "ns (";
+	std::cerr << std::chrono::duration_cast<std::chrono::duration<double>>(end - begin).count() << "s)\n";
 }
