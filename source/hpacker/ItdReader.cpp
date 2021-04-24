@@ -11,11 +11,10 @@
 
 namespace aw {
 namespace itd {
-ItdReader::ItdReader(std::string const& archive_name, bool verbose)
-	: reader(std::make_unique<HPKTreeReader>(archive))
+ItdReader::ItdReader(std::istream& archive, bool verbose)
+	: archive(archive)
+	, reader(std::make_unique<HPKTreeReader>(archive))
 {
-	archive.open(archive_name, std::ifstream::binary);
-
 	archive.seekg(0x40);
 	u64 ptr;
 	u64 size;

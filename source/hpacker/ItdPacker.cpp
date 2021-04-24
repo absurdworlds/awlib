@@ -17,16 +17,15 @@
 
 namespace aw {
 namespace itd {
-ItdPacker::ItdPacker(std::string const& archive_name, bool verbose)
-	: verbose_(verbose)
+ItdPacker::ItdPacker(std::ostream& archive, bool verbose)
+	: archive_(archive)
+	, verbose_(verbose)
 {
-	archive_.open(archive_name, std::ofstream::binary);
 	index_.resize(2);
 }
 
 ItdPacker::~ItdPacker()
 {
-	archive_.close();
 }
 
 void ItdPacker::addFile(std::string const& name)
@@ -63,10 +62,6 @@ void ItdPacker::addList(std::vector<std::string> const& files)
 
 i32 ItdPacker::pack()
 {
-	if (!archive_.is_open()) {
-		return -1;
-	}
-
 	writeHeader();
 	buildIndex();
 	writeArchive();

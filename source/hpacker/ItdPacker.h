@@ -19,7 +19,7 @@
 namespace aw {
 namespace itd {
 struct ItdPacker {
-	ItdPacker (std::string const& archive_name, bool verbose = false);
+	ItdPacker(std::ostream& archive, bool verbose = false);
 	~ItdPacker ();
 
 	/*!
@@ -48,7 +48,7 @@ private:
 	std::vector<std::string> fileList_;
 	std::vector<itd::FileEntry> index_;
 
-	std::ofstream archive_;
+	std::ostream& archive_;
 
 	bool verbose_;
 

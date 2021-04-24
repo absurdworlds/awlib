@@ -19,14 +19,14 @@ namespace itd {
 
 class ItdReader {
 public:
-	ItdReader (std::string const& archive_name, bool verbose);
+	ItdReader (std::istream& archive, bool verbose);
 
 	std::vector<std::string> list (std::string prefix);
 
 	std::vector<u8> getFileContents (u64 fileId);
 	std::vector<u8> getFileContents (std::string path);
 private:
-	std::ifstream archive;
+	std::istream& archive;
 	std::unique_ptr<HPKIndexReader> reader;
 };
 } // namespace itd

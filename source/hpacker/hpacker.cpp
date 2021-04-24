@@ -7,6 +7,7 @@
  * There is NO WARRANTY, to the extent permitted by law.
  */
 #include <cstdio>
+#include <iostream>
 
 #include <aw/utility/argv_parser.h>
 #include <aw/utility/string/split.h>
@@ -88,28 +89,45 @@ i32 main (char** args)
 		}
 	}
 
+	std::fstream file;
+
+	auto istream = [&file, filename]() -> std::istream& {
+		if (!filename.empty())
+			file.open(filename, std::ios::in|std::ios::binary);
+		return filename.empty() ? std::cin : file;
+	};
+
+
+	auto ostream = [&file, filename]() -> std::ostream& {
+		if (!filename.empty())
+			file.open(filename, std::ios::out|std::ios::binary|std::ios::trunc);
+		return filename.empty() ? std::cout : file;
+	};
+
+
 	if (action == Create) {
-		ItdPacker packer(filename, verbose);
+		ItdPacker packer(ostream(), verbose);
 		packer.addList(files);
 
 		packer.pack();
 	} else if (action == List) {
-		ItdReader reader(filename, verbose);
+		ItdReader reader(istream(), verbose);
 		auto list = reader.list("");
 
 		for (auto file : list) {
 			printf("%s\n",file.c_str());
 		}
 	} else if (action == Extract) {
-		ItdReader reader(filename, verbose);
+		ItdReader reader(istream(), verbose);
 
 		for (auto file : files) {
-			std::ofstream f(string::split(file,"/").back(), std::ios::binary);
+			std::string path(string::split(file,"/").back());
+			std::ofstream f(path, std::ios::binary);
 			auto v = reader.getFileContents(file);
 			f.write((char*)v.data(),v.size());
 		}
 	} else if (action == ExtractAll) {
-		ItdReader reader(filename, verbose);
+		ItdReader reader(istream(), verbose);
 		auto list = reader.list("");
 
 		for (auto file : list) {
