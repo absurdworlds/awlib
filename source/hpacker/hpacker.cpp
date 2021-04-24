@@ -134,7 +134,8 @@ i32 main (char** args)
 			fs::path path(file);
 			std::error_code ec;
 			fs::create_directories(path.relative_path().parent_path(), ec);
-			printf("%s\n",file.c_str());
+			if (verbose)
+				printf("%s\n",file.c_str());
 			std::ofstream f(path.relative_path().u8string(), std::ios::binary);
 			auto v = reader.getFileContents(file);
 			f.write((char*)v.data(),v.size());
