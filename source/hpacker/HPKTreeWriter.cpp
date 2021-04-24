@@ -24,11 +24,8 @@ HPKTreeWriter::~HPKTreeWriter ()
 
 void HPKTreeWriter::addFile (std::string const& path, u64 id)
 {
-	std::vector<std::string> dir;
-	std::string name;
-
-	dir = string::split(path, "/");
-	name = dir.back();
+	auto dir = string::split(path, "/");
+	std::string name(dir.back());
 	dir.pop_back();
 
 	root_.add(dir, name, id, strings_);
@@ -52,7 +49,7 @@ void HPKTreeWriter::write (std::ostream& target)
 	strings_.putStrings(target);
 }
 
-void TreeNode::add (std::vector<std::string> path, std::string name, u64 id,
+void TreeNode::add (std::vector<std::string_view> path, std::string name, u64 id,
 		StringBank & strings)
 {
 	if(path.empty()) {
@@ -61,7 +58,7 @@ void TreeNode::add (std::vector<std::string> path, std::string name, u64 id,
 		return;
 	}
 
-	std::string dirName = path.front();
+	auto dirName = path.front();
 
 	auto findChild = [&dirName] (TreeNode const& leaf)
 	{
@@ -78,7 +75,7 @@ void TreeNode::add (std::vector<std::string> path, std::string name, u64 id,
 		dir = leaves.insert(leaves.end(), leaf);
 	}
 
-	dir->add(std::vector<std::string>(path.begin()+1,path.end()),
+	dir->add(std::vector<std::string_view>(path.begin()+1,path.end()),
 			name, id, strings);
 }
 

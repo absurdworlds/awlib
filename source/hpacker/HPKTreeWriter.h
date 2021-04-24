@@ -27,7 +27,7 @@ struct ListEntry {
 };
 
 struct TreeNode {
-	void add (std::vector<std::string> path, std::string name, u64 id,
+	void add (std::vector<std::string_view> path, std::string name, u64 id,
 		StringBank & strings);
 	void calcOffsets (u64 & baseOffset);
 	void writeOut (std::ostream & target, u64 baseOffset);

@@ -20,8 +20,8 @@ HPKHtableWriter::HPKHtableWriter ()
 
 	std::uniform_int_distribution<u64> udist;
 
-	seed_.as64[0] = udist(mt_eng);
-	seed_.as64[1] = udist(mt_eng);
+	seed_[0] = udist(mt_eng);
+	seed_[1] = udist(mt_eng);
 }
 
 HPKHtableWriter::~HPKHtableWriter ()
@@ -38,11 +38,10 @@ void HPKHtableWriter::write (std::ostream& target)
 	while(index_.size() > 0) {
 		u64 num = index_.size();
 
-		u128 hash;
 		std::string const & path = strings_[num];
-		MurmurHash3_x64_128(path.data(), path.size(), seed_, &hash);
+		auto hash = MurmurHash3_x64_128(path.data(), path.size(), seed_);
 
-		u64 i = hash.as64[0] % header.filesNum;
+		u64 i = hash[0] % header.filesNum;
 
 		index_.back().nameOffset += nameBaseOffset;
 		htable_[i].add(index_.back());
