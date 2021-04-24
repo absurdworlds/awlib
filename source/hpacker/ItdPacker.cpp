@@ -102,7 +102,7 @@ i32 ItdPacker::addDir(std::string const& path)
 {
 	// TODO: testing and improvements
 	for (auto& file : fs::directory_iterator(path))
-		addFile(file.path().generic_u8string());
+		addFile(file.path().lexically_normal().generic_u8string());
 	return 0;
 }
 
