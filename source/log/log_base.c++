@@ -18,9 +18,9 @@ void multi_log::message(log::level level, string_view src, string_view msg)
 
 bool regex_filter::operator()(string_view msg)
 {
-	if (!std::regex_search(std::string{msg}, include))
+	if (!std::regex_search(msg.begin(), msg.end(), include))
 		return false;
-	if (std::regex_search(std::string{msg}, exclude))
+	if (std::regex_search(msg.begin(), msg.end(), exclude))
 		return false;
 	return true;
 }
