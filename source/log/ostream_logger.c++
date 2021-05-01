@@ -6,32 +6,37 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
+#include <aw/types/string_view.h>
 #include <aw/log/ostream_logger.h>
 namespace aw {
-inline namespace v1 {
 namespace {
-char const* describe(log::level level)
+constexpr string_view describe(log::level level)
 {
 	switch (level) {
-	case log::info:     return "info:    ";
-	case log::warning:  return "warning: ";
-	case log::error:    return "error:   ";
-	case log::critical: return "critical:";
+	case log::info:     return "info:     ";
+	case log::warning:  return "warning:  ";
+	case log::error:    return "error:    ";
+	case log::critical: return "critical: ";
 	default:            return nullptr;
 	};
 }
+
+template<typename... Strings>
+std::string concatenate(Strings&&... strings)
+{
+	using std::size;
+	std::string result; // TODO: check if memcpy() is faster than append
+	result.reserve((size(strings) + ... ));
+	return ((result += strings), ...);
+}
 } // namespace
 
-std::string format_message(log::level lvl, string_view src, string_view msg)
+inline namespace v1 {
+std::string format_message(log::level level, string_view src, string_view msg)
 {
-	std::string fmt;
-	fmt.append(1,'[');
-	fmt.append(src.data(), src.size());
-	fmt.append(1,']');
-	fmt.append(1,' ');
-	fmt.append(describe(lvl));
-	fmt.append(msg.data(), msg.size());
-	return fmt;
+	constexpr std::string_view sep = ": ";
+	const     std::string_view lvl = describe(level);
+	return concatenate(src, sep, lvl, msg);
 }
 
 void ostream_logger::message(log::level level, string_view src, string_view msg)
