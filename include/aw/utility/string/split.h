@@ -15,11 +15,13 @@
 namespace aw {
 namespace string {
 /*!
- * Split string into tokens, separated by delimiters \a delim.
+ * Split string into tokens, separated by one of delimiters
+ * contained in the string \a delim.
+ * Empty tokens are skipped.
  *
  * Example:
- * `split("/ab/cde//fgh/", "/")` -> `{"ab", "cde", "fgh"}`
- * `split("ab\\cde/fgh/\\", "/\\")` -> `{"ab", "cde", "fgh"}`
+ * `split_by("/ab/cde//fgh/", "/")` -> `{"ab", "cde", "fgh"}`
+ * `split_by("ab, cde;fgh", " ,;")` -> `{"ab", "cde", "fgh"}`
  */
 inline std::vector<string_view>
 split_by(string_view source, string_view delim)
