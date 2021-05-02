@@ -8,6 +8,7 @@
  */
 #include <aw/types/string_view.h>
 #include <aw/log/ostream_logger.h>
+#include <aw/utility/string/join.h>
 namespace aw {
 namespace {
 constexpr string_view describe(log::level level)
@@ -20,15 +21,6 @@ constexpr string_view describe(log::level level)
 	default:            return nullptr;
 	};
 }
-
-template<typename... Strings>
-std::string concatenate(Strings&&... strings)
-{
-	using std::size;
-	std::string result; // TODO: check if memcpy() is faster than append
-	result.reserve((size(strings) + ... ));
-	return ((result += strings), ...);
-}
 } // namespace
 
 inline namespace v1 {
@@ -36,7 +28,7 @@ std::string format_message(log::level level, string_view src, string_view msg)
 {
 	constexpr std::string_view sep = ": ";
 	const     std::string_view lvl = describe(level);
-	return concatenate(src, sep, lvl, msg);
+	return string::concatenate(src, sep, lvl, msg);
 }
 
 void ostream_logger::message(log::level level, string_view src, string_view msg)

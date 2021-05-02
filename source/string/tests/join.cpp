@@ -67,4 +67,13 @@ Test(join_words) {
 		TestEqual(v.size(), 4);
 	}
 }
+
+Test(concatenate) {
+	using namespace std::string_literals;
+	using namespace std::string_view_literals;
+	auto str = string::concatenate("123", "456"sv, "789"s);
+	Postconditions {
+		TestEqual(str, "123456789");
+	}
+}
 } // namespace aw

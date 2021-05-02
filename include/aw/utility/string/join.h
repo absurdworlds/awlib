@@ -14,6 +14,22 @@
 #include <aw/algorithm/join.h>
 namespace aw {
 namespace string {
+/*!
+ * Concatenate \a strings into one string.
+ */
+template<typename... Strings>
+std::string concatenate(Strings&&... strings)
+{
+	using std::size;
+	std::string result; // TODO: check if memcpy() is faster than append
+	// operator += takes const& so forward is unnecesary for now
+	result.reserve((size(strings) + ... ));
+	return ((result += strings), ...);
+}
+
+/*!
+ * Create string with enough space reserved for all strings in the range [begin, end)
+ */
 template<typename Iterator>
 std::string reserve_string(Iterator begin, Iterator end)
 {
