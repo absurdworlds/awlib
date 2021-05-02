@@ -25,6 +25,7 @@ void printUsage()
 	printf("  -c, --create         Create an archive\n");
 	printf("  -x, --extract-all    Extract contents of archive\n");
 	printf("  -e, --extract        Extract files from FILE list\n");
+	printf("  -i, --indices        With extract option, use file indices instead of names\n");
 	printf("  -l, --list           List contents of archive\n");
 	printf("  -f, --file NAME      Perform actions on file NAME\n");
 	printf("  -v, --verbose        Show verbose output\n");
@@ -51,6 +52,7 @@ i32 main (char** args)
 	std::string filename;
 	std::vector<std::string> files;
 	bool verbose = false;
+	bool indices = false;
 
 	optional<utils::argument> opt_arg;
 	while (opt_arg = argp.parse_argument()) {
@@ -68,6 +70,8 @@ i32 main (char** args)
 				filename = argp.get_param();
 			} else if (arg.name == "v" || arg.name == "verbose") {
 				verbose = true;
+			} else if (arg.name == "i" || arg.name == "indices") {
+				indices = true;
 			}
 #if 0
 		if(arg.type == core::Argument::Option && arg.name == "-") {
@@ -119,6 +123,27 @@ i32 main (char** args)
 		}
 	} else if (action == Extract) {
 		ItdReader reader(istream(), verbose);
+
+		if (indices)
+		{
+			//TODO: obtain the file name
+			//auto list = reader.list("");
+			for (const auto& file : files)
+			{
+				u64 index;
+				try {
+					index = std::stoull(file);
+				} catch(...) {
+					continue;
+				}
+				if (verbose)
+					std::cout << "Extracting: " << index << '\n';
+				std::ofstream f(file, std::ios::binary);
+				auto v = reader.getFileContents(index);
+				f.write((char*)v.data(),v.size());
+			}
+			return 0;
+		}
 
 		for (auto file : files) {
 			std::string path(string::split(file,"/").back());
