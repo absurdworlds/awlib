@@ -54,8 +54,8 @@ struct file {
 	}
 
 	file(file&& other) noexcept
-		: data{std::move(other.data)},
-		 _path{std::move(other._path)}
+		: _path{std::move(other._path)}
+		, data{std::move(other.data)}
 	{
 	}
 

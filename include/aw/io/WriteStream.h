@@ -12,6 +12,7 @@
 #include <string>
 
 #include <aw/types/types.h>
+#include <aw/types/string_view.h>
 
 namespace aw {
 namespace io {
