@@ -36,6 +36,9 @@ object parser::read()
 		break;
 	case token::node_begin:
 		++depth;
+		if (lex.peek_token().kind == token::equals)
+			if (auto&& value = read_value())
+				return {object::node, tok.value, std::move(value)};
 		return {object::node, tok.value};
 	case token::node_end:
 		if (depth == 0) {
@@ -292,18 +295,19 @@ void parser::processCommand() {
 		return;
 	}
 
-	if (tok.value == "awdoc_version") {
+	if (tok.value == "version") {
 		tok = lex.get_token();
 
 		if (tok.kind != token::string) {
-			lex.error("Expected string after \"awdoc_version\".", tok.pos);
+			lex.error("Expected string after \"version\".", tok.pos);
 			return;
 		}
 
 		std::string ver = tok.value.substr(0,3);
-		if (ver == "1.4") {
-			lex.message("HDF version: 1.4", tok.pos);
-		} else if (in(ver, "1.0","1.1","1.2","1.3")) {
+		if (in(ver, "1.2", "1.3", "1.4")) {
+			// TODO: do some basic validation
+			lex.message("HDF version: " + ver, tok.pos);
+		} else if (in(ver, "1.0","1.1")) {
 			lex.error("Version " + tok.value + " is not supported.", tok.pos);
 			return;
 		} else {

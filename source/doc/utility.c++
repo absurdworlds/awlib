@@ -49,12 +49,18 @@ node parse_node(parser& parser)
 	while (parser.read(obj)) {
 		auto const& name = obj.name;
 		switch (obj.kind) {
-		case object::node:
-			node.nodes.add(name, parse_node(parser)); break;
-		case object::value:
-			node.values.add(name, obj.val); break;
-		case object::end:
-			return node;
+			case object::node: {
+				auto child = parse_node(parser);
+				if (obj.val)
+					child.values.add("", obj.val);
+				node.nodes.add(name, child);
+				break;
+			}
+			case object::value:
+				node.values.add(name, obj.val);
+				break;
+			case object::end:
+				return node;
 		}
 	}
 	return node;
