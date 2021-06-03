@@ -108,10 +108,16 @@ doc::type parse_type(string_view token)
 	return type::unknown;
 }
 
-template<>
-value parser::parse_value<std::string>()
+template<typename T>
+value parser::parse_value()
 {
 	auto tok = lex.get_token();
+	return parse_value_impl<T>(tok);
+}
+
+template<>
+value parser::parse_value_impl<std::string>(token tok)
+{
 	if (!in(tok.kind, tok.string, tok.name, tok.number)) {
 		lex.error("Invalid string token", tok.pos);
 		return {};
@@ -120,9 +126,8 @@ value parser::parse_value<std::string>()
 }
 
 template<>
-value parser::parse_value<double>()
+value parser::parse_value_impl<double>(token tok)
 {
-	auto tok = lex.get_token();
 	if (tok.kind != token::number) {
 		lex.error("Expected number", tok.pos);
 		return {};
@@ -131,9 +136,8 @@ value parser::parse_value<double>()
 }
 
 template<>
-value parser::parse_value<intmax_t>()
+value parser::parse_value_impl<intmax_t>(token tok)
 {
-	auto tok = lex.get_token();
 	if (tok.kind != token::number) {
 		lex.error("Expected number", tok.pos);
 		return {};
@@ -142,9 +146,8 @@ value parser::parse_value<intmax_t>()
 }
 
 template<>
-value parser::parse_value<bool>()
+value parser::parse_value_impl<bool>(token tok)
 {
-	auto tok = lex.get_token();
 	if (in(tok.value, "true", "1"))
 		return value{true};
 	if (in(tok.value, "false", "0"))
@@ -207,17 +210,20 @@ void parser::skip_vector()
 template<typename T>
 std::vector<T> parser::parse_vector(token::position beg)
 {
-	auto tok = lex.peek_token();
+	token tok;
 	std::vector<T> temp;
-	while (tok.kind != tok.eof) {
-		value val = parse_value<T>();
+	while (true) {
+		auto tok = lex.get_token();
+		if (in(tok.kind, token::eof, token::vec_end))
+			break;
+		value val = parse_value_impl<T>(tok);
 		if (val.empty()) {
 			skip_vector();
 			return temp;
 		}
 		temp.push_back(*val.get<T>());
 
-		auto tok = lex.get_token();
+		tok = lex.get_token();
 		if (tok.kind == token::vec_end)
 			break;
 		if (tok.kind != token::comma) {

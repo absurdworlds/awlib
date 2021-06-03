@@ -78,7 +78,7 @@ private:
 	void report(log::level lvl, std::string msg, token::position pos)
 	{
 		if (log) {
-			msg = to_string(pos) + ':' + msg;
+			msg = to_string(pos) + ": " + msg;
 			log->message(lvl, "awdoc", msg);
 		}
 	}

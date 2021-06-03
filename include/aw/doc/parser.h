@@ -82,6 +82,8 @@ protected:
 	value read_value();
 
 	template <typename T>
+	value parse_value_impl(token tok);
+	template <typename T>
 	value parse_value();
 	value parse_value(token id);
 	value deduce_value(token tok);

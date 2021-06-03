@@ -32,7 +32,7 @@ private:
 	variant_destroy_visitor() = default;
 
 	template<typename... Ts>
-	friend struct variant;
+	friend struct aw::variant;
 };
 
 // Copies value held by one variant into another
