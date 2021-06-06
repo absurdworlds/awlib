@@ -39,36 +39,26 @@ bool assert_check(bool cond, const char* msg, std::source_location loc = std::so
 } // namespace aw
 
 #if (aw_current_assert_level >= aw_assert_level_default)
-#define aw_assert_eval_default(...) (__VA_ARGS__)
+#define aw_assert_eval_default
 #else
-#define aw_assert_eval_default(...) (true || __VA_ARGS__)
+#define aw_assert_eval_default true ||
 #endif
 
 #if (aw_current_assert_level >= aw_assert_level_develop)
-#define aw_assert_eval_develop(...) (__VA_ARGS__)
+#define aw_assert_eval_develop
 #else
-#define aw_assert_eval_develop(...) (true || __VA_ARGS__)
+#define aw_assert_eval_develop true ||
 #endif
 
 #if (aw_current_assert_level >= aw_assert_level_audit)
-#define aw_assert_eval_audit(...) (__VA_ARGS__)
+#define aw_assert_eval_audit
 #else
-#define aw_assert_eval_audit(...) (true || __VA_ARGS__)
+#define aw_assert_eval_audit true ||
 #endif
 
 #define aw_assert_eval_normal(cond) aw_assert_eval_default(cond)
 
-#define aw_assert_eval(level, cond) APPLY(CONCAT(aw_assert_eval_, level), cond)
-
-#if 0
-#define aw_assert_default(cond) ::aw::assert_check<::aw::assert_level::normal>(cond, #cond);
-#define aw_assert_develop(cond) ::aw::assert_check<::aw::assert_level::develop>(cond, #cond);
-#define aw_assert_audit(cond)   ::aw::assert_check<::aw::assert_level::audit>(cond, #cond);
-#define aw_assert_(cond) aw_assert_default(cond)
-#define aw_assert_select(...) APPLY(CONCAT, aw_assert_, FIRST(__VA_ARGS__))
-#define aw_assert(cond, ...) EXPAND( aw_assert_select(__VA_ARGS__) APPLY( aw_assert_eval(__VA_ARGS__), cond))
-#endif
-
+#define aw_assert_eval(level) CONCAT(aw_assert_eval_, level)
 
 #define aw_assert_select_level_audit   ::aw::assert_level::audit
 #define aw_assert_select_level_develop ::aw::assert_level::develop
@@ -83,7 +73,7 @@ bool assert_check(bool cond, const char* msg, std::source_location loc = std::so
 #define aw_assert(cond, ...) \
 	aw_assert_select(aw_assert_get_level(default, __VA_ARGS__)) \
 	( \
-	  aw_assert_eval(aw_assert_get_level(default, __VA_ARGS__), cond), \
+	  aw_assert_eval(aw_assert_get_level(default, __VA_ARGS__)) (cond), \
 	  aw_assert_get_message(#cond, __VA_ARGS__) \
 	)
 
