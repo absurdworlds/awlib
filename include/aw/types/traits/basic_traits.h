@@ -37,7 +37,7 @@ constexpr auto is_polymorphic = std::is_polymorphic<T>::value;
 template<typename T>
 constexpr auto is_abstract    = std::is_abstract<T>::value;
 template<typename T>
-constexpr auto is_pod         = std::is_pod<T>::value;
+constexpr auto is_pod         = std::is_trivial<T>::value && std::is_standard_layout<T>::value;
 
 
 template<typename T>
