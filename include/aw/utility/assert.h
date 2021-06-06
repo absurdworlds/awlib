@@ -38,27 +38,8 @@ bool assert_check(bool cond, const char* msg, std::source_location loc = std::so
 }
 } // namespace aw
 
-#if (aw_current_assert_level >= aw_assert_level_default)
-#define aw_assert_eval_default
-#else
-#define aw_assert_eval_default true ||
-#endif
-
-#if (aw_current_assert_level >= aw_assert_level_develop)
-#define aw_assert_eval_develop
-#else
-#define aw_assert_eval_develop true ||
-#endif
-
-#if (aw_current_assert_level >= aw_assert_level_audit)
-#define aw_assert_eval_audit
-#else
-#define aw_assert_eval_audit true ||
-#endif
-
-#define aw_assert_eval_normal(cond) aw_assert_eval_default(cond)
-
-#define aw_assert_eval(level) CONCAT(aw_assert_eval_, level)
+// disables evaluation by applying short-circuiting
+#define aw_assert_eval(level, cond) (aw_current_assert_level < aw_assert_level_##level) || (cond)
 
 // necessary because of default
 #define aw_assert_map_audit   audit
@@ -69,10 +50,7 @@ bool assert_check(bool cond, const char* msg, std::source_location loc = std::so
 #define aw_assert_enum(level) ::aw::assert_level::aw_assert_map_##level
 
 #define aw_assert_impl(cond, level, message) \
-	::aw::assert_check<aw_assert_enum(level)> ( \
-	  aw_assert_eval(level) (cond), \
-	  message \
-	)
+	::aw::assert_check<aw_assert_enum(level)> ( aw_assert_eval(level, cond), message )
 
 #define aw_assert_get_level(default, ...) FIRST(__VA_ARGS__ __VA_OPT__(,) default)
 #define aw_assert_get_message(default, ...) SECOND(__VA_ARGS__ __VA_OPT__(,) default, default)
