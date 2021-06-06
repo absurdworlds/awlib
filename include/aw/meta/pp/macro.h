@@ -38,6 +38,9 @@
  */
 #define APPLY(NAME,...) NAME(__VA_ARGS__)
 
+#define APPLY_EXPAND(NAME,...) EXPAND(NAME(__VA_ARGS__))
+#define APPLY_EXPAND2(NAME,...) EXPAND(NAME(__VA_ARGS__))
+
 /*!
  * Defer macro expansion:
  *
@@ -48,5 +51,7 @@
  */
 #define DEFER(x) x EMPTY()
 #define EMPTY()
+
+#define EAT(...)
 
 #endif//aw_pp_macro_h

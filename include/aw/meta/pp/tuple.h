@@ -22,7 +22,9 @@
 
 #define UNPACK(x) APPLY_T( IDENTITY, x )
 
-#define FIRST(x,y)  x
-#define SECOND(x,y) y
+#define FIRST(x,...)    x
+#define SECOND(x,y,...) y
+#define REST(x,...)     __VA_ARGS__
+#define TAIL(x,...)     __VA_ARGS__
 
 #endif//aw_pp_tupl_h
