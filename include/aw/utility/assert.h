@@ -5,6 +5,8 @@
 #include <aw/meta/pp/macro.h>
 #include <aw/meta/pp/tuple.h>
 
+#include <aw/utility/string/compose.h>
+
 #define aw_assert_level_default 1
 #define aw_assert_level_normal aw_assert_level_default
 #define aw_assert_level_develop 2
@@ -24,16 +26,28 @@ enum class assert_level {
 	current = aw_current_assert_level,
 };
 
-void assert_fail(const char* assertion, std::source_location location = std::source_location::current());
+void assert_fail(string_view assertion, std::source_location location = std::source_location::current());
 
-template <assert_level level = assert_level::normal>
-bool assert_check(bool cond, const char* msg, std::source_location loc = std::source_location::current())
+template <typename... Arg_types>
+void assert_fail_fmt(string_view msg, std::source_location loc = std::source_location::current(), Arg_types&&... args)
+{
+	std::string fmt = string::compose( msg, std::forward<Arg_types>(args)... );
+	assert_fail(fmt, loc);
+}
+
+template <assert_level level = assert_level::normal, typename... Arg_types>
+bool assert_check(bool cond, string_view msg, std::source_location loc = std::source_location::current(), Arg_types&&... args)
 {
 	if constexpr(level > assert_level::current)
 		return true;
 
-	if (!cond)
-		assert_fail(msg, loc);
+	if (!cond) {
+		if constexpr(sizeof...(Arg_types) > 0)
+			assert_fail_fmt(msg, loc, std::forward<Arg_types>(args)...);
+		else
+			assert_fail(msg, loc);
+	}
+
 	return cond;
 }
 } // namespace aw
@@ -49,14 +63,15 @@ bool assert_check(bool cond, const char* msg, std::source_location loc = std::so
 
 #define aw_assert_enum(level) ::aw::assert_level::aw_assert_map_##level
 
-#define aw_assert_impl(cond, level, message) \
-	::aw::assert_check<aw_assert_enum(level)> ( aw_assert_eval(level, cond), message )
+// TODO: __builtin_assume
+#define aw_assert_x(cond, level, message, ...) \
+	::aw::assert_check<aw_assert_enum(level)> ( aw_assert_eval(level, cond), message __VA_OPT__(, std::source_location::current(), ) __VA_ARGS__ )
 
 #define aw_assert_get_level(default, ...) FIRST(__VA_ARGS__ __VA_OPT__(,) default)
 #define aw_assert_get_message(default, ...) SECOND(__VA_ARGS__ __VA_OPT__(,) default, default)
 
 #define aw_assert(cond, ...) \
-	aw_assert_impl( cond, \
+	aw_assert_x( cond, \
 	  aw_assert_get_level(default, __VA_ARGS__), \
 	  aw_assert_get_message(#cond, __VA_ARGS__) \
 	)
