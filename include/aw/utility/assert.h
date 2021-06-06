@@ -29,7 +29,7 @@ void assert_fail(const char* assertion, std::source_location location = std::sou
 template <assert_level level = assert_level::normal>
 bool assert_check(bool cond, const char* msg, std::source_location loc = std::source_location::current())
 {
-	if constexpr(level < assert_level::current)
+	if constexpr(level > assert_level::current)
 		return true;
 
 	if (!cond)
