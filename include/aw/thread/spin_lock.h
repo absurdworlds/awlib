@@ -14,6 +14,9 @@ namespace aw {
 namespace thread {
 /*!
  * Simple spin_lock implementation.
+ * Spinlock is intended to be used for very short operations,
+ * i.e. orders of magnitude shorter than a scheduler time slice.
+ *
  * (Based on cppreference.com atomic_flag example)
  */
 struct spin_lock {
@@ -22,14 +25,26 @@ struct spin_lock {
 	spin_lock& operator=(spin_lock const&) = delete;
 	~spin_lock() = default;
 
+	bool try_lock()
+	{
+		return !test_and_set(std::memory_order_acquire);
+	}
+
 	void lock()
 	{
-		while (flag.test_and_set(std::memory_order_acquire));
+		while (!try_lock())
+			pause();
 	}
 
 	void unlock()
 	{
 		flag.clear(std::memory_order_release);
+	}
+
+private:
+	void pause() const
+	{
+		// TODO: benchmark and add pause instruction
 	}
 
 private:
