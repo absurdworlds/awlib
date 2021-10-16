@@ -18,6 +18,12 @@
 	#define AW_ARCH AW_ARCH_i686
 #endif
 
+#ifdef _MSC_VER
+#define AW_COMPILER_FLAVOR AW_COMPILER_MSVC
+#else
+#define AW_COMPILER_FLAVOR AW_COMPILER_GCC
+#endif
+
 #define AW_HAS_EXT__builtin_bswap16 __has_builtin(__builtin_bswap16)
 #define AW_HAS_EXT__builtin_bswap32 __has_builtin(__builtin_bswap32)
 #define AW_HAS_EXT__builtin_bswap64 __has_builtin(__builtin_bswap64)

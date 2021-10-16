@@ -57,6 +57,7 @@
 
 #if defined(__GNUC__) || defined(__GNUG__)
 #include <aw/config/gcc.h>
+// must check __clang__ before _MSC_VER because it may be clang-cl
 #elif defined(__clang__)
 #include <aw/config/clang.h>
 #elif defined(_MSC_VER)
