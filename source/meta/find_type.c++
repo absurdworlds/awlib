@@ -1,3 +1,4 @@
+#include <aw/config.h>
 #include <aw/meta/find_type.h>
 
 #include <type_traits>
@@ -15,7 +16,7 @@ static_assert(
 template<typename T>
 void pretty_print()
 {
-	std::cout << __PRETTY_FUNCTION__ << '\n';
+	std::cout << AW_FUNCTION_SIGNATURE << '\n';
 }
 
 int main()

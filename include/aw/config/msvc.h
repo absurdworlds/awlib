@@ -22,4 +22,6 @@
 #define AW_ATTRIBUTE( ... ) __declspec(__VA_ARGS__)
 
 #define aw_force_inline __forceinline
+
+#define AW_FUNCTION_SIGNATURE __FUNCSIG__
 #endif //aw_compiler_setup_2
