@@ -23,7 +23,7 @@ worker::~worker()
 
 bool worker::busy() const
 {
-	return (bool)task;
+	return static_cast<bool>(task);
 }
 
 void worker::start(Task task)
