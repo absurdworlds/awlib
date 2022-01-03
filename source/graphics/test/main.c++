@@ -8,6 +8,7 @@
 #include <GLFW/glfw3.h>
 
 #include <iostream>
+#include <iomanip>
 #include <chrono>
 
 namespace aw {
@@ -15,6 +16,7 @@ using namespace std::chrono;
 namespace gl3 {
 extern render_context ctx;
 extern camera_controller camctl;
+extern float radius;
 
 void initialize_scene();
 void reshape(int x, int y);
@@ -146,11 +148,22 @@ void main()
 		glfwGetWindowSize(window, &w, &h);
 		camctl.mouse_input( vec2{x, double(h) - y} );
 	};
+	std::cout.precision(1);
+	static float step = 1000;
 	auto on_key   = [] (GLFWwindow*, int key,int, int action, int) {
 		if (action != GLFW_PRESS)
 			return;
 		if (key == GLFW_KEY_P) {
 			print_inverse_matrix(ctx.camera_position);
+
+		} else if (key == GLFW_KEY_1) {
+			step /= 10;
+			std::cout << "step: " << step << '\n';
+			std::cout << std::fixed << "radius: " << radius / 1000 << "km" << '\n';
+		} else if (key == GLFW_KEY_2) {
+			step *= 10;
+			std::cout << "step: " << step << '\n';
+			std::cout << std::fixed << "radius: " << radius / 1000 << "km" << '\n';
 		} else if (key == GLFW_KEY_H) {
 			camctl.horiz_lock = !camctl.horiz_lock;
 		} else if (key == GLFW_KEY_LEFT_BRACKET) {
@@ -196,6 +209,20 @@ void main()
 
 	while (!glfwWindowShouldClose(window)) {
 		auto now = steady_clock::now();
+
+		/*auto step = [] {
+			auto p = std::floor(std::log10(radius))-1;
+			return std::pow(10,p);
+		};*/
+
+		if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS) {
+			radius -= step;
+			std::cout << std::fixed << "radius: " << radius / 1000 << "km" << '\n';
+		}
+		if (glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS) {
+			radius += step;
+			std::cout << std::fixed << "radius: " << radius / 1000 << "km" << '\n';
+		}
 
 		glfwPollEvents();
 		render(window, now - last_frame);

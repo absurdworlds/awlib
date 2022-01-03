@@ -45,6 +45,8 @@ void load_model( string_view filename )
 	models.emplace_back( model_from_obj(data) );
 }
 
+float radius = 10000;
+
 struct object {
 	size_t model_id;
 	mat4   pos;
@@ -58,6 +60,9 @@ struct object {
 		gl3::program& program = mtl.prg;
 		auto campos = ctx.camera_position;
 		program[mtl.model_to_camera] = campos * pos;
+		//program["transform"] = pos;
+		//program["campos"] = campos;
+		//program["curwa"] = radius;
 
 		for (auto obj : model.objects)
 			gl::draw_elements_base_vertex(GL_TRIANGLES, obj.num_elements, GL_UNSIGNED_INT, 0, obj.offset);
@@ -109,8 +114,8 @@ void initialize_scene()
 {
 	std::fstream file{ "scene.txt" };
 
-	cam.set_near_z(0.5f);
-	cam.set_far_z(5000.0f);
+	cam.set_near_z(1.0f);
+	cam.set_far_z(50000.0f);
 
 	cam.set_aspect_ratio(1.0f);
 	cam.set_fov( degrees<float>{90} );
@@ -246,7 +251,8 @@ void initialize_scene()
 	gl::depth_func(GL_LEQUAL);
 	gl::depth_range(0.0f, 1.0f);
 
-	gl::clear_color( 1.0f, 1.0f, 1.0f, 1.0f );
+	gl::clear_color( 0.9f, 0.9f, 1.0f, 1.0f );
+	//gl::clear_color( 1.0f, 1.0f, 1.0f, 1.0f );
 	gl::clear_depth( 1.0f );
 	gl::clear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 }
