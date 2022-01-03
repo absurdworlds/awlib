@@ -253,6 +253,14 @@ int main(int, char**argv)
 
 	auto mesh = obj::mesh::parse( file );
 
+	constexpr bool summary_only = true;
+	if (summary_only) {
+		std::cout << mesh.verts.size() << '\n';
+		std::cout << mesh.normals.size() << '\n';
+		std::cout << mesh.texverts.size() << '\n';
+		return 0;
+	}
+
 	if (!mesh.matlibs.empty()) {
 		std::cout << "mtllib";
 		for (auto& m : mesh.matlibs)

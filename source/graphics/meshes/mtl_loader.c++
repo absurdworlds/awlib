@@ -256,7 +256,7 @@ mtllib mtllib::parse( io::input_stream& file )
 } // namespace obj
 } // namespace aw
 
-#ifdef AW_MANUAL_TEST
+#ifdef AW_MTL_MANUAL_TEST
 #include <aw/io/input_file_stream.h>
 #include <iostream>
 
