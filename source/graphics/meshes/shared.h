@@ -40,33 +40,22 @@ using split_func = std::vector<string_view>(string_view, string_view);
 template<typename T>
 size_t parse3(string_view line, T& _1, T& _2, T& _3, string_view delim = ws, split_func* split = string::split_by)
 {
-	auto get_val = [] (string_view str, T& out) {
-		if (str.empty())
-			return true;
-		return parse1(str, out);
+	auto is_delim = [&] (char c) {
+		return delim.find(c) != delim.npos;
 	};
-
-	auto substrs = split(line, delim);
-	if (substrs.empty())
-		return false;
-
-	_1 = _2 = _3 = T{0};
-
-	size_t num = 0;
-	switch ( substrs.size() ) {
-	default:
-	case 3:
-		if ( !get_val(substrs[2], _3) ) return num;
-		++num;
-	case 2:
-		if ( !get_val(substrs[1], _2) ) return num;
-		++num;
-	case 1:
-		if ( !get_val(substrs[0], _1) ) return num;
-		++num;
-	case 0:
-		return num;
-	}
+	char* end;
+	errno = 0;
+	_1 = strto<T>( line.data(), &end );
+	if (errno) return 0;
+	while (is_delim(*end)) ++end;
+	errno = 0;
+	_2 = strto<T>( end+1, &end );
+	if (errno) return 1;
+	while (is_delim(*end)) ++end;
+	errno = 0;
+	_3 = strto<T>( end+1, &end );
+	if (errno) return 2;
+	return 3;
 }
 
 template<typename T>
