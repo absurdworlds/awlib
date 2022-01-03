@@ -91,7 +91,7 @@ GLFWwindow* create_window()
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
 	glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
-	auto window = glfwCreateWindow(800, 600, "OpenGL", nullptr, nullptr);
+	auto window = glfwCreateWindow(1280, 720, "OpenGL", nullptr, nullptr);
 	return window;
 }
 
@@ -114,7 +114,6 @@ void print_capabilities( )
 	println( "GL_MAX_VERTEX_UNIFORM_BLOCKS:     ", num );
 }
 
-
 void main()
 {
 	GLFWwindow* window = create_window();
@@ -122,7 +121,7 @@ void main()
 	create_context( window );
 	print_capabilities();
 	initialize_scene();
-	reshape(800, 600);
+	reshape(1280, 720);
 
 	auto on_resize = [] (GLFWwindow*, int w, int h) {
 		reshape(w,h);
