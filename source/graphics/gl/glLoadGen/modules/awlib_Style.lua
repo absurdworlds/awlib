@@ -628,17 +628,6 @@ function my_style.source.WriteUtilityDefs(hFile, specData, spec, options)
 	hFile:writeblock[[
 using load_extension_ptr = int(*)();
 struct map_entry {
-	map_entry(string_view _ext_name, ext::load_result& _ext_variable)
-		: ext_name{_ext_name},
-		  ext_variable{&_ext_variable}
-	{ }
-
-	map_entry(string_view _ext_name, ext::load_result& _ext_variable, load_extension_ptr _loaderFunc)
-		: ext_name{_ext_name},
-		  ext_variable{&_ext_variable},
-		  loaderFunc{_loaderFunc}
-	{ }
-
 	string_view ext_name;
 	ext::load_result* ext_variable;
 	load_extension_ptr loaderFunc = nullptr;
@@ -657,18 +646,19 @@ bool operator==(map_entry const& a, map_entry const& b)
 	hFile:write "\n"
 
 	--Write the table initialization function.
-	hFile:write "void InitializeMappingTable(std::vector<map_entry> &table)\n"
+	hFile:write "void initialize_mapping_table()\n"
 	hFile:write "{\n"
 	hFile:inc()
-	hFile:fmt("table.reserve(%i);\n", #options.extensions)
+	hFile:write "std::vector<map_entry> table(%i);\n"
+	hFile:write "int i = 0;\n"
 	for _, extName in ipairs(options.extensions) do
 		if(#specData.extdefs[extName].funcs > 0) then
-			hFile:fmt('table.emplace_back("%s", ext::%s, %s);\n',
+			hFile:fmt('table[i++] = { "%s", ext::%s, %s };\n',
 				spec.ExtNamePrefix() .. extName,
 				GenExtensionVarName(extName, spec, options),
 				GenExtLoaderFuncName(extName, spec, options))
 		else
-			hFile:fmt('table.emplace_back("%s", ext::%s);\n',
+			hFile:fmt('table[i++] = { "%s", ext::%s };\n',
 				spec.ExtNamePrefix() .. extName,
 				GenExtensionVarName(extName, spec, options))
 		end
@@ -679,7 +669,7 @@ bool operator==(map_entry const& a, map_entry const& b)
 	hFile:write "\n"
 	
 	--Write the function to clear the extension variables.
-	hFile:fmt("void ClearExtensionVars()\n")
+	hFile:fmt("void clear_extension_vars()\n")
 	hFile:write("{\n")
 	hFile:inc()
 	for _, extName in ipairs(options.extensions) do
@@ -693,7 +683,7 @@ bool operator==(map_entry const& a, map_entry const& b)
 	--Write a function that loads an extension by name. It is called when
 	--processing, so it should also set the extension variable based on the load.
 	hFile:writeblock([[
-void LoadExtByName(std::vector<map_entry>& table, string_view extension)
+void load_extension(std::vector<map_entry>& table, string_view extension)
 {
 	auto compare = [] (map_entry const& e, string_view a)
 	{
@@ -770,13 +760,12 @@ function my_style.source.WriteMainLoaderHelpers(hFile, specData, spec, options)
 	local indexed = WriteAncillaryFuncs(hFile, specData, spec, options)
 	hFile:write "\n"
 
-	hFile:fmt("ext::load_result load_functions(%s)\n", spec.GetLoaderParams())
+	hFile:fmt("ext::load_result load_functions_ext(%s)\n", spec.GetLoaderParams())
 	hFile:write("{\n")
 	hFile:inc()
 	hFile:writeblock[[
-ClearExtensionVars();
-std::vector<map_entry> table;
-InitializeMappingTable(table);
+clear_extension_vars();
+std::vector<map_entry> table = initialize_mapping_table();
 ]]
 	hFile:write("\n")
 
@@ -820,7 +809,7 @@ local function WriteMainLoaderFunc(hFile, version, specData, spec, options)
 	hFile:fmt("ext::load_result %s(%s)\n", func_name, spec.GetLoaderParams())
 	hFile:write "{\n"
 	hFile:inc()
-	hFile:write("load_functions();\n\n")
+	hFile:write("load_functions_ext();\n\n")
 	hFile:fmt("int num_failed = %s();\n", loader_func)
 	
 	hFile:write("return ext::load_result(true, num_failed);\n")

@@ -1466,17 +1466,6 @@ namespace sys {
 namespace {
 using load_extension_ptr = int(*)();
 struct map_entry {
-	map_entry(string_view _ext_name, ext::load_result& _ext_variable)
-		: ext_name{_ext_name},
-		  ext_variable{&_ext_variable}
-	{ }
-
-	map_entry(string_view _ext_name, ext::load_result& _ext_variable, load_extension_ptr _loaderFunc)
-		: ext_name{_ext_name},
-		  ext_variable{&_ext_variable},
-		  loaderFunc{_loaderFunc}
-	{ }
-
 	string_view ext_name;
 	ext::load_result* ext_variable;
 	load_extension_ptr loaderFunc = nullptr;
@@ -1492,17 +1481,19 @@ bool operator==(map_entry const& a, map_entry const& b)
        return a.ext_name == b.ext_name;
 }
 
-void InitializeMappingTable(std::vector<map_entry> &table)
+[[nodiscard]] std::vector<map_entry> initialize_mapping_table()
 {
-	table.reserve(0);
+	std::vector<map_entry> table(0);
+	// generated code goes here
 	std::sort(begin(table), end(table));
+	return table;
 }
 
-void ClearExtensionVars()
+void clear_extension_vars()
 {
 }
 
-void LoadExtByName(std::vector<map_entry>& table, string_view extension)
+void load_extension(std::vector<map_entry>& table, string_view extension)
 {
 	auto compare = [] (map_entry const& e, string_view a)
 	{
@@ -1511,45 +1502,43 @@ void LoadExtByName(std::vector<map_entry>& table, string_view extension)
 	auto entry = aw::binary_find(begin(table), end(table), extension, compare);
 	
 	if (entry != end(table)) {
-		if(entry->loaderFunc)
-			(*entry->ext_variable) = ext::load_result(true, entry->loaderFunc());
-		else
-			(*entry->ext_variable) = ext::load_result(true, 0);
+		const auto loader = entry->loaderFunc;
+		const int  num_failed = loader ? loader() : 0;
+		(*entry->ext_variable) = ext::load_result(true, num_failed);
 	}
 }
 
 
-static void ProcExtsFromExtList(std::vector<map_entry> &table)
+static void load_extensions(std::vector<map_entry> &table)
 {
 	GLint idx;
 	GLint num = 0;
 	gl::get_integer_v(GL_NUM_EXTENSIONS, &num);
 
 	for(idx = 0; idx < num; ++idx) {
-		const char* strExtensionName = (const char *)gl::get_string_i(GL_EXTENSIONS, idx);
-		LoadExtByName(table, strExtensionName);
+		const auto extension_name = reinterpret_cast<const char*>(gl::get_string_i(GL_EXTENSIONS, idx));
+		load_extension(table, extension_name);
 	}
 }
 
-ext::load_result load_functions()
+ext::load_result load_functions_ext()
 {
-	ClearExtensionVars();
-	std::vector<map_entry> table;
-	InitializeMappingTable(table);
+	clear_extension_vars();
 	
 	get_proc(get_integer_v, "glGetIntegerv");
-	if(!get_integer_v) return ext::load_result();
+	if(!get_integer_v) return ext::load_result(false, 1);
 	get_proc(get_string_i, "glGetStringi");
-	if(!get_string_i) return ext::load_result();
+	if(!get_string_i) return ext::load_result(false, 1);
 	
-	ProcExtsFromExtList(table);
-	return ext::load_result();
+	std::vector<map_entry> table = initialize_mapping_table();
+	load_extensions(table);
+	return ext::load_result(true, 0);
 }
 } //namespace
 
 ext::load_result load_functions_3_2()
 {
-	load_functions();
+	load_functions_ext();
 
 	int num_failed = load_gl_3_2_functions();
 	return ext::load_result(true, num_failed);
@@ -1557,7 +1546,7 @@ ext::load_result load_functions_3_2()
 
 ext::load_result load_functions_3_3()
 {
-	load_functions();
+	load_functions_ext();
 
 	int num_failed = load_gl_3_3_functions();
 	return ext::load_result(true, num_failed);
@@ -1565,7 +1554,7 @@ ext::load_result load_functions_3_3()
 
 ext::load_result load_functions_4_0()
 {
-	load_functions();
+	load_functions_ext();
 
 	int num_failed = load_gl_4_0_functions();
 	return ext::load_result(true, num_failed);
@@ -1573,7 +1562,7 @@ ext::load_result load_functions_4_0()
 
 ext::load_result load_functions_4_1()
 {
-	load_functions();
+	load_functions_ext();
 
 	int num_failed = load_gl_4_1_functions();
 	return ext::load_result(true, num_failed);
@@ -1581,7 +1570,7 @@ ext::load_result load_functions_4_1()
 
 ext::load_result load_functions_4_2()
 {
-	load_functions();
+	load_functions_ext();
 
 	int num_failed = load_gl_4_2_functions();
 	return ext::load_result(true, num_failed);
@@ -1589,7 +1578,7 @@ ext::load_result load_functions_4_2()
 
 ext::load_result load_functions_4_3()
 {
-	load_functions();
+	load_functions_ext();
 
 	int num_failed = load_gl_4_3_functions();
 	return ext::load_result(true, num_failed);
@@ -1597,7 +1586,7 @@ ext::load_result load_functions_4_3()
 
 ext::load_result load_functions_4_4()
 {
-	load_functions();
+	load_functions_ext();
 
 	int num_failed = load_gl_4_4_functions();
 	return ext::load_result(true, num_failed);
@@ -1605,7 +1594,7 @@ ext::load_result load_functions_4_4()
 
 ext::load_result load_functions_4_5()
 {
-	load_functions();
+	load_functions_ext();
 
 	int num_failed = load_gl_4_5_functions();
 	return ext::load_result(true, num_failed);
@@ -1613,7 +1602,7 @@ ext::load_result load_functions_4_5()
 
 ext::load_result load_functions_4_6()
 {
-	load_functions();
+	load_functions_ext();
 
 	int num_failed = load_gl_4_6_functions();
 	return ext::load_result(true, num_failed);
@@ -1643,6 +1632,7 @@ int get_minor_version()
 	return g_minor_version;
 }
 
+// TODO: add version class
 bool is_version_geq(int majorVersion, int minorVersion)
 {
 	if(g_major_version == 0)
