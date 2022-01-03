@@ -136,6 +136,8 @@ void main()
 			return;
 		if (key == GLFW_KEY_P) {
 			print_inverse_matrix(ctx.camera_position);
+		} else if (key == GLFW_KEY_H) {
+			camctl.horiz_lock = !camctl.horiz_lock;
 		} else if (key == GLFW_KEY_LEFT_BRACKET) {
 			next_object();
 		} else if (key == GLFW_KEY_RIGHT_BRACKET) {

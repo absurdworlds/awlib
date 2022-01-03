@@ -17,6 +17,7 @@ struct camera_controller {
 	vec2 screen;
 
 	bool mouse_look = true;
+	bool horiz_lock = false;
 
 	void mouse_input(vec2 mouse);
 
