@@ -3,7 +3,7 @@ shaders/vert6.glsl shaders/frag1.glsl
 shaders/v_tex.glsl shaders/f_tex.glsl
 shaders/v_txa.glsl shaders/f_txa.glsl
 7
-testworld.obj
+models/testworld.obj
 models/butruck.obj
 models/cylinder.obj
 models/kusok2.obj
@@ -17,7 +17,7 @@ models/mattest.obj
 2 0
 0 0 0
 0 0 0
-0 4
+0 5
 0 0 0
 0 0 0
 2 6
