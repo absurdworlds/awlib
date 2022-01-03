@@ -23,8 +23,12 @@ struct document {
 	doc::node  const* node(string_view path)  const;
 	doc::value const* value(string_view path) const;
 
-	array_view<std::pair<std::string,doc::node>>  nodes()  const { return _root.nodes.view(); };
-	array_view<std::pair<std::string,doc::value>> values() const { return _root.values.view(); };
+
+	using node_list  = array_view<std::pair<std::string,doc::node>>;
+	using value_list = array_view<std::pair<std::string,doc::value>>;
+
+	node_list  nodes()  const { return _root.nodes.view(); };
+	value_list values() const { return _root.values.view(); };
 
 	bool empty() { return _root.empty(); }
 
