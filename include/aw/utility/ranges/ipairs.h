@@ -53,7 +53,7 @@ struct ipairs {
 
 	iterator begin()
 	{
-		return iterator{  };
+		return std::begin(range);
 	}
 
 	auto end()

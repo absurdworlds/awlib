@@ -87,7 +87,7 @@ struct value {
 	}
 
 	template<typename T>
-	T try_get(T const& _default)
+	T try_get(T const& _default) const
 	{
 		T tmp;
 		return get(tmp) ? tmp : _default;
