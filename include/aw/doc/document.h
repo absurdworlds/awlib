@@ -24,8 +24,7 @@ struct document {
 	doc::value const* value(string_view path) const;
 
 
-	using node_list  = array_view<std::pair<std::string,doc::node>>;
-	using value_list = array_view<std::pair<std::string,doc::value>>;
+	auto nodes()  const { return _root.children.view(); };
 
 	node_list nodes()  const { return _root.children.view(); };
 

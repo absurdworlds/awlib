@@ -20,8 +20,8 @@ inline namespace v1 {
 struct parser;
 
 template<typename T>
-struct list : private std::vector<std::pair<std::string, T>> {
-	typedef std::vector<std::pair<std::string, T>> base_type;
+struct list : private std::vector<T> {
+	using base_type = std::vector<T>;
 
 	using iterator   = typename base_type::iterator;
 	using value_type = typename base_type::value_type;
@@ -32,21 +32,21 @@ struct list : private std::vector<std::pair<std::string, T>> {
 	using base_type::empty;
 	using base_type::size;
 
-	const T* find(string_view name) const
+	const T* const_find(string_view name) const
 	{
 		auto compare_name = [name] (value_type const& pair) {
-			return pair.first == name;
+			return pair.name == name;
 		};
 
 		auto it = std::find_if(begin(), end(), compare_name);
 		if (it == end())
 			return nullptr;
-		return &it->second;
+		return &*it;
 	}
 
-	const T* const_find(string_view name) const
+	const T* find(string_view name) const
 	{
-		return find(name);
+		return const_find(name);
 	}
 
 	T* find(string_view name)
@@ -54,9 +54,9 @@ struct list : private std::vector<std::pair<std::string, T>> {
 		return const_cast<T*>(const_find(name));
 	}
 
-	void add(std::string name, T const& node)
+	void add(T const& node)
 	{
-		base_type::emplace_back(value_type{std::move(name), node});
+		base_type::emplace_back(node);
 	}
 
 	array_view<value_type> view() const { return *static_cast<base_type const*>(this); }
@@ -105,8 +105,9 @@ struct node {
 		return children.empty();
 	}
 
-	doc::value value;
-	list<node> children;
+	std::string name;
+	doc::value  value;
+	list<node>  children;
 };
 } // inline namespace v1
 } // namespace aw::doc

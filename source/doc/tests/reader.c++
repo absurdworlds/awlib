@@ -22,15 +22,15 @@ using namespace aw;
 using namespace aw::io;
 using namespace aw::doc;
 
-void print_node(const doc::node& n, std::string name = "")
+void print_node(const doc::node& parent, std::string name = "")
 {
-	for (const auto& [k,v] : n.children) {
-		auto child_name = name + "/" + k;
+	for (const auto& n : parent.children) {
+		auto child_name = name + "/" + n.name;
 		std::cout << child_name;
-		if (v.value)
-			std::cout << " = " << to_string(v.value);
+		if (n.value)
+			std::cout << " = " << to_string(n.value);
 		std::cout << '\n';
-		print_node( v, child_name );
+		print_node( n, child_name );
 	}
 }
 
