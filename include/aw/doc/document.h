@@ -23,10 +23,12 @@ struct document {
 	doc::node  const* node(string_view path)  const;
 	doc::value const* value(string_view path) const;
 
+	using const_iterator = doc::node::const_iterator;
 
 	auto nodes()  const { return _root.children.view(); };
 
-	node_list nodes()  const { return _root.children.view(); };
+	const_iterator begin() const { return _root.children.cbegin(); }
+	const_iterator end() const { return _root.children.cend(); }
 
 	bool empty() { return _root.empty(); }
 

@@ -23,11 +23,15 @@ template<typename T>
 struct list : private std::vector<T> {
 	using base_type = std::vector<T>;
 
-	using iterator   = typename base_type::iterator;
-	using value_type = typename base_type::value_type;
+	using iterator       = typename base_type::iterator;
+	using const_iterator = typename base_type::const_iterator;
+	using value_type     = typename base_type::value_type;
 
 	using base_type::begin;
 	using base_type::end;
+
+	using base_type::cbegin;
+	using base_type::cend;
 
 	using base_type::empty;
 	using base_type::size;
@@ -64,6 +68,7 @@ struct list : private std::vector<T> {
 
 struct node {
 	using iterator = list<node>::iterator;
+	using const_iterator = list<node>::const_iterator;
 
 	node* find_child(string_view name)
 	{
