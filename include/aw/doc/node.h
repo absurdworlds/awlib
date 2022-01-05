@@ -63,24 +63,50 @@ struct list : private std::vector<std::pair<std::string, T>> {
 };
 
 struct node {
-	typedef list<node>::iterator  node_iter;
-	typedef list<value>::iterator value_iter;
+	using iterator = list<node>::iterator;
 
-	template<typename T>
-	T try_get(string_view name, T def)
+	node* find_child(string_view name)
 	{
-		if (auto* value = values.find(name))
-			return value->try_get(def);
+		return children.find(name);
+	}
+
+	const node* find_child(string_view name) const
+	{
+		return children.const_find(name);
+	}
+
+	/*!
+	 * Get the value of this node.
+	 */
+	template<typename T>
+	T try_get(T def) const
+	{
+		return value.try_get(def);
+	}
+
+	/*!
+	 * Get the value of a child node with name \a name.
+	 */
+	template<typename T>
+	T try_get(string_view name, T def) const
+	{
+		if (auto* node = find_child(name))
+			return node->try_get(def);
 		return def;
 	}
 
-	bool empty() const
+	/*!
+	 * For compatibility with std containers.
+	 */
+	bool empty() const { return is_empty(); }
+
+	bool is_empty() const
 	{
-		return values.empty() && nodes.empty();
+		return children.empty();
 	}
 
-	list<value> values;
-	list<node>  nodes;
+	doc::value value;
+	list<node> children;
 };
 } // inline namespace v1
 } // namespace aw::doc

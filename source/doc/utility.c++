@@ -51,14 +51,16 @@ node parse_node(parser& parser)
 		switch (obj.kind) {
 			case object::node: {
 				auto child = parse_node(parser);
-				if (obj.val)
-					child.values.add("", obj.val);
-				node.nodes.add(name, child);
+				child.value = obj.val;
+				node.children.add(name, child);
 				break;
 			}
 			case object::value:
-				node.values.add(name, obj.val);
+				node.children.add(name, doc::node{ obj.val });
 				break;
+			case object::null:
+				// assert(false);
+				continue;
 			case object::end:
 				return node;
 		}

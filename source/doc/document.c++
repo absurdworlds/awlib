@@ -22,28 +22,20 @@ doc::node const* document::node(string_view path) const
 	{
 		if (!node)
 			break;
-		node = node->nodes.find(name);
+		node = node->find_child(name);
 	}
 	return node;
 }
 
 doc::value const* document::value(string_view path) const
 {
-	auto divide = path.rfind('/');
-	if (divide == path.npos)
-		return _root.values.find(path);
-
-	auto node_path = path.substr(0, divide);
-
 	doc::value* val = nullptr;
 
-	auto sought_node = node(node_path);
+	auto sought_node = node(path);
 	if (!sought_node)
 		return val;
 
-	auto value_name = path.substr(divide);
-
-	return sought_node->values.find(value_name);
+	return &sought_node->value;
 }
 
 } // inline namespace v1

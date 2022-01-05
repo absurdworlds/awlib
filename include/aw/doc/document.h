@@ -27,8 +27,7 @@ struct document {
 	using node_list  = array_view<std::pair<std::string,doc::node>>;
 	using value_list = array_view<std::pair<std::string,doc::value>>;
 
-	node_list  nodes()  const { return _root.nodes.view(); };
-	value_list values() const { return _root.values.view(); };
+	node_list nodes()  const { return _root.children.view(); };
 
 	bool empty() { return _root.empty(); }
 

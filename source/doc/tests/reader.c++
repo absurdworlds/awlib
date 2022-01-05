@@ -24,12 +24,13 @@ using namespace aw::doc;
 
 void print_node(const doc::node& n, std::string name = "")
 {
-	for (auto [k,v] : n.values) {
-		std::cout << name << '/';
-		std::cout << k    << '=' << to_string(v) << '\n';
-	}
-	for (auto [k,v] : n.nodes) {
-		print_node( v, name + "/" + k );
+	for (const auto& [k,v] : n.children) {
+		auto child_name = name + "/" + k;
+		std::cout << child_name;
+		if (v.value)
+			std::cout << " = " << to_string(v.value);
+		std::cout << '\n';
+		print_node( v, child_name );
 	}
 }
 
