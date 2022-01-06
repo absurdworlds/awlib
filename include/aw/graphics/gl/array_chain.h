@@ -104,6 +104,12 @@ struct array_chain_iterator {
 	static constexpr size_t block_size = chain_storage_traits<T>::block_size;
 	using block_type = typename chain_storage<T>::block_type;
 
+	using value_type = T;
+	using pointer = value_type*;
+	using reference = value_type&;
+	using difference_type = ptrdiff_t;
+	using iterator_category = std::forward_iterator_tag;
+
 	array_chain_iterator(block_type* array, size_t pos)
 		: array{array}, pos{pos}
 	{}
