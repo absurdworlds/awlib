@@ -24,7 +24,7 @@ public:
 	WriteFile& openFileWrite(char* path);
 };
 
-HR_CORE_EXP FileSystem* initFilesystem();
+AW_CORE_EXP FileSystem* initFilesystem();
 
 } // namespace io
 } // namespace aw
