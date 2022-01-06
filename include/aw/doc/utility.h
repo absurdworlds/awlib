@@ -33,7 +33,7 @@ inline bool get_numbers(value const& val, T (&out) [N])
 		convert( vec );
 		return true;
 	}
-	if( auto vec = val.get<std::vector<int>>() ) {
+	if( auto vec = val.get<std::vector<long>>() ) {
 		convert( vec );
 		return true;
 	}
