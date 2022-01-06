@@ -15,7 +15,7 @@
 #include <tuple>
 namespace aw {
 namespace gl3 {
-model model_from_obj( obj::mesh const& data )
+inline model model_from_obj( obj::mesh const& data )
 {
 	unsigned last_index = 0;
 	std::map< std::tuple<unsigned, unsigned, unsigned>, unsigned > indices;
@@ -54,7 +54,7 @@ model model_from_obj( obj::mesh const& data )
 
 	for (auto&& [i, mesh] : ipairs(data.meshes)) {
 		if (matids.find(mesh.material) == end(matids)) {
-			std::cout << mesh.material << ' ' << last_matid << '\n';
+			//std::cout << mesh.material << ' ' << last_matid << '\n';
 			matids[mesh.material] = last_matid++;
 		}
 		float matid = matids[mesh.material];

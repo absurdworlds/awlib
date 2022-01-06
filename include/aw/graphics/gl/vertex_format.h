@@ -56,7 +56,7 @@ enum class vertex_attribute_index : size_t {
 	material_id = 5,
 };
 
-size_t operator+(vertex_attribute_index i)
+inline size_t operator+(vertex_attribute_index i)
 {
 	return size_t(i);
 }
