@@ -47,7 +47,7 @@ void scene::load(string_view path)
 
 			if (shader->children.empty())
 			{
-				auto name = node.value.try_get(std::string());
+				auto name = shader->try_get(std::string());
 				if (auto it = program_map.find(name); it != program_map.end())
 				{
 					prgid = it->second;
