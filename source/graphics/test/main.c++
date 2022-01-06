@@ -129,7 +129,7 @@ void main()
 	auto on_mouse = [] (GLFWwindow* window, double x, double y) {
 		int w, h;
 		glfwGetWindowSize(window, &w, &h);
-		camctl.mouse_input( vec2{x, double(h) - y} );
+		camctl.mouse_input( vec2{ float(x), float(h - y) } );
 	};
 	auto on_key   = [] (GLFWwindow*, int key,int, int action, int) {
 		if (action != GLFW_PRESS)

@@ -32,8 +32,8 @@ struct program_ref {
 	{
 		prg = other.prg;
 		aux = other.aux;
+		return *this;
 	}
-
 
 	program& operator*() { return *prg; }
 
