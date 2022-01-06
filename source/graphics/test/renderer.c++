@@ -89,8 +89,6 @@ optional<uniform_buffer> common;
 
 void initialize_scene()
 {
-	std::fstream file{ "scene.txt" };
-
 	cam.set_near_z(0.5f);
 	cam.set_far_z(5000.0f);
 
@@ -106,7 +104,7 @@ void initialize_scene()
 	vec3 ldir{ 0.577, 0.577, 0.577 };
 	common->set_data(sizeof(mat4), lint.array(), ldir.array());
 
-	scn.load("scene.hdf");
+	scn.load("scene.txt");
 
 	for (int i = 0; i < scn.pman.count(); ++i) {
 		auto ref = scn.pman[i];
