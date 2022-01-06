@@ -143,6 +143,11 @@ struct array_chain_iterator {
 		return other.array != array || other.pos != pos;
 	}
 
+	friend ptrdiff_t operator-(const array_chain_iterator& a, const array_chain_iterator&  b)
+	{
+		return (a.array - b.array)*block_size + ptrdiff_t(a.pos) - ptrdiff_t(b.pos);
+	}
+
 private:
 	block_type* array;
 	size_t pos;
