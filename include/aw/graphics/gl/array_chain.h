@@ -133,7 +133,12 @@ struct array_chain_iterator {
 		return *this;
 	}
 
-	bool operator!=(array_chain_iterator& other)
+	bool operator==(const array_chain_iterator& other) const
+	{
+		return other.array == array && other.pos == pos;
+	}
+
+	bool operator!=(const array_chain_iterator& other) const
 	{
 		return other.array != array || other.pos != pos;
 	}
