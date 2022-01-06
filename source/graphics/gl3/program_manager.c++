@@ -15,7 +15,13 @@ size_t program_manager::create_program( string_view v, string_view f )
 	auto program = load_program( v, f );
 	if (!program)
 		return -1;
+	auto idx = programs.size();
+	programs.emplace_back( std::move(*program) );
+	aux.emplace_back();
 
-	return add_resource({}, std::move(*program));
+	auto& prg = programs.back();
+	auto& loc = aux.back().loc;
+
+	return idx;
 }
 } // namespace aw::gl3

@@ -12,9 +12,16 @@
 #include <utility>
 #include <aw/graphics/gl/program.h>
 #include <aw/graphics/gl/texture.h>
-#include <aw/graphics/gl/program_manager.h>
+#include <aw/graphics/gl/resource_manager.h>
 namespace aw {
 namespace gl3 {
+struct program_manager : resource_manager<program> {
+	// TODO: create from shader list, not this
+	size_t create_program( string_view vsh, string_view fsh );
+};
+using program_ref = program_manager::reference;
+
+
 struct texture_manager : resource_manager<texture> {
 	size_t create_texture( string_view name );
 	size_t create_texture_array( array_view<string_view> names );
