@@ -1,0 +1,26 @@
+// -------------------------- SHADERS --------------------------
+[shader = "textured" vert = "shaders/v_tex.glsl" frag = "shaders/f_tex.glsl"]
+[shader = "texarray" vert = "shaders/v_txa.glsl" frag = "shaders/f_txa.glsl"]
+
+// ------------------------- MATERIALS -------------------------
+[material = "default"
+ [shader vert = "shaders/vert6.glsl" frag = "shaders/frag1.glsl"]
+]
+[material = "butruck"
+ shader   = "textured"
+ [textures
+   the_textur = "materials/butruck.png"
+ ]
+]
+
+// -------------------------- OBJECTS --------------------------
+[object = "world"
+ model  = "models/testworld.obj"
+ material = "default"
+]
+[object = "butruck"
+ model  = "models/butruck.obj"
+ material = "butruck"
+ pos = { 300, 15.6, -2560 }
+ rot = { 0, 57, 0 }
+]

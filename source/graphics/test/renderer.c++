@@ -1,4 +1,5 @@
 #include "camera_controller.h"
+#include "scene.h"
 
 #include <aw/graphics/gl/awgl/api.h>
 #include <aw/types/string_view.h>
@@ -21,7 +22,6 @@
 #include <aw/graphics/gl/render_context.h>
 #include <aw/graphics/gl/uniform_buffer.h>
 
-#include <aw/graphics/gl/utility/model/obj.h>
 #include <aw/utility/on_scope_exit.h>
 #include <aw/io/input_file_stream.h>
 
@@ -30,38 +30,22 @@
 namespace aw::gl3 {
 using namespace std::string_view_literals;
 
-program_manager pman;
-texture_manager tman;
-material_manager mman;
 
-
-std::vector<model> models;
-void load_model( string_view filename )
+void object::render(render_context& ctx)
 {
-	io::input_file_stream file{ filename };
-	auto data = obj::mesh::parse( file );
-	models.emplace_back( model_from_obj(data) );
+	auto& mtl = *ctx.active_material;
+	auto& model = scene->models[model_id];
+
+	gl::bind_vertex_array(model.vao);
+	gl3::program& program = mtl.prg;
+	auto campos = ctx.camera_position;
+	program[mtl.model_to_camera] = campos * pos;
+
+	for (auto obj : model.objects)
+		gl::draw_elements_base_vertex(GL_TRIANGLES, obj.num_elements, GL_UNSIGNED_INT, 0, obj.offset);
 }
 
-struct object {
-	size_t model_id;
-	mat4   pos;
-
-	void render( render_context& ctx)
-	{
-		auto& mtl = *ctx.active_material;
-		auto& model = models[model_id];
-
-		gl::bind_vertex_array(model.vao);
-		gl3::program& program = mtl.prg;
-		auto campos = ctx.camera_position;
-		program[mtl.model_to_camera] = campos * pos;
-
-		for (auto obj : model.objects)
-			gl::draw_elements_base_vertex(GL_TRIANGLES, obj.num_elements, GL_UNSIGNED_INT, 0, obj.offset);
-	}
-};
-std::vector<object> objects;
+scene  scn;
 camera cam;
 
 namespace commands {
@@ -122,113 +106,28 @@ void initialize_scene()
 	vec3 ldir{ 0.577, 0.577, 0.577 };
 	common->set_data(sizeof(mat4), lint.array(), ldir.array());
 
+	scn.load("scene.hdf");
 
-	size_t idx = 0;
-	int count = 0;
-	file >> count;
-	while (count --> 0) {
-		std::string vsh, fsh;
-		file >> vsh >> fsh;
-		idx = pman.create_program( vsh, fsh ) + 1;
-	}
-
-	for (int i = 0; i < idx; ++i) {
-		auto ref = pman[i];
+	for (int i = 0; i < scn.pman.count(); ++i) {
+		auto ref = scn.pman[i];
 		program& prg = ref;
 		auto block = prg.uniform_block("common_data");
 		common->bind(prg, block);
-		mman.add_resource("rur",material{ pman[i] });
-	}
-	auto t = tman.create_texture("materials/butruck.png");
-	mman[1].get().add_texture("the_textur", tman[t] );
-
-	string_view paths[] {
-		"materials/m/des_dirt1.png",
-		"materials/m/des_redrockbot.png",
-		"materials/m/des_redrockmid.png",
-		"materials/m/des_rocky1.png",
-		"materials/m/des_rocky1_dirt1.png",
-		"materials/m/des_oldrunway.png",
-		"materials/m/des_oldrunwayblend.png",
-		"materials/m/des_panelconc.png",
-		"materials/m/des_dirttrack1r.png",
-		"materials/m/des_dirttrackl.png",
-		"materials/m/des_dirttrackx.png",
-		"materials/m/des_dirttrack1.png",
-		"materials/m/des_1line256.png",
-		"materials/m/des_dirt2blend.png",
-		"materials/m/vgs_shopwall01_128.png",
-		"materials/m/vgs_shopwall01_128.png",
-		"materials/m/des_scrub1_dirt1.png",
-		"materials/m/des_scrub1.png",
-		"materials/m/Tar_1line256HV.png",
-		"materials/m/desstones_dirt1.png",
-		"materials/m/parking2plain.png",
-		"materials/m/Tar_lineslipway.png",
-		"materials/m/parking2.png",
-		"materials/m/rocktbrn_dirt2.png",
-		"materials/m/rocktbrn128.png",
-		"materials/m/des_roadedge1.png",
-		"materials/m/des_ranchwall1.png",
-		"materials/m/vgs_shopwall01_128.png",
-		"materials/m/vgs_shopwall01_128.png",
-		"materials/m/des_redrock2.png",
-		"materials/m/des_redrock1.png"
-	};
-
-	for (auto [i,path] : ipairs(paths))
-	{
-		std::cout << path << ' ' << i << '\n';
 	}
 
-	auto t2 = tman.create_texture_array( paths );
-	mman[2].get().add_texture( "tex", tman[t2] );
-
-
-	file >> count;
-	while (count --> 0) {
-		std::string name;
-		file >> name;
-		load_model( name );
-	}
-
-	struct tmp {
-		size_t mtl;
-		size_t obj;
+	auto compare = [] (const object& a, const object& b) {
+		return (a.material_id < b.material_id) || (a.material_id == b.material_id && a.model_id < b.model_id);
 	};
-	std::vector<tmp> vec;
+	std::sort(begin(scn.objects),end(scn.objects),compare);
 
-
-	auto push_object = [&] (object& obj, size_t mtl) {
-		vec.push_back(tmp{mtl, objects.size()});
-		objects.push_back(obj);
-	};
-	file >> count;
-	while (count --> 0) {
-		vec3 pos, rot;
-		int mat, mdl;
-		file >> mat >> mdl;
-		file >> pos[0] >> pos[1] >> pos[2];
-		file >> rot[0] >> rot[1] >> rot[2];
-		object o;
-		o.model_id = mdl;
-		auto deg = math::vector3d<degrees<float>>( rot );
-		o.pos = make_transform( pos, math::matrix_from_euler( deg ) );
-		push_object(o, mat);
-	}
-
-	auto compare = [] (tmp a, tmp b) {
-		return (a.mtl < b.mtl) || (a.mtl == b.mtl && a.obj < b.obj);
-	};
-
-	std::sort(begin(vec),end(vec),compare);
-	tmp prev{size_t(-1),size_t(-1)};
-	for (auto t : vec) {
-		if (prev.mtl != t.mtl) {
-			cmds.add( commands::select_program{ mman[t.mtl].get().prg.ptr() } );
-			cmds.add( commands::select_material{ mman[t.mtl].ptr() } );
+	size_t prev_mtl = -1;
+	for (auto& obj : scn.objects) {
+		if (prev_mtl != obj.material_id) {
+			cmds.add( commands::select_program{ scn.mman[obj.material_id].get().prg.ptr() } );
+			cmds.add( commands::select_material{  scn.mman[obj.material_id].ptr() } );
 		}
-		cmds.add( commands::render_simple_object{ &objects[t.obj] } );
+		prev_mtl = obj.material_id;
+		cmds.add( commands::render_simple_object{ &obj } );
 	}
 
 	gl::enable(GL_CULL_FACE);
@@ -250,14 +149,14 @@ camera_controller camctl{ ctx.camera_position, cam };
 static size_t cam_obj = 0;
 void next_object()
 {
-	cam_obj = (cam_obj + 1) % objects.size();
-	camctl.transform = *inverse(objects[cam_obj].pos);
+	cam_obj = (cam_obj + 1) % scn.objects.size();
+	camctl.transform = *inverse(scn.objects[cam_obj].pos);
 }
 
 void prev_object()
 {
-	cam_obj = (cam_obj - 1) % objects.size();
-	camctl.transform = *inverse(objects[cam_obj].pos);
+	cam_obj = (cam_obj - 1) % scn.objects.size();
+	camctl.transform = *inverse(scn.objects[cam_obj].pos);
 }
 
 
@@ -265,8 +164,11 @@ void reshape(int x, int y)
 {
 	gl::viewport(0, 0, x, y);
 
-	camctl.screen = vec2{x,y};
-	cam.set_aspect_ratio( float(x) / float(y) );
+	float fx = x;
+	float fy = y;
+
+	camctl.screen = vec2{fx,fy};
+	cam.set_aspect_ratio( fx / fy );
 
 	auto proj = cam.projection_matrix();
 	common->set_data(0, array(proj));
