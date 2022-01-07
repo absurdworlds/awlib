@@ -18,24 +18,26 @@
 
 namespace aw::gl3 {
 aw::ostream_logger ologger{std::cerr};
-size_t program_manager::create_program( string_view v, string_view f )
+size_t program_manager::create_program( array_view<shader_source> files )
 {
-	std::vector<shader> shaderList;
+	if (files.empty())
+		return -1;
 
-	auto vsh = load_shader( gl::shader_type::vertex,   v );
-	auto fsh = load_shader( gl::shader_type::fragment, f );
+	std::vector<shader> shader_list;
 
-	if (vsh && fsh) {
-		shaderList.push_back(std::move(*vsh));
-		shaderList.push_back(std::move(*fsh));
+	for (auto file : files)
+	{
+		auto shader = load_shader( file.type, file.path );
+		if (shader)
+			shader_list.push_back(std::move(*shader));
 	}
 
 	gl3::program program;
-	bool linked = program.link( shaderList );
+	bool linked = program.link( shader_list );
 	if (!linked)
 		return -1;
 
-	return add_resource( v, std::move(program) );
+	return add_resource( files.front().path, std::move(program) );
 }
 
 size_t texture_manager::create_texture( string_view name )

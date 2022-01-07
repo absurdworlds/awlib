@@ -4,7 +4,7 @@
 
 // ------------------------- MATERIALS -------------------------
 [material = "default"
- [shader vert = "shaders/vert6.glsl" frag = "shaders/frag1.glsl"]
+ [shader vert = { "shaders/gouraud.vsh.glsl",  "shaders/l_light.glsl" } , frag = "shaders/gouraud.fsh.glsl"]
 ]
 [material = "butruck"
  shader   = "textured"

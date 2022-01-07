@@ -12,6 +12,53 @@
 #include <map>
 
 namespace aw::gl3 {
+void parse_shader_list(const doc::node& node, std::vector<shader_source>& out, gl::shader_type type)
+{
+	switch(node.value.get_type())
+	{
+		case doc::type::string:
+		{
+			auto name = node.value.try_get(std::string_view());
+			if (!name.empty())
+				out.push_back({ type, name });
+			break;
+		}
+
+		case doc::type::string_vector:
+		{
+			auto* vec = node.value.get<std::vector<std::string>>();
+			for (auto& path : *vec)
+			{
+				out.push_back({ type, path });
+			}
+			break;
+		}
+
+		default:
+			// error: invlaid node
+			break;
+	}
+}
+
+std::vector<shader_source> parse_program(const doc::node& node)
+{
+	std::vector<shader_source> shaders;
+
+	auto vert = node.find_child("vert");
+	if (vert)
+	{
+		parse_shader_list(*vert, shaders, gl::shader_type::vertex);
+	}
+
+	auto frag = node.find_child("frag");
+	if (frag)
+	{
+		parse_shader_list(*frag, shaders, gl::shader_type::fragment);
+	}
+
+	return shaders;
+}
+
 void scene::load(string_view path)
 {
 	ostream_logger log{std::cout};
@@ -28,12 +75,10 @@ void scene::load(string_view path)
 	{
 		if (node.name == "shader")
 		{
-			// TODO: arbitrary number of shader files
-			auto vert = node.try_get("vert", std::string());
-			auto frag = node.try_get("frag", std::string());
-			if (!vert.empty() && !frag.empty())
+			auto shaders = parse_program(node);
+			if (!shaders.empty())
 			{
-				const auto id = pman.create_program(vert, frag);
+				const auto id = pman.create_program(shaders);
 				program_map.insert({node.value.try_get(std::string()), id});
 			}
 		}
@@ -45,23 +90,21 @@ void scene::load(string_view path)
 			if (!shader)
 				continue;
 
+			auto shader_name = shader->try_get(std::string());
 			if (shader->children.empty())
 			{
-				auto name = shader->try_get(std::string());
-				if (auto it = program_map.find(name); it != program_map.end())
+				if (auto it = program_map.find(shader_name); it != program_map.end())
 				{
 					prgid = it->second;
 				}
 			}
 			else
 			{
-				// TODO: arbitrary number of shader files
-				auto vert = shader->try_get("vert", std::string());
-				auto frag = shader->try_get("frag", std::string());
-				if (!vert.empty() && !frag.empty())
+				auto shaders = parse_program(*shader);
+				if (!shaders.empty())
 				{
-					prgid = pman.create_program(vert, frag);
-					program_map.insert({node.value.try_get(std::string()), prgid});
+					prgid = pman.create_program(shaders);
+					program_map.insert({ shader_name, prgid});
 				}
 			}
 			if (prgid == size_t(-1))
@@ -95,7 +138,7 @@ void scene::load(string_view path)
 						auto texid = tman.create_texture_array(paths);
 						mman[matid].get().add_texture( texture.name.data(), tman[texid] );
 
-						for (auto [i,path] : ipairs(paths))
+						for (auto&& [i,path] : ipairs(paths))
 						{
 							std::cout << path << ' ' << i << '\n';
 						}

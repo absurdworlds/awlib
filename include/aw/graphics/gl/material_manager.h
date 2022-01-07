@@ -15,9 +15,14 @@
 #include <aw/graphics/gl/resource_manager.h>
 namespace aw {
 namespace gl3 {
+struct shader_source {
+	gl::shader_type type;
+	string_view     path;
+};
+
 struct program_manager : resource_manager<program> {
 	// TODO: create from shader list, not this
-	size_t create_program( string_view vsh, string_view fsh );
+	size_t create_program( array_view<shader_source> files );
 };
 using program_ref = program_manager::reference;
 
