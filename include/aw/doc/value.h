@@ -156,26 +156,44 @@ private:
 		switch (holder.type_index()) {
 		case holder_t::index_of<bool>:
 			return doc::type::boolean;
+
 		case holder_t::index_of<intmax_t>:
 			return doc::type::integer;
+
 		case holder_t::index_of<double>:
 			return doc::type::floating_point;
+
 		case holder_t::index_of<std::string>:
 			return doc::type::string;
+
 		case holder_t::index_of<std::vector<bool>>:
 			return doc::type::boolean_vector;
+
 		case holder_t::index_of<std::vector<intmax_t>>:
 			return doc::type::integer_vector;
+
 		case holder_t::index_of<std::vector<double>>:
 			return doc::type::float_vector;
+
 		case holder_t::index_of<std::vector<std::string>>:
 			return doc::type::string_vector;
+
 		case holder_t::invalid:
 		default:
 			return doc::type::unknown;
 		};
 	}
 };
+
+template<>
+inline bool value::get(string_view& v) const
+{
+	const auto* const string = holder.get<std::string>();
+	if (string)
+		v = *string;
+	return string != nullptr;
+}
+
 } // inline namespace v1
 } // namespace doc
 } // namespace aw
