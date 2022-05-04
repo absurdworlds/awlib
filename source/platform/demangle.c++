@@ -7,20 +7,12 @@
  * There is NO WARRANTY, to the extent permitted by law.
  */
 #include <aw/platform/demangle.h>
+#include <aw/types/byte_buffer.h>
 
 #if (AW_COMPILER == AW_COMPILER_GCC) || (AW_COMPILER == AW_COMPILER_CLANG)
 #include <memory>
 #include <cxxabi.h>
 namespace aw {
-struct char_buffer {
-	struct free_deleter {
-		void operator()(char* memory) { std::free(memory); }
-	};
-
-	size_t size = 1024;
-	std::unique_ptr< char, free_deleter > memory{ (char*)malloc(size) };
-};
-
 std::string demangle(const char* name)
 {
 	static thread_local char_buffer buf;
