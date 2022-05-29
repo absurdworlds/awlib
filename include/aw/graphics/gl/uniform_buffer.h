@@ -9,6 +9,7 @@
 #ifndef aw_graphics_gl3_uniform_block_h
 #define aw_graphics_gl3_uniform_block_h
 #include <aw/graphics/gl/awgl/shader_enum.h>
+#include <aw/graphics/export.h>
 #include <aw/types/traits/basic_traits.h>
 #include <aw/meta/conditional.h>
 namespace aw {
@@ -17,7 +18,7 @@ struct program;
 using gl::program_handle;
 using gl::uniform_block_index;
 
-struct uniform_buffer {
+struct AW_GRAPHICS_EXP uniform_buffer {
 	uniform_buffer(GLuint index, size_t size);
 	~uniform_buffer() { cleanup(); }
 

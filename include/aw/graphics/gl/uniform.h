@@ -12,13 +12,14 @@
 #include <aw/graphics/gl/awgl/shader_enum.h>
 #include <aw/graphics/glsl/vec.h>
 #include <aw/graphics/glsl/mat.h>
+#include <aw/graphics/export.h>
 namespace aw {
 namespace gl3 {
 using gl::uniform_block_index;
 using gl::uniform_location;
 using gl::invalid_uniform;
 
-struct uniform_proxy {
+struct AW_GRAPHICS_EXP uniform_proxy {
 	uniform_proxy() = delete;
 	uniform_proxy(uniform_proxy const&) = delete;
 

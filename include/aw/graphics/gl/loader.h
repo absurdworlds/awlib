@@ -28,7 +28,7 @@ unknown_fn* get_proc_address(const char* name);
 } // namespace gl
 
 
-#if (AW_SUPPORT_PLATOFRM_WIN32)
+#if (AW_SUPPORT_PLATFORM_WIN32)
 namespace wgl {
 unknown_fn* get_proc_address(const char* name);
 }

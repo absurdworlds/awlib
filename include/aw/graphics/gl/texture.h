@@ -10,11 +10,12 @@
 #define aw_graphics_gl3_texture_h
 #include <aw/graphics/gl/awgl/texture_enum.h>
 #include <aw/types/array_view.h>
+#include <aw/graphics/export.h>
 namespace aw {
 namespace gl3 {
 using gl::texture_handle;
 
-struct texture {
+struct AW_GRAPHICS_EXP texture {
 	// TODO: various formats
 	texture( array_view<std::byte> data, size_t height, size_t width );
 

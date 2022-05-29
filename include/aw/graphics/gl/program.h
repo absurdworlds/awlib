@@ -11,11 +11,12 @@
 #include <aw/graphics/gl/shader.h>
 #include <aw/graphics/gl/uniform.h>
 #include <aw/types/array_view.h>
+#include <aw/graphics/export.h>
 namespace aw {
 namespace gl3 {
 using gl::program_handle;
 
-struct program {
+struct AW_GRAPHICS_EXP program {
 	program();
 	~program() { cleanup(); }
 

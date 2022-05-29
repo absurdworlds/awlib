@@ -8,10 +8,11 @@
  */
 #ifndef aw_graphics_gl3_program_manager_h
 #define aw_graphics_gl3_program_manager_h
-#include <vector>
 #include <aw/graphics/gl/program.h>
-//#include <aw/types/containers/flat_map.h>
+#include <aw/graphics/export.h>
 #include <aw/types/string_view.h>
+//#include <aw/types/containers/flat_map.h>
+#include <vector>
 namespace aw {
 namespace gl3 {
 struct program_uniform_locations {
@@ -57,7 +58,7 @@ private:
 	program_aux* aux;
 };
 
-struct program_manager {
+struct AW_GRAPHICS_EXP program_manager {
 	using ref = program_ref;
 	ref operator[]( size_t idx )
 	{

@@ -8,7 +8,6 @@
  */
 #ifndef aw_graphics_gl3_resource_manager_h
 #define aw_graphics_gl3_resource_manager_h
-#include <vector>
 #include <aw/graphics/gl/array_chain.h>
 #include <aw/graphics/gl/program.h>
 #include <aw/types/string_view.h>
@@ -37,6 +36,7 @@ struct resource_ref {
 		res     = other.res;
 		ref_ctr = other.ref_ctr;
 		add_ref();
+		return *this;
 	}
 
 	operator Resource&    () { return *res; }
@@ -162,7 +162,7 @@ protected:
 		int ref_ctr;
 	};
 
-	void ref_ctr( size_t idx )
+	int ref_ctr( size_t idx )
 	{
 		return aux_list[idx].ref_ctr;
 	}
@@ -170,7 +170,7 @@ protected:
 	void destroy( size_t idx )
 	{
 		free_list.push_back( idx );
-		res_list[idx].destruct( idx );
+		res_list.destruct( idx );
 		--aux_list[idx].ref_ctr;
 	}
 

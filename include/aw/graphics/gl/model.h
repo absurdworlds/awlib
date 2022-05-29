@@ -9,12 +9,12 @@
 #ifndef aw_graphics_gl3_model_h
 #define aw_graphics_gl3_model_h
 #include <aw/graphics/gl/vertex_format.h>
-namespace aw {
-namespace gl3 {
+#include <aw/graphics/export.h>
+namespace aw::gl3 {
 
 struct mesh_data;
 
-struct model {
+struct AW_GRAPHICS_EXP model {
 	model( vertex_data const& verts, mesh_data const& meshes );
 	model( model&& other )
 		: objects{ std::move(other.objects) }
@@ -59,6 +59,5 @@ struct mesh_data {
 	// TODO: materials
 };
 
-} // namespace gl3
-} // namespace aw
+} // namespace aw::gl3
 #endif//aw_graphics_gl3_program_h

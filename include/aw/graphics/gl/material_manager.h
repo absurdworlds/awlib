@@ -13,6 +13,7 @@
 #include <aw/graphics/gl/program.h>
 #include <aw/graphics/gl/texture.h>
 #include <aw/graphics/gl/resource_manager.h>
+#include <aw/graphics/export.h>
 namespace aw {
 namespace gl3 {
 struct shader_source {
@@ -20,20 +21,20 @@ struct shader_source {
 	string_view     path;
 };
 
-struct program_manager : resource_manager<program> {
+struct AW_GRAPHICS_EXP program_manager : resource_manager<program> {
 	// TODO: create from shader list, not this
 	size_t create_program( array_view<shader_source> files );
 };
 using program_ref = program_manager::reference;
 
 
-struct texture_manager : resource_manager<texture> {
+struct AW_GRAPHICS_EXP texture_manager : resource_manager<texture> {
 	size_t create_texture( string_view name );
 	size_t create_texture_array( array_view<string_view> names );
 };
 using texture_ref = texture_manager::reference;
 
-struct material {
+struct AW_GRAPHICS_EXP material {
 	program_ref prg;
 	uniform_location model_to_camera = ((program&)prg).uniform("transform");
 
