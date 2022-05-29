@@ -49,43 +49,43 @@ enum class type {
 
 namespace _impl {
 template<typename T>
-constexpr auto typeof() -> enable_if<is_int<T>, type>   { return type::integer; }
+constexpr auto type_of() -> enable_if<is_int<T>, type>   { return type::integer; }
 template<typename T>
-constexpr auto typeof() -> enable_if<is_vector_of<T, is_int_t>, type>
+constexpr auto type_of() -> enable_if<is_vector_of<T, is_int_t>, type>
 {
 	return type::integer_vector;
 }
 
 template<typename T>
-constexpr auto typeof() -> enable_if<is_float<T>, type> { return type::floating_point; }
+constexpr auto type_of() -> enable_if<is_float<T>, type> { return type::floating_point; }
 template<typename T>
-constexpr auto typeof() -> enable_if<is_vector_of<T, is_float_t>, type>
+constexpr auto type_of() -> enable_if<is_vector_of<T, is_float_t>, type>
 {
 	return type::float_vector;
 }
 
 template<typename T>
-constexpr type typeof()
+constexpr type type_of()
 {
 	return type::unknown;
 }
 
 template<>
-constexpr type typeof<std::string>()              { return type::string; }
+constexpr type type_of<std::string>()              { return type::string; }
 template<>
-constexpr type typeof<std::vector<std::string>>() { return type::string; }
+constexpr type type_of<std::vector<std::string>>() { return type::string; }
 
 template<>
-constexpr type typeof<bool>()              { return type::boolean; }
+constexpr type type_of<bool>()              { return type::boolean; }
 template<>
-constexpr type typeof<std::vector<bool>>() { return type::boolean; }
+constexpr type type_of<std::vector<bool>>() { return type::boolean; }
 } // namespace _impl
 
 /*!
  * Value corresponding to type T
  */
 template<typename T>
-constexpr type typeof = _impl::typeof<T>();
+constexpr type type_of = _impl::type_of<T>();
 
 /*!
  * Compare type of a value \a val to the type \a type.
@@ -93,7 +93,7 @@ constexpr type typeof = _impl::typeof<T>();
 template<typename T>
 inline bool operator==(doc::type type, T const& val)
 {
-	return type == typeof<T>;
+	return type == type_of<T>;
 }
 } // namespace doc
 } // namespace aw
