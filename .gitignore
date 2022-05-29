@@ -22,6 +22,7 @@ a.out
 *.vcxproj
 *.vcxproj.user
 *.vcxproj.filters
+CMakeLists.txt.user
 .*
 !/.gitignore
 Config.mk
