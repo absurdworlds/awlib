@@ -344,7 +344,8 @@ end
 	end
 
 function my_style.header.WriteFuncPtrDecl(hFile, func, spec, options)
-	hFile:write("extern ", GenFuncPtrDefDirect(func, spec, options), ";\n")
+	-- TODO: remove AW_GRAPHICS_EXP, make all functions private
+	hFile:write("AW_GRAPHICS_EXP extern ", GenFuncPtrDefDirect(func, spec, options), ";\n")
 end
 
 function my_style.header.WriteBlockBeginFuncDecl(hFile, spec, options)
