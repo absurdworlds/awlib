@@ -9,9 +9,10 @@
  */
 #ifndef aw_value_range_h
 #define aw_value_range_h
-#include <cassert>
-#include <type_traits>
 #include <aw/types/types.h>
+#include <cassert>
+#include <iterator>
+#include <type_traits>
 namespace aw {
 template <typename T>
 struct Range {
@@ -52,15 +53,7 @@ struct Range {
 			return *this;
 		}
 
-		bool operator==(iterator const& other)
-		{
-			return value == other.value;
-		}
-
-		bool operator!=(iterator const& other)
-		{
-			return value != other.value;
-		}
+		friend std::strong_ordering operator<=>(iterator const& a, iterator const& b) = default;
 
 	private:
 		value_type value;
