@@ -1,10 +1,16 @@
 #pragma once
+
+#include <aw/log/log.h>
+
 #include <aw/types/containers/queue.h>
+
+#include <aw/utility/test.h>
 #include <aw/utility/to_string/tuple.h>
+
 #include <tuple>
 
 namespace aw {
-template<>
+template <>
 struct string_converter<log::level> {
 	log::level level;
 
