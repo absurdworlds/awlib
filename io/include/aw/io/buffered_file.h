@@ -97,7 +97,7 @@ struct buffered_file {
 		auto err = ::_wfopen_s(&_file, path.native().data(), make_wopen_flag(mode));
 		(void)err; // TODO
 #else
-		_file = std::fopen(path.u8string().data(), make_fopen_flag(mode));
+		_file = std::fopen(path.string().data(), make_fopen_flag(mode));
 #endif
 	}
 

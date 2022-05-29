@@ -45,7 +45,7 @@ file_descriptor open(fs::path const& path, file_mode fm, std::error_code& ec)
 		flags |= O_EXCL;
 
 	constexpr mode_t default_mode = 0644;
-	auto fd = ::open(path.u8string().data(), flags, default_mode);
+	auto fd = ::open(path.string().data(), flags, default_mode);
 
 	set_error_if(fd == -1, ec);
 
