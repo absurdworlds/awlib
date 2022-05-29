@@ -1,7 +1,6 @@
 find_package(PNG REQUIRED)
 
-file(GLOB_RECURSE HEADERS ${AW_HEADER_DIR}/aw/gl/*.h)
-file(GLOB_RECURSE SOURCES obj_loader.c++ mtl_loader.c++ png_loader.c++)
+file(GLOB_RECURSE SOURCES obj_loader.c++ mtl_loader.c++ png_loader.c++ shared.h)
 
 add_library(awobj STATIC ${HEADERS} ${SOURCES})
 
