@@ -12,7 +12,6 @@ set(POSIX_SOURCES
     posix/mmap.cpp
     posix/helpers.h)
 
-file(GLOB_RECURSE HEADERS ${CMAKE_CURRENT_SOURCE_DIR}/aw/io/*.h)
 if (AW_CAPABILITIES_WIN32)
     list(APPEND SOURCES ${WIN32_SOURCES})
 endif()
@@ -21,10 +20,10 @@ if (AW_CAPABILITIES_POSIX)
     list(APPEND SOURCES ${POSIX_SOURCES})
 endif()
 
-add_definitions(-DAW_MODULE_IO)
-
+file(GLOB_RECURSE HEADERS ${CMAKE_CURRENT_SOURCE_DIR}/include/*.h)
 add_library(awio SHARED ${HEADERS} ${SOURCES})
 target_include_directories(awio PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
+target_compile_definitions(awio PRIVATE AW_MODULE_IO)
 target_link_libraries(awio awutils)
 
 add_subdirectory(tests)
