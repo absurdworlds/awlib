@@ -15,14 +15,14 @@ namespace aw {
  */
 template<typename byte_type>
 struct basic_buffer {
-    struct free_deleter {
-        void operator()(unsigned char* memory) { std::free(memory); }
-    };
+	struct free_deleter {
+		void operator()(byte_type* memory) { std::free(memory); }
+	};
 
-    unsigned char* data() { return memory.get(); }
+	unsigned char* data() { return memory.get(); }
 
-    int size = 1024;
-    std::unique_ptr<byte_type, free_deleter> memory{ (unsigned char*)std::malloc(size) };
+	size_t size = 1024;
+	std::unique_ptr<byte_type, free_deleter> memory{ static_cast<byte_type*>(std::malloc(size)) };
 };
 
 using byte_buffer = basic_buffer<std::byte>;
