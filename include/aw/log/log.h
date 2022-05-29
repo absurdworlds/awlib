@@ -16,7 +16,8 @@ inline namespace v1 {
  * Basic logger interface.
  * This interfacce is used by all aw libraries.
  */
-struct log {
+class log {
+public:
 	/*!
 	 * Level of importance of the message.
 	 */
@@ -26,6 +27,14 @@ struct log {
 		error,
 		critical
 	};
+
+	log() = default;
+
+	log(const log&) = delete;
+	log(log&&)      = delete;
+
+	log& operator=(const log&) = delete;
+	log& operator=(log&&)      = delete;
 
 	virtual ~log() = default;
 
