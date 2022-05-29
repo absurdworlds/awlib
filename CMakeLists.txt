@@ -33,6 +33,7 @@ endif()
 set(AW_HEADER_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include)
 include_directories(${AW_HEADER_DIR})
 
+add_subdirectory(source/meta)
 add_subdirectory(source/archive)
 add_subdirectory(source/algorithm)
 add_subdirectory(source/math)
