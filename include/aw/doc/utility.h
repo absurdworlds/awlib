@@ -10,21 +10,22 @@
 #ifndef aw_doc_utility_h
 #define aw_doc_utility_h
 #include <aw/doc/document.h>
+#include <aw/doc/export.h>
 #include <aw/io/input_stream.h>
 #include <aw/log/log.h>
 
 namespace aw::doc {
 inline namespace v1 {
-value find_value(io::input_stream& file, string_view name, log* l = nullptr);
-node  find_node(io::input_stream& file,  string_view name, log* l = nullptr);
+AW_DOC_EXP value find_value(io::input_stream& file, string_view name, log* l = nullptr);
+AW_DOC_EXP node  find_node(io::input_stream& file, string_view name, log* l = nullptr);
 
-node     parse_node(parser& parser);
-document parse_file(io::input_stream& file, log* l = nullptr);
+AW_DOC_EXP node     parse_node(parser& parser);
+AW_DOC_EXP document parse_file(io::input_stream& file, log* l = nullptr);
 
-template<typename T, size_t N>
-inline bool get_numbers(value const& val, T (&out) [N])
+template <typename T, size_t N>
+inline bool get_numbers(value const& val, T (&out)[N])
 {
-	auto convert = [&] (auto vec) {
+	const auto convert = [&](auto vec) {
 		size_t n = std::min(vec->size(), N);
 		for (size_t i = 0; i < n; ++i)
 			out[i] = static_cast<T>((*vec)[i]);
