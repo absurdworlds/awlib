@@ -8,12 +8,15 @@
  */
 #ifndef aw_containers_cbuffer_h
 #define aw_containers_cbuffer_h
+
+#include <iterator>
+
 namespace aw {
 namespace _impl {
-template<typename T>
+template <typename T>
 struct cbuffer_data {
-	using pointer = T*;
-	using const_pointer = T const*;
+	using pointer         = T*;
+	using const_pointer   = T const*;
 	using difference_type = ptrdiff_t;
 
 	pointer begin = nullptr;
@@ -97,7 +100,7 @@ struct cbuffer_data {
 	}
 };
 
-template<typename Traits>
+template <typename Traits>
 struct circular_iterator {
 	using value_type        = typename Traits::value_type;
 	using pointer           = typename Traits::pointer;
