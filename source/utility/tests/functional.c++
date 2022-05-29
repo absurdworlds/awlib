@@ -1,7 +1,7 @@
 #include <aw/utility/functional/overload.h>
 #include <aw/utility/functional/trivial.h>
 #include <aw/utility/functional/wrapper.h>
-#include <aw/utility/test.h>
+#include <aw/test/test.h>
 #include <vector>
 #include <memory>
 #include <algorithm>

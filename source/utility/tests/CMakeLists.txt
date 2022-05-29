@@ -5,4 +5,5 @@ set(SOURCES
     ranges_slice.c++ ranges_ipairs.c++ ranges_zip.c++)
 
 add_executable(test_utility ${SOURCES})
-target_link_libraries(test_utility awutils awplatform)
+target_link_libraries(test_utility
+    PRIVATE awutils awplatform awtest)

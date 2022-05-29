@@ -4,4 +4,5 @@ set(SOURCES
     join.cpp compose.cpp misc.cpp)
 
 add_executable(test_string ${SOURCES})
-target_link_libraries(test_string awstring awplatform)
+target_link_libraries(test_string
+    PRIVATE awstring awplatform awtest)

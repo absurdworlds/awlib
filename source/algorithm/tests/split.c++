@@ -1,6 +1,7 @@
 #include <aw/algorithm/split.h>
 #include <aw/types/string_view.h>
-#include <aw/utility/test.h>
+
+#include <aw/test/test.h>
 
 TestFile( "algorithm::split" );
 

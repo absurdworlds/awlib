@@ -11,3 +11,5 @@ set(SOURCES
     matrix4.c++)
 
 add_executable(test_math ${SOURCES})
+target_link_libraries(test_math
+    PRIVATE awtest)

@@ -4,7 +4,7 @@
 
 #include <aw/types/containers/queue.h>
 
-#include <aw/utility/test.h>
+#include <aw/test/test.h>
 #include <aw/utility/to_string/tuple.h>
 
 #include <tuple>

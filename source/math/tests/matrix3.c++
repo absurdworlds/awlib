@@ -1,4 +1,4 @@
-#include <aw/utility/test.h>
+#include <aw/test/test.h>
 #include <aw/math/matrix3.h>
 #include <aw/math/matrix_compare.h>
 #include <aw/utility/to_string/math/matrix.h>

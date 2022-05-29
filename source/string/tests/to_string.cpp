@@ -6,7 +6,7 @@
 #include <vector>
 #include <list>
 
-#include <aw/utility/test.h>
+#include <aw/test/test.h>
 
 TestFile("to_string tests");
 

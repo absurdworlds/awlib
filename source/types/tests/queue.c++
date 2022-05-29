@@ -3,7 +3,7 @@
 
 #include <aw/utility/ranges/value_range.h>
 #include <aw/utility/ranges/reverse.h>
-#include <aw/utility/test.h>
+#include <aw/test/test.h>
 
 // TODO: test exception-safety
 

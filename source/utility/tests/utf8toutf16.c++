@@ -1,5 +1,5 @@
 #include <aw/utility/unicode/convert.h>
-#include <aw/utility/test.h>
+#include <aw/test/test.h>
 
 TestFile( "utf8toutf16" );
 

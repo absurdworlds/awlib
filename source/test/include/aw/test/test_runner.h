@@ -1,4 +1,4 @@
-#include <aw/utility/test.h>
+#include <aw/test/test.h>
 #include <aw/utility/argv_parser.h>
 
 struct test_config {

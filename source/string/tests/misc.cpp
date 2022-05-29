@@ -1,7 +1,7 @@
 #include <aw/utility/string/join.h>
 #include <aw/utility/string/split.h>
 #include <aw/utility/string/trim.h>
-#include <aw/utility/test.h>
+#include <aw/test/test.h>
 #include <cctype>
 
 TestFile("Combined tests");

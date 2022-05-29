@@ -1,6 +1,6 @@
 #include <aw/fileformat/wav/reader.h>
 #include <aw/io/input_file_stream.h>
-#include <aw/utility/test.h>
+#include <aw/test/test.h>
 
 TestFile("WAV");
 

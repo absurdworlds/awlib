@@ -1,4 +1,4 @@
-#include <aw/utility/test.h>
+#include <aw/test/test.h>
 #include <aw/math/orientation.h>
 #include <aw/math/transform.h>
 #include <aw/math/vector_compare.h>

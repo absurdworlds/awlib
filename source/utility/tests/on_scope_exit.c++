@@ -1,5 +1,5 @@
 #include <aw/utility/on_scope_exit.h>
-#include <aw/utility/test.h>
+#include <aw/test/test.h>
 
 TestFile( "on_scope_exit" );
 

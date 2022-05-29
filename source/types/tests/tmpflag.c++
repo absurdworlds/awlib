@@ -1,5 +1,5 @@
 #include <aw/types/tmpflag.h>
-#include <aw/utility/test.h>
+#include <aw/test/test.h>
 #include <thread>
 
 TestFile( "aw::tmpflag" );

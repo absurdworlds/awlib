@@ -2,7 +2,7 @@
 #include <aw/types/containers/circular_buffer.h>
 
 #include <aw/utility/ranges/zip.h>
-#include <aw/utility/test.h>
+#include <aw/test/test.h>
 
 TestFile( "aw::circular_buffer" );
 

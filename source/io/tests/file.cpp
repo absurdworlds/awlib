@@ -1,6 +1,6 @@
 #include <aw/io/file.h>
 #include <aw/io/buffered_file.h>
-#include <aw/utility/test.h>
+#include <aw/test/test.h>
 #include <cstdio>
 #include <cstring>
 #include <algorithm>

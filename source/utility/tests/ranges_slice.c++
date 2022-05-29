@@ -1,5 +1,5 @@
 #include <aw/utility/ranges/slice.h>
-#include <aw/utility/test.h>
+#include <aw/test/test.h>
 
 TestFile( "ranges::slice" );
 

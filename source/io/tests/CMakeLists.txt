@@ -9,4 +9,5 @@ set(SOURCES
     main.cpp)
 
 add_executable(test_io ${SOURCES})
-target_link_libraries(test_io awio)
+target_link_libraries(test_io
+    PRIVATE awio awtest)

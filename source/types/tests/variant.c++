@@ -1,6 +1,6 @@
 #include <stdexcept>
 #include <aw/types/variant.h>
-#include <aw/utility/test.h>
+#include <aw/test/test.h>
 
 TestFile( "aw::variant" );
 

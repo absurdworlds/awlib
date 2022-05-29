@@ -2,7 +2,7 @@
 #include <aw/io/input_memory_stream.h>
 #include <fstream>
 
-#include <aw/utility/test.h>
+#include <aw/test/test.h>
 
 TestFile("Buffer");
 

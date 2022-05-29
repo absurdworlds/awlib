@@ -1,6 +1,6 @@
 #include <aw/utility/string/lazy_split.h>
 #include <aw/utility/ranges/paired.h>
-#include <aw/utility/test.h>
+#include <aw/test/test.h>
 
 TestFile( "string::split_iterator" );
 

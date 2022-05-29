@@ -1,7 +1,7 @@
 #include <aw/io/istream_adapter.h>
 #include <sstream>
 
-#include <aw/utility/test.h>
+#include <aw/test/test.h>
 
 TestFile("istream_adapter");
 

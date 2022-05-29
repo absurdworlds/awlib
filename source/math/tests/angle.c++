@@ -1,4 +1,4 @@
-#include <aw/utility/test.h>
+#include <aw/test/test.h>
 #include <aw/math/angle.h>
 #include <aw/math/trigonometry.h>
 

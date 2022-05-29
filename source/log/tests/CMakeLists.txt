@@ -4,4 +4,5 @@ set(SOURCES
     log_tester.h)
 
 add_executable(test_log ${SOURCES})
-target_link_libraries(test_log awlog awplatform)
+target_link_libraries(test_log
+    PRIVATE awlog awplatform awtest)

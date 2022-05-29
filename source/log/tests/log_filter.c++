@@ -1,7 +1,7 @@
 #include <aw/log/regex_filter.h>
 #include <aw/log/log_filter.h>
 
-#include <aw/utility/test.h>
+#include <aw/test/test.h>
 #include "log_tester.h"
 
 TestFile("log_filter");

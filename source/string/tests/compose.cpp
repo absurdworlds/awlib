@@ -1,5 +1,5 @@
 #include <aw/utility/string/compose.h>
-#include <aw/utility/test.h>
+#include <aw/test/test.h>
 
 TestFile("Compose tests");
 

@@ -7,4 +7,5 @@ set(SOURCES
     tmpflag.c++)
 
 add_executable(test_types ${SOURCES})
-target_link_libraries(test_types awtypes)
+target_link_libraries(test_types
+    PRIVATE awtypes awtest)

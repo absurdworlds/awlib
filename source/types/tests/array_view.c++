@@ -2,7 +2,7 @@
 #include <vector>
 
 #include <aw/utility/ranges/ipairs.h>
-#include <aw/utility/test.h>
+#include <aw/test/test.h>
 
 TestFile( "aw::array_view" );
 
