@@ -1,16 +1,18 @@
 
-file(GLOB_RECURSE HEADERS ${CMAKE_CURRENT_SOURCE_DIR}/aw/platform/*.h)
+file(GLOB_RECURSE HEADERS ${CMAKE_CURRENT_SOURCE_DIR}/include/*.h)
+set(SOURCES os_version.c++ demangle.c++)
 if (AW_CAPABILITIES_WIN32)
-    set(SOURCES os_version.c++ demangle.c++)
+   # list(APPEND SOURCES win32/process.c++)
 endif()
 
 if (AW_CAPABILITIES_POSIX)
-    set(SOURCES os_version.c++ demangle.c++ posix/process.c++)
+    set(SOURCES posix/process.c++)
 endif()
 
-add_definitions(-DAW_MODULE_PLATFORM)
 
 add_library(awplatform SHARED ${HEADERS} ${SOURCES})
+target_include_directories(awplatform PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
+target_compile_definitions(awplatform PRIVATE AW_MODULE_PLATFORM)
 target_link_libraries(awplatform
     PUBLIC awutils)
 
