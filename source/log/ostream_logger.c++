@@ -18,7 +18,7 @@ constexpr string_view describe(log::level level)
 	case log::warning:  return "warning:  ";
 	case log::error:    return "error:    ";
 	case log::critical: return "critical: ";
-	default:            return nullptr;
+	default:            return {};
 	};
 }
 } // namespace
