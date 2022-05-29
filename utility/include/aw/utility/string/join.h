@@ -37,7 +37,7 @@ std::string reserve_string(Iterator begin, Iterator end)
 	while (begin != end)
 		size += (begin++)->size();
 	std::string tmp;
-	tmp.reserve();
+	tmp.reserve(size);
 	return tmp;
 }
 

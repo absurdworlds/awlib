@@ -155,7 +155,7 @@ template<typename Archive>
 void end_save_virtual(Archive& arc, opt_string name = nullopt) { }
 
 template<typename Archive>
-std::string start_load_virtual(Archive& arc, opt_string name = nullopt) { }
+std::string start_load_virtual(Archive& arc, opt_string name = nullopt) { return {}; }
 template<typename Archive>
 void end_load_virtual(Archive& arc, opt_string name = nullopt) { }
 
