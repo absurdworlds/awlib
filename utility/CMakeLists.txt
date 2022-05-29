@@ -1,5 +1,5 @@
 
-file(GLOB_RECURSE HEADERS ${CMAKE_CURRENT_SOURCE_DIR}/*.h)
+file(GLOB_RECURSE HEADERS ${CMAKE_CURRENT_SOURCE_DIR}/include/*.h)
 file(GLOB SOURCES  argv_parser.c++ murmur_hash3.c++ pool/c++)
 
 add_library(awutils SHARED ${HEADERS} ${SOURCES})

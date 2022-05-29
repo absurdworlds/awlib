@@ -1,5 +1,5 @@
 
-file(GLOB_RECURSE HEADERS ${CMAKE_CURRENT_SOURCE_DIR}/*.h)
+file(GLOB_RECURSE HEADERS ${CMAKE_CURRENT_SOURCE_DIR}/include/*.h)
 set(SOURCES compose.cpp)
 
 add_library(awstring SHARED ${HEADERS} ${SOURCES})

@@ -2,7 +2,7 @@
 find_package(OpenGL REQUIRED)
 
 file(GLOB_RECURSE awgraphics_HEADERS ${CMAKE_CURRENT_SOURCE_DIR}/include/*.h)
-file(GLOB_RECURSE awgraphics_SOURCES
+set(awgraphics_SOURCES
     gl/loader.c++ gl/gl_api.c++ gl/enum_check.c++
     gl3/shader.c++ gl3/program.c++ gl3/uniform.c++ gl3/resources.c++
     gl3/texture.c++ gl3/model.c++ gl3/material.c++ gl3/render_context.c++)
