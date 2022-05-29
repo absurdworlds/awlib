@@ -8,16 +8,17 @@
  */
 #ifndef aw_containers_queue
 #define aw_containers_queue
-#include <cassert>
-#include <memory>
-#include <iterator>
-#include <algorithm>
-#include <aw/utility/exceptions.h>
 #include <aw/meta/conditional.h>
-#include <aw/types/traits/iterator.h>
+#include <aw/types/containers/bits/cbuffer.h>
 #include <aw/types/containers/bits/shared.h>
 #include <aw/types/containers/bits/traits.h>
-#include <aw/types/containers/bits/cbuffer.h>
+#include <aw/types/traits/iterator.h>
+#include <aw/utility/exceptions.h>
+
+#include <algorithm>
+#include <cassert>
+#include <memory>
+#include <stdexcept>
 
 // TODO: insert and remove
 // TODO: assign & assignment operators
@@ -39,14 +40,15 @@ struct queue_base_common {
 	}
 };
 
-template<typename T, typename Allocator>
+template <typename T, typename Allocator>
 struct queue_base : protected queue_base_common {
 	using allocator_type   = Allocator;
 	using allocator_traits = std::allocator_traits<Allocator>;
-	using reference        = typename allocator_type::reference;
-	using size_type        = typename allocator_type::size_type;
-	using difference_type  = typename allocator_type::difference_type;
-	using pointer          = typename allocator_type::pointer;
+	using reference        = T&;
+	using const_reference  = const T&;
+	using size_type        = typename allocator_traits::size_type;
+	using difference_type  = typename allocator_traits::difference_type;
+	using pointer          = typename allocator_traits::pointer;
 
 	/*! Get the allocator associated with the container. */
 	allocator_type get_allocator() const noexcept
@@ -180,21 +182,21 @@ private:
  * but aren't guaranteed to be contiguous withing that chunk (at maximum
  * elements are separated into two parts).
  */
-template<typename T, typename Allocator = std::allocator<T>>
-class queue : _impl::queue_base<T,Allocator> {
-	using Base = _impl::queue_base<T,Allocator>;
+template <typename T, typename Allocator = std::allocator<T>>
+class queue : _impl::queue_base<T, Allocator> {
+        using Base = _impl::queue_base<T, Allocator>;
 public:
-	using value_type       = T;
-	using allocator_type   = Allocator;
-	using allocator_traits = std::allocator_traits<Allocator>;
-	using reference        = typename allocator_type::reference;
-	using const_reference  = typename allocator_type::const_reference;
-	using size_type        = typename allocator_type::size_type;
-	using difference_type  = typename allocator_type::difference_type;
-	using pointer          = typename allocator_type::pointer;
-	using const_pointer    = typename allocator_type::const_pointer;
-	using iterator         = _impl::queue_iterator<Allocator>;
-	using const_iterator   = _impl::queue_iterator<_impl::const_traits<Allocator>>;
+	using value_type             = T;
+	using allocator_type         = Allocator;
+	using allocator_traits       = std::allocator_traits<Allocator>;
+	using reference              = T&;
+	using const_reference        = const T&;
+	using size_type              = typename allocator_traits::size_type;
+	using difference_type        = typename allocator_traits::difference_type;
+	using pointer                = typename allocator_traits::pointer;
+	using const_pointer          = typename allocator_traits::const_pointer;
+	using iterator               = _impl::queue_iterator<_impl::traits<allocator_traits>>;
+	using const_iterator         = _impl::queue_iterator<_impl::const_traits<allocator_traits>>;
 	using reverse_iterator       = std::reverse_iterator<iterator>;
 	using const_reverse_iterator = std::reverse_iterator<const_iterator>;
 

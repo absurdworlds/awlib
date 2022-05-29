@@ -34,7 +34,8 @@ enum class file_mode : unsigned {
 	//! Clear the file contents
 	truncate  = 1 << 4,
 	//! Fail if file already exists
-	exclusive = 1 << 5
+	exclusive = 1 << 5,
+
 };
 
 constexpr file_mode operator|(file_mode a, file_mode b)

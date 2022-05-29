@@ -16,13 +16,16 @@
 #include <aw/meta/conditional.h>
 #include <aw/types/traits/basic_traits.h>
 #include <aw/types/string_view.h>
+#include <iterator>
+
 namespace aw {
 namespace encoding { struct unknown {}; }
 namespace unicode {
-template<typename CharT>
+template <typename CharT>
 constexpr encoding::unknown char_encoding;
 
 template<> constexpr utf8  char_encoding<char>;
+template<> constexpr utf8  char_encoding<char8_t>;
 template<> constexpr utf16 char_encoding<char16_t>;
 template<> constexpr utf32 char_encoding<char32_t>;
 
@@ -87,6 +90,10 @@ auto convert(In const& str) -> Out
 inline std::string narrow(wstring_view in)
 {
 	return convert<std::string>(in);
+}
+inline std::wstring widen(u8string_view in)
+{
+	return convert<std::wstring>(in);
 }
 inline std::wstring widen(string_view in)
 {

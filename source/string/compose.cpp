@@ -22,7 +22,7 @@ std::string compose(string_view fmt, array_view<std::string> args)
 
 	size_t pos = 0;
 
-	while (pos != std::string::npos) {
+	while (pos < fmt.size()) {
 		size_t nextpos = fmt.find(delim, pos);
 
 		// TODO: C++17 string.append(string_view)
@@ -36,7 +36,7 @@ std::string compose(string_view fmt, array_view<std::string> args)
 		if (isdigit(idx)) {
 			pos = nextpos;
 
-			while (isdigit(fmt[nextpos]))
+			while (nextpos < fmt.size() && isdigit(fmt[nextpos]))
 				++nextpos;
 
 			// TODO: C++17 from_chars

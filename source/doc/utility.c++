@@ -7,11 +7,11 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
+#include <aw/doc/parser.h>
+#include <aw/doc/utility.h>
+#include <aw/utility/string/split.h>
 #include <cassert>
 #include <fstream>
-#include <aw/doc/utility.h>
-#include <aw/doc/parser.h>
-#include <aw/utility/string/split.h>
 namespace aw {
 namespace doc {
 inline namespace v1 {
@@ -25,7 +25,8 @@ bool find_node(parser& parser, string_view name)
 
 	object obj;
 	while (parser.read(obj)) {
-		if (obj.kind != object::node) continue;
+		if (obj.kind != object::node)
+			continue;
 
 		if (obj.name != str.back()) {
 			parser.skip_node();
@@ -77,7 +78,7 @@ value find_value(io::input_stream& file, string_view name, log* l)
 	if (pos != name.npos) {
 		if (!find_node(parser, name.substr(0, pos)))
 			return value();
-		name = name.substr(pos+1);
+		name = name.substr(pos + 1);
 	}
 
 	object obj;

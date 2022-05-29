@@ -317,8 +317,11 @@ private:
 
 	void destroy(iterator head, iterator tail)
 	{
-		for (; head != tail; ++head)
-			head->~T();
+		if constexpr(!std::is_trivially_destructible_v<T>)
+		{
+			for (; head != tail; ++head)
+				head->~T();
+		}
 	}
 
 

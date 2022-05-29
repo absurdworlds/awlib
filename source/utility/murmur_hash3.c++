@@ -7,8 +7,8 @@
  * There is NO WARRANTY, to the extent permitted by law.
  */
 //-----------------------------------------------------------------------------
-// MurmurHash3 was written by Austin Appleby, and is placed in the public
-// domain. The author hereby disclaims copyright to this source code.
+// This code is based on MurmurHash3.
+// MurmurHash3 was written by Austin Appleby, and is placed in the public domain.
 #include <aw/math/bitmath.h>
 #include <aw/types/support/reinterpret.h>
 #include <aw/utility/endian.h>

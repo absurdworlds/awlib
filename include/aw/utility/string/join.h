@@ -63,7 +63,7 @@ std::string join(Iterator begin, Iterator end, string_view delim = "")
 	return aw::join(begin, end, sink, delim);
 }
 
-template<template<typename> typename Container, typename StringT>
+template<template<typename...> typename Container, typename StringT>
 std::string join(Container<StringT> const& source, string_view delim = "")
 {
 	auto begin = source.begin();

@@ -17,6 +17,8 @@
 #include <aw/fileformat/wav/reader.h>
 #include <aw/fileformat/wav/log.h>
 
+#include <stdexcept>
+
 namespace aw {
 namespace wav {
 

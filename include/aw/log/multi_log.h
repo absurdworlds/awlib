@@ -8,16 +8,16 @@
  */
 #ifndef aw_multi_log_h
 #define aw_multi_log_h
-#include <vector>
 #include <algorithm>
-#include <aw/log/log.h>
 #include <aw/log/export.h>
+#include <aw/log/log.h>
+#include <vector>
 namespace aw {
 inline namespace v1 {
 /*!
  * Redirects message to multiple logs.
  */
-struct multi_log : log {
+struct AW_LOG_EXP multi_log : log {
 	~multi_log() = default;
 
 	/*!

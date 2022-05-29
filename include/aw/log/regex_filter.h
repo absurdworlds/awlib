@@ -9,10 +9,11 @@
 #ifndef aw_log_regex_filte_h
 #define aw_log_regex_filte_h
 #include <aw/types/string_view.h>
+#include <aw/log/export.h>
 #include <regex>
 namespace aw {
 inline namespace v1 {
-struct regex_filter {
+struct AW_LOG_EXP regex_filter {
 	/*!
 	 * By default Filter inlcudes everything and excludes nothing
 	 */

@@ -11,14 +11,71 @@
 #define aw_io_File_h
 #include <algorithm>
 
-#include <aw/types/types.h>
 #include <aw/io/file_mode.h>
 #include <aw/io/filesystem.h>
+#include <aw/types/types.h>
 
 #include <cstdio>
 
 namespace aw {
 namespace io {
+
+inline const char* make_fopen_flag(file_mode mode)
+{
+	using fm = file_mode;
+
+	switch (mode) {
+	case fm::read:
+	case fm::read | fm::append:
+		return "rb";
+	case fm::write:
+	case fm::write | fm::truncate:
+	case fm::write | fm::truncate | fm::create:
+		return "wb";
+	case fm::append:
+	case fm::write | fm::append:
+	case fm::write | fm::append | fm::create:
+		return "ab";
+	case fm::read | fm::write:
+		return "r+b";
+	case fm::read | fm::write | fm::truncate:
+		return "w+b";
+	case fm::read | fm::write | fm::append:
+	case fm::read | fm::write | fm::append | fm::create:
+		return "a+b";
+	default:
+		return "?";
+	}
+}
+
+inline const wchar_t* make_wopen_flag(file_mode mode)
+{
+	using fm = file_mode;
+
+	switch (mode) {
+	case fm::read:
+	case fm::read | fm::append:
+		return L"rb";
+	case fm::write:
+	case fm::write | fm::truncate:
+	case fm::write | fm::truncate | fm::create:
+		return L"wb";
+	case fm::append:
+	case fm::write | fm::append:
+	case fm::write | fm::append | fm::create:
+		return L"ab";
+	case fm::read | fm::write:
+		return L"r+b";
+	case fm::read | fm::write | fm::truncate:
+		return L"w+b";
+	case fm::read | fm::write | fm::append:
+	case fm::read | fm::write | fm::append | fm::create:
+		return L"a+b";
+	default:
+		return L"?";
+	}
+}
+
 /*! Wrapper for C file streams */
 struct buffered_file {
 	/*!
@@ -27,43 +84,21 @@ struct buffered_file {
 	buffered_file() = default;
 
 	/*! Construct file from existing C file */
-	buffered_file(FILE* _file) : _file(_file) { }
-	
+	buffered_file(FILE* _file) : _file(_file) {}
+
 	/*!
 	 * Open file identified by \a path.
 	 * Not all file_mode flags are supported.
 	 */
 	buffered_file(fs::path const& path, file_mode mode)
-		: _path(path)
+	    : _path(path)
 	{
-		using fm = file_mode;
-
-		char const* oflag;
-		switch (mode) {
-		case fm::read:
-		case fm::read|fm::append:
-			oflag = "rb";      break;
-		case fm::write:
-		case fm::write|fm::truncate:
-		case fm::write|fm::truncate|fm::create:
-			oflag = "wb";      break;
-		case fm::append:
-		case fm::write|fm::append:
-		case fm::write|fm::append|fm::create:
-			oflag = "ab";     break;
-		case fm::read|fm::write:
-			oflag = "r+b";     break;
-		case fm::read|fm::write|fm::truncate:
-			oflag = "w+b";     break;
-		case fm::read|fm::write|fm::append:
-		case fm::read|fm::write|fm::append|fm::create:
-			oflag = "a+b";     break;
-		default:
-			oflag = "?";
-		}
-
-		// TODO: _wfopen on win32
-		_file = std::fopen(path.u8string().data(), oflag);
+#if (AW_PLATFORM == AW_PLATFORM_WIN32)
+		auto err = ::_wfopen_s(&_file, path.native().data(), make_wopen_flag(mode));
+		(void)err; // TODO
+#else
+		_file = std::fopen(path.u8string().data(), make_fopen_flag(mode));
+#endif
 	}
 
 	~buffered_file()
@@ -71,7 +106,7 @@ struct buffered_file {
 		if (is_open())
 			close();
 	}
-	
+
 	buffered_file(buffered_file&& other) noexcept
 	{
 		swap(other);

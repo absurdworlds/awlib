@@ -13,11 +13,12 @@
 #include <iterator>
 #include <tuple>
 namespace aw {
-template <typename...Iters>
+template <typename... Iters>
 struct zip_iterator {
-	constexpr zip_iterator(Iters...iters)
-		: iters{iters...}
-	{}
+	constexpr explicit zip_iterator(Iters... iters)
+	    : iters{iters...}
+	{
+	}
 
 	constexpr auto operator*()
 	{
@@ -67,16 +68,25 @@ constexpr bool operator<(zip_iterator<Is...> const& a, zip_iterator<Js...> const
 	return a.iters < b.iters;
 }
 
+template <typename... Ranges>
+auto zip_begin(Ranges&&... ranges)
+{
+	using std::begin;
+	return zip_iterator{begin(forward<Ranges>(ranges))...};
+}
+
 /*!
  * Provides a way to iterate over multiple ranges
  */
-template<typename...Ranges>
+template <typename... Ranges>
 struct zip {
 	constexpr zip(Ranges&&... ranges)
 		: ranges{ forward<Ranges&&>(ranges)... }
 	{}
 
-	constexpr auto begin()
+	using iterator = decltype(zip_begin(std::declval<Ranges&>()...));
+
+	constexpr iterator begin()
 	{
 		auto _begin = [] (auto&&... ps)
 		{
@@ -86,7 +96,7 @@ struct zip {
 		return std::apply( _begin, ranges );
 	}
 
-	constexpr auto end()
+	constexpr iterator end()
 	{
 		auto _end = [] (auto&&... ps)
 		{
@@ -96,9 +106,7 @@ struct zip {
 		return std::apply( _end, ranges );
 	}
 
-	std::tuple<Ranges&&...> ranges;
-
-	using iterator = decltype(std::declval<zip>().begin());
+	std::tuple<Ranges...> ranges;
 };
 
 template<typename...Ranges>

@@ -14,18 +14,18 @@ namespace _impl {
 // traits wrapper — used to select const or non-const types
 template <typename Traits>
 struct traits {
-	using value_type        = typename Traits::value_type;
-	using pointer           = typename Traits::pointer;
-	using reference         = typename Traits::reference;
-	using difference_type   = typename Traits::difference_type;
+	using value_type      = typename Traits::value_type;
+	using pointer         = typename Traits::pointer;
+	using reference       = value_type&;
+	using difference_type = typename Traits::difference_type;
 };
 
 template <typename Traits>
 struct const_traits {
-	using value_type        = typename Traits::value_type;
-	using pointer           = typename Traits::const_pointer;
-	using reference         = typename Traits::const_reference;
-	using difference_type   = typename Traits::difference_type;
+	using value_type      = typename Traits::value_type;
+	using pointer         = typename Traits::const_pointer;
+	using reference       = const value_type&;
+	using difference_type = typename Traits::difference_type;
 };
 } // namespace _impl
 } // namespace aw

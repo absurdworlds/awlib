@@ -457,8 +457,9 @@ struct equal_v {
 	bool operator()(T&& arg, Args&&...args)
 	{
 		using aw::to_string;
-		std::vector<remove_reference<T>> tmp = { arg, args... };
+		std::vector<std::remove_cvref_t<T>> tmp = {arg, args...};
 		auto it = std::adjacent_find( begin(tmp), end(tmp), std::not_equal_to<T>() );
+
 		values = to_string(tmp);
 		return it == end(tmp);
 	}

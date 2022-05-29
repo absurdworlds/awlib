@@ -8,11 +8,11 @@
  */
 #ifndef aw_traits_basic_traits
 #define aw_traits_basic_traits
-#include <string>
-#include <utility>
-#include <type_traits>
 #include <aw/meta/void_t.h>
 #include <aw/types/string_view.h>
+#include <string>
+#include <type_traits>
+#include <utility>
 namespace aw {
 using std::declval;
 
@@ -60,9 +60,15 @@ constexpr auto is_same = std::is_same<A,B>::value;
 
 template<typename T>
 constexpr bool is_const = std::is_const<T>::value;
+namespace detail {
+template <typename Call> struct result_of {};
 
-template<typename Call>
-using result_of = std::result_of<Call>;
+template <typename Call, typename... Args>
+struct result_of<Call(Args...)> : std::invoke_result<Call, Args...> {};
+} // namespace detail
+
+template <typename Call>
+using result_of [[deprecated]] = detail::result_of<Call>;
 
 template<typename T>
 struct is_floating_point_t : std::is_floating_point<T> { };
