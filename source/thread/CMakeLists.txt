@@ -1,10 +1,9 @@
 
-file(GLOB_RECURSE HEADERS ${AW_HEADER_DIR}/aw/thread/*.h)
+file(GLOB_RECURSE HEADERS ${CMAKE_CURRENT_SOURCE_DIR}/include/*.h)
 set(SOURCES worker.c++)
 
-add_definitions(-DAW_MODULE_THREAD)
-
 add_library(awthread SHARED ${HEADERS} ${SOURCES})
-set_target_properties(awthread PROPERTIES LINKER_LANGUAGE CXX)
+target_include_directories(awthread PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
+target_compile_definitions(awthread PRIVATE AW_MODULE_THREAD)
 
 #add_subdirectory(tests)
