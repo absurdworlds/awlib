@@ -15,7 +15,7 @@ if (MSVC)
         # disable msvc bugs that were treated as features over the years
         "/permissive-"
         # fix \ treates as esacpe in raw string literals
-        "/experimental:preprocessor"
+        "/Zc:preprocessor"
     )
 endif()
 
