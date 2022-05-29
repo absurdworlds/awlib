@@ -8,7 +8,7 @@ target_compile_definitions(awutils PRIVATE AW_MODULE_UTILS)
 target_include_directories(awutils PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 target_link_libraries(awutils
     PUBLIC
-        awlib
+        aw
         awtypes
         awalgo
         awmath # TODO: maybe get rid of bitmath?

@@ -15,7 +15,6 @@ target_include_directories(awplatform PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include
 target_compile_definitions(awplatform PRIVATE AW_MODULE_PLATFORM)
 target_link_libraries(awplatform
     PUBLIC
-        awlib
         awutils)
 
 add_subdirectory(tests)
