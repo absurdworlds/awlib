@@ -7,6 +7,9 @@ target_compile_definitions(awdoc PRIVATE AW_MODULE_DOC)
 target_include_directories(awdoc PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 set_target_properties(awdoc PROPERTIES LINKER_LANGUAGE CXX)
 target_link_libraries(awdoc
-    PUBLIC awutils awio)
+    PUBLIC
+        awlog_interface
+        awutils
+        awio)
 
 add_subdirectory(tests)

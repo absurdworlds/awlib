@@ -1,14 +1,20 @@
 
-file(GLOB_RECURSE HEADERS ${AW_HEADER_DIR}/aw/log/*.h)
-file(GLOB SOURCES
-    ${CMAKE_CURRENT_SOURCE_DIR}/*.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/*.c++)
+# awlog interface library: linking with awlog is optional in case user
+# wants to provide their own logger implementation
+file(GLOB_RECURSE HEADERS ${CMAKE_CURRENT_SOURCE_DIR}/include/*.h)
+add_library(awlog_interface INTERFACE ${HEADERS})
+target_include_directories(awlog_interface INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
-add_definitions(-DAW_MODULE_LOG)
+# awlog shared library: provides common logger implementations
+add_library(awlog SHARED
+    log_base.c++
+    ostream_logger.c++)
 
-add_library(awlog SHARED ${HEADERS} ${SOURCES})
-set_target_properties(awlog PROPERTIES LINKER_LANGUAGE CXX)
+target_compile_definitions(awlog PRIVATE AW_MODULE_LOG)
 target_link_libraries(awlog
-    PUBLIC awalgo awutils)
+    PUBLIC
+        awlog_interface
+        awalgo
+        awutils)
 
 add_subdirectory(tests)
