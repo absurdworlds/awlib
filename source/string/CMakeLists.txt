@@ -9,6 +9,8 @@ set_target_properties(awstring PROPERTIES LINKER_LANGUAGE CXX)
 target_compile_definitions(awstring PRIVATE AW_MODULE_STRING)
 target_include_directories(awstring PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 target_link_libraries(awstring
-    PUBLIC awalgo)
+    PUBLIC
+        awalgo
+        awtypes)
 
 add_subdirectory(tests)

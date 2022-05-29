@@ -7,6 +7,10 @@ set_target_properties(awutils PROPERTIES LINKER_LANGUAGE CXX)
 target_compile_definitions(awutils PRIVATE AW_MODULE_UTILS)
 target_include_directories(awutils PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 target_link_libraries(awutils
-    PUBLIC awalgo)
+    PUBLIC
+        awtypes
+        awalgo
+        awmath # TODO: maybe get rid of bitmath?
+    )
 
 add_subdirectory(tests)

@@ -6,7 +6,13 @@ set(SOURCES renderer.c++ main.c++ camera_controller.c++ scene.c++)
 add_executable(rendertest ${HEADERS} ${SOURCES})
 
 target_link_libraries(rendertest
-    PUBLIC awio awgraphics awobj awlog awdoc
+    PUBLIC
+        awio
+        awgraphics
+        awobj
+        awlog
+        awdoc
+        awtypes
     PRIVATE
         OpenGL::GL
         glfw)

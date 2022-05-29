@@ -13,7 +13,10 @@ target_compile_definitions(awgraphics PRIVATE AW_MODULE_GRAPHICS)
 target_include_directories(awgraphics PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 target_link_libraries(awgraphics
-    PUBLIC awio awobj
+    PUBLIC
+        awio
+        awmath
+        awobj
     PRIVATE
         OpenGL::GL)
 
