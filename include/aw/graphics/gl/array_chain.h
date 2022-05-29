@@ -76,6 +76,11 @@ struct chain_storage {
 		return _data[n];
 	}
 
+	block_type* get_block_ptr(size_t n)
+	{
+		return _data.data() + n;
+	}
+
 	storage& get(size_t idx)
 	{
 		return get_block(idx / block_size)[idx % block_size];
@@ -193,13 +198,13 @@ struct array_chain {
 
 	iterator begin()
 	{
-		return {&_data.get_block( 0 ), 0};
+		return {_data.get_block_ptr( 0 ), 0};
 	}
 
 	iterator end()
 	{
 		size_t i = _size / block_size;
-		return {&_data.get_block( i ), _size % block_size};
+		return {_data.get_block_ptr( i ), _size % block_size};
 	}
 
 private:
