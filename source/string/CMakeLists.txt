@@ -11,6 +11,7 @@ target_include_directories(awstring PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 target_link_libraries(awstring
     PUBLIC
         awalgo
+        awutils # TODO: move string headers here
         awtypes)
 
 add_subdirectory(tests)
