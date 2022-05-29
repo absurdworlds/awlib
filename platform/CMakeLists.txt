@@ -6,7 +6,7 @@ if (AW_CAPABILITIES_WIN32)
 endif()
 
 if (AW_CAPABILITIES_POSIX)
-    set(SOURCES posix/process.c++)
+    list(APPEND SOURCES posix/process.c++)
 endif()
 
 
