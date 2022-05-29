@@ -27,7 +27,7 @@ struct spin_lock {
 
 	bool try_lock()
 	{
-		return !test_and_set(std::memory_order_acquire);
+		return !flag.test_and_set(std::memory_order_acquire);
 	}
 
 	void lock()
