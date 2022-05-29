@@ -39,7 +39,7 @@ struct wave_data {
 	//! Size of one coding block
 	u16 block_align;
 
-	size_t size()     { return data.size(); }
+	size_t size() const { return data.size(); }
 	const char* ptr() { return data.data(); }
 
 	//! Calculate number of bits per sample (format-dependent)
