@@ -9,6 +9,7 @@
 #ifndef aw_index_sequence_h
 #define aw_index_sequence_h
 #include <utility>
+#include <cstddef>
 namespace aw {
 template<size_t... I>
 using index_sequence = std::index_sequence<I...>;
