@@ -8,10 +8,10 @@
 #include <dlfcn.h>
 
 namespace aw::gl::apple {
-unknown_fn* get_proc_address(const char *name)
+unknown_fn* get_proc_address(const char* name)
 {
 	static void* image = nullptr;
-	
+
 	if (image == nullptr) {
 		image = dlopen("/System/Library/Frameworks/OpenGL.framework/Versions/Current/OpenGL", RTLD_LAZY);
 		if (image == nullptr)
@@ -32,8 +32,8 @@ unknown_fn* get_proc_address(const char* name)
 {
 	using gpasig = void*(const GLubyte*);
 
-	static void* image = nullptr;
-	static gpasig* gpa = nullptr;
+	static void*   image = nullptr;
+	static gpasig* gpa   = nullptr;
 
 	if (image == nullptr) {
 		image = dlopen(nullptr, RTLD_LAZY | RTLD_LOCAL);
@@ -46,7 +46,7 @@ unknown_fn* get_proc_address(const char* name)
 		return dlsym(image, name);
 	return gpa((const GLubyte*)name);
 }
-} // namespace sun
+} // namespace aw::gl::sun
 #endif /* __sgi || __sun */
 
 #ifdef AW_SUPPORT_PLATFORM_WIN32
@@ -64,24 +64,23 @@ unknown_fn* get_proc_address(const char* name)
 
 namespace aw::wgl {
 namespace {
-bool TestPointer(unknown_fn const* ptr)
+bool TestPointer(PROC ptr)
 {
-	if(!ptr) return 0;
-
-	intptr_t test = intptr_t(ptr);
-
-	if( in(test, 1, 2, 3, -1) )
+	if (!ptr)
 		return false;
-	return true;
+
+	const auto test = intptr_t(ptr);
+
+	return !in(test, 1, 2, 3, -1);
 }
 } // namespace
 
-unknown_fn* get_proc_address(const char *name)
+unknown_fn* get_proc_address(const char* name)
 {
 	HMODULE glMod = nullptr;
-	PROC pFunc = wglGetProcAddress((LPCSTR)name);
-	if(TestPointer(pFunc))
-		return pFunc;
+	PROC    pFunc = wglGetProcAddress((LPCSTR)name);
+	if (TestPointer(pFunc))
+		return (unknown_fn*)pFunc;
 	glMod = GetModuleHandleA("OpenGL32.dll");
 	return (unknown_fn*)GetProcAddress(glMod, (LPCSTR)name);
 }
