@@ -9,13 +9,20 @@
  */
 #include <aw/utility/string/compose.h>
 
-namespace aw {
-namespace string {
+#include <charconv>
+
+namespace aw::string {
+namespace _impl {
 static constexpr char CompositionChar = '%';
 
-std::string compose(string_view fmt, array_view<std::string> args)
+std::string compose(string_view fmt, std::initializer_list<string_view> args)
 {
 	constexpr char delim = CompositionChar;
+
+	auto arg = [&args] (size_t arg_no)
+	{
+		return *(args.begin() + arg_no);
+	};
 
 	std::string result;
 	result.reserve(fmt.size());
@@ -33,18 +40,16 @@ std::string compose(string_view fmt, array_view<std::string> args)
 
 		char idx = fmt[++nextpos];
 		// '%0' is replaced by one of positional arguments
-		if (isdigit(idx)) {
+		if (std::isdigit(idx)) {
 			pos = nextpos;
 
-			while (nextpos < fmt.size() && isdigit(fmt[nextpos]))
-				++nextpos;
+			size_t arg_no = args.size();
 
-			// TODO: C++17 from_chars
-			std::string temp(fmt.substr(pos, nextpos - pos));
-			size_t arg_no = stoull(temp);
+			const auto res = std::from_chars(fmt.data() + pos, fmt.data() + fmt.size(), arg_no);
 
+			nextpos = res.ptr - fmt.data();
 			if (arg_no < args.size())
-				result += args[arg_no];
+				result += arg(arg_no);
 		// '%%' is replaced by a single '%' (for escaping)
 		} else if (idx == delim) {
 			result += delim;
@@ -58,5 +63,5 @@ std::string compose(string_view fmt, array_view<std::string> args)
 
 	return result;
 }
-} // namespace string
+} // namepsace _impl
 } // namespace aw
