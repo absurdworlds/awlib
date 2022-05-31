@@ -221,7 +221,9 @@ u16 wave_data::bits_per_sample() const noexcept
 		return block_align / channels * 8;
 	case wav::format::ima_adpcm:
 		return ima_adpcm_bits_per_sample;
-	}	
+	}
+	// TODO: unreachable;
+	return 0;
 }
 
 u16 wave_data::samples_per_block() const noexcept
@@ -232,6 +234,8 @@ u16 wave_data::samples_per_block() const noexcept
 	case wav::format::ima_adpcm:
 		return ima_adpcm_samples_per_block( *this );
 	}
+	// TODO: unreachable;
+	return 0;
 }
 } // namespace wav
 } // namespace aw
