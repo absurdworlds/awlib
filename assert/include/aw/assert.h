@@ -8,24 +8,22 @@
 #include <aw/meta/pp/tuple.h>
 #include <aw/meta/source_location.h>
 
+#ifndef aw_default_assert_level
+#define aw_default_assert_level release
+#endif
 
-#define aw_assert_level_default 1
-#define aw_assert_level_normal aw_assert_level_default
-#define aw_assert_level_develop 2
-#define aw_assert_level_audit 3
-
-#ifndef aw_current_assert_level
-#define aw_current_assert_level aw_assert_level_default
+#ifndef aw_maximum_assert_level
+#define aw_maximum_assert_level release
 #endif
 
 namespace aw {
-
 enum class assert_level {
 	off,
-	normal  = aw_assert_level_default,
-	develop = aw_assert_level_develop,
-	audit   = aw_assert_level_audit,
-	current = aw_current_assert_level,
+	release,
+	debug,
+	audit,
+	current = aw_default_assert_level,
+	maximum = aw_maximum_assert_level
 };
 
 template <assert_level level = assert_level::debug, typename Expression, typename... Arg_types>
@@ -60,19 +58,17 @@ bool assert_check(Expression&& expr, string_view msg, source_location loc = sour
 #define aw_assert_map_default normal
 #define aw_assert_map_normal  normal
 
-#define aw_assert_enum(level) ::aw::assert_level::aw_assert_map_##level
 
 // TODO: __builtin_assume
 #define aw_assert_x(cond, level, message, ...) \
-	::aw::assert_check<aw_assert_enum(level)> ( [] { return cond; }, message __VA_OPT__(, std::source_location::current(), ) __VA_ARGS__ )
+::aw::assert_check<::aw::assert_level::level> ( [] { return cond; }, message __VA_OPT__(, source_location::current(), ) __VA_ARGS__ )
 
 #define aw_assert_get_level(default, ...) FIRST(__VA_ARGS__ __VA_OPT__(,) default)
 #define aw_assert_get_message(default, ...) SECOND(__VA_ARGS__ __VA_OPT__(,) default, default)
 
-#define aw_assert(cond, ...) \
-	aw_assert_x( cond, \
-	  aw_assert_get_level(default, __VA_ARGS__), \
-	  aw_assert_get_message(#cond, __VA_ARGS__) \
-	)
+#define aw_assert(cond, ...) aw_assert_x( cond, current, __VA_ARGS__ );
+#define aw_assert_release(cond, ...) aw_assert_x( cond, release, __VA_ARGS__ );
+#define aw_assert_debug(cond, ...) aw_assert_x( cond, debub, __VA_ARGS__ );
+#define aw_assert_audit(cond, ...) aw_assert_x( cond, audit, __VA_ARGS__ );
 
 #endif//aw_utility_assert_h

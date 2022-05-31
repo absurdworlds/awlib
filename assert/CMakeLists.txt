@@ -1,6 +1,25 @@
 file(GLOB_RECURSE HEADERS ${CMAKE_CURRENT_SOURCE_DIR}/include/*.h)
 
+if (CMAKE_BUILD_TYPE STREQUAL "Debug" OR CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo")
+	set(LEVEL "debug")
+else()
+	set(LEVEL "release")
+endif()
+
+set(LEVELS "off;release;debug;audit")
+
+set(AW_MAXIMUM_ASSERT_LEVEL "${LEVEL}" CACHE STRING "Override assert level")
+set(AW_DEFAULT_ASSERT_LEVEL "release"  CACHE STRING "Override assert level for aw_assert macro")
+
+set_property(CACHE AW_MAXIMUM_ASSERT_LEVEL PROPERTY STRINGS ${LEVELS})
+set_property(CACHE AW_DEFAULT_ASSERT_LEVEL PROPERTY STRINGS ${LEVELS})
+
 add_library(awassert_interface INTERFACE ${HEADERS})
+
+target_compile_definitions(${INTERFACE_LIB}
+	INTERFACE
+		aw_default_assert_level=${AW_DEFAULT_ASSERT_LEVEL}
+		aw_maximum_assert_level=${AW_MAXIMUM_ASSERT_LEVEL})
 
 target_include_directories(awassert_interface
 	INTERFACE
