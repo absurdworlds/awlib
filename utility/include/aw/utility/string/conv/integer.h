@@ -9,6 +9,8 @@
 #ifndef aw_string_conv_integer_h
 #define aw_string_conv_integer_h
 #include <aw/utility/string/conv/digits.h>
+#include <aw/types/types.h>
+#include <string>
 namespace aw {
 /*!
  * TODO: better name
