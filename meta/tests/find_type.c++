@@ -12,6 +12,7 @@ static_assert(
 
 } // namespace aw
 
+#ifdef AW_MANUAL_TEST
 #include <iostream>
 template<typename T>
 void pretty_print()
@@ -29,4 +30,4 @@ int main()
 		>
 	>();
 }
-
+#endif
