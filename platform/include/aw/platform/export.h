@@ -10,7 +10,7 @@
 #define aw_platform_exp_h
 #include <aw/config.h>
 
-#ifdef AW_MODULE_PLATOFORM
+#ifdef AW_MODULE_PLATFORM
 	#define AW_PLATFORM_EXP AW_EXPORT
 #else
 	#define AW_PLATFORM_EXP AW_IMPORT

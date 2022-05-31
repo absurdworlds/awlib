@@ -72,4 +72,4 @@ int kill(process_handle pid, int signal, std::error_code& ec) noexcept
 		ec.assign( errno, std::generic_category() );
 	return ret;
 }
-} // namespace posix
+} // namespace aw::platform::posix

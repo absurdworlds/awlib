@@ -14,7 +14,10 @@ add_library(awplatform SHARED ${HEADERS} ${SOURCES})
 target_include_directories(awplatform PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 target_compile_definitions(awplatform PRIVATE AW_MODULE_PLATFORM)
 target_link_libraries(awplatform
-    PUBLIC
-        awutils)
+	PUBLIC
+		aw
+		awtypes
+	PRIVATE
+		awalgo)
 
 add_subdirectory(tests)

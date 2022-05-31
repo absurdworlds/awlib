@@ -28,13 +28,13 @@ struct os_name {
 
 #if defined(AW_SUPPORT_PLATFORM_POSIX)
 namespace posix {
-os_name get_os_version();
+AW_PLATFORM_EXP os_name get_os_version();
 } // namespace posix
 #endif
 
 #if defined(AW_SUPPORT_PLATFORM_WIN32)
 namespace win32 {
-os_name get_os_version();
+AW_PLATFORM_EXP os_name get_os_version();
 } // namespace win32
 #endif
 
