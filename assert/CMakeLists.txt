@@ -14,6 +14,7 @@ target_link_libraries(awassert_interface
 		awplatform)
 
 
+# awassert implementation
 add_library(awassert SHARED
 	source/assert_fail.c++
 	source/assert_handler.c++
@@ -21,6 +22,14 @@ add_library(awassert SHARED
 target_compile_definitions(awassert
 	PRIVATE
 	    AW_MODULE_ASSERT)
+
+if (AW_CAPABILITIES_WIN32)
+	target_sources(awassert PRIVATE source/win32/debugger.c++)
+endif()
+
+if (AW_CAPABILITIES_POSIX)
+	target_sources(awassert PRIVATE source/posix/debugger.c++)
+endif()
 
 target_link_libraries(awassert
 	PUBLIC
