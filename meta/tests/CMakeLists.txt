@@ -8,6 +8,7 @@ add_executable(test_meta
 	eat_paren.c++
 	find_index.c++
 	find_type.c++
+	source_location.c++
 )
 
 target_link_libraries(test_meta
