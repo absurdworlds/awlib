@@ -516,7 +516,7 @@ struct _catch {
 #define TestFile(name) namespace aw::test { namespace { context file_context{name}; } }
 #define Test(name)     \
 	void run_test_##name(); \
-	aw::test::register_test add_test_##name{#name, run_test_##name}; \
+	const aw::test::register_test add_test_##name{#name, run_test_##name}; \
 	void run_test_##name()
 #define Setup          if (aw::test::setup())
 #define Preconditions  if (aw::test::preconditions())

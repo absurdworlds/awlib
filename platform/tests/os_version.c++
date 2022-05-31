@@ -8,18 +8,27 @@
  */
 #include <aw/platform/os_version.h>
 #include <iostream>
-int main()
+
+#include <aw/utility/test.h>
+
+TestFile("platform::os_version");
+
+namespace aw {
+Test( os_version )
 {
+// TODO: verify with outside tools
 #if defined(AW_SUPPORT_PLATFORM_POSIX)
 	{
 		auto ver = aw::platform::posix::get_os_version();
-		std::cout << ver.sysname << " / " << ver.machine << " / " << ver.version << " / " << ver.version << '\n';
+		std::cout << ver.sysname << " / " << ver.machine << " / " << ver.release << " / " << ver.version << '\n';
 	}
 #endif
 #if defined(AW_SUPPORT_PLATFORM_WIN32)
 	{
 		auto ver = aw::platform::win32::get_os_version();
-		std::cout << ver.sysname << " / " << ver.machine << " / " << ver.version << " / " << ver.version << '\n';
+		std::cout << ver.sysname << " / " << ver.machine << " / " << ver.release << " / " << ver.version << '\n';
 	}
 #endif
 }
+
+} // namespace aw
