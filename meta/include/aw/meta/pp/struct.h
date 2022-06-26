@@ -11,6 +11,7 @@
 #include "macro.h"
 #include "foldr.h"
 #include "tuple.h"
+#include "separators.h"
 
 #include <tuple>
 #include <aw/meta/void_t.h>
@@ -30,25 +31,25 @@
  * Turns a list of preprocessor "tuples" into list of variable declarations
  */
 #define AW_DEFINE_STRUCT_MEMBERS(NAME,...)\
-	AW_FOLD_RIGHT( AW_SEP_SEMI, AW_DECLARE_VAR AW_DEFER, __VA_ARGS__ )
+	AW_EXPAND(AW_FOLD_RIGHT( AW_SEP_SEMI, AW_DECLARE_VAR AW_DEFER, __VA_ARGS__ ))
 
 /*!
  * Expands list of preprocessor "tuples" (type, name)
  * into comma-separated list of types
  */
 #define AW_LIST_MEMBER_TYPES(NAME,...)\
-	AW_FOLD_RIGHT( AW_SEP_COMMA, AW_FIRST AW_DEFER , __VA_ARGS__ )
+	AW_EXPAND(AW_FOLD_RIGHT( AW_SEP_COMMA, AW_FIRST AW_DEFER , __VA_ARGS__ ))
 #define AW_LIST_MEMBER_NAMES(NAME,...)\
-	AW_FOLD_RIGHT( AW_SEP_COMMA, AW_SECOND AW_DEFER, __VA_ARGS__ )
+	AW_EXPAND(AW_FOLD_RIGHT( AW_SEP_COMMA, AW_SECOND AW_DEFER, __VA_ARGS__ ))
 #define AW_DEFINE_STRUCT_TUPLE_TYPE(NAME,...)\
-	using tuple_type = std::tuple< AW_LIST_MEMBER_TYPES( __VA_ARGS__ ) >
+	using tuple_type = std::tuple<AW_LIST_MEMBER_TYPES( NAME, __VA_ARGS__ )>
 #define AW_DEFINE_STRUCT_TUPLE_OPERATOR(NAME,...)\
 	constexpr operator tuple_type() { \
-		return { AW_LIST_MEMBER_NAMES( __VA_ARGS__ ) };\
+		return { AW_LIST_MEMBER_NAMES( NAME, __VA_ARGS__ ) };\
 	}
 
 #define AW_LIST_MEMBER_NAME_STRINGS(NAME,...)\
-	AW_FOLD_RIGHT( AW_SEP_COMMA, AW_SECOND AW_DEFER, __VA_ARGS__ )
+	AW_EXPAND(AW_FOLD_RIGHT( AW_SEP_COMMA, AW_SECOND AW_DEFER, __VA_ARGS__ ))
 	
 
 #define AW_DEFINE_STRUCT(NAME,...) \
