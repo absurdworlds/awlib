@@ -12,7 +12,7 @@
 #include <aw/algorithm/in.h>
 #include <aw/utility/string/escape.h>
 namespace aw {
-namespace format {
+namespace formatter {
 struct pretty_print {
 	pretty_print() = default;
 	pretty_print(pretty_print const&) = default;
@@ -128,6 +128,6 @@ private:
 	bool in_compound = false;
 	bool first_value = true;
 };
-} // namespace format
+} // namespace formatter
 } // namespace aw
 #endif//aw_to_string_formatters_pretty_print_h

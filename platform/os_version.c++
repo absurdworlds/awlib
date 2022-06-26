@@ -113,7 +113,7 @@ string_view get_architecture()
 
 std::string get_version(OSVERSIONINFOEXW& info)
 {
-	format::pretty_print fmt;
+	formatter::pretty_print fmt;
 	fmt.convert(info.dwMajorVersion);
 	fmt.literal(".");
 	fmt.convert(info.dwMinorVersion);
@@ -122,7 +122,7 @@ std::string get_version(OSVERSIONINFOEXW& info)
 
 std::string get_version_full(OSVERSIONINFOEXW& info)
 {
-	format::pretty_print fmt;
+	formatter::pretty_print fmt;
 	fmt.convert(info.dwMajorVersion);
 	fmt.literal(".");
 	fmt.convert(info.dwMinorVersion);
@@ -138,7 +138,7 @@ std::string get_service_pack_ver(OSVERSIONINFOEXW& info)
 
 std::string get_service_pack_ver_ex(OSVERSIONINFOEXW& info)
 {
-	format::pretty_print fmt;
+	formatter::pretty_print fmt;
 	fmt.convert(info.wServicePackMajor);
 	if (info.wServicePackMinor > 0) {
 		fmt.literal(".");

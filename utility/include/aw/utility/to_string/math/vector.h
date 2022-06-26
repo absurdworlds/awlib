@@ -18,7 +18,7 @@ namespace math {
  * \return
  *    String in format "{vec[0], vec[1], ..., vec[N]}"
  */
-template<typename T, size_t N, typename Formatter = format::pretty_print>
+template<typename T, size_t N, typename Formatter = formatter::pretty_print>
 std::string to_string(vector<T,N> const& vec, Formatter&& fmt = Formatter{})
 {
 	fmt.compound_start();

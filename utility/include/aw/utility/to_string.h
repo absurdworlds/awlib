@@ -18,81 +18,81 @@
 #include <aw/meta/conditional.h>
 
 namespace aw {
-namespace format {
+namespace formatter {
 struct pretty_print;
 }
 
-template<typename Formatter = format::pretty_print>
+template<typename Formatter = formatter::pretty_print>
 std::string to_string(string_view str, Formatter&& fmt = Formatter{})
 {
 	return fmt.value(str);
 }
 
-template<typename Formatter = format::pretty_print>
+template<typename Formatter = formatter::pretty_print>
 std::string to_string(std::string const& str, Formatter&& fmt = Formatter{})
 {
 	return fmt.value(str);
 }
 
-template<typename Formatter = format::pretty_print>
+template<typename Formatter = formatter::pretty_print>
 std::string to_string(char const* str, Formatter&& fmt = Formatter{})
 {
 	return fmt.value(str);
 }
 
-template<typename Formatter = format::pretty_print>
+template<typename Formatter = formatter::pretty_print>
 std::string to_string(char ch, Formatter&& fmt = Formatter{})
 {
 	return fmt.value(ch);
 }
 
-template<typename Formatter = format::pretty_print>
+template<typename Formatter = formatter::pretty_print>
 std::string to_string(char16_t ch, Formatter&& fmt = Formatter{})
 {
 	return fmt.value(ch);
 }
 
-template<typename Formatter = format::pretty_print>
+template<typename Formatter = formatter::pretty_print>
 std::string to_string(char32_t ch, Formatter&& fmt = Formatter{})
 {
 	return fmt.value(ch);
 }
 
-template<typename Formatter = format::pretty_print>
+template<typename Formatter = formatter::pretty_print>
 std::string to_string(wchar_t ch, Formatter&& fmt = Formatter{})
 {
 	return fmt.value(ch);
 }
 
-template<typename T, typename Formatter = format::pretty_print>
+template<typename T, typename Formatter = formatter::pretty_print>
 auto to_string(T value, Formatter&& fmt = Formatter{}) ->
 	enable_if<is_int<T>, std::string>
 {
 	return fmt.value(value);
 }
 
-template<typename T, typename Formatter = format::pretty_print>
+template<typename T, typename Formatter = formatter::pretty_print>
 auto to_string(T value, Formatter&& fmt = Formatter{}) ->
 	enable_if<is_float<T>, std::string>
 {
 	return fmt.value(value);
 }
 
-template<typename Formatter = format::pretty_print>
+template<typename Formatter = formatter::pretty_print>
 std::string to_string(bool value, Formatter&& fmt = Formatter{})
 {
 	using namespace std::string_view_literals;
 	return fmt.literal(value ? "true"sv : "false"sv);
 }
 
-template<typename Formatter = format::pretty_print>
+template<typename Formatter = formatter::pretty_print>
 std::string to_string(nullptr_t, Formatter&& fmt = Formatter{})
 {
 	using namespace std::string_view_literals;
 	return fmt.literal("nullptr"sv);
 }
 
-template<typename T, typename Formatter = format::pretty_print>
+template<typename T, typename Formatter = formatter::pretty_print>
 std::string to_string(T const* ptr, Formatter&& fmt = Formatter{})
 {
 	return fmt.value(reinterpret_cast<void const*>(ptr));
@@ -101,7 +101,7 @@ std::string to_string(T const* ptr, Formatter&& fmt = Formatter{})
 template<typename T>
 struct string_converter;
 
-template <typename T, typename Formatter = format::pretty_print>
+template <typename T, typename Formatter = formatter::pretty_print>
 auto to_string(T const& value, Formatter&& fmt = Formatter{}) ->
 	decltype( declval<string_converter<T>>()(fmt) )
 {
@@ -109,15 +109,15 @@ auto to_string(T const& value, Formatter&& fmt = Formatter{}) ->
 }
 
 
-template<typename T, typename Formatter = format::pretty_print>
+template<typename T, typename Formatter = formatter::pretty_print>
 auto to_string(T const& range, Formatter&& fmt = Formatter{}) ->
 	enable_if<is_const_iterable<T>, std::string>;
 
-template<typename InputIt, typename Formatter = format::pretty_print>
+template<typename InputIt, typename Formatter = formatter::pretty_print>
 std::string to_string(InputIt begin, InputIt end, Formatter&& fmt);
 
 
-template<typename T, typename Formatter = format::pretty_print>
+template<typename T, typename Formatter = formatter::pretty_print>
 std::string to_string(std::initializer_list<T> ilist, Formatter&& fmt = Formatter{})
 {
 	return to_string(begin(ilist), end(ilist), fmt);

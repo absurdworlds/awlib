@@ -19,7 +19,7 @@ namespace math {
  *    String in format
  *    "{{mat.get(0,0), ..., mat.get(0,N)}, ..., {mat.get(M,0), ..., mat.get(M,N)}}"
  */
-template<typename T, size_t M, size_t N, typename Formatter = format::pretty_print>
+template<typename T, size_t M, size_t N, typename Formatter = formatter::pretty_print>
 std::string to_string(matrix<T,M,N> const& mat, Formatter&& fmt = Formatter{})
 {
 	fmt.compound_start();

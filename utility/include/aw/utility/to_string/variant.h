@@ -35,7 +35,7 @@ struct variant_to_string_visitor {
  *    Contained value, converted to string,
  *    or empty string if optional is empty.
  */
-template<typename... Args, typename Formatter = format::pretty_print>
+template<typename... Args, typename Formatter = formatter::pretty_print>
 std::string to_string(variant<Args...> const& var, Formatter&& fmt = Formatter{})
 {
 	if (var.empty())
