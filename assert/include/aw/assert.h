@@ -26,15 +26,30 @@ enum class assert_level {
 	maximum = aw_maximum_assert_level
 };
 
+struct assert_message {
+	template<typename T>
+	assert_message(T&& msg, source_location loc = source_location::current())
+		: message(msg), location(loc)
+	{
+	}
+
+	string_view     message;
+	source_location location;
+};
+
+#ifdef assert
+#undef assert
+#endif
+
 template <assert_level level = assert_level::debug, typename Expression, typename... Arg_types>
-bool assert_check(Expression&& expr, string_view msg, source_location loc = source_location::current(), Arg_types&&... args)
+bool assert(Expression&& bool_expr, assert_message msg, Arg_types&&... args)
 {
 	if constexpr(level > assert_level::maximum)
 		return true;
 
-	const bool cond = expr();
+	const bool cond = bool_expr();
 	if (!cond) {
-		const auto action = assert_fail_fmt(msg, loc, std::forward<Arg_types>(args)...);
+		const auto action = assert_fail_fmt(msg.message, msg.location, std::forward<Arg_types>(args)...);
 		switch (action)
 		{
 			case assert_action::abort:
@@ -49,6 +64,12 @@ bool assert_check(Expression&& expr, string_view msg, source_location loc = sour
 
 	return cond;
 }
+
+template <assert_level level = assert_level::debug, typename Expression, typename... Arg_types>
+bool assert_check(Expression&& expr, assert_message msg, Arg_types&&... args)
+{
+	assert<level>(std::forward<Expression>(expr), msg, std::forward<Arg_types>(args)...);
+}
 } // namespace aw
 
 
@@ -61,7 +82,7 @@ bool assert_check(Expression&& expr, string_view msg, source_location loc = sour
 
 // TODO: __builtin_assume
 #define aw_assert_x(cond, level, message, ...) \
-::aw::assert_check<::aw::assert_level::level> ( [] { return cond; }, message __VA_OPT__(, source_location::current(), ) __VA_ARGS__ )
+::aw::assert_check<::aw::assert_level::level> ( [] { return cond; }, message __VA_OPT__(, ) __VA_ARGS__ )
 
 #define aw_assert_get_level(default, ...) FIRST(__VA_ARGS__ __VA_OPT__(,) default)
 #define aw_assert_get_message(default, ...) SECOND(__VA_ARGS__ __VA_OPT__(,) default, default)
