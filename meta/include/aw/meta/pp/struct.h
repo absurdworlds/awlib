@@ -30,24 +30,25 @@
  * Turns a list of preprocessor "tuples" into list of variable declarations
  */
 #define AW_DEFINE_STRUCT_MEMBERS(NAME,...)\
-	FOLD_RIGHT( SEP_SEMI, AW_DECLARE_VAR DEFER, __VA_ARGS__ )
+	AW_FOLD_RIGHT( AW_SEP_SEMI, AW_DECLARE_VAR AW_DEFER, __VA_ARGS__ )
+
 /*!
  * Expands list of preprocessor "tuples" (type, name)
  * into comma-separated list of types
  */
 #define AW_LIST_MEMBER_TYPES(NAME,...)\
-	FOLD_RIGHT( SEP_COMMA, FIRST DEFER, __VA_ARGS__ )
+	AW_FOLD_RIGHT( AW_SEP_COMMA, AW_FIRST AW_DEFER , __VA_ARGS__ )
 #define AW_LIST_MEMBER_NAMES(NAME,...)\
-	FOLD_RIGHT( SEP_COMMA, SECOND DEFER, __VA_ARGS__ )
+	AW_FOLD_RIGHT( AW_SEP_COMMA, AW_SECOND AW_DEFER, __VA_ARGS__ )
 #define AW_DEFINE_STRUCT_TUPLE_TYPE(NAME,...)\
-	using tuple_type = std::tuple< AW_LIST_MEMBER_TYPES(__VA_ARGS__) >
+	using tuple_type = std::tuple< AW_LIST_MEMBER_TYPES( __VA_ARGS__ ) >
 #define AW_DEFINE_STRUCT_TUPLE_OPERATOR(NAME,...)\
 	constexpr operator tuple_type() { \
 		return { AW_LIST_MEMBER_NAMES( __VA_ARGS__ ) };\
 	}
 
 #define AW_LIST_MEMBER_NAME_STRINGS(NAME,...)\
-	FOLD_RIGHT( SEP_COMMA, SECOND DEFER, __VA_ARGS__ )
+	AW_FOLD_RIGHT( AW_SEP_COMMA, AW_SECOND AW_DEFER, __VA_ARGS__ )
 	
 
 #define AW_DEFINE_STRUCT(NAME,...) \

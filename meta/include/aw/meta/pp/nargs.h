@@ -13,7 +13,7 @@
  *
  * Works by __VA_ARGS__ shifting desired argument into NAME position.
  */
-#define GET_MACRO(\
+#define AW_GET_MACRO(\
 	_00,_01,_02,_03,_04,_05,_06,_07,_08,_09,\
 	_10,_11,_12,_13,_14,_15,_16,_17,_18,_19,\
 	_20,_21,_22,_23,_24,_25,_26,_27,_28,_29,\
@@ -29,7 +29,7 @@
 /*!
  * Get number of arguments in a variadic macro
  */
-#define N_ARGS(...) GET_MACRO(__VA_ARGS__,       \
+#define AW_N_ARGS(...) AW_GET_MACRO(__VA_ARGS__,       \
 	 100, 99, 98, 97, 96, 95, 94, 93, 92, 91,\
 	  90, 89, 88, 87, 86, 85, 84, 83, 82, 81,\
 	  80, 79, 78, 77, 76, 75, 74, 73, 72, 71,\

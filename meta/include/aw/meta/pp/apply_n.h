@@ -10,14 +10,14 @@
 #define aw_meta_pp_apply_n_h
 #include "macro.h"
 #include "nargs.h"
-/*
+/*!
  * Suffix NAME with number of arguments
  */
-#define SUFFIX_N(NAME, ...) CONCAT(NAME,N_ARGS(__VA_ARGS__))
+#define AW_SUFFIX_N(NAME, ...) AW_CONCAT(NAME,AW_N_ARGS(__VA_ARGS__))
 
 /*!
  * Similar to APPLY, but suffixes the macro with number of arguments
  */
-#define APPLY_N(NAME, ...) APPLY(SUFFIX_N(NAME,__VA_ARGS__), __VA_ARGS__)
+#define AW_APPLY_N(NAME, ...) AW_APPLY(AW_SUFFIX_N(NAME,__VA_ARGS__), __VA_ARGS__)
 
 #endif//aw_meta_pp_apply_n_h
