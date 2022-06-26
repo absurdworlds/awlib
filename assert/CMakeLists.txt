@@ -21,51 +21,59 @@ set(HEADERS
 	include/aw/assert/export.h
 	include/aw/assert.h)
 
+option(AW_ENABLE_ASSERT "Enable aw::assert. If OFF, awlib will be compiled without dependency on aw::assert." ON)
 if (AW_ENABLE_ASSERT)
 	set(INTERFACE_LIB awassert_interface)
 else()
 	set(INTERFACE_LIB awassert)
 endif()
 
-add_library(awassert_interface INTERFACE ${HEADERS})
+add_library(${INTERFACE_LIB} INTERFACE ${HEADERS})
 
 target_compile_definitions(${INTERFACE_LIB}
 	INTERFACE
 		aw_default_assert_level=${AW_DEFAULT_ASSERT_LEVEL}
 		aw_maximum_assert_level=${AW_MAXIMUM_ASSERT_LEVEL})
 
-target_include_directories(awassert_interface
+target_include_directories(${INTERFACE_LIB}
 	INTERFACE
 	    ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
-target_link_libraries(awassert_interface
+target_link_libraries(${INTERFACE_LIB}
 	INTERFACE
-	    aw
+		aw
 		awutils
 		awtypes
-		awplatform)
+		awstring)
 
-
-# awassert implementation
-add_library(awassert SHARED
-	source/assert_fail.c++
-	source/assert_handler.c++
-)
-target_compile_definitions(awassert
-	PRIVATE
-	    AW_MODULE_ASSERT)
-
-if (AW_CAPABILITIES_WIN32)
-	target_sources(awassert PRIVATE source/win32/debugger.c++)
-endif()
-
-if (AW_CAPABILITIES_POSIX)
-	target_sources(awassert PRIVATE source/posix/debugger.c++)
-endif()
-
-target_link_libraries(awassert
-	PUBLIC
-	    awassert_interface
+if (AW_ENABLE_ASSERT)
+	# awassert implementation
+	add_library(awassert SHARED
+		source/assert_fail.c++
+		source/assert_handler.c++
 	)
+	target_compile_definitions(awassert
+		PRIVATE
+		    AW_MODULE_ASSERT)
 
-add_subdirectory(tests)
+	if (AW_CAPABILITIES_WIN32)
+		target_sources(awassert
+			PRIVATE
+				source/win32/debugger.c++
+				source/win32/assert_fail.c++
+		)
+	endif()
+
+	if (AW_CAPABILITIES_POSIX)
+		target_sources(awassert PRIVATE source/posix/debugger.c++)
+	endif()
+
+	target_link_libraries(awassert
+		PUBLIC
+			awassert_interface
+		PRIVATE
+			awplatform # TODO: remove dependency on awplatform
+		)
+
+	add_subdirectory(tests)
+endif()

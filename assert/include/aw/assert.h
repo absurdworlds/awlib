@@ -5,6 +5,7 @@
 #include <aw/assert/debugger.h>
 
 #include <aw/meta/pp/macro.h>
+#include <aw/meta/pp/separators.h>
 #include <aw/meta/pp/tuple.h>
 #include <aw/meta/source_location.h>
 
@@ -27,8 +28,11 @@ enum class assert_level {
 };
 
 struct assert_message {
+	assert_message(const assert_message& other) = default;
+	assert_message(assert_message&& other) = default;
+
 	template<typename T>
-	assert_message(T&& msg, source_location loc = source_location::current())
+	assert_message(const T& msg, source_location loc = source_location::current())
 		: message(msg), location(loc)
 	{
 	}
@@ -37,12 +41,8 @@ struct assert_message {
 	source_location location;
 };
 
-#ifdef assert
-#undef assert
-#endif
-
 template <assert_level level = assert_level::debug, typename Expression, typename... Arg_types>
-bool assert(Expression&& bool_expr, assert_message msg, Arg_types&&... args)
+bool (assert)(Expression&& bool_expr, assert_message msg, Arg_types&&... args)
 {
 	if constexpr(level > assert_level::maximum)
 		return true;
@@ -53,7 +53,7 @@ bool assert(Expression&& bool_expr, assert_message msg, Arg_types&&... args)
 		switch (action)
 		{
 			case assert_action::abort:
-				std::abort();
+				assert_abort();
 			case assert_action::stop:
 				aw_debug_break;
 				[[fallthrough]];
@@ -63,12 +63,6 @@ bool assert(Expression&& bool_expr, assert_message msg, Arg_types&&... args)
 	}
 
 	return cond;
-}
-
-template <assert_level level = assert_level::debug, typename Expression, typename... Arg_types>
-bool assert_check(Expression&& expr, assert_message msg, Arg_types&&... args)
-{
-	assert<level>(std::forward<Expression>(expr), msg, std::forward<Arg_types>(args)...);
 }
 } // namespace aw
 
@@ -82,14 +76,13 @@ bool assert_check(Expression&& expr, assert_message msg, Arg_types&&... args)
 
 // TODO: __builtin_assume
 #define aw_assert_x(cond, level, message, ...) \
-::aw::assert_check<::aw::assert_level::level> ( [] { return cond; }, message __VA_OPT__(, ) __VA_ARGS__ )
+	::aw::assert<::aw::assert_level::level> ( [] { return cond; }, message __VA_OPT__(, ) __VA_ARGS__ )
 
-#define aw_assert_get_level(default, ...) FIRST(__VA_ARGS__ __VA_OPT__(,) default)
-#define aw_assert_get_message(default, ...) SECOND(__VA_ARGS__ __VA_OPT__(,) default, default)
+#define aw_assert_make_args(default, ...) AW_FIRST(__VA_ARGS__ __VA_OPT__(,) default) AW_VA_COMMA(AW_TAIL(__VA_ARGS__))
 
-#define aw_assert(cond, ...) aw_assert_x( cond, current, __VA_ARGS__ );
-#define aw_assert_release(cond, ...) aw_assert_x( cond, release, __VA_ARGS__ );
-#define aw_assert_debug(cond, ...) aw_assert_x( cond, debub, __VA_ARGS__ );
-#define aw_assert_audit(cond, ...) aw_assert_x( cond, audit, __VA_ARGS__ );
+#define aw_assert(cond, ...) aw_assert_x( cond, current, aw_assert_make_args(#cond, __VA_ARGS__) );
+#define aw_assert_release(cond, ...) aw_assert_x( cond, release, aw_assert_make_args(#cond, __VA_ARGS__) );
+#define aw_assert_debug(cond, ...) aw_assert_x( cond, debug, aw_assert_make_args(#cond, __VA_ARGS__) );
+#define aw_assert_audit(cond, ...) aw_assert_x( cond, audit, aw_assert_make_args(#cond, __VA_ARGS__) );
 
 #endif//aw_utility_assert_h

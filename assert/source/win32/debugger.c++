@@ -8,5 +8,5 @@ bool is_debugger_present()
 {
 	return IsDebuggerPresent();
 }
-}
+} // namespace aw::win32
 
