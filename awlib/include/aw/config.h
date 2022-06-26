@@ -144,4 +144,10 @@
 
 #define AW_FEATURE(x) AW_HAS_FEATURE_##x
 
+#ifdef __has_builtin
+#define AW_HAS_BUILTIN(x) __has_builtin(x)
+#else
+#define AW_HAS_BUILTIN(x) 0
+#endif
+
 #endif//aw_compiler_setup_h

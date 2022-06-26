@@ -5,7 +5,12 @@
 #include <aw/stdlib.h>
 #include <cstdint>
 
-#if (AW_COMPILER == AW_COMPILER_CLANG) && (AW_STDLIB == AW_STDLIB_GLIBCXX) && (!__has_builtin(__builtin_source_location))
+// I guess I could check for __cpp_lib_source_location, but I don't want warnings
+#if (AW_COMPILER == AW_COMPILER_CLANG) && \
+    ( \
+        (AW_STDLIB == AW_STDLIB_GLIBCXX && !AW_HAS_BUILTIN(__builtin_source_location) ) || \
+        (AW_STDLIB == AW_STDLIB_MSVCSTL && !__cpp_consteval) \
+    )
 // clang STILL lacks the __builtin_SOURCE_LOCATION so I have to provide my own implementation...
 namespace aw {
 class source_location
