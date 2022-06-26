@@ -51,10 +51,7 @@ unknown_fn* get_proc_address(const char* name)
 
 #ifdef AW_SUPPORT_PLATFORM_WIN32
 #include <aw/algorithm/in.h>
-
-#define WIN32_LEAN_AND_MEAN 1
-#define NOMINMAX
-#include <windows.h>
+#include <aw/platform/windows.h>
 
 #ifdef _MSC_VER
 #pragma warning(disable: 4055)

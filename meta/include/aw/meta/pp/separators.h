@@ -10,10 +10,15 @@
 #define aw_pp_separators_h
 
 /*! Insert both arguments separated by space */
-#define SEP_SPACE(x, y) x y
+#define AW_SEP_SPACE(x, y) x y
 /*! Insert both arguments separated by semicolon */
-#define SEP_SEMI(x, y) x; y
+#define AW_SEP_SEMI(x, y) x; y
 /*! Insert both arguments separated by comma */
-#define SEP_COMMA(x, y) x, y
+#define AW_SEP_COMMA(x, y) x, y
+
+/*! Insert comma before __VA_ARGS__ */
+#define AW_VA_COMMA(...) __VA_OPT__(,) __VA_ARGS__
+/*! Insert comma before __VA_ARGS__ */
+#define AW_VA_SEMI(...) __VA_OPT__(;) __VA_ARGS__
 
 #endif//aw_pp_separators_h

@@ -12,10 +12,10 @@
 #include "macro.h"
 #include "tuple.h"
 
-#define EAT_UNPAREN UNPAREN ,
-#define UNPAREN(...) UNPAREN __VA_ARGS__
+#define AW_EAT_UNPAREN AW_UNPAREN ,
+#define AW_UNPAREN(...) AW_UNPAREN __VA_ARGS__
 
-#define REMOVE_PAREN2(...) APPLY_EXPAND2(TAIL, EAT_##__VA_ARGS__)
-#define REMOVE_PAREN(...)  APPLY_EXPAND(REMOVE_PAREN2, UNPAREN __VA_ARGS__)
+#define AW_REMOVE_PAREN2(...) AW_APPLY_EXPAND2(AW_TAIL, AW_EAT_##__VA_ARGS__)
+#define AW_REMOVE_PAREN(...)  AW_APPLY_EXPAND(AW_REMOVE_PAREN2, AW_UNPAREN __VA_ARGS__)
 
 #endif//aw_pp_tupl_h

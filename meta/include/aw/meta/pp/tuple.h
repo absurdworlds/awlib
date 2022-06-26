@@ -12,19 +12,19 @@
 #include "macro.h"
 
 /*! Encases arguments in (), allowing to be passed as a single argument */
-#define TUPLE(...) (__VA_ARGS__)
+#define AW_TUPLE(...) (__VA_ARGS__)
 
 /*!
  * Same as apply, but for a TUPLE:
- * `APPLY_T( FUNC, TUPLE(a,b,c) )` expands into `FUNC(a,b,c)`
+ * `AW_APPLY_T( FUNC, AW_TUPLE(a,b,c) )` expands into `FUNC(a,b,c)`
  */
-#define APPLY_T(NAME,x) EXPAND( NAME x )
+#define AW_APPLY_T(NAME,x) AW_EXPAND( NAME x )
 
-#define UNPACK(x) APPLY_T( IDENTITY, x )
+#define AW_UNPACK(x) AW_APPLY_T( AW_IDENTITY, x )
 
-#define FIRST(x,...)    x
-#define SECOND(x,y,...) y
-#define REST(x,...)     __VA_ARGS__
-#define TAIL(x,...)     __VA_ARGS__
+#define AW_FIRST(x,...)    x
+#define AW_SECOND(x,y,...) y
+#define AW_REST(x,...)     __VA_ARGS__
+#define AW_TAIL(x,...)     __VA_ARGS__
 
 #endif//aw_pp_tupl_h
