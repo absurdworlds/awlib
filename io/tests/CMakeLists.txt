@@ -10,4 +10,8 @@ set(SOURCES
 
 add_executable(test_io ${SOURCES})
 target_link_libraries(test_io
-    PRIVATE awio awtest)
+	PRIVATE
+		awio
+		awtest
+		awtest_main
+)

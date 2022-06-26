@@ -21,4 +21,6 @@ target_link_libraries(awplatform
 		awalgo
 		awutils)
 
-add_subdirectory(tests)
+if (AW_MAKE_TESTS)
+	add_subdirectory(tests)
+endif()

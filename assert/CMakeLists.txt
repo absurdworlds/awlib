@@ -75,5 +75,7 @@ if (AW_ENABLE_ASSERT)
 			awplatform # TODO: remove dependency on awplatform
 		)
 
-	add_subdirectory(tests)
+	if (AW_MAKE_TESTS)
+		add_subdirectory(tests)
+	endif()
 endif()

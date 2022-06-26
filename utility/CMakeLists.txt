@@ -11,7 +11,9 @@ target_link_libraries(awutils
         aw
         awtypes
         awalgo
-        awmath # TODO: maybe get rid of bitmath?
+	awmath # TODO: maybe get rid of bitmath?
     )
 
-add_subdirectory(tests)
+if (AW_MAKE_TESTS)
+	add_subdirectory(tests)
+endif()

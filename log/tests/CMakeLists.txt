@@ -5,4 +5,9 @@ set(SOURCES
 
 add_executable(test_log ${SOURCES})
 target_link_libraries(test_log
-    PRIVATE awlog awplatform awtest)
+	PRIVATE
+		awlog
+		awplatform
+		awtest
+		awtest_main
+)

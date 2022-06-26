@@ -12,4 +12,6 @@ target_link_libraries(awdoc
         awutils
         awio)
 
-add_subdirectory(tests)
+if (AW_MAKE_TESTS)
+	add_subdirectory(tests)
+endif()

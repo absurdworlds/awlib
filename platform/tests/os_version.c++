@@ -9,7 +9,7 @@
 #include <aw/platform/os_version.h>
 #include <iostream>
 
-#include <aw/utility/test.h>
+#include <aw/test/test.h>
 
 TestFile("platform::os_version");
 

@@ -8,4 +8,7 @@ set(SOURCES
 
 add_executable(test_types ${SOURCES})
 target_link_libraries(test_types
-    PRIVATE awtypes awtest)
+	PRIVATE
+		awtypes
+		awtest
+		awtest_main)

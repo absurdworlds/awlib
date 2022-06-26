@@ -53,4 +53,3 @@ Test(assert_basic_test)
 }
 } // namespace aw
 
-#include <aw/test/test_runner.h>

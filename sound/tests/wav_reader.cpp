@@ -19,5 +19,3 @@ Test(read) {
 	}
 };
 } // namespace aw
-
-#include <aw/test/test_runner.h>

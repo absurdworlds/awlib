@@ -67,5 +67,3 @@ Test(to_string) {
 	}
 }
 } // namespace aw
-
-#include <aw/test/test_runner.h>

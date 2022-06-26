@@ -14,4 +14,6 @@ target_link_libraries(awaudio
         awlog_interface
         awio)
 
-add_subdirectory(tests)
+if (AW_MAKE_TESTS)
+	add_subdirectory(tests)
+endif()

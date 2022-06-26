@@ -14,4 +14,6 @@ target_link_libraries(awstring
         awutils # TODO: move string headers here
         awtypes)
 
-add_subdirectory(tests)
+if (AW_MAKE_TESTS)
+	add_subdirectory(tests)
+endif()

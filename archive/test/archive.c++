@@ -116,5 +116,3 @@ Test(polymorphic) {
 
 } // namespace arc
 } // namespace aw
-
-#include <aw/test/test_runner.h>

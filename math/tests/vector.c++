@@ -84,5 +84,3 @@ Test(vec_cross) {
 };
 } // namespace math
 } // namespace aw
-
-#include <aw/test/test_runner.h>

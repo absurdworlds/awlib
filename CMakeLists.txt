@@ -38,10 +38,8 @@ if (UNIX)
 endif()
 
 
+option(AW_MAKE_TESTS "Make tests. Produces a test executable for each library." ON)
 
-# TODO: split the project into a set of libraries
-set(AW_HEADER_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include)
-include_directories(${AW_HEADER_DIR})
 
 add_subdirectory(awlib)
 add_subdirectory(meta)

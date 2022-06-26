@@ -173,4 +173,4 @@ Test(variant_construct_in_place) {
 	}
 }
 
-#include <aw/test/test_runner.h>
+#include <aw/test/main.h>

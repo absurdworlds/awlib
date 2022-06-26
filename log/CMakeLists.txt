@@ -17,4 +17,6 @@ target_link_libraries(awlog
         awalgo
         awutils)
 
-add_subdirectory(tests)
+if (AW_MAKE_TESTS)
+	add_subdirectory(tests)
+endif()

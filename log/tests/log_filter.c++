@@ -65,4 +65,3 @@ Test(regex_filter) {
 };
 } // namespace aw
 
-#include <aw/test/test_runner.h>

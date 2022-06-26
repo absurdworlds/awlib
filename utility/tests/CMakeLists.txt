@@ -12,7 +12,8 @@ set(SOURCES
 
 add_executable(test_utility ${SOURCES})
 target_link_libraries(test_utility
-    PRIVATE
-        awutils
-        awplatform
-        awtest)
+	PRIVATE
+		awutils
+		awplatform
+		awtest
+		awtest_main)

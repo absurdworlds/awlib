@@ -6,4 +6,6 @@ add_library(awthread SHARED ${HEADERS} ${SOURCES})
 target_include_directories(awthread PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 target_compile_definitions(awthread PRIVATE AW_MODULE_THREAD)
 
-#add_subdirectory(tests)
+if (AW_MAKE_TESTS)
+	#add_subdirectory(tests)
+endif()

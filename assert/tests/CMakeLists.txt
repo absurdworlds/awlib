@@ -9,4 +9,5 @@ target_link_libraries(test_assert
 	PRIVATE
 		awutils
 		awtest
+		awtest_main
 		awassert)

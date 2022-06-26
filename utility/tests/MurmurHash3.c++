@@ -96,5 +96,3 @@ Test(murmur_64_128_1)
 	};
 }
 } // namespace aw
-
-#include <aw/test/test_runner.h>

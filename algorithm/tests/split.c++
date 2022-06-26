@@ -44,5 +44,3 @@ Test(cut_basic) {
 	}
 }
 } // namespace aw
-
-#include <aw/test/test_runner.h>

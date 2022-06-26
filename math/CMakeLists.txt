@@ -10,4 +10,6 @@ target_link_libraries(awmath
 
 #set_target_properties(awalgorithm PROPERTIES LINKER_LANGUAGE CXX)
 
-add_subdirectory(tests)
+if (AW_MAKE_TESTS)
+	add_subdirectory(tests)
+endif()

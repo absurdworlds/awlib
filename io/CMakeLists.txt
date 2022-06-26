@@ -26,4 +26,6 @@ target_include_directories(awio PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 target_compile_definitions(awio PRIVATE AW_MODULE_IO)
 target_link_libraries(awio awutils)
 
-add_subdirectory(tests)
+if (AW_MAKE_TESTS)
+	add_subdirectory(tests)
+endif()

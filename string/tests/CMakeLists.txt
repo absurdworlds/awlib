@@ -5,4 +5,8 @@ set(SOURCES
 
 add_executable(test_string ${SOURCES})
 target_link_libraries(test_string
-    PRIVATE awstring awplatform awtest)
+	PRIVATE
+		awstring
+		awplatform
+		awtest
+		awtest_main)

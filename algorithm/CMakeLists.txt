@@ -6,4 +6,6 @@ target_include_directories(awalgo INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 #set_target_properties(awalgorithm PROPERTIES LINKER_LANGUAGE CXX)
 
-add_subdirectory(tests)
+if (AW_MAKE_TESTS)
+	add_subdirectory(tests)
+endif()

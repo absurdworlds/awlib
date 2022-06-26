@@ -7,4 +7,6 @@ target_link_libraries(awtypes
     INTERFACE
         awmeta)
 
-add_subdirectory(tests)
+if (AW_MAKE_TESTS)
+	add_subdirectory(tests)
+endif()

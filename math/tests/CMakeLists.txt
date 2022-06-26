@@ -12,6 +12,7 @@ set(SOURCES
 
 add_executable(test_math ${SOURCES})
 target_link_libraries(test_math
-    PRIVATE
-        awmath
-        awtest)
+	PRIVATE
+		awmath
+		awtest
+		awtest_main)
