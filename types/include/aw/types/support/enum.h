@@ -13,12 +13,23 @@
 #include <type_traits>
 
 namespace aw {
+
+template<typename Enum>
+using underlying_type = typename std::underlying_type<Enum>::type;
+
+/*! Convert enum to value of its underlying type */
+template<typename Enum>
+	requires( std::is_enum_v<Enum> )
+constexpr auto underlying(Enum e)
+{
+	return static_cast<underlying_type<Enum>>(e);
+}
+
 namespace enum_bit_operators {
 template<typename Enum>
 	requires( std::is_enum_v<Enum> )
 Enum operator&(Enum a, Enum b)
 {
-	using underlying = std::underlying_type_t<Enum>;
 	return Enum( underlying(a) & underlying(b) );
 }
 
@@ -33,7 +44,6 @@ template<typename Enum>
 	requires( std::is_enum_v<Enum> )
 Enum operator|(Enum a, Enum b)
 {
-	using underlying = std::underlying_type_t<Enum>;
 	return Enum( underlying(a) & underlying(b) );
 }
 
@@ -48,7 +58,6 @@ template<typename Enum>
 	requires( std::is_enum_v<Enum> )
 Enum operator^(Enum a, Enum b)
 {
-	using underlying = std::underlying_type_t<Enum>;
 	return Enum( underlying(a) & underlying(b) );
 }
 
