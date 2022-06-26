@@ -23,7 +23,8 @@ target_link_libraries(awgraphics
 if (WIN32)
     target_link_libraries(awgraphics
         PRIVATE
-            OpenGL::GL)
+            OpenGL::GL
+		awplatform)
 endif()
 
 if (UNIX)

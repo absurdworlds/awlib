@@ -18,6 +18,7 @@ target_link_libraries(awplatform
 		aw
 		awtypes
 	PRIVATE
-		awalgo)
+		awalgo
+		awutils)
 
 add_subdirectory(tests)
