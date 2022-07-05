@@ -15,6 +15,7 @@
 #include <aw/test/registry.h>
 #include <aw/test/report.h>
 #include <aw/test/print.h>
+#include <aw/test/segv_handler.h>
 #include <aw/platform/demangle.h>
 #include <aw/utility/to_string.h>
 #include <aw/types/strip.h>
@@ -28,19 +29,8 @@
 namespace aw {
 namespace test {
 
-
 namespace {
 extern context file_context;
-}
-
-void context::segvhandler(int signum)
-{
-#if (AW_PLATFORM == AW_PLATFORM_POSIX)
-	//file_context.test_failure();
-	print(bold, red, "caught SIGSEGV, aborting tests", reset, '\n');
-	signal(signum, SIG_DFL);
-	kill(getpid(), signum);
-#endif
 }
 
 namespace {

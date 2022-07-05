@@ -11,10 +11,14 @@
 
 #include <iostream>
 
+#if (AW_PLATFORM == AW_PLATFORM_POSIX)
+#include <cstdio>
+#endif
+
 // TODO: make a generic pretty-printer
 
 namespace aw::test {
-#if (AW_PLATFORM != AW_PLATFORM_WIN32)
+#if (AW_PLATFORM != AW_PLATFORM_POSIX)
 char const _bold[]  = "\033[1m";
 char const _red[]   = "\033[31m";
 char const _green[] = "\033[32m";

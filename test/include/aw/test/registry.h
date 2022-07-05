@@ -11,6 +11,7 @@
 
 #include <iostream>
 #include <vector>
+#include <csignal>
 
 #include <aw/config.h>
 #include <aw/utility/static_object.h>
