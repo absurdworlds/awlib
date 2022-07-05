@@ -17,6 +17,7 @@
 #define AW_STD_FORMAT 1
 #define AW_FMTLIB_FORMAT 2
 
+#ifndef AW_FORMAT
 #if __has_include(<format>)
 #include <format>
 #define AW_FORMAT AW_STD_FORMAT
@@ -24,6 +25,7 @@
 #define AW_FORMAT AW_FMTLIB_FORMAT
 #else
 #define AW_FORMAT AW_NO_FORMAT
+#endif
 #endif
 
 #if AW_FORMAT == AW_STD_FORMAT
