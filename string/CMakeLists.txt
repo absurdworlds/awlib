@@ -21,7 +21,7 @@ endif()
 
 try_compile(AW_HAS_CXX_FORMAT
 	"${CMAKE_BINARY_DIR}/temp"
-	"${CMAKE_CURRENT_SOURCE_DIR}/.cmake/test_stdlib_has_fmt.c++"
+	"${CMAKE_CURRENT_SOURCE_DIR}/cmake/test_stdlib_has_fmt.c++"
 )
 
 message(STATUS "AW_HAS_CXX_FORMAT: ${AW_HAS_CXX_FORMAT}")
