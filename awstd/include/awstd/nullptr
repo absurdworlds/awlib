@@ -1,0 +1,3 @@
+#if __cplusplus < 201103L
+#include "C++98/nullptr.h"
+#endif
