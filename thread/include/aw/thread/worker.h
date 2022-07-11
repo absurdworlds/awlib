@@ -12,6 +12,7 @@
 #include <mutex>
 #include <condition_variable>
 #include <functional>
+#include <aw/thread/export.h>
 namespace aw {
 namespace thread {
 /*!
@@ -19,7 +20,7 @@ namespace thread {
  * manually killed.
  * Executes signle task and waits until next one.
  */
-struct worker {
+struct AW_THREAD_EXP worker {
 	typedef std::function<void()> Task;
 
 	worker();

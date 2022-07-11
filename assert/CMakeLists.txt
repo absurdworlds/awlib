@@ -13,69 +13,48 @@ set(AW_DEFAULT_ASSERT_LEVEL "release"  CACHE STRING "Override assert level for a
 set_property(CACHE AW_MAXIMUM_ASSERT_LEVEL PROPERTY STRINGS ${LEVELS})
 set_property(CACHE AW_DEFAULT_ASSERT_LEVEL PROPERTY STRINGS ${LEVELS})
 
-# awassert interface library
-set(HEADERS
-	include/aw/assert/assert_action.h
-	include/aw/assert/assert_handler.h
-	include/aw/assert/debugger.h
-	include/aw/assert/export.h
-	include/aw/assert.h)
+aw_add_library(awassert SHARED
+	HEADERS
+		include/aw/assert/assert_action.h
+		include/aw/assert/assert_handler.h
+		include/aw/assert/debugger.h
+		include/aw/assert/export.h
+		include/aw/assert.h
+	SOURCES
+		source/assert_fail.c++
+		source/assert_handler.c++
+	EXPORT_NAME
+		assert
+)
 
-option(AW_ENABLE_ASSERT "Enable aw::assert. If OFF, awlib will be compiled without dependency on aw::assert." ON)
-if (AW_ENABLE_ASSERT)
-	set(INTERFACE_LIB awassert_interface)
-else()
-	set(INTERFACE_LIB awassert)
+if (AW_CAPABILITIES_WIN32)
+	target_sources(awassert
+		PRIVATE
+			source/win32/debugger.c++
+			source/win32/assert_fail.c++
+	)
 endif()
 
-add_library(${INTERFACE_LIB} INTERFACE ${HEADERS})
+if (AW_CAPABILITIES_POSIX)
+	target_sources(awassert
+		PRIVATE
+			source/posix/debugger.c++)
+endif()
 
-target_compile_definitions(${INTERFACE_LIB}
+target_compile_definitions(awassert
 	INTERFACE
 		aw_default_assert_level=${AW_DEFAULT_ASSERT_LEVEL}
-		aw_maximum_assert_level=${AW_MAXIMUM_ASSERT_LEVEL})
+		aw_maximum_assert_level=${AW_MAXIMUM_ASSERT_LEVEL}
+	PRIVATE
+		AW_MODULE_ASSERT
+	)
 
-target_include_directories(${INTERFACE_LIB}
-	INTERFACE
-	    ${CMAKE_CURRENT_SOURCE_DIR}/include)
-
-target_link_libraries(${INTERFACE_LIB}
-	INTERFACE
+target_link_libraries(awassert
+	PUBLIC
 		aw
 		awutils
 		awtypes
-		awstring)
-
-if (AW_ENABLE_ASSERT)
-	# awassert implementation
-	add_library(awassert SHARED
-		source/assert_fail.c++
-		source/assert_handler.c++
+		awstring
+	PRIVATE
+		awplatform # TODO: remove dependency on awplatform
 	)
-	target_compile_definitions(awassert
-		PRIVATE
-		    AW_MODULE_ASSERT)
-
-	if (AW_CAPABILITIES_WIN32)
-		target_sources(awassert
-			PRIVATE
-				source/win32/debugger.c++
-				source/win32/assert_fail.c++
-		)
-	endif()
-
-	if (AW_CAPABILITIES_POSIX)
-		target_sources(awassert PRIVATE source/posix/debugger.c++)
-	endif()
-
-	target_link_libraries(awassert
-		PUBLIC
-			awassert_interface
-		PRIVATE
-			awplatform # TODO: remove dependency on awplatform
-		)
-
-	if (AW_MAKE_TESTS)
-		add_subdirectory(tests)
-	endif()
-endif()

@@ -1,9 +1,10 @@
 
-file(GLOB_RECURSE HEADERS ${CMAKE_CURRENT_SOURCE_DIR}/include/*.h)
-
-add_library(awsignals INTERFACE ${HEADERS})
-target_include_directories(awsignals INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/include)
+aw_add_library(awsignals INTERFACE
+	GLOB_HEADERS
+	EXPORT_NAME
+		signals
+)
 
 target_link_libraries(awsignals
-    INTERFACE
-        awtypes)
+	INTERFACE
+		awtypes)

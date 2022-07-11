@@ -18,13 +18,17 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
+set(AW_CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/awlib/cmake")
+
+list(APPEND CMAKE_MODULE_PATH ${AW_CMAKE_MODULE_PATH})
+
 if (MSVC)
 	add_compile_options(
 		# multicore build by default
 		"/MP"
 		# disable msvc bugs that were treated as features over the years
 		"/permissive-"
-		# fix \ treates as esacpe in raw string literals
+		# fix \ treated as esacpe in raw string literals
 		"/Zc:preprocessor"
 	)
 endif()
@@ -40,6 +44,7 @@ endif()
 
 option(AW_MAKE_TESTS "Make tests. Produces a test executable for each library." ON)
 
+include(aw-common)
 
 add_subdirectory(awlib)
 add_subdirectory(meta)
@@ -47,7 +52,14 @@ add_subdirectory(algorithm)
 add_subdirectory(math)
 add_subdirectory(types)
 add_subdirectory(platform)
-add_subdirectory(assert)
+
+option(AW_ENABLE_ASSERT "Enable aw::assert. If OFF, awlib will be compiled without dependency on aw::assert." ON)
+if (AW_ENABLE_ASSERT)
+	add_subdirectory(assert)
+else()
+#TODO: assert stub
+endif()
+
 add_subdirectory(utility)
 add_subdirectory(string)
 add_subdirectory(io)
@@ -60,7 +72,9 @@ add_subdirectory(doc)
 
 option(AW_ENABLE_GRAPHICS "Enable libawgraphics" ON)
 if (AW_ENABLE_GRAPHICS)
-    add_subdirectory(graphics)
+	add_subdirectory(graphics)
 endif()
 add_subdirectory(sound)
 add_subdirectory(signals)
+
+include (aw-export)

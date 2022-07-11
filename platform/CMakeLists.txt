@@ -1,5 +1,3 @@
-
-file(GLOB_RECURSE HEADERS ${CMAKE_CURRENT_SOURCE_DIR}/include/*.h)
 set(SOURCES os_version.c++ demangle.c++)
 if (AW_CAPABILITIES_WIN32)
    # list(APPEND SOURCES win32/process.c++)
@@ -9,9 +7,14 @@ if (AW_CAPABILITIES_POSIX)
     list(APPEND SOURCES posix/process.c++)
 endif()
 
+aw_add_library(awplatform SHARED
+	GLOB_HEADERS
+	SOURCES
+		${SOURCES}
+	EXPORT_NAME
+		platform
+)
 
-add_library(awplatform SHARED ${HEADERS} ${SOURCES})
-target_include_directories(awplatform PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 target_compile_definitions(awplatform PRIVATE AW_MODULE_PLATFORM)
 target_link_libraries(awplatform
 	PUBLIC
@@ -20,7 +23,3 @@ target_link_libraries(awplatform
 	PRIVATE
 		awalgo
 		awutils)
-
-if (AW_MAKE_TESTS)
-	add_subdirectory(tests)
-endif()

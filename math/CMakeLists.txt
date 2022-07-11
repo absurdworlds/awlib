@@ -1,15 +1,10 @@
 
-file(GLOB_RECURSE HEADERS ${CMAKE_CURRENT_SOURCE_DIR}/include/*.h)
-
-add_library(awmath INTERFACE ${HEADERS})
-target_include_directories(awmath INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/include)
+aw_add_library(awmath INTERFACE
+	GLOB_HEADERS
+	EXPORT_NAME
+		math
+)
 
 target_link_libraries(awmath
-    INTERFACE
-        awtypes)
-
-#set_target_properties(awalgorithm PROPERTIES LINKER_LANGUAGE CXX)
-
-if (AW_MAKE_TESTS)
-	add_subdirectory(tests)
-endif()
+	INTERFACE
+		awtypes)

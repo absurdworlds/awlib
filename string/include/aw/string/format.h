@@ -19,7 +19,6 @@
 
 #ifndef AW_FORMAT
 #if __has_include(<format>)
-#include <format>
 #define AW_FORMAT AW_STD_FORMAT
 #elif __has_include(<fmt/format.h>)
 #define AW_FORMAT AW_FMTLIB_FORMAT
@@ -29,6 +28,7 @@
 #endif
 
 #if AW_FORMAT == AW_STD_FORMAT
+#include <format>
 namespace aw {
 using std::format;
 using std::vformat;

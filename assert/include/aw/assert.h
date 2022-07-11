@@ -66,14 +66,6 @@ bool (assert)(Expression&& bool_expr, assert_message msg, Arg_types&&... args)
 }
 } // namespace aw
 
-
-// necessary because of default
-#define aw_assert_map_audit   audit
-#define aw_assert_map_develop develop
-#define aw_assert_map_default normal
-#define aw_assert_map_normal  normal
-
-
 // TODO: __builtin_assume
 #define aw_assert_x(cond, level, message, ...) \
 	::aw::assert<::aw::assert_level::level> ( [] { return cond; }, message __VA_OPT__(, ) __VA_ARGS__ )

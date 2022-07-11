@@ -10,8 +10,7 @@
 #define aw_thread_spin_lock_h
 #include <thread>
 #include <atomic>
-namespace aw {
-namespace thread {
+namespace aw::thread {
 /*!
  * Simple spin_lock implementation.
  * Spinlock is intended to be used for very short operations,
@@ -50,6 +49,5 @@ private:
 private:
 	std::atomic_flag flag = ATOMIC_FLAG_INIT;
 };
-} // namespace thread
-} // namespace aw
+} // namespace aw::thread
 #endif//aw_thread_spin_lock_h

@@ -13,19 +13,20 @@ set(POSIX_SOURCES
     posix/helpers.h)
 
 if (AW_CAPABILITIES_WIN32)
-    list(APPEND SOURCES ${WIN32_SOURCES})
+	list(APPEND SOURCES ${WIN32_SOURCES})
 endif()
 
 if (AW_CAPABILITIES_POSIX)
-    list(APPEND SOURCES ${POSIX_SOURCES})
+	list(APPEND SOURCES ${POSIX_SOURCES})
 endif()
 
-file(GLOB_RECURSE HEADERS ${CMAKE_CURRENT_SOURCE_DIR}/include/*.h)
-add_library(awio SHARED ${HEADERS} ${SOURCES})
-target_include_directories(awio PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
+aw_add_library(awio SHARED
+	GLOB_HEADERS
+	SOURCES
+		${SOURCES}
+	EXPORT_NAME
+		io
+)
+
 target_compile_definitions(awio PRIVATE AW_MODULE_IO)
 target_link_libraries(awio awutils)
-
-if (AW_MAKE_TESTS)
-	add_subdirectory(tests)
-endif()
