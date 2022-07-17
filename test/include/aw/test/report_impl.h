@@ -12,6 +12,9 @@
 #include <aw/test/report.h>
 #include <aw/test/print.h>
 
+#include <string>
+#include <string_view>
+
 namespace aw::test {
 
 class report_classic : public report {
@@ -102,8 +105,16 @@ private:
 
 class report_junit : public report {
 public:
-	void begin_tests() override {}
-	void end_tests(int total, int failed) override {}
+	void begin_tests() override
+	{
+		println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+		println("<testsuites>");
+	}
+
+	void end_tests(int total, int failed) override
+	{
+		println("</testsuites>");
+	}
 
 	void begin_suite(const char* name, int test_count) override
 	{
