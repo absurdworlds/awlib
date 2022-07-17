@@ -86,5 +86,18 @@ function(aw_add_library NAME TYPE)
 		COMPONENT
 			Devel
 	)
+endfunction()
 
+
+function(aw_add_test NAME)
+	set(options)
+	set(arguments)
+	set(multivalue SOURCES PARAMS)
+	cmake_parse_arguments(PARSE_ARGV 1 ARG "${options}" "${arguments}" "${multivalue}")
+
+	add_executable(${NAME} ${ARG_SOURCES})
+	add_test(
+		NAME ${NAME}
+		COMMAND ${NAME} ${ARG_PARAMS}
+		WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
 endfunction()

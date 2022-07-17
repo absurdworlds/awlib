@@ -14,3 +14,5 @@ target_link_libraries(test_platform
 		awplatform
 		awtest
 		awtest_main)
+
+add_test(NAME test_platform COMMAND test_platform)

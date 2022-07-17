@@ -1,9 +1,5 @@
-
-set(SOURCES)
-
-
-
-add_executable(test_meta
+aw_add_test(test_meta
+	SOURCES
 	at_index.c++
 	find_index.c++
 	find_type.c++
