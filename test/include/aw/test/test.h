@@ -31,9 +31,7 @@ namespace test {
 
 namespace {
 extern context file_context;
-}
 
-namespace {
 class context_block {
 	friend bool setup();
 	friend bool preconditions();
@@ -64,7 +62,6 @@ bool setup()          { context_block::enter(stage::setup); return true; }
 bool preconditions()  { context_block::enter(stage::preconditions); return true; }
 bool checks()         { context_block::enter(stage::checks); return true; }
 bool postconditions() { context_block::enter(stage::postconditions); return true; }
-} // namespace
 
 template<typename Evaluator, typename... Args>
 bool check(Evaluator eval, Args&&... args)
@@ -153,6 +150,7 @@ struct _catch {
 	std::string msg() { return _msg; }
 	std::string _msg;
 };
+} // namespace
 } // namespace test
 } // namespace aw
 
