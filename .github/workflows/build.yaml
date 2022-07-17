@@ -1,0 +1,28 @@
+name: normal-build
+
+on:
+  push:
+
+jobs:
+  windows:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Configure
+        run: cmake -S . -B build -DAW_ENABLE_GRAPHICS:BOOL=OFF
+      - name: Build
+        run: cmake --build build
+      - name: Test
+        run: ctest --test-dir build -C Debug
+  ubuntu:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Configure
+        run: cmake -S . -B build -DAW_ENABLE_GRAPHICS:BOOL=OFF -DAW_ENABLE_ASSERT:BOOL=OFF
+      - name: Build
+        run: cmake --build build
+      - name: Test
+        run: ctest --test-dir build

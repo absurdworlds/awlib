@@ -21,7 +21,7 @@ try_compile(AW_HAS_CXX_FORMAT
 if (AW_HAS_CXX_FORMAT)
 	set(AW_FORMAT AW_STD_FORMAT)
 else()
-	find_package(fmt)
+	find_package(fmt QUIET)
 
 	if (TARGET fmt::fmt)
 		target_link_libraries(awstring
