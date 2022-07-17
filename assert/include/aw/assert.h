@@ -41,7 +41,7 @@ struct assert_message {
 	source_location location;
 };
 
-template <assert_level level = assert_level::debug, typename Expression, typename... Arg_types>
+template <assert_level level = assert_level::current, typename Expression, typename... Arg_types>
 bool (assert)(Expression&& bool_expr, assert_message msg, Arg_types&&... args)
 {
 	if constexpr(level > assert_level::maximum)
