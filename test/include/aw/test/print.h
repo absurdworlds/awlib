@@ -14,6 +14,7 @@
 #include <aw/config.h>
 
 #if (AW_PLATFORM == AW_PLATFORM_POSIX)
+#include <unistd.h>
 #include <cstdio>
 #endif
 
@@ -26,11 +27,11 @@ char const _red[]   = "\033[31m";
 char const _green[] = "\033[32m";
 char const _white[] = "\033[37m";
 char const _reset[] = "\033[0m";
-inline std::ostream& bold(std::ostream& os)  { if (isatty(1)) os << _bold;  return os;}
-inline std::ostream& red(std::ostream& os)   { if (isatty(1)) os << _red;   return os;}
-inline std::ostream& green(std::ostream& os) { if (isatty(1)) os << _green; return os;}
-inline std::ostream& white(std::ostream& os) { if (isatty(1)) os << _white; return os;}
-inline std::ostream& reset(std::ostream& os) { if (isatty(1)) os << _reset; return os;}
+inline std::ostream& bold(std::ostream& os)  { if (isatty(STDOUT_FILENO)) os << _bold;  return os;}
+inline std::ostream& red(std::ostream& os)   { if (isatty(STDOUT_FILENO)) os << _red;   return os;}
+inline std::ostream& green(std::ostream& os) { if (isatty(STDOUT_FILENO)) os << _green; return os;}
+inline std::ostream& white(std::ostream& os) { if (isatty(STDOUT_FILENO)) os << _white; return os;}
+inline std::ostream& reset(std::ostream& os) { if (isatty(STDOUT_FILENO)) os << _reset; return os;}
 #else
 char const bold[]  = "";
 char const red[]   = "";
