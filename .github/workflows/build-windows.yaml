@@ -1,0 +1,17 @@
+name: windows
+
+on:
+  push:
+
+jobs:
+  cmake:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Configure
+        run: cmake -S . -B build
+      - name: Build
+        run: cmake --build build
+      - name: Test
+        run: ctest --test-dir build
