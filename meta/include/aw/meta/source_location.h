@@ -37,7 +37,11 @@ public:
 		const char*         file     = __builtin_FILE(),
 		const char*         function = __builtin_FUNCTION(),
 		std::uint_least32_t line     = __builtin_LINE(),
+#if AW_HAS_BUILTIN(__builtin_COLUMN)
 		std::uint_least32_t column   = __builtin_COLUMN()
+#else
+		std::uint_least32_t column   = 0
+#endif
 	)
 	{
 		return { file, function, line, column };
