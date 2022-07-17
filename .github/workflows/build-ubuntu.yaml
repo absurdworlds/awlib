@@ -10,7 +10,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Configure
-        run: cmake -S . -B build
+        run: cmake -S . -B build -DAW_ENABLE_GRAPHICS:BOOL=OFF
       - name: Build
         run: cmake --build build
       - name: Test
