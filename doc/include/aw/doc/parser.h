@@ -50,7 +50,7 @@ using object_kind = decltype(object::kind);
  *
  * For an usage example, see 'tests/reader.c++'.
  */
-struct parser {
+struct AW_DOC_EXP parser {
 	parser(io::input_stream& stream, aw::log* log = nullptr)
 		: lex{stream, log}
 	{}
@@ -73,6 +73,8 @@ struct parser {
 
 	//! Skip current node
 	void skip_node();
+
+	bool has_error() const { return lex.has_error(); }
 
 protected:
 	friend struct object;

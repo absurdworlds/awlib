@@ -45,7 +45,7 @@ using tok_kind = decltype(token::kind);
 
 AW_DOC_EXP std::string to_string(token::position pos);
 
-struct lexer {
+struct AW_DOC_EXP lexer {
 	lexer(io::input_stream& stream, aw::log* log = nullptr)
 		: stream{stream}, log{log}
 	{
@@ -71,8 +71,11 @@ struct lexer {
 	}
 	void error(string_view msg, token::position pos)
 	{
+		err = true;
 		report(log::error, std::string{msg}, pos);
 	}
+
+	bool has_error() const { return err; }
 
 private:
 	void report(log::level lvl, std::string msg, token::position pos)
@@ -127,6 +130,7 @@ private:
 
 	token tok;
 	token::position pos{1, 1};
+	bool err = false;
 };
 } // inline namespace v1
 } // namespace aw::doc

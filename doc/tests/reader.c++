@@ -34,21 +34,34 @@ void print_node(const doc::node& parent, std::string name = "")
 	}
 }
 
-int main(int,char** arg)
+int main(int, char** arg)
 {
 	if (arg[1] == nullptr)
 		return 1;
 
-	ostream_logger log{std::cout};
-	// open a file
-	io::input_file_stream stream{arg[1]};
-	// create the parser
+	bool has_error = false;
 
-	auto begin = std::chrono::steady_clock::now();
-	auto doc = doc::parse_file( stream, &log );
-	auto end = std::chrono::steady_clock::now();
-	print_node( doc.root() );
+	int i = 1;
+	for (int i = 1; arg[i] != nullptr; ++i)
+	{
+		ostream_logger log{std::cout};
+		// open a file
+		io::input_file_stream stream{arg[i]};
+		// create the parser
 
-	std::cerr << "parse time: " << std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin).count() << "ns (";
-	std::cerr << std::chrono::duration_cast<std::chrono::duration<double>>(end - begin).count() << "s)\n";
+		auto begin = std::chrono::steady_clock::now();
+		doc::parser parser(stream, &log);
+		aw::document doc( doc::parse_node(parser) );
+		auto end = std::chrono::steady_clock::now();
+
+		has_error += parser.has_error();
+
+		print_node( doc.root() );
+
+
+		std::cerr << "parse time: " << std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin).count() << "ns (";
+		std::cerr << std::chrono::duration_cast<std::chrono::duration<double>>(end - begin).count() << "s)\n";
+	}
+
+	return has_error ? EXIT_FAILURE : EXIT_SUCCESS;
 }
