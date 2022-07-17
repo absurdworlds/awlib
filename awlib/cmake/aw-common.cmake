@@ -29,6 +29,13 @@ function(aw_add_library NAME TYPE)
 		set_target_properties(${NAME} PROPERTIES LINKER_LANGUAGE CXX)
 	endif()
 
+	if (UNIX)
+		set_target_properties(${NAME}
+			PROPERTIES
+				VERSION ${CMAKE_PROJECT_VERSION}
+				SOVERSION ${PROJECT_VERSION_MAJOR} )
+	endif()
+
 	set(EXPORT_TARGETS ${NAME})
 
 	if (ARG_SPLIT_INTERFACE)
