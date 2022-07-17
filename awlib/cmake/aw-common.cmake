@@ -1,3 +1,7 @@
+if (NOT AW_PROJECT_NAME)
+	set(AW_PROJECT_NAME ${PROJECT_NAME})
+endif()
+
 # Options:
 # SPLIT_INTERFACE
 #     Generate an additional LIB_interface target which contains public headers
@@ -79,7 +83,7 @@ function(aw_add_library NAME TYPE)
 		TARGETS
 			${EXPORT_TARGETS}
 		EXPORT
-			awlib_targets
+			${AW_PROJECT_NAME}_targets
 		LIBRARY DESTINATION lib
 		ARCHIVE DESTINATION lib
 		RUNTIME DESTINATION bin
