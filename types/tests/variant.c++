@@ -168,8 +168,8 @@ Test(variant_construct_in_place) {
 	aw::variant<std::string, char const*> vary{ +"asdasd" };
 
 	Checks {
-		TestEqual(*varx.get<std::string>(), "asdasd");
-		TestEqual(*vary.get<char const*>(), "asdasd");
+		TestEqual(*varx.get<std::string>(), "asdasd"s);
+		TestEqual(*vary.get<char const*>(), "asdasd"s);
 	}
 }
 
