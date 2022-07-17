@@ -49,13 +49,13 @@ file_descriptor open(fs::path const& path, file_mode fm, std::error_code& ec)
 
 	set_error_if(fd == -1, ec);
 
-	return {fd};
+	return fd;
 }
 
 int close(file_descriptor fd, std::error_code& ec)
 {
 	int ret = ::close(fd);
-	set_error_if(fd == -1, ec);
+	set_error_if(ret == -1, ec);
 	return ret;
 }
 

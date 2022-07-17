@@ -46,9 +46,10 @@ struct file {
 	~file() noexcept
 	try
 	{
-		close();
+		if (is_open())
+			close();
 	}
-	catch(...)
+	catch(std::exception& ex)
 	{
 		//log.warning("aw::io", "could not close file " + path.u8string());
 	}
@@ -183,8 +184,7 @@ protected:
 private:
 	void check_error(std::error_code& ec, char const* what) const
 	{
-		std::error_condition ok{0, ec.category()};
-		if (ec.default_error_condition() != ok)
+		if (ec)
 			throw fs::filesystem_error{what, path(), ec};
 	}
 
