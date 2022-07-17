@@ -4,7 +4,7 @@
 /* WARNING! Very long string(s). */
 
 #include <aw/utility/ranges/paired.h>
-#include <aw/utility/test.h>
+#include <aw/test/test.h>
 
 #include "demangle.x86_64abi.h"
 
