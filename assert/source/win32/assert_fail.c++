@@ -98,7 +98,7 @@ assert_action assert_fail(string_view assertion, source_location location)
 
 		auto* active_window = (GetActiveWindow) ? GetActiveWindow() : nullptr;
 
-		const string_view message_template =
+		constexpr string_view message_template =
 R"(Assertion failed: "{}"
 
 In file: {}
