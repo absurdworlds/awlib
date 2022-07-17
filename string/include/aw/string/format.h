@@ -40,7 +40,7 @@ namespace aw {
 using fmt::format;
 using fmt::vformat;
 using fmt::make_format_args;
-}
+} // namespace aw
 #endif
 
 #endif//aw_string_format_h

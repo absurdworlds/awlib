@@ -18,13 +18,8 @@ try_compile(AW_HAS_CXX_FORMAT
 	"${CMAKE_CURRENT_SOURCE_DIR}/cmake/test_stdlib_has_fmt.c++"
 )
 
-message(STATUS "AW_HAS_CXX_FORMAT: ${AW_HAS_CXX_FORMAT}")
-
 if (AW_HAS_CXX_FORMAT)
-	target_compile_definitions(awstring
-		PUBLIC
-			AW_FORMAT=AW_STD_FORMAT
-	)
+	set(AW_FORMAT AW_STD_FORMAT)
 else()
 	find_package(fmt)
 
@@ -33,9 +28,15 @@ else()
 			PUBLIC
 				fmt::fmt
 		)
-		target_compile_definitions(awstring
-			PUBLIC
-				AW_FORMAT=AW_FMTLIB_FORMAT
-		)
+		set(AW_FORMAT AW_FMTLIB_FORMAT)
+	else()
+		set(AW_FORMAT AW_NO_FORMAT)
 	endif()
 endif()
+
+target_compile_definitions(awstring
+	PUBLIC
+		AW_FORMAT=${AW_FORMAT}
+)
+
+message(STATUS "AW_FORMAT: ${AW_FORMAT}")
