@@ -43,9 +43,10 @@ private:
 	void create_storage(size_type size)
 	{
 		++size; // for null element
-		data.begin = (pointer)operator new(size);
+		data.begin = (pointer)operator new(size * sizeof(T)); // TODO: use allocator
 		data.end   = data.begin + size;
-		data.head  = data.tail = data.begin;
+		data.head  = data.begin;
+		data.tail  = data.head;
 	}
 
 	void destroy_storage()
