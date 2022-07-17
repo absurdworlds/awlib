@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.19)
 
-project(awlib)
+project(awlib VERSION 0)
 
 if (MSVC)
 	# MSVC requires /std:c++latest for some C++20 features
