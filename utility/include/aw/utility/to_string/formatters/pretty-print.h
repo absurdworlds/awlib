@@ -76,6 +76,7 @@ struct pretty_print {
 
 	void convert(void const* ptr) { convert(uintptr_t(ptr)); }
 
+	void convert(char8_t val) { result.append(std::to_string(val)); }
 	void convert(char16_t val) { result.append(std::to_string(val)); }
 	void convert(char32_t val) { result.append(std::to_string(val)); }
 	void convert(wchar_t val)  { result.append(std::to_string(val)); }
