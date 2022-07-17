@@ -10,6 +10,8 @@
 #include <cassert>
 #include <new>
 #include <memory>
+#include <utility>
+
 #include <aw/types/types.h>
 namespace aw::memory {
 struct slab {
