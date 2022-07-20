@@ -60,10 +60,12 @@ function(aw_add_library NAME TYPE)
 		set(PUBLIC_HEADER_PREFIX "/${NAME}")
 	endif()
 
-	target_include_directories(${INTERFACE_LIB}
-		${INCLUDE_TYPE}
-			$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-			$<INSTALL_INTERFACE:include${PUBLIC_HEADER_PREFIX}>)
+	if (IS_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/include")
+		target_include_directories(${INTERFACE_LIB}
+			${INCLUDE_TYPE}
+				$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+				$<INSTALL_INTERFACE:include${PUBLIC_HEADER_PREFIX}>)
+	endif()
 
 	if (ARG_EXPORT_NAME)
 		set_property(TARGET ${NAME} PROPERTY EXPORT_NAME ${ARG_EXPORT_NAME})
