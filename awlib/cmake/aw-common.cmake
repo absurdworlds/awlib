@@ -56,8 +56,12 @@ function(aw_add_library NAME TYPE)
 		set(INTERFACE_LIB ${NAME})
 	endif()
 
+	set(PUBLIC_HEADER_PREFIX "include")
+	if (AW_INCLUDE_PREFIX)
+		set(PUBLIC_HEADER_PREFIX "${PUBLIC_HEADER_PREFIX}/${AW_INCLUDE_PREFIX}")
+	endif()
 	if (AW_SPLIT_INCLUDES)
-		set(PUBLIC_HEADER_PREFIX "/${NAME}")
+		set(PUBLIC_HEADER_PREFIX "${PUBLIC_HEADER_PREFIX}/${NAME}")
 	endif()
 
 	if (ARG_EXPORT_NAME)
@@ -72,11 +76,11 @@ function(aw_add_library NAME TYPE)
 		target_include_directories(${INTERFACE_LIB}
 			${INCLUDE_TYPE}
 				$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-				$<INSTALL_INTERFACE:include${PUBLIC_HEADER_PREFIX}>)
+				$<INSTALL_INTERFACE:${PUBLIC_HEADER_PREFIX}>)
 		install(
 			DIRECTORY
 				${CMAKE_CURRENT_SOURCE_DIR}/include/
-			DESTINATION include${PUBLIC_HEADER_PREFIX}
+			DESTINATION ${PUBLIC_HEADER_PREFIX}
 			COMPONENT
 				Devel
 		)
@@ -90,8 +94,6 @@ function(aw_add_library NAME TYPE)
 		LIBRARY DESTINATION lib
 		ARCHIVE DESTINATION lib
 		RUNTIME DESTINATION bin
-		COMPONENT
-			Devel
 	)
 endfunction()
 

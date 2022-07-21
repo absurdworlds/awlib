@@ -45,6 +45,8 @@ endif()
 option(AW_MAKE_TESTS "Make tests. Produces a test executable for each library." ON)
 option(AW_SPLIT_INCLUDES "Install headers for each library into a separate directory." ON)
 
+set(AW_INCLUDE_PREFIX "awlib")
+
 if (AW_MAKE_TESTS)
 	enable_testing()
 endif()
