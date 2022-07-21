@@ -14,11 +14,20 @@
 #include <aw/meta/conditional.h>
 namespace aw {
 //! Assignment operator wrapper functor
-template<typename T1, typename T2>
+template<typename T1, typename T2 = void>
 struct assign_plus {
 	constexpr T1& operator()(T1& a, T2 const& b) const
 	{
 		return a += b;
+	}
+};
+
+template<typename T1>
+struct assign_plus<T1, void> {
+	template<typename T2>
+	constexpr T1& operator()(T1& a, T2 const& bb) const
+	{
+		return a += bb;
 	}
 };
 
@@ -39,7 +48,7 @@ T join(Iterator begin, Iterator end, T sink, D const& delim, Adder add)
 	return sink;
 }
 
-/*
+/*!
  * Same as above, but T::operator+= is used.
  */
 template <typename Iterator, typename T, typename D>
@@ -49,7 +58,7 @@ auto join(Iterator begin, Iterator end, T sink, D const& delim) ->
 	return join(begin, end, sink, delim, assign_plus<T,D>{});
 }
 
-/*
+/*!
  * Join elements in range [begin, end) into single element,
  * where resulting elements are separated by \a delim.
  */
@@ -61,13 +70,13 @@ auto join(Iterator begin, Iterator end, T const& delim, Adder add) ->
 	if (begin == end)
 		return sink;
 	add(sink, *begin++);
-	return join(begin, end, sink, delim);
+	return join(begin, end, sink, delim, add);
 }
 
 template <typename Iterator, typename T>
-T join(Iterator begin, Iterator end, T const& delim)
+auto join(Iterator begin, Iterator end, T const& delim)
 {
-	return join(begin, end, delim, assign_plus<T,T>{});
+	return join(begin, end, delim, assign_plus<T>{});
 }
 } // namespace aw
 #endif//aw_algorithm_join_h

@@ -20,8 +20,6 @@ Test(join_compile_test) {
 		return s;
 	};
 
-
-
 	Checks {
 		auto a = join(begin(strs), end(strs),  std::string(), delim, adder1);
 		auto b = join(begin(strs), end(strs),  std::string(), delim);
@@ -29,6 +27,16 @@ Test(join_compile_test) {
 		auto d = join(begin(strs), end(strs), (std::string)delim);
 		TestEqualV(a,b);
 		TestEqualV(c,d);
+	}
+}
+
+Test(join_compile_test_with_different_types) {
+
+	Checks {
+		std::vector<std::string_view> strs {"A", "B", "C"};
+		std::string delim{"-"};
+		auto v = join(begin(strs), end(strs), delim);
+		TestEqual(v, "A-B-C");
 	}
 }
 } // namespace aw
