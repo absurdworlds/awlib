@@ -76,12 +76,17 @@ add_subdirectory(test)
 add_subdirectory(archive)
 add_subdirectory(thread)
 add_subdirectory(doc)
+add_subdirectory(signals)
 
-option(AW_ENABLE_GRAPHICS "Enable libawgraphics" ON)
+# Libraries with extra dependencies
+option(AW_ENABLE_GRAPHICS "Enable libawgraphics" OFF)
 if (AW_ENABLE_GRAPHICS)
 	add_subdirectory(graphics)
 endif()
-add_subdirectory(sound)
-add_subdirectory(signals)
+
+option(AW_ENABLE_SOUND "Enable libawsound" OFF)
+if (AW_ENABLE_SOUND)
+	add_subdirectory(sound)
+endif()
 
 include (aw-export)
