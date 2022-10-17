@@ -2,6 +2,10 @@ if (NOT AW_PROJECT_NAME)
 	set(AW_PROJECT_NAME ${PROJECT_NAME})
 endif()
 
+macro(aw_export_dependency DEP)
+	set_property(GLOBAL APPEND PROPERTY AW_EXPORT_DEPENDENCIES ${DEP})
+endmacro()
+
 # Options:
 # SPLIT_INTERFACE
 #     Generate an additional LIB_interface target which contains public headers

@@ -24,6 +24,8 @@ else()
 	find_package(fmt QUIET)
 
 	if (TARGET fmt::fmt)
+		aw_export_dependency(fmt)
+
 		target_link_libraries(awstring
 			PUBLIC
 				fmt::fmt
