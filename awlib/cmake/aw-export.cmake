@@ -36,7 +36,7 @@ install(EXPORT
 install(
 	FILES
 		awlib/cmake/aw-common.cmake
-		awlib/cmake/awlibConfig.cmake
+		${AW_EXPORT_FILE}
 	DESTINATION
 		${ConfigPackageLocation}
 	COMPONENT
