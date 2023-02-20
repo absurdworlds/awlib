@@ -37,7 +37,7 @@ struct array_ref {
 		: _data{list.begin()}, _size{list.size()}
 	{ }
 
-	template<typename C, typename = enable_if<is_flat_container<C>>>
+	template<typename C, typename = enable_if<is_flat_container_of_v<C, T>>>
 	constexpr array_ref( C& cont )
 		: _data{cont.data()}, _size{cont.size()}
 	{ }

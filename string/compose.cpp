@@ -9,13 +9,14 @@
  */
 #include <aw/utility/string/compose.h>
 
+#include <vector>
+
 #include <charconv>
 
 namespace aw::string {
-namespace _impl {
 static constexpr char CompositionChar = '%';
 
-std::string compose(string_view fmt, std::initializer_list<string_view> args)
+std::string compose_v(string_view fmt, array_view<string_view> args)
 {
 	constexpr char delim = CompositionChar;
 
@@ -63,5 +64,11 @@ std::string compose(string_view fmt, std::initializer_list<string_view> args)
 
 	return result;
 }
-} // namepsace _impl
+
+std::string compose_v(string_view fmt, array_view<std::string> args)
+{
+	std::vector<string_view> tmp(args.begin(), args.end());
+	return compose_v(fmt, tmp);
+}
+
 } // namespace aw

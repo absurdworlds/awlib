@@ -9,8 +9,6 @@
  */
 #ifndef aw_string_compose_h
 #define aw_string_compose_h
-#include <vector>
-
 #include <aw/types/array_view.h>
 #include <aw/types/string_view.h>
 
@@ -18,12 +16,19 @@
 #include <aw/utility/to_string.h>
 
 namespace aw::string {
-namespace _impl {
 /*!
  * Compose parametrized string (parameter substitution).
  */
 AW_STRING_EXP
-std::string compose(string_view fmt, std::initializer_list<string_view> args);
+std::string compose_v(string_view fmt, array_view<string_view> args);
+AW_STRING_EXP
+std::string compose_v(string_view fmt, array_view<std::string> args);
+
+namespace _impl {
+inline std::string compose(string_view fmt, std::initializer_list<string_view> args)
+{
+	return compose_v(fmt, array_view<string_view>(args));
+}
 } // namespace _impl
 
 /*!
