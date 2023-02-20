@@ -1,9 +1,12 @@
 all: libs
 
 # core
-libs: utility core hdf gui physics platform
+libs: utility io string
 core:
 	@ $(MAKE) -C 'source/core' $(TARGET)
+
+io:
+	@ $(MAKE) -C 'source/io' $(TARGET)
 
 gui:
 	@ $(MAKE) -C 'source/gui' $(TARGET)
@@ -19,6 +22,9 @@ platform:
 
 utility:
 	@ $(MAKE) -C 'source/utility' $(TARGET)
+
+string:
+	@ $(MAKE) -C 'source/string' $(TARGET)
 
 # tools
 hpacker:
