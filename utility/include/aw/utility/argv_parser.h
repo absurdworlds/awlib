@@ -28,7 +28,12 @@ struct argument_info {
 		: type(argument), name(str)
 	{ }
 
+	argument_info(std::string name, std::string value)
+		: type(option), name(name), value(value)
+	{ }
+
 	std::string name;
+	std::string value;
 
 	/*!
 	 * List of types of arguments:
@@ -64,12 +69,13 @@ using argument = argument_info;
  *   followed by at most one option-argument;
  * - Arguments starting with '`--`' are long options. These must be
  *   separated from other arguments with a space;
- * - Options may appear in different order or multiple times.
- * - Supports '`--option=argument`' syntax, but not '`-o=argument`'
+ * - Options may appear in different order or multiple times;
+ * - Supports '`--option=argument`' syntax, but not '`-o=argument`'.
  *
  * However, some things are left up to the user of this class:
  * - This parser doesn't check if options consist only of alphanumeric characters,
- * - Options following '`--`' aren't automatically treated as non-option arguments.
+ * - Options following '`--`' aren't automatically treated as non-option arguments,
+ * - The aprser treats some edge cases '`--=something`' as valid.
  */
 struct AW_UTILS_EXP argv_parser {
 	/*!
@@ -89,6 +95,14 @@ struct AW_UTILS_EXP argv_parser {
 	 *     there is no more arguments.
 	 */
 	optional<argument> parse_argument();
+
+	/*!
+	 * Same as \a parse_argument, but always has a parameter.
+	 * \return
+	 *     An \a argument_info object or \a nullopt in case
+	 *     there is no more arguments.
+	 */
+	optional<argument> parse_option();
 
 	/*!
 	 * Returns either the next parameter, or the rest of

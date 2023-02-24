@@ -20,6 +20,15 @@ argv_parser::argv_parser(char const* const* argv)
 {
 }
 
+static void check_for_equals(argument& arg)
+{
+	auto pos = arg.name.find('=');
+	if (pos == arg.name.npos)
+		return;
+	arg.value = arg.name.substr(pos+1);
+	arg.name  = arg.name.substr(0, pos);
+}
+
 argument argv_parser::next_arg(char const* arg)
 {
 	using namespace std::string_literals;
@@ -36,13 +45,14 @@ argument argv_parser::next_arg(char const* arg)
 		return argument("-"s);
 	case '-':
 		++arg;
+		tok.long_option = true;
 		if (*arg == 0) {
 			tok.type = argument::delim;
 			tok.name = "--";
-			tok.long_option = true;
 		} else {
 			tok.type = argument::option;
 			tok.name = std::string(arg);
+			check_for_equals(tok);
 		}
 		break;
 	default:
@@ -67,6 +77,14 @@ optional<argument> argv_parser::parse_argument()
 		return nullopt;
 
 	return next_arg(*argv++);
+}
+
+optional<argument> argv_parser::parse_option()
+{
+	auto arg = parse_argument();
+	if (arg && arg->value.empty())
+		arg->value = get_param();
+	return arg;
 }
 
 std::string argv_parser::get_param()
