@@ -9,15 +9,14 @@
  */
 #include <aw/utility/argv_parser.h>
 
-namespace aw {
-namespace utils {
+namespace aw::utils {
 namespace {
 // Used to avoid extra branching
 char const dummy = 0;
 }
 
 argv_parser::argv_parser(char const* const* argv)
-	: argv(argv), args(&dummy)
+	: argv(argv), arg_group(&dummy)
 {
 }
 
@@ -26,7 +25,7 @@ argument argv_parser::next_arg(char const* arg)
 	using namespace std::string_literals;
 
 	if (*arg != '-')
-		return std::string(arg);
+		return argument(arg);
 
 	++arg; // Eat '-'
 
@@ -34,7 +33,7 @@ argument argv_parser::next_arg(char const* arg)
 
 	switch (*arg) {
 	case 0:
-		return "-"s;
+		return argument("-"s);
 	case '-':
 		++arg;
 		if (*arg == 0) {
@@ -49,7 +48,7 @@ argument argv_parser::next_arg(char const* arg)
 	default:
 		tok.type = argument::option;
 		tok.name = *(arg++);
-		args = arg;
+		arg_group = arg;
 	}
 
 	return tok;
@@ -57,14 +56,14 @@ argument argv_parser::next_arg(char const* arg)
 
 optional<argument> argv_parser::parse_argument()
 {
-	if (*args != 0) {
+	if (*arg_group != 0) {
 		argument tok;
 		tok.type = argument::option;
-		tok.name = *(args++);
+		tok.name = *(arg_group++);
 		return tok;
 	}
 
-	if (*argv == 0)
+	if (*argv == nullptr)
 		return nullopt;
 
 	return next_arg(*argv++);
@@ -72,16 +71,15 @@ optional<argument> argv_parser::parse_argument()
 
 std::string argv_parser::get_param()
 {
-	if (*args != 0) {
-		std::string tmp(args);
-		args = &dummy; // reset 'args'
+	if (*arg_group != 0) {
+		std::string tmp(arg_group);
+		arg_group = &dummy; // reset 'args'
 		return tmp;
 	}
 
-	if (*argv == 0)
+	if (*argv == nullptr)
 		return "";
 
 	return std::string(*argv++);
 }
-} //namespace utils
-} //namespace aw
+} //namespace aw::utils

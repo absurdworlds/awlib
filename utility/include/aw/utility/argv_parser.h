@@ -14,19 +14,18 @@
 #include <aw/utility/utility.h>
 #include <aw/types/types.h>
 #include <aw/types/optional.h>
-namespace aw {
-namespace utils {
+namespace aw::utils {
 /*!
  * Command line argument,
  * represents a single option or argument
  */
-struct argument {
-	argument()
+struct argument_info {
+	argument_info()
 		: type(invalid)
 	{ }
 
-	argument(std::string str)
-		: type(operand), name(str)
+	explicit argument_info(std::string str)
+		: type(argument), name(str)
 	{ }
 
 	std::string name;
@@ -39,15 +38,18 @@ struct argument {
 		invalid,
 		//! Option ('-o') or ('--option')
 		option,
-		//! Argument or operand
-		operand,
+		//! Positional argument or argument for an option
+		argument,
+		operand [[deprecated("use argument")]] = argument,
 		//! End of arguments delimiter: "--"
 		delim
 	} type;
 
 	//! Returns true if argument is GNU long option
-	bool long_option;
+	bool long_option = false;
 };
+
+using argument = argument_info;
 
 /*!
  * Parses program arguments with POSIX syntax, and additionally supports
@@ -63,11 +65,11 @@ struct argument {
  * - Arguments starting with '`--`' are long options. These must be
  *   separated from other arguments with a space;
  * - Options may appear in different order or multiple times.
+ * - Supports '`--option=argument`' syntax, but not '`-o=argument`'
  *
  * However, some things are left up to the user of this class:
- * - This parser doesn't check if options consist of alphanumeric characters,
- * - It doesn't support '`--option=argument`' syntax,
- * - Options following '`--`' aren't treated as non-option arguments.
+ * - This parser doesn't check if options consist only of alphanumeric characters,
+ * - Options following '`--`' aren't automatically treated as non-option arguments.
  */
 struct AW_UTILS_EXP argv_parser {
 	/*!
@@ -83,7 +85,7 @@ struct AW_UTILS_EXP argv_parser {
 	 * Get the next argument from the command line
 	 *
 	 * \return
-	 *     An \a Argument object or \a nullopt in case
+	 *     An \a argument_info object or \a nullopt in case
 	 *     there is no more arguments.
 	 */
 	optional<argument> parse_argument();
@@ -99,9 +101,9 @@ private:
 	argument next_arg(char const* arg);
 
 	char const* const* argv;
+	// A group of arguments, like -xvf
 	// Needed to avoid modifying pointers in argv array
-	char const* args;
+	char const* arg_group;
 };
-} //namespace utils
-} //namespace aw
+} //namespace aw::utils
 #endif//aw_utility_argv_parser_h
