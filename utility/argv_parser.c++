@@ -20,6 +20,13 @@ argv_parser::argv_parser(char const* const* argv)
 {
 }
 
+bool argv_parser::has_next() const
+{
+	if (*arg_group != 0)
+		return true;
+	return *argv != nullptr;
+}
+
 static void check_for_equals(argument& arg)
 {
 	auto pos = arg.name.find('=');

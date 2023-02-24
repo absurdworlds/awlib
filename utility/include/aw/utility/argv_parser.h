@@ -10,6 +10,7 @@
 #ifndef aw_utility_argv_parser_h
 #define aw_utility_argv_parser_h
 #include <string>
+#include <utility>
 
 #include <aw/utility/utility.h>
 #include <aw/types/types.h>
@@ -19,17 +20,17 @@ namespace aw::utils {
  * Command line argument,
  * represents a single option or argument
  */
-struct argument_info {
-	argument_info()
-		: type(invalid)
+struct argument_token {
+	argument_token() = default;
+
+	explicit argument_token(std::string str)
+		: type(argument), value(std::move(str))
 	{ }
 
-	explicit argument_info(std::string str)
-		: type(argument), name(str)
-	{ }
-
-	argument_info(std::string name, std::string value)
-		: type(option), name(name), value(value)
+	argument_token(std::string name, std::string value)
+		: type(option)
+		, name(std::move(name))
+		, value(std::move(value))
 	{ }
 
 	std::string name;
@@ -48,17 +49,19 @@ struct argument_info {
 		operand [[deprecated("use argument")]] = argument,
 		//! End of arguments delimiter: "--"
 		delim
-	} type;
+	} type = invalid;
 
 	//! Returns true if argument is GNU long option
 	bool long_option = false;
 };
 
-using argument = argument_info;
+/// For backward compatibility
+using argument = argument_token;
 
 /*!
  * Parses program arguments with POSIX syntax, and additionally supports
- * GNU long options.
+ * GNU long options. It is a low-level parser, suitable for very simple
+ * programs or building another parser on top of it.
  *
  * Here is short summary:
  * - Options begin with delimiter '`-`';
@@ -73,6 +76,7 @@ using argument = argument_info;
  * - Supports '`--option=argument`' syntax, but not '`-o=argument`'.
  *
  * However, some things are left up to the user of this class:
+ * - Parser doesn't skip the zeroth argument (program path)
  * - This parser doesn't check if options consist only of alphanumeric characters,
  * - Options following '`--`' aren't automatically treated as non-option arguments,
  * - The aprser treats some edge cases '`--=something`' as valid.
@@ -85,7 +89,13 @@ struct AW_UTILS_EXP argv_parser {
 	 *      zero-terminated strings.
 	 *      Last element of array must be nullptr.
 	 */
-	argv_parser(char const* const* argv);
+	explicit argv_parser(char const* const* argv);
+
+	/*!
+	 * Returns true if there's a next argument.
+	 * False when reached the end of the command line.
+	 */
+	bool has_next() const;
 
 	/*!
 	 * Get the next argument from the command line
