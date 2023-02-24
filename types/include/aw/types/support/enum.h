@@ -17,6 +17,10 @@ namespace aw {
 template<typename Enum>
 using underlying_type = typename std::underlying_type<Enum>::type;
 
+template<typename Enum>
+auto to_underlying(Enum e) { return underlying_type<Enum>(e); }
+
+
 /*! Convert enum to value of its underlying type */
 template<typename Enum>
 	requires( std::is_enum_v<Enum> )
