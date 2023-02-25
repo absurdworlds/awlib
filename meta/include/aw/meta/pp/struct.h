@@ -47,10 +47,14 @@
 	constexpr operator tuple_type() { \
 		return { AW_LIST_MEMBER_NAMES( NAME, __VA_ARGS__ ) };\
 	}
+#define AW_DEFINE_STRUCT_TIE(NAME,...)\
+	constexpr auto tie() { \
+		return std::tie( AW_LIST_MEMBER_NAMES( NAME,__VA_ARGS__ ) );\
+	}
 
 #define AW_LIST_MEMBER_NAME_STRINGS(NAME,...)\
 	AW_EXPAND(AW_FOLD_RIGHT( AW_SEP_COMMA, AW_SECOND AW_DEFER, __VA_ARGS__ ))
-	
+
 
 #define AW_DEFINE_STRUCT(NAME,...) \
 struct NAME { \
