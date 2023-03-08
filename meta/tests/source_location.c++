@@ -14,6 +14,11 @@ constexpr auto f(source_location loc = source_location::current())
 	return loc.line();
 }
 
-static_assert(f() == 17);
-static_assert(f() == 18);
+#if (AW_COMPILER == AW_COMPILER_CLANG && AW_COMPILER_VERSION_MAJOR == 15)
+#warning "std::source_location is broken in clang 15"
+#else
+static_assert(f() == 20);
+static_assert(f() == 21);
+static_assert(f() == __LINE__);
+#endif
 } // namespace aw

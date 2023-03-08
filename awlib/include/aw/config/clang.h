@@ -12,6 +12,10 @@
 // TODO: apple clang version bullshit
 #define AW_CVER_X __clang_major__
 #define AW_CVER_Y __clang_minor__
+#define AW_COMPILER_VERSION AW_VERSION(__clang_major__, __clang_minor__, 0)
+#define AW_COMPILER_VERSION_MAJOR __clang_major__
+#define AW_COMPILER_VERSION_MINOR __clang_minor__
+
 #if defined(__x86_64__) || defined(__amd64__)
 	#define AW_ARCH AW_ARCH_X86_64
 #elif defined(__i686__) || defined(_X86_)

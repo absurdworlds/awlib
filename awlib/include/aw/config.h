@@ -18,6 +18,9 @@
  * and choosing which API to use by default
  */
 
+#define AW_MAKE_VERSION(major, minor, patch) \
+	(((major) << 0x10000) + ((minor) << 0x100) + (patch))
+
 /**** DEFINITIONS ****/
 #define AW_COMPILER_GCC     1
 #define AW_COMPILER_CLANG   2
@@ -47,6 +50,9 @@
 /**** COMPILER VERSION ****/
 #ifdef AW_COMPILER
 	#undef AW_COMPILER
+#endif
+#ifdef AW_COMPILER_VERSION
+	#undef AW_COMPILER_VERSION
 #endif
 #ifdef AW_CVER_X
 	#undef AW_CVER_X

@@ -30,8 +30,10 @@ namespace aw {
 class source_location
 {
 public:
-	// clang supports these builtins since 9.0.0, so no need to check for __has_builtin, we don't support anything earlier
-	// GCC supports everything except __builtin_COLUMN since 4.8.0, but this code is used only for clang, so again, no need to check.
+	// clang supports these builtins since 9.0.0, so no need to check for __has_builtin,
+	// we don't support anything earlier
+	// GCC supports everything except __builtin_COLUMN since 4.8.0, but this code is used only
+	// for clang, so again, no need to check.
 	// ... and clang doesn't support consteval properly so I've changed it to constexpr
 	static constexpr source_location current(
 		const char*         file     = __builtin_FILE(),
