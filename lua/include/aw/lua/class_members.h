@@ -17,8 +17,6 @@
 
 #include <aw/lua/push_value.h>
 
-#include <lua.hpp>
-
 #include <vector>
 
 namespace aw::lua {
