@@ -15,8 +15,6 @@
 #include <aw/lua/userdata_utils.h>
 #include <aw/lua/class_members.h>
 
-#include <lua.hpp>
-
 namespace aw::lua {
 
 class class_def {
