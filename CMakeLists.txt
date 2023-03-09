@@ -89,4 +89,10 @@ if (AW_ENABLE_SOUND)
 	add_subdirectory(sound)
 endif()
 
+option(AW_ENABLE_LUA "Enable libawlua" OFF)
+if (AW_ENABLE_LUA)
+	add_subdirectory(lua)
+endif()
+
+
 include (aw-export)
