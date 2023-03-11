@@ -8,7 +8,8 @@ aw_add_test(test_utility
 	on_scope_exit.c++
 	ranges_slice.c++
 	ranges_ipairs.c++
-	ranges_zip.c++)
+	ranges_zip.c++
+	type_name.c++)
 
 target_link_libraries(test_utility
 	PRIVATE
