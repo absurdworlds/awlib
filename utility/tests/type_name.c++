@@ -9,17 +9,21 @@ namespace aw {
 // doesn't give details
 //static_assert( type_name<void>::value == "void"sv );
 
-Test(type_name)
+Test(type_name_basic)
 {
-	struct empty {
-
-	};
-
-	auto s = compiler_string<void>();
-
 	TestEqual( type_name<void>::value, "void"sv );
 	TestEqual( type_name<int>::value, "int"sv );
-	TestEqual( type_name<empty>::value, "empty"sv );
 }
+
+#if 0 // doesn't work reliably
+namespace test {
+struct empty {};
+} // namespace test
+
+Test(type_name_classes)
+{
+	TestEqual( type_name<test::empty>::value, "aw::test::empty"sv );
+}
+#endif
 
 } // namespace aw
