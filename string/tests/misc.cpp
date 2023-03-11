@@ -57,9 +57,9 @@ Test(trim_string_view) {
 	};
 
 	Checks {
-		TestEqual(trim(str, pred), "str");
-		TestEqual(ltrim(str, pred), "str.");
-		TestEqual(rtrim(str, pred), ".str");
+		TestEqual(trim_if(str, pred), "str");
+		TestEqual(ltrim_if(str, pred), "str.");
+		TestEqual(rtrim_if(str, pred), ".str");
 	}
 };
 
