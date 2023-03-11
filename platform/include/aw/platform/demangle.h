@@ -23,7 +23,7 @@ inline std::string demangle(std::string const& name)
 #include <typeinfo>
 namespace aw {
 //! Produces demangled type name from type_info.
-AW_PLATFORM_EXP std::string type_name( std::type_info const& info );
-} // namespace a
+AW_PLATFORM_EXP std::string demangle( std::type_info const& info );
+} // namespace aw
 #endif// __cpp_rtti
 #endif//aw_platform_demangle_h

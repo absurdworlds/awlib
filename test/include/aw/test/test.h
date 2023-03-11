@@ -135,7 +135,7 @@ struct _catch {
 		} catch(Ex&) {
 			return true;
 		} catch(std::exception& e) {
-			auto name = type_name( typeid(e) );
+			auto name = demangle( typeid(e) );
 			auto what = " - \""s + e.what() + '"';
 			_msg = "caught wrong exception: " + name + what;
 			return false;

@@ -67,7 +67,7 @@ std::string demangle(const char* name) { return name; }
 #if (__cpp_rtti)
 namespace aw {
 #if (AW_COMPILER == AW_COMPILER_GCC) || (AW_COMPILER == AW_COMPILER_CLANG)
-std::string type_name(std::type_info const& info)
+std::string demangle(std::type_info const& info)
 {
 	return demangle( info.name() );
 }
@@ -76,7 +76,7 @@ std::string type_name(std::type_info const& info)
 // — MSVC
 // Not supported:
 // ???
-std::string type_name(std::type_info const& info)
+std::string demangle(std::type_info const& info)
 {
 	return info.name();
 }
