@@ -50,6 +50,14 @@ void push_value(lua_State* L, bool value)
 	lua_pushboolean(L, value);
 }
 
+inline
+std::string_view lua_tostringview(lua_State *L, int idx)
+{
+	size_t str_size = 0;
+	auto str_data = lua_tolstring(L, idx, &str_size);
+	return { str_data, str_size };
+}
+
 } // namespace aw::lua
 
 #endif // aw_push_value_h
