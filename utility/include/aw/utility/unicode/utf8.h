@@ -9,149 +9,204 @@
 #ifndef aw_utility_utf8_h
 #define aw_utility_utf8_h
 #include <aw/utility/unicode/unicode.h>
-namespace aw {
-namespace unicode {
-struct utf8 {
-using char_type   = u8;
+namespace aw::unicode::utf8 {
+using char_type   = char8_t;
 using string      = std::string;
 
-/*!
- * Returns true if character is a trail character
- */
-static bool isTrail(char_type ch) {
-	return (ch & 0xC0) == 0x80;
-}
+enum head_char : char_type {
+	begin            = 0xC0,
+	valid_begin      = 0xC2,
+	three_byte_begin = 0xE0,
+	four_byte_begin  = 0xF0,
+	valid_end        = 0xF5,
+};
+
+enum marker : char_type {
+	tail_mask       = 0xC0,
+	tail            = 0x80,
+	start_2byte_seq = 0xC0,
+	start_3byte_seq = 0xE0,
+	start_4byte_seq = 0xF0,
+};
 
 /*!
  * Returns width of UTF-8 encoding of specific code point
  */
-static size_t width(code_point cp) {
-	if (cp < 0x80) {
+inline size_t width(code_point cp)
+{
+	enum code_point {
+		single_byte_cp_end = 0x80,
+		two_byte_cp_end    = 0x800,
+		three_byte_cp_end  = 0x10000,
+		four_byte_cp_end   = 0x110000,
+	};
+
+	if (cp < single_byte_cp_end)
 		return 1;
-	} else if (cp < 0x800) {
+	if (cp < two_byte_cp_end)
 		return 2;
-	} else if (cp < 0x10000) {
+	if (cp < three_byte_cp_end)
 		return 3;
-	} else if (cp < 0x110000) {
+	if (cp < four_byte_cp_end)
 		return 4;
-	}
 
 	return 0;
 }
 
-static bool isASCII(char_type ch)
+/*!
+ * \return true if \a ch is a single-byte ASCII character
+ */
+inline bool is_ascii(char_type ch)
 {
-	return ch < 0x80;
-}
-
-static bool isHead(char_type lead)
-{
-	return (0xC1 < lead) && (lead < 0xF5);
+	constexpr char_type ascii_end = 0x80;
+	return ch < ascii_end;
 }
 
 /*!
- * Returns how many characters follow the head,
- * or -1 if \a lead is not a valid start of multi-byte encoding
+ * \return true if character is a valid continuation byte
  */
-static size_t trailLength(char_type lead) {
-	if (!isHead(lead))
+inline bool is_tail(char_type ch)
+{
+	return (ch & marker::tail_mask) == marker::tail;
+}
+
+/*!
+ * \return Is the \a lead a valid start of multi-byte encoding.
+ * \note Character that technically can start multi-byte encoding,
+ *       but is not valid under the UTF-8 spec is not considered valid.
+ */
+inline bool is_head(char_type ch)
+{
+	return (head_char::valid_begin < ch) && (ch < head_char::valid_end);
+}
+
+/*!
+ * \return How many characters follow the head, or -1 if the
+ *         \a lead is not a valid start of multi-byte encoding.
+ */
+inline size_t tail_length(char_type lead)
+{
+	if (!is_head(lead))
 		return -1;
-
-	if (lead < 0xE0)
+	if (lead < head_char::three_byte_begin)
 		return 1;
-	if (lead < 0xF0)
+	if (lead < head_char::four_byte_begin)
 		return 2;
-
 	return 3;
 }
 
-/*!
- * Encode code point in UTF-8 and append it to a string
- * Does not check if code point is valid
- */
-template<typename Iterator> static
-Iterator encode(code_point cp, Iterator output)
+inline bool is_valid_code_unit(char_type unit)
 {
-	if (cp < 0x80) {
-		*(output++) = u8(cp);
-	} else if(cp < 0x800) {
-		*(output++) = u8((cp >> 6)   | 0xC0);
-		*(output++) = u8((cp & 0x3F) | 0x80);
-	} else if(cp < 0x10000) {
-		*(output++) = u8((cp  >> 12)        | 0xE0);
-		*(output++) = u8(((cp >> 6) & 0x3F) | 0x80);
-		*(output++) = u8((cp & 0x3F)        | 0x80);
-	} else {
-		*(output++) = u8((cp  >> 18)         | 0xF0);
-		*(output++) = u8(((cp >> 12) & 0x3F) | 0x80);
-		*(output++) = u8(((cp >> 6)  & 0x3F) | 0x80);
-		*(output++) = u8((cp & 0x3F)         | 0x80);
+	// equivalent to
+	// is_ascii(unit) || is_tail(unit) || is_head(unit);
+	return unit < head_char::begin || is_head(unit);
+}
+
+using sextet = bitword<6, char_type>;
+
+
+struct codec {
+	using char_type   = utf8::char_type;
+	using string      = utf8::string;
+
+	/*!
+	 * Encode code point in UTF-8 and append it to a string
+	 * Does not check if the code point is valid
+	 */
+	template<typename Iterator>
+	static Iterator encode(code_point cp, Iterator output)
+	{
+		switch (width(cp)) {
+		case 1:
+			*(output++) = char_type(cp);
+			break;
+		case 2:
+			*(output++) = sextet::get(cp, 1) | marker::start_2byte_seq;
+			*(output++) = sextet::get(cp, 0) | marker::tail;
+			break;
+		case 3:
+			*(output++) = sextet::get(cp, 2) | marker::start_3byte_seq;
+			*(output++) = sextet::get(cp, 1) | marker::tail;
+			*(output++) = sextet::get(cp, 0) | marker::tail;
+			break;
+		case 4:
+			*(output++) = sextet::get(cp, 3) | marker::start_4byte_seq;
+			*(output++) = sextet::get(cp, 2) | marker::tail;
+			*(output++) = sextet::get(cp, 1) | marker::tail;
+			*(output++) = sextet::get(cp, 0) | marker::tail;
+		}
+
+		// invalid, skip
+		return output;
 	}
 
-	return output;
-}
+	/*!
+	 * Advance to the next sequence of code units
+	 */
+	template<typename Iterator>
+	static Iterator next(Iterator input, Iterator end)
+	{
+		while ((input < end) && !is_head(*input) && !is_ascii(*input))
+			++input;
 
-/*!
- * Find next sequence
- */
-template<typename Iterator> static
-Iterator next(Iterator input, Iterator end)
-{
-	while ((input < end) && !isHead(*input) && !isASCII(*input))
-		++input;
-
-	return input;
-}
-
-/*!
- * Decode UTF-8 sequence, if valid
- */
-template<typename Iterator> static
-Iterator decode(Iterator input, Iterator end, code_point& cp)
-{
-	// Helper lambda to bail out with an error
-	auto error = [&cp] (Iterator ret) {
-		cp = -1;
-		return ret;
-	};
-
-	assert(input < end);
-
-	cp = *(input++) & 0xFF;
-	if (cp < 0x80)
-		return input;
-
-	size_t length = trailLength(cp);
-	if (length == -1)
-		return error(input);
-
-	if (std::distance(input, end) < length)
-		return error(end);
-
-	cp = cp & (0x3F >> length);
-
-	switch (length) {
-	case 3:
-		if (!isTrail(*input))
-			break;
-
-		cp = (cp << 6) | (*(input++) & 0x3F);
-	case 2:
-		if (!isTrail(*input))
-			break;
-
-		cp = (cp << 6) | (*(input++) & 0x3F);
-	case 1:
-		if (!isTrail(*input))
-			break;
-
-		cp = (cp << 6) | (*(input++) & 0x3F);
 		return input;
 	}
 
-	return error(input);
-}
-}; // namespace utf8
-} // namespace unicode
-} // namespace aw
+	/*!
+	 * Decode UTF-8 sequence, if valid
+	 */
+	template<typename Iterator>
+	static Iterator decode(Iterator input, Iterator end, code_point& cp)
+	{
+		// bail out with an error
+		auto error = [&cp] (Iterator ret) {
+			cp = -1;
+			return ret;
+		};
+
+		if (input == end)
+			return error(input);
+
+		constexpr size_t byte_mask = 0xFF;
+		cp = *(input++) & byte_mask;
+		if (is_ascii(cp))
+			return input;
+
+		size_t length = tail_length(cp);
+		if (length == -1)
+			return error(input);
+
+		const size_t data_mask = sextet::mask >> length;
+
+		cp = cp & data_mask;
+
+		// clang can't properly unroll the loop,
+		// and all compilers leave in checks for (i<length)
+		switch (length) {
+		default:
+			return error(input);
+
+		case 3: // NOLINT(bugprone-branch-clone): manually unrolled loop
+			if (input == end || !is_tail(*input))
+				return error(input);
+
+			cp = sextet::add(cp, *input++);
+
+		case 2:
+			if (input == end || !is_tail(*input))
+				return error(input);
+
+			cp = sextet::add(cp, *input++);
+
+		case 1:
+			if (input == end || !is_tail(*input))
+				return error(input);
+
+			cp = sextet::add(cp, *input++);
+		}
+
+		return input;
+	}
+};
+} // namespace aw::unicode::utf8
 #endif//aw_utility_utf8_h

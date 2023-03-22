@@ -24,44 +24,38 @@ namespace unicode {
 template <typename CharT>
 constexpr encoding::unknown char_encoding;
 
-template<> constexpr utf8  char_encoding<char>;
-template<> constexpr utf8  char_encoding<char8_t>;
-template<> constexpr utf16 char_encoding<char16_t>;
-template<> constexpr utf32 char_encoding<char32_t>;
+template<> inline constexpr utf8::codec  char_encoding<char>;
+template<> inline constexpr utf8::codec  char_encoding<char8_t>;
+template<> inline constexpr utf16::codec char_encoding<char16_t>;
+template<> inline constexpr utf32::codec char_encoding<char32_t>;
 
 namespace _impl {
-#if 0
-constexpr auto wchar_encoding()
-{
-	constexpr max = std::numeric_limits<wchar_t>::max();
-	if constexpr ( max >= utf32::max )
-		return utf32{};
-	else if constexpr ( max >= utf16::max )
-		return utf16{};
-	else if constexpr ( max >= utf8::max )
-		return utf8{};
-	return encoding::unknown;
-}
-#endif
 struct wchar_enc {
 private:
-	static constexpr size_t _wsize = sizeof(std::wstring::value_type);
+	static constexpr size_t size = sizeof(std::wstring::value_type);
 public:
-	using type = conditional<_wsize >= sizeof(char32_t), utf32,
-	             conditional<_wsize >= sizeof(char16_t), utf16,
-	             conditional<_wsize >= sizeof(char),     utf8, void>>>;
+	using type = conditional<size <= sizeof(char),     utf8::codec,
+	             conditional<size <= sizeof(char16_t), utf16::codec,
+	             conditional<size <= sizeof(char32_t), utf32::codec,
+	                                                   encoding::unknown>>>;
 };
 } // namespace _impl
 
-template<> constexpr _impl::wchar_enc::type char_encoding<wchar_t>;
+template<> inline constexpr _impl::wchar_enc::type char_encoding<wchar_t>;
 
 
 template<typename String>
 constexpr decltype( char_encoding<typename String::value_type> ) encoding_of;
 
+struct parser_parameters {
+	bool* error = nullptr;
+	bool stop_on_error = false;
+};
+
 //! Convert string between different Unicode encodings
-template<typename Output, typename Input, typename InEnc, typename OutEnc>
-auto convert(Input const& str, InEnc, OutEnc) -> Output
+template<typename Output, typename Input, typename In_enc, typename Out_enc>
+auto convert(Input const& str, In_enc input_codec, Out_enc output_codec, parser_parameters params = {})
+	-> Output
 {
 	auto begin = std::begin(str);
 	auto end   = std::end(str);
@@ -70,12 +64,17 @@ auto convert(Input const& str, InEnc, OutEnc) -> Output
 	auto out = std::back_inserter(result);
 
 	while (begin != end) {
-		code_point cp;
+		code_point cp = invalid;
 
-		begin = InEnc::template decode(begin, end, cp);
-		if ( !isValidCodepoint(cp) )
+		begin = input_codec.template decode(begin, end, cp);
+		if ( !is_valid_code_point(cp) ) {
+			if (params.error)
+				*params.error = true;
+			if (params.stop_on_error)
+				return result;
 			continue;
-		out   = OutEnc::template encode(cp, out);
+		}
+		out   = output_codec.template encode(cp, out);
 	}
 
 	return result;
@@ -85,6 +84,12 @@ template<typename Out, typename In>
 auto convert(In const& str) -> Out
 {
 	return convert<Out>(str, encoding_of<In>, encoding_of<Out>);
+}
+
+template<typename Out, typename In>
+auto convert(In const& str, bool& has_error) -> Out
+{
+	return convert<Out>(str, encoding_of<In>, encoding_of<Out>, { &has_error, true });
 }
 
 inline std::string narrow(wstring_view in)
