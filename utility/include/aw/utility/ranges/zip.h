@@ -24,7 +24,7 @@ struct zip_iterator {
 	{
 		auto dereference = [] (auto&&... ps)
 		{
-			return std::tuple{ (*forward<decltype(ps)>(ps)) ... };
+			return std::tuple{ (*std::forward<decltype(ps)>(ps)) ... };
 		};
 		return std::apply( dereference, iters );
 	}
@@ -33,7 +33,7 @@ struct zip_iterator {
 	{
 		auto increment = [] (auto&&... ps)
 		{
-			return std::tuple{ (++forward<decltype(ps)>(ps)) ... };
+			return std::tuple{ (++std::forward<decltype(ps)>(ps)) ... };
 		};
 		std::apply( increment, iters );
 		return *this;
@@ -72,7 +72,7 @@ template <typename... Ranges>
 auto zip_begin(Ranges&&... ranges)
 {
 	using std::begin;
-	return zip_iterator{begin(forward<Ranges>(ranges))...};
+	return zip_iterator{begin(std::forward<Ranges&&>(ranges))...};
 }
 
 /*!
@@ -81,7 +81,7 @@ auto zip_begin(Ranges&&... ranges)
 template <typename... Ranges>
 struct zip {
 	constexpr zip(Ranges&&... ranges)
-		: ranges{ forward<Ranges&&>(ranges)... }
+		: ranges{ std::forward<Ranges&&>(ranges)... }
 	{}
 
 	using iterator = decltype(zip_begin(std::declval<Ranges&>()...));
@@ -91,7 +91,7 @@ struct zip {
 		auto _begin = [] (auto&&... ps)
 		{
 			using std::begin;
-			return zip_iterator{ begin( forward<decltype(ps)>(ps) ) ... };
+			return zip_iterator{ begin( std::forward<decltype(ps)>(ps) ) ... };
 		};
 		return std::apply( _begin, ranges );
 	}
@@ -101,7 +101,7 @@ struct zip {
 		auto _end = [] (auto&&... ps)
 		{
 			using std::end;
-			return zip_iterator{ end( forward<decltype(ps)>(ps) ) ... };
+			return zip_iterator{ end( std::forward<decltype(ps)>(ps) ) ... };
 		};
 		return std::apply( _end, ranges );
 	}
