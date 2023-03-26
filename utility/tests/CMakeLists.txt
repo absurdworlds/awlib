@@ -7,6 +7,7 @@ aw_add_test(test_utility
 	static_object.c++
 	on_scope_exit.c++
 	ranges_slice.c++
+	ranges_paired.c++
 	ranges_ipairs.c++
 	ranges_zip.c++)
 

@@ -1,5 +1,4 @@
 #include <aw/utility/ranges/zip.h>
-#include <aw/utility/ranges/paired.h>
 #include <aw/test/test.h>
 #include <numeric>
 
@@ -13,7 +12,7 @@ Test(pairs_test) {
 	std::vector<int> result1;
 	std::vector<size_t> result2;
 
-	for (auto&& [first, second] : paired(vec1, vec2)) {
+	for (auto&& [first, second] : zip(vec1, vec2)) {
 		result1.push_back(first);
 		result2.push_back(second);
 	}
