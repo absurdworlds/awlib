@@ -9,6 +9,8 @@
  */
 #ifndef aw_string_escape_h
 #define aw_string_escape_h
+#include <aw/types/string_view.h>
+
 #include <string>
 namespace aw {
 namespace string {
