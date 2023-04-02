@@ -47,7 +47,7 @@ struct codec {
 			*(output++) = cp;
 		} else {
 			cp -= ucs16_max;
-			*(output++) = surrogate::low_begin + decabit::get(cp, 1);
+			*(output++) = surrogate::high_begin + decabit::get(cp, 1);
 			*(output++) = surrogate::low_begin + decabit::get(cp, 0);
 		}
 

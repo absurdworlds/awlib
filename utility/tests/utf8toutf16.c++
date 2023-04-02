@@ -15,10 +15,10 @@ Test(utf8toutf16)
 
 	for (const auto& [utf8, utf16] : utf_strings) {
 		auto utf16_a = unicode::convert<std::u16string>(utf8);
-		auto utf8_b  = unicode::convert<std::u8string>(utf16);
+		auto utf8_a  = unicode::convert<std::u8string>(utf16);
 
-		auto utf8_a  = unicode::convert<std::u8string>(utf16_a);
-		auto utf16_b = unicode::convert<std::u16string>(utf8_b);
+		auto utf8_b  = unicode::convert<std::u8string>(utf16_a);
+		auto utf16_b = unicode::convert<std::u16string>(utf8_a);
 
 		TestEqualV(utf8, utf8_a, utf8_b);
 		TestEqualV(utf16, utf16_a, utf16_b);
