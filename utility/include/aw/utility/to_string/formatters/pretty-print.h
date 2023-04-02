@@ -11,6 +11,8 @@
 #define aw_to_string_formatters_pretty_print_h
 #include <aw/algorithm/in.h>
 #include <aw/utility/string/escape.h>
+
+#include <vector>
 namespace aw {
 namespace formatter {
 struct pretty_print {
@@ -19,13 +21,8 @@ struct pretty_print {
 
 	operator std::string() const { return result; }
 
-	void list_reset()
-	{
-		in_compound = true; first_value = true;
-	}
-
-	void list_start() { result.push_back('{'); list_reset(); }
-	void list_end()   { result.push_back('}'); }
+	void list_start() { result.push_back('{'); stack.emplace_back(); }
+	void list_end()   { result.push_back('}'); stack.pop_back(); }
 
 	void compound_start() { list_start(); }
 	void compound_end()   { list_end(); }
@@ -38,8 +35,8 @@ struct pretty_print {
 
 	pretty_print& value_separator()
 	{
-		if (!first_value) result.append(", ");
-		else first_value = false;
+		if (!first_value()) result.append(", ");
+		else first_value() = false;
 		return *this;
 	}
 
@@ -84,7 +81,7 @@ struct pretty_print {
 	void convert(char val)
 	{
 		// TODO: non-printable chars
-		if (in_compound)
+		if (in_compound())
 			add_escaped(val);
 		else
 			result.push_back(val);
@@ -92,7 +89,7 @@ struct pretty_print {
 
 	void convert(string_view val)
 	{
-		if (in_compound)
+		if (in_compound())
 			add_escaped(std::string(val));
 		else
 			result.append(val.data(), val.size());
@@ -126,8 +123,14 @@ private:
 	}
 
 	std::string result;
-	bool in_compound = false;
-	bool first_value = true;
+
+	struct state {
+		bool first_value = true;
+	};
+	std::vector<state> stack = {{}};
+
+	bool in_compound() const { return stack.size() > 1; }
+	bool& first_value() { return stack.back().first_value; }
 };
 } // namespace formatter
 } // namespace aw
