@@ -12,8 +12,16 @@
 #include <aw/algorithm/find.h>
 namespace aw {
 /*!
- * Slices range [begin, end) into subranges by delimiter,
- * including empty subranges.
+ * \brief Slices range [begin, end) into subranges by delimiter, including empty subranges.
+ *
+ * This function divides the input into subranges by the provided delimiter,
+ * and calls \a store for each subrange. It includes empty subranges
+ * that might result from consecutive delimiters.
+ *
+ * \param begin An iterator pointing to the beginning of the input range.
+ * \param end An iterator pointing to the end of the input range.
+ * \param delim The delimiter used to slice the input range into subranges.
+ * \param store A function or functor that stores the resulting subranges.
  */
 template <typename Iterator, typename T, typename Store>
 void cut(Iterator begin, Iterator end, T const& delim, Store store)
@@ -30,8 +38,16 @@ void cut(Iterator begin, Iterator end, T const& delim, Store store)
 }
 
 /*!
- * Splits range [begin, end) into subranges by delimiter,
- * excluding empty subranges.
+ * \brief Splits range [begin, end) into subranges by delimiter, excluding empty subranges.
+ *
+ * This function divides the input into subranges by the provided delimiter,
+ * and calls \a store for each subrange. Empty subranges resulting from multiple
+ * consecutive delimiters are skipped.
+ *
+ * \param begin An iterator pointing to the beginning of the input range.
+ * \param end An iterator pointing to the end of the input range.
+ * \param delim The delimiter used to slice the input range into subranges.
+ * \param store A function or functor that stores the resulting subranges.
  */
 template <typename Iterator, typename T, typename Store>
 void split(Iterator begin, Iterator end, T const& delim, Store store)
