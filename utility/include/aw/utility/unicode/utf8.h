@@ -77,7 +77,7 @@ inline bool is_tail(char_type ch)
  */
 inline bool is_head(char_type ch)
 {
-	return (head_char::valid_begin < ch) && (ch < head_char::valid_end);
+	return (head_char::valid_begin <= ch) && (ch < head_char::valid_end);
 }
 
 /*!
