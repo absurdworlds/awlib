@@ -96,13 +96,50 @@ Test(exchange_copy_move) {
 	}
 }
 
-Test(exchange_circle) {
+Test(rotate_left) {
 	std::string a = "test1";
 	std::string b = "test2";
 	std::string c = "test3";
 	std::string d = "test4";
 
-	exchange_circle(a, b, c, d);
+	rotate_left(a, b, c, d);
+
+	TestEqual(a, "test2");
+	TestEqual(b, "test3");
+	TestEqual(c, "test4");
+	TestEqual(d, "test1");
+
 }
 
+Test(rotate_right) {
+	std::string a = "test1";
+	std::string b = "test2";
+	std::string c = "test3";
+	std::string d = "test4";
+
+	rotate_right(a, b, c, d);
+
+	TestEqual(a, "test4");
+	TestEqual(b, "test1");
+	TestEqual(c, "test2");
+	TestEqual(d, "test3");
+}
+
+Test(rotate_left_copy_count) {
+	using namespace std::string_literals;
+	copy_move_counter a = "a"s, b = "b"s, c = "c"s, d = "d"s; // NOLINT
+
+	rotate_left(a, b, c, d);
+
+	TestEqualV(b.n_copies, c.n_copies, d.n_copies, 0u);
+}
+
+Test(rotate_right_copy_count) {
+	using namespace std::string_literals;
+	copy_move_counter a = "a"s, b = "b"s, c = "c"s, d = "d"s; // NOLINT
+
+	rotate_left(a, b, c, d);
+
+	TestEqualV(b.n_copies, c.n_copies, d.n_copies, 0u);
+}
 } // namespace aw
