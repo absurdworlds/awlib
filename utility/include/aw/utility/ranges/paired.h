@@ -9,25 +9,52 @@
  */
 #ifndef aw_utility_ranges_paired_h
 #define aw_utility_ranges_paired_h
-#include <utility>
+#include "iter_range.h"
+
 #include <iterator>
+#include <utility>
 namespace aw {
 template <typename Iter1, typename Iter2>
 struct pairs_sentinel : public std::pair<Iter1, Iter2> {
 	using std::pair<Iter1, Iter2>::pair;
 };
 
-template <typename Base1, typename Base2>
+namespace adl {
+using std::begin;
+using std::end;
+template<typename Range>
+using begin_type = decltype( begin(std::declval<Range>()) );
+template<typename Range>
+using end_type   = decltype( end(std::declval<Range>()) );
+} // namespace adl
+
+template <typename Range1, typename Range2>
 struct pairs_iterator {
 private:
-	using reference1 = typename std::iterator_traits<Base1>::reference;
-	using reference2 = typename std::iterator_traits<Base2>::reference;
+	using iterator1 = adl::begin_type<Range1>;
+	using iterator2 = adl::begin_type<Range2>;
+
+	using sentinel1 = adl::end_type<Range1>;
+	using sentinel2 = adl::end_type<Range2>;
+
+	using reference1 = typename std::iterator_traits<iterator1>::reference;
+	using reference2 = typename std::iterator_traits<iterator2>::reference;
+
+	using iter_pair = std::pair<iterator1, iterator2>;
+
+	constexpr iter_pair make_pair()
+	{
+		using std::begin;
+		return { begin(ranges.first), begin(ranges.second) };
+	}
 
 public:
-	using sentinel = pairs_sentinel<Base1, Base2>;
+	using iterator = pairs_iterator<Range1, Range2>;
+	using sentinel = pairs_sentinel<sentinel1, sentinel2>;
 
-	constexpr pairs_iterator(Base1 iter1, Base2 iter2)
-		: iters{iter1, iter2}
+	constexpr pairs_iterator(Range1&& first, Range2&& second)
+		: ranges(std::forward<Range1>(first), std::forward<Range2>(second))
+		, iters(make_pair())
 	{}
 
 	constexpr std::pair<reference1,reference2> operator*()
@@ -49,49 +76,41 @@ public:
 		       iters.second != other.second;
 	}
 
-	constexpr bool operator!=(Base1 const& it)
+	constexpr bool operator!=(iterator1 const& it)
 	{
 		return iters.first != it;
 	}
 
-	std::pair<Base1, Base2> iters;
-};
-
-namespace adl {
-using std::begin;
-using std::end;
-template<typename Range>
-using begin_type = decltype( begin(std::declval<Range>()) );
-template<typename Range>
-using end_type   = decltype( begin(std::declval<Range>()) );
-} // namespace adl
-
-template <typename Range1, typename Range2>
-struct pairs_adapter {
-private:
-	using _iter1 = adl::begin_type<Range1>;
-	using _iter2 = adl::begin_type<Range2>;
-public:
-	using iterator = pairs_iterator<_iter1, _iter2>;
-	using sentinel = pairs_sentinel<_iter1, _iter2>;
-
-	constexpr pairs_adapter(Range1 range1, Range2 range2)
-		: ranges{range1, range2}
-	{}
-
 	constexpr iterator begin()
 	{
 		using std::begin;
-		return {begin(ranges.first), begin(ranges.second)};
+		return *this;
 	}
 
 	constexpr sentinel end()
 	{
 		using std::end;
-		return {end(ranges.first), end(ranges.second)};
+		return { end(ranges.first), end(ranges.second) };
 	}
 
+	constexpr iter_range<iterator1, sentinel1> first()
+	{
+		using std::end;
+		return { iters.first, end(ranges.first) };
+	}
+
+	constexpr iter_range<iterator2, sentinel2> second()
+	{
+		using std::end;
+		return { iters.second, end(ranges.second) };
+	}
+
+	// Safety thing for temporary ranges:
+	// If an rvalue is passed to paired() it gets stored here
 	std::pair<Range1, Range2> ranges;
+
+	// Current state
+	std::pair<iterator1, iterator2> iters;
 };
 
 /*!
@@ -102,7 +121,7 @@ public:
 template<typename... Ranges>
 constexpr auto paired(Ranges&&... ranges)
 {
-	return pairs_adapter<Ranges...>(std::forward<Ranges>(ranges)...);
+	return pairs_iterator<Ranges...>(std::forward<Ranges>(ranges)...);
 }
 } // namespace aw
 #endif//aw_utility_ranges_paired_h
