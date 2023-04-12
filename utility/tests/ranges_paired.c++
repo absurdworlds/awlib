@@ -32,4 +32,15 @@ Test(paired_ref) {
 	const std::vector<size_t> expected({ 1, 3, 3, 5, 5, 7, 7 });
 	TestEqual(vec2, expected);
 }
+
+Test(paired_rvalue) {
+	std::vector<size_t> vec2(10, 0);
+
+	for (auto [v1, v2] : paired(std::vector<int>{ 1, 2, 3, 4, 5, 6, 7 }, vec2)) {
+		v2 = static_cast<size_t>(v1) | 0x1;
+	}
+
+	const std::vector<size_t> expected({ 1, 3, 3, 5, 5, 7, 7, 0, 0, 0 });
+	TestEqual(vec2, expected);
+}
 } // namespace aw
