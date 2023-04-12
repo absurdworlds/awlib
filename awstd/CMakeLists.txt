@@ -1,0 +1,26 @@
+option(AWSTD_BUILD_CPP98_FALLBACKS OFF)
+option(AWSTD_BUILD_CPP14_FALLBACKS OFF)
+option(AWSTD_BUILD_CPP17_FALLBACKS OFF)
+option(AWSTD_BUILD_CPP20_FALLBACKS OFF)
+
+set(SOURCES)
+
+if (AWSTD_BUILD_CPP98_FALLBACKS)
+	list(APPEND SOURCES source/C++98/fspath.c++)
+endif()
+if (AWSTD_BUILD_CPP14_FALLBACKS)
+	if (AW_CAPABILITIES_WIN32)
+		list(APPEND SOURCES source/C++14/win32_fsops.c++)
+	endif()
+	if (AW_CAPABILITIES_POSIX)
+		list(APPEND SOURCES source/C++14/posix_fsops.c++)
+	endif()
+endif()
+
+aw_add_library(awstd SHARED
+	GLOB_HEADERS
+	SOURCES
+		${SOURCES}
+	EXPORT_NAME
+		std
+)

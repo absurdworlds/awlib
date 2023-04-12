@@ -1,5 +1,6 @@
 #ifndef awstd_nullptr_h
 #define awstd_nullptr_h
+#if __cplusplus < 201103L
 #ifdef nullptr
 #undef nullptr
 #endif
@@ -24,4 +25,5 @@ private:
 #endif
 
 #define NULL nullptr
+#endif//__cplusplus < 201103L
 #endif//awstd_nullptr_h
