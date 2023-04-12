@@ -6,11 +6,12 @@
 #include <cstring>
 #include <algorithm>
 
-#include "type_traits"
+#include "../C++/config.h"
+#include "type_traits.h"
 
 namespace awstd {
 template<size_t N>
-inline /*constexpr*/ size_t stringsize(const char (&array)[N])
+inline aw_constexpr size_t stringsize(const char (&array)[N])
 {
 	size_t n = N;
 	while (n && !array[n-1]) --n;
@@ -276,9 +277,7 @@ private:
 	char const* _data;
 	size_t _size;
 };
-} // namespace awstd
 
-namespace awstd {
 inline std::ostream& operator<<(std::ostream& os, string_view sv)
 {
 	if (!sv.empty()) os.write(sv.data(), sv.size());

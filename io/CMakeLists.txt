@@ -29,4 +29,6 @@ aw_add_library(awio SHARED
 )
 
 target_compile_definitions(awio PRIVATE AW_MODULE_IO)
-target_link_libraries(awio awutils)
+target_link_libraries(awio
+	awutils
+	awstd)

@@ -55,6 +55,7 @@ target_link_libraries(awassert
 		awutils
 		awtypes
 		awstring
+		awstd
 	PRIVATE
 		awplatform # TODO: remove dependency on awplatform
 	)

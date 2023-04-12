@@ -8,7 +8,7 @@
 #include <aw/meta/pp/separators.h>
 #include <aw/meta/pp/tuple.h>
 
-#include <awstd/source_location.h>
+#include <awstd/source_location>
 
 #ifndef aw_default_assert_level
 #define aw_default_assert_level release

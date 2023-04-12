@@ -54,6 +54,7 @@ endif()
 include(aw-common)
 
 add_subdirectory(awlib)
+add_subdirectory(awstd)
 add_subdirectory(meta)
 add_subdirectory(algorithm)
 add_subdirectory(math)

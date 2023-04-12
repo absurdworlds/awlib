@@ -6,7 +6,6 @@ aw_add_test(test_meta
 	find_index.c++
 	find_type.c++
 	fold.c++
-	source_location.c++
 	pp/macro.c++
 	pp/tuple.c++
 	pp/foldl.c++
