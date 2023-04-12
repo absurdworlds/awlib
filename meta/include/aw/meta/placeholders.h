@@ -14,6 +14,7 @@ namespace aw {
  */
 struct _1 {};
 struct _2 {};
+struct _3 {};
 /*\}*/
 
 namespace meta {

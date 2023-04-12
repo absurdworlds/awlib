@@ -1,6 +1,8 @@
 aw_add_test(test_meta
 	SOURCES
+	main.c++
 	at_index.c++
+	expand.c++
 	find_index.c++
 	find_type.c++
 	source_location.c++
