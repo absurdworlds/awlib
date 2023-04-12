@@ -56,7 +56,10 @@ template<class Base, class Derived>
 constexpr auto is_base_of = std::is_base_of<Base,Derived>::value;
 
 template<class A, class B>
-constexpr auto is_same = std::is_same<A,B>::value;
+constexpr auto is_same [[deprecated("Use is_same_v")]] = std::is_same<A,B>::value;
+
+template<class A, class B>
+constexpr auto is_same_v = std::is_same<A,B>::value;
 
 template<typename T>
 constexpr bool is_const = std::is_const<T>::value;

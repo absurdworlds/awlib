@@ -10,6 +10,11 @@
 static_assert(false, "Do not include this file directly.");
 #endif//aw_types_variant_h
 
+#include <aw/types/traits/basic_traits.h>
+#include <aw/meta/conditional.h>
+#include <aw/meta/list_ops.h>
+#include <aw/meta/index_of.h>
+#include <aw/meta/at_index.h>
 
 namespace aw {
 //
@@ -110,7 +115,7 @@ struct construct_t<T> {
 template<typename...Os,typename...Ts>
 static void assert_subset(variant<Os...> const&, variant<Ts...> const&)
 {
-	static_assert(!is_same<variant<Os...>, variant<Ts...>>,
+	static_assert(!is_same_v<variant<Os...>, variant<Ts...>>,
 	              "Non-template overload should've been used.");
 	static_assert(is_subset<meta::list<Os...>, meta::list<Ts...>>,
 	              "Other variant type must be a subset.");

@@ -14,10 +14,10 @@
 namespace aw {
 /*! Check if type T is present in parameter pack Ts */
 template <class T, typename... Ts>
-constexpr bool is_in_pack      = (is_same<T,Ts> || ...);
+constexpr bool is_in_pack      = (is_same_v<T,Ts> || ...);
 /*! Count how many times T occurs in parameter pack Ts */
 template <class T, typename... Ts>
-constexpr size_t count_in_pack = (size_t(is_same<T,Ts>) + ...);
+constexpr size_t count_in_pack = (size_t(is_same_v<T,Ts>) + ...);
 
 namespace meta {
 template<typename F, typename...Ts>

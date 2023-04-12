@@ -4,9 +4,16 @@
 #include <type_traits>
 namespace aw {
 static_assert(
-	is_same<
+	is_same_v<
 		meta::find_type< std::is_same<aw::_1,int>, void,void,void,int,void,float,void >,
 		meta::list<int,void,float,void>
+	>
+);
+
+static_assert(
+	is_same_v<
+		find_type< std::is_same<aw::_1,int>, void,void,void,int,void,float,void >,
+		int
 	>
 );
 

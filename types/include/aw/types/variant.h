@@ -8,11 +8,6 @@
  */
 #ifndef aw_types_variant_h
 #define aw_types_variant_h
-#include <aw/types/traits/basic_traits.h>
-#include <aw/meta/conditional.h>
-#include <aw/meta/list_ops.h>
-#include <aw/meta/index_of.h>
-#include <aw/meta/at_index.h>
 #include <algorithm>
 #include <cassert>
 
