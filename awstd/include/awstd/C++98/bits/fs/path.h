@@ -8,7 +8,15 @@
  */
 #ifdef aw_utility_fallback_filesystem_h
 #include <string_view>
+#include <awstd/_c++config>
 #include <aw/C++98/utility/unicode/convert.h>
+
+//------------------------------------------------------------------------------
+#ifdef AWSTD_MODULE_FS
+#define AW_FS_EXP AW_EXPORT
+#else
+#define AW_FS_EXP AW_IMPORT
+#endif
 
 namespace awstd {
 namespace filesystem {
