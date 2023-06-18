@@ -70,9 +70,9 @@ Test(utf8toutf32)
 }
 Test(invalid_unicode_utf8_with_error)
 {
-	const std::u8string invalid_utf8_strings[] = {
-		u8"\xC3\x30", // Invalid 2-byte sequence
-		u8"\xF0\xBF\xC0\xBF" // Invalid 4-byte sequence
+	const std::string invalid_utf8_strings[] = {
+		"\xC3\x30", // Invalid 2-byte sequence
+		"\xF0\xBF\xC0\xBF" // Invalid 4-byte sequence
 	};
 
 	for (const auto& invalid_utf8 : invalid_utf8_strings) {
