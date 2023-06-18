@@ -66,7 +66,7 @@ auto convert(Input const& str, In_enc input_codec, Out_enc output_codec, parser_
 	while (begin != end) {
 		code_point cp = invalid;
 
-		begin = input_codec.template decode(begin, end, cp);
+		begin = input_codec.decode(begin, end, cp);
 		if ( !is_valid_code_point(cp) ) {
 			if (params.error)
 				*params.error = true;
@@ -74,7 +74,7 @@ auto convert(Input const& str, In_enc input_codec, Out_enc output_codec, parser_
 				return result;
 			continue;
 		}
-		out   = output_codec.template encode(cp, out);
+		out   = output_codec.encode(cp, out);
 	}
 
 	return result;
