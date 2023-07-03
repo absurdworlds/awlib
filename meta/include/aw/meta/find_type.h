@@ -19,7 +19,7 @@ namespace _impl {
 template<typename Pred>
 struct find_type {
 	template<typename T>
-	using F = aw::expand<Pred, T>;
+	using F = aw::expand_r<Pred, T>;
 
 	template <typename...Ts>
 	struct result {

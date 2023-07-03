@@ -8,10 +8,6 @@
  */
 #ifndef aw_meta_fold_h
 #define aw_meta_fold_h
-#include <limits>
-#include <aw/types/types.h>
-#include <aw/meta/list_ops.h>
-#include <aw/meta/conditional.h>
 namespace aw {
 namespace meta {
 

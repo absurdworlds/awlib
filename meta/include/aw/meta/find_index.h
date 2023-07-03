@@ -13,17 +13,10 @@
 #include <aw/meta/expand.h>
 namespace aw {
 namespace _impl {
-/*
-template<typename Pred>
-struct find_index;
-template<template <typename...> class Pred, typename...Args>
-struct find_index<Pred<Args...>> {
-*/
-
 template<typename Pred>
 struct find_index {
 	template<typename T>
-	using F = aw::expand<Pred, T>;
+	using F = aw::expand_r<Pred, T>;
 
 	template <size_t N, typename...Ts>
 	struct index;
@@ -37,29 +30,6 @@ struct find_index {
 	struct index<N,T,Ts...> {
 		static constexpr size_t value = F<T>::value ? N : index<N+1,Ts...>::value;
 	};
-
-	/* Doesn't work with GCC: c++/71954
-	template <size_t N, typename...Ts>
-	static constexpr size_t value = std::numeric_limits<size_t>::max();
-
-	template <size_t N, typename T>
-	static constexpr size_t value<N,T> = F<T>::value ? N : value<N>;
-
-	template <size_t N, typename T, typename...Ts>
-	static constexpr size_t value<N,T,Ts...> = F<T>::value ? N : value<N+1,Ts...>;
-	*/
-
-	/*
-	template <typename Head, typename...Tail>
-	static constexpr size_t get_index(size_t idx = 0)
-	{
-		if constexpr(F<Head>::value)
-			return idx;
-		else if constexpr(sizeof...(Tail) == 0)
-			return std::numeric_limits<size_t>::max();
-		else
-			return get_index<Tail...>(idx + 1);
-	}*/
 };
 } // namespace impl
 

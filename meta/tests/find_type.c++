@@ -17,6 +17,22 @@ static_assert(
 	>
 );
 
+struct A {};
+struct B : A {};
+struct C : B {};
+struct D : C {};
+struct U {};
+
+template<typename T1, typename T2>
+using not_related = std::negation<std::disjunction<std::is_base_of<T1, T2>, std::is_base_of<T2, T1>>>;
+
+static_assert(
+	is_same_v<
+		find_type< not_related<A, _1>, B, C, D, B, U, D >,
+		U
+	>
+);
+
 } // namespace aw
 
 #ifdef AW_MANUAL_TEST
