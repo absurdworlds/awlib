@@ -11,7 +11,7 @@ Test(lazy_split_empty) {
 	Checks {
 		auto v1 = string::split_by(s, "abcd");
 		auto l1 = string::lazy::split_by(s, "abcd");
-		auto v2 = string::cut(s, " ");
+		auto v2 = string::split(s, " ", string::keep_empty);
 		auto l2 = string::lazy::cut(s, " ");
 
 		bool equal1 = std::equal( begin(v1), end(v1), begin(l1), end(l1) );
@@ -27,7 +27,7 @@ Test(lazy_split_word) {
 	Postconditions {
 		auto v1 = string::split_by(s, " ");
 		auto l1 = string::lazy::split_by(s, " ");
-		auto v2 = string::cut(s, " ");
+		auto v2 = string::split(s, " ", string::keep_empty);
 		auto l2 = string::lazy::cut(s, " ");
 
 		bool equal1 = std::equal( begin(v1), end(v1), begin(l1), end(l1) );
@@ -46,14 +46,14 @@ Test(lazy_split_words) {
 
 	Checks {
 		v1 = string::split_by(s, ", ");
-		v2 = string::cut(s, " ");
-		v3 = string::cut(s, ", ");
+		v2 = string::split(s, " ", string::keep_empty);
+		v3 = string::split(s, ", ", string::keep_empty);
 	}
 
 	Postconditions {
 		auto v1 = string::split_by(s, ", ");
-		auto v2 = string::cut(s, " ");
-		auto v3 = string::cut(s, ", ");
+		auto v2 = string::split(s, " ", string::keep_empty);
+		auto v3 = string::split(s, ", ", string::keep_empty);
 		auto l1 = string::lazy::split_by(s, ", ");
 		auto l2 = string::lazy::cut(s, " ");
 		auto l3 = string::lazy::cut(s, ", ");

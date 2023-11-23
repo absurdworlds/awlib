@@ -64,10 +64,9 @@ template<typename Store>
 void split(string_view source, string_view delim, Store store)
 {
 	size_t pos1 = 0;
-	size_t pos2;
 
 	do {
-		pos2 = source.find(delim, pos1);
+		const auto pos2 = source.find(delim, pos1);
 
 		store( source.substr(pos1, pos2 - pos1) );
 
@@ -79,17 +78,20 @@ void split(string_view source, string_view delim, Store store)
 }
 } // namespace _impl
 
+constexpr enum class keep_empty_t {} keep_empty = {};
+constexpr enum class discard_empty_t {} discard_empty = {};
+
 /*!
  * Split delimited string into substrings,
  * discarding empty substrings.
  * Delimiter may consist of multiple characters.
  *
  * Examples:
- * `slice("x==y==z", "==")` -> `{"x", "y", "z"}`
- * `slice("/path/", "/", true)`  -> `{"path"}`
+ * `split("x==y==z", "==", discard_empty)` -> `{"x", "y", "z"}`
+ * `split("/path/", "/", discard_empty)`  -> `{"path"}`
  */
-inline std::vector<string_view>
-split(string_view source, string_view delim)
+inline auto split(string_view source, string_view delim, discard_empty_t /*behavior*/)
+	-> std::vector<string_view>
 {
 	std::vector<string_view> holder;
 	auto insert = [&] (string_view s) {
@@ -106,11 +108,11 @@ split(string_view source, string_view delim)
  * Delimiter may consist of multiple characters.
  *
  * Examples:
- * `explode("x==y==z", "==")` -> `{"x", "y", "z"}`
- * `explode("/path/", "/", false)` -> `{"", "path", ""}`
+ * `split("x==y==z", "==", keep_empty)` -> `{"x", "y", "z"}`
+ * `split("/path/", "/", keep_empty)` -> `{"", "path", ""}`
  */
-inline std::vector<string_view>
-cut(string_view source, string_view delim)
+inline auto split(string_view source, string_view delim, keep_empty_t /*behavior*/)
+	-> std::vector<string_view>
 {
 	std::vector<string_view> holder;
 	auto insert = [&] (string_view s) {
@@ -119,6 +121,37 @@ cut(string_view source, string_view delim)
 	_impl::split(source, delim, insert);
 	return holder;
 }
+
+enum class split_behavior {
+	keep_empty,
+	discard_empty,
+};
+
+/*!
+ * Same as previous split, but allows to control behavior at run-time.
+ */
+inline auto split(string_view source, string_view delim, split_behavior behavior)
+	-> std::vector<string_view>
+{
+	if (behavior == split_behavior::discard_empty)
+		return split(source, delim, discard_empty);
+	if (behavior == split_behavior::keep_empty)
+		return split(source, delim, keep_empty);
+	// unreachable
+	return {};
+}
+
+inline std::vector<string_view> split(string_view source, string_view delim)
+{
+	return split(source, delim, discard_empty);
+}
+
+[[deprecated("use aw::string::split(source, delim, aw::string::keep_empty)")]]
+inline std::vector<string_view> cut(string_view source, string_view delim)
+{
+	return split(source, delim, keep_empty);
+}
+
 } // namespace string
 } // namespace aw
 #endif//aw_string_split_h
