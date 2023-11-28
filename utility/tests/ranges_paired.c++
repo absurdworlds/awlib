@@ -20,4 +20,16 @@ Test(paired_test) {
 	TestEqual(result1, vec1);
 	TestEqual(result2, vec2);
 }
+
+Test(paired_ref) {
+	std::vector<int> vec1{ 1, 2, 3, 4, 5, 6, 7 };
+	std::vector<size_t> vec2(vec1.size());
+
+	for (auto [v1, v2] : paired(vec1, vec2)) {
+		v2 = static_cast<size_t>(v1) | 0x1;
+	}
+
+	const std::vector<size_t> expected({ 1, 3, 3, 5, 5, 7, 7 });
+	TestEqual(vec2, expected);
+}
 } // namespace aw

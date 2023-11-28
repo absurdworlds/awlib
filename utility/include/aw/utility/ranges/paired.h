@@ -43,9 +43,8 @@ public:
 
 	constexpr bool operator!=(sentinel const& other)
 	{
-		// Unsafe!
-		//return iters != other.iters;
-		// && is used here to accomodate for ranges of different lengths
+		// If ranges have different lengths, we need to stop
+		// at the end of the shortest range, && here is NOT a mistake
 		return iters.first != other.first &&
 		       iters.second != other.second;
 	}
