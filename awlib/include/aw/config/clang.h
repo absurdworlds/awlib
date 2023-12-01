@@ -8,7 +8,11 @@
  */
 #ifndef aw_compiler_setup_2
 #define aw_compiler_setup_2
+#ifdef _MSC_VER
+#define AW_COMPILER AW_COMPILER_CLANG_CL
+#else
 #define AW_COMPILER AW_COMPILER_CLANG
+#endif
 // TODO: apple clang version bullshit
 #define AW_CVER_X __clang_major__
 #define AW_CVER_Y __clang_minor__

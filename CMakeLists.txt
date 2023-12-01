@@ -22,7 +22,7 @@ set(AW_CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/awlib/cmake")
 
 list(APPEND CMAKE_MODULE_PATH ${AW_CMAKE_MODULE_PATH})
 
-if (MSVC)
+if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
 	add_compile_options(
 		# multicore build by default
 		"/MP"

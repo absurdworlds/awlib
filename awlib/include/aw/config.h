@@ -22,10 +22,11 @@
 	(((major) << 0x10000) + ((minor) << 0x100) + (patch))
 
 /**** DEFINITIONS ****/
-#define AW_COMPILER_GCC     1
-#define AW_COMPILER_CLANG   2
-#define AW_COMPILER_MSVC    3
-#define AW_COMPILER_UNKNOWN 0
+#define AW_COMPILER_GCC      1
+#define AW_COMPILER_CLANG    2
+#define AW_COMPILER_CLANG_CL 3
+#define AW_COMPILER_MSVC     4
+#define AW_COMPILER_UNKNOWN  0
 
 #define AW_ARCH_i686   686
 #define AW_ARCH_x86_64 8664
