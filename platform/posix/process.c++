@@ -20,8 +20,11 @@
 #include <sys/wait.h>
 #include <spawn.h>
 #include <unistd.h>
+#include <signal.h>
 
-//extern char** environ;
+#ifdef __APPLE__
+extern char** environ;
+#endif
 
 namespace aw::platform::posix {
 AW_PLATFORM_EXP

@@ -7,7 +7,7 @@
 #include <aw/types/types.h>
 #include <aw/config.h>
 
-#if (AW_PLATFORM == AW_PLATFORM_APPLE)
+#if (AW_PLATFORM_SPECIFIC == AW_PLATFORM_APPLE)
 typedef void *GLhandleARB;
 #else
 typedef unsigned int GLhandleARB;

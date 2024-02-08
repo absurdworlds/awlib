@@ -11,6 +11,7 @@
 #include <new>
 #include <memory>
 #include <utility>
+#include <algorithm>
 
 #include <aw/types/types.h>
 namespace aw::memory {

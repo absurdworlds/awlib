@@ -25,7 +25,7 @@ struct Range {
 		using value_type = T;
 		using reference  = T&;
 		using pointer    = T*;
-		using iterator_category = std::input_iterator_tag;
+		using iterator_category = std::bidirectional_iterator_tag;
 
 		iterator(value_type v)
 			: value(v)

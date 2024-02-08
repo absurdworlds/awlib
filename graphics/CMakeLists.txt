@@ -25,9 +25,11 @@ if (WIN32)
         PRIVATE
             OpenGL::GL
 		awplatform)
-endif()
-
-if (UNIX)
+elseif (APPLE)
+    target_link_libraries(awgraphics
+        PRIVATE
+            OpenGL::GL)
+elseif (UNIX)
     target_link_libraries(awgraphics
         PRIVATE
             OpenGL::OpenGL

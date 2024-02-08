@@ -4,7 +4,7 @@
  */
 #include <aw/graphics/gl/loader.h>
 
-#ifdef AW_SUPPORT_PLATOFRM_APPLE
+#ifdef AW_SUPPORT_PLATFORM_APPLE
 #include <dlfcn.h>
 
 namespace aw::gl::apple {
@@ -18,12 +18,13 @@ unknown_fn* get_proc_address(const char* name)
 			return nullptr;
 	}
 
-	return dlsym(image, name);
+	auto* symaddr = dlsym(image, name);
+	return reinterpret_cast<unknown_fn*>(symaddr);
 }
 } // namespace aw::gl::apple
-#endif//AW_HAS_PLATOFRM_APPLE
+#endif//AW_SUPPORT_PLATFORM_APPLE
 
-#ifdef AW_SUPPORT_PLATOFRM_SUN
+#ifdef AW_SUPPORT_PLATFORM_SUN
 #include <dlfcn.h>
 #include <stdio.h>
 

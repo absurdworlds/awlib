@@ -13,17 +13,17 @@
 namespace aw {
 namespace gl {
 
-#if (AW_SUPPORT_PLATOFRM_APPLE)
+#if (AW_SUPPORT_PLATFORM_APPLE)
 namespace apple {
 unknown_fn* get_proc_address(const char* name);
 }
-#endif//AW_SUPPORT_PLATOFRM_APPLE
+#endif//AW_SUPPORT_PLATFORM_APPLE
 
-#if (AW_SUPPORT_PLATOFRM_SUN)
+#if (AW_SUPPORT_PLATFORM_SUN)
 namespace sun {
 unknown_fn* get_proc_address(const char* name);
 }
-#endif//AW_SUPPORT_PLATOFRM_SUN
+#endif//AW_SUPPORT_PLATFORM_SUN
 
 } // namespace gl
 
@@ -32,24 +32,24 @@ unknown_fn* get_proc_address(const char* name);
 namespace wgl {
 unknown_fn* get_proc_address(const char* name);
 }
-#endif//AW_SUPPORT_PLATOFRM_WIN32
+#endif//AW_SUPPORT_PLATFORM_WIN32
 
 // TODO: __has_include(<GL/glx.h>)
 #if (AW_SUPPORT_PLATFORM_X11)
 namespace glx {
 unknown_fn* get_proc_address(const char* name);
 }
-#endif//AW_SUPPORT_PLATOFRM_X11
+#endif//AW_SUPPORT_PLATFORM_X11
 
 namespace gl {
 template <typename R, typename...Args>
 void get_proc(R(*& func)(Args...), char const* name)
 {
-#if (AW_PLATFORM_SPECIFIX == AW_PLATFORM_APPLE)
+#if AW_SUPPORT_PLATFORM_APPLE
 	using apple::get_proc_address;
-#elif (AW_PLATFORM == AW_PLATFORM_WIN32)
+#elif AW_SUPPORT_PLATFORM_WIN32
 	using wgl::get_proc_address;
-#elif (AW_PLATFORM == AW_PLATFORM_POSIX)
+#elif AW_SUPPORT_PLATFORM_X11
 	using glx::get_proc_address;
 #endif
 	func = reinterpret_cast<R(*)(Args...)>( get_proc_address(name) );

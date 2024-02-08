@@ -1,6 +1,8 @@
 #ifndef aw_assert_handler_h
 #define aw_assert_handler_h
 
+#include <string>
+
 #include <aw/types/string_view.h>
 #include <aw/string/format.h>
 
