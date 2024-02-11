@@ -62,7 +62,7 @@ struct object {
 		program[mtl.model_to_camera] = campos * pos;
 		//program["transform"] = pos;
 		//program["campos"] = campos;
-		//program["curwa"] = radius;
+		program["curwa"] = radius;
 
 		for (auto obj : model.objects)
 			gl::draw_elements_base_vertex(GL_TRIANGLES, obj.num_elements, GL_UNSIGNED_INT, 0, obj.offset);

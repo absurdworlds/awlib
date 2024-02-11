@@ -1,86 +1,63 @@
-3
-shaders/vert6.glsl shaders/frag1.glsl
+4
+shaders/earth.glsl shaders/frag1.glsl
 shaders/v_tex.glsl shaders/f_tex.glsl
 shaders/v_txa.glsl shaders/f_txa.glsl
-shaders/vert6.glsl shaders/frag1r.glsl
-shaders/vert6.glsl shaders/frag1g.glsl
-shaders/vert6.glsl shaders/frag1b.glsl
-8
-молдаване/молдавадлом.obj
+shaders/vert6.glsl shaders/frag1.glsl
+3
+models/plane6301.obj
 models/butruck.obj
 models/cylinder.obj
 models/kusok2.obj
 models/testworld.obj
 models/box.obj
 models/mattest.obj
-models/cone2.obj
-21
-2 5
-0 0 -10
+15
+0 0
+0 -2 0
 0 0 0
-2 0
-0 0 0
-0 0 0
-0 5
+0 2
 0 0 0
 0 0 0
-2 6
-0 -5 0
+0 1
+0 2 0
 0 0 0
-
+0 1
+0 4 0
+0 0 0
+0 1
+0 6 0
+0 0 0
+0 1
+0 8 0
+0 0 0
+0 1
+0 10 0
+0 0 0
+0 1
+0 12 0
+0 0 0
 1 1
-0 3 0
-0 0 0
-1 1
-0 3 -10
-0 0 0
-1 1
-0 3 -20
-0 0 0
-1 1
-300 15.3 -2560
+300 15.6 -2560
 0 57 0
 
 0 1
-4 3 0
+0 14 0
 0 0 0
-0 2
-4 3 20
-0 180 0
-0 3
-0 5 20
+0 1
+0 16 0
 0 0 0
-0 3
-10 5 20
-0 45 0
-
-0 2
--23 4 -75
+0 1
+0 18 0
 0 0 0
-0 2
--28 4.2 -78
+0 1
+0 20 0
 0 0 0
-0 2
--32 4.35 -80
+0 1
+0 22 0
 0 0 0
-
-0 7
-0 -20 0
+0 1
+0 24 0
 0 0 0
-
-0 7
-0 0 0
-0 0 0
-
-0 7
-2 30 0
-0 90 0
-3 7
-0 30 -2
-0 180 0
-4 7
--2 30 0
-0 270 0
-5 7
-0 30 2
+0 1
+0 26 0
 0 0 0
