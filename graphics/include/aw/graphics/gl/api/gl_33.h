@@ -88,26 +88,26 @@ AW_GRAPHICS_EXP extern void (AWGL_API* tex_parameter_iv)(GLenum target, GLenum p
 AW_GRAPHICS_EXP extern void (AWGL_API* viewport)(GLint x, GLint y, GLsizei width, GLsizei height);
 
 /* gl version 1.1 */
-extern void (AWGL_API* bind_texture)(GLenum target, GLuint texture);
-extern void (AWGL_API* copy_tex_image_1d)(GLenum target, GLint level, GLenum internalformat, GLint x, GLint y, GLsizei width, GLint border);
-extern void (AWGL_API* copy_tex_image_2d)(GLenum target, GLint level, GLenum internalformat, GLint x, GLint y, GLsizei width, GLsizei height, GLint border);
-extern void (AWGL_API* copy_tex_sub_image_1d)(GLenum target, GLint level, GLint xoffset, GLint x, GLint y, GLsizei width);
-extern void (AWGL_API* copy_tex_sub_image_2d)(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint x, GLint y, GLsizei width, GLsizei height);
-extern void (AWGL_API* delete_textures)(GLsizei n, const GLuint * textures);
-extern void (AWGL_API* draw_arrays)(GLenum mode, GLint first, GLsizei count);
-extern void (AWGL_API* draw_elements)(GLenum mode, GLsizei count, GLenum type, const void * indices);
-extern void (AWGL_API* gen_textures)(GLsizei n, GLuint * textures);
-extern void (AWGL_API* get_pointer_v)(GLenum pname, void ** params);
-extern GLboolean (AWGL_API* is_texture)(GLuint texture);
-extern void (AWGL_API* polygon_offset)(GLfloat factor, GLfloat units);
-extern void (AWGL_API* tex_sub_image_1d)(GLenum target, GLint level, GLint xoffset, GLsizei width, GLenum format, GLenum type, const void * pixels);
-extern void (AWGL_API* tex_sub_image_2d)(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height, GLenum format, GLenum type, const void * pixels);
+AW_GRAPHICS_EXP extern void (AWGL_API* bind_texture)(GLenum target, GLuint texture);
+AW_GRAPHICS_EXP extern void (AWGL_API* copy_tex_image_1d)(GLenum target, GLint level, GLenum internalformat, GLint x, GLint y, GLsizei width, GLint border);
+AW_GRAPHICS_EXP extern void (AWGL_API* copy_tex_image_2d)(GLenum target, GLint level, GLenum internalformat, GLint x, GLint y, GLsizei width, GLsizei height, GLint border);
+AW_GRAPHICS_EXP extern void (AWGL_API* copy_tex_sub_image_1d)(GLenum target, GLint level, GLint xoffset, GLint x, GLint y, GLsizei width);
+AW_GRAPHICS_EXP extern void (AWGL_API* copy_tex_sub_image_2d)(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint x, GLint y, GLsizei width, GLsizei height);
+AW_GRAPHICS_EXP extern void (AWGL_API* delete_textures)(GLsizei n, const GLuint * textures);
+AW_GRAPHICS_EXP extern void (AWGL_API* draw_arrays)(GLenum mode, GLint first, GLsizei count);
+AW_GRAPHICS_EXP extern void (AWGL_API* draw_elements)(GLenum mode, GLsizei count, GLenum type, const void * indices);
+AW_GRAPHICS_EXP extern void (AWGL_API* gen_textures)(GLsizei n, GLuint * textures);
+AW_GRAPHICS_EXP extern void (AWGL_API* get_pointer_v)(GLenum pname, void ** params);
+AW_GRAPHICS_EXP extern GLboolean (AWGL_API* is_texture)(GLuint texture);
+AW_GRAPHICS_EXP extern void (AWGL_API* polygon_offset)(GLfloat factor, GLfloat units);
+AW_GRAPHICS_EXP extern void (AWGL_API* tex_sub_image_1d)(GLenum target, GLint level, GLint xoffset, GLsizei width, GLenum format, GLenum type, const void * pixels);
+AW_GRAPHICS_EXP extern void (AWGL_API* tex_sub_image_2d)(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height, GLenum format, GLenum type, const void * pixels);
 
 /* gl version 1.2 */
-extern void (AWGL_API* copy_tex_sub_image_3d)(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLint x, GLint y, GLsizei width, GLsizei height);
-extern void (AWGL_API* draw_range_elements)(GLenum mode, GLuint start, GLuint end, GLsizei count, GLenum type, const void * indices);
-extern void (AWGL_API* tex_image_3d)(GLenum target, GLint level, GLint internalformat, GLsizei width, GLsizei height, GLsizei depth, GLint border, GLenum format, GLenum type, const void * pixels);
-extern void (AWGL_API* tex_sub_image_3d)(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width, GLsizei height, GLsizei depth, GLenum format, GLenum type, const void * pixels);
+AW_GRAPHICS_EXP extern void (AWGL_API* copy_tex_sub_image_3d)(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLint x, GLint y, GLsizei width, GLsizei height);
+AW_GRAPHICS_EXP extern void (AWGL_API* draw_range_elements)(GLenum mode, GLuint start, GLuint end, GLsizei count, GLenum type, const void * indices);
+AW_GRAPHICS_EXP extern void (AWGL_API* tex_image_3d)(GLenum target, GLint level, GLint internalformat, GLsizei width, GLsizei height, GLsizei depth, GLint border, GLenum format, GLenum type, const void * pixels);
+AW_GRAPHICS_EXP extern void (AWGL_API* tex_sub_image_3d)(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width, GLsizei height, GLsizei depth, GLenum format, GLenum type, const void * pixels);
 
 /* gl version 1.3 */
 AW_GRAPHICS_EXP extern void (AWGL_API* active_texture)(GLenum texture);

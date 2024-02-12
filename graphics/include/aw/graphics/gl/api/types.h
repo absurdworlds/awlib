@@ -4,6 +4,7 @@
  */
 #ifndef aw_gl_types
 #define aw_gl_types
+#include <aw/graphics/export.h>
 #include <aw/types/types.h>
 #include <aw/config.h>
 

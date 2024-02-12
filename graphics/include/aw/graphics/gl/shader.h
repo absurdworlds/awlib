@@ -12,6 +12,7 @@
 #include <aw/graphics/gl/awgl/shader_enum.h>
 #include <aw/types/string_view.h>
 #include <aw/types/optional.h>
+#include <aw/graphics/export.h>
 namespace aw {
 namespace gl3 {
 using gl::shader_handle;
@@ -21,7 +22,7 @@ using gl::shader_handle;
 // — what infomation to store?
 // — if I make it possible to make invalid shader, do I also provide methods
 // to recompile shader?
-struct shader {
+struct AW_GRAPHICS_EXP shader {
 
 	shader(gl::shader_type type);
 	shader(gl::shader_type type, string_view source)
