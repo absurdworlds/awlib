@@ -10,6 +10,8 @@ aw_add_library(awobj STATIC
  #AW_MANUAL_TEST
 #target_compile_definitions(awobj PRIVATE AW_MODULE_GRAPHICS)
 
+aw_export_dependency(PNG)
+
 target_link_libraries(awobj
     PUBLIC  awio awlog
     PRIVATE PNG::PNG)
