@@ -7,9 +7,11 @@ set(awgraphics_SOURCES
     gl3/texture.c++ gl3/model.c++ gl3/material.c++ gl3/render_context.c++)
 
 aw_add_library(awgraphics SHARED
-    GLOB_HEADERS
-    SOURCES
-    ${awgraphics_SOURCES})
+	GLOB_HEADERS
+	SOURCES
+		${awgraphics_SOURCES}
+	EXPORT_NAME
+		graphics)
 
 target_link_libraries(awgraphics
     PUBLIC
