@@ -52,9 +52,17 @@ int registry::run(report* reporter)
 {
 	auto& vec = static_object<_ctxs>::instance().ctxs;
 
+	reporter->begin_tests();
+
+	int total = 0;
+	for (auto& ctx : vec)
+		total += ctx->test_count();
+
 	int res = 0;
 	for (auto& ctx : vec)
 		res += ctx->run(reporter);
+
+	reporter->end_tests(total, res);
 
 	return res > 0xFF ? 0xFF : res;
 }
@@ -72,7 +80,7 @@ int main(int n_param, char** parameters)
 
 	report* _report = config.use_junit ? (report*)&junit : (report*)&classic;
 
-       	int fail_count = aw::test::registry::run(_report);
+	int fail_count = aw::test::registry::run(_report);
 
 	return config.no_exitcode ? 0 : fail_count;
 }

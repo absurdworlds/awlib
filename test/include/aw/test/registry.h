@@ -91,6 +91,11 @@ struct context {
 		tests.push_back(std::move(tst));
 	}
 
+	int test_count()
+	{
+		return tests.size();
+	}
+
 private:
 	inline static void segvhandler(int signum);
 

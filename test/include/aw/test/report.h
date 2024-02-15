@@ -15,6 +15,9 @@ namespace aw::test {
 
 class report {
 public:
+	virtual void begin_tests() = 0;
+	virtual void end_tests(int total, int failed) = 0;
+
 	virtual void begin_suite(const char* name, int test_count) = 0;
 	virtual void end_suite() = 0;
 

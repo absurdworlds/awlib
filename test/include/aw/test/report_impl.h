@@ -16,6 +16,15 @@ namespace aw::test {
 
 class report_classic : public report {
 public:
+	void begin_tests() override
+	{
+		println(bold, "[***] begin tests");
+	}
+	void end_tests(int total, int failed) override
+	{
+		println(bold, "[***] end tests: ", total - failed, '/', total, " succeeded");
+	}
+
 	void begin_suite(const char* name, int test_count) override
 	{
 		filename  = name;
@@ -27,7 +36,7 @@ public:
 		println(bold, '[', filename, ']', ' ', reset, "running tests");
 	}
 
-	void end_suite()
+	void end_suite() override
 	{
 		print(bold, '[', filename, ']', ' ', reset);
 		print("tests done, failed: ");
@@ -93,6 +102,9 @@ private:
 
 class report_junit : public report {
 public:
+	void begin_tests() override {}
+	void end_tests(int total, int failed) override {}
+
 	void begin_suite(const char* name, int test_count) override
 	{
 		test_cases.clear();
@@ -102,7 +114,7 @@ public:
 		this->total = test_count;
 	}
 
-	void end_suite()
+	void end_suite() override
 	{
 		int skipped = total - succeeded - failed;
 		print("<testsuite name=\"", name, "\" tests=\"", total, "\" errors=\"0\" ");
