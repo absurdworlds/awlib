@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017  hedede <haddayn@gmail.com>
+ * Copyright (C) 2017-2024 hedede <haddayn@gmail.com>
  *
  * License LGPLv3 or later:
  * GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
@@ -8,10 +8,12 @@
  */
 #ifndef aw_graphics_gl3_command_list_h
 #define aw_graphics_gl3_command_list_h
-#include <vector>
 #include <aw/types/strip.h>
-namespace aw {
-namespace gl3 {
+#include <aw/types/containers/any_buffer.h>
+
+#include <functional>
+#include <vector>
+namespace aw::gl3 {
 struct render_context;
 
 
@@ -21,8 +23,8 @@ struct render_context;
  */
 struct command_storage {
 	static constexpr size_t max_size = 32;
-	using storage_type = std::aligned_storage<max_size, alignof(void*)>::type;
-	using invoke_func  = void(void*, render_context& ctx);
+	using storage_type = any_buffer<max_size>;
+	using invoke_func  = void(storage_type&, render_context& ctx);
 
 	template<typename T>
 	command_storage(T&& t)
@@ -34,26 +36,21 @@ struct command_storage {
 	void assign( T&& t )
 	{
 		static_assert(std::is_trivially_destructible_v<T>);
-		static_assert( alignof(T) <= alignof(void*) );
-		static_assert( sizeof(T)  <= max_size );
-		using cmd_type = remove_reference<T>;
-		new (&data) cmd_type{ std::forward<T>(t) };
-		invoke  = +[] (void* data, render_context& ctx)
+		storage.emplace<std::remove_cvref_t<T>>(std::forward<T>(t));
+		invoke  = +[] (storage_type& data, render_context& ctx)
 		{
-			static_cast<cmd_type*>(data)->operator()(ctx);
+			std::invoke(data.get<T&>(), ctx);
 		};
 	}
 
 	void operator()( render_context& ctx )
 	{
-		invoke(&data, ctx);
+		invoke(storage, ctx);
 	}
 
-	invoke_func*  invoke;
-	storage_type  data;
+	invoke_func* invoke;
+	storage_type storage;
 };
-
-
 
 
 struct command_list {
@@ -71,6 +68,5 @@ struct command_list {
 			cmd(ctx);
 	}
 };
-} // namespace gl3
-} // namespace aw
+} // namespace aw::gl3
 #endif//aw_graphics_gl3_command_list_h
