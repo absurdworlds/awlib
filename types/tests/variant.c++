@@ -172,5 +172,3 @@ Test(variant_construct_in_place) {
 		TestEqual(*vary.get<char const*>(), "asdasd"s);
 	}
 }
-
-#include <aw/test/main.h>

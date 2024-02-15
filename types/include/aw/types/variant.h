@@ -12,6 +12,7 @@
 #include <cassert>
 
 #include <aw/types/bits/variant.h>
+#include <aw/types/containers/any_buffer.h>
 
 namespace aw {
 /*!
@@ -321,7 +322,7 @@ private:
 	{
 		static_assert(index_of<T> != invalid, "Invalid type");
 		index = index_of<T>;
-		new (&storage) T(std::forward<Args>(args)...);
+		storage.template emplace<T>(std::forward<Args>(args)...);
 	}
 
 	/*
@@ -341,25 +342,25 @@ private:
 	template<typename T>
 	T* get_ptr()
 	{
-		return reinterpret_cast<T*>(&storage);
+		return storage.template ptr<T>();
 	}
 
 	template<typename T>
 	T const* get_ptr() const
 	{
-		return reinterpret_cast<T const*>(&storage);
+		return storage.template ptr<T>();
 	}
 
 	template<typename T>
 	T& get_ref()
 	{
-		return *get_ptr<T>();
+		return storage.template get<T>();
 	}
 
 	template<typename T>
 	T const& get_ref() const
 	{
-		return *get_ptr<T>();
+		return storage.template get<T>();
 	}
 	/* \} */
 
@@ -424,7 +425,7 @@ private:
 
 private:
 	// Storage
-	using Storage = typename std::aligned_storage<size, align>::type;
+	using Storage = any_buffer<size, align>;
 
 	index_t index = invalid;
 	Storage storage;
