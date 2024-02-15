@@ -10,15 +10,14 @@
 #define aw_graphics_gl3_render_context_h
 #include <aw/graphics/glsl/mat.h>
 
-namespace aw {
-namespace gl3 {
+namespace aw::gl3 {
 struct program;
 struct material;
 struct camera;
 struct render_context {
 	program*  active_program;
 	material* active_material;
-	camera*   active_camera;
+	mat4      projection;
 	mat4      camera_position;
 
 	void set_program( program& prg )

@@ -95,7 +95,7 @@ void initialize_scene()
 	cam.set_aspect_ratio(1.0f);
 	cam.set_fov( degrees<float>{90} );
 
-	ctx.active_camera = &cam;
+	ctx.projection = cam.projection_matrix();
 	ctx.camera_position = math::identity_matrix<float,4>;
 
 	common.emplace(common_block_idx, common_block_size);
