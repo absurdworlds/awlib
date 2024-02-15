@@ -14,8 +14,7 @@
 #include <aw/graphics/gl/texture.h>
 #include <aw/graphics/gl/resource_manager.h>
 #include <aw/graphics/export.h>
-namespace aw {
-namespace gl3 {
+namespace aw::gl3 {
 struct shader_source {
 	gl::shader_type type;
 	string_view     path;
@@ -52,6 +51,5 @@ struct AW_GRAPHICS_EXP material {
 struct material_manager : resource_manager<material> {
 };
 using material_ref = material_manager::reference;
-} // namespace gl3
-} // namespace aw
+} // namespace aw::gl3
 #endif//aw_graphics_gl3_material_manager_h

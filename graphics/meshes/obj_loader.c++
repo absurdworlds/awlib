@@ -237,7 +237,7 @@ mesh mesh::parse( io::input_stream& file )
 {
 	parser obj;
 	obj.parse( file );
-	return obj.result();;
+	return obj.result();
 }
 } // namespace obj
 } // namespace aw

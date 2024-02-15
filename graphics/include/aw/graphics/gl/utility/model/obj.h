@@ -13,8 +13,7 @@
 #include <aw/utility/ranges/ipairs.h>
 #include <map>
 #include <tuple>
-namespace aw {
-namespace gl3 {
+namespace aw::gl3 {
 inline model model_from_obj( obj::mesh const& data )
 {
 	unsigned last_index = 0;
@@ -107,7 +106,7 @@ inline model model_from_obj( obj::mesh const& data )
 
 	std::vector<float> soup;
 	soup.reserve(n*vd.format.attributes.size());
-       	soup.insert( end(soup), begin(verts),   end(verts) );
+	soup.insert( end(soup), begin(verts),   end(verts) );
 	soup.insert( end(soup), begin(normals), end(normals) );
 	soup.insert( end(soup), begin(tex),     end(tex) );
 	if (data.meshes.size() > 1)
@@ -122,6 +121,5 @@ inline model model_from_obj( obj::mesh const& data )
 	mesh_data md{ tris };
 	return { vd, md };
 }
-} // namespace gl3
-} // namespace aw
-#endif//aw_graphics_gl3_program_h
+} // namespace aw::gl3
+#endif//aw_graphics_model_obj_h

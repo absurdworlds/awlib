@@ -32,6 +32,5 @@ struct render_context {
 		active_material = &mtl;
 	}
 };
-} // namespace gl3
-} // namespace aw
+} // namespace aw::gl3
 #endif//aw_graphics_gl3_render_context_h
