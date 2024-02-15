@@ -23,24 +23,17 @@ struct command_storage {
 	static constexpr size_t max_size = 32;
 	using storage_type = std::aligned_storage<max_size, alignof(void*)>::type;
 	using invoke_func  = void(void*, render_context& ctx);
-	using generic_func  = void(void*);
 
 	template<typename T>
 	command_storage(T&& t)
 	{
-		insert(std::forward<T>(t));
+		assign(std::forward<T>(t));
 	}
 
 	template<typename T>
 	void assign( T&& t )
 	{
-		destroy(&data);
-		insert(std::forward<T>(t));
-	}
-
-	template<typename T>
-	void insert( T&& t )
-	{
+		static_assert(std::is_trivially_destructible_v<T>);
 		static_assert( alignof(T) <= alignof(void*) );
 		static_assert( sizeof(T)  <= max_size );
 		using cmd_type = remove_reference<T>;
@@ -48,10 +41,6 @@ struct command_storage {
 		invoke  = +[] (void* data, render_context& ctx)
 		{
 			static_cast<cmd_type*>(data)->operator()(ctx);
-		};
-		destroy = +[] (void* data)
-		{
-			static_cast<cmd_type*>(data)->~cmd_type();
 		};
 	}
 
@@ -61,7 +50,6 @@ struct command_storage {
 	}
 
 	invoke_func*  invoke;
-	generic_func* destroy;
 	storage_type  data;
 };
 
