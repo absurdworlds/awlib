@@ -1,14 +1,19 @@
 #include <aw/math/matrix4.h>
 #include <aw/math/matrix_compare.h>
-#include <aw/test/test.h>
 #include <aw/types/containers/any_buffer.h>
 #include <aw/utility/to_string/math/matrix.h>
 
+#include <aw/test/test.h>
+
+#include <utility>
+
 TestFile( "aw::any_buffer" );
+
+constexpr auto buf_size = std::max({ 32uz, sizeof(std::string) });
 
 Test(any_buffer_basic) {
 	using namespace std::string_literals;
-	aw::any_buffer<32> buf;
+	aw::any_buffer<buf_size> buf;
 	buf.emplace<std::string>("Test string!"s);
 	TestEqual(buf.get<std::string>(), "Test string!"s);
 }
