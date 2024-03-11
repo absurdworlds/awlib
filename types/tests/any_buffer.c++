@@ -9,7 +9,7 @@
 
 TestFile( "aw::any_buffer" );
 
-constexpr auto buf_size = std::max({ 32uz, sizeof(std::string) });
+constexpr auto buf_size = std::max({ size_t(32), sizeof(std::string) });
 
 Test(any_buffer_basic) {
 	using namespace std::string_literals;
