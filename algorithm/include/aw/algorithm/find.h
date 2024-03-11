@@ -24,9 +24,15 @@ struct is_not {
 };
 
 template<typename Iterator, typename T>
-Iterator find_not(Iterator begin, Iterator end, T const& val)
+Iterator find_not(Iterator begin, Iterator end, const T& val)
 {
 	return find_if(begin, end, is_not<T>{val});
+}
+
+template<typename Container, typename T = Container::value_type>
+auto find(Container& c, const T& val) -> decltype(c.begin())
+{
+	return find(begin(c), end(c), val);
 }
 } // namespace aw
 #endif//aw_algorithm_find_h

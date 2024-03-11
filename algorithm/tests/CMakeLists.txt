@@ -1,8 +1,10 @@
 aw_add_test(test_algo
 	SOURCES
-		split.c++ join.c++
+		common_prefix.c++
 		exchange.c++
-		common_prefix.c++)
+		join.c++
+		shift.c++
+		split.c++)
 
 target_link_libraries(test_algo
 	PRIVATE
