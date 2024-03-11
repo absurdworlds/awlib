@@ -154,7 +154,7 @@ struct _catch {
 } // namespace test
 } // namespace aw
 
-#define TestFile(name) namespace aw::test { namespace { context file_context{name}; } }
+#define TestFile(...) namespace aw::test { namespace { context file_context{__VA_ARGS__}; } }
 #define Test(name)     \
 	void run_test_##name(); \
 	const aw::test::register_test add_test_##name{#name, run_test_##name}; \

@@ -1,7 +1,7 @@
 #include <stdexcept>
-#include <aw/utility/test.h>
+#include <aw/test/test.h>
 
-TestFile( "test fail" );
+TestFile( "test fail", aw::test::negative );
 
 Test(always_fail0) { Checks { TestAssert(1 == 2); } }
 Test(always_fail1) { Checks { TestAssert(false); } }
@@ -19,5 +19,3 @@ Test(always_failc) { Checks { TestEqual(1, 2); } }
 Test(always_faild) { Checks { TestEqual(1, 2); } }
 Test(always_faile) { Checks { TestEqual(1, 2); } }
 Test(always_failf) { Checks { TestEqual(1, 2); } }
-
-#include <aw/test/test_runner.h>

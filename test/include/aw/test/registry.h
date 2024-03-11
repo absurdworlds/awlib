@@ -42,9 +42,17 @@ class registry {
 
 struct test_failed : std::exception {};
 
+constexpr struct negative_t {} negative;
+
 struct context {
 	context(char const* filename)
-	    : filename(filename)
+		: filename(filename)
+	{
+		registry::add(*this);
+	}
+
+	context(char const* filename, negative_t)
+		: filename(filename), negative(true)
 	{
 		registry::add(*this);
 	}
@@ -81,7 +89,7 @@ struct context {
 	void enter(stage st)
 	{
 		for (const auto& check : cur->checks)
-			if (!check)
+			if (!validate(check))
 				throw test_failed{};
 		cur->st = st;
 	}
@@ -94,6 +102,15 @@ struct context {
 	int test_count()
 	{
 		return tests.size();
+	}
+
+	bool validate(const check_report& check)
+	{
+		if (negative && check)
+			return false;
+		if (!negative && !check)
+			return false;
+		return true;
 	}
 
 private:
@@ -112,10 +129,19 @@ private:
 	inline void test_failure(report* _report);
 	inline void test_success(report* _report);
 
+	void report_test_failure(report* _report)
+	{
+		if (!negative)
+			test_failure(_report);
+		else
+			test_success(_report);
+	}
+
 private:
 	test_case* cur;
 	std::vector<test_case> tests;
 	unsigned failed = 0;
+	bool negative = false;
 };
 
 void context::test_failure(report* _report)
@@ -149,12 +175,12 @@ void context::run_test_case(test_case& test, report* _report)
 	catch (std::exception& e)
 	{
 		cur->checks.push_back(check_report{ false, "unhandled exception: "s + e.what() });
-		test_failure(_report);
+		report_test_failure(_report);
 	}
 	catch (...)
 	{
 		cur->checks.push_back(check_report{ false, "caught unknown exception" });
-		test_failure(_report);
+		report_test_failure(_report);
 	}
 }
 
