@@ -103,7 +103,7 @@ endfunction()
 
 
 function(aw_add_test NAME)
-	set(options)
+	set(options NEGATIVE)
 	set(arguments)
 	set(multivalue SOURCES PARAMS)
 	cmake_parse_arguments(PARSE_ARGV 1 ARG "${options}" "${arguments}" "${multivalue}")
@@ -113,4 +113,8 @@ function(aw_add_test NAME)
 		NAME ${NAME}
 		COMMAND ${NAME} ${ARG_PARAMS}
 		WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
+
+	if (ARG_NEGATIVE)
+		set_property(TEST ${NAME} PROPERTY WILL_FAIL true)
+	endif()
 endfunction()
