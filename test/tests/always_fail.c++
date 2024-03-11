@@ -14,7 +14,7 @@ Test(always_fail7) { Checks { TestCatch(std::logic_error, (void)0); } }
 Test(always_fail8) { Checks { TestCatch(std::logic_error, throw 2); } }
 Test(always_fail9) { Checks { TestCatch(std::logic_error, throw std::runtime_error{"a"}); } }
 Test(always_faila) { Checks { TestEqual(1, 2); } }
-Test(always_failb) { Checks { TestEqual(1, 2); } }
+Test(always_failb) { Checks { TestNEqual(1, 1); } }
 Test(always_failc) { Checks { TestEqual(1, 2); } }
 Test(always_faild) { Checks { TestEqual(1, 2); } }
 Test(always_faile) { Checks { TestEqual(1, 2); } }

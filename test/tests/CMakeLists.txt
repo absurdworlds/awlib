@@ -1,6 +1,7 @@
 aw_add_test(test_test
 	SOURCES
-		always_fail.c++)
+		always_fail.c++
+		assertions.c++)
 
 target_link_libraries(test_test
 	PRIVATE

@@ -84,7 +84,28 @@ struct equal {
 	std::string msg()
 	{
 		using namespace std::string_literals;
-		return vargs + ": "s + got + " == "s + expected;
+		return "expected equality: "s + vargs + ": "s + got + " != "s + expected;
+	}
+
+	char const* vargs;
+	std::string expected;
+	std::string got;
+};
+
+struct not_equal {
+	template<typename A, typename B>
+	bool operator()(A const& got, B const& expected)
+	{
+		using aw::to_string;
+		this->got      = to_string(got);
+		this->expected = to_string(expected);
+		return !(got == expected);
+	}
+
+	std::string msg()
+	{
+		using namespace std::string_literals;
+		return "expected inequality: "s + vargs + ":  "s + got + " == "s + expected;
 	}
 
 	char const* vargs;
@@ -167,6 +188,8 @@ struct _catch {
 #include <aw/meta/pp/macro.h>
 #define TestEqual(...) \
 aw::test::check(aw::test::equal{#__VA_ARGS__}, __VA_ARGS__)
+#define TestNEqual(...) \
+aw::test::check(aw::test::not_equal{#__VA_ARGS__}, __VA_ARGS__)
 #define TestEqualV(...) \
 aw::test::check(aw::test::equal_v{#__VA_ARGS__}, __VA_ARGS__)
 #define TestAssert(...) \
