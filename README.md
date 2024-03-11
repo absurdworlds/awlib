@@ -16,7 +16,7 @@ List of libraries that are currently in this collection:
 - thread: multi-threading primitives
 - archive (v3): header-only serialization library
 - doc: text-based data interchange format
-  sound: simple-to-use WAV file reader
+- sound: simple-to-use WAV file reader
 
 And a few work-in-progress libraries:
 - assert: debug assertion library, offers extended functionality compared to the standard <cassert>.
