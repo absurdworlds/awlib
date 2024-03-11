@@ -27,17 +27,41 @@ std::string concatenate(Strings&&... strings)
 	return ((result += strings), ...);
 }
 
-/*!
- * Create string with enough space reserved for all strings in the range [begin, end)
- */
 template<typename Iterator>
-std::string reserve_string(Iterator begin, Iterator end)
+size_t reserved_size(Iterator begin, Iterator end)
 {
 	size_t size = 0;
 	while (begin != end)
 		size += (begin++)->size();
+	return size;
+}
+
+template<typename Iterator>
+	requires std::forward_iterator<Iterator>
+size_t reserved_size(Iterator begin, Iterator end, size_t delim_size)
+{
+	const size_t delim_count = std::distance(begin, end) - 1;
+	return reserved_size(begin, end) + delim_size * delim_count;
+}
+
+template<typename Iterator>
+	requires (!std::forward_iterator<Iterator>)
+std::string reserve_string(Iterator begin, Iterator end, size_t /*delim_size*/ = 0)
+{
 	std::string tmp;
-	tmp.reserve(size);
+	tmp.reserve(reserved_size(begin, end));
+	return tmp;
+}
+
+/*!
+ * Create string with enough space reserved for all strings in the range [begin, end)
+ */
+template<typename Iterator>
+	requires std::forward_iterator<Iterator>
+std::string reserve_string(Iterator begin, Iterator end, size_t delim_size = 0)
+{
+	std::string tmp;
+	tmp.reserve(reserved_size(begin, end, delim_size));
 	return tmp;
 }
 

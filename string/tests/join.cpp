@@ -76,4 +76,14 @@ Test(concatenate) {
 		TestEqual(str, "123456789");
 	}
 }
+
+Test(reserve_string) {
+	std::vector<string_view> v{ "AAA", "BBB", "CCCCC", "DDDD" };
+
+	std::string s1 = string::reserve_string(begin(v), end(v));
+	std::string s2 = string::reserve_string(begin(v), end(v), 1);
+
+	TestAssert(s1.capacity() >= 15);
+	TestAssert(s2.capacity() >= 18);
+}
 } // namespace aw
