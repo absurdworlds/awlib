@@ -141,18 +141,6 @@ struct codec {
 	}
 
 	/*!
-	 * Advance to the next sequence of code units
-	 */
-	template<typename Iterator>
-	static Iterator next(Iterator input, Iterator end)
-	{
-		while ((input < end) && !is_head(*input) && !is_ascii(*input))
-			++input;
-
-		return input;
-	}
-
-	/*!
 	 * Decode UTF-8 sequence, if valid
 	 */
 	template<typename Iterator>
@@ -205,6 +193,31 @@ struct codec {
 			cp = sextet::add(cp, *input++);
 		}
 
+		return input;
+	}
+
+	/*!
+	 * Advance to the next sequence of code units
+	 */
+	template<typename Iterator>
+	static Iterator next(Iterator input, Iterator end)
+	{
+		while ((input < end) && !is_head(*input) && !is_ascii(*input))
+			++input;
+
+		return input;
+	}
+
+	/*!
+	 * Skip n code points
+	 */
+	template<typename Iterator>
+	static Iterator skip(Iterator input, Iterator end, size_t n)
+	{
+		while (input < end && n > 0) {
+			input = next(std::next(input), end);
+			--n;
+		}
 		return input;
 	}
 };

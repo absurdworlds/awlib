@@ -4,6 +4,16 @@
 TestFile("utf8toutf16");
 
 namespace aw {
+Test(utf8skip) {
+	std::string s1 = "αβγ";
+	std::string s2 = "こんにちは";
+
+	auto it1 = aw::unicode::utf8::codec::skip(begin(s1), end(s1), 2);
+	auto it2 = aw::unicode::utf8::codec::skip(begin(s2), end(s2), 4);
+	TestEqual(std::string(it1, end(s1)), "γ");
+	TestEqual(std::string(it2, end(s2)), "は");
+}
+
 Test(utf8toutf16)
 {
 	const std::pair<std::u8string, std::u16string> utf_strings[] = {
