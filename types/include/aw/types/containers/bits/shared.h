@@ -9,6 +9,7 @@
 #ifndef aw_containers_shared
 #define aw_containers_shared
 #include <aw/types/traits/iterator.h>
+#include <memory>
 namespace aw {
 namespace _impl {
 template<typename InputIt, typename ForwardIt>
@@ -28,11 +29,6 @@ ForwardIt try_uninit_move(InputIt begin, InputIt end, ForwardIt output)
 
 	return std::uninitialized_copy(beg_it, end_it, output);
 }
-
-template<typename T>
-struct temp_buffer {
-
-};
 } // namespace _impl
 } // namespace aw
 #endif//aw_containers_shared

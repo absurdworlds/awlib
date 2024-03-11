@@ -28,7 +28,7 @@ namespace aw::script {
  * Note that it is a very specific use case, so you probably shouldn't
  * be using this class unless you know what you're doing.
  *
- * Also nota that it doesn't support custom allocators so far.
+ * Also note that it doesn't support custom allocators so far.
  */
 class char_buffer {
 public:
