@@ -1,4 +1,4 @@
-#include <aw/io/mmap_file.h>
+#include <aw/platform/mmap_file.h>
 #include <aw/test/test.h>
 #include <aw/types/array_view.h>
 #include <algorithm>

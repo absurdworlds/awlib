@@ -18,7 +18,7 @@
 #endif//NOMINMAX
 #include <windows.h>
 namespace aw {
-AW_IO_EXP std::error_category const& winapi_error_category();
+AW_PLATFORM_EXP std::error_category const& winapi_error_category();
 namespace io {
 namespace win32 {
 inline void set_error( std::error_code& ec )

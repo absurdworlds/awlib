@@ -6,12 +6,10 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#include <aw/io/native_file.h>
+#include <aw/platform/native_file.h>
 #include "winapi_helpers.h"
 #include "path.h"
-namespace aw {
-namespace io {
-namespace win32 {
+namespace aw::io::win32 {
 namespace {
 int get_access( file_mode mode )
 {
@@ -152,6 +150,4 @@ uintmax_t size(file_descriptor fd, std::error_code& ec)
 
 	return ret ? sz.QuadPart : uintmax_t(-1);
 }
-} // namespace win32
-} // namespace io
-} // namespace aw
+} // namespace aw::io::win32

@@ -6,11 +6,9 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#include <aw/io/mmap_file.h>
+#include <aw/platform/mmap_file.h>
 #include "winapi_helpers.h"
-namespace aw {
-namespace io {
-namespace win32 {
+namespace aw::io::win32 {
 namespace {
 unsigned get_protection( map_perms perms )
 {
@@ -79,6 +77,4 @@ bool unmap_file( file_mapping& map, std::error_code& ec )
 
 	return close_handle( map.handle, ec );
 }
-} // namespace win32
-} // namespace io
-} // namespace aw
+} // namespace aw::io::win32
