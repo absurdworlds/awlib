@@ -1,5 +1,7 @@
 
 set(SOURCES
+	mmap_file.c++
+	native_file.c++
 	os_version.c++)
 
 
