@@ -10,7 +10,8 @@ set(WIN32_SOURCES
 set(POSIX_SOURCES
 	posix/file.c++
 	posix/helpers.h
-	posix/mmap.c++)
+	posix/mmap.c++
+	posix/process.c++)
 
 if (AW_CAPABILITIES_WIN32)
 	list(APPEND SOURCES ${WIN32_SOURCES})
