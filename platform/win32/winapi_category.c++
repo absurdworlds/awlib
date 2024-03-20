@@ -1,7 +1,7 @@
 #include <aw/utility/unicode/convert.h>
 #include <aw/utility/string/trim.h>
 #include <aw/algorithm/in.h>
-#include <aw/io/export.h>
+#include <aw/platform/export.h>
 #include <system_error>
 #include <windows.h>
 namespace aw {
@@ -12,12 +12,12 @@ namespace _impl {
 namespace {
 
 struct winapi_error_category final : std::error_category {
-    char const* name() const noexcept override
+	char const* name() const noexcept override
 	{
 		return "winapi";
 	}
 
-    std::string message(int code) const override;
+	std::string message(int code) const override;
 	
 	std::error_condition default_error_condition( int code ) const noexcept override
 	{
@@ -46,7 +46,7 @@ auto winapi_error_category::message(int code) const -> std::string
 } // namespace
 } // namespace _impl
 
-AW_IO_EXP std::error_category const& winapi_error_category()
+AW_PLATFORM_EXP std::error_category const& winapi_error_category()
 {
   static aw::_impl::winapi_error_category cat;
   return cat;
