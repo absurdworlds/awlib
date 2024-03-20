@@ -8,15 +8,13 @@
  */
 #ifndef aw_internal_winapi_helpers_h
 #define aw_internal_winapi_helpers_h
+#include <aw/platform/export.h>
+
 #include <system_error>
 
-#ifndef WIN32_LEAN_AND_MEAN
-#define WIN32_LEAN_AND_MEAN
-#endif//WIN32_LEAN_AND_MEAN
-#ifndef NOMINMAX
-#define NOMINMAX
-#endif//NOMINMAX
-#include <windows.h>
+// must be the last
+#include <aw/platform/windows.h>
+
 namespace aw {
 AW_PLATFORM_EXP std::error_category const& winapi_error_category();
 namespace io {

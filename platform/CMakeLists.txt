@@ -5,7 +5,7 @@ set(WIN32_SOURCES
 	win32/file.c++
 	win32/mmap.c++
 	win32/path.h
-	#win32/process.c++
+	win32/process.c++
 	win32/winapi_category.c++
 	win32/winapi_helpers.h)
 

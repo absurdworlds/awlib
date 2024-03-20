@@ -60,24 +60,30 @@ constexpr auto invalid_process_handle = process_handle(-1);
  * Spawn a child process with specified \a path and argument list \a argv.
  * Argument list must end with `nullptr`.
  */
-AW_PLATFORM_EXP process_handle spawn(const char* path, aw::array_ref<char*> argv, std::error_code& ec) noexcept;
+AW_PLATFORM_EXP process_handle spawn(const char* path, aw::array_ref<const char*> argv, std::error_code& ec) noexcept;
+AW_PLATFORM_EXP process_handle spawn(std::string path, aw::array_ref<std::string> argv, std::error_code& ec);
 /*!
  * Spawn a child process with specified argument list \a argv. `argv[0]` is used as path.
  */
-AW_PLATFORM_EXP process_handle spawn(aw::array_ref<char*> argv, std::error_code& ec) noexcept;
+AW_PLATFORM_EXP process_handle spawn(aw::array_ref<const char*> argv, std::error_code& ec) noexcept;
 AW_PLATFORM_EXP int kill(process_handle pid, int signal, std::error_code& ec) noexcept;
 
-inline process_handle spawn(const char* path, aw::array_ref<char*> argv)
+inline process_handle spawn(const char* path, aw::array_ref<const char*> argv)
 {
 	std::error_code ec;
 	return spawn(path, argv, ec);
 }
-inline process_handle spawn(aw::array_ref<char*> argv)
+inline process_handle spawn(aw::array_ref<const char*> argv)
 {
 	std::error_code ec;
 	return spawn(argv, ec);
 }
-AW_PLATFORM_EXP process_handle spawn(std::string path, aw::array_ref<std::string> argv);
+
+inline process_handle spawn(std::string path, aw::array_ref<std::string> argv)
+{
+	std::error_code ec;
+	return spawn(path, argv, ec);
+}
 
 inline int kill(process_handle pid, int signal)
 {

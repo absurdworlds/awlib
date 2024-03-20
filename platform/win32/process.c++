@@ -2,20 +2,35 @@
 #include <aw/platform/windows.h>
 
 #include <aw/types/string_view.h>
+#include <aw/utility/string/escape.h>
 #include <aw/algorithm/in.h>
+
+#include "path.h"
 
 #include <iostream>
 #include <vector>
 
 #include <cassert>
 namespace aw::platform::win32 {
+
+std::wstring format_command_line(const char* path, aw::array_ref<const char*> argv)
+{
+	std::wstring result = path;
+	for (auto* arg : argv) {
+		result += " \"";
+		result += string::escape_quotes(arg);
+		result += '"';
+	}
+	return result;
+}
+
 AW_PLATFORM_EXP
-process_handle spawn(const char* path, aw::array_ref<char*> argv, std::error_code& ec) noexcept
+process_handle spawn(const char* path, aw::array_ref<const char*> argv, std::error_code& ec) noexcept
 {
 	/*! enforce `nullptr` at the end of `argv` */
 	assert( argv.empty() || argv.back() == nullptr );
 
-	CreateProcessW( fs::path() );
+	CreateProcessW( nullptr, format_command_line(path, argv),  );
 	pid_t pid;
 	int rc = posix_spawn(&pid, path, nullptr, nullptr, argv.data(), environ);
 	if (rc == 0)
@@ -26,7 +41,7 @@ process_handle spawn(const char* path, aw::array_ref<char*> argv, std::error_cod
 }
 
 AW_PLATFORM_EXP
-process_handle spawn(aw::array_ref<char*> argv, std::error_code& ec) noexcept
+process_handle spawn(aw::array_ref<const char*> argv, std::error_code& ec) noexcept
 {
 	return spawn( argv[0], argv, ec );
 }

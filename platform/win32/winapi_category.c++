@@ -3,7 +3,9 @@
 #include <aw/algorithm/in.h>
 #include <aw/platform/export.h>
 #include <system_error>
-#include <windows.h>
+
+// must be the last
+#include <aw/platform/windows.h>
 namespace aw {
 namespace win32 {
 std::errc map_error_code(int code);
