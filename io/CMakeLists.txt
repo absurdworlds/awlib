@@ -1,16 +1,16 @@
 
 set(WIN32_SOURCES
-    win32/file.cpp
-    win32/mmap.cpp
-    win32/winapi_category.cpp
-    win32/error_codes.cpp
-    win32/path.h
-    win32/winapi_helpers.h)
+	win32/error_codes.c++
+	win32/file.c++
+	win32/mmap.c++
+	win32/path.h
+	win32/winapi_category.c++
+	win32/winapi_helpers.h)
 
 set(POSIX_SOURCES
-    posix/file.cpp
-    posix/mmap.cpp
-    posix/helpers.h)
+	posix/file.c++
+	posix/helpers.h
+	posix/mmap.c++)
 
 if (AW_CAPABILITIES_WIN32)
 	list(APPEND SOURCES ${WIN32_SOURCES})
