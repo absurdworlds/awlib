@@ -57,6 +57,12 @@ endif()
 include(aw-common)
 
 add_subdirectory(awlib)
+
+option(AW_ENABLE_AWSTD "Enable awstd, provides fallbacks for missing std library features." OFF)
+if (AW_ENABLE_AWSTD)
+add_subdirectory(awstd)
+endif()
+
 add_subdirectory(meta)
 add_subdirectory(algorithm)
 add_subdirectory(math)
