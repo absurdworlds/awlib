@@ -13,12 +13,15 @@
 #include <aw/test/registry.h>
 #include <aw/utility/argv_parser.h>
 
+#include <filesystem>
+
 namespace aw::test {
 
 struct test_config {
 	bool use_junit   = false;
 	bool no_exitcode = false;
 };
+
 test_config parse_parameters(char** begin, char** end)
 {
 	using namespace std::string_view_literals;
@@ -48,7 +51,7 @@ test_config parse_parameters(char** begin, char** end)
 	return config;
 }
 
-int registry::run(report* reporter)
+int registry::run(std::string_view exe_dir, report* reporter)
 {
 	auto& vec = static_object<_ctxs>::instance().ctxs;
 
@@ -60,7 +63,7 @@ int registry::run(report* reporter)
 
 	int res = 0;
 	for (auto& ctx : vec)
-		res += ctx->run(reporter);
+		res += ctx->run(exe_dir, reporter);
 
 	reporter->end_tests(total, res);
 
@@ -73,6 +76,10 @@ int main(int n_param, char** parameters)
 {
 	using namespace aw::test;
 
+	auto dir_name = [] (std::string_view s) {
+		return std::filesystem::path(s).parent_path().string();
+	};
+
 	auto config = parse_parameters(parameters, parameters + n_param);
 
 	report_classic classic;
@@ -80,7 +87,7 @@ int main(int n_param, char** parameters)
 
 	report* _report = config.use_junit ? (report*)&junit : (report*)&classic;
 
-	int fail_count = aw::test::registry::run(_report);
+	int fail_count = aw::test::registry::run(dir_name(parameters[0]), _report);
 
 	return config.no_exitcode ? 0 : fail_count;
 }
