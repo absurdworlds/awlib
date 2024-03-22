@@ -19,7 +19,8 @@ Test(process_basic_test) {
 
 	auto path = io::executable_name("dump_args"s);
 
-	auto result = io::run(path, { "a", "b", "c" });
+	std::vector<std::string> in_args = { "a", "b", "c" };
+	auto result = io::run(path, in_args);
 
 	TestAssert(result == io::wait_status::finished);
 

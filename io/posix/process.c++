@@ -1,17 +1,8 @@
-/*
- * Copyright (C) 2016-2018 hedede <haddayn@gmail.com>
- *
- * License LGPLv3 or later:
- * GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
- * This is free software: you are free to change and redistribute it.
- * There is NO WARRANTY, to the extent permitted by law.
- */
-#include <aw/platform/process.h>
+#include "aw/io/posix/process.h"
 
 #include <aw/types/string_view.h>
 #include <aw/algorithm/in.h>
 
-#include <iostream>
 #include <vector>
 
 #include <cassert>
@@ -26,15 +17,18 @@
 extern char** environ;
 #endif
 
-namespace aw::platform::posix {
+namespace aw::io::posix {
 AW_IO_EXP
-process_handle spawn(const char* path, aw::array_ref<char*> argv, std::error_code& ec) noexcept
+process_handle spawn(const char* path, aw::array_view<char*> argv, std::error_code& ec) noexcept
 {
 	/*! enforce `nullptr` at the end of `argv` */
 	assert( argv.empty() || argv.back() == nullptr );
 
 	pid_t pid;
-	int rc = posix_spawn(&pid, path, nullptr, nullptr, argv.data(), environ);
+	int rc = posix_spawnp(&pid, path, nullptr, nullptr, argv.data(), environ);
+	if (rc == 2)
+		rc = posix_spawn(&pid, path, nullptr, nullptr, argv.data(), environ);
+
 	if (rc == 0)
 		return process_handle( pid );
 
@@ -43,15 +37,14 @@ process_handle spawn(const char* path, aw::array_ref<char*> argv, std::error_cod
 }
 
 AW_IO_EXP
-process_handle spawn(aw::array_ref<char*> argv, std::error_code& ec) noexcept
+process_handle spawn(aw::array_view<char*> argv, std::error_code& ec) noexcept
 {
 	return spawn( argv[0], argv, ec );
 }
 
 AW_IO_EXP
-process_handle spawn(std::string path, aw::array_ref<std::string> argv)
+process_handle spawn(std::string path, aw::array_ref<std::string> argv, std::error_code& ec)
 {
-	std::error_code ec;
 	std::vector<char*> args;
 	args.push_back(path.data());
 	for (std::string& arg : argv)
@@ -74,5 +67,16 @@ int kill(process_handle pid, int signal, std::error_code& ec) noexcept
 	if (ret < 0)
 		ec.assign( errno, std::generic_category() );
 	return ret;
+}
+
+AW_IO_EXP wait_status wait(process_handle pid, std::error_code& ec) noexcept
+{
+	int status = 0;
+	pid_t ret = waitpid( pid_t(pid), &status, 0);
+	if (ret < 0) {
+		ec.assign( errno, std::generic_category() );
+		return wait_status::failed;
+	}
+	return wait_status::finished;
 }
 } // namespace aw::platform::posix

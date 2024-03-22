@@ -76,7 +76,7 @@ inline wait_status run(
 	if (handle == invalid_process_handle)
 		return wait_status::failed;
 
-	return wait(handle, ec);
+	return wait(handle, ec, timeout);
 }
 
 inline wait_status run(std::string path, aw::array_view<std::string> argv, timeout_spec_ms timeout = {})
