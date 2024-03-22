@@ -14,46 +14,11 @@
 #if defined(AW_SUPPORT_PLATFORM_WIN32)
 #include "win32/process.h"
 #endif
-
-namespace aw::io {
 #if defined(AW_SUPPORT_PLATFORM_POSIX)
-namespace posix {
-enum class process_handle : long {
-
-};
-constexpr auto invalid_process_handle = process_handle(-1L );
-
-/*!
- * Spawn a child process with specified \a path and argument list \a argv.
- * Argument list must end with `nullptr`.
- */
-AW_IO_EXP process_handle spawn(const char* path, aw::array_ref<char*> argv, std::error_code& ec) noexcept;
-/*!
- * Spawn a child process with specified argument list \a argv. `argv[0]` is used as path.
- */
-AW_IO_EXP process_handle spawn(aw::array_ref<char*> argv, std::error_code& ec) noexcept;
-AW_IO_EXP int kill(process_handle pid, int signal, std::error_code& ec) noexcept;
-
-inline process_handle spawn(const char* path, aw::array_ref<char*> argv)
-{
-	std::error_code ec;
-	return spawn(path, argv, ec);
-}
-inline process_handle spawn(aw::array_ref<char*> argv)
-{
-	std::error_code ec;
-	return spawn(argv, ec);
-}
-AW_IO_EXP process_handle spawn(std::string path, aw::array_ref<std::string> argv);
-
-inline int kill(process_handle pid, int signal)
-{
-	std::error_code ec;
-	return kill(pid, signal, ec);
-}
-} // namespace posix
+#include "posix/process.h"
 #endif
 
+namespace aw::io {
 #if   (AW_PLATFORM == AW_PLATFORM_POSIX)
 using posix::process_handle;
 using posix::invalid_process_handle;

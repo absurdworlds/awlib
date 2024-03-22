@@ -27,7 +27,7 @@ extern char** environ;
 #endif
 
 namespace aw::platform::posix {
-AW_PLATFORM_EXP
+AW_IO_EXP
 process_handle spawn(const char* path, aw::array_ref<char*> argv, std::error_code& ec) noexcept
 {
 	/*! enforce `nullptr` at the end of `argv` */
@@ -42,13 +42,13 @@ process_handle spawn(const char* path, aw::array_ref<char*> argv, std::error_cod
 	return invalid_process_handle;
 }
 
-AW_PLATFORM_EXP
+AW_IO_EXP
 process_handle spawn(aw::array_ref<char*> argv, std::error_code& ec) noexcept
 {
 	return spawn( argv[0], argv, ec );
 }
 
-AW_PLATFORM_EXP
+AW_IO_EXP
 process_handle spawn(std::string path, aw::array_ref<std::string> argv)
 {
 	std::error_code ec;
@@ -61,7 +61,7 @@ process_handle spawn(std::string path, aw::array_ref<std::string> argv)
 	return spawn(path.data(), args, ec);
 }
 
-AW_PLATFORM_EXP
+AW_IO_EXP
 int kill(process_handle pid, int signal, std::error_code& ec) noexcept
 {
 	// TODO: don't accept -1 or 0 as pid, add separate functions for that
