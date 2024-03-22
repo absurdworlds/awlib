@@ -6,6 +6,7 @@ aw_add_library(awtest INTERFACE
 		include/aw/test/print.h
 		include/aw/test/segv_handler.h
 		include/aw/test/test_case.h
+		include/aw/test/test_context.h
 		include/aw/test/test.h
 		include/aw/test/main.h
 	EXPORT_NAME

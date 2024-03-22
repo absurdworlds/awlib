@@ -11,6 +11,8 @@
 #include <vector>
 #include <string>
 
+#include "test_context.h"
+
 namespace aw::test {
 enum class stage : size_t {
 	start,
@@ -37,7 +39,7 @@ struct check_report {
 };
 
 struct test_case {
-	using test_function = void();
+	using test_function = void(test_context exe_dir);
 	test_case(char const* name, test_function* func)
 		: name{name}, func{func}
 	{ }

@@ -15,12 +15,12 @@
 
 #include <aw/config.h>
 #include <aw/utility/static_object.h>
+#include <aw/test/test_context.h>
 #include <aw/test/report.h>
 
 int main(int,char**);
 
 namespace aw::test {
-
 class registry {
 	friend int ::main(int, char**);
 	friend struct context;
@@ -37,7 +37,7 @@ class registry {
 		vec.push_back(&ctx);
 	}
 
-	inline static int run(report* _report);
+	inline static int run(std::string_view exe_dir, report* _report);
 };
 
 struct test_failed : std::exception {};
@@ -60,14 +60,14 @@ struct context {
 	test_case& current() { return *cur; }
 	char const* const filename;
 
-	int run(report* _report)
+	int run(std::string_view exe_dir, report* _report)
 	{
 		install_handler();
 
 		_report->begin_suite(filename, tests.size());
 
 		for (test_case& test : tests)
-			run_test_case(test, _report);
+			run_test_case(test, exe_dir, _report);
 
 		_report->end_suite();
 
@@ -123,11 +123,19 @@ private:
 #endif
 	}
 
-	inline void run_test_case(test_case& tst, report* _report);
+	inline void run_test_case(test_case& tst, std::string_view exe_dir, report* _report);
 
 
-	inline void test_failure(report* _report);
-	inline void test_success(report* _report);
+	void test_failure(report* _report)
+	{
+		++failed;
+		_report->test_failure( cur->name, cur->checks, stage_name[size_t(cur->st)] );
+	}
+
+	void test_success(report* _report)
+	{
+		_report->test_success( cur->name, cur->checks );
+	}
 
 	void report_test_failure(report* _report)
 	{
@@ -144,19 +152,7 @@ private:
 	bool negative = false;
 };
 
-void context::test_failure(report* _report)
-{
-	++failed;
-
-	_report->test_failure( cur->name, cur->checks, stage_name[size_t(cur->st)] );
-}
-
-void context::test_success(report* _report)
-{
-	_report->test_success( cur->name, cur->checks );
-}
-
-void context::run_test_case(test_case& test, report* _report)
+void context::run_test_case(test_case& test, std::string_view exe_dir, report* _report)
 {
 	using namespace std::string_literals;
 
@@ -164,7 +160,7 @@ void context::run_test_case(test_case& test, report* _report)
 
 	try {
 		enter(stage::start);
-		cur->func();
+		cur->func({ exe_dir });
 		enter(stage::end);
 		return test_success(_report);
 	}
