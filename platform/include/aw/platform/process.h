@@ -6,8 +6,8 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef aw_platform_demangle_h
-#define aw_platform_demangle_h
+#ifndef aw_platform_process_h
+#define aw_platform_process_h
 #include <aw/platform/export.h>
 #include <aw/types/array_view.h>
 #include <system_error>
@@ -57,5 +57,5 @@ using posix::invalid_process_handle;
 using posix::spawn;
 using posix::kill;
 #endif
-} // namespace aw::platform
-#endif//aw_platform_demangle_h
+} // namespace aw::io
+#endif//aw_platform_process_h
