@@ -23,6 +23,9 @@ struct winapi_path {
 	winapi_path( fs::path const& path )
 		: path{ path.wstring() }
 	{}
+	winapi_path( const std::wstring& path )
+		: path{ path }
+	{}
 	std::wstring path;
 #endif
 	operator wchar_t*() const { return (wchar_t*)path.data(); }
