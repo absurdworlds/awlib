@@ -7,6 +7,7 @@
  * There is NO WARRANTY, to the extent permitted by law.
  */
 #include <aw/io/native_file.h>
+#include <cassert>
 #include "winapi_helpers.h"
 #include "path.h"
 namespace aw {
@@ -41,6 +42,8 @@ int get_openmode( file_mode mode )
 	case fm::exclusive:
 	case fm::none:
 		return OPEN_EXISTING;
+	default:
+		assert(!"unreachable");
 	};
 }
 } // namespace

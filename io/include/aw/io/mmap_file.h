@@ -123,7 +123,7 @@ struct mmap_file {
 		: _file{fd}
 	{
 		if (!ec)
-                      create_mapping( ec, perms );
+			create_mapping( ec, perms );
 	}
 
 	mmap_file(fs::path const& path, map_perms perms = map_perms::rdwr)
