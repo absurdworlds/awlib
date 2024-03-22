@@ -24,13 +24,16 @@ using posix::process_handle;
 using posix::invalid_process_handle;
 using posix::spawn;
 using posix::kill;
+using posix::wait;
+using posix::run;
+using posix::executable_name;
 #elif (AW_PLATFORM == AW_PLATFORM_WIN32)
 using win32::invalid_process_handle;
 using win32::process_handle;
 using win32::spawn;
-using win32::run;
 using win32::kill;
 using win32::wait;
+using win32::run;
 using win32::executable_name;
 #endif
 } // namespace aw::platform
