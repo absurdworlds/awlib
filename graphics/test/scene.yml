@@ -1,0 +1,39 @@
+shaders:
+	-
+	  name: "textured"
+	  vert: "shaders/v_tex.glsl"
+	  frag: "shaders/f_tex.glsl"
+	-
+	  name: "texarray"
+	  vert: "shaders/v_txa.glsl"
+	  frag: "shaders/f_txa.glsl"
+
+materials:
+	-
+	  name: "default"
+	  shader:
+		vert: [ "shaders/gouraud.vsh.glsl", "shaders/l_light.glsl" ]
+		frag: "shaders/gouraud.fsh.glsl"
+	-
+	  name: butruck
+	  shader: "textured"
+	  textures:
+	    the_textur: "materials/butruck.png"
+
+objects:
+	-
+	  name: "world"
+	  model: "models/testworld.obj"
+	  material: "default"
+	-
+	  name: "butruck"
+	  model: "models/butruck.obj"
+	  material: "butruck"
+	  pos:
+		x: 300
+		y: 15.6
+		z: -2560
+	  rot:
+		pitch: 0
+		yaw: 57
+		roll: 0
