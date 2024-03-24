@@ -12,7 +12,7 @@ Test(split_empty) {
 
 	Checks {
 		v1 = string::split_by(s, "abcd");
-		v2 = string::cut(s, " ");
+		v2 = string::split(s, " ", string::keep_empty);
 	}
 
 	Postconditions {
@@ -29,7 +29,7 @@ Test(split_word) {
 
 	Checks {
 		v1 = string::split_by(s, " ");
-		v2 = string::cut(s, " ");
+		v2 = string::split(s, " ", string::keep_empty);
 	}
 
 	Postconditions {
@@ -48,8 +48,8 @@ Test(split_words) {
 
 	Checks {
 		v1 = string::split_by(s, ", ");
-		v2 = string::cut(s, " ");
-		v3 = string::cut(s, ", ");
+		v2 = string::split(s, " ", string::keep_empty);
+		v2 = string::split(s, ", ", string::keep_empty);
 	}
 
 	Postconditions {
