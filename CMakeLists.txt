@@ -81,7 +81,7 @@ add_subdirectory(thread)
 add_subdirectory(signals)
 
 # TODO: disable by default
-option(AW_ENABLE_HUDF "Enable HuDF data format" ON)
+option(AW_ENABLE_HUDF "Enable HuDF data format" OFF)
 if (AW_ENABLE_HUDF)
 	add_subdirectory(hudf)
 endif()
