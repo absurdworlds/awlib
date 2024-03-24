@@ -7,17 +7,16 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#include <aw/doc/parser.h>
+#include <aw/hudf/parser.h>
+#include <aw/hudf/type.h>
+
+#include <aw/algorithm/in.h>
+#include <aw/types/string_view.h>
 
 #include <cassert>
 #include <cstdio>
 
-#include <aw/algorithm/in.h>
-#include <aw/types/string_view.h>
-#include <aw/doc/type.h>
-
-namespace aw {
-namespace doc {
+namespace aw::hudf {
 inline namespace v1 {
 object parser::read()
 {
@@ -98,7 +97,7 @@ value parser::read_value()
 	return parse_value(id);
 }
 
-doc::type parse_type(string_view token)
+type parse_type(string_view token)
 {
 	if (token == "bool" || token == "b")
 		return type::boolean;
@@ -330,5 +329,4 @@ void parser::processCommand() {
 	}
 }
 } // inline namespace v1
-} // namespace doc
-} // namespace aw
+} // namespace aw::hudf

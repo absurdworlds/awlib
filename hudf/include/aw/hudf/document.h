@@ -7,23 +7,23 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef aw_doc_document_h
-#define aw_doc_document_h
-#include <aw/doc/node.h>
+#ifndef aw_hudf_document_h
+#define aw_hudf_document_h
+#include <aw/hudf/node.h>
 namespace aw {
 inline namespace v1 {
 
 struct document {
-	explicit document(doc::node node)
+	explicit document(hudf::node node)
 		: _root(std::move(node))
 	{
 	}
 
-	doc::node  const& root() const { return _root; }
-	doc::node  const* node(string_view path)  const;
-	doc::value const* value(string_view path) const;
+	hudf::node  const& root() const { return _root; }
+	hudf::node  const* node(string_view path)  const;
+	hudf::value const* value(string_view path) const;
 
-	using const_iterator = doc::node::const_iterator;
+	using const_iterator = hudf::node::const_iterator;
 
 	auto nodes()  const { return _root.children.view(); };
 
@@ -41,10 +41,10 @@ struct document {
 	}
 
 private:
-	doc::node _root;
+	hudf::node _root;
 };
 
 } // inline namespace v1
 } // namespace aw
 
-#endif//aw_doc_document_h
+#endif//aw_hudf_document_h

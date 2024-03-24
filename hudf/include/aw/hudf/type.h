@@ -6,8 +6,8 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef aw_doc_type_h
-#define aw_doc_type_h
+#ifndef aw_hudf_type_h
+#define aw_hudf_type_h
 #include <string>
 #include <vector>
 #include <aw/meta/conditional.h>
@@ -31,7 +31,7 @@ constexpr bool is_vector = is_vector_t<T>::value;
 template<typename T, template <typename> typename Pred>
 constexpr bool is_vector_of = is_vector_of_t<T, Pred>::value;
 
-namespace doc {
+namespace hudf {
 /*!
  * Enumeration of possible value types
  */
@@ -91,10 +91,10 @@ constexpr type type_of = _impl::type_of<T>();
  * Compare type of a value \a val to the type \a type.
  */
 template<typename T>
-inline bool operator==(doc::type type, T const& val)
+inline bool operator==(hudf::type type, T const& val)
 {
 	return type == type_of<T>;
 }
-} // namespace doc
+} // namespace hudf
 } // namespace aw
-#endif//aw_doc_type_h
+#endif//aw_hudf_type_h

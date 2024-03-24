@@ -1,4 +1,4 @@
-aw_add_library(awdoc SHARED
+aw_add_library(awhudf SHARED
 	GLOB_HEADERS
 	SOURCES
 		lexer.c++
@@ -7,11 +7,11 @@ aw_add_library(awdoc SHARED
 		utility.c++
 		document.c++
 	EXPORT_NAME
-		doc
+		hudf
 )
 
-target_compile_definitions(awdoc PRIVATE AW_MODULE_DOC)
-target_link_libraries(awdoc
+target_compile_definitions(awhudf PRIVATE AW_MODULE_HUDF)
+target_link_libraries(awhudf
 	PUBLIC
 		awlog_interface
 		awutils

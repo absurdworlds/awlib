@@ -7,20 +7,20 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef aw_doc_utility_h
-#define aw_doc_utility_h
-#include <aw/doc/document.h>
-#include <aw/doc/export.h>
+#ifndef aw_hudf_utility_h
+#define aw_hudf_utility_h
+#include <aw/hudf/document.h>
+#include <aw/hudf/export.h>
 #include <aw/io/input_stream.h>
 #include <aw/log/log.h>
 
-namespace aw::doc {
+namespace aw::hudf {
 inline namespace v1 {
-AW_DOC_EXP value find_value(io::input_stream& file, string_view name, log* l = nullptr);
-AW_DOC_EXP node  find_node(io::input_stream& file, string_view name, log* l = nullptr);
+AW_HUDF_EXP value find_value(io::input_stream& file, string_view name, log* l = nullptr);
+AW_HUDF_EXP node  find_node(io::input_stream& file, string_view name, log* l = nullptr);
 
-AW_DOC_EXP node     parse_node(parser& parser);
-AW_DOC_EXP document parse_file(io::input_stream& file, log* l = nullptr);
+AW_HUDF_EXP node     parse_node(parser& parser);
+AW_HUDF_EXP document parse_file(io::input_stream& file, log* l = nullptr);
 
 template <typename T, size_t N>
 inline bool get_numbers(value const& val, T (&out)[N])
@@ -42,5 +42,5 @@ inline bool get_numbers(value const& val, T (&out)[N])
 };
 
 } // namespace v1
-} // namespace aw::doc
-#endif//aw_doc_utility_h
+} // namespace aw::hudf
+#endif//aw_hudf_utility_h

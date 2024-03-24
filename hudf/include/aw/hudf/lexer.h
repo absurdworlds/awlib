@@ -7,13 +7,13 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef aw_fileformat_doc_lexer_h
-#define aw_fileformat_doc_lexer_h
+#ifndef aw_fileformat_hudf_lexer_h
+#define aw_fileformat_hudf_lexer_h
 #include <aw/io/input_stream.h>
 #include <aw/log/log.h>
 #include <aw/algorithm/in.h>
-#include <aw/doc/export.h>
-namespace aw::doc {
+#include <aw/hudf/export.h>
+namespace aw::hudf {
 inline namespace v1 {
 struct token {
 	struct position {
@@ -43,9 +43,9 @@ struct token {
 
 using tok_kind = decltype(token::kind);
 
-AW_DOC_EXP std::string to_string(token::position pos);
+AW_HUDF_EXP std::string to_string(token::position pos);
 
-struct AW_DOC_EXP lexer {
+struct AW_HUDF_EXP lexer {
 	lexer(io::input_stream& stream, aw::log* log = nullptr)
 		: stream{stream}, log{log}
 	{
@@ -82,7 +82,7 @@ private:
 	{
 		if (log) {
 			msg = to_string(pos) + ": " + msg;
-			log->message(lvl, "awdoc", msg);
+			log->message(lvl, "hudf", msg);
 		}
 	}
 
@@ -133,5 +133,5 @@ private:
 	bool err = false;
 };
 } // inline namespace v1
-} // namespace aw::doc
-#endif//aw_fileformat_doc_lexer_h
+} // namespace aw::hudf
+#endif//aw_fileformat_hudf_lexer_h

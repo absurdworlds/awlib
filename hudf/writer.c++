@@ -7,10 +7,9 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#include <aw/doc/writer.h>
+#include <aw/hudf/writer.h>
 
-namespace aw {
-namespace doc {
+namespace aw::hudf {
 /*! Create a new node and write a header for it. */
 bool writer::start_node(string_view name)
 {
@@ -43,7 +42,7 @@ bool writer::end_node()
 }
 
 //! Spell the type of value
-string_view spell_type(value const& val)
+string_view spell_type(const value& val)
 {
 	switch (val.get_type()) {
 	case type::integer_vector:
@@ -81,13 +80,13 @@ bool writer::write_value(string_view name, value const& val, bool typed)
 	return true;
 }
 
-void writer::write_value_value(value const& val)
+void writer::write_value_value(const value& val)
 {
 	switch (val.get_type()) {
 	default:
 		ostream.put(to_string(val));
 		break;
-	case doc::type::string:
+	case type::string:
 		ostream.put('"');
 		ostream.put(to_string(val));
 		ostream.put('"');
@@ -172,5 +171,4 @@ void writer::end_line()
 	ostream.put('\n');
 }
 
-} // namespace io
-} // namespace aw
+} // namespace aw::hudf

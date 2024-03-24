@@ -10,12 +10,11 @@
 #include <cassert>
 #include <cstdio>
 
-#include <aw/doc/lexer.h>
+#include <aw/hudf/lexer.h>
 #include <aw/utility/to_string.h>
 #include <aw/utility/string/compose.h>
 
-namespace aw {
-namespace doc {
+namespace aw::hudf {
 inline namespace v1 {
 std::string to_string(token::position pos)
 {
@@ -196,5 +195,4 @@ token lexer::get_token()
 	return tmp;
 }
 } // inline namespace v1
-} // namespace doc
-} // namespace aw
+} // namespace aw::hudf
