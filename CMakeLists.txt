@@ -83,7 +83,7 @@ add_subdirectory(signals)
 # TODO: disable by default
 option(AW_ENABLE_HUDF "Enable HuDF data format" OFF)
 if (AW_ENABLE_HUDF)
-	add_subdirectory(hudf)
+	add_subdirectory(fileformat/hudf)
 endif()
 
 # Libraries with extra dependencies
@@ -94,7 +94,7 @@ endif()
 
 option(AW_ENABLE_SOUND "Enable libawsound" OFF)
 if (AW_ENABLE_SOUND)
-	add_subdirectory(sound)
+	add_subdirectory(fileformat/sound)
 endif()
 
 option(AW_ENABLE_LUA "Enable libawlua" OFF)
