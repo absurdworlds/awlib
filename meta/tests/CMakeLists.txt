@@ -7,12 +7,14 @@ aw_add_test(test_meta
 	find_type.c++
 	fold.c++
 	source_location.c++
-	pp/macro.c++
-	pp/tuple.c++
+	pp/eat_paren.c++
 	pp/foldl.c++
 	pp/foldr.c++
+	pp/macro.c++
+	pp/tuple.c++
+	pp/tuple_fold.c++
+	pp/repeat.c++
 	pp/reverse.c++
-	pp/eat_paren.c++
 	pp/struct.c++
 )
 
