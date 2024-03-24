@@ -20,6 +20,7 @@ jobs:
         -DAW_ENABLE_ASSERT:BOOL=OFF
         -DAW_NO_BUILTINS:BOOL=OFF
         -DAW_MAKE_DEMOS:BOOL=ON
+        -DAW_OUTPUT_JUNIT:BOOL=ON
     strategy:
       fail-fast: false
       matrix:
@@ -68,6 +69,13 @@ jobs:
       - name: Test
         # -C is only meaningful for the multi-config generator on Windows
         run: ctest --test-dir build -C Debug --output-on-failure
+      - name: Publish Test Report
+        uses: mikepenz/action-junit-report@v4
+        # Report the failures too, not only the runs that got through
+        if: success() || failure()
+        with:
+          check_name: test report (${{ matrix.name }})
+          report_paths: 'build/test-results/TEST-*.xml'
 
   graphics:
     name: graphics (${{ matrix.loader }})
@@ -99,6 +107,7 @@ jobs:
           -DAW_ENABLE_ASSERT:BOOL=OFF
           -DAW_NO_BUILTINS:BOOL=OFF
           -DAW_MAKE_DEMOS:BOOL=ON
+          -DAW_OUTPUT_JUNIT:BOOL=ON
           -DAW_GL_USE_EGL:BOOL=${{ matrix.use_egl }}
       - name: Build
         run: >
