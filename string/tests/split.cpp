@@ -12,7 +12,7 @@ Test(split_empty) {
 
 	Checks {
 		v1 = string::split_by(s, "abcd");
-		v2 = string::cut(s, " ");
+		v2 = string::split(s, " ", string::keep_empty);
 	}
 
 	Postconditions {
@@ -29,7 +29,7 @@ Test(split_word) {
 
 	Checks {
 		v1 = string::split_by(s, " ");
-		v2 = string::cut(s, " ");
+		v2 = string::split(s, " ", string::keep_empty);
 	}
 
 	Postconditions {
@@ -48,17 +48,17 @@ Test(split_words) {
 
 	Checks {
 		v1 = string::split_by(s, ", ");
-		v2 = string::cut(s, " ");
-		v3 = string::cut(s, ", ");
+		v2 = string::split(s, " ", string::keep_empty);
+		v3 = string::split(s, ", ", string::keep_empty);
 	}
 
 	Postconditions {
 		std::vector<string_view> e1{"word1", "word2", "word3"};
 		std::vector<string_view> e2{"word1", "", "word2,", "word3"};
 		std::vector<string_view> e3{"word1  word2", "word3"};
-		TestAssert(v1 == e1);
-		TestAssert(v2 == e2);
-		TestAssert(v3 == e3);
+		TestEqual(v1, e1);
+		TestEqual(v2, e2);
+		TestEqual(v3, e3);
 	}
 }
 } // namespace aw
