@@ -11,3 +11,4 @@ static_assert(AW_TO_STR(AW_FIRST( a,b,c )) == "a"sv);
 static_assert(AW_TO_STR(AW_SECOND( a,b,c )) == "b"sv);
 static_assert(AW_TO_STR(AW_TAIL( a,b,c )) == "b,c"sv);
 static_assert(AW_TO_STR(AW_UNPACK( AW_TUPLE(a,b,c) )) == "a,b,c"sv);
+static_assert(AW_TO_STR(AW_COMBINE( AW_TUPLE(a,b), AW_TUPLE(c,d)) ) == "(a,b,c,d)"sv);
