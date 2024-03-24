@@ -15,15 +15,15 @@ List of libraries that are currently in this collection:
 - platform: abstraction of platform-specific functions
 - thread: multi-threading primitives
 - archive (v3): header-only serialization library
-- doc: text-based data interchange format
-- sound: simple-to-use WAV file reader
+- fileformat/hudf: text-based data interchange format
+- fileformat/sound: simple-to-use WAV file reader
 
 And a few work-in-progress libraries:
-- assert: debug assertion library, offers extended functionality compared to the standard <cassert>.
+- assert: debug assertion library, offers extended functionality compared to the standard `<cassert>`.
 - graphics: attempt at making a rendering engine.
 	- Most of available rendering libraries come with their own scene graph, resource managers, input managers, windowing, GUI and so on and so forth.
 	- I am trying to make a library that does only rendering, easy to integrate, and offers the best possible performance.
 - lua: C++ bindings for Lua
-- itd: simple and performant file archive format for games
 - gui: UI library for games
 - audio-openal: wrapper for OpenAL
+- fileformat/itd: simple and performant file archive format for games
