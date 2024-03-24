@@ -27,4 +27,7 @@
 #define AW_REST(x,...)     __VA_ARGS__
 #define AW_TAIL(x,...)     __VA_ARGS__
 
+//! Combine two tuples
+#define AW_COMBINE( T1, T2 ) (AW_UNPACK(T1),AW_UNPACK(T2))
+
 #endif//aw_pp_tupl_h

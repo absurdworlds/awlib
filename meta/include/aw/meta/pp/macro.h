@@ -54,4 +54,6 @@
 
 #define AW_EAT(...)
 
+#define AW_OBSTRUCT(...) __VA_ARGS__ AW_DEFER(AW_EMPTY)()
+
 #endif//aw_pp_macro_h
