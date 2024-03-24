@@ -78,8 +78,13 @@ add_subdirectory(test)
 
 add_subdirectory(archive)
 add_subdirectory(thread)
-add_subdirectory(doc)
 add_subdirectory(signals)
+
+# TODO: disable by default
+option(AW_ENABLE_HUDF "Enable HuDF data format" ON)
+if (AW_ENABLE_HUDF)
+	add_subdirectory(hudf)
+endif()
 
 # Libraries with extra dependencies
 option(AW_ENABLE_GRAPHICS "Enable libawgraphics" OFF)

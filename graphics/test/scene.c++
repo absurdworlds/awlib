@@ -3,7 +3,7 @@
 #include <aw/math/transform.h>
 #include <aw/math/vector3d.h>
 #include <aw/math/matrix3.h>
-#include <aw/doc/utility.h>
+#include <aw/hudf/utility.h>
 
 #include <aw/log/ostream_logger.h>
 #include <aw/io/input_file_stream.h>
