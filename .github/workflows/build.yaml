@@ -8,9 +8,12 @@ jobs:
     runs-on: windows-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Configure
-        run: cmake -S . -B build -DAW_ENABLE_GRAPHICS:BOOL=OFF
+        run: >
+          cmake -S . -B build
+          -DAW_ENABLE_GRAPHICS:BOOL=OFF
+          -DAW_ENABLE_HUDF:BOOL=ON
       - name: Build
         run: cmake --build build
       - name: Test
@@ -19,9 +22,13 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Configure
-        run: cmake -S . -B build -DAW_ENABLE_GRAPHICS:BOOL=OFF -DAW_ENABLE_ASSERT:BOOL=OFF
+        run: >
+          cmake -S . -B build
+          -DAW_ENABLE_GRAPHICS:BOOL=OFF
+          -DAW_ENABLE_ASSERT:BOOL=OFF
+          -DAW_ENABLE_HUDF:BOOL=ON
       - name: Build
         run: cmake --build build
       - name: Test
