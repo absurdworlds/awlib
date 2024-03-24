@@ -7,13 +7,13 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef aw_fileformat_doc_export_h
-#define aw_fileformat_doc_export_h
+#ifndef aw_fileformat_hudf_export_h
+#define aw_fileformat_hudf_export_h
 #include <aw/config.h>
 
-#ifdef AW_MODULE_DOC
-	#define AW_DOC_EXP AW_EXPORT
+#ifdef AW_MODULE_HUDF
+	#define AW_HUDF_EXP AW_EXPORT
 #else
-	#define AW_DOC_EXP AW_IMPORT
+	#define AW_HUDF_EXP AW_IMPORT
 #endif
-#endif//aw_fileformat_doc_export_h
+#endif//aw_fileformat_hudf_export_h

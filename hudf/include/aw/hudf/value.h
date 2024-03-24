@@ -7,8 +7,8 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef aw_doc_value_h
-#define aw_doc_value_h
+#ifndef aw_hudf_value_h
+#define aw_hudf_value_h
 #include <cstring>
 #include <string>
 
@@ -16,12 +16,11 @@
 #include <aw/utility/to_string.h>
 #include <aw/utility/to_string/variant.h>
 
-#include <aw/doc/type.h>
+#include <aw/hudf/type.h>
 
-namespace aw {
-namespace doc {
+namespace aw::hudf {
 inline namespace v1 {
-//! Class for holding any doc value.
+//! Class for holding any HuDF value.
 struct value {
 	value() = default;
 	value(value const&) = default;
@@ -94,7 +93,7 @@ struct value {
 	}
 
 	//! Returns type of currently held value
-	doc::type get_type() const
+	type get_type() const
 	{
 		return convert_type();
 	}
@@ -151,36 +150,36 @@ private:
 
 	holder_t holder;
 
-	doc::type convert_type() const
+	type convert_type() const
 	{
 		switch (holder.type_index()) {
 		case holder_t::index_of<bool>:
-			return doc::type::boolean;
+			return type::boolean;
 
 		case holder_t::index_of<intmax_t>:
-			return doc::type::integer;
+			return type::integer;
 
 		case holder_t::index_of<double>:
-			return doc::type::floating_point;
+			return type::floating_point;
 
 		case holder_t::index_of<std::string>:
-			return doc::type::string;
+			return type::string;
 
 		case holder_t::index_of<std::vector<bool>>:
-			return doc::type::boolean_vector;
+			return type::boolean_vector;
 
 		case holder_t::index_of<std::vector<intmax_t>>:
-			return doc::type::integer_vector;
+			return type::integer_vector;
 
 		case holder_t::index_of<std::vector<double>>:
-			return doc::type::float_vector;
+			return type::float_vector;
 
 		case holder_t::index_of<std::vector<std::string>>:
-			return doc::type::string_vector;
+			return type::string_vector;
 
 		case holder_t::invalid:
 		default:
-			return doc::type::unknown;
+			return type::unknown;
 		};
 	}
 };
@@ -195,6 +194,5 @@ inline bool value::get(string_view& v) const
 }
 
 } // inline namespace v1
-} // namespace doc
-} // namespace aw
-#endif//aw_doc_value_h
+} // namespace aw::hudf
+#endif//aw_hudf_value_h

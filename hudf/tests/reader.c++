@@ -15,14 +15,14 @@
 
 #include <aw/log/ostream_logger.h>
 #include <aw/io/input_file_stream.h>
-#include <aw/doc/utility.h>
-#include <aw/doc/parser.h>
+#include <aw/hudf/utility.h>
+#include <aw/hudf/parser.h>
 
 using namespace aw;
 using namespace aw::io;
-using namespace aw::doc;
+using namespace aw::hudf;
 
-void print_node(const doc::node& parent, std::string name = "")
+void print_node(const node& parent, std::string name = "")
 {
 	for (const auto& n : parent.children) {
 		auto child_name = name + "/" + n.name;
@@ -50,8 +50,8 @@ int main(int, char** arg)
 		// create the parser
 
 		auto begin = std::chrono::steady_clock::now();
-		doc::parser parser(stream, &log);
-		aw::document doc( doc::parse_node(parser) );
+		hudf::parser parser(stream, &log);
+		aw::document doc( hudf::parse_node(parser) );
 		auto end = std::chrono::steady_clock::now();
 
 		has_error += parser.has_error();

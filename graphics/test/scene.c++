@@ -12,11 +12,11 @@
 #include <map>
 
 namespace aw::gl3 {
-void parse_shader_list(const doc::node& node, std::vector<shader_source>& out, gl::shader_type type)
+void parse_shader_list(const hudf::node& node, std::vector<shader_source>& out, gl::shader_type type)
 {
 	switch(node.value.get_type())
 	{
-		case doc::type::string:
+		case hudf::type::string:
 		{
 			auto name = node.value.try_get(std::string_view());
 			if (!name.empty())
@@ -24,7 +24,7 @@ void parse_shader_list(const doc::node& node, std::vector<shader_source>& out, g
 			break;
 		}
 
-		case doc::type::string_vector:
+		case hudf::type::string_vector:
 		{
 			auto* vec = node.value.get<std::vector<std::string>>();
 			for (auto& path : *vec)
@@ -40,7 +40,7 @@ void parse_shader_list(const doc::node& node, std::vector<shader_source>& out, g
 	}
 }
 
-std::vector<shader_source> parse_program(const doc::node& node)
+std::vector<shader_source> parse_program(const hudf::node& node)
 {
 	std::vector<shader_source> shaders;
 
@@ -65,7 +65,7 @@ void scene::load(string_view path)
 	// open a file
 	io::input_file_stream stream{path};
 
-	auto document = doc::parse_file(stream);
+	auto document = hudf::parse_file(stream);
 
 	std::map<std::string, size_t> program_map;
 	// TODO: inline programs
@@ -178,13 +178,13 @@ void scene::load(string_view path)
 			vec3 pos = {};
 			if (auto* pos_node = node.find_child("pos"))
 			{
-				doc::get_numbers(pos_node->value, pos.elems);
+				hudf::get_numbers(pos_node->value, pos.elems);
 			}
 
 			vec3 rot = {};
 			if (auto* pos_node = node.find_child("rot"))
 			{
-				doc::get_numbers(pos_node->value, rot.elems);
+				hudf::get_numbers(pos_node->value, rot.elems);
 			}
 
 			auto deg = math::vector3d<degrees<float>>( rot );

@@ -14,14 +14,14 @@ aw_add_test(test_doc
 	)
 
 add_test(
-	NAME test_doc_fail
+	NAME test_hudf_fail
 	COMMAND test_doc data/invalid.hdf)
-set_property(TEST test_doc_fail PROPERTY WILL_FAIL ON)
+set_property(TEST test_hudf_fail PROPERTY WILL_FAIL ON)
 
 target_link_libraries(test_doc
 	PRIVATE
 		awlog
 		awio
-		awdoc
+		awhudf
 		awtest
 		awtest_main)

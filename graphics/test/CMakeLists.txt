@@ -11,7 +11,7 @@ target_link_libraries(rendertest
         awgraphics
         awobj
         awlog
-        awdoc
+        awhudf
         awtypes
     PRIVATE
         OpenGL::GL

@@ -7,17 +7,16 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef aw_fileformat_doc_writer_h
-#define aw_fileformat_doc_writer_h
+#ifndef aw_fileformat_hudf_writer_h
+#define aw_fileformat_hudf_writer_h
 #include <aw/types/string_view.h>
 
-#include <aw/doc/export.h>
-#include <aw/doc/value.h>
+#include <aw/hudf/export.h>
+#include <aw/hudf/value.h>
 
 #include <aw/io/WriteStream.h>
 #include <aw/log/log.h>
-namespace aw {
-namespace doc {
+namespace aw::hudf {
 /*! List of Writer indentation styles */
 enum class indentation_style {
 	none,
@@ -28,8 +27,8 @@ enum class indentation_style {
 	eight_spaces,
 };
 
-//! Interface for writing doc files. Supports doc 1.4.0 format.
-struct AW_DOC_EXP writer {
+//! Interface for writing HuDF files. Supports HuDF 1.4.0 format.
+struct AW_HUDF_EXP writer {
 	//! Create writer outputting to \a out.
 	writer(io::WriteStream& out, log* logger = nullptr)
 		: ostream{out}, logger{logger}
@@ -44,7 +43,7 @@ struct AW_DOC_EXP writer {
 	bool end_node();
 
 	/*! Write a value object. */
-	bool write_value(string_view name, value const& val, bool typed = true);
+	bool write_value(string_view name, const value& val, bool typed = true);
 
 	/*! Write a comment */
 	void add_comment(string_view comment_text);
@@ -57,7 +56,7 @@ private:
 	void error(log::level type, string_view msg);
 
 private:
-	void write_value_value(value const& val);
+	void write_value_value(const value& val);
 	void end_line();
 	std::string get_indent() const;
 
@@ -66,6 +65,5 @@ private:
 	indentation_style indentation = indentation_style::double_space;
 	size_t depth = 0;
 };
-} // namespace io
-} // namespace aw
-#endif//aw_fileformat_doc_writer_h
+} // namespace aw::hudf
+#endif//aw_fileformat_hudf_writer_h

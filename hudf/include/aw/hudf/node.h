@@ -7,15 +7,15 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef aw_fileformat_doc_node_h
-#define aw_fileformat_doc_node_h
+#ifndef aw_fileformat_hudf_node_h
+#define aw_fileformat_hudf_node_h
 #include <iosfwd>
 #include <string>
 #include <algorithm>
 #include <aw/types/string_view.h>
 #include <aw/types/array_view.h>
-#include <aw/doc/value.h>
-namespace aw::doc {
+#include <aw/hudf/value.h>
+namespace aw::hudf {
 inline namespace v1 {
 struct parser;
 
@@ -111,9 +111,9 @@ struct node {
 	}
 
 	std::string name;
-	doc::value  value;
+	hudf::value value;
 	list<node>  children;
 };
 } // inline namespace v1
-} // namespace aw::doc
-#endif//aw_fileformat_doc_node_h
+} // namespace aw::hudf
+#endif//aw_fileformat_hudf_node_h
