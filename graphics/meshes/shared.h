@@ -12,28 +12,24 @@
 
 #include <aw/io/input_stream_utils.h>
 
-#include <aw/utility/string/trim.h>
 #include <aw/utility/string/split.h>
-#include <aw/utility/string/strto.h>
+#include <aw/utility/string/trim.h>
 
-//#include <aw/types/promote.h>
-#include <limits>
-#include <cassert>
+#include <charconv>
 
-namespace aw {
-namespace obj {
+namespace aw::obj {
 constexpr string_view ws (" \t\v\f\r", 5);
 
 
 template<typename T>
 bool parse1(string_view line, T& v)
 {
-	char* end;
-	std::string tmp(line);
-	// unfortunately, strto* requires string to be null-terminated
-
-	v = strto<T>( tmp.data(), &end );
-	return (end != tmp.data());
+	auto result = std::from_chars(begin(line), end(line), v);
+	if (result.ec != std::errc()) {
+		v = T();
+		return false;
+	}
+	return true;
 }
 
 using split_func = std::vector<string_view>(string_view, string_view);
@@ -74,6 +70,6 @@ size_t parse3(string_view line, T(&arr)[3], string_view delim = ws)
 {
 	return parse3(line, arr[0], arr[1], arr[2], delim);
 }
-} // namespace obj
-} // namespace aw
+} // namespace aw::obj
+
 #endif//aw_internal_obj_shared_h
