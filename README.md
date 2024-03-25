@@ -25,5 +25,4 @@ And a few work-in-progress libraries:
 	- I am trying to make a library that does only rendering, easy to integrate, and offers the best possible performance.
 - lua: C++ bindings for Lua
 - gui: UI library for games
-- audio-openal: wrapper for OpenAL
 - fileformat/itd: simple and performant file archive format for games
