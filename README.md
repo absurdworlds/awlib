@@ -24,5 +24,4 @@ And a few work-in-progress libraries:
 	- Most of available rendering libraries come with their own scene graph, resource managers, input managers, windowing, GUI and so on and so forth.
 	- I am trying to make a library that does only rendering, easy to integrate, and offers the best possible performance.
 - lua: C++ bindings for Lua
-- gui: UI library for games
 - fileformat/itd: simple and performant file archive format for games
