@@ -21,6 +21,9 @@
 #define AW_CONCAT2(x, y)    AW_CONCAT(x, y)
 #define AW_CONCAT3(x, y, z) AW_CONCAT(AW_CONCAT(x, y), z)
 
+/*! Same as AW_TO_STR but produces string_view */
+#define AW_TO_SV(...) AW_CONCAT(AW_TO_STR(__VA_ARGS__), sv)
+
 /*!
  * Forces macro expansion:
  *

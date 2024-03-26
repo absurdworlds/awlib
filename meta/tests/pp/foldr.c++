@@ -1,11 +1,32 @@
 #include <aw/meta/pp/foldr.h>
+#include <aw/meta/pp/separators.h>
 
-#include <string_view>
+#include <aw/config.h>
 
-using namespace std::string_view_literals;
+#include "helpers.h"
 
-static_assert(AW_TO_STR(AW_FOLD_RIGHT(AW_IDENTITY, AW_TO_STR, a, b, c)) == R"("a", "b", "c")"sv);
-static_assert(AW_TO_STR(AW_FOREACH(AW_TO_STR, a, b, c)) == R"("a", "b", "c")"sv);
+ASSERT_EQUAL1(AW_N_ARGS((,),(,),(,)), 3);
+
+ASSERT_EQUAL(
+	(AW_FOLD_RIGHT(AW_IDENTITY, AW_TO_STR, a, b, c)),
+	("a", "b", "c"));
+
+ASSERT_EQUAL(
+	(AW_FOLD_RIGHT(AW_SEP_SEMI, AW_SEP_SPACE AW_DEFER, (int,a), (float,b), (char,c) );),
+#if AW_COMPILER == AW_COMPILER_GCC
+	(int a ; float b ; char c ;)
+#else
+	(int a; float b; char c;)
+#endif
+);
+
+ASSERT_EQUAL(
+	(AW_FOREACH(AW_TO_STR, a, b, c)),
+	("a", "b", "c"));
 
 #define SHOW_ASSOC( a, b ) (a b)
-static_assert(AW_TO_STR(AW_FOLDR(SHOW_ASSOC,  1, 2, 3, 4, 5, 6, 7)) == "(1 (2 (3 (4 (5 (6 7))))))"sv);
+
+ASSERT_EQUAL1(
+	AW_FOLDR(SHOW_ASSOC,  1, 2, 3, 4, 5, 6, 7),
+	(1 (2 (3 (4 (5 (6 7))))))
+);

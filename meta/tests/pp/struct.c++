@@ -1,29 +1,57 @@
 #include <aw/meta/pp/struct.h>
 
 #include <aw/config.h>
-#include <string_view>
 
-using namespace std::string_view_literals;
+#include "helpers.h"
 
 // TODO: strip spaces to eliminate differences in the preprocessor behaviour
 
-static_assert(
-    AW_TO_STR(AW_LIST_MEMBER_TYPES(NAME, AW_TUPLE(int, x), AW_TUPLE(int, y))) ==
-#if (AW_COMPILER == AW_COMPILER_GCC)
-    "int , int"sv
+ASSERT_EQUAL(
+	(AW_LIST_MEMBER_TYPES(NAME, AW_TUPLE(int, x), AW_TUPLE(int, y))),
+#if AW_COMPILER == AW_COMPILER_GCC
+	(int , int)
 #else
-    "int, int"sv
+	(int, int)
 #endif
-    );
+);
 
-static_assert(
-    AW_TO_STR(AW_DEFINE_STRUCT(s, AW_TUPLE(int, x), AW_TUPLE(int, y))) ==
-#if (AW_COMPILER == AW_COMPILER_GCC)
-    "struct s { ::aw::type_t<int> x ; ::aw::type_t<int> y ; using tuple_type = std::tuple<int , int >; constexpr operator tuple_type() { return { x , y }; };}"sv
+ASSERT_EQUAL(
+	(AW_DEFINE_STRUCT(s, AW_TUPLE(int, x), AW_TUPLE(int, y))),
+#if AW_COMPILER == AW_COMPILER_GCC
+	(struct s {
+		::aw::type_t<int> x ;
+		::aw::type_t<int> y ;
+		using tuple_type = std::tuple<int , int >;
+		constexpr operator tuple_type() { return { x , y }; }
+	})
 #else
-    "struct s { ::aw::type_t<int> x; ::aw::type_t<int> y; using tuple_type = std::tuple<int, int>; constexpr operator tuple_type() { return { x, y }; };}"sv
+	(struct s {
+		::aw::type_t<int> x;
+		::aw::type_t<int> y;
+		using tuple_type = std::tuple<int, int>;
+		constexpr operator tuple_type() { return { x, y }; }
+	})
 #endif
-    );
+);
+
+ASSERT_EQUAL(
+	(AW_DEFINE_STRUCT( str, (int, x), (int, y) )),
+#if AW_COMPILER == AW_COMPILER_GCC
+	(struct str {
+		::aw::type_t<int> x ;
+		::aw::type_t<int> y ;
+		using tuple_type = std::tuple<int , int >;
+		constexpr operator tuple_type() { return { x , y }; }
+	})
+#else
+	(struct str {
+		::aw::type_t<int> x;
+		::aw::type_t<int> y;
+		using tuple_type = std::tuple<int, int>;
+		constexpr operator tuple_type() { return { x, y }; }
+	})
+#endif
+);
 
 AW_DEFINE_STRUCT(s, AW_TUPLE(int, x), AW_TUPLE(int, y));
 

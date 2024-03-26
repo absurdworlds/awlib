@@ -7,6 +7,7 @@ aw_add_test(test_meta
 	find_type.c++
 	fold.c++
 	source_location.c++
+	pp/helpers.h
 	pp/eat_paren.c++
 	pp/foldl.c++
 	pp/foldr.c++
