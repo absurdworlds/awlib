@@ -13,9 +13,9 @@ namespace aw::hudf {
 /*! Create a new node and write a header for it. */
 bool writer::start_node(string_view name)
 {
-	ostream.put(get_indent());
-	ostream.put('[');
-	ostream.put(name);
+	ostream << get_indent();
+	ostream << '[';
+	ostream << name;
 
 	++depth;
 
@@ -33,8 +33,8 @@ bool writer::end_node()
 
 	--depth;
 
-	ostream.put(get_indent());
-	ostream.put(']');
+	ostream << get_indent();
+	ostream << ']';
 
 	end_line();
 
@@ -66,12 +66,13 @@ string_view spell_type(const value& val)
 /*! Write a value object. */
 bool writer::write_value(string_view name, value const& val, bool typed)
 {
-	ostream.put(get_indent());
-	ostream.put(name);
-	ostream.put(" = ");
+	write_token_sep();
+	ostream << get_indent();
+	ostream << name;
+	ostream << '=';
 
 	if (typed)
-		ostream.put(spell_type(val));
+		ostream << spell_type(val);
 
 	write_value_value(val);
 
@@ -84,12 +85,12 @@ void writer::write_value_value(const value& val)
 {
 	switch (val.get_type()) {
 	default:
-		ostream.put(to_string(val));
+		ostream << to_string(val);
 		break;
 	case type::string:
-		ostream.put('"');
-		ostream.put(to_string(val));
-		ostream.put('"');
+		ostream << '"';
+		ostream << to_string(val);
+		ostream << '"';
 		break;
 	}
 }
@@ -105,11 +106,16 @@ void writer::add_comment(string_view comment)
 	size_t pos2;
 
 	do {
+		// Not using end_line here so that
+		// comments don't eat up the data
+		// TODO: make end_line() smarter
 		pos2 = comment.find('\n', pos1);
-		ostream.put(indent);
-		ostream.put("//");
-		ostream.put(comment.substr(pos1, pos2 - pos1));
-		ostream.put('\n');
+		if (!line_breaks)
+			ostream << '\n';
+		ostream << indent;
+		ostream << "//";
+		ostream << comment.substr(pos1, pos2 - pos1);
+		ostream << '\n';
 
 		if (pos2 == comment.npos)
 			break;
@@ -168,7 +174,18 @@ std::string writer::get_indent() const
 
 void writer::end_line()
 {
-	ostream.put('\n');
+	if (line_breaks)
+		ostream.put('\n');
+	else
+		token_sep = true;
+}
+
+void writer::write_token_sep()
+{
+	if (token_sep) {
+		ostream.put(' ');
+		token_sep = false;
+	}
 }
 
 } // namespace aw::hudf
