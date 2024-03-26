@@ -14,8 +14,10 @@
 #include <aw/hudf/export.h>
 #include <aw/hudf/value.h>
 
-#include <aw/io/WriteStream.h>
 #include <aw/log/log.h>
+
+#include <ostream>
+
 namespace aw::hudf {
 /*! List of Writer indentation styles */
 enum class indentation_style {
@@ -30,7 +32,7 @@ enum class indentation_style {
 //! Interface for writing HuDF files. Supports HuDF 1.4.0 format.
 struct AW_HUDF_EXP writer {
 	//! Create writer outputting to \a out.
-	writer(io::WriteStream& out, log* logger = nullptr)
+	writer(std::ostream& out, log* logger = nullptr)
 		: ostream{out}, logger{logger}
 	{}
 
@@ -51,19 +53,22 @@ struct AW_HUDF_EXP writer {
 	/*! Set the indentation style for the document */
 	void set_indentation_style(indentation_style style);
 
+	void set_line_break_style(bool use) { line_breaks = use; }
+
 private:
 	/*! Report an error */
 	void error(log::level type, string_view msg);
-
-private:
+	void write_token_sep();
 	void write_value_value(const value& val);
 	void end_line();
 	std::string get_indent() const;
 
-	io::WriteStream& ostream;
+	std::ostream& ostream;
 	log* logger;
 	indentation_style indentation = indentation_style::double_space;
 	size_t depth = 0;
+	bool line_breaks = true;
+	bool token_sep = false;
 };
 } // namespace aw::hudf
 #endif//aw_fileformat_hudf_writer_h
