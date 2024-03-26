@@ -11,14 +11,17 @@ ASSERT_EQUAL(
 	(AW_FOLD_RIGHT(AW_IDENTITY, AW_TO_STR, a, b, c)),
 	("a", "b", "c"));
 
+#if AW_COMPILER == AW_COMPILER_GCC
 ASSERT_EQUAL(
 	(AW_FOLD_RIGHT(AW_SEP_SEMI, AW_SEP_SPACE AW_DEFER, (int,a), (float,b), (char,c) );),
-#if AW_COMPILER == AW_COMPILER_GCC
 	(int a ; float b ; char c ;)
-#else
-	(int a; float b; char c;)
-#endif
 );
+#else
+ASSERT_EQUAL(
+	(AW_FOLD_RIGHT(AW_SEP_SEMI, AW_SEP_SPACE AW_DEFER, (int,a), (float,b), (char,c) );),
+	(int a; float b; char c;)
+);
+#endif
 
 ASSERT_EQUAL(
 	(AW_FOREACH(AW_TO_STR, a, b, c)),
