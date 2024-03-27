@@ -146,7 +146,7 @@
 
 /**** NON-STANDARD FEATURE TESTING ****/
 #define AW_EXT(x) defined(AW_HAS_EXT##x) && AW_HAS_EXT##x
-// #define AW_HAS(x) __has_builtin(x)
+#define AW_HAS(x) AW_HAS_##x
 
 #define AW_FEATURE(x) AW_HAS_FEATURE_##x
 
