@@ -13,17 +13,17 @@
 
 #include <aw/config.h>
 
-namespace aw {
 template<typename T>
-static constexpr string_view compiler_string()
+static constexpr std::string_view aw_type_string()
 {
 	return AW_FUNCTION_SIGNATURE;
 }
 
+namespace aw {
 class type_name_helper {
-	static constexpr size_t full_size = compiler_string<void>().size();
+	static constexpr size_t full_size = aw_type_string<void>().size();
 	static constexpr size_t name_size = string_view("void").size();
-	static constexpr size_t prefix_size = compiler_string<void>().find("void");
+	static constexpr size_t prefix_size = aw_type_string<void>().find("void");
 	static constexpr size_t suffix_size = full_size - prefix_size - name_size;
 
 public:
@@ -49,12 +49,15 @@ struct type_name
 {
 	constexpr static std::string_view name()
 	{
-		return type_name_helper::extract_name(compiler_string<T>());
+		return type_name_helper::extract_name(aw_type_string<T>());
 	}
 
 	using type = T;
 	constexpr static std::string_view value = name();
 };
+
+template<typename T>
+constexpr std::string_view type_name_v = type_name<T>::value;
 
 } // namespace aw
 
