@@ -8,10 +8,10 @@ aw_add_library(awstring SHARED
 )
 target_compile_definitions(awstring PRIVATE AW_MODULE_STRING)
 target_link_libraries(awstring
-    PUBLIC
-        awalgo
-        awutils # TODO: move string headers here
-        awtypes)
+	PUBLIC
+		awalgo
+		awutils # TODO: move string headers here
+		awtypes)
 
 try_compile(AW_HAS_CXX_FORMAT
 	"${CMAKE_BINARY_DIR}/temp"
