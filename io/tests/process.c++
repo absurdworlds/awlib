@@ -2,7 +2,7 @@
 #include <aw/io/filesystem.h>
 
 #include <aw/utility/on_scope_exit.h>
-#include <aw/utility/string/trim.h>
+#include <aw/utility/string/trim_if.h>
 
 #include <aw/test/test.h>
 
@@ -31,7 +31,7 @@ Test(process_basic_test) {
 		std::string str;
 		while (std::getline(fs, str)) {
 			const auto pred = [] (char c) { return std::isspace(c); };
-			args.push_back(string::rtrimmed(str, pred));
+			args.push_back(string::rtrimmed_if(str, pred));
 		}
 	}
 

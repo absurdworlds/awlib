@@ -1,6 +1,7 @@
 #include <aw/utility/string/join.h>
 #include <aw/utility/string/split.h>
 #include <aw/utility/string/trim.h>
+#include <aw/utility/string/trim_if.h>
 #include <aw/test/test.h>
 #include <cctype>
 
@@ -26,15 +27,15 @@ Test(trim) {
 	};
 
 	Checks {
-		TestEqual(ltrimmed(str, pred), str_left);
-		TestEqual(rtrimmed(str, pred), str_right);
-		TestEqual(trimmed(str, pred), str_both);
+		TestEqual(ltrimmed_if(str, pred), str_left);
+		TestEqual(rtrimmed_if(str, pred), str_right);
+		TestEqual(trimmed_if(str, pred), str_both);
 
-		ltrim(str1, pred);
-		rtrim(str2, pred);
-		trim(str3, pred);
-		ltrim(rtrim(str4, pred), pred);
-		rtrim(ltrim(str5, pred), pred);
+		ltrim_if(str1, pred);
+		rtrim_if(str2, pred);
+		trim_if(str3, pred);
+		ltrim_if(rtrim_if(str4, pred), pred);
+		rtrim_if(ltrim_if(str5, pred), pred);
 	}
 
 	Postconditions {
