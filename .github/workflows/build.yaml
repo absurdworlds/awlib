@@ -4,14 +4,28 @@ on:
   push:
 
 jobs:
-  windows:
+  windows-x86:
     runs-on: windows-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Configure
         run: >
-          cmake -S . -B build
+          cmake -S . -B build -A Win32
+          -DAW_ENABLE_GRAPHICS:BOOL=OFF
+          -DAW_ENABLE_HUDF:BOOL=ON
+      - name: Build
+        run: cmake --build build
+      - name: Test
+        run: ctest --test-dir build -C Debug --output-on-failure
+  windows-x64:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Configure
+        run: >
+          cmake -S . -B build -A x64
           -DAW_ENABLE_GRAPHICS:BOOL=OFF
           -DAW_ENABLE_HUDF:BOOL=ON
       - name: Build
@@ -22,7 +36,7 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Configure
         run: >
           cmake -S . -B build
