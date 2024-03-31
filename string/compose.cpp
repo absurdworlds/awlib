@@ -1,13 +1,4 @@
-/*
- * Copyright (C) 2014-2015  absurdworlds
- * Copyright (C) 2015       Hedede <hededrk@gmail.com>
- *
- * License LGPLv3 or later:
- * GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
- * This is free software: you are free to change and redistribute it.
- * There is NO WARRANTY, to the extent permitted by law.
- */
-#include <aw/utility/string/compose.h>
+#include <aw/string/compose.h>
 
 #include <vector>
 
@@ -71,4 +62,4 @@ std::string compose_v(string_view fmt, array_view<std::string> args)
 	return compose_v(fmt, tmp);
 }
 
-} // namespace aw
+} // namespace aw::string
