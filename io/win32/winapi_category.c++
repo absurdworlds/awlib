@@ -1,5 +1,5 @@
 #include <aw/utility/unicode/convert.h>
-#include <aw/utility/string/trim.h>
+#include <aw/utility/string/trim_if.h>
 #include <aw/algorithm/in.h>
 #include <aw/io/export.h>
 #include <system_error>
@@ -40,7 +40,7 @@ auto winapi_error_category::message(int code) const -> std::string
 		return "Unknown error";
 
 	auto msg = aw::unicode::narrow(buf);
-	aw::string::rtrim( msg, [] (char c) { return in(c,'\r','\n'); } );
+	aw::string::rtrim_if( msg, [] (char c) { return in(c,'\r','\n'); } );
 	return msg;
 }
 } // namespace
