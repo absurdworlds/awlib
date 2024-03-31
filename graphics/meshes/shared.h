@@ -12,24 +12,17 @@
 
 #include <aw/io/input_stream_utils.h>
 
+#include <aw/utility/string/parse.h>
 #include <aw/utility/string/split.h>
 #include <aw/utility/string/trim.h>
 
-#include <charconv>
-
 namespace aw::obj {
-constexpr string_view ws (" \t\v\f\r", 5);
-
+constexpr auto ws = string::whitespace;
 
 template<typename T>
 bool parse1(string_view line, T& v)
 {
-	auto result = std::from_chars(begin(line), end(line), v);
-	if (result.ec != std::errc()) {
-		v = T();
-		return false;
-	}
-	return true;
+	return string::try_parse(line, v);
 }
 
 using split_func = std::vector<string_view>(string_view, string_view);
