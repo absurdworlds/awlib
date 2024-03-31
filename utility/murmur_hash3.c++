@@ -56,12 +56,12 @@ u64 read_u64(char const* addr)
 
 u32 getbyte32(char const* p, int i)
 {
-	return { u8(p[i]) };
+	return u8(p[i]);
 }
 
 u64 getbyte64(char const* p, int i)
 {
-	return { u8(p[i]) };
+	return u8(p[i]);
 }
 
 u32 getblock32(char const* p, int i)
