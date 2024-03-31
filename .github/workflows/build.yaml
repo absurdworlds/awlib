@@ -4,6 +4,25 @@ on:
   push:
 
 jobs:
+  build:
+    strategy:
+      matrix:
+        arch:
+          - x64
+          - x86
+        runner:
+          - windows-latest
+          - ubuntu-latest
+        compiler:
+          - gcc
+          - msvc
+          - llvm
+        exclude:
+          - runner: windows-latest
+            compiler: gcc
+          - runner: ubuntu-latest
+            compiler: msvc
+    runs-on: ${{ matrix.runner }}
   windows-x86:
     runs-on: windows-latest
     steps:
