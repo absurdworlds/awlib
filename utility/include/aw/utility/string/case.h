@@ -40,10 +40,27 @@ inline std::string& toupper(std::string& str)
  */
 inline std::string& capitalize(std::string& str)
 {
-	auto begin = std::begin(str);
-	std::toupper(*begin++);
+	if (!str.empty())
+		str.front() = std::toupper(str.front());
+	if (str.size() < 2)
+		return str;
+	auto begin = std::next(std::begin(str));
 	std::transform(begin, std::end(str), begin, ::tolower);
 	return str;
+}
+
+inline std::string tolower( std::string_view str )
+{
+	std::string tmp(str);
+	tolower(tmp);
+	return tmp;
+}
+
+inline std::string toupper( std::string_view str )
+{
+	std::string tmp(str);
+	toupper(tmp);
+	return tmp;
 }
 } // namespace string
 } // namespace aw
