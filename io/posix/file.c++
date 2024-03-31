@@ -18,21 +18,20 @@
 #include <sys/ioctl.h>
 #include <linux/fs.h>
 #endif
-namespace aw {
-namespace io {
-namespace posix {
 
+
+namespace aw::io::posix {
 
 file_descriptor open(fs::path const& path, file_mode fm, std::error_code& ec)
 {
 	int flags = 0;
 	switch (fm & (file_mode::read | file_mode::write)) {
-	case file_mode::read:
-		flags |= O_RDONLY; break;
-	case file_mode::write:
-		flags |= O_WRONLY; break;
-	case file_mode::read|file_mode::write:
-		flags |= O_RDWR;   break;
+		case file_mode::read:
+			flags |= O_RDONLY; break;
+		case file_mode::write:
+			flags |= O_WRONLY; break;
+		case file_mode::read|file_mode::write:
+			flags |= O_RDWR;   break;
 	}
 
 	if (bool(fm & file_mode::append))
@@ -133,6 +132,4 @@ uintmax_t size(file_descriptor fd, std::error_code& ec)
 #endif
 	return (ret == -1) ? uintmax_t(-1) : info.st_size;
 }
-} // namespace posix
-} // namespace io
-} // namespace aw
+} // namespace aw::io::posix
