@@ -4,17 +4,27 @@
 #include <aw/types/string_view.h>
 
 #include <charconv>
+#include <optional>
 
 namespace aw::string {
 template<typename T>
 bool try_parse(string_view line, T& v)
 {
-	auto result = std::from_chars(begin(line), end(line), v);
+	auto result = std::from_chars(line.data(), line.data() + line.size(), v);
 	return result.ec != std::errc();
 }
 
 template<typename T>
-T parse(string_view line, T default_value = T())
+std::optional<T> parse(string_view line)
+{
+	T val;
+	if (!try_parse(line, val))
+		return {};
+	return val;
+}
+
+template<typename T>
+T parse(string_view line, T default_value)
 {
 	T val;
 	if (!try_parse(line, val))
