@@ -1,18 +1,9 @@
-/*
- * Copyright (C) 2014-2015  absurdworlds
- * Copyright (C) 2015       Hedede <hededrk@gmail.com>
- *
- * License LGPLv3 or later:
- * GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
- * This is free software: you are free to change and redistribute it.
- * There is NO WARRANTY, to the extent permitted by law.
- */
 #ifndef aw_string_compose_h
 #define aw_string_compose_h
 #include <aw/types/array_view.h>
 #include <aw/types/string_view.h>
 
-#include <aw/utility/string/string.h>
+#include <aw/string/export.h>
 #include <aw/utility/to_string.h>
 
 namespace aw::string {
