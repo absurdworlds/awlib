@@ -2,7 +2,8 @@
 aw_add_library(awutils SHARED
 	GLOB_HEADERS
 	SOURCES
-		argv_parser.c++ murmur_hash3.c++ pool.c++
+		argv_parser.c++
+		murmur_hash3.c++
 	EXPORT_NAME
 		utility
 )
