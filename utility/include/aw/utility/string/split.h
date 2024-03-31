@@ -58,28 +58,51 @@ split_off(string_view source, string_view delim)
 	return {first, source.substr( std::min(pos3, source.size()) )};
 }
 
+constexpr enum class keep_empty_t {} keep_empty = {};
+constexpr enum class discard_empty_t {} discard_empty = {};
+
 namespace _impl {
+
+inline size_t delim_size(char)
+{
+	return 1;
+}
+
+inline size_t delim_size(std::string_view str)
+{
+	return str.size();
+}
+
+inline bool keep(std::string_view substr, keep_empty_t)
+{
+	return true;
+}
+
+inline bool keep(std::string_view substr, discard_empty_t)
+{
+	return !substr.empty();
+}
+
 // TODO: move out of _impl?
-template<typename Store>
-void split(string_view source, string_view delim, Store store)
+template<typename Delimiter, typename Container, typename Behavior>
+void split(string_view source, Delimiter delim, Container& store, Behavior behavior)
 {
 	size_t pos1 = 0;
 
 	do {
 		const auto pos2 = source.find(delim, pos1);
 
-		store( source.substr(pos1, pos2 - pos1) );
+		const auto substr = source.substr(pos1, pos2 - pos1);
+		if (keep(substr, behavior))
+			store.push_back( substr );
 
 		if (pos2 == source.npos)
 			break;
 
-		pos1 = pos2 + delim.size();
+		pos1 = pos2 + delim_size(delim);
 	} while (true);
 }
 } // namespace _impl
-
-constexpr enum class keep_empty_t {} keep_empty = {};
-constexpr enum class discard_empty_t {} discard_empty = {};
 
 /*!
  * Split delimited string into substrings,
@@ -90,15 +113,19 @@ constexpr enum class discard_empty_t {} discard_empty = {};
  * `split("x==y==z", "==", discard_empty)` -> `{"x", "y", "z"}`
  * `split("/path/", "/", discard_empty)`  -> `{"path"}`
  */
-inline auto split(string_view source, string_view delim, discard_empty_t /*behavior*/)
+inline auto split(string_view source, string_view delim, discard_empty_t behavior)
 	-> std::vector<string_view>
 {
 	std::vector<string_view> holder;
-	auto insert = [&] (string_view s) {
-		if (!s.empty())
-			holder.push_back(s);
-	};
-	_impl::split(source, delim, insert);
+	_impl::split(source, delim, holder, behavior);
+	return holder;
+}
+
+inline auto split(string_view source, char delim, discard_empty_t behavior)
+	-> std::vector<string_view>
+{
+	std::vector<string_view> holder;
+	_impl::split(source, delim, holder, behavior);
 	return holder;
 }
 
@@ -111,14 +138,19 @@ inline auto split(string_view source, string_view delim, discard_empty_t /*behav
  * `split("x==y==z", "==", keep_empty)` -> `{"x", "y", "z"}`
  * `split("/path/", "/", keep_empty)` -> `{"", "path", ""}`
  */
-inline auto split(string_view source, string_view delim, keep_empty_t /*behavior*/)
+inline auto split(string_view source, string_view delim, keep_empty_t behavior)
 	-> std::vector<string_view>
 {
 	std::vector<string_view> holder;
-	auto insert = [&] (string_view s) {
-		holder.push_back(s);
-	};
-	_impl::split(source, delim, insert);
+	_impl::split(source, delim, holder, behavior);
+	return holder;
+}
+
+inline auto split(string_view source, char delim, keep_empty_t behavior)
+	-> std::vector<string_view>
+{
+	std::vector<string_view> holder;
+	_impl::split(source, delim, holder, behavior);
 	return holder;
 }
 
@@ -130,7 +162,8 @@ enum class split_behavior {
 /*!
  * Same as previous split, but allows to control behavior at run-time.
  */
-inline auto split(string_view source, string_view delim, split_behavior behavior)
+template<typename Delimiter>
+auto split(string_view source, Delimiter delim, split_behavior behavior)
 	-> std::vector<string_view>
 {
 	if (behavior == split_behavior::discard_empty)
@@ -141,7 +174,8 @@ inline auto split(string_view source, string_view delim, split_behavior behavior
 	return {};
 }
 
-inline std::vector<string_view> split(string_view source, string_view delim)
+template<typename Delimiter>
+std::vector<string_view> split(string_view source, Delimiter delim)
 {
 	return split(source, delim, discard_empty);
 }

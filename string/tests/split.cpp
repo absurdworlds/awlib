@@ -21,6 +21,24 @@ Test(split_empty) {
 	}
 }
 
+Test(split_char) {
+	std::string s = "a bc  d e ";
+
+	std::vector<string_view> v1;
+	std::vector<string_view> v2;
+
+	Checks {
+		v1 = string::split(s, ' ', string::discard_empty);
+		v2 = string::split(s, ' ', string::keep_empty);
+	}
+
+	Postconditions {
+		using V = std::vector<string_view>;
+		TestEqual(v1, V{ "a", "bc", "d", "e" });
+		TestEqual(v2, V{ "a", "bc", "", "d", "e", "" });
+	}
+}
+
 Test(split_word) {
 	std::string s = "word";
 
@@ -59,6 +77,22 @@ Test(split_words) {
 		TestEqual(v1, e1);
 		TestEqual(v2, e2);
 		TestEqual(v3, e3);
+	}
+}
+
+Test(split_default) {
+	std::string s = " a bc  d e ";
+
+	std::vector<string_view> v1;
+	std::vector<string_view> v2;
+
+	Checks {
+		v1 = string::split(s, ' ');
+		v2 = string::split(s, ' ', string::discard_empty);
+	}
+
+	Postconditions {
+		TestEqual(v1, v2);
 	}
 }
 } // namespace aw
