@@ -17,13 +17,17 @@ namespace aw {
  */
 template<typename...Fs>
 struct overload : Fs... {
+	overload() = default;
 	overload(Fs... fs) : Fs{ std::move(fs) }...  {}
 	using Fs::operator()...;
+	// Enables use in transparent containers
+	// (std::map, std::unordered_map, etc)
+	using is_transparent = void;
 };
 #else
 template<typename Func, typename...Fs>
 struct overload : overload<Func>, overload<Fs...> {
-	overloaded(Func func, Fs... fs)
+	overload(Func func, Fs... fs)
 		: overload<Func>{std::forward<F>(func)},
 		  overload<Fs...>{std::forward<Fs>(fs)...}
 	{}
