@@ -12,7 +12,7 @@
 
 #include <aw/hudf/lexer.h>
 #include <aw/utility/to_string.h>
-#include <aw/utility/string/compose.h>
+#include <aw/string/compose.h>
 
 namespace aw::hudf {
 inline namespace v1 {

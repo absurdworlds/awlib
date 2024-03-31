@@ -8,7 +8,6 @@
  */
 #ifndef aw_utf_convert_h
 #define aw_utf_convert_h
-#include <aw/utility/string/string.h>
 #include <aw/utility/unicode/utf8.h>
 #include <aw/utility/unicode/utf16.h>
 #include <aw/utility/unicode/utf32.h>

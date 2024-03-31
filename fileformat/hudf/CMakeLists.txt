@@ -15,4 +15,5 @@ target_link_libraries(awhudf
 	PUBLIC
 		awlog_interface
 		awutils
-		awio)
+		awio
+		awstring)

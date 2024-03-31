@@ -2,10 +2,12 @@
 aw_add_library(awstring SHARED
 	GLOB_HEADERS
 	SOURCES
+		string.c++
 		compose.cpp # TODO: remove, superseded by std::format
 	EXPORT_NAME
 		string
 )
+
 target_compile_definitions(awstring PRIVATE AW_MODULE_STRING)
 target_link_libraries(awstring
 	PUBLIC

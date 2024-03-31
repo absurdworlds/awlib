@@ -1,4 +1,4 @@
-#include <aw/utility/string/compose.h>
+#include <aw/string/compose.h>
 #include <aw/test/test.h>
 
 TestFile("Compose tests");
