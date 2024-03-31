@@ -7,6 +7,7 @@
  * There is NO WARRANTY, to the extent permitted by law.
  */
 #include <aw/io/mmap_file.h>
+#include <aw/types/support/narrow.h>
 #include "winapi_helpers.h"
 namespace aw {
 namespace io {
@@ -57,17 +58,21 @@ file_mapping map_file( file_descriptor fd, map_perms perms, std::error_code& ec 
 		return { invalid_mapping };
 	}
 
-	unsigned prot = get_protection( perms );
-	HANDLE mapping = CreateFileMappingW( HANDLE(fd), nullptr, prot, 0, 0, nullptr);
+	const unsigned prot = get_protection( perms );
+	const HANDLE mapping = CreateFileMappingW( HANDLE(fd), nullptr, prot, 0, 0, nullptr);
 	if (!mapping) {
 		set_error( ec );
 		return { invalid_mapping };
 	}
 
-	unsigned access = get_access( perms );
+	const unsigned access = get_access( perms );
 	void* view = MapViewOfFile( mapping, access, 0, 0, 0 );
 
-	return { uintptr_t(mapping), view, size( fd, ec ) };
+	return {
+		.handle = uintptr_t(mapping),
+		.address = view,
+		.length = narrow_cast<size_t>(size( fd, ec ))
+	};
 }
 
 bool unmap_file( file_mapping& map, std::error_code& ec )
