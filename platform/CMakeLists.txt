@@ -16,3 +16,10 @@ target_link_libraries(awplatform
 	PRIVATE
 		awalgo
 		awutils)
+
+if (WIN32)
+	target_link_libraries(awplatform
+	PRIVATE
+		DbgHelp
+	)
+endif()

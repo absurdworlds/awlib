@@ -1,7 +1,7 @@
 // Not a bug: all of compiler_setup headers have the same include guard
 #ifndef aw_compiler_setup_2
 #define aw_compiler_setup_2
-#define AW_COMPILER AW_COMPILER_MVSC
+#define AW_COMPILER AW_COMPILER_MSVC
 #define AW_CVER_X _MSC_VER
 
 #if defined(_M_X64)

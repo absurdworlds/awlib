@@ -30,8 +30,9 @@ std::string demangle(const char* name)
 	return name;
 }
 } // namespace aw
-#elif (AW_COMPILER == AW_COMPILER_MSVC)
+#elif (AW_COMPILER == AW_COMPILER_MSVC) || (AW_COMPILER == AW_COMPILER_CLANG_CL)
 #include <vector>
+#include <aw/platform/windows.h>
 #include <dbghelp.h>
 #undef UnDecorateSymbolName
 namespace aw {
