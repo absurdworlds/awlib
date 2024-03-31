@@ -1478,7 +1478,7 @@ bool operator<(map_entry const& a, map_entry const& b)
 
 bool operator==(map_entry const& a, map_entry const& b)
 {
-       return a.ext_name == b.ext_name;
+	return a.ext_name == b.ext_name;
 }
 
 [[nodiscard]] std::vector<map_entry> initialize_mapping_table()

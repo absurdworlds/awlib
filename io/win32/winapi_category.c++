@@ -12,12 +12,12 @@ namespace _impl {
 namespace {
 
 struct winapi_error_category final : std::error_category {
-    char const* name() const noexcept override
+	char const* name() const noexcept override
 	{
 		return "winapi";
 	}
 
-    std::string message(int code) const override;
+	std::string message(int code) const override;
 	
 	std::error_condition default_error_condition( int code ) const noexcept override
 	{
