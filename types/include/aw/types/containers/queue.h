@@ -184,7 +184,7 @@ private:
  */
 template <typename T, typename Allocator = std::allocator<T>>
 class queue : _impl::queue_base<T, Allocator> {
-        using Base = _impl::queue_base<T, Allocator>;
+	using Base = _impl::queue_base<T, Allocator>;
 public:
 	using value_type             = T;
 	using allocator_type         = Allocator;

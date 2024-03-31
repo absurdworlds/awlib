@@ -255,7 +255,7 @@ seed128_32 MurmurHash3_x86_128(char const* key, size_t len, seed128_32 seed)
 	h4 ^= len;
 
 	h1 += h2;
-       	h1 += h3;
+	h1 += h3;
 	h1 += h4;
 	h2 += h1;
 	h3 += h1;

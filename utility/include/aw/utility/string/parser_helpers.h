@@ -19,28 +19,28 @@ template<typename Iter, typename CharT>
 Iter find_non_escaped_char(Iter begin, Iter end, CharT c, CharT escape)
 {
 	Iter pos;
-        while (true) {
+	while (true) {
 		pos = std::find(begin, end, c);
 		if (pos == begin || pos == end)
-                        break;
-                if (*(pos-1) != escape)
-                        break;
-        }
-        return pos;
+			break;
+		if (*(pos-1) != escape)
+			break;
+	}
+	return pos;
 }
 
 template<typename CharT>
 size_t find_non_escaped_char(basic_string_view<CharT> s, CharT c, CharT escape)
 {
 	size_t pos;
-        while (true) {
+	while (true) {
 		pos = s.find(c);
 		if (pos == 0 || pos == s.npos)
-                        break;
-                if (s[pos-1] != escape)
-                        break;
-        }
-        return pos;
+			break;
+		if (s[pos-1] != escape)
+			break;
+	}
+	return pos;
 }
 } // namespace aw
 #endif//aw_string_parser_helpers_h
