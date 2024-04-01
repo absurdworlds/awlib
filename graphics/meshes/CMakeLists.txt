@@ -13,5 +13,9 @@ aw_add_library(awobj STATIC
 aw_export_dependency(PNG)
 
 target_link_libraries(awobj
-    PUBLIC  awio awlog
-    PRIVATE PNG::PNG)
+	PUBLIC
+		awio
+		awlog
+		awstring
+	PRIVATE
+		PNG::PNG)
