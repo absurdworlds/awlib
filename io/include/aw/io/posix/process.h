@@ -36,12 +36,11 @@ inline process_handle spawn(aw::array_view<char*> argv)
 	return spawn(argv, ec);
 }
 AW_IO_EXP process_handle spawn(std::string path, aw::array_ref<std::string> argv, std::error_code& ec);
-AW_IO_EXP process_handle spawn(std::string path, aw::array_ref<std::string> argv)
+inline process_handle spawn(std::string path, aw::array_ref<std::string> argv)
 {
 	std::error_code ec;
 	return spawn(path, argv, ec);
 }
-
 
 AW_IO_EXP wait_status wait(process_handle pid, std::error_code& ec) noexcept;
 inline wait_status wait(process_handle pid)

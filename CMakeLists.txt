@@ -18,6 +18,8 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
+option(BUILD_SHARED_LIBS "Build using shared libraries" ON)
+
 set(AW_CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/awlib/cmake")
 
 list(APPEND CMAKE_MODULE_PATH ${AW_CMAKE_MODULE_PATH})
@@ -43,7 +45,6 @@ endif()
 if (UNIX)
 	set(AW_CAPABILITIES_POSIX YES)
 endif()
-
 
 option(AW_MAKE_TESTS "Make tests. Produces a test executable for each library." ON)
 option(AW_SPLIT_INCLUDES "Install headers for each library into a separate directory." ON)
