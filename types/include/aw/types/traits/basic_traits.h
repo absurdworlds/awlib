@@ -9,9 +9,9 @@
 #ifndef aw_traits_basic_traits
 #define aw_traits_basic_traits
 #include <aw/meta/void_t.h>
+#include <aw/meta/is_same.h>
 #include <aw/types/string_view.h>
 #include <string>
-#include <type_traits>
 #include <utility>
 namespace aw {
 using std::declval;
@@ -54,12 +54,6 @@ constexpr bool is_invocable = std::is_invocable<Fn, Args...>::value;
 
 template<class Base, class Derived>
 constexpr auto is_base_of = std::is_base_of<Base,Derived>::value;
-
-template<class A, class B>
-constexpr auto is_same [[deprecated("Use is_same_v")]] = std::is_same<A,B>::value;
-
-template<class A, class B>
-constexpr auto is_same_v = std::is_same<A,B>::value;
 
 template<typename T>
 constexpr bool is_const = std::is_const<T>::value;
