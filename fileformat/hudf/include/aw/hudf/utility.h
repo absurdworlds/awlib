@@ -25,7 +25,7 @@ AW_HUDF_EXP document parse_file(io::input_stream& file, log* l = nullptr);
 template <typename T, size_t N>
 inline bool get_numbers(value const& val, T (&out)[N])
 {
-	const auto convert = [&](auto vec) {
+	const auto convert = [&](auto& vec) {
 		size_t n = std::min(vec->size(), N);
 		for (size_t i = 0; i < n; ++i)
 			out[i] = static_cast<T>((*vec)[i]);
