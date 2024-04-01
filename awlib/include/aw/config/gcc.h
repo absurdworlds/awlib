@@ -19,6 +19,11 @@
 #endif
 
 #define AW_HAS_warning 1
+// GCC doc:
+// The relevant bytes of the representation of the object
+// are treated as an object of the type used for the access.
+// See Type-punning. This may be a trap representation.
+#define AW_HAS_type_punning_union 1
 
 // TODO: minimal compiler version
 #define AW_HAS_EXT__builtin_clz 1
