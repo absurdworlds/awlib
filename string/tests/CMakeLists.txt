@@ -8,6 +8,7 @@ aw_add_test(test_string
 		lazy_split.cpp
 		join.cpp
 		misc.cpp
+		parse.c++
 		repeat.c++)
 
 target_link_libraries(test_string

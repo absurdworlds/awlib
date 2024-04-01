@@ -12,7 +12,7 @@
 
 #include <aw/io/input_stream_utils.h>
 
-#include <aw/utility/string/parse.h>
+#include <aw/string/parse.h>
 #include <aw/utility/string/split.h>
 #include <aw/utility/string/trim.h>
 
