@@ -26,12 +26,14 @@ assert_action assert_fail(string_view assertion, source_location location = sour
 template <typename... Arg_types>
 assert_action assert_fail_fmt(string_view msg, source_location loc = source_location::current(), Arg_types&&... args)
 {
+#if AW_FORMAT != AW_NO_FORMAT
 	if constexpr(sizeof...(Arg_types) > 0)
 	{
 		std::string fmt = vformat( msg, make_format_args(std::forward<Arg_types>(args)...) );
 		return assert_fail(fmt, loc);
 	}
 	else
+#endif
 	{
 		return assert_fail(msg, loc);
 	}
