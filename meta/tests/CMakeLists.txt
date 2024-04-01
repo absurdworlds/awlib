@@ -6,6 +6,7 @@ aw_add_test(test_meta
 	find_index.c++
 	find_type.c++
 	fold.c++
+	is_same.c++
 	source_location.c++
 	pp/helpers.h
 	pp/eat_paren.c++

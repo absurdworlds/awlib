@@ -8,7 +8,7 @@
  */
 #ifndef aw_traits_basic_operations_h
 #define aw_traits_basic_operations_h
-#include <aw/types/traits/basic_traits.h>
+#include <aw/meta/is_same.h>
 #include <aw/meta/void_t.h>
 namespace aw {
 using std::declval;
@@ -21,14 +21,14 @@ template<typename T, typename = void>
 constexpr bool is_incrementable = false;
 template<typename T>
 constexpr bool is_incrementable< T, void_t<increment<T>> > {
-	is_same< increment<T>, T&>
+	is_same_v< increment<T>, T&>
 };
 
 template<typename T, typename = void>
 constexpr bool is_decrementable = false;
 template<typename T>
 constexpr bool is_decrementable< T, void_t<decrement<T>> > {
-	is_same< decrement<T>, T&>
+	is_same_v< decrement<T>, T&>
 };
 
 template<typename T, typename = void>
