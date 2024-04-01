@@ -26,10 +26,7 @@ std::optional<T> parse(string_view line)
 template<typename T>
 T parse(string_view line, T default_value)
 {
-	T val;
-	if (!try_parse(line, val))
-		return default_value;
-	return val;
+	return parse<T>(line).value_or(default_value);
 }
 } // namespace aw::string
 
