@@ -51,7 +51,7 @@ target_compile_definitions(awassert
 
 target_link_libraries(awassert
 	PUBLIC
-		aw
+		awconfig
 		awutils
 		awtypes
 		awstring
