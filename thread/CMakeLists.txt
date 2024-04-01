@@ -7,4 +7,4 @@ aw_add_library(awthread SHARED
 )
 
 target_compile_definitions(awthread PRIVATE AW_MODULE_THREAD)
-target_link_libraries(awthread aw)
+target_link_libraries(awthread awconfig)

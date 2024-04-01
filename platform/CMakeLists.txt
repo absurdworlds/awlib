@@ -11,7 +11,7 @@ aw_add_library(awplatform SHARED
 target_compile_definitions(awplatform PRIVATE AW_MODULE_PLATFORM)
 target_link_libraries(awplatform
 	PUBLIC
-		aw
+		awconfig
 		awtypes
 	PRIVATE
 		awalgo
