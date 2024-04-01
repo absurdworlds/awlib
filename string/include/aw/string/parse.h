@@ -11,7 +11,7 @@ template<typename T>
 bool try_parse(string_view line, T& v)
 {
 	auto result = std::from_chars(line.data(), line.data() + line.size(), v);
-	return result.ec != std::errc();
+	return result.ec == std::errc();
 }
 
 template<typename T>
