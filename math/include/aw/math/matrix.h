@@ -156,6 +156,18 @@ struct matrix {
 		return rows[idx];
 	}
 
+#if __cpp_multidimensional_subscript >= 202110L
+	constexpr value_type operator[](size_t row, size_t col) const
+	{
+		return rows[row][col];
+	}
+
+	constexpr value_type& operator[](size_t row, size_t col)
+	{
+		return rows[row][col];
+	}
+#endif
+
 	constexpr matrix& operator+=(matrix const& other)
 	{
 		_impl::vec::add(*this, other, row_indices);
