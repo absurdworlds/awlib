@@ -26,6 +26,7 @@
 #endif
 
 #define AW_HAS_warning 1
+#define AW_HAS_type_punning_union 1
 
 #define AW_HAS_EXT__builtin_bswap16 __has_builtin(__builtin_bswap16)
 #define AW_HAS_EXT__builtin_bswap32 __has_builtin(__builtin_bswap32)

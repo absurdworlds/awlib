@@ -12,6 +12,8 @@
 
 #define AW_HAS_EXT__assume 1
 #define AW_HAS_warning 0
+// TODO: this is not documented anywhere but works in practice
+#define AW_HAS_type_punning_union 1
 
 #define AW_ATTRIBUTE( ... ) __declspec(__VA_ARGS__)
 
