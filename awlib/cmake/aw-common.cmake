@@ -28,6 +28,10 @@ function(aw_add_library NAME TYPE)
 		file(GLOB_RECURSE ARG_HEADERS ${CMAKE_CURRENT_SOURCE_DIR}/include/*.h)
 	endif()
 
+	if (NOT BUILD_SHARED_LIBS AND TYPE STREQUAL "SHARED")
+		set(TYPE "STATIC")
+	endif()
+
 	add_library(${NAME} ${TYPE} ${ARG_HEADERS} ${ARG_SOURCES})
 
 	if ("${TYPE}" STREQUAL "INTERFACE")
