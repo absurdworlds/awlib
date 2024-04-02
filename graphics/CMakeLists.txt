@@ -11,7 +11,13 @@ aw_add_library(awgraphics SHARED
 	SOURCES
 		${awgraphics_SOURCES}
 	EXPORT_NAME
-		graphics)
+		graphics
+)
+
+target_compile_definitions(awgraphics
+	PRIVATE
+		AW_MODULE_GRAPHICS
+)
 
 target_link_libraries(awgraphics
     PUBLIC
