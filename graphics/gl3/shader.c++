@@ -64,7 +64,7 @@ bool shader::compile(string_view code)
 
 	bool status = is_compiled();
 	if (status == false) {
-		std::cout << "Failed to compile " << enum_string( type() ) << " shader:" << '\n';
+		std::cerr << "Failed to compile " << enum_string( type() ) << " shader:" << '\n';
 		report_info_log( _shader );
 	}
 
