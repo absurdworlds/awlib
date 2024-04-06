@@ -10,6 +10,7 @@
 #define aw_gl_loader_h
 #include <aw/types/unknown.h>
 #include <aw/config.h>
+#include <type_traits>
 namespace aw {
 namespace gl {
 
@@ -42,8 +43,9 @@ unknown_fn* get_proc_address(const char* name);
 #endif//AW_SUPPORT_PLATFORM_X11
 
 namespace gl {
-template <typename R, typename...Args>
-void get_proc(R(*& func)(Args...), char const* name)
+template <typename Function>
+	requires std::is_function_v<Function>
+void get_proc(Function*& func, char const* name)
 {
 #if AW_SUPPORT_PLATFORM_APPLE
 	using apple::get_proc_address;
@@ -52,7 +54,7 @@ void get_proc(R(*& func)(Args...), char const* name)
 #elif AW_SUPPORT_PLATFORM_X11
 	using glx::get_proc_address;
 #endif
-	func = reinterpret_cast<R(*)(Args...)>( get_proc_address(name) );
+	func = reinterpret_cast<Function*>( get_proc_address(name) );
 };
 } // namespace gl
 } // namespace aw
