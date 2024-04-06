@@ -11,8 +11,7 @@
 #include <aw/graphics/gl/api/types.h>
 #include <aw/types/string_view.h>
 #include <aw/utility/builtins.h>
-namespace aw {
-namespace gl {
+namespace aw::gl {
 enum class shader_handle : GLuint {};
 enum class program_handle : GLuint {};
 enum class uniform_location : GLint {};
@@ -57,6 +56,5 @@ enum class program_param : GLenum {
 	link_status     = 0x8B82,
 	info_log_length = 0x8B84,
 };
-} // namespace gl
-} // namespace aw
+} // namespace aw::gl
 #endif//aw_graphics_awgl_shader_enum_h

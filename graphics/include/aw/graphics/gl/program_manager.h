@@ -8,13 +8,12 @@
  */
 #ifndef aw_graphics_gl3_program_manager_h
 #define aw_graphics_gl3_program_manager_h
-#include <aw/graphics/gl/program.h>
 #include <aw/graphics/export.h>
+#include <aw/graphics/gl/program.h>
 #include <aw/types/string_view.h>
 //#include <aw/types/containers/flat_map.h>
 #include <vector>
-namespace aw {
-namespace gl3 {
+namespace aw::gl3 {
 struct program_uniform_locations {
 	uniform_location model_to_camera;
 };
@@ -73,6 +72,5 @@ struct AW_GRAPHICS_EXP program_manager {
 	std::vector<program_aux> aux;
 };
 
-} // namespace gl3
-} // namespace aw
+} // namespace aw::gl3
 #endif//aw_graphics_gl3_program_manager_h
