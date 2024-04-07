@@ -4,6 +4,7 @@
 # awlog shared library: provides common logger implementations
 
 aw_add_library(awlog SHARED
+	VERSION 1.1.1
 	SPLIT_INTERFACE
 	GLOB_HEADERS
 	SOURCES

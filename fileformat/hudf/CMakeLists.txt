@@ -1,4 +1,5 @@
 aw_add_library(awhudf SHARED
+	VERSION 1.4.1
 	GLOB_HEADERS
 	SOURCES
 		lexer.c++

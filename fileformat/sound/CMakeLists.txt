@@ -1,5 +1,6 @@
 
 aw_add_library(awsound SHARED
+	VERSION 1.0.0
 	GLOB_HEADERS
 	SOURCES
 		wav_reader.c++

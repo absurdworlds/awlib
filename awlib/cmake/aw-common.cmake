@@ -17,7 +17,7 @@ endmacro()
 #     Alias for the exported target
 function(aw_add_library NAME TYPE)
 	set(options GLOB_HEADERS SPLIT_INTERFACE)
-	set(arguments EXPORT_NAME)
+	set(arguments EXPORT_NAME VERSION)
 	set(multivalue HEADERS SOURCES)
 	cmake_parse_arguments(PARSE_ARGV 1 ARG "${options}" "${arguments}" "${multivalue}")
 
@@ -41,12 +41,18 @@ function(aw_add_library NAME TYPE)
 		set_target_properties(${NAME} PROPERTIES LINKER_LANGUAGE CXX)
 	endif()
 
-	if (UNIX)
-		set_target_properties(${NAME}
-			PROPERTIES
-				VERSION ${CMAKE_PROJECT_VERSION}
-				SOVERSION ${PROJECT_VERSION_MAJOR} )
+	if (ARG_VERSION)
+		set(VERSION ${ARG_VERSION})
+		string(REGEX MATCH "^[0-9]+" VERSION_MAJOR ${VERSION})
+	else()
+		set(VERSION ${CMAKE_PROJECT_VERSION})
+		set(VERSION_MAJOR ${CMAKE_PROJECT_VERSION_MAJOR})
 	endif()
+
+	set_target_properties(${NAME}
+		PROPERTIES
+			VERSION ${VERSION}
+			SOVERSION ${VERSION_MAJOR} )
 
 	set(EXPORT_TARGETS ${NAME})
 
