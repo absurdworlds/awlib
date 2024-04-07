@@ -465,57 +465,59 @@ public:
 	/*!
 	 * Insert element at the front of queue
 	 */
-	void push_front(const_reference val)
+	reference push_front(const_reference val)
 	{
-		emplace_front(val);
+		return emplace_front(val);
 	}
 
 	/*!
 	 * Insert element at the end of queue
 	 */
-	void push_back(const_reference val)
+	reference push_back(const_reference val)
 	{
-		emplace_back(val);
+		return emplace_back(val);
 	}
 
 	/*!
 	 * Insert element at the front of queue
 	 */
-	void push_front(value_type&& val)
+	reference push_front(value_type&& val)
 	{
-		emplace_front(std::move(val));
+		return emplace_front(std::move(val));
 	}
 
 	/*!
 	 * Insert element at the end of queue
 	 */
-	void push_back(value_type&& val)
+	reference push_back(value_type&& val)
 	{
-		emplace_back(std::move(val));
+		return emplace_back(std::move(val));
 	}
 
 	/*!
 	 * Construct element at the front of queue
 	 */
 	template <typename... Args>
-	void emplace_front(Args&&... args)
+	reference emplace_front(Args&&... args)
 	{
 		check_capacity();
 
 		impl.head = impl.prev_p(impl.head);
 		construct(impl.head, std::forward<Args>(args)...);
+		return *impl.head;
 	}
 
 	/*!
 	 * Construct element at the end of queue
 	 */
 	template <typename... Args>
-	void emplace_back(Args&&... args)
+	reference emplace_back(Args&&... args)
 	{
 		check_capacity();
 
-		construct(impl.tail, std::forward<Args>(args)...);
-		impl.tail = impl.next_p(impl.tail);
+		auto elem_ptr = std::exchange(impl.tail, impl.next_p(impl.tail));
+		construct(elem_ptr, std::forward<Args>(args)...);
+		return *elem_ptr;
 	}
 
 	/*! Get element at the head of queue */

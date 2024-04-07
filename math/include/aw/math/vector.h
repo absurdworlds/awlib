@@ -191,7 +191,7 @@ struct vector {
 		return dot(*this);
 	}
 
-	T length() const
+	auto length() const
 	{
 		return math::sqrt(length_sq());
 	}
