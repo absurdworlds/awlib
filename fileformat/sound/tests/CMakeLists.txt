@@ -1,10 +1,10 @@
 
-set(SOURCES wav_reader.cpp) # TODO: .c++
-
-add_executable(test_wav ${SOURCES})
+aw_add_test(test_wav
+	SOURCES
+		wav_reader.c++)
 target_link_libraries(test_wav
 	PRIVATE
-		awaudio
+		awsound
 		awio
 		awplatform
 		awtest
