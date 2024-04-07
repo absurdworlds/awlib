@@ -1,19 +1,15 @@
 
-file(GLOB_RECURSE HEADERS ${CMAKE_CURRENT_SOURCE_DIR}/include/*.h)
-set(SOURCES
-    wav_reader.cpp
-    chunks.h)
+aw_add_library(awsound SHARED
+	GLOB_HEADERS
+	SOURCES
+		wav_reader.c++
+		chunks.h
+	EXPORT_NAME
+		sound
+	)
 
-
-add_library(awaudio SHARED ${HEADERS} ${SOURCES})
-set_target_properties(awaudio PROPERTIES LINKER_LANGUAGE CXX)
-target_compile_definitions(awaudio PRIVATE AW_MODULE_SOUND)
-target_include_directories(awaudio PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
-target_link_libraries(awaudio
-    PUBLIC
-        awlog_interface
-        awio)
-
-if (AW_MAKE_TESTS)
-	add_subdirectory(tests)
-endif()
+target_compile_definitions(awsound PRIVATE AW_MODULE_SOUND)
+target_link_libraries(awsound
+	PUBLIC
+		awlog_interface
+		awio)
