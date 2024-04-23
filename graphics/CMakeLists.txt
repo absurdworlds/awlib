@@ -2,9 +2,6 @@
 find_package(OpenGL REQUIRED)
 
 set(awgraphics_SOURCES
-	gl/loader.c++
-	gl/gl_api.c++
-	gl/enum_check.c++
 	gl3/shader.c++
 	gl3/program.c++
 	gl3/uniform.c++
@@ -28,31 +25,12 @@ target_compile_definitions(awgraphics
 		AW_MODULE_GRAPHICS
 )
 
-if (WIN32)
-	set(AW_OPENGL_LIBS
-		OpenGL::GL
-		awplatform
-	)
-elseif (APPLE)
-	set(AW_OPENGL_LIBS
-		OpenGL::GL
-	)
-elseif (UNIX)
-	set(AW_OPENGL_LIBS
-		OpenGL::GL
-		OpenGL::GLX
-	)
-endif()
-
-
 target_link_libraries(awgraphics
-	PUBLIC
-		awio
-		awmath
-		awobj
-	PRIVATE
-		${AW_OPENGL_LIBS}
+    PUBLIC
+        awio
+        awmath
+        awobj
 )
-
 add_subdirectory(test)
+add_subdirectory(gl)
 add_subdirectory(meshes)

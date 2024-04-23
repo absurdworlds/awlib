@@ -8,8 +8,8 @@
  */
 #ifndef aw_graphics_awgl_texture_func_h
 #define aw_graphics_awgl_texture_func_h
-#include <aw/graphics/gl/api/gl_33.h>
-#include <aw/graphics/gl/awgl/texture_enum.h>
+#include <aw/gl/api/gl_33.h>
+#include <aw/gl/texture_enum.h>
 #include <aw/types/enum.h>
 namespace aw {
 namespace gl {
