@@ -8,11 +8,11 @@
  */
 #ifndef aw_graphics_awgl_draw_func_h
 #define aw_graphics_awgl_draw_func_h
-#include <aw/graphics/gl/api/gl_33.h>
-#include <aw/graphics/gl/api/types.h>
+#include <aw/gl/api/gl_33.h>
+#include <aw/gl/api/types.h>
 #include <aw/types/string_view.h>
-namespace aw {
-namespace gl {
+
+namespace aw::gl {
 //------------------------------------------------------------------------------
 inline void line_width(GLfloat width)
 {
@@ -103,6 +103,6 @@ inline void draw_range_elements_base_vertex(GLenum mode, GLuint start, GLuint en
 {
 	::gl::draw_range_elements_base_vertex(mode, start, end, count, type, indices, basevertex);
 }
-} // namespace gl
-} // namespace aw
+} // namespace aw::gl
+
 #endif//aw_graphics_awgl_draw_func_h

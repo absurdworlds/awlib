@@ -8,10 +8,10 @@
  */
 #ifndef aw_graphics_awgl_vertex_func_h
 #define aw_graphics_awgl_vertex_func_h
-#include <aw/graphics/gl/api/gl_33.h>
+#include <aw/gl/api/gl_33.h>
 #include <aw/types/enum.h>
-namespace aw {
-namespace gl {
+
+namespace aw::gl {
 //------------------------------------------------------------------------------
 inline void gen_vertex_arrays(GLsizei n, GLuint * arrays)
 {
@@ -341,6 +341,6 @@ inline void vertex_attrib_p_4uiv(GLuint index, GLenum type, GLboolean normalized
 {
 	::gl::vertex_attrib_p_4uiv(index, type, normalized, value);
 }
-} // namespace gl
-} // namespace aw
+} // namespace aw::gl
+
 #endif//aw_graphics_awgl_vertex_func_h

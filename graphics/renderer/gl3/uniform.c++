@@ -9,8 +9,8 @@
 #include <aw/graphics/gl/program.h>
 #include <aw/graphics/gl/uniform.h>
 #include <aw/graphics/gl/uniform_buffer.h>
-#include <aw/graphics/gl/awgl/shader_func.h>
-#include <aw/graphics/gl/awgl/buffer_func.h>
+#include <aw/gl/wrapper/shader_func.h>
+#include <aw/gl/wrapper/buffer_func.h>
 
 namespace aw::gl3 {
 uniform_buffer::uniform_buffer(GLuint index, size_t size)
