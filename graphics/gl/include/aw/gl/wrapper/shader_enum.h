@@ -8,7 +8,7 @@
  */
 #ifndef aw_graphics_awgl_shader_enum_h
 #define aw_graphics_awgl_shader_enum_h
-#include <aw/graphics/gl/api/types.h>
+#include <aw/gl/api/types.h>
 #include <aw/types/string_view.h>
 #include <aw/utility/builtins.h>
 namespace aw::gl {

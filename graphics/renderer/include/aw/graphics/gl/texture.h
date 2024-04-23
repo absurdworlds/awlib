@@ -8,7 +8,7 @@
  */
 #ifndef aw_graphics_gl3_texture_h
 #define aw_graphics_gl3_texture_h
-#include <aw/graphics/gl/awgl/texture_enum.h>
+#include <aw/gl/wrapper/texture_enum.h>
 #include <aw/types/array_view.h>
 #include <aw/graphics/export.h>
 namespace aw {

@@ -8,10 +8,10 @@
  */
 #ifndef aw_graphics_awgl_buffer_func_h
 #define aw_graphics_awgl_buffer_func_h
-#include <aw/graphics/gl/api/gl_33.h>
+#include <aw/gl/api/gl_33.h>
 #include <aw/types/enum.h>
-namespace aw {
-namespace gl {
+
+namespace aw::gl {
 //------------------------------------------------------------------------------
 inline void gen_buffers(GLsizei n, GLuint * buffers)
 {
@@ -72,6 +72,6 @@ inline void get_buffer_sub_data(GLenum target, GLintptr offset, GLsizeiptr size,
 	::gl::get_buffer_sub_data(target, offset, size, data);
 }
 
-} // namespace gl
-} // namespace aw
+} // namespace aw::gl
+
 #endif//aw_graphics_awgl_buffer_func_h

@@ -8,7 +8,7 @@
  */
 #include <aw/graphics/gl/material_manager.h>
 #include <aw/utility/ranges/ipairs.h>
-#include <aw/graphics/gl/awgl/texture_func.h>
+#include <aw/gl/wrapper/texture_func.h>
 
 namespace aw::gl3 {
 void material::add_texture( const char* name, texture_ref r )

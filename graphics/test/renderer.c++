@@ -1,7 +1,7 @@
 #include "camera_controller.h"
 #include "scene.h"
 
-#include <aw/graphics/gl/awgl/api.h>
+#include <aw/gl/wrapper/api.h>
 #include <aw/types/string_view.h>
 #include <aw/utility/string/split.h>
 #include <aw/math/matrix3.h>

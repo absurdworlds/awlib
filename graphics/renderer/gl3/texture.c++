@@ -7,7 +7,7 @@
  * There is NO WARRANTY, to the extent permitted by law.
  */
 #include <aw/graphics/gl/texture.h>
-#include <aw/graphics/gl/awgl/texture_func.h>
+#include <aw/gl/wrapper/texture_func.h>
 
 namespace aw::gl3 {
 texture::texture( array_view<std::byte> data, size_t width, size_t height )

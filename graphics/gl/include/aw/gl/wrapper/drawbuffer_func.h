@@ -8,7 +8,7 @@
  */
 #ifndef aw_graphics_awgl_drawbuffer_func_h
 #define aw_graphics_awgl_drawbuffer_func_h
-#include <aw/graphics/gl/api/types.h>
+#include <aw/gl/api/types.h>
 #include <aw/types/string_view.h>
 namespace aw {
 namespace gl {

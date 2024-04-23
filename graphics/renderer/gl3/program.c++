@@ -8,7 +8,7 @@
  */
 #include <aw/graphics/gl/program.h>
 #include <aw/graphics/gl/shader.h>
-#include <aw/graphics/gl/awgl/shader_func.h>
+#include <aw/gl/wrapper/shader_func.h>
 #include <aw/utility/on_scope_exit.h>
 #include <aw/types/enum.h>
 #include <iostream> // temporary

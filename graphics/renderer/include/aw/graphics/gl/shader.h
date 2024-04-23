@@ -8,8 +8,8 @@
  */
 #ifndef aw_graphics_gl3_shader_h
 #define aw_graphics_gl3_shader_h
-#include <aw/graphics/gl/api/types.h>
-#include <aw/graphics/gl/awgl/shader_enum.h>
+#include <aw/gl/api/types.h>
+#include <aw/gl/wrapper/shader_enum.h>
 #include <aw/types/string_view.h>
 #include <aw/types/optional.h>
 #include <aw/graphics/export.h>

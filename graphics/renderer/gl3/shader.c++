@@ -7,7 +7,7 @@
  * There is NO WARRANTY, to the extent permitted by law.
  */
 #include <aw/graphics/gl/shader.h>
-#include <aw/graphics/gl/awgl/shader_func.h>
+#include <aw/gl/wrapper/shader_func.h>
 #include <iostream> // temporary
 #include <vector>
 

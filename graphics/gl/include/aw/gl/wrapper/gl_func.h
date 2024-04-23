@@ -8,10 +8,10 @@
  */
 #ifndef aw_graphics_awgl_gl_func_h
 #define aw_graphics_awgl_gl_func_h
-#include <aw/graphics/gl/api/gl_33.h>
+#include <aw/gl/api/gl_33.h>
 #include <aw/types/enum.h>
-namespace aw {
-namespace gl {
+
+namespace aw::gl {
 //------------------------------------------------------------------------------
 
 inline GLenum get_error(void)
@@ -549,6 +549,6 @@ inline void sampler_parameter(GLuint sampler, GLenum pname, const GLint * param)
 #endif
 
 
-} //namespace gl
-} // namespace aw
+} // namespace aw::gl
+
 #endif//aw_graphics_awgl_shader_func_h
