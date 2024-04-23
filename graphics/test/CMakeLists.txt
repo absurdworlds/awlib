@@ -14,5 +14,4 @@ target_link_libraries(rendertest
         awhudf
         awtypes
     PRIVATE
-        OpenGL::GL
         glfw)
