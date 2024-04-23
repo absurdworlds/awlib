@@ -1,4 +1,4 @@
-#include <aw/graphics/gl/awgl/api.h>
+#include <aw/gl/wrapper/api.h>
 namespace aw {
 static_assert(GLenum(gl::shader_type::fragment) == GL_FRAGMENT_SHADER);
 static_assert(GLenum(gl::shader_type::vertex)   == GL_VERTEX_SHADER);

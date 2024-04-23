@@ -8,7 +8,7 @@
  */
 #include <aw/graphics/gl/program.h>
 #include <aw/graphics/gl/render_context.h>
-#include <aw/graphics/gl/awgl/shader_func.h>
+#include <aw/gl/wrapper/shader_func.h>
 
 namespace aw::gl3 {
 

@@ -8,11 +8,11 @@
  */
 #ifndef aw_graphics_awgl_shader_func_h
 #define aw_graphics_awgl_shader_func_h
-#include <aw/graphics/gl/api/gl_33.h>
-#include <aw/graphics/gl/awgl/shader_enum.h>
+#include <aw/gl/api/gl_33.h>
+#include <aw/gl/wrapper/shader_enum.h>
 #include <aw/types/enum.h>
-namespace aw {
-namespace gl {
+
+namespace aw::gl {
 //------------------------------------------------------------------------------
 inline shader_handle create_shader(shader_type type)
 {
@@ -275,6 +275,6 @@ inline void uniform_block_binding(program_handle program, uniform_block_index un
 {
 	::gl::uniform_block_binding(underlying(program), underlying(uniformBlockIndex), uniformBlockBinding);
 }
-} // namespace gl
-} // namespace aw
+} // namespace aw::gl
+
 #endif//aw_graphics_awgl_shader_func_h

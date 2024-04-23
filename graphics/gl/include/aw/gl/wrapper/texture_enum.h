@@ -8,11 +8,11 @@
  */
 #ifndef aw_graphics_awgl_texture_enum_h
 #define aw_graphics_awgl_texture_enum_h
-#include <aw/graphics/gl/api/types.h>
-namespace aw {
-namespace gl {
+#include <aw/gl/api/types.h>
+
+namespace aw::gl {
 enum class texture_handle : GLuint {};
 constexpr texture_handle no_texture{ 0 };
-} // namespace gl
-} // namespace aw
+} // namespace aw::gl
+
 #endif//aw_graphics_awgl_texture_enum_h

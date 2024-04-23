@@ -9,10 +9,10 @@
 #ifndef aw_graphics_awgl_texture_func_h
 #define aw_graphics_awgl_texture_func_h
 #include <aw/gl/api/gl_33.h>
-#include <aw/gl/texture_enum.h>
+#include <aw/gl/wrapper/texture_enum.h>
 #include <aw/types/enum.h>
-namespace aw {
-namespace gl {
+
+namespace aw::gl {
 
 //------------------------------------------------------------------------------
 inline void gen_textures(GLsizei n, texture_handle* textures)
@@ -180,6 +180,6 @@ inline void get_tex_parameter(GLenum target, GLenum pname, GLint * params)
 {
 	::gl::get_tex_parameter_iv(target, pname, params);
 }
-} // namespace gl
-} // namespace aw
+} // namespace aw::gl
+
 #endif//aw_graphics_awgl_texture_func_h

@@ -1,7 +1,7 @@
 #include "camera_controller.h"
 
 #include <aw/graphics/gl/render_context.h>
-#include <aw/graphics/gl/awgl/api.h>
+#include <aw/gl/wrapper/api.h>
 #include <aw/graphics/glsl/vec.h>
 #include <aw/graphics/glsl/mat.h>
 
