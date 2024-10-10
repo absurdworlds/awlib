@@ -8,6 +8,7 @@
  */
 #ifndef aw_types_byte_buffer_h
 #define aw_types_byte_buffer_h
+#include <cstdlib>
 #include <memory>
 namespace aw {
 /**
