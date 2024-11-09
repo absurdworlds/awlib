@@ -25,5 +25,6 @@ target_link_libraries(awgraphics
 	PUBLIC
 		awio
 		awmath
+		awimage
 		awobj
 		awgl)
