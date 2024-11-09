@@ -76,21 +76,12 @@ add_subdirectory(archive)
 add_subdirectory(thread)
 add_subdirectory(signals)
 
-# TODO: disable by default
-option(AW_ENABLE_HUDF "Enable HuDF data format" OFF)
-if (AW_ENABLE_HUDF)
-	add_subdirectory(fileformat/hudf)
-endif()
+add_subdirectory(fileformat)
 
 # Libraries with extra dependencies
 option(AW_ENABLE_GRAPHICS "Enable libawgraphics" OFF)
 if (AW_ENABLE_GRAPHICS)
 	add_subdirectory(graphics)
-endif()
-
-option(AW_ENABLE_SOUND "Enable libawsound" OFF)
-if (AW_ENABLE_SOUND)
-	add_subdirectory(fileformat/sound)
 endif()
 
 option(AW_ENABLE_LUA "Enable libawlua" OFF)
