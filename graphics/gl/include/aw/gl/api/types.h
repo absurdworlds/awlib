@@ -4,9 +4,10 @@
  */
 #ifndef aw_gl_types
 #define aw_gl_types
-#include <aw/graphics/export.h>
 #include <aw/types/types.h>
 #include <aw/config.h>
+
+#define AW_GL_EXP // TODO
 
 #if (AW_PLATFORM_SPECIFIC == AW_PLATFORM_APPLE)
 typedef void *GLhandleARB;
