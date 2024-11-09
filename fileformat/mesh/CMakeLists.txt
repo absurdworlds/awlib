@@ -1,15 +1,15 @@
 
-aw_add_library(awobj STATIC
+aw_add_library(awmesh STATIC
 	GLOB_HEADERS
 	SOURCES
 		obj_loader.c++ mtl_loader.c++ shared.h
 	EXPORT_NAME
-		graphics-importer)
+		mesh)
 
  #AW_MANUAL_TEST
-#target_compile_definitions(awobj PRIVATE AW_MODULE_GRAPHICS)
+#target_compile_definitions(awmesh PRIVATE AW_MODULE_GRAPHICS)
 
-target_link_libraries(awobj
+target_link_libraries(awmesh
 	PUBLIC
 		awio
 		awlog

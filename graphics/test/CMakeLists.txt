@@ -9,7 +9,7 @@ target_link_libraries(rendertest
     PUBLIC
         awio
         awgraphics
-        awobj
+        awmesh
         awimage
         awlog
         awhudf

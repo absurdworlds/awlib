@@ -14,3 +14,9 @@ option(AW_ENABLE_IMAGE "Enable libawimage" OFF)
 if (AW_ENABLE_IMAGE)
 	add_subdirectory(image)
 endif()
+
+## 3D mesh/scene file support
+option(AW_ENABLE_MESH "Enable libawmesh" OFF)
+if (AW_ENABLE_MESH)
+	add_subdirectory(mesh)
+endif()

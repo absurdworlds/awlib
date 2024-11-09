@@ -25,6 +25,6 @@ target_link_libraries(awgraphics
 	PUBLIC
 		awio
 		awmath
-		awimage
-		awobj
+		awimage # TODO: remove
+		awmesh  # TODO: remove
 		awgl)
