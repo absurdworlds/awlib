@@ -12,6 +12,9 @@ aw_add_library(awgl STATIC
 )
 
 target_link_libraries(awgl
+	PUBLIC
+		awalgo
+		awutils
 	PRIVATE
 		OpenGL::GL)
 
