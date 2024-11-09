@@ -51,7 +51,7 @@ size_t texture_manager::create_texture( string_view name )
 	return add_resource( name, texture{ img->data, img->width, img->height} );
 }
 
-// TEMPORARY
+// TODO: TEMPORARY
 size_t texture_manager::create_texture_array( array_view<string_view> names )
 {
 	png::log.set_logger(&ologger);

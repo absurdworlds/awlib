@@ -10,6 +10,7 @@ target_link_libraries(rendertest
         awio
         awgraphics
         awobj
+        awimage
         awlog
         awhudf
         awtypes

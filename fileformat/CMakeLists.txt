@@ -8,3 +8,9 @@ option(AW_ENABLE_SOUND "Enable libawsound" OFF)
 if (AW_ENABLE_SOUND)
 	add_subdirectory(sound)
 endif()
+
+## Image file support
+option(AW_ENABLE_IMAGE "Enable libawimage" OFF)
+if (AW_ENABLE_IMAGE)
+	add_subdirectory(image)
+endif()
