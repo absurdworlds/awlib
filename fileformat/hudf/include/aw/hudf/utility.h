@@ -34,7 +34,7 @@ inline bool get_numbers(value const& val, T (&out)[N])
 		convert( vec );
 		return true;
 	}
-	if( auto vec = val.get<std::vector<long>>() ) {
+	if( auto vec = val.get<std::vector<intmax_t>>() ) {
 		convert( vec );
 		return true;
 	}
