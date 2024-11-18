@@ -75,11 +75,10 @@ bool TestPointer(PROC ptr)
 
 unknown_fn* get_proc_address(const char* name)
 {
-	HMODULE glMod = nullptr;
-	PROC    pFunc = wglGetProcAddress((LPCSTR)name);
+	PROC pFunc = wglGetProcAddress((LPCSTR)name);
 	if (TestPointer(pFunc))
 		return (unknown_fn*)pFunc;
-	glMod = GetModuleHandleA("OpenGL32.dll");
+	HMODULE glMod = GetModuleHandleA("OpenGL32.dll");
 	return (unknown_fn*)GetProcAddress(glMod, (LPCSTR)name);
 }
 } // namespace aw::wgl

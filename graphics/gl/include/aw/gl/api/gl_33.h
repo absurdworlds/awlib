@@ -5,6 +5,7 @@
 #define aw_gl_ext_opengl_3_3_h
 #include "types.h"
 #include "gl_enum_33.h"
+#include "aw/gl/export.h"
 
 namespace gl {
 namespace ext {

@@ -7,8 +7,6 @@
 #include <aw/types/types.h>
 #include <aw/config.h>
 
-#define AW_GL_EXP // TODO
-
 #if (AW_PLATFORM_SPECIFIC == AW_PLATFORM_APPLE)
 typedef void *GLhandleARB;
 #else

@@ -1,7 +1,7 @@
 
 find_package(OpenGL REQUIRED)
 
-aw_add_library(awgl STATIC
+aw_add_library(awgl SHARED
 	GLOB_HEADERS
 	SOURCES
 		enum_check.c++
@@ -11,26 +11,30 @@ aw_add_library(awgl STATIC
 		gl
 )
 
+target_compile_definitions(awgl
+	PRIVATE
+		AW_MODULE_GL_LOADER
+)
+
+target_sources(awgl
+  PRIVATE
+    include/aw/gl/export.h
+)
+
 target_link_libraries(awgl
 	PUBLIC
 		awalgo
 		awutils
-	PRIVATE
 		OpenGL::GL)
 
 
 if (WIN32)
 	target_link_libraries(awgl
 		PRIVATE
-			OpenGL::GL
 			awplatform)
 elseif (APPLE)
-	target_link_libraries(awgl
-		PRIVATE
-			OpenGL::GL)
 elseif (UNIX)
 	target_link_libraries(awgl
 		PRIVATE
-			OpenGL::OpenGL
 			OpenGL::GLX)
 endif()
