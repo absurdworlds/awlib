@@ -117,6 +117,7 @@ public:
 	void end_suite() override
 	{
 		int skipped = total - succeeded - failed;
+		println("<testsuites>");
 		print("<testsuite name=\"", name, "\" tests=\"", total, "\" errors=\"0\" ");
 		println("failures=\"", failed, "\" skipped=\"", skipped, "\">");
 		for (const auto& test_case : test_cases)
@@ -138,6 +139,7 @@ public:
 			}
 		}
 		println("</testsuite>");
+		println("</testsuites>");
 
 	}
 
