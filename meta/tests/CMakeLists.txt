@@ -18,6 +18,7 @@ aw_add_test(test_meta
 	pp/repeat.c++
 	pp/reverse.c++
 	pp/struct.c++
+	v2/contains.c++
 )
 
 target_link_libraries(test_meta

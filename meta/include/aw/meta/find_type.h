@@ -8,7 +8,6 @@
  */
 #ifndef aw_meta_find_type_h
 #define aw_meta_find_type_h
-#include <limits>
 #include <aw/types/types.h>
 #include <aw/meta/list_ops.h>
 #include <aw/meta/conditional.h>
