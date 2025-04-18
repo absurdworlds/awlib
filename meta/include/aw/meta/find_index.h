@@ -12,6 +12,10 @@
 #include <aw/types/types.h>
 #include <aw/meta/expand.h>
 namespace aw {
+namespace meta {
+
+constexpr size_t invalid_index = std::numeric_limits<size_t>::max();
+
 namespace _impl {
 template<typename Pred>
 struct find_index {
@@ -23,7 +27,7 @@ struct find_index {
 
 	template <size_t N, typename T>
 	struct index<N,T> {
-		static constexpr size_t value = F<T>::value ? N : std::numeric_limits<size_t>::max();
+		static constexpr size_t value = F<T>::value ? N : invalid_index;
 	};
 
 	template <size_t N, typename T, typename...Ts>
@@ -35,5 +39,9 @@ struct find_index {
 
 template<typename Pred, typename...Ts>
 constexpr size_t find_index = _impl::find_index<Pred>::template index<0,Ts...>::value;
+} // namespace meta
+
+// TODO: remove
+using meta::find_index;
 } // namespace aw
 #endif//aw_meta_find_index_h
