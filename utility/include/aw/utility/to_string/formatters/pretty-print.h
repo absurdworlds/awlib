@@ -9,6 +9,7 @@
  */
 #ifndef aw_to_string_formatters_pretty_print_h
 #define aw_to_string_formatters_pretty_print_h
+#include <aw/types/types.h>
 #include <aw/algorithm/in.h>
 #include <aw/utility/string/escape.h>
 
@@ -61,6 +62,7 @@ struct pretty_print {
 	void convert(long long val) { result.append(std::to_string(val)); }
 
 	//void convert(unsigned char val) { result.append(std::to_string(val)); }
+	void convert(unsigned char val)      { result.append(std::to_string(val)); }
 	void convert(unsigned short val)     { result.append(std::to_string(val)); }
 	void convert(unsigned val)           { result.append(std::to_string(val)); }
 	void convert(unsigned long val)      { result.append(std::to_string(val)); }
@@ -69,7 +71,6 @@ struct pretty_print {
 	void convert(float val)  { result.append(std::to_string(val)); }
 	void convert(double val) { result.append(std::to_string(val)); }
 	void convert(long double val) { result.append(std::to_string(val)); }
-
 
 	void convert(void const* ptr) { convert(uintptr_t(ptr)); }
 
