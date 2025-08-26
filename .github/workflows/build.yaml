@@ -28,10 +28,16 @@ jobs:
           cmake -S . -B build -A x64
           -DAW_ENABLE_GRAPHICS:BOOL=OFF
           -DAW_ENABLE_HUDF:BOOL=ON
+          -DAW_OUTPUT_JUNIT:BOOL=ON
       - name: Build
         run: cmake --build build
       - name: Test
         run: ctest --test-dir build -C Debug --output-on-failure
+      - name: Publish Test Report
+        uses: mikepenz/action-junit-report@v4
+        if: success() || failure()
+        with:
+          report_paths: '**/build/test-results/test/TEST-*.xml'
   ubuntu:
     runs-on: ubuntu-22.04
     steps:
@@ -43,6 +49,7 @@ jobs:
           -DAW_ENABLE_GRAPHICS:BOOL=OFF
           -DAW_ENABLE_ASSERT:BOOL=OFF
           -DAW_ENABLE_HUDF:BOOL=ON
+          -DAW_OUTPUT_JUNIT:BOOL=ON
       - name: Build
         run: cmake --build build
       - name: Test
