@@ -71,11 +71,11 @@ struct vh_recursive {
 		if constexpr (Length_left > 0)
 		{
 			if (index < Mid)
-				return vh_recursive<Start,Mid,Ts...>::template dispatch(index, storage, f);
+				return vh_recursive<Start,Mid,Ts...>::dispatch(index, storage, f);
 		}
 
 		if constexpr (Length_right > 1)
-			return vh_recursive<Mid+1,End,Ts...>::template dispatch(index, storage, f);
+			return vh_recursive<Mid+1,End,Ts...>::dispatch(index, storage, f);
 
 		_unreachable();
 	}
