@@ -96,7 +96,7 @@ protected:
 	queue_base(queue_base&& other, Allocator const& alloc) noexcept
 		: impl(alloc)
 	{
-		if (alloc == other.alloc)
+		if (alloc == static_cast<Allocator&>(other.impl))
 			impl.swap(other.impl);
 		else
 			create_storage(other.allocated_size());
