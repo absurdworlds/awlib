@@ -45,7 +45,10 @@ class context_block {
 
 class register_test {
 public:
-	register_test(const char* test_name, test_case::test_function* test_func)
+	register_test(
+		const char* test_name,
+		test_case::test_function* test_func,
+		[[maybe_unused]] const char* description = nullptr)
 	{
 		add_test(aw::test::test_case{test_name, test_func});
 	}
@@ -174,9 +177,10 @@ struct _catch {
 } // namespace aw::
 
 #define TestFile(...) namespace aw::test { namespace { context file_context{__VA_ARGS__}; } }
-#define Test(name)     \
+#define Test(name, ...)     \
 	void run_test_##name(::aw::test::test_context); \
-	const aw::test::register_test add_test_##name{#name, run_test_##name}; \
+	const aw::test::register_test add_test_##name{#name, run_test_##name \
+		__VA_OPT__(,) __VA_ARGS__}; \
 	void run_test_##name(::aw::test::test_context _context)
 #define Setup          if (aw::test::setup())
 #define Preconditions  if (aw::test::preconditions())
