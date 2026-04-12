@@ -3,8 +3,7 @@
 
 TestFile("math::bitmath");
 
-namespace aw {
-namespace math {
+namespace aw::math {
 Test(log2) {
 	TestEqual( log2(2), 1 );
 	TestEqual( log2(3), 1 );
@@ -22,5 +21,15 @@ Test(bits) {
 	TestEqual( get_bit(0b100000,4), 0 );
 	TestEqual( set_bit(0b100000,4,1), 0b110000);
 };
-} // namespace math
-} // namespace aw
+
+
+Test(ctz) {
+	TestEqual( trailing_zeros(u32(0b1000)), 3 );
+	TestEqual( trailing_zeros(u64(0b1000)), 3 );
+}
+
+Test(clz) {
+	TestEqual( leading_zeros(u32(0b1000)), 28 );
+	TestEqual( leading_zeros(u64(0b1000)), 60 );
+}
+} // namespace aw::math
