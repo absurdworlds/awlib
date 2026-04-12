@@ -145,15 +145,22 @@
 #endif //AW_STATIC_BUILD
 
 /**** NON-STANDARD FEATURE TESTING ****/
-#define AW_EXT(x) defined(AW_HAS_EXT##x) && AW_HAS_EXT##x
-#define AW_HAS(x) AW_HAS_##x
 
 #define AW_FEATURE(x) AW_HAS_FEATURE_##x
 
-#ifdef __has_builtin
-#define AW_HAS_BUILTIN(x) __has_builtin(x)
+#if AW_NO_BUILTINS
+	#define AW_EXT(x) 0
+	#define AW_HAS(x) 0
+	#define AW_HAS_BUILTIN(x) 0
 #else
-#define AW_HAS_BUILTIN(x) 0
+	#define AW_EXT(x) defined(AW_HAS_EXT##x) && AW_HAS_EXT##x
+	#define AW_HAS(x) AW_HAS_##x
+
+	#ifdef __has_builtin
+	#define AW_HAS_BUILTIN(x) __has_builtin(x)
+	#else
+	#define AW_HAS_BUILTIN(x) 0
+	#endif
 #endif
 
 #endif//aw_compiler_setup_h
