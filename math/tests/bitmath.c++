@@ -23,6 +23,15 @@ Test(bits) {
 };
 
 
+Test(mask) {
+	TestEqual( lower_mask<u64>(2), 0b11 );
+	TestEqual( lower_mask<u64>(4), 0b1111 );
+	TestEqual( lower_half(u32(0x4)), 0x4 );
+	TestEqual( lower_half(u64(0b1000)), 0b1000 );
+	TestEqual( lower_half(u64(0x1'00000004)), 0x4 );
+}
+
+
 Test(ctz) {
 	TestEqual( trailing_zeros(u32(0b1000)), 3 );
 	TestEqual( trailing_zeros(u64(0b1000)), 3 );

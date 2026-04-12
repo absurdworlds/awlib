@@ -223,8 +223,6 @@ inline size_t leading_zeros(u64 x)
 #else
 	if (x <= 0x00000000'ffffffff) {
 		n +=  32;
-		x <<= 32;
-
 		n += leading_zeros(u32(lower_half(x)));
 	} else {
 		n += leading_zeros(u32(upper_half(x)));
@@ -264,7 +262,8 @@ inline size_t trailing_zeros(u32 x)
 		x >>= 2;
 		n  += 2;
 	}
-	n += x & 0x1;
+
+	n += !(x & 0x1);
 #endif
 
 	return n;
@@ -284,7 +283,6 @@ inline size_t trailing_zeros(u64 x)
 		return 0;
 
 	if ((x & 0xffffffff) == 0) {
-		x >>= 32;
 		n  += 32;
 
 		n += trailing_zeros(u32(upper_half(x)));
