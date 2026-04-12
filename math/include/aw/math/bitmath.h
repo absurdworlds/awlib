@@ -241,7 +241,7 @@ inline size_t trailing_zeros(u32 x)
 
 #if AW_EXT(__builtin_ctz)
 	if (x != 0)
-		n = __builtin_clz(x);
+		n = __builtin_ctz(x);
 	else
 		n = 32;
 #else
