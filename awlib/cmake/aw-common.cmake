@@ -118,10 +118,16 @@ function(aw_add_test NAME)
 	set(multivalue SOURCES PARAMS)
 	cmake_parse_arguments(PARSE_ARGV 1 ARG "${options}" "${arguments}" "${multivalue}")
 
+	if (AW_OUTPUT_JUNIT)
+		set(ADDITIONAL_PARAMS)
+	else()
+		set(ADDITIONAL_PARAMS "--output-format=junit")
+	endif()
+
 	add_executable(${NAME} ${ARG_SOURCES})
 	add_test(
 		NAME ${NAME}
-		COMMAND ${NAME} ${ARG_PARAMS}
+		COMMAND ${NAME} ${ARG_PARAMS} ${ADDITIONAL_PARAMS}
 		WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
 
 	if (ARG_NEGATIVE)
