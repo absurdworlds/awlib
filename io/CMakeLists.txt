@@ -11,8 +11,12 @@ set(WIN32_SOURCES
 set(POSIX_SOURCES
 	posix/file.c++
 	posix/helpers.h
-	posix/mmap.c++
-	posix/process.c++)
+	posix/mmap.c++)
+
+# There are no processes in WASM
+if(NOT EMSCRIPTEN)
+    list(APPEND POSIX_SOURCES posix/process.c++)
+endif()
 
 if (AW_CAPABILITIES_WIN32)
 	list(APPEND SOURCES ${WIN32_SOURCES})
