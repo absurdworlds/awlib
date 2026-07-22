@@ -58,6 +58,13 @@ file_mapping map_file( file_descriptor fd, map_perms perms, std::error_code& ec 
 		return { invalid_mapping };
 	}
 
+	const auto length = size( fd, ec );
+	if (ec)
+		return { invalid_mapping };
+
+	if (length == 0)
+		return {};
+
 	const unsigned prot = get_protection( perms );
 	const HANDLE mapping = CreateFileMappingW( HANDLE(fd), nullptr, prot, 0, 0, nullptr);
 	if (!mapping) {
@@ -67,11 +74,17 @@ file_mapping map_file( file_descriptor fd, map_perms perms, std::error_code& ec 
 
 	const unsigned access = get_access( perms );
 	void* view = MapViewOfFile( mapping, access, 0, 0, 0 );
+	if (!view) {
+		set_error( ec );
+		close_handle( uintptr_t(mapping), ec );
+		return { invalid_mapping };
+	}
 
+	ec.clear();
 	return {
 		.handle = uintptr_t(mapping),
 		.address = view,
-		.length = narrow_cast<size_t>(size( fd, ec ))
+		.length = narrow_cast<size_t>(length)
 	};
 }
 
