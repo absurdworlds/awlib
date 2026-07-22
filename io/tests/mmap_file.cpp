@@ -5,8 +5,11 @@
 
 TestFile("mmap file");
 
+// TODO: test E2BIG
+// TODO: look into the temporary file cleanup
+
 namespace aw {
-Test(mmpa_basic_read) {
+Test(mmap_basic_read) {
 	char const filename[] { "~temp_mmap_test.bin" };
 	constexpr size_t buf_size = 0x12000;
 
@@ -28,6 +31,112 @@ Test(mmpa_basic_read) {
 		array_view<char> view1(file);
 		array_view<char> view2(buf1, buf_size);
 		TestEqual( view1, view2 );
+	}
+
+	fs::remove( filename );
+};
+
+Test(mmap_view_read) {
+	char const filename[] { "~temp_mmap_view_test.bin" };
+	constexpr size_t buf_size = 0x12000;
+
+	char* buf1 = new char[buf_size];
+	std::fill_n(buf1, buf_size, 'c');
+	buf1[buf_size - 0x10] = 'd';
+
+	using fm = io::file_mode;
+	auto mode = fm::write|fm::create|fm::truncate;
+
+	Checks {
+		io::native::file file(filename, mode);
+		auto ret = file.write(buf1, buf_size);
+		TestAssert(ret > 0);
+	}
+
+	Checks {
+		io::mmap_view view(filename);
+		TestAssert(view.is_open());
+		TestEqual(view.size(), buf_size);
+		TestAssert( std::equal(view.begin(), view.end(), buf1, buf1 + buf_size) );
+	}
+
+	fs::remove( filename );
+};
+
+Test(mmap_write_back) {
+	char const filename[] { "~temp_mmap_write_test.bin" };
+	constexpr size_t buf_size = 0x12000;
+
+	char* buf1 = new char[buf_size];
+	std::fill_n(buf1, buf_size, 'a');
+
+	using fm = io::file_mode;
+	auto mode = fm::write|fm::create|fm::truncate;
+
+	Checks {
+		io::native::file file(filename, mode);
+		auto ret = file.write(buf1, buf_size);
+		TestAssert(ret > 0);
+	}
+
+	Checks {
+		io::mmap_file file(filename, io::map_perms::rdwr);
+		TestAssert(file.is_open());
+		std::fill(file.begin(), file.end(), 'z');
+	}
+
+	Checks {
+		char* buf2 = new char[buf_size];
+		io::native::file file(filename, fm::read);
+		auto ret = file.read(buf2, buf_size);
+		TestAssert(ret > 0);
+
+		char* expected = new char[buf_size];
+		std::fill_n(expected, buf_size, 'z');
+		TestAssert( std::equal(buf2, buf2+buf_size, expected, expected+buf_size) );
+	}
+
+	fs::remove( filename );
+};
+
+Test(mmap_missing_file) {
+	char const filename[] { "~temp_mmap_missing_test.bin" };
+	fs::remove( filename );
+
+	Checks {
+		std::error_code ec;
+		io::mmap_file file(filename, ec, io::map_perms::read);
+		TestAssert(bool(ec));
+		TestAssert(!file.is_open());
+	}
+};
+
+Test(mmap_invalid_fd) {
+	Checks {
+		std::error_code ec;
+		io::mmap_file file(io::invalid_fd, ec, io::map_perms::read);
+		TestAssert(bool(ec));
+		TestAssert(!file.is_open());
+	}
+};
+
+Test(mmap_empty_file) {
+	char const filename[] { "~temp_mmap_empty_test.bin" };
+
+	using fm = io::file_mode;
+	auto mode = fm::write|fm::create|fm::truncate;
+
+	Checks {
+		io::native::file file(filename, mode);
+		TestAssert(file.is_open());
+	}
+
+	Checks {
+		std::error_code ec;
+		io::mmap_file file(filename, ec, io::map_perms::read);
+		TestAssert(!ec);
+		TestAssert(!file.is_open());
+		TestEqual(file.size(), 0u);
 	}
 
 	fs::remove( filename );
