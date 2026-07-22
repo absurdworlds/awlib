@@ -54,17 +54,32 @@ file_mapping map_file( file_descriptor fd, map_perms perms, std::error_code& ec 
 		return { };
 	}
 
-	auto length = size( fd, ec );
-	if (length == -1)
-		return { };
+	const auto length = size( fd, ec );
+	if (length == 0)
+		return {};
+
+	if (length == uintmax_t(-1))
+		// ec is already passed through from size()
+		return {};
+
+	// only relevant on platforms where size_t is smaller than uintmax_t,
+	// mainly WASM
+	constexpr uintmax_t max_size = std::numeric_limits<size_t>::max();
+	if (length > max_size) {
+		ec = std::make_error_code(std::errc::file_too_large);
+		return {};
+	}
+	const size_t map_length = static_cast<size_t>(length);
 
 	auto [prot,flags] = get_map_flags( perms );
-	void* map = ::mmap( nullptr, length, prot, flags, fd, 0 );
+	void* map = ::mmap( nullptr, map_length, prot, flags, fd, 0 );
 	if (map == MAP_FAILED) {
 		set_error( ec );
 		return { };
 	}
-	return { map, length };
+
+	ec.clear();
+	return { map, map_length };
 }
 
 bool unmap_file( file_mapping& map, std::error_code& ec )
