@@ -76,7 +76,8 @@ file_mapping map_file( file_descriptor fd, map_perms perms, std::error_code& ec 
 	void* view = MapViewOfFile( mapping, access, 0, 0, 0 );
 	if (!view) {
 		set_error( ec );
-		close_handle( uintptr_t(mapping), ec );
+		std::error_code close_ec;
+		close_handle( uintptr_t(mapping), close_ec );
 		return { invalid_mapping };
 	}
 
