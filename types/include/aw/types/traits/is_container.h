@@ -6,8 +6,8 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef aw_traits_is_container
-#define aw_traits_is_container
+#ifndef aw_traits_is_container_h
+#define aw_traits_is_container_h
 #include <utility>
 #include <aw/meta/void_t.h>
 namespace aw {
@@ -52,4 +52,4 @@ constexpr bool is_basic_container = is_basic_container_t<T>::value;
 template<class T> constexpr bool is_allocator_aware_container =
 	is_basic_container<T> && is_allocator_aware<T>;
 } // namespace aw
-#endif//aw_traits_is_container
+#endif//aw_traits_is_container_h
