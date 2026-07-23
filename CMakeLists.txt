@@ -78,10 +78,11 @@ add_subdirectory(io)
 add_subdirectory(log)
 add_subdirectory(test)
 
-add_subdirectory(archive)
+add_subdirectory(term)
 add_subdirectory(thread)
-add_subdirectory(signals)
 
+add_subdirectory(signals)
+add_subdirectory(archive)
 add_subdirectory(fileformat)
 
 # Libraries with extra dependencies
