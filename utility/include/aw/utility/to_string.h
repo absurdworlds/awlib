@@ -81,8 +81,7 @@ auto to_string(T value, Formatter&& fmt = Formatter{}) ->
 template<typename Formatter = formatter::pretty_print>
 std::string to_string(bool value, Formatter&& fmt = Formatter{})
 {
-	using namespace std::string_view_literals;
-	return fmt.literal(value ? "true"sv : "false"sv);
+	return fmt.value(value);
 }
 
 template<typename Formatter = formatter::pretty_print>

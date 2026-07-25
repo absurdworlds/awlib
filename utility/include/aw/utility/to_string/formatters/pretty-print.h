@@ -13,6 +13,7 @@
 #include <aw/algorithm/in.h>
 #include <aw/utility/string/escape.h>
 
+#include <type_traits>
 #include <vector>
 namespace aw {
 namespace formatter {
@@ -55,26 +56,32 @@ struct pretty_print {
 		return *this;
 	};
 
-	//void convert(signed char val) { result.append(std::to_string(val)); }
-	void convert(short val)  { result.append(std::to_string(val)); }
-	void convert(int val)  { result.append(std::to_string(val)); }
-	void convert(long val) { result.append(std::to_string(val)); }
-	void convert(long long val) { result.append(std::to_string(val)); }
+	// needs an overload because of the assert below
+	void convert(bool val)
+	{
+		using namespace std::string_view_literals;
+		literal(val ? "true"sv : "false"sv);
+	}
 
-	//void convert(unsigned char val) { result.append(std::to_string(val)); }
+	void convert(signed char val) { result.append(std::to_string(val)); }
+	void convert(short val)       { result.append(std::to_string(val)); }
+	void convert(int val)         { result.append(std::to_string(val)); }
+	void convert(long val)        { result.append(std::to_string(val)); }
+	void convert(long long val)   { result.append(std::to_string(val)); }
+
 	void convert(unsigned char val)      { result.append(std::to_string(val)); }
 	void convert(unsigned short val)     { result.append(std::to_string(val)); }
 	void convert(unsigned val)           { result.append(std::to_string(val)); }
 	void convert(unsigned long val)      { result.append(std::to_string(val)); }
 	void convert(unsigned long long val) { result.append(std::to_string(val)); }
 
-	void convert(float val)  { result.append(std::to_string(val)); }
-	void convert(double val) { result.append(std::to_string(val)); }
+	void convert(float val)       { result.append(std::to_string(val)); }
+	void convert(double val)      { result.append(std::to_string(val)); }
 	void convert(long double val) { result.append(std::to_string(val)); }
 
 	void convert(void const* ptr) { convert(uintptr_t(ptr)); }
 
-	void convert(char8_t val) { result.append(std::to_string(val)); }
+	void convert(char8_t val)  { result.append(std::to_string(val)); }
 	void convert(char16_t val) { result.append(std::to_string(val)); }
 	void convert(char32_t val) { result.append(std::to_string(val)); }
 	void convert(wchar_t val)  { result.append(std::to_string(val)); }
@@ -102,6 +109,9 @@ struct pretty_print {
 	template<typename T>
 	void convert(T const& val)
 	{
+		// very likely to cause infinite recursion, bail out at compile time
+		static_assert(!std::is_arithmetic_v<T>,
+			"missing convert() for arithmetic type");
 		using aw::to_string;
 		to_string(val, *this);
 	}
