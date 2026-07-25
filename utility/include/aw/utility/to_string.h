@@ -25,76 +25,87 @@ struct pretty_print;
 template<typename Formatter = formatter::pretty_print>
 std::string to_string(string_view str, Formatter&& fmt = Formatter{})
 {
-	return fmt.value(str);
+	fmt.convert(str);
+	return fmt;
 }
 
 template<typename Formatter = formatter::pretty_print>
 std::string to_string(std::string const& str, Formatter&& fmt = Formatter{})
 {
-	return fmt.value(str);
+	fmt.convert(str);
+	return fmt;
 }
 
 template<typename Formatter = formatter::pretty_print>
 std::string to_string(char const* str, Formatter&& fmt = Formatter{})
 {
-	return fmt.value(str);
+	fmt.convert(str);
+	return fmt;
 }
 
 template<typename Formatter = formatter::pretty_print>
 std::string to_string(char ch, Formatter&& fmt = Formatter{})
 {
-	return fmt.value(ch);
+	fmt.convert(ch);
+	return fmt;
 }
 
 template<typename Formatter = formatter::pretty_print>
 std::string to_string(char16_t ch, Formatter&& fmt = Formatter{})
 {
-	return fmt.value(ch);
+	fmt.convert(ch);
+	return fmt;
 }
 
 template<typename Formatter = formatter::pretty_print>
 std::string to_string(char32_t ch, Formatter&& fmt = Formatter{})
 {
-	return fmt.value(ch);
+	fmt.convert(ch);
+	return fmt;
 }
 
 template<typename Formatter = formatter::pretty_print>
 std::string to_string(wchar_t ch, Formatter&& fmt = Formatter{})
 {
-	return fmt.value(ch);
+	fmt.convert(ch);
+	return fmt;
 }
 
 template<typename T, typename Formatter = formatter::pretty_print>
 auto to_string(T value, Formatter&& fmt = Formatter{}) ->
 	enable_if<is_int<T>, std::string>
 {
-	return fmt.value(value);
+	fmt.convert(value);
+	return fmt;
 }
 
 template<typename T, typename Formatter = formatter::pretty_print>
 auto to_string(T value, Formatter&& fmt = Formatter{}) ->
 	enable_if<is_float<T>, std::string>
 {
-	return fmt.value(value);
+	fmt.convert(value);
+	return fmt;
 }
 
 template<typename Formatter = formatter::pretty_print>
 std::string to_string(bool value, Formatter&& fmt = Formatter{})
 {
-	return fmt.value(value);
+	fmt.convert(value);
+	return fmt;
 }
 
 template<typename Formatter = formatter::pretty_print>
-std::string to_string(nullptr_t, Formatter&& fmt = Formatter{})
+std::string to_string(nullptr_t value, Formatter&& fmt = Formatter{})
 {
-	using namespace std::string_view_literals;
-	return fmt.literal("nullptr"sv);
+	fmt.convert(value);
+	return fmt;
 }
 
 template<typename T, typename Formatter = formatter::pretty_print>
 std::string to_string(T const* ptr, Formatter&& fmt = Formatter{})
 {
-	return fmt.value(reinterpret_cast<void const*>(ptr));
+	fmt.convert(reinterpret_cast<void const*>(ptr));
+	return fmt;
 }
 
 template<typename T>
