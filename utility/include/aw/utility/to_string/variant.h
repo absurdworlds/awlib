@@ -21,7 +21,8 @@ struct variant_to_string_visitor {
 	template<typename T>
 	std::string operator()(T const& data)
 	{
-		return fmt->value(data);
+		fmt->convert(data);
+		return *fmt;
 	}
 
 	Formatter* fmt;

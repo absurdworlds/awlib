@@ -56,11 +56,16 @@ struct pretty_print {
 		return *this;
 	};
 
-	// needs an overload because of the assert below
 	void convert(bool val)
 	{
 		using namespace std::string_view_literals;
 		literal(val ? "true"sv : "false"sv);
+	}
+
+	void convert(nullptr_t val)
+	{
+		using namespace std::string_view_literals;
+		literal("nullptr"sv);
 	}
 
 	void convert(signed char val) { result.append(std::to_string(val)); }

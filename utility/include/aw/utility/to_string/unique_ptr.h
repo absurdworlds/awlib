@@ -24,7 +24,8 @@ struct string_converter<std::unique_ptr<T>> {
 	template<typename Formatter>
 	std::string operator()( Formatter& fmt ) const
 	{
-		return fmt.value( ptr.get() );
+		fmt.convert( ptr.get() );
+		return fmt;
 	}
 };
 

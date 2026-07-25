@@ -19,12 +19,6 @@ Test(to_string_stringly_types) {
 	TestAssert(to_string("raw string") == "raw string"s);
 	TestAssert(to_string({"raw \"string\""}) == R"({"raw \"string\""})"s);
 	TestAssert(to_string("string"s) == "string"s);
-	TestAssert(to_string(std::vector<int>{1,2,3,-1,100,15,22}) == "{1, 2, 3, -1, 100, 15, 22}"s);
-	TestAssert(to_string((void*)0) == "0"s);
-	TestAssert(to_string(nullptr) == "nullptr"s);
-	TestAssert(to_string(optional<int>(100)) == "100"s);
-	TestAssert(to_string(optional<int>()) == ""s);
-	TestAssert(to_string(nullopt) == "nullopt"s);
 }
 
 Test(to_string_char_types) {
@@ -66,8 +60,20 @@ Test(to_string_arithmetic) {
 }
 
 Test(to_string_pointers) {
+	TestAssert(to_string((void*)0) == "0"s);
+	TestAssert(to_string(nullptr) == "nullptr"s);
+
 	auto ptr = std::make_unique<std::string>("s");
 	TestAssert(to_string(ptr) == to_string(ptr.get()));
+
+	// TODO: maybe should be "nullptr,nullptr"?
+	std::vector<std::unique_ptr<int>> ptrs;
+	ptrs.push_back(nullptr);
+	ptrs.push_back(nullptr);
+	TestEqual(to_string(ptrs), "{0, 0}"s);
+
+	TestEqual(to_string(std::vector<void*>{nullptr, nullptr}), "{0, 0}"s);
+	TestEqual(to_string(std::vector<nullptr_t>{nullptr}), "{nullptr}"s);
 }
 
 Test(to_string_math_types) {
@@ -78,6 +84,11 @@ Test(to_string_math_types) {
 }
 
 Test(to_string_compound) {
+	TestAssert(to_string(optional<int>(100)) == "100"s);
+	TestAssert(to_string(optional<int>()) == ""s);
+	TestAssert(to_string(nullopt) == "nullopt"s);
+
+	TestAssert(to_string(std::vector<int>{1,2,3,-1,100,15,22}) == "{1, 2, 3, -1, 100, 15, 22}"s);
 	TestEqual(to_string(std::vector<bool>{true, false}), "{true, false}"s);
 	TestAssert(to_string(std::pair{10, "abc"}) == R"({10, "abc"})"s);
 
