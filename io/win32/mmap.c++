@@ -17,6 +17,7 @@ unsigned get_protection( map_perms perms )
 {
 	using mp = map_perms;
 	switch (perms) {
+	default:
 	case mp::none:
 		return 0;
 	case mp::read:
@@ -35,19 +36,22 @@ unsigned get_protection( map_perms perms )
 unsigned get_access( map_perms perms )
 {
 	using mp = map_perms;
-	switch (perms) {
-	case mp::none:
-		return 0;
-	case mp::read:
-	case mp::read|mp::execute:
-		return FILE_MAP_READ;
-	case mp::write:
-	case mp::write|mp::execute:
-		return FILE_MAP_WRITE;
-	case mp::rdwr:
-	case mp::rdwr|mp::execute:
-		return FILE_MAP_ALL_ACCESS;
-	}
+
+	unsigned result = 0;
+
+	if (!(perms & mp::rdwr)) // MapViewOfFile doesn't have execute-only mode
+		return result;
+
+	if (bool(perms & mp::write))
+		result |= FILE_MAP_WRITE;
+	if (bool(perms & mp::read))
+		result |= FILE_MAP_READ;
+	if (bool(perms & mp::execute))
+		result |= FILE_MAP_EXECUTE;
+
+	// TODO: add a flag for FILE_MAP_ALL_ACCESS ?
+
+	return result;
 }
 } // namespace
 
