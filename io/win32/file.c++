@@ -20,6 +20,8 @@ int get_access( file_mode mode )
 		access |= GENERIC_READ;
 	if (bool(mode & fm::write))
 		access |= GENERIC_WRITE;
+	if (bool(mode & fm::execute))
+		access |= GENERIC_EXECUTE;
 	return access;
 }
 

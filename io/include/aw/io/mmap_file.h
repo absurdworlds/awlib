@@ -83,22 +83,30 @@ using win32::file_mapping;
 inline file_mode get_file_mode(map_perms perms)
 {
 	using mp = map_perms;
+
+	file_mode mode;
 	switch (static_cast<unsigned>(perms)) {
-	case static_cast<unsigned>(mp::none):
-	case static_cast<unsigned>(mp::none|mp::exec):
-		return file_mode::none;
 	case static_cast<unsigned>(mp::read):
 	case static_cast<unsigned>(mp::read|mp::exec):
-		return file_mode::read;
+		mode = file_mode::read;
+		break;
 	case static_cast<unsigned>(mp::write):
-		return file_mode::write;
+		mode = file_mode::write;
+		break;
 	case static_cast<unsigned>(mp::write|mp::exec):
 	case static_cast<unsigned>(mp::rdwr):
 	case static_cast<unsigned>(mp::rdwr|mp::exec):
-		return file_mode::read|file_mode::write;
+		mode = file_mode::read|file_mode::write;
+		break;
+	default:
+		// execute-only isn't a valid mapping mode
+		return file_mode::none;
 	}
 
-	return file_mode::none;
+	if (bool(perms & mp::exec))
+		mode = mode|file_mode::execute;
+
+	return mode;
 }
 
 
