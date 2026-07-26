@@ -14,7 +14,7 @@
 #define AW_COMPILER_VERSION_MINOR __clang_minor__
 
 #if defined(__x86_64__) || defined(__amd64__)
-	#define AW_ARCH AW_ARCH_X86_64
+	#define AW_ARCH AW_ARCH_x86_64
 #elif defined(__i686__) || defined(_X86_)
 	#define AW_ARCH AW_ARCH_i686
 #endif
