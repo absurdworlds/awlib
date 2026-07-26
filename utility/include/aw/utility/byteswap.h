@@ -14,7 +14,7 @@ namespace aw {
 /*!
  * Switch endiannes of an integer value
  */
-u16 byteswap(u16 val)
+inline u16 byteswap(u16 val)
 {
 #if   AW_EXT(__builtin_bswap16)
 	return __builtin_bswap16(val);
@@ -29,7 +29,7 @@ u16 byteswap(u16 val)
 /*!
  * Switch endiannes of an integer value
  */
-u32 byteswap(u32 val)
+inline u32 byteswap(u32 val)
 {
 #if   AW_EXT(__builtin_bswap32)
 	return __builtin_bswap32(val);
@@ -46,7 +46,7 @@ u32 byteswap(u32 val)
 /*!
  * Switch endiannes of an integer value
  */
-u64 byteswap(u64 val)
+inline u64 byteswap(u64 val)
 {
 #if   AW_EXT(__builtin_bswap64)
 	return __builtin_bswap64(val);
@@ -67,7 +67,7 @@ u64 byteswap(u64 val)
 /*!
  * Switch endiannes of an integer value
  */
-i16 byteswap(i16 val)
+inline i16 byteswap(i16 val)
 {
 	return i16(byteswap(u16(val)));
 }
@@ -75,7 +75,7 @@ i16 byteswap(i16 val)
 /*!
  * Switch endiannes of an integer value
  */
-i32 byteswap(i32 val)
+inline i32 byteswap(i32 val)
 {
 	return i32(byteswap(u32(val)));
 }
@@ -83,7 +83,7 @@ i32 byteswap(i32 val)
 /*!
  * Switch endiannes of an integer value
  */
-i64 byteswap(i64 val)
+inline i64 byteswap(i64 val)
 {
 	return i64(byteswap(u64(val)));
 }
