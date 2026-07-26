@@ -5,7 +5,7 @@
 #define AW_CVER_X _MSC_VER
 
 #if defined(_M_X64)
-	#define AW_ARCH AW_ARCH_X86_64
+	#define AW_ARCH AW_ARCH_x86_64
 #elif defined(_M_IX86)
 	#define AW_ARCH AW_ARCH_i686
 #endif
