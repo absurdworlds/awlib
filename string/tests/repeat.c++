@@ -5,13 +5,18 @@
 TestFile( "string::repeat" );
 
 namespace aw {
+Test(repeat_empty) {
+	TestAssert(string::repeat("", 0).empty());
+	TestAssert(string::repeat("", 10).empty());
+	TestAssert(string::extend("", 0).empty());
+	TestAssert(string::extend("", 10).empty());
+}
+
 Test(repeat_zero) {
-	Checks {
-		TestAssert(string::repeat(" ", 0).empty());
-		TestAssert(string::repeat("---", 0).empty());
-		TestAssert(string::extend(" ", 0).empty());
-		TestAssert(string::extend("---", 0).empty());
-	}
+	TestAssert(string::repeat(" ", 0).empty());
+	TestAssert(string::repeat("---", 0).empty());
+	TestAssert(string::extend(" ", 0).empty());
+	TestAssert(string::extend("---", 0).empty());
 }
 
 Test(repeat_correct_size) {

@@ -8,8 +8,11 @@ std::string extend(std::string_view str, size_t total_size)
 	if (total_size == 0)
 		return {};
 
+	size_t size = str.size();
+	if (size == 0)
+		return {};
+
 	std::string result(str);
-	size_t size = result.size();
 
 	result.resize(total_size);
 
