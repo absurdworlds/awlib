@@ -15,7 +15,7 @@ set(POSIX_SOURCES
 
 # There are no processes in WASM
 if(NOT EMSCRIPTEN)
-    list(APPEND POSIX_SOURCES posix/process.c++)
+	list(APPEND POSIX_SOURCES posix/process.c++)
 endif()
 
 if (AW_CAPABILITIES_WIN32)

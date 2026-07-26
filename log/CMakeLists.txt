@@ -3,6 +3,11 @@
 # wants to provide their own logger implementation
 # awlog shared library: provides common logger implementations
 
+set(WASM_SOURCES)
+if(EMSCRIPTEN)
+	list(APPEND WASM_SOURCES emscripten_console_logger.c++)
+endif()
+
 aw_add_library(awlog SHARED
 	VERSION 1.1.1
 	SPLIT_INTERFACE
@@ -10,6 +15,7 @@ aw_add_library(awlog SHARED
 	SOURCES
 		log_base.c++
 		ostream_logger.c++
+		${WASM_SOURCES}
 	EXPORT_NAME
 		log
 )
