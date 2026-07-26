@@ -40,6 +40,7 @@
 #define AW_PLATFORM_APPLE  4
 #define AW_PLATFORM_WIN32  5
 #define AW_PLATFORM_WIN64  6
+#define AW_PLATFORM_WASM   7
 
 // When compiling for winelib, both win32 api and posix api can be used
 #if    defined(AW_WINE_USE_POSIX)
@@ -97,6 +98,22 @@
 	#define AW_PLATFORM_SPECIFIC AW_PLATFORM_WIN32
 	#endif
 	#define AW_SUPPORT_PLATFORM_WIN32 1
+/* WebAssembly */
+// Emscripten emulates most of the posix API,
+// so it can be treated as another posix platform
+#elif defined(__EMSCRIPTEN__)
+	#define AW_WASM
+	#define AW_EMSCRIPTEN
+	#define AW_PLATFORM          AW_PLATFORM_POSIX
+	#define AW_PLATFORM_SPECIFIC AW_PLATFORM_WASM
+	#define AW_SUPPORT_PLATFORM_POSIX 1
+	#define AW_SUPPORT_PLATFORM_WASM  1
+/* Bare WebAssembly (wasi, freestanding) */
+#elif defined(__wasm__)
+	#define AW_WASM
+	#define AW_PLATFORM          AW_PLATFORM_WASM
+	#define AW_PLATFORM_SPECIFIC AW_PLATFORM_WASM
+	#define AW_SUPPORT_PLATFORM_WASM 1
 /* Unix-like */
 #elif defined(__gnu_linux__)
 	#define AW_PLATFORM          AW_PLATFORM_POSIX
@@ -124,6 +141,8 @@
 	#define AW_PLATFORM_SPECIFIC AW_PLATFORM_POSIX
 	#define AW_SUPPORT_PLATFORM_POSIX 1
 	#define AW_SUPPORT_PLATFORM_X11 1
+#else
+	#error "Unknown platform"
 #endif
 
 /**** IMPORTS/EXPORTS ****/
