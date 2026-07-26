@@ -35,6 +35,8 @@ enum class file_mode : unsigned {
 	truncate  = 1 << 4,
 	//! Fail if file already exists
 	exclusive = 1 << 5,
+	//! Open file for execution; only meaningful when mapping it into memory
+	execute   = 1 << 6,
 
 };
 
