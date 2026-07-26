@@ -17,7 +17,7 @@ inline namespace v1 {
 /*!
  * Writes log messages to the browser console
  */
-struct emscripten_console_logger : log {
+struct AW_LOG_EXP emscripten_console_logger : log {
 	struct options {
 		//! Prefix every line with the calling thread's id.
 		bool show_thread = false;
