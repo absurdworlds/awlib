@@ -1,3 +1,11 @@
+/*
+ * Copyright (C) 2016  Hedede <hededrk@gmail.com>
+ *
+ * License LGPLv3 or later:
+ * GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
+ * This is free software: you are free to change and redistribute it.
+ * There is NO WARRANTY, to the extent permitted by law.
+ */
 #ifndef awstd_string_view_h
 #define awstd_string_view_h
 #include <cassert>
@@ -5,13 +13,15 @@
 #include <string>
 #include <cstring>
 #include <algorithm>
+#include <iterator>
+#include <ostream>
 
 #include "../C++/config.h"
 #include "type_traits.h"
 
 namespace awstd {
 template<size_t N>
-inline aw_constexpr size_t stringsize(const char (&array)[N])
+inline aw_constexpr_fn size_t stringsize(const char (&array)[N])
 {
 	size_t n = N;
 	while (n && !array[n-1]) --n;
@@ -101,7 +111,7 @@ struct string_view {
 		const size_t len = str.size();
 
 		if (len == 0)
-			return (pos < size()) ? pos : npos;
+			return (pos <= size()) ? pos : npos;
 
 		if (len > size())
 			return npos;
@@ -168,7 +178,7 @@ struct string_view {
 	size_t find_first_of(string_view str, size_t pos = 0) const
 	{
 		// meh, doesn't worth it to optimize
-		if (pos >= _size || str.empty())
+		if (pos >= _size)
 			return npos;
 		iterator beg = begin() + pos;
 		iterator it = std::find_first_of(beg, end(), str.begin(), str.end());
@@ -195,7 +205,7 @@ struct string_view {
 
 	size_t find_first_not_of(string_view str, size_t pos = 0) const
 	{
-		if (pos >= _size || str.empty())
+		if (pos >= _size)
 			return npos;
 		iterator it = begin() + pos;
 		for (; it != end(); ++it) {

@@ -8,7 +8,7 @@
  */
 #ifndef aw98_utf_convert_h
 #define aw98_utf_convert_h
-#include <_c++config>
+#include <awstd/C++/config.h>
 #include <aw/C++98/utility/unicode/utf8.h>
 #include <aw/C++98/utility/unicode/utf16.h>
 #include <aw/C++98/utility/unicode/utf32.h>
@@ -28,10 +28,10 @@ Output& convert(Input const& str, Output& result, InEnc, OutEnc)
 	while (begin != end) {
 		code_point cp;
 
-		begin = InEnc::template decode(begin, end, cp);
+		begin = InEnc::decode(begin, end, cp);
 		if ( !isValidCodepoint(cp) )
 			continue;
-		out   = OutEnc::template encode(cp, out);
+		out   = OutEnc::encode(cp, out);
 	}
 
 	return result;
@@ -47,13 +47,13 @@ inline utf16 getenc(std::wstring const&) { return utf16(); }
 inline utf32 getenc(std::wstring const&) { return utf32(); }
 #endif
 
-inline std::wstring widen(std::string s)
+inline std::wstring widen(std::string const& s)
 {
 	std::wstring o;
 	convert(s, o, getenc(s), getenc(o));
 	return o;
 }
-inline std::string narrow(std::wstring w)
+inline std::string narrow(std::wstring const& w)
 {
 	std::string o;
 	convert(w, o, getenc(w), getenc(o));

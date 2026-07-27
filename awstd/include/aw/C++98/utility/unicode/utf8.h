@@ -55,7 +55,7 @@ static bool isHead(char_type lead)
  */
 static size_t trailLength(char_type lead) {
 	if (!isHead(lead))
-		return -1;
+		return size_t(-1);
 
 	if (lead < 0xE0)
 		return 1;
@@ -115,14 +115,14 @@ Iterator decode(Iterator input, Iterator end, code_point& cp)
 	if (cp < 0x80)
 		return input;
 
-	size_t length = trailLength(cp);
-	if (length == -1) {
-		cp = -1;
+	size_t length = trailLength(char_type(cp));
+	if (length == size_t(-1)) {
+		cp = invalid;
 		return input;
 	}
 
-	if (std::distance(input, end) < ptrdiff_t(length)) {
-		cp = -1;
+	if (std::distance(input, end) < std::ptrdiff_t(length)) {
+		cp = invalid;
 		return end;
 	}
 
@@ -134,11 +134,13 @@ Iterator decode(Iterator input, Iterator end, code_point& cp)
 			break;
 
 		cp = (cp << 6) | (*(input++) & 0x3F);
+		// fall through
 	case 2:
 		if (!isTrail(*input))
 			break;
 
 		cp = (cp << 6) | (*(input++) & 0x3F);
+		// fall through
 	case 1:
 		if (!isTrail(*input))
 			break;
@@ -147,7 +149,7 @@ Iterator decode(Iterator input, Iterator end, code_point& cp)
 		return input;
 	}
 
-	cp = -1;
+	cp = invalid;
 	return input;
 }
 }; // namespace utf8

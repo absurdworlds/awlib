@@ -6,13 +6,14 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifdef aw_utility_fallback_filesystem_h
-#include <string_view>
+#ifdef awstd_filesystem_h
+#include <string>
+#include <awstd/string_view>
 #include <aw/C++98/utility/unicode/convert.h>
 
 namespace awstd {
 namespace filesystem {
-struct path {
+struct AW_FS_EXP path {
 #if (AW_PLATFORM == AW_PLATFORM_WIN32)
 	static aw_constexpr char preferred_separator = '\\';
 #else
@@ -29,6 +30,10 @@ struct path {
 		: p(std::string(source))
 	{ }
 
+	path(char const* source)
+		: p(source)
+	{ }
+
 	path(std::string const& source)
 		: p(source)
 	{ }
@@ -39,12 +44,18 @@ struct path {
 
 	template<class CharT, size_t N>
 	path(CharT const (&source)[N])
-		: path(std::basic_string<CharT>(source))
+		: p(to_utf8(std::basic_string<CharT>(source)))
 	{ }
+
+	path& operator=(path const& other)
+	{
+		p = other.p;
+		return *this;
+	}
 
 	path& make_preferred();
 
-	path filename() const  { return filename_view(); }
+	path filename() const  { return path(filename_view()); }
 	//! Filename without extension: "file.txt" -> "file"
 	path stem() const;
 	//! Extract extension: "file.txt" -> ".txt"
@@ -63,6 +74,9 @@ struct path {
 
 	bool empty() const { return p.empty(); }
 
+	friend bool operator==(path const& a, path const& b) { return a.p == b.p; }
+	friend bool operator!=(path const& a, path const& b) { return !(a == b); }
+
 protected:
 	string_view path_view() const;
 	string_view filename_view() const;
@@ -70,8 +84,19 @@ protected:
 	string_view extension_view() const;
 
 private:
+	//! Bring the source string into the encoding used by path::p
+	static std::string to_utf8(std::string const& source)
+	{
+		return source;
+	}
+
+	static std::string to_utf8(std::wstring const& source)
+	{
+		return aw::unicode::narrow(source);
+	}
+
 	std::string p;
 };
 } // namespace filesystem
 } // namespace awstd
-#endif//aw_utility_fallback_filesystem_h
+#endif//awstd_filesystem_h
