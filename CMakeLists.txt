@@ -59,7 +59,6 @@ endif()
 include(aw-common)
 
 add_subdirectory(awlib)
-add_subdirectory(awstd)
 add_subdirectory(meta)
 add_subdirectory(algorithm)
 add_subdirectory(math)
@@ -94,6 +93,13 @@ endif()
 option(AW_ENABLE_LUA "Enable libawlua" OFF)
 if (AW_ENABLE_LUA)
 	add_subdirectory(lua)
+endif()
+
+# awstd provides fallbacks for older standards, so it is built separately,
+# with its own (much older) value of CMAKE_CXX_STANDARD.
+option(AW_ENABLE_AWSTD "Enable libawstd" OFF)
+if (AW_ENABLE_AWSTD)
+	add_subdirectory(awstd)
 endif()
 
 
