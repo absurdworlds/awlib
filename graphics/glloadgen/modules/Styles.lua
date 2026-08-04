@@ -12,13 +12,10 @@ If you want to extend this to new styles, then create a file in this directory c
 local style_registry =
 {
 	pointer_c = require("PointerC_Style"),
-	pointer_cpp = require("PointerCPP_Style"),
 	func_cpp = require("FuncCpp_Style"),
-	noload_cpp = require("NoloadCpp_Style"),
-	noload_c = require("NoloadC_Style"),
 }
 
-local default_style = "pointer_c"
+local default_style = "func_cpp"
 
 local status, userStyles = pcall(require, "UserStyles")
 
