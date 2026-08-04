@@ -10,7 +10,7 @@ if (NOT BUILD_SHARED_LIBS)
 			AW_STATIC_BUILD)
 endif()
 
-option(AW_NO_BUILTINS "Build without compiler built-in functions." OFF)
+option(AW_NO_BUILTINS "Build without compiler built-in functions." ON)
 if (AW_NO_BUILTINS)
 	target_compile_definitions(awconfig
 		INTERFACE
