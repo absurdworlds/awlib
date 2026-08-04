@@ -4,28 +4,21 @@ on:
   push:
 
 jobs:
-  windows-x86:
+  windows:
+    name: windows-${{ matrix.name }}
     runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { name: x86, platform: Win32 }
+          - { name: x64, platform: x64 }
     steps:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Configure
         run: >
-          cmake -S . -B build -A Win32
-          -DAW_ENABLE_GRAPHICS:BOOL=OFF
-          -DAW_ENABLE_HUDF:BOOL=ON
-      - name: Build
-        run: cmake --build build
-      - name: Test
-        run: ctest --test-dir build -C Debug --output-on-failure
-  windows-x64:
-    runs-on: windows-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Configure
-        run: >
-          cmake -S . -B build -A x64
+          cmake -S . -B build -A ${{ matrix.platform }}
           -DAW_ENABLE_GRAPHICS:BOOL=OFF
           -DAW_ENABLE_HUDF:BOOL=ON
       - name: Build
