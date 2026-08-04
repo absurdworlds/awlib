@@ -5,6 +5,8 @@
 #include <aw/graphics/glsl/vec.h>
 #include <aw/graphics/glsl/mat.h>
 
+// GL/gl.h defined GL_* macros that clobber clobber awgl
+#define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
 
 #include <iostream>
