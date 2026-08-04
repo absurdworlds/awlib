@@ -15,20 +15,59 @@ function replace(a, b)
 	return a .. "_" .. b:lower();
 end
 
-function to_snake(name)
-	local patterns = {
-		-- unfortuately, requires manual input right now
-		"([a-z])([0-9][A-Z]?[0-9a-z]*[a-z])$",
-		"(.)([A-Z][a-z]+)",
-		"([a-z])([0-9][A-Z])",
-		"([a-z])([A-Z])"
-	};
+local patterns = {
+	"([a-z])([0-9][A-Z]?[0-9a-z]*[a-z])$",
+	"(.)([A-Z][a-z]+)",
+	"([a-z])([0-9][A-Z])",
+	"([a-z])([A-Z])",
+}
 
-	for _,pattern in ipairs(patterns) do
-		name = name:gsub(pattern, replace);
+-- The type suffix GL puts on the end of a name -- the fv of "ClearBufferfv".
+-- Longest first, so that ui64v is not read as ui, and i64v not as iv.
+local type_suffixes = {
+	"i64_v", "i_v", -- indexed queries, 'i' here means "indexed" rather than "int"
+	"ui64v", "ui64", "i64v", "i64",
+	"uiv", "ubv", "usv", "ui",
+	"iv", "fv", "dv", "bv", "sv", "fi",
+	"i", "f", "v",
+}
+
+local exceptions = {
+	-- Ambiguous: the rule above would produce indexe_dv,
+	-- but 'd' is a part of 'indexed', not the 'dv' type suffix
+	ScissorIndexedv = "scissor_indexed_v",
+}
+
+function to_snake(name)
+	if exceptions[name] then return exceptions[name] end
+
+	-- Take the suffix off before splitting words, so the modifiers stay
+	-- attached to the type:
+	-- "UniformMatrix2x3fv" -> "uniform_matrix_2x3fv",
+	-- "VertexAttrib4Nbv" -> "vertex_attrib_4Nbv",
+	-- "VertexAttribL1dv" -> "vertex_attrib_L1dv",
+	-- etc
+	local head, suffix
+	for _, suf in ipairs(type_suffixes) do
+		-- Matrix dimensions first: x is only part of a modifier between
+		-- two digits, otherwise it is just the last letter of 'Matrix'.
+		local h, mod = name:match("^(.-)(%d+x%d+)" .. suf .. "$")
+		if not h then
+			h, mod = name:match("^(.-)([%dLN]*)" .. suf .. "$")
+		end
+		if h and #h > 0 then
+			head, suffix = h, (mod .. suf):lower()
+			break
+		end
 	end
 
-	return name:lower();
+	name = head or name
+	for _, pattern in ipairs(patterns) do
+		name = name:gsub(pattern, replace)
+	end
+	name = name:lower()
+
+	return suffix and (name .. "_" .. suffix) or name
 end
 
 local function Flatten(version)
