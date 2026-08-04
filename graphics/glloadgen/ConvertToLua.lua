@@ -1,3 +1,7 @@
+-- Lua 5.1 compatibility shims
+unpack = unpack or table.unpack
+loadstring = loadstring or load
+
 local LoadXml = require "LoadXml"
 require "_TableWriter"
 local Build = require "_BuildDataFromXml"

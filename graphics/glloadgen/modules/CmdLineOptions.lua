@@ -223,10 +223,11 @@ function group:array(optName, tblName, desc, modifier, optional)
 			
 			local bFound = false
 			for ext in iter() do
+				local value = ext
 				if(modifier) then
-					ext = modifier(ext)
+					value = modifier(value)
 				end
-				table.insert(self[tblName], ext)
+				table.insert(self[tblName], value)
 				bFound = true
 			end
 			
@@ -252,10 +253,11 @@ function group:array_empty(optName, tblName, desc, modifier, optional)
 			
 			local bFound = false
 			for ext in iter() do
+				local value = ext
 				if(modifier) then
-					ext = modifier(ext)
+					value = modifier(value)
 				end
-				table.insert(self[tblName], ext)
+				table.insert(self[tblName], value)
 			end
 		end,
 		

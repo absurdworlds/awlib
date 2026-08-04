@@ -1,3 +1,7 @@
+-- Lua 5.1 compatibility shims
+unpack = unpack or table.unpack
+loadstring = loadstring or load
+
 assert(arg and arg[0], "You ran this script incorrectly.")
 
 --Get the location of our modules relative to here.
