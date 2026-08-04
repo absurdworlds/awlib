@@ -34,7 +34,7 @@ jobs:
         run: ctest --test-dir build -C Debug --output-on-failure
   ubuntu:
     name: ubuntu (${{ matrix.cc }}, no-builtins=${{ matrix.no_builtins }})
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     strategy:
       fail-fast: false
       matrix:
