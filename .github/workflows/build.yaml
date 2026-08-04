@@ -33,16 +33,29 @@ jobs:
       - name: Test
         run: ctest --test-dir build -C Debug --output-on-failure
   ubuntu:
+    name: ubuntu (${{ matrix.cc }}, no-builtins=${{ matrix.no_builtins }})
     runs-on: ubuntu-22.04
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { cc: gcc,   cxx: g++,     no_builtins: "OFF" }
+          - { cc: clang, cxx: clang++, no_builtins: "OFF" }
+          # The fallbacks are plain C++ with no per-compiler paths, so one
+          # job is enough to cover them.
+          - { cc: gcc,   cxx: g++,     no_builtins: "ON" }
     steps:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Configure
         run: >
           cmake -S . -B build
+          -DCMAKE_C_COMPILER=${{ matrix.cc }}
+          -DCMAKE_CXX_COMPILER=${{ matrix.cxx }}
           -DAW_ENABLE_GRAPHICS:BOOL=OFF
           -DAW_ENABLE_ASSERT:BOOL=OFF
           -DAW_ENABLE_HUDF:BOOL=ON
+          -DAW_NO_BUILTINS:BOOL=${{ matrix.no_builtins }}
       - name: Build
         run: cmake --build build
       - name: Test
