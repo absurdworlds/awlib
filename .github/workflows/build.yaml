@@ -4,28 +4,21 @@ on:
   push:
 
 jobs:
-  windows-x86:
+  windows:
+    name: windows-${{ matrix.name }}
     runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { name: x86, platform: Win32 }
+          - { name: x64, platform: x64 }
     steps:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Configure
         run: >
-          cmake -S . -B build -A Win32
-          -DAW_ENABLE_GRAPHICS:BOOL=OFF
-          -DAW_ENABLE_HUDF:BOOL=ON
-      - name: Build
-        run: cmake --build build
-      - name: Test
-        run: ctest --test-dir build -C Debug --output-on-failure
-  windows-x64:
-    runs-on: windows-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Configure
-        run: >
-          cmake -S . -B build -A x64
+          cmake -S . -B build -A ${{ matrix.platform }}
           -DAW_ENABLE_GRAPHICS:BOOL=OFF
           -DAW_ENABLE_HUDF:BOOL=ON
       - name: Build
@@ -33,7 +26,35 @@ jobs:
       - name: Test
         run: ctest --test-dir build -C Debug --output-on-failure
   ubuntu:
-    runs-on: ubuntu-22.04
+    name: ubuntu (${{ matrix.cc }}, no-builtins=${{ matrix.no_builtins }})
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { cc: gcc,   cxx: g++,     no_builtins: "OFF" }
+          - { cc: clang, cxx: clang++, no_builtins: "OFF" }
+          # The fallbacks are plain C++ with no per-compiler paths, so one
+          # job is enough to cover them.
+          - { cc: gcc,   cxx: g++,     no_builtins: "ON" }
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Configure
+        run: >
+          cmake -S . -B build
+          -DCMAKE_C_COMPILER=${{ matrix.cc }}
+          -DCMAKE_CXX_COMPILER=${{ matrix.cxx }}
+          -DAW_ENABLE_GRAPHICS:BOOL=OFF
+          -DAW_ENABLE_ASSERT:BOOL=OFF
+          -DAW_ENABLE_HUDF:BOOL=ON
+          -DAW_NO_BUILTINS:BOOL=${{ matrix.no_builtins }}
+      - name: Build
+        run: cmake --build build
+      - name: Test
+        run: ctest --test-dir build --output-on-failure
+  macos:
+    runs-on: macos-26
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -43,6 +64,7 @@ jobs:
           -DAW_ENABLE_GRAPHICS:BOOL=OFF
           -DAW_ENABLE_ASSERT:BOOL=OFF
           -DAW_ENABLE_HUDF:BOOL=ON
+          -DAW_NO_BUILTINS:BOOL=OFF
       - name: Build
         run: cmake --build build
       - name: Test

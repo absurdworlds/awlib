@@ -13,6 +13,9 @@ namespace aw {
 /*!
  * Temporal flag — a flag that is set only for specified
  * period of time (i.e. resets itself after duration passes).
+ *
+ * A typical use-case for this is to implement and action on
+ * double key press.
  */
 struct tmpflag {
 	using clock_type = std::chrono::steady_clock;
