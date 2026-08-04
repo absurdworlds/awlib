@@ -69,3 +69,40 @@ jobs:
         run: cmake --build build
       - name: Test
         run: ctest --test-dir build --output-on-failure
+  graphics:
+    name: graphics (${{ matrix.loader }})
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { loader: glx, use_egl: "OFF" }
+          - { loader: egl, use_egl: "ON" }
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Install dependencies
+        run: >
+          sudo apt-get update && sudo apt-get install -y
+          libgl1-mesa-dev
+          libegl-dev
+          libglfw3-dev
+          libpng-dev
+          libgl1-mesa-dri
+      - name: Configure
+        run: >
+          cmake -S . -B build
+          -DAW_ENABLE_GRAPHICS:BOOL=ON
+          -DAW_ENABLE_IMAGE:BOOL=ON
+          -DAW_ENABLE_MESH:BOOL=ON
+          -DAW_ENABLE_HUDF:BOOL=ON
+          -DAW_ENABLE_ASSERT:BOOL=OFF
+          -DAW_NO_BUILTINS:BOOL=OFF
+          -DAW_GL_USE_EGL:BOOL=${{ matrix.use_egl }}
+      - name: Build
+        run: cmake --build build
+      - name: Test
+        # No GPU on the runners, fall back to Mesa's software rasteriser
+        env:
+          LIBGL_ALWAYS_SOFTWARE: 1
+        run: ctest --test-dir build --output-on-failure
