@@ -3,8 +3,10 @@ option(AW_GL_USE_EGL "Load GL entry points through EGL instead of the platform d
 
 if (AW_GL_USE_EGL)
 	find_package(OpenGL REQUIRED COMPONENTS OpenGL EGL)
+	aw_export_dependency("OpenGL COMPONENTS OpenGL EGL")
 else()
 	find_package(OpenGL REQUIRED)
+	aw_export_dependency(OpenGL)
 endif()
 
 aw_add_library(awgl SHARED
