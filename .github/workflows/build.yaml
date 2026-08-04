@@ -53,3 +53,19 @@ jobs:
         run: cmake --build build
       - name: Test
         run: ctest --test-dir build --output-on-failure
+  macos:
+    runs-on: macos-26
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Configure
+        run: >
+          cmake -S . -B build
+          -DAW_ENABLE_GRAPHICS:BOOL=OFF
+          -DAW_ENABLE_ASSERT:BOOL=OFF
+          -DAW_ENABLE_HUDF:BOOL=ON
+          -DAW_NO_BUILTINS:BOOL=OFF
+      - name: Build
+        run: cmake --build build
+      - name: Test
+        run: ctest --test-dir build --output-on-failure
