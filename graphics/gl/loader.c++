@@ -93,3 +93,15 @@ unknown_fn* get_proc_address(const char* name)
 }
 } // namespace aw::glx
 #endif
+
+#if AW_GL_USE_EGL
+#include <EGL/egl.h>
+namespace aw::egl {
+unknown_fn* get_proc_address(const char* name)
+{
+	// Assumes EGL 1.5 or 1.4 with EGL_KHR_get_all_proc_addresses.
+	// Below that, EGL spec allows this to return nullptr for core functions.
+	return (unknown_fn*)eglGetProcAddress(name);
+}
+} // namespace aw::egl
+#endif//AW_GL_USE_EGL
