@@ -226,6 +226,30 @@ local function GenEnumName(enum, spec, options)
 	return GenEnumNamePrefix(enum, spec, options)
 end
 
+--[[
+The column the values line up on, per block of enums.
+
+33 is the minimum to avoid code churn. Longer blocks widen to fit the longest item.
+]]
+local alignmentColumns = setmetatable({}, {__mode = "k"})
+
+local function AlignmentColumn(enumList, spec, options)
+	if(alignmentColumns[enumList]) then
+		return alignmentColumns[enumList]
+	end
+
+	local column = 33
+	for _, enum in ipairs(enumList) do
+		local width = #GenEnumName(enum, spec, options) + 1
+		if(width > column) then
+			column = width
+		end
+	end
+
+	alignmentColumns[enumList] = column
+	return column
+end
+
 local function GenExtensionVarName(extName, spec, options)
 	return "var_" .. extName:lower();
 end
@@ -319,17 +343,17 @@ struct load_result {
 	{
 		return is_loaded;
 	}
-	
+
 	int num_missing() const { return missing; }
-	
+
 	load_result() = default;
 	load_result(bool is_loaded, int num_missing)
 		: is_loaded{is_loaded}, missing{num_missing}
 	{}
 
 private:
-	bool is_loaded   = false;
-	int  missing = 0;
+	bool is_loaded = false;
+	int  missing   = 0;
 };
 ]]
 	hFile:write("\n")
@@ -355,16 +379,13 @@ function my_style.header.WriteBlockEndEnumDecl(hFile, spec, options)
 	hFile:write("};\n")
 end
 
-function my_style.header.WriteEnumDecl(hFile, enum, enumTable, spec, options, enumSeen)
+function my_style.header.WriteEnumDecl(hFile, enum, enumTable, spec, options, enumSeen, enumList)
 	if(enumSeen[enum.name]) then
 		hFile:fmt("//%s taken from ext: %s\n", enum.name, enumSeen[enum.name])
 	else
 	
 		local enumName = GenEnumName(enum, spec, options)
-		local lenEnum = #enumName
-		local numIndent = 36
-		
-		local numSpaces = numIndent - lenEnum
+		local numSpaces = AlignmentColumn(enumList, spec, options) - #enumName
 		if(numSpaces < 1) then
 			numSpaces = 1
 		end
@@ -774,7 +795,7 @@ void load_extension(std::vector<map_entry>& table, string_view extension)
 		return a == e.ext_name;
 	};
 	auto entry = aw::binary_find(begin(table), end(table), extension, compare);
-	
+
 	if (entry != end(table)) {
 		const auto loader = entry->loaderFunc;
 		const int  num_failed = loader ? loader() : 0;

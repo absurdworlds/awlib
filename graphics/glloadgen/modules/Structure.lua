@@ -389,7 +389,7 @@ local blankAction = {}
 
 function blankAction:PreProcess(context)
 	self:Assert(context.hFile, "Blanks must be in files.")
-	context.hFile:write("\n")
+	context.hFile:rawwrite("\n")
 end
 
 MakeActionType("blank", blankAction, function(self, data)
@@ -582,12 +582,14 @@ function enumIterAction:PreProcess(context)
 	end
 
 	context.enumTable = context.specData.enumtable
+	context.enumList = enumList
 	self:IterateChildren(context, enumList, "enum",
 		function(context, enum)
 			if(context.enumSeen) then
 				context.enumSeen[enum.name] = source
 			end
 		end)
+	context.enumList = nil
 	context.enumTable = nil
 	return true --Stops regular child processing.
 end

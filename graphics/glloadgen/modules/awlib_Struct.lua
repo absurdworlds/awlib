@@ -14,7 +14,7 @@ local my_struct =
 							cond="enum-iter"
 						},
 						{ type="enum-iter",
-							{ type="write", name="EnumDecl(hFile, enum, enumTable, spec, options, enumSeen)", },
+							{ type="write", name="EnumDecl(hFile, enum, enumTable, spec, options, enumSeen, enumList)", },
 							{ type="blank", last=true },
 						},
 					},
@@ -24,7 +24,7 @@ local my_struct =
 								cond="enum-iter"
 							},
 							{ type="enum-iter",
-								{ type="write", name="EnumDecl(hFile, enum, enumTable, spec, options, enumSeen)", },
+								{ type="write", name="EnumDecl(hFile, enum, enumTable, spec, options, enumSeen, enumList)", },
 								{ type="blank", last=true },
 							},
 						},

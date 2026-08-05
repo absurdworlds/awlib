@@ -51,7 +51,11 @@ function members:rawfmt(fmt, ...)
 end
 
 function members:write(...)
-	self:_Indent()
+	--A line with nothing on it gets no indent
+	local first = ...
+	if(first ~= "" and first ~= "\n") then
+		self:_Indent()
+	end
 	rawget(self, "_hFile"):write(...)
 end
 
