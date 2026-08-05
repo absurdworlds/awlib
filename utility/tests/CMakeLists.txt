@@ -1,5 +1,6 @@
 aw_add_test(test_utility
 	SOURCES
+	byteswap.c++
 	utf8toutf16.c++
 	MurmurHash3.c++
 	hash_combine.c++
