@@ -166,7 +166,7 @@ Test(c2_trailing_invalid_token_terminates) {
 }
 
 Test(c2_valid_input_still_parses) {
-	auto stream = stream_of("[node\n\ta = 1\n\tb = \"str\"\n\tc = -2.5\n]");
+	auto stream = stream_of("[node\n\ta = 1\n\tb = \"str\"\n\tc = -2.5\n\td = +7\n]");
 	auto doc = hudf::parse_file(stream);
 
 	Checks {
@@ -178,7 +178,7 @@ Test(c2_valid_input_still_parses) {
 		if (!node)
 			return;
 
-		TestEqual(node->children.size(), size_t(3));
+		TestEqual(node->children.size(), size_t(4));
 
 		auto* a = node->find_child("a");
 		TestAssert(a != nullptr);
@@ -194,6 +194,11 @@ Test(c2_valid_input_still_parses) {
 		TestAssert(c != nullptr);
 		if (c)
 			TestEqual(c->try_get<double>(0.0), -2.5);
+
+		auto* d = node->find_child("d");
+		TestAssert(d != nullptr);
+		if (d)
+			TestEqual(d->try_get<intmax_t>(0), intmax_t(7));
 	}
 }
 
@@ -262,6 +267,26 @@ Test(c4_deep_nesting_terminates) {
 			text += "[a ";
 		parse(text);
 	}), outcome::completed);
+}
+
+Test(out_of_range_number_reports_error) {
+	// deduced from the literal
+	TestEqual(run_sandboxed([] { parse("a = 1e999999"); }),
+		  outcome::completed);
+	TestEqual(run_sandboxed([] { parse("a = 999999999999999999999999"); }),
+		  outcome::completed);
+
+	// explicitly typed values take a different path
+	TestEqual(run_sandboxed([] { parse("a = f:1e999999"); }),
+		  outcome::completed);
+	TestEqual(run_sandboxed([] { parse("a = i:999999999999999999999999"); }),
+		  outcome::completed);
+
+	// and so do vectors
+	TestEqual(run_sandboxed([] { parse("a = {1e999999}"); }),
+		  outcome::completed);
+	TestEqual(run_sandboxed([] { parse("a = i:{999999999999999999999999}"); }),
+		  outcome::completed);
 }
 
 Test(c7_junk_token_run_terminates) {

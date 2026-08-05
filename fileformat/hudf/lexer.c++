@@ -32,6 +32,7 @@ bool is_digit(char c)
 	return (c >= '0' && c <= '9');
 }
 
+// TODO: accept 0x numeric prefixes
 bool is_num_char(char c)
 {
 	return is_digit(c) || in(c, '.', 'e', 'E', '+', '-');
