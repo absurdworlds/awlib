@@ -10,6 +10,9 @@
 #define aw_utility_byteswap
 #include <aw/utility/utility.h>
 #include <aw/types/types.h>
+#if defined(AW_WINDOWS)
+#include <stdlib.h>
+#endif
 namespace aw {
 /*!
  * Switch endiannes of an integer value
@@ -34,7 +37,7 @@ inline u32 byteswap(u32 val)
 #if   AW_EXT(__builtin_bswap32)
 	return __builtin_bswap32(val);
 #elif defined(AW_WINDOWS)
-	return _byteswap_uint(val);
+	return _byteswap_ulong(val);
 #else
 	return ((((val >> 0) & 0xFF) << 24) |
 	        (((val >> 8) & 0xFF) << 16) |
@@ -51,7 +54,7 @@ inline u64 byteswap(u64 val)
 #if   AW_EXT(__builtin_bswap64)
 	return __builtin_bswap64(val);
 #elif defined(AW_WINDOWS)
-	return _byteswap_ulong(val);
+	return _byteswap_uint64(val);
 #else
 	return ((((val >> 0)  & 0xFF) << 56) |
 	        (((val >> 8)  & 0xFF) << 48) |

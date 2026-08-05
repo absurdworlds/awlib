@@ -172,7 +172,7 @@
 	#define AW_HAS(x) 0
 	#define AW_HAS_BUILTIN(x) 0
 #else
-	#define AW_EXT(x) defined(AW_HAS_EXT##x) && AW_HAS_EXT##x
+	#define AW_EXT(x) AW_HAS_EXT##x
 	#define AW_HAS(x) AW_HAS_##x
 
 	#ifdef __has_builtin
