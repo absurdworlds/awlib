@@ -74,6 +74,9 @@ struct AW_HUDF_EXP parser {
 	//! Skip current node
 	void skip_node();
 
+	//! Report a parse error at the current position
+	void error(string_view msg) { lex.error(msg, lex.peek_token().pos); }
+
 	bool has_error() const { return lex.has_error(); }
 
 protected:

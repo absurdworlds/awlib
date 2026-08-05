@@ -40,8 +40,9 @@ bool find_node(parser& parser, string_view name)
 }
 } // namespace
 
-//------------------------------------------------------------------------
-node parse_node(parser& parser)
+namespace {
+
+node parse_node(parser& parser, size_t depth)
 {
 	node node;
 	object obj;
@@ -50,7 +51,12 @@ node parse_node(parser& parser)
 		auto const& name = obj.name;
 		switch (obj.kind) {
 			case object::node: {
-				auto child = parse_node(parser);
+				if (depth >= max_nesting_depth) {
+					parser.error("Node nesting is too deep");
+					parser.skip_node();
+					break;
+				}
+				auto child = parse_node(parser, depth + 1);
 				child.name = name;
 				child.value = obj.val;
 				node.children.add(child);
@@ -68,7 +74,14 @@ node parse_node(parser& parser)
 	}
 	return node;
 }
+} // namespace
 
+node parse_node(parser& parser)
+{
+	return parse_node(parser, 0);
+}
+
+//------------------------------------------------------------------------
 value find_value(io::input_stream& file, string_view name, log* l)
 {
 	parser parser(file, l);
