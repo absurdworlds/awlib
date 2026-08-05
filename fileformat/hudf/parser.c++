@@ -62,17 +62,20 @@ object parser::read()
 
 void parser::skip_node()
 {
-	token tok = lex.peek_token();
+	size_t const end_depth = depth - 1;
 
-	size_t depth = 1;
-	do {
-		if (tok.kind == token::node_begin) {
-			++depth;
-		} else if (tok.kind == token::node_end) {
-			--depth;
+	while (depth > end_depth) {
+		token tok = lex.get_token();
+		if (tok.kind == token::eof) {
+			lex.error("Reached end of file while looking for ']'", tok.pos);
+			return;
 		}
-		tok = lex.get_token();
-	} while (depth > 0);
+
+		if (tok.kind == token::node_begin)
+			++depth;
+		else if (tok.kind == token::node_end)
+			--depth;
+	}
 }
 
 value parser::read_value()
