@@ -462,12 +462,15 @@ function my_style.source.GetFilename(basename, options)
 	return basename .. ".c++"
 end
 
+-- Where awgl's headers end up once installed
+local includeRoot = "aw/gl"
+
 function my_style.source.WriteIncludes(hFile, basename, spec, options)
 	local base = util.ParsePath(my_style.header.GetFilename(basename, options))
-	hFile:fmt('#include "%s"\n\n', base)
+	hFile:fmt('#include <%s/api/%s>\n', includeRoot, base)
+	hFile:fmt('#include <%s/loader.h>\n\n', includeRoot)
 
 	hFile:writeblock([[
-#include "loader.h"
 #include <vector>
 #include <aw/types/string_view.h>
 #include <aw/algorithm/binary_find.h>
