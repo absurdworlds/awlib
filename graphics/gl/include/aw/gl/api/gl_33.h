@@ -4,7 +4,7 @@
 #ifndef aw_gl_ext_opengl_3_3_h
 #define aw_gl_ext_opengl_3_3_h
 #include "types.h"
-#include "gl_enum_33.h"
+#include "gl_33_enum.h"
 #include "aw/gl/export.h"
 
 namespace gl {

@@ -14,7 +14,7 @@ aw_add_library(awgl SHARED
 	SOURCES
 		enum_check.c++
 		loader.c++
-		gl_api.c++
+		gl_46.c++
 	EXPORT_NAME
 		gl
 )

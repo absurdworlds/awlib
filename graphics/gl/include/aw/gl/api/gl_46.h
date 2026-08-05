@@ -5,7 +5,7 @@
 #define aw_gl_ext_opengl_4_6_h
 #include "types.h"
 #include "gl_33.h"
-#include "gl_enum_46.h"
+#include "gl_46_enum.h"
 
 namespace gl {
 /* gl version 1.0 */
