@@ -20,9 +20,9 @@ inline namespace v1 {
  * Nesting limit for parse_node(), which recurses once per level.
  *
  * Without it, a file consisting of nothing but '[' overflows the stack.
- * The limit should be far above any sensible document.
+ * The limit should be far above what is required by any sensible document.
  */
-constexpr size_t max_nesting_depth = 256;
+constexpr size_t max_nesting_depth = 1024;
 
 AW_HUDF_EXP value find_value(io::input_stream& file, string_view name, log* l = nullptr);
 AW_HUDF_EXP node  find_node(io::input_stream& file, string_view name, log* l = nullptr);
