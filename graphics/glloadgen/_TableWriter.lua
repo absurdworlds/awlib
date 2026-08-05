@@ -1,6 +1,8 @@
 --This file exports a funciton, WriteTable, that writes a given table out to a given file handle.
 
-require "_util";
+local function WriteFormatted(hFile, strFormat, ...)
+	hFile:write(string.format(strFormat, ...));
+end
 
 local writeKey = {};
 
