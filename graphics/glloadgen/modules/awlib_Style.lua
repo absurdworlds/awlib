@@ -505,10 +505,14 @@ function my_style.source.WriteExtVariableDef(hFile, extName,
 	hFile:fmt("load_result %s;\n", GenExtensionVarName(extName, spec, options));
 end
 
+local funcPointerMacro = "aw_gl_func_pointer"
+
 function my_style.source.WriteBlockBeginPtrDefs(hFile, spec, options)
+	hFile:fmt("#define %s(x) decltype(x) x = nullptr\n", funcPointerMacro)
 end
 
 function my_style.source.WriteBlockEndPtrDefs(hFile, spec, options)
+	hFile:fmt("#undef %s\n", funcPointerMacro)
 end
 
 function my_style.source.WriteBlockBeginExtFuncPtrDef(hFile, extName, spec, options)
@@ -520,7 +524,7 @@ end
 my_style.source.WriteVersionComment = VersionComment;
 
 function my_style.source.WriteFuncPtrDef(hFile, func, spec, options)
-	hFile:write(GenFuncPtrDefDecltype(func, spec, options), " = 0;\n")
+	hFile:fmt("%s(%s);\n", funcPointerMacro, GenFuncPtrName(func, spec, options))
 end
 
 function my_style.source.WriteBlockBeginExtLoader(hFile, extName, spec, options)
