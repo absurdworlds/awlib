@@ -50,6 +50,14 @@ parseOpts:value(
 	{"OpenGL version to export.", "Only use this with the 'gl' spec."},
 	nil,
 	true)
+parseOpts:value(
+	"minversion",
+	"minversion",
+	{"OpenGL version to build on top of.",
+	 "That version and everything below it are folded into",
+	 "gl_<minversion>.h instead of being generated."},
+	nil,
+	true)
 parseOpts:enum(
 	"profile",
 	"profile",

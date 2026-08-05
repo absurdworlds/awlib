@@ -95,6 +95,26 @@ local function Clamp(version)
 	return version
 end
 
+local function VersionAtLeast(version, minimum)
+	local _, _, v1, v2 = version:find( "(%d+)%.(%d+)" )
+	local _, _, m1, m2 = minimum:find( "(%d+)%.(%d+)" )
+	local major,    minor    = tonumber(v1), tonumber(v2)
+	local minMajor, minMinor = tonumber(m1), tonumber(m2)
+	return major > minMajor or (major == minMajor and minor >= minMinor)
+end
+
+local function AboveMinVersion(version, options)
+	if (not options.minversion) then
+		return true
+	end
+	return not VersionAtLeast(options.minversion, version)
+end
+
+-- gl_33.h, gl_46.h: the version with the dot taken out
+local function VersionFileName(version)
+	return "gl_" .. version:gsub("%.", "") .. ".h"
+end
+
 local function GenIncludeGuardName(hFile, spec, options, suffix)
 	local name = spec.GetIncludeGuardString():lower()
 	if (options.version) then
@@ -254,8 +274,12 @@ function my_style.header.WriteInit(hFile, spec, options)
 	--hFile:rawwrite(spec.GetHeaderInit())
 end
 
-function my_style.header.WriteStdIncludes(hFile, basename, spec, options)
+function my_style.header.WriteStdIncludes(hFile, basename, options)
 	hFile:write('#include "types.h"\n')
+	-- That version and everything below it live in its own header
+	if (options.minversion) then
+		hFile:fmt('#include "%s"\n', VersionFileName(options.minversion))
+	end
 	hFile:fmt('#include "%s_enum.h"\n', BaseName(basename))
 	if (not options.minversion) then
 		hFile:fmt('#include <%s/export.h>\n', includeRoot)
@@ -567,6 +591,7 @@ function my_style.source.WriteBlockEndCoreLoaders(hFile, version, spec, options)
 end
 
 my_style.source.FilterGL33OrLater = GL33OrLater
+my_style.header.FilterAboveMinVersion = AboveMinVersion
 
 local function GenCoreLoaderFuncName(version, spec, options)
 	return "load_gl_" .. Flatten(version) .. "_functions"
