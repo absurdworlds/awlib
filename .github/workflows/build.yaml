@@ -102,7 +102,7 @@ jobs:
       - name: Build
         run: >
           cmake --build build --target
-          awgl awgraphics awgraphics-demo
+          awgl awgraphics awgraphics-demo test_graphics test_graphics_gl
       - name: Test
         # No GPU on the runners, fall back to Mesa's software rasteriser
         env:
