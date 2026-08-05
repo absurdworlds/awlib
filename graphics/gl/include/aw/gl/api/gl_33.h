@@ -5,7 +5,7 @@
 #define aw_gl_ext_opengl_3_3_h
 #include "types.h"
 #include "gl_33_enum.h"
-#include "aw/gl/export.h"
+#include <aw/gl/export.h>
 
 namespace gl {
 namespace ext {
@@ -14,9 +14,9 @@ struct load_result {
 	{
 		return is_loaded;
 	}
-	
+
 	int num_missing() const { return missing; }
-	
+
 	load_result() = default;
 	load_result(bool is_loaded, int num_missing)
 		: is_loaded{is_loaded}, missing{num_missing}
@@ -46,7 +46,7 @@ AW_GL_EXP extern void (AWGL_API* color_mask)(GLboolean red, GLboolean green, GLb
 AW_GL_EXP extern void (AWGL_API* cull_face)(GLenum mode);
 AW_GL_EXP extern void (AWGL_API* depth_func)(GLenum func);
 AW_GL_EXP extern void (AWGL_API* depth_mask)(GLboolean flag);
-AW_GL_EXP extern void (AWGL_API* depth_range)(GLdouble ren_near, GLdouble ren_far);
+AW_GL_EXP extern void (AWGL_API* depth_range)(GLdouble n, GLdouble f);
 AW_GL_EXP extern void (AWGL_API* disable)(GLenum cap);
 AW_GL_EXP extern void (AWGL_API* draw_buffer)(GLenum buf);
 AW_GL_EXP extern void (AWGL_API* enable)(GLenum cap);
@@ -96,7 +96,6 @@ AW_GL_EXP extern void (AWGL_API* delete_textures)(GLsizei n, const GLuint * text
 AW_GL_EXP extern void (AWGL_API* draw_arrays)(GLenum mode, GLint first, GLsizei count);
 AW_GL_EXP extern void (AWGL_API* draw_elements)(GLenum mode, GLsizei count, GLenum type, const void * indices);
 AW_GL_EXP extern void (AWGL_API* gen_textures)(GLsizei n, GLuint * textures);
-AW_GL_EXP extern void (AWGL_API* get_pointer_v)(GLenum pname, void ** params);
 AW_GL_EXP extern GLboolean (AWGL_API* is_texture)(GLuint texture);
 AW_GL_EXP extern void (AWGL_API* polygon_offset)(GLfloat factor, GLfloat units);
 AW_GL_EXP extern void (AWGL_API* tex_sub_image_1d)(GLenum target, GLint level, GLint xoffset, GLsizei width, GLenum format, GLenum type, const void * pixels);
@@ -266,7 +265,7 @@ AW_GL_EXP extern void (AWGL_API* bind_vertex_array)(GLuint ren_array);
 AW_GL_EXP extern void (AWGL_API* blit_framebuffer)(GLint srcX0, GLint srcY0, GLint srcX1, GLint srcY1, GLint dstX0, GLint dstY0, GLint dstX1, GLint dstY1, GLbitfield mask, GLenum filter);
 AW_GL_EXP extern GLenum (AWGL_API* check_framebuffer_status)(GLenum target);
 AW_GL_EXP extern void (AWGL_API* clamp_color)(GLenum target, GLenum clamp);
-AW_GL_EXP extern void (AWGL_API* clear_bufferf_i)(GLenum buffer, GLint drawbuffer, GLfloat depth, GLint stencil);
+AW_GL_EXP extern void (AWGL_API* clear_buffer_fi)(GLenum buffer, GLint drawbuffer, GLfloat depth, GLint stencil);
 AW_GL_EXP extern void (AWGL_API* clear_buffer_fv)(GLenum buffer, GLint drawbuffer, const GLfloat * value);
 AW_GL_EXP extern void (AWGL_API* clear_buffer_iv)(GLenum buffer, GLint drawbuffer, const GLint * value);
 AW_GL_EXP extern void (AWGL_API* clear_buffer_uiv)(GLenum buffer, GLint drawbuffer, const GLuint * value);
@@ -288,10 +287,10 @@ AW_GL_EXP extern void (AWGL_API* gen_framebuffers)(GLsizei n, GLuint * framebuff
 AW_GL_EXP extern void (AWGL_API* gen_renderbuffers)(GLsizei n, GLuint * renderbuffers);
 AW_GL_EXP extern void (AWGL_API* gen_vertex_arrays)(GLsizei n, GLuint * arrays);
 AW_GL_EXP extern void (AWGL_API* generate_mipmap)(GLenum target);
-AW_GL_EXP extern void (AWGL_API* get_boolean_iv)(GLenum target, GLuint index, GLboolean * data);
+AW_GL_EXP extern void (AWGL_API* get_boolean_i_v)(GLenum target, GLuint index, GLboolean * data);
 AW_GL_EXP extern GLint (AWGL_API* get_frag_data_location)(GLuint program, const GLchar * name);
 AW_GL_EXP extern void (AWGL_API* get_framebuffer_attachment_parameter_iv)(GLenum target, GLenum attachment, GLenum pname, GLint * params);
-AW_GL_EXP extern void (AWGL_API* get_integer_iv)(GLenum target, GLuint index, GLint * data);
+AW_GL_EXP extern void (AWGL_API* get_integer_i_v)(GLenum target, GLuint index, GLint * data);
 AW_GL_EXP extern void (AWGL_API* get_renderbuffer_parameter_iv)(GLenum target, GLenum pname, GLint * params);
 AW_GL_EXP extern const GLubyte * (AWGL_API* get_string_i)(GLenum name, GLuint index);
 AW_GL_EXP extern void (AWGL_API* get_tex_parameter_i_iv)(GLenum target, GLenum pname, GLint * params);
@@ -363,10 +362,10 @@ AW_GL_EXP extern void (AWGL_API* draw_range_elements_base_vertex)(GLenum mode, G
 AW_GL_EXP extern GLsync (AWGL_API* fence_sync)(GLenum condition, GLbitfield flags);
 AW_GL_EXP extern void (AWGL_API* framebuffer_texture)(GLenum target, GLenum attachment, GLuint texture, GLint level);
 AW_GL_EXP extern void (AWGL_API* get_buffer_parameter_i64v)(GLenum target, GLenum pname, GLint64 * params);
-AW_GL_EXP extern void (AWGL_API* get_integer_64iv)(GLenum target, GLuint index, GLint64 * data);
+AW_GL_EXP extern void (AWGL_API* get_integer_64i_v)(GLenum target, GLuint index, GLint64 * data);
 AW_GL_EXP extern void (AWGL_API* get_integer_64v)(GLenum pname, GLint64 * data);
 AW_GL_EXP extern void (AWGL_API* get_multisample_fv)(GLenum pname, GLuint index, GLfloat * val);
-AW_GL_EXP extern void (AWGL_API* get_sync_iv)(GLsync sync, GLenum pname, GLsizei bufSize, GLsizei * length, GLint * values);
+AW_GL_EXP extern void (AWGL_API* get_sync_iv)(GLsync sync, GLenum pname, GLsizei count, GLsizei * length, GLint * values);
 AW_GL_EXP extern GLboolean (AWGL_API* is_sync)(GLsync sync);
 AW_GL_EXP extern void (AWGL_API* multi_draw_elements_base_vertex)(GLenum mode, const GLsizei * count, GLenum type, const void *const* indices, GLsizei drawcount, const GLint * basevertex);
 AW_GL_EXP extern void (AWGL_API* provoking_vertex)(GLenum mode);
