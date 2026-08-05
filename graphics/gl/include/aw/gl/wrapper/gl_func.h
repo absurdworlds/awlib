@@ -74,13 +74,13 @@ inline GLboolean is_enabled_i(GLenum target, GLuint index)
 
 #if 0
 
-inline void pixel_storef(GLenum pname, GLfloat param)
+inline void pixel_store_f(GLenum pname, GLfloat param)
 {
-	::gl::pixel_storef(pname, param);
+	::gl::pixel_store_f(pname, param);
 }
-inline void pixel_storei(GLenum pname, GLint param)
+inline void pixel_store_i(GLenum pname, GLint param)
 {
-	::gl::pixel_storei(pname, param);
+	::gl::pixel_store_i(pname, param);
 }
 inline void read_buffer(GLenum src)
 {
@@ -110,21 +110,21 @@ inline void sample_coverage(GLfloat value, GLboolean invert)
 
 /* gl version 1.4 */
 
-inline void point_parameterf(GLenum pname, GLfloat param)
+inline void point_parameter_f(GLenum pname, GLfloat param)
 {
-	::gl::point_parameterf(pname, param);
+	::gl::point_parameter_f(pname, param);
 }
-inline void point_parameterfv(GLenum pname, const GLfloat * params)
+inline void point_parameter_fv(GLenum pname, const GLfloat * params)
 {
-	::gl::point_parameterfv(pname, params);
+	::gl::point_parameter_fv(pname, params);
 }
-inline void point_parameteri(GLenum pname, GLint param)
+inline void point_parameter_i(GLenum pname, GLint param)
 {
-	::gl::point_parameteri(pname, param);
+	::gl::point_parameter_i(pname, param);
 }
-inline void point_parameteriv(GLenum pname, const GLint * params)
+inline void point_parameter_iv(GLenum pname, const GLint * params)
 {
-	::gl::point_parameteriv(pname, params);
+	::gl::point_parameter_iv(pname, params);
 }
 
 /* gl version 1.5 */
@@ -146,17 +146,17 @@ inline void gen_queries(GLsizei n, GLuint * ids)
 {
 	::gl::gen_queries(n, ids);
 }
-inline void get_query_objectiv(GLuint id, GLenum pname, GLint * params)
+inline void get_query_object_iv(GLuint id, GLenum pname, GLint * params)
 {
-	::gl::get_query_objectiv(id, pname, params);
+	::gl::get_query_object_iv(id, pname, params);
 }
-inline void get_query_objectuiv(GLuint id, GLenum pname, GLuint * params)
+inline void get_query_object_uiv(GLuint id, GLenum pname, GLuint * params)
 {
-	::gl::get_query_objectuiv(id, pname, params);
+	::gl::get_query_object_uiv(id, pname, params);
 }
-inline void get_queryiv(GLenum target, GLenum pname, GLint * params)
+inline void get_query_iv(GLenum target, GLenum pname, GLint * params)
 {
-	::gl::get_queryiv(target, pname, params);
+	::gl::get_query_iv(target, pname, params);
 }
 
 inline GLboolean is_query(GLuint id)
@@ -229,25 +229,25 @@ inline void clamp_color(GLenum target, GLenum clamp)
 {
 	::gl::clamp_color(target, clamp);
 }
-inline void clear_bufferfi(GLenum buffer, GLint drawbuffer, GLfloat depth, GLint stencil)
+inline void clear_buffer_fi(GLenum buffer, GLint drawbuffer, GLfloat depth, GLint stencil)
 {
-	::gl::clear_bufferfi(buffer, drawbuffer, depth, stencil);
+	::gl::clear_buffer_fi(buffer, drawbuffer, depth, stencil);
 }
-inline void clear_bufferfv(GLenum buffer, GLint drawbuffer, const GLfloat * value)
+inline void clear_buffer_fv(GLenum buffer, GLint drawbuffer, const GLfloat * value)
 {
-	::gl::clear_bufferfv(buffer, drawbuffer, value);
+	::gl::clear_buffer_fv(buffer, drawbuffer, value);
 }
-inline void clear_bufferiv(GLenum buffer, GLint drawbuffer, const GLint * value)
+inline void clear_buffer_iv(GLenum buffer, GLint drawbuffer, const GLint * value)
 {
-	::gl::clear_bufferiv(buffer, drawbuffer, value);
+	::gl::clear_buffer_iv(buffer, drawbuffer, value);
 }
-inline void clear_bufferuiv(GLenum buffer, GLint drawbuffer, const GLuint * value)
+inline void clear_buffer_uiv(GLenum buffer, GLint drawbuffer, const GLuint * value)
 {
-	::gl::clear_bufferuiv(buffer, drawbuffer, value);
+	::gl::clear_buffer_uiv(buffer, drawbuffer, value);
 }
-inline void color_maski(GLuint index, GLboolean r, GLboolean g, GLboolean b, GLboolean a)
+inline void color_mask_i(GLuint index, GLboolean r, GLboolean g, GLboolean b, GLboolean a)
 {
-	::gl::color_maski(index, r, g, b, a);
+	::gl::color_mask_i(index, r, g, b, a);
 }
 inline void delete_framebuffers(GLsizei n, const GLuint * framebuffers)
 {
@@ -274,17 +274,17 @@ inline void framebuffer_renderbuffer(GLenum target, GLenum attachment, GLenum re
 {
 	::gl::framebuffer_renderbuffer(target, attachment, renderbuffertarget, renderbuffer);
 }
-inline void framebuffer_texture1_d(GLenum target, GLenum attachment, GLenum textarget, GLuint texture, GLint level)
+inline void framebuffer_texture_1d(GLenum target, GLenum attachment, GLenum textarget, GLuint texture, GLint level)
 {
-	::gl::framebuffer_texture1_d(target, attachment, textarget, texture, level);
+	::gl::framebuffer_texture_1d(target, attachment, textarget, texture, level);
 }
-inline void framebuffer_texture2_d(GLenum target, GLenum attachment, GLenum textarget, GLuint texture, GLint level)
+inline void framebuffer_texture_2d(GLenum target, GLenum attachment, GLenum textarget, GLuint texture, GLint level)
 {
-	::gl::framebuffer_texture2_d(target, attachment, textarget, texture, level);
+	::gl::framebuffer_texture_2d(target, attachment, textarget, texture, level);
 }
-inline void framebuffer_texture3_d(GLenum target, GLenum attachment, GLenum textarget, GLuint texture, GLint level, GLint zoffset)
+inline void framebuffer_texture_3d(GLenum target, GLenum attachment, GLenum textarget, GLuint texture, GLint level, GLint zoffset)
 {
-	::gl::framebuffer_texture3_d(target, attachment, textarget, texture, level, zoffset);
+	::gl::framebuffer_texture_3d(target, attachment, textarget, texture, level, zoffset);
 }
 inline void framebuffer_texture_layer(GLenum target, GLenum attachment, GLuint texture, GLint level, GLint layer)
 {
@@ -303,37 +303,37 @@ inline void generate_mipmap(GLenum target)
 {
 	::gl::generate_mipmap(target);
 }
-inline void get_booleani_v(GLenum target, GLuint index, GLboolean * data)
+inline void get_boolean_i_v(GLenum target, GLuint index, GLboolean * data)
 {
-	::gl::get_booleani_v(target, index, data);
+	::gl::get_boolean_i_v(target, index, data);
 }
 inline GLint get_frag_data_location(GLuint program, const GLchar * name)
 {
 	return ::gl::get_frag_data_location(program, name);
 }
-inline void get_framebuffer_attachment_parameteriv(GLenum target, GLenum attachment, GLenum pname, GLint * params)
+inline void get_framebuffer_attachment_parameter_iv(GLenum target, GLenum attachment, GLenum pname, GLint * params)
 {
-	::gl::get_framebuffer_attachment_parameteriv(target, attachment, pname, params);
+	::gl::get_framebuffer_attachment_parameter_iv(target, attachment, pname, params);
 }
-inline void get_integeri_v(GLenum target, GLuint index, GLint * data)
+inline void get_integer_i_v(GLenum target, GLuint index, GLint * data)
 {
-	::gl::get_integeri_v(target, index, data);
+	::gl::get_integer_i_v(target, index, data);
 }
-inline void get_renderbuffer_parameteriv(GLenum target, GLenum pname, GLint * params)
+inline void get_renderbuffer_parameter_iv(GLenum target, GLenum pname, GLint * params)
 {
-	::gl::get_renderbuffer_parameteriv(target, pname, params);
+	::gl::get_renderbuffer_parameter_iv(target, pname, params);
 }
-inline const GLubyte * get_stringi(GLenum name, GLuint index)
+inline const GLubyte * get_string_i(GLenum name, GLuint index)
 {
-	return ::gl::get_stringi(name, index);
+	return ::gl::get_string_i(name, index);
 }
-inline void get_tex_parameter_iiv(GLenum target, GLenum pname, GLint * params)
+inline void get_tex_parameter_i_iv(GLenum target, GLenum pname, GLint * params)
 {
-	::gl::get_tex_parameter_iiv(target, pname, params);
+	::gl::get_tex_parameter_i_iv(target, pname, params);
 }
-inline void get_tex_parameter_iuiv(GLenum target, GLenum pname, GLuint * params)
+inline void get_tex_parameter_i_uiv(GLenum target, GLenum pname, GLuint * params)
 {
-	::gl::get_tex_parameter_iuiv(target, pname, params);
+	::gl::get_tex_parameter_i_uiv(target, pname, params);
 }
 inline void get_transform_feedback_varying(GLuint program, GLuint index, GLsizei bufSize, GLsizei * length, GLsizei * size, GLenum * type, GLchar * name)
 {
@@ -378,17 +378,17 @@ inline void get_active_uniform_block_name(GLuint program, GLuint uniformBlockInd
 {
 	::gl::get_active_uniform_block_name(program, uniformBlockIndex, bufSize, length, uniformBlockName);
 }
-inline void get_active_uniform_blockiv(GLuint program, GLuint uniformBlockIndex, GLenum pname, GLint * params)
+inline void get_active_uniform_block_iv(GLuint program, GLuint uniformBlockIndex, GLenum pname, GLint * params)
 {
-	::gl::get_active_uniform_blockiv(program, uniformBlockIndex, pname, params);
+	::gl::get_active_uniform_block_iv(program, uniformBlockIndex, pname, params);
 }
 inline void get_active_uniform_name(GLuint program, GLuint uniformIndex, GLsizei bufSize, GLsizei * length, GLchar * uniformName)
 {
 	::gl::get_active_uniform_name(program, uniformIndex, bufSize, length, uniformName);
 }
-inline void get_active_uniformsiv(GLuint program, GLsizei uniformCount, const GLuint * uniformIndices, GLenum pname, GLint * params)
+inline void get_active_uniforms_iv(GLuint program, GLsizei uniformCount, const GLuint * uniformIndices, GLenum pname, GLint * params)
 {
-	::gl::get_active_uniformsiv(program, uniformCount, uniformIndices, pname, params);
+	::gl::get_active_uniforms_iv(program, uniformCount, uniformIndices, pname, params);
 }
 
 inline void get_uniform_indices(GLuint program, GLsizei uniformCount, const GLchar *const* uniformNames, GLuint * uniformIndices)
@@ -423,25 +423,25 @@ inline void framebuffer_texture(GLenum target, GLenum attachment, GLuint texture
 {
 	::gl::framebuffer_texture(target, attachment, texture, level);
 }
-inline void get_buffer_parameteri64v(GLenum target, GLenum pname, GLint64 * params)
+inline void get_buffer_parameter_i64v(GLenum target, GLenum pname, GLint64 * params)
 {
-	::gl::get_buffer_parameteri64v(target, pname, params);
+	::gl::get_buffer_parameter_i64v(target, pname, params);
 }
-inline void get_integer64i_v(GLenum target, GLuint index, GLint64 * data)
+inline void get_integer_64i_v(GLenum target, GLuint index, GLint64 * data)
 {
-	::gl::get_integer64i_v(target, index, data);
+	::gl::get_integer_64i_v(target, index, data);
 }
-inline void get_integer64v(GLenum pname, GLint64 * data)
+inline void get_integer_64v(GLenum pname, GLint64 * data)
 {
-	::gl::get_integer64v(pname, data);
+	::gl::get_integer_64v(pname, data);
 }
-inline void get_multisamplefv(GLenum pname, GLuint index, GLfloat * val)
+inline void get_multisample_fv(GLenum pname, GLuint index, GLfloat * val)
 {
-	::gl::get_multisamplefv(pname, index, val);
+	::gl::get_multisample_fv(pname, index, val);
 }
-inline void get_synciv(GLsync sync, GLenum pname, GLsizei bufSize, GLsizei * length, GLint * values)
+inline void get_sync_iv(GLsync sync, GLenum pname, GLsizei bufSize, GLsizei * length, GLint * values)
 {
-	::gl::get_synciv(sync, pname, bufSize, length, values);
+	::gl::get_sync_iv(sync, pname, bufSize, length, values);
 }
 inline GLboolean is_sync(GLsync sync)
 {
@@ -455,9 +455,9 @@ inline void provoking_vertex(GLenum mode)
 {
 	::gl::provoking_vertex(mode);
 }
-inline void sample_maski(GLuint maskNumber, GLbitfield mask)
+inline void sample_mask_i(GLuint maskNumber, GLbitfield mask)
 {
-	::gl::sample_maski(maskNumber, mask);
+	::gl::sample_mask_i(maskNumber, mask);
 }
 
 inline void wait_sync(GLsync sync, GLbitfield flags, GLuint64 timeout)
@@ -505,7 +505,7 @@ inline void get_sampler_parameter_i(GLuint sampler, GLenum pname, GLuint * param
 }
 inline void get_sampler_parameter(GLuint sampler, GLenum pname, GLfloat * params)
 {
-	::gl::get_sampler_parameterfv(sampler, pname, params);
+	::gl::get_sampler_parameter_fv(sampler, pname, params);
 }
 inline void get_sampler_parameter(GLuint sampler, GLenum pname, GLint * params)
 {

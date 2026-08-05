@@ -2,8 +2,11 @@ if (NOT AW_PROJECT_NAME)
 	set(AW_PROJECT_NAME ${PROJECT_NAME})
 endif()
 
+# Record a package that awlibConfig.cmake has to find before the exported
+# targets can be used. DEP is written into find_dependency() as-is, so pass
+# it quoted to carry extra arguments: "OpenGL COMPONENTS OpenGL EGL".
 macro(aw_export_dependency DEP)
-	set_property(GLOBAL APPEND PROPERTY AW_EXPORT_DEPENDENCIES ${DEP})
+	set_property(GLOBAL APPEND PROPERTY AW_EXPORT_DEPENDENCIES "${DEP}")
 endmacro()
 
 # Options:

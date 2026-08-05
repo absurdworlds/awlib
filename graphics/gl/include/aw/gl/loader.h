@@ -42,12 +42,20 @@ unknown_fn* get_proc_address(const char* name);
 }
 #endif//AW_SUPPORT_PLATFORM_X11
 
+#if (AW_GL_USE_EGL)
+namespace egl {
+unknown_fn* get_proc_address(const char* name);
+}
+#endif//AW_GL_USE_EGL
+
 namespace gl {
 template <typename Function>
 	requires std::is_function_v<Function>
 void get_proc(Function*& func, char const* name)
 {
-#if AW_SUPPORT_PLATFORM_APPLE
+#if AW_GL_USE_EGL
+	using egl::get_proc_address;
+#elif AW_SUPPORT_PLATFORM_APPLE
 	using apple::get_proc_address;
 #elif AW_SUPPORT_PLATFORM_WIN32
 	using wgl::get_proc_address;
