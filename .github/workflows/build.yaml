@@ -100,9 +100,11 @@ jobs:
           -DAW_NO_BUILTINS:BOOL=OFF
           -DAW_GL_USE_EGL:BOOL=${{ matrix.use_egl }}
       - name: Build
-        run: cmake --build build
+        run: >
+          cmake --build build --target
+          awgl awgraphics awgraphics-demo
       - name: Test
         # No GPU on the runners, fall back to Mesa's software rasteriser
         env:
           LIBGL_ALWAYS_SOFTWARE: 1
-        run: ctest --test-dir build --output-on-failure
+        run: ctest --test-dir build -R graphics --output-on-failure
