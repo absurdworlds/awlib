@@ -21,43 +21,47 @@ inline namespace v1 {
 object parser::read()
 {
 	using namespace std::string_literals;
-	token tok = lex.get_token();
 
-	switch (tok.kind) {
-	case token::eof:
-		return {};
-	case token::bang:
-		if (depth > 0) {
-			lex.error("Unexpected ! inside node.", tok.pos);
+	// A token which does not produce an object is retried rather than
+	// recursed on: a long run of them (a file of stray ']', say) would
+	// otherwise take a stack frame each.
+	while (true) {
+		token tok = lex.get_token();
+
+		switch (tok.kind) {
+		case token::eof:
+			return {};
+		case token::bang:
+			if (depth > 0) {
+				lex.error("Unexpected ! inside node.", tok.pos);
+				break;
+			}
+			processCommand();
 			break;
-		}
-		processCommand();
-		break;
-	case token::node_begin:
-		++depth;
-		if (lex.peek_token().kind == token::equals)
+		case token::node_begin:
+			++depth;
+			if (lex.peek_token().kind == token::equals)
+				if (auto&& value = read_value())
+					return {object::node, tok.value, std::move(value)};
+			return {object::node, tok.value};
+		case token::node_end:
+			if (depth == 0) {
+				lex.error("Unexpected ']'.", tok.pos);
+				break;
+			}
+			--depth;
+			return {object::end};
+		case token::name:
 			if (auto&& value = read_value())
-				return {object::node, tok.value, std::move(value)};
-		return {object::node, tok.value};
-	case token::node_end:
-		if (depth == 0) {
-			lex.error("Unexpected ']'.", tok.pos);
+				return {object::value, tok.value, std::move(value)};
 			break;
+		case token::invalid:
+			lex.error("illegal token: \""s + tok.value + "\"", tok.pos);
+			break;
+		default:
+			lex.error("unexpected token: \""s + tok.value + "\"", tok.pos);
 		}
-		--depth;
-		return {object::end};
-	case token::name:
-		if (auto&& value = read_value())
-			return {object::value, tok.value, std::move(value)};
-		break;
-	case token::invalid:
-		lex.error("illegal token: \""s + tok.value + "\"", tok.pos);
-		break;
-	default:
-		lex.error("unexpected token: \""s + tok.value + "\"", tok.pos);
 	}
-
-	return read();
 }
 
 void parser::skip_node()

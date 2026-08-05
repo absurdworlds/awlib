@@ -238,11 +238,12 @@ Test(c3_find_value_still_works) {
 }
 
 Test(c4_deep_nesting_terminates) {
+	// just under the limit: still a well-formed document
 	TestEqual(run_sandboxed([] {
 		std::string text;
-		for (int i = 0; i < (max_nesting_depth - 1); ++i)
+		for (size_t i = 0; i < max_nesting_depth - 1; ++i)
 			text += "[a ";
-		text.append(nesting_depth, ']');
+		text.append(max_nesting_depth - 1, ']');
 		parse(text);
 	}), outcome::completed);
 
@@ -261,7 +262,28 @@ Test(c4_deep_nesting_terminates) {
 			text += "[a ";
 		parse(text);
 	}), outcome::completed);
+}
 
+Test(c7_junk_token_run_terminates) {
+	// ']' with nothing open
+	TestEqual(run_sandboxed([] {
+		parse(std::string(nesting_depth, ']'));
+	}), outcome::completed);
+
+	// ... and trailing a well-formed node
+	TestEqual(run_sandboxed([] {
+		std::string text = "[a\n\tx = 1\n]";
+		text.append(nesting_depth, ']');
+		parse(text);
+	}), outcome::completed);
+
+	// a run of invalid tokens, separated so they do not lex as one
+	TestEqual(run_sandboxed([] {
+		std::string text;
+		for (int i = 0; i < nesting_depth; ++i)
+			text += "@ ";
+		parse(text);
+	}), outcome::completed);
 }
 #endif // AW_PLATFORM_POSIX
 } // namespace aw::hudf
