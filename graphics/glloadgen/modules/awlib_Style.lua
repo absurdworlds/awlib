@@ -356,7 +356,6 @@ private:
 	int  missing   = 0;
 };
 ]]
-	hFile:write("\n")
 end
 
 function my_style.header.WriteBlockEndExtVarDecl(hFile, spec, options)
@@ -369,9 +368,21 @@ function my_style.header.WriteExtVariableDecl(hFile, extName,
 		GenExtensionVarName(extName, spec, options));
 end
 
+-- Whether a version block has been written to the enum file yet, so that the
+-- separator goes between blocks and not before the first or after the last.
+local wroteEnumBlock = false
+
+function my_style.header.WriteEnumBlockSeparator(hFile)
+	if(wroteEnumBlock) then
+		hFile:rawwrite("\n")
+	end
+	wroteEnumBlock = true
+end
+
 function my_style.header.WriteBlockBeginEnumDecl(hFile, spec, options)
 	hFile:write("enum {\n")
 	hFile:inc()
+	wroteEnumBlock = false
 end
 
 function my_style.header.WriteBlockEndEnumDecl(hFile, spec, options)

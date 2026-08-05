@@ -7,7 +7,6 @@
 #include "gl_33.h"
 #include "gl_46_enum.h"
 
-
 namespace gl {
 /* gl version 4.0 */
 AW_GL_EXP extern void (AWGL_API* begin_query_indexed)(GLenum target, GLuint index, GLuint id);

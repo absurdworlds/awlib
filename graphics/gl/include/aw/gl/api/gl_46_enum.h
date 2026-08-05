@@ -566,6 +566,5 @@ enum {
 	GL_TRANSFORM_FEEDBACK_STREAM_OVERFLOW = 0x82ED,
 	GL_VERTEX_SHADER_INVOCATIONS          = 0x82F0,
 	GL_VERTICES_SUBMITTED                 = 0x82EE,
-	
 };
 #endif//aw_gl_ext_opengl_4_6_enum_h
