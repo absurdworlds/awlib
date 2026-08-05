@@ -15,6 +15,13 @@ function replace(a, b)
 	return a .. "_" .. b:lower();
 end
 
+-- Where awgl's headers end up once installed
+local includeRoot = "aw/gl"
+
+local exportMacro = "AW_GL_EXP"
+
+local getProc = "aw::gl::get_proc"
+
 local patterns = {
 	"([a-z])([0-9][A-Z]?[0-9a-z]*[a-z])$",
 	"(.)([A-Z][a-z]+)",
@@ -250,6 +257,9 @@ end
 function my_style.header.WriteStdIncludes(hFile, basename, spec, options)
 	hFile:write('#include "types.h"\n')
 	hFile:fmt('#include "%s_enum.h"\n', BaseName(basename))
+	if (not options.minversion) then
+		hFile:fmt('#include <%s/export.h>\n', includeRoot)
+	end
 end
 
 function my_style.header.WriteSpecTypedefs(hFile, specData, spec, options)
@@ -258,14 +268,15 @@ function my_style.header.WriteSpecTypedefs(hFile, specData, spec, options)
 	end]]
 end
 
+-- The pointers belong in ::gl, because aw::gl is the hand-written
+-- wrapper layer sitting on top of them; putting them both there
+-- would collide
 function my_style.header.WriteBlockBeginDecl(hFile, spec, options)
-	StartPrefixNamespace(hFile, spec, options)
 	StartNamespace(hFile, spec.FuncNamePrefix())
 end
 
 function my_style.header.WriteBlockEndDecl(hFile, spec, options)
 	EndNamespace(hFile, spec.FuncNamePrefix())
-	EndPrefixNamespace(hFile, spec, options)
 end
 
 
@@ -307,7 +318,6 @@ function my_style.header.WriteExtVariableDecl(hFile, extName,
 end
 
 function my_style.header.WriteBlockBeginEnumDecl(hFile, spec, options)
-	StartPrefixNamespace(hFile, spec, options)
 	hFile:write("enum {\n")
 	hFile:inc()
 end
@@ -315,7 +325,6 @@ end
 function my_style.header.WriteBlockEndEnumDecl(hFile, spec, options)
 	hFile:dec()
 	hFile:write("};\n")
-	EndPrefixNamespace(hFile, spec, options)
 end
 
 function my_style.header.WriteEnumDecl(hFile, enum, enumTable, spec, options, enumSeen)
@@ -325,7 +334,7 @@ function my_style.header.WriteEnumDecl(hFile, enum, enumTable, spec, options, en
 	
 		local enumName = GenEnumName(enum, spec, options)
 		local lenEnum = #enumName
-		local numIndent = 33
+		local numIndent = 36
 		
 		local numSpaces = numIndent - lenEnum
 		if(numSpaces < 1) then
@@ -383,8 +392,8 @@ end
 	end
 
 function my_style.header.WriteFuncPtrDecl(hFile, func, spec, options)
-	-- TODO: remove AW_GRAPHICS_EXP, make all functions private
-	hFile:write("AW_GRAPHICS_EXP extern ", GenFuncPtrDefDirect(func, spec, options), ";\n")
+	-- TODO: remove the export, make all functions private
+	hFile:fmt("%s extern %s;\n", exportMacro, GenFuncPtrDefDirect(func, spec, options))
 end
 
 function my_style.header.WriteBlockBeginFuncDecl(hFile, spec, options)
@@ -442,16 +451,17 @@ end
 function my_style.header.WriteMainLoaderFuncDecl(hFile, spec, options)
 	if (options.version) then
 		local name = "load_functions_" .. Flatten(options.version)
-		hFile:fmt("%s::load_result %s(%s);\n", "ext", name, spec.GetLoaderParams())
+		hFile:fmt("%s %s::load_result %s(%s);\n",
+			exportMacro, "ext", name, spec.GetLoaderParams())
 	end
 end
 
 function my_style.header.WriteVersioningFuncDecls(hFile, spec, options)
-	hFile:writeblock([[
-int get_minor_version();
-int get_major_version();
-bool is_version_geq(int major, int minor);
-]])
+	hFile:fmt([[
+%s int get_minor_version();
+%s int get_major_version();
+%s bool is_version_geq(int major, int minor);
+]], exportMacro, exportMacro, exportMacro)
 end
 
 --------------------------------------------------
@@ -461,9 +471,6 @@ my_style.source.WriteFilePreamble = Preamble
 function my_style.source.GetFilename(basename, options)
 	return basename .. ".c++"
 end
-
--- Where awgl's headers end up once installed
-local includeRoot = "aw/gl"
 
 function my_style.source.WriteIncludes(hFile, basename, spec, options)
 	local base = util.ParsePath(my_style.header.GetFilename(basename, options))
@@ -482,17 +489,13 @@ function my_style.source.WriteLoaderData(hFile, spec, options)
 end
 
 function my_style.source.WriteBlockBeginDef(hFile, spec, options)
-	if(#options.prefix > 0) then
-		StartNamespace(hFile, options.prefix)
-	end
 	StartNamespace(hFile, spec.FuncNamePrefix())
+
+	hFile:write("using aw::string_view;\n")
 end
 
 function my_style.source.WriteBlockEndDef(hFile, spec, options)
 	EndNamespace(hFile, spec.FuncNamePrefix())
-	if(#options.prefix > 0) then
-		EndNamespace(hFile, options.prefix)
-	end
 end
 
 function my_style.source.WriteBlockBeginExtVarDef(hFile, spec, options)
@@ -544,7 +547,7 @@ function my_style.source.WriteBlockEndExtLoader(hFile, extName, spec, options)
 end
 
 function my_style.source.WriteExtFuncLoader(hFile, func, spec, options)
-	hFile:fmt('get_proc(%s, "%s%s");\n',
+	hFile:fmt('%s(%s, "%s%s");\n', getProc,
 		GenFuncPtrName(func, spec, options),
 		spec.FuncNamePrefix(), func.name)
 end
@@ -577,12 +580,12 @@ local function BlockBeginCoreLoaderPre(hFile, version, spec, options)
 end
 
 local function BlockBeginCoreLoaderPost(hFile, version, spec, options)
-	hFile:writeblock([[
+	hFile:writeblock(string.format([[
 auto core_load_func = [&] (auto& func, char const* spec) {
-	get_proc(func, spec);
+	%s(func, spec);
 	if (!func) ++num_failed;
 };
-]])
+]], getProc))
 end
 
 local function BlockEndCoreLoader(hFile, version, spec, options)
@@ -619,7 +622,7 @@ function my_style.source.WriteCoreFuncLoader(hFile, func, spec, options)
 	--They do not count against the loaded count.
 	if (func.name:match("EXT$")) then
 		hFile:write("//An EXT_direct_state_access-based function. Don't count it if it fails to load.\n")
-		load_func = 'get_proc(%s, "%s%s");\n';
+		load_func = getProc .. '(%s, "%s%s");\n';
 	end
 
 	hFile:fmt(load_func,
@@ -693,24 +696,28 @@ bool operator==(map_entry const& a, map_entry const& b)
 	hFile:write "\n"
 
 	--Write the table initialization function.
-	hFile:write "void initialize_mapping_table()\n"
+	hFile:write "[[nodiscard]] std::vector<map_entry> initialize_mapping_table()\n"
 	hFile:write "{\n"
 	hFile:inc()
-	hFile:write "std::vector<map_entry> table(%i);\n"
-	hFile:write "int i = 0;\n"
-	for _, extName in ipairs(options.extensions) do
-		if(#specData.extdefs[extName].funcs > 0) then
-			hFile:fmt('table[i++] = { "%s", ext::%s, %s };\n',
-				spec.ExtNamePrefix() .. extName,
-				GenExtensionVarName(extName, spec, options),
-				GenExtLoaderFuncName(extName, spec, options))
-		else
-			hFile:fmt('table[i++] = { "%s", ext::%s };\n',
-				spec.ExtNamePrefix() .. extName,
-				GenExtensionVarName(extName, spec, options))
+	hFile:fmt("std::vector<map_entry> table(%i);\n", #options.extensions)
+
+	if(#options.extensions > 0) then
+		hFile:write "int i = 0;\n"
+		for _, extName in ipairs(options.extensions) do
+			if(#specData.extdefs[extName].funcs > 0) then
+				hFile:fmt('table[i++] = { "%s", ext::%s, %s };\n',
+					spec.ExtNamePrefix() .. extName,
+					GenExtensionVarName(extName, spec, options),
+					GenExtLoaderFuncName(extName, spec, options))
+			else
+				hFile:fmt('table[i++] = { "%s", ext::%s };\n',
+					spec.ExtNamePrefix() .. extName,
+					GenExtensionVarName(extName, spec, options))
+			end
 		end
+		hFile:write("std::sort(begin(table), end(table));\n")
 	end
-	hFile:write("std::sort(begin(table), end(table));\n")
+	hFile:write("return table;\n")
 	hFile:dec()
 	hFile:write "}\n"
 	hFile:write "\n"
@@ -739,10 +746,9 @@ void load_extension(std::vector<map_entry>& table, string_view extension)
 	auto entry = aw::binary_find(begin(table), end(table), extension, compare);
 	
 	if (entry != end(table)) {
-		if(entry->loaderFunc)
-			(*entry->ext_variable) = ext::load_result(true, entry->loaderFunc());
-		else
-			(*entry->ext_variable) = ext::load_result(true, 0);
+		const auto loader = entry->loaderFunc;
+		const int  num_failed = loader ? loader() : 0;
+		(*entry->ext_variable) = ext::load_result(true, num_failed);
 	}
 }
 ]])
@@ -770,7 +776,7 @@ local function WriteAncillaryFuncs(hFile, specData, spec, options)
 		end
 		
 			hFile:writeblock([[
-static void ProcExtsFromExtList(std::vector<map_entry> &table)
+static void load_extensions(std::vector<map_entry> &table)
 {
 	GLint idx;
 	GLint num = 0;
@@ -779,16 +785,16 @@ static void ProcExtsFromExtList(std::vector<map_entry> &table)
 	.. [[, &num);
 
 	for(idx = 0; idx < num; ++idx) {
-		const char* strExtensionName = (const char *)]] ..
+		const auto extension_name = reinterpret_cast<const char*>(]] ..
 		GenQualifiedFuncName(indexed[3], spec, options) ..
-		[[(]] .. GenQualifiedEnumName(indexed[4], spec, options) .. [[, idx);
-		LoadExtByName(table, strExtensionName);
+		[[(]] .. GenQualifiedEnumName(indexed[4], spec, options) .. [[, idx));
+		load_extension(table, extension_name);
 	}
 }
 ]])
 	else
 		hFile:writeblock(common.GetProcessExtsFromStringFunc(
-			"LoadExtByName(table, %s)", ", std::vector<map_entry> &table"))
+			"load_extension(table, %s)", ", std::vector<map_entry> &table"))
 	end
 
 	return indexed
@@ -796,10 +802,10 @@ end
 
 	
 local function WriteInMainFuncLoader(hFile, func, spec, options)
-	hFile:fmt('get_proc(%s, "%s%s");\n',
+	hFile:fmt('%s(%s, "%s%s");\n', getProc,
 		GenFuncPtrName(func, spec, options),
 		spec.FuncNamePrefix(), func.name)
-	hFile:fmt('if(!%s) return ext::load_result();\n',
+	hFile:fmt('if(!%s) return ext::load_result(false, 1);\n',
 		GenFuncPtrName(func, spec, options))
 end
 
@@ -810,17 +816,15 @@ function my_style.source.WriteMainLoaderHelpers(hFile, specData, spec, options)
 	hFile:fmt("ext::load_result load_functions_ext(%s)\n", spec.GetLoaderParams())
 	hFile:write("{\n")
 	hFile:inc()
-	hFile:writeblock[[
-clear_extension_vars();
-std::vector<map_entry> table = initialize_mapping_table();
-]]
+	hFile:write("clear_extension_vars();\n")
 	hFile:write("\n")
 
 	if(indexed) then
 		WriteInMainFuncLoader(hFile, indexed[1], spec, options)
 		WriteInMainFuncLoader(hFile, indexed[3], spec, options)
 		hFile:write("\n")
-		hFile:write("ProcExtsFromExtList(table);\n")
+		hFile:write("std::vector<map_entry> table = initialize_mapping_table();\n")
+		hFile:write("load_extensions(table);\n")
 	else
 		local extListName, needLoad = spec.GetExtStringFuncName()
 		if(needLoad) then
@@ -841,11 +845,15 @@ std::vector<map_entry> table = initialize_mapping_table();
 		end
 		
 		hFile:write "\n"
+		hFile:write("std::vector<map_entry> table = initialize_mapping_table();\n")
 		hFile:fmt("ProcExtsFromExtString((const char *)%s(%s), table);\n",
 			extListName,
 			spec.GetExtStringParamList(EnumResolve))
 	end
-	
+
+	hFile:write("\n")
+	hFile:write("return ext::load_result(true, 0);\n")
+
 	hFile:dec()
 	hFile:write("}\n")
 end
@@ -878,13 +886,14 @@ function my_style.source.WriteVersioningFuncs(hFile, specData, spec, options)
 	hFile:write "\n"
 	
 	if (tonumber(options.version) >= 3.0) then
-		hFile:writeblock([[
+		local getIntegerV = to_snake("GetIntegerv")
+		hFile:writeblock(string.format([[
 static void get_gl_version()
 {
-	get_integerv(GL_MAJOR_VERSION, &g_major_version);
-	get_integerv(GL_MINOR_VERSION, &g_minor_version);
+	%s(GL_MAJOR_VERSION, &g_major_version);
+	%s(GL_MINOR_VERSION, &g_minor_version);
 }
-]])
+]], getIntegerV, getIntegerV))
 	else
 		hFile:writeblock(common.GetParseVersionFromString())
 		hFile:write "\n"
