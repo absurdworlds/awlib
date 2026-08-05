@@ -115,6 +115,10 @@ local function VersionFileName(version)
 	return "gl_" .. version:gsub("%.", "") .. ".h"
 end
 
+local function WritesSharedDecls(options)
+	return not options.minversion
+end
+
 local function GenIncludeGuardName(hFile, spec, options, suffix)
 	local name = spec.GetIncludeGuardString():lower()
 	if (options.version) then
@@ -591,7 +595,8 @@ function my_style.source.WriteBlockEndCoreLoaders(hFile, version, spec, options)
 end
 
 my_style.source.FilterGL33OrLater = GL33OrLater
-my_style.header.FilterAboveMinVersion = AboveMinVersion
+my_style.header.FilterAboveMinVersion   = AboveMinVersion
+my_style.header.FilterWritesSharedDecls = WritesSharedDecls
 
 local function GenCoreLoaderFuncName(version, spec, options)
 	return "load_gl_" .. Flatten(version) .. "_functions"

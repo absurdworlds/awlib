@@ -35,6 +35,29 @@ local listOfExtensionsToRemove =
 }
 
 
+--[[
+Returns the version a feature belongs to.
+
+A feature can be listed in multiple GL versions. This function
+returns the one where it last became part of the core profile.
+
+For example, GL_UNSIGNED_INT_10F_11F_11F_REV is core in 3.0 and
+listed again in 4.4, and still belongs to 3.0.
+But glGetPointerv is core in 1.1, was dropped from core in 3.2,
+and added back in 4.3, which is where it belongs (4.3).
+]]
+local function IntroducedIn(coreList)
+	local introduced, wasCore = nil, false
+	for _, coreSpec in ipairs(coreList) do
+		local isCore = (coreSpec[2] == "core")
+		if(isCore and not wasCore) then
+			introduced = coreSpec[1]
+		end
+		wasCore = isCore
+	end
+	return introduced
+end
+
 local load = {}
 
 function load.LoadLuaSpec(luaFilename, spec)
@@ -147,11 +170,9 @@ function load.LoadLuaSpec(luaFilename, spec)
 		end
 		
 		if(enum.core) then
-			for _, coreSpec in ipairs(enum.core) do
-				if(coreSpec[2] == "core") then
-					table.insert(GetCore(coreSpec[1]).enums, enum)
-					break
-				end
+			local introduced = IntroducedIn(enum.core)
+			if(introduced) then
+				table.insert(GetCore(introduced).enums, enum)
 			end
 		end
 	end
@@ -166,11 +187,9 @@ function load.LoadLuaSpec(luaFilename, spec)
 		end
 	
 		if(func.core) then
-			for _, coreSpec in ipairs(func.core) do
-				if(coreSpec[2] == "core") then
-					table.insert(GetCore(coreSpec[1]).funcs, func)
-					break
-				end
+			local introduced = IntroducedIn(func.core)
+			if(introduced) then
+				table.insert(GetCore(introduced).funcs, func)
 			end
 		end
 	end
