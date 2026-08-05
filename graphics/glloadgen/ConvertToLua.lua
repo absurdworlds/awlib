@@ -17,8 +17,8 @@ local xmlDir  = arg[1] or (here .. "/xml")
 local specDir = arg[2] or (here .. "/glspecs")
 
 local LoadXml = require "LoadXml"
-require "_TableWriter"
-local Build = require "_BuildDataFromXml"
+require "TableWriter"
+local Build = require "BuildDataFromXml"
 
 local specs =
 {
