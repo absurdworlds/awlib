@@ -8,6 +8,7 @@ aw_add_test(test_types
     queue.c++ flat_map.c++
     circular_buffer.c++
     array_chain.c++
+    char_buffer.c++
     string_view.c++ array_view.c++
     tmpflag.c++
 )

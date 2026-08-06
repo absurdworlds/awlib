@@ -38,7 +38,7 @@ public:
 	 * Construct a non-owning char_buffer from a string_view
 	 */
 	explicit char_buffer(string_view view)
-		: view(view.data())
+		: view(view)
 	{
 	}
 
