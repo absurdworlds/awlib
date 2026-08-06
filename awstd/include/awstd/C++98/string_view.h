@@ -135,15 +135,19 @@ struct string_view {
 		if (len > size())
 			return npos;
 
-		pos = std::min(size() - len, pos) + 1;
-		do {
-			pos = rfind(str[0], pos - 1);
+		pos = std::min(size() - len, pos);
+		for (;;) {
+			pos = rfind(str[0], pos);
+			if (pos == npos)
+				return npos;
+
 			if (str == substr(pos, len))
 				return pos;
 
-		} while ( pos > 0 );
-
-		return npos;
+			if (pos == 0)
+				return npos;
+			--pos;
+		}
 	}
 
 	size_t rfind(char c, size_t pos = npos) const
