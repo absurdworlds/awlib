@@ -11,7 +11,7 @@
 #include <aw/types/string_view.h>
 #include <memory_resource>
 #include <utility>
-namespace aw::script {
+namespace aw {
 /*!
  * An immutable character buffer with optional ownership semantics.
  * In other words, it can act as a move-only std::string or
@@ -160,5 +160,5 @@ private:
 	size_t length = 0;
 	string_view view;
 };
-} // namespace aw::script
+} // namespace aw
 #endif//aw_types_char_buffer_h

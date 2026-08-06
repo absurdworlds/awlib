@@ -20,14 +20,13 @@ struct basic_buffer {
 		void operator()(byte_type* memory) { std::free(memory); }
 	};
 
-	unsigned char* data() { return memory.get(); }
+	byte_type* data() { return memory.get(); }
 
 	size_t size = 1024;
 	std::unique_ptr<byte_type, free_deleter> memory{ static_cast<byte_type*>(std::malloc(size)) };
 };
 
 using byte_buffer = basic_buffer<std::byte>;
-using char_buffer = basic_buffer<char>;
 
 } // namespace aw
 #endif//aw_types_byte_buffer_h

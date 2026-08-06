@@ -15,7 +15,7 @@
 namespace aw {
 std::string demangle(const char* name)
 {
-	static thread_local char_buffer buf;
+	static thread_local basic_buffer<char> buf;
 	int status;
 	// renounce memory ownership, __cxa_demangle might call realloc()
 	char* memory = buf.memory.release();
