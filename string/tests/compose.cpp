@@ -58,7 +58,12 @@ Test(special_cases) {
 }
 
 Test(trailing_delimiter) {
+	std::string buffer = "%7 and more";
+	string_view truncated(buffer.data(), 1);
+
 	Checks {
+		// the '7' is out of bounds and must not be read as an index
+		TestEqual(string::compose(truncated, "a"), "%");
 		TestEqual(string::compose("%"), "%");
 		TestEqual(string::compose("100%"), "100%");
 		TestEqual(string::compose("%0%", "a"), "a%");
