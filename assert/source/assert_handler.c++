@@ -2,6 +2,7 @@
 
 #include <utility>
 #include <csignal>
+#include <cstdlib>
 #include <aw/config.h>
 
 namespace aw {
