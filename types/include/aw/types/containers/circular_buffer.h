@@ -160,8 +160,7 @@ public:
 	/*! Get number of elements in queue */
 	size_type size() const noexcept
 	{
-		auto dist = end() - begin();
-		return dist - 1;
+		return end() - begin();
 	}
 
 	/*! Get buffer capacity */
