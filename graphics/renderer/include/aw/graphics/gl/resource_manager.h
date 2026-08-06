@@ -8,7 +8,7 @@
  */
 #ifndef aw_graphics_gl3_resource_manager_h
 #define aw_graphics_gl3_resource_manager_h
-#include <aw/graphics/gl/array_chain.h>
+#include <aw/types/containers/array_chain.h>
 #include <aw/graphics/gl/program.h>
 #include <aw/types/string_view.h>
 namespace aw {
