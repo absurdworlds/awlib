@@ -10,6 +10,10 @@ namespace aw::string {
 template<typename T>
 bool try_parse(string_view line, T& v)
 {
+	// std::from_chars() accepts a leading '-', but not a leading '+'
+	if (line.starts_with('+'))
+		line.remove_prefix(1);
+
 	auto result = std::from_chars(line.data(), line.data() + line.size(), v);
 	return result.ec == std::errc();
 }

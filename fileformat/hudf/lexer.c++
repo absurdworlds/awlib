@@ -32,6 +32,7 @@ bool is_digit(char c)
 	return (c >= '0' && c <= '9');
 }
 
+// TODO: accept 0x numeric prefixes
 bool is_num_char(char c)
 {
 	return is_digit(c) || in(c, '.', 'e', 'E', '+', '-');
@@ -92,7 +93,7 @@ std::string lexer::read(Func condition)
 	std::string val;
 
 	char c = peek();
-	while (condition(c)) {
+	while (condition(c) && c != 0) {
 		val += c;
 		c = next();
 	}
@@ -109,6 +110,12 @@ std::string lexer::read_string() {
 		// next character as it is.
 		if (c == '\\')
 			c = next();
+
+		if (c == 0) {
+			error("unterminated string", pos);
+			return val;
+		}
+
 		val += c;
 		c = next();
 	}

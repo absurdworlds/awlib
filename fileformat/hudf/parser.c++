@@ -11,6 +11,7 @@
 #include <aw/hudf/type.h>
 
 #include <aw/algorithm/in.h>
+#include <aw/string/parse.h>
 #include <aw/types/string_view.h>
 
 #include <cassert>
@@ -21,58 +22,65 @@ inline namespace v1 {
 object parser::read()
 {
 	using namespace std::string_literals;
-	token tok = lex.get_token();
 
-	switch (tok.kind) {
-	case token::eof:
-		return {};
-	case token::bang:
-		if (depth > 0) {
-			lex.error("Unexpected ! inside node.", tok.pos);
+	// A token which does not produce an object is retried rather than
+	// recursed on: a long run of them (a file of stray ']', say) would
+	// otherwise take a stack frame each.
+	while (true) {
+		token tok = lex.get_token();
+
+		switch (tok.kind) {
+		case token::eof:
+			return {};
+		case token::bang:
+			if (depth > 0) {
+				lex.error("Unexpected ! inside node.", tok.pos);
+				break;
+			}
+			processCommand();
 			break;
-		}
-		processCommand();
-		break;
-	case token::node_begin:
-		++depth;
-		if (lex.peek_token().kind == token::equals)
+		case token::node_begin:
+			++depth;
+			if (lex.peek_token().kind == token::equals)
+				if (auto&& value = read_value())
+					return {object::node, tok.value, std::move(value)};
+			return {object::node, tok.value};
+		case token::node_end:
+			if (depth == 0) {
+				lex.error("Unexpected ']'.", tok.pos);
+				break;
+			}
+			--depth;
+			return {object::end};
+		case token::name:
 			if (auto&& value = read_value())
-				return {object::node, tok.value, std::move(value)};
-		return {object::node, tok.value};
-	case token::node_end:
-		if (depth == 0) {
-			lex.error("Unexpected ']'.", tok.pos);
+				return {object::value, tok.value, std::move(value)};
 			break;
+		case token::invalid:
+			lex.error("illegal token: \""s + tok.value + "\"", tok.pos);
+			break;
+		default:
+			lex.error("unexpected token: \""s + tok.value + "\"", tok.pos);
 		}
-		--depth;
-		return {object::end};
-	case token::name:
-		if (auto&& value = read_value())
-			return {object::value, tok.value, std::move(value)};
-		break;
-	case token::invalid:
-		lex.error("illegal token: \""s + tok.value + "\"", tok.pos);
-		break;
-	default:
-		lex.error("unexpected token: \""s + tok.value + "\"", tok.pos);
 	}
-
-	return read();
 }
 
 void parser::skip_node()
 {
-	token tok = lex.peek_token();
+	size_t const end_depth = depth - 1;
 
-	size_t depth = 1;
-	do {
-		if (tok.kind == token::node_begin) {
-			++depth;
-		} else if (tok.kind == token::node_end) {
-			--depth;
+	while (depth > end_depth) {
+		token tok = lex.get_token();
+		if (tok.kind == token::eof) {
+			lex.error("Reached end of file while looking for ']'", tok.pos);
+			return;
 		}
-		tok = lex.get_token();
-	} while (depth > 0);
+
+		if (tok.kind == token::node_begin)
+			++depth;
+		else if (tok.kind == token::node_end)
+			--depth;
+	}
 }
 
 value parser::read_value()
@@ -134,7 +142,12 @@ value parser::parse_value_impl<double>(token tok)
 		lex.error("Expected number", tok.pos);
 		return {};
 	}
-	return value{std::stod(tok.value)};
+	auto num = string::parse<double>(tok.value);
+	if (!num) {
+		lex.error("Invalid number: " + tok.value, tok.pos);
+		return {};
+	}
+	return value{*num};
 }
 
 template<>
@@ -144,7 +157,12 @@ value parser::parse_value_impl<intmax_t>(token tok)
 		lex.error("Expected number", tok.pos);
 		return {};
 	}
-	return value{std::stoll(tok.value)};
+	auto num = string::parse<intmax_t>(tok.value);
+	if (!num) {
+		lex.error("Invalid number: " + tok.value, tok.pos);
+		return {};
+	}
+	return value{*num};
 }
 
 template<>
@@ -181,9 +199,18 @@ value parser::deduce_value(token tok)
 {
 	switch (tok.kind) {
 	case token::number:
-		if (tok.value.find('.') == std::string::npos)
-			return value{std::stoll(tok.value)};
-		return value{std::stod(tok.value)};
+		// TODO: read_token() accepts an exponent, but only '.' picks the
+		// floating point branch here, so "1e5" is deduced as an integer
+		// and parsing stops at the 'e', silently yielding 1.
+		if (tok.value.find('.') == std::string::npos) {
+			if (auto num = string::parse<intmax_t>(tok.value))
+				return value{*num};
+		} else {
+			if (auto num = string::parse<double>(tok.value))
+				return value{*num};
+		}
+		lex.error("Invalid number: " + tok.value, tok.pos);
+		break;
 	case token::name:
 		if (tok.value == "true")
 			return value{true};
@@ -271,6 +298,8 @@ value parser::deduce_vector(token::position beg)
 	case token::string:
 		return value{parse_vector<std::string>(beg)};
 	case token::number:
+		// TODO: same exponent deduction bug as in deduce_value(), and the
+		// element type is picked from the first element only
 		if (tok.value.find('.') == std::string::npos)
 			return value{parse_vector<intmax_t>(beg)};
 		return value{parse_vector<double>(beg)};

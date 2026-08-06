@@ -33,3 +33,14 @@ target_link_libraries(test_doc_writer
 		awhudf
 		awtest
 		awtest_main)
+
+aw_add_test(test_hudf
+	SOURCES
+		hardening.c++
+	)
+target_link_libraries(test_hudf
+	PRIVATE
+		awio
+		awhudf
+		awtest
+		awtest_main)
