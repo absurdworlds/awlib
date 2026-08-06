@@ -16,10 +16,17 @@ using std::u8string_view;
 using std::string_view;
 using std::wstring_view;
 
+/*!
+ * Create a string_view from a character array.
+ *
+ * A single trailing null is not part of the view, so that
+ * make_string_view("hello").size() == 5. Arrays which are not
+ * null-terminated are viewed in full.
+ */
 template<size_t N>
 constexpr string_view make_string_view(char const (&array)[N])
 {
-	return {array, N};
+	return {array, N > 0 && array[N-1] == '\0' ? N-1 : N};
 }
 } // namespace aw
 #endif//aw_utility_string_view_h
