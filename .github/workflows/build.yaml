@@ -2,6 +2,7 @@ name: normal-build
 
 on:
   push:
+  workflow_dispatch:
 
 jobs:
   windows:
