@@ -51,7 +51,7 @@ private:
 
 	void destroy_storage()
 	{
-		delete[] data.begin;
+		operator delete(data.begin);
 	}
 
 public:
@@ -67,9 +67,11 @@ public:
 	 * Creates buffer of the same size and copies all elements.
 	 */
 	circular_buffer(circular_buffer const& q)
-		: circular_buffer( q.size() )
+		: circular_buffer( q.capacity() )
 	{
 		std::uninitialized_copy(q.begin(), q.end(), begin());
+
+		data.tail = data.begin + q.size();
 	}
 
 	/*! TODO: move constructor */
