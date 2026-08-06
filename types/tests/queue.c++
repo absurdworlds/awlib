@@ -114,4 +114,33 @@ Test(queue_push_pop2) {
 		TestAssert(std::equal(k.begin(), k.end(), d.begin(), d.end()));
 	}
 }
+
+Test(queue_reserve) {
+	queue<unsigned> k;
+	std::deque<unsigned> d;
+
+	Setup {
+		for (auto v : range(100u)) {
+			k.push_back(v);
+			d.push_back(v);
+		}
+	}
+
+	Checks {
+		// growing past the current capacity has to take effect
+		k.reserve(1000);
+		TestAssert(k.capacity() >= 1000);
+		TestEqual(k.size(), d.size());
+		TestAssert(std::equal(k.begin(), k.end(), d.begin(), d.end()));
+
+		// asking for less than is there must not drop or move anything
+		k.reserve(4);
+		TestAssert(k.capacity() >= k.size());
+		TestEqual(k.size(), d.size());
+		TestAssert(std::equal(k.begin(), k.end(), d.begin(), d.end()));
+
+		TestEqual(k.front(), 0u);
+		TestEqual(k.back(), 99u);
+	}
+}
 } // namespace aw

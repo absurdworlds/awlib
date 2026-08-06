@@ -404,7 +404,7 @@ public:
 	 */
 	void reserve(size_type n)
 	{
-		if (n < capacity())
+		if (n > capacity())
 			reallocate(n + 1);
 	}
 
