@@ -9,6 +9,7 @@
 #ifndef aw_types_char_buffer_h
 #define aw_types_char_buffer_h
 #include <aw/types/string_view.h>
+#include <algorithm>
 #include <memory_resource>
 #include <utility>
 namespace aw {
