@@ -10,12 +10,13 @@ aw_add_library(awlua SHARED
 )
 
 target_include_directories(awlua
-	INTERFACE
+	PUBLIC
 		${LUA_INCLUDE_DIR})
 
 target_link_libraries(awlua
-	INTERFACE
+	PUBLIC
 		awtypes
+		awutils
 		${LUA_LIBRARIES})
 
 target_compile_definitions(awlua PRIVATE AW_MODULE_LUA)
