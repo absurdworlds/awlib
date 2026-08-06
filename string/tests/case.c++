@@ -34,4 +34,17 @@ Test(string_capitalize) {
 	TestEqual(s4, "");
 }
 
+Test(string_non_ascii_passes_through) {
+	// bytes above 0x7f must reach should be
+	// left alone in the C locale
+	std::string s = "aÑb";
+	std::string t = "AÑB";
+	tolower(s);
+	toupper(t);
+	TestEqual(s, "aÑb");
+	TestEqual(t, "AÑB");
+	TestEqual(tolower("Ю"), "Ю");
+	TestEqual(toupper("Ю"), "Ю");
+}
+
 } // namespace aw::string

@@ -6,13 +6,22 @@
 #include <string>
 
 namespace aw::string {
+namespace _impl {
+/*
+ * ::tolower/::toupper take an int which must be representable as an
+ * unsigned char; passing a negative char is undefined.
+ */
+inline char to_lower(char c) { return char(::tolower((unsigned char)c)); }
+inline char to_upper(char c) { return char(::toupper((unsigned char)c)); }
+} // namespace _impl
+
 /*!
  * Transform the string to lower case.
  */
 inline std::string& tolower(std::string& str)
 {
 	std::transform(std::begin(str), std::end(str),
-	               std::begin(str), ::tolower);
+	               std::begin(str), _impl::to_lower);
 	return str;
 }
 
@@ -22,7 +31,7 @@ inline std::string& tolower(std::string& str)
 inline std::string& toupper(std::string& str)
 {
 	std::transform(std::begin(str), std::end(str),
-	               std::begin(str), ::toupper);
+	               std::begin(str), _impl::to_upper);
 	return str;
 }
 
@@ -32,11 +41,11 @@ inline std::string& toupper(std::string& str)
 inline std::string& capitalize(std::string& str)
 {
 	if (!str.empty())
-		str.front() = std::toupper(str.front());
+		str.front() = _impl::to_upper(str.front());
 	if (str.size() < 2)
 		return str;
 	auto begin = std::next(std::begin(str));
-	std::transform(begin, std::end(str), begin, ::tolower);
+	std::transform(begin, std::end(str), begin, _impl::to_lower);
 	return str;
 }
 
