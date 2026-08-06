@@ -1,7 +1,10 @@
+file(COPY data DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+
 # Unit tests
 aw_add_test(test_graphics
 	SOURCES
-		fake_gl.c++)
+		fake_gl.c++
+		texture.c++)
 
 target_link_libraries(test_graphics
 	PRIVATE

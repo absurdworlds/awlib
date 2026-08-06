@@ -9,9 +9,21 @@
 #include <aw/graphics/gl/texture.h>
 #include <aw/gl/wrapper/texture_func.h>
 
+#include <cassert>
+
 namespace aw::gl3 {
+namespace {
+bool has_enough_pixels( array_view<std::byte> data, size_t width, size_t height, size_t layers )
+{
+	constexpr size_t bytes_per_pixel = 4; // RGBA8
+	return data.size() >= width * height * layers * bytes_per_pixel;
+}
+} // namespace
+
 texture::texture( array_view<std::byte> data, size_t width, size_t height )
 {
+	assert(has_enough_pixels(data, width, height, 1) && "texture data is too small");
+
 	_type = GL_TEXTURE_2D;
 	gl::gen_textures(1, &handle);
 	gl::bind_texture(GL_TEXTURE_2D, handle);
@@ -25,6 +37,8 @@ texture::texture( array_view<std::byte> data, size_t width, size_t height )
 
 texture::texture( array_view<std::byte> data, size_t count, size_t width, size_t height )
 {
+	assert(has_enough_pixels(data, width, height, count) && "texture array data is too small");
+
 	_type = GL_TEXTURE_2D_ARRAY;
 	gl::gen_textures(1, &handle);
 	gl::bind_texture(GL_TEXTURE_2D_ARRAY, handle);

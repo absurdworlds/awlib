@@ -40,6 +40,21 @@ size_t program_manager::create_program( array_view<shader_source> files )
 	return add_resource( files.front().path, std::move(program) );
 }
 
+namespace {
+//! Storage required for one OpenGL RGBA8 image
+size_t rgba8_size( size_t width, size_t height )
+{
+	constexpr size_t bytes_per_pixel = 4;
+	return width * height * bytes_per_pixel;
+}
+
+//! Does the decoded image hold as many pixels as its dimensions claim?
+bool has_enough_pixels( png::image const& img )
+{
+	return img.data.size() >= rgba8_size( img.width, img.height );
+}
+} // namespace
+
 size_t texture_manager::create_texture( string_view name )
 {
 	io::input_file_stream ts{name};
@@ -48,6 +63,11 @@ size_t texture_manager::create_texture( string_view name )
 	if (!img)
 		return -1;
 
+	if (!has_enough_pixels(*img)) {
+		ologger.message( log::error, "texture", "image is smaller than its own dimensions" );
+		return -1;
+	}
+
 	return add_resource( name, texture{ img->data, img->width, img->height} );
 }
 
@@ -55,16 +75,33 @@ size_t texture_manager::create_texture( string_view name )
 size_t texture_manager::create_texture_array( array_view<string_view> names )
 {
 	png::log.set_logger(&ologger);
+
+	if (names.empty())
+		return -1;
+
 	png::image img;
-	std::optional<png::image> tmp;
+	bool first = true;
 	for (auto name : names) {
 		io::input_file_stream ts{name};
 
-		tmp = png::read(ts);
+		auto tmp = png::read(ts);
 		if (!tmp)
 			return -1;
-		img.width  = tmp->width;
-		img.height = tmp->height;
+
+		if (first) {
+			img.width  = tmp->width;
+			img.height = tmp->height;
+			first = false;
+		} else if (tmp->width != img.width || tmp->height != img.height) {
+			ologger.message( log::error, "texture", "array layers differ in size" );
+			return -1;
+		}
+
+		if (!has_enough_pixels(*tmp)) {
+			ologger.message( log::error, "texture", "image is smaller than its own dimensions" );
+			return -1;
+		}
+
 		img.data.insert( img.data.end(), tmp->data.begin(), tmp->data.end() );
 	}
 
