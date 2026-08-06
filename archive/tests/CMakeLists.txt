@@ -1,9 +1,8 @@
+aw_add_test(test_archive
+	SOURCES
+		archive.c++
+)
 
-set(SOURCES
-    archive.c++
-    test_archive.h)
-
-add_executable(test_archive ${SOURCES})
 target_link_libraries(test_archive
 	PRIVATE
 		awarchive
