@@ -9,6 +9,7 @@
 #ifndef aw_types_containers_array_chain_h
 #define aw_types_containers_array_chain_h
 // This is a placeholder, for now
+#include <cassert>
 #include <vector>
 #include <memory>
 
@@ -183,7 +184,8 @@ struct array_chain {
 
 	void pop_back()
 	{
-		_data.destruct(_size--);
+		assert(_size > 0 && "pop_back() on empty array_chain.");
+		_data.destruct(--_size);
 	}
 
 	size_t capacity() const
