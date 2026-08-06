@@ -54,6 +54,14 @@ inline size_t width(code_point cp)
 }
 
 /*!
+ * \return true if \a length represents an overlong encoding \a cp
+ */
+inline bool is_overlong(code_point cp, size_t length)
+{
+	return width(cp) < length;
+}
+
+/*!
  * \return true if \a ch is a single-byte ASCII character
  */
 inline bool is_ascii(char_type ch)
@@ -192,6 +200,9 @@ struct codec {
 
 			cp = sextet::add(cp, *input++);
 		}
+
+		if (is_overlong(cp, length + 1) || !is_valid_code_point(cp))
+			return error(input);
 
 		return input;
 	}

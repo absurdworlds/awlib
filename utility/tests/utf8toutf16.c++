@@ -108,4 +108,48 @@ Test(invalid_unicode_utf16_with_error)
 	}
 }
 
+namespace {
+//! Decode a single sequence, yielding unicode::invalid if it is not valid
+unicode::code_point decode_one(std::string_view str)
+{
+	unicode::code_point cp = 0;
+	unicode::utf8::codec::decode(begin(str), end(str), cp);
+	return cp;
+}
+} // namespace
+
+/*
+ * Every code point has exactly one UTF-8 encoding. Accepting an overlong
+ * form lets '/' or '.' slip past a filter which scans the raw bytes and only
+ * decodes afterwards.
+ */
+Test(malformed_utf8_rejected)
+{
+	Checks {
+		// well-formed input, including the boundary of each width
+		TestEqual(decode_one("\x2F"), unicode::code_point(0x2F));
+		TestEqual(decode_one("\xC2\x80"), unicode::code_point(0x80));
+		TestEqual(decode_one("\xDF\xBF"), unicode::code_point(0x7FF));
+		TestEqual(decode_one("\xE0\xA0\x80"), unicode::code_point(0x800));
+		TestEqual(decode_one("\xEF\xBF\xBF"), unicode::code_point(0xFFFF));
+		TestEqual(decode_one("\xF0\x90\x80\x80"), unicode::code_point(0x10000));
+		TestEqual(decode_one("\xF4\x8F\xBF\xBF"), unicode::code_point(0x10FFFF));
+
+		// overlong encodings of '/'
+		TestEqual(decode_one("\xC0\xAF"), unicode::invalid);
+		TestEqual(decode_one("\xE0\x80\xAF"), unicode::invalid);
+		TestEqual(decode_one("\xF0\x80\x80\xAF"), unicode::invalid);
+
+		// overlong encodings of the largest code point of the width below
+		TestEqual(decode_one("\xE0\x9F\xBF"), unicode::invalid);
+		TestEqual(decode_one("\xF0\x8F\xBF\xBF"), unicode::invalid);
+
+		// surrogates have no UTF-8 form
+		TestEqual(decode_one("\xED\xA0\x80"), unicode::invalid);
+		TestEqual(decode_one("\xED\xBF\xBF"), unicode::invalid);
+
+		// past the last code point
+		TestEqual(decode_one("\xF4\x90\x80\x80"), unicode::invalid);
+	}
+}
 } // namespace aw
