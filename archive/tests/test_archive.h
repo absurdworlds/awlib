@@ -52,6 +52,11 @@ struct testarc : input_archive<testarc>, output_archive<testarc> {
 	size_t iter = 0;
 };
 
+inline optional<size_t> bytes_left(testarc& arc)
+{
+	return arc.data.size() - arc.iter;
+}
+
 template<>
 void start_save_virtual(testarc& arc, string_view type, opt_string name)
 {

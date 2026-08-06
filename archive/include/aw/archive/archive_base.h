@@ -179,6 +179,18 @@ void start_load_array(Archive& arc, opt_string name = nullopt) { }
 template<typename Archive>
 void end_load_array(Archive& arc, opt_string name = nullopt) { }
 
+/*!
+ * Number of bytes of input the archive has not consumed yet.
+ *
+ * Should be used by `unarchive` to test if archive contains as many elements
+ * as it claims.
+ *
+ * Archives which cannot tell how much input is left return nullopt, and
+ * give up the protection.
+ */
+template<typename Archive>
+optional<size_t> bytes_left(Archive& arc) { return nullopt; }
+
 } // inline namespace v3
 } // namespace arc
 } // namespace aw

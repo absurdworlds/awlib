@@ -2,6 +2,9 @@
 #include "test_archive.h"
 
 #include <aw/test/test.h>
+
+#include <cstring>
+#include <stdexcept>
 #include <aw/utility/index_sequence.h>
 #include <aw/utility/to_string/pair.h>
 #include <aw/archive/types/std/tuple.h>
@@ -45,6 +48,61 @@ Test(saveload) {
 		TestEqual(a, b);
 		TestEqual(vec1, vec2);
 		TestEqual(map1, map2);
+	}
+}
+
+
+// Overwrite the serialized element count, which `save` writes first,
+// with one the archive cannot possibly back.
+void forge_element_count(testarc& arc, size_t count)
+{
+	std::memcpy(arc.data.data(), &count, sizeof(count));
+	arc.iter = 0;
+}
+
+Test(vector_element_count_is_not_trusted) {
+	testarc arc;
+	std::vector<int> vec{11, 18, 45, 99};
+	arc.archive(vec);
+
+	forge_element_count(arc, 1000);
+
+	std::vector<int> out;
+
+	Checks {
+		TestCatch(std::length_error, arc.unarchive(out));
+	}
+}
+
+Test(map_element_count_is_not_trusted) {
+	testarc arc;
+	std::map<int,int> map{{1,2}, {2,4}, {3,6}};
+	arc.archive(map);
+
+	forge_element_count(arc, 1000);
+
+	std::map<int,int> out;
+
+	Checks {
+		TestCatch(std::length_error, arc.unarchive(out));
+	}
+}
+
+Test(vector_honest_element_count_is_accepted) {
+	testarc arc;
+	// one byte per element is the bound, so a vector of chars is the
+	// tightest legitimate case
+	std::vector<char> vec(64, 'x');
+	arc.archive(vec);
+
+	std::vector<char> out;
+
+	Setup {
+		arc.unarchive(out);
+	}
+
+	Checks {
+		TestEqual(vec, out);
 	}
 }
 

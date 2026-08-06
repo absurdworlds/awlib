@@ -9,6 +9,8 @@
 #ifndef aw_archive_std_vector_h
 #define aw_archive_std_vector_h
 #include <vector>
+#include <stdexcept>
+#include <aw/archive/archive_base.h>
 #include <aw/archive/types/range_shared.h>
 namespace aw {
 namespace arc {
@@ -26,6 +28,10 @@ void load(Archive& arc, std::vector<T>& vec)
 {
 	size_t size;
 	arc( size, "size" );
+
+	auto const remaining = bytes_left(arc);
+	if (remaining && size > *remaining)
+		throw std::length_error("unexpected end of data");
 
 	vec.clear();
 	vec.resize(size);
