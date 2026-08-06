@@ -43,7 +43,7 @@ inline Iterator encode(code_point cp, Iterator output)
 		*(output++) = cp;
 	} else {
 		cp -= 0x10000;
-		*(output++) = 0xDC00 + (cp >> 10);
+		*(output++) = 0xD800 + (cp >> 10);
 		*(output++) = 0xDC00 + (cp & 0x3FF);
 	}
 
@@ -61,8 +61,10 @@ inline Iterator decode(Iterator input, Iterator end, code_point& cp)
 		}
 
 		char_type second = *(input++);
-		if (!isSecondSurrogate(second))
-			return error(input);
+		if (!isSecondSurrogate(second)) {
+			cp = -1;
+			return input;
+		}
 
 		cp = ((first  & 0x3FF) << 10) +
 		      (second & 0x3FF) + 0x10000;
