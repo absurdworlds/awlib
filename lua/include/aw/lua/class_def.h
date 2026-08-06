@@ -26,7 +26,7 @@ class class_def {
 template<typename T, typename Properties, typename Methods>
 class class_def_impl : public class_def
 {
-	std::string name = std::string(type_name<T>::name());
+	const char* name = metatable_name<T>();
 
 	void push_reference(lua_State* L, void* instance) const override
 	{
@@ -37,8 +37,7 @@ class class_def_impl : public class_def
 	{
 		static property_binding<T> get_property = Properties::template get_property<T>;
 
-		void* ptr = lua_touserdata(L, 1);
-		auto instance = *reinterpret_cast<T**>(ptr);
+		auto instance = check_userdata_pointer<T>(L, 1);
 
 		const auto key = lua_tostringview(L, 2);
 		auto type = luaL_getmetafield(L, -2, key.data());
@@ -52,7 +51,7 @@ class class_def_impl : public class_def
 
 	void create_metatable(lua_State *L) const
 	{
-		if (aw::lua::get_metatable(L, name.c_str()))
+		if (aw::lua::get_metatable(L, name))
 			return;
 
 		std::vector<luaL_Reg> funcs;
@@ -60,7 +59,7 @@ class class_def_impl : public class_def
 
 		Methods::register_methods(funcs);
 
-		aw::lua::create_metatable(L, name.c_str(), funcs);
+		aw::lua::create_metatable(L, name, funcs);
 	}
 
 public:

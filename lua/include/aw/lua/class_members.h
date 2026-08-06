@@ -16,6 +16,7 @@
 #include <aw/utility/functional/rank.h>
 
 #include <aw/lua/push_value.h>
+#include <aw/lua/userdata_utils.h>
 
 #include <vector>
 
@@ -33,8 +34,7 @@ public:
 			.name = static_cast<const char*>(Name.value),
 			.func = [] (lua_State* L)
 			{
-				void* ptr = lua_touserdata(L, 1);
-				auto instance = *reinterpret_cast<Class**>(ptr);
+				auto instance = check_userdata_pointer<Class>(L, 1);
 				(instance->*Method)();
 				return 0;
 			}
