@@ -30,7 +30,12 @@ std::string compose_v(string_view fmt, array_view<string_view> args)
 		if (nextpos == std::string::npos)
 			break;
 
-		char idx = fmt[++nextpos];
+		if (++nextpos == fmt.size()) {
+			result += delim;
+			break;
+		}
+
+		unsigned char idx = fmt[nextpos];
 		// '%0' is replaced by one of positional arguments
 		if (std::isdigit(idx)) {
 			pos = nextpos;

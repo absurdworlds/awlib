@@ -56,4 +56,23 @@ Test(special_cases) {
 		TestEqual(string::compose(select_third, "a", "b", "c"), "c");
 	}
 }
+
+Test(trailing_delimiter) {
+	Checks {
+		TestEqual(string::compose("%"), "%");
+		TestEqual(string::compose("100%"), "100%");
+		TestEqual(string::compose("%0%", "a"), "a%");
+		// '%%' at the end is still an escape
+		TestEqual(string::compose("100%%"), "100%");
+	}
+}
+
+Test(non_ascii_after_delimiter) {
+	Checks {
+		// the byte after '%' is not a digit, and must not be
+		// sign-extended on its way into isdigit()
+		TestEqual(string::compose("%°"), "%°");
+		TestEqual(string::compose("%ъ%0", "э"), "%ъэ");
+	}
+}
 } // namespace aw
