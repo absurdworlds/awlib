@@ -3,10 +3,13 @@
 
 #include <aw/utility/ranges/zip.h>
 #include <aw/test/test.h>
+#include <aw/test/helpers/counted.h>
 
 TestFile( "aw::circular_buffer" );
 
 namespace aw {
+using test::counted;
+
 Test(circular_buf_push_back) {
 	circular_buffer<int> buf(3);
 	buf.push_back(1);
@@ -107,19 +110,6 @@ Test(circular_buf_copy) {
 		TestEqual(empty_copy.capacity(), size_t(3));
 	}
 }
-
-namespace {
-//! Counts its own lifetime, so a buffer which loses or double-frees an
-//! element shows up as a mismatch rather than as silent corruption.
-struct counted {
-	static inline int live = 0;
-
-	counted() { ++live; }
-	counted(counted const&) { ++live; }
-	counted(counted&&) noexcept { ++live; }
-	~counted() { --live; }
-};
-} // namespace
 
 Test(circular_buf_destroys_elements) {
 	counted::live = 0;
