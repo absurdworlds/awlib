@@ -377,7 +377,7 @@ private:
 	template<typename Variant>
 	void move_from(Variant&& other)
 	{
-		using Visitor = _impl::variant_copy_assign_visitor<variant>;
+		using Visitor = _impl::variant_move_assign_visitor<variant>;
 		if (other.empty()) {
 			reset();
 		} else {
