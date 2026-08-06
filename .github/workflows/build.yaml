@@ -40,6 +40,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Install dependencies
+        run: sudo apt-get update && sudo apt-get install -y liblua5.4-dev
       - name: Configure
         run: >
           cmake -S . -B build
@@ -48,6 +50,7 @@ jobs:
           -DAW_ENABLE_GRAPHICS:BOOL=OFF
           -DAW_ENABLE_ASSERT:BOOL=OFF
           -DAW_ENABLE_HUDF:BOOL=ON
+          -DAW_ENABLE_LUA:BOOL=ON
           -DAW_NO_BUILTINS:BOOL=${{ matrix.no_builtins }}
       - name: Build
         run: cmake --build build
