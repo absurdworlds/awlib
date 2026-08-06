@@ -4,6 +4,7 @@ aw_add_test(test_types
 		variant.c++
 		variant_converter.c++
 		variant_cast.c++
+		enum.c++
     traits_promote.c++ traits_is_iterable.c++
     queue.c++ flat_map.c++
     circular_buffer.c++

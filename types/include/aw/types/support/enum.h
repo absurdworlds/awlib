@@ -48,7 +48,7 @@ template<typename Enum>
 	requires( std::is_enum_v<Enum> )
 Enum operator|(Enum a, Enum b)
 {
-	return Enum( underlying(a) & underlying(b) );
+	return Enum( underlying(a) | underlying(b) );
 }
 
 template<typename Enum>
@@ -62,7 +62,7 @@ template<typename Enum>
 	requires( std::is_enum_v<Enum> )
 Enum operator^(Enum a, Enum b)
 {
-	return Enum( underlying(a) & underlying(b) );
+	return Enum( underlying(a) ^ underlying(b) );
 }
 
 template<typename Enum>
