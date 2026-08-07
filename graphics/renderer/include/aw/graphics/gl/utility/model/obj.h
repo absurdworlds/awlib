@@ -32,7 +32,7 @@ inline model model_from_obj( obj::mesh const& data )
 	};
 
 	auto push_normal = [&] (unsigned idx) {
-		if (idx == -1) {
+		if (idx >= data.normals.size()) {
 			normals.push_back(0);
 			normals.push_back(0);
 			normals.push_back(0);
@@ -42,7 +42,7 @@ inline model model_from_obj( obj::mesh const& data )
 	};
 
 	auto push_texcoord = [&] (unsigned idx) {
-		if (idx == -1) {
+		if (idx >= data.texverts.size()) {
 			tex.push_back(0);
 			tex.push_back(0);
 		} else {
@@ -59,6 +59,15 @@ inline model model_from_obj( obj::mesh const& data )
 		float matid = matids[mesh.material];
 		for (auto j = mesh.begin; j < mesh.end; ++j) {
 			auto tri = data.faces[j];
+
+			auto const names_a_vertex = [&data] (obj::face_vert const& fv) {
+				return fv.index < data.verts.size();
+			};
+			if (!names_a_vertex(tri.verts[0]) ||
+			    !names_a_vertex(tri.verts[1]) ||
+			    !names_a_vertex(tri.verts[2]))
+				continue;
+
 			for (auto& [v,n,t] : tri.verts) {
 				if (auto p = indices.find({v,n,t}); p != end(indices)) {
 					tris.push_back(p->second);
