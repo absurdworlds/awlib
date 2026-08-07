@@ -311,7 +311,7 @@ constexpr vector<T,M> col(matrix<T,M,N> const& mat)
 namespace _impl {
 namespace mat {
 template<typename T, size_t M, size_t N, size_t...Is>
-constexpr void set_col(matrix<T,M,N> const& mat, vector<T,N> const& col, size_t j, index_sequence<Is...>)
+constexpr void set_col(matrix<T,M,N>& mat, vector<T,M> const& col, size_t j, index_sequence<Is...>)
 {
 	(void(mat[Is][j] = col[Is]), ...);
 }
@@ -319,7 +319,7 @@ constexpr void set_col(matrix<T,M,N> const& mat, vector<T,N> const& col, size_t 
 } // namespace _impl
 
 template<typename T, size_t M, size_t N>
-constexpr void set_column(matrix<T,M,N> const& mat, vector<T,N> const& col, size_t idx)
+constexpr void set_column(matrix<T,M,N>& mat, vector<T,M> const& col, size_t idx)
 {
 	_impl::mat::set_col(mat, col, idx, mat.row_indices);
 }

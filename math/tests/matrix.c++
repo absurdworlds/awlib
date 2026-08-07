@@ -65,6 +65,31 @@ Test(matrix_inverse) {
 	}
 };
 
+//! set_column writes the column that col() reads back
+Test(matrix_set_column) {
+	matrix<int,2,3> mat{
+		1, 2, 3,
+		4, 5, 6,
+	};
+
+	// a column of a 2×3 holds one entry per row, so two of them
+	vector<int,2> const replacement{ 7, 8 };
+
+	Checks {
+		set_column(mat, replacement, 1);
+
+		matrix<int,2,3> const expected{
+			1, 7, 3,
+			4, 8, 6,
+		};
+		TestEqual( mat, expected );
+	}
+
+	Postconditions {
+		TestEqual( col<1>(mat), replacement );
+	}
+}
+
 //! scalar and unary operators, on a matrix that is not square
 Test(matrix_scalar_ops) {
 	matrix<int,2,3> const A{
