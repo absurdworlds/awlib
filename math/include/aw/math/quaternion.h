@@ -322,6 +322,23 @@ quaternion<T> normalize(quaternion<T> const& quat)
 	return quaternion<T>{quat}.normalize();
 }
 
+//! Get the conjugate, which for a unit quaternion is the inverse rotation
+template <typename T>
+quaternion<T> conjugate(quaternion<T> const& quat)
+{
+	return {quat.w, -quat.x, -quat.y, -quat.z};
+}
+
+//! Rotate a vector by a unit quaternion: `v' = q·v·conjugate(q)`
+template <typename T>
+vector3d<T> rotate(quaternion<T> const& quat, vector3d<T> const& vec)
+{
+	vector3d<T> const axis{ quat.x, quat.y, quat.z };
+	vector3d<T> const tmp = T(2) * cross(axis, vec);
+
+	return vec + quat.w * tmp + cross(axis, tmp);
+}
+
 //! Linear interpolation of quaternion
 template <typename T>
 quaternion<T> lerp(quaternion<T> const& q0, quaternion<T> const& q1, f64 t)
