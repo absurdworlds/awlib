@@ -10,50 +10,12 @@
 // This code is based on MurmurHash3.
 // MurmurHash3 was written by Austin Appleby, and is placed in the public domain.
 #include <aw/math/bitmath.h>
-#include <aw/types/support/reinterpret.h>
 #include <aw/utility/endian.h>
 
 #include <aw/utility/hash.h>
 
 namespace aw {
 namespace {
-u8 read_byte(char const* addr)
-{
-	return u8(*addr);
-}
-
-u16 read_u16(char const* addr)
-{
-	u16 result = 0;
-	result |= u16(read_byte(addr++)) << 0;
-	result |= u16(read_byte(addr  )) << 8;
-	return result;
-}
-
-u32 read_u32(char const* addr)
-{
-	u32 result = 0;
-	result |= u32(read_byte(addr++)) << 0;
-	result |= u32(read_byte(addr++)) << 8;
-	result |= u32(read_byte(addr++)) << 16;
-	result |= u32(read_byte(addr  )) << 24;
-	return result;
-}
-
-u64 read_u64(char const* addr)
-{
-	u64 result = 0;
-	result |= u64(read_byte(addr++)) << 0;
-	result |= u64(read_byte(addr++)) << 8;
-	result |= u64(read_byte(addr++)) << 16;
-	result |= u64(read_byte(addr++)) << 24;
-	result |= u64(read_byte(addr++)) << 32;
-	result |= u64(read_byte(addr++)) << 40;
-	result |= u64(read_byte(addr++)) << 48;
-	result |= u64(read_byte(addr  )) << 56;
-	return result;
-}
-
 u32 getbyte32(char const* p, int i)
 {
 	return u8(p[i]);
@@ -67,16 +29,13 @@ u64 getbyte64(char const* p, int i)
 u32 getblock32(char const* p, int i)
 {
 	p += i * sizeof(u32);
-	return read_u32(p);
-	// TODO: call to reinterpret_memory on native platform
-	//return reinterpret_memory<u32>(p);
+	return read_le<u32>(p);
 }
 
 u64 getblock64(char const* p, size_t i)
 {
 	p += i * sizeof(u64);
-	return read_u64(p);
-	//return reinterpret_memory<u64>(p);
+	return read_le<u64>(p);
 }
 
 /*!
