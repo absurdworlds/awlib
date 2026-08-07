@@ -1,7 +1,12 @@
 #include <aw/test/test.h>
 #include <aw/math/matrix4.h>
+#include <aw/math/matrix3.h>
+#include <aw/math/matrix_extras.h>
+#include <aw/math/transform.h>
 #include <aw/math/matrix_compare.h>
+#include <aw/math/vector_compare.h>
 #include <aw/utility/to_string/math/matrix.h>
+#include <aw/utility/to_string/math/vector.h>
 
 #include <algorithm>
 
@@ -64,6 +69,51 @@ Test(matrix_inverse) {
 		TestEqual(I1, I2);
 	}
 };
+
+//! extend pads the added row and column from the identity, so that
+//! expanding a rotation gives a transform with no translation
+Test(matrix_extend) {
+	auto const rot = matrix_from_euler( vector3d<radians<double>>{
+		radians<double>{0.4}, radians<double>{0.3}, radians<double>{0.2} } );
+
+	auto const expanded = extend(rot);
+
+	Checks {
+		TestEqual( sub_matrix<3,3>(expanded), rot );
+	}
+
+	Checks {
+		TestEqual( expanded, make_transform(vector3d<double>{}, rot) );
+	}
+
+	Postconditions {
+		TestEqual( translation(expanded), vector3d<double>{0, 0, 0} );
+		TestEqual( get<3,3>(expanded), 1.0 );
+	}
+}
+
+//! the ^T / ^-1 sugar, which has never been compiled
+Test(matrix_extras_sugar) {
+	using namespace matrix_extras;
+
+	matrix<double,2,3> const A{
+		1, 2, 3,
+		4, 5, 6,
+	};
+
+	Checks {
+		TestEqual( A ^ T, transpose(A) );
+	}
+
+	Checks {
+		auto const sq = matrix<double,2,2>{ 4, 7, 2, 6 };
+		auto const inv = sq ^ -1;
+
+		TestAssert( bool(inv) );
+		if (inv)
+			TestEqual( sq * inv.value(), identity_matrix<double,2> );
+	}
+}
 
 //! sub_matrix drops one row and one column -- checked where M != N,
 //! since a square matrix hides a swap of the two
