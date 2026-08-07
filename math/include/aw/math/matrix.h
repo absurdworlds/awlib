@@ -326,18 +326,20 @@ constexpr void set_column(matrix<T,M,N>& mat, vector<T,M> const& col, size_t idx
 
 namespace _impl {
 template<size_t Col, size_t... Rows, typename T, size_t M, size_t N>
-constexpr matrix<T,N-1,M-1> make_sub(matrix<T,M,N> const& mat, index_sequence<Rows...>)
+constexpr matrix<T,M-1,N-1> make_sub(matrix<T,M,N> const& mat, index_sequence<Rows...>)
 {
 	return { sub<Col>(row<Rows>(mat))... };
 }
 } // namespace _impl
 
+//! Get the minor: \a mat without row \a Row and column \a Col
 template<size_t Row, size_t Col, typename T, size_t M, size_t N>
-constexpr matrix<T,N-1,M-1> sub_matrix(matrix<T,M,N> const& mat)
+constexpr matrix<T,M-1,N-1> sub_matrix(matrix<T,M,N> const& mat)
 {
+	// the rows that survive, so bounded by the row count
 	auto range = index_cat<
 	        make_index_range<0,Row>,
-	        make_index_range<Row+1,N>
+	        make_index_range<Row+1,M>
 	>{};
 
 	return _impl::make_sub<Col>(mat,range);

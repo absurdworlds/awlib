@@ -65,6 +65,33 @@ Test(matrix_inverse) {
 	}
 };
 
+//! sub_matrix drops one row and one column -- checked where M != N,
+//! since a square matrix hides a swap of the two
+Test(matrix_sub_matrix) {
+	matrix<int,2,3> const A{
+		1, 2, 3,
+		4, 5, 6,
+	};
+
+	Setup {
+		using dropped = decltype(sub_matrix<0,0>(A));
+		TestAssert( dropped::num_rows    == 1 );
+		TestAssert( dropped::num_columns == 2 );
+	}
+
+	Checks {
+		TestEqual( sub_matrix<0,0>(A), matrix<int,1,2>{ 5, 6 } );
+		TestEqual( sub_matrix<0,2>(A), matrix<int,1,2>{ 4, 5 } );
+		TestEqual( sub_matrix<1,1>(A), matrix<int,1,2>{ 1, 3 } );
+	}
+
+	Checks {
+		// the square case the rest of the library relies on
+		auto const m4 = identity_matrix<double,4>;
+		TestEqual( sub_matrix<3,3>(m4), identity_matrix<double,3> );
+	}
+}
+
 //! set_column writes the column that col() reads back
 Test(matrix_set_column) {
 	matrix<int,2,3> mat{
