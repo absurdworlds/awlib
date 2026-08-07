@@ -63,6 +63,7 @@ struct quaternion {
 		y = other.y;
 		z = other.z;
 		w = other.w;
+		return *this;
 	}
 
 
