@@ -231,8 +231,7 @@ struct quaternion {
 		T angle = {};
 
 		T const tCos = w;
-		T tSin = T{1} - w*w;
-		// T tSin = x*x + y*y + z*z;
+		T tSin = x*x + y*y + z*z;
 
 		if (tSin > T{0}) {
 			tSin = T(math::sqrt(tSin));
