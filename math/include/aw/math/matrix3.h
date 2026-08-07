@@ -177,7 +177,8 @@ quaternion<T> to_quaternion(matrix3<T> const& mat)
 template<typename T>
 quaternion<T> as_quaternion_unscaled(matrix3<T> const& mat)
 {
-	return _impl::to_quaternion( mat, T(0) );
+	// an unscaled rotation matrix has determinant 1
+	return _impl::to_quaternion( mat, T(1) );
 }
 } // namespace math
 } // namespace aw
