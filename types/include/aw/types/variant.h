@@ -225,7 +225,7 @@ public:
 	template<typename T>
 	T try_get(T _default) const
 	{
-		T* ptr = get<T>();
+		T const* ptr = get<T>();
 		if (!ptr)
 			return _default;
 		return *ptr;

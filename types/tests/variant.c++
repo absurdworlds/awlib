@@ -23,6 +23,34 @@ Test(variant_basic_get) {
 	}
 }
 
+Test(variant_try_get) {
+	using namespace std::string_literals;
+	aw::variant<int, float, std::string> var1;
+
+	Checks {
+		// empty variant falls back to the default
+		TestEqual(var1.try_get(42), 42);
+		TestEqual(var1.try_get("fallback"s), "fallback"s);
+
+		// type matches: value is returned
+		var1.set(100);
+		TestEqual(var1.try_get(42), 100);
+
+		// type doesn't match: default is returned
+		TestEqual(var1.try_get(1.01f), 1.01f);
+		TestEqual(var1.try_get("fallback"s), "fallback"s);
+
+		var1.set("A string."s);
+		TestEqual(var1.try_get("fallback"s), "A string."s);
+		TestEqual(var1.try_get(42), 42);
+
+		// callable on a const variant
+		const auto& cvar = var1;
+		TestEqual(cvar.try_get("fallback"s), "A string."s);
+		TestEqual(cvar.try_get(42), 42);
+	}
+}
+
 Test(variant_basic_copy) {
 	using namespace std::string_literals;
 	aw::variant<int, float, std::string> var1;
