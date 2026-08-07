@@ -68,9 +68,8 @@ u32 getblock32(char const* p, int i)
 {
 	p += i * sizeof(u32);
 	return read_u32(p);
-	// TODO: defines to switch between these
+	// TODO: call to reinterpret_memory on native platform
 	//return reinterpret_memory<u32>(p);
-	//return *reinterpret_cast<u32 const*>(p);
 }
 
 u64 getblock64(char const* p, size_t i)
@@ -78,7 +77,6 @@ u64 getblock64(char const* p, size_t i)
 	p += i * sizeof(u64);
 	return read_u64(p);
 	//return reinterpret_memory<u64>(p);
-	//return *reinterpret_cast<u64 const*>(p);
 }
 
 /*!
