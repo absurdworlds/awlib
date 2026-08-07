@@ -8,6 +8,7 @@
  */
 #ifndef aw_math_matrix4_h
 #define aw_math_matrix4_h
+#include <aw/math/float.h>
 #include <aw/math/vector4d.h>
 #include <aw/math/matrix3.h>
 namespace aw {
@@ -68,8 +69,13 @@ vector3d<T> rotation(matrix4<T> const& mat, vector3d<T> const& scale)
 	/*
 	 * At |yaw| = 90° the X and Z axes coincide and only (pitch − roll)
 	 * is determined; hand the whole of it to pitch.
+	 *
+	 * The cutoff is the machine epsilon, not the much looser
+	 * float_traits::epsilon: the general path holds up until sin(yaw)
+	 * stops being distinguishable from 1, and switching any earlier
+	 * only snaps yaw to 90° when it demonstrably is not.
 	 */
-	constexpr T threshold = T(1) - T(1e-7);
+	constexpr T threshold = T(1) - float_traits<T>::max_rel;
 
 	if (sin_yaw > threshold || sin_yaw < -threshold) {
 		rot[axis::x] = T(std::atan2(sin_yaw * m(0,1), m(1,1)));
