@@ -4,6 +4,7 @@
 #include <aw/utility/to_string/math/matrix.h>
 
 #include <aw/test/test.h>
+#include <aw/test/helpers/counted.h>
 
 #include <utility>
 
@@ -22,6 +23,26 @@ using m4 = aw::math::matrix<int, 4, 4>;
 struct aligned_matrix {
 	alignas(32) m4 m;
 };
+
+//! destroy() must run the destructor of the stored type
+Test(any_buffer_destroy) {
+	using aw::test::counted;
+
+	aw::any_buffer<sizeof(counted)> buf;
+
+	Setup {
+		counted::live = 0;
+	}
+
+	Checks {
+		buf.emplace<counted>();
+		TestEqual( counted::live, 1 );
+		TestEqual( buf.get<counted>().value, counted::payload() );
+
+		buf.destroy<counted>();
+		TestEqual( counted::live, 0 );
+	}
+}
 
 Test(any_buffer_aligned) {
 	using namespace std::string_literals;
