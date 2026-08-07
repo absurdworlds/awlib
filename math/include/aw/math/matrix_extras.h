@@ -53,4 +53,5 @@ auto operator^(matrix<T,M,N> const& mat, int i)
 }
 } // namespace matrix_extras
 } // namespace math
-} // namespace aw#endif //aw_math_matrix_extras_h
+} // namespace aw
+#endif //aw_math_matrix_extras_h
