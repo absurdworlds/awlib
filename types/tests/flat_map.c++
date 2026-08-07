@@ -78,6 +78,39 @@ Test(flat_map_merge) {
 	}
 }
 
+Test(flat_map_merge_custom_compare) {
+	using map_type = aw::flat_map<std::string, int, std::greater<std::string>>;
+
+	map_type map{ {"ddd",4}, {"bbb",2} };
+	map_type const expected{
+		{"aaa",1}, {"bbb",2}, {"ccc",3}, {"ddd",4}, {"eee",5}
+	};
+
+	std::vector<std::pair<std::string, int>> const range{
+		{"aaa",1}, {"ccc",3}, {"eee",5}
+	};
+
+	Preconditions {
+		TestAssert(std::is_sorted(begin(map), end(map), map.value_comp()));
+	}
+
+	Checks {
+		map.insert(begin(range), end(range));
+
+		TestAssert(std::is_sorted(begin(map), end(map), map.value_comp()));
+		TestEqual(map, expected);
+	}
+
+	Checks {
+		TestEqual(map.size(), 5u);
+		TestEqual(map.find("aaa")->second, 1);
+		TestEqual(map.find("bbb")->second, 2);
+		TestEqual(map.find("ccc")->second, 3);
+		TestEqual(map.find("ddd")->second, 4);
+		TestEqual(map.find("eee")->second, 5);
+	}
+}
+
 Test(flat_map_assignment) {
 
 	aw::flat_map<std::string, int> map{

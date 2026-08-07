@@ -454,7 +454,7 @@ public:
 		auto a_middle = begin() + len;
 		auto a_end    = end();
 
-		std::sort(a_middle, a_end);
+		std::sort(a_middle, a_end, value_comp());
 		std::inplace_merge(a_begin, a_middle, a_end, value_comp());
 		remove_duplicates();
 	}
