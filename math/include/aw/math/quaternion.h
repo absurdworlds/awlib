@@ -171,7 +171,10 @@ struct quaternion {
 		return *this;
 	}
 
-	//! Set quaternion from euler angles
+	/*! Set quaternion from euler angles (in radians)
+	 * \brief Rotate by \a roll around Z, then \a yaw around Y,
+	 *        then \a pitch around X.
+	 */
 	quaternion<T>& set_euler(T pitch, T yaw, T roll)
 	{
 		vector3d<T> vec{ pitch, yaw, roll };
@@ -180,10 +183,10 @@ struct quaternion {
 		vector3d<T> const s = sin( vec );
 		vector3d<T> const c = cos( vec );
 
-		x = s.x() * s.y() * c.z() + c.x() * c.y() * s.z();
-		y = s.x() * c.y() * c.z() + c.x() * s.y() * s.z();
-		z = c.x() * s.y() * c.z() - s.x() * c.y() * s.z();
-		w = c.x() * c.y() * c.z() - s.x() * s.y() * s.z();
+		x = c.z() * c.y() * s.x() - s.z() * s.y() * c.x();
+		y = c.z() * s.y() * c.x() + s.z() * c.y() * s.x();
+		z = s.z() * c.y() * c.x() - c.z() * s.y() * s.x();
+		w = c.z() * c.y() * c.x() + s.z() * s.y() * s.x();
 		return *this;
 	}
 
