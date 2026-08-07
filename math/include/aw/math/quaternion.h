@@ -135,10 +135,12 @@ struct quaternion {
 	//! Quaternion multiplication
 	quaternion<T>& operator*=(quaternion<T> const& other)
 	{
-		x = (x * other.w) + (w * other.x) + (z * other.y) - (y * other.z);
-		y = (y * other.w) - (z * other.x) + (w * other.y) + (x * other.z);
-		z = (z * other.w) + (y * other.x) - (x * other.y) + (w * other.z);
-		w = (w * other.w) - (x * other.x) - (y * other.y) - (z * other.z);
+		auto old_x = x, old_y = y, old_z = z, old_w = w;
+
+		x = (old_x * other.w) + (old_w * other.x) + (old_z * other.y) - (old_y * other.z);
+		y = (old_y * other.w) - (old_z * other.x) + (old_w * other.y) + (old_x * other.z);
+		z = (old_z * other.w) + (old_y * other.x) - (old_x * other.y) + (old_w * other.z);
+		w = (old_w * other.w) - (old_x * other.x) - (old_y * other.y) - (old_z * other.z);
 
 		return *this;
 	}
