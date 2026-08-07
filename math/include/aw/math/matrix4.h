@@ -19,7 +19,7 @@ using matrix4 = matrix<T,4,4>;
 template<typename T>
 vector3d<T> translation(matrix4<T> const& mat)
 {
-	return { get<3,0>(mat), get<3,1>(mat), get<3,2>(mat) };
+	return { get<0,3>(mat), get<1,3>(mat), get<2,3>(mat) };
 }
 
 //! Extract scale from matrix
