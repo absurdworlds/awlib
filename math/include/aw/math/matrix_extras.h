@@ -14,20 +14,6 @@
 namespace aw {
 namespace math {
 
-/*!
- * Expand square matrix by adding a row and a column
- * Useful for convering 3x3 rotation matrix into a 4x4
- * transform matrix.
- */
-template<typename T, size_t N>
-auto expand_matrix(aw::math::matrix<T, N, N> m)
-	-> aw::math::matrix<T, N+1, N+1>
-{
-	aw::math::matrix<T, N+1, N+1> ret;
-	ret = m;
-	return ret;
-}
-
 //! Additional syntactic sugar for matrices
 namespace matrix_extras {
 struct _transposer {};
@@ -53,4 +39,5 @@ auto operator^(matrix<T,M,N> const& mat, int i)
 }
 } // namespace matrix_extras
 } // namespace math
-} // namespace aw#endif //aw_math_matrix_extras_h
+} // namespace aw
+#endif //aw_math_matrix_extras_h

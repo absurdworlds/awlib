@@ -311,7 +311,7 @@ constexpr vector<T,M> col(matrix<T,M,N> const& mat)
 namespace _impl {
 namespace mat {
 template<typename T, size_t M, size_t N, size_t...Is>
-constexpr void set_col(matrix<T,M,N> const& mat, vector<T,N> const& col, size_t j, index_sequence<Is...>)
+constexpr void set_col(matrix<T,M,N>& mat, vector<T,M> const& col, size_t j, index_sequence<Is...>)
 {
 	(void(mat[Is][j] = col[Is]), ...);
 }
@@ -319,25 +319,27 @@ constexpr void set_col(matrix<T,M,N> const& mat, vector<T,N> const& col, size_t 
 } // namespace _impl
 
 template<typename T, size_t M, size_t N>
-constexpr void set_column(matrix<T,M,N> const& mat, vector<T,N> const& col, size_t idx)
+constexpr void set_column(matrix<T,M,N>& mat, vector<T,M> const& col, size_t idx)
 {
 	_impl::mat::set_col(mat, col, idx, mat.row_indices);
 }
 
 namespace _impl {
 template<size_t Col, size_t... Rows, typename T, size_t M, size_t N>
-constexpr matrix<T,N-1,M-1> make_sub(matrix<T,M,N> const& mat, index_sequence<Rows...>)
+constexpr matrix<T,M-1,N-1> make_sub(matrix<T,M,N> const& mat, index_sequence<Rows...>)
 {
 	return { sub<Col>(row<Rows>(mat))... };
 }
 } // namespace _impl
 
+//! Get the minor: \a mat without row \a Row and column \a Col
 template<size_t Row, size_t Col, typename T, size_t M, size_t N>
-constexpr matrix<T,N-1,M-1> sub_matrix(matrix<T,M,N> const& mat)
+constexpr matrix<T,M-1,N-1> sub_matrix(matrix<T,M,N> const& mat)
 {
+	// the rows that survive, so bounded by the row count
 	auto range = index_cat<
 	        make_index_range<0,Row>,
-	        make_index_range<Row+1,N>
+	        make_index_range<Row+1,M>
 	>{};
 
 	return _impl::make_sub<Col>(mat,range);
@@ -381,34 +383,34 @@ constexpr matrix<T,M,N> operator-(matrix<T,M,N> A, matrix<T,M,N> const& B)
 }
 
 template<typename T, size_t M, size_t N>
-constexpr matrix<T,M,N> operator*(matrix<T,N,M> mat, T const v)
+constexpr matrix<T,M,N> operator*(matrix<T,M,N> mat, T const v)
 {
 	mat *= v;
 	return mat;
 }
 
 template<typename T, size_t M, size_t N>
-constexpr matrix<T,M,N> operator*(T const v, matrix<T,N,M> mat)
+constexpr matrix<T,M,N> operator*(T const v, matrix<T,M,N> mat)
 {
 	mat *= v;
 	return mat;
 }
 
 template<typename T, size_t M, size_t N>
-constexpr matrix<T,M,N> operator/(matrix<T,N,M> mat, T const v)
+constexpr matrix<T,M,N> operator/(matrix<T,M,N> mat, T const v)
 {
 	mat /= v;
 	return mat;
 }
 
 template<typename T, size_t M, size_t N>
-constexpr matrix<T,M,N> operator+(matrix<T,N,M> mat)
+constexpr matrix<T,M,N> operator+(matrix<T,M,N> mat)
 {
 	return mat;
 }
 
 template<typename T, size_t M, size_t N>
-constexpr matrix<T,M,N> operator-(matrix<T,N,M> mat)
+constexpr matrix<T,M,N> operator-(matrix<T,M,N> mat)
 {
 	return mat *= T(-1);
 }

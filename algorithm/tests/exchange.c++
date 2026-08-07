@@ -1,58 +1,13 @@
 #include <aw/algorithm/exchange.h>
 
 #include <aw/test/test.h>
+#include <aw/test/helpers/copy_move_tracker.h>
 
 TestFile( "algorithm::exchange" );
 
-template<typename T>
-struct copy_move_counter {
-	T value;
-	size_t n_copies = 0;
-	size_t n_moves  = 0;
-	size_t n_moved_from = 0;
-
-	copy_move_counter(T value)
-		: value(std::move(value))
-	{}
-
-	copy_move_counter(const copy_move_counter& other)
-		: value(other.value)
-		, n_copies(other.n_copies + 1)
-		, n_moves(other.n_moves)
-	{
-	}
-
-	copy_move_counter(copy_move_counter&& other)
-		: value(std::move(other.value))
-		, n_copies(std::exchange(other.n_copies, 0))
-		, n_moves(std::exchange(other.n_moves, 0) + 1)
-	{
-		++other.n_moved_from;
-	}
-
-	copy_move_counter& operator=(const copy_move_counter& other)
-	{
-		value = other.value;
-		n_copies = other.n_copies + 1;
-		n_moves = other.n_moves;
-		return *this;
-	}
-
-	copy_move_counter& operator=(copy_move_counter&& other)
-	{
-		value = std::move(other.value);
-		n_copies = std::exchange(other.n_copies, 0);
-		n_moves = std::exchange(other.n_moves, 0) + 1;
-		++other.n_moved_from;
-		return *this;
-	}
-
-	// silences the clang-tidy warning
-	[[clang::reinitializes]]
-	void unmove() {}
-};
-
 namespace aw {
+using test::copy_move_tracker;
+
 Test(exchange_chain) {
 	std::string a = "test1";
 	std::string b = "test2";
@@ -72,7 +27,7 @@ Test(exchange_chain) {
 Test(exchange_copy_move) {
 	using namespace std::string_literals;
 	{
-		copy_move_counter a = "a"s, b = "b"s, c = "c"s, d = "d"s; // NOLINT
+		copy_move_tracker a = "a"s, b = "b"s, c = "c"s, d = "d"s; // NOLINT
 
 		auto x = exchange_chain(a, b, c, std::move(d));
 		d.unmove(); // silence clang-tidy
@@ -85,7 +40,7 @@ Test(exchange_copy_move) {
 		// Others depend on optimization levels,
 	}
 	{
-		copy_move_counter a = "a"s, b = "b"s, c = "c"s, d = "d"s; // NOLINT
+		copy_move_tracker a = "a"s, b = "b"s, c = "c"s, d = "d"s; // NOLINT
 
 		auto x = exchange_chain(a, b, c, d);
 
@@ -127,7 +82,7 @@ Test(rotate_right) {
 
 Test(rotate_left_copy_count) {
 	using namespace std::string_literals;
-	copy_move_counter a = "a"s, b = "b"s, c = "c"s, d = "d"s; // NOLINT
+	copy_move_tracker a = "a"s, b = "b"s, c = "c"s, d = "d"s; // NOLINT
 
 	rotate_left(a, b, c, d);
 
@@ -136,7 +91,7 @@ Test(rotate_left_copy_count) {
 
 Test(rotate_right_copy_count) {
 	using namespace std::string_literals;
-	copy_move_counter a = "a"s, b = "b"s, c = "c"s, d = "d"s; // NOLINT
+	copy_move_tracker a = "a"s, b = "b"s, c = "c"s, d = "d"s; // NOLINT
 
 	rotate_left(a, b, c, d);
 

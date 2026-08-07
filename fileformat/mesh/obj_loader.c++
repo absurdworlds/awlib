@@ -12,6 +12,9 @@
 namespace aw {
 namespace obj {
 namespace {
+//! Signifies that normal or texuv is not specified for the vertex
+constexpr unsigned absent = unsigned(-1);
+
 void make_zero_based( face_vert& v )
 {
 	--v.index;
@@ -138,6 +141,10 @@ void parser::add_vert(string_view line)
 
 void parser::add_face(string_view s)
 {
+	size_t const num_verts    = mesh::verts.size();
+	size_t const num_normals  = normals.size();
+	size_t const num_texverts = texverts.size();
+
 	std::vector< obj::face_vert > verts;
 
 	auto substrs = string::split_by(s, " \v\r\t");
@@ -147,6 +154,15 @@ void parser::add_face(string_view s)
 			continue;
 
 		make_zero_based( v );
+
+		if (v.index >= num_verts)
+			return;
+
+		if (v.normal >= num_normals)
+			v.normal = absent;
+		if (v.texuv >= num_texverts)
+			v.texuv = absent;
+
 		verts.push_back( v );
 	}
 

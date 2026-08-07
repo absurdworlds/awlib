@@ -22,6 +22,20 @@ struct axis_angle {
 	T angle;
 };
 
+/*!
+ * Unit quaternion representing a rotation in 3D space.
+ *
+ * Conventions, chosen to match `aw::math::matrix3`:
+ *
+ *  - Rotations are right-handed and act on column vectors,
+ *    applied as `v' = q·v·conjugate(q)` (see `rotate`).
+ *  - Multiplication is the Hamilton product, so `a * b` denotes
+ *    the rotation `b` followed by the rotation `a`, in the same
+ *    order as the equivalent matrix product `A * B`.
+ *  - Euler angles are `pitch` around the X axis, `yaw` around the
+ *    Y axis and `roll` around the Z axis, in radians, composed as
+ *    `roll * yaw * pitch` — the order used by `matrix_from_euler`.
+ */
 template<typename T>
 struct quaternion {
 	/*! Default constructor
@@ -63,6 +77,7 @@ struct quaternion {
 		y = other.y;
 		z = other.z;
 		w = other.w;
+		return *this;
 	}
 
 
@@ -131,13 +146,17 @@ struct quaternion {
 		return {-w, -x, -y, -z};
 	}
 
-	//! Quaternion multiplication
+	/*! Quaternion (Hamilton) multiplication
+	 * \brief Rotate by \a other first, then by this quaternion.
+	 */
 	quaternion<T>& operator*=(quaternion<T> const& other)
 	{
-		x = (x * other.w) + (w * other.x) + (z * other.y) - (y * other.z);
-		y = (y * other.w) - (z * other.x) + (w * other.y) + (x * other.z);
-		z = (z * other.w) + (y * other.x) - (x * other.y) + (w * other.z);
-		w = (w * other.w) - (x * other.x) - (y * other.y) - (z * other.z);
+		auto old_x = x, old_y = y, old_z = z, old_w = w;
+
+		x = (old_w * other.x) + (old_x * other.w) + (old_y * other.z) - (old_z * other.y);
+		y = (old_w * other.y) - (old_x * other.z) + (old_y * other.w) + (old_z * other.x);
+		z = (old_w * other.z) + (old_x * other.y) - (old_y * other.x) + (old_z * other.w);
+		w = (old_w * other.w) - (old_x * other.x) - (old_y * other.y) - (old_z * other.z);
 
 		return *this;
 	}
@@ -156,7 +175,20 @@ struct quaternion {
 		return *this;
 	}
 
-	//! Set quaternion from euler angles
+	//! Set quaternion from individual components
+	quaternion<T>& set(T const w, T const x, T const y, T const z)
+	{
+		this->w = w;
+		this->x = x;
+		this->y = y;
+		this->z = z;
+		return *this;
+	}
+
+	/*! Set quaternion from euler angles (in radians)
+	 * \brief Rotate by \a roll around Z, then \a yaw around Y,
+	 *        then \a pitch around X.
+	 */
 	quaternion<T>& set_euler(T pitch, T yaw, T roll)
 	{
 		vector3d<T> vec{ pitch, yaw, roll };
@@ -165,10 +197,10 @@ struct quaternion {
 		vector3d<T> const s = sin( vec );
 		vector3d<T> const c = cos( vec );
 
-		x = s.x() * s.y() * c.z() + c.x() * c.y() * s.z();
-		y = s.x() * c.y() * c.z() + c.x() * s.y() * s.z();
-		z = c.x() * s.y() * c.z() - s.x() * c.y() * s.z();
-		w = c.x() * c.y() * c.z() - s.x() * s.y() * s.z();
+		x = c.z() * c.y() * s.x() - s.z() * s.y() * c.x();
+		y = c.z() * s.y() * c.x() + s.z() * c.y() * s.x();
+		z = s.z() * c.y() * c.x() - c.z() * s.y() * s.x();
+		w = c.z() * c.y() * c.x() + s.z() * s.y() * s.x();
 		return *this;
 	}
 
@@ -176,64 +208,63 @@ struct quaternion {
 	{
 		angle /= T(2);
 
-		vector3d<T> const v = axis.normalized() * sin(angle);
+		vector3d<T> const v = math::normalize(axis) * T(std::sin(angle));
 
-		set(cos(angle), v.x(), v.y(), v.z());
+		set(T(std::cos(angle)), v.x(), v.y(), v.z());
 
 		return *this;
 	}
 
-	//! Get quaternion as euler angles
-	vector3d<T> to_euler()
+	/*! Get quaternion as euler angles (in radians)
+	 * \return Vector holding the rotation around the X axis (pitch)
+	 *         in its x component, around Y (yaw) in y, and around Z
+	 *         (roll) in z — the layout accepted by `matrix_from_euler`.
+	 */
+	vector3d<T> to_euler() const
 	{
+		/*
+		 * Recovering (roll ± pitch) instead of each angle on its own
+		 * keeps the extraction well-conditioned at yaw = ±90°, where
+		 * the two are no longer individually defined (gimbal lock).
+		 */
+		T const sum  = T( 2 * std::atan2(x + z, w - y) ); // roll + pitch
+		T const diff = T( 2 * std::atan2(z - x, w + y) ); // roll − pitch
+
+		// |cos(yaw/2) ± sin(yaw/2)|, whose ratio is tan(π/4 + yaw/2)
+		T const cs = T( std::hypot(w + y, z - x) );
+		T const cd = T( std::hypot(w - y, x + z) );
+
 		vector3d<T> euler = {};
 
-		// singularity test
-		T const xyzw = x*y + z*w;
-		if ( math::equals(xyzw, 0.5f) ) { // north pole
-			euler[axis::x] = pi/2;
-			euler[axis::y] = 2 * atan2(x, w);
-			euler[axis::z] = 0;
-		} else if ( math::equals(xyzw, -0.5f) ) { // south pole
-			euler[axis::x] = -pi/2;
-			euler[axis::y] = -2 * atan2(x, w);
-			euler[axis::z] = 0;
-		} else {
-			T const sX = x * x;
-			T const sY = y * y;
-			T const sZ = z * z;
-
-			euler[axis::x] = asin(2*xyzw);
-			euler[axis::y] = atan2(2*(x*w - y*z), 1 - 2*sX - 2*sZ);
-			euler[axis::z] = atan2(2*(y*w - x*z), 1 - 2*sY - 2*sZ);
-		}
+		euler[axis::x] = (sum - diff) / T(2);
+		euler[axis::y] = T( 2 * std::atan2(cs, cd) - pi/2 );
+		euler[axis::z] = (sum + diff) / T(2);
 
 		return euler;
 	}
 
 	//! Get quaternion in axis-angle representation
-	axis_angle<T> to_axis_angle()
+	axis_angle<T> to_axis_angle() const
 	{
 		vector3d<T> axis = {};
 		T angle = {};
 
 		T const tCos = w;
-		T tSin = T{1} - w*w;
-		// T tSin = x*x + y*y + z*z;
+		T tSin = x*x + y*y + z*z;
 
 		if (tSin > T{0}) {
-			tSin = T(sqrt(tSin));
+			tSin = T(math::sqrt(tSin));
 			T invSin = 1 / tSin;
 
-			angle = T( 2 * atan2(tSin, tCos) );
-			axis.x = x * invSin;
-			axis.y = y * invSin;
-			axis.z = z * invSin;
+			angle = T( 2 * std::atan2(tSin, tCos) );
+			axis.x() = x * invSin;
+			axis.y() = y * invSin;
+			axis.z() = z * invSin;
 		} else {
-			axis.x = T{0};
-			axis.y = T{0};
-			axis.z = T{-1};
-			angle  = T{0};
+			axis.x() = T{0};
+			axis.y() = T{0};
+			axis.z() = T{-1};
+			angle    = T{0};
 		}
 
 		return {axis, angle};
@@ -305,9 +336,26 @@ quaternion<T> normalize(quaternion<T> const& quat)
 	return quaternion<T>{quat}.normalize();
 }
 
+//! Get the conjugate, which for a unit quaternion is the inverse rotation
+template <typename T>
+quaternion<T> conjugate(quaternion<T> const& quat)
+{
+	return {quat.w, -quat.x, -quat.y, -quat.z};
+}
+
+//! Rotate a vector by a unit quaternion: `v' = q·v·conjugate(q)`
+template <typename T>
+vector3d<T> rotate(quaternion<T> const& quat, vector3d<T> const& vec)
+{
+	vector3d<T> const axis{ quat.x, quat.y, quat.z };
+	vector3d<T> const tmp = T(2) * cross(axis, vec);
+
+	return vec + quat.w * tmp + cross(axis, tmp);
+}
+
 //! Linear interpolation of quaternion
 template <typename T>
-quaternion<T>& lerp(quaternion<T> const& q0, quaternion<T> const& q1, f64 t)
+quaternion<T> lerp(quaternion<T> const& q0, quaternion<T> const& q1, f64 t)
 {
 	return (1-t)*q0 + t*q1;
 }
@@ -319,7 +367,7 @@ quaternion<T> nlerp(quaternion<T> const& q0, quaternion<T> const& q1, f64 t)
 }
 
 template <typename T>
-quaternion<T> slerp(quaternion<T> const& q0, quaternion<T> const& q1,
+quaternion<T> slerp(quaternion<T> q0, quaternion<T> const& q1,
 	f64 alpha, bool shortest)
 {
 	T tCos = q0.dot(q1);
@@ -330,17 +378,17 @@ quaternion<T> slerp(quaternion<T> const& q0, quaternion<T> const& q1,
 		tCos = -tCos;
 	}
 
-	static T const epsilon = T(0.005);
+	constexpr T epsilon = T(0.005);
 	if(tCos > (1 - epsilon)) {
 		return nlerp(q0, q1, alpha);
 	}
 
-	T const tSin = sqrt(1.0 - tCos*tCos);
-	T const theta = atan2(tSin, tCos);
+	T const tSin = T(std::sqrt(1.0 - tCos*tCos));
+	T const theta = T(std::atan2(tSin, tCos));
 
 	T const invSin = 1/tSin;
-	T const t1 = sin((1.0 - alpha)*theta) * invSin;
-	T const t2 = sin(alpha*theta) * invSin;
+	T const t1 = T(std::sin((1.0 - alpha)*theta)) * invSin;
+	T const t2 = T(std::sin(alpha*theta)) * invSin;
 
 	return t1*q0 + t2*q1;
 

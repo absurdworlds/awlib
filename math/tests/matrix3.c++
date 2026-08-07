@@ -1,7 +1,9 @@
 #include <aw/test/test.h>
 #include <aw/math/matrix3.h>
 #include <aw/math/matrix_compare.h>
+#include <aw/math/vector_compare.h>
 #include <aw/utility/to_string/math/matrix.h>
+#include <aw/utility/to_string/math/vector.h>
 
 #include <algorithm>
 
@@ -24,6 +26,39 @@ Test(matrix3_pyr) {
 
 	TestEqual(pyr1, pyr2);
 };
+
+Test(matrix3_scale)
+{
+	auto const rot = matrix_from_euler( vector3d<radians<double>>{
+		radians<double>{0.4}, radians<double>{0.3}, radians<double>{0.2} } );
+
+	vector3d<double> const scl{ 2, 3, 4 };
+
+	auto scaled = rot;
+	for (size_t i = 0; i < 3; ++i)
+		for (size_t j = 0; j < 3; ++j)
+			scaled.get(i, j) *= scl[i];
+
+	Checks {
+		TestEqual( scale_positive(scaled), scl );
+		TestEqual( scale(scaled), scl );
+	}
+
+	Checks {
+		// a pure rotation carries no scale
+		TestEqual( scale_positive(rot), vector3d<double>{1, 1, 1} );
+	}
+
+	Checks {
+		// a negative determinant is charged to the X axis
+		auto mirrored = rot;
+		for (size_t j = 0; j < 3; ++j)
+			mirrored.get(0, j) = -mirrored.get(0, j);
+
+		TestEqual( scale(mirrored),          vector3d<double>{-1, 1, 1} );
+		TestEqual( scale_positive(mirrored), vector3d<double>{ 1, 1, 1} );
+	}
+}
 
 Test(matrix3_rotation)
 {

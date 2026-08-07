@@ -56,6 +56,36 @@ Test(shift_multiple2) {
 	}
 }
 
+Test(shift_container_one) {
+	std::vector<std::string> strs {"A", "B", "C", "D"};
+
+	auto vec1 = strs;
+	shift(vec1, 0, 3);
+
+	auto vec2 = vec1;
+	shift(vec2, 2, 1);
+
+	Checks {
+		TestEqual(vec1, decltype(vec1){ "B", "C", "D", "A" });
+		TestEqual(vec2, decltype(vec2){ "B", "D", "C", "A" });
+	}
+}
+
+Test(shift_container_multiple) {
+	std::vector<std::string> strs {"A", "B", "C", "D"};
+
+	auto vec1 = strs;
+	shift(vec1, 0, 3, 2);
+
+	auto vec2 = vec1;
+	shift(vec2, 2, 1, 2);
+
+	Checks {
+		TestEqual(vec1, decltype(vec1){ "C", "D", "A", "B" });
+		TestEqual(vec2, decltype(vec2){ "C", "A", "B", "D" });
+	}
+}
+
 Test(shift_identity) {
 	std::vector<std::string> strs {"A", "B", "C"};
 	string_view delim{"-"};
@@ -66,9 +96,13 @@ Test(shift_identity) {
 	auto vec2 = vec1;
 	shift(vec2.begin(), vec2.end(), vec2.begin());
 
+	auto vec3 = vec2;
+	shift(vec3, 1, 1);
+
 	Checks {
 		TestEqual(vec1, strs);
 		TestEqual(vec2, strs);
+		TestEqual(vec3, strs);
 	}
 }
 } // namespace aw

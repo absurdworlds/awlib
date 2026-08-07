@@ -12,6 +12,7 @@ aw_add_test(test_types
     char_buffer.c++
     string_view.c++ array_view.c++
     tmpflag.c++
+    reinterpret.c++
 )
 
 target_link_libraries(test_types

@@ -1,6 +1,8 @@
+#include <memory>
 #include <stdexcept>
 #include <aw/types/variant.h>
 #include <aw/test/test.h>
+#include <aw/test/helpers/copy_move_tracker.h>
 
 TestFile( "aw::variant" );
 
@@ -18,6 +20,34 @@ Test(variant_basic_get) {
 
 		TestAssert(!var1.get<int>());
 		TestAssert(!var1.get<std::string>());
+	}
+}
+
+Test(variant_try_get) {
+	using namespace std::string_literals;
+	aw::variant<int, float, std::string> var1;
+
+	Checks {
+		// empty variant falls back to the default
+		TestEqual(var1.try_get(42), 42);
+		TestEqual(var1.try_get("fallback"s), "fallback"s);
+
+		// type matches: value is returned
+		var1.set(100);
+		TestEqual(var1.try_get(42), 100);
+
+		// type doesn't match: default is returned
+		TestEqual(var1.try_get(1.01f), 1.01f);
+		TestEqual(var1.try_get("fallback"s), "fallback"s);
+
+		var1.set("A string."s);
+		TestEqual(var1.try_get("fallback"s), "A string."s);
+		TestEqual(var1.try_get(42), 42);
+
+		// callable on a const variant
+		const auto& cvar = var1;
+		TestEqual(cvar.try_get("fallback"s), "A string."s);
+		TestEqual(cvar.try_get(42), 42);
 	}
 }
 
@@ -109,6 +139,84 @@ Test(variant_basic_move) {
 	Checks {
 		var2 = std::move(var1);
 		TestEqual(*var2.get<std::string>(), "Test string!"s);
+		TestAssert(var1.empty());
+	}
+}
+
+using tracker = aw::test::copy_move_tracker<std::string>;
+
+Test(variant_move_does_not_copy) {
+	using namespace std::string_literals;
+	aw::variant<int, tracker> var1{ tracker{"Test string!"s} };
+	aw::variant<int, tracker> var2;
+
+	Preconditions {
+		TestEqual(var1.get<tracker>()->n_copies, 0u);
+		TestAssert(var2.empty());
+	}
+
+	// target is empty: value is constructed in place
+	Checks {
+		var2 = std::move(var1);
+		TestAssert(!var2.empty());
+		TestEqual(var2.get<tracker>()->value, "Test string!"s);
+		TestEqual(var2.get<tracker>()->n_copies, 0u);
+		TestAssert(var1.empty());
+	}
+
+	// target already holds the same type: value is assigned
+	Checks {
+		var1.set(tracker{"Tost string!"s});
+		var2 = std::move(var1);
+		TestAssert(!var2.empty());
+		TestEqual(var2.get<tracker>()->value, "Tost string!"s);
+		TestEqual(var2.get<tracker>()->n_copies, 0u);
+		TestAssert(var1.empty());
+	}
+}
+
+Test(variant_move_only_value) {
+	aw::variant<int, std::unique_ptr<int>> var1{ std::make_unique<int>(42) };
+	aw::variant<int, std::unique_ptr<int>> var2;
+
+	Preconditions {
+		TestEqual(**var1.get<std::unique_ptr<int>>(), 42);
+		TestAssert(var2.empty());
+	}
+
+	// target is empty: value is constructed in place
+	Checks {
+		var2 = std::move(var1);
+		TestAssert(!var2.empty());
+		TestEqual(**var2.get<std::unique_ptr<int>>(), 42);
+		TestAssert(var1.empty());
+	}
+
+	// target already holds the same type: value is assigned
+	Checks {
+		var1.set(std::make_unique<int>(13));
+		var2 = std::move(var1);
+		TestAssert(!var2.empty());
+		TestEqual(**var2.get<std::unique_ptr<int>>(), 13);
+		TestAssert(var1.empty());
+	}
+}
+
+Test(variant_move_subset_does_not_copy) {
+	using namespace std::string_literals;
+	aw::variant<int,        tracker> var1{ tracker{"Test string!"s} };
+	aw::variant<int, float, tracker> var2;
+
+	Preconditions {
+		TestEqual(var1.get<tracker>()->n_copies, 0u);
+		TestAssert(var2.empty());
+	}
+
+	Checks {
+		var2 = std::move(var1);
+		TestAssert(!var2.empty());
+		TestEqual(var2.get<tracker>()->value, "Test string!"s);
+		TestEqual(var2.get<tracker>()->n_copies, 0u);
 		TestAssert(var1.empty());
 	}
 }

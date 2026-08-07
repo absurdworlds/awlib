@@ -18,7 +18,7 @@ namespace aw {
  * Copy raw sequence of bytes into an object of type T.
  */
 template<typename T>
-T& copy_from_memory(T&& out, void const* memory)
+T& copy_from_memory(T& out, void const* memory)
 {
 	static_assert(is_trivially_copyable<remove_reference<T>>,
 	              "Output type must be trivially copyable!");
@@ -33,7 +33,7 @@ void* copy_to_memory(T const& in, void* memory)
 {
 	static_assert(is_trivially_copyable<T>,
 	              "Input type must be trivially copyable!");
-	std::memcpy(memory, in, sizeof(T));
+	std::memcpy(memory, &in, sizeof(T));
 	return memory;
 }
 
@@ -90,7 +90,7 @@ template<typename Output>
 Output reinterpret_memory(void const* in)
 {
 	Output out;
-	copy_from_memory(&out, in);
+	copy_from_memory(out, in);
 	return out;
 }
 } // namespace aw

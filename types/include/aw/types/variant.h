@@ -225,7 +225,7 @@ public:
 	template<typename T>
 	T try_get(T _default) const
 	{
-		T* ptr = get<T>();
+		T const* ptr = get<T>();
 		if (!ptr)
 			return _default;
 		return *ptr;
@@ -377,7 +377,7 @@ private:
 	template<typename Variant>
 	void move_from(Variant&& other)
 	{
-		using Visitor = _impl::variant_copy_assign_visitor<variant>;
+		using Visitor = _impl::variant_move_assign_visitor<variant>;
 		if (other.empty()) {
 			reset();
 		} else {

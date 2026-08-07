@@ -146,17 +146,17 @@ struct buffered_file {
 	/*!
 	 * Read specified number of bytes from file to buffer
 	 */
-	intmax_t read(char* buffer, uintmax_t count)
+	intmax_t read(char* buffer, size_t count)
 	{
-		return std::fread(buffer, 1, long(count), _file);
+		return std::fread(buffer, 1, count, _file);
 	}
 
 	/*!
 	 * Write specified number of bytes to file from buffer.
 	 */
-	intmax_t write(char const* buffer, uintmax_t count)
+	intmax_t write(char const* buffer, size_t count)
 	{
-		return std::fwrite(buffer, 1, long(count), _file);
+		return std::fwrite(buffer, 1, count, _file);
 	}
 
 	/*! Set pointer position */

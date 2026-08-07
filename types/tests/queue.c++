@@ -1,9 +1,11 @@
 #include <deque>
+#include <memory_resource>
 #include <aw/types/containers/queue.h>
 
 #include <aw/utility/ranges/value_range.h>
 #include <aw/utility/ranges/reverse.h>
 #include <aw/test/test.h>
+#include <aw/test/helpers/counted.h>
 
 // TODO: test exception-safety
 
@@ -112,6 +114,55 @@ Test(queue_push_pop2) {
 
 	Checks {
 		TestAssert(std::equal(k.begin(), k.end(), d.begin(), d.end()));
+	}
+}
+
+Test(queue_move_with_allocator) {
+	using test::counted;
+	using alloc_type = std::pmr::polymorphic_allocator<counted>;
+	using queue_type = queue<counted, alloc_type>;
+
+	std::pmr::monotonic_buffer_resource memory, elsewhere;
+
+	alloc_type const source  { &memory };
+	alloc_type const equal   { &memory };     // compares equal to source
+	alloc_type const unequal { &elsewhere };  // compares unequal
+
+	Checks {
+		counted::live = 0;
+
+		queue_type src{ source };
+		src.push_back(counted{ counted::payload('a') });
+		src.push_back(counted{ counted::payload('b') });
+
+		queue_type dst{ std::move(src), equal };
+
+		TestEqual( dst.size(), size_t(2) );
+		TestEqual( dst[0].value, counted::payload('a') );
+		TestEqual( dst[1].value, counted::payload('b') );
+	}
+
+	Checks {
+		TestEqual( counted::live, 0 );
+	}
+
+	// must still work if allocators are unequal
+	Checks {
+		counted::live = 0;
+
+		queue_type src{ source };
+		src.push_back(counted{ counted::payload('a') });
+		src.push_back(counted{ counted::payload('b') });
+
+		queue_type dst{ std::move(src), unequal };
+
+		TestEqual( dst.size(), size_t(2) );
+		TestEqual( dst[0].value, counted::payload('a') );
+		TestEqual( dst[1].value, counted::payload('b') );
+	}
+
+	Postconditions {
+		TestEqual( counted::live, 0 );
 	}
 }
 

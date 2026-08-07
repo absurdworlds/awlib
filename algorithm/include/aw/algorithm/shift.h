@@ -27,7 +27,7 @@ void shift(Iterator from, Iterator to, size_t n = 1)
 template <typename Container>
 void shift(Container& c, size_t from, size_t to, size_t n = 1)
 {
-	shift(c.begin() + from, c.end() + to, n);
+	shift(c.begin() + from, c.begin() + to, n);
 }
 } // namespace aw
 

@@ -124,9 +124,9 @@ vector3d<T> scale(matrix3<T> const& mat)
 
 	T const det = determinant(mat);
 
-	T const scaleX = det > 0 ? row1[0].length() : -row1[0].length();
-	T const scaleY = row2[1].length();
-	T const scaleZ = row3[2].length();
+	T const scaleX = det > 0 ? row1.length() : -row1.length();
+	T const scaleY = row2.length();
+	T const scaleZ = row3.length();
 
 	return {scaleX, scaleY, scaleZ};
 }
@@ -139,9 +139,9 @@ vector3d<T> scale_positive(matrix3<T> const& mat)
 	auto const row2 = row<1>(mat);
 	auto const row3 = row<2>(mat);
 
-	T const scaleX = row1[0].length();
-	T const scaleY = row2[1].length();
-	T const scaleZ = row3[2].length();
+	T const scaleX = row1.length();
+	T const scaleY = row2.length();
+	T const scaleZ = row3.length();
 
 	return { scaleX, scaleY, scaleZ };
 }
@@ -152,10 +152,10 @@ quaternion<T> to_quaternion(matrix3<T> const& mat, T det)
 {
 	quaternion<T> quat = {};
 
-	quat.w = sqrt(max(0, det + get<0,0>(mat) + get<1,1>(mat) + get<2,2>(mat)))/2;
-	quat.x = sqrt(max(0, det + get<0,0>(mat) - get<1,1>(mat) - get<2,2>(mat)))/2;
-	quat.y = sqrt(max(0, det - get<0,0>(mat) + get<1,1>(mat) - get<2,2>(mat)))/2;
-	quat.z = sqrt(max(0, det - get<0,0>(mat) - get<1,1>(mat) + get<2,2>(mat)))/2;
+	quat.w = sqrt(std::max(T{0}, det + get<0,0>(mat) + get<1,1>(mat) + get<2,2>(mat)))/2;
+	quat.x = sqrt(std::max(T{0}, det + get<0,0>(mat) - get<1,1>(mat) - get<2,2>(mat)))/2;
+	quat.y = sqrt(std::max(T{0}, det - get<0,0>(mat) + get<1,1>(mat) - get<2,2>(mat)))/2;
+	quat.z = sqrt(std::max(T{0}, det - get<0,0>(mat) - get<1,1>(mat) + get<2,2>(mat)))/2;
 
 	quat.x = std::copysign(quat.x, get<2,1>(mat) - get<1,2>(mat));
 	quat.y = std::copysign(quat.y, get<0,2>(mat) - get<2,0>(mat));
@@ -177,7 +177,8 @@ quaternion<T> to_quaternion(matrix3<T> const& mat)
 template<typename T>
 quaternion<T> as_quaternion_unscaled(matrix3<T> const& mat)
 {
-	return _impl::to_quaternion( mat, T(0) );
+	// an unscaled rotation matrix has determinant 1
+	return _impl::to_quaternion( mat, T(1) );
 }
 } // namespace math
 } // namespace aw

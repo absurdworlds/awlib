@@ -248,7 +248,7 @@ public:
 	 * If `!(alloc == q.get_allocator())`, then operation is O(n).
 	 */
 	queue(queue&& q, Allocator const& alloc) noexcept
-		: Base(q, alloc)
+		: Base(std::move(q), alloc)
 	{
 		if (alloc != q.get_allocator()) {
 			// If memory can't be managed with new allocator,

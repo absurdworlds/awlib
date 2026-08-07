@@ -28,7 +28,8 @@ struct any_buffer {
 	template<typename T>
 	void destroy()
 	{
-		static_cast<T*>(buffer)->~T();
+		using type = std::remove_cvref_t<T>;
+		ptr<type>()->~type();
 	}
 
 	template<typename T>
