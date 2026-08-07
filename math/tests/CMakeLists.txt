@@ -4,8 +4,7 @@ aw_add_test(test_math
 	bitmath.c++
 	angle.c++
 	orientation.c++
-	#exclude for now, it doesn't work
-	#quaternion.c++
+	quaternion.c++
 	vector.c++
 	matrix.c++
 	matrix3.c++
