@@ -124,9 +124,9 @@ vector3d<T> scale(matrix3<T> const& mat)
 
 	T const det = determinant(mat);
 
-	T const scaleX = det > 0 ? row1[0].length() : -row1[0].length();
-	T const scaleY = row2[1].length();
-	T const scaleZ = row3[2].length();
+	T const scaleX = det > 0 ? row1.length() : -row1.length();
+	T const scaleY = row2.length();
+	T const scaleZ = row3.length();
 
 	return {scaleX, scaleY, scaleZ};
 }
@@ -139,9 +139,9 @@ vector3d<T> scale_positive(matrix3<T> const& mat)
 	auto const row2 = row<1>(mat);
 	auto const row3 = row<2>(mat);
 
-	T const scaleX = row1[0].length();
-	T const scaleY = row2[1].length();
-	T const scaleZ = row3[2].length();
+	T const scaleX = row1.length();
+	T const scaleY = row2.length();
+	T const scaleZ = row3.length();
 
 	return { scaleX, scaleY, scaleZ };
 }

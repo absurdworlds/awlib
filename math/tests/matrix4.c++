@@ -108,6 +108,11 @@ Test(matrix4_rotation_scaled) {
 	Checks {
 		TestEqual( rotation(mat, scale), euler );
 	}
+
+	Checks {
+		// the one-argument overload has to work out the scale itself
+		TestEqual( rotation(mat), euler );
+	}
 }
 } // namespace math
 } // namespace aw
