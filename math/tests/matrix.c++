@@ -65,6 +65,38 @@ Test(matrix_inverse) {
 	}
 };
 
+//! scalar and unary operators, on a matrix that is not square
+Test(matrix_scalar_ops) {
+	matrix<int,2,3> const A{
+		1, 2, 3,
+		4, 5, 6,
+	};
+
+	matrix<int,2,3> const twice{
+		2, 4,  6,
+		8, 10, 12,
+	};
+
+	matrix<int,2,3> const negated{
+		-1, -2, -3,
+		-4, -5, -6,
+	};
+
+	Checks {
+		TestEqual( A * 2, twice );
+		TestEqual( 2 * A, twice );
+	}
+
+	Checks {
+		TestEqual( twice / 2, A );
+	}
+
+	Checks {
+		TestEqual( -A, negated );
+		TestEqual( +A, A );
+	}
+}
+
 Test(matrix_product) {
 	matrix<int,4,2> _4x2{
 		1,3,
