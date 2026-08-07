@@ -154,7 +154,7 @@ public:
 	flat_map(Iterator first, Iterator last,
 	         Compare const& comp = Compare(),
 	         Allocator const& alloc = Allocator())
-		: base(first, last, alloc), _key_comp(comp._key_comp)
+		: base(first, last, alloc), _key_comp(comp)
 	{
 		normalize();
 	}
@@ -481,7 +481,6 @@ public:
 	std::pair<iterator,bool> insert_or_assign(key_type const& key, M&& obj)
 	{
 		iterator pos = lower_bound(key);
-		bool inserted = false;
 		if (pos == end()) {
 			base.push_back( value_type{key, std::forward<M>(obj)} );
 			return {end() - 1, true};
@@ -492,7 +491,7 @@ public:
 			return {pos, true};
 		}
 
-		*pos->second = std::forward<M>(obj);
+		pos->second = std::forward<M>(obj);
 		return {pos, false};
 	}
 
