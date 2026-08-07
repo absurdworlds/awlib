@@ -22,6 +22,20 @@ struct axis_angle {
 	T angle;
 };
 
+/*!
+ * Unit quaternion representing a rotation in 3D space.
+ *
+ * Conventions, chosen to match `aw::math::matrix3`:
+ *
+ *  - Rotations are right-handed and act on column vectors,
+ *    applied as `v' = q·v·conjugate(q)` (see `rotate`).
+ *  - Multiplication is the Hamilton product, so `a * b` denotes
+ *    the rotation `b` followed by the rotation `a`, in the same
+ *    order as the equivalent matrix product `A * B`.
+ *  - Euler angles are `pitch` around the X axis, `yaw` around the
+ *    Y axis and `roll` around the Z axis, in radians, composed as
+ *    `roll * yaw * pitch` — the order used by `matrix_from_euler`.
+ */
 template<typename T>
 struct quaternion {
 	/*! Default constructor
