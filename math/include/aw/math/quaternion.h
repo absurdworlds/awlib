@@ -132,14 +132,16 @@ struct quaternion {
 		return {-w, -x, -y, -z};
 	}
 
-	//! Quaternion multiplication
+	/*! Quaternion (Hamilton) multiplication
+	 * \brief Rotate by \a other first, then by this quaternion.
+	 */
 	quaternion<T>& operator*=(quaternion<T> const& other)
 	{
 		auto old_x = x, old_y = y, old_z = z, old_w = w;
 
-		x = (old_x * other.w) + (old_w * other.x) + (old_z * other.y) - (old_y * other.z);
-		y = (old_y * other.w) - (old_z * other.x) + (old_w * other.y) + (old_x * other.z);
-		z = (old_z * other.w) + (old_y * other.x) - (old_x * other.y) + (old_w * other.z);
+		x = (old_w * other.x) + (old_x * other.w) + (old_y * other.z) - (old_z * other.y);
+		y = (old_w * other.y) - (old_x * other.z) + (old_y * other.w) + (old_z * other.x);
+		z = (old_w * other.z) + (old_x * other.y) - (old_y * other.x) + (old_z * other.w);
 		w = (old_w * other.w) - (old_x * other.x) - (old_y * other.y) - (old_z * other.z);
 
 		return *this;
