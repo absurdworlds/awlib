@@ -152,10 +152,10 @@ quaternion<T> to_quaternion(matrix3<T> const& mat, T det)
 {
 	quaternion<T> quat = {};
 
-	quat.w = sqrt(max(0, det + get<0,0>(mat) + get<1,1>(mat) + get<2,2>(mat)))/2;
-	quat.x = sqrt(max(0, det + get<0,0>(mat) - get<1,1>(mat) - get<2,2>(mat)))/2;
-	quat.y = sqrt(max(0, det - get<0,0>(mat) + get<1,1>(mat) - get<2,2>(mat)))/2;
-	quat.z = sqrt(max(0, det - get<0,0>(mat) - get<1,1>(mat) + get<2,2>(mat)))/2;
+	quat.w = sqrt(std::max(T{0}, det + get<0,0>(mat) + get<1,1>(mat) + get<2,2>(mat)))/2;
+	quat.x = sqrt(std::max(T{0}, det + get<0,0>(mat) - get<1,1>(mat) - get<2,2>(mat)))/2;
+	quat.y = sqrt(std::max(T{0}, det - get<0,0>(mat) + get<1,1>(mat) - get<2,2>(mat)))/2;
+	quat.z = sqrt(std::max(T{0}, det - get<0,0>(mat) - get<1,1>(mat) + get<2,2>(mat)))/2;
 
 	quat.x = std::copysign(quat.x, get<2,1>(mat) - get<1,2>(mat));
 	quat.y = std::copysign(quat.y, get<0,2>(mat) - get<2,0>(mat));
