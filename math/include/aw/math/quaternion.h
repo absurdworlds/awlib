@@ -159,6 +159,16 @@ struct quaternion {
 		return *this;
 	}
 
+	//! Set quaternion from individual components
+	quaternion<T>& set(T const w, T const x, T const y, T const z)
+	{
+		this->w = w;
+		this->x = x;
+		this->y = y;
+		this->z = z;
+		return *this;
+	}
+
 	//! Set quaternion from euler angles
 	quaternion<T>& set_euler(T pitch, T yaw, T roll)
 	{
@@ -179,9 +189,9 @@ struct quaternion {
 	{
 		angle /= T(2);
 
-		vector3d<T> const v = axis.normalized() * sin(angle);
+		vector3d<T> const v = math::normalize(axis) * T(std::sin(angle));
 
-		set(cos(angle), v.x(), v.y(), v.z());
+		set(T(std::cos(angle)), v.x(), v.y(), v.z());
 
 		return *this;
 	}
@@ -215,7 +225,7 @@ struct quaternion {
 	}
 
 	//! Get quaternion in axis-angle representation
-	axis_angle<T> to_axis_angle()
+	axis_angle<T> to_axis_angle() const
 	{
 		vector3d<T> axis = {};
 		T angle = {};
@@ -225,18 +235,18 @@ struct quaternion {
 		// T tSin = x*x + y*y + z*z;
 
 		if (tSin > T{0}) {
-			tSin = T(sqrt(tSin));
+			tSin = T(math::sqrt(tSin));
 			T invSin = 1 / tSin;
 
-			angle = T( 2 * atan2(tSin, tCos) );
-			axis.x = x * invSin;
-			axis.y = y * invSin;
-			axis.z = z * invSin;
+			angle = T( 2 * std::atan2(tSin, tCos) );
+			axis.x() = x * invSin;
+			axis.y() = y * invSin;
+			axis.z() = z * invSin;
 		} else {
-			axis.x = T{0};
-			axis.y = T{0};
-			axis.z = T{-1};
-			angle  = T{0};
+			axis.x() = T{0};
+			axis.y() = T{0};
+			axis.z() = T{-1};
+			angle    = T{0};
 		}
 
 		return {axis, angle};
@@ -310,7 +320,7 @@ quaternion<T> normalize(quaternion<T> const& quat)
 
 //! Linear interpolation of quaternion
 template <typename T>
-quaternion<T>& lerp(quaternion<T> const& q0, quaternion<T> const& q1, f64 t)
+quaternion<T> lerp(quaternion<T> const& q0, quaternion<T> const& q1, f64 t)
 {
 	return (1-t)*q0 + t*q1;
 }
@@ -322,7 +332,7 @@ quaternion<T> nlerp(quaternion<T> const& q0, quaternion<T> const& q1, f64 t)
 }
 
 template <typename T>
-quaternion<T> slerp(quaternion<T> const& q0, quaternion<T> const& q1,
+quaternion<T> slerp(quaternion<T> q0, quaternion<T> const& q1,
 	f64 alpha, bool shortest)
 {
 	T tCos = q0.dot(q1);
@@ -333,17 +343,17 @@ quaternion<T> slerp(quaternion<T> const& q0, quaternion<T> const& q1,
 		tCos = -tCos;
 	}
 
-	static T const epsilon = T(0.005);
+	constexpr T epsilon = T(0.005);
 	if(tCos > (1 - epsilon)) {
 		return nlerp(q0, q1, alpha);
 	}
 
-	T const tSin = sqrt(1.0 - tCos*tCos);
-	T const theta = atan2(tSin, tCos);
+	T const tSin = T(std::sqrt(1.0 - tCos*tCos));
+	T const theta = T(std::atan2(tSin, tCos));
 
 	T const invSin = 1/tSin;
-	T const t1 = sin((1.0 - alpha)*theta) * invSin;
-	T const t2 = sin(alpha*theta) * invSin;
+	T const t1 = T(std::sin((1.0 - alpha)*theta)) * invSin;
+	T const t2 = T(std::sin(alpha*theta)) * invSin;
 
 	return t1*q0 + t2*q1;
 
