@@ -201,30 +201,30 @@ struct quaternion {
 		return *this;
 	}
 
-	//! Get quaternion as euler angles
-	vector3d<T> to_euler()
+	/*! Get quaternion as euler angles (in radians)
+	 * \return Vector holding the rotation around the X axis (pitch)
+	 *         in its x component, around Y (yaw) in y, and around Z
+	 *         (roll) in z — the layout accepted by `matrix_from_euler`.
+	 */
+	vector3d<T> to_euler() const
 	{
+		/*
+		 * Recovering (roll ± pitch) instead of each angle on its own
+		 * keeps the extraction well-conditioned at yaw = ±90°, where
+		 * the two are no longer individually defined (gimbal lock).
+		 */
+		T const sum  = T( 2 * std::atan2(x + z, w - y) ); // roll + pitch
+		T const diff = T( 2 * std::atan2(z - x, w + y) ); // roll − pitch
+
+		// |cos(yaw/2) ± sin(yaw/2)|, whose ratio is tan(π/4 + yaw/2)
+		T const cs = T( std::hypot(w + y, z - x) );
+		T const cd = T( std::hypot(w - y, x + z) );
+
 		vector3d<T> euler = {};
 
-		// singularity test
-		T const xyzw = x*y + z*w;
-		if ( math::equals(xyzw, 0.5f) ) { // north pole
-			euler[axis::x] = pi/2;
-			euler[axis::y] = 2 * atan2(x, w);
-			euler[axis::z] = 0;
-		} else if ( math::equals(xyzw, -0.5f) ) { // south pole
-			euler[axis::x] = -pi/2;
-			euler[axis::y] = -2 * atan2(x, w);
-			euler[axis::z] = 0;
-		} else {
-			T const sX = x * x;
-			T const sY = y * y;
-			T const sZ = z * z;
-
-			euler[axis::x] = asin(2*xyzw);
-			euler[axis::y] = atan2(2*(x*w - y*z), 1 - 2*sX - 2*sZ);
-			euler[axis::z] = atan2(2*(y*w - x*z), 1 - 2*sY - 2*sZ);
-		}
+		euler[axis::x] = (sum - diff) / T(2);
+		euler[axis::y] = T( 2 * std::atan2(cs, cd) - pi/2 );
+		euler[axis::z] = (sum + diff) / T(2);
 
 		return euler;
 	}
