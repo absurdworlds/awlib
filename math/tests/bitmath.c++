@@ -50,4 +50,35 @@ Test(clz) {
 	TestEqual( leading_zeros(u32(0b1000)), 28 );
 	TestEqual( leading_zeros(u64(0b1000)), 60 );
 }
+
+Test(clz_ctz_zero) {
+	TestEqual( leading_zeros(u32(0)),  32 );
+	TestEqual( trailing_zeros(u32(0)), 32 );
+	TestEqual( leading_zeros(u64(0)),  64 );
+	TestEqual( trailing_zeros(u64(0)), 64 );
+}
+
+Test(clz_ctz_edges) {
+	TestEqual( leading_zeros(u32(0xffffffff)),  0 );
+	TestEqual( trailing_zeros(u32(0xffffffff)), 0 );
+	TestEqual( leading_zeros(u64(0xffffffff'ffffffff)),  0 );
+	TestEqual( trailing_zeros(u64(0xffffffff'ffffffff)), 0 );
+
+	TestEqual( leading_zeros(u32(1)),           31 );
+	TestEqual( trailing_zeros(u32(0x80000000)), 31 );
+	TestEqual( leading_zeros(u64(1)),                    63 );
+	TestEqual( trailing_zeros(u64(0x80000000'00000000)), 63 );
+}
+
+Test(clz_ctz_sweep) {
+	for (size_t i = 0; i < 32; ++i) {
+		TestEqual( leading_zeros(u32(u32(1) << i)),  31 - i );
+		TestEqual( trailing_zeros(u32(u32(1) << i)), i );
+	}
+
+	for (size_t i = 0; i < 64; ++i) {
+		TestEqual( leading_zeros(u64(u64(1) << i)),  63 - i );
+		TestEqual( trailing_zeros(u64(u64(1) << i)), i );
+	}
+}
 } // namespace aw::math
