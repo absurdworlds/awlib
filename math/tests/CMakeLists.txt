@@ -1,6 +1,7 @@
 aw_add_test(test_math
 	SOURCES
 	functions.c++
+	float.c++
 	numeric.c++
 	angle.c++
 	orientation.c++
