@@ -38,6 +38,25 @@ Test(count_trailing_zeros)
 	};
 }
 
+Test(count_single_bit)
+{
+	// For a value with one bit set, the zeros on either side
+	// add up to one less than the width of the type
+	Checks {
+		for (size_t i = 0; i < 32; ++i) {
+			TestEqual(leading_zeros(u32(1) << i), 31 - i);
+			TestEqual(trailing_zeros(u32(1) << i), i);
+		}
+	};
+
+	Checks {
+		for (size_t i = 0; i < 64; ++i) {
+			TestEqual(leading_zeros(u64(1) << i), 63 - i);
+			TestEqual(trailing_zeros(u64(1) << i), i);
+		}
+	};
+}
+
 Test(count_aliases)
 {
 	Checks {

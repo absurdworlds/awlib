@@ -16,17 +16,15 @@
 namespace aw::bit {
 inline size_t leading_zeros(u32 x)
 {
-	size_t n = 0;
-
-#if AW_EXT(__builtin_clz)
-	if (x != 0)
-		n = __builtin_clz(x);
-	else
-		n = 32;
-#else
+	// Handled outside of the #if, so that both implementations agree
 	if (x == 0)
 		return 32;
 
+	size_t n = 0;
+
+#if AW_EXT(__builtin_clz)
+	n = __builtin_clz(x);
+#else
 	if (x <= 0x0000ffff) {
 		n +=  16;
 		x <<= 16;
@@ -52,12 +50,12 @@ inline size_t leading_zeros(u32 x)
 
 inline size_t leading_zeros(u64 x)
 {
+	if (x == 0)
+		return 64;
+
 	size_t n = 0;
 #if AW_EXT(__builtin_clzll)
-	if (x != 0)
-		n = __builtin_clzll(x);
-	else
-		n = 64;
+	n = __builtin_clzll(x);
 #else
 	if (x <= 0x00000000'ffffffff) {
 		n +=  32;
@@ -73,17 +71,14 @@ inline size_t leading_zeros(u64 x)
 
 inline size_t trailing_zeros(u32 x)
 {
-	size_t n = 0;
-
-#if AW_EXT(__builtin_ctz)
-	if (x != 0)
-		n = __builtin_ctz(x);
-	else
-		n = 32;
-#else
 	if (x == 0)
 		return 32;
 
+	size_t n = 0;
+
+#if AW_EXT(__builtin_ctz)
+	n = __builtin_ctz(x);
+#else
 	if (x & 0x1)
 		return 0;
 
@@ -112,13 +107,13 @@ inline size_t trailing_zeros(u32 x)
 
 inline size_t trailing_zeros(u64 x)
 {
+	if (x == 0)
+		return 64;
+
 	size_t n = 0;
 
 #if AW_EXT(__builtin_ctzll)
-	if (x != 0)
-		n = __builtin_ctzll(x);
-	else
-		n = 64;
+	n = __builtin_ctzll(x);
 #else
 	if (x & 0x1)
 		return 0;
