@@ -10,6 +10,7 @@
 #define aw_bit_mask_h
 #include <aw/types/types.h>
 
+#include <cassert>
 #include <limits>
 namespace aw::bit {
 //! Number of radix digits in type \a T
@@ -19,11 +20,12 @@ constexpr size_t num_digits = std::numeric_limits<T>::digits;
 /*!
  * Value with Nth bit set and other bits cleared,
  * counting from 0.
- * (0 is lsb, 31 is msb)
+ * (0 is lsb, 63 is msb on a 64-bit uintmax_t)
  */
 template<typename Int = uintmax_t>
 constexpr Int bit(size_t N)
 {
+	assert(N < num_digits<Int>);
 	return Int(1) << N;
 }
 

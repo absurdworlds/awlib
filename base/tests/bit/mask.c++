@@ -8,9 +8,12 @@ Test(mask_single_bit)
 {
 	Checks {
 		TestEqual(bit(0), uintmax_t(1));
+		TestEqual(bit(1), uintmax_t(2));
 		TestEqual(bit(4), uintmax_t(0b10000));
+		TestEqual(bit(30), uintmax_t(1) << 30);
 		// Bits above the width of int are reachable
 		TestEqual(bit(31), uintmax_t(1) << 31);
+		TestEqual(bit(32), uintmax_t(1) << 32);
 		TestEqual(bit(63), uintmax_t(1) << 63);
 	};
 }

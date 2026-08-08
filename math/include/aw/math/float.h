@@ -9,6 +9,7 @@
  */
 #ifndef aw_math_float_h
 #define aw_math_float_h
+#include <aw/bit/mask.h>
 #include <aw/math/math.h>
 #include <aw/math/numeric.h>
 #include <aw/types/support/reinterpret.h>
@@ -38,7 +39,7 @@ struct float_traits<f64> {
 namespace _impl {
 //! Sign bit of the integer representation of a float
 template <typename U>
-constexpr U sign_mask = U(1) << (num_digits<U> - 1);
+constexpr U sign_mask = bit::bit<U>(num_digits<U> - 1);
 
 template <typename U>
 inline U ulps_diff(U a, U b)

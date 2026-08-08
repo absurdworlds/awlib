@@ -14,8 +14,7 @@
 #include <aw/bit/mask.h>
 #include <aw/math/math.h>
 #include <aw/math/numeric.h>
-namespace aw {
-namespace math {
+namespace aw::math {
 /*
  * The bit manipulation functions have moved into aw::bit,
  * everything below is kept only until the users are updated.
@@ -138,6 +137,5 @@ size_t ctz(T value)
 {
 	return aw::bit::trailing_zeros(value);
 }
-} //namespace math
-} //namespace aw
+} //namespace aw::math
 #endif //aw_math_bitwise_h
