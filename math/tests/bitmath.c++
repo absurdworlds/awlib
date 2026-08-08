@@ -22,6 +22,15 @@ Test(bits) {
 	TestEqual( set_bit(0b100000,4,1), 0b110000);
 };
 
+Test(bit) {
+	TestEqual( bit(0), uintmax_t(1) );
+	TestEqual( bit(1), uintmax_t(2) );
+	TestEqual( bit(30), uintmax_t(1) << 30 );
+	TestEqual( bit(31), uintmax_t(1) << 31 );
+	TestEqual( bit(32), uintmax_t(1) << 32 );
+	TestEqual( bit(63), uintmax_t(1) << 63 );
+}
+
 
 Test(mask) {
 	TestEqual( lower_mask<u64>(2), 0b11 );

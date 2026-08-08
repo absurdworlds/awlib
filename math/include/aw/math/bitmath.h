@@ -16,11 +16,14 @@ namespace math {
 /*!
  * Value with Nth bit set and other bits cleared,
  * counting from 0.
- * (0 is lsb, 31 is msb)
+ * (0 is lsb, 63 is msb on a 64-bit uintmax_t)
  */
-constexpr uintmax_t bit(size_t N)
+template<typename Uint = uintmax_t>
+constexpr Uint bit(size_t N)
 {
-	return 1 << N;
+	static_assert(std::is_unsigned_v<Uint>);
+	assert(N < std::numeric_limits<Uint>::digits);
+	return Uint(1) << N;
 }
 
 /*!
