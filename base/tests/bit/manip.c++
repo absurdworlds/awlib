@@ -44,8 +44,27 @@ Test(manip_rotate)
 		TestEqual(rotl(u32(0x80000001), 1), u32(0x00000003));
 		TestEqual(rotr(u32(0x00000003), 1), u32(0x80000001));
 		TestEqual(rotl(u8(0b1000'0001), 1), u8(0b0000'0011));
+		TestEqual(rotr(u8(0b1000'0001), 1), u8(0b1100'0000));
 		TestEqual(rotr(u64(1), 1), u64(1) << 63);
+		TestEqual(rotl(u64(0x80000000'00000001), 1), u64(0x00000000'00000003));
+		TestEqual(rotr(u64(0x80000000'00000001), 1), u64(0xc0000000'00000000));
+
+		// Rotating by zero leaves the value alone
 		TestEqual(rotl(u32(0x12345678), 0), u32(0x12345678));
+		TestEqual(rotr(u32(0x12345678), 0), u32(0x12345678));
+	};
+}
+
+
+/*!
+ * Rotating left by r and right by the bits that remain
+ * describe the same rotation
+ */
+Test(manip_rotate_round_trip)
+{
+	Checks {
+		for (size_t r = 1; r < 32; ++r)
+			TestEqual(rotl(u32(0xdeadbeef), r), rotr(u32(0xdeadbeef), 32 - r));
 	};
 }
 } // namespace aw::bit
