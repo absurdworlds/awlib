@@ -1,0 +1,16 @@
+@AWSTD_CONFIG_DEPENDENCY@
+include("${CMAKE_CURRENT_LIST_DIR}/awstdTargets.cmake")
+
+#
+# awstd needs awlib's <aw/config.h>, which is not a part of this package:
+# remember the directory it was found in when awstd was built. Set
+# AWSTD_AWLIB_INCLUDE_DIR before find_package(awstd) to override it.
+#
+if (NOT AWSTD_AWLIB_INCLUDE_DIR)
+	set(AWSTD_AWLIB_INCLUDE_DIR "@AWSTD_AWLIB_INCLUDE_DIR@")
+endif()
+
+if (AWSTD_AWLIB_INCLUDE_DIR)
+	set_property(TARGET awstd::awstd APPEND PROPERTY
+		INTERFACE_INCLUDE_DIRECTORIES "${AWSTD_AWLIB_INCLUDE_DIR}")
+endif()

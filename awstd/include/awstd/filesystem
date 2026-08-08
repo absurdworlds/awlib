@@ -6,9 +6,13 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef aw_utility_fallback_filesystem_h
-#define aw_utility_fallback_filesystem_h
-#include <_c++config>
+/*
+ * This header is reachable both as <awstd/filesystem> and as <filesystem>,
+ * when include/awstd is added to the include path (see Readme.md).
+ */
+#ifndef awstd_filesystem_h
+#define awstd_filesystem_h
+#include <awstd/C++/config.h>
 
 #ifdef AWSTD_MODULE_FS
 #define AW_FS_EXP AW_EXPORT
@@ -30,4 +34,4 @@ namespace filesystem {}
 #include "C++14/bits/fs/ops.h"
 #endif
 
-#endif//aw_utility_fallback_filesystem_h
+#endif//awstd_filesystem_h

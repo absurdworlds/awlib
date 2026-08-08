@@ -29,7 +29,7 @@ inline Iterator decode(Iterator input, Iterator end, code_point& cp)
 		cp = *(input++);
 		return input;
 	}
-	cp = -1;
+	cp = invalid;
 	return end;
 }
 }; // namespace utf32

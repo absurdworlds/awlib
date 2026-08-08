@@ -1,0 +1,36 @@
+name: awstd-build
+
+# awstd is built separately from the rest of awlib, with an older standard,
+# so it is of no interest to a push which does not touch it
+on:
+  push:
+    paths:
+      - 'awstd/**'
+      # awstd uses awlib's <aw/config.h> for platform detection
+      - 'awlib/include/aw/config.h'
+      - '.github/workflows/awstd.yaml'
+
+jobs:
+  awstd:
+    name: awstd (${{ matrix.os }}, C++${{ matrix.standard }})
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-22.04, windows-latest]
+        standard: [98, 14, 17]
+        exclude:
+          # MSVC has no way to select anything older than C++14
+          - os: windows-latest
+            standard: 98
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Configure
+        run: >
+          cmake -S awstd -B build
+          -DAWSTD_CXX_STANDARD=${{ matrix.standard }}
+      - name: Build
+        run: cmake --build build
+      - name: Test
+        run: ctest --test-dir build -C Debug --output-on-failure

@@ -10,6 +10,7 @@
 #define _aw_utf_
 #include <cassert>
 #include <cstddef>
+#include <iterator>
 #include <string>
 namespace aw {
 namespace unicode {

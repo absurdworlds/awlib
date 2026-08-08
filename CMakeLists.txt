@@ -95,5 +95,12 @@ if (AW_ENABLE_LUA)
 	add_subdirectory(lua)
 endif()
 
+# awstd provides fallbacks for older standards, so it is built separately,
+# with its own (much older) value of CMAKE_CXX_STANDARD.
+option(AW_ENABLE_AWSTD "Enable libawstd" OFF)
+if (AW_ENABLE_AWSTD)
+	add_subdirectory(awstd)
+endif()
+
 
 include (aw-export)

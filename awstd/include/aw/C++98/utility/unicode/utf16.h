@@ -40,11 +40,11 @@ template<typename Iterator> static
 inline Iterator encode(code_point cp, Iterator output)
 {
 	if (cp < 0x10000) {
-		*(output++) = cp;
+		*(output++) = char_type(cp);
 	} else {
 		cp -= 0x10000;
-		*(output++) = 0xDC00 + (cp >> 10);
-		*(output++) = 0xDC00 + (cp & 0x3FF);
+		*(output++) = char_type(0xD800 + (cp >> 10));
+		*(output++) = char_type(0xDC00 + (cp & 0x3FF));
 	}
 
 	return output;
@@ -53,16 +53,20 @@ inline Iterator encode(code_point cp, Iterator output)
 template<typename Iterator> static
 inline Iterator decode(Iterator input, Iterator end, code_point& cp)
 {
-	char_type first = *(input++);
+	assert(input != end);
+
+	char_type first = char_type(*(input++));
 	if (isFirstSurrogate(first)) {
 		if (input == end) {
-			cp = -1;
+			cp = invalid;
 			return input;
 		}
 
-		char_type second = *(input++);
-		if (!isSecondSurrogate(second))
-			return error(input);
+		char_type second = char_type(*(input++));
+		if (!isSecondSurrogate(second)) {
+			cp = invalid;
+			return input;
+		}
 
 		cp = ((first  & 0x3FF) << 10) +
 		      (second & 0x3FF) + 0x10000;
@@ -71,10 +75,10 @@ inline Iterator decode(Iterator input, Iterator end, code_point& cp)
 	}
 
 	if (isSecondSurrogate(first)) {
-		cp = -1;
+		cp = invalid;
 		return input;
 	}
-	
+
 	cp = first;
 	return input;
 }
