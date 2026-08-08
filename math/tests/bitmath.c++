@@ -81,4 +81,21 @@ Test(clz_ctz_sweep) {
 		TestEqual( trailing_zeros(u64(u64(1) << i)), i );
 	}
 }
+
+Test(rot) {
+	TestEqual( rotl(u8(0x81), 1), u8(0x03) );
+	TestEqual( rotr(u8(0x81), 1), u8(0xc0) );
+	TestEqual( rotl(u32(0x80000001), 1), u32(0x00000003) );
+	TestEqual( rotr(u32(0x80000001), 1), u32(0xc0000000) );
+	TestEqual( rotl(u64(0x80000000'00000001), 1), u64(0x00000000'00000003) );
+	TestEqual( rotr(u64(0x80000000'00000001), 1), u64(0xc0000000'00000000) );
+
+	// rotating by zero is the identity, and must not shift by the full width
+	TestEqual( rotl(u32(0x12345678), 0), u32(0x12345678) );
+	TestEqual( rotr(u32(0x12345678), 0), u32(0x12345678) );
+
+	// rotl(x, r) and rotr(x, digits - r) describe the same rotation
+	for (size_t r = 1; r < 32; ++r)
+		TestEqual( rotl(u32(0xdeadbeef), r), rotr(u32(0xdeadbeef), 32 - r) );
+}
 } // namespace aw::math
