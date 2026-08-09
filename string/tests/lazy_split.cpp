@@ -5,107 +5,53 @@
 TestFile( "string::lazy_split" );
 
 namespace aw {
+namespace {
+//! Materialise a lazy split, so it can be compared to the eager one
+std::vector<string_view> collect(auto lazy)
+{
+	std::vector<string_view> substrs;
+	for (auto substr : lazy)
+		substrs.push_back(substr);
+	return substrs;
+}
+
+/*
+ * Each lazy iterator is specified to produce exactly what its eager
+ * counterpart produces, so every test here is the same test.
+ */
+void test_lazy(string_view source, string_view delim)
+{
+	using namespace string;
+	TestEqual( collect(lazy::split_by(source, delim)), split_by(source, delim) );
+	TestEqual( collect(lazy::cut(source, delim)),      split(source, delim, keep_empty) );
+	TestEqual( collect(lazy::split(source, delim)),    split(source, delim, discard_empty) );
+}
+} // namespace
+
 Test(lazy_split_empty_string) {
-	std::string s;
-
 	Checks {
-		auto v1 = string::split_by(s, "abcd");
-		auto l1 = string::lazy::split_by(s, "abcd");
-		auto v2 = string::split(s, " ", string::keep_empty);
-		auto l2 = string::lazy::cut(s, " ");
-		auto v3 = string::split(s1, " ", string::discard_empty);
-		auto l3 = string::lazy::split(s1, " ");
-
-		bool equal1 = std::equal( begin(v1), end(v1), begin(l1), end(l1) );
-		bool equal2 = std::equal( begin(v2), end(v2), begin(l2), end(l2) );
-		bool equal3 = std::equal( begin(v3), end(v3), begin(l3), end(l3) );
-		TestAssert( equal1 );
-		TestAssert( equal2 );
-		TestAssert( equal3 );
+		test_lazy("", "abcd");
+		test_lazy("", " ");
 	}
 }
 
 Test(lazy_split_empty_delim) {
-	std::string s1 = "abcdef";
-
 	Checks {
-		auto v1 = string::split_by(s1, "");
-		auto l1 = string::lazy::split_by(s1, "");
-		auto v2 = string::split(s1, "", string::keep_empty);
-		auto l2 = string::lazy::cut(s1, "");
-		auto v3 = string::split(s1, "", string::discard_empty);
-		auto l3 = string::lazy::split(s1, "");
-
-		bool equal1 = std::equal( begin(v1), end(v1), begin(l1), end(l1) );
-		bool equal2 = std::equal( begin(v2), end(v2), begin(l2), end(l2) );
-		bool equal3 = std::equal( begin(v3), end(v3), begin(l3), end(l3) );
-		TestAssert( equal1 );
-		TestAssert( equal2 );
-		TestAssert( equal3 );
-	}
-
-	std::string s2 = "";
-
-	Checks {
-		auto v1 = string::split_by(s2, "");
-		auto l1 = string::lazy::split_by(s2, "");
-		auto v2 = string::split(s2, "", string::keep_empty);
-		auto l2 = string::lazy::cut(s2, "");
-		auto v3 = string::split(s2, "", string::discard_empty);
-		auto l3 = string::lazy::split(s2, "");
-
-		bool equal1 = std::equal( begin(v1), end(v1), begin(l1), end(l1) );
-		bool equal2 = std::equal( begin(v2), end(v2), begin(l2), end(l2) );
-		bool equal3 = std::equal( begin(v3), end(v3), begin(l3), end(l3) );
-		TestAssert( equal1 );
-		TestAssert( equal2 );
-		TestAssert( equal3 );
+		test_lazy("abcdef", "");
+		test_lazy("", "");
 	}
 }
 
 Test(lazy_split_word) {
-	std::string s = "word";
-
-	Postconditions {
-		auto v1 = string::split_by(s, " ");
-		auto l1 = string::lazy::split_by(s, " ");
-		auto v2 = string::split(s, " ", string::keep_empty);
-		auto l2 = string::lazy::cut(s, " ");
-
-		bool equal1 = std::equal( begin(v1), end(v1), begin(l1), end(l1) );
-		bool equal2 = std::equal( begin(v2), end(v2), begin(l2), end(l2) );
-		TestAssert( equal1 );
-		TestAssert( equal2 );
+	Checks {
+		test_lazy("word", " ");
 	}
 }
 
 Test(lazy_split_words) {
-	std::string s = "word1  word2, word3";
-
-	std::vector<string_view> v1;
-	std::vector<string_view> v2;
-	std::vector<string_view> v3;
-
 	Checks {
-		v1 = string::split_by(s, ", ");
-		v2 = string::split(s, " ", string::keep_empty);
-		v3 = string::split(s, ", ", string::keep_empty);
-	}
-
-	Postconditions {
-		auto v1 = string::split_by(s, ", ");
-		auto v2 = string::split(s, " ", string::keep_empty);
-		auto v3 = string::split(s, ", ", string::keep_empty);
-		auto l1 = string::lazy::split_by(s, ", ");
-		auto l2 = string::lazy::cut(s, " ");
-		auto l3 = string::lazy::cut(s, ", ");
-
-		bool equal1 = std::equal( begin(v1), end(v1), begin(l1), end(l1) );
-		bool equal2 = std::equal( begin(v2), end(v2), begin(l2), end(l2) );
-		bool equal3 = std::equal( begin(v3), end(v3), begin(l3), end(l3) );
-		TestAssert( equal1 );
-		TestAssert( equal2 );
-		TestAssert( equal3 );
+		test_lazy("word1  word2, word3", " ");
+		test_lazy("word1  word2, word3", ", ");
 	}
 }
 } // namespace aw
