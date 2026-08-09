@@ -90,4 +90,38 @@ Test(int_converter_radix_35)
 		TestEqual(conv.to_string(), std::string("Y"));
 	}
 }
+
+namespace {
+//! Feed value's bits into conv MSB-first, the same way composite_int::to_string does
+template<size_t R, size_t N>
+void add_bits(int_converter<R, N>& conv, unsigned long long value, size_t width)
+{
+	for (size_t i = width; i-- > 0; )
+		conv.add_digit((value >> i) & 1u);
+}
+} // namespace
+
+Test(int_converter_add_digit_radix_36)
+{
+	Checks {
+		// 35 stays a single digit: "Z"
+		int_converter<36, 10> conv;
+		add_bits(conv, 35, 8);
+		TestEqual(conv.to_string(), std::string("Z"));
+	}
+
+	Checks {
+		// 36 carries into a new digit: "10"
+		int_converter<36, 10> conv;
+		add_bits(conv, 36, 8);
+		TestEqual(conv.to_string(), std::string("10"));
+	}
+
+	Checks {
+		// 1294 = 35*36 + 34: "ZY"
+		int_converter<36, 10> conv;
+		add_bits(conv, 1294, 16);
+		TestEqual(conv.to_string(), std::string("ZY"));
+	}
+}
 } // namespace aw
