@@ -4,20 +4,55 @@
 TestFile( "string::split" );
 
 namespace aw {
-Test(split_empty) {
+Test(split_empty_string) {
 	std::string s;
 
 	std::vector<string_view> v1;
 	std::vector<string_view> v2;
+	std::vector<string_view> v3;
 
 	Checks {
 		v1 = string::split_by(s, "abcd");
-		v2 = string::split(s, " ", string::keep_empty);
+		v2 = string::split(s, " ", string::discard_empty);
+		v3 = string::split(s, " ", string::keep_empty);
 	}
 
 	Postconditions {
 		TestAssert(v1.empty());
-		TestEqual(v2[0], "");
+		TestAssert(v2.empty());
+
+		TestAssert(!v3.empty());
+		for (const auto& s : v3)
+			TestEqual(s, "");
+	}
+}
+
+Test(split_empty_delim) {
+	std::string s1 = "abcdef";
+
+	Checks {
+		const auto v1 = string::split_by(s1, "");
+		const auto v2 = string::split(s1, "", string::keep_empty);
+		const auto v3 = string::split(s1, "", string::discard_empty);
+
+		std::vector<string_view> unsplit = { "abcdef" };
+
+		TestEqual(v1, unsplit);
+		TestEqual(v2, unsplit);
+		TestEqual(v3, unsplit);
+	}
+
+	std::string s2;
+
+	Checks {
+		const auto v1 = string::split_by(s2, "");
+		const auto v2 = string::split(s2, "", string::discard_empty);
+		const auto v3 = string::split(s2, "", string::keep_empty);
+
+		TestAssert(v1.empty());
+		TestAssert(v2.empty());
+		TestAssert(v3.size() == 1);
+		TestAssert(v3[0].empty());
 	}
 }
 
