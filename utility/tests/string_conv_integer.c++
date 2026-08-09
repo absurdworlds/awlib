@@ -4,11 +4,11 @@
 TestFile("string_conv_integer");
 
 namespace aw {
-Test(int_converter_radix_36)
+Test(radix_accumulator_radix_36)
 {
 	Checks {
 		// Test that radix 36 compiles and works
-		int_converter<36, 10> conv;
+		radix_accumulator<36, 10> conv;
 		conv.sign = false;
 		conv.top_digit = 0;
 		conv.digits[0] = 0;
@@ -43,10 +43,10 @@ Test(int_converter_radix_36)
 	}
 }
 
-Test(int_converter_radix_2)
+Test(radix_accumulator_radix_2)
 {
 	Checks {
-		int_converter<2, 10> conv;
+		radix_accumulator<2, 10> conv;
 		conv.sign = false;
 		conv.top_digit = 0;
 		conv.digits[0] = 1;
@@ -59,10 +59,10 @@ Test(int_converter_radix_2)
 	}
 }
 
-Test(int_converter_radix_16)
+Test(radix_accumulator_radix_16)
 {
 	Checks {
-		int_converter<16, 10> conv;
+		radix_accumulator<16, 10> conv;
 		conv.sign = false;
 		conv.top_digit = 0;
 		conv.digits[0] = 15;
@@ -78,12 +78,12 @@ Test(int_converter_radix_16)
 	}
 }
 
-Test(int_converter_radix_35)
+Test(radix_accumulator_radix_35)
 {
 	Checks {
 		// Test that radix 35 also works (edge case below 36)
 		// In radix 35, valid digits are 0-9 and A-Y (35 chars), so 34 maps to Y
-		int_converter<35, 10> conv;
+		radix_accumulator<35, 10> conv;
 		conv.sign = false;
 		conv.top_digit = 0;
 		conv.digits[0] = 34;
@@ -94,32 +94,32 @@ Test(int_converter_radix_35)
 namespace {
 //! Feed value's bits into conv MSB-first, the same way composite_int::to_string does
 template<size_t R, size_t N>
-void add_bits(int_converter<R, N>& conv, unsigned long long value, size_t width)
+void add_bits(radix_accumulator<R, N>& conv, unsigned long long value, size_t width)
 {
 	for (size_t i = width; i-- > 0; )
-		conv.add_digit((value >> i) & 1u);
+		conv.add_bit((value >> i) & 1u);
 }
 } // namespace
 
-Test(int_converter_add_digit_radix_36)
+Test(radix_accumulator_add_bit_radix_36)
 {
 	Checks {
 		// 35 stays a single digit: "Z"
-		int_converter<36, 10> conv;
+		radix_accumulator<36, 10> conv;
 		add_bits(conv, 35, 8);
 		TestEqual(conv.to_string(), std::string("Z"));
 	}
 
 	Checks {
 		// 36 carries into a new digit: "10"
-		int_converter<36, 10> conv;
+		radix_accumulator<36, 10> conv;
 		add_bits(conv, 36, 8);
 		TestEqual(conv.to_string(), std::string("10"));
 	}
 
 	Checks {
 		// 1294 = 35*36 + 34: "ZY"
-		int_converter<36, 10> conv;
+		radix_accumulator<36, 10> conv;
 		add_bits(conv, 1294, 16);
 		TestEqual(conv.to_string(), std::string("ZY"));
 	}

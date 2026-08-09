@@ -37,12 +37,12 @@ std::string to_string(composite_int<T> val, Formatter&& fmt = Formatter{})
 
 	constexpr size_t size_needed = composite_int<T>::digits / math::log2(base) + 1;
 
-	int_converter<base, size_needed> result;
+	radix_accumulator<base, size_needed> result;
 	result.sign = sign;
 	for (size_t i = lz; i < dg; ++i) {
 		bool carry = math::top_bit(tmp.high_part());
 		tmp <<= 1;
-		result.add_digit(carry);
+		result.add_bit(carry);
 	}
 
 	return fmt.literal(result.to_string());
