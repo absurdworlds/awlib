@@ -18,7 +18,7 @@ namespace aw {
 template <size_t R, size_t N>
 struct int_converter {
 	static_assert(R > 1,  "Radix must be at least two.");
-	static_assert(R < 36, "Radix is too big (max. 36).");
+	static_assert(R <= 36, "Radix is too big (max. 36).");
 
 	void add_digit(bool carry)
 	{
