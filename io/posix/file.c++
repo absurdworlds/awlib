@@ -122,7 +122,7 @@ uintmax_t size(file_descriptor fd, std::error_code& ec)
 	set_error_if(ret == -1, ec);
 
 #if (AW_PLATFORM_SPECIFIC == AW_PLATFORM_LINUX)
-	if (S_ISBLK(info.st_mode)) {
+	if (ret != -1 && S_ISBLK(info.st_mode)) {
 		uint64_t size;
 		int ret = ::ioctl(fd, BLKGETSIZE64, &size);
 		set_error_if(ret == -1, ec);

@@ -84,4 +84,14 @@ Test(native_truncate_without_create) {
 
 	fs::remove(filename);
 };
+
+Test(native_size_reports_error_on_bad_fd) {
+	std::error_code ec;
+	auto ret = io::native::size(io::invalid_fd, ec);
+
+	Checks {
+		TestAssert(bool(ec));
+		TestEqual(ret, uintmax_t(-1));
+	}
+};
 } // namespace aw
