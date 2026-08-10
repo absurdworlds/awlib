@@ -58,15 +58,15 @@ struct scoped_log : log_provider {
 	void exit_scope()
 	{
 		if (disable_logger) return;
-		if (scopes.empty()) {
+		if (scope_stack.empty()) {
 			error("aw::log", "scope mismatch");
 			return;
 		}
-		char const* scope = scope_stack.back();
+		string_view scope = scope_stack.back();
 		scope_stack.pop_back();
 
 		indent.resize(scope_stack.size()*2, ' ');
-		info(src, "}");
+		info(scope, "}");
 	}
 
 private:
