@@ -12,6 +12,20 @@
 #include <vector>
 
 namespace aw::io::win32 {
+namespace current_process {
+process_handle handle()
+{
+	return convert_handle<process_handle>(GetCurrentProcess());
+}
+} //namespace current_process
+
+u32 handle_count(process_handle handle)
+{
+	DWORD count = 0;
+	GetProcessHandleCount(HANDLE(handle), &count);
+	return count;
+}
+
 namespace detail {
 void close_handle( uintptr_t handle )
 {

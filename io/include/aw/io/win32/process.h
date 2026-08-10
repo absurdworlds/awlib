@@ -16,6 +16,13 @@ namespace aw::io::win32 {
 enum class process_handle : uintptr_t {};
 constexpr auto invalid_process_handle = process_handle(-1);
 
+AW_IO_EXP u32 handle_count(process_handle handle);
+
+namespace current_process {
+AW_IO_EXP process_handle handle();
+inline u32 handle_count() { return win32::handle_count( handle() ); }
+} // namespace current_process
+
 using process_holder = detail::handle_holder<process_handle>;
 using timeout_spec_ms = std::optional<std::chrono::milliseconds>;
 
