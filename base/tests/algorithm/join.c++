@@ -43,4 +43,46 @@ Test(join_compile_test_with_different_types) {
 		TestEqual(v, "A-B-C");
 	}
 }
+
+Test(join_empty_delim) {
+	std::vector<std::string> strs {"A", "B", "C"};
+	string_view delim;
+	Checks {
+		auto v = join(begin(strs), end(strs), delim);
+		TestEqual(v, "ABC");
+	}
+}
+
+Test(join_empty_elements) {
+	std::vector<std::string> strs {"", "", ""};
+	string_view delim1{"-"};
+	string_view delim2;
+	Checks {
+		auto v = join(begin(strs), end(strs), delim1);
+		TestEqual(v, "--");
+	}
+
+	Checks {
+		auto v = join(begin(strs), end(strs), delim2);
+		TestEqual(v, "");
+	}
+}
+
+Test(join_one_element) {
+	std::vector<std::string> strs{"A"};
+	string_view delim1{"-"};
+	Checks {
+		auto v = join(begin(strs), end(strs), delim1);
+		TestEqual(v, "A");
+	}
+}
+
+Test(join_empty_set) {
+	std::vector<std::string> strs;
+	string_view delim1{"-"};
+	Checks {
+		auto v = join(begin(strs), end(strs), delim1);
+		TestEqual(v, "");
+	}
+}
 } // namespace aw
