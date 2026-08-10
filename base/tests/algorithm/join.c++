@@ -21,12 +21,16 @@ Test(join_compile_test) {
 	};
 
 	Checks {
-		auto a = join(begin(strs), end(strs),  std::string(), delim, adder1);
-		auto b = join(begin(strs), end(strs),  std::string(), delim);
-		auto c = join(begin(strs), end(strs), (std::string)delim, adder1);
-		auto d = join(begin(strs), end(strs), (std::string)delim);
+		auto a = join_into(begin(strs), end(strs),  std::string(), delim, adder1);
+		auto b = join_into(begin(strs), end(strs),  std::string(), delim);
 		TestEqualV(a,b);
+		TestEqual(a, "-A-B-C");
+		TestEqual(join_into(begin(strs), end(strs), std::string("XXX"), delim, adder1), "XXX-A-B-C");
+
+		auto c = join(begin(strs), end(strs), std::string(delim), adder1);
+		auto d = join(begin(strs), end(strs), std::string(delim));
 		TestEqualV(c,d);
+		TestEqual(c, "A-B-C");
 	}
 }
 

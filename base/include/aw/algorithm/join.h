@@ -32,14 +32,16 @@ struct assign_plus<T1, void> {
 };
 
 /*!
- * Join elements in range [begin, end) into single element,
- * starting with \a sink.
- * Adder must have signature of 
+ * Continue joining elements in range [begin, end) onto \a sink, prefixing
+ * \a delim before each one, including the first, since \a sink is
+ * treated as already holding a prior element. See join() for a fresh
+ * join with no leading delimiter.
+ * Adder must have signature of
  *    T (T&, U const&)
  * where U must be convertible to T.
  */
 template <typename Iterator, typename T, typename D, typename Adder>
-T join(Iterator begin, Iterator end, T sink, D const& delim, Adder add)
+T join_into(Iterator begin, Iterator end, T sink, D const& delim, Adder add)
 {
 	while (begin != end) {
 		add(sink, delim);
@@ -52,10 +54,10 @@ T join(Iterator begin, Iterator end, T sink, D const& delim, Adder add)
  * Same as above, but T::operator+= is used.
  */
 template <typename Iterator, typename T, typename D>
-auto join(Iterator begin, Iterator end, T sink, D const& delim) ->
+auto join_into(Iterator begin, Iterator end, T sink, D const& delim) ->
 	type_t<T, decltype(sink += delim)>
 {
-	return join(begin, end, sink, delim, assign_plus<T,D>{});
+	return join_into(begin, end, sink, delim, assign_plus<T,D>{});
 }
 
 /*!
@@ -70,7 +72,7 @@ auto join(Iterator begin, Iterator end, T const& delim, Adder add) ->
 	if (begin == end)
 		return sink;
 	add(sink, *begin++);
-	return join(begin, end, sink, delim, add);
+	return join_into(begin, end, sink, delim, add);
 }
 
 template <typename Iterator, typename T>
