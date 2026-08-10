@@ -70,6 +70,8 @@ process_holder spawn(const char* path, aw::array_view<const char*> argv, std::er
 
 	set_error_if(!ret, ec);
 
+	if (process_info.hThread)
+		CloseHandle(process_info.hThread);
 
 	const auto handle = process_info.hProcess;
 	if (handle)
