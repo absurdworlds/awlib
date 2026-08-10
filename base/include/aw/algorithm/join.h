@@ -61,24 +61,45 @@ auto join_into(Iterator begin, Iterator end, T sink, D const& delim) ->
 }
 
 /*!
- * Join elements in range [begin, end) into single element,
+ * Join elements in range [begin, end) into single element of type \a T,
  * where resulting elements are separated by \a delim.
+ * Adder must have signature of
+ *    T (T&, U const&)
+ * where U must be convertible to T.
  */
-template <typename Iterator, typename T, typename Adder>
-auto join(Iterator begin, Iterator end, T const& delim, Adder add) ->
-	type_t<T, decltype(add(declval<T&>(), *begin++))>
+template <typename T, typename Iterator, typename D, typename Adder>
+T join(Iterator begin, Iterator end, D const& delim, Adder add)
 {
-	T sink;
+	T sink{};
 	if (begin == end)
 		return sink;
 	add(sink, *begin++);
 	return join_into(begin, end, sink, delim, add);
 }
 
-template <typename Iterator, typename T>
-auto join(Iterator begin, Iterator end, T const& delim)
+//! Same as above, but the result type is the range's own element type.
+template <typename Iterator, typename D, typename Adder>
+auto join(Iterator begin, Iterator end, D const& delim, Adder add)
 {
-	return join(begin, end, delim, assign_plus<T>{});
+	using S = typename std::iterator_traits<Iterator>::value_type;
+	return join<S>(begin, end, delim, add);
+}
+
+/*!
+ * Same as above, but T::operator+= is used.
+ */
+template <typename T, typename Iterator, typename D>
+T join(Iterator begin, Iterator end, D const& delim)
+{
+	return join<T>(begin, end, delim, assign_plus<T>{});
+}
+
+//! Same as above, but the result type is the range's own element type.
+template <typename Iterator, typename D>
+auto join(Iterator begin, Iterator end, D const& delim)
+{
+	using S = typename std::iterator_traits<Iterator>::value_type;
+	return join<S>(begin, end, delim, assign_plus<S>{});
 }
 } // namespace aw
 #endif//aw_algorithm_join_h

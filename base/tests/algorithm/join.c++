@@ -15,11 +15,6 @@ Test(join_compile_test) {
 		return s;
 	};
 
-	auto adder2 = [] (std::string& s, std::string const& v) {
-		s.append(v);
-		return s;
-	};
-
 	Checks {
 		auto a = join_into(begin(strs), end(strs),  std::string(), delim, adder1);
 		auto b = join_into(begin(strs), end(strs),  std::string(), delim);
@@ -27,20 +22,53 @@ Test(join_compile_test) {
 		TestEqual(a, "-A-B-C");
 		TestEqual(join_into(begin(strs), end(strs), std::string("XXX"), delim, adder1), "XXX-A-B-C");
 
-		auto c = join(begin(strs), end(strs), std::string(delim), adder1);
+		auto c = join(begin(strs), end(strs), delim, adder1);
 		auto d = join(begin(strs), end(strs), std::string(delim));
 		TestEqualV(c,d);
 		TestEqual(c, "A-B-C");
 	}
+
+	auto adder2 = [] (std::string& s, std::string const& v) {
+		s.append(v);
+		return s;
+	};
+
+	auto adder3 = [] (std::string& s, auto const& v) {
+		s.append(v);
+		return s;
+	};
+
+	Checks {
+		std::string_view const result = "A-B-C";
+
+		TestEqual( join(begin(strs), end(strs), std::string(delim), adder1), result );
+		TestEqual( join(begin(strs), end(strs), std::string(delim), adder2), result );
+		TestEqual( join(begin(strs), end(strs), std::string(delim), adder3), result );
+
+		TestEqual( join(begin(strs), end(strs), delim, adder1), result );
+		//TestEqual( join(begin(strs), end(strs), delim, adder2), result ); -- should not compile
+		TestEqual( join(begin(strs), end(strs), delim, adder3), result );
+	}
 }
 
 Test(join_compile_test_with_different_types) {
-
+	std::vector<std::string> strs {"A", "B", "C"};
+	std::vector<std::string_view> views {"A", "B", "C"};
+	std::string delim{"-"};
 	Checks {
-		std::vector<std::string_view> strs {"A", "B", "C"};
-		std::string delim{"-"};
-		auto v = join(begin(strs), end(strs), delim);
-		TestEqual(v, "A-B-C");
+		auto v1 = join(begin(strs), end(strs), delim);
+		auto v2 = join<std::string>(begin(views), end(views), delim);
+		TestEqual(v1, "A-B-C");
+		TestEqual(v1, v2);
+	}
+}
+
+Test(join_compile_test_with_primitive_delim) {
+	std::vector<std::string> strs {"A", "B", "C"};
+	char const delim{'-'};
+	Checks {
+		auto v1 = join(begin(strs), end(strs), delim);
+		TestEqual(v1, "A-B-C");
 	}
 }
 
