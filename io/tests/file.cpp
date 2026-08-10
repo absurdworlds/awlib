@@ -51,6 +51,12 @@ Test(basic_rw) {
 	fs::remove( filename );
 };
 
+Test(size_reports_error) {
+	io::file file{ io::invalid_fd };
+
+	TestCatch(fs::filesystem_error, file.size());
+};
+
 Test(buffered_file_move_keeps_path) {
 	char const filename[] { "~temp_io_movepath_test.bin" };
 	char const data[]     { "abcde" };

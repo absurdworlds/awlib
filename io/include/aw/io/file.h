@@ -164,7 +164,7 @@ struct file {
 		std::error_code ec;
 		std::lock_guard<std::mutex> guard{mutex};
 
-		auto ret = data.size();
+		auto ret = data.size(ec);
 
 		check_error(ec, "cannot get file size");
 
