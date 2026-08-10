@@ -84,7 +84,7 @@ std::string join(Iterator begin, Iterator end, string_view delim = "")
 
 	std::string sink = reserve_string(begin, end);
 	sink += *begin++;
-	return aw::join(begin, end, sink, delim);
+	return aw::join_into(begin, end, sink, delim);
 }
 
 template<template<typename...> typename Container, typename StringT>
