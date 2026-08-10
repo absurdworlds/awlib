@@ -75,4 +75,4 @@ private:
 };
 } // namespace log
 } // namespace aw
-#endif//aw_log_log_provider_h
+#endif//aw_log_scoped_log_h
