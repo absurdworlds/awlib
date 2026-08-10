@@ -1,5 +1,6 @@
 aw_add_test(test_algo
 	SOURCES
+		binary_find.c++
 		common_prefix.c++
 		exchange.c++
 		join.c++

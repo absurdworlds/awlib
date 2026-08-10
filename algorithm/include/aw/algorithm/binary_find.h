@@ -22,7 +22,7 @@ template <typename Iterator, typename T, typename Comparator>
 Iterator binary_find(Iterator begin, Iterator end, T const& val, Comparator comp)
 {
 	Iterator pos = std::lower_bound(begin, end, val, comp);
-	if (pos == end || comp(*pos, val))
+	if (pos == end || comp(val, *pos))
 		return end;
 	return pos;
 }

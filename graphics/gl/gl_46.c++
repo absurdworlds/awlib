@@ -1490,13 +1490,14 @@ void clear_extension_vars()
 {
 }
 
+struct ext_name_less {
+	bool operator()(map_entry const& e, string_view a) const { return e.ext_name < a; }
+	bool operator()(string_view a, map_entry const& e) const { return a < e.ext_name; }
+};
+
 void load_extension(std::vector<map_entry>& table, string_view extension)
 {
-	auto compare = [] (map_entry const& e, string_view a)
-	{
-		return a == e.ext_name;
-	};
-	auto entry = aw::binary_find(begin(table), end(table), extension, compare);
+	auto entry = aw::binary_find(begin(table), end(table), extension, ext_name_less{});
 
 	if (entry != end(table)) {
 		const auto loader = entry->loaderFunc;
