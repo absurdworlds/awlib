@@ -51,6 +51,33 @@ Test(basic_rw) {
 	fs::remove( filename );
 };
 
+Test(buffered_file_move_keeps_path) {
+	char const filename[] { "~temp_io_movepath_test.bin" };
+	char const data[]     { "abcde" };
+
+	auto const fm = io::file_mode::write|io::file_mode::create|io::file_mode::truncate;
+	io::buffered_file file(filename, fm);
+	file.write(data, sizeof(data) - 1);
+	file.flush();
+
+	Preconditions {
+		TestAssert(file.is_open());
+	}
+
+	auto const old_path = file.path();
+
+	io::buffered_file moved(std::move(file));
+
+	Checks {
+		TestAssert(moved.is_open());
+		TestEqual(moved.path().string(), old_path.string());
+		TestEqual(moved.size(), intmax_t(sizeof(data) - 1));
+	}
+
+	moved.close();
+	fs::remove(filename);
+};
+
 Test(basic_buf_rw) {
 	char const filename[] { "~temp_io_test.bin" };
 	constexpr size_t buf_size = 0x12000;
@@ -60,7 +87,7 @@ Test(basic_buf_rw) {
 	std::fill_n(buf1, buf_size, 'a');
 	buf1[buf_size - 0x10] = 'b';
 
-	auto fm = io::file_mode::write|io::file_mode::create|io::file_mode::truncate;
+	auto const fm = io::file_mode::write|io::file_mode::create|io::file_mode::truncate;
 	io::buffered_file file(filename, fm);
 
 	Preconditions {
