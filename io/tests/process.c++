@@ -60,7 +60,7 @@ Test(win32_spawn_does_not_leak_thread_handle) {
 	auto after = io::win32::current_process::handle_count();
 
 	Checks {
-		TestAssert(after < before + iterations);
+		TestLess(after, before + iterations);
 	}
 }
 #endif
