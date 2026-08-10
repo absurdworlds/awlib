@@ -7,6 +7,7 @@
  * There is NO WARRANTY, to the extent permitted by law.
  */
 #ifndef aw_ranges_char_view_h
+#include <cstddef>
 #define aw_ranges_char_view_h
 namespace aw {
 /*!
