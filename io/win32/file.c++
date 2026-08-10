@@ -38,7 +38,7 @@ int get_openmode( file_mode mode )
 		return CREATE_NEW;
 	case fm::truncate:
 	case fm::truncate|fm::exclusive:
-		return CREATE_NEW;
+		return TRUNCATE_EXISTING;
 	case fm::exclusive:
 	case fm::none:
 		return OPEN_EXISTING;
