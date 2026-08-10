@@ -49,4 +49,39 @@ Test(native_basic_rw) {
 	file.close();
 	fs::remove( filename );
 };
+
+/*!
+ * truncate without create must behave like POSIX O_TRUNC without O_CREAT:
+ * fail on a missing file, succeed on an existing one and truncate it to 0 bytes.
+ */
+Test(native_truncate_without_create) {
+	char const filename[] { "~temp_io_truncate_test.bin" };
+	char const initial[]  { "some initial data" };
+
+	auto fm = io::file_mode::write|io::file_mode::truncate;
+
+	Preconditions {
+		fs::remove(filename);
+	}
+
+	Checks {
+		std::error_code ec;
+		io::native::file missing(filename, fm, ec);
+		TestAssert(!missing.is_open());
+	}
+
+	Setup {
+		io::native::file seed(filename, io::file_mode::write|io::file_mode::create);
+		seed.write(initial, sizeof(initial) - 1);
+	}
+
+	Checks {
+		std::error_code ec;
+		io::native::file existing(filename, fm, ec);
+		TestAssert(existing.is_open());
+		TestEqual(existing.size(), 0u);
+	}
+
+	fs::remove(filename);
+};
 } // namespace aw
