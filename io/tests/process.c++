@@ -8,6 +8,8 @@
 
 #include <fstream>
 
+#include <aw/config.h>
+
 TestFile("Test");
 
 namespace aw {
@@ -37,5 +39,30 @@ Test(process_basic_test) {
 
 	TestEqual(args, args_expect);
 }
+
+#if (AW_PLATFORM == AW_PLATFORM_WIN32)
+Test(win32_spawn_does_not_leak_thread_handle) {
+	using namespace std::string_literals;
+
+	auto cd_guard = on_scope_exit([cd = fs::current_path()] { fs::current_path(cd); });
+	fs::current_path(_context.exe_dir);
+
+	auto path = io::executable_name("dump_args"s);
+	std::vector<std::string> args = { "x" };
+
+	constexpr int iterations = 25;
+
+	auto before = io::win32::current_process::handle_count();
+
+	for (int i = 0; i < iterations; ++i)
+		io::run(path, args);
+
+	auto after = io::win32::current_process::handle_count();
+
+	Checks {
+		TestAssert(after < before + iterations);
+	}
+}
+#endif
 
 } // namespace aw
