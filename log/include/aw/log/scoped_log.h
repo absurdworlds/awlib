@@ -8,7 +8,9 @@
  */
 #ifndef aw_log_scoped_log_h
 #define aw_log_scoped_log_h
+#include <string>
 #include <vector>
+#include <aw/types/string_view.h>
 #include <aw/log/log_provider.h>
 namespace aw {
 inline namespace v1 {
@@ -22,7 +24,8 @@ struct scoped_log : log_provider {
 	 */
 	void message(log::level lvl, string_view src, string_view msg)
 	{
-		log_provider::message(lvl, src, indent + msg);
+		std::string prefixed = indent + std::string(msg);
+		log_provider::message(lvl, src, prefixed);
 	}
 
 	void info(string_view src, string_view msg)
