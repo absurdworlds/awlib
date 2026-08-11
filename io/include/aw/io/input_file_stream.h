@@ -57,7 +57,7 @@ struct input_file_buffer : input_buffer {
 	{
 		auto newpos = ptr() + offset;
 		if ( newpos < begin() || newpos >= end() ) {
-			_file.seek(offset, seek_mode::cur);
+			_file.seek(offset - (end() - ptr()), seek_mode::cur);
 			read_more();
 		} else {
 			set_ptr(begin(), newpos, end());
@@ -66,9 +66,11 @@ struct input_file_buffer : input_buffer {
 
 	size_t position() const override
 	{
-		// TODO
-		auto pos = const_cast<file&>(_file).tell();
-		return pos;
+		// tell() is the underlying file position, which is ahead
+		// of the logical position by the amount read into the
+		// buffer but not yet consumed
+		auto pos = _file.tell();
+		return pos - (end() - ptr());
 	}
 
 protected:
