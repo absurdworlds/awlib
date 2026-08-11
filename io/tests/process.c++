@@ -45,7 +45,7 @@ Test(spawn_without_arguments_reports_error) {
 
 	Checks {
 		// reject empty argv
-		aw::array_view<char*> argv;
+		aw::array_view<const char*> argv;
 
 		auto handle = io::spawn(argv, ec);
 		TestAssert( handle == io::invalid_process_handle );
@@ -54,7 +54,7 @@ Test(spawn_without_arguments_reports_error) {
 
 	Checks {
 		// reject argv with only null-terminator in it
-		char* argv[] = { nullptr };
+		const char* argv[] = { nullptr };
 
 		auto handle = io::spawn(argv, ec);
 		TestAssert( handle == io::invalid_process_handle );

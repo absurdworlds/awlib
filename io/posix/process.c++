@@ -19,15 +19,22 @@ extern char** environ;
 
 namespace aw::io::posix {
 AW_IO_EXP
-process_handle spawn(const char* path, aw::array_view<char*> argv, std::error_code& ec) noexcept
+process_handle spawn(const char* path, aw::array_view<const char*> argv, std::error_code& ec) noexcept
 {
 	// enforce `nullptr` at the end of `argv`
 	assert( argv.empty() || argv.back() == nullptr );
 
+	/*
+	 * posix_spawnp takes `char* const[]` for historical reasons.
+	 * The POSIX spec states that the strings argv[] and envp[] point
+	 * to shall not modified, so dropping const here is safe.
+	 */
+	auto args = const_cast<char* const*>( argv.data() );
+
 	pid_t pid;
-	int rc = posix_spawnp(&pid, path, nullptr, nullptr, argv.data(), environ);
+	int rc = posix_spawnp(&pid, path, nullptr, nullptr, args, environ);
 	if (rc == 2)
-		rc = posix_spawn(&pid, path, nullptr, nullptr, argv.data(), environ);
+		rc = posix_spawn(&pid, path, nullptr, nullptr, args, environ);
 
 	if (rc == 0)
 		return process_handle( pid );
@@ -37,7 +44,7 @@ process_handle spawn(const char* path, aw::array_view<char*> argv, std::error_co
 }
 
 AW_IO_EXP
-process_handle spawn(aw::array_view<char*> argv, std::error_code& ec) noexcept
+process_handle spawn(aw::array_view<const char*> argv, std::error_code& ec) noexcept
 {
 	if (argv.empty() || argv[0] == nullptr) {
 		ec = make_error_code( std::errc::invalid_argument );
@@ -48,11 +55,11 @@ process_handle spawn(aw::array_view<char*> argv, std::error_code& ec) noexcept
 }
 
 AW_IO_EXP
-process_handle spawn(std::string path, aw::array_ref<std::string> argv, std::error_code& ec)
+process_handle spawn(std::string path, aw::array_view<std::string> argv, std::error_code& ec)
 {
-	std::vector<char*> args;
+	std::vector<const char*> args;
 	args.push_back(path.data());
-	for (std::string& arg : argv)
+	for (std::string const& arg : argv)
 		args.push_back(arg.data());
 	args.push_back(nullptr);
 
