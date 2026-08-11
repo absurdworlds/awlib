@@ -8,29 +8,35 @@
  */
 #include <cstdio>
 
-#include <aw/utility/ArgumentParser.h>
+#include <aw/utility/argv_parser.h>
 
-int main (int, char** v)
+int main(int, char** v)
 {
-	using namespace aw;
-	core::ArgumentParser parser(v + 1);
-	opt<core::Argument> r;
+	using namespace aw::utils;
 
-	while(r = parser.parseArgument()) {
-		core::Argument& arg = r.value();
-		char c;
-		switch(arg.type) {
-		case core::Argument::Option:
-			c = arg.longOpt ? 'l' : 'o';
+	argv_parser parser(v + 1);
+
+	while (auto r = parser.parse_argument()) {
+		argument& arg = *r;
+
+		char c = '?';
+		char const* text = arg.name.c_str();
+		switch (arg.type) {
+		case argument::option:
+			c = arg.long_option ? 'l' : 'o';
 			break;
-		case core::Argument::Delim:
+		case argument::delim:
 			c = 'd';
 			break;
-		case core::Argument::Operand:
-			c = 'a';
+		case argument::argument:
+			c    = 'a';
+			text = arg.value.c_str();
 			break;
-		}	
-		printf("%c %s\n", c, arg.name.c_str());
+		case argument::invalid:
+			break;
+		}
+
+		printf("%c %s\n", c, text);
 	}
 
 	return 0;
