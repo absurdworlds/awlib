@@ -42,7 +42,8 @@ struct input_memory_buffer : input_buffer {
 
 	void seekoff(ptrdiff_t offset) override
 	{
-		auto newpos = ptr() + offset;
+		// ptr() is null at eof, so seek from the end of the source
+		auto newpos = (eof() ? b_end : ptr()) + offset;
 		if ((newpos < b_begin) || (newpos > b_end)) {
 			set_ptr(b_begin, b_end, b_end);
 		} else {
@@ -52,13 +53,15 @@ struct input_memory_buffer : input_buffer {
 
 	size_t position() const override
 	{
-		return ptr() - begin();
+		return eof() ? b_size() : ptr() - begin();
 	}
 
 protected:
 	bool fill_buffer() override
 	{
-		if (ptr() == b_end) {
+		// ptr() is null at eof, so it must be checked separately,
+		// because ptr() is no longer equal to b_end
+		if (eof() || ptr() == b_end) {
 			set_ptr(0, 0, 0);
 			return false;
 		}
