@@ -42,11 +42,11 @@ inline process_handle spawn(std::string path, aw::array_view<std::string> argv)
 	return spawn(path, argv, ec);
 }
 
-AW_IO_EXP wait_status wait(process_handle pid, std::error_code& ec) noexcept;
-inline wait_status wait(process_handle pid)
+AW_IO_EXP wait_status wait(process_handle pid, std::error_code& ec, timeout_spec_ms timeout = {}) noexcept;
+inline wait_status wait(process_handle pid, timeout_spec_ms timeout = {})
 {
 	std::error_code ec;
-	return wait(pid, ec);
+	return wait(pid, ec, timeout);
 }
 
 AW_IO_EXP int kill(process_handle pid, int signal, std::error_code& ec) noexcept;
@@ -57,19 +57,23 @@ inline int kill(process_handle pid, int signal)
 }
 
 
-inline wait_status run(std::string path, aw::array_view<std::string> argv, std::error_code& ec)
+inline wait_status run(
+	std::string path,
+	aw::array_view<std::string> argv,
+	std::error_code& ec,
+	timeout_spec_ms timeout = {})
 {
 	auto handle = spawn(path, argv, ec);
 	if (handle == invalid_process_handle)
 		return wait_status::failed;
 
-	return wait(handle, ec);
+	return wait(handle, ec, timeout);
 }
 
-inline wait_status run(std::string path, aw::array_view<std::string> argv)
+inline wait_status run(std::string path, aw::array_view<std::string> argv, timeout_spec_ms timeout = {})
 {
 	std::error_code ec;
-	return run(path, argv, ec);
+	return run(path, argv, ec, timeout);
 }
 
 inline std::string executable_name(std::string path)

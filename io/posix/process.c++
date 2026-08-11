@@ -3,9 +3,12 @@
 #include <aw/types/string_view.h>
 #include <aw/algorithm/in.h>
 
+#include <algorithm>
+#include <chrono>
 #include <vector>
 
 #include <cassert>
+#include <ctime>
 
 #include <sys/types.h>
 #include <sys/wait.h>
@@ -81,8 +84,58 @@ int kill(process_handle pid, int signal, std::error_code& ec) noexcept
 	return ret;
 }
 
-AW_IO_EXP wait_status wait(process_handle pid, std::error_code& ec) noexcept
+namespace {
+// this one is noexcept unlike std::this_thread::sleep_for
+void sleep_for(std::chrono::nanoseconds duration) noexcept
 {
+	using namespace std::chrono;
+
+	timespec spec = {};
+	spec.tv_sec  = duration_cast<seconds>(duration).count();
+	spec.tv_nsec = (duration % seconds(1)).count();
+
+	// an interrupted sleep is fine since the caller re-checks the deadline
+	nanosleep(&spec, nullptr);
+}
+
+/*!
+ * Wait until the child changes state or \a deadline passes.
+ */
+wait_status wait_until(pid_t pid, std::chrono::steady_clock::time_point deadline,
+                       std::error_code& ec) noexcept
+{
+	// TODO: use pidfd_open and ppoll on Linux instead of polling
+	using namespace std::chrono;
+
+	constexpr auto max_interval = microseconds(10'000);
+	auto interval = microseconds(200);
+
+	for (;;) {
+		int status = 0;
+		const pid_t ret = waitpid( pid, &status, WNOHANG );
+		if (ret > 0)
+			return wait_status::finished;
+
+		if (ret < 0 && errno != EINTR) {
+			ec.assign( errno, std::generic_category() );
+			return wait_status::failed;
+		}
+
+		const auto left = deadline - steady_clock::now();
+		if (left <= steady_clock::duration::zero())
+			return wait_status::timeout;
+
+		sleep_for( std::min<nanoseconds>(interval, left) );
+		interval = std::min(interval * 2, max_interval);
+	}
+}
+} // namespace
+
+AW_IO_EXP wait_status wait(process_handle pid, std::error_code& ec, timeout_spec_ms timeout) noexcept
+{
+	if (timeout)
+		return wait_until( pid_t(pid), std::chrono::steady_clock::now() + *timeout, ec );
+
 	int status = 0;
 
 	pid_t ret;

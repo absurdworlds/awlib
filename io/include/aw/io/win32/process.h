@@ -24,7 +24,6 @@ inline u32 handle_count() { return win32::handle_count( handle() ); }
 } // namespace current_process
 
 using process_holder = detail::handle_holder<process_handle>;
-using timeout_spec_ms = std::optional<std::chrono::milliseconds>;
 
 inline void close_handle(process_handle handle)
 {

@@ -76,6 +76,82 @@ Test(spawn_without_arguments_reports_error) {
 	}
 }
 
+/*!
+ * A wait must return at the deadlinerather than waiting for the child
+ */
+Test(wait_gives_up_at_the_deadline) {
+	using namespace std::string_literals;
+	using namespace std::chrono;
+
+	auto cd_guard = on_scope_exit([cd = fs::current_path()] { fs::current_path(cd); });
+	fs::current_path(_context.exe_dir);
+
+	constexpr auto child_lifetime = 500ms;
+	constexpr auto give_up_after  = 50ms;
+
+	auto path = io::executable_name("dump_args"s);
+	std::vector<std::string> args = {
+		format("--sleep-ms={}", child_lifetime.count())
+	};
+
+	std::error_code ec;
+	auto handle = io::spawn(path, args, ec);
+
+	Preconditions {
+		TestAssert( handle != io::invalid_process_handle );
+	}
+
+	auto started = steady_clock::now();
+	auto status  = io::wait(handle, ec, give_up_after);
+	auto waited  = steady_clock::now() - started;
+
+	Checks {
+		TestAssert( status == io::wait_status::timeout );
+		TestAssert( waited >= give_up_after );
+		TestAssert( waited <  child_lifetime );
+	}
+
+	// the child outlived the wait, so it is still there to collect
+	Checks {
+		TestAssert( io::wait(handle, ec) == io::wait_status::finished );
+	}
+}
+
+/*!
+ * A child that beats the deadline is reported as finished, not timed out
+ */
+Test(wait_with_a_deadline_reports_child_as_finished) {
+	using namespace std::string_literals;
+	using namespace std::chrono;
+
+	auto cd_guard = on_scope_exit([cd = fs::current_path()] { fs::current_path(cd); });
+	fs::current_path(_context.exe_dir);
+
+	constexpr auto child_lifetime = 50ms;
+	constexpr auto give_up_after  = 1s;
+
+	auto path = io::executable_name("dump_args"s);
+	std::vector<std::string> args = {
+		format("--sleep-ms={}", child_lifetime.count())
+	};
+
+	std::error_code ec;
+	auto handle = io::spawn(path, args, ec);
+
+	Preconditions {
+		TestAssert( handle != io::invalid_process_handle );
+	}
+
+	auto started = steady_clock::now();
+	auto status  = io::wait(handle, ec, give_up_after);
+	auto waited  = steady_clock::now() - started;
+
+	Checks {
+		TestAssert( status == io::wait_status::finished );
+		TestAssert( waited < give_up_after );
+	}
+}
+
 #if (AW_PLATFORM == AW_PLATFORM_POSIX)
 /*!
  * Check whether \a pid is still waiting to be reaped.
