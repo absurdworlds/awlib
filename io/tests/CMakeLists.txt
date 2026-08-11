@@ -11,6 +11,7 @@ aw_add_test(test_io
 		mmap_file.cpp
 		file_stream.cpp
 		istream_adapter.cpp
+		memory_stream.c++
 		${POSIX_SOURCES}
 )
 

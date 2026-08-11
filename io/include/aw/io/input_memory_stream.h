@@ -58,8 +58,10 @@ struct input_memory_buffer : input_buffer {
 protected:
 	bool fill_buffer() override
 	{
-		if (ptr() == b_end)
+		if (ptr() == b_end) {
+			set_ptr(0, 0, 0);
 			return false;
+		}
 		return true;
 	}
 
@@ -80,6 +82,13 @@ private:
 struct input_memory_stream : input_stream {
 	input_memory_stream(char const* begin, char const* end)
 		: buffer{begin, end}
+	{
+		input_stream::init_buffer(buffer);
+	}
+
+	template<size_t N>
+	explicit input_memory_stream(char const (&buf)[N])
+		: buffer{buf, buf+N}
 	{
 		input_stream::init_buffer(buffer);
 	}
