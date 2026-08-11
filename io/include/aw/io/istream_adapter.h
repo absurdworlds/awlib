@@ -51,8 +51,10 @@ protected:
 
 		adapt.advance(ptr() - begin());
 
-		if (!adapt.fill_buffer())
+		if (!adapt.fill_buffer()) {
+			set_ptr(0, 0, 0);
 			return false;
+		}
 		set_ptr(adapt.begin(), adapt.ptr(), adapt.end());
 		return true;
 	}

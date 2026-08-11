@@ -28,5 +28,23 @@ Test(basic_test) {
 		TestEqual(tmp, "string.");
 	}
 };
+
+Test(wrapped_stream_is_still_usable_after_eof) {
+	std::string str{"short"};
+
+	std::istringstream is{str};
+
+	Checks {
+		char c;
+		{
+			io::istream_adapter stream{is};
+			while (stream.get(c)) {}
+		}
+	}
+
+	Postconditions {
+		TestAssert(is.tellg() != std::streampos(-1));
+	}
+};
 } // namespace aw
 
