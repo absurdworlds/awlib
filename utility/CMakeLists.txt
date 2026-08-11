@@ -16,5 +16,3 @@ target_link_libraries(awutils
 		awalgo
 		awmath # TODO: maybe get rid of bitmath?
 )
-
-add_subdirectory(demo)

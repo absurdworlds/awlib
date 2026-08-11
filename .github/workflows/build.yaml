@@ -21,6 +21,7 @@ jobs:
           cmake -S . -B build -A ${{ matrix.platform }}
           -DAW_ENABLE_GRAPHICS:BOOL=OFF
           -DAW_ENABLE_HUDF:BOOL=ON
+          -DAW_MAKE_DEMOS:BOOL=ON
       - name: Build
         run: cmake --build build
       - name: Test
@@ -51,6 +52,7 @@ jobs:
           -DAW_ENABLE_ASSERT:BOOL=OFF
           -DAW_ENABLE_HUDF:BOOL=ON
           -DAW_ENABLE_LUA:BOOL=ON
+          -DAW_MAKE_DEMOS:BOOL=ON
           -DAW_NO_BUILTINS:BOOL=${{ matrix.no_builtins }}
       - name: Build
         run: cmake --build build
@@ -67,6 +69,7 @@ jobs:
           -DAW_ENABLE_GRAPHICS:BOOL=OFF
           -DAW_ENABLE_ASSERT:BOOL=OFF
           -DAW_ENABLE_HUDF:BOOL=ON
+          -DAW_MAKE_DEMOS:BOOL=ON
           -DAW_NO_BUILTINS:BOOL=OFF
       - name: Build
         run: cmake --build build
@@ -101,6 +104,7 @@ jobs:
           -DAW_ENABLE_HUDF:BOOL=ON
           -DAW_ENABLE_ASSERT:BOOL=OFF
           -DAW_NO_BUILTINS:BOOL=OFF
+          -DAW_MAKE_DEMOS:BOOL=ON
           -DAW_GL_USE_EGL:BOOL=${{ matrix.use_egl }}
       - name: Build
         run: >
