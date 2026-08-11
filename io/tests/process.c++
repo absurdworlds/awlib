@@ -3,20 +3,20 @@
 
 #include <aw/utility/on_scope_exit.h>
 #include <aw/utility/string/trim_if.h>
-#include <aw/utility/string/split.h>
 #include <aw/string/format.h>
 
 #include <aw/test/test.h>
 
 #include <chrono>
 #include <fstream>
-#include <thread>
 
 #include <aw/config.h>
 
 #if (AW_PLATFORM == AW_PLATFORM_POSIX)
+#include <errno.h>
 #include <signal.h>
 #include <sys/time.h>
+#include <sys/wait.h>
 #endif
 
 TestFile("Test");
@@ -77,17 +77,16 @@ Test(spawn_without_arguments_reports_error) {
 }
 
 #if (AW_PLATFORM == AW_PLATFORM_POSIX)
-static bool is_zombie(io::process_handle pid)
+/*!
+ * Check whether \a pid is still waiting to be reaped.
+ */
+static bool awaits_reaping(io::process_handle pid)
 {
-	auto path = format("/proc/{}/status", underlying(pid));
-	const auto lines = read_all(path);
-
-	for (auto& line : lines) {
-		if (!line.contains("State:"))
-			continue;
-		return line.contains("Z");
-	}
-	return false;
+	int status = 0;
+	errno = 0;
+	if (waitpid( pid_t(pid), &status, WNOHANG ) >= 0)
+		return true;
+	return errno != ECHILD;
 }
 
 /*!
@@ -139,12 +138,12 @@ Test(wait_survives_a_signal) {
 
 	Checks {
 		TestAssert( status == io::wait_status::finished );
+
 		// the wait ran to the child's exit, not to the signal
 		TestAssert( waited >= child_lifetime );
 
-		std::this_thread::sleep_for( child_lifetime );
-
-		TestAssert( !is_zombie(handle) );
+		// nothing is left to reap
+		TestAssert( !awaits_reaping(handle) );
 	}
 }
 #endif
