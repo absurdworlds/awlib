@@ -84,7 +84,12 @@ int kill(process_handle pid, int signal, std::error_code& ec) noexcept
 AW_IO_EXP wait_status wait(process_handle pid, std::error_code& ec) noexcept
 {
 	int status = 0;
-	pid_t ret = waitpid( pid_t(pid), &status, 0);
+
+	pid_t ret;
+	do
+		ret = waitpid( pid_t(pid), &status, 0);
+	while (ret < 0 && errno == EINTR);
+
 	if (ret < 0) {
 		ec.assign( errno, std::generic_category() );
 		return wait_status::failed;

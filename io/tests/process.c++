@@ -6,9 +6,15 @@
 
 #include <aw/test/test.h>
 
+#include <chrono>
 #include <fstream>
 
 #include <aw/config.h>
+
+#if (AW_PLATFORM == AW_PLATFORM_POSIX)
+#include <signal.h>
+#include <sys/time.h>
+#endif
 
 TestFile("Test");
 
@@ -61,6 +67,64 @@ Test(spawn_without_arguments_reports_error) {
 		TestAssert( ec == std::errc::invalid_argument );
 	}
 }
+
+#if (AW_PLATFORM == AW_PLATFORM_POSIX)
+/*!
+ * A signal arriving during wait() must not interrupt the wait
+ */
+Test(wait_survives_a_signal) {
+	using namespace std::string_literals;
+	using namespace std::chrono;
+
+	auto cd_guard = on_scope_exit([cd = fs::current_path()] { fs::current_path(cd); });
+	fs::current_path(_context.exe_dir);
+
+	constexpr auto child_lifetime = 300ms;
+	constexpr auto signal_after   = 50ms;
+
+	// disable SA_RESTART
+	struct sigaction interrupt = {};
+	interrupt.sa_handler = [] (int) {};
+	interrupt.sa_flags   = 0;
+
+	struct sigaction previous = {};
+	sigaction(SIGALRM, &interrupt, &previous);
+
+	auto signal_guard = on_scope_exit([&previous] {
+		itimerval off = {};
+		setitimer(ITIMER_REAL, &off, nullptr);
+		sigaction(SIGALRM, &previous, nullptr);
+	});
+
+	auto path = io::executable_name("dump_args"s);
+	std::vector<std::string> args = {
+		std::format("--sleep-ms={}", child_lifetime.count())
+	};
+
+	std::error_code ec;
+	auto handle = io::spawn(path, args, ec);
+
+	Preconditions {
+		TestAssert( handle != io::invalid_process_handle );
+	}
+
+	itimerval timer = {};
+	timer.it_value.tv_usec = duration_cast<microseconds>(signal_after).count();
+	setitimer(ITIMER_REAL, &timer, nullptr);
+
+	auto started = steady_clock::now();
+	auto status  = io::wait(handle, ec);
+	auto waited  = steady_clock::now() - started;
+
+	Checks {
+		TestAssert( status == io::wait_status::finished );
+		// the wait ran to the child's exit, not to the signal
+		TestAssert( waited >= child_lifetime );
+
+		// TODO: verify that there's no zombie
+	}
+}
+#endif
 
 #if (AW_PLATFORM == AW_PLATFORM_WIN32)
 Test(win32_spawn_does_not_leak_thread_handle) {
