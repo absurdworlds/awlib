@@ -51,7 +51,7 @@ winapi_path format_command_line(const char* path, aw::array_view<const char*> ar
 
 process_holder spawn(const char* path, aw::array_view<const char*> argv, std::error_code& ec) noexcept
 {
-	/*! enforce `nullptr` at the end of `argv` */
+	// enforce `nullptr` at the end of `argv` for consistency between platforms
 	if (!argv.empty()) {
 		assert( argv.back() == nullptr );
 		argv.remove_suffix(1);

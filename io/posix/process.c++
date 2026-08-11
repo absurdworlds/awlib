@@ -21,7 +21,7 @@ namespace aw::io::posix {
 AW_IO_EXP
 process_handle spawn(const char* path, aw::array_view<char*> argv, std::error_code& ec) noexcept
 {
-	/*! enforce `nullptr` at the end of `argv` */
+	// enforce `nullptr` at the end of `argv`
 	assert( argv.empty() || argv.back() == nullptr );
 
 	pid_t pid;
@@ -39,6 +39,11 @@ process_handle spawn(const char* path, aw::array_view<char*> argv, std::error_co
 AW_IO_EXP
 process_handle spawn(aw::array_view<char*> argv, std::error_code& ec) noexcept
 {
+	if (argv.empty() || argv[0] == nullptr) {
+		ec = make_error_code( std::errc::invalid_argument );
+		return invalid_process_handle;
+	}
+
 	return spawn( argv[0], argv, ec );
 }
 

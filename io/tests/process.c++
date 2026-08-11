@@ -40,6 +40,28 @@ Test(process_basic_test) {
 	TestEqual(args, args_expect);
 }
 
+Test(spawn_without_arguments_reports_error) {
+	std::error_code ec;
+
+	Checks {
+		// reject empty argv
+		aw::array_view<char*> argv;
+
+		auto handle = io::spawn(argv, ec);
+		TestAssert( handle == io::invalid_process_handle );
+		TestAssert( ec == std::errc::invalid_argument );
+	}
+
+	Checks {
+		// reject argv with only null-terminator in it
+		char* argv[] = { nullptr };
+
+		auto handle = io::spawn(argv, ec);
+		TestAssert( handle == io::invalid_process_handle );
+		TestAssert( ec == std::errc::invalid_argument );
+	}
+}
+
 #if (AW_PLATFORM == AW_PLATFORM_WIN32)
 Test(win32_spawn_does_not_leak_thread_handle) {
 	using namespace std::string_literals;
