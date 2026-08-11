@@ -18,6 +18,7 @@ aw_add_test(test_io
 target_link_libraries(test_io
 	PRIVATE
 		awio
+		awstring
 		awtest
 		awtest_main
 )

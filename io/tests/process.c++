@@ -3,11 +3,14 @@
 
 #include <aw/utility/on_scope_exit.h>
 #include <aw/utility/string/trim_if.h>
+#include <aw/utility/string/split.h>
+#include <aw/string/format.h>
 
 #include <aw/test/test.h>
 
 #include <chrono>
 #include <fstream>
+#include <thread>
 
 #include <aw/config.h>
 
@@ -19,6 +22,19 @@
 TestFile("Test");
 
 namespace aw {
+
+static auto read_all(std::string filename, char delim = '\n') -> std::vector<std::string>
+{
+	std::vector<std::string> args;
+	std::ifstream fs(filename);
+	std::string str;
+	while (std::getline(fs, str, delim)) {
+		const auto pred = [] (char c) { return std::isspace(c); };
+		args.push_back(string::rtrimmed_if(str, pred));
+	}
+	return args;
+}
+
 Test(process_basic_test) {
 	using namespace std::string_literals;
 
@@ -33,15 +49,7 @@ Test(process_basic_test) {
 	TestAssert(result == io::wait_status::finished);
 
 	std::vector<std::string> args_expect{ { path, "a", "b", "c" } };
-	std::vector<std::string> args;
-	{
-		std::ifstream fs("argv.txt");
-		std::string str;
-		while (std::getline(fs, str)) {
-			const auto pred = [] (char c) { return std::isspace(c); };
-			args.push_back(string::rtrimmed_if(str, pred));
-		}
-	}
+	std::vector<std::string> args = read_all("argv.txt");
 
 	TestEqual(args, args_expect);
 }
@@ -69,6 +77,19 @@ Test(spawn_without_arguments_reports_error) {
 }
 
 #if (AW_PLATFORM == AW_PLATFORM_POSIX)
+static bool is_zombie(io::process_handle pid)
+{
+	auto path = format("/proc/{}/status", underlying(pid));
+	const auto lines = read_all(path);
+
+	for (auto& line : lines) {
+		if (!line.contains("State:"))
+			continue;
+		return line.contains("Z");
+	}
+	return false;
+}
+
 /*!
  * A signal arriving during wait() must not interrupt the wait
  */
@@ -98,7 +119,7 @@ Test(wait_survives_a_signal) {
 
 	auto path = io::executable_name("dump_args"s);
 	std::vector<std::string> args = {
-		std::format("--sleep-ms={}", child_lifetime.count())
+		format("--sleep-ms={}", child_lifetime.count())
 	};
 
 	std::error_code ec;
@@ -121,7 +142,9 @@ Test(wait_survives_a_signal) {
 		// the wait ran to the child's exit, not to the signal
 		TestAssert( waited >= child_lifetime );
 
-		// TODO: verify that there's no zombie
+		std::this_thread::sleep_for( child_lifetime );
+
+		TestAssert( !is_zombie(handle) );
 	}
 }
 #endif
