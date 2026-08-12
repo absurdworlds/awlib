@@ -163,12 +163,19 @@ Test(wait_gives_up_at_the_deadline) {
 
 	auto started = steady_clock::now();
 	auto status  = io::wait(handle, test.ec, give_up_after);
-	auto waited  = steady_clock::now() - started;
+	auto waited  = duration_cast<milliseconds>( steady_clock::now() - started );
+
+	/*
+	 * WaitForSingleObject expires on a system timer tick,
+	 * historically ~15.6ms by default
+	 * TODO: revisit this, and maybe strengthen guarantees to match posix
+	 */
+	constexpr auto timer_slack = 16ms;
 
 	Checks {
 		TestAssert( status == io::wait_status::timeout );
-		TestAssert( waited >= give_up_after );
-		TestAssert( waited <  child_lifetime );
+		TestLess( (give_up_after - timer_slack).count(), waited.count() );
+		TestLess( waited.count(), child_lifetime.count() );
 	}
 
 	// the child outlived the wait, so it is still there to collect
