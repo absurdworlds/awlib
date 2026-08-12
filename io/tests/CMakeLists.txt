@@ -5,12 +5,12 @@ endif()
 
 aw_add_test(test_io
 	SOURCES
-		file.cpp
-		buffer.cpp
-		native_file.cpp
-		mmap_file.cpp
-		file_stream.cpp
-		istream_adapter.cpp
+		file.c++
+		buffer.c++
+		native_file.c++
+		mmap_file.c++
+		file_stream.c++
+		istream_adapter.c++
 		memory_stream.c++
 		${POSIX_SOURCES}
 )
