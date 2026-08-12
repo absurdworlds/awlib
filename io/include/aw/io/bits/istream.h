@@ -117,12 +117,18 @@ struct streambuf_adapt : private std::streambuf {
 	std::streambuf* buf;
 };
 
-/*! A dummy streambuf that does nothing */
+/*!
+ * A placeholder streambuf that holds no characters.
+ *
+ * istream_adapter parks one of these in the wrapped stream while it
+ * owns the real buffer, to guard against potential reads into the
+ * wrapped stream.
+ */
 struct streambuf_dummy : std::streambuf {
 	using std::streambuf::traits_type;
 	using int_type = traits_type::int_type;
 
-	int_type overflow( int_type c ) override { return c; }
-	int_type underflow( ) override { return traits_type::to_int_type(' '); }
+	int_type overflow( int_type ) override { return traits_type::eof(); }
+	int_type underflow( ) override { return traits_type::eof(); }
 };
 } // namespace aw::io
