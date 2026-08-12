@@ -40,6 +40,24 @@ Test(obj_parses_a_triangle) {
 	}
 }
 
+/*!
+ * A file whose last line has no newline after it still ends in a face.
+ * Text editors write files both ways, so both have to parse alike.
+ */
+Test(obj_parses_a_last_line_without_a_newline) {
+	auto const terminated = parse( std::string(three_verts) + "f 1 2 3\n" );
+	auto const bare       = parse( std::string(three_verts) + "f 1 2 3" );
+
+	Preconditions {
+		TestEqual( terminated.faces.size(), size_t(1) );
+	}
+
+	Checks {
+		TestEqual( bare.faces.size(), terminated.faces.size() );
+		TestEqual( bare.verts.size(), terminated.verts.size() );
+	}
+}
+
 //! Every index in a kept face has to be in range, whatever the file said
 Test(obj_out_of_range_indices_are_dropped) {
 	auto const in_range = [] (obj::mesh const& mesh) {

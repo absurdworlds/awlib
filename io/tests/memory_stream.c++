@@ -47,6 +47,57 @@ Test(stream_over_a_buffer_can_be_moved) {
 	}
 }
 
+/*!
+ * Input that runs out before a delimiter still holds a record, and
+ * read_until has to hand it over rather than drop it.
+ */
+Test(read_until_keeps_a_record_without_a_delimiter) {
+	char const memory[] { "a\nb" };
+
+	io::input_memory_stream stream{ memory, memory + 3 };
+	std::string line;
+
+	Checks {
+		TestAssert( stream.read_until(line, '\n') );
+		TestEqual( line, "a" );
+	}
+
+	// this is the one that used to be lost
+	Checks {
+		TestAssert( stream.read_until(line, '\n') );
+		TestEqual( line, "b" );
+	}
+
+	// and only now is there nothing left, which ends the loop
+	Checks {
+		TestAssert( !stream.read_until(line, '\n') );
+		TestAssert( line.empty() );
+	}
+}
+
+/*!
+ * A delimiter at the very end does not add a record after it.
+ */
+Test(read_until_stops_after_a_trailing_delimiter) {
+	char const memory[] { "a\nb\n" };
+
+	io::input_memory_stream stream{ memory, memory + 4 };
+	std::string line;
+
+	Checks {
+		TestAssert( stream.read_until(line, '\n') );
+		TestEqual( line, "a" );
+
+		TestAssert( stream.read_until(line, '\n') );
+		TestEqual( line, "b" );
+	}
+
+	Checks {
+		TestAssert( !stream.read_until(line, '\n') );
+		TestAssert( line.empty() );
+	}
+}
+
 Test(memory_stream_reports_eof) {
 	char const memory[] { "abcdefghijkilmno" };
 	constexpr size_t buf_size = sizeof(memory);
