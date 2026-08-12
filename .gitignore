@@ -25,5 +25,6 @@ a.out
 *.vcxproj.filters
 CMakeLists.txt.user
 .*
+!/.github
 !/.gitignore
 Config.mk
