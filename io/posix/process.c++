@@ -10,6 +10,7 @@
 #include <vector>
 
 #include <cassert>
+#include <cerrno>
 #include <ctime>
 
 #include <sys/types.h>
@@ -36,9 +37,12 @@ process_handle spawn(const char* path, aw::array_view<const char*> argv, std::er
 	 */
 	auto args = const_cast<char* const*>( argv.data() );
 
+	// look in the PATH first
 	pid_t pid;
 	int rc = posix_spawnp(&pid, path, nullptr, nullptr, args, environ);
-	if (rc == 2)
+
+	// try the working directory second
+	if (rc == ENOENT)
 		rc = posix_spawn(&pid, path, nullptr, nullptr, args, environ);
 
 	if (rc != 0) {
