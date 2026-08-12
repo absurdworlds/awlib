@@ -48,9 +48,8 @@ Test(wrapped_stream_is_still_usable_after_eof) {
 };
 
 /*!
- * The adapter takes the parent's buffer for its lifetime and leaves a
- * placeholder behind. 
- * Reading from the parent while the buffer is borrowed should fail cleanly. 
+ * Reading from the parent stream while an adapter holds it should fail
+ * cleanly rather than fault
  */
 Test(wrapped_stream_fails_cleanly_while_adapted) {
 	std::istringstream is{"0123456789"};
@@ -102,5 +101,67 @@ Test(wrapped_stream_is_restored_cleanly) {
 		TestEqual( word, "3456789" );
 	}
 }
+
+/*!
+ * Reading after a seek yields the bytes at the position sought to
+ */
+Test(reads_resume_where_a_seek_landed) {
+	std::istringstream is{"0123456789"};
+
+	io::istream_buffer buffer{ is.rdbuf() };
+	io::input_stream stream{ buffer };
+
+	char c = 0;
+
+	Preconditions {
+		TestAssert( stream.get(c) );
+		TestEqual( c, '0' );
+	}
+
+	Checks {
+		buffer.seekpos(4);
+		TestAssert( stream.get(c) );
+		TestEqual( c, '4' );
+	}
+
+	// and again to a position before the one already read
+	Checks {
+		buffer.seekpos(1);
+		TestAssert( stream.get(c) );
+		TestEqual( c, '1' );
+	}
+};
+
+/*!
+ * A relative seek counts from the position already read to
+ */
+Test(relative_seek_counts_from_the_read_position) {
+	std::istringstream is{"0123456789"};
+
+	io::istream_buffer buffer{ is.rdbuf() };
+	io::input_stream stream{ buffer };
+
+	char c = 0;
+
+	Preconditions {
+		// read as far as '2'
+		TestAssert( stream.get(c) );
+		TestAssert( stream.get(c) );
+		TestAssert( stream.get(c) );
+		TestEqual( c, '2' );
+	}
+
+	Checks {
+		buffer.seekoff(2);
+		TestAssert( stream.get(c) );
+		TestEqual( c, '5' );
+	}
+
+	Checks {
+		buffer.seekoff(-3);
+		TestAssert( stream.get(c) );
+		TestEqual( c, '3' );
+	}
+};
 } // namespace aw
 

@@ -28,17 +28,17 @@ struct istream_buffer : input_buffer {
 
 	void seekpos(size_t offset) override
 	{
-		adapt.buf->pubseekoff(offset, std::ios_base::beg, std::ios_base::in);
+		reseek(offset, std::ios_base::beg);
 	}
 
 	void seekend(size_t offset) override
 	{
-		adapt.buf->pubseekoff(offset, std::ios_base::end, std::ios_base::in);
+		reseek(offset, std::ios_base::end);
 	}
 
 	void seekoff(ptrdiff_t offset) override
 	{
-		adapt.buf->pubseekoff(offset, std::ios_base::cur, std::ios_base::in);
+		reseek(offset, std::ios_base::cur);
 	}
 
 protected:
@@ -55,11 +55,27 @@ protected:
 			set_ptr(0, 0, 0);
 			return false;
 		}
-		set_ptr(adapt.begin(), adapt.ptr(), adapt.end());
+		set_ptr(adapt.ptr(), adapt.ptr(), adapt.end());
 		return true;
 	}
 
 private:
+	/*!
+	 * Seek the wrapped buffer and mirror it again afterwards.
+	 */
+	void reseek(ptrdiff_t offset, std::ios_base::seekdir dir)
+	{
+		if (!adapt)
+			return;
+
+		adapt.advance(ptr() - begin());
+
+		adapt.buf->pubseekoff(offset, dir, std::ios_base::in);
+
+		set_ptr(adapt.ptr(), adapt.ptr(), adapt.end());
+		fill_buffer();
+	}
+
 	streambuf_adapt adapt;
 };
 
