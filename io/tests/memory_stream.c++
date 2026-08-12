@@ -4,10 +4,49 @@
 #include <cstring>
 #include <fstream>
 #include <algorithm>
+#include <type_traits>
 
 TestFile("memory_stream");
 
 namespace aw {
+static_assert( !std::is_copy_constructible_v<io::input_stream> );
+static_assert( !std::is_copy_assignable_v<io::input_stream> );
+
+static_assert( !std::is_copy_constructible_v<io::input_memory_stream> );
+static_assert( !std::is_copy_assignable_v<io::input_memory_stream> );
+
+// holds buffer by value
+static_assert( !std::is_move_constructible_v<io::input_memory_stream> );
+// owns the buffer, moving is fine
+static_assert(  std::is_move_constructible_v<io::input_stream> );
+
+/*!
+ * A stream can be built over a buffer directly, and moved: the moved-from
+ * one gives up the buffer rather than sharing it.
+ */
+Test(stream_over_a_buffer_can_be_moved) {
+	char const memory[] { "abc" };
+
+	io::input_memory_buffer buffer{memory, memory + 3};
+	io::input_stream stream{buffer};
+
+	char c = 0;
+
+	Preconditions {
+		TestAssert( stream.get(c) );
+		TestEqual( c, 'a' );
+	}
+
+	Checks {
+		auto moved = std::move(stream);
+
+		// it carries on where the original left off
+		TestAssert( moved.get(c) );
+		TestEqual( c, 'b' );
+		TestEqual( moved.position(), 2u );
+	}
+}
+
 Test(memory_stream_reports_eof) {
 	char const memory[] { "abcdefghijkilmno" };
 	constexpr size_t buf_size = sizeof(memory);
