@@ -3,60 +3,54 @@
 #include <aw/types/array_view.h>
 #include <algorithm>
 
+#include "temp_file.h"
+
 TestFile("mmap file");
 
 // TODO: test E2BIG
-// TODO: look into the temporary file cleanup
 
 namespace aw {
 using fm = io::file_mode;
 using mp = io::map_perms;
+using test::temp_file;
 
 Test(mmap_basic_read) {
-	char const filename[] { "~temp_mmap_test.bin" };
 	constexpr size_t buf_size = 0x12000;
 
 	std::vector<char> buf1(buf_size, 'a');
 	buf1[buf_size - 0x10] = 'b';
 
-	const auto mode = fm::write|fm::create|fm::truncate;
+	temp_file file{_context.name};
 
-	Checks {
-		io::native::file file(filename, mode);
-		auto ret = file.write(buf1.data(), buf1.size());
-		TestAssert(ret > 0);
+	Preconditions {
+		TestEqual( file.write(buf1), intmax_t(buf_size) );
 	}
 
 	Checks {
-		io::mmap_file file(filename, io::map_perms::read);
-		array_view<char> view1(file);
+		io::mmap_file mapped(file.path, io::map_perms::read);
+		array_view<char> view1(mapped);
 		array_view<char> view2(buf1);
 		// buf_size is too large to be properly displayed
 		// so TestAssert here instead of TestEqual
 		//TestEqual( view1, view2 );
 		TestAssert( view1 == view2 );
 	}
-
-	fs::remove( filename );
 };
 
 Test(mmap_view_read) {
-	char const filename[] { "~temp_mmap_view_test.bin" };
 	constexpr size_t buf_size = 0x12000;
 
 	std::vector<char> buf1(buf_size, 'a');
 	buf1[buf_size - 0x10] = 'd';
 
-	const auto mode = fm::write|fm::create|fm::truncate;
+	temp_file file{_context.name};
 
-	Checks {
-		io::native::file file(filename, mode);
-		auto ret = file.write(buf1.data(), buf1.size());
-		TestAssert(ret > 0);
+	Preconditions {
+		TestEqual( file.write(buf1), intmax_t(buf_size) );
 	}
 
 	Checks {
-		io::mmap_view file_view(filename);
+		io::mmap_view file_view(file.path);
 
 		TestAssert(file_view.is_open());
 		TestEqual(file_view.size(), buf_size);
@@ -66,8 +60,6 @@ Test(mmap_view_read) {
 
 		TestAssert( view1 == view2 );
 	}
-
-	fs::remove( filename );
 };
 
 /*!
@@ -75,36 +67,27 @@ Test(mmap_view_read) {
  * file
  */
 Test(mmap_write_only_still_maps) {
-	char const filename[] { "~temp_mmap_write_only_test.bin" };
 	constexpr size_t buf_size = 0x1000;
 
-	std::vector<char> buf1(buf_size, 'a');
+	temp_file file{_context.name};
 
-	Checks {
-		io::native::file file(filename, fm::write|fm::create|fm::truncate);
-		TestAssert( file.write(buf1.data(), buf1.size()) > 0 );
+	Preconditions {
+		TestEqual( file.write(std::vector<char>(buf_size, 'a')), intmax_t(buf_size) );
 	}
 
 	Checks {
 		std::error_code ec;
-		io::mmap_file file(filename, ec, mp::write);
+		io::mmap_file mapped(file.path, ec, mp::write);
 
 		TestAssert( !ec );
-		TestAssert( file.is_open() );
+		TestAssert( mapped.is_open() );
 
-		std::fill(file.begin(), file.end(), 'z');
+		std::fill(mapped.begin(), mapped.end(), 'z');
 	}
 
-	// the writes reached the file
 	Checks {
-		std::vector<char> buf2(buf_size, 'x');
-		io::native::file file(filename, fm::read);
-		TestAssert( file.read(buf2.data(), buf2.size()) > 0 );
-
-		TestEqual( buf2, std::vector<char>(buf_size, 'z') );
+		TestEqual( file.read(), std::vector<char>(buf_size, 'z') );
 	}
-
-	fs::remove( filename );
 };
 
 /*!
@@ -112,72 +95,61 @@ Test(mmap_write_only_still_maps) {
  * then faulting on the first read
  */
 Test(mmap_rejects_no_permissions) {
-	char const filename[] { "~temp_mmap_none_test.bin" };
+	temp_file file{_context.name};
 
-	Checks {
-		io::native::file file(filename, fm::write|fm::create|fm::truncate);
-		TestAssert( file.write("data", 4) > 0 );
+	Preconditions {
+		TestEqual( file.write("data"), intmax_t(4) );
 	}
 
 	Checks {
 		std::error_code ec;
-		io::mmap_file file(filename, ec, mp::none);
+		io::mmap_file mapped(file.path, ec, mp::none);
 
 		TestAssert( bool(ec) );
-		TestAssert( !file.is_open() );
+		TestAssert( !mapped.is_open() );
 	}
-
-	fs::remove( filename );
 };
 
 Test(mmap_write_back) {
-	char const filename[] { "~temp_mmap_write_test.bin" };
 	constexpr size_t buf_size = 0x12000;
 
-	std::vector<char> buf1(buf_size, 'a');
+	temp_file file{_context.name};
 
-	const auto mode = fm::write|fm::create|fm::truncate;
-
-	Checks {
-		io::native::file file(filename, mode);
-		auto ret = file.write(buf1.data(), buf1.size());
-		TestAssert(ret > 0);
+	Preconditions {
+		TestEqual( file.write(std::vector<char>(buf_size, 'a')), intmax_t(buf_size) );
 	}
 
 	std::vector<char> expected(buf_size, 'z');
 
 	Checks {
-		io::mmap_file file(filename, io::map_perms::rdwr);
-		TestAssert(file.is_open());
-		std::fill(file.begin(), file.end(), 'z');
+		io::mmap_file mapped(file.path, io::map_perms::rdwr);
+		TestAssert(mapped.is_open());
+		std::fill(mapped.begin(), mapped.end(), 'z');
 
-		array_view<char> view1(file);
+		array_view<char> view1(mapped);
 		array_view<char> view2(expected);
 
 		TestAssert( view1 == view2 );
 	}
 
 	Checks {
-		std::vector<char> buf2(buf_size, 'x');
-		io::native::file file(filename, fm::read);
-		auto ret = file.read(buf2.data(), buf2.size());
-
-		TestAssert(ret > 0);
-		TestAssert( buf2 == expected );
+		TestAssert( file.read() == expected );
 	}
-
-	fs::remove( filename );
 };
 
 Test(mmap_missing_file) {
-	char const filename[] { "~temp_mmap_missing_test.bin" };
-	fs::remove( filename );
+	// constructed and left empty, so nothing is on disk to map
+	temp_file file{_context.name};
+
+	Preconditions {
+		TestAssert( !file.exists() );
+	}
 
 	Checks {
 		std::error_code ec;
-		io::mmap_file file(filename, ec, io::map_perms::read);
+		io::mmap_file mapped(file.path, ec, io::map_perms::read);
 		TestAssert(bool(ec));
-		TestAssert(!file.is_open());
+		TestAssert(!mapped.is_open());
 	}
 };
 
@@ -191,24 +163,21 @@ Test(mmap_invalid_fd) {
 };
 
 Test(mmap_empty_file) {
-	char const filename[] { "~temp_mmap_empty_test.bin" };
+	temp_file file{_context.name};
 
-	const auto mode = fm::write|fm::create|fm::truncate;
-
-	Checks {
-		io::native::file file(filename, mode);
-		TestAssert(file.is_open());
+	Preconditions {
+		TestEqual( file.write(""), intmax_t(0) );
+		TestAssert( file.exists() );
+		TestEqual( file.size(), 0u );
 	}
 
 	Checks {
 		std::error_code ec;
-		io::mmap_file file(filename, ec, io::map_perms::read);
+		io::mmap_file mapped(file.path, ec, io::map_perms::read);
 		TestAssert(!ec);
-		TestAssert(!file.is_open());
-		TestEqual(file.size(), 0u);
+		TestAssert(!mapped.is_open());
+		TestEqual(mapped.size(), 0u);
 	}
-
-	fs::remove( filename );
 };
 
 #if 0// (AW_PLATFORM_SPECIFIC == AW_PLATFORM_LINUX)
@@ -224,35 +193,29 @@ Test(mmap_blkdevide)
 
 #if (AW_ARCH == AW_ARCH_x86_64) || (AW_ARCH == AW_ARCH_i686)
 Test(mmap_execute) {
-	char const filename[] { "~temp_mmap_exec_test.bin" };
-
 	char const code[] = {
 		'\xb8', '\x2a', '\x00', '\x00', '\x00', // mov eax, 42
 		'\xc3'                                  // ret
 	};
 
-	const auto mode = fm::write|fm::create|fm::truncate;
+	temp_file file{_context.name};
 
-	Checks {
-		io::native::file file(filename, mode);
-		auto ret = file.write(code, sizeof(code));
-		TestAssert(ret > 0);
+	Preconditions {
+		TestEqual( file.write(std::string_view{code, sizeof(code)}), intmax_t(sizeof(code)) );
 	}
 
 	Checks {
 		std::error_code ec;
-		io::mmap_file file(filename, ec, mp::read|mp::exec);
+		io::mmap_file mapped(file.path, ec, mp::read|mp::exec);
 		TestAssert(!ec);
-		TestAssert(file.is_open());
+		TestAssert(mapped.is_open());
 
-		if (file.is_open()) {
-			auto func = reinterpret_cast<int(*)()>(file.data());
+		if (mapped.is_open()) {
+			auto func = reinterpret_cast<int(*)()>(mapped.data());
 			// will segfault with wrong perms
 			TestEqual(func(), 42);
 		}
 	}
-
-	fs::remove( filename );
 };
 #endif
 } // namespace aw

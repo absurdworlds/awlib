@@ -1,23 +1,27 @@
 #include <aw/io/file.h>
 #include <aw/io/buffered_file.h>
 #include <aw/test/test.h>
-#include <cstdio>
 #include <cstring>
 #include <algorithm>
+
+#include "temp_file.h"
 
 TestFile("File IO");
 
 namespace aw {
+using test::temp_file;
+
 Test(basic_rw) {
-	char const filename[] { "~temp_io_test.bin" };
 	constexpr size_t buf_size = 0x12000;
 
 	std::vector<char> buf1(buf_size, 'a');
 	std::vector<char> buf2(buf_size, 'x');
 	buf1[buf_size - 0x10] = 'b';
 
+	temp_file tmp{_context.name};
+
 	auto fm = io::file_mode::write|io::file_mode::create|io::file_mode::truncate;
-	io::file file(filename, fm);
+	io::file file(tmp.path, fm);
 
 	Preconditions {
 		TestAssert(file.is_open());
@@ -30,7 +34,7 @@ Test(basic_rw) {
 
 	Setup {
 		file.close();
-		file = io::file(filename, io::file_mode::read);
+		file = io::file(tmp.path, io::file_mode::read);
 	}
 
 	Preconditions {
@@ -47,9 +51,6 @@ Test(basic_rw) {
 		// so TestAssert here instead of TestEqual
 		TestAssert( buf1 == buf2 );
 	}
-
-	file.close();
-	fs::remove( filename );
 };
 
 Test(size_reports_error) {
@@ -59,11 +60,12 @@ Test(size_reports_error) {
 };
 
 Test(buffered_file_move_keeps_path) {
-	char const filename[] { "~temp_io_movepath_test.bin" };
-	char const data[]     { "abcde" };
+	char const data[] { "abcde" };
+
+	temp_file tmp{_context.name};
 
 	auto const fm = io::file_mode::write|io::file_mode::create|io::file_mode::truncate;
-	io::buffered_file file(filename, fm);
+	io::buffered_file file(tmp.path, fm);
 	file.write(data, sizeof(data) - 1);
 	file.flush();
 
@@ -82,19 +84,19 @@ Test(buffered_file_move_keeps_path) {
 	}
 
 	moved.close();
-	fs::remove(filename);
 };
 
 Test(basic_buf_rw) {
-	char const filename[] { "~temp_io_test.bin" };
 	constexpr size_t buf_size = 0x12000;
 
 	std::vector<char> buf1(buf_size, 'a');
 	std::vector<char> buf2(buf_size, 'x');
 	buf1[buf_size - 0x10] = 'b';
 
+	temp_file tmp{_context.name};
+
 	auto const fm = io::file_mode::write|io::file_mode::create|io::file_mode::truncate;
-	io::buffered_file file(filename, fm);
+	io::buffered_file file(tmp.path, fm);
 
 	Preconditions {
 		TestAssert(file.is_open());
@@ -107,7 +109,7 @@ Test(basic_buf_rw) {
 
 	Setup {
 		file.close();
-		file = io::buffered_file(filename, io::file_mode::read);
+		file = io::buffered_file(tmp.path, io::file_mode::read);
 	}
 
 	Preconditions {
@@ -122,8 +124,5 @@ Test(basic_buf_rw) {
 	Postconditions {
 		TestAssert( buf1 == buf2 );
 	}
-
-	file.close();
-	fs::remove( filename );
 };
 } // namespace aw
