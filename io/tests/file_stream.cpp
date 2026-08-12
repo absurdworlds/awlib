@@ -13,14 +13,13 @@ Test(file_stream_rw) {
 	char const filename[] { "~temp_io_test.bin" };
 	constexpr size_t buf_size = 0x12023;
 
-	char* buf1 = new char[buf_size];
-	char* buf2 = new char[buf_size];
-	std::fill_n(buf1, buf_size, 'a');
+	std::vector<char> buf1(buf_size, 'a');
+	std::vector<char> buf2(buf_size, 'x');
 	buf1[buf_size - 0x10] = 'b';
 
 	Setup {
 		std::ofstream fs{ filename };
-		fs.write(buf1, buf_size);
+		fs.write(buf1.data(), buf1.size());
 	}
 
 	io::input_file_stream ifs{ filename };
@@ -30,11 +29,13 @@ Test(file_stream_rw) {
 	}
 
 	Checks {
-		ifs.read(buf2, buf_size);
+		ifs.read(buf2.data(), buf2.size());
 	}
 
 	Postconditions {
-		TestAssert( std::equal(buf1, buf1+buf_size, buf2, buf2 + buf_size) );
+		// buf_size is very large, so TestEquals would flood
+		// the output too much on failure
+		TestAssert( buf1 == buf2 );
 	}
 
 	fs::remove( filename );
