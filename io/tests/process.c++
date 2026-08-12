@@ -8,6 +8,7 @@
 #include <aw/test/test.h>
 
 #include <chrono>
+#include <csignal>
 #include <fstream>
 
 #include <aw/config.h>
@@ -174,6 +175,31 @@ Test(wait_with_a_deadline_reports_child_as_finished) {
 		TestAssert( status == io::wait_status::finished );
 		TestAssert( waited < give_up_after );
 	}
+}
+
+/*!
+ * kill() has to clear the error code on success
+ */
+Test(kill_clears_the_error_code) {
+	using namespace std::chrono;
+
+	process_fixture test{_context};
+
+	auto handle = test.spawn(300ms);
+
+	Preconditions {
+		TestAssert( handle != io::invalid_process_handle );
+
+		test.fail();
+		TestAssert( bool(test.ec) );
+	}
+
+	Checks {
+		TestAssert( io::kill(handle, SIGTERM, test.ec) == 0 );
+		TestAssert( !test.ec );
+	}
+
+	io::wait(handle, test.ec);
 }
 
 #if (AW_PLATFORM == AW_PLATFORM_POSIX)

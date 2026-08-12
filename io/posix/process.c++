@@ -1,5 +1,7 @@
 #include "aw/io/posix/process.h"
 
+#include "helpers.h"
+
 #include <aw/types/string_view.h>
 #include <aw/algorithm/in.h>
 
@@ -79,8 +81,7 @@ int kill(process_handle pid, int signal, std::error_code& ec) noexcept
 	};
 
 	auto ret = ::kill( pid_t(pid), signal);
-	if (ret < 0)
-		ec.assign( errno, std::generic_category() );
+	set_error_if(ret < 0, ec);
 	return ret;
 }
 

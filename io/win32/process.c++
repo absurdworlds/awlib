@@ -134,6 +134,6 @@ int kill(process_handle hprocess, int signal, std::error_code& ec) noexcept
 
 	set_error_if(!ret, ec);
 
-	return ret;
+	return ret ? 0 : -1;
 }
 } // namespace aw::platform::win32
