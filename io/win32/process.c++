@@ -9,6 +9,7 @@
 #include "winapi_helpers.h"
 
 #include <cassert>
+#include <csignal>
 #include <vector>
 
 namespace aw::io::win32 {
@@ -123,6 +124,29 @@ wait_status wait(process_handle hprocess, std::error_code& ec, timeout_spec_ms t
 }
 
 int kill(process_handle hprocess, int signal, std::error_code& ec) noexcept
+{
+	// TODO: add is_handle_valid()
+	if( in( hprocess, process_handle(0), process_handle(-1) ) ) {
+		ec = make_error_code( std::errc::invalid_argument );
+		return -1;
+	};
+
+	switch (signal) {
+	// TODO: SIGINT, SIGBREAK, SIGSTOP/SIGCONT
+	case SIGTERM:
+#ifdef SIGKILL
+	// SIGKILL is not defined on MSVC, and mingw defines it only
+	// under _POSIX
+	case SIGKILL:
+#endif
+		return terminate(hprocess, ec);
+	default:
+		ec = make_error_code( std::errc::not_supported );
+		return -1;
+	}
+}
+
+int terminate(process_handle hprocess, std::error_code& ec) noexcept
 {
 	// TODO: add is_handle_valid()
 	if( in( hprocess, process_handle(0), process_handle(-1) ) ) {

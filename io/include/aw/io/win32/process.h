@@ -72,6 +72,16 @@ inline int kill(process_handle pid, int signal)
 	return kill(pid, signal, ec);
 }
 
+/*!
+ * Stop a process. On WinAPI platform it unconditionally ends the process.
+ */
+AW_IO_EXP int terminate(process_handle pid, std::error_code& ec) noexcept;
+inline int terminate(process_handle pid)
+{
+	std::error_code ec;
+	return terminate(pid, ec);
+}
+
 inline wait_status run(
 	std::string path,
 	aw::array_view<std::string> argv,

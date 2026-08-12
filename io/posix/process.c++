@@ -87,6 +87,12 @@ int kill(process_handle pid, int signal, std::error_code& ec) noexcept
 	return ret;
 }
 
+AW_IO_EXP
+int terminate(process_handle pid, std::error_code& ec) noexcept
+{
+	return kill(pid, SIGTERM, ec);
+}
+
 namespace {
 // this one is noexcept unlike std::this_thread::sleep_for
 void sleep_for(std::chrono::nanoseconds duration) noexcept

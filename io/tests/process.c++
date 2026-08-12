@@ -117,6 +117,33 @@ Test(spawn_without_arguments_reports_error) {
 	}
 }
 
+Test(terminate_stops_the_child) {
+	using namespace std::chrono;
+
+	process_fixture test{_context};
+
+	// long enough that it cannot have finished on its own
+	constexpr auto child_lifetime = 30s;
+
+	auto handle = test.spawn(child_lifetime);
+
+	Preconditions {
+		TestAssert( handle != io::invalid_process_handle );
+	}
+
+	auto started = steady_clock::now();
+
+	Checks {
+		TestAssert( io::terminate(handle, test.ec) == 0 );
+		TestAssert( !test.ec );
+	}
+
+	Checks {
+		TestAssert( io::wait(handle, test.ec) == io::wait_status::finished );
+		TestAssert( steady_clock::now() - started < child_lifetime );
+	}
+}
+
 /*!
  * A wait must return at the deadline rather than waiting for the child
  */
