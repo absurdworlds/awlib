@@ -4,7 +4,7 @@
 #include <cstring>
 #include <algorithm>
 
-#include "temp_file.h"
+#include "round_trip.h"
 
 TestFile("File IO");
 
@@ -12,45 +12,7 @@ namespace aw {
 using test::temp_file;
 
 Test(basic_rw) {
-	constexpr size_t buf_size = 0x12000;
-
-	std::vector<char> buf1(buf_size, 'a');
-	std::vector<char> buf2(buf_size, 'x');
-	buf1[buf_size - 0x10] = 'b';
-
-	temp_file tmp{_context.name};
-
-	auto fm = io::file_mode::write|io::file_mode::create|io::file_mode::truncate;
-	io::file file(tmp.path, fm);
-
-	Preconditions {
-		TestAssert(file.is_open());
-	}
-
-	Checks {
-		auto ret = file.write(buf1.data(), buf1.size());
-		TestAssert(ret > 0);
-	}
-
-	Setup {
-		file.close();
-		file = io::file(tmp.path, io::file_mode::read);
-	}
-
-	Preconditions {
-		TestAssert(file.is_open());
-	}
-
-	Checks {
-		auto ret = file.read(buf2.data(), buf2.size());
-		TestAssert(ret > 0);
-	}
-
-	Postconditions {
-		// buf_size is too large to be properly displayed
-		// so TestAssert here instead of TestEqual
-		TestAssert( buf1 == buf2 );
-	}
+	test::test_round_trip<io::file>(_context.name);
 };
 
 Test(size_reports_error) {
@@ -87,42 +49,6 @@ Test(buffered_file_move_keeps_path) {
 };
 
 Test(basic_buf_rw) {
-	constexpr size_t buf_size = 0x12000;
-
-	std::vector<char> buf1(buf_size, 'a');
-	std::vector<char> buf2(buf_size, 'x');
-	buf1[buf_size - 0x10] = 'b';
-
-	temp_file tmp{_context.name};
-
-	auto const fm = io::file_mode::write|io::file_mode::create|io::file_mode::truncate;
-	io::buffered_file file(tmp.path, fm);
-
-	Preconditions {
-		TestAssert(file.is_open());
-	}
-
-	Checks {
-		auto ret = file.write(buf1.data(), buf1.size());
-		TestAssert(ret > 0);
-	}
-
-	Setup {
-		file.close();
-		file = io::buffered_file(tmp.path, io::file_mode::read);
-	}
-
-	Preconditions {
-		TestAssert(file.is_open());
-	}
-
-	Checks {
-		auto ret = file.read(buf2.data(), buf2.size());
-		TestAssert(ret > 0);
-	}
-
-	Postconditions {
-		TestAssert( buf1 == buf2 );
-	}
+	test::test_round_trip<io::buffered_file>(_context.name);
 };
 } // namespace aw
