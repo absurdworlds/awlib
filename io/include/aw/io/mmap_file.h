@@ -206,6 +206,7 @@ struct mmap_view : private mmap_file {
 	using mmap_file::is_open;
 	using mmap_file::size;
 
+	char const* data()  const { return mmap_file::data(); }
 	char const* begin() const { return mmap_file::begin(); }
 	char const* end()   const { return mmap_file::end(); }
 };

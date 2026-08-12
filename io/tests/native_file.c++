@@ -11,9 +11,8 @@ Test(native_basic_rw) {
 	char const filename[] { "~temp_io_test.bin" };
 	constexpr size_t buf_size = 0x12023;
 
-	char* buf1 = new char[buf_size];
-	char* buf2 = new char[buf_size];
-	std::fill_n(buf1, buf_size, 'a');
+	std::vector<char> buf1(buf_size, 'a');
+	std::vector<char> buf2(buf_size, 'x');
 	buf1[buf_size - 0x10] = 'b';
 
 	auto fm = io::file_mode::write|io::file_mode::create|io::file_mode::truncate;
@@ -24,7 +23,7 @@ Test(native_basic_rw) {
 	}
 
 	Checks {
-		auto ret = file.write(buf1, buf_size);
+		auto ret = file.write(buf1.data(), buf1.size());
 		TestAssert(ret > 0);
 	}
 
@@ -38,12 +37,14 @@ Test(native_basic_rw) {
 	}
 
 	Checks {
-		auto ret = file.read(buf2, buf_size);
+		auto ret = file.read(buf2.data(), buf2.size());
 		TestAssert(ret > 0);
 	}
 
 	Postconditions {
-		TestAssert( std::equal(buf1, buf1+buf_size, buf2, buf2 + buf_size) );
+		// buf_size is too large to be properly displayed,
+		// so TestAssert here instead of TestEqual
+		TestAssert( buf1 == buf2 );
 	}
 
 	file.close();

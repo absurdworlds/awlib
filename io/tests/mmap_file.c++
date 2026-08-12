@@ -16,23 +16,25 @@ Test(mmap_basic_read) {
 	char const filename[] { "~temp_mmap_test.bin" };
 	constexpr size_t buf_size = 0x12000;
 
-	char* buf1 = new char[buf_size];
-	std::fill_n(buf1, buf_size, 'a');
+	std::vector<char> buf1(buf_size, 'a');
 	buf1[buf_size - 0x10] = 'b';
 
 	const auto mode = fm::write|fm::create|fm::truncate;
 
 	Checks {
 		io::native::file file(filename, mode);
-		auto ret = file.write(buf1, buf_size);
+		auto ret = file.write(buf1.data(), buf1.size());
 		TestAssert(ret > 0);
 	}
 
 	Checks {
 		io::mmap_file file(filename, io::map_perms::read);
 		array_view<char> view1(file);
-		array_view<char> view2(buf1, buf_size);
-		TestEqual( view1, view2 );
+		array_view<char> view2(buf1);
+		// buf_size is too large to be properly displayed
+		// so TestAssert here instead of TestEqual
+		//TestEqual( view1, view2 );
+		TestAssert( view1 == view2 );
 	}
 
 	fs::remove( filename );
@@ -42,23 +44,27 @@ Test(mmap_view_read) {
 	char const filename[] { "~temp_mmap_view_test.bin" };
 	constexpr size_t buf_size = 0x12000;
 
-	char* buf1 = new char[buf_size];
-	std::fill_n(buf1, buf_size, 'c');
+	std::vector<char> buf1(buf_size, 'a');
 	buf1[buf_size - 0x10] = 'd';
 
 	const auto mode = fm::write|fm::create|fm::truncate;
 
 	Checks {
 		io::native::file file(filename, mode);
-		auto ret = file.write(buf1, buf_size);
+		auto ret = file.write(buf1.data(), buf1.size());
 		TestAssert(ret > 0);
 	}
 
 	Checks {
-		io::mmap_view view(filename);
-		TestAssert(view.is_open());
-		TestEqual(view.size(), buf_size);
-		TestAssert( std::equal(view.begin(), view.end(), buf1, buf1 + buf_size) );
+		io::mmap_view file_view(filename);
+
+		TestAssert(file_view.is_open());
+		TestEqual(file_view.size(), buf_size);
+
+		array_view<char> view1(file_view);
+		array_view<char> view2(buf1);
+
+		TestAssert( view1 == view2 );
 	}
 
 	fs::remove( filename );
@@ -68,32 +74,36 @@ Test(mmap_write_back) {
 	char const filename[] { "~temp_mmap_write_test.bin" };
 	constexpr size_t buf_size = 0x12000;
 
-	char* buf1 = new char[buf_size];
-	std::fill_n(buf1, buf_size, 'a');
+	std::vector<char> buf1(buf_size, 'a');
 
 	const auto mode = fm::write|fm::create|fm::truncate;
 
 	Checks {
 		io::native::file file(filename, mode);
-		auto ret = file.write(buf1, buf_size);
+		auto ret = file.write(buf1.data(), buf1.size());
 		TestAssert(ret > 0);
 	}
+
+	std::vector<char> expected(buf_size, 'z');
 
 	Checks {
 		io::mmap_file file(filename, io::map_perms::rdwr);
 		TestAssert(file.is_open());
 		std::fill(file.begin(), file.end(), 'z');
+
+		array_view<char> view1(file);
+		array_view<char> view2(expected);
+
+		TestAssert( view1 == view2 );
 	}
 
 	Checks {
-		char* buf2 = new char[buf_size];
+		std::vector<char> buf2(buf_size, 'x');
 		io::native::file file(filename, fm::read);
-		auto ret = file.read(buf2, buf_size);
-		TestAssert(ret > 0);
+		auto ret = file.read(buf2.data(), buf2.size());
 
-		char* expected = new char[buf_size];
-		std::fill_n(expected, buf_size, 'z');
-		TestAssert( std::equal(buf2, buf2+buf_size, expected, expected+buf_size) );
+		TestAssert(ret > 0);
+		TestAssert( buf2 == expected );
 	}
 
 	fs::remove( filename );
