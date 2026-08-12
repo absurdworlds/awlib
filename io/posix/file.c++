@@ -32,6 +32,9 @@ file_descriptor open(fs::path const& path, file_mode fm, std::error_code& ec)
 			flags |= O_WRONLY; break;
 		case file_mode::read|file_mode::write:
 			flags |= O_RDWR;   break;
+		default:
+			ec = make_error_code( std::errc::invalid_argument );
+			return invalid_fd;
 	}
 
 	if (bool(fm & file_mode::append))

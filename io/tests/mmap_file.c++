@@ -70,6 +70,66 @@ Test(mmap_view_read) {
 	fs::remove( filename );
 };
 
+/*!
+ * A write-only mapping opens, and what is written through it reaches the
+ * file
+ */
+Test(mmap_write_only_still_maps) {
+	char const filename[] { "~temp_mmap_write_only_test.bin" };
+	constexpr size_t buf_size = 0x1000;
+
+	std::vector<char> buf1(buf_size, 'a');
+
+	Checks {
+		io::native::file file(filename, fm::write|fm::create|fm::truncate);
+		TestAssert( file.write(buf1.data(), buf1.size()) > 0 );
+	}
+
+	Checks {
+		std::error_code ec;
+		io::mmap_file file(filename, ec, mp::write);
+
+		TestAssert( !ec );
+		TestAssert( file.is_open() );
+
+		std::fill(file.begin(), file.end(), 'z');
+	}
+
+	// the writes reached the file
+	Checks {
+		std::vector<char> buf2(buf_size, 'x');
+		io::native::file file(filename, fm::read);
+		TestAssert( file.read(buf2.data(), buf2.size()) > 0 );
+
+		TestEqual( buf2, std::vector<char>(buf_size, 'z') );
+	}
+
+	fs::remove( filename );
+};
+
+/*!
+ * Asking for no permissions is refused, rather than reported as open and
+ * then faulting on the first read
+ */
+Test(mmap_rejects_no_permissions) {
+	char const filename[] { "~temp_mmap_none_test.bin" };
+
+	Checks {
+		io::native::file file(filename, fm::write|fm::create|fm::truncate);
+		TestAssert( file.write("data", 4) > 0 );
+	}
+
+	Checks {
+		std::error_code ec;
+		io::mmap_file file(filename, ec, mp::none);
+
+		TestAssert( bool(ec) );
+		TestAssert( !file.is_open() );
+	}
+
+	fs::remove( filename );
+};
+
 Test(mmap_write_back) {
 	char const filename[] { "~temp_mmap_write_test.bin" };
 	constexpr size_t buf_size = 0x12000;
