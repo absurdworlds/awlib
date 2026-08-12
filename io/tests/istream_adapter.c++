@@ -163,5 +163,17 @@ Test(relative_seek_counts_from_the_read_position) {
 		TestEqual( c, '3' );
 	}
 };
+
+Test(adapting_a_stream_without_a_buffer) {
+	std::istream is{nullptr};
+
+	Checks {
+		io::istream_adapter stream{is};
+
+		char c = 0;
+		TestAssert( !stream.get(c) );
+		TestAssert( stream.eof() );
+	}
+}
 } // namespace aw
 

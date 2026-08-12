@@ -22,6 +22,9 @@ struct istream_buffer : input_buffer {
 
 	~istream_buffer() override
 	{
+		if (!adapt)
+			return;
+
 		// tell underlying buffer that we read some characters from it
 		adapt.advance(ptr() - begin());
 	}
