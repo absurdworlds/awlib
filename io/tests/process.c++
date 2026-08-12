@@ -19,11 +19,11 @@
 #include <sys/wait.h>
 #endif
 
-TestFile("Test");
+TestFile("io::process");
 
 namespace aw {
 
-static auto read_all(std::string filename, char delim = '\n') -> std::vector<std::string>
+static auto read_all_lines(std::string filename, char delim = '\n') -> std::vector<std::string>
 {
 	std::vector<std::string> args;
 	std::ifstream fs(filename);
@@ -35,21 +35,61 @@ static auto read_all(std::string filename, char delim = '\n') -> std::vector<std
 	return args;
 }
 
+/*!
+ * Shared helper for the process tests
+ */
+struct process_fixture {
+	explicit process_fixture(test::test_context context)
+		: previous_path{ fs::current_path() }
+	{
+		fs::current_path(context.exe_dir);
+	}
+
+	~process_fixture()
+	{
+		fs::current_path(previous_path);
+	}
+
+	process_fixture(process_fixture const&) = delete;
+	process_fixture& operator=(process_fixture const&) = delete;
+
+	//! Spawn the helper process
+	//! \param lifetime ms to keep it alive for
+	auto spawn(std::chrono::milliseconds lifetime = {})
+	{
+		std::vector<std::string> args;
+		if (lifetime > lifetime.zero())
+			args.push_back( format("--sleep-ms={}", lifetime.count()) );
+
+		return io::spawn(helper, args, ec);
+	}
+
+	//! Populate \a ec with an error
+	void fail()
+	{
+		io::run(missing, no_args, ec);
+	}
+
+	fs::path previous_path;
+
+	std::vector<std::string> no_args;
+
+	std::string helper  = io::executable_name( std::string("dump_args") );
+	std::string missing = io::executable_name( std::string("no_such_executable") );
+
+	std::error_code ec;
+};
+
 Test(process_basic_test) {
-	using namespace std::string_literals;
-
-	auto cd_guard = on_scope_exit([cd = fs::current_path()] { fs::current_path(cd); });
-	fs::current_path(_context.exe_dir);
-
-	auto path = io::executable_name("dump_args"s);
+	process_fixture test{_context};
 
 	std::vector<std::string> in_args = { "a", "b", "c" };
-	auto result = io::run(path, in_args);
+	auto result = io::run(test.helper, in_args);
 
 	TestAssert(result == io::wait_status::finished);
 
-	std::vector<std::string> args_expect{ { path, "a", "b", "c" } };
-	std::vector<std::string> args = read_all("argv.txt");
+	std::vector<std::string> args_expect{ { test.helper, "a", "b", "c" } };
+	std::vector<std::string> args = read_all_lines("argv.txt");
 
 	TestEqual(args, args_expect);
 }
@@ -77,32 +117,24 @@ Test(spawn_without_arguments_reports_error) {
 }
 
 /*!
- * A wait must return at the deadlinerather than waiting for the child
+ * A wait must return at the deadline rather than waiting for the child
  */
 Test(wait_gives_up_at_the_deadline) {
-	using namespace std::string_literals;
 	using namespace std::chrono;
 
-	auto cd_guard = on_scope_exit([cd = fs::current_path()] { fs::current_path(cd); });
-	fs::current_path(_context.exe_dir);
+	process_fixture test{_context};
 
 	constexpr auto child_lifetime = 500ms;
 	constexpr auto give_up_after  = 50ms;
 
-	auto path = io::executable_name("dump_args"s);
-	std::vector<std::string> args = {
-		format("--sleep-ms={}", child_lifetime.count())
-	};
-
-	std::error_code ec;
-	auto handle = io::spawn(path, args, ec);
+	auto handle = test.spawn(child_lifetime);
 
 	Preconditions {
 		TestAssert( handle != io::invalid_process_handle );
 	}
 
 	auto started = steady_clock::now();
-	auto status  = io::wait(handle, ec, give_up_after);
+	auto status  = io::wait(handle, test.ec, give_up_after);
 	auto waited  = steady_clock::now() - started;
 
 	Checks {
@@ -113,7 +145,7 @@ Test(wait_gives_up_at_the_deadline) {
 
 	// the child outlived the wait, so it is still there to collect
 	Checks {
-		TestAssert( io::wait(handle, ec) == io::wait_status::finished );
+		TestAssert( io::wait(handle, test.ec) == io::wait_status::finished );
 	}
 }
 
@@ -121,29 +153,21 @@ Test(wait_gives_up_at_the_deadline) {
  * A child that beats the deadline is reported as finished, not timed out
  */
 Test(wait_with_a_deadline_reports_child_as_finished) {
-	using namespace std::string_literals;
 	using namespace std::chrono;
 
-	auto cd_guard = on_scope_exit([cd = fs::current_path()] { fs::current_path(cd); });
-	fs::current_path(_context.exe_dir);
+	process_fixture test{_context};
 
 	constexpr auto child_lifetime = 50ms;
 	constexpr auto give_up_after  = 1s;
 
-	auto path = io::executable_name("dump_args"s);
-	std::vector<std::string> args = {
-		format("--sleep-ms={}", child_lifetime.count())
-	};
-
-	std::error_code ec;
-	auto handle = io::spawn(path, args, ec);
+	auto handle = test.spawn(child_lifetime);
 
 	Preconditions {
 		TestAssert( handle != io::invalid_process_handle );
 	}
 
 	auto started = steady_clock::now();
-	auto status  = io::wait(handle, ec, give_up_after);
+	auto status  = io::wait(handle, test.ec, give_up_after);
 	auto waited  = steady_clock::now() - started;
 
 	Checks {
@@ -166,50 +190,62 @@ static bool awaits_reaping(io::process_handle pid)
 }
 
 /*!
+ * Signal helper. Replaces the signal handler for SIGALRM and raises
+ * the signal after the specified delay.
+ */
+struct alarm_after {
+	/*!
+	 * Installs a SIGALRM handler without SA_RESTART and
+	 * raises the alarm after \a delay
+	 */
+	explicit alarm_after(std::chrono::microseconds delay)
+	{
+		struct sigaction interrupt = {};
+		interrupt.sa_handler = [] (int) {};
+		interrupt.sa_flags   = 0;
+
+		sigaction(SIGALRM, &interrupt, &previous);
+
+		itimerval timer = {};
+		timer.it_value.tv_usec = delay.count();
+		setitimer(ITIMER_REAL, &timer, nullptr);
+	}
+
+	//! Stops the alarm and restores the old signal handler
+	~alarm_after()
+	{
+		itimerval off = {};
+		setitimer(ITIMER_REAL, &off, nullptr);
+		sigaction(SIGALRM, &previous, nullptr);
+	}
+
+	alarm_after(alarm_after const&) = delete;
+	alarm_after& operator=(alarm_after const&) = delete;
+
+	struct sigaction previous = {};
+};
+
+/*!
  * A signal arriving during wait() must not interrupt the wait
  */
 Test(wait_survives_a_signal) {
-	using namespace std::string_literals;
 	using namespace std::chrono;
 
-	auto cd_guard = on_scope_exit([cd = fs::current_path()] { fs::current_path(cd); });
-	fs::current_path(_context.exe_dir);
+	process_fixture test{_context};
 
 	constexpr auto child_lifetime = 300ms;
 	constexpr auto signal_after   = 50ms;
 
-	// disable SA_RESTART
-	struct sigaction interrupt = {};
-	interrupt.sa_handler = [] (int) {};
-	interrupt.sa_flags   = 0;
-
-	struct sigaction previous = {};
-	sigaction(SIGALRM, &interrupt, &previous);
-
-	auto signal_guard = on_scope_exit([&previous] {
-		itimerval off = {};
-		setitimer(ITIMER_REAL, &off, nullptr);
-		sigaction(SIGALRM, &previous, nullptr);
-	});
-
-	auto path = io::executable_name("dump_args"s);
-	std::vector<std::string> args = {
-		format("--sleep-ms={}", child_lifetime.count())
-	};
-
-	std::error_code ec;
-	auto handle = io::spawn(path, args, ec);
+	auto handle = test.spawn(child_lifetime);
 
 	Preconditions {
 		TestAssert( handle != io::invalid_process_handle );
 	}
 
-	itimerval timer = {};
-	timer.it_value.tv_usec = duration_cast<microseconds>(signal_after).count();
-	setitimer(ITIMER_REAL, &timer, nullptr);
+	alarm_after alarm{ duration_cast<microseconds>(signal_after) };
 
 	auto started = steady_clock::now();
-	auto status  = io::wait(handle, ec);
+	auto status  = io::wait(handle, test.ec);
 	auto waited  = steady_clock::now() - started;
 
 	Checks {
@@ -226,12 +262,8 @@ Test(wait_survives_a_signal) {
 
 #if (AW_PLATFORM == AW_PLATFORM_WIN32)
 Test(win32_spawn_does_not_leak_thread_handle) {
-	using namespace std::string_literals;
+	process_fixture test{_context};
 
-	auto cd_guard = on_scope_exit([cd = fs::current_path()] { fs::current_path(cd); });
-	fs::current_path(_context.exe_dir);
-
-	auto path = io::executable_name("dump_args"s);
 	std::vector<std::string> args = { "x" };
 
 	constexpr int iterations = 25;
@@ -239,7 +271,7 @@ Test(win32_spawn_does_not_leak_thread_handle) {
 	auto before = io::win32::current_process::handle_count();
 
 	for (int i = 0; i < iterations; ++i)
-		io::run(path, args);
+		io::run(test.helper, args);
 
 	auto after = io::win32::current_process::handle_count();
 
