@@ -57,6 +57,7 @@ if (AW_MAKE_TESTS)
 endif()
 
 include(aw-common)
+include(aw-sanitizers)
 
 add_subdirectory(awlib)
 add_subdirectory(meta)
