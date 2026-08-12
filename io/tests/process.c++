@@ -178,7 +178,36 @@ Test(wait_with_a_deadline_reports_child_as_finished) {
 }
 
 /*!
- * kill() has to clear the error code on success
+ * \a ec must be cleared on success, not left untouched
+ */
+Test(success_clears_the_error_code) {
+	process_fixture test{_context};
+
+	Preconditions {
+		test.fail();
+		TestAssert( bool(test.ec) );
+	}
+
+	Checks {
+		auto handle = test.spawn();
+		TestAssert( handle != io::invalid_process_handle );
+		TestAssert( !test.ec ); // "spawn clears ec"
+
+		io::wait(handle, test.ec);
+	}
+
+	Checks {
+		auto handle = test.spawn();
+		test.fail();
+		TestAssert( bool(test.ec) );
+
+		TestAssert( io::wait(handle, test.ec) == io::wait_status::finished );
+		TestAssert( !test.ec ); // "wait clears ec"
+	}
+}
+
+/*!
+ * kill() has to clear the error code on success as well
  */
 Test(kill_clears_the_error_code) {
 	using namespace std::chrono;

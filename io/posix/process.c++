@@ -41,11 +41,13 @@ process_handle spawn(const char* path, aw::array_view<const char*> argv, std::er
 	if (rc == 2)
 		rc = posix_spawn(&pid, path, nullptr, nullptr, args, environ);
 
-	if (rc == 0)
-		return process_handle( pid );
+	if (rc != 0) {
+		ec.assign( rc, std::generic_category() );
+		return invalid_process_handle;
+	}
 
-	ec.assign( rc, std::generic_category() );
-	return invalid_process_handle;
+	ec.clear();
+	return process_handle( pid );
 }
 
 AW_IO_EXP
@@ -118,7 +120,7 @@ wait_status wait_until(pid_t pid, std::chrono::steady_clock::time_point deadline
 			return wait_status::finished;
 
 		if (ret < 0 && errno != EINTR) {
-			ec.assign( errno, std::generic_category() );
+			set_error( ec );
 			return wait_status::failed;
 		}
 
@@ -134,6 +136,8 @@ wait_status wait_until(pid_t pid, std::chrono::steady_clock::time_point deadline
 
 AW_IO_EXP wait_status wait(process_handle pid, std::error_code& ec, timeout_spec_ms timeout) noexcept
 {
+	ec.clear();
+
 	if (timeout)
 		return wait_until( pid_t(pid), std::chrono::steady_clock::now() + *timeout, ec );
 
@@ -145,7 +149,7 @@ AW_IO_EXP wait_status wait(process_handle pid, std::error_code& ec, timeout_spec
 	while (ret < 0 && errno == EINTR);
 
 	if (ret < 0) {
-		ec.assign( errno, std::generic_category() );
+		set_error( ec );
 		return wait_status::failed;
 	}
 	return wait_status::finished;
