@@ -68,4 +68,37 @@ Test(mem_buffer) {
 		TestAssert(std::equal(str.begin(), str.end(), tmp.begin()));
 	}
 };
+
+/*!
+ * seekend(n) seeks back n bytes from the end
+ */
+Test(seekend_counts_back_from_the_end) {
+	std::string_view const str = "0123456789";
+	constexpr size_t from_end = 4;
+
+	temp_file file{_context.name};
+
+	Preconditions {
+		TestEqual( file.write(str), intmax_t(str.size()) );
+	}
+
+	io::input_file_buffer   from_file{ file.path };
+	io::input_memory_buffer from_memory{ str.data(), str.data() + str.size() };
+
+	char in_file = 0;
+	char in_memory = 0;
+
+	Checks {
+		from_file.seekend(from_end);
+		from_memory.seekend(from_end);
+
+		TestAssert( from_file.get(in_file) );
+		TestAssert( from_memory.get(in_memory) );
+	}
+
+	Postconditions {
+		TestEqual( in_file, in_memory );
+		TestEqual( in_memory, '6' );
+	}
+}
 } // namespace aw

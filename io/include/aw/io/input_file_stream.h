@@ -49,7 +49,7 @@ struct input_file_buffer : input_buffer {
 
 	void seekend(size_t offset) override
 	{
-		_file.seek(offset, seek_mode::end);
+		_file.seek(-intmax_t(offset), seek_mode::end);
 		read_more();
 	}
 
