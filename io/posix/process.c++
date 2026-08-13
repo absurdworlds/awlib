@@ -114,7 +114,20 @@ void sleep_for(std::chrono::nanoseconds duration) noexcept
 /*!
  * Wait until the child changes state or \a deadline passes.
  */
-wait_status wait_until(pid_t pid, std::chrono::steady_clock::time_point deadline,
+//! Decode what waitpid() reported about a process that has ended
+wait_result decode_status(int status) noexcept
+{
+	wait_result result{ .status = wait_status::finished };
+
+	if (WIFEXITED(status))
+		result.code = WEXITSTATUS(status);
+	else if (WIFSIGNALED(status))
+		result.signal = WTERMSIG(status);
+
+	return result;
+}
+
+wait_result wait_until(pid_t pid, std::chrono::steady_clock::time_point deadline,
                        std::error_code& ec) noexcept
 {
 	// TODO: use pidfd_open and ppoll on Linux instead of polling
@@ -127,16 +140,16 @@ wait_status wait_until(pid_t pid, std::chrono::steady_clock::time_point deadline
 		int status = 0;
 		const pid_t ret = waitpid( pid, &status, WNOHANG );
 		if (ret > 0)
-			return wait_status::finished;
+			return decode_status( status );
 
 		if (ret < 0 && errno != EINTR) {
 			set_error( ec );
-			return wait_status::failed;
+			return { .status = wait_status::failed };
 		}
 
 		const auto left = deadline - steady_clock::now();
 		if (left <= steady_clock::duration::zero())
-			return wait_status::timeout;
+			return { .status = wait_status::timeout };
 
 		sleep_for( std::min<nanoseconds>(interval, left) );
 		interval = std::min(interval * 2, max_interval);
@@ -144,7 +157,7 @@ wait_status wait_until(pid_t pid, std::chrono::steady_clock::time_point deadline
 }
 } // namespace
 
-AW_IO_EXP wait_status wait(process_handle pid, std::error_code& ec, timeout_spec_ms timeout) noexcept
+AW_IO_EXP wait_result wait(process_handle pid, std::error_code& ec, timeout_spec_ms timeout) noexcept
 {
 	ec.clear();
 
@@ -160,8 +173,9 @@ AW_IO_EXP wait_status wait(process_handle pid, std::error_code& ec, timeout_spec
 
 	if (ret < 0) {
 		set_error( ec );
-		return wait_status::failed;
+		return { .status = wait_status::failed };
 	}
-	return wait_status::finished;
+
+	return decode_status( status );
 }
 } // namespace aw::platform::posix

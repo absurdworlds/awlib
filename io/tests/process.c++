@@ -268,7 +268,55 @@ Test(kill_clears_the_error_code) {
 	io::wait(handle, test.ec);
 }
 
+/*!
+ * Exit code returned by the process is correctly reported back
+ */
+Test(wait_reports_the_exit_code) {
+	process_fixture test{_context};
+
+	constexpr int expected = 42;
+
+	std::vector<std::string> args = { format("--exit={}", expected) };
+	auto handle = io::spawn(test.helper, args, test.ec);
+
+	Preconditions {
+		TestAssert( handle != io::invalid_process_handle );
+	}
+
+	auto result = io::wait(handle, test.ec);
+
+	Checks {
+		TestAssert( result.status == io::wait_status::finished );
+		TestEqual( result.code, expected );
+		TestEqual( result.signal, 0 );
+	}
+}
+
 #if (AW_PLATFORM == AW_PLATFORM_POSIX)
+/*!
+ * Wait correctly reports the signal that killed the process
+ */
+Test(wait_reports_the_signal_that_killed_the_process) {
+	using namespace std::chrono;
+
+	process_fixture test{_context};
+
+	auto handle = test.spawn(30s);
+
+	Preconditions {
+		TestAssert( handle != io::invalid_process_handle );
+		TestEqual( io::kill(handle, SIGKILL, test.ec), 0 );
+	}
+
+	auto result = io::wait(handle, test.ec);
+
+	Checks {
+		TestAssert( result.status == io::wait_status::finished );
+		TestEqual( result.signal, SIGKILL );
+		TestEqual( result.code, 0 );
+	}
+}
+
 /*!
  * Check whether \a pid is still waiting to be reaped.
  */

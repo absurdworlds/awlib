@@ -100,12 +100,12 @@ process_holder spawn(std::string path, aw::array_view<std::string> argv, std::er
 }
 
 
-wait_status wait(process_handle hprocess, std::error_code& ec, timeout_spec_ms timeout) noexcept
+wait_result wait(process_handle hprocess, std::error_code& ec, timeout_spec_ms timeout) noexcept
 {
 	// TODO: add is_handle_valid()
 	if( in( hprocess, process_handle(0), process_handle(-1) ) ) {
 		ec = make_error_code( std::errc::invalid_argument );
-		return wait_status::failed;
+		return { .status = wait_status::failed };
 	};
 
 	auto ret = WaitForSingleObject( HANDLE(hprocess), timeout ? timeout->count() : INFINITE );
@@ -113,16 +113,23 @@ wait_status wait(process_handle hprocess, std::error_code& ec, timeout_spec_ms t
 	set_error_if(ret == WAIT_FAILED, ec);
 
 	switch (ret) {
-		using enum wait_status;
+	case WAIT_TIMEOUT:
+		return { .status = wait_status::timeout };
+	case WAIT_FAILED:
+		return { .status = wait_status::failed };
 	default:
 	case WAIT_OBJECT_0:
 	case WAIT_ABANDONED:
-		return finished;
-	case WAIT_TIMEOUT:
-		return timeout;
-	case WAIT_FAILED:
-		return failed;
+		break;
 	}
+
+	DWORD code = 0;
+	if (!GetExitCodeProcess( HANDLE(hprocess), &code )) {
+		set_error( ec );
+		return { .status = wait_status::failed };
+	}
+
+	return { .status = wait_status::finished, .code = int(code) };
 }
 
 int kill(process_handle hprocess, int signal, std::error_code& ec) noexcept

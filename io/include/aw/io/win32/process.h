@@ -66,8 +66,8 @@ inline process_holder spawn(std::string path, aw::array_view<std::string> argv)
 	return spawn(path, argv, ec);
 }
 
-AW_IO_EXP wait_status wait(process_handle pid, std::error_code& ec, timeout_spec_ms timeout = {}) noexcept;
-inline wait_status wait(process_handle pid, timeout_spec_ms timeout = {})
+AW_IO_EXP wait_result wait(process_handle pid, std::error_code& ec, timeout_spec_ms timeout = {}) noexcept;
+inline wait_result wait(process_handle pid, timeout_spec_ms timeout = {})
 {
 	std::error_code ec;
 	return wait(pid, ec, timeout);
@@ -90,7 +90,7 @@ inline int terminate(process_handle pid)
 	return terminate(pid, ec);
 }
 
-inline wait_status run(
+inline wait_result run(
 	std::string path,
 	aw::array_view<std::string> argv,
 	std::error_code& ec,
@@ -98,12 +98,12 @@ inline wait_status run(
 {
 	auto handle = spawn(path, argv, ec);
 	if (handle == invalid_process_handle)
-		return wait_status::failed;
+		return { .status = wait_status::failed };
 
 	return wait(handle, ec, timeout);
 }
 
-inline wait_status run(std::string path, aw::array_view<std::string> argv, timeout_spec_ms timeout = {})
+inline wait_result run(std::string path, aw::array_view<std::string> argv, timeout_spec_ms timeout = {})
 {
 	std::error_code ec;
 	return run(path, argv, ec, timeout);
