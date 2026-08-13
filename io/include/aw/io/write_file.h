@@ -16,7 +16,7 @@ namespace io {
 template<typename File>
 struct write_file : private File {
 	write_file(fs::path const& _path)
-		: File(_path, file_mode::write)
+		: File(_path, file_mode::write|file_mode::create|file_mode::truncate)
 	{ }
 
 	/*!

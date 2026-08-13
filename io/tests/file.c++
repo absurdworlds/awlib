@@ -1,5 +1,6 @@
 #include <aw/io/file.h>
 #include <aw/io/buffered_file.h>
+#include <aw/io/write_file.h>
 #include <aw/test/test.h>
 #include <cstring>
 #include <algorithm>
@@ -14,6 +15,44 @@ using test::temp_file;
 Test(basic_rw) {
 	test::test_round_trip<io::file>(_context.name);
 };
+
+/*!
+ * Default file mode for write_file should be equivalent to "wb":
+ * clear the existing file, and create it if it doesn't
+ */
+Test(write_file_creates_and_truncates) {
+	char const shorter[] { "ab" };
+	char const longer[]  { "0123456789" };
+
+	temp_file tmp{_context.name};
+
+	Preconditions {
+		TestAssert( !tmp.exists() );
+	}
+
+	Checks {
+		io::write_file<io::file> file(tmp.path);
+
+		TestAssert( file.is_open() );
+		TestEqual( file.write(shorter, sizeof(shorter) - 1), intmax_t(sizeof(shorter) - 1) );
+	}
+
+	Preconditions {
+		TestEqual( tmp.write(longer), intmax_t(sizeof(longer) - 1) );
+	}
+
+	// nothing of the longer contents may survive
+	Checks {
+		io::write_file<io::file> file(tmp.path);
+
+		TestAssert( file.is_open() );
+		TestEqual( file.write(shorter, sizeof(shorter) - 1), intmax_t(sizeof(shorter) - 1) );
+	}
+
+	Postconditions {
+		TestEqual( tmp.read(), std::vector<char>(shorter, shorter + sizeof(shorter) - 1) );
+	}
+}
 
 Test(size_reports_error) {
 	io::file file{ io::invalid_fd };
