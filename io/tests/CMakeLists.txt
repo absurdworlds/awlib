@@ -24,3 +24,8 @@ target_link_libraries(test_io
 )
 
 add_executable(dump_args process/dump_args.c++)
+target_link_libraries(dump_args
+	PRIVATE
+		awutils
+		awstring
+)
