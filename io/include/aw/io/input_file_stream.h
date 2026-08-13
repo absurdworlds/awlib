@@ -55,12 +55,13 @@ struct input_file_buffer : input_buffer {
 
 	void seekoff(ptrdiff_t offset) override
 	{
-		auto newpos = ptr() + offset;
-		if ( newpos < begin() || newpos >= end() ) {
+		const ptrdiff_t newpos = (ptr() - begin()) + offset;
+
+		if ( newpos < 0 || newpos >= (end() - begin()) ) {
 			_file.seek(offset - (end() - ptr()), seek_mode::cur);
 			read_more();
 		} else {
-			set_ptr(begin(), newpos, end());
+			set_ptr(begin(), begin() + newpos, end());
 		}
 	}
 

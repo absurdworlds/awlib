@@ -43,11 +43,14 @@ struct input_memory_buffer : input_buffer {
 	void seekoff(ptrdiff_t offset) override
 	{
 		// ptr() is null at eof, so seek from the end of the source
-		auto newpos = (eof() ? b_end : ptr()) + offset;
-		if ((newpos < b_begin) || (newpos > b_end)) {
+		const auto from = eof() ? b_end : ptr();
+
+		const ptrdiff_t newpos = (from - b_begin) + offset;
+
+		if ((newpos < 0) || (newpos > ptrdiff_t(b_size()))) {
 			set_ptr(b_begin, b_end, b_end);
 		} else {
-			set_ptr(b_begin, newpos, b_end);
+			set_ptr(b_begin, b_begin + newpos, b_end);
 		}
 	}
 
