@@ -9,6 +9,8 @@
 #include <aw/io/mmap_file.h>
 #include "helpers.h"
 
+#include <limits>
+
 #include <sys/mman.h>
 namespace aw {
 namespace io {
