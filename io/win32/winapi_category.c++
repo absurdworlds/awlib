@@ -33,7 +33,10 @@ auto winapi_error_category::message(int code) const -> std::string
 	//std::wstring buf(buffer_size,L'\0');
 
 	auto err = static_cast<DWORD>(code);
-	auto flags = FORMAT_MESSAGE_FROM_SYSTEM;
+
+	// Some messages carry placeholders, FormatMessageW fails
+	// without IGNORE_INSERTS for the ones that do
+	auto flags = FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS;
 	const void* source = nullptr;
 	auto len = ::FormatMessageW(flags, source, err, 0, buf, buffer_size, nullptr);
 	if (len == 0)

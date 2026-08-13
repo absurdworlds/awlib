@@ -14,6 +14,8 @@
 
 #include <aw/config.h>
 
+#include "temp_file.h"
+
 #if (AW_PLATFORM == AW_PLATFORM_POSIX)
 #include <errno.h>
 #include <signal.h>
@@ -353,6 +355,34 @@ Test(wait_survives_a_signal) {
 #if (AW_PLATFORM == AW_PLATFORM_WIN32)
 static_assert( std::is_convertible_v<io::win32::process_holder const&,
                                      io::win32::process_handle> );
+
+/*!
+ * A failure produces a readable error message
+ */
+Test(win32_error_messages_are_readable) {
+	process_fixture test{_context};
+
+	test::temp_file not_a_program{_context.name};
+
+	Preconditions {
+		TestAssert( not_a_program.write("this is not a program") > 0 );
+	}
+
+	std::error_code ec;
+	auto handle = io::spawn(not_a_program.path.string(), test.no_args, ec);
+
+	Preconditions {
+		TestAssert( handle == io::invalid_process_handle );
+		TestAssert( bool(ec) );
+	}
+
+	Checks {
+		auto message = ec.message();
+
+		TestAssert( !message.empty() );
+		TestNEqual( message, std::string("Unknown error") );
+	}
+}
 
 Test(win32_spawn_does_not_leak_thread_handle) {
 	process_fixture test{_context};
