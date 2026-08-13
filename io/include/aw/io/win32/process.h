@@ -16,11 +16,17 @@ namespace aw::io::win32 {
 enum class process_handle : uintptr_t {};
 constexpr auto invalid_process_handle = process_handle(-1);
 
+// winelib has no GetProcessHandleCount
+#if !defined(AW_WINELIB)
+#define AW_IO_HAS_HANDLE_COUNT 1
 AW_IO_EXP u32 handle_count(process_handle handle);
+#endif
 
 namespace current_process {
 AW_IO_EXP process_handle handle();
+#if defined(AW_IO_HAS_HANDLE_COUNT)
 inline u32 handle_count() { return win32::handle_count( handle() ); }
+#endif
 } // namespace current_process
 
 using process_holder = detail::handle_holder<process_handle>;

@@ -9,6 +9,7 @@
 #ifndef aw_internal_winapi_helpers_h
 #define aw_internal_winapi_helpers_h
 #include <aw/io/export.h>
+#include <aw/types/types.h>
 #include <system_error>
 
 #ifndef WIN32_LEAN_AND_MEAN

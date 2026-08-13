@@ -384,6 +384,7 @@ Test(win32_error_messages_are_readable) {
 	}
 }
 
+#if defined(AW_IO_HAS_HANDLE_COUNT)
 Test(win32_spawn_does_not_leak_thread_handle) {
 	process_fixture test{_context};
 
@@ -402,6 +403,7 @@ Test(win32_spawn_does_not_leak_thread_handle) {
 		TestLess(after, before + iterations);
 	}
 }
+#endif
 
 /*!
  * A handle holder assigned onto itself still refers to its process

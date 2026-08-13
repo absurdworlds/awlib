@@ -20,12 +20,14 @@ process_handle handle()
 }
 } //namespace current_process
 
+#if defined(AW_IO_HAS_HANDLE_COUNT)
 u32 handle_count(process_handle handle)
 {
 	DWORD count = 0;
 	GetProcessHandleCount(HANDLE(handle), &count);
 	return count;
 }
+#endif
 
 namespace detail {
 void close_handle( uintptr_t handle )
