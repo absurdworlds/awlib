@@ -98,6 +98,34 @@ Test(read_until_stops_after_a_trailing_delimiter) {
 	}
 }
 
+/*!
+ * input_stream_iterator should not skip over bytes and both increments
+ * should behave the same
+ */
+Test(stream_iterator_yields_every_byte_once) {
+	char const memory[] { "abc" };
+
+	Checks {
+		io::input_memory_stream stream{ memory, memory + 3 };
+
+		std::string got;
+		for (auto it = io::input_stream_iterator{stream}; !(it == io::input_stream_iterator{}); ++it)
+			got += char(*it);
+
+		TestEqual( got, "abc" );
+	}
+
+	Checks {
+		io::input_memory_stream stream{ memory, memory + 3 };
+
+		std::string got;
+		for (auto it = io::input_stream_iterator{stream}; !(it == io::input_stream_iterator{}); )
+			got += char(*it++);
+
+		TestEqual( got, "abc" );
+	}
+};
+
 Test(memory_stream_reports_eof) {
 	char const memory[] { "abcdefghijkilmno" };
 	constexpr size_t buf_size = sizeof(memory);

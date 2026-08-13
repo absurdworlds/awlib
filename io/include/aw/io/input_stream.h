@@ -175,12 +175,9 @@ struct input_stream_iterator {
 
 	input_stream_iterator operator++(int)
 	{
-		char c;
-		if (stream->get(c))
-			cur = traits::to_int_type(c);
-		else
-			cur = traits::eof();
-		return *this;
+		auto copy = *this;
+		++*this;
+		return copy;
 	}
 
 	input_stream_iterator& operator++()
