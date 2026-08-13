@@ -52,6 +52,12 @@ inline bool close_handle( uintptr_t handle, std::error_code& ec )
 	return closed;
 }
 
+inline bool close_handle( uintptr_t handle )
+{
+	std::error_code close_ec;
+	return close_handle( handle, close_ec );
+}
+
 } // namespace win32
 } // namespace io
 } // namespace aw

@@ -56,7 +56,7 @@ AW_IO_EXP bool unmap_file( file_mapping& map, std::error_code& ec );
 namespace win32 {
 constexpr uintptr_t invalid_mapping = -1;
 struct file_mapping {
-	constexpr bool valid() const { return handle != invalid_mapping; }
+	constexpr bool valid() const { return address != nullptr; }
 	uintptr_t handle = invalid_mapping;
 	void* address = nullptr;
 	size_t length = 0;

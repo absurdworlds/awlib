@@ -153,6 +153,76 @@ Test(mmap_missing_file) {
 	}
 };
 
+/*!
+ * A mapping that has been unmapped no longer counts as valid
+ */
+Test(unmap_leaves_nothing_behind) {
+	temp_file file{_context.name};
+
+	Preconditions {
+		TestEqual( file.write("data"), intmax_t(4) );
+	}
+
+	std::error_code ec;
+	io::native::file opened(file.path, fm::read);
+
+	auto mapping = io::native::map_file(opened.descriptor(), mp::read, ec);
+
+	Preconditions {
+		TestAssert( !ec );
+		TestAssert( mapping.valid() );
+	}
+
+	// double-unmapping is a no-op
+	Checks {
+		TestAssert( io::native::unmap_file(mapping, ec) );
+		TestAssert( !ec );
+
+		TestAssert( !mapping.valid() );
+	}
+};
+
+/*!
+ * An unmap that fails leaves behind only what it could not release, so
+ * trying again finishes the job instead of failing on what is gone
+ */
+Test(unmap_can_be_retried_after_a_failure) {
+	temp_file file{_context.name};
+
+	Preconditions {
+		TestEqual( file.write("data"), intmax_t(4) );
+	}
+
+	std::error_code ec;
+	io::native::file opened(file.path, fm::read);
+
+	auto mapping = io::native::map_file(opened.descriptor(), mp::read, ec);
+
+	Preconditions {
+		TestAssert( !ec );
+		TestAssert( mapping.valid() );
+	}
+
+	void* const view = mapping.address;
+
+	// deliberately misaligned, so no platform will accept it
+	mapping.address = reinterpret_cast<void*>(uintptr_t(0x1001));
+
+	Checks {
+		TestAssert( !io::native::unmap_file(mapping, ec) );
+		TestAssert( bool(ec) );
+	}
+
+	// hand back the real view: only that is left to release
+	Checks {
+		mapping.address = view;
+
+		TestAssert( io::native::unmap_file(mapping, ec) );
+		TestAssert( !ec );
+		TestAssert( !mapping.valid() );
+	}
+};
+
 Test(mmap_invalid_fd) {
 	Checks {
 		std::error_code ec;
