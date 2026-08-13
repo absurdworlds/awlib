@@ -10,6 +10,7 @@
 #ifndef aw_istream_adapter_h
 #define aw_istream_adapter_h
 #include <aw/io/input_stream.h>
+#include <cassert>
 #include <istream>
 #include <aw/io/bits/istream.h>
 namespace aw {

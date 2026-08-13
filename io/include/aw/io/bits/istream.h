@@ -25,27 +25,32 @@ struct streambuf_adapt : private std::streambuf {
 
 	void advance(ptrdiff_t dist)
 	{
+		assert(buf);
 		(buf->*(&streambuf_adapt::gbump))(dist);
 	}
 
 	char* begin()
 	{
+		assert(buf);
 		return (buf->*(&streambuf_adapt::eback))();
 	}
 
 	char* ptr()
 	{
+		assert(buf);
 		return (buf->*(&streambuf_adapt::gptr))();
 	}
 
 	char* end()
 	{
+		assert(buf);
 		return (buf->*(&streambuf_adapt::egptr))();
 	}
 
 	bool fill_buffer()
 	{
 		using traits = std::streambuf::traits_type;
+		assert(buf);
 		return (buf->*(&streambuf_adapt::underflow))() != traits::eof();
 	}
 
