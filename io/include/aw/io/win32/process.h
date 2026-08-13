@@ -25,6 +25,8 @@ inline u32 handle_count() { return win32::handle_count( handle() ); }
 
 using process_holder = detail::handle_holder<process_handle>;
 
+static_assert( process_holder::invalid == invalid_process_handle );
+
 inline void close_handle(process_handle handle)
 {
 	detail::close_handle( underlying(handle) );

@@ -9,6 +9,7 @@
 
 #include <chrono>
 #include <csignal>
+#include <type_traits>
 #include <fstream>
 
 #include <aw/config.h>
@@ -350,6 +351,9 @@ Test(wait_survives_a_signal) {
 #endif
 
 #if (AW_PLATFORM == AW_PLATFORM_WIN32)
+static_assert( std::is_convertible_v<io::win32::process_holder const&,
+                                     io::win32::process_handle> );
+
 Test(win32_spawn_does_not_leak_thread_handle) {
 	process_fixture test{_context};
 
@@ -367,6 +371,55 @@ Test(win32_spawn_does_not_leak_thread_handle) {
 	Checks {
 		TestLess(after, before + iterations);
 	}
+}
+
+/*!
+ * A handle holder assigned onto itself still refers to its process
+ */
+Test(win32_self_move_assignment_keeps_the_handle) {
+	using namespace std::chrono;
+
+	process_fixture test{_context};
+
+	auto handle = test.spawn(300ms);
+
+	Preconditions {
+		TestAssert( handle != io::invalid_process_handle );
+	}
+
+	Checks {
+		auto& self = handle;
+		handle = std::move(self);
+
+		TestAssert( handle != io::invalid_process_handle );
+
+		TestAssert( io::wait(handle, test.ec) == io::wait_status::finished );
+		TestAssert( !test.ec );
+	}
+}
+
+/*!
+ * A handle holder that has been moved out of no longer refers to anything
+ */
+Test(win32_moved_from_handle_is_invalid) {
+	using namespace std::chrono;
+
+	process_fixture test{_context};
+
+	auto handle = test.spawn(300ms);
+
+	Preconditions {
+		TestAssert( handle != io::invalid_process_handle );
+	}
+
+	auto moved = std::move(handle);
+
+	Checks {
+		TestAssert( handle == io::invalid_process_handle );
+		TestAssert( moved != io::invalid_process_handle );
+	}
+
+	io::wait(moved, test.ec);
 }
 #endif
 
