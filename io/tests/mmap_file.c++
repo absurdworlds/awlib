@@ -2,6 +2,7 @@
 #include <aw/test/test.h>
 #include <aw/types/array_view.h>
 #include <algorithm>
+#include <type_traits>
 
 #include "temp_file.h"
 
@@ -222,6 +223,42 @@ Test(unmap_can_be_retried_after_a_failure) {
 		TestAssert( !mapping.valid() );
 	}
 };
+
+//! mmap_file is move-only
+static_assert(  std::is_move_constructible_v<io::mmap_file> );
+static_assert(  std::is_move_assignable_v<io::mmap_file> );
+static_assert( !std::is_copy_constructible_v<io::mmap_file> );
+static_assert( !std::is_copy_assignable_v<io::mmap_file> );
+
+/*!
+ * A mapping that has been moved reads the same bytes from its new home,
+ * and the one it came from holds nothing
+ */
+Test(mmap_can_be_moved) {
+	constexpr size_t buf_size = 0x1000;
+
+	temp_file file{_context.name};
+
+	Preconditions {
+		TestEqual( file.write(std::vector<char>(buf_size, 'a')), intmax_t(buf_size) );
+	}
+
+	io::mmap_file mapped(file.path, mp::read);
+
+	Preconditions {
+		TestAssert( mapped.is_open() );
+	}
+
+	Checks {
+		auto moved = std::move(mapped);
+
+		TestAssert( moved.is_open() );
+		TestEqual( moved.size(), buf_size );
+		TestEqual( moved.data()[0], 'a' );
+
+		TestAssert( !mapped.is_open() );
+	}
+}
 
 Test(mmap_invalid_fd) {
 	Checks {

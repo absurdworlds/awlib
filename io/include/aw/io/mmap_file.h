@@ -9,6 +9,8 @@
 #ifndef aw_io_mmap_file_h
 #define aw_io_mmap_file_h
 #include <aw/io/native_file.h>
+
+#include <utility>
 namespace aw {
 namespace io {
 
@@ -140,10 +142,28 @@ struct mmap_file {
 			create_mapping( ec, perms );
 	}
 
-	~mmap_file()
+	~mmap_file() { release(); }
+
+	mmap_file(mmap_file const&) = delete;
+	mmap_file& operator=(mmap_file const&) = delete;
+
+	//! Transfers ownership of the file and its mapping
+	mmap_file(mmap_file&& other) noexcept
+		: _file{ std::move(other._file) }
+		, _map { std::exchange(other._map, {}) }
+	{}
+
+	mmap_file& operator=(mmap_file&& other) noexcept
 	{
-		std::error_code ec;
-		if ( _map.valid()) native::unmap_file( _map, ec );
+		if (this == &other)
+			return *this;
+
+		release();
+
+		_file = std::move(other._file);
+		_map  = std::exchange(other._map, {});
+
+		return *this;
 	}
 
 	using iterator       = char*;
@@ -169,6 +189,12 @@ private:
 	void create_mapping( std::error_code& ec, map_perms perms )
 	{
 		_map = native::map_file( _file.descriptor(), perms, ec );
+	}
+
+	void release()
+	{
+		std::error_code ec;
+		if ( _map.valid() ) native::unmap_file( _map, ec );
 	}
 
 	native::file _file;
