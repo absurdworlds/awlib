@@ -1,11 +1,17 @@
 #include "aw/io/posix/process.h"
 
+#include "helpers.h"
+
 #include <aw/types/string_view.h>
 #include <aw/algorithm/in.h>
 
+#include <algorithm>
+#include <chrono>
 #include <vector>
 
 #include <cassert>
+#include <cerrno>
+#include <ctime>
 
 #include <sys/types.h>
 #include <sys/wait.h>
@@ -19,35 +25,52 @@ extern char** environ;
 
 namespace aw::io::posix {
 AW_IO_EXP
-process_handle spawn(const char* path, aw::array_view<char*> argv, std::error_code& ec) noexcept
+process_handle spawn(const char* path, aw::array_view<const char*> argv, std::error_code& ec) noexcept
 {
-	/*! enforce `nullptr` at the end of `argv` */
+	// enforce `nullptr` at the end of `argv`
 	assert( argv.empty() || argv.back() == nullptr );
 
+	/*
+	 * posix_spawnp takes `char* const[]` for historical reasons.
+	 * The POSIX spec states that the strings argv[] and envp[] point
+	 * to shall not modified, so dropping const here is safe.
+	 */
+	auto args = const_cast<char* const*>( argv.data() );
+
+	// look in the PATH first
 	pid_t pid;
-	int rc = posix_spawnp(&pid, path, nullptr, nullptr, argv.data(), environ);
-	if (rc == 2)
-		rc = posix_spawn(&pid, path, nullptr, nullptr, argv.data(), environ);
+	int rc = posix_spawnp(&pid, path, nullptr, nullptr, args, environ);
 
-	if (rc == 0)
-		return process_handle( pid );
+	// try the working directory second
+	if (rc == ENOENT)
+		rc = posix_spawn(&pid, path, nullptr, nullptr, args, environ);
 
-	ec.assign( rc, std::generic_category() );
-	return invalid_process_handle;
+	if (rc != 0) {
+		ec.assign( rc, std::generic_category() );
+		return invalid_process_handle;
+	}
+
+	ec.clear();
+	return process_handle( pid );
 }
 
 AW_IO_EXP
-process_handle spawn(aw::array_view<char*> argv, std::error_code& ec) noexcept
+process_handle spawn(aw::array_view<const char*> argv, std::error_code& ec) noexcept
 {
+	if (argv.empty() || argv[0] == nullptr) {
+		ec = make_error_code( std::errc::invalid_argument );
+		return invalid_process_handle;
+	}
+
 	return spawn( argv[0], argv, ec );
 }
 
 AW_IO_EXP
-process_handle spawn(std::string path, aw::array_ref<std::string> argv, std::error_code& ec)
+process_handle spawn(std::string path, aw::array_view<std::string> argv, std::error_code& ec)
 {
-	std::vector<char*> args;
+	std::vector<const char*> args;
 	args.push_back(path.data());
-	for (std::string& arg : argv)
+	for (std::string const& arg : argv)
 		args.push_back(arg.data());
 	args.push_back(nullptr);
 
@@ -64,19 +87,95 @@ int kill(process_handle pid, int signal, std::error_code& ec) noexcept
 	};
 
 	auto ret = ::kill( pid_t(pid), signal);
-	if (ret < 0)
-		ec.assign( errno, std::generic_category() );
+	set_error_if(ret < 0, ec);
 	return ret;
 }
 
-AW_IO_EXP wait_status wait(process_handle pid, std::error_code& ec) noexcept
+AW_IO_EXP
+int terminate(process_handle pid, std::error_code& ec) noexcept
 {
-	int status = 0;
-	pid_t ret = waitpid( pid_t(pid), &status, 0);
-	if (ret < 0) {
-		ec.assign( errno, std::generic_category() );
-		return wait_status::failed;
+	return kill(pid, SIGTERM, ec);
+}
+
+namespace {
+// this one is noexcept unlike std::this_thread::sleep_for
+void sleep_for(std::chrono::nanoseconds duration) noexcept
+{
+	using namespace std::chrono;
+
+	timespec spec = {};
+	spec.tv_sec  = duration_cast<seconds>(duration).count();
+	spec.tv_nsec = (duration % seconds(1)).count();
+
+	// an interrupted sleep is fine since the caller re-checks the deadline
+	nanosleep(&spec, nullptr);
+}
+
+/*!
+ * Wait until the child changes state or \a deadline passes.
+ */
+//! Decode what waitpid() reported about a process that has ended
+wait_result decode_status(int status) noexcept
+{
+	wait_result result{ .status = wait_status::finished };
+
+	if (WIFEXITED(status))
+		result.code = WEXITSTATUS(status);
+	else if (WIFSIGNALED(status))
+		result.signal = WTERMSIG(status);
+
+	return result;
+}
+
+wait_result wait_until(pid_t pid, std::chrono::steady_clock::time_point deadline,
+                       std::error_code& ec) noexcept
+{
+	// TODO: use pidfd_open and ppoll on Linux instead of polling
+	using namespace std::chrono;
+
+	constexpr auto max_interval = microseconds(10'000);
+	auto interval = microseconds(200);
+
+	for (;;) {
+		int status = 0;
+		const pid_t ret = waitpid( pid, &status, WNOHANG );
+		if (ret > 0)
+			return decode_status( status );
+
+		if (ret < 0 && errno != EINTR) {
+			set_error( ec );
+			return { .status = wait_status::failed };
+		}
+
+		const auto left = deadline - steady_clock::now();
+		if (left <= steady_clock::duration::zero())
+			return { .status = wait_status::timeout };
+
+		sleep_for( std::min<nanoseconds>(interval, left) );
+		interval = std::min(interval * 2, max_interval);
 	}
-	return wait_status::finished;
+}
+} // namespace
+
+AW_IO_EXP wait_result wait(process_handle pid, std::error_code& ec, timeout_spec_ms timeout) noexcept
+{
+	ec.clear();
+
+	if (timeout)
+		return wait_until( pid_t(pid), std::chrono::steady_clock::now() + *timeout, ec );
+
+	int status = 0;
+
+	pid_t ret;
+	do
+		ret = waitpid( pid_t(pid), &status, 0);
+	while (ret < 0 && errno == EINTR);
+
+	if (ret < 0) {
+		set_error( ec );
+		return { .status = wait_status::failed };
+	}
+
+	return decode_status( status );
 }
 } // namespace aw::platform::posix

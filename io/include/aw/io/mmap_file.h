@@ -9,6 +9,8 @@
 #ifndef aw_io_mmap_file_h
 #define aw_io_mmap_file_h
 #include <aw/io/native_file.h>
+
+#include <utility>
 namespace aw {
 namespace io {
 
@@ -56,7 +58,7 @@ AW_IO_EXP bool unmap_file( file_mapping& map, std::error_code& ec );
 namespace win32 {
 constexpr uintptr_t invalid_mapping = -1;
 struct file_mapping {
-	constexpr bool valid() const { return handle != invalid_mapping; }
+	constexpr bool valid() const { return address != nullptr; }
 	uintptr_t handle = invalid_mapping;
 	void* address = nullptr;
 	size_t length = 0;
@@ -80,28 +82,20 @@ using win32::file_mapping;
 #endif
 } // namespace native
 
+/*!
+ * File mode needed to create a mapping with \a perms.
+ */
 inline file_mode get_file_mode(map_perms perms)
 {
 	using mp = map_perms;
 
-	file_mode mode;
-	switch (static_cast<unsigned>(perms)) {
-	case static_cast<unsigned>(mp::read):
-	case static_cast<unsigned>(mp::read|mp::exec):
-		mode = file_mode::read;
-		break;
-	case static_cast<unsigned>(mp::write):
-		mode = file_mode::write;
-		break;
-	case static_cast<unsigned>(mp::write|mp::exec):
-	case static_cast<unsigned>(mp::rdwr):
-	case static_cast<unsigned>(mp::rdwr|mp::exec):
-		mode = file_mode::read|file_mode::write;
-		break;
-	default:
-		// execute-only isn't a valid mapping mode
+	if (perms == mp::none)
 		return file_mode::none;
-	}
+
+	file_mode mode = file_mode::read;
+
+	if (bool(perms & mp::write))
+		mode = mode|file_mode::write;
 
 	if (bool(perms & mp::exec))
 		mode = mode|file_mode::execute;
@@ -148,10 +142,28 @@ struct mmap_file {
 			create_mapping( ec, perms );
 	}
 
-	~mmap_file()
+	~mmap_file() { release(); }
+
+	mmap_file(mmap_file const&) = delete;
+	mmap_file& operator=(mmap_file const&) = delete;
+
+	//! Transfers ownership of the file and its mapping
+	mmap_file(mmap_file&& other) noexcept
+		: _file{ std::move(other._file) }
+		, _map { std::exchange(other._map, {}) }
+	{}
+
+	mmap_file& operator=(mmap_file&& other) noexcept
 	{
-		std::error_code ec;
-		if ( _map.valid()) native::unmap_file( _map, ec );
+		if (this == &other)
+			return *this;
+
+		release();
+
+		_file = std::move(other._file);
+		_map  = std::exchange(other._map, {});
+
+		return *this;
 	}
 
 	using iterator       = char*;
@@ -177,6 +189,12 @@ private:
 	void create_mapping( std::error_code& ec, map_perms perms )
 	{
 		_map = native::map_file( _file.descriptor(), perms, ec );
+	}
+
+	void release()
+	{
+		std::error_code ec;
+		if ( _map.valid() ) native::unmap_file( _map, ec );
 	}
 
 	native::file _file;
@@ -206,6 +224,7 @@ struct mmap_view : private mmap_file {
 	using mmap_file::is_open;
 	using mmap_file::size;
 
+	char const* data()  const { return mmap_file::data(); }
 	char const* begin() const { return mmap_file::begin(); }
 	char const* end()   const { return mmap_file::end(); }
 };

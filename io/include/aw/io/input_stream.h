@@ -12,13 +12,40 @@
 #include <aw/io/input_buffer.h>
 #include <aw/types/traits/basic_traits.h>
 
+#include <utility>
+
 namespace aw {
 namespace io {
 /*!
  * Provides interface for sequential character streams.
  */
 struct input_stream {
+	/*!
+	 * Construct a stream from a buffer.
+	 *
+	 * The stream does not own its buffer, it only reads through it,
+	 * so the buffer has to outlive the stream. The position lives in
+	 * the buffer, so two streams over one buffer share a cursor and
+	 * reading through either advances both.
+	 */
+	explicit input_stream(input_buffer& buffer)
+		: buffer{&buffer}
+	{}
+
 	virtual ~input_stream() = default;
+
+	input_stream(input_stream const&) = delete;
+	input_stream& operator=(input_stream const&) = delete;
+
+	input_stream(input_stream&& other) noexcept
+		: buffer{ std::exchange(other.buffer, nullptr) }
+	{}
+
+	input_stream& operator=(input_stream&& other) noexcept
+	{
+		buffer = std::exchange(other.buffer, nullptr);
+		return *this;
+	}
 
 	bool eof() const
 	{
@@ -94,7 +121,7 @@ protected:
 	}
 
 private:
-	input_buffer* buffer;
+	input_buffer* buffer = nullptr;
 };
 
 
@@ -148,12 +175,9 @@ struct input_stream_iterator {
 
 	input_stream_iterator operator++(int)
 	{
-		char c;
-		if (stream->get(c))
-			cur = traits::to_int_type(c);
-		else
-			cur = traits::eof();
-		return *this;
+		auto copy = *this;
+		++*this;
+		return copy;
 	}
 
 	input_stream_iterator& operator++()

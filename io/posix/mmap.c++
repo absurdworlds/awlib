@@ -9,6 +9,8 @@
 #include <aw/io/mmap_file.h>
 #include "helpers.h"
 
+#include <limits>
+
 #include <sys/mman.h>
 namespace aw {
 namespace io {
@@ -86,7 +88,12 @@ bool unmap_file( file_mapping& map, std::error_code& ec )
 {
 	int result = munmap( map.address, map.length );
 	set_error_if( result == -1, ec );
-	return result == 0;
+
+	if (result != 0)
+		return false;
+
+	map = {};
+	return true;
 }
 } // namespace posix
 } // namespace io

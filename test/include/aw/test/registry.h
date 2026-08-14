@@ -160,7 +160,7 @@ void context::run_test_case(test_case& test, std::string_view exe_dir, report* _
 
 	try {
 		enter(stage::start);
-		cur->func({ exe_dir });
+		cur->func({ exe_dir, cur->name });
 		enter(stage::end);
 		return test_success(_report);
 	}

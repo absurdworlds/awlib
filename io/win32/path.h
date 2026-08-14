@@ -18,6 +18,9 @@ struct winapi_path {
 	winapi_path( fs::path const& path )
 		: path{ path.u16string() }
 	{}
+	winapi_path( std::wstring const& str )
+		: path{ str.begin(), str.end() }
+	{}
 	std::u16string path;
 #else
 	winapi_path( fs::path const& path )

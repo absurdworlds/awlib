@@ -9,9 +9,26 @@
 #include "winapi_helpers.h"
 
 #include <cassert>
+#include <csignal>
 #include <vector>
 
 namespace aw::io::win32 {
+namespace current_process {
+process_handle handle()
+{
+	return convert_handle<process_handle>(GetCurrentProcess());
+}
+} //namespace current_process
+
+#if defined(AW_IO_HAS_HANDLE_COUNT)
+u32 handle_count(process_handle handle)
+{
+	DWORD count = 0;
+	GetProcessHandleCount(HANDLE(handle), &count);
+	return count;
+}
+#endif
+
 namespace detail {
 void close_handle( uintptr_t handle )
 {
@@ -37,7 +54,7 @@ winapi_path format_command_line(const char* path, aw::array_view<const char*> ar
 
 process_holder spawn(const char* path, aw::array_view<const char*> argv, std::error_code& ec) noexcept
 {
-	/*! enforce `nullptr` at the end of `argv` */
+	// enforce `nullptr` at the end of `argv` for consistency between platforms
 	if (!argv.empty()) {
 		assert( argv.back() == nullptr );
 		argv.remove_suffix(1);
@@ -55,6 +72,9 @@ process_holder spawn(const char* path, aw::array_view<const char*> argv, std::er
 		&startup_info, &process_info );
 
 	set_error_if(!ret, ec);
+
+	if (process_info.hThread)
+		CloseHandle(process_info.hThread);
 
 	const auto handle = process_info.hProcess;
 	if (handle)
@@ -80,12 +100,12 @@ process_holder spawn(std::string path, aw::array_view<std::string> argv, std::er
 }
 
 
-wait_status wait(process_handle hprocess, std::error_code& ec, timeout_spec_ms timeout) noexcept
+wait_result wait(process_handle hprocess, std::error_code& ec, timeout_spec_ms timeout) noexcept
 {
 	// TODO: add is_handle_valid()
 	if( in( hprocess, process_handle(0), process_handle(-1) ) ) {
 		ec = make_error_code( std::errc::invalid_argument );
-		return wait_status::failed;
+		return { .status = wait_status::failed };
 	};
 
 	auto ret = WaitForSingleObject( HANDLE(hprocess), timeout ? timeout->count() : INFINITE );
@@ -93,19 +113,49 @@ wait_status wait(process_handle hprocess, std::error_code& ec, timeout_spec_ms t
 	set_error_if(ret == WAIT_FAILED, ec);
 
 	switch (ret) {
-		using enum wait_status;
+	case WAIT_TIMEOUT:
+		return { .status = wait_status::timeout };
+	case WAIT_FAILED:
+		return { .status = wait_status::failed };
 	default:
 	case WAIT_OBJECT_0:
 	case WAIT_ABANDONED:
-		return finished;
-	case WAIT_TIMEOUT:
-		return timeout;
-	case WAIT_FAILED:
-		return failed;
+		break;
 	}
+
+	DWORD code = 0;
+	if (!GetExitCodeProcess( HANDLE(hprocess), &code )) {
+		set_error( ec );
+		return { .status = wait_status::failed };
+	}
+
+	return { .status = wait_status::finished, .code = int(code) };
 }
 
 int kill(process_handle hprocess, int signal, std::error_code& ec) noexcept
+{
+	// TODO: add is_handle_valid()
+	if( in( hprocess, process_handle(0), process_handle(-1) ) ) {
+		ec = make_error_code( std::errc::invalid_argument );
+		return -1;
+	};
+
+	switch (signal) {
+	// TODO: SIGINT, SIGBREAK, SIGSTOP/SIGCONT
+	case SIGTERM:
+#ifdef SIGKILL
+	// SIGKILL is not defined on MSVC, and mingw defines it only
+	// under _POSIX
+	case SIGKILL:
+#endif
+		return terminate(hprocess, ec);
+	default:
+		ec = make_error_code( std::errc::not_supported );
+		return -1;
+	}
+}
+
+int terminate(process_handle hprocess, std::error_code& ec) noexcept
 {
 	// TODO: add is_handle_valid()
 	if( in( hprocess, process_handle(0), process_handle(-1) ) ) {
@@ -117,6 +167,6 @@ int kill(process_handle hprocess, int signal, std::error_code& ec) noexcept
 
 	set_error_if(!ret, ec);
 
-	return ret;
+	return ret ? 0 : -1;
 }
 } // namespace aw::platform::win32

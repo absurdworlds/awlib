@@ -10,6 +10,7 @@
 #ifndef aw_istream_adapter_h
 #define aw_istream_adapter_h
 #include <aw/io/input_stream.h>
+#include <cassert>
 #include <istream>
 #include <aw/io/bits/istream.h>
 namespace aw {
@@ -22,23 +23,26 @@ struct istream_buffer : input_buffer {
 
 	~istream_buffer() override
 	{
+		if (!adapt)
+			return;
+
 		// tell underlying buffer that we read some characters from it
 		adapt.advance(ptr() - begin());
 	}
 
 	void seekpos(size_t offset) override
 	{
-		adapt.buf->pubseekoff(offset, std::ios_base::beg, std::ios_base::in);
+		reseek(offset, std::ios_base::beg);
 	}
 
 	void seekend(size_t offset) override
 	{
-		adapt.buf->pubseekoff(offset, std::ios_base::end, std::ios_base::in);
+		reseek(offset, std::ios_base::end);
 	}
 
 	void seekoff(ptrdiff_t offset) override
 	{
-		adapt.buf->pubseekoff(offset, std::ios_base::cur, std::ios_base::in);
+		reseek(offset, std::ios_base::cur);
 	}
 
 protected:
@@ -51,13 +55,31 @@ protected:
 
 		adapt.advance(ptr() - begin());
 
-		if (!adapt.fill_buffer())
+		if (!adapt.fill_buffer()) {
+			set_ptr(0, 0, 0);
 			return false;
-		set_ptr(adapt.begin(), adapt.ptr(), adapt.end());
+		}
+		set_ptr(adapt.ptr(), adapt.ptr(), adapt.end());
 		return true;
 	}
 
 private:
+	/*!
+	 * Seek the wrapped buffer and mirror it again afterwards.
+	 */
+	void reseek(ptrdiff_t offset, std::ios_base::seekdir dir)
+	{
+		if (!adapt)
+			return;
+
+		adapt.advance(ptr() - begin());
+
+		adapt.buf->pubseekoff(offset, dir, std::ios_base::in);
+
+		set_ptr(adapt.ptr(), adapt.ptr(), adapt.end());
+		fill_buffer();
+	}
+
 	streambuf_adapt adapt;
 };
 

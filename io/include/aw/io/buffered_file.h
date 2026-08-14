@@ -120,11 +120,8 @@ struct buffered_file {
 
 	void swap(buffered_file& other) noexcept
 	{
-		//std::swap(_path, other._path);
-		auto tmp = _file;
-		_file = other._file;
-		other._file=tmp;
-		//std::swap(_file, other._file);
+		std::swap(_path, other._path);
+		std::swap(_file, other._file);
 	}
 
 	void swap(buffered_file&& other) noexcept

@@ -49,26 +49,29 @@ struct input_file_buffer : input_buffer {
 
 	void seekend(size_t offset) override
 	{
-		_file.seek(offset, seek_mode::end);
+		_file.seek(-intmax_t(offset), seek_mode::end);
 		read_more();
 	}
 
 	void seekoff(ptrdiff_t offset) override
 	{
-		auto newpos = ptr() + offset;
-		if ( newpos < begin() || newpos >= end() ) {
-			_file.seek(offset, seek_mode::cur);
+		const ptrdiff_t newpos = (ptr() - begin()) + offset;
+
+		if ( newpos < 0 || newpos >= (end() - begin()) ) {
+			_file.seek(offset - (end() - ptr()), seek_mode::cur);
 			read_more();
 		} else {
-			set_ptr(begin(), newpos, end());
+			set_ptr(begin(), begin() + newpos, end());
 		}
 	}
 
 	size_t position() const override
 	{
-		// TODO
-		auto pos = const_cast<file&>(_file).tell();
-		return pos;
+		// tell() is the underlying file position, which is ahead
+		// of the logical position by the amount read into the
+		// buffer but not yet consumed
+		auto pos = _file.tell();
+		return pos - (end() - ptr());
 	}
 
 protected:

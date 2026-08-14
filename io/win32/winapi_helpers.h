@@ -9,6 +9,7 @@
 #ifndef aw_internal_winapi_helpers_h
 #define aw_internal_winapi_helpers_h
 #include <aw/io/export.h>
+#include <aw/types/types.h>
 #include <system_error>
 
 #ifndef WIN32_LEAN_AND_MEAN
@@ -50,6 +51,12 @@ inline bool close_handle( uintptr_t handle, std::error_code& ec )
 	bool closed = ::CloseHandle( HANDLE(handle) );
 	set_error_if( !closed, ec );
 	return closed;
+}
+
+inline bool close_handle( uintptr_t handle )
+{
+	std::error_code close_ec;
+	return close_handle( handle, close_ec );
 }
 
 } // namespace win32

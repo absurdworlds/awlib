@@ -80,8 +80,7 @@ file_mapping map_file( file_descriptor fd, map_perms perms, std::error_code& ec 
 	void* view = MapViewOfFile( mapping, access, 0, 0, 0 );
 	if (!view) {
 		set_error( ec );
-		std::error_code close_ec;
-		close_handle( uintptr_t(mapping), close_ec );
+		close_handle( uintptr_t(mapping) );
 		return { invalid_mapping };
 	}
 
@@ -95,12 +94,27 @@ file_mapping map_file( file_descriptor fd, map_perms perms, std::error_code& ec 
 
 bool unmap_file( file_mapping& map, std::error_code& ec )
 {
-	if (!UnmapViewOfFile( map.address )) {
-		set_error( ec );
-		return false;
+	const bool unmapped = UnmapViewOfFile( map.address );
+	set_error_if( !unmapped, ec );
+
+	if (unmapped)
+		map.address = nullptr;
+
+	// the mapping is a separate object from view, so it has to be
+	// released separately; it is safe to release it even if view
+	// unmapping failed because it lives as long as there's a view left
+	bool released = true;
+	if (map.handle != invalid_mapping) {
+		std::error_code close_ec;
+		released = close_handle( map.handle, close_ec );
+
+		if (unmapped && !released)
+			ec = close_ec;
+
+		map.handle = invalid_mapping;
 	}
 
-	return close_handle( map.handle, ec );
+	return unmapped && released;
 }
 } // namespace win32
 } // namespace io

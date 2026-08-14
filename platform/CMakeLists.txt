@@ -18,8 +18,10 @@ target_link_libraries(awplatform
 		awutils)
 
 if (WIN32)
+	# lowercase: mingw ships libdbghelp.a, and cross-linking on Linux
+	# is case-sensitive
 	target_link_libraries(awplatform
 	PRIVATE
-		DbgHelp
+		dbghelp
 	)
 endif()

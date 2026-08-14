@@ -138,9 +138,13 @@ private:
 
 inline bool input_buffer::scan(std::string& s, char delim)
 {
+	bool extracted = false;
+
 	while (true) {
 		if (!check_length())
-			return false;
+			// input that runs out before a delimiter still holds a
+			// record, so hand it over
+			return extracted;
 
 		/*
 		 * I did a bit of benchmarking, and found out
@@ -163,15 +167,14 @@ inline bool input_buffer::scan(std::string& s, char delim)
 			auto iter = static_cast<const char*>(p);
 			s.append(ptr(), iter);
 			move_ptr(iter - ptr());
-			break;
+			skip(1);
+			return true;
 		}
 
 		s.append( ptr(), end() );
 		move_ptr( l );
+		extracted = true;
 	}
-
-	skip(1);
-	return true;
 }
 } // namespace io
 } // namespace aw

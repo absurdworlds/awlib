@@ -32,6 +32,9 @@ file_descriptor open(fs::path const& path, file_mode fm, std::error_code& ec)
 			flags |= O_WRONLY; break;
 		case file_mode::read|file_mode::write:
 			flags |= O_RDWR;   break;
+		default:
+			ec = make_error_code( std::errc::invalid_argument );
+			return invalid_fd;
 	}
 
 	if (bool(fm & file_mode::append))
@@ -122,7 +125,7 @@ uintmax_t size(file_descriptor fd, std::error_code& ec)
 	set_error_if(ret == -1, ec);
 
 #if (AW_PLATFORM_SPECIFIC == AW_PLATFORM_LINUX)
-	if (S_ISBLK(info.st_mode)) {
+	if (ret != -1 && S_ISBLK(info.st_mode)) {
 		uint64_t size;
 		int ret = ::ioctl(fd, BLKGETSIZE64, &size);
 		set_error_if(ret == -1, ec);
