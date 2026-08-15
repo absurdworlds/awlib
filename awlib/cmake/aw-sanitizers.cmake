@@ -10,6 +10,10 @@ function(_aw_configure_sanitizers)
 	# Accept "address,undefined" as well as "address;undefined"
 	string(REPLACE "," ";" sanitizers "${AW_SANITIZERS}")
 
+	if (NOT sanitizers)
+		return()
+	endif()
+
 	foreach (san IN LISTS sanitizers)
 		if (NOT san IN_LIST AW_SANITIZERS_KNOWN)
 			message(FATAL_ERROR
