@@ -82,10 +82,22 @@ add_subdirectory(archive)
 add_subdirectory(thread)
 add_subdirectory(signals)
 
-add_subdirectory(fileformat)
-
 # Libraries with extra dependencies
 option(AW_ENABLE_GRAPHICS "Enable libawgraphics" OFF)
+
+# awgraphics links awimage and awmesh, and the demo also needs awhudf.
+# Linking a target that was never added doesn't fail at configure time -
+# cmake just turns the name into -l<name> - so with these left off it
+# generates fine and then dies at compile time on missing headers.
+# Force them on rather than making the user rediscover that.
+if (AW_ENABLE_GRAPHICS)
+	set(AW_ENABLE_IMAGE ON)
+	set(AW_ENABLE_MESH ON)
+	set(AW_ENABLE_HUDF ON)
+endif()
+
+add_subdirectory(fileformat)
+
 if (AW_ENABLE_GRAPHICS)
 	add_subdirectory(graphics)
 endif()
