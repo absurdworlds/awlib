@@ -4,74 +4,70 @@ on:
   push:
 
 jobs:
-  windows:
-    name: windows-${{ matrix.name }}
-    runs-on: windows-latest
+  build:
+    name: ${{ matrix.name }}
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        # Git Bash on Windows, so that one set of steps works on every runner
+        shell: bash
+    env:
+      # Baseline configuration. Every option is spelled out, so that a change
+      # to an the default cannot silently alter what CI covers
+      CMAKE_COMMON: >-
+        -DAW_ENABLE_GRAPHICS:BOOL=OFF
+        -DAW_ENABLE_HUDF:BOOL=ON
+        -DAW_ENABLE_ASSERT:BOOL=OFF
+        -DAW_NO_BUILTINS:BOOL=OFF
     strategy:
       fail-fast: false
       matrix:
         include:
-          - { name: x86, platform: Win32 }
-          - { name: x64, platform: x64 }
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Configure
-        run: >
-          cmake -S . -B build -A ${{ matrix.platform }}
-          -DAW_ENABLE_GRAPHICS:BOOL=OFF
-          -DAW_ENABLE_HUDF:BOOL=ON
-      - name: Build
-        run: cmake --build build
-      - name: Test
-        run: ctest --test-dir build -C Debug --output-on-failure
-  ubuntu:
-    name: ubuntu (${{ matrix.cc }}, no-builtins=${{ matrix.no_builtins }})
-    runs-on: ubuntu-24.04
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - { cc: gcc,   cxx: g++,     no_builtins: "OFF" }
-          - { cc: clang, cxx: clang++, no_builtins: "OFF" }
+          - name: windows (x86)
+            os: windows-latest
+            cmake: -A Win32 -DAW_ENABLE_ASSERT:BOOL=ON
+          - name: windows (x64)
+            os: windows-latest
+            cmake: -A x64 -DAW_ENABLE_ASSERT:BOOL=ON
+
+          - name: ubuntu (gcc)
+            os: ubuntu-24.04
+            packages: liblua5.4-dev
+            cmake: >-
+              -DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++
+              -DAW_ENABLE_LUA:BOOL=ON
+          - name: ubuntu (clang)
+            os: ubuntu-24.04
+            packages: liblua5.4-dev
+            cmake: >-
+              -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++
+              -DAW_ENABLE_LUA:BOOL=ON
           # The fallbacks are plain C++ with no per-compiler paths, so one
           # job is enough to cover them.
-          - { cc: gcc,   cxx: g++,     no_builtins: "ON" }
+          - name: ubuntu (gcc, no-builtins)
+            os: ubuntu-24.04
+            packages: liblua5.4-dev
+            cmake: >-
+              -DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++
+              -DAW_ENABLE_LUA:BOOL=ON
+              -DAW_NO_BUILTINS:BOOL=ON
+
+          - name: macos
+            os: macos-26
     steps:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Install dependencies
-        run: sudo apt-get update && sudo apt-get install -y liblua5.4-dev
+        if: matrix.packages
+        run: sudo apt-get update && sudo apt-get install -y ${{ matrix.packages }}
       - name: Configure
-        run: >
-          cmake -S . -B build
-          -DCMAKE_C_COMPILER=${{ matrix.cc }}
-          -DCMAKE_CXX_COMPILER=${{ matrix.cxx }}
-          -DAW_ENABLE_GRAPHICS:BOOL=OFF
-          -DAW_ENABLE_ASSERT:BOOL=OFF
-          -DAW_ENABLE_HUDF:BOOL=ON
-          -DAW_ENABLE_LUA:BOOL=ON
-          -DAW_NO_BUILTINS:BOOL=${{ matrix.no_builtins }}
+        run: cmake -S . -B build $CMAKE_COMMON ${{ matrix.cmake }}
       - name: Build
         run: cmake --build build
       - name: Test
-        run: ctest --test-dir build --output-on-failure
-  macos:
-    runs-on: macos-26
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Configure
-        run: >
-          cmake -S . -B build
-          -DAW_ENABLE_GRAPHICS:BOOL=OFF
-          -DAW_ENABLE_ASSERT:BOOL=OFF
-          -DAW_ENABLE_HUDF:BOOL=ON
-          -DAW_NO_BUILTINS:BOOL=OFF
-      - name: Build
-        run: cmake --build build
-      - name: Test
-        run: ctest --test-dir build --output-on-failure
+        # -C is only meaningful for the multi-config generator on Windows
+        run: ctest --test-dir build -C Debug --output-on-failure
+
   graphics:
     name: graphics (${{ matrix.loader }})
     runs-on: ubuntu-24.04
