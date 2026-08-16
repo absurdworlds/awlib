@@ -41,6 +41,9 @@ struct result {
 	using value_type = T;
 	using error_type = E;
 
+	template<typename, typename>
+	friend struct result;
+
 	/*!
 	 * Construct result from copy of \a value.
 	 *
@@ -96,6 +99,24 @@ struct result {
 		construct_error(std::forward<Args>(args)...);
 	}
 
+	result(result const& other)
+		: is_error(other.is_error)
+	{
+		if (!is_error)
+			construct_value(other.value());
+		else
+			construct_error(other.error());
+	}
+
+	result(result&& other)
+		: is_error(other.is_error)
+	{
+		if (!is_error)
+			construct_value(std::move(other).value());
+		else
+			construct_error(std::move(other).error());
+	}
+
 	template<typename OtherT, typename OtherE>
 	result(result<OtherT,OtherE> const& other)
 		: is_error(other.is_error)
@@ -122,6 +143,32 @@ struct result {
 		destroy();
 	}
 
+	result& operator=(result const& other)
+	{
+		if (this == &other)
+			return *this;
+		destroy();
+		is_error = other.is_error;
+		if (!is_error)
+			construct_value(other.value());
+		else
+			construct_error(other.error());
+		return *this;
+	}
+
+	result& operator=(result&& other)
+	{
+		if (this == &other)
+			return *this;
+		destroy();
+		is_error = other.is_error;
+		if (!is_error)
+			construct_value(std::move(other).value());
+		else
+			construct_error(std::move(other).error());
+		return *this;
+	}
+
 	template<typename OtherT, typename OtherE>
 	result& operator=(result<OtherT,OtherE> const& other)
 	{
@@ -131,6 +178,7 @@ struct result {
 			construct_value(other.value());
 		else
 			construct_error(other.error());
+		return *this;
 	}
 
 	template<typename OtherT, typename OtherE>
@@ -142,6 +190,7 @@ struct result {
 			construct_value(std::move(other.value()));
 		else
 			construct_error(std::move(other.error()));
+		return *this;
 	}
 
 	bool has_error() const
