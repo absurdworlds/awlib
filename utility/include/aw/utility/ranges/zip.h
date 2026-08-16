@@ -12,7 +12,18 @@
 #include <aw/utility/forward.h>
 #include <iterator>
 #include <tuple>
+#include <utility>
 namespace aw {
+// TODO: polish and move to algorithm?
+template <typename... Ts, typename... Us, std::size_t... N>
+constexpr bool any_equal(
+	std::tuple<Ts...> const& a,
+	std::tuple<Us...> const& b,
+	std::index_sequence<N...>)
+{
+	return (... || (std::get<N>(a) == std::get<N>(b)));
+}
+
 template <typename... Iters>
 struct zip_iterator {
 	constexpr explicit zip_iterator(Iters... iters)
@@ -53,13 +64,14 @@ private:
 template <typename...Is, typename...Js>
 constexpr bool operator==(zip_iterator<Is...> const& a, zip_iterator<Js...> const& b)
 {
-	return a.iters == b.iters;
+	static_assert( sizeof...(Is) == sizeof...(Js) );
+	return any_equal(a.iters, b.iters, std::index_sequence_for<Is...>{});
 }
 
 template <typename...Is, typename...Js>
 constexpr bool operator!=(zip_iterator<Is...> const& a, zip_iterator<Js...> const& b)
 {
-	return a.iters != b.iters;
+	return !(a == b);
 }
 
 template <typename...Is, typename...Js>

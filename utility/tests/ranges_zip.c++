@@ -1,6 +1,8 @@
 #include <aw/utility/ranges/zip.h>
+#include <aw/utility/to_string/pair.h>
 #include <aw/test/test.h>
 #include <numeric>
+#include <utility>
 
 TestFile( "ranges::zip" );
 
@@ -40,5 +42,26 @@ Test(zip_test) {
 	TestEqual(result1, vec1);
 	TestEqual(result2, vec2);
 	TestEqual(result3, vec3);
+}
+
+/*
+ * Iteration stops after the shorter range, regardless of which
+ * argument it is.
+ */
+Test(unequal_lengths_stop_at_the_shortest) {
+	std::vector<int> shorter{1, 2};
+	std::vector<int> longer {10, 20, 30, 40};
+
+	std::vector<std::pair<int,int>> seen;
+	for (auto&& [a, b] : zip(shorter, longer))
+		seen.emplace_back(a, b);
+
+	TestEqual(seen, (std::vector<std::pair<int,int>>{ {1,10}, {2,20} }));
+
+	seen.clear();
+	for (auto&& [a, b] : zip(longer, shorter))
+		seen.emplace_back(a, b);
+
+	TestEqual(seen, (std::vector<std::pair<int,int>>{ {10,1}, {20,2} }));
 }
 } // namespace aw
