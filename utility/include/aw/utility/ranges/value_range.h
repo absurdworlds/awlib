@@ -15,8 +15,8 @@
 #include <type_traits>
 namespace aw {
 template <typename T>
-struct Range {
-	Range(T begin, T end)
+struct value_range {
+	value_range(T begin, T end)
 		: first(begin), last(end)
 	{ }
 
@@ -98,23 +98,27 @@ private:
 	T last;
 };
 
+//! \deprecated Old name for value_range.
 template<typename T>
-Range<T> range(T a, T z)
+using Range [[deprecated("use value_range")]] = value_range<T>;
+
+template<typename T>
+value_range<T> range(T a, T z)
 {
 	assert(a < z);
-	return Range<T>(a, z);
+	return value_range<T>(a, z);
 }
 
 template<typename T>
-Range<T> range(T end)
+value_range<T> range(T end)
 {
-	return Range<T>(T{}, end);
+	return value_range<T>(T{}, end);
 }
 
-inline Range<unsigned char> char_range(unsigned char a, unsigned char z)
+inline value_range<unsigned char> char_range(unsigned char a, unsigned char z)
 {
 	assert(a < z);
-	return Range<unsigned char>(a, z + 1);
+	return value_range<unsigned char>(a, z + 1);
 }
 } // namespace aw
 #endif//aw_value_range_h

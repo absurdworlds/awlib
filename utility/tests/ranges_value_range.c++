@@ -7,7 +7,7 @@
 TestFile( "ranges::value_range" );
 
 namespace aw {
-static_assert(std::bidirectional_iterator<Range<int>::iterator>);
+static_assert(std::bidirectional_iterator<value_range<int>::iterator>);
 
 Test(value_range_forward)
 {
