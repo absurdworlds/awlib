@@ -62,6 +62,9 @@ struct codec {
 			return ret;
 		};
 
+		if (input == end)
+			return error(end);
+
 		char16_t first = *(input++);
 		if (is_high_surrogate(first)) {
 			if (input == end)
