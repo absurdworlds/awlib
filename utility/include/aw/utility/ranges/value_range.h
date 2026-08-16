@@ -23,22 +23,20 @@ struct Range {
 	struct iterator {
 		using difference_type = std::ptrdiff_t;
 		using value_type = T;
-		using reference  = T&;
-		using pointer    = T*;
-		using iterator_category = std::bidirectional_iterator_tag;
+		using reference  = T;
+		using pointer    = void;
+		using iterator_category = std::input_iterator_tag;
+		using iterator_concept  = std::bidirectional_iterator_tag;
+
+		iterator() = default;
 
 		iterator(value_type v)
 			: value(v)
 		{ }
 
-		reference operator*()
+		reference operator*() const
 		{
 			return value;
-		}
-
-		pointer operator->()
-		{
-			return &value;
 		}
 
 		iterator& operator++()
@@ -47,16 +45,30 @@ struct Range {
 			return *this;
 		}
 
+		iterator operator++(int)
+		{
+			auto copy = *this;
+			++value;
+			return copy;
+		}
+
 		iterator& operator--()
 		{
 			--value;
 			return *this;
 		}
 
+		iterator operator--(int)
+		{
+			auto copy = *this;
+			--value;
+			return copy;
+		}
+
 		friend std::strong_ordering operator<=>(iterator const& a, iterator const& b) = default;
 
 	private:
-		value_type value;
+		value_type value = value_type{};
 	};
 
 	using reverse_iterator = std::reverse_iterator<iterator>;
