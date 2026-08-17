@@ -4,6 +4,7 @@ file(COPY data DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 aw_add_test(test_graphics
 	SOURCES
 		camera.c++
+		command_list.c++
 		fake_gl.c++
 		material.c++
 		model.c++
