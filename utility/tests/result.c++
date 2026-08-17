@@ -7,6 +7,21 @@ TestFile( "result" );
 namespace aw {
 using test::counted;
 
+namespace {
+struct throwing {
+	static inline int  live  = 0;
+	static inline bool armed = false;
+	struct error {};
+
+	throwing()                    { ++live; }
+	throwing(throwing const&)     { if (armed) throw error{}; ++live; }
+	throwing(throwing&&) noexcept { ++live; }
+	throwing& operator=(throwing const&)     = default;
+	throwing& operator=(throwing&&) noexcept = default;
+	~throwing()                   { --live; }
+};
+} // namespace
+
 Test(result_basic_test)
 {
 	result<counted, int> val{ counted{counted::payload('a')} };
@@ -75,5 +90,27 @@ Test(assignment_yields_the_assigned_result)
 
 	TestAssert(&ref == &dst);
 	TestEqual(dst.value(), 7L);
+}
+
+/*
+ * A rebuild that throws mid-assignment leaves the result valueless rather than
+ * destroying a value that was never constructed
+ */
+Test(result_throwing_assignment_is_safe)
+{
+	throwing::live  = 0;
+	throwing::armed = false;
+	{
+		result<throwing, int> dst{ value_tag{} };
+		result<throwing, int> src{ value_tag{} };
+		TestEqual(throwing::live, 2);
+
+		throwing::armed = true;
+		TestCatch( throwing::error, dst = src );
+
+		TestAssert(dst.valueless_by_exception());
+		TestEqual(throwing::live, 1);
+	}
+	TestEqual(throwing::live, 0);
 }
 } // namespace aw

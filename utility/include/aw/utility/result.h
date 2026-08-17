@@ -148,11 +148,13 @@ struct result {
 		if (this == &other)
 			return *this;
 		destroy();
+		valueless = true;
 		is_error = other.is_error;
 		if (!is_error)
 			construct_value(other.value());
 		else
 			construct_error(other.error());
+		valueless = false;
 		return *this;
 	}
 
@@ -161,11 +163,13 @@ struct result {
 		if (this == &other)
 			return *this;
 		destroy();
+		valueless = true;
 		is_error = other.is_error;
 		if (!is_error)
 			construct_value(std::move(other).value());
 		else
 			construct_error(std::move(other).error());
+		valueless = false;
 		return *this;
 	}
 
@@ -173,11 +177,13 @@ struct result {
 	result& operator=(result<OtherT,OtherE> const& other)
 	{
 		destroy();
+		valueless = true;
 		is_error = other.is_error;
 		if (!is_error)
 			construct_value(other.value());
 		else
 			construct_error(other.error());
+		valueless = false;
 		return *this;
 	}
 
@@ -185,17 +191,28 @@ struct result {
 	result& operator=(result<OtherT,OtherE>&& other)
 	{
 		destroy();
+		valueless = true;
 		is_error = other.is_error;
 		if (!is_error)
 			construct_value(std::move(other.value()));
 		else
 			construct_error(std::move(other.error()));
+		valueless = false;
 		return *this;
 	}
 
 	bool has_error() const
 	{
 		return is_error;
+	}
+
+	/*!
+	 * Check whether a throwing assignment left the result holding neither a
+	 * value nor an error. Such a result may only be destroyed or assigned to.
+	 */
+	bool valueless_by_exception() const
+	{
+		return valueless;
 	}
 
 	/*!
@@ -256,6 +273,8 @@ struct result {
 private:
 	void destroy()
 	{
+		if (valueless)
+			return;
 		if (!is_error)
 			storage_.template destroy<value_type>();
 		else
@@ -276,30 +295,31 @@ private:
 
 	T* get_value()
 	{
-		assert(!is_error);
+		assert(!is_error && !valueless);
 		return storage_.template get<T>();
 	}
 
 	T const* get_value() const
 	{
-		assert(!is_error);
+		assert(!is_error && !valueless);
 		return storage_.template get<T>();
 	}
 
 	E* get_error()
 	{
-		assert(is_error);
+		assert(is_error && !valueless);
 		return storage_.template get<E>();
 	}
 
 	E const* get_error() const
 	{
-		assert(is_error);
+		assert(is_error && !valueless);
 		return storage_.template get<E>();
 	}
 
 	storage<T, E> storage_;
 	bool is_error;
+	bool valueless = false;
 };
 
 template<class T, class E, typename... Args>
