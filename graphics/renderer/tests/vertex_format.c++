@@ -5,6 +5,7 @@
  * There is NO WARRANTY, to the extent permitted by law.
  */
 
+#include <aw/gl/api/gl_33.h>
 #include <aw/graphics/gl/vertex_format.h>
 
 #include <aw/test/test.h>
@@ -92,6 +93,19 @@ Test(packed_vertex_elements_share_a_single_word) {
 	Checks {
 		TestEqual( spec.size, packed_vertex_size );
 		TestEqual( spec.attributes[1].offset, size_t(12) );
+	}
+}
+
+Test(element_type_names_a_gl_type_and_whether_it_is_normalized) {
+	Checks {
+		TestEqual( to_gl(element_type::single_float), GLenum(GL_FLOAT) );
+		TestEqual( to_gl(element_type::half_float),   GLenum(GL_HALF_FLOAT) );
+
+		// a normalized type names the same GL type as its plain counterpart
+		TestEqual( to_gl(element_type::unsigned_byte_norm),
+		           to_gl(element_type::unsigned_byte) );
+		TestAssert( is_normalized(element_type::unsigned_byte_norm) );
+		TestAssert( !is_normalized(element_type::unsigned_byte) );
 	}
 }
 } // namespace aw::gl3

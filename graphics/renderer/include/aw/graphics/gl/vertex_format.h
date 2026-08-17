@@ -44,8 +44,8 @@ enum class element_type {
 	unsigned_int_10f_11f_11f_rev,
 };
 
-GLenum to_gl(element_type);
-bool   is_normalized(element_type);
+AW_GRAPHICS_EXP GLenum to_gl(element_type);
+AW_GRAPHICS_EXP bool   is_normalized(element_type);
 
 /*!
  * Size in bytes of an attribute holding \a count elements of \a type.
