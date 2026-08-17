@@ -5,6 +5,7 @@ aw_add_test(test_graphics
 	SOURCES
 		fake_gl.c++
 		model.c++
+		resource_manager.c++
 		texture.c++
 		uniform_buffer.c++
 		vertex_format.c++)
