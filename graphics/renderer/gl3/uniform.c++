@@ -14,6 +14,7 @@
 
 namespace aw::gl3 {
 uniform_buffer::uniform_buffer(GLuint index, size_t size)
+	: index{index}
 {
 	gl::gen_buffers(1, &ubo);
 	gl::bind_buffer(GL_UNIFORM_BUFFER, ubo);

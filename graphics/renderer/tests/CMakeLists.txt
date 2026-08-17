@@ -6,6 +6,7 @@ aw_add_test(test_graphics
 		fake_gl.c++
 		model.c++
 		texture.c++
+		uniform_buffer.c++
 		vertex_format.c++)
 
 target_link_libraries(test_graphics
