@@ -55,19 +55,40 @@ public:
 		return {opposite_type(hi), lo};
 	}
 
+	/*
+	 * Carrying into the high word is meant to wrap: that is what makes
+	 * two words behave as one wider one. For an unsigned T it does, but
+	 * for a signed one overflow is undefined rather than modular, and
+	 * -- for instance -- negating the most negative value reaches it.
+	 *
+	 * Doing the arithmetic in the unsigned domain and converting back
+	 * gives exactly the wrapping the algorithm wants; since C++20 that
+	 * conversion is defined as the two's-complement reinterpretation
+	 * rather than being implementation-defined.
+	 */
+	static constexpr T carry_into(T high, U amount)
+	{
+		return T(U(high) + amount);
+	}
+
+	static constexpr T borrow_from(T high, U amount)
+	{
+		return T(U(high) - amount);
+	}
+
 	constexpr auto& operator++()
 	{
 		// If anyone reading this gets annoyed that
 		// I compute (lo + 1) twice: I don't care about that,
 		// that should be optimized away by compiler.
-		hi += (lo + 1) < lo;
+		hi = carry_into(hi, (lo + 1) < lo);
 		++lo;
 		return *this;
 	}
 
 	constexpr auto& operator--()
 	{
-		hi -= (lo - 1) > lo;
+		hi = borrow_from(hi, (lo - 1) > lo);
 		--lo;
 		return *this;
 	}
@@ -76,7 +97,7 @@ public:
 	{
 		U carry = (lo + other.lo) < lo;
 		lo += other.lo;
-		hi += other.hi + carry;
+		hi = carry_into(hi, U(other.hi) + carry);
 		return *this;
 	}
 
@@ -84,7 +105,7 @@ public:
 	{
 		U carry = (lo + val) < lo;
 		lo += val;
-		hi += carry;
+		hi = carry_into(hi, carry);
 		return *this;
 	}
 
@@ -92,7 +113,7 @@ public:
 	{
 		U carry = (lo - other.lo) > lo;
 		lo -= other.lo;
-		hi -= other.hi + carry;
+		hi = borrow_from(hi, U(other.hi) + carry);
 		return *this;
 	}
 
