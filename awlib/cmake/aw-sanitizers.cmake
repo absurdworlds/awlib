@@ -3,11 +3,19 @@ include_guard(GLOBAL)
 
 set(AW_SANITIZERS "" CACHE STRING
 	"Sanitizers to build with. Allowed options: address, undefined, thread, memory, leak")
-# List of supported sanitizers
+option(AW_SANITIZER_FAIL_FAST "Make all sanitizer diagnostics fatal" OFF)
+
+# List of known sanitizers
 set(AW_SANITIZERS_KNOWN address undefined thread memory leak)
 # List of sanitizers that don't play well with each other
 set(AW_SANITIZERS_EXCLUSIVE address thread memory)
-option(AW_SANITIZER_FAIL_FAST "Make all sanitizer diagnostics fatal" OFF)
+# List of actually supported sanitizers
+if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+	set(AW_SANITIZERS_SUPPORTED address)
+else()
+	set(AW_SANITIZERS_SUPPORTED ${AW_SANITIZERS_KNOWN})
+endif()
+
 
 # Parses AW_SANITIZERS, check it for errors, and store the normalised
 # list of sanitizers in ${out_var}.
@@ -23,6 +31,10 @@ function(_aw_validate_sanitizers out_var)
 		if (NOT san IN_LIST AW_SANITIZERS_KNOWN)
 			message(FATAL_ERROR
 				"Unknown sanitizer '${san}'. Allowed options: ${AW_SANITIZERS_KNOWN}")
+		endif()
+		if (NOT san IN_LIST AW_SANITIZERS_SUPPORTED)
+			message(FATAL_ERROR
+				"${CMAKE_CXX_COMPILER_ID} does not support '${san}'. Supported sanitizers: ${AW_SANITIZERS_SUPPORTED}")
 		endif()
 	endforeach()
 
@@ -54,10 +66,14 @@ function(_aw_configure_sanitizers)
 		return()
 	endif()
 
+	message(STATUS "Sanitizers: ${sanitizers}")
+
 	set(compile_flags)
 	set(link_flags)
 	if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
-		#TODO
+		foreach (san IN LISTS sanitizers)
+			list(APPEND compile_flags /fsanitize=${san})
+		endforeach()
 	else()
 		string(REPLACE ";" "," sanitizer_list "${sanitizers}")
 
