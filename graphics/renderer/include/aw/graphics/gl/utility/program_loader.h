@@ -9,6 +9,7 @@
 #ifndef aw_graphics_gl3_shader_file_h
 #define aw_graphics_gl3_shader_file_h
 #include <aw/graphics/gl/program.h>
+#include <aw/graphics/gl/log.h>
 #include <aw/io/file.h>
 #include <aw/types/optional.h>
 #include <vector>
@@ -30,7 +31,7 @@ inline optional<shader> load_shader( gl::shader_type type, fs::path const& path 
 		buf.resize( file.size() );
 		file.read( buf.data(), buf.size() );
 	} catch( std::exception& ex ) {
-		// TODO: journal.error( "gl3", ex.what() );
+		journal.error( "shader", ex.what() );
 		return nullopt;
 	}
 
@@ -48,17 +49,15 @@ inline optional<program> link_program( array_ref<shader> shader_list )
 
 inline optional<program> load_program( string_view v, string_view f )
 {
-	std::vector<shader> shader_list;
-
 	auto vsh = load_shader( gl::shader_type::vertex,   v );
 	auto fsh = load_shader( gl::shader_type::fragment, f );
 
-	if (vsh && fsh) {
-		shader_list.push_back(std::move(*vsh));
-		shader_list.push_back(std::move(*fsh));
-	}
+	if (!vsh || !fsh)
+		return nullopt;
 
-	return link_program(shader_list);
+	shader stages[] = { std::move(*vsh), std::move(*fsh) };
+
+	return link_program( stages );
 }
 } // namespace gl3
 } // namespace aw

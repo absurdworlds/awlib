@@ -34,8 +34,16 @@ struct AW_GRAPHICS_EXP texture_manager : resource_manager<texture> {
 using texture_ref = texture_manager::reference;
 
 struct AW_GRAPHICS_EXP material {
+	material() = default;
+
+	/*!
+	 * \param transform
+	 *    Name of the uniform the model-to-camera matrix is written to.
+	 */
+	explicit material( program_ref prg, char const* transform = "transform" );
+
 	program_ref prg;
-	uniform_location model_to_camera = ((program&)prg).uniform("transform");
+	uniform_location model_to_camera = invalid_uniform;
 
 	void bind_parameters();
 	void bind_textures();

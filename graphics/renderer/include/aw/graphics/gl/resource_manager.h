@@ -24,8 +24,9 @@ struct resource_ref {
 	}
 
 	resource_ref(resource_ref const& other)
-		: resource_ref{*other.res, *other.ref_ctr}
+		: res{other.res}, ref_ctr{other.ref_ctr}
 	{
+		add_ref();
 	}
 
 	~resource_ref() { release(); }
@@ -60,6 +61,9 @@ struct resource_ref {
 private:
 	void add_ref()
 	{
+		if (ref_ctr == nullptr)
+			return;
+
 		++*ref_ctr;
 	}
 
@@ -186,4 +190,4 @@ private:
 
 } // namespace gl3
 } // namespace aw
-#endif//aw_graphics_gl3_program_manager_h
+#endif//aw_graphics_gl3_resource_manager_h

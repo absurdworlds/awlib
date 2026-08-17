@@ -7,24 +7,26 @@
  * There is NO WARRANTY, to the extent permitted by law.
  */
 #include <aw/graphics/gl/shader.h>
+#include <aw/graphics/gl/log.h>
 #include <aw/gl/wrapper/shader_func.h>
-#include <iostream> // temporary
-#include <vector>
+#include <string>
 
 namespace aw::gl3 {
 
 namespace {
 // TODO: move to aw::gl
-void report_info_log( shader_handle shd )
+//! What the driver has to say about a shader
+std::string info_log( shader_handle shd )
 {
-	GLint length;
+	GLint length = 0;
 	gl::get_shader(shd, gl::shader_param::info_log_length, &length);
+	if (length <= 0)
+		return {};
 
-	std::vector<char> log(length + 1);
-	gl::get_info_log(shd, log.size(), nullptr, log.data());
-
-	// TODO: gl3::journal
-	std::cerr << string_view{log.data(), log.size()} << '\n';
+	// the reported length includes the terminator
+	std::string log(length - 1, '\0');
+	gl::get_info_log(shd, length, nullptr, log.data());
+	return log;
 }
 } // namespace
 
@@ -63,10 +65,9 @@ bool shader::compile(string_view code)
 	gl::compile_shader( _shader );
 
 	bool status = is_compiled();
-	if (status == false) {
-		std::cerr << "Failed to compile " << enum_string( type() ) << " shader:" << '\n';
-		report_info_log( _shader );
-	}
+	if (status == false)
+		journal.error( "shader", "failed to compile " +
+			std::string{enum_string( type() )} + " shader: " + info_log( _shader ) );
 
 	return status;
 }

@@ -1,5 +1,9 @@
+if (NOT (AW_ENABLE_IMAGE AND AW_ENABLE_MESH))
+	message(FATAL_ERROR "AW_ENABLE_GRAPHICS requires AW_ENABLE_IMAGE and AW_ENABLE_MESH")
+endif()
 
 set(awgraphics_SOURCES
+	gl3/log.c++
 	gl3/shader.c++
 	gl3/program.c++
 	gl3/uniform.c++

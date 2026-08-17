@@ -11,6 +11,13 @@
 #include <aw/gl/wrapper/texture_func.h>
 
 namespace aw::gl3 {
+material::material( program_ref prg, char const* transform )
+	: prg{prg}
+{
+	if (this->prg.is_valid())
+		model_to_camera = this->prg.get().uniform( transform );
+}
+
 void material::add_texture( const char* name, texture_ref r )
 {
 	gl3::program& program = prg;
@@ -37,7 +44,7 @@ void material::bind_textures( )
 		gl::active_texture(GL_TEXTURE0 + i);
 		texture& tex = t.second;
 		gl::bind_texture(tex.type(), texture_handle{tex});
-		program[t.first] = GLuint(i);
+		program[t.first] = GLint(i);
 	}
 	// gl::use_program( gl::no_program );
 }
