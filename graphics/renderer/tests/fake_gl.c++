@@ -16,6 +16,7 @@
 #include <aw/gl/api/gl_33.h>
 #include <aw/gl/api/gl_46.h>
 #include <aw/graphics/gl/shader.h>
+#include <aw/graphics/gl/log.h>
 
 #include <aw/test/test.h>
 #include <string>
@@ -110,6 +111,21 @@ std::string deleted(GLuint handle)
 {
 	return "delete_shader(" + std::to_string(handle) + ")";
 }
+
+struct capture_log : aw::log {
+	struct entry {
+		level       lvl;
+		std::string src;
+		std::string msg;
+	};
+
+	void message(level lvl, string_view src, string_view msg) override
+	{
+		entries.push_back({lvl, std::string(src), std::string(msg)});
+	}
+
+	std::vector<entry> entries;
+};
 } // namespace
 
 Test(shader_issues_expected_gl_calls) {
@@ -148,10 +164,36 @@ Test(failed_compile_is_reported) {
 	install_fake_gl();
 	compile_succeeds = false;
 
+	capture_log captured;
+	journal.set_logger(&captured);
+
 	shader shd{gl::shader_type::vertex, "irrelevant"};
+
+	journal.set_logger(nullptr);
 
 	Checks {
 		TestAssert( !shd.is_compiled() );
+
+		// the failure is logged
+		TestEqual( captured.entries.size(), size_t(1) );
+
+		if (captured.entries.size() == 1) {
+			TestEqual( captured.entries[0].src, std::string("shader") );
+			TestAssert( captured.entries[0].lvl == log::error );
+		}
+	}
+}
+
+Test(nothing_is_logged_without_a_logger) {
+	install_fake_gl();
+	compile_succeeds = false;
+
+	capture_log captured;
+
+	shader shd{gl::shader_type::vertex, "irrelevant"};
+
+	Checks {
+		TestEqual( captured.entries.size(), size_t(0) );
 	}
 }
 

@@ -7,17 +7,13 @@
  * There is NO WARRANTY, to the extent permitted by law.
  */
 #include <aw/graphics/gl/material_manager.h>
+#include <aw/graphics/gl/log.h>
 #include <aw/gl/wrapper/shader_func.h>
 #include <aw/graphics/gl/utility/program_loader.h>
 #include <aw/fileformat/png/reader.h>
-#include <aw/fileformat/png/log.h>
-#include <aw/log/ostream_logger.h>
 #include <aw/io/input_file_stream.h>
 
-#include <iostream>
-
 namespace aw::gl3 {
-aw::ostream_logger ologger{std::cerr};
 size_t program_manager::create_program( array_view<shader_source> files )
 {
 	if (files.empty())
@@ -60,11 +56,13 @@ size_t texture_manager::create_texture( string_view name )
 	io::input_file_stream ts{name};
 
 	auto img = png::read(ts);
-	if (!img)
+	if (!img) {
+		journal.error( "texture", "cannot read image: " + std::string(name) );
 		return -1;
+	}
 
 	if (!has_enough_pixels(*img)) {
-		ologger.message( log::error, "texture", "image is smaller than its own dimensions" );
+		journal.error( "texture", "image is smaller than its own dimensions" );
 		return -1;
 	}
 
@@ -74,8 +72,6 @@ size_t texture_manager::create_texture( string_view name )
 // TODO: TEMPORARY
 size_t texture_manager::create_texture_array( array_view<string_view> names )
 {
-	png::log.set_logger(&ologger);
-
 	if (names.empty())
 		return -1;
 
@@ -85,20 +81,22 @@ size_t texture_manager::create_texture_array( array_view<string_view> names )
 		io::input_file_stream ts{name};
 
 		auto tmp = png::read(ts);
-		if (!tmp)
+		if (!tmp) {
+			journal.error( "texture", "cannot read image: " + std::string(name) );
 			return -1;
+		}
 
 		if (first) {
 			img.width  = tmp->width;
 			img.height = tmp->height;
 			first = false;
 		} else if (tmp->width != img.width || tmp->height != img.height) {
-			ologger.message( log::error, "texture", "array layers differ in size" );
+			journal.error( "texture", "array layers differ in size" );
 			return -1;
 		}
 
 		if (!has_enough_pixels(*tmp)) {
-			ologger.message( log::error, "texture", "image is smaller than its own dimensions" );
+			journal.error( "texture", "image is smaller than its own dimensions" );
 			return -1;
 		}
 
