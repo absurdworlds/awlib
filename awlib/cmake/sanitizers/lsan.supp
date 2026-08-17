@@ -1,0 +1,12 @@
+# LeakSanitizer suppressions.
+#
+# For leaks in code awlib does not own -- a system library that allocates
+# once and never frees, a driver, an interpreter's global state. A leak in
+# awlib itself belongs in a bug report, not in here.
+#
+# Syntax:  leak:<substring of a function name, file name or library name>
+# Docs:    https://github.com/google/sanitizers/wiki/AddressSanitizerLeakSanitizer
+
+# Lua keeps its allocations until lua_close(), which the bindings' tests
+# deliberately skip in the cases that check error paths.
+#leak:liblua
