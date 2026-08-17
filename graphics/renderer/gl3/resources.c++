@@ -24,8 +24,9 @@ size_t program_manager::create_program( array_view<shader_source> files )
 	for (auto file : files)
 	{
 		auto shader = load_shader( file.type, file.path );
-		if (shader)
-			shader_list.push_back(std::move(*shader));
+		if (!shader)
+			return -1;
+		shader_list.push_back(std::move(*shader));
 	}
 
 	gl3::program program;

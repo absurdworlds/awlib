@@ -7,6 +7,7 @@ aw_add_test(test_graphics
 		fake_gl.c++
 		material.c++
 		model.c++
+		program.c++
 		resource_manager.c++
 		texture.c++
 		uniform_buffer.c++

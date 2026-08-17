@@ -54,6 +54,11 @@ bool program::is_linked() const
 
 bool program::link(array_ref<shader> shaders)
 {
+	if ( shaders.empty() ) {
+		journal.error( "program", "cannot link without shaders" );
+		return false;
+	}
+
 	for ( auto& shader : shaders )
 		gl::attach_shader( _program, shader_handle{shader});
 
