@@ -9,6 +9,7 @@ aw_add_test(test_types
 		traits_pointer.c++
     traits_promote.c++ traits_is_iterable.c++
     traits_is_container.c++
+		priority_queue.c++
     queue.c++ flat_map.c++
     circular_buffer.c++
     array_chain.c++
