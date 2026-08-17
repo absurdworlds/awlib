@@ -27,7 +27,9 @@ void HPKTreeWriter::addFile (std::string const& path, u64 id)
 	std::vector<std::string> dir;
 	std::string name;
 
-	dir = string::split(path, "/");
+	auto peg = string::split(path, "/");
+	for (auto s:peg)
+		dir.push_back(std::string(s));
 	name = dir.back();
 	dir.pop_back();
 

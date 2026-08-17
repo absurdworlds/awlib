@@ -59,11 +59,11 @@ private:
 		u8 type[4];
 		u8 unused[4];
 		u64 filesNum;
-		u128 seed;
+		seed128_64 seed;
 	};
 
 	std::vector<HtableEntry> htable_;
-	u128 seed_;
+	seed128_64 seed_;
 };
 
 } //namespace itd

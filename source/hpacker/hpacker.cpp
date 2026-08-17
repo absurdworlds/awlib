@@ -104,7 +104,7 @@ i32 main (char** args)
 		ItdReader reader(filename, verbose);
 
 		for (auto file : files) {
-			std::ofstream f(string::split(file,"/").back(), std::ios::binary);
+			std::ofstream f((std::string)string::split(file,"/").back(), std::ios::binary);
 			auto v = reader.getFileContents(file);
 			f.write((char*)v.data(),v.size());
 		}

@@ -114,6 +114,8 @@ image try_read(io::input_stream& stream)
 			return "RGB";
 		case PNG_COLOR_TYPE_RGB_ALPHA:
 			return "RGBA";
+		default:
+			return "";
 		};
 	};
 
@@ -200,7 +202,7 @@ optional<image> read(io::input_stream& stream) noexcept
 } // namespace png
 } // namespace aw
 
-#ifdef AW_MANUAL_TEST
+#ifdef AW_PNG_MANUAL_TEST
 #include <aw/io/input_file_stream.h>
 #include <aw/log/ostream_logger.h>
 #include <iostream>

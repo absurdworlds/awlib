@@ -58,7 +58,7 @@ CXXFLAGS += -fvisibility=default
 CXXFLAGS += -fdiagnostics-color=auto
 CXXFLAGS += -Werror=return-type
 CXXFLAGS_DEBUG   = -g -DDEBUG -D_DEBUG
-CXXFLAGS_RELEASE = -g -O3 -DNDEBUG
+CXXFLAGS_RELEASE = -g -Og -march=native -DNDEBUG
 CXXFLAGS += $(ProjectFlags)
 
 CCFLAGS  = -std=c11

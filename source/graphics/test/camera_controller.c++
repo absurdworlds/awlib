@@ -75,6 +75,7 @@ void camera_controller::frame(GLFWwindow* window, std::chrono::duration<float> f
 	auto rotation = extend( math::yaw_matrix( -ang ) );
 
 	transform.get(0,3) += movement[0];
+	if (!horiz_lock)
 	transform.get(1,3) += movement[1];
 	transform.get(2,3) += movement[2];
 	transform = rotation * transform;
