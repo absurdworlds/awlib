@@ -4,6 +4,7 @@ ipch/*
 ipch/*/
 ipch/*/*
 build/*
+build-*/
 docs/documentation
 a.out
 *.o
@@ -24,5 +25,6 @@ a.out
 *.vcxproj.filters
 CMakeLists.txt.user
 .*
+!/.github
 !/.gitignore
 Config.mk

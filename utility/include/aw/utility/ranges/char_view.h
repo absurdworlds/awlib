@@ -8,6 +8,7 @@
  */
 #ifndef aw_ranges_char_view_h
 #define aw_ranges_char_view_h
+#include <cstddef>
 namespace aw {
 /*!
  * View object of type T as sequence of characters.

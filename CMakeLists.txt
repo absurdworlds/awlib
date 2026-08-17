@@ -48,6 +48,7 @@ if (UNIX)
 endif()
 
 option(AW_MAKE_TESTS "Make tests. Produces a test executable for each library." ON)
+option(AW_MAKE_DEMOS "Build demo programs." OFF)
 option(AW_SPLIT_INCLUDES "Install headers for each library into a separate directory." ON)
 
 set(AW_INCLUDE_PREFIX "awlib" CACHE STRING "Prefix for the include directory.")
@@ -57,6 +58,7 @@ if (AW_MAKE_TESTS)
 endif()
 
 include(aw-common)
+include(aw-sanitizers)
 
 add_subdirectory(awlib)
 add_subdirectory(meta)

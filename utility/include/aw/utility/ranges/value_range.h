@@ -15,30 +15,28 @@
 #include <type_traits>
 namespace aw {
 template <typename T>
-struct Range {
-	Range(T begin, T end)
+struct value_range {
+	value_range(T begin, T end)
 		: first(begin), last(end)
 	{ }
 
 	struct iterator {
 		using difference_type = std::ptrdiff_t;
 		using value_type = T;
-		using reference  = T&;
-		using pointer    = T*;
-		using iterator_category = std::bidirectional_iterator_tag;
+		using reference  = T;
+		using pointer    = void;
+		using iterator_category = std::input_iterator_tag;
+		using iterator_concept  = std::bidirectional_iterator_tag;
+
+		iterator() = default;
 
 		iterator(value_type v)
 			: value(v)
 		{ }
 
-		reference operator*()
+		reference operator*() const
 		{
 			return value;
-		}
-
-		pointer operator->()
-		{
-			return &value;
 		}
 
 		iterator& operator++()
@@ -47,16 +45,30 @@ struct Range {
 			return *this;
 		}
 
+		iterator operator++(int)
+		{
+			auto copy = *this;
+			++value;
+			return copy;
+		}
+
 		iterator& operator--()
 		{
 			--value;
 			return *this;
 		}
 
+		iterator operator--(int)
+		{
+			auto copy = *this;
+			--value;
+			return copy;
+		}
+
 		friend std::strong_ordering operator<=>(iterator const& a, iterator const& b) = default;
 
 	private:
-		value_type value;
+		value_type value = value_type{};
 	};
 
 	using reverse_iterator = std::reverse_iterator<iterator>;
@@ -86,23 +98,27 @@ private:
 	T last;
 };
 
+//! \deprecated Old name for value_range.
 template<typename T>
-Range<T> range(T a, T z)
+using Range [[deprecated("use value_range")]] = value_range<T>;
+
+template<typename T>
+value_range<T> range(T a, T z)
 {
 	assert(a < z);
-	return Range<T>(a, z);
+	return value_range<T>(a, z);
 }
 
 template<typename T>
-Range<T> range(T end)
+value_range<T> range(T end)
 {
-	return Range<T>(T{}, end);
+	return value_range<T>(T{}, end);
 }
 
-inline Range<unsigned char> char_range(unsigned char a, unsigned char z)
+inline value_range<unsigned char> char_range(unsigned char a, unsigned char z)
 {
 	assert(a < z);
-	return Range<unsigned char>(a, z + 1);
+	return value_range<unsigned char>(a, z + 1);
 }
 } // namespace aw
 #endif//aw_value_range_h

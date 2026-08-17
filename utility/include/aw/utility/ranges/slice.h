@@ -16,9 +16,11 @@ namespace aw {
 template <typename Container>
 struct slice_adapter {
 	slice_adapter(Container&& range, size_t start, size_t end)
-		: range(range), bounds{start, range.size() - end}
+		: range(std::forward<Container>(range))
+		, bounds{start, this->range.size() - end}
 	{}
-	Container& range;
+
+	Container range;
 
 	std::pair<size_t,size_t> bounds;
 };

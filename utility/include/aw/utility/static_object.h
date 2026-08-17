@@ -20,12 +20,13 @@ namespace aw {
  */
 template<typename T> //, class Tag = EmptyTag>
 class static_object {
-	static void use(T const&) {}
+	static void use(T const*) {}
 
-	static T& ref;
+	static T const* ref;
 	static T& create()
 	{
 		static T object;
+		// odr-use `ptr` to instantiate it
 		use(ref);
 		return object;
 	}
@@ -36,6 +37,6 @@ public:
 };
 
 template<typename T>
-T& static_object<T>::ref = static_object<T>::create();
+T const* static_object<T>::ref = &static_object<T>::create();
 } // namespace aw
 #endif//aw_static_object_h

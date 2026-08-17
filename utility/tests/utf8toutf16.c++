@@ -1,4 +1,5 @@
 #include <aw/utility/unicode/convert.h>
+#include <aw/utility/unicode/utf16.h>
 #include <aw/test/test.h>
 
 TestFile("utf8toutf16");
@@ -106,6 +107,20 @@ Test(invalid_unicode_utf16_with_error)
 
 		TestAssert(error);
 	}
+}
+
+/*!
+ * decode() must not read past the end of an empty range
+ */
+Test(utf16_decode_of_empty_input_is_an_error)
+{
+	char16_t buf[] = { 0x0 };
+	unicode::code_point cp = 0;
+
+	auto it = unicode::utf16::codec::decode(buf, buf, cp);
+
+	TestAssert(it == buf);
+	TestEqual(cp, unicode::invalid);
 }
 
 namespace {

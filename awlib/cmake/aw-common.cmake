@@ -89,6 +89,10 @@ function(aw_add_library NAME TYPE)
 		add_subdirectory(tests)
 	endif()
 
+	if (AW_MAKE_DEMOS AND IS_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/demo")
+		add_subdirectory(demo)
+	endif()
+
 	if (IS_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/include")
 		target_include_directories(${INTERFACE_LIB}
 			${INCLUDE_TYPE}
