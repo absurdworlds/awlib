@@ -3,6 +3,7 @@ file(COPY data DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 # Unit tests
 aw_add_test(test_graphics
 	SOURCES
+		camera.c++
 		fake_gl.c++
 		material.c++
 		model.c++
