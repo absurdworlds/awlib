@@ -299,6 +299,27 @@ Test(mmap_blkdevide)
 #endif
 
 #if (AW_ARCH == AW_ARCH_x86_64) || (AW_ARCH == AW_ARCH_i686)
+namespace {
+/*!
+ * Call hand-written machine code through a function pointer.
+ *
+ * clang's -fsanitize=function, part of -fsanitize=undefined, checks an
+ * indirect call by reading the type signature clang emits just ahead of
+ * every function it compiles. The bytes below are assembled by hand and
+ * have no such header, so the check reads off the front of the mapping
+ * and takes the SIGSEGV this test exists to prove does not happen. GCC
+ * implements no equivalent check, which is why only clang trips on it.
+ */
+#if defined(__clang__)
+[[clang::no_sanitize("function")]]
+#endif
+int call_code(void const* code)
+{
+	auto func = reinterpret_cast<int(*)()>(const_cast<void*>(code));
+	return func();
+}
+} // namespace
+
 Test(mmap_execute) {
 	char const code[] = {
 		'\xb8', '\x2a', '\x00', '\x00', '\x00', // mov eax, 42
@@ -318,9 +339,8 @@ Test(mmap_execute) {
 		TestAssert(mapped.is_open());
 
 		if (mapped.is_open()) {
-			auto func = reinterpret_cast<int(*)()>(mapped.data());
 			// will segfault with wrong perms
-			TestEqual(func(), 42);
+			TestEqual(call_code(mapped.data()), 42);
 		}
 	}
 };

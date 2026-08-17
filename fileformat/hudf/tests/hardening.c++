@@ -58,8 +58,20 @@ std::string to_string(outcome o)
 }
 
 constexpr rlim_t address_space_limit = 256u << 20;
-constexpr rlim_t stack_limit         =   1u << 20;
-constexpr unsigned time_limit        = 5;
+/*
+ * Enough for the parser to reach max_nesting_depth and unwind again, and
+ * little enough that unbounded recursion hits it quickly. A sanitizer
+ * needs the bigger figure: instrumentation grows every frame, and ASan
+ * additionally redzones the on-stack locals.
+ */
+constexpr rlim_t stack_limit = AW_SANITIZER_ANY ? (8u << 20) : (1u << 20);
+/*
+ * Only has to be short enough that a genuine hang is caught well inside
+ * ctest's own timeout. TSan runs the deep-nesting cases an order of
+ * magnitude slower than an uninstrumented build, and on a loaded CI
+ * runner they came close enough to five seconds to fail intermittently.
+ */
+constexpr unsigned time_limit = AW_SANITIZER_ANY ? 60 : 5;
 
 /*!
  * Nesting depth for the deep-recursion case.
@@ -84,8 +96,18 @@ outcome run_sandboxed(Func func)
 
 	pid_t pid = fork();
 	if (pid == 0) {
-		rlimit as{address_space_limit, address_space_limit};
-		setrlimit(RLIMIT_AS, &as);
+		/*
+		 * A sanitizer runtime reserves terabytes of address space for
+		 * its shadow memory, so any RLIMIT_AS we could still fit under
+		 * would kill the child on its next mmap rather than on a
+		 * runaway allocation. Drop that one limit and let the
+		 * sanitizer's own allocator report the overrun instead; the
+		 * alarm below still bounds the run either way.
+		 */
+		if (!AW_SANITIZER_ANY) {
+			rlimit as{address_space_limit, address_space_limit};
+			setrlimit(RLIMIT_AS, &as);
+		}
 		rlimit st{stack_limit, stack_limit};
 		setrlimit(RLIMIT_STACK, &st);
 		// no core dumps for the deliberate crashes
