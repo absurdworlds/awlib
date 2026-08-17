@@ -67,6 +67,34 @@ Code that has to know -- there should be very little of it -- can ask
 
 CI runs asan+ubsan under both gcc and clang, and tsan under clang.
 
+### Coverage ###
+
+```sh
+cmake -S . -B build-cov -DAW_COVERAGE=ON
+cmake --build build-cov --target coverage
+```
+
+The `coverage` target discards the previous run's counters, runs the tests
+and writes a report to `<build>/coverage`, printing a summary as it goes.
+GCC and clang each use their own instrumentation and their own report tool
+-- gcov with gcovr, and llvm-cov -- rather than clang being pushed through
+gcov emulation, where the data format has to match whichever gcov happens
+to be installed. clang reports region and branch coverage as well, and is
+the better of the two to read.
+
+Coverage implies `-O0`: the inliner and the branch folder rewrite the very
+thing being counted, so a report from an optimised build measures
+something other than the source in front of you. Configuring a non-Debug
+build type with `AW_COVERAGE=ON` warns for that reason.
+
+`AW_COVERAGE_EXCLUDE` is a list of regexes for paths to leave out, and by
+default drops the tests themselves, since what is wanted is how much of
+the library they reach.
+
+CI runs this and keeps the report as an artifact. There is deliberately no
+threshold to fall under: the branch figure is the one worth reading, and a
+number to defend tends to attract tests written for the number.
+
 ### Static analysis ###
 
 Each analyser is a separate option, off by default, and runs as part of the

@@ -64,10 +64,11 @@ endif()
 
 include(aw-common)
 
-# Both of these add flags for the whole build, so they have to come before
-# the first add_subdirectory().
+# These all add flags for the whole build, so they have to come before the
+# first add_subdirectory().
 include(aw-sanitizers)
 include(aw-static-analysis)
+include(aw-coverage)
 
 add_subdirectory(awlib)
 add_subdirectory(meta)
