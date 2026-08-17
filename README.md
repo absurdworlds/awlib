@@ -66,3 +66,39 @@ Code that has to know -- there should be very little of it -- can ask
 `AW_SANITIZER_MEMORY`, `AW_SANITIZER_UNDEFINED` and `AW_SANITIZER_ANY`.
 
 CI runs asan+ubsan under both gcc and clang, and tsan under clang.
+
+### Static analysis ###
+
+Each analyser is a separate option, off by default, and runs as part of the
+compile:
+
+```sh
+# clang-tidy, which includes the clang static analyser (clang-analyzer-*).
+# Checks are configured in .clang-tidy at the top of the tree.
+cmake -S . -B build-tidy -DAW_CLANG_TIDY=ON -DCMAKE_CXX_COMPILER=clang++
+
+# GCC's own analyser.
+cmake -S . -B build-analyzer -DAW_GCC_ANALYZER=ON
+
+# cppcheck.
+cmake -S . -B build-cppcheck -DAW_CPPCHECK=ON
+
+# include-what-you-use.
+cmake -S . -B build-iwyu -DAW_IWYU=ON
+```
+
+Add `-DAW_ANALYZER_WERROR=ON` to turn findings into build errors, which is
+how CI runs them. `compile_commands.json` is written by default, so the
+analysers can equally be run out of band -- `run-clang-tidy -p build`.
+
+Two of these need their expectations set. GCC's analyser is still
+experimental for C++: it does not model a libc function filling in the
+buffer it is handed, nor the thunk behind a captureless lambda, so those
+two checks are off and the rest are left on. cppcheck cannot parse the
+macro DSL the tests are written in, so it is scoped to the library sources.
+
+clang-tidy's check list is the one place with a backlog behind it: the
+correctness families are on, while a few hundred style and performance
+suggestions are switched off individually in `.clang-tidy`, each recorded
+with its count. Turning one back on and clearing it is a self-contained
+piece of work.

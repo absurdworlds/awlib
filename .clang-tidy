@@ -1,0 +1,166 @@
+# clang-tidy configuration for awlib.
+#
+# The selection is about correctness rather than style: the bugprone,
+# cert, clang-analyzer, misc, performance and portability families are on
+# as a whole, and individual checks are subtracted below. modernize-* and
+# readability-* are not enabled at all -- awlib's conventions predate most
+# of what they would rewrite, and the churn would bury everything else.
+#
+# clang-analyzer-* is the clang static analyser proper: the same engine
+# scan-build drives, run here as part of the ordinary build. It is clean
+# on the library, and the two checks subtracted from it below fire only on
+# things the tests do deliberately.
+#
+# What is subtracted falls into two groups, marked below. The first is
+# checks that do not apply to this codebase. The second is a cleanup
+# backlog: real suggestions, too many to fix alongside enabling the tool,
+# each with the number of findings at the time it was switched off. CI
+# runs with --warnings-as-errors, so the list has to hold everything not
+# yet clean; shortening it is the point.
+#
+# To see the backlog again, run with the second group dropped:
+#     run-clang-tidy -p build -checks='bugprone-*,cert-*,performance-*'
+#
+# Usage:
+#     cmake -S . -B build -DAW_CLANG_TIDY=ON -DCMAKE_CXX_COMPILER=clang++
+#     cmake --build build
+# or, out of band and in parallel, from a compile_commands.json:
+#     run-clang-tidy -p build
+
+Checks: >
+  bugprone-*,
+  cert-*,
+  clang-analyzer-*,
+  misc-*,
+  performance-*,
+  portability-*,
+
+  -bugprone-easily-swappable-parameters,
+  -bugprone-macro-parentheses,
+  -bugprone-exception-escape,
+  -cert-dcl21-cpp,
+  -cert-err58-cpp,
+  -misc-include-cleaner,
+  -misc-non-private-member-variables-in-classes,
+  -misc-no-recursion,
+  -misc-use-anonymous-namespace,
+  -misc-use-internal-linkage,
+  -misc-definitions-in-headers,
+  -bugprone-use-after-move,
+  -cert-dcl59-cpp,
+  -cert-dcl58-cpp,
+  -clang-analyzer-cplusplus.Move,
+  -clang-analyzer-deadcode.DeadStores,
+
+  -misc-unused-parameters,
+  -misc-const-correctness,
+  -bugprone-narrowing-conversions,
+  -cert-err33-c,
+  -performance-enum-size,
+  -performance-unnecessary-value-param,
+  -performance-noexcept-swap,
+  -performance-noexcept-move-constructor,
+  -performance-unnecessary-copy-initialization,
+  -performance-avoid-endl,
+  -cert-oop54-cpp,
+  -bugprone-unhandled-self-assignment,
+  -cert-dcl16-c,
+  -bugprone-reserved-identifier,
+  -cert-dcl37-c,
+  -cert-dcl51-cpp,
+  -bugprone-signed-char-misuse,
+  -cert-str34-c,
+  -bugprone-forwarding-reference-overload,
+  -bugprone-move-forwarding-reference,
+  -bugprone-empty-catch,
+  -bugprone-switch-missing-default-case,
+  -bugprone-implicit-widening-of-multiplication-result,
+  -bugprone-unused-local-non-trivial-variable,
+  -clang-diagnostic-switch,
+  -clang-diagnostic-deprecated-declarations,
+
+# Group one, not applicable here:
+#   bugprone-easily-swappable-parameters  advisory, fires on any (T, T)
+#   bugprone-macro-parentheses            the test DSL and <aw/meta/pp> are
+#                                         macros by design
+#   bugprone-exception-escape             flags main() in the test runner
+#   cert-dcl21-cpp                        deprecated in C++11 and after
+#   cert-err58-cpp                        every TestFile() registers a static
+#   misc-include-cleaner                  wants each header spelled out per TU
+#   misc-non-private-member-variables-in-classes  aggregates are deliberate
+#   misc-no-recursion                     the parsers recurse on purpose
+#   misc-use-anonymous-namespace          disagrees with the house style
+#   misc-use-internal-linkage             same
+#   misc-definitions-in-headers        2  <aw/test/main.h> defines main() by
+#                                         design, for the one TU that includes it
+#   bugprone-use-after-move           11  the container tests check the
+#                                         moved-from state deliberately, and
+#                                         queue's allocator-extended move ctor
+#                                         documents reading its source
+#   cert-dcl59-cpp                    63  unnamed namespaces in headers
+#   cert-dcl58-cpp                    25  specialisations opened in namespace std
+#   clang-analyzer-cplusplus.Move             2  types/tests/variant.c++ calls
+#                                         empty() and set() on a moved-from
+#                                         variant on purpose: checking what the
+#                                         moved-from state is *is* the test
+#   clang-analyzer-deadcode.DeadStores        2  variant_converter.c++ declares
+#                                         v1/v2 to prove the conversion
+#                                         compiles, and never reads them
+#
+# Group two, the cleanup backlog:
+#   misc-unused-parameters           362
+#   misc-const-correctness           328
+#   bugprone-narrowing-conversions   234
+#   cert-err33-c                     130
+#   performance-enum-size            109
+#   performance-unnecessary-value-param      27
+#   performance-noexcept-swap                25
+#   performance-noexcept-move-constructor    21
+#   performance-unnecessary-copy-initialization  5
+#   performance-avoid-endl                    1
+#   cert-oop54-cpp                    20  and bugprone-unhandled-self-assignment,
+#                                         which is the same check under its
+#                                         other name -- switching off only the
+#                                         cert alias leaves it reporting
+#   cert-dcl16-c                       1
+#   bugprone-forwarding-reference-overload   10
+#   bugprone-move-forwarding-reference        3
+#   bugprone-empty-catch                      5
+#   bugprone-switch-missing-default-case      4
+#   bugprone-implicit-widening-of-multiplication-result  3
+#   bugprone-unused-local-non-trivial-variable           2
+#   clang-diagnostic-switch                  20
+#   clang-diagnostic-deprecated-declarations  2
+#   bugprone-reserved-identifier            752  with its aliases cert-dcl37-c
+#                                         and cert-dcl51-cpp. <aw/config.h>
+#                                         builds its feature-test macros by
+#                                         pasting AW_HAS_EXT onto a builtin's
+#                                         name, so AW_HAS_EXT__builtin_bswap16
+#                                         and its siblings contain a double
+#                                         underscore. Renaming the scheme is a
+#                                         change to make on purpose, not as a
+#                                         side effect of enabling a linter.
+#   bugprone-signed-char-misuse               1  with its alias cert-str34-c.
+#                                         utf32.h:32 assigns a possibly-signed
+#                                         char straight into an unsigned
+#                                         code_point, so a byte over 0x7f
+#                                         sign-extends. Only reachable when
+#                                         decode() is instantiated over a
+#                                         narrow-char iterator, but it is a
+#                                         real one worth looking at.
+#
+# An alias is a second name for one check, and clang-tidy keeps reporting
+# through whichever name is still enabled -- so both names have to be
+# switched off, as above. Diagnostics then print as [check,alias1,alias2],
+# which is worth knowing when grepping this output for what still fires.
+
+# Only awlib's own headers; a finding in libstdc++ or a system header is
+# not actionable. Matched against the header's path.
+HeaderFilterRegex: '.*/(awlib|algorithm|archive|assert|awstd|fileformat|graphics|io|log|lua|math|meta|platform|signals|string|test|thread|types|utility)/include/aw/.*'
+
+# The naming conventions vary across the tree (aw::static_object next to
+# aw::Range), so identifiers are not checked at all rather than checked
+# against a rule half the code would fail.
+CheckOptions:
+  - key: bugprone-assert-side-effect.AssertMacros
+    value: 'assert,TestAssert'
