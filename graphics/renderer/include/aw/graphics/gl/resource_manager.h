@@ -190,4 +190,4 @@ private:
 
 } // namespace gl3
 } // namespace aw
-#endif//aw_graphics_gl3_program_manager_h
+#endif//aw_graphics_gl3_resource_manager_h
