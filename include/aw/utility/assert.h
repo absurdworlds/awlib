@@ -35,25 +35,26 @@ void assert_fail_fmt(string_view msg, std::source_location loc = std::source_loc
 	assert_fail(fmt, loc);
 }
 
-template <assert_level level = assert_level::normal, typename... Arg_types>
-bool assert_check(bool cond, string_view msg, std::source_location loc = std::source_location::current(), Arg_types&&... args)
+template <assert_level level = assert_level::normal, typename Cond, typename... Arg_types>
+bool assert_check(Cond&& cond, string_view msg, std::source_location loc = std::source_location::current(), Arg_types&&... args)
 {
 	if constexpr(level > assert_level::current)
 		return true;
 
-	if (!cond) {
+	const bool value = cond();
+	if (!value) {
 		if constexpr(sizeof...(Arg_types) > 0)
 			assert_fail_fmt(msg, loc, std::forward<Arg_types>(args)...);
 		else
 			assert_fail(msg, loc);
 	}
 
-	return cond;
+	return value;
 }
 } // namespace aw
 
 // disables evaluation by applying short-circuiting
-#define aw_assert_eval(level, cond) (aw_current_assert_level < aw_assert_level_##level) || (cond)
+#define aw_assert_eval(cond) [&] { return (cond); }
 
 // necessary because of default
 #define aw_assert_map_audit   audit
@@ -65,7 +66,7 @@ bool assert_check(bool cond, string_view msg, std::source_location loc = std::so
 
 // TODO: __builtin_assume
 #define aw_assert_x(cond, level, message, ...) \
-	::aw::assert_check<aw_assert_enum(level)> ( aw_assert_eval(level, cond), message __VA_OPT__(, std::source_location::current(), ) __VA_ARGS__ )
+	::aw::assert_check<aw_assert_enum(level)> ( aw_assert_eval(cond), message __VA_OPT__(, std::source_location::current(), ) __VA_ARGS__ )
 
 #define aw_assert_get_level(default, ...) FIRST(__VA_ARGS__ __VA_OPT__(,) default)
 #define aw_assert_get_message(default, ...) SECOND(__VA_ARGS__ __VA_OPT__(,) default, default)
@@ -75,5 +76,12 @@ bool assert_check(bool cond, string_view msg, std::source_location loc = std::so
 	  aw_assert_get_level(default, __VA_ARGS__), \
 	  aw_assert_get_message(#cond, __VA_ARGS__) \
 	)
+
+#define aw_unexpected(msg) \
+	::aw::assert_fail(msg, std::source_location::current());
+
+#define aw_unexpected_x(msg, ...) \
+	::aw::assert_fail_fmt(msg, std::source_location::current(), __VA_ARGS__);
+
 
 #endif//aw_utility_assert_h

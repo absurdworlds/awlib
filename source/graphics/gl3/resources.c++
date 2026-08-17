@@ -54,7 +54,7 @@ size_t texture_manager::create_texture( string_view name )
 // TEMPORARY
 size_t texture_manager::create_texture_array( array_view<string_view> names )
 {
-	png::log.set_logger(&ologger);
+	//png::log.set_logger(&ologger);
 	png::image img;
 	std::optional<png::image> tmp;
 	for (auto name : names) {

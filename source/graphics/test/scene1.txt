@@ -1,0 +1,55 @@
+4
+shaders/earth.glsl shaders/frag1.glsl
+shaders/v_tex.glsl shaders/f_tex.glsl
+shaders/v_txa.glsl shaders/f_txa.glsl
+shaders/vert6.glsl shaders/frag1.glsl
+3
+models/plane6301.obj
+models/butruck.obj
+models/testworld.obj
+15
+0 0
+0 -2 0
+0 0 0
+0 2
+0 0 0
+0 0 0
+0 1
+0 2 0
+0 0 0
+0 1
+0 4 0
+0 0 0
+0 1
+0 6 0
+0 0 0
+0 1
+0 8 0
+0 0 0
+0 1
+0 10 0
+0 0 0
+0 1
+0 12 0
+0 0 0
+0 1
+0 14 0
+0 0 0
+0 1
+0 16 0
+0 0 0
+0 1
+0 18 0
+0 0 0
+0 1
+0 20 0
+0 0 0
+0 1
+0 22 0
+0 0 0
+0 1
+0 24 0
+0 0 0
+0 1
+0 26 0
+0 0 0

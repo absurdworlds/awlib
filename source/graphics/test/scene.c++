@@ -140,7 +140,7 @@ void scene::load(string_view path)
 
 						for (auto&& [i,path] : ipairs(paths))
 						{
-							std::cout << path << ' ' << i << '\n';
+							//std::cout << path << ' ' << i << '\n';
 						}
 					}
 				}

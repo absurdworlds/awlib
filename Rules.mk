@@ -63,7 +63,7 @@ CXXFLAGS += $(ProjectFlags)
 
 CCFLAGS  = -std=c11
 CPPFLAGS = $(ProjectDefines) $(Includes) $(ExtraIncludePaths) $(EXTRA_DEFINES)
-LDFLAGS += -fuse-ld=gold
+#LDFLAGS += -fuse-ld=gold
 LDFLAGS += -Wl,-rpath-link,$(RootPath)/lib,-R,'$$ORIGIN/../lib' -L$(RootPath)/lib
 LDFLAGS += $(ExtraLibraryPaths)
 LDFLAGS += $(ProjectDependencies)

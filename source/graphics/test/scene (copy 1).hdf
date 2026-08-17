@@ -4,16 +4,13 @@
 
 // ------------------------- MATERIALS -------------------------
 [material = "default"
- [shader vert = { "shaders/gouraud.vsh.glsl",  "shaders/l_light.glsl" } , frag = "shaders/gouraud.fsh.glsl"]
+ [shader vert = "shaders/vert6.glsl" frag = "shaders/frag1.glsl"]
 ]
 [material = "butruck"
  shader   = "textured"
  [textures
    the_textur = "materials/butruck.png"
  ]
-]
-[material = "texarray_debug"
- [shader = "colorcubes" vert = "shaders/v_txa.glsl" frag = "shaders/f_txad.glsl"]
 ]
 [material = "moldavia"
  shader   = "texarray"
@@ -60,18 +57,13 @@
  material = "default"
 ]
 [object = "moldavia"
- model  = "молдаване/молдавадлом.obj"
+ model  = "models/moldavia.obj"
  material = "moldavia"
 ]
 [object = "mattest"
  model  = "models/mattest.obj"
  material = "moldavia"
- pos = { 10, 0, -10 }
-]
-[object = "mattest"
- model  = "models/mattest.obj"
- material = "texarray_debug"
- pos = { 10, 0, -30 }
+ pos = { 0, 0, -10 }
 ]
 [object = "butruck"
  model  = "models/butruck.obj"

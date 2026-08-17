@@ -5,7 +5,7 @@
 #include <aw/graphics/glsl/vec.h>
 #include <aw/graphics/glsl/mat.h>
 
-#include <GLFW/glfw3.h>
+#include "test_gui.h"
 
 #include <iostream>
 #include <chrono>
@@ -122,6 +122,7 @@ void main()
 	print_capabilities();
 	initialize_scene();
 	reshape(1280, 720);
+	init_imgui(window);
 
 	auto on_resize = [] (GLFWwindow*, int w, int h) {
 		reshape(w,h);
@@ -131,7 +132,8 @@ void main()
 		glfwGetWindowSize(window, &w, &h);
 		camctl.mouse_input( vec2{ float(x), float(h - y) } );
 	};
-	auto on_key   = [] (GLFWwindow*, int key,int, int action, int) {
+	auto on_key   = [] (GLFWwindow* window, int key, int scancode, int action, int mods) {
+		onkey_imgui(window, key, scancode, action, mods);
 		if (action != GLFW_PRESS)
 			return;
 		if (key == GLFW_KEY_P) {
@@ -146,9 +148,9 @@ void main()
 			camctl.mouse_look = !camctl.mouse_look;
 		}
 	};
-	glfwSetWindowSizeCallback(window, +on_resize );
-	glfwSetCursorPosCallback(window,  +on_mouse );
-	glfwSetKeyCallback(window,        +on_key );
+	glfwSetWindowSizeCallback(window, on_resize );
+	glfwSetCursorPosCallback(window,  on_mouse );
+	glfwSetKeyCallback(window,        on_key );
 	
 
 	auto last_frame = steady_clock::now();
@@ -158,10 +160,13 @@ void main()
 
 		glfwPollEvents();
 		render(window, now - last_frame);
+		render_imgui(window);
 		frame_ctr( window, now );
 		last_frame = now;
 		glfwSwapBuffers(window);
 	}
+
+	shutdown_imgui();
 
 	std::cout << "FPS (min/max/avg): " << min << '/' << max << '/' << avg << '\n';
 
@@ -175,7 +180,7 @@ ostream_logger ologger{std::cerr};
 
 static void set_loggers()
 {
-	png::log.set_logger(&ologger);
+	//png::log.set_logger(&ologger);
 }
 } // namespace aw
 

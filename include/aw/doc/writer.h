@@ -16,6 +16,7 @@
 
 #include <aw/io/WriteStream.h>
 #include <aw/log/log.h>
+
 namespace aw {
 namespace doc {
 /*! List of Writer indentation styles */
