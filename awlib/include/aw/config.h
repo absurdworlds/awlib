@@ -163,6 +163,56 @@
 	#define AW_IMPORT
 #endif //AW_STATIC_BUILD
 
+/**** SANITIZERS ****/
+/*
+ * Each of these is 1 when the corresponding sanitizer is compiled in.
+ *
+ * Clang announces them through __has_feature, GCC through the
+ * __SANITIZE_*__ macros, and MSVC only ever offers ASan. Code should
+ * need these only to step around a sanitizer's runtime, never to change
+ * what it actually tests -- see AW_SANITIZER_ANY.
+ */
+#if defined(__has_feature)
+	#define AW_HAS_SANITIZER_FEATURE(x) __has_feature(x)
+#else
+	#define AW_HAS_SANITIZER_FEATURE(x) 0
+#endif
+
+#if defined(__SANITIZE_ADDRESS__) || AW_HAS_SANITIZER_FEATURE(address_sanitizer)
+	#define AW_SANITIZER_ADDRESS 1
+#else
+	#define AW_SANITIZER_ADDRESS 0
+#endif
+
+#if defined(__SANITIZE_THREAD__) || AW_HAS_SANITIZER_FEATURE(thread_sanitizer)
+	#define AW_SANITIZER_THREAD 1
+#else
+	#define AW_SANITIZER_THREAD 0
+#endif
+
+// GCC has no MemorySanitizer, hence no matching __SANITIZE_MEMORY__
+#if AW_HAS_SANITIZER_FEATURE(memory_sanitizer)
+	#define AW_SANITIZER_MEMORY 1
+#else
+	#define AW_SANITIZER_MEMORY 0
+#endif
+
+/*
+ * UBSan has no feature macro of its own on either compiler; the build
+ * system defines this one when it turns the sanitizer on.
+ */
+#if defined(AW_SANITIZE_UNDEFINED)
+	#define AW_SANITIZER_UNDEFINED 1
+#else
+	#define AW_SANITIZER_UNDEFINED 0
+#endif
+
+//! True when any sanitizer is active, i.e. when the process carries a
+//! sanitizer runtime and its very large shadow memory reservation.
+#define AW_SANITIZER_ANY \
+	(AW_SANITIZER_ADDRESS || AW_SANITIZER_THREAD || \
+	 AW_SANITIZER_MEMORY  || AW_SANITIZER_UNDEFINED)
+
 /**** NON-STANDARD FEATURE TESTING ****/
 
 #define AW_FEATURE(x) AW_HAS_FEATURE_##x
