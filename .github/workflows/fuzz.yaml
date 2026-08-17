@@ -1,0 +1,71 @@
+name: fuzz
+
+on:
+  push:
+  pull_request:
+  schedule:
+    # A fuzzer run once is close to useless; the point is that it keeps
+    # going. Weekly, Monday 04:00 UTC.
+    - cron: '0 4 * * 1'
+
+jobs:
+  fuzz:
+    name: fuzz (${{ github.event_name == 'schedule' && 'soak' || 'corpus' }})
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: >
+          sudo apt-get update && sudo apt-get install -y
+          clang
+          libclang-rt-18-dev
+
+      - name: Configure
+        run: >
+          cmake -S . -B build
+          -DCMAKE_BUILD_TYPE=Debug
+          -DCMAKE_C_COMPILER=clang
+          -DCMAKE_CXX_COMPILER=clang++
+          -DAW_FUZZERS:BOOL=ON
+          -DAW_SANITIZERS=address,undefined
+          -DAW_ENABLE_GRAPHICS:BOOL=OFF
+          -DAW_ENABLE_ASSERT:BOOL=OFF
+          -DAW_ENABLE_HUDF:BOOL=ON
+          -DAW_ENABLE_SOUND:BOOL=ON
+
+      - name: Build
+        run: cmake --build build
+
+      # On every push: replay the committed corpus only. Deterministic,
+      # a few seconds, and it is the regression suite for everything
+      # fuzzing has already turned up.
+      - name: Replay corpus
+        run: ctest --test-dir build -R fuzz --output-on-failure
+
+      # On the schedule: actually fuzz for a while. A crash stops that
+      # target and leaves its artifact behind, but the loop carries on, so
+      # one bad target does not hide the others.
+      - name: Soak
+        if: github.event_name == 'schedule'
+        run: |
+          mkdir -p findings
+          status=0
+          for target in build/bin/fuzz_*; do
+            name=$(basename "$target")
+            echo "::group::$name"
+            "$target" "findings/$name" "build/fuzz-corpus/$name" \
+              -max_total_time=600 -artifact_prefix=findings/ || status=1
+            echo "::endgroup::"
+          done
+          exit $status
+
+      - name: Keep findings
+        if: github.event_name == 'schedule' && always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: fuzz-findings
+          path: findings
+          if-no-files-found: ignore
+          retention-days: 30

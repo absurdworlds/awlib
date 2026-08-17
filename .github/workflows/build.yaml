@@ -53,6 +53,41 @@ jobs:
               -DAW_ENABLE_LUA:BOOL=ON
               -DAW_NO_BUILTINS:BOOL=ON
 
+          # Sanitizers. FAIL_FAST because a diagnostic that only prints is
+          # a diagnostic CI ignores. gcc ships its runtimes with the
+          # compiler; clang keeps them in libclang-rt.
+          - name: ubuntu (gcc, asan+ubsan)
+            os: ubuntu-24.04
+            packages: liblua5.4-dev
+            cmake: >-
+              -DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++
+              -DCMAKE_BUILD_TYPE=Debug
+              -DAW_ENABLE_LUA:BOOL=ON
+              -DAW_SANITIZERS=address,undefined
+              -DAW_SANITIZER_FAIL_FAST:BOOL=ON
+          # The two implementations do not find quite the same things:
+          # clang's UBSan has more checks, and only clang implements
+          # -fsanitize=function.
+          - name: ubuntu (clang, asan+ubsan)
+            os: ubuntu-24.04
+            packages: liblua5.4-dev clang libclang-rt-18-dev
+            cmake: >-
+              -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++
+              -DCMAKE_BUILD_TYPE=Debug
+              -DAW_ENABLE_LUA:BOOL=ON
+              -DAW_SANITIZERS=address,undefined
+              -DAW_SANITIZER_FAIL_FAST:BOOL=ON
+          # TSan needs the address space to itself, so it gets its own job.
+          - name: ubuntu (clang, tsan)
+            os: ubuntu-24.04
+            packages: liblua5.4-dev clang libclang-rt-18-dev
+            cmake: >-
+              -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++
+              -DCMAKE_BUILD_TYPE=Debug
+              -DAW_ENABLE_LUA:BOOL=ON
+              -DAW_SANITIZERS=thread
+              -DAW_SANITIZER_FAIL_FAST:BOOL=ON
+
           - name: macos
             os: macos-26
     steps:

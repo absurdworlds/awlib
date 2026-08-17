@@ -1,0 +1,53 @@
+name: coverage
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  coverage:
+    name: coverage (${{ matrix.cc }})
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # clang measures regions and branches, not just lines
+          - { cc: clang, cxx: clang++, tools: llvm }
+          - { cc: gcc,   cxx: g++,     tools: gcovr }
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: >
+          sudo apt-get update && sudo apt-get install -y
+          liblua5.4-dev
+          ${{ matrix.tools }}
+
+      - name: Configure
+        run: >
+          cmake -S . -B build
+          -DCMAKE_BUILD_TYPE=Debug
+          -DCMAKE_C_COMPILER=${{ matrix.cc }}
+          -DCMAKE_CXX_COMPILER=${{ matrix.cxx }}
+          -DAW_COVERAGE:BOOL=ON
+          -DAW_ENABLE_GRAPHICS:BOOL=OFF
+          -DAW_ENABLE_ASSERT:BOOL=OFF
+          -DAW_ENABLE_HUDF:BOOL=ON
+          -DAW_ENABLE_LUA:BOOL=ON
+
+      - name: Build
+        run: cmake --build build
+
+      # Reports rather than gates: no threshold to fall under, since a
+      # number to defend tends to attract tests written for the number.
+      - name: Measure
+        run: cmake --build build --target coverage
+
+      - name: Keep the report
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-${{ matrix.cc }}
+          path: build/coverage
+          retention-days: 14

@@ -1,0 +1,84 @@
+name: static-analysis
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  clang-tidy:
+    # Includes the clang static analyser: the clang-analyzer-* checks are
+    # the same engine scan-build drives.
+    name: clang-tidy
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: sudo apt-get update && sudo apt-get install -y clang-tidy liblua5.4-dev
+
+      - name: Configure
+        run: >
+          cmake -S . -B build
+          -DCMAKE_BUILD_TYPE=Debug
+          -DCMAKE_C_COMPILER=clang
+          -DCMAKE_CXX_COMPILER=clang++
+          -DAW_CLANG_TIDY:BOOL=ON
+          -DAW_ANALYZER_WERROR:BOOL=ON
+          -DAW_ENABLE_GRAPHICS:BOOL=OFF
+          -DAW_ENABLE_ASSERT:BOOL=OFF
+          -DAW_ENABLE_HUDF:BOOL=ON
+          -DAW_ENABLE_LUA:BOOL=ON
+
+      - name: Analyse
+        run: cmake --build build
+
+  gcc-analyzer:
+    name: gcc -fanalyzer
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: sudo apt-get update && sudo apt-get install -y liblua5.4-dev
+
+      - name: Configure
+        run: >
+          cmake -S . -B build
+          -DCMAKE_BUILD_TYPE=Debug
+          -DCMAKE_C_COMPILER=gcc
+          -DCMAKE_CXX_COMPILER=g++
+          -DAW_GCC_ANALYZER:BOOL=ON
+          -DAW_ANALYZER_WERROR:BOOL=ON
+          -DAW_ENABLE_GRAPHICS:BOOL=OFF
+          -DAW_ENABLE_ASSERT:BOOL=OFF
+          -DAW_ENABLE_HUDF:BOOL=ON
+          -DAW_ENABLE_LUA:BOOL=ON
+
+      - name: Analyse
+        run: cmake --build build
+
+  cppcheck:
+    name: cppcheck
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: sudo apt-get update && sudo apt-get install -y cppcheck liblua5.4-dev
+
+      - name: Configure
+        run: >
+          cmake -S . -B build
+          -DCMAKE_BUILD_TYPE=Debug
+          -DAW_CPPCHECK:BOOL=ON
+          -DAW_ANALYZER_WERROR:BOOL=ON
+          -DAW_ENABLE_GRAPHICS:BOOL=OFF
+          -DAW_ENABLE_ASSERT:BOOL=OFF
+          -DAW_ENABLE_HUDF:BOOL=ON
+          -DAW_ENABLE_LUA:BOOL=ON
+
+      - name: Analyse
+        run: cmake --build build
