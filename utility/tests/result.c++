@@ -13,14 +13,18 @@ struct throwing {
 	static inline bool armed = false;
 	struct error {};
 
-	throwing()                    { ++live; }
-	throwing(throwing const&)     { if (armed) throw error{}; ++live; }
-	throwing(throwing&&) noexcept { ++live; }
+	throwing(int id = 0) : id{id}          { ++live; }
+	throwing(throwing const& other)        { if (armed) throw error{}; id = other.id; ++live; }
+	throwing(throwing&& other) noexcept    { id = other.id; ++live; }
 	throwing& operator=(throwing const&)     = default;
 	throwing& operator=(throwing&&) noexcept = default;
-	~throwing()                   { --live; }
+	~throwing()                            { --live; }
+
+	int id;
 };
 } // namespace
+
+static_assert(std::is_nothrow_move_assignable_v<result<counted, int>>);
 
 Test(result_basic_test)
 {
@@ -93,23 +97,25 @@ Test(assignment_yields_the_assigned_result)
 }
 
 /*
- * A rebuild that throws mid-assignment leaves the result valueless rather than
- * destroying a value that was never constructed
+ * An assignment whose copy throws leaves the target holding the value it had
+ * before, and destroys nothing twice.
  */
 Test(result_throwing_assignment_is_safe)
 {
 	throwing::live  = 0;
 	throwing::armed = false;
 	{
-		result<throwing, int> dst{ value_tag{} };
-		result<throwing, int> src{ value_tag{} };
+		result<throwing, int> dst{ value_tag{}, 1 };
+		result<throwing, int> src{ value_tag{}, 2 };
 		TestEqual(throwing::live, 2);
 
 		throwing::armed = true;
 		TestCatch( throwing::error, dst = src );
+		throwing::armed = false;
 
-		TestAssert(dst.valueless_by_exception());
-		TestEqual(throwing::live, 1);
+		// dst kept its original value; nothing was destroyed or leaked.
+		TestEqual(dst.value().id, 1);
+		TestEqual(throwing::live, 2);
 	}
 	TestEqual(throwing::live, 0);
 }
