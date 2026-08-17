@@ -37,7 +37,7 @@ void material::bind_textures( )
 		gl::active_texture(GL_TEXTURE0 + i);
 		texture& tex = t.second;
 		gl::bind_texture(tex.type(), texture_handle{tex});
-		program[t.first] = GLuint(i);
+		program[t.first] = GLint(i);
 	}
 	// gl::use_program( gl::no_program );
 }

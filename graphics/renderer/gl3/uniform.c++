@@ -52,7 +52,7 @@ void uniform_proxy::set(GLint x)
 }
 void uniform_proxy::set(GLuint x)
 {
-	gl::uniform_1i( location, x);
+	gl::uniform_1ui( location, x);
 }
 
 void uniform_proxy::set(GLfloat x)
