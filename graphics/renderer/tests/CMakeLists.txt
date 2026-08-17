@@ -4,6 +4,7 @@ file(COPY data DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 aw_add_test(test_graphics
 	SOURCES
 		fake_gl.c++
+		model.c++
 		texture.c++
 		vertex_format.c++)
 

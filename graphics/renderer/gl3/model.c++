@@ -47,6 +47,32 @@ static const GLenum elem_type_value[] = {
 	GL_UNSIGNED_INT_10F_11F_11F_REV
 };
 
+/*
+ * Bytes per element. The packed types hold every element of an attribute in
+ * one 32-bit word, so for those this is the size of the whole attribute.
+ */
+static const size_t elem_type_size[] = {
+	/**/
+	1, 2, 4, 1, 2, 4,
+	/**/
+	1, 2, 4, 1, 2, 4,
+	/**/
+	2, 4, 8, 4,
+	/**/
+	4, 4, 4
+};
+
+static const bool elem_type_packed[] = {
+	/**/
+	false, false, false, false, false, false,
+	/**/
+	false, false, false, false, false, false,
+	/**/
+	false, false, false, false,
+	/**/
+	true, true, true
+};
+
 static const bool elem_type_normalized[] = {
 	/**/
 	false, false, false, false, false, false,
@@ -66,6 +92,14 @@ GLenum to_gl(element_type type)
 bool is_normalized(element_type type)
 {
 	return elem_type_normalized[underlying(type)];
+}
+
+size_t attribute_size(element_type type, size_t count)
+{
+	auto idx = underlying(type);
+	if (elem_type_packed[idx])
+		return elem_type_size[idx];
+	return count * elem_type_size[idx];
 }
 
 // TODO: use attribi_pointer for (non-normalized) ints
@@ -96,9 +130,7 @@ void set_attrib_array( vertex_data const& verts )
 			0,
 			offset
 		);
-		// FIXME FIXME FIXME
-		// replace 4 with actual size
-		offset += verts.count * size * 4;
+		offset += verts.count * attribute_size(type, size);
 	}
 }
 

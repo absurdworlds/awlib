@@ -9,6 +9,7 @@
 #ifndef aw_graphics_gl3_vertex_format_h
 #define aw_graphics_gl3_vertex_format_h
 #include <aw/gl/api/types.h>
+#include <aw/graphics/export.h>
 #include <aw/types/array_view.h>
 #include <vector>
 namespace aw {
@@ -45,6 +46,13 @@ enum class element_type {
 
 GLenum to_gl(element_type);
 bool   is_normalized(element_type);
+
+/*!
+ * Size in bytes of an attribute holding \a count elements of \a type.
+ * \note Elements of the packed types share a single 32-bit word, so their
+ *       size does not depend on \a count.
+ */
+AW_GRAPHICS_EXP size_t attribute_size(element_type type, size_t count);
 
 /* This is just a convention I'm using. Not required to be used. */
 enum class vertex_attribute_index : size_t {
@@ -86,9 +94,7 @@ struct vertex_specification {
 	{
 		// TODO: alignment?
 		attrib.offset = size;
-		// FIXME FIXME FIXME
-		// replace 4 with actual size
-		size += attrib.size * 4;
+		size += attribute_size( attrib.type, attrib.size );
 		attributes.push_back( attrib );
 	}
 };
