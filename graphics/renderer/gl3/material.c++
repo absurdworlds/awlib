@@ -11,6 +11,13 @@
 #include <aw/gl/wrapper/texture_func.h>
 
 namespace aw::gl3 {
+material::material( program_ref prg, char const* transform )
+	: prg{prg}
+{
+	if (this->prg.is_valid())
+		model_to_camera = this->prg.get().uniform( transform );
+}
+
 void material::add_texture( const char* name, texture_ref r )
 {
 	gl3::program& program = prg;

@@ -87,4 +87,28 @@ Test(material_binds_a_sampler) {
 			TestEqual( calls[0], std::string("uniform_1i(3, 0)") );
 	}
 }
+
+Test(material_without_a_program_has_no_transform) {
+	install_fake_gl();
+
+	material mtl;
+
+	Checks {
+		TestAssert( !mtl.prg.is_valid() );
+		TestAssert( mtl.model_to_camera == invalid_uniform );
+	}
+}
+
+Test(material_finds_the_transform_uniform) {
+	install_fake_gl();
+
+	program_manager pman;
+	auto pref = pman[ pman.add_resource( "program", program{} ) ];
+
+	material mtl{ pref };
+
+	Checks {
+		TestAssert( mtl.model_to_camera != invalid_uniform );
+	}
+}
 } // namespace aw::gl3
