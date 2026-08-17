@@ -17,6 +17,7 @@ struct camera {
 	camera()
 	{
 		math::set_identity(perspective);
+		recalc_planes();
 	}
 
 	void set_far_z(float value)
@@ -86,8 +87,8 @@ protected:
 private:
 	float frustum_scale = calc_frustum_scale( default_fov );
 	float aspect = 1.0f;
-	float zfar   = 1.0f;
-	float znear  = 2.0f;
+	float znear  = 1.0f;
+	float zfar   = 2.0f;
 
 	math::matrix4<f32> perspective;
 };

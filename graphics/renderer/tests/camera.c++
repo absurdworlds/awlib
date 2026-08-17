@@ -31,6 +31,16 @@ float radians_in( math::degrees<float> angle )
 {
 	return math::radians<float>{angle}.count();
 }
+
+//! Where a point \a distance units in front of the camera lands on the depth axis
+float ndc_depth( math::matrix4<f32> const& m, float distance )
+{
+	// the camera looks down -z, and clip coordinates are divided by w
+	float z = -distance;
+	float clip_z = m.get(2,2) * z + m.get(2,3);
+	float clip_w = m.get(3,2) * z + m.get(3,3);
+	return clip_z / clip_w;
+}
 } // namespace
 
 Test(camera_fov_is_the_horizontal_angle) {
@@ -80,6 +90,33 @@ Test(camera_widening_the_viewport_keeps_the_vertical_angle) {
 		// the extra width is shown, rather than the same image stretched
 		TestAssert( math::equals( vertical_angle(cam.projection_matrix()), radians_in(fov) ) );
 		TestAssert( after > before );
+	}
+}
+
+Test(camera_out_of_the_box_has_a_view_volume) {
+	camera cam;
+
+	auto& m = cam.projection_matrix();
+
+	Checks {
+		// the nearer of two points has to come out in front of the farther one
+		TestAssert( ndc_depth(m, 1.0f) < ndc_depth(m, 2.0f) );
+	}
+}
+
+Test(camera_maps_its_clip_planes_onto_the_depth_range) {
+	constexpr float near_z = 0.5f;
+	constexpr float far_z  = 100.0f;
+
+	camera cam;
+	cam.set_near_z( near_z );
+	cam.set_far_z( far_z );
+
+	auto& m = cam.projection_matrix();
+
+	Checks {
+		TestAssert( math::equals( ndc_depth(m, near_z), -1.0f ) );
+		TestAssert( math::equals( ndc_depth(m, far_z),   1.0f ) );
 	}
 }
 } // namespace aw::gl3
