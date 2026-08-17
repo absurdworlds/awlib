@@ -8,6 +8,7 @@
  */
 #ifndef aw_on_scope_exit_h
 #define aw_on_scope_exit_h
+#include <type_traits>
 #include <utility>
 #include <aw/types/non_copyable.h>
 namespace aw {
@@ -16,12 +17,12 @@ class on_scope_exit : non_copyable {
 	bool enabled = true;
 	Callable func;
 public:
-	on_scope_exit(Callable func) noexcept
-		: func{func}
+	on_scope_exit(Callable func) noexcept(std::is_nothrow_move_constructible_v<Callable>)
+		: func{std::move(func)}
 	{}
 
-	on_scope_exit(on_scope_exit&& other) noexcept
-		: func{std::move(other.func)}, enabled{other.enabled}
+	on_scope_exit(on_scope_exit&& other) noexcept(std::is_nothrow_move_constructible_v<Callable>)
+		: enabled{other.enabled}, func{std::move(other.func)}
 	{
 		other.enabled = false;
 	}
@@ -33,7 +34,8 @@ public:
 };
 
 template <class Callable>
-on_scope_exit<Callable> call_on_exit(Callable&& func) noexcept
+on_scope_exit<Callable> call_on_exit(Callable&& func)
+	noexcept(std::is_nothrow_constructible_v<on_scope_exit<Callable>, Callable>)
 {
 	return on_scope_exit<Callable>(std::forward<Callable>(func));
 }
@@ -43,7 +45,8 @@ on_scope_exit<Callable> call_on_exit(Callable&& func) noexcept
  */
 template <class Callable>
 on_scope_exit<Callable> scope_guard(Callable&& init, Callable&& func)
-	noexcept( noexcept( init() ))
+	noexcept(noexcept(init()) &&
+	         std::is_nothrow_constructible_v<on_scope_exit<Callable>, Callable>)
 {
 	init();
 	return on_scope_exit<Callable>(std::forward<Callable>(func));
