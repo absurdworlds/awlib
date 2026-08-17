@@ -15,9 +15,9 @@ Test(slice_test) {
 	TestEqual(vec2, expect);
 }
 
-/*
- * Storing the adapter outlives the temporary, so it must not
- * produce dangling references.
+/*!
+ * Storing the adapter outlives the temporary range, so it must
+ * not produce dangling references.
  */
 Test(slicing_a_temporary_keeps_it_alive) {
 	auto slice = aw::slice_range(std::vector<int>{10, 20, 30, 40, 50}, 1, 3);
@@ -30,7 +30,7 @@ Test(slicing_a_temporary_keeps_it_alive) {
 	TestEqual(got, expect);
 }
 
-/*
+/*!
  * Slicing an lvalue should not produce a copy.
  */
 Test(lvalue_is_sliced_by_reference) {
