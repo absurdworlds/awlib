@@ -7,6 +7,7 @@ aw_add_test(test_utility
 	functional.c++
 	static_object.c++
 	on_scope_exit.c++
+	memory_pool.c++
 	result.c++
 	ranges_slice.c++
 	ranges_value_range.c++

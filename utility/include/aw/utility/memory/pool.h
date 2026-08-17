@@ -124,6 +124,9 @@ private:
 		auto full_size = slab_size + block_size * (num_blocks + 1);
 
 		std::byte* new_slab = allocate(full_size);
+		if (new_slab == nullptr)
+			return nullptr;
+
 		current = init_slab(new_slab, full_size, current);
 
 		void* memory_begin = new_slab + sizeof(slab);
