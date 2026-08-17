@@ -84,10 +84,13 @@ add_subdirectory(archive)
 add_subdirectory(thread)
 add_subdirectory(signals)
 
-add_subdirectory(fileformat)
-
 # Libraries with extra dependencies
 option(AW_ENABLE_GRAPHICS "Enable libawgraphics" OFF)
+
+# Note: has more options inside the makefile,
+# must go after AW_ENABLE_GRAPHICS since it reads it to decide the defaults
+add_subdirectory(fileformat)
+
 if (AW_ENABLE_GRAPHICS)
 	add_subdirectory(graphics)
 endif()
