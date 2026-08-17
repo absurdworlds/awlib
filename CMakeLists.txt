@@ -37,6 +37,11 @@ if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
 		# fix \ treated as esacpe in raw string literals
 		"/Zc:preprocessor"
 	)
+else()
+	add_compile_options(
+		# falling off the end of a non-void function is UB, not a warning
+		"-Werror=return-type"
+	)
 endif()
 
 
