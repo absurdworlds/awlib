@@ -84,12 +84,12 @@ struct vertex_specification {
 
 	void add_attribute( vertex_attribute attrib )
 	{
-		attributes.push_back( attrib );
 		// TODO: alignment?
 		attrib.offset = size;
 		// FIXME FIXME FIXME
 		// replace 4 with actual size
 		size += attrib.size * 4;
+		attributes.push_back( attrib );
 	}
 };
 struct vertex_data {
