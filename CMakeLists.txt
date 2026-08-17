@@ -69,6 +69,7 @@ include(aw-common)
 include(aw-sanitizers)
 include(aw-static-analysis)
 include(aw-coverage)
+include(aw-fuzzers)
 
 add_subdirectory(awlib)
 add_subdirectory(meta)

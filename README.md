@@ -67,6 +67,37 @@ Code that has to know -- there should be very little of it -- can ask
 
 CI runs asan+ubsan under both gcc and clang, and tsan under clang.
 
+### Fuzzing ###
+
+libFuzzer targets, clang only, and worth building with the sanitizers on
+-- without them a fuzzer only finds the crashes bad enough to fault on
+their own:
+
+```sh
+cmake -S . -B build-fuzz -DAW_FUZZERS=ON \
+      -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ \
+      -DAW_SANITIZERS=address,undefined
+cmake --build build-fuzz
+ctest --test-dir build-fuzz -R fuzz
+```
+
+A target lives in `<module>/fuzz/`, next to that module's `tests/`, and
+is picked up the same way. Each one has a `corpus/` directory, which
+serves two purposes: it seeds a real fuzzing run, and ctest replays it as
+an ordinary test. That replay is what turns a crash found once into a
+regression -- the input goes into `corpus/` and stays there.
+
+ctest only replays; it does not fuzz, so it stays fast and gives the same
+result on every machine. Fuzzing proper is a longer, separate run:
+
+```sh
+build-fuzz/bin/fuzz_wav fileformat/sound/fuzz/corpus -max_total_time=300
+```
+
+Anything it finds is written to the working directory as a
+`crash-*`/`oom-*`/`timeout-*` file. Confirm it reproduces, fix it, then
+commit the file into that target's `corpus/`.
+
 ### Coverage ###
 
 ```sh
