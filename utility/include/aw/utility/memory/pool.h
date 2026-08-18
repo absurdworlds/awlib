@@ -25,6 +25,12 @@ inline void*& next_of(void* ptr)
 	return *static_cast<void**>(ptr);
 }
 
+//! Round \a size up to the next multiple of \a align
+constexpr size_t align_up(size_t size, size_t align)
+{
+	return (size + align - 1) / align * align;
+}
+
 /*!
  * Memory pool allocates fixed-size chunks of memory
  * from a contiguous memory area, size of which is specified
@@ -38,14 +44,17 @@ struct pool {
 	 */
 	static constexpr size_t size  = std::max(Size,  sizeof(void*));
 	static constexpr size_t align = std::max(Align, alignof(void*));
-	static constexpr size_t block_size = std::max(size, align);
+	static constexpr size_t block_size = align_up(std::max(size, align), align);
 
 	/*!
 	 * Create pool with blocks allocated in
 	 * \a num_blocks sized slabs.
+	 *
+	 * \note
+	 * A slab holds at least one block.
 	 */
 	pool(size_t num_blocks) noexcept
-		: num_blocks(num_blocks)
+		: num_blocks(std::max<size_t>(num_blocks, 1))
 	{ }
 
 	pool(pool const&) = delete;
