@@ -22,13 +22,6 @@ void make_zero_based( face_vert& v )
 	--v.texuv;
 }
 
-void make_one_based( face_vert& v )
-{
-	++v.index;
-	++v.normal;
-	++v.texuv;
-}
-
 struct parser : private obj::mesh {
 	mesh& result()
 	{
@@ -256,63 +249,3 @@ mesh mesh::parse( io::input_stream& file )
 }
 } // namespace obj
 } // namespace aw
-
-#ifdef AW_MANUAL_TEST
-#include <aw/io/input_file_stream.h>
-#include <iostream>
-
-int main(int, char**argv)
-{
-	using namespace aw;
-	io::input_file_stream file{ argv[1] ? argv[1] : "butruck.obj" };
-
-	auto mesh = obj::mesh::parse( file );
-
-	constexpr bool summary_only = true;
-	if (summary_only) {
-		std::cout << mesh.verts.size() << '\n';
-		std::cout << mesh.normals.size() << '\n';
-		std::cout << mesh.texverts.size() << '\n';
-		return 0;
-	}
-
-	if (!mesh.matlibs.empty()) {
-		std::cout << "mtllib";
-		for (auto& m : mesh.matlibs)
-			std::cout << ' ' << m;
-		std::cout << '\n';
-	}
-	for (auto& v : mesh.verts)
-		std::cout << "v " << v[0] << ' ' << v[1] << ' ' << v[2] << '\n';
-	for (auto& v : mesh.normals)
-		std::cout << "vn " << v[0] << ' ' << v[1] << ' ' << v[2] << '\n';
-	for (auto& v : mesh.texverts)
-		std::cout << "vt " << v[0] << ' ' << v[1] << ' ' << v[2] << '\n';
-
-	auto face_list = array_view<obj::face>( mesh.faces );
-
-	string_view cur_group;
-	for (auto& sm : mesh.meshes) {
-		if (!sm.group.empty() && sm.group != cur_group) {
-			cur_group = sm.group;
-			std::cout << "g " << sm.group << '\n';
-		}
-		if (!sm.material.empty())
-			std::cout << "usemtl " << sm.material << '\n';
-		unsigned sg = -1;
-		auto faces = face_list.slice( sm.begin, sm.end );
-		for ( auto& f : faces ) {
-			if (f.smooth != sg) {
-				sg = f.smooth;
-				std::cout << "s " << (sg ? std::to_string(sg) : "off") << '\n';
-			}
-			std::cout << "f";
-			for (auto v : f.verts) {
-				obj::make_one_based( v );
-				std::cout << ' ' << v.index << '/' << v.normal << '/' << v.texuv;
-			}
-			std::cout << "\n";
-		}
-	}
-}
-#endif
