@@ -147,10 +147,9 @@ void parser::add_face(string_view s)
 
 	std::vector< obj::face_vert > verts;
 
-	auto substrs = string::split_by(s, " \v\r\t");
-	for (auto s : substrs) {
+	for (string_view field : string::lazy::split_by(s, " \v\r\t")) {
 		obj::face_vert v;
-		if (!parse3(s, v.index, v.texuv, v.normal, "/", string::cut))
+		if (!parse3(field, v.index, v.texuv, v.normal, "/", cut_behavior::keep_empty))
 			continue;
 
 		make_zero_based( v );

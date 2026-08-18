@@ -13,11 +13,13 @@
 #include <aw/io/input_stream_utils.h>
 
 #include <aw/string/parse.h>
+#include <aw/utility/string/lazy_split.h>
 #include <aw/utility/string/split.h>
 #include <aw/utility/string/trim.h>
 
 namespace aw::obj {
 constexpr auto ws = string::whitespace;
+using string::cut_behavior;
 
 template<typename T>
 bool parse1(string_view line, T& v)
@@ -25,26 +27,46 @@ bool parse1(string_view line, T& v)
 	return string::try_parse(line, v);
 }
 
-using split_func = std::vector<string_view>(string_view, string_view);
-template<typename T>
-size_t parse3(string_view line, T& _1, T& _2, T& _3, string_view delim = ws, split_func* split = string::split_by)
+namespace _impl {
+template<typename Fields, typename T>
+size_t parse_fields(Fields fields, T& _1, T& _2, T& _3)
 {
-	auto is_delim = [&] (char c) {
-		return delim.find(c) != delim.npos;
-	};
-	char* end;
-	errno = 0;
-	_1 = strto<T>( line.data(), &end );
-	if (errno) return 0;
-	while (is_delim(*end)) ++end;
-	errno = 0;
-	_2 = strto<T>( end+1, &end );
-	if (errno) return 1;
-	while (is_delim(*end)) ++end;
-	errno = 0;
-	_3 = strto<T>( end+1, &end );
-	if (errno) return 2;
-	return 3;
+	_1 = _2 = _3 = T{0};
+
+	T*     values[] = { &_1, &_2, &_3 };
+	size_t num      = 0;
+
+	for (string_view field : fields) {
+		if (num == 3)
+			break;
+
+		if (!field.empty() && !string::try_parse(field, *values[num]))
+			return num;
+
+		++num;
+	}
+
+	return num;
+}
+} // namespace _impl
+
+/*!
+ * Read up to three delimited values out of \a line.
+ *
+ * An empty field the value of zero, e.g. `1//3`, a normal with no texture coordinate.
+ *
+ * \return
+ *     How many values were read. Scanning stops at the first field that is
+ *     not a number. Zero means nothing usable was found.
+ */
+template<typename T>
+size_t parse3(string_view line, T& _1, T& _2, T& _3,
+              string_view delim = ws, cut_behavior behavior = cut_behavior::discard_empty)
+{
+	if (behavior == cut_behavior::keep_empty)
+		return _impl::parse_fields( string::lazy::cut(line, delim), _1, _2, _3 );
+
+	return _impl::parse_fields( string::lazy::split_by(line, delim), _1, _2, _3 );
 }
 
 template<typename T>
