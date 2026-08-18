@@ -14,6 +14,7 @@ aw_add_test(test_utility
 	ranges_paired.c++
 	ranges_ipairs.c++
 	ranges_zip.c++
+	ranges_reverse.c++
 	iterators_wrapper.c++
 	string_strto.c++
 	string_conv_integer.c++
