@@ -1,5 +1,8 @@
 #include <aw/types/composite_int.h>
-#include <aw/utility/test.h>
+#include <aw/utility/to_string/composite_int.h>
+#include <aw/test/test.h>
+#include <limits>
+#include <string>
 
 TestFile( "aw::composite_int" );
 
@@ -23,6 +26,16 @@ void CIEqual(s_i64 c, i64 i)
 {
 	TestEqual(to_i(c),     i);
 	TestEqual(     c, to_s(i));
+}
+
+void CUPrints(u64 u)
+{
+	TestEqual(to_string(to_s(u), formatter::pretty_print{}), std::to_string(u));
+}
+
+void CIPrints(i64 i)
+{
+	TestEqual(to_string(to_s(i), formatter::pretty_print{}), std::to_string(i));
 }
 
 void unsigned_binary(u64 a, u64 b)
@@ -93,5 +106,46 @@ Test(signed_arithmetic) {
 	signed_binary(ival1, ival2);
 	signed_unary(ival1);
 	signed_unary(ival2);
+}
+
+/*!
+ * Shifting by the whole width or more leaves nothing behind.
+ */
+Test(compint_shift_by_whole_width) {
+	constexpr size_t width = s_u64::digits;
+
+	CUEqual(to_s(u64(0xdeadbeefcafef00d)) <<= width,     0);
+	CUEqual(to_s(u64(0xdeadbeefcafef00d)) >>= width,     0);
+	CUEqual(to_s(u64(0xdeadbeefcafef00d)) <<= width + 1, 0);
+	CUEqual(to_s(u64(0xdeadbeefcafef00d)) >>= width + 1, 0);
+
+	// the boundary just below is still a real shift
+	CUEqual(to_s(u64(1)) <<= width - 1, u64(1) << (width - 1));
+	CUEqual(to_s(u64(1) << (width - 1)) >>= width - 1, 1);
+
+	// and the same for negative values
+	CIEqual(to_s(i64(-1)) <<= width, 0);
+	CIEqual(to_s(i64(-1)) >>= width, 0);
+	CIEqual(to_s(i64(0x0123'4567'89ab'cdef)) <<= width, 0);
+	CIEqual(to_s(i64(0x0123'4567'89ab'cdef)) >>= width, 0);
+}
+
+/*!
+ * A composite prints as the number it represents
+ */
+Test(compint_to_string) {
+	CUPrints(0);
+	CUPrints(1);
+	CUPrints(9);
+	CUPrints(135487);
+	CUPrints(0x0000'0002'0000'1000);
+	CUPrints(~u64(0));
+
+	CIPrints(0);
+	CIPrints(1);
+	CIPrints(-1);
+	CIPrints(-135487);
+	CIPrints(std::numeric_limits<i64>::max());
+	CIPrints(std::numeric_limits<i64>::min());
 }
 } // namespace aw

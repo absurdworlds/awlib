@@ -42,7 +42,7 @@ public:
 	 *    enable_if<> is needed to avoid ambiguity caused by
 	 *    implicit conversion to bool.
 	 */
-	template<typename I, typename = enable_if<is_same<I,T>>>
+	template<typename I, typename = enable_if<is_same_v<I,T>>>
 	constexpr explicit composite_int(I value)
 		: lo{U(value)}
 	{
@@ -128,7 +128,12 @@ public:
 	{
 		if (n == 0)
 			return *this;
-		if (n == num_digits<T>) {
+		// shifting by the whole width would shift a half by its own
+		// width, which is undefined
+		if (n >= digits) {
+			hi = 0;
+			lo = 0;
+		} else if (n == num_digits<T>) {
 			hi = lo;
 			lo = 0;
 		} else if (n > num_digits<T>) {
@@ -146,7 +151,10 @@ public:
 	{
 		if (n == 0)
 			return *this;
-		if (n == num_digits<T>) {
+		if (n >= digits) {
+			hi = 0;
+			lo = 0;
+		} else if (n == num_digits<T>) {
 			lo = hi;
 			hi = 0;
 		} else if (n > num_digits<T>) {

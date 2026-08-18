@@ -17,6 +17,7 @@ aw_add_test(test_utility
 	iterators_wrapper.c++
 	string_strto.c++
 	string_conv_integer.c++
+	to_string_composite_int.c++
 	type_name.c++
 )
 
