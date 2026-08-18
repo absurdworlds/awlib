@@ -8,6 +8,7 @@
  */
 #ifndef aw_utility_string_strto_h
 #define aw_utility_string_strto_h
+#include <cerrno>
 #include <limits>
 #include <cstdlib>
 namespace aw {
@@ -39,6 +40,8 @@ namespace _impl {
 template<typename T, typename L>
 T _strto(char const* begin, char** end, int base)
 {
+	errno = 0;
+
 	L val = aw::strto<L>(begin, end, base);
 	if (end && (begin == *end))
 		return T(val);

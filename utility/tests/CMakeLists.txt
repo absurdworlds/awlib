@@ -15,6 +15,7 @@ aw_add_test(test_utility
 	ranges_ipairs.c++
 	ranges_zip.c++
 	iterators_wrapper.c++
+	string_strto.c++
 	type_name.c++)
 
 target_link_libraries(test_utility
