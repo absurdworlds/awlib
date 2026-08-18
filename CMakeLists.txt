@@ -47,7 +47,21 @@ if (UNIX)
 	set(AW_CAPABILITIES_POSIX YES)
 endif()
 
-option(AW_MAKE_TESTS "Make tests. Produces a test executable for each library." ON)
+# Neither means a bare-metal target (CMAKE_SYSTEM_NAME=Generic): there is no
+# OS, so no threads and no signals, and usually no exceptions either.
+if (NOT AW_CAPABILITIES_WIN32 AND NOT AW_CAPABILITIES_POSIX)
+	set(AW_BAREMETAL YES)
+endif()
+
+if (AW_BAREMETAL)
+	# There is nowhere to run the test executables, and the test framework
+	# itself needs exceptions and POSIX signals.
+	set(AW_MAKE_TESTS_DEFAULT OFF)
+else()
+	set(AW_MAKE_TESTS_DEFAULT ON)
+endif()
+
+option(AW_MAKE_TESTS "Make tests. Produces a test executable for each library." ${AW_MAKE_TESTS_DEFAULT})
 option(AW_MAKE_DEMOS "Build demo programs." OFF)
 option(AW_SPLIT_INCLUDES "Install headers for each library into a separate directory." ON)
 
@@ -78,10 +92,16 @@ add_subdirectory(utility)
 add_subdirectory(string)
 add_subdirectory(io)
 add_subdirectory(log)
-add_subdirectory(test)
+if (NOT AW_BAREMETAL)
+	add_subdirectory(test)
+endif()
 
 add_subdirectory(archive)
-add_subdirectory(thread)
+# libawthread is built on top of std::thread, which a bare-metal toolchain
+# does not provide.
+if (NOT AW_BAREMETAL)
+	add_subdirectory(thread)
+endif()
 add_subdirectory(signals)
 
 add_subdirectory(fileformat)

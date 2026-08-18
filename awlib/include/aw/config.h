@@ -41,6 +41,7 @@
 #define AW_PLATFORM_WIN32  5
 #define AW_PLATFORM_WIN64  6
 #define AW_PLATFORM_WASM   7
+#define AW_PLATFORM_BARE   8
 
 // When compiling for winelib, both win32 api and posix api can be used
 #if    defined(AW_WINE_USE_POSIX)
@@ -141,6 +142,16 @@
 	#define AW_PLATFORM_SPECIFIC AW_PLATFORM_POSIX
 	#define AW_SUPPORT_PLATFORM_POSIX 1
 	#define AW_SUPPORT_PLATFORM_X11 1
+/* Bare metal (no OS): ARM EABI targets, e.g. Cortex-M (STM32).
+ * Hosted ARM targets are matched by the OS checks above, so reaching this
+ * point with __ARM_EABI__ means there is no OS underneath.
+ * Define AW_FORCE_BAREMETAL to select this branch on other freestanding
+ * targets. */
+#elif defined(__ARM_EABI__) || defined(AW_FORCE_BAREMETAL)
+	#define AW_BAREMETAL
+	#define AW_PLATFORM          AW_PLATFORM_BARE
+	#define AW_PLATFORM_SPECIFIC AW_PLATFORM_BARE
+	#define AW_SUPPORT_PLATFORM_BARE 1
 #else
 	#error "Unknown platform"
 #endif
