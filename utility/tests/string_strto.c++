@@ -2,6 +2,7 @@
 #include <aw/test/test.h>
 #include <cerrno>
 #include <limits>
+#include <system_error>
 
 TestFile( "string::strto" );
 
@@ -35,18 +36,38 @@ Test(strto_clamps_out_of_range)
 }
 
 /*!
- * An errno set by an earlier call is not reported by the next one:
- * a parse which succeeds leaves no error set.
+ * A parse which succeeds leaves errno as it found it, so an error
+ * belonging to an earlier call is not destroyed.
  */
-Test(strto_clears_stale_errno)
+Test(strto_preserves_errno)
 {
 	char* end = nullptr;
 
-	errno = 0;
-	TestEqual(strto<int>("9999999999", &end, 10), std::numeric_limits<int>::max());
+	errno = ERANGE;
+	TestEqual(strto<int>("5", &end, 10), 5);
 	TestEqual(errno, ERANGE);
 
-	TestEqual(strto<int>("5", &end, 10), 5);
+	errno = 0;
+	TestEqual(strto<long>("5", &end, 10), 5L);
 	TestEqual(errno, 0);
+}
+
+/*!
+ * The error_code overload reports the range error itself, and errno is
+ * left alone whether the parse succeeds or overflows.
+ */
+Test(strto_reports_error_code)
+{
+	char* end = nullptr;
+	std::error_code ec;
+
+	errno = EDOM;
+	TestEqual(strto<short>("99999", &end, ec, 10), std::numeric_limits<short>::max());
+	TestAssert(ec == std::errc::result_out_of_range);
+	TestEqual(errno, EDOM);
+
+	TestEqual(strto<int>("5", &end, ec, 10), 5);
+	TestAssert(!ec);
+	TestEqual(errno, EDOM);
 }
 } // namespace aw

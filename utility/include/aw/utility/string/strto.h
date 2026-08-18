@@ -10,12 +10,18 @@
 #define aw_utility_string_strto_h
 #include <cerrno>
 #include <limits>
+#include <system_error>
 #include <cstdlib>
 namespace aw {
 /*!
  * Thin wrapper around std::strto*() for use in template code.
  * Additionally provides specializations for `short int` and `int`,
  * and unsigned counterparts.
+ *
+ * \note
+ * As with std::strto*(), reports value that is out-of-range via errno,
+ * and errno is not cleared on success, therefore the caller needs to
+ * clear it before the call or use the overload taking a std::error_code.
  */
 template<typename T>
 T strto(char const* begin, char** end, int base = 0);
@@ -40,21 +46,11 @@ namespace _impl {
 template<typename T, typename L>
 T _strto(char const* begin, char** end, int base)
 {
-	errno = 0;
-
 	L val = aw::strto<L>(begin, end, base);
 	if (end && (begin == *end))
 		return T(val);
 	constexpr auto min = std::numeric_limits<T>::min();
 	constexpr auto max = std::numeric_limits<T>::max();
-	constexpr auto minl = std::numeric_limits<L>::min();
-	constexpr auto maxl = std::numeric_limits<L>::max();
-	if (errno == ERANGE) {
-		if (val == maxl)
-			return max;
-		if (val == minl)
-			return min;
-	}
 	if (val > max) {
 		errno = ERANGE;
 		return max;
@@ -115,5 +111,20 @@ inline long long strto(char const* begin, char** end, int base)
 	return std::strtoll(begin, end, base);
 }
 
+/*!
+ * Convert, reporting a range error through \a ec.
+ */
+template<typename T>
+T strto(char const* begin, char** end, std::error_code& ec, int base = 0)
+{
+	auto const saved = errno;
+	errno = 0;
+
+	T const val = strto<T>(begin, end, base);
+	ec = std::error_code{errno, std::generic_category()};
+
+	errno = saved;
+	return val;
+}
 } // namespace aw
 #endif//aw_utility_string_strto_h
