@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 absurdworlds
+ * Copyright (C) 2016-2026 Hedede <dev@hedede.me>
  *
  * License LGPLv3 or later:
  * GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
@@ -13,16 +13,20 @@
 #include <string>
 namespace aw {
 /*!
- * TODO: better name
+ * Builds a base-\a R string one bit at a time vid add_bit.
+ * Used for extra-wide integers where division is expensive (e.g. composite_int).
+ *
+ * Based on the "double dabble" algorithm.
  */
 template <size_t R, size_t N>
-struct int_converter {
+struct radix_accumulator {
 	static_assert(R > 1,  "Radix must be at least two.");
-	static_assert(R < 36, "Radix is too big (max. 36).");
+	static_assert(R <= 36, "Radix is too big (max. 36).");
 
-	void add_digit(bool carry)
+	void add_bit(bool const bit)
 	{
 		size_t i = 0;
+		bool carry = bit;
 		do {
 			auto& digit = digits[i];
 			digit *= 2;

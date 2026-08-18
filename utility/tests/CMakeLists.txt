@@ -16,7 +16,9 @@ aw_add_test(test_utility
 	ranges_zip.c++
 	iterators_wrapper.c++
 	string_strto.c++
-	type_name.c++)
+	string_conv_integer.c++
+	type_name.c++
+)
 
 target_link_libraries(test_utility
 	PRIVATE

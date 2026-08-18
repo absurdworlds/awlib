@@ -9,7 +9,6 @@
  */
 #ifndef aw_string_substr_iterator_h
 #define aw_string_substr_iterator_h
-#include <cassert>
 #include <aw/types/string_view.h>
 #include <aw/utility/iterators/proxy.h>
 namespace aw {
@@ -114,9 +113,10 @@ struct cut_iterator_base : substring_iterator_base {
 	cut_iterator_base(string_view source, string_view delim)
 		: substring_iterator_base{source, delim}
 	{
-		assert(!delim.empty());
 		pos1 = 0;
-		pos2 = source.find(delim, pos1);
+		// An empty delimiter yields the whole source as a single
+		// substring: npos makes operator++ stop at the first step.
+		pos2 = delim.empty() ? npos : source.find(delim, pos1);
 
 		discard_empty();
 	}

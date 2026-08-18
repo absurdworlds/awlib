@@ -83,10 +83,19 @@ inline bool keep(std::string_view substr, discard_empty_t)
 	return !substr.empty();
 }
 
+
 // TODO: move out of _impl?
 template<typename Delimiter, typename Container, typename Behavior>
 void split(string_view source, Delimiter delim, Container& store, Behavior behavior)
 {
+	const auto step = delim_size(delim);
+	if (step == 0) {
+		const auto substr = source;
+		if (keep(substr, behavior))
+			store.push_back( substr );
+		return;
+	}
+
 	size_t pos1 = 0;
 
 	do {
@@ -99,7 +108,7 @@ void split(string_view source, Delimiter delim, Container& store, Behavior behav
 		if (pos2 == source.npos)
 			break;
 
-		pos1 = pos2 + delim_size(delim);
+		pos1 = pos2 + step;
 	} while (true);
 }
 } // namespace _impl

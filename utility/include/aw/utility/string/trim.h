@@ -14,7 +14,7 @@
 namespace aw {
 namespace string {
 
-constexpr string_view whitespace (" \t\v\f\r", 5);
+constexpr string_view whitespace (" \t\v\f\r\n", 6);
 
 /*!
  * Remove characters in set \a chars
