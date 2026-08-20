@@ -118,9 +118,9 @@ Test(queue_push_pop2) {
 }
 
 Test(queue_move_with_allocator) {
-	using test::counted;
-	using alloc_type = std::pmr::polymorphic_allocator<counted>;
-	using queue_type = queue<counted, alloc_type>;
+	using test::lifetime_tracker;
+	using alloc_type = std::pmr::polymorphic_allocator<lifetime_tracker>;
+	using queue_type = queue<lifetime_tracker, alloc_type>;
 
 	std::pmr::monotonic_buffer_resource memory, elsewhere;
 
@@ -129,40 +129,40 @@ Test(queue_move_with_allocator) {
 	alloc_type const unequal { &elsewhere };  // compares unequal
 
 	Checks {
-		counted::live = 0;
+		lifetime_tracker::live = 0;
 
 		queue_type src{ source };
-		src.push_back(counted{ counted::payload('a') });
-		src.push_back(counted{ counted::payload('b') });
+		src.push_back(lifetime_tracker{ lifetime_tracker::payload('a') });
+		src.push_back(lifetime_tracker{ lifetime_tracker::payload('b') });
 
 		queue_type dst{ std::move(src), equal };
 
 		TestEqual( dst.size(), size_t(2) );
-		TestEqual( dst[0].value, counted::payload('a') );
-		TestEqual( dst[1].value, counted::payload('b') );
+		TestEqual( dst[0].value, lifetime_tracker::payload('a') );
+		TestEqual( dst[1].value, lifetime_tracker::payload('b') );
 	}
 
 	Checks {
-		TestEqual( counted::live, 0 );
+		TestEqual( lifetime_tracker::live, 0 );
 	}
 
 	// must still work if allocators are unequal
 	Checks {
-		counted::live = 0;
+		lifetime_tracker::live = 0;
 
 		queue_type src{ source };
-		src.push_back(counted{ counted::payload('a') });
-		src.push_back(counted{ counted::payload('b') });
+		src.push_back(lifetime_tracker{ lifetime_tracker::payload('a') });
+		src.push_back(lifetime_tracker{ lifetime_tracker::payload('b') });
 
 		queue_type dst{ std::move(src), unequal };
 
 		TestEqual( dst.size(), size_t(2) );
-		TestEqual( dst[0].value, counted::payload('a') );
-		TestEqual( dst[1].value, counted::payload('b') );
+		TestEqual( dst[0].value, lifetime_tracker::payload('a') );
+		TestEqual( dst[1].value, lifetime_tracker::payload('b') );
 	}
 
 	Postconditions {
-		TestEqual( counted::live, 0 );
+		TestEqual( lifetime_tracker::live, 0 );
 	}
 }
 

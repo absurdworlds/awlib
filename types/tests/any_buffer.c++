@@ -26,21 +26,21 @@ struct aligned_matrix {
 
 //! destroy() must run the destructor of the stored type
 Test(any_buffer_destroy) {
-	using aw::test::counted;
+	using aw::test::lifetime_tracker;
 
-	aw::any_buffer<sizeof(counted)> buf;
+	aw::any_buffer<sizeof(lifetime_tracker)> buf;
 
 	Setup {
-		counted::live = 0;
+		lifetime_tracker::live = 0;
 	}
 
 	Checks {
-		buf.emplace<counted>();
-		TestEqual( counted::live, 1 );
-		TestEqual( buf.get<counted>().value, counted::payload() );
+		buf.emplace<lifetime_tracker>();
+		TestEqual( lifetime_tracker::live, 1 );
+		TestEqual( buf.get<lifetime_tracker>().value, lifetime_tracker::payload() );
 
-		buf.destroy<counted>();
-		TestEqual( counted::live, 0 );
+		buf.destroy<lifetime_tracker>();
+		TestEqual( lifetime_tracker::live, 0 );
 	}
 }
 

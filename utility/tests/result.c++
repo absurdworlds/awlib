@@ -5,7 +5,7 @@
 TestFile( "result" );
 
 namespace aw {
-using test::counted;
+using test::lifetime_tracker;
 
 namespace {
 struct throwing {
@@ -24,50 +24,50 @@ struct throwing {
 };
 } // namespace
 
-static_assert(std::is_nothrow_move_assignable_v<result<counted, int>>);
+static_assert(std::is_nothrow_move_assignable_v<result<lifetime_tracker, int>>);
 
 Test(result_basic_test)
 {
-	result<counted, int> val{ counted{counted::payload('a')} };
-	result<counted, int> err{ 42, error_tag{} };
+	result<lifetime_tracker, int> val{ lifetime_tracker{lifetime_tracker::payload('a')} };
+	result<lifetime_tracker, int> err{ 42, error_tag{} };
 
 	TestAssert(bool(val));
 	TestAssert(!err);
-	TestEqual(val.value().value, counted::payload('a'));
+	TestEqual(val.value().value, lifetime_tracker::payload('a'));
 	TestEqual(err.error(), 42);
 }
 
 Test(result_copy_owns_an_independent_value)
 {
-	counted::live = 0;
+	lifetime_tracker::live = 0;
 	{
-		result<counted, int> original{ counted{counted::payload('v')} };
-		TestEqual(counted::live, 1);
+		result<lifetime_tracker, int> original{ lifetime_tracker{lifetime_tracker::payload('v')} };
+		TestEqual(lifetime_tracker::live, 1);
 		{
-			result<counted, int> copy{ original };
+			result<lifetime_tracker, int> copy{ original };
 			// Both results now hold a live value of their own.
-			TestEqual(counted::live, 2);
-			TestEqual(copy.value().value, counted::payload('v'));
-			TestEqual(original.value().value, counted::payload('v'));
+			TestEqual(lifetime_tracker::live, 2);
+			TestEqual(copy.value().value, lifetime_tracker::payload('v'));
+			TestEqual(original.value().value, lifetime_tracker::payload('v'));
 		}
 		// Destroying the copy leaves the original intact.
-		TestEqual(counted::live, 1);
-		TestEqual(original.value().value, counted::payload('v'));
+		TestEqual(lifetime_tracker::live, 1);
+		TestEqual(original.value().value, lifetime_tracker::payload('v'));
 	}
 	// Everything that was constructed has been destroyed exactly once.
-	TestEqual(counted::live, 0);
+	TestEqual(lifetime_tracker::live, 0);
 }
 
 Test(result_moved_owns_the_value)
 {
-	counted::live = 0;
+	lifetime_tracker::live = 0;
 	{
-		result<counted, int> source{ counted{counted::payload('m')} };
-		result<counted, int> moved{ std::move(source) };
+		result<lifetime_tracker, int> source{ lifetime_tracker{lifetime_tracker::payload('m')} };
+		result<lifetime_tracker, int> moved{ std::move(source) };
 
-		TestEqual(moved.value().value, counted::payload('m'));
+		TestEqual(moved.value().value, lifetime_tracker::payload('m'));
 	}
-	TestEqual(counted::live, 0);
+	TestEqual(lifetime_tracker::live, 0);
 }
 
 Test(result_converts_to_a_wider_value_type)
