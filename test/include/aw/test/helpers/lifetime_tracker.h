@@ -6,8 +6,8 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef aw_test_counted_h
-#define aw_test_counted_h
+#ifndef aw_test_lifetime_tracker_h
+#define aw_test_lifetime_tracker_h
 #include <string>
 #include <utility>
 
@@ -23,7 +23,7 @@ namespace aw::test {
  *
  * \note \a live is shared, so a test has to reset it before use.
  */
-struct counted {
+struct lifetime_tracker {
 	static inline int live = 0;
 
 	//! Payload long enough to be heap-allocated rather than stored inline
@@ -32,31 +32,31 @@ struct counted {
 		return std::string(64, c);
 	}
 
-	counted() : counted{payload()} {}
+	lifetime_tracker() : lifetime_tracker{payload()} {}
 
-	explicit counted(std::string val)
+	explicit lifetime_tracker(std::string val)
 		: value{std::move(val)}
 	{
 		++live;
 	}
 
-	counted(counted const& other)
+	lifetime_tracker(lifetime_tracker const& other)
 		: value{other.value}
 	{
 		++live;
 	}
 
-	counted(counted&& other) noexcept
+	lifetime_tracker(lifetime_tracker&& other) noexcept
 		: value{std::move(other.value)}
 	{
 		++live;
 	}
 
 	// assignment neither creates nor destroys an instance
-	counted& operator=(counted const&) = default;
-	counted& operator=(counted&&) noexcept = default;
+	lifetime_tracker& operator=(lifetime_tracker const&) = default;
+	lifetime_tracker& operator=(lifetime_tracker&&) noexcept = default;
 
-	~counted()
+	~lifetime_tracker()
 	{
 		--live;
 	}
@@ -64,4 +64,4 @@ struct counted {
 	std::string value;
 };
 } // namespace aw::test
-#endif//aw_test_counted_h
+#endif//aw_test_lifetime_tracker_h

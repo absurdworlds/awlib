@@ -17,6 +17,7 @@ struct camera {
 	camera()
 	{
 		math::set_identity(perspective);
+		recalc_planes();
 	}
 
 	void set_far_z(float value)
@@ -31,19 +32,21 @@ struct camera {
 		recalc_planes();
 	}
 
+	//! Set the horizontal field of view
 	void set_fov(math::radians<float> value)
+	{
+		auto hscale = calc_frustum_scale( value );
+		frustum_scale = hscale * aspect;
+		perspective.get(0,0) = hscale;
+		perspective.get(1,1) = frustum_scale;
+	}
+
+	//! Set the vertical field of view
+	void set_vfov(math::radians<float> value)
 	{
 		frustum_scale = calc_frustum_scale( value );
 		perspective.get(0,0) = frustum_scale / aspect;
 		perspective.get(1,1) = frustum_scale;
-	}
-
-	void set_vfov(math::radians<float> value)
-	{
-		auto vscale = calc_frustum_scale( value );
-		perspective.get(0,0) = vscale;
-		perspective.get(1,1) = vscale * aspect;
-		frustum_scale = perspective.get(1,1);
 	}
 
 	void set_aspect_ratio(float value)
@@ -84,8 +87,8 @@ protected:
 private:
 	float frustum_scale = calc_frustum_scale( default_fov );
 	float aspect = 1.0f;
-	float zfar   = 1.0f;
-	float znear  = 2.0f;
+	float znear  = 1.0f;
+	float zfar   = 2.0f;
 
 	math::matrix4<f32> perspective;
 };

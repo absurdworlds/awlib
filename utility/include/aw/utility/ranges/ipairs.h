@@ -44,11 +44,11 @@ struct ipairs_iterator {
 // TODO: starting index?
 template <typename Range>
 struct ipairs {
-	using base_iterator = decltype(std::begin(std::declval<Range>()));
+	using base_iterator = decltype(std::begin(std::declval<Range&>()));
 	using iterator = ipairs_iterator<base_iterator>;
 
 	ipairs(Range&& range)
-		: range(range)
+		: range(std::forward<Range>(range))
 	{}
 
 	iterator begin()
@@ -61,7 +61,7 @@ struct ipairs {
 		return std::end(range);
 	}
 
-	Range&& range;
+	Range range;
 };
 
 /*!

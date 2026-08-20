@@ -1,13 +1,13 @@
 aw_add_test(test_string
 	SOURCES
 		case.c++
-		compose.cpp
-		to_string.cpp
-		split.cpp
-		split_iterator.cpp
-		lazy_split.cpp
-		join.cpp
-		misc.cpp
+		compose.c++
+		to_string.c++
+		split.c++
+		split_iterator.c++
+		lazy_split.c++
+		join.c++
+		misc.c++
 		parse.c++
 		repeat.c++)
 

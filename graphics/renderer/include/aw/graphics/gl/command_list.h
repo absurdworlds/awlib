@@ -27,6 +27,7 @@ struct command_storage {
 	using invoke_func  = void(storage_type&, render_context& ctx);
 
 	template<typename T>
+		requires (!std::is_same_v<std::remove_cvref_t<T>, command_storage>)
 	command_storage(T&& t)
 	{
 		assign(std::forward<T>(t));
@@ -48,7 +49,7 @@ struct command_storage {
 		invoke(storage, ctx);
 	}
 
-	invoke_func* invoke;
+	invoke_func* invoke = nullptr;
 	storage_type storage;
 };
 

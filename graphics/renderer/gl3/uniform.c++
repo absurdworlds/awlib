@@ -14,6 +14,7 @@
 
 namespace aw::gl3 {
 uniform_buffer::uniform_buffer(GLuint index, size_t size)
+	: index{index}
 {
 	gl::gen_buffers(1, &ubo);
 	gl::bind_buffer(GL_UNIFORM_BUFFER, ubo);
@@ -51,7 +52,7 @@ void uniform_proxy::set(GLint x)
 }
 void uniform_proxy::set(GLuint x)
 {
-	gl::uniform_1i( location, x);
+	gl::uniform_1ui( location, x);
 }
 
 void uniform_proxy::set(GLfloat x)

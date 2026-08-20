@@ -1,12 +1,12 @@
 #include <aw/types/containers/array_chain.h>
 
 #include <aw/test/test.h>
-#include <aw/test/helpers/counted.h>
+#include <aw/test/helpers/lifetime_tracker.h>
 
 TestFile( "aw::array_chain" );
 
 namespace aw {
-using test::counted;
+using test::lifetime_tracker;
 
 Test(array_chain_push_pop) {
 	array_chain<int> c;
@@ -28,49 +28,49 @@ Test(array_chain_push_pop) {
 }
 
 Test(array_chain_pop_back_destroys_last) {
-	counted::live = 0;
+	lifetime_tracker::live = 0;
 
 	Checks {
 		{
-			array_chain<counted> c;
-			c.push_back(counted{counted::payload('a')});
-			TestEqual(counted::live, 1);
+			array_chain<lifetime_tracker> c;
+			c.push_back(lifetime_tracker{lifetime_tracker::payload('a')});
+			TestEqual(lifetime_tracker::live, 1);
 
 			c.pop_back();
-			TestEqual(counted::live, 0);
+			TestEqual(lifetime_tracker::live, 0);
 			TestEqual(c.size(), size_t(0));
 		}
-		TestEqual(counted::live, 0);
+		TestEqual(lifetime_tracker::live, 0);
 	}
 }
 
 Test(array_chain_pop_back_on_block_boundary) {
-	counted::live = 0;
+	lifetime_tracker::live = 0;
 
 	Checks {
-		array_chain<counted> c;
+		array_chain<lifetime_tracker> c;
 
-		const auto block = array_chain<counted>::block_size;
+		const auto block = array_chain<lifetime_tracker>::block_size;
 		for (size_t i = 0; i < block; ++i)
-			c.push_back(counted{counted::payload('b')});
+			c.push_back(lifetime_tracker{lifetime_tracker::payload('b')});
 
 		TestEqual(c.size(), block);
-		TestEqual(size_t(counted::live), block);
+		TestEqual(size_t(lifetime_tracker::live), block);
 
 		c.pop_back();
 		TestEqual(c.size(), block - 1);
-		TestEqual(size_t(counted::live), block - 1);
+		TestEqual(size_t(lifetime_tracker::live), block - 1);
 
 		// the remaining elements are intact
 		bool intact = true;
 		for (size_t i = 0; i < c.size(); ++i)
-			intact &= (c[i].value == counted::payload('b'));
+			intact &= (c[i].value == lifetime_tracker::payload('b'));
 		TestAssert(intact);
 
 		while (c.size() > 0)
 			c.pop_back();
 
-		TestEqual(counted::live, 0);
+		TestEqual(lifetime_tracker::live, 0);
 	}
 }
 } // namespace aw

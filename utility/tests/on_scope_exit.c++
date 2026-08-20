@@ -42,4 +42,22 @@ Test(throw_in_dtor)
 
 	TestCatch( ex, func() );
 }
+
+/*!
+ * The first action runs straight away, the second when the guard goes
+ * out of scope.
+ */
+Test(scope_guard_runs_both_actions)
+{
+	int entered = 0;
+	int left    = 0;
+	{
+		auto guard = scope_guard([&] { ++entered; }, [&] { ++left; });
+
+		TestEqual(entered, 1);
+		TestEqual(left, 0);
+	}
+	TestEqual(entered, 1);
+	TestEqual(left, 1);
+}
 } // namespace aw

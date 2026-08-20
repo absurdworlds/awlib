@@ -86,4 +86,17 @@ Test(reserve_string) {
 	TestAssert(s1.capacity() >= 15);
 	TestAssert(s2.capacity() >= 18);
 }
+
+/*!
+ * Reserving for an empty range is a no-op.
+ */
+Test(reserve_string_empty_range) {
+	std::vector<string_view> v;
+
+	std::string s1 = string::reserve_string(begin(v), end(v));
+	std::string s2 = string::reserve_string(begin(v), end(v), 1);
+
+	TestAssert(s1.empty());
+	TestAssert(s2.empty());
+}
 } // namespace aw

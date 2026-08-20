@@ -9,6 +9,7 @@
 #ifndef aw_utility_result_h
 #define aw_utility_result_h
 #include <cassert>
+#include <type_traits>
 #include <aw/types/types.h>
 #include <aw/utility/storage.h>
 namespace aw {
@@ -143,23 +144,31 @@ struct result {
 		destroy();
 	}
 
+	/*!
+	 * Assign from \a other.
+	 *
+	 * \note
+	 * The copy is made before the old contents are replaced, so if it
+	 * throws, the result is left holding what it held before.
+	 */
 	result& operator=(result const& other)
 	{
-		if (this == &other)
-			return *this;
-		destroy();
-		is_error = other.is_error;
-		if (!is_error)
-			construct_value(other.value());
-		else
-			construct_error(other.error());
-		return *this;
+		return *this = result(other);
 	}
 
-	result& operator=(result&& other)
+	/*!
+	 * Take over the contents of \a other.
+	 */
+	result& operator=(result&& other) noexcept
 	{
+		static_assert(std::is_nothrow_move_constructible_v<T> &&
+		              std::is_nothrow_move_constructible_v<E>,
+		              "result requires nothrow-move-constructible types, "
+		              "otherwise assignment cannot be made exception-safe.");
+
 		if (this == &other)
 			return *this;
+
 		destroy();
 		is_error = other.is_error;
 		if (!is_error)
@@ -172,25 +181,13 @@ struct result {
 	template<typename OtherT, typename OtherE>
 	result& operator=(result<OtherT,OtherE> const& other)
 	{
-		destroy();
-		is_error = other.is_error;
-		if (!is_error)
-			construct_value(other.value());
-		else
-			construct_error(other.error());
-		return *this;
+		return *this = result(other);
 	}
 
 	template<typename OtherT, typename OtherE>
 	result& operator=(result<OtherT,OtherE>&& other)
 	{
-		destroy();
-		is_error = other.is_error;
-		if (!is_error)
-			construct_value(std::move(other.value()));
-		else
-			construct_error(std::move(other.error()));
-		return *this;
+		return *this = result(std::move(other));
 	}
 
 	bool has_error() const

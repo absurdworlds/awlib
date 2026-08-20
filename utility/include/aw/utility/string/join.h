@@ -40,6 +40,9 @@ template<typename Iterator>
 	requires std::forward_iterator<Iterator>
 size_t reserved_size(Iterator begin, Iterator end, size_t delim_size)
 {
+	if (begin == end)
+		return 0;
+
 	const size_t delim_count = std::distance(begin, end) - 1;
 	return reserved_size(begin, end) + delim_size * delim_count;
 }

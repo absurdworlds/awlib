@@ -15,7 +15,7 @@ namespace aw {
 template <typename Range>
 struct reverse_adapter {
 	reverse_adapter(Range&& range)
-		: range{range}
+		: range{std::forward<Range>(range)}
 	{}
 
 	auto begin() { return std::rbegin(range); }

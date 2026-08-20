@@ -43,8 +43,8 @@ on_scope_exit<Callable> call_on_exit(Callable&& func)
 /*!
  * Executes pair of actions: one immediately, and another at exit
  */
-template <class Callable>
-on_scope_exit<Callable> scope_guard(Callable&& init, Callable&& func)
+template <class Init, class Callable>
+on_scope_exit<Callable> scope_guard(Init&& init, Callable&& func)
 	noexcept(noexcept(init()) &&
 	         std::is_nothrow_constructible_v<on_scope_exit<Callable>, Callable>)
 {

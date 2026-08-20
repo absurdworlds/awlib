@@ -175,12 +175,14 @@ void main()
 } // namespace aw
 
 #include <aw/fileformat/png/log.h>
+#include <aw/graphics/gl/log.h>
 #include <aw/log/ostream_logger.h>
 namespace aw {
 ostream_logger ologger{std::cerr};
 
 static void set_loggers()
 {
+	gl3::journal.set_logger(&ologger);
 	png::log.set_logger(&ologger);
 }
 } // namespace aw

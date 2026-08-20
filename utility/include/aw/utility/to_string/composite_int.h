@@ -13,7 +13,7 @@
 #include <aw/utility/to_string.h>
 #include <aw/utility/string/conv/integer.h>
 namespace aw {
-template<typename T, typename Formatter>
+template<typename T, typename Formatter = formatter::pretty_print>
 std::string to_string(composite_int<T> val, Formatter&& fmt = Formatter{})
 {
 	using U = make_unsigned<T>;
@@ -23,10 +23,10 @@ std::string to_string(composite_int<T> val, Formatter&& fmt = Formatter{})
 
 	if (val.sign() < 0) {
 		sign = 1;
-		tmp = -val;
+		tmp = composite_int<U>(-val);
 	} else {
 		sign = 0;
-		tmp = val;
+		tmp = composite_int<U>(val);
 	}
 
 	// TODO: figure out a way to specify base
@@ -37,12 +37,12 @@ std::string to_string(composite_int<T> val, Formatter&& fmt = Formatter{})
 
 	constexpr size_t size_needed = composite_int<T>::digits / math::log2(base) + 1;
 
-	int_converter<base, size_needed> result;
+	radix_accumulator<base, size_needed> result;
 	result.sign = sign;
 	for (size_t i = lz; i < dg; ++i) {
-		bool carry = math::top_bit(tmp.high_part());
+		bool carry = math::top_bit(tmp.high());
 		tmp <<= 1;
-		result.add_digit(carry);
+		result.add_bit(carry);
 	}
 
 	return fmt.literal(result.to_string());

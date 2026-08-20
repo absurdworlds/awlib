@@ -8,23 +8,26 @@
  */
 #include <aw/graphics/gl/program.h>
 #include <aw/graphics/gl/shader.h>
+#include <aw/graphics/gl/log.h>
 #include <aw/gl/wrapper/shader_func.h>
 #include <aw/utility/on_scope_exit.h>
 #include <aw/types/enum.h>
-#include <iostream> // temporary
-#include <vector>
+#include <string>
 
 namespace aw::gl3 {
 namespace {
-void report_info_log( program_handle _program)
+//! What the driver has to say about a program
+std::string info_log( program_handle _program )
 {
-	GLint length;
+	GLint length = 0;
 	gl::get_program( _program, gl::program_param::info_log_length, &length );
+	if (length <= 0)
+		return {};
 
-	std::vector<char> log(length + 1);
-	gl::get_info_log( _program, log.size(), nullptr, log.data() );
-
-	std::cerr << string_view{log.data(), log.size()} << '\n';
+	// the reported length includes the terminator
+	std::string log(length - 1, '\0');
+	gl::get_info_log( _program, length, nullptr, log.data() );
+	return log;
 }
 } // namespace
 
@@ -51,16 +54,19 @@ bool program::is_linked() const
 
 bool program::link(array_ref<shader> shaders)
 {
+	if ( shaders.empty() ) {
+		journal.error( "program", "cannot link without shaders" );
+		return false;
+	}
+
 	for ( auto& shader : shaders )
 		gl::attach_shader( _program, shader_handle{shader});
 
 	gl::link_program( _program );
 
 	bool status = is_linked();
-	if ( status == false ) {
-		std::cerr << "Failed to link program: " << '\n';
-		report_info_log( _program );
-	}
+	if ( status == false )
+		journal.error( "program", "failed to link: " + info_log( _program ) );
 
 	for ( auto& shader : shaders )
 		gl::detach_shader( _program, shader_handle{shader});

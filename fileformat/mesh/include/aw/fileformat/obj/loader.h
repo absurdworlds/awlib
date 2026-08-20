@@ -28,6 +28,19 @@ struct face_vert {
 	unsigned texuv   = -1;
 };
 
+/*!
+ * Convert zero-based indices to one-based. OBJ counts from one while the
+ * structs in this parser count from zero.
+ *
+ * \note An empty index (like `1//1`) comes out as zero.
+ */
+inline void make_one_based( face_vert& v )
+{
+	++v.index;
+	++v.normal;
+	++v.texuv;
+}
+
 struct face {
 	face_vert verts[3];
 	unsigned smooth  = 0;

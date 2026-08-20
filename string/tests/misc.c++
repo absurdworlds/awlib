@@ -64,6 +64,18 @@ Test(trim_string_view) {
 	}
 };
 
+Test(trim_default_whitespace) {
+	string_view str = " \t line \r\n";
+
+	using namespace string;
+
+	Checks {
+		TestEqual(trim(str), "line");
+		TestEqual(ltrim(str), "line \r\n");
+		TestEqual(rtrim(str), " \t line");
+	}
+};
+
 Test(split_and_join) {
 	std::string s = "word1 word2 word3";
 	std::vector<string_view> v;

@@ -2,7 +2,7 @@
 aw_add_library(awstring SHARED
 	GLOB_HEADERS
 	SOURCES
-		compose.cpp # TODO: remove, superseded by std::format
+		compose.c++ # TODO: remove, superseded by std::format
 		string.c++
 		repeat.c++
 	EXPORT_NAME

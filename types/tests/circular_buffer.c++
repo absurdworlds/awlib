@@ -3,12 +3,12 @@
 
 #include <aw/utility/ranges/zip.h>
 #include <aw/test/test.h>
-#include <aw/test/helpers/counted.h>
+#include <aw/test/helpers/lifetime_tracker.h>
 
 TestFile( "aw::circular_buffer" );
 
 namespace aw {
-using test::counted;
+using test::lifetime_tracker;
 
 Test(circular_buf_push_back) {
 	circular_buffer<int> buf(3);
@@ -112,19 +112,19 @@ Test(circular_buf_copy) {
 }
 
 Test(circular_buf_destroys_elements) {
-	counted::live = 0;
+	lifetime_tracker::live = 0;
 
 	Checks {
 		{
-			circular_buffer<counted> buf(3);
-			buf.push_back(counted{});
-			buf.push_back(counted{});
-			TestEqual(counted::live, 2);
+			circular_buffer<lifetime_tracker> buf(3);
+			buf.push_back(lifetime_tracker{});
+			buf.push_back(lifetime_tracker{});
+			TestEqual(lifetime_tracker::live, 2);
 
-			circular_buffer<counted> copy(buf);
-			TestEqual(counted::live, 4);
+			circular_buffer<lifetime_tracker> copy(buf);
+			TestEqual(lifetime_tracker::live, 4);
 		}
-		TestEqual(counted::live, 0);
+		TestEqual(lifetime_tracker::live, 0);
 	}
 }
 } // namespace aw

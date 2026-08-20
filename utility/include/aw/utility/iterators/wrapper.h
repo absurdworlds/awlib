@@ -8,6 +8,8 @@
  */
 #ifndef aw_iterators_wrapper_h
 #define aw_iterators_wrapper_h
+#include <cstddef>
+#include <iterator>
 #include <aw/utility/iterators/proxy.h>
 namespace aw {
 namespace iter {
@@ -26,6 +28,10 @@ struct default_converter {
  *
  * For example, to iterate through `vector<unique_ptr<V>>` as
  * though it is `vector<V*>`.
+ *
+ * \note
+ * Dereferencing returns a value rather than a reference, so this is
+ * an input iterator.
  */
 template <typename Iterator, typename T, typename Convert = default_converter<T>>
 struct wrapper : Iterator, protected Convert {
@@ -33,23 +39,22 @@ struct wrapper : Iterator, protected Convert {
 
 	using difference_type = std::ptrdiff_t;
 
-	// TODO: should I write *actual* types in here?
 	using value_type = T;
-	using reference  = T&;
-	using pointer    = T*;
+	using reference  = T;
+	using pointer    = proxy<T>;
 
-	using iterator_category = typename Iterator::iterator_category;
+	using iterator_category = std::input_iterator_tag;
 
 	constexpr wrapper(Iterator base)
 		: Iterator{base}
 	{}
 
-	constexpr value_type operator*() const
+	constexpr reference operator*() const
 	{
-		return convert( Iterator::operator*() );
+		return Convert::operator()( Iterator::operator*() );
 	}
 
-	constexpr proxy<value_type> operator->() const
+	constexpr pointer operator->() const
 	{
 		return { operator*() };
 	}
@@ -78,12 +83,6 @@ struct wrapper : Iterator, protected Convert {
 		wrapper copy = *this;
 		Iterator::operator--();
 		return copy;
-	}
-
-private:
-	value_type convert(typename Iterator::value_type val) const
-	{
-		return Convert::operator()(val);
 	}
 };
 } // namespace iter

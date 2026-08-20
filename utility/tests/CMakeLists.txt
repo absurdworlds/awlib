@@ -14,7 +14,14 @@ aw_add_test(test_utility
 	ranges_paired.c++
 	ranges_ipairs.c++
 	ranges_zip.c++
-	type_name.c++)
+	ranges_reverse.c++
+	iterators_wrapper.c++
+	string_strto.c++
+	string_parser_helpers.c++
+	string_conv_integer.c++
+	to_string_composite_int.c++
+	type_name.c++
+)
 
 target_link_libraries(test_utility
 	PRIVATE
