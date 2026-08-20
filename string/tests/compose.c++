@@ -80,4 +80,25 @@ Test(non_ascii_after_delimiter) {
 		TestEqual(string::compose("%ъ%0", "э"), "%ъэ");
 	}
 }
+
+Test(huge_index) {
+	Checks {
+		// a number too large to be an argument number substitutes
+		// nothing, like any other argument which was not passed
+		TestEqual(string::compose("%99999999999999999999", "a"), "");
+		TestEqual(string::compose("[%0|%99999999999999999999|%1]", "a", "b"),
+		          "[a||b]");
+
+		if constexpr(sizeof(size_t) == sizeof(u32))
+		{
+			TestEqual(string::compose("%4294967296", "a", "b", "c"), "");
+			TestEqual(string::compose("%4294967297", "a", "b", "c"), "");
+		}
+		else if constexpr(sizeof(size_t) == sizeof(u64))
+		{
+			TestEqual(string::compose("%18446744073709551616", "a", "b", "c"), "");
+			TestEqual(string::compose("%18446744073709551617", "a", "b", "c"), "");
+		}
+	}
+}
 } // namespace aw
