@@ -75,4 +75,14 @@ Test(string_repeat_operator) {
 		TestAssert("  "s * 100 == std::string(200, ' '));
 	}
 }
+
+Test(repeat_length_overflow) {
+	constexpr size_t max = std::numeric_limits<size_t>::max();
+
+	TestCatch( std::length_error, string::repeat("ab", max / 2 + 1) );
+	TestCatch( std::length_error, string::repeat("abc", max / 3 + 1) );
+	TestCatch( std::length_error, string::repeat("ab", max) );
+
+	TestCatch( std::length_error, string::repeat("ab", max / 2) );
+}
 } // namespace aw

@@ -3,7 +3,10 @@
 
 #include <aw/string/export.h>
 
+#include <cassert>
 #include <cstring>
+#include <limits>
+#include <stdexcept>
 #include <string>
 
 namespace aw::string {
@@ -13,12 +16,27 @@ namespace aw::string {
 AW_STRING_EXP
 std::string extend(std::string_view str, size_t total_size);
 
+namespace _impl {
+inline void length_error()
+{
+#if __cpp_exceptions
+	throw std::length_error("aw::string::repeat");
+#else
+	assert(!"length_error");
+#endif
+}
+} // namespace _impl
+
 /*!
  * Repeat the string n times.
  */
 inline std::string repeat(std::string_view str, size_t n)
 {
-	return extend(str, str.size() * n);
+	auto const size = str.size();
+	if (size != 0 && n > std::numeric_limits<size_t>::max() / size)
+		_impl::length_error();
+
+	return extend(str, size * n);
 }
 
 namespace operators {
