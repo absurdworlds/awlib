@@ -6,12 +6,60 @@
 #include <aw/ranges/reverse.h>
 #include <aw/test/test.h>
 #include <aw/test/helpers/lifetime_tracker.h>
+#include <aw/test/helpers/copy_move_tracker.h>
 
 // TODO: test exception-safety
 
 TestFile( "aw::queue" );
 
 namespace aw {
+namespace {
+/*!
+ * Element which can be made to fail on relocation, however the container
+ * chooses to relocate it. Moving it away leaves \a moved_from behind.
+ */
+struct fragile {
+	static constexpr int moved_from = -1;
+
+	//! How many more relocations to let through before throwing
+	static inline int budget = 0;
+
+	explicit fragile(int val) : value{val} {}
+
+	fragile(fragile const& other)
+		: value{ other.value }
+	{
+		spend();
+	}
+
+	fragile(fragile&& other)
+		: value{ std::exchange(other.value, moved_from) }
+	{
+		spend();
+	}
+
+	static void spend()
+	{
+		if (--budget < 0)
+			throw std::runtime_error("fragile");
+	}
+
+	int value;
+};
+
+/*!
+ * Fill \a q up to its capacity, numbering the elements from 0, so that the
+ * next insertion is the one that has to grow it.
+ */
+template<typename Queue>
+void fill_to_capacity(Queue& q)
+{
+	q.reserve(4);
+	while (q.size() < q.capacity())
+		q.push_back(typename Queue::value_type{int(q.size())});
+}
+} // namespace
+
 Test(queue_ctors) {
 	queue<unsigned> q0{};
 	queue<unsigned> q1(11);
@@ -192,6 +240,90 @@ Test(queue_reserve) {
 
 		TestEqual(k.front(), 0u);
 		TestEqual(k.back(), 99u);
+	}
+}
+
+/*!
+ * Elements of move-only types can be held in the queue like
+ * any other type.
+ */
+Test(queue_holds_move_only_elements) {
+	queue<std::unique_ptr<int>> q;
+
+	Setup {
+		for (auto v : range(100))
+			q.push_back(std::make_unique<int>(v));
+	}
+
+	Checks {
+		TestEqual( q.size(), size_t(100) );
+		TestEqual( *q.front(), 0 );
+		TestEqual( *q.back(), 99 );
+	}
+}
+
+/*!
+ * Growing moves the elements to the new storage instead of copying them.
+ */
+Test(queue_moves_elements_when_it_grows) {
+	using tracker = test::copy_move_tracker<int>;
+	static_assert(std::is_nothrow_move_constructible_v<tracker>);
+
+	queue<tracker> q;
+
+	Setup {
+		fill_to_capacity(q);
+	}
+
+	Preconditions {
+		// the next insertion is the one which has to grow the queue
+		TestEqual( q.size(), q.capacity() );
+	}
+
+	Checks {
+		auto const filled = q.size();
+		q.push_back(tracker{99});
+
+		TestEqual( q.size(), filled + 1 );
+
+		// everything that was already there kept its value
+		for (auto i : range(filled))
+			TestEqual( q[i].value, int(i) );
+		TestEqual( q[filled].value, 99 );
+
+		// and was carried across by moving, not copying
+		for (auto i : range(q.size()))
+			TestEqual( q[i].n_copies, size_t(0) );
+	}
+}
+
+/*!
+ * If an exception is thrown during growth, the queue is untouched, with
+ * every element still holding its value.
+ */
+Test(queue_keeps_elements_when_growth_throws) {
+	queue<fragile> q;
+
+	Setup {
+		fragile::budget = std::numeric_limits<int>::max();
+		fill_to_capacity(q);
+	}
+
+	Preconditions {
+		TestAssert( q.size() >= 2 );
+		for (auto i : range(q.size()))
+			TestEqual( q[i].value, int(i) );
+	}
+
+	Checks {
+		// the second element is the one that fails
+		fragile::budget = 1;
+		TestCatch( std::runtime_error, q.push_back(fragile{999}) );
+	}
+
+	Checks {
+		for (auto i : range(q.size()))
+			TestEqual( q[i].value, int(i) );
 	}
 }
 } // namespace aw

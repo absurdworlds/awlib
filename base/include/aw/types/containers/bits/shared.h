@@ -22,7 +22,7 @@ ForwardIt try_uninit_move(InputIt begin, InputIt end, ForwardIt output)
 
 	constexpr bool do_move = std::is_nothrow_move_constructible<T>::value;
 
-	using Iter = conditional<do_move, InputIt, std::move_iterator<InputIt>>;
+	using Iter = conditional<do_move, std::move_iterator<InputIt>, InputIt>;
 
 	auto beg_it = Iter{begin};
 	auto end_it = Iter{end};
