@@ -17,6 +17,7 @@ aw_add_test(test_utility
 	ranges_reverse.c++
 	iterators_wrapper.c++
 	string_strto.c++
+	string_parser_helpers.c++
 	string_conv_integer.c++
 	to_string_composite_int.c++
 	type_name.c++
