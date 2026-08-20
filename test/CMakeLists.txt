@@ -5,7 +5,7 @@ aw_add_library(awtest INTERFACE
 		include/aw/test/report_impl.h
 		include/aw/test/print.h
 		include/aw/test/segv_handler.h
-		include/aw/test/helpers/counted.h
+		include/aw/test/helpers/lifetime_tracker.h
 		include/aw/test/helpers/copy_move_tracker.h
 		include/aw/test/test_case.h
 		include/aw/test/test_context.h

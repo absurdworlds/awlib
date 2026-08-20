@@ -5,7 +5,7 @@
 #include <aw/utility/ranges/value_range.h>
 #include <aw/utility/ranges/reverse.h>
 #include <aw/test/test.h>
-#include <aw/test/helpers/counted.h>
+#include <aw/test/helpers/lifetime_tracker.h>
 
 // TODO: test exception-safety
 

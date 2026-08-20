@@ -3,7 +3,7 @@
 
 #include <aw/utility/ranges/zip.h>
 #include <aw/test/test.h>
-#include <aw/test/helpers/counted.h>
+#include <aw/test/helpers/lifetime_tracker.h>
 
 TestFile( "aw::circular_buffer" );
 

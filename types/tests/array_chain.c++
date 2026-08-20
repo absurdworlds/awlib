@@ -1,7 +1,7 @@
 #include <aw/types/containers/array_chain.h>
 
 #include <aw/test/test.h>
-#include <aw/test/helpers/counted.h>
+#include <aw/test/helpers/lifetime_tracker.h>
 
 TestFile( "aw::array_chain" );
 

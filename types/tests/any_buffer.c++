@@ -4,7 +4,7 @@
 #include <aw/utility/to_string/math/matrix.h>
 
 #include <aw/test/test.h>
-#include <aw/test/helpers/counted.h>
+#include <aw/test/helpers/lifetime_tracker.h>
 
 #include <utility>
 
