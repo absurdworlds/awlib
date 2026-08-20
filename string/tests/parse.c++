@@ -46,4 +46,25 @@ Test(parse_out_of_range) {
 		TestEqual(string::parse<double>("1e999999"), std::nullopt);
 	}
 }
+
+/*!
+ * Do not accept a string with trailing characters that don't belong
+ * to the number
+ */
+Test(parse_trailing_characters) {
+	Checks {
+		TestEqual(string::parse<int>("12abc"), std::nullopt);
+		TestEqual(string::parse<int>("12.9"),  std::nullopt);
+		TestEqual(string::parse<int>("1 2"),   std::nullopt);
+		TestEqual(string::parse<int>("0x10"),  std::nullopt);
+		TestEqual(string::parse<double>("1.5xyz"), std::nullopt);
+		TestEqual(string::parse<double>("1e5"), 1e5);
+	}
+	{
+		// a rejected string leaves the output alone
+		int value = 111;
+		TestAssert(!string::try_parse<int>("12abc", value));
+		TestEqual(value, 111);
+	}
+}
 } // namespace aw

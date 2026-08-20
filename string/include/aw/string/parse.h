@@ -7,6 +7,18 @@
 #include <optional>
 
 namespace aw::string {
+/*!
+ * Parse the whole of \a line into \a v.
+ *
+ * - Does not strip whitespace.
+ * - Does not accept leading whitespace.
+ * - Does not accept 0x suffixes.
+ * - Does not accept any trailing characters.
+ * - Accepts leading '+' for unsigned numbers, and both '-' and '+' for signed numbers
+ *
+ * \return
+ *    `true` if all of \a line was a number, leaving \a v alone otherwise.
+ */
 template<typename T>
 bool try_parse(string_view line, T& v)
 {
@@ -14,8 +26,15 @@ bool try_parse(string_view line, T& v)
 	if (line.starts_with('+'))
 		line.remove_prefix(1);
 
-	auto result = std::from_chars(line.data(), line.data() + line.size(), v);
-	return result.ec == std::errc();
+	auto const end = line.data() + line.size();
+
+	T tmp{};
+	auto result = std::from_chars(line.data(), end, tmp);
+	if (result.ec != std::errc() || result.ptr != end)
+		return false;
+
+	v = tmp;
+	return true;
 }
 
 template<typename T>
