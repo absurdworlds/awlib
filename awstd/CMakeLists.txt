@@ -55,7 +55,7 @@ if (TARGET awconfig)
 else()
 	find_path(AWSTD_AWLIB_INCLUDE_DIR
 		NAMES aw/config.h
-		HINTS "${PROJECT_SOURCE_DIR}/../awlib/include"
+		HINTS "${PROJECT_SOURCE_DIR}/../config/include"
 		DOC "Directory containing awlib's <aw/config.h>")
 
 	if (NOT AWSTD_AWLIB_INCLUDE_DIR)

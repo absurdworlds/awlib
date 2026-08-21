@@ -65,7 +65,7 @@ endif()
 include(aw-common)
 include(aw-sanitizers)
 
-add_subdirectory(awlib)
+add_subdirectory(config)
 add_subdirectory(meta)
 add_subdirectory(algorithm)
 add_subdirectory(math)
