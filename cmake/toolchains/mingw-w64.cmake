@@ -1,7 +1,7 @@
 # Cross-compile for Windows with mingw-w64.
 #
 #   cmake -S . -B build-mingw -G Ninja \
-#         -DCMAKE_TOOLCHAIN_FILE=awlib/cmake/toolchains/mingw-w64.cmake
+#         -DCMAKE_TOOLCHAIN_FILE=cmake/toolchains/mingw-w64.cmake
 
 set(CMAKE_SYSTEM_NAME Windows)
 set(CMAKE_SYSTEM_PROCESSOR x86_64)

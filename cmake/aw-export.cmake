@@ -9,7 +9,7 @@ export(EXPORT awlib_targets
 set(AW_EXPORT_FILE "${CMAKE_CURRENT_BINARY_DIR}/awlib/awlibConfig.cmake")
 
 configure_file(
-	awlib/cmake/awlibConfig.cmake
+	cmake/awlibConfig.cmake
 	"${CMAKE_CURRENT_BINARY_DIR}/awlib/awlibConfig.cmake"
 	COPYONLY
 )
@@ -35,7 +35,7 @@ install(EXPORT
 )
 install(
 	FILES
-		awlib/cmake/aw-common.cmake
+		cmake/aw-common.cmake
 		${AW_EXPORT_FILE}
 	DESTINATION
 		${ConfigPackageLocation}
