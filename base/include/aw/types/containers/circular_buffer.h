@@ -74,8 +74,42 @@ public:
 		data.tail = data.begin + q.size();
 	}
 
-	/*! TODO: move constructor */
+	/*!
+	 * Move constructor.
+	 * Takes over the storage, leaving \a q empty.
+	 */
+	circular_buffer(circular_buffer&& q) noexcept
+	{
+		data.swap( q.data );
+	}
 
+	/*!
+	 * Copy assignment.
+	 * Replaces the contents with a copy of \a q.
+	 */
+	circular_buffer& operator=(circular_buffer const& q)
+	{
+		circular_buffer copy{ q };
+		data.swap( copy.data );
+		return *this;
+	}
+
+	/*!
+	 * Move assignment.
+	 * Takes over the storage of \a q, leaving it empty.
+	 */
+	circular_buffer& operator=(circular_buffer&& q) noexcept
+	{
+		if (this == &q)
+			return *this;
+
+		destroy( begin(), end() );
+		destroy_storage();
+
+		data = q.data;
+		q.data = { };
+		return *this;
+	}
 
 	~circular_buffer()
 	{
@@ -166,8 +200,10 @@ public:
 	/*! Get buffer capacity */
 	size_type capacity() const noexcept
 	{
+		// there's one sentinel element in the buffer,
+		// but a moved-from buffer has no storage at all
 		auto dist = data.end - data.begin;
-		return dist - 1;
+		return dist > 0 ? dist - 1 : 0;
 	}
 
 	/*!
