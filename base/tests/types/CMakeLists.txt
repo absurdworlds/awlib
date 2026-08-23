@@ -14,6 +14,7 @@ aw_add_test(test_types
     tmpflag.c++
     reinterpret.c++
 		compint.c++
+		result.c++
 )
 
 target_link_libraries(test_types

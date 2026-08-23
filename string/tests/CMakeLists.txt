@@ -9,7 +9,10 @@ aw_add_test(test_string
 		join.c++
 		misc.c++
 		parse.c++
-		repeat.c++)
+		repeat.c++
+		strto.c++
+		parser_helpers.c++
+		conv_integer.c++)
 
 target_link_libraries(test_string
 	PRIVATE
