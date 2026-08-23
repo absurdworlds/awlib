@@ -9,7 +9,7 @@
  */
 #ifndef aw_std_tuple_to_string_h
 #define aw_std_tuple_to_string_h
-#include <aw/utility/index_sequence.h>
+#include <aw/meta/index_sequence.h>
 #include <aw/utility/to_string.h>
 #include <aw/types/tuple.h>
 namespace aw {

@@ -2,7 +2,7 @@
 #include "test_archive.h"
 
 #include <aw/test/test.h>
-#include <aw/utility/index_sequence.h>
+#include <aw/meta/index_sequence.h>
 #include <aw/utility/to_string/pair.h>
 #include <aw/archive/types/std/tuple.h>
 #include <aw/archive/types/std/vector.h>

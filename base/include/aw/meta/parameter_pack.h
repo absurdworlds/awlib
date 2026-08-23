@@ -11,7 +11,7 @@
 #define aw_parameter_pack_h
 #include <aw/types/types.h>
 #include <aw/meta/conditional.h>
-#include <aw/utility/index_sequence.h>
+#include <aw/meta/index_sequence.h>
 #include <aw/utility/fold.h>
 namespace aw {
 template <class Func, class... Args>

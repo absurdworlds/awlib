@@ -13,7 +13,7 @@
 #include <utility>
 #include <aw/types/types.h>
 #include <aw/types/traits/decay.h>
-#include <aw/utility/index_sequence.h>
+#include <aw/meta/index_sequence.h>
 namespace aw {
 using std::declval;
 
