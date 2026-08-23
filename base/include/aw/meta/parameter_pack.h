@@ -12,11 +12,11 @@
 #include <aw/types/types.h>
 #include <aw/meta/conditional.h>
 #include <aw/meta/index_sequence.h>
-#include <aw/utility/fold.h>
 namespace aw {
 template <class Func, class... Args>
-void for_each_argument(Func f, Args&&... args) {
-	AW_FOLD(f(std::forward<Args>(args)));
+void for_each_argument(Func f, Args&&... args)
+{
+	( void(f(std::forward<Args>(args))), ... );
 }
 
 template<class Func, size_t...Is>
