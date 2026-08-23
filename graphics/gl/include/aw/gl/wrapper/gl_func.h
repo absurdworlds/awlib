@@ -9,7 +9,7 @@
 #ifndef aw_graphics_awgl_gl_func_h
 #define aw_graphics_awgl_gl_func_h
 #include <aw/gl/api/gl_33.h>
-#include <aw/types/enum.h>
+#include <aw/types/support/enum.h>
 
 namespace aw::gl {
 //------------------------------------------------------------------------------
