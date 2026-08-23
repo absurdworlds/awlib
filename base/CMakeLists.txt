@@ -14,9 +14,14 @@ add_library(awalgo INTERFACE)
 target_link_libraries(awalgo INTERFACE awbase)
 set_target_properties(awalgo PROPERTIES EXPORT_NAME algorithm)
 
+add_library(awmeta INTERFACE)
+target_link_libraries(awmeta INTERFACE awbase)
+set_target_properties(awmeta PROPERTIES EXPORT_NAME meta)
+
 install(
 	TARGETS
 		awalgo
+		awmeta
 	EXPORT
 		${AW_PROJECT_NAME}_targets
 )
