@@ -66,6 +66,7 @@ include(aw-common)
 include(aw-sanitizers)
 
 add_subdirectory(config)
+add_subdirectory(base)
 add_subdirectory(meta)
 add_subdirectory(algorithm)
 add_subdirectory(math)
