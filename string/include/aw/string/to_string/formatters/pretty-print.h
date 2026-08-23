@@ -11,7 +11,7 @@
 #define aw_to_string_formatters_pretty_print_h
 #include <aw/types/types.h>
 #include <aw/algorithm/in.h>
-#include <aw/utility/string/escape.h>
+#include <aw/string/escape.h>
 
 #include <type_traits>
 #include <vector>

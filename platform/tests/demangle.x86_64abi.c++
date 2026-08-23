@@ -3,7 +3,7 @@
 
 /* WARNING! Very long string(s). */
 
-#include <aw/utility/ranges/paired.h>
+#include <aw/ranges/paired.h>
 #include <aw/test/test.h>
 
 #include "demangle.x86_64abi.h"

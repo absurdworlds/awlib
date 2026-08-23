@@ -155,5 +155,5 @@ std::string to_string(InputIt begin, InputIt end, Formatter&& fmt)
 }
 } // namespace aw
 
-#include <aw/utility/to_string/formatters/pretty-print.h>
+#include <aw/string/to_string/formatters/pretty-print.h>
 #endif//aw_string_to_string_h

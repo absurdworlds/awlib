@@ -10,8 +10,8 @@
 #ifndef aw_composite_int_to_string_h
 #define aw_composite_int_to_string_h
 #include <aw/types/composite_int.h>
-#include <aw/utility/to_string.h>
-#include <aw/utility/string/conv/integer.h>
+#include <aw/string/to_string.h>
+#include <aw/string/conv/integer.h>
 namespace aw {
 template<typename T, typename Formatter = formatter::pretty_print>
 std::string to_string(composite_int<T> val, Formatter&& fmt = Formatter{})

@@ -1,4 +1,4 @@
-#include <aw/utility/iterators/wrapper.h>
+#include <aw/iterators/wrapper.h>
 #include <aw/test/test.h>
 #include <iterator>
 #include <memory>

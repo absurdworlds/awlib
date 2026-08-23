@@ -11,7 +11,7 @@
 #include <cassert>
 #include <type_traits>
 #include <aw/types/types.h>
-#include <aw/utility/storage.h>
+#include <aw/types/storage.h>
 namespace aw {
 inline namespace utility {
 

@@ -7,7 +7,7 @@
  * There is NO WARRANTY, to the extent permitted by law.
  */
 #include <aw/graphics/gl/material_manager.h>
-#include <aw/utility/ranges/ipairs.h>
+#include <aw/ranges/ipairs.h>
 #include <aw/gl/wrapper/texture_func.h>
 
 namespace aw::gl3 {

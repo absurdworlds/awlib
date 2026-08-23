@@ -1,7 +1,7 @@
 #include <aw/types/array_view.h>
 #include <vector>
 
-#include <aw/utility/ranges/ipairs.h>
+#include <aw/ranges/ipairs.h>
 #include <aw/test/test.h>
 
 TestFile( "aw::array_view" );

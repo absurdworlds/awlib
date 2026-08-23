@@ -10,7 +10,7 @@
 #ifndef aw_variant_to_string_h
 #define aw_variant_to_string_h
 #include <aw/types/variant.h>
-#include <aw/utility/to_string.h>
+#include <aw/string/to_string.h>
 #include <aw/types/strip.h>
 namespace aw {
 namespace _impl {

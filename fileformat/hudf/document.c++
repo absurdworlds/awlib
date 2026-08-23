@@ -8,8 +8,8 @@
  * There is NO WARRANTY, to the extent permitted by law.
  */
 #include <aw/hudf/document.h>
-#include <aw/utility/string/split.h>
-#include <aw/utility/string/lazy_split.h>
+#include <aw/string/split.h>
+#include <aw/string/lazy_split.h>
 
 namespace aw {
 inline namespace v1 {

@@ -10,7 +10,7 @@
 #ifndef aw_math_vector_to_string_h
 #define aw_math_vector_to_string_h
 #include <aw/math/vector.h>
-#include <aw/utility/to_string.h>
+#include <aw/string/to_string.h>
 namespace aw {
 namespace math {
 /*!

@@ -10,7 +10,7 @@
 #ifndef aw_string_substr_iterator_h
 #define aw_string_substr_iterator_h
 #include <aw/types/string_view.h>
-#include <aw/utility/iterators/proxy.h>
+#include <aw/iterators/proxy.h>
 namespace aw {
 namespace string {
 struct substring_iterator_base {

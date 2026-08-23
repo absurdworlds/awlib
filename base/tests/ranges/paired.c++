@@ -1,4 +1,4 @@
-#include <aw/utility/ranges/paired.h>
+#include <aw/ranges/paired.h>
 #include <aw/test/test.h>
 #include <numeric>
 

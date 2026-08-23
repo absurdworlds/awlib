@@ -11,7 +11,7 @@
 #include <cstdio>
 
 #include <aw/hudf/lexer.h>
-#include <aw/utility/to_string.h>
+#include <aw/string/to_string.h>
 #include <aw/string/compose.h>
 
 namespace aw::hudf {

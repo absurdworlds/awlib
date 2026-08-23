@@ -10,7 +10,7 @@
 #define aw_log_filter_h
 #include <aw/log/multi_log.h>
 #include <functional>
-#include <aw/utility/functional/trivial.h>
+#include <aw/functional/trivial.h>
 namespace aw {
 inline namespace v1 {
 /*!

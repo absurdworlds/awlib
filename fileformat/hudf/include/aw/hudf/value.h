@@ -13,8 +13,8 @@
 #include <string>
 
 #include <aw/types/variant.h>
-#include <aw/utility/to_string.h>
-#include <aw/utility/to_string/variant.h>
+#include <aw/string/to_string.h>
+#include <aw/string/to_string/variant.h>
 
 #include <aw/hudf/type.h>
 

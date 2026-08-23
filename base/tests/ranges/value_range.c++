@@ -1,5 +1,5 @@
-#include <aw/utility/ranges/value_range.h>
-#include <aw/utility/ranges/reverse.h>
+#include <aw/ranges/value_range.h>
+#include <aw/ranges/reverse.h>
 #include <aw/test/test.h>
 #include <iterator>
 #include <vector>

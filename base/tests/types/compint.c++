@@ -1,5 +1,5 @@
 #include <aw/types/composite_int.h>
-#include <aw/utility/to_string/composite_int.h>
+#include <aw/string/to_string/composite_int.h>
 #include <aw/test/test.h>
 #include <limits>
 #include <string>

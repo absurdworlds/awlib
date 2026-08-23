@@ -1,4 +1,4 @@
-#include <aw/utility/string/strto.h>
+#include <aw/string/strto.h>
 #include <aw/test/test.h>
 #include <cerrno>
 #include <limits>

@@ -1,4 +1,4 @@
-#include <aw/utility/ranges/slice.h>
+#include <aw/ranges/slice.h>
 #include <aw/test/test.h>
 
 TestFile( "ranges::slice" );

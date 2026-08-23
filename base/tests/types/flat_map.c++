@@ -1,6 +1,6 @@
 #include <aw/types/containers/flat_map.h>
 
-#include <aw/utility/to_string/pair.h>
+#include <aw/string/to_string/pair.h>
 #include <aw/test/test.h>
 
 // TODO: test exception-safety

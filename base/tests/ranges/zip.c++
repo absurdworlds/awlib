@@ -1,5 +1,5 @@
-#include <aw/utility/ranges/zip.h>
-#include <aw/utility/to_string/pair.h>
+#include <aw/ranges/zip.h>
+#include <aw/string/to_string/pair.h>
 #include <aw/test/test.h>
 #include <numeric>
 #include <utility>

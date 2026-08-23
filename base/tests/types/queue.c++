@@ -2,8 +2,8 @@
 #include <memory_resource>
 #include <aw/types/containers/queue.h>
 
-#include <aw/utility/ranges/value_range.h>
-#include <aw/utility/ranges/reverse.h>
+#include <aw/ranges/value_range.h>
+#include <aw/ranges/reverse.h>
 #include <aw/test/test.h>
 #include <aw/test/helpers/lifetime_tracker.h>
 

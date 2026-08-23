@@ -1,7 +1,7 @@
 #include <array>
 #include <aw/types/containers/circular_buffer.h>
 
-#include <aw/utility/ranges/zip.h>
+#include <aw/ranges/zip.h>
 #include <aw/test/test.h>
 #include <aw/test/helpers/lifetime_tracker.h>
 

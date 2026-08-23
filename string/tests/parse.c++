@@ -1,7 +1,7 @@
 #include <aw/string/parse.h>
 #include <aw/test/test.h>
 
-#include <aw/utility/to_string/optional.h>
+#include <aw/string/to_string/optional.h>
 
 TestFile( "string::parse" );
 

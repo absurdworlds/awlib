@@ -10,7 +10,7 @@
 #ifndef aw_pair_to_string_h
 #define aw_pair_to_string_h
 #include <memory>
-#include <aw/utility/to_string.h>
+#include <aw/string/to_string.h>
 namespace aw {
 /*!
  * Convert pair to string

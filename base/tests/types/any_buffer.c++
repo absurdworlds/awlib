@@ -1,7 +1,7 @@
 #include <aw/math/matrix4.h>
 #include <aw/math/matrix_compare.h>
 #include <aw/types/containers/any_buffer.h>
-#include <aw/utility/to_string/math/matrix.h>
+#include <aw/string/to_string/math/matrix.h>
 
 #include <aw/test/test.h>
 #include <aw/test/helpers/lifetime_tracker.h>

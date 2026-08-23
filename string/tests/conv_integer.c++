@@ -1,4 +1,4 @@
-#include <aw/utility/string/conv/integer.h>
+#include <aw/string/conv/integer.h>
 #include <aw/test/test.h>
 
 TestFile("string_conv_integer");

@@ -10,7 +10,7 @@
 #define aw_graphics_model_obj_h
 #include <aw/fileformat/obj/loader.h>
 #include <aw/graphics/gl/model.h>
-#include <aw/utility/ranges/ipairs.h>
+#include <aw/ranges/ipairs.h>
 #include <map>
 #include <tuple>
 namespace aw::gl3 {

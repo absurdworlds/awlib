@@ -10,7 +10,7 @@
 #define aw_iterators_wrapper_h
 #include <cstddef>
 #include <iterator>
-#include <aw/utility/iterators/proxy.h>
+#include <aw/iterators/proxy.h>
 namespace aw {
 namespace iter {
 

@@ -5,7 +5,7 @@
 #include <aw/types/containers/queue.h>
 
 #include <aw/test/test.h>
-#include <aw/utility/to_string/tuple.h>
+#include <aw/string/to_string/tuple.h>
 
 #include <tuple>
 

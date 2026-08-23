@@ -9,7 +9,7 @@
 #include <aw/graphics/gl/model.h>
 #include <aw/gl/wrapper/buffer_func.h>
 #include <aw/gl/wrapper/vertex_func.h>
-#include <aw/utility/ranges/ipairs.h>
+#include <aw/ranges/ipairs.h>
 
 namespace aw::glh {
 template<typename T>

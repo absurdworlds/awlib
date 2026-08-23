@@ -1,7 +1,7 @@
-#include <aw/utility/string/join.h>
-#include <aw/utility/string/split.h>
-#include <aw/utility/string/trim.h>
-#include <aw/utility/string/trim_if.h>
+#include <aw/string/join.h>
+#include <aw/string/split.h>
+#include <aw/string/trim.h>
+#include <aw/string/trim_if.h>
 #include <aw/test/test.h>
 #include <cctype>
 

@@ -2,7 +2,7 @@
 #include <aw/io/filesystem.h>
 
 #include <aw/utility/on_scope_exit.h>
-#include <aw/utility/string/trim_if.h>
+#include <aw/string/trim_if.h>
 #include <aw/string/format.h>
 
 #include <aw/test/test.h>

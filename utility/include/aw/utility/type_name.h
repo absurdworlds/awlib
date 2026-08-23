@@ -9,7 +9,7 @@
 #ifndef aw_utility_type_name_h
 #define aw_utility_type_name_h
 
-#include <aw/utility/string/trim.h>
+#include <aw/string/trim.h>
 
 #include <aw/config.h>
 

@@ -1,6 +1,6 @@
-#include <aw/utility/functional/overload.h>
-#include <aw/utility/functional/trivial.h>
-#include <aw/utility/functional/wrapper.h>
+#include <aw/functional/overload.h>
+#include <aw/functional/trivial.h>
+#include <aw/functional/wrapper.h>
 #include <aw/test/test.h>
 #include <vector>
 #include <memory>

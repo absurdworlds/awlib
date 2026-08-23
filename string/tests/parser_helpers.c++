@@ -1,4 +1,4 @@
-#include <aw/utility/string/parser_helpers.h>
+#include <aw/string/parser_helpers.h>
 #include <aw/test/test.h>
 
 TestFile( "string::parser_helpers" );

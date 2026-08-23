@@ -1,5 +1,5 @@
 #include <aw/test/test.h>
-#include <aw/utility/to_string/math/vector.h>
+#include <aw/string/to_string/math/vector.h>
 #include <aw/math/vector3d.h>
 #include <aw/math/vector_compare.h>
 #include <algorithm>

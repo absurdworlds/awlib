@@ -5,7 +5,6 @@ aw_add_test(test_utility
 	utf8toutf16.c++
 	MurmurHash3.c++
 	hash_combine.c++
-	to_string_composite_int.c++
 	type_name.c++
 )
 
