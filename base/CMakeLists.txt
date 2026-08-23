@@ -18,10 +18,15 @@ add_library(awmeta INTERFACE)
 target_link_libraries(awmeta INTERFACE awbase)
 set_target_properties(awmeta PROPERTIES EXPORT_NAME meta)
 
+add_library(awtypes INTERFACE)
+target_link_libraries(awtypes INTERFACE awbase)
+set_target_properties(awtypes PROPERTIES EXPORT_NAME types)
+
 install(
 	TARGETS
 		awalgo
 		awmeta
+		awtypes
 	EXPORT
 		${AW_PROJECT_NAME}_targets
 )

@@ -68,7 +68,6 @@ include(aw-sanitizers)
 add_subdirectory(config)
 add_subdirectory(base)
 add_subdirectory(math)
-add_subdirectory(types)
 add_subdirectory(platform)
 
 option(AW_ENABLE_ASSERT "Enable aw::assert. If OFF, awlib will be compiled without dependency on aw::assert." ON)

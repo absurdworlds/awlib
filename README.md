@@ -8,8 +8,8 @@ List of libraries that are currently in this collection:
   - meta: helpers for template metaprogramming
   - meta/pp: preprocessor metaprogramming
   - algorithm: additional algorithms built on top of std::algorithm
+  - types: aliases, containers, type traits etc
 - utility: things that didn't fit anywhere else
-- types: aliases, containers, type traits etc
 - math: template-based linear algebra classes and other things
 - string: string-manipulation-related utilities
 - log: simple logger facility
