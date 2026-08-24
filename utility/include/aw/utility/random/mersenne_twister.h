@@ -8,6 +8,7 @@
  */
 #ifndef aw_utility_random_mersenne_twister_h
 #define aw_utility_random_mersenne_twister_h
+#include <algorithm>
 #include <random>
 #include <functional>
 namespace aw {

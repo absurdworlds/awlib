@@ -8,6 +8,7 @@
  */
 #ifndef aw_traits_is_iterable_h
 #define aw_traits_is_iterable_h
+#include <aw/types/types.h>
 #include <aw/meta/void_t.h>
 #include <aw/meta/boolean.h>
 namespace aw {

@@ -9,6 +9,7 @@
 #ifndef aw_math_numeric_h
 #define aw_math_numeric_h
 #include <limits>
+#include <aw/types/types.h>
 namespace aw {
 //! Number of radix digits in type T
 template<typename T>
