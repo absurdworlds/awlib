@@ -13,6 +13,11 @@
 #include "tuple.h"
 #include "optional.h"
 #include "unique_ptr.h"
+
+#if __has_include(<aw/math/vector.h>)
 #include "math/vector.h"
+#endif
+#if __has_include(<aw/math/matrix.h>)
 #include "math/matrix.h"
+#endif
 #endif//aw_to_string_all_extras_h
