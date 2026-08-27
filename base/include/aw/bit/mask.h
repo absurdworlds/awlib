@@ -21,9 +21,10 @@ constexpr size_t num_digits = std::numeric_limits<T>::digits;
  * counting from 0.
  * (0 is lsb, 31 is msb)
  */
-constexpr uintmax_t bit(size_t N)
+template<typename Int = uintmax_t>
+constexpr Int bit(size_t N)
 {
-	return uintmax_t(1) << N;
+	return Int(1) << N;
 }
 
 /*!

@@ -62,8 +62,9 @@ template <typename Int>
 constexpr Int set_bit(Int val, size_t idx, bool bitval)
 {
 	assert(idx < num_digits<Int>);
-	Int flag = (Int(bitval) << idx);
-	val ^= (val & flag) ^ flag;
+	Int mask = bit<Int>(idx);
+	Int flag = Int(bitval) << idx;
+	val ^= (val & mask) ^ flag;
 	return val;
 }
 

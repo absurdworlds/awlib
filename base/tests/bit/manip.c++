@@ -24,6 +24,7 @@ Test(manip_single_bits)
 		TestEqual(top_bit(u8(0x80)), 1);
 		TestEqual(top_bit(u8(0x7f)), 0);
 		TestEqual(set_bit(0b100000, 4, 1), 0b110000);
+		TestEqual(set_bit(0b110000, 4, 0), 0b100000);
 		TestEqual(swap_bits(0b01000, 3, 4), 0b10000);
 	};
 }
