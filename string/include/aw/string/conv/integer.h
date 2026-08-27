@@ -31,9 +31,11 @@ constexpr size_t max_digits = bits / bits_per_digit(radix) + 1;
  * Builds a base-\a R string one bit at a time vid add_bit.
  * Used for extra-wide integers where division is expensive (e.g. composite_int).
  *
+ * Sized to hold any integer \a bits bits wide.
+ *
  * Based on the "double dabble" algorithm.
  */
-template <size_t R, size_t N>
+template <size_t R, size_t bits>
 struct radix_accumulator {
 	static_assert(R > 1,  "Radix must be at least two.");
 	static_assert(R <= 36, "Radix is too big (max. 36).");
@@ -68,7 +70,7 @@ struct radix_accumulator {
 
 	bool sign = 0;
 	size_t top_digit = 0;
-	u8 digits[N] = {};
+	u8 digits[max_digits<R, bits>] = {};
 };
 } // namespace aw
 #endif//aw_string_conv_integer_h

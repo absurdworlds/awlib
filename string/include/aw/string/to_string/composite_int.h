@@ -36,7 +36,7 @@ std::string to_string(composite_int<T> val, Formatter&& fmt = Formatter{})
 	size_t lz = tmp.leading_zeros();
 	tmp <<= lz;
 
-	radix_accumulator<base, max_digits<base, composite_int<T>::digits>> result;
+	radix_accumulator<base, dg> result;
 	result.sign = sign;
 	for (size_t i = lz; i < dg; ++i) {
 		bool carry = bit::top_bit(tmp.high());
