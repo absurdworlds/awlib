@@ -29,7 +29,7 @@ assert_action assert_fail_fmt(string_view msg, source_location loc = source_loca
 #if AW_FORMAT != AW_NO_FORMAT
 	if constexpr(sizeof...(Arg_types) > 0)
 	{
-		std::string fmt = vformat( msg, make_format_args(std::forward<Arg_types>(args)...) );
+		std::string fmt = aw::vformat( msg, aw::make_format_args(std::forward<Arg_types>(args)...) );
 		return assert_fail(fmt, loc);
 	}
 	else
