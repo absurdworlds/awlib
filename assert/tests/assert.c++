@@ -13,7 +13,12 @@ const string_view expected_assertions[] ={
     "false",
     "1 == 2",
     "false_with_message",
+#if AW_FORMAT != AW_NO_FORMAT
     "false_with_formatted_message"
+#else
+    // with no provider behind aw::format the message is passed through as-is
+    "false_with_{}_message"
+#endif
 };
 
 const string_view* current_assertion = &expected_assertions[0];
