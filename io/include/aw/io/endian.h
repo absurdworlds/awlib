@@ -10,7 +10,7 @@
 #define aw_io_endian_h
 #include <limits>
 #include <aw/types/types.h>
-#include <aw/utility/ranges/reverse.h>
+#include <aw/ranges/reverse.h>
 #include <aw/io/input_stream.h>
 namespace aw {
 namespace io {

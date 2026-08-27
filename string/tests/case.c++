@@ -1,4 +1,4 @@
-#include <aw/utility/string/case.h>
+#include <aw/string/case.h>
 #include <aw/test/test.h>
 
 TestFile("string::case");

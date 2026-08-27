@@ -11,7 +11,7 @@
 #include <aw/types/types.h>
 #include <aw/types/int128.h>
 #include <aw/utility/utility.h>
-#include <aw/math/bitmath.h>
+#include <aw/bit/manip.h>
 #include <array>
 
 namespace aw {
@@ -24,7 +24,7 @@ H hash_combine( H h1, H h2 )
 	constexpr auto r = (digits > 32) ? 41 : 19;
 	constexpr auto p = (digits > 32) ? prime64 : prime32;
 
-	h1 = math::rotl(h1,r);
+	h1 = bit::rotl(h1,r);
 	h2 += p;
 	h1 ^= (h2 >> 6) + (h2 << 2);
 	return h1;

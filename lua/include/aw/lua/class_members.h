@@ -13,7 +13,7 @@
 #include <aw/types/string_literal.h>
 #include <aw/types/string_view.h>
 
-#include <aw/utility/functional/rank.h>
+#include <aw/functional/rank.h>
 
 #include <aw/lua/push_value.h>
 #include <aw/lua/userdata_utils.h>

@@ -3,7 +3,7 @@
 #include <aw/math/transform.h>
 #include <aw/math/vector_compare.h>
 #include <aw/math/matrix_compare.h>
-#include <aw/utility/to_string/math/matrix.h>
+#include <aw/string/to_string/math/matrix.h>
 
 #include <algorithm>
 

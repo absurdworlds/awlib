@@ -1,46 +1,7 @@
-/*
- * Copyright (C) 2015  absurdworlds
- * Copyright (C) 2015  Hedede <hededrk@gmail.com>
- *
- * License LGPLv3 or later:
- * GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
- * This is free software: you are free to change and redistribute it.
- * There is NO WARRANTY, to the extent permitted by law.
- */
-#ifndef aw_optional_to_string_h
-#define aw_optional_to_string_h
-#include <aw/types/optional.h>
-#include <aw/utility/to_string.h>
-namespace aw {
-//! Convert nullopt_t to string.
-template <>
-struct string_converter<nullopt_t> {
-	string_converter(nullopt_t) {}
+// This header is obsolete. Please use this one instead:
+#include <aw/string/to_string/optional.h>
 
-	template<typename Formatter>
-	std::string operator()( Formatter& fmt ) const
-	{
-		return fmt.literal("nullopt");
-	}
-};
-
-/*!
- * Convert optional to string
- * \return
- *    Contained value, converted to string,
- *    or empty string if optional is empty.
- */
-template <typename T>
-struct string_converter<optional<T>> {
-	optional<T> const& opt;
-
-	template<typename Formatter>
-	std::string operator()( Formatter& fmt ) const
-	{
-		if (opt) fmt.convert( *opt );
-		return fmt;
-	}
-};
-
-} // namespace aw
-#endif//aw_optional_to_string_h
+#if !defined(aw_utility_to_string_optional_h_warned) &&  __cplusplus >= 202302L
+#define aw_utility_to_string_optional_h_warned
+#warning "<aw/utility/to_string/optional.h> is obsolete and will be removed soon. Please use <aw/string/to_string/optional.h> instead."
+#endif

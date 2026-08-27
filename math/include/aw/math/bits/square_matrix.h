@@ -7,6 +7,10 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
+#ifndef aw_math_matrix_h
+static_assert(false, "Do not include this file directly.");
+#endif//aw_math_matrix_h
+
 #ifndef aw_math_matrixNN_h
 #define aw_math_matrixNN_h
 #include <algorithm>

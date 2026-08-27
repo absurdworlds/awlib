@@ -1,5 +1,5 @@
-#include <aw/utility/string/split.h>
-#include <aw/utility/string/lazy_split.h>
+#include <aw/string/split.h>
+#include <aw/string/lazy_split.h>
 #include <aw/test/test.h>
 
 TestFile( "string::lazy_split" );

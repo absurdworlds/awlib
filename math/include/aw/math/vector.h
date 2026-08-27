@@ -14,7 +14,7 @@
 #include <aw/math/math.h>
 #include <aw/math/angle.h>
 #include <aw/meta/conditional.h>
-#include <aw/utility/index_sequence.h>
+#include <aw/meta/index_sequence.h>
 #include <aw/meta/list_ops.h>
 
 namespace aw::math {

@@ -13,9 +13,9 @@
 #include <aw/io/input_stream_utils.h>
 
 #include <aw/string/parse.h>
-#include <aw/utility/string/lazy_split.h>
-#include <aw/utility/string/split.h>
-#include <aw/utility/string/trim.h>
+#include <aw/string/lazy_split.h>
+#include <aw/string/split.h>
+#include <aw/string/trim.h>
 
 namespace aw::obj {
 constexpr auto ws = string::whitespace;

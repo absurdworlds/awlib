@@ -11,8 +11,6 @@ aw_add_library(awutils SHARED
 target_compile_definitions(awutils PRIVATE AW_MODULE_UTILS)
 target_link_libraries(awutils
 	PUBLIC
-		awconfig
-		awtypes
-		awalgo
-		awmath # TODO: maybe get rid of bitmath?
+		awbase
+		awstring # type_name trims with aw/string
 )

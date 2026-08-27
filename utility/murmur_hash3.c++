@@ -9,7 +9,7 @@
 //-----------------------------------------------------------------------------
 // This code is based on MurmurHash3.
 // MurmurHash3 was written by Austin Appleby, and is placed in the public domain.
-#include <aw/math/bitmath.h>
+#include <aw/bit/manip.h>
 #include <aw/utility/endian.h>
 
 #include <aw/utility/hash.h>
@@ -77,7 +77,7 @@ u32 MurmurHash3_x86_32 (char const* key, size_t len, u32 seed)
 
 	auto mix_1 = [] (u32 k) {
 		k *= c1;
-		k  = math::rotl(k,15);
+		k  = bit::rotl(k,15);
 		k *= c2;
 		return k;
 	};
@@ -90,7 +90,7 @@ u32 MurmurHash3_x86_32 (char const* key, size_t len, u32 seed)
 
 		h1 ^= mix_1(k1);
 
-		h1 = math::rotl(h1,13);
+		h1 = bit::rotl(h1,13);
 		h1 = h1*5 + magic1;
 	}
 
@@ -134,14 +134,14 @@ seed128_32 MurmurHash3_x86_128(char const* key, size_t len, seed128_32 seed)
 	auto mix_1 = [] (u32 k, u32 ca, u32 cb, size_t s)
 	{
 		k *= ca;
-		k  = math::rotl(k,s);
+		k  = bit::rotl(k,s);
 		k *= cb;
 		return k;
 	};
 
 	auto mix_2 = [] (u32 ha, u32 hb, size_t s, u32 m)
 	{
-		ha  = math::rotl(ha,s);
+		ha  = bit::rotl(ha,s);
 		ha += hb;
 		return ha*5 + m;
 	};
@@ -246,14 +246,14 @@ seed128_64 MurmurHash3_x64_128(char const* key, size_t len, seed128_64 seed)
 	auto mix_1 = [] (u64 k, u64 ca, u64 cb, size_t s)
 	{
 		k *= ca;
-		k  = math::rotl(k,s);
+		k  = bit::rotl(k,s);
 		k *= cb;
 		return k;
 	};
 
 	auto mix_2 = [] (u64 ha, u64 hb, size_t s, u64 m)
 	{
-		ha  = math::rotl(ha,s);
+		ha  = bit::rotl(ha,s);
 		ha += hb;
 		return ha*5 + m;
 	};

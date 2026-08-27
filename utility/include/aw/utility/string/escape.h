@@ -1,39 +1,7 @@
-/*
- * Copyright (C) 2016  absurdworlds
- * Copyright (C) 2016  Hedede <haddayn@gmail.com>
- *
- * License LGPLv3 or later:
- * GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
- * This is free software: you are free to change and redistribute it.
- * There is NO WARRANTY, to the extent permitted by law.
- */
-#ifndef aw_string_escape_h
-#define aw_string_escape_h
-#include <aw/types/string_view.h>
+// This header is obsolete. Please use this one instead:
+#include <aw/string/escape.h>
 
-#include <string>
-namespace aw {
-namespace string {
-inline std::string& escape_quotes(string_view src, std::string& dest)
-{
-	dest.reserve(dest.size() + src.size());
-	for (char c : src) switch (c) {
-	case '\\':
-	case '"':
-		dest.push_back('\\');
-		[[fallthrough]];
-	default:
-		dest.push_back(c);
-	}
-	return dest;
-}
-
-inline std::string escape_quotes(string_view src)
-{
-	std::string dest;
-	escape_quotes(src, dest);
-	return dest;
-}
-} // namespace string
-} // namespace aw
-#endif//aw_string_escape_h
+#if !defined(aw_utility_string_escape_h_warned) &&  __cplusplus >= 202302L
+#define aw_utility_string_escape_h_warned
+#warning "<aw/utility/string/escape.h> is obsolete and will be removed soon. Please use <aw/string/escape.h> instead."
+#endif

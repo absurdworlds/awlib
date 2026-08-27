@@ -1,5 +1,5 @@
 #include <aw/utility/unicode/convert.h>
-#include <aw/utility/string/trim_if.h>
+#include <aw/string/trim_if.h>
 #include <aw/algorithm/in.h>
 #include <aw/io/export.h>
 #include <system_error>

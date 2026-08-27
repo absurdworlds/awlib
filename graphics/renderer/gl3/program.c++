@@ -11,7 +11,7 @@
 #include <aw/graphics/gl/log.h>
 #include <aw/gl/wrapper/shader_func.h>
 #include <aw/utility/on_scope_exit.h>
-#include <aw/types/enum.h>
+#include <aw/types/support/enum.h>
 #include <string>
 
 namespace aw::gl3 {

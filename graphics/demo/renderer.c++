@@ -3,7 +3,7 @@
 
 #include <aw/gl/wrapper/api.h>
 #include <aw/types/string_view.h>
-#include <aw/utility/string/split.h>
+#include <aw/string/split.h>
 #include <aw/math/matrix3.h>
 #include <aw/math/matrix4.h>
 #include <aw/math/transform.h>

@@ -12,7 +12,6 @@
 #include <string>
 #include <aw/types/types.h>
 #include <aw/meta/pp/macro.h>
-#include <aw/math/math.h>
 namespace aw {
 namespace unicode {
 /*!

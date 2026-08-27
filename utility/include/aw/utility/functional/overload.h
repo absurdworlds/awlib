@@ -1,54 +1,7 @@
-/*
- * Copyright (C) 2016  absurdworlds
- * Copyright (C) 2016  Hedede <haddayn@gmail.com>
- *
- * License LGPLv3 or later:
- * GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
- * This is free software: you are free to change and redistribute it.
- * There is NO WARRANTY, to the extent permitted by law.
- */
-#ifndef aw_utility_functional_overload_h
-#define aw_utility_functional_overload_h
-#include <utility>
-namespace aw {
-#if __cpp_variadic_using >= 201611
-/*!
- * Allows to combine multiple functors into overloaded set.
- */
-template<typename...Fs>
-struct overload : Fs... {
-	overload() = default;
-	overload(Fs... fs) : Fs{ std::move(fs) }...  {}
-	using Fs::operator()...;
-	// Enables use in transparent containers
-	// (std::map, std::unordered_map, etc)
-	using is_transparent = void;
-};
-#else
-template<typename Func, typename...Fs>
-struct overload : overload<Func>, overload<Fs...> {
-	overload(Func func, Fs... fs)
-		: overload<Func>{std::forward<F>(func)},
-		  overload<Fs...>{std::forward<Fs>(fs)...}
-	{}
+// This header is obsolete. Please use this one instead:
+#include <aw/functional/overload.h>
 
-	using overload<Func>::operator();
-	using overload<Fs...>::operator();
-};
-
-template<typename Func>
-struct overload<Func> : Func {
-	overload(Func func)
-		: Func{std::forward<Func>(func)}
-	{}
-};
+#if !defined(aw_utility_functional_overload_h_warned) &&  __cplusplus >= 202302L
+#define aw_utility_functional_overload_h_warned
+#warning "<aw/utility/functional/overload.h> is obsolete and will be removed soon. Please use <aw/functional/overload.h> instead."
 #endif
-
-template<typename...Fs>
-[[deprecated]]
-overload<Fs...> make_overload(Fs&&...fs)
-{
-	return {std::forward<Fs>(fs)...};
-}
-} // namespace aw
-#endif//aw_utility_functional_overload_h

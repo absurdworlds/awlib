@@ -9,7 +9,7 @@
  */
 #include <aw/hudf/parser.h>
 #include <aw/hudf/utility.h>
-#include <aw/utility/string/split.h>
+#include <aw/string/split.h>
 #include <cassert>
 #include <fstream>
 namespace aw::hudf {

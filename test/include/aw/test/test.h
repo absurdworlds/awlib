@@ -17,7 +17,7 @@
 #include <aw/test/print.h>
 #include <aw/test/segv_handler.h>
 #include <aw/platform/demangle.h>
-#include <aw/utility/to_string.h>
+#include <aw/string/to_string.h>
 #include <aw/types/strip.h>
 #if (AW_PLATFORM == AW_PLATFORM_POSIX)
 #include <sys/types.h>

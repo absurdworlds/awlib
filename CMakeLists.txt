@@ -21,7 +21,7 @@ endif()
 
 option(BUILD_SHARED_LIBS "Build using shared libraries" ${BUILD_SHARED_LIBS_DEFAULT})
 
-set(AW_CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/awlib/cmake")
+set(AW_CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 list(APPEND CMAKE_MODULE_PATH ${AW_CMAKE_MODULE_PATH})
 
@@ -65,11 +65,9 @@ endif()
 include(aw-common)
 include(aw-sanitizers)
 
-add_subdirectory(awlib)
-add_subdirectory(meta)
-add_subdirectory(algorithm)
+add_subdirectory(config)
+add_subdirectory(base)
 add_subdirectory(math)
-add_subdirectory(types)
 add_subdirectory(platform)
 
 option(AW_ENABLE_ASSERT "Enable aw::assert. If OFF, awlib will be compiled without dependency on aw::assert." ON)

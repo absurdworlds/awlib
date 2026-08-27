@@ -1,25 +1,10 @@
 aw_add_test(test_utility
 	SOURCES
-	byteswap.c++
+	static_object.c++
+	memory_pool.c++
 	utf8toutf16.c++
 	MurmurHash3.c++
 	hash_combine.c++
-	functional.c++
-	static_object.c++
-	on_scope_exit.c++
-	memory_pool.c++
-	result.c++
-	ranges_slice.c++
-	ranges_value_range.c++
-	ranges_paired.c++
-	ranges_ipairs.c++
-	ranges_zip.c++
-	ranges_reverse.c++
-	iterators_wrapper.c++
-	string_strto.c++
-	string_parser_helpers.c++
-	string_conv_integer.c++
-	to_string_composite_int.c++
 	type_name.c++
 )
 

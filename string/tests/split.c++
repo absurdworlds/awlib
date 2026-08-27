@@ -1,4 +1,4 @@
-#include <aw/utility/string/split.h>
+#include <aw/string/split.h>
 #include <aw/test/test.h>
 
 TestFile( "string::split" );

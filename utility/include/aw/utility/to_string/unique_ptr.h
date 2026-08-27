@@ -1,33 +1,7 @@
-/*
- * Copyright (C) 2016  absurdworlds
- * Copyright (C) 2016  Hedede <hededrk@gmail.com>
- *
- * License LGPLv3 or later:
- * GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
- * This is free software: you are free to change and redistribute it.
- * There is NO WARRANTY, to the extent permitted by law.
- */
-#ifndef aw_unique_ptr_to_string_h
-#define aw_unique_ptr_to_string_h
-#include <memory>
-#include <aw/utility/to_string.h>
-namespace aw {
-/*!
- * Convert unique_ptr to string
- * \return
- *    Underlying pointer converted to string
- */
-template <typename T>
-struct string_converter<std::unique_ptr<T>> {
-	std::unique_ptr<T> const& ptr;
+// This header is obsolete. Please use this one instead:
+#include <aw/string/to_string/unique_ptr.h>
 
-	template<typename Formatter>
-	std::string operator()( Formatter& fmt ) const
-	{
-		fmt.convert( ptr.get() );
-		return fmt;
-	}
-};
-
-} // namespace aw
-#endif//aw_unique_ptr_to_string_h
+#if !defined(aw_utility_to_string_unique_ptr_h_warned) &&  __cplusplus >= 202302L
+#define aw_utility_to_string_unique_ptr_h_warned
+#warning "<aw/utility/to_string/unique_ptr.h> is obsolete and will be removed soon. Please use <aw/string/to_string/unique_ptr.h> instead."
+#endif

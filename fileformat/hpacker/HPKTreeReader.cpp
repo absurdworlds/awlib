@@ -8,7 +8,7 @@
  */
 #include <algorithm>
 
-#include <aw/utility/string/split.h>
+#include <aw/string/split.h>
 
 #include "HPKTreeReader.h"
 

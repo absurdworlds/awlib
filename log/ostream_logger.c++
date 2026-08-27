@@ -7,7 +7,7 @@
  * There is NO WARRANTY, to the extent permitted by law.
  */
 #include <aw/log/ostream_logger.h>
-#include <aw/utility/string/join.h>
+#include <aw/string/join.h>
 #include "helpers.h"
 namespace aw {
 inline namespace v1 {

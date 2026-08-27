@@ -1,35 +1,7 @@
-/*
- * Copyright (C) 2016  absurdworlds
- * Copyright (C) 2016  Hedede <hededrk@gmail.com>
- *
- * License LGPLv3 or later:
- * GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
- * This is free software: you are free to change and redistribute it.
- * There is NO WARRANTY, to the extent permitted by law.
- */
-#ifndef aw_pair_to_string_h
-#define aw_pair_to_string_h
-#include <memory>
-#include <aw/utility/to_string.h>
-namespace aw {
-/*!
- * Convert pair to string
- * \return
- *    String in format "{pair.first, pair.second}".
- */
-template <typename T1, typename T2>
-struct string_converter<std::pair<T1, T2>> {
-	std::pair<T1, T2> const& pair;
+// This header is obsolete. Please use this one instead:
+#include <aw/string/to_string/pair.h>
 
-	template<typename Formatter>
-	std::string operator()( Formatter& fmt ) const
-	{
-		fmt.compound_start();
-		fmt.value(pair.first);
-		fmt.value(pair.second);
-		fmt.compound_end();
-		return fmt;
-	}
-};
-} // namespace aw
-#endif//aw_pair_to_string_h
+#if !defined(aw_utility_to_string_pair_h_warned) &&  __cplusplus >= 202302L
+#define aw_utility_to_string_pair_h_warned
+#warning "<aw/utility/to_string/pair.h> is obsolete and will be removed soon. Please use <aw/string/to_string/pair.h> instead."
+#endif

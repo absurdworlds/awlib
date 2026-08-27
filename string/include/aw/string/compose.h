@@ -4,7 +4,7 @@
 #include <aw/types/string_view.h>
 
 #include <aw/string/export.h>
-#include <aw/utility/to_string.h>
+#include <aw/string/to_string.h>
 
 namespace aw::string {
 /*!

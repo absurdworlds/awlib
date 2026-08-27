@@ -10,7 +10,7 @@
 #define aw_archive_map_shared_h
 #include <utility>
 #include <aw/meta/substitute.h>
-#include <aw/utility/iterators/wrapper.h>
+#include <aw/iterators/wrapper.h>
 #include <aw/archive/types/std/pair.h>
 namespace aw {
 namespace arc {

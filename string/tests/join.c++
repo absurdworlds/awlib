@@ -1,4 +1,4 @@
-#include <aw/utility/string/join.h>
+#include <aw/string/join.h>
 #include <aw/test/test.h>
 #include <aw/types/array_view.h>
 

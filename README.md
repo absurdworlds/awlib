@@ -4,12 +4,14 @@ I try to make them independent of each other (except for utility libraries, all 
 
 List of libraries that are currently in this collection:
 
+- base: basic vocabulary: types, algorithms, ranges, and small utilities
+  - meta: helpers for template metaprogramming
+  - meta/pp: preprocessor metaprogramming
+  - algorithm: additional algorithms built on top of std::algorithm
+  - types: aliases, containers, type traits etc
 - utility: things that didn't fit anywhere else
-- types: aliases, containers, type traits etc
 - math: template-based linear algebra classes and other things
-- algorithm: additional algorithms built on top of std::algorithm
 - string: string-manipulation-related utilities
-- meta: helpers for template metaprogramming
 - log: simple logger facility
 - io: facilities for unformatted I/O
 - platform: abstraction of platform-specific functions

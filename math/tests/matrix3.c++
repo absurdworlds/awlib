@@ -2,8 +2,8 @@
 #include <aw/math/matrix3.h>
 #include <aw/math/matrix_compare.h>
 #include <aw/math/vector_compare.h>
-#include <aw/utility/to_string/math/matrix.h>
-#include <aw/utility/to_string/math/vector.h>
+#include <aw/string/to_string/math/matrix.h>
+#include <aw/string/to_string/math/vector.h>
 
 #include <algorithm>
 

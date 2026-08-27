@@ -9,7 +9,7 @@
  */
 #ifndef aw_io_file_mode_h
 #define aw_io_file_mode_h
-#include <aw/types/enum.h>
+#include <aw/types/support/enum.h>
 namespace aw {
 namespace io {
 /*! File seek direction */
