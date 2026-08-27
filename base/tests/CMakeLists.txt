@@ -1,4 +1,5 @@
 add_subdirectory(algorithm)
+add_subdirectory(bit)
 add_subdirectory(functional)
 add_subdirectory(iterators)
 add_subdirectory(meta)

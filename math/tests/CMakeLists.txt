@@ -1,7 +1,7 @@
 aw_add_test(test_math
 	SOURCES
 	functions.c++
-	bitmath.c++
+	numeric.c++
 	angle.c++
 	orientation.c++
 	quaternion.c++
