@@ -12,6 +12,21 @@
 #include <aw/types/types.h>
 #include <string>
 namespace aw {
+//! Number of bits a single base-\a radix digit is guaranteed to carry
+constexpr size_t bits_per_digit(size_t radix)
+{
+	size_t bits = 0;
+	while (radix > 1) {
+		radix >>= 1;
+		++bits;
+	}
+	return bits;
+}
+
+//! Upper bound on the number of base-\a radix digits in a \a bits-bit integer
+template<size_t radix, size_t bits>
+constexpr size_t max_digits = bits / bits_per_digit(radix) + 1;
+
 /*!
  * Builds a base-\a R string one bit at a time vid add_bit.
  * Used for extra-wide integers where division is expensive (e.g. composite_int).
