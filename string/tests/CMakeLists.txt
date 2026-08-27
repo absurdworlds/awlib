@@ -18,6 +18,7 @@ aw_add_test(test_string
 target_link_libraries(test_string
 	PRIVATE
 		awstring
+		awmath # to_string.c++ prints vectors and matrices
 		awplatform
 		awtest
 		awtest_main)

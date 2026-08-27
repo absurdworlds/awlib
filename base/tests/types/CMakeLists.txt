@@ -20,5 +20,6 @@ aw_add_test(test_types
 target_link_libraries(test_types
 	PRIVATE
 		awtypes
+		awmath # any_buffer.c++ stores matrices
 		awtest
 		awtest_main)
