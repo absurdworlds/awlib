@@ -14,9 +14,9 @@ namespace aw {
 template<typename T>
 auto composite_int<T>::mul(U a, U b) -> composite_int<T>
 {
-	constexpr auto& upper    = math::upper_half<U>;
-	constexpr auto& lower    = math::lower_half<U>;
-	constexpr auto& to_upper = math::lower_to_upper<U>;
+	constexpr auto& upper    = bit::upper_half<U>;
+	constexpr auto& lower    = bit::lower_half<U>;
+	constexpr auto& to_upper = bit::lower_to_upper<U>;
 
 	// Split integers into lower and upper halves
 	U ah = upper(a);

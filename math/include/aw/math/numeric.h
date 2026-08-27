@@ -9,6 +9,7 @@
 #ifndef aw_math_numeric_h
 #define aw_math_numeric_h
 #include <limits>
+#include <aw/bit/mask.h>
 #include <aw/types/types.h>
 namespace aw {
 //! Number of radix digits in type T
@@ -41,5 +42,38 @@ constexpr intmax_t lcm(intmax_t x, intmax_t y)
 {
 	return x / gcd(x,y) * y;
 }
+
+namespace math {
+//! Compute log2 of an integer value
+template <typename Int>
+constexpr size_t log2(Int value)
+{
+	static_assert(num_digits<Int> <= num_digits<u64>, "Type is too large.");
+	constexpr u64 powers[] = { 0, 1, 2, 4, 8, 16, 32 };
+	constexpr u64 lookup[] = {
+	       0,
+	       bit::upper_mask<u64>(1),  bit::upper_mask<u64>(2),
+	       bit::upper_mask<u64>(4),  bit::upper_mask<u64>(8),
+	       bit::upper_mask<u64>(16), bit::upper_mask<u64>(32)
+	};
+
+	Int result = 0;
+	for (size_t i = 6; i > 0; --i) {
+		if (value & lookup[i]) {
+			value >>= powers[i];
+			result |= powers[i];
+		}
+	}
+
+	return result;
+}
+
+/*! Check if value is a power of 2 */
+template <typename Int>
+constexpr bool is_power_of_2(Int value)
+{
+	return value && !(value & (value - 1));
+}
+} // namespace math
 } //namespace aw
 #endif //aw_math_numeric_h

@@ -9,6 +9,8 @@
  */
 #ifndef aw_composite_int_to_string_h
 #define aw_composite_int_to_string_h
+#include <aw/bit/manip.h>
+#include <aw/math/numeric.h>
 #include <aw/types/composite_int.h>
 #include <aw/string/to_string.h>
 #include <aw/string/conv/integer.h>
@@ -40,7 +42,7 @@ std::string to_string(composite_int<T> val, Formatter&& fmt = Formatter{})
 	radix_accumulator<base, size_needed> result;
 	result.sign = sign;
 	for (size_t i = lz; i < dg; ++i) {
-		bool carry = math::top_bit(tmp.high());
+		bool carry = bit::top_bit(tmp.high());
 		tmp <<= 1;
 		result.add_bit(carry);
 	}

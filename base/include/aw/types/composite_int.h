@@ -11,8 +11,8 @@
 #include <aw/meta/conditional.h>
 #include <aw/types/traits/basic_traits.h>
 #include <aw/types/promote.h>
-#include <aw/math/numeric.h>
-#include <aw/math/bitmath.h>
+#include <aw/bit/manip.h>
+#include <aw/bit/count.h>
 namespace aw {
 /*!
  * Synthesizes bigger integer type from two smaller ints.
@@ -26,7 +26,7 @@ public:
 	using unsigned_type = U;
 	using signed_type = S;
 	using opposite_type = conditional<is_signed<T>, U, S>;
-	static constexpr auto digits = num_digits<T> + num_digits<U>;
+	static constexpr auto digits = bit::num_digits<T> + bit::num_digits<U>;
 
 	constexpr composite_int() = default;
 	constexpr composite_int(T hi, U lo)
@@ -133,15 +133,15 @@ public:
 		if (n >= digits) {
 			hi = 0;
 			lo = 0;
-		} else if (n == num_digits<T>) {
+		} else if (n == bit::num_digits<T>) {
 			hi = lo;
 			lo = 0;
-		} else if (n > num_digits<T>) {
-			hi = lo << (n - num_digits<T>);
+		} else if (n > bit::num_digits<T>) {
+			hi = lo << (n - bit::num_digits<T>);
 			lo = 0;
-		} else if (n < num_digits<T>) {
+		} else if (n < bit::num_digits<T>) {
 			hi <<= n;
-			hi |= lo >> (num_digits<T> - n);
+			hi |= lo >> (bit::num_digits<T> - n);
 			lo <<= n;
 		}
 		return *this;
@@ -154,15 +154,15 @@ public:
 		if (n >= digits) {
 			hi = 0;
 			lo = 0;
-		} else if (n == num_digits<T>) {
+		} else if (n == bit::num_digits<T>) {
 			lo = hi;
 			hi = 0;
-		} else if (n > num_digits<T>) {
-			lo = hi >> (n - num_digits<T>);
+		} else if (n > bit::num_digits<T>) {
+			lo = hi >> (n - bit::num_digits<T>);
 			hi = 0;
-		} else if (n < num_digits<T>) {
+		} else if (n < bit::num_digits<T>) {
 			lo >>= n;
-			lo |= hi << (num_digits<T> - n);
+			lo |= hi << (bit::num_digits<T> - n);
 			hi >>= n;
 		}
 		return *this;
@@ -207,15 +207,15 @@ public:
 	size_t leading_zeros() const
 	{
 		if (hi == 0)
-			return num_digits<T> + math::leading_zeros(lo);
-		return math::leading_zeros(hi);
+			return bit::num_digits<T> + bit::leading_zeros(lo);
+		return bit::leading_zeros(hi);
 	}
 
 	size_t trailing_zeros() const
 	{
 		if (lo == 0)
-			return num_digits<T> + math::trailing_zeros(hi);
-		return math::trailing_zeros(lo);
+			return bit::num_digits<T> + bit::trailing_zeros(hi);
+		return bit::trailing_zeros(lo);
 	}
 
 	constexpr T high() const

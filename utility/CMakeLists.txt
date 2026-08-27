@@ -13,5 +13,5 @@ target_link_libraries(awutils
 	PUBLIC
 		awbase
 		awstring # type_name trims with aw/string
-		awmath # TODO: maybe get rid of bitmath?
+		awmath # TODO: only unicode.h needs it
 )
