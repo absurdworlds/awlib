@@ -275,19 +275,26 @@ struct quaternion {
 		return math::sqrt(magnitude_sq());
 	}
 
-	//! Normalize quaternion
+	/*!
+	 * Normalize quaternion.
+	 *
+	 * A zero quaternion has no direction and is not normalized.
+	 */
 	quaternion<T>& normalize()
 	{
 		T const sqrMag = magnitude_sq();
 
-		if (!math::equals(sqrMag, T{1})) {
-			T const mag = math::sqrt(sqrMag);
+		// Exact comparison on purpose:  using math::equals here would
+		// cause small drift over repeated composition.
+		if (sqrMag == T{0} || sqrMag == T{1})
+			return *this;
 
-			x /= mag;
-			y /= mag;
-			z /= mag;
-			w /= mag;
-		}
+		T const mag = math::sqrt(sqrMag);
+
+		x /= mag;
+		y /= mag;
+		z /= mag;
+		w /= mag;
 
 		return *this;
 	}
