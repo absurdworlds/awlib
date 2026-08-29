@@ -12,10 +12,10 @@
 #include <aw/meta/void_t.h>
 namespace aw {
 template<class, typename = void>
-struct is_basic_container_t : std::false_type {};
+struct is_basic_container : std::false_type {};
 
 template<class T>
-struct is_basic_container_t<
+struct is_basic_container<
 	T,
 	void_t<
 		typename T::value_type,
@@ -32,10 +32,10 @@ struct is_basic_container_t<
 > : std::true_type {};
 
 template<class, typename = void>
-struct is_allocator_aware_t : std::false_type {};
+struct is_allocator_aware : std::false_type {};
 
 template<class T>
-struct is_allocator_aware_t<
+struct is_allocator_aware<
 	T,
 	void_t<
 		typename T::allocator_type,
@@ -44,12 +44,12 @@ struct is_allocator_aware_t<
 > : std::true_type {};
 
 template<class T>
-constexpr bool is_allocator_aware = is_basic_container_t<T>::value;
+constexpr bool is_allocator_aware_v = is_allocator_aware<T>::value;
 
 template<class T>
-constexpr bool is_basic_container = is_basic_container_t<T>::value;
+constexpr bool is_basic_container_v = is_basic_container<T>::value;
 
 template<class T> constexpr bool is_allocator_aware_container =
-	is_basic_container<T> && is_allocator_aware<T>;
+	is_basic_container_v<T> && is_allocator_aware_v<T>;
 } // namespace aw
 #endif//aw_traits_is_container_h
