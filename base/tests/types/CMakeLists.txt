@@ -6,6 +6,7 @@ aw_add_test(test_types
 		variant_cast.c++
 		enum.c++
 		traits_decay.c++
+		traits_pointer.c++
     traits_promote.c++ traits_is_iterable.c++
     traits_is_container.c++
     queue.c++ flat_map.c++
