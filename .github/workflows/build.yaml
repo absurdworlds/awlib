@@ -76,6 +76,12 @@ jobs:
         with:
           check_name: test report (${{ matrix.name }})
           report_paths: 'build/test-results/TEST-*.xml'
+          group_reports: true
+          detailed_summary: true
+          include_passed: false
+          group_suite: true
+          annotate_only: true
+          verbose_summary: true
 
   graphics:
     name: graphics (${{ matrix.loader }})
