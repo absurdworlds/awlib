@@ -93,7 +93,7 @@ protected:
 	 * move other's data into new storage.
 	 *
 	 */
-	queue_base(queue_base&& other, Allocator const& alloc) noexcept
+	queue_base(queue_base&& other, Allocator const& alloc)
 		: impl(alloc)
 	{
 		if (alloc == static_cast<Allocator&>(other.impl))
@@ -103,7 +103,7 @@ protected:
 	}
 
 	template<typename Iterator>
-	queue_base(Iterator first, Iterator last, Allocator const& alloc) noexcept
+	queue_base(Iterator first, Iterator last, Allocator const& alloc)
 		: impl(alloc)
 	{
 		if (is_forward_iterator<Iterator>)
@@ -247,7 +247,7 @@ public:
 	 * \note
 	 * If `!(alloc == q.get_allocator())`, then operation is O(n).
 	 */
-	queue(queue&& q, Allocator const& alloc) noexcept
+	queue(queue&& q, Allocator const& alloc)
 		: Base(std::move(q), alloc)
 	{
 		if (alloc != q.get_allocator()) {
