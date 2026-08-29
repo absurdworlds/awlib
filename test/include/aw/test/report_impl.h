@@ -14,6 +14,7 @@
 
 #include <string>
 #include <string_view>
+#include <vector>
 
 namespace aw::test {
 
@@ -104,6 +105,50 @@ private:
 	int failed    = 0;
 
 	const char* filename;
+};
+
+/*!
+ * Hands everything it is told to several reports at once, so that one run
+ * can be written out in more than one form.
+ */
+class report_tee : public report {
+public:
+	report_tee(std::initializer_list<report*> list)
+		: report(std::cout), reports(list)
+	{}
+
+	void begin_tests() override
+	{
+		for (auto* r : reports) r->begin_tests();
+	}
+
+	void end_tests(int total, int failed) override
+	{
+		for (auto* r : reports) r->end_tests(total, failed);
+	}
+
+	void begin_suite(const char* name, int test_count) override
+	{
+		for (auto* r : reports) r->begin_suite(name, test_count);
+	}
+
+	void end_suite() override
+	{
+		for (auto* r : reports) r->end_suite();
+	}
+
+	void test_success(const char* name, const std::vector<check_report>& checks) override
+	{
+		for (auto* r : reports) r->test_success(name, checks);
+	}
+
+	void test_failure(const char* name, const std::vector<check_report>& checks, const char* detail) override
+	{
+		for (auto* r : reports) r->test_failure(name, checks, detail);
+	}
+
+private:
+	std::vector<report*> reports;
 };
 
 //! Replace the characters which may not appear literally in XML

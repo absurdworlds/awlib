@@ -111,12 +111,21 @@ int main(int n_param, char** parameters)
 		}
 	}
 
-	std::ostream& out = file.is_open() ? file : std::cout;
+	std::ostream& file_out = file.is_open() ? static_cast<std::ostream&>(file) : std::cout;
 
-	report_classic classic{out};
-	report_junit   junit{out};
+	report_classic classic{ config.use_junit ? std::cout : file_out };
+	report_junit   junit{ file_out };
 
-	report* _report = config.use_junit ? (report*)&junit : (report*)&classic;
+	/*
+	 * When the report is written to a file, the console still gets the
+	 * human-readable one, so that `ctest --output-on-failure` keeps saying
+	 * which checks failed.
+	 */
+	report_tee tee{ &junit, &classic };
+
+	report* _report = !config.use_junit ? (report*)&classic
+	                : file.is_open()    ? (report*)&tee
+	                                    : (report*)&junit;
 
 	int fail_count = aw::test::registry::run(dir_name(parameters[0]), _report);
 
