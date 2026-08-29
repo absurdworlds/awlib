@@ -9,6 +9,6 @@ namespace aw {
 template<typename T>
 using decay = typename std::decay<T>::type;
 template<typename T>
-using decay_t = std::decay<T>;
+using decay_t = typename std::decay<T>::type;
 } // namespace aw
 #endif//aw_traits_decay_h
