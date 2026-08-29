@@ -23,6 +23,8 @@ namespace aw::test {
 struct test_config {
 	bool use_junit   = false;
 	bool no_exitcode = false;
+	//! Print only the tests which failed
+	bool quiet       = false;
 	//! Where to write the report; empty means standard output
 	std::string output_file;
 };
@@ -42,6 +44,7 @@ test_config parse_parameters(char** begin, char** end)
 	auto param_output_format = "--output-format="sv;
 	auto param_output_file   = "--output-file="sv;
 	auto param_no_exitcode   = "--no-exitcode"sv;
+	auto param_quiet         = "--quiet"sv;
 
 	for ( auto iter = begin; iter < end; ++iter )
 	{
@@ -62,6 +65,11 @@ test_config parse_parameters(char** begin, char** end)
 		if (param == param_no_exitcode)
 		{
 			config.no_exitcode = true;
+		}
+
+		if (param == param_quiet)
+		{
+			config.quiet = true;
 		}
 
 	}
@@ -113,14 +121,17 @@ int main(int n_param, char** parameters)
 
 	std::ostream& file_out = file.is_open() ? static_cast<std::ostream&>(file) : std::cout;
 
-	report_classic classic{ config.use_junit ? std::cout : file_out };
-	report_junit   junit{ file_out };
-
 	/*
 	 * When the report is written to a file, the console still gets the
 	 * human-readable one, so that `ctest --output-on-failure` keeps saying
-	 * which checks failed.
+	 * which checks failed. It names only the failures, because the file
+	 * already holds the full record.
 	 */
+	bool const failures_only = config.quiet || (config.use_junit && file.is_open());
+
+	report_classic classic{ config.use_junit ? std::cout : file_out, failures_only };
+	report_junit   junit{ file_out };
+
 	report_tee tee{ &junit, &classic };
 
 	report* _report = !config.use_junit ? (report*)&classic

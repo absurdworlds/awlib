@@ -20,10 +20,15 @@ namespace aw::test {
 
 class report_classic : public report {
 public:
-	using report::report;
+	report_classic(std::ostream& os, bool failures_only = false)
+		: report(os), failures_only(failures_only)
+	{}
 
 	void begin_tests() override
 	{
+		if (failures_only)
+			return;
+
 		println(out, bold, "[***] begin tests");
 	}
 
@@ -39,12 +44,17 @@ public:
 		count     = 0;
 		succeeded = 0;
 		failed    = 0;
+		header_shown = false;
 
-		println(out, bold, '[', filename, ']', ' ', reset, "running tests");
+		if (!failures_only)
+			print_header();
 	}
 
 	void end_suite() override
 	{
+		if (failures_only && !header_shown)
+			return;
+
 		print(out, bold, '[', filename, ']', ' ', reset);
 		print(out, "tests done, failed: ");
 		print(out, bold, (failed > 0 ? red : white), failed, reset);
@@ -58,6 +68,12 @@ public:
 	{
 		++succeeded;
 
+		if (failures_only)
+		{
+			++count;
+			return;
+		}
+
 		test_start(name);
 
 		println(out, bold, green, " succeeded, checks: ", checks.size(), reset);
@@ -66,6 +82,9 @@ public:
 	void test_failure(const char* name, const std::vector<check_report>& checks, const char* detail) override
 	{
 		++failed;
+
+		if (!header_shown)
+			print_header();
 
 		test_start(name);
 
@@ -92,6 +111,12 @@ public:
 	}
 
 private:
+	void print_header()
+	{
+		println(out, bold, '[', filename, ']', ' ', reset, "running tests");
+		header_shown = true;
+	}
+
 	void test_start(const char* name)
 	{
 		print(out, bold, '[', ++count, '/', total, ']', ' ', reset);
@@ -105,6 +130,9 @@ private:
 	int failed    = 0;
 
 	const char* filename;
+
+	bool failures_only = false;
+	bool header_shown  = false;
 };
 
 /*!
