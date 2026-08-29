@@ -93,9 +93,9 @@ constexpr matrix<T,N,M> transpose(matrix<T,M,N> const& mat, index_sequence<Js...
 }
 
 template<typename M, typename Func, size_t...Js>
-constexpr void for_each_column(M& mat, Func func, index_sequence<Js...>)
+constexpr void for_each_column(M const& mat, Func func, index_sequence<Js...>)
 {
-	(void(func(mat[Js])), ...);
+	(void(func(math::col<Js>(mat))), ...);
 }
 
 template<typename M, typename Func, size_t...Is>
@@ -192,8 +192,14 @@ struct matrix {
 		return *this;
 	}
 
+	/*!
+	 * Visit each column.
+	 *
+	 * \note Unlike for_each_row, each column is passed by value,
+	 *       columns aren't stored. Use set_column() to write them back.
+	 */
 	template<typename Func>
-	constexpr void for_each_column(Func func)
+	constexpr void for_each_column(Func func) const
 	{
 		_impl::mat::for_each_column(*this, func, column_indices);
 	}

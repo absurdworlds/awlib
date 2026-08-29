@@ -307,5 +307,61 @@ Test(matrix_multidim_subscript) {
 	}
 }
 #endif
+
+Test(matrix_for_each_column) {
+	matrix<int,2,3> m {{
+		{1, 2, 3},
+		{4, 5, 6},
+	}};
+
+	vector<int,2> seen[3] {};
+	size_t count = 0;
+
+	Checks {
+		m.for_each_column([&](auto col) {
+			if (count < 3)
+				seen[count] = col;
+			++count;
+		});
+
+		// three columns of two, not three rows of three
+		TestEqual(count, size_t(3));
+
+		TestEqual(seen[0], (vector<int,2>{1, 4}));
+		TestEqual(seen[1], (vector<int,2>{2, 5}));
+		TestEqual(seen[2], (vector<int,2>{3, 6}));
+	}
+}
+
+Test(matrix_for_each_row) {
+	matrix<int,2,3> m {{
+		{1, 2, 3},
+		{4, 5, 6},
+	}};
+
+	vector<int,3> seen[2] {};
+	size_t count = 0;
+
+	Checks {
+		m.for_each_row([&](auto& row) {
+			if (count < 2)
+				seen[count] = row;
+			++count;
+		});
+
+		TestEqual(count, size_t(2));
+
+		TestEqual(seen[0], (vector<int,3>{1, 2, 3}));
+		TestEqual(seen[1], (vector<int,3>{4, 5, 6}));
+	}
+
+	Postconditions {
+		// rows are stored, so they are handed over by reference
+		m.for_each_row([](auto& row) { row *= 2; });
+
+		TestEqual(m.row(0), (vector<int,3>{2, 4, 6}));
+		TestEqual(m.row(1), (vector<int,3>{8, 10, 12}));
+	}
+}
 } // namespace math
 } // namespace aw
