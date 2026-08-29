@@ -1,28 +1,13 @@
 #include <aw/types/result.h>
 #include <aw/test/test.h>
 #include <aw/test/helpers/lifetime_tracker.h>
+#include <aw/test/helpers/throwing.h>
 
 TestFile( "result" );
 
 namespace aw {
 using test::lifetime_tracker;
-
-namespace {
-struct throwing {
-	static inline int  live  = 0;
-	static inline bool armed = false;
-	struct error {};
-
-	throwing(int id = 0) : id{id}          { ++live; }
-	throwing(throwing const& other)        { if (armed) throw error{}; id = other.id; ++live; }
-	throwing(throwing&& other) noexcept    { id = other.id; ++live; }
-	throwing& operator=(throwing const&)     = default;
-	throwing& operator=(throwing&&) noexcept = default;
-	~throwing()                            { --live; }
-
-	int id;
-};
-} // namespace
+using test::throwing;
 
 static_assert(std::is_nothrow_move_assignable_v<result<lifetime_tracker, int>>);
 

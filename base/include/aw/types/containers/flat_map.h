@@ -124,7 +124,7 @@ public:
 		: base(other.base), _key_comp(other._key_comp)
 	{ }
 
-	flat_map(flat_map const& other, Allocator const& alloc) noexcept
+	flat_map(flat_map const& other, Allocator const& alloc)
 		: base(other.base, alloc), _key_comp(other._key_comp)
 	{ }
 
@@ -142,8 +142,8 @@ public:
 	 * \note
 	 * If `!(alloc == q.get_allocator())`, then operation is O(n).
 	 */
-	flat_map(flat_map&& other, Allocator const& alloc) noexcept
-		: base(std::move(other), alloc), _key_comp(other._key_comp)
+	flat_map(flat_map&& other, Allocator const& alloc)
+		: base(std::move(other.base), alloc), _key_comp(other._key_comp)
 	{ }
 
 

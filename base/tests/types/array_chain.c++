@@ -3,6 +3,8 @@
 #include <aw/test/test.h>
 #include <aw/test/helpers/lifetime_tracker.h>
 
+#include <utility>
+
 TestFile( "aw::array_chain" );
 
 namespace aw {
@@ -70,6 +72,81 @@ Test(array_chain_pop_back_on_block_boundary) {
 		while (c.size() > 0)
 			c.pop_back();
 
+		TestEqual(lifetime_tracker::live, 0);
+	}
+}
+
+/*!
+ * Destroying a chain destroys the elements it still holds.
+ */
+Test(array_chain_destroys_elements) {
+	lifetime_tracker::live = 0;
+
+	Checks {
+		{
+			array_chain<lifetime_tracker> c;
+
+			// enough elements to span more than one block
+			const auto block = array_chain<lifetime_tracker>::block_size;
+			for (size_t i = 0; i < block + 2; ++i)
+				c.push_back(lifetime_tracker{lifetime_tracker::payload('c')});
+
+			TestEqual(size_t(lifetime_tracker::live), block + 2);
+		}
+
+		TestEqual(lifetime_tracker::live, 0);
+	}
+}
+
+/*!
+ * A moved-from chain holds nothing, and its elements live in the
+ * chain they were moved into.
+ */
+Test(array_chain_move) {
+	lifetime_tracker::live = 0;
+
+	Checks {
+		array_chain<lifetime_tracker> a;
+		a.push_back(lifetime_tracker{lifetime_tracker::payload('a')});
+		a.push_back(lifetime_tracker{lifetime_tracker::payload('b')});
+
+		array_chain<lifetime_tracker> b{ std::move(a) };
+
+		TestEqual(a.size(), size_t(0));
+		TestEqual(b.size(), size_t(2));
+		TestEqual(b[0].value, lifetime_tracker::payload('a'));
+		TestEqual(lifetime_tracker::live, 2);
+	}
+
+	Postconditions {
+		TestEqual(lifetime_tracker::live, 0);
+	}
+}
+
+/*!
+ * Move assignment destroys what the target held.
+ */
+Test(array_chain_move_assign) {
+	lifetime_tracker::live = 0;
+
+	Checks {
+		array_chain<lifetime_tracker> a;
+		a.push_back(lifetime_tracker{lifetime_tracker::payload('a')});
+
+		array_chain<lifetime_tracker> b;
+		b.push_back(lifetime_tracker{lifetime_tracker::payload('x')});
+		b.push_back(lifetime_tracker{lifetime_tracker::payload('y')});
+
+		b = std::move(a);
+
+		TestEqual(a.size(), size_t(0));
+		TestEqual(b.size(), size_t(1));
+		TestEqual(b[0].value, lifetime_tracker::payload('a'));
+		// the two the target held are gone
+		TestEqual(lifetime_tracker::live, 1);
+	}
+
+	Postconditions {
 		TestEqual(lifetime_tracker::live, 0);
 	}
 }

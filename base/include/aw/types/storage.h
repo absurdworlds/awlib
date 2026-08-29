@@ -8,6 +8,8 @@
  */
 #ifndef aw_utility_storage_h
 #define aw_utility_storage_h
+#include <algorithm>
+#include <cstddef>
 #include <type_traits>
 #include <utility>
 #include <aw/meta/list_ops.h>
@@ -15,10 +17,10 @@ namespace aw {
 inline namespace utility {
 template <typename...Types>
 class storage {
-	using Storage = std::aligned_union<1, Types...>;
+	static constexpr size_t size_value = std::max({ size_t(1), sizeof(Types)... });
 
 public:
-	static constexpr auto alignment_value = Storage::alignment_value;
+	static constexpr size_t alignment_value = std::max({ size_t(1), alignof(Types)... });
 
 	void* get_storage()
 	{
@@ -59,7 +61,7 @@ public:
 	}
 
 private:
-	typename Storage::type storage_;
+	alignas(alignment_value) std::byte storage_[size_value];
 };
 } // namespace utility
 } // namespace aw

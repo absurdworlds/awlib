@@ -10,8 +10,10 @@
 #define aw_types_containers_array_chain_h
 // This is a placeholder, for now
 #include <cassert>
+#include <cstddef>
 #include <vector>
 #include <memory>
+#include <utility>
 
 namespace aw {
 
@@ -23,8 +25,6 @@ struct chain_storage_traits {
 
 template<typename T>
 struct unitialized_storage {
-	using storage = typename std::aligned_storage<sizeof(T), alignof(T)>::type;
-
 	template<typename...Args>
 	void construct(Args&&... args)
 	{
@@ -38,7 +38,7 @@ struct unitialized_storage {
 
 	void* get_pointer()
 	{
-		return reinterpret_cast<void*>(&_data);
+		return _data;
 	}
 
 	T& get_ref()
@@ -47,7 +47,7 @@ struct unitialized_storage {
 	}
 
 private:
-	storage _data;
+	alignas(T) std::byte _data[sizeof(T)];
 };
 
 template<typename T>
@@ -164,6 +164,26 @@ struct array_chain {
 	using iterator = array_chain_iterator<T>;
 	static constexpr size_t block_size = chain_storage_traits<T>::block_size;
 
+	array_chain() = default;
+
+	array_chain(array_chain&& other) noexcept
+		: _data{ std::move(other._data) }
+		, _size{ std::exchange(other._size, 0) }
+	{ }
+
+	array_chain& operator=(array_chain&& other) noexcept
+	{
+		destroy_elements();
+		_data = std::move(other._data);
+		_size = std::exchange(other._size, 0);
+		return *this;
+	}
+
+	~array_chain()
+	{
+		destroy_elements();
+	}
+
 	T& operator[](size_t index)
 	{
 		return _data.get( index ).get_ref();
@@ -210,6 +230,12 @@ struct array_chain {
 	}
 
 private:
+	void destroy_elements()
+	{
+		while (_size > 0)
+			_data.destruct(--_size);
+	}
+
 	chain_storage<T> _data;
 	size_t _size = 0;
 };

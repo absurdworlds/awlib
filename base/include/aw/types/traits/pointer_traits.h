@@ -18,8 +18,8 @@ template<typename T>
 constexpr bool is_smart_pointer<std::shared_ptr<T>> = true;
 template<typename T>
 constexpr bool is_smart_pointer<std::weak_ptr<T>> = true;
-template<typename T>
-constexpr bool is_smart_pointer<std::unique_ptr<T>> = true;
+template<typename T, typename Deleter>
+constexpr bool is_smart_pointer<std::unique_ptr<T, Deleter>> = true;
 
 template<typename T>
 constexpr bool is_pointer_type = is_pointer<T> || is_smart_pointer<T>;
