@@ -1,3 +1,4 @@
+#include <string>
 #include <deque>
 #include <memory_resource>
 #include <aw/types/containers/queue.h>
@@ -324,6 +325,57 @@ Test(queue_keeps_elements_when_growth_throws) {
 	Checks {
 		for (auto i : range(q.size()))
 			TestEqual( q[i].value, int(i) );
+	}
+}
+/*!
+ * An element of the queue can be pushed into the same queue.
+ * It must not get corrupted when reallocated.
+ */
+Test(queue_push_back_aliasing_element) {
+	queue<std::string> q;
+
+	Setup {
+		q.reserve(4);
+		while (q.size() < q.capacity())
+			q.push_back(std::string(64, char('a' + q.size())));
+	}
+
+	Preconditions {
+		// the next insertion is the one which has to grow the queue
+		TestEqual( q.size(), q.capacity() );
+	}
+
+	Checks {
+		auto const expected = q.front();
+		q.push_back(q.front());
+
+		TestEqual( q.back(), expected );
+		TestEqual( q.front(), expected );
+	}
+}
+
+/*!
+ * The same holds at the front of the queue.
+ */
+Test(queue_push_front_aliasing_element) {
+	queue<std::string> q;
+
+	Setup {
+		q.reserve(4);
+		while (q.size() < q.capacity())
+			q.push_back(std::string(64, char('a' + q.size())));
+	}
+
+	Preconditions {
+		TestEqual( q.size(), q.capacity() );
+	}
+
+	Checks {
+		auto const expected = q.back();
+		q.push_front(q.back());
+
+		TestEqual( q.front(), expected );
+		TestEqual( q.back(), expected );
 	}
 }
 } // namespace aw

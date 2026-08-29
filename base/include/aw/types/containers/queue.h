@@ -500,7 +500,11 @@ public:
 	template <typename... Args>
 	void emplace_front(Args&&... args)
 	{
-		check_capacity();
+		if (size() == capacity()) {
+			size_type const new_size = next_size();
+			impl.head = grow_and_construct(new_size, new_size - 1, std::forward<Args>(args)...);
+			return;
+		}
 
 		impl.head = impl.prev_p(impl.head);
 		construct(impl.head, std::forward<Args>(args)...);
@@ -512,7 +516,11 @@ public:
 	template <typename... Args>
 	void emplace_back(Args&&... args)
 	{
-		check_capacity();
+		if (size() == capacity()) {
+			pointer const pos = grow_and_construct(next_size(), size(), std::forward<Args>(args)...);
+			impl.tail = impl.next_p(pos);
+			return;
+		}
 
 		construct(impl.tail, std::forward<Args>(args)...);
 		impl.tail = impl.next_p(impl.tail);
@@ -587,9 +595,44 @@ private:
 		impl.end   = end;
 	}
 
-	void do_emplace_back()
+	/*
+	 * Grow the queue, and construct one new element in the new storage.
+	 *
+	 * The new element is built before the old ones are moved across, so
+	 * that \a args may refer to an element of this queue.
+	 *
+	 * \a offset is the slot the new element takes in the new storage.
+	 *
+	 * \return pointer to the new element.
+	 */
+	template <typename... Args>
+	pointer grow_and_construct(size_type new_size, size_type offset, Args&&... args)
 	{
+		pointer const new_begin{ allocate(new_size) };
+		pointer const pos = new_begin + offset;
 
+		aw_try {
+			construct(pos, std::forward<Args>(args)...);
+		} aw_catch(...) {
+			deallocate(new_begin, new_size);
+			aw_rethrow;
+		}
+
+		pointer new_tail = nullptr;
+		aw_try {
+			new_tail = _impl::try_uninit_move(begin(), end(), new_begin);
+		} aw_catch(...) {
+			allocator_traits::destroy(alloc(), pos);
+			deallocate(new_begin, new_size);
+			aw_rethrow;
+		}
+
+		set_storage(new_begin, new_begin + new_size);
+
+		impl.head = new_begin;
+		impl.tail = new_tail;
+
+		return pos;
 	}
 
 	void reallocate(size_type new_size)
@@ -624,12 +667,6 @@ private:
 	void range_init(Iterator first, Sentinel last, std::forward_iterator_tag)
 	{
 		impl.tail = std::uninitialized_copy(first, last, impl.head);
-	}
-
-	void check_capacity()
-	{
-		if (size() == capacity())
-			reallocate(next_size());
 	}
 };
 
