@@ -3,6 +3,8 @@
 #include <aw/string/to_string/pair.h>
 #include <aw/test/test.h>
 
+#include <memory_resource>
+
 // TODO: test exception-safety
 
 TestFile( "aw::flat_map" );
@@ -276,6 +278,45 @@ Test(flat_map_assignment) {
 		TestEqual(map.find("ada")->second, 2);
 		TestEqual(map.find("baa")->second, 3);
 		TestEqual(map.find("cac")->second, 4);
+	}
+}
+
+/*!
+ * A map moved with a different allocator keeps its contents, whether or
+ * not the new allocator can take over the old storage.
+ */
+Test(flat_map_move_with_allocator) {
+	using alloc_type = std::pmr::polymorphic_allocator<std::pair<int, int>>;
+	using map_type   = flat_map<int, int, std::less<int>, alloc_type>;
+
+	std::pmr::monotonic_buffer_resource memory, elsewhere;
+
+	alloc_type const source  { &memory };
+	alloc_type const equal   { &memory };     // compares equal to source
+	alloc_type const unequal { &elsewhere };  // compares unequal
+
+	Checks {
+		map_type src{ source };
+		src[1] = 10;
+		src[2] = 20;
+
+		map_type dst{ std::move(src), equal };
+
+		TestEqual( dst.size(), size_t(2) );
+		TestEqual( dst[1], 10 );
+		TestEqual( dst[2], 20 );
+	}
+
+	Checks {
+		map_type src{ source };
+		src[1] = 10;
+		src[2] = 20;
+
+		map_type dst{ std::move(src), unequal };
+
+		TestEqual( dst.size(), size_t(2) );
+		TestEqual( dst[1], 10 );
+		TestEqual( dst[2], 20 );
 	}
 }
 } // namespace aw

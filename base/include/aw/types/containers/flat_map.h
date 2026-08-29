@@ -143,7 +143,7 @@ public:
 	 * If `!(alloc == q.get_allocator())`, then operation is O(n).
 	 */
 	flat_map(flat_map&& other, Allocator const& alloc) noexcept
-		: base(std::move(other), alloc), _key_comp(other._key_comp)
+		: base(std::move(other.base), alloc), _key_comp(other._key_comp)
 	{ }
 
 
