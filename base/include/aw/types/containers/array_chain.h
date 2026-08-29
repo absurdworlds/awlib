@@ -10,6 +10,7 @@
 #define aw_types_containers_array_chain_h
 // This is a placeholder, for now
 #include <cassert>
+#include <cstddef>
 #include <vector>
 #include <memory>
 #include <utility>
@@ -24,8 +25,6 @@ struct chain_storage_traits {
 
 template<typename T>
 struct unitialized_storage {
-	using storage = typename std::aligned_storage<sizeof(T), alignof(T)>::type;
-
 	template<typename...Args>
 	void construct(Args&&... args)
 	{
@@ -39,7 +38,7 @@ struct unitialized_storage {
 
 	void* get_pointer()
 	{
-		return reinterpret_cast<void*>(&_data);
+		return _data;
 	}
 
 	T& get_ref()
@@ -48,7 +47,7 @@ struct unitialized_storage {
 	}
 
 private:
-	storage _data;
+	alignas(T) std::byte _data[sizeof(T)];
 };
 
 template<typename T>
