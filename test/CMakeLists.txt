@@ -20,4 +20,9 @@ target_link_libraries(awtest
 		awutils
 		awplatform)
 
+# so that the reports can name source files relative to the source tree
+target_compile_definitions(awtest
+	INTERFACE
+		AW_TEST_SOURCE_ROOT="${CMAKE_SOURCE_DIR}/")
+
 add_subdirectory(test_runner)

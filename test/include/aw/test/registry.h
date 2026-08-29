@@ -74,15 +74,15 @@ struct context {
 		return failed;
 	}
 
-	bool check_fail(std::string const& msg)
+	bool check_fail(std::string const& msg, source_location loc = source_location::current())
 	{
-		cur->checks.push_back(check_report{false, msg});
+		cur->checks.push_back(check_report{false, msg, loc});
 		return false;
 	}
 
-	bool check_succeed(std::string const& msg)
+	bool check_succeed(std::string const& msg, source_location loc = source_location::current())
 	{
-		cur->checks.push_back(check_report{true, msg});
+		cur->checks.push_back(check_report{true, msg, loc});
 		return true;
 	}
 
@@ -170,12 +170,12 @@ void context::run_test_case(test_case& test, std::string_view exe_dir, report* _
 	}
 	catch (std::exception& e)
 	{
-		cur->checks.push_back(check_report{ false, "unhandled exception: "s + e.what() });
+		cur->checks.push_back(check_report{ false, "unhandled exception: "s + e.what(), cur->location });
 		report_test_failure(_report);
 	}
 	catch (...)
 	{
-		cur->checks.push_back(check_report{ false, "caught unknown exception" });
+		cur->checks.push_back(check_report{ false, "caught unknown exception", cur->location });
 		report_test_failure(_report);
 	}
 }

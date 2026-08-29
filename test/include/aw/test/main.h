@@ -13,13 +13,20 @@
 #include <aw/test/registry.h>
 #include <aw/utility/argv_parser.h>
 
+#include <cstdlib>
 #include <filesystem>
+#include <fstream>
+#include <string>
 
 namespace aw::test {
 
 struct test_config {
 	bool use_junit   = false;
 	bool no_exitcode = false;
+	//! Print only the tests which failed
+	bool quiet       = false;
+	//! Where to write the report; empty means standard output
+	std::string output_file;
 };
 
 test_config parse_parameters(char** begin, char** end)
@@ -28,8 +35,16 @@ test_config parse_parameters(char** begin, char** end)
 
 	test_config config;
 
+	if (auto* format = std::getenv("AW_TEST_OUTPUT_FORMAT"))
+		config.use_junit = (std::string_view(format) == "junit"sv);
+	if (auto* file = std::getenv("AW_TEST_OUTPUT_FILE"))
+		config.output_file = file;
+
+	// command line overrides the env
 	auto param_output_format = "--output-format="sv;
+	auto param_output_file   = "--output-file="sv;
 	auto param_no_exitcode   = "--no-exitcode"sv;
+	auto param_quiet         = "--quiet"sv;
 
 	for ( auto iter = begin; iter < end; ++iter )
 	{
@@ -41,9 +56,20 @@ test_config parse_parameters(char** begin, char** end)
 				config.use_junit = true;
 		}
 
+		if (param.find(param_output_file) == 0)
+		{
+			param.remove_prefix(param_output_file.size());
+			config.output_file = param;
+		}
+
 		if (param == param_no_exitcode)
 		{
 			config.no_exitcode = true;
+		}
+
+		if (param == param_quiet)
+		{
+			config.quiet = true;
 		}
 
 	}
@@ -82,10 +108,35 @@ int main(int n_param, char** parameters)
 
 	auto config = parse_parameters(parameters, parameters + n_param);
 
-	report_classic classic;
-	report_junit   junit;
+	std::ofstream file;
+	if (!config.output_file.empty())
+	{
+		file.open(config.output_file);
+		if (!file)
+		{
+			std::cerr << "cannot open " << config.output_file << " for writing\n";
+			return 1;
+		}
+	}
 
-	report* _report = config.use_junit ? (report*)&junit : (report*)&classic;
+	std::ostream& file_out = file.is_open() ? static_cast<std::ostream&>(file) : std::cout;
+
+	/*
+	 * When the report is written to a file, the console still gets the
+	 * human-readable one, so that `ctest --output-on-failure` keeps saying
+	 * which checks failed. It names only the failures, because the file
+	 * already holds the full record.
+	 */
+	bool const failures_only = config.quiet || (config.use_junit && file.is_open());
+
+	report_classic classic{ config.use_junit ? std::cout : file_out, failures_only };
+	report_junit   junit{ file_out };
+
+	report_tee tee{ &junit, &classic };
+
+	report* _report = !config.use_junit ? (report*)&classic
+	                : file.is_open()    ? (report*)&tee
+	                                    : (report*)&junit;
 
 	int fail_count = aw::test::registry::run(dir_name(parameters[0]), _report);
 

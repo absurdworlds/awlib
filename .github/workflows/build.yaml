@@ -20,6 +20,7 @@ jobs:
         -DAW_ENABLE_ASSERT:BOOL=OFF
         -DAW_NO_BUILTINS:BOOL=OFF
         -DAW_MAKE_DEMOS:BOOL=ON
+        -DAW_OUTPUT_JUNIT:BOOL=ON
     strategy:
       fail-fast: false
       matrix:
@@ -34,6 +35,8 @@ jobs:
           - name: ubuntu (gcc)
             os: ubuntu-24.04
             packages: liblua5.4-dev
+            # TODO: find a way to dedupe annotations
+            annotate: true
             cmake: >-
               -DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++
               -DAW_ENABLE_LUA:BOOL=ON
@@ -57,7 +60,7 @@ jobs:
             os: macos-26
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
       - name: Install dependencies
         if: matrix.packages
         run: sudo apt-get update && sudo apt-get install -y ${{ matrix.packages }}
@@ -68,6 +71,19 @@ jobs:
       - name: Test
         # -C is only meaningful for the multi-config generator on Windows
         run: ctest --test-dir build -C Debug --output-on-failure
+      - name: JUnit Report Action
+        uses: mikepenz/action-junit-report@v6.5.0
+        # Report the failures too, not only the runs that got through
+        if: success() || failure()
+        with:
+          check_name: test report (${{ matrix.name }})
+          report_paths: 'build/test-results/*.xml'
+          group_reports: true
+          detailed_summary: true
+          include_passed: false
+          group_suite: true
+          annotate_only: true
+          skip_annotations: ${{ !matrix.annotate }}
 
   graphics:
     name: graphics (${{ matrix.loader }})
@@ -80,7 +96,7 @@ jobs:
           - { loader: egl, use_egl: "ON" }
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
       - name: Install dependencies
         run: >
           sudo apt-get update && sudo apt-get install -y
@@ -99,6 +115,7 @@ jobs:
           -DAW_ENABLE_ASSERT:BOOL=OFF
           -DAW_NO_BUILTINS:BOOL=OFF
           -DAW_MAKE_DEMOS:BOOL=ON
+          -DAW_OUTPUT_JUNIT:BOOL=ON
           -DAW_GL_USE_EGL:BOOL=${{ matrix.use_egl }}
       - name: Build
         run: >

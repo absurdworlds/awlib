@@ -18,7 +18,7 @@ void context::segvhandler(int signum)
 {
 #if (AW_PLATFORM == AW_PLATFORM_POSIX)
 	//file_context.test_failure();
-	print(bold, red, "caught SIGSEGV, aborting tests", reset, '\n');
+	print(std::cout, bold, red, "caught SIGSEGV, aborting tests", reset, '\n');
 	signal(signum, SIG_DFL);
 	kill(getpid(), signum);
 #endif

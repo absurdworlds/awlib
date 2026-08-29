@@ -12,17 +12,29 @@
 #include <aw/test/report.h>
 #include <aw/test/print.h>
 
+#include <string>
+#include <string_view>
+#include <vector>
+
 namespace aw::test {
 
 class report_classic : public report {
 public:
+	report_classic(std::ostream& os, bool failures_only = false)
+		: report(os), failures_only(failures_only)
+	{}
+
 	void begin_tests() override
 	{
-		println(bold, "[***] begin tests");
+		if (failures_only)
+			return;
+
+		println(out, bold, "[***] begin tests");
 	}
+
 	void end_tests(int total, int failed) override
 	{
-		println(bold, "[***] end tests: ", total - failed, '/', total, " succeeded");
+		println(out, bold, "[***] end tests: ", total - failed, '/', total, " succeeded");
 	}
 
 	void begin_suite(const char* name, int test_count) override
@@ -32,18 +44,23 @@ public:
 		count     = 0;
 		succeeded = 0;
 		failed    = 0;
+		header_shown = false;
 
-		println(bold, '[', filename, ']', ' ', reset, "running tests");
+		if (!failures_only)
+			print_header();
 	}
 
 	void end_suite() override
 	{
-		print(bold, '[', filename, ']', ' ', reset);
-		print("tests done, failed: ");
-		print(bold, (failed > 0 ? red : white), failed, reset);
-		print(", succeeded: ");
-		print(bold, (succeeded > 0 ? green : white), succeeded, reset);
-		print(reset, '\n');
+		if (failures_only && !header_shown)
+			return;
+
+		print(out, bold, '[', filename, ']', ' ', reset);
+		print(out, "tests done, failed: ");
+		print(out, bold, (failed > 0 ? red : white), failed, reset);
+		print(out, ", succeeded: ");
+		print(out, bold, (succeeded > 0 ? green : white), succeeded, reset);
+		print(out, reset, '\n');
 
 	}
 
@@ -51,14 +68,23 @@ public:
 	{
 		++succeeded;
 
+		if (failures_only)
+		{
+			++count;
+			return;
+		}
+
 		test_start(name);
 
-		println(bold, green, " succeeded, checks: ", checks.size(), reset);
+		println(out, bold, green, " succeeded, checks: ", checks.size(), reset);
 	}
 
 	void test_failure(const char* name, const std::vector<check_report>& checks, const char* detail) override
 	{
 		++failed;
+
+		if (!header_shown)
+			print_header();
 
 		test_start(name);
 
@@ -73,22 +99,28 @@ public:
 				++checks_succeeded;
 		}
 
-		print(bold, red, " failed: (", detail, ") ", reset);
-		print(red, "failed: ", bold, checks_failed, reset);
-		print(green, ", succeeded: ", bold, checks_succeeded, reset, '\n');
+		print(out, bold, red, " failed: (", detail, ") ", reset);
+		print(out, red, "failed: ", bold, checks_failed, reset);
+		print(out, green, ", succeeded: ", bold, checks_succeeded, reset, '\n');
 
 		for (auto& check : checks)
 		{
 			if (!check)
-				print(bold, red, "check failed: ", reset, check.message, '\n');
+				print(out, bold, red, "check failed: ", reset, check.message, '\n');
 		}
 	}
 
 private:
+	void print_header()
+	{
+		println(out, bold, '[', filename, ']', ' ', reset, "running tests");
+		header_shown = true;
+	}
+
 	void test_start(const char* name)
 	{
-		print(bold, '[', ++count, '/', total, ']', ' ', reset);
-		print("test \"", bold, name, reset, '"');
+		print(out, bold, '[', ++count, '/', total, ']', ' ', reset);
+		print(out, "test \"", bold, name, reset, '"');
 	}
 
 private:
@@ -98,12 +130,102 @@ private:
 	int failed    = 0;
 
 	const char* filename;
+
+	bool failures_only = false;
+	bool header_shown  = false;
 };
+
+/*!
+ * Hands everything it is told to several reports at once, so that one run
+ * can be written out in more than one form.
+ */
+class report_tee : public report {
+public:
+	report_tee(std::initializer_list<report*> list)
+		: report(std::cout), reports(list)
+	{}
+
+	void begin_tests() override
+	{
+		for (auto* r : reports) r->begin_tests();
+	}
+
+	void end_tests(int total, int failed) override
+	{
+		for (auto* r : reports) r->end_tests(total, failed);
+	}
+
+	void begin_suite(const char* name, int test_count) override
+	{
+		for (auto* r : reports) r->begin_suite(name, test_count);
+	}
+
+	void end_suite() override
+	{
+		for (auto* r : reports) r->end_suite();
+	}
+
+	void test_success(const char* name, const std::vector<check_report>& checks) override
+	{
+		for (auto* r : reports) r->test_success(name, checks);
+	}
+
+	void test_failure(const char* name, const std::vector<check_report>& checks, const char* detail) override
+	{
+		for (auto* r : reports) r->test_failure(name, checks, detail);
+	}
+
+private:
+	std::vector<report*> reports;
+};
+
+/*!
+ * Make \a path relative to the root of the source tree.
+ */
+inline std::string_view relative_path(char const* path)
+{
+	std::string_view result = path ? path : "";
+#ifdef AW_TEST_SOURCE_ROOT
+	std::string_view const root = AW_TEST_SOURCE_ROOT;
+	if (result.starts_with(root))
+		result.remove_prefix(root.size());
+#endif
+	return result;
+}
+
+//! Replace the characters which may not appear literally in XML
+inline std::string xml_escape(std::string_view in)
+{
+	std::string out;
+	for (char c : in)
+	{
+		switch (c)
+		{
+		case '&': out += "&amp;";  break;
+		case '<': out += "&lt;";   break;
+		case '>': out += "&gt;";   break;
+		case '"': out += "&quot;"; break;
+		default:  out += c;
+		}
+	}
+	return out;
+}
 
 class report_junit : public report {
 public:
-	void begin_tests() override {}
-	void end_tests(int total, int failed) override {}
+	using report::report;
+
+	// the whole run is one document, so the root element wraps every suite
+	void begin_tests() override
+	{
+		println(out, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+		println(out, "<testsuites>");
+	}
+
+	void end_tests(int total, int failed) override
+	{
+		println(out, "</testsuites>");
+	}
 
 	void begin_suite(const char* name, int test_count) override
 	{
@@ -117,27 +239,33 @@ public:
 	void end_suite() override
 	{
 		int skipped = total - succeeded - failed;
-		print("<testsuite name=\"", name, "\" tests=\"", total, "\" errors=\"0\" ");
-		println("failures=\"", failed, "\" skipped=\"", skipped, "\">");
+		print(out, "<testsuite name=\"", xml_escape(name), "\" tests=\"", total, "\" errors=\"0\" ");
+		println(out, "failures=\"", failed, "\" skipped=\"", skipped, "\">");
 		for (const auto& test_case : test_cases)
 		{
 			if (test_case.success)
 			{
-				println("<testcase name=\"", test_case.name, "\" time=\"0\"/>");
+				println(out, "<testcase name=\"", xml_escape(test_case.name), "\" time=\"0\"/>");
 			}
 			else
 			{
-				println("<testcase name=\"", test_case.name, "\" time=\"0\">");
+				println(out, "<testcase name=\"", xml_escape(test_case.name), "\" time=\"0\">");
 				for (auto& check : test_case.checks)
 				{
 					if (check)
 						continue;
-					println("<failure type=\"check_failed\">" + check.message + "\"</failure>");
+					print(out, "<failure type=\"check_failed\"");
+					if (check.location.line() != 0)
+					{
+						print(out, " file=\"", xml_escape(relative_path(check.location.file_name())), "\"");
+						print(out, " line=\"", check.location.line(), "\"");
+					}
+					println(out, ">", xml_escape(check.message), "</failure>");
 				}
-				println("</testcase>");
+				println(out, "</testcase>");
 			}
 		}
-		println("</testsuite>");
+		println(out, "</testsuite>");
 
 	}
 

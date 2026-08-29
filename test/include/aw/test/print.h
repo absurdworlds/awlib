@@ -41,15 +41,15 @@ char const reset[] = "";
 #endif
 
 template<typename...Args>
-void print(Args&&...args)
+void print(std::ostream& os, Args&&...args)
 {
-	( std::cout << ... << std::forward<Args>(args) );
+	( os << ... << std::forward<Args>(args) );
 }
 
 template<typename...Args>
-void println(Args&&...args)
+void println(std::ostream& os, Args&&...args)
 {
-	( std::cout << ... << std::forward<Args>(args) ) << '\n';
+	( os << ... << std::forward<Args>(args) ) << '\n';
 }
 } // namespace aw::test
 

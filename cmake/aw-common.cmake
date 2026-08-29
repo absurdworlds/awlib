@@ -131,6 +131,16 @@ function(aw_add_test NAME)
 		COMMAND ${NAME} ${ARG_PARAMS}
 		WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
 
+	if (AW_OUTPUT_JUNIT)
+		# one report per test binary, named so that CI can glob them.
+		# through the environment rather than the command line: a test which
+		# brings its own main() takes every argument for a file name
+		file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/test-results")
+		set_property(TEST ${NAME} PROPERTY ENVIRONMENT
+			"AW_TEST_OUTPUT_FORMAT=junit"
+			"AW_TEST_OUTPUT_FILE=${CMAKE_BINARY_DIR}/test-results/${NAME}.xml")
+	endif()
+
 	if (ARG_NEGATIVE)
 		set_property(TEST ${NAME} PROPERTY WILL_FAIL true)
 	endif()
