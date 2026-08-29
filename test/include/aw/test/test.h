@@ -48,9 +48,10 @@ public:
 	register_test(
 		const char* test_name,
 		test_case::test_function* test_func,
-		[[maybe_unused]] const char* description = nullptr)
+		[[maybe_unused]] const char* description = nullptr,
+		source_location loc = source_location::current())
 	{
-		add_test(aw::test::test_case{test_name, test_func});
+		add_test(aw::test::test_case{test_name, test_func, loc});
 	}
 
 protected:
@@ -69,8 +70,8 @@ template<typename Evaluator, typename... Args>
 bool check(Evaluator eval, Args&&... args)
 {
 	return eval(std::forward<Args>(args)...) ?
-		file_context.check_succeed(eval.msg()) :
-		file_context.check_fail(eval.msg());
+		file_context.check_succeed(eval.msg(), eval.location) :
+		file_context.check_fail(eval.msg(), eval.location);
 }
 
 struct equal {
@@ -92,6 +93,7 @@ struct equal {
 	char const* vargs;
 	std::string expected;
 	std::string got;
+	source_location location = source_location::current();
 };
 
 struct less {
@@ -113,6 +115,7 @@ struct less {
 	char const* vargs;
 	std::string expected;
 	std::string got;
+	source_location location = source_location::current();
 };
 
 struct not_equal {
@@ -134,6 +137,7 @@ struct not_equal {
 	char const* vargs;
 	std::string expected;
 	std::string got;
+	source_location location = source_location::current();
 };
 
 struct equal_v {
@@ -156,6 +160,7 @@ struct equal_v {
 
 	char const* vargs;
 	std::string values;
+	source_location location = source_location::current();
 };
 
 struct _assert {
@@ -166,6 +171,7 @@ struct _assert {
 
 	std::string msg() { return {_msg}; }
 	char const* _msg;
+	source_location location = source_location::current();
 };
 
 template<typename Ex>
@@ -193,6 +199,7 @@ struct _catch {
 
 	std::string msg() { return _msg; }
 	std::string _msg;
+	source_location location = source_location::current();
 };
 } // namespace
 } // namespace aw::

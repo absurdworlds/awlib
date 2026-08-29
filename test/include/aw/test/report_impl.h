@@ -179,6 +179,20 @@ private:
 	std::vector<report*> reports;
 };
 
+/*!
+ * Make \a path relative to the root of the source tree.
+ */
+inline std::string_view relative_path(char const* path)
+{
+	std::string_view result = path ? path : "";
+#ifdef AW_TEST_SOURCE_ROOT
+	std::string_view const root = AW_TEST_SOURCE_ROOT;
+	if (result.starts_with(root))
+		result.remove_prefix(root.size());
+#endif
+	return result;
+}
+
 //! Replace the characters which may not appear literally in XML
 inline std::string xml_escape(std::string_view in)
 {
@@ -240,7 +254,13 @@ public:
 				{
 					if (check)
 						continue;
-					println(out, "<failure type=\"check_failed\">", xml_escape(check.message), "</failure>");
+					print(out, "<failure type=\"check_failed\"");
+					if (check.location.line() != 0)
+					{
+						print(out, " file=\"", xml_escape(relative_path(check.location.file_name())), "\"");
+						print(out, " line=\"", check.location.line(), "\"");
+					}
+					println(out, ">", xml_escape(check.message), "</failure>");
 				}
 				println(out, "</testcase>");
 			}

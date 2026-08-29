@@ -11,6 +11,8 @@
 #include <vector>
 #include <string>
 
+#include <aw/meta/source_location.h>
+
 #include "test_context.h"
 
 namespace aw::test {
@@ -36,15 +38,19 @@ struct check_report {
 	explicit operator bool() const { return status; }
 	bool status;
 	std::string message;
+	//! Where the check is written
+	source_location location;
 };
 
 struct test_case {
 	using test_function = void(test_context exe_dir);
-	test_case(char const* name, test_function* func)
-		: name{name}, func{func}
+	test_case(char const* name, test_function* func, source_location loc = {})
+		: name{name}, location{loc}, func{func}
 	{ }
 
 	char const* const name;
+	//! Where the test is written
+	source_location const location;
 
 private:
 	friend struct context;
