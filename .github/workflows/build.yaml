@@ -35,6 +35,8 @@ jobs:
           - name: ubuntu (gcc)
             os: ubuntu-24.04
             packages: liblua5.4-dev
+            # TODO: find a way to dedupe annotations
+            annotate: true
             cmake: >-
               -DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++
               -DAW_ENABLE_LUA:BOOL=ON
@@ -81,7 +83,7 @@ jobs:
           include_passed: false
           group_suite: true
           annotate_only: true
-          verbose_summary: true
+          skip_annotations: ${{ !matrix.annotate }}
 
   graphics:
     name: graphics (${{ matrix.loader }})
