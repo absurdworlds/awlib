@@ -60,7 +60,7 @@ jobs:
             os: macos-26
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
       - name: Install dependencies
         if: matrix.packages
         run: sudo apt-get update && sudo apt-get install -y ${{ matrix.packages }}
@@ -96,7 +96,7 @@ jobs:
           - { loader: egl, use_egl: "ON" }
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
       - name: Install dependencies
         run: >
           sudo apt-get update && sudo apt-get install -y
