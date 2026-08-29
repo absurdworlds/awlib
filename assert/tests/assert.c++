@@ -3,6 +3,7 @@
 #include <aw/test/test.h>
 
 #include <iostream>
+#include <string>
 
 TestFile( "assert" );
 
@@ -56,5 +57,36 @@ Test(assert_basic_test)
 
 	install_assert_handler(old_handler);
 }
+
+namespace {
+std::string recorded_message;
+int         recorded_calls = 0;
+
+assert_action recording_handler(string_view assertion, source_location)
+{
+	recorded_message.assign(assertion.begin(), assertion.end());
+	++recorded_calls;
+	return assert_action::ignore;
+}
+} // namespace
+
+#if AW_FORMAT != AW_NO_FORMAT
+Test(assert_formats_temporaries)
+{
+	const auto old_handler = install_assert_handler(recording_handler);
+
+	int value = 7;
+	aw_assert(false, "lvalue {}", value);
+	TestEqual(string_view(recorded_message), string_view("lvalue 7"));
+
+	aw_assert(false, "literal {}", 42);
+	TestEqual(string_view(recorded_message), string_view("literal 42"));
+
+	aw_assert(false, "temporary {}", std::string("s"));
+	TestEqual(string_view(recorded_message), string_view("temporary s"));
+
+	install_assert_handler(old_handler);
+}
+#endif
 } // namespace aw
 
