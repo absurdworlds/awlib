@@ -14,12 +14,16 @@
 #include <aw/utility/argv_parser.h>
 
 #include <filesystem>
+#include <fstream>
+#include <string>
 
 namespace aw::test {
 
 struct test_config {
 	bool use_junit   = false;
 	bool no_exitcode = false;
+	//! Where to write the report; empty means standard output
+	std::string output_file;
 };
 
 test_config parse_parameters(char** begin, char** end)
@@ -29,6 +33,7 @@ test_config parse_parameters(char** begin, char** end)
 	test_config config;
 
 	auto param_output_format = "--output-format="sv;
+	auto param_output_file   = "--output-file="sv;
 	auto param_no_exitcode   = "--no-exitcode"sv;
 
 	for ( auto iter = begin; iter < end; ++iter )
@@ -39,6 +44,12 @@ test_config parse_parameters(char** begin, char** end)
 			param.remove_prefix(param_output_format.size());
 			if (param == "junit"sv)
 				config.use_junit = true;
+		}
+
+		if (param.find(param_output_file) == 0)
+		{
+			param.remove_prefix(param_output_file.size());
+			config.output_file = param;
 		}
 
 		if (param == param_no_exitcode)
@@ -82,8 +93,21 @@ int main(int n_param, char** parameters)
 
 	auto config = parse_parameters(parameters, parameters + n_param);
 
-	report_classic classic;
-	report_junit   junit;
+	std::ofstream file;
+	if (!config.output_file.empty())
+	{
+		file.open(config.output_file);
+		if (!file)
+		{
+			std::cerr << "cannot open " << config.output_file << " for writing\n";
+			return 1;
+		}
+	}
+
+	std::ostream& out = file.is_open() ? file : std::cout;
+
+	report_classic classic{out};
+	report_junit   junit{out};
 
 	report* _report = config.use_junit ? (report*)&junit : (report*)&classic;
 

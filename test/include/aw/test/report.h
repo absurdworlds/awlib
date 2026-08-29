@@ -11,10 +11,18 @@
 
 #include <aw/test/test_case.h>
 
+#include <ostream>
+
 namespace aw::test {
 
 class report {
 public:
+	explicit report(std::ostream& os)
+		: out(os)
+	{}
+
+	virtual ~report() = default;
+
 	virtual void begin_tests() = 0;
 	virtual void end_tests(int total, int failed) = 0;
 
@@ -23,6 +31,9 @@ public:
 
 	virtual void test_success(const char* name, const std::vector<check_report>& checks) = 0;
 	virtual void test_failure(const char* name, const std::vector<check_report>& checks, const char* detail) = 0;
+
+protected:
+	std::ostream& out;
 };
 
 } // namespace aw::test

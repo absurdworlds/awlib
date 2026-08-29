@@ -19,13 +19,16 @@ namespace aw::test {
 
 class report_classic : public report {
 public:
+	using report::report;
+
 	void begin_tests() override
 	{
-		println(bold, "[***] begin tests");
+		println(out, bold, "[***] begin tests");
 	}
+
 	void end_tests(int total, int failed) override
 	{
-		println(bold, "[***] end tests: ", total - failed, '/', total, " succeeded");
+		println(out, bold, "[***] end tests: ", total - failed, '/', total, " succeeded");
 	}
 
 	void begin_suite(const char* name, int test_count) override
@@ -36,17 +39,17 @@ public:
 		succeeded = 0;
 		failed    = 0;
 
-		println(bold, '[', filename, ']', ' ', reset, "running tests");
+		println(out, bold, '[', filename, ']', ' ', reset, "running tests");
 	}
 
 	void end_suite() override
 	{
-		print(bold, '[', filename, ']', ' ', reset);
-		print("tests done, failed: ");
-		print(bold, (failed > 0 ? red : white), failed, reset);
-		print(", succeeded: ");
-		print(bold, (succeeded > 0 ? green : white), succeeded, reset);
-		print(reset, '\n');
+		print(out, bold, '[', filename, ']', ' ', reset);
+		print(out, "tests done, failed: ");
+		print(out, bold, (failed > 0 ? red : white), failed, reset);
+		print(out, ", succeeded: ");
+		print(out, bold, (succeeded > 0 ? green : white), succeeded, reset);
+		print(out, reset, '\n');
 
 	}
 
@@ -56,7 +59,7 @@ public:
 
 		test_start(name);
 
-		println(bold, green, " succeeded, checks: ", checks.size(), reset);
+		println(out, bold, green, " succeeded, checks: ", checks.size(), reset);
 	}
 
 	void test_failure(const char* name, const std::vector<check_report>& checks, const char* detail) override
@@ -76,22 +79,22 @@ public:
 				++checks_succeeded;
 		}
 
-		print(bold, red, " failed: (", detail, ") ", reset);
-		print(red, "failed: ", bold, checks_failed, reset);
-		print(green, ", succeeded: ", bold, checks_succeeded, reset, '\n');
+		print(out, bold, red, " failed: (", detail, ") ", reset);
+		print(out, red, "failed: ", bold, checks_failed, reset);
+		print(out, green, ", succeeded: ", bold, checks_succeeded, reset, '\n');
 
 		for (auto& check : checks)
 		{
 			if (!check)
-				print(bold, red, "check failed: ", reset, check.message, '\n');
+				print(out, bold, red, "check failed: ", reset, check.message, '\n');
 		}
 	}
 
 private:
 	void test_start(const char* name)
 	{
-		print(bold, '[', ++count, '/', total, ']', ' ', reset);
-		print("test \"", bold, name, reset, '"');
+		print(out, bold, '[', ++count, '/', total, ']', ' ', reset);
+		print(out, "test \"", bold, name, reset, '"');
 	}
 
 private:
@@ -105,15 +108,18 @@ private:
 
 class report_junit : public report {
 public:
+	using report::report;
+
+	// the whole run is one document, so the root element wraps every suite
 	void begin_tests() override
 	{
-		println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
-		println("<testsuites>");
+		println(out, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+		println(out, "<testsuites>");
 	}
 
 	void end_tests(int total, int failed) override
 	{
-		println("</testsuites>");
+		println(out, "</testsuites>");
 	}
 
 	void begin_suite(const char* name, int test_count) override
@@ -128,27 +134,27 @@ public:
 	void end_suite() override
 	{
 		int skipped = total - succeeded - failed;
-		print("<testsuite name=\"", name, "\" tests=\"", total, "\" errors=\"0\" ");
-		println("failures=\"", failed, "\" skipped=\"", skipped, "\">");
+		print(out, "<testsuite name=\"", name, "\" tests=\"", total, "\" errors=\"0\" ");
+		println(out, "failures=\"", failed, "\" skipped=\"", skipped, "\">");
 		for (const auto& test_case : test_cases)
 		{
 			if (test_case.success)
 			{
-				println("<testcase name=\"", test_case.name, "\" time=\"0\"/>");
+				println(out, "<testcase name=\"", test_case.name, "\" time=\"0\"/>");
 			}
 			else
 			{
-				println("<testcase name=\"", test_case.name, "\" time=\"0\">");
+				println(out, "<testcase name=\"", test_case.name, "\" time=\"0\">");
 				for (auto& check : test_case.checks)
 				{
 					if (check)
 						continue;
-					println("<failure type=\"check_failed\">" + check.message + "\"</failure>");
+					println(out, "<failure type=\"check_failed\">", check.message, "</failure>");
 				}
-				println("</testcase>");
+				println(out, "</testcase>");
 			}
 		}
-		println("</testsuite>");
+		println(out, "</testsuite>");
 
 	}
 

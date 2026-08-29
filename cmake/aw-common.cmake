@@ -126,7 +126,11 @@ function(aw_add_test NAME)
 	cmake_parse_arguments(PARSE_ARGV 1 ARG "${options}" "${arguments}" "${multivalue}")
 
 	if (AW_OUTPUT_JUNIT)
-		set(ADDITIONAL_PARAMS "--output-format=junit")
+		# one report per test binary, named so that CI can glob them
+		file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/test-results")
+		set(ADDITIONAL_PARAMS
+			"--output-format=junit"
+			"--output-file=${CMAKE_BINARY_DIR}/test-results/TEST-${NAME}.xml")
 	else()
 		set(ADDITIONAL_PARAMS)
 	endif()
