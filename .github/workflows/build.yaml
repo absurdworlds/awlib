@@ -75,7 +75,7 @@ jobs:
         if: success() || failure()
         with:
           check_name: test report (${{ matrix.name }})
-          report_paths: 'build/test-results/TEST-*.xml'
+          report_paths: 'build/test-results/*.xml'
           group_reports: true
           detailed_summary: true
           include_passed: false

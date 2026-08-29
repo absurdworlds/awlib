@@ -138,7 +138,7 @@ function(aw_add_test NAME)
 		file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/test-results")
 		set_property(TEST ${NAME} PROPERTY ENVIRONMENT
 			"AW_TEST_OUTPUT_FORMAT=junit"
-			"AW_TEST_OUTPUT_FILE=${CMAKE_BINARY_DIR}/test-results/TEST-${NAME}.xml")
+			"AW_TEST_OUTPUT_FILE=${CMAKE_BINARY_DIR}/test-results/${NAME}.xml")
 	endif()
 
 	if (ARG_NEGATIVE)
