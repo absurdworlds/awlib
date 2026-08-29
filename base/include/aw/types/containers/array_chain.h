@@ -12,6 +12,7 @@
 #include <cassert>
 #include <vector>
 #include <memory>
+#include <utility>
 
 namespace aw {
 
@@ -164,6 +165,26 @@ struct array_chain {
 	using iterator = array_chain_iterator<T>;
 	static constexpr size_t block_size = chain_storage_traits<T>::block_size;
 
+	array_chain() = default;
+
+	array_chain(array_chain&& other) noexcept
+		: _data{ std::move(other._data) }
+		, _size{ std::exchange(other._size, 0) }
+	{ }
+
+	array_chain& operator=(array_chain&& other) noexcept
+	{
+		destroy_elements();
+		_data = std::move(other._data);
+		_size = std::exchange(other._size, 0);
+		return *this;
+	}
+
+	~array_chain()
+	{
+		destroy_elements();
+	}
+
 	T& operator[](size_t index)
 	{
 		return _data.get( index ).get_ref();
@@ -210,6 +231,12 @@ struct array_chain {
 	}
 
 private:
+	void destroy_elements()
+	{
+		while (_size > 0)
+			_data.destruct(--_size);
+	}
+
 	chain_storage<T> _data;
 	size_t _size = 0;
 };
