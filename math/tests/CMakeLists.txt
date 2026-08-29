@@ -10,6 +10,7 @@ aw_add_test(test_math
 	matrix.c++
 	matrix3.c++
 	matrix4.c++
+	rect.c++
 	segment3d.c++
 )
 
