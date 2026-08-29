@@ -9,7 +9,9 @@ aw_add_test(test_math
 	vector.c++
 	matrix.c++
 	matrix3.c++
-	matrix4.c++)
+	matrix4.c++
+	segment3d.c++
+)
 
 target_link_libraries(test_math
 	PRIVATE
