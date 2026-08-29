@@ -70,17 +70,6 @@ struct quaternion {
 		return quaternion<T>{}.set_axis_angle(axis, angle);
 	}
 
-	//! Copy components from other quaternion
-	quaternion<T>& operator=(quaternion<T> const& other)
-	{
-		x = other.x;
-		y = other.y;
-		z = other.z;
-		w = other.w;
-		return *this;
-	}
-
-
 	//! Get a result of component-wise addition of two quaternions
 	quaternion<T> operator+(quaternion<T> const& other) const
 	{
@@ -286,19 +275,26 @@ struct quaternion {
 		return math::sqrt(magnitude_sq());
 	}
 
-	//! Normalize quaternion
+	/*!
+	 * Normalize quaternion.
+	 *
+	 * A zero quaternion has no direction and is not normalized.
+	 */
 	quaternion<T>& normalize()
 	{
 		T const sqrMag = magnitude_sq();
 
-		if (!math::equals(sqrMag, T{1})) {
-			T const mag = math::sqrt(sqrMag);
+		// Exact comparison on purpose:  using math::equals here would
+		// cause small drift over repeated composition.
+		if (sqrMag == T{0} || sqrMag == T{1})
+			return *this;
 
-			x /= mag;
-			y /= mag;
-			z /= mag;
-			w /= mag;
-		}
+		T const mag = math::sqrt(sqrMag);
+
+		x /= mag;
+		y /= mag;
+		z /= mag;
+		w /= mag;
 
 		return *this;
 	}
@@ -383,6 +379,15 @@ quaternion<T> slerp(quaternion<T> q0, quaternion<T> const& q1,
 		return nlerp(q0, q1, alpha);
 	}
 
+	/*
+	 * Antipodal: q and -q name the same rotation, so there is no arc
+	 * between them to walk, and so invSin would be infinite and
+	 * the whole result would be NaN. Only reachable with shortest = false.
+	 */
+	if(tCos < (epsilon - 1)) {
+		return q0;
+	}
+
 	T const tSin = T(std::sqrt(1.0 - tCos*tCos));
 	T const theta = T(std::atan2(tSin, tCos));
 
@@ -391,16 +396,6 @@ quaternion<T> slerp(quaternion<T> q0, quaternion<T> const& q1,
 	T const t2 = T(std::sin(alpha*theta)) * invSin;
 
 	return t1*q0 + t2*q1;
-
-#if 0 // alternative implementation
-	math::clamp(dot, T(-1.0), T(1.0));
-	T const theta = acos(dot) * alpha;
-
-	quaternion<T> q2 = q1 - q0*dot;
-	q2.normalize();
-
-	return sin(theta)*q0 + cos(theta)*q2;
-#endif
 }
 } // namespace math
 } // namespace aw

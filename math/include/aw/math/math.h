@@ -46,6 +46,21 @@ auto fclamp(T value, T lower, T upper) -> enable_if<is_float<T>, T>
 	return fmax(lower, fmin(value, upper));
 }
 
+namespace _impl {
+template<typename T, typename = void>
+struct scalar_of {
+	using type = T;
+};
+
+template<typename T>
+struct scalar_of<T, void_t<typename T::value_type>> {
+	using type = typename T::value_type;
+};
+
+template<typename T>
+using scalar_of_t = typename scalar_of<T>::type;
+} // namespace _impl
+
 /*!
  * Linearly interpolate two values \a v0 and \a v1.
  * The parameter \a t (within range [0,1]) specifies how close
@@ -57,7 +72,9 @@ auto fclamp(T value, T lower, T upper) -> enable_if<is_float<T>, T>
 template<typename T>
 constexpr T lerp(T const& v0, T const& v1, double t)
 {
-	return (1.0 - t)*v0 + t*v1;
+	using S = _impl::scalar_of_t<T>;
+
+	return S(1.0 - t)*v0 + S(t)*v1;
 }
 
 //! Divide two integers, rounding result to the nearest value

@@ -9,7 +9,9 @@
  */
 #ifndef aw_math_float_h
 #define aw_math_float_h
+#include <aw/bit/mask.h>
 #include <aw/math/math.h>
+#include <aw/math/numeric.h>
 #include <aw/types/support/reinterpret.h>
 #include <aw/types/traits/basic_traits.h>
 namespace aw {
@@ -35,27 +37,36 @@ struct float_traits<f64> {
 };
 
 namespace _impl {
+//! Sign bit of the integer representation of a float
+template <typename U>
+constexpr U sign_mask = bit::bit<U>(num_digits<U> - 1);
+
+template <typename U>
+inline U ulps_diff(U a, U b)
+{
+	if (a > b)
+		return a - b;
+	return b - a;
+}
+
 /*
- * See
+ * Based on
  * https://randomascii.wordpress.com/2012/02/25/comparing-floating-point-numbers-2012-edition/
  */
 template <typename F>
-inline bool almostEqualUlps(F a, F b, size_t maxUlpsDiff)
+inline bool almost_equal_ulps(F a, F b, size_t max_ulps_diff)
 {
 	using uint_type = typename float_traits<F>::uint_type;
 
-	// Different signs means they do not match.
-	if ((a < 0) != (b < 0))
+	const uint_type ulps_a = reinterpret<uint_type>(a);
+	const uint_type ulps_b = reinterpret<uint_type>(b);
+
+	// Different signs means they do not match, except for ±0.
+	if ((ulps_a ^ ulps_b) & sign_mask<uint_type>)
 		return a == b;
 
 	// Find the difference in ULPs.
-	uint_type ulps_a = reinterpret<uint_type>(a);
-	uint_type ulps_b = reinterpret<uint_type>(b);
-
-	if (ulps_a > ulps_b)
-		std::swap(ulps_a, ulps_b);
-
-	return (ulps_a - ulps_b) <= maxUlpsDiff;
+	return ulps_diff(ulps_a, ulps_b) <= max_ulps_diff;
 }
 
 template <typename F>
@@ -104,7 +115,7 @@ bool compare_ulps(F a, F b)
 	constexpr I max_ulps = float_traits<F>::max_ulps;
 	constexpr F epsilon  = float_traits<F>::epsilon;
 
-	return _impl::almostEqualUlps(a,b,max_ulps) ||
+	return _impl::almost_equal_ulps(a,b,max_ulps) ||
 	       _impl::almostEqualEpsilon(a,b,epsilon);
 }
 

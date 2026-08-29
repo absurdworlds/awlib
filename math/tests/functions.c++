@@ -1,4 +1,7 @@
 #include <aw/math/math.h>
+#include <aw/math/vector3d.h>
+#include <aw/math/vector_compare.h>
+#include <aw/string/to_string/math/vector.h>
 #include <aw/test/test.h>
 
 TestFile("math::functions");
@@ -48,5 +51,29 @@ Test(sign) {
 Test(lerp) {
 	TestEqual( lerp(1.0,2.0,0.5), 1.5 );
 };
+
+Test(lerp_vector) {
+	using vec3 = vector3d<float>;
+
+	vec3 a {0, 0, 0};
+	vec3 b {2, 4, 6};
+
+	Checks {
+		TestEqual( lerp(a, b, 0.0), a );
+		TestEqual( lerp(a, b, 1.0), b );
+		TestEqual( lerp(a, b, 0.5), (vec3{1, 2, 3}) );
+	}
+}
+
+Test(lerp_vector_of_double) {
+	using vec3 = vector3d<double>;
+
+	vec3 a {1, 1, 1};
+	vec3 b {3, 5, 9};
+
+	Checks {
+		TestEqual( lerp(a, b, 0.5), (vec3{2, 3, 5}) );
+	}
+}
 } // namespace math
 } // namespace aw

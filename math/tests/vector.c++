@@ -2,12 +2,61 @@
 #include <aw/string/to_string/math/vector.h>
 #include <aw/math/vector3d.h>
 #include <aw/math/vector_compare.h>
+#include <aw/types/traits/basic_traits.h>
 #include <algorithm>
 
 TestFile("Vector");
 
 namespace aw {
 namespace math {
+/*
+ * The math types are plain aggregates of scalars, and both awlib and its
+ * users rely on copying them being a memcpy: containers relocate them, and
+ * they are passed in registers.
+ *
+ * Hand-writing a copy assignment makes the type non-trilially copyable,
+ * so the simplest way is to declare none of the assignment operators,
+ * except the templated ones, which are not copy-assignment operators and
+ * should not affect triviality.
+ */
+static_assert(is_trivially_copyable<vector<float,2>>);
+static_assert(is_trivially_copyable<vector<float,3>>);
+static_assert(is_trivially_copyable<vector<double,4>>);
+static_assert(std::is_standard_layout_v<vector<float,3>>);
+// no user-provided constructors, so it can also live in uninitialised storage
+static_assert(std::is_trivial_v<vector<float,3>>);
+static_assert(sizeof(vector<float,3>) == 3 * sizeof(float));
+
+Test(vec_copy_assignment) {
+	vector3d<int> src {1, 2, 3};
+	vector3d<int> dst {0, 0, 0};
+
+	Checks {
+		dst = src;
+
+		TestEqual(dst, src);
+		TestEqual(dst, (vector3d<int>{1, 2, 3}));
+	}
+
+	Postconditions {
+		// assignment copies, it does not alias
+		src = vector3d<int>{9, 9, 9};
+		TestEqual(dst, (vector3d<int>{1, 2, 3}));
+	}
+}
+
+Test(vec_narrow_assignment_keeps_extra_elements) {
+	vector<int,4> dst {1, 2, 3, 4};
+	vector<int,2> src {8, 9};
+
+	Checks {
+		dst = src;
+
+		// Does not affect the tail
+		TestEqual(dst, (vector<int,4>{8, 9, 3, 4}));
+	}
+}
+
 Test(vec_addition) {
 	vector3d<int> a {  };
 	vector3d<int> b { 0, 0, 0 };

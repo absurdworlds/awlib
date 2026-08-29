@@ -5,12 +5,18 @@
 #include <aw/math/matrix_compare.h>
 #include <aw/string/to_string/math/vector.h>
 #include <aw/string/to_string/math/matrix.h>
+#include <aw/types/traits/basic_traits.h>
 #include <algorithm>
+#include <cmath>
 
 TestFile("math::quaternion");
 
 namespace aw {
 namespace math {
+// Kept trivially copyable; see the note in vector.c++
+static_assert(is_trivially_copyable<quaternion<float>>);
+static_assert(std::is_standard_layout_v<quaternion<float>>);
+
 namespace {
 using quat = quaternion<double>;
 using vec3 = vector3d<double>;
@@ -34,6 +40,26 @@ vector3d<radians<double>> as_angles(vec3 const& v)
 	return { radians<double>{v[0]}, radians<double>{v[1]}, radians<double>{v[2]} };
 }
 } // namespace
+
+Test(quaternion_copy_assignment) {
+	quat src {0.5, 0.5, 0.5, 0.5};
+	quat dst;
+
+	Checks {
+		dst = src;
+
+		TestEqual(dst.w, src.w);
+		TestEqual(dst.x, src.x);
+		TestEqual(dst.y, src.y);
+		TestEqual(dst.z, src.z);
+	}
+
+	Postconditions {
+		src = quat{1, 0, 0, 0};
+		TestEqual(dst.w, 0.5);
+		TestEqual(dst.x, 0.5);
+	}
+}
 
 /*
  * Euler angles must name the same axes as matrix3: pitch is the
@@ -176,6 +202,71 @@ Test(quaternion_interpolation) {
 	Checks {
 		TestEqual( as_matrix( nlerp(a, b, 0.0) ), as_matrix(a) );
 		TestEqual( as_matrix( nlerp(a, b, 1.0) ), as_matrix(b) );
+	}
+}
+
+// A zero quaternion has no direction, normalizing it yields no NaNs
+Test(quaternion_normalize_of_zero) {
+	quat q {0, 0, 0, 0};
+
+	Checks {
+		q.normalize();
+
+		TestAssert( !std::isnan(q.w) );
+		TestAssert( !std::isnan(q.x) );
+		TestAssert( !std::isnan(q.y) );
+		TestAssert( !std::isnan(q.z) );
+
+		// nothing to point at, so it is left alone
+		TestEqual( q.magnitude_sq(), 0.0 );
+	}
+}
+
+/*
+ * The unit check is exact, so a quaternion sitting within equals()'s
+ * tolerance of one is still normalized rather than left to drift.
+ */
+Test(quaternion_normalize_of_nearly_unit) {
+	// f32, so equals() brings its 1e-4 absolute epsilon along
+	quaternion<float> q {1.00002f, 0, 0, 0};
+
+	Preconditions {
+		// drifted off unit, but close enough to fool equals()
+		TestAssert( q.magnitude_sq() != 1.0f );
+		TestAssert( math::equals(q.magnitude_sq(), 1.0f) );
+	}
+
+	Checks {
+		q.normalize();
+
+		// actually normalised, not merely "close enough to leave alone"
+		TestAssert( std::abs(q.magnitude_sq() - 1.0f) < 1e-6f );
+		TestAssert( q.w < 1.00002f );
+	}
+} 
+
+// The result is still finite with antipodal inputs
+Test(quaternion_slerp_of_antipodal) {
+	quat a {1, 0, 0, 0};
+	quat b = -a;
+
+	Checks {
+		// q and -q are the same rotation, so any point of the path will do
+		auto s = slerp(a, b, 0.5, false);
+
+		TestAssert( std::isfinite(s.w) );
+		TestAssert( std::isfinite(s.x) );
+		TestAssert( std::isfinite(s.y) );
+		TestAssert( std::isfinite(s.z) );
+
+		TestEqual( as_matrix(s), as_matrix(a) );
+	}
+
+	Postconditions {
+		auto s = slerp(a, b, 0.5, true);
+
+		TestAssert( std::isfinite(s.w) );
+		TestEqual( as_matrix(s), as_matrix(a) );
 	}
 }
 } // namespace math

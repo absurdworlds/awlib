@@ -7,6 +7,10 @@
 #include <aw/math/vector_compare.h>
 #include <aw/string/to_string/math/matrix.h>
 #include <aw/string/to_string/math/vector.h>
+#include <aw/types/traits/basic_traits.h>
+
+#include <type_traits>
+#include <utility>
 
 #include <algorithm>
 
@@ -14,6 +18,13 @@ TestFile("Matrix");
 
 namespace aw {
 namespace math {
+// Kept trivially copyable; see the note in vector.c++
+static_assert(is_trivially_copyable<matrix<float,3,3>>);
+static_assert(is_trivially_copyable<matrix<double,4,4>>);
+static_assert(std::is_standard_layout_v<matrix<float,4,4>>);
+static_assert(std::is_trivial_v<matrix<float,4,4>>);
+static_assert(sizeof(matrix<float,4,4>) == 16 * sizeof(float));
+
 Test(matrix_basic) {
 	matrix<int, 4,4> A {{
 		{1,0,0,0},
@@ -45,6 +56,25 @@ Test(matrix_basic) {
 	TestEqual(A, D);
 
 	TestEqual( get<15>(C), get<3,3>(C) );
+}
+
+Test(matrix_copy_assignment) {
+	matrix<int,3,3> src {{
+		{1, 2, 3},
+		{4, 5, 6},
+		{7, 8, 9},
+	}};
+	matrix<int,3,3> dst {{
+		{0, 0, 0},
+		{0, 0, 0},
+		{0, 0, 0},
+	}};
+
+	Checks {
+		dst = src;
+
+		TestEqual(dst, src);
+	}
 }
 
 Test(matrix_inverse) {
@@ -232,5 +262,106 @@ Test(matrix_product) {
 		TestEqual(_4x3, mat);
 	}
 };
+
+#if __cpp_multidimensional_subscript >= 202110L
+/*
+ * The const overload hands back a value rather than a reference on purpose:
+ * the elements are scalars, so a copy costs nothing and cannot dangle.
+ */
+static_assert(std::is_same_v<
+	decltype(std::declval<matrix<int,2,3>&>()[0,0]), int&>);
+static_assert(std::is_same_v<
+	decltype(std::declval<matrix<int,2,3> const&>()[0,0]), int>);
+
+Test(matrix_multidim_subscript) {
+	matrix<int,2,3> m {{
+		{1, 2, 3},
+		{4, 5, 6},
+	}};
+
+	Preconditions {
+		TestEqual((m[1,2]), 6);
+	}
+
+	Checks {
+		// m[i,j] names the same element as every other accessor
+		for (size_t i = 0; i < m.num_rows; ++i)
+			for (size_t j = 0; j < m.num_columns; ++j) {
+				TestEqualV((m[i,j]), m.get(i,j), m.row(i)[j]);
+				TestEqual((m[i,j]), m[i][j]);
+			}
+
+		// the non-const overload is a real lvalue
+		m[0,1] = 99;
+
+		TestEqual((m[0,1]), 99);
+		TestEqual(m.get(0,1), 99);
+		TestEqual(m[0][1], 99);
+	}
+
+	Postconditions {
+		matrix<int,2,3> const c = m;
+
+		TestEqual((c[0,1]), 99);
+		TestEqual((c[1,0]), 4);
+	}
+}
+#endif
+
+Test(matrix_for_each_column) {
+	matrix<int,2,3> m {{
+		{1, 2, 3},
+		{4, 5, 6},
+	}};
+
+	vector<int,2> seen[3] {};
+	size_t count = 0;
+
+	Checks {
+		m.for_each_column([&](auto col) {
+			if (count < 3)
+				seen[count] = col;
+			++count;
+		});
+
+		// three columns of two, not three rows of three
+		TestEqual(count, size_t(3));
+
+		TestEqual(seen[0], (vector<int,2>{1, 4}));
+		TestEqual(seen[1], (vector<int,2>{2, 5}));
+		TestEqual(seen[2], (vector<int,2>{3, 6}));
+	}
+}
+
+Test(matrix_for_each_row) {
+	matrix<int,2,3> m {{
+		{1, 2, 3},
+		{4, 5, 6},
+	}};
+
+	vector<int,3> seen[2] {};
+	size_t count = 0;
+
+	Checks {
+		m.for_each_row([&](auto& row) {
+			if (count < 2)
+				seen[count] = row;
+			++count;
+		});
+
+		TestEqual(count, size_t(2));
+
+		TestEqual(seen[0], (vector<int,3>{1, 2, 3}));
+		TestEqual(seen[1], (vector<int,3>{4, 5, 6}));
+	}
+
+	Postconditions {
+		// rows are stored, so they are handed over by reference
+		m.for_each_row([](auto& row) { row *= 2; });
+
+		TestEqual(m.row(0), (vector<int,3>{2, 4, 6}));
+		TestEqual(m.row(1), (vector<int,3>{8, 10, 12}));
+	}
+}
 } // namespace math
 } // namespace aw

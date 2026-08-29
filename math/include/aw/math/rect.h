@@ -7,128 +7,121 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef aw_math_Rect_h
-#define aw_math_Rect_h
-#include <aw/types/types.h>
-#include <aw/math/Vector2d.h>
-namespace aw {
-//! Represents a 2D rectangle, used mostly for GUI rendering
-template <class T>
-class Rect {
-public:
+#ifndef aw_math_rect_h
+#define aw_math_rect_h
+#include <aw/math/vector2d.h>
+namespace aw::math {
+/*!
+ * Represents a 2D rectangle, used mostly for GUI rendering.
+ *
+ * \note Coordinates follow the screen convention: the Y axis grows
+ *       downwards, so a rectangle is well-formed when \a lower_right
+ *       is component-wise greater than \a upper_left.
+ */
+template<typename T>
+struct rect {
 	//! Construct zero-sized rect at (0,0)
-	Rect()
-		: upperLeft(0,0), lowerRight(0,0)
-	{
-	}
+	constexpr rect() = default;
 
 	//! Construct specifying each coordinate
-	Rect(T x, T y, T x2, T y2)
-		: upperLeft(x,y), lowerRight(x2,y2)
+	constexpr rect(T x, T y, T x2, T y2)
+		: upper_left{x,y}, lower_right{x2,y2}
 	{
 	}
 
 	//! Construct specifying coordinates as vectors
-	Rect(const Vector2d<T>& upperLeft, const Vector2d<T>& lowerRight)
-		: upperLeft(upperLeft), lowerRight(lowerRight)
+	constexpr rect(vector2d<T> const& upper_left, vector2d<T> const& lower_right)
+		: upper_left(upper_left), lower_right(lower_right)
 	{
 	}
 
-
-	Rect<T>& operator += (Rect<T> const& other)
+	constexpr rect& operator+=(rect const& other)
 	{
-		upperLeft  += other.upperLeft;
-		lowerRight += other.lowerRight;
+		upper_left  += other.upper_left;
+		lower_right += other.lower_right;
 		return *this;
 	}
 
-	Rect<T> operator + (Rect<T> const& other) const
+	constexpr rect& operator-=(rect const& other)
 	{
-		Rect<T> tmp = *this;
-		tmp.upperLeft  += other.upperLeft;
-		tmp.lowerRight += other.lowerRight;
-		return tmp;
-	}
-
-	Rect<T>& operator -= (Rect<T> const& other)
-	{
-		upperLeft  -= other.upperLeft;
-		lowerRight -= other.lowerRight;
+		upper_left  -= other.upper_left;
+		lower_right -= other.lower_right;
 		return *this;
 	}
 
-	Rect<T> operator - (Rect<T> const& other) const
+	constexpr rect& operator+=(vector2d<T> const& vec)
 	{
-		Rect<T> tmp = *this;
-		tmp.upperLeft  -= other.upperLeft;
-		tmp.lowerRight -= other.lowerRight;
-		return tmp;
-	}
-
-	Rect<T>& operator += (Vector2d<T> const& vec)
-	{
-		upperLeft  += vec;
-		lowerRight += vec;
+		upper_left  += vec;
+		lower_right += vec;
 		return *this;
 	}
 
-	Rect<T>& operator -= (Vector2d<T> const& vec)
+	constexpr rect& operator-=(vector2d<T> const& vec)
 	{
-		upperLeft  -= vec;
-		lowerRight -= vec;
+		upper_left  -= vec;
+		lower_right -= vec;
 		return *this;
 	}
 
-	T getWidth() const
+	//! Distance between the left and the right edges
+	constexpr T width() const
 	{
-		return lowerRight.x() - upperLeft.x();
+		return lower_right.x() - upper_left.x();
 	}
 
-	T getHeight() const
+	//! Distance between the top and the bottom edges
+	constexpr T height() const
 	{
-		return lowerRight.y() - upperLeft.y();
-	}
-
-	Vector2d<T> getUpperLeft() const
-	{
-		return upperLeft;
-	}
-
-	Vector2d<T> getLowerRight() const
-	{
-		return lowerRight;
+		return lower_right.y() - upper_left.y();
 	}
 
 	//! Get center of the rectangle.
-	Vector2d<T> getCenter() const
+	constexpr vector2d<T> center() const
 	{
-		return (lowerRight + upperLeft) / 2;
+		return (upper_left + lower_right) / T(2);
 	}
 
-	void setHeight(T height)
+	//! Move the right edge, keeping the left one in place
+	constexpr void set_width(T width)
 	{
-		lowerRight.y() = height + upperLeft.y();
+		lower_right.x() = upper_left.x() + width;
 	}
 
-	void setWidth(T width)
+	//! Move the bottom edge, keeping the top one in place
+	constexpr void set_height(T height)
 	{
-		lowerRight.y() = width + upperLeft.x();
+		lower_right.y() = upper_left.y() + height;
 	}
 
-	void setPosition(Vector2d<T> position)
+	//! Move the rectangle, preserving its size
+	constexpr void set_position(vector2d<T> const& position)
 	{
-		lowerRight += position - upperLeft;
-		upperLeft   = position;
+		lower_right += position - upper_left;
+		upper_left   = position;
 	}
 
 	//! Coordinates of upper left corner
-	Vector2d<T> upperLeft;
+	vector2d<T> upper_left  = {};
 	//! Coordinates of lower right corner
-	Vector2d<T> lowerRight;
-
+	vector2d<T> lower_right = {};
 };
 
-// TODO: rename to contains, and swap arguments
+//! Sum of two rectangles
+template<typename T>
+constexpr rect<T> operator+(rect<T> a, rect<T> const& b)
+{
+	a += b;
+	return a;
+}
+
+//! Difference of two rectangles
+template<typename T>
+constexpr rect<T> operator-(rect<T> a, rect<T> const& b)
+{
+	a -= b;
+	return a;
+}
+
 /*!
  * Check if point is inside a rectangle.
  * \param point
@@ -137,14 +130,13 @@ public:
  *      true if point is within the rectangle,
  *      false otherwise
  */
-template <typename T>
-bool pointWithinRect(Vector2d<T> point, Rect<T> rect)
+template<typename T>
+constexpr bool contains(rect<T> const& rect, vector2d<T> const& point)
 {
-	bool isInside = (rect.upperLeft[0] <= point[0]  &&
-			 rect.upperLeft[1] <= point[1]  &&
-			 point[0] <= rect.lowerRight[0] &&
-			 point[1] <= rect.lowerRight[1]);
-	return isInside;
+	return rect.upper_left.x()  <= point.x() &&
+	       rect.upper_left.y()  <= point.y() &&
+	       point.x() <= rect.lower_right.x() &&
+	       point.y() <= rect.lower_right.y();
 }
-} // namespace aw
-#endif//aw_math_Rect_h
+} // namespace aw::math
+#endif//aw_math_rect_h
