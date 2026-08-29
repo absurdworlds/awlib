@@ -6,8 +6,8 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef aw_math_line3d_h
-#define aw_math_line3d_h
+#ifndef aw_math_segment3d_h
+#define aw_math_segment3d_h
 #include <aw/math/vector3d.h>
 namespace aw::math {
 //! Represents a line segment in 3D space
@@ -93,9 +93,5 @@ struct segment3d {
 	vector3d<T> start = {};
 	vector3d<T> end   = {};
 };
-
-/*! Alias for segment3d */
-template<typename T>
-using line3d = segment3d<T>;
 } // namespace aw::math
-#endif//aw_math_line3d_h
+#endif//aw_math_segment3d_h
