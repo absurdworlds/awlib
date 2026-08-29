@@ -125,21 +125,21 @@ function(aw_add_test NAME)
 	set(multivalue SOURCES PARAMS)
 	cmake_parse_arguments(PARSE_ARGV 1 ARG "${options}" "${arguments}" "${multivalue}")
 
-	if (AW_OUTPUT_JUNIT)
-		# one report per test binary, named so that CI can glob them
-		file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/test-results")
-		set(ADDITIONAL_PARAMS
-			"--output-format=junit"
-			"--output-file=${CMAKE_BINARY_DIR}/test-results/TEST-${NAME}.xml")
-	else()
-		set(ADDITIONAL_PARAMS)
-	endif()
-
 	add_executable(${NAME} ${ARG_SOURCES})
 	add_test(
 		NAME ${NAME}
-		COMMAND ${NAME} ${ARG_PARAMS} ${ADDITIONAL_PARAMS}
+		COMMAND ${NAME} ${ARG_PARAMS}
 		WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
+
+	if (AW_OUTPUT_JUNIT)
+		# one report per test binary, named so that CI can glob them.
+		# through the environment rather than the command line: a test which
+		# brings its own main() takes every argument for a file name
+		file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/test-results")
+		set_property(TEST ${NAME} PROPERTY ENVIRONMENT
+			"AW_TEST_OUTPUT_FORMAT=junit"
+			"AW_TEST_OUTPUT_FILE=${CMAKE_BINARY_DIR}/test-results/TEST-${NAME}.xml")
+	endif()
 
 	if (ARG_NEGATIVE)
 		set_property(TEST ${NAME} PROPERTY WILL_FAIL true)

@@ -13,6 +13,7 @@
 #include <aw/test/registry.h>
 #include <aw/utility/argv_parser.h>
 
+#include <cstdlib>
 #include <filesystem>
 #include <fstream>
 #include <string>
@@ -32,6 +33,12 @@ test_config parse_parameters(char** begin, char** end)
 
 	test_config config;
 
+	if (auto* format = std::getenv("AW_TEST_OUTPUT_FORMAT"))
+		config.use_junit = (std::string_view(format) == "junit"sv);
+	if (auto* file = std::getenv("AW_TEST_OUTPUT_FILE"))
+		config.output_file = file;
+
+	// command line overrides the env
 	auto param_output_format = "--output-format="sv;
 	auto param_output_file   = "--output-file="sv;
 	auto param_no_exitcode   = "--no-exitcode"sv;
