@@ -2,10 +2,16 @@
 #include <aw/math/rect.h>
 #include <aw/math/vector_compare.h>
 #include <aw/string/to_string/math/vector.h>
+#include <aw/types/traits/basic_traits.h>
 
 TestFile("math::rect");
 
 namespace aw::math {
+// Kept trivially copyable; see the note in vector.c++
+static_assert(is_trivially_copyable<rect<int>>);
+static_assert(is_trivially_copyable<rect<float>>);
+static_assert(std::is_standard_layout_v<rect<int>>);
+
 Test(rect_construction) {
 	rect<int> from_scalars{1, 2, 5, 8};
 	rect<int> from_vectors{{1, 2}, {5, 8}};

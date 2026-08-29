@@ -132,12 +132,6 @@ struct vector {
 
 	value_type elems[N];
 
-	constexpr vector& operator=(vector const& other)
-	{
-		_impl::vec::assign(*this, other, indices);
-		return *this;
-	}
-
 	template<typename U>
 	constexpr explicit operator vector<U,N>() const
 	{

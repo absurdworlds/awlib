@@ -1,6 +1,7 @@
 #include <aw/test/test.h>
 #include <aw/math/angle.h>
 #include <aw/math/trigonometry.h>
+#include <aw/types/traits/basic_traits.h>
 
 #include <algorithm>
 
@@ -8,6 +9,10 @@ TestFile("math::angle");
 
 namespace aw {
 namespace math {
+// Kept trivially copyable; see the note in vector.c++
+static_assert(is_trivially_copyable<radians<float>>);
+static_assert(is_trivially_copyable<degrees<double>>);
+
 Test(angle_conversion) {
 	degrees<f32> d1{ 30 };
 	radians<f32> r1{ pi/6 };

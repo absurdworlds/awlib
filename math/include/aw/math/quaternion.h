@@ -70,17 +70,6 @@ struct quaternion {
 		return quaternion<T>{}.set_axis_angle(axis, angle);
 	}
 
-	//! Copy components from other quaternion
-	quaternion<T>& operator=(quaternion<T> const& other)
-	{
-		x = other.x;
-		y = other.y;
-		z = other.z;
-		w = other.w;
-		return *this;
-	}
-
-
 	//! Get a result of component-wise addition of two quaternions
 	quaternion<T> operator+(quaternion<T> const& other) const
 	{

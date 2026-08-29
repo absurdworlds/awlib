@@ -5,12 +5,17 @@
 #include <aw/math/matrix_compare.h>
 #include <aw/string/to_string/math/vector.h>
 #include <aw/string/to_string/math/matrix.h>
+#include <aw/types/traits/basic_traits.h>
 #include <algorithm>
 
 TestFile("math::quaternion");
 
 namespace aw {
 namespace math {
+// Kept trivially copyable; see the note in vector.c++
+static_assert(is_trivially_copyable<quaternion<float>>);
+static_assert(std::is_standard_layout_v<quaternion<float>>);
+
 namespace {
 using quat = quaternion<double>;
 using vec3 = vector3d<double>;
@@ -34,6 +39,26 @@ vector3d<radians<double>> as_angles(vec3 const& v)
 	return { radians<double>{v[0]}, radians<double>{v[1]}, radians<double>{v[2]} };
 }
 } // namespace
+
+Test(quaternion_copy_assignment) {
+	quat src {0.5, 0.5, 0.5, 0.5};
+	quat dst;
+
+	Checks {
+		dst = src;
+
+		TestEqual(dst.w, src.w);
+		TestEqual(dst.x, src.x);
+		TestEqual(dst.y, src.y);
+		TestEqual(dst.z, src.z);
+	}
+
+	Postconditions {
+		src = quat{1, 0, 0, 0};
+		TestEqual(dst.w, 0.5);
+		TestEqual(dst.x, 0.5);
+	}
+}
 
 /*
  * Euler angles must name the same axes as matrix3: pitch is the

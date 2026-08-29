@@ -131,12 +131,6 @@ struct matrix {
 
 	row_type rows[M];
 
-	constexpr matrix& operator=(matrix const& other)
-	{
-		_impl::vec::assign(*this, other, row_indices);
-		return *this;
-	}
-
 	template<size_t M1, size_t N1>
 	constexpr matrix& operator=(matrix<T,M1,N1> const& other)
 	{

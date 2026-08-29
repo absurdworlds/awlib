@@ -2,10 +2,15 @@
 #include <aw/math/segment3d.h>
 #include <aw/math/vector_compare.h>
 #include <aw/string/to_string/math/vector.h>
+#include <aw/types/traits/basic_traits.h>
 
 TestFile("math::segment3d");
 
 namespace aw::math {
+// Kept trivially copyable; see the note in vector.c++
+static_assert(is_trivially_copyable<segment3d<float>>);
+static_assert(std::is_standard_layout_v<segment3d<float>>);
+
 using vec3 = vector3d<double>;
 
 Test(segment3d_construction) {

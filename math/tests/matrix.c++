@@ -7,6 +7,7 @@
 #include <aw/math/vector_compare.h>
 #include <aw/string/to_string/math/matrix.h>
 #include <aw/string/to_string/math/vector.h>
+#include <aw/types/traits/basic_traits.h>
 
 #include <algorithm>
 
@@ -14,6 +15,13 @@ TestFile("Matrix");
 
 namespace aw {
 namespace math {
+// Kept trivially copyable; see the note in vector.c++
+static_assert(is_trivially_copyable<matrix<float,3,3>>);
+static_assert(is_trivially_copyable<matrix<double,4,4>>);
+static_assert(std::is_standard_layout_v<matrix<float,4,4>>);
+static_assert(std::is_trivial_v<matrix<float,4,4>>);
+static_assert(sizeof(matrix<float,4,4>) == 16 * sizeof(float));
+
 Test(matrix_basic) {
 	matrix<int, 4,4> A {{
 		{1,0,0,0},
@@ -45,6 +53,25 @@ Test(matrix_basic) {
 	TestEqual(A, D);
 
 	TestEqual( get<15>(C), get<3,3>(C) );
+}
+
+Test(matrix_copy_assignment) {
+	matrix<int,3,3> src {{
+		{1, 2, 3},
+		{4, 5, 6},
+		{7, 8, 9},
+	}};
+	matrix<int,3,3> dst {{
+		{0, 0, 0},
+		{0, 0, 0},
+		{0, 0, 0},
+	}};
+
+	Checks {
+		dst = src;
+
+		TestEqual(dst, src);
+	}
 }
 
 Test(matrix_inverse) {
