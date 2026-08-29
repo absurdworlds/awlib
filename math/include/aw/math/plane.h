@@ -26,7 +26,7 @@ enum class relation {
 template<typename T>
 struct plane {
 	plane(vector3d<T> const& point, vector3d<T> const& normal)
-		: _normal{ normal.normalize() }
+		: _normal{ normalize(normal) }
 	{
 		compute_distance(point);
 	}

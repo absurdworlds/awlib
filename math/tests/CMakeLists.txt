@@ -12,6 +12,7 @@ aw_add_test(test_math
 	matrix4.c++
 	rect.c++
 	segment3d.c++
+	plane.c++
 )
 
 target_link_libraries(test_math
