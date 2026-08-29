@@ -9,6 +9,9 @@
 #include <aw/string/to_string/math/vector.h>
 #include <aw/types/traits/basic_traits.h>
 
+#include <type_traits>
+#include <utility>
+
 #include <algorithm>
 
 TestFile("Matrix");
@@ -259,5 +262,50 @@ Test(matrix_product) {
 		TestEqual(_4x3, mat);
 	}
 };
+
+#if __cpp_multidimensional_subscript >= 202110L
+/*
+ * The const overload hands back a value rather than a reference on purpose:
+ * the elements are scalars, so a copy costs nothing and cannot dangle.
+ */
+static_assert(std::is_same_v<
+	decltype(std::declval<matrix<int,2,3>&>()[0,0]), int&>);
+static_assert(std::is_same_v<
+	decltype(std::declval<matrix<int,2,3> const&>()[0,0]), int>);
+
+Test(matrix_multidim_subscript) {
+	matrix<int,2,3> m {{
+		{1, 2, 3},
+		{4, 5, 6},
+	}};
+
+	Preconditions {
+		TestEqual((m[1,2]), 6);
+	}
+
+	Checks {
+		// m[i,j] names the same element as every other accessor
+		for (size_t i = 0; i < m.num_rows; ++i)
+			for (size_t j = 0; j < m.num_columns; ++j) {
+				TestEqualV((m[i,j]), m.get(i,j), m.row(i)[j]);
+				TestEqual((m[i,j]), m[i][j]);
+			}
+
+		// the non-const overload is a real lvalue
+		m[0,1] = 99;
+
+		TestEqual((m[0,1]), 99);
+		TestEqual(m.get(0,1), 99);
+		TestEqual(m[0][1], 99);
+	}
+
+	Postconditions {
+		matrix<int,2,3> const c = m;
+
+		TestEqual((c[0,1]), 99);
+		TestEqual((c[1,0]), 4);
+	}
+}
+#endif
 } // namespace math
 } // namespace aw
