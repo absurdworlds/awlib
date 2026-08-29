@@ -243,6 +243,31 @@ Test(quaternion_normalize_of_nearly_unit) {
 		TestAssert( std::abs(q.magnitude_sq() - 1.0f) < 1e-6f );
 		TestAssert( q.w < 1.00002f );
 	}
+} 
+
+// The result is still finite with antipodal inputs
+Test(quaternion_slerp_of_antipodal) {
+	quat a {1, 0, 0, 0};
+	quat b = -a;
+
+	Checks {
+		// q and -q are the same rotation, so any point of the path will do
+		auto s = slerp(a, b, 0.5, false);
+
+		TestAssert( std::isfinite(s.w) );
+		TestAssert( std::isfinite(s.x) );
+		TestAssert( std::isfinite(s.y) );
+		TestAssert( std::isfinite(s.z) );
+
+		TestEqual( as_matrix(s), as_matrix(a) );
+	}
+
+	Postconditions {
+		auto s = slerp(a, b, 0.5, true);
+
+		TestAssert( std::isfinite(s.w) );
+		TestEqual( as_matrix(s), as_matrix(a) );
+	}
 }
 } // namespace math
 } // namespace aw

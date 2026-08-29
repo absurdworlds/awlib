@@ -379,6 +379,15 @@ quaternion<T> slerp(quaternion<T> q0, quaternion<T> const& q1,
 		return nlerp(q0, q1, alpha);
 	}
 
+	/*
+	 * Antipodal: q and -q name the same rotation, so there is no arc
+	 * between them to walk, and so invSin would be infinite and
+	 * the whole result would be NaN. Only reachable with shortest = false.
+	 */
+	if(tCos < (epsilon - 1)) {
+		return q0;
+	}
+
 	T const tSin = T(std::sqrt(1.0 - tCos*tCos));
 	T const theta = T(std::atan2(tSin, tCos));
 
@@ -387,16 +396,6 @@ quaternion<T> slerp(quaternion<T> q0, quaternion<T> const& q1,
 	T const t2 = T(std::sin(alpha*theta)) * invSin;
 
 	return t1*q0 + t2*q1;
-
-#if 0 // alternative implementation
-	math::clamp(dot, T(-1.0), T(1.0));
-	T const theta = acos(dot) * alpha;
-
-	quaternion<T> q2 = q1 - q0*dot;
-	q2.normalize();
-
-	return sin(theta)*q0 + cos(theta)*q2;
-#endif
 }
 } // namespace math
 } // namespace aw
