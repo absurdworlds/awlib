@@ -321,8 +321,8 @@ private:
 	void construct(Args&&... args)
 	{
 		static_assert(index_of<T> != invalid, "Invalid type");
-		index = index_of<T>;
 		storage.template emplace<T>(std::forward<Args>(args)...);
+		index = index_of<T>;
 	}
 
 	/*

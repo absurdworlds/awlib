@@ -3,6 +3,7 @@
 #include <aw/types/variant.h>
 #include <aw/test/test.h>
 #include <aw/test/helpers/copy_move_tracker.h>
+#include <aw/test/helpers/throwing.h>
 
 TestFile( "aw::variant" );
 
@@ -279,4 +280,30 @@ Test(variant_construct_in_place) {
 		TestEqual(*varx.get<std::string>(), "asdasd"s);
 		TestEqual(*vary.get<char const*>(), "asdasd"s);
 	}
+}
+
+using aw::test::throwing;
+
+/*!
+ * A constructor which throws leaves the variant holding nothing, rather
+ * than reporting a value which was never built.
+ */
+Test(variant_construct_throws) {
+	throwing::live  = 0;
+	throwing::armed = false;
+	{
+		aw::variant<throwing, int> var{ 5 };
+
+		throwing::armed = true;
+		TestCatch( throwing::error, var.emplace<throwing>() );
+		throwing::armed = false;
+
+		Checks {
+			TestAssert(var.empty());
+			TestEqual(throwing::live, 0);
+		}
+	}
+
+	// The value was neither constructed nor destroyed
+	TestEqual(throwing::live, 0);
 }
