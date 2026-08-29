@@ -106,6 +106,24 @@ private:
 	const char* filename;
 };
 
+//! Replace the characters which may not appear literally in XML
+inline std::string xml_escape(std::string_view in)
+{
+	std::string out;
+	for (char c : in)
+	{
+		switch (c)
+		{
+		case '&': out += "&amp;";  break;
+		case '<': out += "&lt;";   break;
+		case '>': out += "&gt;";   break;
+		case '"': out += "&quot;"; break;
+		default:  out += c;
+		}
+	}
+	return out;
+}
+
 class report_junit : public report {
 public:
 	using report::report;
@@ -134,22 +152,22 @@ public:
 	void end_suite() override
 	{
 		int skipped = total - succeeded - failed;
-		print(out, "<testsuite name=\"", name, "\" tests=\"", total, "\" errors=\"0\" ");
+		print(out, "<testsuite name=\"", xml_escape(name), "\" tests=\"", total, "\" errors=\"0\" ");
 		println(out, "failures=\"", failed, "\" skipped=\"", skipped, "\">");
 		for (const auto& test_case : test_cases)
 		{
 			if (test_case.success)
 			{
-				println(out, "<testcase name=\"", test_case.name, "\" time=\"0\"/>");
+				println(out, "<testcase name=\"", xml_escape(test_case.name), "\" time=\"0\"/>");
 			}
 			else
 			{
-				println(out, "<testcase name=\"", test_case.name, "\" time=\"0\">");
+				println(out, "<testcase name=\"", xml_escape(test_case.name), "\" time=\"0\">");
 				for (auto& check : test_case.checks)
 				{
 					if (check)
 						continue;
-					println(out, "<failure type=\"check_failed\">", check.message, "</failure>");
+					println(out, "<failure type=\"check_failed\">", xml_escape(check.message), "</failure>");
 				}
 				println(out, "</testcase>");
 			}
