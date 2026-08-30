@@ -44,25 +44,26 @@ struct assert_message {
 template <assert_level level = assert_level::current, typename Expression, typename... Arg_types>
 bool (assert)(Expression&& bool_expr, assert_message msg, Arg_types&&... args)
 {
-	if constexpr(level > assert_level::maximum)
-		return true;
-
-	const bool cond = bool_expr();
-	if (!cond) {
-		const auto action = assert_fail_fmt(msg.message, msg.location, std::forward<Arg_types>(args)...);
-		switch (action)
-		{
-			case assert_action::abort:
-				assert_abort();
-			case assert_action::stop:
-				aw_debug_break;
-				[[fallthrough]];
-			case assert_action::ignore:
-				break;
+	if constexpr(level <= assert_level::maximum) {
+		const bool cond = bool_expr();
+		if (!cond) {
+			const auto action = assert_fail_fmt(msg.message, msg.location, std::forward<Arg_types>(args)...);
+			switch (action)
+			{
+				case assert_action::abort:
+					assert_abort();
+				case assert_action::stop:
+					aw_debug_break;
+					[[fallthrough]];
+				case assert_action::ignore:
+					break;
+			}
 		}
+
+		return cond;
 	}
 
-	return cond;
+	return true;
 }
 } // namespace aw
 
