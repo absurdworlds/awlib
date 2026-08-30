@@ -88,5 +88,21 @@ Test(assert_formats_temporaries)
 	install_assert_handler(old_handler);
 }
 #endif
+
+// an assertion as an unbraced branch must not swallow the else
+Test(assert_is_one_statement)
+{
+	const auto old_handler = install_assert_handler(recording_handler);
+
+	bool else_taken = false;
+	if (false)
+		aw_assert(true);
+	else
+		else_taken = true;
+	TestAssert(else_taken);
+
+	install_assert_handler(old_handler);
+}
+
 } // namespace aw
 

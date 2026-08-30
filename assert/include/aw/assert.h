@@ -72,9 +72,9 @@ bool (assert)(Expression&& bool_expr, assert_message msg, Arg_types&&... args)
 
 #define aw_assert_make_args(default, ...) AW_FIRST(__VA_ARGS__ __VA_OPT__(,) default) AW_VA_COMMA(AW_TAIL(__VA_ARGS__))
 
-#define aw_assert(cond, ...) aw_assert_x( cond, current, aw_assert_make_args(#cond, __VA_ARGS__) );
-#define aw_assert_release(cond, ...) aw_assert_x( cond, release, aw_assert_make_args(#cond, __VA_ARGS__) );
-#define aw_assert_debug(cond, ...) aw_assert_x( cond, debug, aw_assert_make_args(#cond, __VA_ARGS__) );
-#define aw_assert_audit(cond, ...) aw_assert_x( cond, audit, aw_assert_make_args(#cond, __VA_ARGS__) );
+#define aw_assert(cond, ...) aw_assert_x( cond, current, aw_assert_make_args(#cond, __VA_ARGS__) )
+#define aw_assert_release(cond, ...) aw_assert_x( cond, release, aw_assert_make_args(#cond, __VA_ARGS__) )
+#define aw_assert_debug(cond, ...) aw_assert_x( cond, debug, aw_assert_make_args(#cond, __VA_ARGS__) )
+#define aw_assert_audit(cond, ...) aw_assert_x( cond, audit, aw_assert_make_args(#cond, __VA_ARGS__) )
 
 #endif//aw_utility_assert_h
