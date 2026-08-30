@@ -68,7 +68,7 @@ bool (assert)(Expression&& bool_expr, assert_message msg, Arg_types&&... args)
 
 // TODO: __builtin_assume
 #define aw_assert_x(cond, level, message, ...) \
-	::aw::assert<::aw::assert_level::level> ( [] { return cond; }, message __VA_OPT__(, ) __VA_ARGS__ )
+	::aw::assert<::aw::assert_level::level> ( [&] { return cond; }, message __VA_OPT__(, ) __VA_ARGS__ )
 
 #define aw_assert_make_args(default, ...) AW_FIRST(__VA_ARGS__ __VA_OPT__(,) default) AW_VA_COMMA(AW_TAIL(__VA_ARGS__))
 

@@ -68,7 +68,28 @@ assert_action recording_handler(string_view assertion, source_location)
 	++recorded_calls;
 	return assert_action::ignore;
 }
+
+//! Fails an assertion on its own parameters, which a caller cannot do
+//! if the condition is evaluated outside the calling scope.
+bool check_arguments(int* pointer, int count)
+{
+	aw_assert(pointer != nullptr);
+	aw_assert(count > 0, "count was {}", count);
+	return true;
+}
 } // namespace
+
+Test(assert_reports_locals)
+{
+	const auto old_handler = install_assert_handler(recording_handler);
+	recorded_calls = 0;
+
+	check_arguments(nullptr, 1);
+	TestEqual(recorded_calls, 1);
+	TestEqual(string_view(recorded_message), string_view("pointer != nullptr"));
+
+	install_assert_handler(old_handler);
+}
 
 #if AW_FORMAT != AW_NO_FORMAT
 Test(assert_formats_temporaries)
