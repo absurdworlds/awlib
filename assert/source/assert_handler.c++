@@ -7,6 +7,9 @@
 #include <aw/config.h>
 
 namespace aw {
+//! Generic reporter, defined in assert_fail.c++
+assert_action default_assert_fail(string_view assertion, source_location location);
+
 #if defined(AW_SUPPORT_PLATFORM_WIN32)
 namespace win32 {
 assert_action assert_fail(string_view assertion, source_location location);
@@ -16,7 +19,7 @@ assert_action assert_fail(string_view assertion, source_location location);
 #if (AW_PLATFORM == AW_PLATFORM_WIN32)
 static std::atomic<assert_handler_func*> assert_handler = win32::assert_fail; // NOLINT(cppcoreguidelines-avoid-non-const-global-variables)
 #else
-static std::atomic<assert_handler_func*> assert_handler = nullptr; // NOLINT(cppcoreguidelines-avoid-non-const-global-variables)
+static std::atomic<assert_handler_func*> assert_handler = default_assert_fail; // NOLINT(cppcoreguidelines-avoid-non-const-global-variables)
 #endif
 
 void assert_abort()
