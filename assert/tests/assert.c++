@@ -26,7 +26,7 @@ const string_view* current_assertion = &expected_assertions[0];
 
 assert_action test_assert_handler(string_view assertion, source_location location)
 {
-	if (current_assertion > std::end(expected_assertions))
+	if (current_assertion >= std::end(expected_assertions))
 	{
 		TestFail("Too many assertions!");
 	}
