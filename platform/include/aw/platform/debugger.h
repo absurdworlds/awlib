@@ -1,28 +1,28 @@
-#ifndef aw_assert_debugger_h
-#define aw_assert_debugger_h
+#ifndef aw_platform_debugger_h
+#define aw_platform_debugger_h
 
 #include <aw/config.h>
 
-#include "export.h"
+#include <aw/platform/export.h>
 
 #if (AW_PLATFORM == AW_PLATFORM_POSIX)
 #include <signal.h>
 #endif
 
 namespace aw {
+namespace platform {
 #ifdef AW_SUPPORT_PLATFORM_POSIX
 namespace posix {
-AW_ASSERT_EXP bool is_debugger_present();
+AW_PLATFORM_EXP bool is_debugger_present();
 } // namespace posix
 #endif // AW_SUPPORT_PLATFORM_POSIX
 
 #ifdef AW_SUPPORT_PLATFORM_WIN32
 namespace win32 {
-AW_ASSERT_EXP bool is_debugger_present();
+AW_PLATFORM_EXP bool is_debugger_present();
 } // namespace win32
 #endif
 
-namespace platform {
 // -------------------------------------
 #if (AW_PLATFORM == AW_PLATFORM_POSIX)
 using posix::is_debugger_present;
@@ -56,4 +56,4 @@ inline bool is_debugger_present() { return false; }
 	} while (0)
 
 
-#endif//aw_assert_debugger_h
+#endif//aw_platform_debugger_h

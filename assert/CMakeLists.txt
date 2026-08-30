@@ -17,7 +17,6 @@ aw_add_library(awassert SHARED
 	HEADERS
 		include/aw/assert/assert_action.h
 		include/aw/assert/assert_handler.h
-		include/aw/assert/debugger.h
 		include/aw/assert/export.h
 		include/aw/assert.h
 	SOURCES
@@ -30,15 +29,8 @@ aw_add_library(awassert SHARED
 if (AW_CAPABILITIES_WIN32)
 	target_sources(awassert
 		PRIVATE
-			source/win32/debugger.c++
 			source/win32/assert_fail.c++
 	)
-endif()
-
-if (AW_CAPABILITIES_POSIX)
-	target_sources(awassert
-		PRIVATE
-			source/posix/debugger.c++)
 endif()
 
 target_compile_definitions(awassert
@@ -55,6 +47,5 @@ target_link_libraries(awassert
 		awutils
 		awtypes
 		awstring
-	PRIVATE
-		awplatform # TODO: remove dependency on awplatform
+		awplatform # aw/assert.h includes aw/platform/debugger.h
 	)

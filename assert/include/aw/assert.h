@@ -2,7 +2,7 @@
 #define aw_utility_assert_h
 
 #include <aw/assert/assert_handler.h>
-#include <aw/assert/debugger.h>
+#include <aw/platform/debugger.h>
 
 #include <aw/meta/pp/macro.h>
 #include <aw/meta/pp/separators.h>

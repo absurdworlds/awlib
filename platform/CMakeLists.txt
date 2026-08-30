@@ -17,6 +17,14 @@ target_link_libraries(awplatform
 		awalgo
 		awutils)
 
+if (AW_CAPABILITIES_POSIX)
+	target_sources(awplatform PRIVATE posix/debugger.c++)
+endif()
+
+if (AW_CAPABILITIES_WIN32)
+	target_sources(awplatform PRIVATE win32/debugger.c++)
+endif()
+
 if (WIN32)
 	# lowercase: mingw ships libdbghelp.a, and cross-linking on Linux
 	# is case-sensitive
