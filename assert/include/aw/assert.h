@@ -44,6 +44,9 @@ struct assert_message {
 template <assert_level level = assert_level::current, typename Expression, typename... Arg_types>
 bool (assert)(Expression&& bool_expr, assert_message msg, Arg_types&&... args)
 {
+	static_assert(level != assert_level::off,
+	              "assert_level::off is a threshold, not an assertion level");
+
 	if constexpr(level <= assert_level::maximum) {
 		const bool cond = bool_expr();
 		if (!cond) {
