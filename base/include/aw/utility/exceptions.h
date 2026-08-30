@@ -20,7 +20,7 @@
 #define aw_throw      throw
 #define aw_rethrow    throw
 #else
-#define aw_try        if (true)
+#define aw_try        if constexpr (true)
 #define aw_catch(...) else
 #define aw_throw
 #define aw_rethrow

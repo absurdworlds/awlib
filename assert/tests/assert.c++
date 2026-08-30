@@ -108,6 +108,18 @@ Test(assert_formats_temporaries)
 
 	install_assert_handler(old_handler);
 }
+
+Test(assert_survives_malformed_message)
+{
+	const auto old_handler = install_assert_handler(recording_handler);
+
+	// an unusable message is reported as written, rather than terminating
+	int value = 1;
+	aw_assert(false, "unmatched brace {", value);
+	TestEqual(string_view(recorded_message), string_view("unmatched brace {"));
+
+	install_assert_handler(old_handler);
+}
 #endif
 
 // an assertion as an unbraced branch must not swallow the else

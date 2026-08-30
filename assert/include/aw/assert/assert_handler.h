@@ -5,6 +5,7 @@
 
 #include <aw/types/string_view.h>
 #include <aw/string/format.h>
+#include <aw/utility/exceptions.h>
 
 #include <aw/assert/export.h>
 #include <aw/assert/assert_action.h>
@@ -29,9 +30,15 @@ assert_action assert_fail_fmt(string_view msg, source_location loc = source_loca
 #if AW_FORMAT != AW_NO_FORMAT
 	if constexpr(sizeof...(Arg_types) > 0)
 	{
-		// No std::forward here: make_format_args need lvalues
-		std::string fmt = aw::vformat( msg, aw::make_format_args(args...) );
-		return assert_fail(fmt, loc);
+		aw_try {
+			// No std::forward here: make_format_args need lvalues
+			std::string message = aw::vformat( msg, aw::make_format_args(args...) );
+			return assert_fail(message, loc);
+		} aw_catch(...) {
+			// a message that cannot be formatted is reported as written,
+			// rather than being worse than the assertion it describes
+			return assert_fail(msg, loc);
+		}
 	}
 	else
 #endif
