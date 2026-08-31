@@ -53,8 +53,8 @@ HMODULE load_module(winapi_module& module, winapi_module& fallback_module)
 	{
 		if (!module.loaded)
 		{
-			module.loaded = true;
 			module.handle = LoadLibraryW(module.name);
+			module.loaded = true;
 		}
 	};
 
@@ -76,6 +76,7 @@ void* load_function(winapi_function& winapi_function)
 		auto* proc  = GetProcAddress(module, winapi_function.name);
 		// reinterpret_cast to silence -Wms-extensions
 		winapi_function.pointer = reinterpret_cast<void*>(proc);
+		winapi_function.loaded = true;
 	}
 	return winapi_function.pointer;
 }
