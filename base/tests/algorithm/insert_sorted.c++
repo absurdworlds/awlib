@@ -1,5 +1,8 @@
 #include <aw/algorithm/insert_sorted.h>
+#include <aw/ranges/value_range.h>
 #include <aw/test/test.h>
+
+#include "tagged.h"
 
 #include <algorithm>
 #include <vector>
@@ -8,29 +11,35 @@ TestFile( "algorithm::insert_sorted" );
 
 namespace aw {
 namespace {
-//! carries its starting position, so equal elements can be told apart
-struct tagged {
-	int key;
-	int tag;
-
-	friend bool operator<(tagged a, tagged b) { return a.key < b.key; }
-};
-
-std::vector<int> tags(std::vector<tagged> const& v)
-{
-	std::vector<int> result;
-	for (auto const& e : v)
-		result.push_back(e.tag);
-	return result;
-}
+using test_sort::tagged;
+using test_sort::tags;
 
 //! ascending keys, each appearing twice, tagged by starting position
 std::vector<tagged> run(int n)
 {
 	std::vector<tagged> v;
-	for (int i = 0; i < n; ++i)
+	for (int i : range(n))
 		v.push_back({ i / 2, i });
 	return v;
+}
+
+//! inserts a key into a sorted run, for every key and every length of run
+template<typename Insert>
+void check_every_position(Insert insert)
+{
+	for (int n : range(1, 7))
+	for (int key : range(n + 1)) {
+		auto vec = run(n);
+		vec.push_back({ key, n });
+
+		auto expected = vec;
+		std::stable_sort(expected.begin(), expected.end());
+
+		auto got = vec;
+		insert(got.begin(), got.begin() + n);
+
+		TestEqual(tags(got), tags(expected));
+	}
 }
 } // namespace
 
@@ -92,38 +101,14 @@ Test(insert_sorted_after_equals) {
 //! The order matches a stable sort for any possible position
 Test(insert_sorted_every_position) {
 	Checks {
-		for (int n = 1; n <= 6; ++n)
-		for (int key = 0; key <= n; ++key) {
-			auto vec = run(n);
-			vec.push_back({ key, n });
-
-			auto expected = vec;
-			std::stable_sort(expected.begin(), expected.end());
-
-			auto got = vec;
-			insert_sorted(got.begin(), got.begin() + n);
-
-			TestEqual(tags(got), tags(expected));
-		}
+		check_every_position([](auto begin, auto pos) { insert_sorted(begin, pos); });
 	}
 }
 
 // same for the unguarded version
 Test(insert_sorted_unguarded_every_position) {
 	Checks {
-		for (int n = 1; n <= 6; ++n)
-		for (int key = 0; key <= n; ++key) {
-			auto vec = run(n);
-			vec.push_back({ key, n });
-
-			auto expected = vec;
-			std::stable_sort(expected.begin(), expected.end());
-
-			auto got = vec;
-			insert_sorted_unguarded(got.begin(), got.begin() + n);
-
-			TestEqual(tags(got), tags(expected));
-		}
+		check_every_position([](auto begin, auto pos) { insert_sorted_unguarded(begin, pos); });
 	}
 }
 } // namespace aw
