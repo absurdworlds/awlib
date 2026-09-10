@@ -17,28 +17,19 @@ namespace meta {
 constexpr size_t invalid_index = std::numeric_limits<size_t>::max();
 
 namespace _impl {
-template<typename Pred>
-struct find_index {
-	template<typename T>
-	using F = aw::expand_r<Pred, T>;
-
-	template <size_t N, typename...Ts>
-	struct index;
-
-	template <size_t N, typename T>
-	struct index<N,T> {
-		static constexpr size_t value = F<T>::value ? N : invalid_index;
-	};
-
-	template <size_t N, typename T, typename...Ts>
-	struct index<N,T,Ts...> {
-		static constexpr size_t value = F<T>::value ? N : index<N+1,Ts...>::value;
-	};
-};
+template<typename Pred, typename... Ts>
+constexpr std::size_t find_index()
+{
+	constexpr bool eval[] { aw::expand_r<Pred, Ts>::value..., false };
+	for (std::size_t i = 0; i < sizeof...(Ts); ++i)
+		if (eval[i])
+			return i;
+	return invalid_index;
+}
 } // namespace impl
 
 template<typename Pred, typename...Ts>
-constexpr size_t find_index = _impl::find_index<Pred>::template index<0,Ts...>::value;
+constexpr size_t find_index = _impl::find_index<Pred, Ts...>();
 } // namespace meta
 
 // TODO: remove
