@@ -12,10 +12,10 @@
 #include <aw/meta/void_t.h>
 namespace aw {
 template<class T, typename = void>
-struct is_flat_container_t : std::false_type {};
+struct is_flat_container : std::false_type {};
 
 template<class T>
-struct is_flat_container_t<
+struct is_flat_container<
 	T,
 	void_t<
 		decltype( declval<T>().size() ),
@@ -36,7 +36,7 @@ struct is_flat_container_of<
 > : std::is_convertible<decltype( declval<C>().data() ), T*> {};
 
 template<class T>
-constexpr bool is_flat_container = is_flat_container_t<T>::value;
+constexpr bool is_flat_container_v = is_flat_container<T>::value;
 
 template<typename C, typename T>
 constexpr bool is_flat_container_of_v = is_flat_container_of<C,T>::value;
