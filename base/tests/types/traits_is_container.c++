@@ -1,4 +1,5 @@
 #include <aw/types/traits/is_container.h>
+#include <aw/types/traits/is_flat_container.h>
 #include <array>
 #include <vector>
 
@@ -14,4 +15,13 @@ static_assert(!is_allocator_aware_v<int>);
 
 static_assert(is_allocator_aware_container<std::vector<int>>);
 static_assert(!is_allocator_aware_container<std::array<int,3>>);
+
+static_assert(is_flat_container_v<std::vector<int>>);
+static_assert(is_flat_container_v<std::array<int,3>>);
+
+static_assert(is_flat_container_of_v<std::vector<int>, int>);
+static_assert(is_flat_container_of_v<std::array<int,3>, int>);
+
+static_assert(!is_flat_container_of_v<std::vector<long>, int>);
+static_assert(!is_flat_container_of_v<std::array<long,3>, int>);
 } // namespace aw
