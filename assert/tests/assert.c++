@@ -3,6 +3,7 @@
 #include <aw/test/test.h>
 
 #include <iostream>
+#include <string>
 
 TestFile( "assert" );
 
@@ -13,14 +14,19 @@ const string_view expected_assertions[] ={
     "false",
     "1 == 2",
     "false_with_message",
+#if AW_FORMAT != AW_NO_FORMAT
     "false_with_formatted_message"
+#else
+    // with no provider behind aw::format the message is passed through as-is
+    "false_with_{}_message"
+#endif
 };
 
 const string_view* current_assertion = &expected_assertions[0];
 
 assert_action test_assert_handler(string_view assertion, source_location location)
 {
-	if (current_assertion > std::end(expected_assertions))
+	if (current_assertion >= std::end(expected_assertions))
 	{
 		TestFail("Too many assertions!");
 	}
@@ -51,5 +57,85 @@ Test(assert_basic_test)
 
 	install_assert_handler(old_handler);
 }
+
+namespace {
+std::string recorded_message;
+int         recorded_calls = 0;
+
+assert_action recording_handler(string_view assertion, source_location)
+{
+	recorded_message.assign(assertion.begin(), assertion.end());
+	++recorded_calls;
+	return assert_action::ignore;
+}
+
+//! Fails an assertion on its own parameters, which a caller cannot do
+//! if the condition is evaluated outside the calling scope.
+bool check_arguments(int* pointer, int count)
+{
+	aw_assert(pointer != nullptr);
+	aw_assert(count > 0, "count was {}", count);
+	return true;
+}
+} // namespace
+
+Test(assert_reports_locals)
+{
+	const auto old_handler = install_assert_handler(recording_handler);
+	recorded_calls = 0;
+
+	check_arguments(nullptr, 1);
+	TestEqual(recorded_calls, 1);
+	TestEqual(string_view(recorded_message), string_view("pointer != nullptr"));
+
+	install_assert_handler(old_handler);
+}
+
+#if AW_FORMAT != AW_NO_FORMAT
+Test(assert_formats_temporaries)
+{
+	const auto old_handler = install_assert_handler(recording_handler);
+
+	int value = 7;
+	aw_assert(false, "lvalue {}", value);
+	TestEqual(string_view(recorded_message), string_view("lvalue 7"));
+
+	aw_assert(false, "literal {}", 42);
+	TestEqual(string_view(recorded_message), string_view("literal 42"));
+
+	aw_assert(false, "temporary {}", std::string("s"));
+	TestEqual(string_view(recorded_message), string_view("temporary s"));
+
+	install_assert_handler(old_handler);
+}
+
+Test(assert_survives_malformed_message)
+{
+	const auto old_handler = install_assert_handler(recording_handler);
+
+	// an unusable message is reported as written, rather than terminating
+	int value = 1;
+	aw_assert(false, "unmatched brace {", value);
+	TestEqual(string_view(recorded_message), string_view("unmatched brace {"));
+
+	install_assert_handler(old_handler);
+}
+#endif
+
+// an assertion as an unbraced branch must not swallow the else
+Test(assert_is_one_statement)
+{
+	const auto old_handler = install_assert_handler(recording_handler);
+
+	bool else_taken = false;
+	if (false)
+		aw_assert(true);
+	else
+		else_taken = true;
+	TestAssert(else_taken);
+
+	install_assert_handler(old_handler);
+}
+
 } // namespace aw
 

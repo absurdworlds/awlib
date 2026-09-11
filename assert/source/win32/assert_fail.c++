@@ -14,8 +14,8 @@ struct winapi_module {
 };
 
 struct {
-	winapi_module api_ms_win_rtcore_ntuser_window_l1_1_0 = { L"api_ms_win_rtcore_ntuser_window_l1_1_0" };
-	winapi_module ext_ms_win_ntuser_dialogbox_l1_1_0 = { L"ext_ms_win_ntuser_dialogbox_l1_1_0" };
+	winapi_module api_ms_win_rtcore_ntuser_window_l1_1_0 = { L"api-ms-win-rtcore-ntuser-window-l1-1-0" };
+	winapi_module ext_ms_win_ntuser_dialogbox_l1_1_0 = { L"ext-ms-win-ntuser-dialogbox-l1-1-0" };
 
 	winapi_module user32 = { L"user32" };
 } static winapi_modules;
@@ -53,8 +53,8 @@ HMODULE load_module(winapi_module& module, winapi_module& fallback_module)
 	{
 		if (!module.loaded)
 		{
-			module.loaded = true;
 			module.handle = LoadLibraryW(module.name);
+			module.loaded = true;
 		}
 	};
 
@@ -76,6 +76,7 @@ void* load_function(winapi_function& winapi_function)
 		auto* proc  = GetProcAddress(module, winapi_function.name);
 		// reinterpret_cast to silence -Wms-extensions
 		winapi_function.pointer = reinterpret_cast<void*>(proc);
+		winapi_function.loaded = true;
 	}
 	return winapi_function.pointer;
 }

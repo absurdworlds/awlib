@@ -1,6 +1,8 @@
 
 set(SOURCES
-	os_version.c++)
+	os_version.c++
+	debugger.c++
+)
 
 
 if (AW_CAPABILITIES_POSIX) # TODO
