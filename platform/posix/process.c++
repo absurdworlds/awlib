@@ -20,6 +20,7 @@
 #include <signal.h>
 
 #ifdef __APPLE__
+#include <mach-o/dyld.h>
 extern char** environ;
 #endif
 
@@ -121,8 +122,17 @@ fs::path path(std::error_code& ec)
 		}
 		buf.resize(buf.size() * 2);
 	}
+#elif (AW_PLATFORM_SPECIFIC == AW_PLATFORM_APPLE)
+	uint32_t size = 0;
+	std::string buf;
+	while (_NSGetExecutablePath(buf.data(), &size) != 0)
+		buf.resize(size);
+	buf.resize( std::strlen(buf.data()) );
+
+	// Canonicalize path, as it might be relative or contain symlinks
+	return fs::canonical(fs::path{ std::move(buf) }, ec);
 #else
-	// TODO: macOS needs _NSGetExecutablePath(); BSD has sysctl(KERN_PROC_PATHNAME)
+	// TODO: BSD has sysctl(KERN_PROC_PATHNAME)
 	// https://stackoverflow.com/questions/1023306/finding-current-executables-path-without-proc-self-exe
 	ec = std::make_error_code(std::errc::function_not_supported);
 	return {};
