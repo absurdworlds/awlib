@@ -6,6 +6,7 @@
 
 #include <aw/platform/export.h>
 #include <aw/process/wait_status.h>
+#include <aw/io/filesystem.h>
 
 #include <string>
 #include <system_error>
@@ -90,5 +91,17 @@ inline std::string executable_name(std::string path)
 {
 	return path;
 }
+
+namespace current_process {
+/*!
+ * Returns the path of the current executable.
+ */
+AW_PLATFORM_EXP fs::path path(std::error_code& ec);
+inline fs::path path()
+{
+	std::error_code ec;
+	return path(ec);
+}
+} // namespace current_process
 } // namespace aw::process::posix
 #endif // aw_process_posix_h

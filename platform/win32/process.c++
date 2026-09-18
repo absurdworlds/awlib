@@ -23,6 +23,25 @@ process_handle handle()
 {
 	return convert_handle<process_handle>(GetCurrentProcess());
 }
+
+fs::path path(std::error_code& ec)
+{
+	std::vector<WCHAR> buf(MAX_PATH);
+	while (true) {
+		auto len = ::GetModuleFileNameW(nullptr, buf.data(), DWORD(buf.size()));
+		if (len == 0) {
+			set_error(ec);
+			return {};
+		}
+		if (len < buf.size()) {
+			ec.clear();
+			// wchar_t is 32-bit on winelib, so go through char16_t
+			auto* text = reinterpret_cast<char16_t const*>(buf.data());
+			return fs::path{ std::u16string_view{ text, len } };
+		}
+		buf.resize(buf.size() * 2);
+	}
+}
 } //namespace current_process
 
 #if defined(AW_PROCESS_HAS_HANDLE_COUNT)

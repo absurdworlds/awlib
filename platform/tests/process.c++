@@ -292,6 +292,20 @@ Test(wait_reports_the_exit_code) {
 	}
 }
 
+Test(current_process_path_is_the_running_executable) {
+	std::error_code ec;
+
+	auto path = process::current_process::path(ec);
+
+	Checks {
+		TestAssert( !ec );
+		TestAssert( path.is_absolute() );
+		TestAssert( fs::exists(path) );
+		TestAssert( fs::equivalent(path, fs::path(_context.exe_dir) / path.filename()) );
+		TestEqual( path.filename().string(), process::executable_name("test_platform") );
+	}
+}
+
 #if (AW_PLATFORM == AW_PLATFORM_POSIX)
 /*!
  * Wait correctly reports the signal that killed the process
