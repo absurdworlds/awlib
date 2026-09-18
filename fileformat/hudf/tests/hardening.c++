@@ -21,105 +21,37 @@
 #include <aw/io/input_memory_stream.h>
 
 #include <aw/test/test.h>
+#include <aw/test/helpers/sandbox.h>
 
 #include <string>
 #include <string_view>
-
-#if (AW_PLATFORM == AW_PLATFORM_POSIX)
-#include <sys/resource.h>
-#include <sys/wait.h>
-#include <signal.h>
-#include <unistd.h>
-#endif
 
 TestFile("hudf::hardening");
 
 namespace aw::hudf {
 #if (AW_PLATFORM == AW_PLATFORM_POSIX)
 namespace {
-enum class outcome {
-	completed,   //!< parser returned on its own
-	timed_out,   //!< infinite loop
-	out_of_memory,
-	crashed,     //!< stack overflow / other fatal signal
-	threw,
+using test::outcome;
+
+constexpr test::sandbox limits {
+	.time_limit          = 5,
+	.address_space_limit = 256u << 20,
+	.stack_limit         =   1u << 20,
 };
-
-std::string to_string(outcome o)
-{
-	switch (o) {
-	case outcome::completed:     return "completed";
-	case outcome::timed_out:     return "timed_out";
-	case outcome::out_of_memory: return "out_of_memory";
-	case outcome::crashed:       return "crashed";
-	case outcome::threw:         return "threw";
-	}
-	return "?";
-}
-
-constexpr rlim_t address_space_limit = 256u << 20;
-constexpr rlim_t stack_limit         =   1u << 20;
-constexpr unsigned time_limit        = 5;
 
 /*!
  * Nesting depth for the deep-recursion case.
  *
- * Linux honours the lowered RLIMIT_STACK below, but a platform which sizes
+ * Linux honours the lowered RLIMIT_STACK above, but a platform which sizes
  * the main stack once at exec time (macOS) keeps its default. The depth is
  * therefore chosen to overflow that default rather than the limit we ask for.
  */
 constexpr int nesting_depth = 200000;
 
-/*!
- * Run \a func in a child process under resource limits.
- */
 template <typename Func>
 outcome run_sandboxed(Func func)
 {
-	constexpr auto exit_success   = 0;
-	constexpr auto exit_bad_alloc = 3;
-	constexpr auto exit_exception = 4;
-
-	fflush(nullptr);
-
-	pid_t pid = fork();
-	if (pid == 0) {
-		rlimit as{address_space_limit, address_space_limit};
-		setrlimit(RLIMIT_AS, &as);
-		rlimit st{stack_limit, stack_limit};
-		setrlimit(RLIMIT_STACK, &st);
-		// no core dumps for the deliberate crashes
-		rlimit core{0, 0};
-		setrlimit(RLIMIT_CORE, &core);
-
-		alarm(time_limit);
-
-		int code = exit_success;
-		try {
-			func();
-		} catch (std::bad_alloc&) {
-			code = exit_bad_alloc;
-		} catch (...) {
-			code = exit_exception;
-		}
-		_exit(code);
-	}
-
-	int status = 0;
-	waitpid(pid, &status, 0);
-
-	if (WIFSIGNALED(status)) {
-		int sig = WTERMSIG(status);
-		if (sig == SIGALRM)
-			return outcome::timed_out;
-		return outcome::crashed;
-	}
-
-	switch (WEXITSTATUS(status)) {
-	case exit_success:   return outcome::completed;
-	case exit_bad_alloc: return outcome::out_of_memory;
-	default:             return outcome::threw;
-	}
+	return test::run_sandboxed(func, limits);
 }
 
 io::input_memory_stream stream_of(std::string_view text)
