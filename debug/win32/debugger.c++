@@ -1,12 +1,12 @@
-#include <aw/platform/debugger.h>
+#include <aw/debug/debugger.h>
 
 #include <aw/platform/windows.h>
 
 
-namespace aw::platform::win32 {
+namespace aw::debug::win32 {
 bool is_debugger_present()
 {
 	return IsDebuggerPresent();
 }
-} // namespace aw::platform::win32
+} // namespace aw::debug::win32
 

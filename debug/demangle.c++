@@ -6,13 +6,13 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#include <aw/platform/demangle.h>
+#include <aw/debug/demangle.h>
 #include <aw/types/byte_buffer.h>
 
 #if (AW_COMPILER == AW_COMPILER_GCC) || (AW_COMPILER == AW_COMPILER_CLANG)
 #include <memory>
 #include <cxxabi.h>
-namespace aw {
+namespace aw::debug {
 std::string demangle(const char* name)
 {
 	static thread_local basic_buffer<char> buf;
@@ -29,13 +29,13 @@ std::string demangle(const char* name)
 	buf.memory.reset( memory );
 	return name;
 }
-} // namespace aw
+} // namespace aw::debug
 #elif (AW_COMPILER == AW_COMPILER_MSVC) || (AW_COMPILER == AW_COMPILER_CLANG_CL)
 #include <vector>
 #include <aw/platform/windows.h>
 #include <dbghelp.h>
 #undef UnDecorateSymbolName
-namespace aw {
+namespace aw::debug {
 namespace {
 size_t undecorate(const char* name, char* out, size_t len)
 {
@@ -57,16 +57,16 @@ std::string demangle(const char* name)
 
 	return std::string(buf.data(), buf.size());
 }
-} // namespace aw
+} // namespace aw::debug
 #else
-namespace aw {
+namespace aw::debug {
 std::string demangle(const char* name) { return name; }
-} // namespace aw
+} // namespace aw::debug
 #endif
 
 //------------------------------------------------------------------------------
 #if (__cpp_rtti)
-namespace aw {
+namespace aw::debug {
 #if (AW_COMPILER == AW_COMPILER_GCC) || (AW_COMPILER == AW_COMPILER_CLANG)
 std::string demangle(std::type_info const& info)
 {
@@ -82,5 +82,5 @@ std::string demangle(std::type_info const& info)
 	return info.name();
 }
 #endif
-} // namespace aw
+} // namespace aw::debug
 #endif // __cpp_rtti

@@ -6,24 +6,24 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef aw_platform_demangle_h
-#define aw_platform_demangle_h
-#include <aw/platform/export.h>
+#ifndef aw_debug_demangle_h
+#define aw_debug_demangle_h
+#include <aw/debug/export.h>
 #include <string>
-namespace aw {
+namespace aw::debug {
 //! Demangle symbol name. Returns unmodified mangled name on failure.
-AW_PLATFORM_EXP std::string demangle( char const* name );
+AW_DEBUG_EXP std::string demangle( char const* name );
 inline std::string demangle(std::string const& name)
 {
 	return demangle(name.data());
 }
-} // namespace aw
+} // namespace aw::debug
 
 #if (__cpp_rtti)
 #include <typeinfo>
-namespace aw {
+namespace aw::debug {
 //! Produces demangled type name from type_info.
-AW_PLATFORM_EXP std::string demangle( std::type_info const& info );
-} // namespace aw
+AW_DEBUG_EXP std::string demangle( std::type_info const& info );
+} // namespace aw::debug
 #endif// __cpp_rtti
-#endif//aw_platform_demangle_h
+#endif//aw_debug_demangle_h

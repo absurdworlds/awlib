@@ -1,4 +1,4 @@
-#include <aw/platform/debugger.h>
+#include <aw/debug/debugger.h>
 
 #if AW_SUPPORT_PLATFORM_POSIX
 
@@ -9,7 +9,7 @@
 #include <aw/types/string_view.h>
 #endif
 
-namespace aw::platform::posix {
+namespace aw::debug::posix {
 #if (AW_PLATFORM_SPECIFIC == AW_PLATFORM_LINUX)
 bool is_debugger_present()
 {
@@ -37,5 +37,5 @@ bool is_debugger_present()
 	return false;
 }
 #endif
-} // namespace aw::platform::posix
+} // namespace aw::debug::posix
 #endif

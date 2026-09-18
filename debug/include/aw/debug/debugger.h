@@ -1,25 +1,25 @@
-#ifndef aw_platform_debugger_h
-#define aw_platform_debugger_h
+#ifndef aw_debug_debugger_h
+#define aw_debug_debugger_h
 
 #include <aw/config.h>
 
-#include <aw/platform/export.h>
+#include <aw/debug/export.h>
 
 #if (AW_PLATFORM == AW_PLATFORM_POSIX)
 #include <signal.h>
 #endif
 
 namespace aw {
-namespace platform {
+namespace debug {
 #ifdef AW_SUPPORT_PLATFORM_POSIX
 namespace posix {
-AW_PLATFORM_EXP bool is_debugger_present();
+AW_DEBUG_EXP bool is_debugger_present();
 } // namespace posix
 #endif // AW_SUPPORT_PLATFORM_POSIX
 
 #ifdef AW_SUPPORT_PLATFORM_WIN32
 namespace win32 {
-AW_PLATFORM_EXP bool is_debugger_present();
+AW_DEBUG_EXP bool is_debugger_present();
 } // namespace win32
 #endif
 
@@ -35,7 +35,7 @@ using win32::is_debugger_present;
 #else
 inline bool is_debugger_present() { return false; }
 #endif
-} // namespace platform
+} // namespace debug
 } // namespace aw
 
 // -------------------------------------
@@ -51,9 +51,9 @@ inline bool is_debugger_present() { return false; }
 
 #define aw_debug_break \
 	do { \
-		if (::aw::platform::is_debugger_present()) \
+		if (::aw::debug::is_debugger_present()) \
 			aw_debug_break_impl;\
 	} while (0)
 
 
-#endif//aw_platform_debugger_h
+#endif//aw_debug_debugger_h

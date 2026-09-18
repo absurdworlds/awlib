@@ -1,4 +1,4 @@
-#include <aw/platform/demangle.h>
+#include <aw/debug/demangle.h>
 #include <aw/types/string_view.h>
 
 /* WARNING! Very long string(s). */
@@ -8,9 +8,9 @@
 
 #include "demangle.x86_64abi.h"
 
-TestFile("platform::demangle");
+TestFile("debug::demangle");
 
-namespace aw {
+namespace aw::debug {
 Test( demangle )
 {
 	for (auto&& [man, dem] : paired(mangled, demangled))
@@ -20,5 +20,5 @@ Test( demangle )
 #endif
 }
 
-} // namespace aw
+} // namespace aw::debug
 

@@ -1,11 +1,11 @@
-#include <aw/platform/debugger.h>
+#include <aw/debug/debugger.h>
 #include <aw/types/string_view.h>
 
 #include <aw/test/test.h>
 
-TestFile("platform::debugger");
+TestFile("debug::debugger");
 
-namespace aw::platform {
+namespace aw::debug {
 Test( debugger_present )
 {
 	bool is_present = false;
@@ -17,4 +17,4 @@ Test( debugger_present )
 	TestEqual( is_debugger_present(), is_present );
 }
 
-} // namespace aw::platform
+} // namespace aw::debug

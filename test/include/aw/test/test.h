@@ -16,7 +16,7 @@
 #include <aw/test/report.h>
 #include <aw/test/print.h>
 #include <aw/test/segv_handler.h>
-#include <aw/platform/demangle.h>
+#include <aw/debug/demangle.h>
 #include <aw/string/to_string.h>
 #include <aw/types/strip.h>
 #if (AW_PLATFORM == AW_PLATFORM_POSIX)
@@ -185,7 +185,7 @@ struct _catch {
 		} catch(Ex&) {
 			return true;
 		} catch(std::exception& e) {
-			auto name = demangle( typeid(e) );
+			auto name = debug::demangle( typeid(e) );
 			auto what = " - \""s + e.what() + '"';
 			_msg = "caught wrong exception: " + name + what;
 			return false;
