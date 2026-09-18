@@ -6,19 +6,19 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef aw_platform_process_h
-#define aw_platform_process_h
-#include <aw/io/export.h>
+#ifndef aw_process_h
+#define aw_process_h
+#include <aw/platform/export.h>
 #include <aw/types/array_view.h>
 
 #if defined(AW_SUPPORT_PLATFORM_WIN32)
-#include "win32/process.h"
+#include <aw/process/win32.h>
 #endif
 #if defined(AW_SUPPORT_PLATFORM_POSIX)
-#include "posix/process.h"
+#include <aw/process/posix.h>
 #endif
 
-namespace aw::io {
+namespace aw::process {
 #if   (AW_PLATFORM == AW_PLATFORM_POSIX)
 using posix::process_handle;
 using posix::invalid_process_handle;
@@ -38,5 +38,5 @@ using win32::wait;
 using win32::run;
 using win32::executable_name;
 #endif
-} // namespace aw::platform
-#endif//aw_platform_process_h
+} // namespace aw::process
+#endif//aw_process_h

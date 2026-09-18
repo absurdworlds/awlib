@@ -21,6 +21,7 @@
 
 
 namespace aw::io::posix {
+using platform::posix::set_error_if;
 
 file_descriptor open(fs::path const& path, file_mode fm, std::error_code& ec)
 {

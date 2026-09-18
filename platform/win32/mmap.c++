@@ -12,6 +12,10 @@
 namespace aw {
 namespace io {
 namespace win32 {
+using platform::win32::close_handle;
+using platform::win32::set_error;
+using platform::win32::set_error_if;
+
 namespace {
 unsigned get_protection( map_perms perms )
 {

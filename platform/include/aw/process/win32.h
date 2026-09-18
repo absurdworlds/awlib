@@ -1,30 +1,30 @@
-#ifndef aw_io_win32_process_h
-#define aw_io_win32_process_h
+#ifndef aw_process_win32_h
+#define aw_process_win32_h
 
-#include "detail/handle_holder.h"
+#include <aw/process/detail/handle_holder.h>
 
 #include <aw/types/array_view.h>
 #include <aw/types/support/enum.h>
 
-#include <aw/io/wait_status.h>
+#include <aw/process/wait_status.h>
 
 #include <string>
 #include <chrono>
 #include <system_error>
 
-namespace aw::io::win32 {
+namespace aw::process::win32 {
 enum class process_handle : uintptr_t {};
 constexpr auto invalid_process_handle = process_handle(-1);
 
 // winelib has no GetProcessHandleCount
 #if !defined(AW_WINELIB)
-#define AW_IO_HAS_HANDLE_COUNT 1
-AW_IO_EXP u32 handle_count(process_handle handle);
+#define AW_PROCESS_HAS_HANDLE_COUNT 1
+AW_PLATFORM_EXP u32 handle_count(process_handle handle);
 #endif
 
 namespace current_process {
-AW_IO_EXP process_handle handle();
-#if defined(AW_IO_HAS_HANDLE_COUNT)
+AW_PLATFORM_EXP process_handle handle();
+#if defined(AW_PROCESS_HAS_HANDLE_COUNT)
 inline u32 handle_count() { return win32::handle_count( handle() ); }
 #endif
 } // namespace current_process
@@ -42,11 +42,11 @@ inline void close_handle(process_handle handle)
  * Spawn a child process with specified \a path and argument list \a argv.
  * Argument list must end with `nullptr`.
  */
-AW_IO_EXP process_holder spawn(const char* path, aw::array_view<const char*> argv, std::error_code& ec) noexcept;
+AW_PLATFORM_EXP process_holder spawn(const char* path, aw::array_view<const char*> argv, std::error_code& ec) noexcept;
 /*!
  * Spawn a child process with specified argument list \a argv. `argv[0]` is used as path.
  */
-AW_IO_EXP process_holder spawn(aw::array_view<const char*> argv, std::error_code& ec) noexcept;
+AW_PLATFORM_EXP process_holder spawn(aw::array_view<const char*> argv, std::error_code& ec) noexcept;
 
 inline process_holder spawn(const char* path, aw::array_view<const char*> argv)
 {
@@ -59,21 +59,21 @@ inline process_holder spawn(aw::array_view<const char*> argv)
 	return spawn(argv, ec);
 }
 
-AW_IO_EXP process_holder spawn(std::string path, aw::array_view<std::string> argv, std::error_code& ec);
+AW_PLATFORM_EXP process_holder spawn(std::string path, aw::array_view<std::string> argv, std::error_code& ec);
 inline process_holder spawn(std::string path, aw::array_view<std::string> argv)
 {
 	std::error_code ec;
 	return spawn(path, argv, ec);
 }
 
-AW_IO_EXP wait_result wait(process_handle pid, std::error_code& ec, timeout_spec_ms timeout = {}) noexcept;
+AW_PLATFORM_EXP wait_result wait(process_handle pid, std::error_code& ec, timeout_spec_ms timeout = {}) noexcept;
 inline wait_result wait(process_handle pid, timeout_spec_ms timeout = {})
 {
 	std::error_code ec;
 	return wait(pid, ec, timeout);
 }
 
-AW_IO_EXP int kill(process_handle pid, int signal, std::error_code& ec) noexcept;
+AW_PLATFORM_EXP int kill(process_handle pid, int signal, std::error_code& ec) noexcept;
 inline int kill(process_handle pid, int signal)
 {
 	std::error_code ec;
@@ -83,7 +83,7 @@ inline int kill(process_handle pid, int signal)
 /*!
  * Stop a process. On WinAPI platform it unconditionally ends the process.
  */
-AW_IO_EXP int terminate(process_handle pid, std::error_code& ec) noexcept;
+AW_PLATFORM_EXP int terminate(process_handle pid, std::error_code& ec) noexcept;
 inline int terminate(process_handle pid)
 {
 	std::error_code ec;
@@ -115,6 +115,6 @@ inline std::string executable_name(std::string path)
 		path += ".exe";
 	return path;
 }
-} // namespace aw::io::win32
+} // namespace aw::process::win32
 
-#endif // aw_io_win32_process_h
+#endif // aw_process_win32_h

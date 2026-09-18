@@ -1,7 +1,7 @@
 #include <aw/utility/unicode/convert.h>
 #include <aw/string/trim_if.h>
 #include <aw/algorithm/in.h>
-#include <aw/io/export.h>
+#include <aw/platform/export.h>
 #include <system_error>
 #include <windows.h>
 namespace aw {
@@ -49,7 +49,7 @@ auto winapi_error_category::message(int code) const -> std::string
 } // namespace
 } // namespace _impl
 
-AW_IO_EXP std::error_category const& winapi_error_category()
+AW_PLATFORM_EXP std::error_category const& winapi_error_category()
 {
   static aw::_impl::winapi_error_category cat;
   return cat;

@@ -9,7 +9,7 @@
 #ifndef aw_io_posix_internal_helpers_h
 #define aw_io_posix_internal_helpers_h
 #include <system_error>
-namespace aw::io::posix {
+namespace aw::platform::posix {
 // Initialise ec from errno
 inline void set_error(std::error_code& ec)
 {
@@ -25,5 +25,5 @@ inline void set_error_if(bool cond, std::error_code& ec)
 		ec.clear();
 	}
 }
-} // namespace aw::io:posix
+} // namespace aw::platform::posix
 #endif//aw_io_posix_internal_helpers_h

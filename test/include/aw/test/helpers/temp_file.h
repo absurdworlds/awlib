@@ -6,8 +6,8 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef aw_io_tests_temp_file_h
-#define aw_io_tests_temp_file_h
+#ifndef aw_test_helpers_temp_file_h
+#define aw_test_helpers_temp_file_h
 #include <aw/io/filesystem.h>
 #include <aw/io/native_file.h>
 
@@ -73,4 +73,4 @@ struct temp_file {
 	fs::path path;
 };
 } // namespace aw::test
-#endif//aw_io_tests_temp_file_h
+#endif//aw_test_helpers_temp_file_h

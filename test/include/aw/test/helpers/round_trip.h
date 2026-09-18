@@ -6,15 +6,15 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef aw_io_tests_round_trip_h
-#define aw_io_tests_round_trip_h
+#ifndef aw_test_helpers_round_trip_h
+#define aw_test_helpers_round_trip_h
 #include <aw/io/file_mode.h>
 #include <aw/test/test.h>
 
 #include <string_view>
 #include <vector>
 
-#include "temp_file.h"
+#include <aw/test/helpers/temp_file.h>
 
 namespace aw::test {
 /*!
@@ -65,4 +65,4 @@ void test_round_trip(std::string_view name)
 	}
 }
 } // namespace aw::test
-#endif//aw_io_tests_round_trip_h
+#endif//aw_test_helpers_round_trip_h

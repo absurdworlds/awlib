@@ -48,9 +48,9 @@ struct file_mapping {
 	size_t length = 0;
 };
 
-AW_IO_EXP
+AW_PLATFORM_EXP
 file_mapping map_file( file_descriptor fd, map_perms perms, std::error_code& ec );
-AW_IO_EXP bool unmap_file( file_mapping& map, std::error_code& ec );
+AW_PLATFORM_EXP bool unmap_file( file_mapping& map, std::error_code& ec );
 } // namespace posix
 #endif
 
@@ -64,9 +64,9 @@ struct file_mapping {
 	size_t length = 0;
 };
 
-AW_IO_EXP
+AW_PLATFORM_EXP
 file_mapping map_file( file_descriptor fd, map_perms perms, std::error_code& ec );
-AW_IO_EXP bool unmap_file( file_mapping& map, std::error_code& ec );
+AW_PLATFORM_EXP bool unmap_file( file_mapping& map, std::error_code& ec );
 } // namespace win32
 #endif
 

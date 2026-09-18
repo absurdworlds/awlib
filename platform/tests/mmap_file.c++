@@ -4,7 +4,7 @@
 #include <algorithm>
 #include <type_traits>
 
-#include "temp_file.h"
+#include <aw/test/helpers/temp_file.h>
 
 TestFile("mmap file");
 

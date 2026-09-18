@@ -1,10 +1,10 @@
-#ifndef aw_io_wait_status_h
-#define aw_io_wait_status_h
+#ifndef aw_process_wait_status_h
+#define aw_process_wait_status_h
 
 #include <chrono>
 #include <optional>
 
-namespace aw::io {
+namespace aw::process {
 
 enum class wait_status {
 	finished,
@@ -41,7 +41,7 @@ struct wait_result {
 //! How long to wait for a process; no value means indefinitely
 using timeout_spec_ms = std::optional<std::chrono::milliseconds>;
 
-} // namespace aw::io
+} // namespace aw::process
 
 
-#endif // aw_io_wait_status_h
+#endif // aw_process_wait_status_h

@@ -9,7 +9,7 @@
 #ifndef aw_internal_path_helpers_h
 #define aw_internal_path_helpers_h
 #include <aw/io/filesystem.h>
-namespace aw::io::win32 {
+namespace aw::platform::win32 {
 // workaround: (actually run into this problem)
 // wchar_t is 2 bytes on windows, and 4 bytes in linux
 // when using native libstdc++, this causes problems
@@ -33,5 +33,5 @@ struct winapi_path {
 #endif
 	operator wchar_t*() const { return (wchar_t*)path.data(); }
 };
-} // namespace aw::io::win32
+} // namespace aw::platform::win32
 #endif//aw_internal_path_helpers_h

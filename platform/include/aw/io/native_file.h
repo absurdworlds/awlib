@@ -11,18 +11,18 @@
 #include <aw/io/file_descriptor.h>
 #include <aw/io/file_mode.h>
 #include <aw/io/filesystem.h>
-#include <aw/io/export.h>
+#include <aw/platform/export.h>
 namespace aw {
 namespace io {
 #if defined(AW_SUPPORT_PLATFORM_POSIX)
 namespace posix {
-AW_IO_EXP file_descriptor open(fs::path const& path, file_mode fm, std::error_code& ec);
-AW_IO_EXP int close(file_descriptor fd, std::error_code& ec);
-AW_IO_EXP intmax_t read(file_descriptor  fd, char* buffer,       uintmax_t count, std::error_code& ec);
-AW_IO_EXP intmax_t write(file_descriptor fd, char const* buffer, uintmax_t count, std::error_code& ec);
-AW_IO_EXP intmax_t seek(file_descriptor  fd, intmax_t count, seek_mode mode, std::error_code& ec);
-AW_IO_EXP intmax_t tell(file_descriptor  fd, std::error_code& ec);
-AW_IO_EXP uintmax_t size(file_descriptor fd, std::error_code& ec);
+AW_PLATFORM_EXP file_descriptor open(fs::path const& path, file_mode fm, std::error_code& ec);
+AW_PLATFORM_EXP int close(file_descriptor fd, std::error_code& ec);
+AW_PLATFORM_EXP intmax_t read(file_descriptor  fd, char* buffer,       uintmax_t count, std::error_code& ec);
+AW_PLATFORM_EXP intmax_t write(file_descriptor fd, char const* buffer, uintmax_t count, std::error_code& ec);
+AW_PLATFORM_EXP intmax_t seek(file_descriptor  fd, intmax_t count, seek_mode mode, std::error_code& ec);
+AW_PLATFORM_EXP intmax_t tell(file_descriptor  fd, std::error_code& ec);
+AW_PLATFORM_EXP uintmax_t size(file_descriptor fd, std::error_code& ec);
 
 /*! Wrapper around native file handle */
 struct file {
@@ -69,13 +69,13 @@ private:
 
 #if defined(AW_SUPPORT_PLATFORM_WIN32)
 namespace win32 {
-AW_IO_EXP file_descriptor open(fs::path const& path, file_mode fm, std::error_code& ec);
-AW_IO_EXP bool close(file_descriptor fd, std::error_code& ec);
-AW_IO_EXP intmax_t read(file_descriptor  fd, char* buffer,       uintmax_t count, std::error_code& ec);
-AW_IO_EXP intmax_t write(file_descriptor fd, char const* buffer, uintmax_t count, std::error_code& ec);
-AW_IO_EXP intmax_t seek(file_descriptor  fd, intmax_t count, seek_mode mode, std::error_code& ec);
-AW_IO_EXP intmax_t tell(file_descriptor  fd, std::error_code& ec);
-AW_IO_EXP uintmax_t size(file_descriptor fd, std::error_code& ec);
+AW_PLATFORM_EXP file_descriptor open(fs::path const& path, file_mode fm, std::error_code& ec);
+AW_PLATFORM_EXP bool close(file_descriptor fd, std::error_code& ec);
+AW_PLATFORM_EXP intmax_t read(file_descriptor  fd, char* buffer,       uintmax_t count, std::error_code& ec);
+AW_PLATFORM_EXP intmax_t write(file_descriptor fd, char const* buffer, uintmax_t count, std::error_code& ec);
+AW_PLATFORM_EXP intmax_t seek(file_descriptor  fd, intmax_t count, seek_mode mode, std::error_code& ec);
+AW_PLATFORM_EXP intmax_t tell(file_descriptor  fd, std::error_code& ec);
+AW_PLATFORM_EXP uintmax_t size(file_descriptor fd, std::error_code& ec);
 
 /*! Wrapper around native file handle */
 struct file {

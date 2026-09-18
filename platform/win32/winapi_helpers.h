@@ -8,7 +8,7 @@
  */
 #ifndef aw_internal_winapi_helpers_h
 #define aw_internal_winapi_helpers_h
-#include <aw/io/export.h>
+#include <aw/platform/export.h>
 #include <aw/types/types.h>
 #include <system_error>
 
@@ -23,8 +23,8 @@
 #include <windows.h>
 
 namespace aw {
-AW_IO_EXP std::error_category const& winapi_error_category();
-namespace io {
+AW_PLATFORM_EXP std::error_category const& winapi_error_category();
+namespace platform {
 namespace win32 {
 template<typename T>
 auto convert_handle( HANDLE h ) -> T
@@ -60,6 +60,6 @@ inline bool close_handle( uintptr_t handle )
 }
 
 } // namespace win32
-} // namespace io
+} // namespace platform
 } // namespace aw
 #endif//aw_internal_winapi_helpers_h

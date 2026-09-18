@@ -12,9 +12,10 @@
 #include <limits>
 
 #include <sys/mman.h>
-namespace aw {
-namespace io {
-namespace posix {
+namespace aw::io::posix {
+using platform::posix::set_error;
+using platform::posix::set_error_if;
+
 namespace {
 int get_protection( map_perms perms )
 {
@@ -95,6 +96,4 @@ bool unmap_file( file_mapping& map, std::error_code& ec )
 	map = {};
 	return true;
 }
-} // namespace posix
-} // namespace io
-} // namespace aw
+} // namespace aw::io::posix

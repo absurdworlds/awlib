@@ -1,4 +1,4 @@
-#include "aw/io/posix/process.h"
+#include <aw/process/posix.h>
 
 #include "helpers.h"
 
@@ -23,8 +23,11 @@
 extern char** environ;
 #endif
 
-namespace aw::io::posix {
-AW_IO_EXP
+namespace aw::process::posix {
+using platform::posix::set_error;
+using platform::posix::set_error_if;
+
+AW_PLATFORM_EXP
 process_handle spawn(const char* path, aw::array_view<const char*> argv, std::error_code& ec) noexcept
 {
 	// enforce `nullptr` at the end of `argv`
@@ -54,7 +57,7 @@ process_handle spawn(const char* path, aw::array_view<const char*> argv, std::er
 	return process_handle( pid );
 }
 
-AW_IO_EXP
+AW_PLATFORM_EXP
 process_handle spawn(aw::array_view<const char*> argv, std::error_code& ec) noexcept
 {
 	if (argv.empty() || argv[0] == nullptr) {
@@ -65,7 +68,7 @@ process_handle spawn(aw::array_view<const char*> argv, std::error_code& ec) noex
 	return spawn( argv[0], argv, ec );
 }
 
-AW_IO_EXP
+AW_PLATFORM_EXP
 process_handle spawn(std::string path, aw::array_view<std::string> argv, std::error_code& ec)
 {
 	std::vector<const char*> args;
@@ -77,7 +80,7 @@ process_handle spawn(std::string path, aw::array_view<std::string> argv, std::er
 	return spawn(path.data(), args, ec);
 }
 
-AW_IO_EXP
+AW_PLATFORM_EXP
 int kill(process_handle pid, int signal, std::error_code& ec) noexcept
 {
 	// TODO: don't accept -1 or 0 as pid, add separate functions for that
@@ -91,7 +94,7 @@ int kill(process_handle pid, int signal, std::error_code& ec) noexcept
 	return ret;
 }
 
-AW_IO_EXP
+AW_PLATFORM_EXP
 int terminate(process_handle pid, std::error_code& ec) noexcept
 {
 	return kill(pid, SIGTERM, ec);
@@ -157,7 +160,7 @@ wait_result wait_until(pid_t pid, std::chrono::steady_clock::time_point deadline
 }
 } // namespace
 
-AW_IO_EXP wait_result wait(process_handle pid, std::error_code& ec, timeout_spec_ms timeout) noexcept
+AW_PLATFORM_EXP wait_result wait(process_handle pid, std::error_code& ec, timeout_spec_ms timeout) noexcept
 {
 	ec.clear();
 
@@ -178,4 +181,4 @@ AW_IO_EXP wait_result wait(process_handle pid, std::error_code& ec, timeout_spec
 
 	return decode_status( status );
 }
-} // namespace aw::platform::posix
+} // namespace aw::process::posix

@@ -3,7 +3,7 @@
 #include <cstring>
 #include <algorithm>
 
-#include "round_trip.h"
+#include <aw/test/helpers/round_trip.h>
 
 TestFile("Native file");
 

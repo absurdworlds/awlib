@@ -1,15 +1,15 @@
-#ifndef aw_io_handle_holder_h
-#define aw_io_handle_holder_h
+#ifndef aw_process_handle_holder_h
+#define aw_process_handle_holder_h
 
 #include <aw/types/types.h>
 
-#include <aw/io/export.h>
+#include <aw/platform/export.h>
 
 #include <utility>
 
-namespace aw::io::win32::detail {
+namespace aw::process::win32::detail {
 
-AW_IO_EXP
+AW_PLATFORM_EXP
 void close_handle( uintptr_t handle );
 
 //! A wrapper that owns the handle and automatically closes it
@@ -60,6 +60,6 @@ private:
 };
 
 
-} // namespace aw::io::win32::detail
+} // namespace aw::process::win32::detail
 
-#endif // aw_io_handle_holder_h
+#endif // aw_process_handle_holder_h

@@ -11,6 +11,10 @@
 #include "winapi_helpers.h"
 #include "path.h"
 namespace aw::io::win32 {
+using platform::win32::close_handle;
+using platform::win32::set_error_if;
+using platform::win32::winapi_path;
+
 namespace {
 int get_access( file_mode mode )
 {

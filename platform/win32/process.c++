@@ -1,4 +1,4 @@
-#include "aw/io/win32/process.h"
+#include <aw/process/win32.h>
 
 #include <aw/types/string_view.h>
 #include <aw/string/escape.h>
@@ -12,7 +12,12 @@
 #include <csignal>
 #include <vector>
 
-namespace aw::io::win32 {
+namespace aw::process::win32 {
+using platform::win32::convert_handle;
+using platform::win32::set_error;
+using platform::win32::set_error_if;
+using platform::win32::winapi_path;
+
 namespace current_process {
 process_handle handle()
 {
@@ -20,7 +25,7 @@ process_handle handle()
 }
 } //namespace current_process
 
-#if defined(AW_IO_HAS_HANDLE_COUNT)
+#if defined(AW_PROCESS_HAS_HANDLE_COUNT)
 u32 handle_count(process_handle handle)
 {
 	DWORD count = 0;
@@ -169,4 +174,4 @@ int terminate(process_handle hprocess, std::error_code& ec) noexcept
 
 	return ret ? 0 : -1;
 }
-} // namespace aw::platform::win32
+} // namespace aw::process::win32
