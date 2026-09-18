@@ -2,6 +2,7 @@
 #include <aw/io/buffered_file.h>
 #include <aw/io/write_file.h>
 #include <aw/test/test.h>
+#include <aw/test/helpers/sandbox.h>
 #include <cstring>
 #include <algorithm>
 
@@ -59,6 +60,37 @@ Test(size_reports_error) {
 
 	TestCatch(fs::filesystem_error, file.size());
 };
+
+#if (AW_PLATFORM == AW_PLATFORM_POSIX)
+/*!
+ * A file that can no longer be closed must not take the process
+ * down with it when it goes out of scope.
+ */
+Test(destructor_survives_close_failure) {
+	temp_file tmp{_context.name};
+	tmp.write("");
+
+	auto const fm = io::file_mode::read;
+
+	auto const scenario = [&] {
+		// hack: we rely on fd reuse, open() guarantees to give
+		// the lowest free descriptor, so we open a file, save its fd,
+		// and close it
+		auto const fd = io::native::file{ tmp.path, fm }.descriptor();
+
+		// file uses native::file under the hood
+		io::file file{ tmp.path, fm };
+
+		// ... then we pull the descriptor out from under the wrapper
+		::close(fd);
+
+		// ~file() fails to close the invalid fd
+		// the exception should not escape
+	};
+
+	TestEqual( test::run_sandboxed(scenario), test::outcome::completed );
+};
+#endif
 
 Test(buffered_file_move_keeps_path) {
 	char const data[] { "abcde" };

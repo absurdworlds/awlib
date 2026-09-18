@@ -52,6 +52,7 @@ struct file {
 	catch(std::exception& ex)
 	{
 		//log.warning("aw::io", "could not close file " + path.u8string());
+		return;
 	}
 
 	file(file&& other) noexcept
