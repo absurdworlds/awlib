@@ -69,6 +69,7 @@ add_subdirectory(config)
 add_subdirectory(base)
 add_subdirectory(math)
 add_subdirectory(platform)
+add_subdirectory(debug)
 
 option(AW_ENABLE_ASSERT "Enable aw::assert. If OFF, awlib will be compiled without dependency on aw::assert." ON)
 if (AW_ENABLE_ASSERT)

@@ -1,7 +1,6 @@
-set(SOURCES os_version.c++ demangle.c++)
+set(SOURCES os_version.c++)
 
 set(WIN32_SOURCES
-	win32/debugger.c++
 	win32/error_codes.c++
 	win32/file.c++
 	win32/mmap.c++
@@ -11,7 +10,6 @@ set(WIN32_SOURCES
 	win32/winapi_helpers.h)
 
 set(POSIX_SOURCES
-	posix/debugger.c++
 	posix/file.c++
 	posix/helpers.h
 	posix/mmap.c++)
@@ -44,12 +42,3 @@ target_link_libraries(awplatform
 		awbase
 	PRIVATE
 		awutils)
-
-if (WIN32)
-	# lowercase: mingw ships libdbghelp.a, and cross-linking on Linux
-	# is case-sensitive
-	target_link_libraries(awplatform
-	PRIVATE
-		dbghelp
-	)
-endif()

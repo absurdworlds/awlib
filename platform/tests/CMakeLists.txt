@@ -1,14 +1,9 @@
 
 set(SOURCES
 	os_version.c++
-	debugger.c++
 	native_file.c++
 	mmap_file.c++
 )
-
-if (AW_CAPABILITIES_POSIX) # TODO
-	list(APPEND SOURCES demangle.x86_64abi.c++)
-endif()
 
 if(NOT EMSCRIPTEN)
 	list(APPEND SOURCES process.c++)

@@ -20,7 +20,9 @@ aw_add_library(awtest INTERFACE
 target_link_libraries(awtest
 	INTERFACE
 		awutils
-		awplatform)
+		awplatform
+		awdebug
+)
 
 # so that the reports can name source files relative to the source tree
 target_compile_definitions(awtest

@@ -47,5 +47,5 @@ target_link_libraries(awassert
 		awutils
 		awtypes
 		awstring
-		awplatform # aw/assert.h includes aw/platform/debugger.h
+		awdebug # aw/assert.h includes aw/debug/debugger.h
 	)
