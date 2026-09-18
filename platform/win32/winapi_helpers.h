@@ -12,20 +12,11 @@
 #include <aw/types/types.h>
 #include <system_error>
 
-#ifndef WIN32_LEAN_AND_MEAN
-#define WIN32_LEAN_AND_MEAN
-#endif//WIN32_LEAN_AND_MEAN
-
-#ifndef NOMINMAX
-#define NOMINMAX
-#endif//NOMINMAX
-
-#include <windows.h>
+#include <aw/platform/windows.h>
 
 namespace aw {
 AW_PLATFORM_EXP std::error_category const& winapi_error_category();
-namespace platform {
-namespace win32 {
+namespace platform::win32 {
 template<typename T>
 auto convert_handle( HANDLE h ) -> T
 {
@@ -59,7 +50,6 @@ inline bool close_handle( uintptr_t handle )
 	return close_handle( handle, close_ec );
 }
 
-} // namespace win32
-} // namespace platform
+} // namespace platform::win32
 } // namespace aw
 #endif//aw_internal_winapi_helpers_h

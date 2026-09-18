@@ -2,8 +2,11 @@
 #include <aw/string/trim_if.h>
 #include <aw/algorithm/in.h>
 #include <aw/platform/export.h>
+
 #include <system_error>
-#include <windows.h>
+
+#include <aw/platform/windows.h>
+
 namespace aw {
 namespace win32 {
 std::errc map_error_code(int code);
