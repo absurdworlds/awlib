@@ -7,6 +7,7 @@
 #include <aw/types/support/enum.h>
 
 #include <aw/process/wait_status.h>
+#include <aw/io/filesystem.h>
 
 #include <string>
 #include <chrono>
@@ -27,6 +28,16 @@ AW_PLATFORM_EXP process_handle handle();
 #if defined(AW_PROCESS_HAS_HANDLE_COUNT)
 inline u32 handle_count() { return win32::handle_count( handle() ); }
 #endif
+
+/*!
+ * Returns the path of the current executable.
+ */
+AW_PLATFORM_EXP fs::path path(std::error_code& ec);
+inline fs::path path()
+{
+	std::error_code ec;
+	return path(ec);
+}
 } // namespace current_process
 
 using process_holder = detail::handle_holder<process_handle>;

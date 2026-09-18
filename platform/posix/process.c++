@@ -100,6 +100,37 @@ int terminate(process_handle pid, std::error_code& ec) noexcept
 	return kill(pid, SIGTERM, ec);
 }
 
+namespace current_process {
+AW_PLATFORM_EXP
+fs::path path(std::error_code& ec)
+{
+#if (AW_PLATFORM_SPECIFIC == AW_PLATFORM_LINUX)
+	// readlink() does not terminate the result and truncates silently,
+	// so keep growing until the link fits with room to spare
+	std::string buf(256, '\0');
+	while (true) {
+		auto len = ::readlink("/proc/self/exe", buf.data(), buf.size());
+		if (len < 0) {
+			set_error(ec);
+			return {};
+		}
+		if (size_t(len) < buf.size()) {
+			buf.resize(size_t(len));
+			ec.clear();
+			return fs::path{ std::move(buf) };
+		}
+		buf.resize(buf.size() * 2);
+	}
+#else
+	// TODO: macOS needs _NSGetExecutablePath(); BSD has sysctl(KERN_PROC_PATHNAME)
+	// https://stackoverflow.com/questions/1023306/finding-current-executables-path-without-proc-self-exe
+	ec = std::make_error_code(std::errc::function_not_supported);
+	return {};
+#endif
+}
+
+} // namespace current_process
+
 namespace {
 // this one is noexcept unlike std::this_thread::sleep_for
 void sleep_for(std::chrono::nanoseconds duration) noexcept
