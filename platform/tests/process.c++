@@ -17,6 +17,8 @@
 #include <aw/test/helpers/temp_file.h>
 
 #if (AW_PLATFORM == AW_PLATFORM_POSIX)
+#include <aw/process/posix/fork.h>
+
 #include <errno.h>
 #include <signal.h>
 #include <sys/time.h>
@@ -410,6 +412,81 @@ Test(wait_survives_a_signal) {
 
 		// nothing is left to reap
 		TestAssert( !awaits_reaping(handle) );
+	}
+}
+
+/*!
+ * The child exits with return value of the supplied body.
+ * The parent gets a valid handle it can wait on.
+ */
+Test(fork_child_exits_with_body_result) {
+	std::error_code ec;
+
+	constexpr int expected = 42;
+
+	auto handle = process::posix::fork([] { return expected; }, ec);
+
+	Preconditions {
+		TestAssert( !ec );
+		TestAssert( handle != process::invalid_process_handle );
+		TestAssert( handle != process::posix::child_process_handle );
+	}
+
+	auto result = process::wait(handle, ec);
+
+	Checks {
+		TestAssert( result.status == process::wait_status::finished );
+		TestEqual( result.code, expected );
+		TestEqual( result.signal, 0 );
+	}
+}
+
+//! The child exits with 0 if the body does not have a return value.
+Test(fork_void_body_exits_with_zero) {
+	std::error_code ec;
+
+	auto handle = process::posix::fork([] { }, ec);
+
+	Preconditions {
+		TestAssert( handle != process::invalid_process_handle );
+	}
+
+	auto result = process::wait(handle, ec);
+
+	Checks {
+		TestAssert( result.status == process::wait_status::finished );
+		TestEqual( result.code, 0 );
+	}
+}
+
+/*!
+ * The plain fork() tells the two sides apart: the child sees
+ * child_process_handle, and the parent doesn't see whatever the
+ * child is doing.
+ */
+Test(fork_tells_the_sides_apart) {
+	std::error_code ec;
+
+	constexpr int child_code = 7;
+
+	int seen_by_child = 0;
+
+	auto handle = process::posix::fork(ec);
+	if (handle == process::posix::child_process_handle) {
+		seen_by_child = 1;
+		process::posix::current_process::exit_now(child_code);
+	}
+
+	Preconditions {
+		TestAssert( !ec );
+		TestAssert( handle != process::invalid_process_handle );
+	}
+
+	auto result = process::wait(handle, ec);
+
+	Checks {
+		TestEqual( result.code, child_code );
+		TestEqual( seen_by_child, 0 );
 	}
 }
 #endif

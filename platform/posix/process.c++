@@ -1,4 +1,5 @@
 #include <aw/process/posix.h>
+#include <aw/process/posix/fork.h>
 
 #include "helpers.h"
 
@@ -100,6 +101,22 @@ int terminate(process_handle pid, std::error_code& ec) noexcept
 {
 	return kill(pid, SIGTERM, ec);
 }
+
+AW_PLATFORM_EXP
+process_handle fork(std::error_code& ec) noexcept
+{
+	auto pid = ::fork();
+	set_error_if(pid < 0, ec);
+	return pid < 0 ? invalid_process_handle : process_handle(pid);
+}
+
+namespace current_process {
+AW_PLATFORM_EXP
+void exit_now(int code) noexcept
+{
+	::_exit(code);
+}
+} // namespace current_process
 
 namespace current_process {
 AW_PLATFORM_EXP
