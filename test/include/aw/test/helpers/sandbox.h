@@ -11,11 +11,16 @@
 #include <aw/config.h>
 
 #if (AW_PLATFORM == AW_PLATFORM_POSIX)
+#include <aw/process.h>
+#include <aw/process/posix/fork.h>
+#include <aw/process/posix/alarm.h>
+
 #include <sys/resource.h>
 #include <sys/wait.h>
 #include <signal.h>
 #include <unistd.h>
 
+#include <chrono>
 #include <cstdio>
 #include <new>
 #include <string>
@@ -46,7 +51,7 @@ inline std::string to_string(outcome o)
 
 //! Resource limits for run_sandboxed(); zero means unlimited
 struct sandbox {
-	unsigned time_limit = 0; //!< wall-clock seconds
+	std::chrono::seconds time_limit = {};
 	rlim_t address_space_limit = 0;
 	rlim_t stack_limit = 0;
 };
@@ -67,8 +72,7 @@ outcome run_sandboxed(Func func, sandbox limits = {})
 	// so that the child doesn't flush a copy of the parent's buffers
 	fflush(nullptr);
 
-	pid_t pid = fork();
-	if (pid == 0) {
+	const auto handle = process::posix::fork([=]{
 		if (limits.address_space_limit) {
 			rlimit as{limits.address_space_limit, limits.address_space_limit};
 			setrlimit(RLIMIT_AS, &as);
@@ -81,8 +85,8 @@ outcome run_sandboxed(Func func, sandbox limits = {})
 		rlimit core{0, 0};
 		setrlimit(RLIMIT_CORE, &core);
 
-		if (limits.time_limit)
-			alarm(limits.time_limit);
+		if (limits.time_limit != std::chrono::seconds::zero())
+			process::posix::current_process::alarm(limits.time_limit);
 
 		int code = exit_success;
 		try {
@@ -92,21 +96,21 @@ outcome run_sandboxed(Func func, sandbox limits = {})
 		} catch (...) {
 			code = exit_exception;
 		}
-		_exit(code);
+		process::posix::current_process::exit_now(code);
+		return;
+	});
+
+	std::error_code ec;
+	const auto result = process::wait(handle, ec);
+
+	switch (result.signal) {
+	case process::no_signal: break;
+	case SIGALRM: return outcome::timed_out;
+	case SIGABRT: return outcome::aborted;
+	default:      return outcome::crashed;
 	}
 
-	int status = 0;
-	waitpid(pid, &status, 0);
-
-	if (WIFSIGNALED(status)) {
-		switch (WTERMSIG(status)) {
-		case SIGALRM: return outcome::timed_out;
-		case SIGABRT: return outcome::aborted;
-		default:      return outcome::crashed;
-		}
-	}
-
-	switch (WEXITSTATUS(status)) {
+	switch (result.code) {
 	case exit_success:   return outcome::completed;
 	case exit_bad_alloc: return outcome::out_of_memory;
 	default:             return outcome::threw;

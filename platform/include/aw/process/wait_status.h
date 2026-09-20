@@ -12,6 +12,8 @@ enum class wait_status {
 	failed,
 };
 
+constexpr int no_signal = 0;
+
 /*!
  * Result of a wait() or run() call.
  */
@@ -21,9 +23,9 @@ struct wait_result {
 	//! Exit code that the process returned (passed to exit())
 	int code = 0;
 
-	//! Signal that killed the process, or 0 if it exited on its own.
-	//! \note Meaningful only on POSIX. Always 0 on Windows.
-	int signal = 0;
+	//! Signal that killed the process, or `no_signal` if it exited on its own.
+	//! \note Meaningful only on POSIX. Always `no_signal` on Windows.
+	int signal = no_signal;
 
 	//! Whether the wait ended with the process gone
 	explicit constexpr operator bool() const

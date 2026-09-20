@@ -32,9 +32,10 @@ namespace aw::hudf {
 #if (AW_PLATFORM == AW_PLATFORM_POSIX)
 namespace {
 using test::outcome;
+using namespace std::chrono_literals;
 
 constexpr test::sandbox limits {
-	.time_limit          = 5,
+	.time_limit          = 5s,
 	.address_space_limit = 256u << 20,
 	.stack_limit         =   1u << 20,
 };
