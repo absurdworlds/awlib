@@ -17,6 +17,7 @@
 #include <aw/test/helpers/temp_file.h>
 
 #if (AW_PLATFORM == AW_PLATFORM_POSIX)
+#include <aw/process/posix/alarm.h>
 #include <aw/process/posix/fork.h>
 
 #include <errno.h>
@@ -487,6 +488,35 @@ Test(fork_tells_the_sides_apart) {
 	Checks {
 		TestEqual( result.code, child_code );
 		TestEqual( seen_by_child, 0 );
+	}
+}
+
+//! An alarm ends the child with SIGALRM once the delay is up
+Test(alarm_ends_child_after_delay) {
+	using namespace std::chrono;
+
+	std::error_code ec;
+
+	constexpr auto delay = 1s;
+
+	auto handle = process::posix::fork([] {
+		process::posix::current_process::alarm(delay);
+		std::this_thread::sleep_for(20s);
+		return 0;
+	}, ec);
+
+	Preconditions {
+		TestAssert( handle != process::invalid_process_handle );
+	}
+
+	auto started = steady_clock::now();
+	auto result  = process::wait(handle, ec);
+	auto waited  = steady_clock::now() - started;
+
+	Checks {
+		TestAssert( result.status == process::wait_status::finished );
+		TestEqual( result.signal, SIGALRM );
+		TestAssert( waited < 5s );
 	}
 }
 #endif

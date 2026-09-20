@@ -1,4 +1,5 @@
 #include <aw/process/posix.h>
+#include <aw/process/posix/alarm.h>
 #include <aw/process/posix/fork.h>
 
 #include "helpers.h"
@@ -156,6 +157,11 @@ fs::path path(std::error_code& ec)
 #endif
 }
 
+AW_PLATFORM_EXP
+std::chrono::seconds alarm(std::chrono::seconds delay) noexcept
+{
+	return std::chrono::seconds( ::alarm( unsigned(delay.count()) ) );
+}
 } // namespace current_process
 
 namespace {
