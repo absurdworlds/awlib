@@ -12,13 +12,9 @@
 
 #if (AW_PLATFORM == AW_PLATFORM_POSIX)
 #include <aw/process.h>
+#include <aw/process/limits.h>
 #include <aw/process/posix/fork.h>
 #include <aw/process/posix/alarm.h>
-
-#include <sys/resource.h>
-#include <sys/wait.h>
-#include <signal.h>
-#include <unistd.h>
 
 #include <chrono>
 #include <cstdio>
@@ -52,8 +48,8 @@ inline std::string to_string(outcome o)
 //! Resource limits for run_sandboxed(); zero means unlimited
 struct sandbox {
 	std::chrono::seconds time_limit = {};
-	rlim_t address_space_limit = 0;
-	rlim_t stack_limit = 0;
+	uintmax_t address_space_limit = 0;
+	uintmax_t stack_limit = 0;
 };
 
 /*!
@@ -73,17 +69,13 @@ outcome run_sandboxed(Func func, sandbox limits = {})
 	fflush(nullptr);
 
 	const auto handle = process::posix::fork([=]{
-		if (limits.address_space_limit) {
-			rlimit as{limits.address_space_limit, limits.address_space_limit};
-			setrlimit(RLIMIT_AS, &as);
-		}
-		if (limits.stack_limit) {
-			rlimit st{limits.stack_limit, limits.stack_limit};
-			setrlimit(RLIMIT_STACK, &st);
-		}
+		if (limits.address_space_limit)
+			process::self::set_limit( process::resource::address_space, limits.address_space_limit );
+		if (limits.stack_limit)
+			process::self::set_limit( process::resource::stack, limits.stack_limit );
+
 		// no core dumps for the deliberate crashes
-		rlimit core{0, 0};
-		setrlimit(RLIMIT_CORE, &core);
+		process::self::set_limit( process::resource::core_file, 0 );
 
 		if (limits.time_limit != std::chrono::seconds::zero())
 			process::posix::self::alarm(limits.time_limit);

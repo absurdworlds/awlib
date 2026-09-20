@@ -1,6 +1,7 @@
 #include <aw/process/posix.h>
 #include <aw/process/posix/alarm.h>
 #include <aw/process/posix/fork.h>
+#include <aw/process/limits.h>
 
 #include "helpers.h"
 
@@ -13,9 +14,11 @@
 
 #include <cassert>
 #include <cerrno>
+#include <cstring>
 #include <ctime>
 
 #include <sys/types.h>
+#include <sys/resource.h>
 #include <sys/wait.h>
 #include <spawn.h>
 #include <unistd.h>
@@ -156,6 +159,51 @@ fs::path path(std::error_code& ec)
 	return {};
 #endif
 }
+
+namespace {
+int resource_id(resource res) noexcept
+{
+	switch (res) {
+	case resource::address_space: return RLIMIT_AS;
+	case resource::stack:         return RLIMIT_STACK;
+	case resource::core_file:     return RLIMIT_CORE;
+	case resource::cpu_time:      return RLIMIT_CPU;
+	case resource::open_files:    return RLIMIT_NOFILE;
+	}
+	return -1;
+}
+
+rlim_t to_rlim(uintmax_t value) noexcept
+{
+	return value == unlimited ? RLIM_INFINITY : rlim_t(value);
+}
+
+uintmax_t from_rlim(rlim_t value) noexcept
+{
+	return value == RLIM_INFINITY ? unlimited : uintmax_t(value);
+}
+} // namespace
+
+AW_PLATFORM_EXP
+int set_limits(resource res, limit value, std::error_code& ec) noexcept
+{
+	::rlimit native{ to_rlim(value.soft), to_rlim(value.hard) };
+	auto ret = ::setrlimit(resource_id(res), &native);
+	set_error_if(ret < 0, ec);
+	return ret;
+}
+
+AW_PLATFORM_EXP
+limit get_limits(resource res, std::error_code& ec) noexcept
+{
+	::rlimit native{};
+	auto ret = ::getrlimit(resource_id(res), &native);
+	set_error_if(ret < 0, ec);
+	if (ret < 0)
+		return {};
+	return { from_rlim(native.rlim_cur), from_rlim(native.rlim_max) };
+}
+
 
 AW_PLATFORM_EXP
 std::chrono::seconds alarm(std::chrono::seconds delay) noexcept

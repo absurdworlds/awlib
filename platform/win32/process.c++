@@ -1,4 +1,5 @@
 #include <aw/process/win32.h>
+#include <aw/process/limits.h>
 
 #include <aw/types/string_view.h>
 #include <aw/string/escape.h>
@@ -193,4 +194,21 @@ int terminate(process_handle hprocess, std::error_code& ec) noexcept
 
 	return ret ? 0 : -1;
 }
+
+namespace self {
+// TODO: job objects can cap the memory and the CPU time of a process
+AW_PLATFORM_EXP
+int set_limit(resource, uintmax_t, std::error_code& ec) noexcept
+{
+	ec = std::make_error_code(std::errc::not_supported);
+	return -1;
+}
+
+AW_PLATFORM_EXP
+uintmax_t get_limit(resource, std::error_code& ec) noexcept
+{
+	ec = std::make_error_code(std::errc::not_supported);
+	return unlimited;
+}
+} // namespace self
 } // namespace aw::process::win32

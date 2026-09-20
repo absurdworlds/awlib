@@ -1,4 +1,5 @@
 #include <aw/process.h>
+#include <aw/process/limits.h>
 #include <aw/io/filesystem.h>
 
 #include <aw/utility/on_scope_exit.h>
@@ -11,6 +12,8 @@
 #include <csignal>
 #include <type_traits>
 #include <fstream>
+#include <thread>
+#include <vector>
 
 #include <aw/config.h>
 
@@ -488,6 +491,94 @@ Test(fork_tells_the_sides_apart) {
 	Checks {
 		TestEqual( result.code, child_code );
 		TestEqual( seen_by_child, 0 );
+	}
+}
+
+//! An allocation beyond the address space limit fails with bad_alloc
+Test(set_limit_caps_address_space) {
+	std::error_code ec;
+
+	constexpr uintmax_t limit = 64u << 20;
+	constexpr size_t    ask   = 256u << 20;
+
+	auto handle = process::posix::fork([] {
+		using namespace process;
+		if (self::set_limit(resource::address_space, limit) != 0)
+			return 1;
+		try {
+			std::vector<char> big(ask);
+			big.back() = 1;
+			return big.back() == 1 ? 2 : 3;
+		} catch (std::bad_alloc&) {
+			return 0;
+		}
+	}, ec);
+
+	Preconditions {
+		TestAssert( handle != process::invalid_process_handle );
+	}
+
+	auto result = process::wait(handle, ec);
+
+	Checks {
+		TestAssert( result.status == process::wait_status::finished );
+		TestEqual( result.code, 0 );
+	}
+}
+
+//! get_limits reads back both limits set_limits set
+Test(get_limits_reads_back_set_limits) {
+	std::error_code ec;
+
+	constexpr uintmax_t soft = 64;
+	constexpr uintmax_t hard = 128;
+
+	auto handle = process::posix::fork([] {
+		using namespace process;
+		if (posix::self::set_limits(resource::open_files, { soft, hard }) != 0)
+			return 1;
+		auto now = posix::self::get_limits(resource::open_files);
+		return now.soft == soft && now.hard == hard ? 0 : 2;
+	}, ec);
+
+	Preconditions {
+		TestAssert( handle != process::invalid_process_handle );
+	}
+
+	auto result = process::wait(handle, ec);
+
+	Checks {
+		TestEqual( result.code, 0 );
+	}
+}
+
+//! Lowering the soft limit alone leaves the hard limit where it was
+Test(set_limits_soft_only_keeps_hard) {
+	std::error_code ec;
+
+	auto handle = process::posix::fork([] {
+		using namespace process;
+		auto before = posix::self::get_limits(resource::open_files);
+		if (before.soft < 2)
+			return 1;
+		auto lowered = before;
+		lowered.soft = before.soft - 1;
+		if (posix::self::set_limits(resource::open_files, lowered) != 0)
+			return 2;
+		auto after = posix::self::get_limits(resource::open_files);
+		// and the portable view reports the enforced limit
+		return after.soft == lowered.soft && after.hard == before.hard
+		    && self::get_limit(resource::open_files) == lowered.soft ? 0 : 3;
+	}, ec);
+
+	Preconditions {
+		TestAssert( handle != process::invalid_process_handle );
+	}
+
+	auto result = process::wait(handle, ec);
+
+	Checks {
+		TestEqual( result.code, 0 );
 	}
 }
 
