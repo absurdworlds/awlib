@@ -295,10 +295,10 @@ Test(wait_reports_the_exit_code) {
 	}
 }
 
-Test(current_process_path_is_the_running_executable) {
+Test(self_path_is_the_running_executable) {
 	std::error_code ec;
 
-	auto path = process::current_process::path(ec);
+	auto path = process::self::path(ec);
 
 	Checks {
 		TestAssert( !ec );
@@ -475,7 +475,7 @@ Test(fork_tells_the_sides_apart) {
 	auto handle = process::posix::fork(ec);
 	if (handle == process::posix::child_process_handle) {
 		seen_by_child = 1;
-		process::posix::current_process::exit_now(child_code);
+		process::posix::self::exit_now(child_code);
 	}
 
 	Preconditions {
@@ -500,7 +500,7 @@ Test(alarm_ends_child_after_delay) {
 	constexpr auto delay = 1s;
 
 	auto handle = process::posix::fork([] {
-		process::posix::current_process::alarm(delay);
+		process::posix::self::alarm(delay);
 		std::this_thread::sleep_for(20s);
 		return 0;
 	}, ec);
@@ -561,12 +561,12 @@ Test(win32_spawn_does_not_leak_thread_handle) {
 
 	constexpr int iterations = 25;
 
-	auto before = process::win32::current_process::handle_count();
+	auto before = process::win32::self::handle_count();
 
 	for (int i = 0; i < iterations; ++i)
 		process::run(test.helper, args);
 
-	auto after = process::win32::current_process::handle_count();
+	auto after = process::win32::self::handle_count();
 
 	Checks {
 		TestLess(after, before + iterations);

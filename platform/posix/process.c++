@@ -111,15 +111,15 @@ process_handle fork(std::error_code& ec) noexcept
 	return pid < 0 ? invalid_process_handle : process_handle(pid);
 }
 
-namespace current_process {
+namespace self {
 AW_PLATFORM_EXP
 void exit_now(int code) noexcept
 {
 	::_exit(code);
 }
-} // namespace current_process
+} // namespace self
 
-namespace current_process {
+namespace self {
 AW_PLATFORM_EXP
 fs::path path(std::error_code& ec)
 {
@@ -162,7 +162,7 @@ std::chrono::seconds alarm(std::chrono::seconds delay) noexcept
 {
 	return std::chrono::seconds( ::alarm( unsigned(delay.count()) ) );
 }
-} // namespace current_process
+} // namespace self
 
 namespace {
 // this one is noexcept unlike std::this_thread::sleep_for

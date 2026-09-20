@@ -92,7 +92,7 @@ inline std::string executable_name(std::string path)
 	return path;
 }
 
-namespace current_process {
+namespace self {
 /*!
  * Returns the path of the current executable.
  */
@@ -102,6 +102,6 @@ inline fs::path path()
 	std::error_code ec;
 	return path(ec);
 }
-} // namespace current_process
+} // namespace self
 } // namespace aw::process::posix
 #endif // aw_process_posix_h

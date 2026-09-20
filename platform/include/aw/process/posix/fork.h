@@ -25,7 +25,7 @@ inline process_handle fork()
 	return fork(ec);
 }
 
-namespace current_process {
+namespace self {
 /*!
  * Exit the calling process immediately with \a code.
  * Does not run destructors, atexit handlers, and does not flush any streams.
@@ -33,7 +33,7 @@ namespace current_process {
  * Meant for the child side of a fork(), which must not run the parent's cleanup.
  */
 [[noreturn]] AW_PLATFORM_EXP void exit_now(int code) noexcept;
-} // namespace current_process
+} // namespace self
 
 /*!
  * Run \a body in a forked child, which then exits with the value it
@@ -52,9 +52,9 @@ process_handle fork(Body&& body, std::error_code& ec) noexcept
 	if (handle == child_process_handle) {
 		if constexpr (std::is_void_v<std::invoke_result_t<Body>>) {
 			body();
-			current_process::exit_now(0);
+			self::exit_now(0);
 		} else {
-			current_process::exit_now( body() );
+			self::exit_now( body() );
 		}
 	}
 	return handle;

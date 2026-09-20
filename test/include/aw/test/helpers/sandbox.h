@@ -86,7 +86,7 @@ outcome run_sandboxed(Func func, sandbox limits = {})
 		setrlimit(RLIMIT_CORE, &core);
 
 		if (limits.time_limit != std::chrono::seconds::zero())
-			process::posix::current_process::alarm(limits.time_limit);
+			process::posix::self::alarm(limits.time_limit);
 
 		int code = exit_success;
 		try {
@@ -96,7 +96,7 @@ outcome run_sandboxed(Func func, sandbox limits = {})
 		} catch (...) {
 			code = exit_exception;
 		}
-		process::posix::current_process::exit_now(code);
+		process::posix::self::exit_now(code);
 		return;
 	});
 

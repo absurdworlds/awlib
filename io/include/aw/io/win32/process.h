@@ -28,6 +28,6 @@ using process::win32::executable_name;
 #if defined(AW_PROCESS_HAS_HANDLE_COUNT)
 using process::win32::handle_count;
 #endif
-namespace current_process = process::win32::current_process;
+namespace current_process = process::win32::self;
 } // namespace win32
 } // namespace aw::io

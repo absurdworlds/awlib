@@ -19,6 +19,12 @@
 #endif
 
 namespace aw::process {
+/*
+ * Functions in this namespace apply to the calling process,
+ * i.e. the current process as opposed to a child of it.
+ */
+namespace self {}
+
 #if   (AW_PLATFORM == AW_PLATFORM_POSIX)
 using posix::process_handle;
 using posix::invalid_process_handle;
@@ -28,9 +34,9 @@ using posix::terminate;
 using posix::wait;
 using posix::run;
 using posix::executable_name;
-namespace current_process {
-using posix::current_process::path;
-} // namespace current_process
+namespace self {
+using posix::self::path;
+} // namespace self
 #elif (AW_PLATFORM == AW_PLATFORM_WIN32)
 using win32::invalid_process_handle;
 using win32::process_handle;
@@ -40,13 +46,13 @@ using win32::terminate;
 using win32::wait;
 using win32::run;
 using win32::executable_name;
-namespace current_process {
-using win32::current_process::handle;
+namespace self {
+using win32::self::handle;
 #if defined(AW_PROCESS_HAS_HANDLE_COUNT)
-using win32::current_process::handle_count;
+using win32::self::handle_count;
 #endif
-using win32::current_process::path;
-} // namespace current_process
+using win32::self::path;
+} // namespace self
 #endif
 } // namespace aw::process
 #endif//aw_process_h

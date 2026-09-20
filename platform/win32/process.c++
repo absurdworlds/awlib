@@ -18,7 +18,7 @@ using platform::win32::set_error;
 using platform::win32::set_error_if;
 using platform::win32::winapi_path;
 
-namespace current_process {
+namespace self {
 process_handle handle()
 {
 	return convert_handle<process_handle>(GetCurrentProcess());
@@ -42,7 +42,7 @@ fs::path path(std::error_code& ec)
 		buf.resize(buf.size() * 2);
 	}
 }
-} //namespace current_process
+} //namespace self
 
 #if defined(AW_PROCESS_HAS_HANDLE_COUNT)
 u32 handle_count(process_handle handle)
