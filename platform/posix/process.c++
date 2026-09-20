@@ -18,6 +18,7 @@
 #include <ctime>
 
 #include <sys/types.h>
+#include <sys/time.h>
 #include <sys/resource.h>
 #include <sys/wait.h>
 #include <spawn.h>
@@ -206,9 +207,20 @@ limit get_limits(resource res, std::error_code& ec) noexcept
 
 
 AW_PLATFORM_EXP
-std::chrono::seconds alarm(std::chrono::seconds delay) noexcept
+std::chrono::microseconds alarm(std::chrono::microseconds delay) noexcept
 {
-	return std::chrono::seconds( ::alarm( unsigned(delay.count()) ) );
+	using namespace std::chrono;
+
+	// alarm(2) and setitimer(2) share the same timer
+	auto secs = duration_cast<seconds>(delay);
+	itimerval timer = {};
+	timer.it_value.tv_sec  = secs.count();
+	timer.it_value.tv_usec = (delay - secs).count();
+
+	itimerval previous = {};
+	::setitimer(ITIMER_REAL, &timer, &previous);
+
+	return seconds(previous.it_value.tv_sec) + microseconds(previous.it_value.tv_usec);
 }
 } // namespace self
 

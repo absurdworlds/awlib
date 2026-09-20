@@ -25,7 +25,6 @@
 
 #include <errno.h>
 #include <signal.h>
-#include <sys/time.h>
 #include <sys/wait.h>
 #endif
 
@@ -366,16 +365,13 @@ struct alarm_after {
 
 		sigaction(SIGALRM, &interrupt, &previous);
 
-		itimerval timer = {};
-		timer.it_value.tv_usec = delay.count();
-		setitimer(ITIMER_REAL, &timer, nullptr);
+		process::posix::self::alarm(delay);
 	}
 
 	//! Stops the alarm and restores the old signal handler
 	~alarm_after()
 	{
-		itimerval off = {};
-		setitimer(ITIMER_REAL, &off, nullptr);
+		process::posix::self::alarm({});
 		sigaction(SIGALRM, &previous, nullptr);
 	}
 
@@ -582,15 +578,40 @@ Test(set_limits_soft_only_keeps_hard) {
 	}
 }
 
+//! Replacing an alarm reports how much the previous one had left
+Test(alarm_reports_time_left) {
+	using namespace std::chrono;
+
+	std::error_code ec;
+
+	auto handle = process::posix::fork([] {
+		using process::posix::self::alarm;
+		if (alarm(2s) != 0us)
+			return 1;
+		auto left = alarm({});
+		return left > 1s && left <= 2s ? 0 : 2;
+	}, ec);
+
+	Preconditions {
+		TestAssert( handle != process::invalid_process_handle );
+	}
+
+	auto result = process::wait(handle, ec);
+
+	Checks {
+		TestEqual( result.code, 0 );
+	}
+}
+
 //! An alarm ends the child with SIGALRM once the delay is up
 Test(alarm_ends_child_after_delay) {
 	using namespace std::chrono;
 
 	std::error_code ec;
 
-	constexpr auto delay = 1s;
+	constexpr auto delay = 100ms;
 
-	auto handle = process::posix::fork([] {
+	auto handle = process::posix::fork([delay] {
 		process::posix::self::alarm(delay);
 		std::this_thread::sleep_for(20s);
 		return 0;
@@ -607,7 +628,7 @@ Test(alarm_ends_child_after_delay) {
 	Checks {
 		TestAssert( result.status == process::wait_status::finished );
 		TestEqual( result.signal, SIGALRM );
-		TestAssert( waited < 5s );
+		TestAssert( waited < 1s );
 	}
 }
 #endif

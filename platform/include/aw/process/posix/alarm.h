@@ -16,7 +16,7 @@ namespace self {
  * \note Primary use in awlib is for unit tests: testing a signal arriving during a syscall,
  *       and setting a timeout on child processes.
  */
-AW_PLATFORM_EXP std::chrono::seconds alarm(std::chrono::seconds delay) noexcept;
+AW_PLATFORM_EXP std::chrono::microseconds alarm(std::chrono::microseconds delay) noexcept;
 } // namespace self
 } // namespace aw::process::posix
 #endif // aw_process_posix_alarm_h
