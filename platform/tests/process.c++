@@ -6,6 +6,7 @@
 #include <aw/string/trim_if.h>
 #include <aw/string/format.h>
 
+#include <aw/string/to_string/chrono.h>
 #include <aw/test/test.h>
 
 #include <chrono>
@@ -613,7 +614,7 @@ Test(alarm_ends_child_after_delay) {
 
 	auto handle = process::posix::fork([delay] {
 		process::posix::self::alarm(delay);
-		std::this_thread::sleep_for(20s);
+		std::this_thread::sleep_for(10s);
 		return 0;
 	}, ec);
 
@@ -628,7 +629,7 @@ Test(alarm_ends_child_after_delay) {
 	Checks {
 		TestAssert( result.status == process::wait_status::finished );
 		TestEqual( result.signal, SIGALRM );
-		TestAssert( waited < 1s );
+		TestLess( waited, 1s );
 	}
 }
 #endif
