@@ -12,7 +12,30 @@ using test::temp_file;
 
 Test(native_basic_rw) {
 	test::test_round_trip<io::native::file>(_context.name);
-};
+}
+
+Test(native_file_move_assignment_releases_old_file) {
+	auto path1 = std::string(_context.name) + "1";
+	auto path2 = std::string(_context.name) + "2";
+	temp_file tmp1{path1};
+	temp_file tmp2{path2};
+	tmp1.write("");
+	tmp2.write("");
+
+	io::native::file file1{ tmp1.path, io::file_mode::read };
+	io::native::file file2{ tmp2.path, io::file_mode::read };
+
+	io::native::file old{ file1.descriptor() }; // non-owning
+
+	file1 = std::move(file2);
+
+	std::error_code ec;
+	old.size(ec);
+
+	Checks {
+		TestAssert( bool(ec) );
+	}
+}
 
 /*!
  * truncate without create must behave like POSIX O_TRUNC without O_CREAT:

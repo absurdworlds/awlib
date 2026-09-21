@@ -76,6 +76,23 @@ inline uintmax_t ns::file::size() const noexcept \
 }
 
 #if defined(AW_SUPPORT_PLATFORM_POSIX)
+inline posix::file::file(file&& other) noexcept
+	: owns_fd{other.owns_fd}, fd{other.fd}
+{
+	other.owns_fd = false;
+	other.fd = invalid_fd;
+}
+
+inline auto posix::file::operator=(file&& other) noexcept -> file&
+{
+	if (this == &other)
+		return *this;
+	close();
+	owns_fd = std::exchange( other.owns_fd, false );
+	fd = std::exchange( other.fd, invalid_fd );
+	return *this;
+}
+
 inline void posix::file::swap(file& other) noexcept
 {
 	std::swap(owns_fd, other.owns_fd);
@@ -92,6 +109,25 @@ AW_DEFINE_ERRORCODELESS_OVERLOADS(posix)
 #endif
 
 #if defined(AW_SUPPORT_PLATFORM_WIN32)
+inline win32::file::file(file&& other) noexcept
+	: mode{other.mode}, owns_fd{other.owns_fd}, fd{other.fd}
+{
+	other.mode = file_mode::none;
+	other.owns_fd = false;
+	other.fd = invalid_fd;
+}
+
+inline auto win32::file::operator=(file&& other) noexcept -> file&
+{
+	if (this == &other)
+		return *this;
+	close();
+	mode = std::exchange( other.mode, file_mode::none );
+	owns_fd = std::exchange( other.owns_fd, false );
+	fd = std::exchange( other.fd, invalid_fd );
+	return *this;
+}
+
 inline void win32::file::swap(file& other) noexcept
 {
 	std::swap(mode, other.mode);

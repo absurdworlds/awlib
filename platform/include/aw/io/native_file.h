@@ -12,6 +12,7 @@
 #include <aw/io/file_mode.h>
 #include <aw/io/filesystem.h>
 #include <aw/platform/export.h>
+#include <utility>
 namespace aw {
 namespace io {
 #if defined(AW_SUPPORT_PLATFORM_POSIX)
@@ -33,8 +34,10 @@ struct file {
 	~file() noexcept { close(); }
 
 	file(file const& other) = delete;
-	file(file&& other) noexcept { swap(other); }
-	file& operator=(file&& other) noexcept { swap(other); return *this; }
+	file(file&& other) noexcept;
+
+	file& operator=(file const& other) = delete;
+	file& operator=(file&& other) noexcept;
 
 	bool is_open() const noexcept { return fd != invalid_fd; }
 
@@ -86,8 +89,10 @@ struct file {
 	~file() noexcept { close(); }
 
 	file(file const& other) = delete;
-	file(file&& other) noexcept { swap(other); }
-	file& operator=(file&& other) noexcept { swap(other); return *this; }
+	file(file&& other) noexcept;
+
+	file& operator=(file const& other) = delete;
+	file& operator=(file&& other) noexcept;
 
 	bool is_open() const noexcept { return fd != invalid_fd; }
 

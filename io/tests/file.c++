@@ -61,6 +61,39 @@ Test(file_size_reports_error) {
 	TestCatch(fs::filesystem_error, file.size());
 };
 
+Test(file_move) {
+	auto path1 = std::string(_context.name) + "1";
+	auto path2 = std::string(_context.name) + "2";
+	temp_file tmp1{path1};
+	temp_file tmp2{path2};
+	tmp1.write("");
+	tmp2.write("");
+
+	io::file file1{ tmp1.path, io::file_mode::read };
+	io::file file2{ tmp2.path, io::file_mode::read };
+
+	file1 = std::move(file2);
+
+	Checks {
+		TestAssert( file1.is_open() );
+		TestAssert( !file2.is_open() );
+		TestEqual( file1.path(), tmp2.path );
+	}
+}
+
+Test(file_self_move) {
+	temp_file tmp{_context.name};
+	tmp.write("");
+
+	io::file file{ tmp.path, io::file_mode::read };
+	file = std::move(file);
+
+	Checks {
+		TestAssert( file.is_open() );
+		TestEqual( file.path().string(), tmp.path.string() );
+	}
+}
+
 Test(file_self_swap) {
 	temp_file tmp{_context.name};
 	tmp.write("");

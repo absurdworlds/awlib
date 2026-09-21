@@ -63,7 +63,15 @@ struct file {
 
 	file& operator=(file&& other) noexcept
 	{
-		swap(other);
+		if (this != &other) {
+			std::scoped_lock guard{mutex, other.mutex};
+
+			std::error_code ec;
+			data.close(ec);
+
+			_path = std::move(other._path);
+			data = std::move(other.data);
+		}
 		return *this;
 	}
 
