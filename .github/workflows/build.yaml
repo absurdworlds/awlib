@@ -68,6 +68,12 @@ jobs:
         run: cmake -S . -B build $CMAKE_COMMON ${{ matrix.cmake }}
       - name: Build
         run: cmake --build build
+      - name: Provide a block device for the tests
+        if: runner.os == 'Linux'
+        run: |
+          truncate -s 8M /tmp/block.img
+          device=$(sudo losetup --find --show /tmp/block.img)
+          sudo chmod o+r "$device"
       - name: Test
         # -C is only meaningful for the multi-config generator on Windows
         run: ctest --test-dir build -C Debug --output-on-failure
