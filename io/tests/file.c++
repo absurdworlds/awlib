@@ -55,18 +55,31 @@ Test(write_file_creates_and_truncates) {
 	}
 }
 
-Test(size_reports_error) {
+Test(file_size_reports_error) {
 	io::file file{ io::invalid_fd };
 
 	TestCatch(fs::filesystem_error, file.size());
 };
+
+Test(file_self_swap) {
+	temp_file tmp{_context.name};
+	tmp.write("");
+
+	io::file file{ tmp.path, io::file_mode::read };
+	file.swap(file);
+
+	Checks {
+		TestAssert( file.is_open() );
+		TestEqual( file.path(), tmp.path );
+	}
+}
 
 #if (AW_PLATFORM == AW_PLATFORM_POSIX)
 /*!
  * A file that can no longer be closed must not take the process
  * down with it when it goes out of scope.
  */
-Test(destructor_survives_close_failure) {
+Test(file_destructor_survives_close_failure) {
 	temp_file tmp{_context.name};
 	tmp.write("");
 

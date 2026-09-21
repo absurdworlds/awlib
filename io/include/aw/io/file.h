@@ -69,7 +69,9 @@ struct file {
 
 	void swap(file& other) noexcept
 	{
-		std::lock_guard<std::mutex> guard{mutex};
+		if (this == &other)
+			return;
+		std::scoped_lock guard{mutex, other.mutex};
 		_path.swap(other._path);
 		data.swap(other.data);
 	}
