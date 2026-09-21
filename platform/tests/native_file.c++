@@ -2,6 +2,7 @@
 #include <aw/test/test.h>
 #include <cstring>
 #include <algorithm>
+#include <fstream>
 
 #include <aw/test/helpers/round_trip.h>
 
@@ -80,4 +81,30 @@ Test(native_size_reports_error_on_bad_fd) {
 		TestEqual(ret, uintmax_t(-1));
 	}
 };
+
+#if (AW_PLATFORM_SPECIFIC == AW_PLATFORM_LINUX)
+/*!
+ * Runs against every block device that the test can open.
+ * Without privileges it's usually none, so the test passes without doing anything,
+ * so ideally the test environment should have a readable loop device.
+ */
+Test(size_of_block_device_is_its_capacity) {
+	for (auto const& entry : fs::directory_iterator("/sys/class/block")) {
+		auto const name = entry.path().filename();
+
+		std::error_code ec;
+		io::native::file device{ fs::path("/dev") / name, io::file_mode::read, ec };
+		if (ec)
+			continue;
+
+		constexpr uintmax_t sector_size = 512;
+		uintmax_t sectors = 0;
+		std::ifstream(entry.path() / "size") >> sectors;
+		if (sectors == 0)
+			continue;
+
+		TestEqual( device.size(), sectors * sector_size );
+	}
+}
+#endif
 } // namespace aw
