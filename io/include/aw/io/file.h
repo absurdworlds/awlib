@@ -42,17 +42,17 @@ struct file {
 	{
 	}
 
-	/*! Destructor automatically closes the file */
+	/*!
+	 * Destructor automatically closes the file.
+	 *
+	 * \note A destructor has no way of reporting a failure. Callers who
+	 *       need to know about a failed close have to manually call close()
+	 */
 	~file() noexcept
-	try
 	{
-		if (is_open())
-			close();
-	}
-	catch(std::exception& ex)
-	{
+		std::error_code ec;
+		data.close(ec);
 		//log.warning("aw::io", "could not close file " + path.u8string());
-		return;
 	}
 
 	file(file&& other) noexcept
