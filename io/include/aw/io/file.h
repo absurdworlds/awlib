@@ -106,7 +106,8 @@ struct file {
 	/*!
 	 * Read specified number of bytes from file to buffer
 	 * \return
-	 *     number of bytes read, or -1 on failure.
+	 *     number of bytes read, 0 at the end of file
+	 * \throw fs::filesystem_error on failure
 	 */
 	uintmax_t read(char* buffer, uintmax_t count)
 	{
@@ -123,7 +124,8 @@ struct file {
 	/*!
 	 * Write specified number of bytes to file from buffer.
 	 * \return
-	 *     number of bytes written, negative on failure
+	 *     number of bytes written
+	 * \throw fs::filesystem_error on failure
 	 */
 	uintmax_t write(char const* buffer, uintmax_t count)
 	{
