@@ -37,6 +37,49 @@ Test(div_floor) {
 	TestEqual( div_floor(-5,3), -2 );
 };
 
+Test(div_ceil) {
+	TestEqual( div_ceil(1,2), 1 );
+	TestEqual( div_ceil(100,2), 50 );
+	TestEqual( div_ceil(101,2), 51 );
+	TestEqual( div_ceil(102,2), 51 );
+	TestEqual( div_ceil(5,3), 2 );
+	TestEqual( div_ceil(-5,3), -1 );
+
+	TestEqual( div_ceil(5u,3u), 2u );
+	TestEqual( div_ceil(6u,3u), 2u );
+}
+
+Test(round_down) {
+	TestEqual( round_down(7, 3), 6 );
+	TestEqual( round_down(6, 3), 6 );
+	TestEqual( round_down(-7, 3), -9 );
+	TestEqual( round_down(-6, 3), -6 );
+
+	TestEqual( round_down(7.5, 3.0), 6.0 );
+	TestEqual( round_down(-7.5, 3.0), -9.0 );
+
+	// a step of a different type widens the result
+	TestEqual( round_down(7, 2.5), 5.0 );
+
+	static_assert( round_down(7, 3) == 6 );
+	static_assert( round_down(7.5, 3.0) == 6.0 );
+}
+
+Test(round_up) {
+	TestEqual( round_up(7, 3), 9 );
+	TestEqual( round_up(6, 3), 6 );
+	TestEqual( round_up(-7, 3), -6 );
+	TestEqual( round_up(-6, 3), -6 );
+
+	TestEqual( round_up(7.5, 3.0), 9.0 );
+	TestEqual( round_up(-7.5, 3.0), -6.0 );
+
+	TestEqual( round_up(7, 2.5), 7.5 );
+
+	static_assert( round_up(7, 3) == 9 );
+	static_assert( round_up(7.5, 3.0) == 9.0 );
+}
+
 Test(sign) {
 	TestEqual( sign(-100), -1 );
 	TestEqual( sign(0), 0 );

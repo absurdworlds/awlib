@@ -94,6 +94,12 @@ constexpr auto was_rounded_up(T r, U d)
 {
 	return (r != 0) && ((r < 0) != (d < 0));
 }
+
+template<typename T, typename U>
+constexpr auto was_rounded_down(T r, U d)
+{
+	return (r != 0) && ((r < 0) == (d < 0));
+}
 } // namespace _impl
 
 //! Divide two integers, rounding result towards negative infinity
@@ -123,18 +129,53 @@ constexpr auto mod_floor(T v, U d)
 	return r;
 }
 
+//! Divide two integers, rounding the result towards positive infinity
 template<typename T, typename U>
-auto remainder(T x, U y) -> T
+constexpr auto div_ceil(T v, U d) -> enable_if<is_signed<T>, T>
+{
+	T q = v / d;
+	T r = v % d;
+	if ( _impl::was_rounded_down( r, d ) )
+		++q;
+	return q;
+}
+
+template<typename T, typename U>
+constexpr auto div_ceil(T v, U d) -> enable_if<is_unsigned<T>, T>
+{
+	T q = v / d;
+	if ( v % d != 0 )
+		++q;
+	return q;
+}
+
+//! Round \a v towards negative infinity, to a multiple of \a d
+template<typename T, typename U>
+constexpr auto round_down(T v, U d) -> common_type<T,U>
 {
 	using C = common_type<T,U>;
-
-	auto extra = (x + y/2);
 	if constexpr(std::is_floating_point_v< C >)
-		// TODO: edge cases?
-		extra = std::floor( extra / y ) * y;
-	if constexpr(std::is_integral_v< C >)
-		extra = div_floor( extra, y ) * y;
-	return x - extra;
+		return C( std::floor( C(v) / d ) * d );
+	else
+		return C( div_floor( C(v), d ) * d );
+}
+
+//! Round \a v towards positive infinity, to a multiple of \a d
+template<typename T, typename U>
+constexpr auto round_up(T v, U d) -> common_type<T,U>
+{
+	using C = common_type<T,U>;
+	if constexpr(std::is_floating_point_v< C >)
+		return C( std::ceil( C(v) / d ) * d );
+	else
+		return C( div_ceil( C(v), d ) * d );
+}
+
+template<typename T, typename U>
+constexpr auto remainder(T x, U y) -> T
+{
+	// TODO: edge cases?
+	return T( x - round_down( x + y/2, y ) );
 }
 
 } //namespace math
