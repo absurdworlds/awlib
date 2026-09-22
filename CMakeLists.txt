@@ -64,6 +64,7 @@ endif()
 
 include(aw-common)
 include(aw-sanitizers)
+include(aw-analyzers)
 
 add_subdirectory(config)
 add_subdirectory(base)

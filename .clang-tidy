@@ -1,0 +1,10 @@
+Checks: >
+  bugprone-*,
+  cert-*,
+  clang-analyzer-*,
+  misc-*,
+  performance-*,
+  portability-*,
+
+  -bugprone-easily-swappable-parameters,
+  -misc-non-private-member-variables-in-classes,
