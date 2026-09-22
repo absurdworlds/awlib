@@ -165,6 +165,27 @@ Test(buffered_file_move_keeps_path) {
 	moved.close();
 };
 
+#if (AW_PLATFORM_SPECIFIC == AW_PLATFORM_LINUX)
+Test(buffered_file_close_reports_failure) {
+	char const data[] { "a" };
+
+	// every write to /dev/full fails with ENOSPC
+	io::buffered_file file("/dev/full", io::file_mode::write);
+
+	Preconditions {
+		TestAssert( file.is_open() );
+		TestEqual( file.write(data, 1), intmax_t(1) );
+	}
+
+	// the idea is that the write reaches the acual file only when the
+	// internal buffer is flushed, so a failed write would show up in close()
+	Checks {
+		TestAssert( file.close() != 0 );
+		TestAssert( !file.is_open() );
+	}
+};
+#endif
+
 #if (AW_PLATFORM == AW_PLATFORM_POSIX)
 /*!
  * Closing a file that is already closed does nothing.
