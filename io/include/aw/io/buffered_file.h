@@ -13,6 +13,7 @@
 
 #include <aw/io/file_mode.h>
 #include <aw/io/filesystem.h>
+#include <aw/io/whence.h>
 #include <aw/types/types.h>
 
 #include <cstdio>
@@ -170,13 +171,7 @@ struct buffered_file {
 	/*! Set pointer position */
 	intmax_t seek(intmax_t count, seek_mode mode)
 	{
-		int whence;
-		switch (mode) {
-		case seek_mode::set: whence = SEEK_SET; break;
-		case seek_mode::end: whence = SEEK_END; break;
-		case seek_mode::cur: whence = SEEK_CUR; break;
-		}
-		return std::fseek(_file, count, whence);
+		return std::fseek(_file, count, get_whence(mode));
 	}
 
 	/*! Get pointer position */
