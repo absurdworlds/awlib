@@ -1,6 +1,7 @@
 aw_add_test(test_io
 	SOURCES
 		file.c++
+		buffered_file.c++
 		buffer.c++
 		file_stream.c++
 		istream_adapter.c++
