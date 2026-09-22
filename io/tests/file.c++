@@ -204,6 +204,32 @@ Test(buffered_file_close_twice) {
 }
 #endif
 
+/*!
+ * Positions past 4 GiB (32-bit long) are reachable
+ */
+Test(buffered_file_seek_past_4gib) {
+	temp_file tmp{_context.name};
+	tmp.write("");
+
+	intmax_t const far = intmax_t(5) << 30; // ~5GiB
+
+	io::buffered_file file(tmp.path, io::file_mode::read);
+
+	Preconditions {
+		TestAssert( file.is_open() );
+	}
+
+	Checks {
+		TestEqual( file.seek(far, io::seek_mode::set), far );
+		TestEqual( file.tell(), far );
+	}
+
+	Checks {
+		TestEqual( file.seek(-far, io::seek_mode::cur), intmax_t(0) );
+		TestEqual( file.tell(), intmax_t(0) );
+	}
+}
+
 Test(basic_buf_rw) {
 	test::test_round_trip<io::buffered_file>(_context.name);
 };

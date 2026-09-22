@@ -168,14 +168,29 @@ struct buffered_file {
 		return std::fwrite(buffer, 1, count, _file);
 	}
 
-	/*! Set pointer position */
+	/*!
+	 * Set pointer position
+	 * \return new position, or -1 on failure
+	 */
 	intmax_t seek(intmax_t count, seek_mode mode)
 	{
-		return std::fseek(_file, count, get_whence(mode));
+#if (AW_PLATFORM == AW_PLATFORM_WIN32)
+		int ret = ::_fseeki64(_file, count, get_whence(mode));
+#else
+		int ret = ::fseeko(_file, count, get_whence(mode));
+#endif
+		return ret == 0 ? tell() : -1;
 	}
 
-	/*! Get pointer position */
-	intmax_t tell() { return std::ftell(_file); }
+	/*! Get pointer position, or -1 on failure */
+	intmax_t tell()
+	{
+#if (AW_PLATFORM == AW_PLATFORM_WIN32)
+		return ::_ftelli64(_file);
+#else
+		return ::ftello(_file);
+#endif
+	}
 
 	/*! Flush file buffer */
 	int flush()     { return std::fflush(_file); }
