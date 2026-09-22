@@ -77,7 +77,7 @@ Test(file_move) {
 	Checks {
 		TestAssert( file1.is_open() );
 		TestAssert( !file2.is_open() );
-		TestEqual( file1.path(), tmp2.path );
+		TestEqual( file1.path().string(), tmp2.path.string() );
 	}
 }
 
@@ -103,7 +103,7 @@ Test(file_self_swap) {
 
 	Checks {
 		TestAssert( file.is_open() );
-		TestEqual( file.path(), tmp.path );
+		TestEqual( file.path().string(), tmp.path.string() );
 	}
 }
 
