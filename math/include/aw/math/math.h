@@ -175,7 +175,7 @@ template<typename T, typename U>
 constexpr auto remainder(T x, U y) -> T
 {
 	// TODO: edge cases?
-	return T( x - round_down( x + y/2, y ) );
+	return T( x - round_up( x - y/2, y ) );
 }
 
 } //namespace math

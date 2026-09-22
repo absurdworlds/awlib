@@ -53,21 +53,29 @@ Test(angle_arithmetic) {
 	TestAssert( equals( b3.count(), pi/2 ) );
 }
 
+/*
+ * Normalizing brings an angle into (-180; 180], the same range as atan2.
+ */
 Test(angle_normalize) {
 	TestEqual( degrees<int>{ -181 }.normalize().count(), 179 );
-	TestEqual( degrees<int>{ -180 }.normalize().count(), -180 );
+	TestEqual( degrees<int>{ -180 }.normalize().count(), 180 );
 	TestEqual( degrees<int>{ -90 }.normalize().count(),  -90 );
+	TestEqual( degrees<int>{ 0 }.normalize().count(), 0 );
 	TestEqual( degrees<int>{ 90 }.normalize().count(), 90 );
-	TestEqual( degrees<int>{ 180 }.normalize().count(), -180 );
+	TestEqual( degrees<int>{ 179 }.normalize().count(), 179 );
+	TestEqual( degrees<int>{ 180 }.normalize().count(), 180 );
+	TestEqual( degrees<int>{ 181 }.normalize().count(), -179 );
 	TestEqual( degrees<int>{ 270 }.normalize().count(), -90 );
 	TestEqual( degrees<int>{ 360 }.normalize().count(), 0 );
-	TestEqual( degrees<int>{ 540 }.normalize().count(), -180 );
+	TestEqual( degrees<int>{ 540 }.normalize().count(), 180 );
 
 	TestEqual( degrees<float>{ -181.f }.normalize().count(), 179.f );
+	TestEqual( degrees<float>{ -180.f }.normalize().count(), 180.f );
 	TestEqual( degrees<float>{ 90.f }.normalize().count(), 90.f );
 	TestEqual( degrees<float>{ -90.f }.normalize().count(), -90.f );
+	TestEqual( degrees<float>{ 180.f }.normalize().count(), 180.f );
 	TestEqual( degrees<float>{ 360.f }.normalize().count(), 0.f );
-	TestEqual( degrees<float>{ 540.f }.normalize().count(), -180.f );
+	TestEqual( degrees<float>{ 540.f }.normalize().count(), 180.f );
 }
 } // namespace math
 } // namespace aw

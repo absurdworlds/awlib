@@ -80,6 +80,23 @@ Test(round_up) {
 	static_assert( round_up(7.5, 3.0) == 9.0 );
 }
 
+Test(remainder) {
+	TestEqual( remainder(7, 3), 1 );
+	TestEqual( remainder(-7, 3), -1 );
+	TestEqual( remainder(370, 360), 10 );
+	TestEqual( remainder(-370, 360), -10 );
+	TestEqual( remainder(180, 360), 180 );
+	TestEqual( remainder(-180, 360), 180 );
+	TestEqual( remainder(181, 360), -179 );
+
+	TestEqual( remainder(7.0, 3.0), 1.0 );
+	TestEqual( remainder(-7.0, 3.0), -1.0 );
+	// 7.5 sits on the included upper bound of (-1.5, 1.5]
+	TestEqual( remainder(7.5, 3.0), 1.5 );
+	TestEqual( remainder(-7.5, 3.0), 1.5 );
+	TestEqual( remainder(180.0, 360.0), 180.0 );
+}
+
 Test(sign) {
 	TestEqual( sign(-100), -1 );
 	TestEqual( sign(0), 0 );
