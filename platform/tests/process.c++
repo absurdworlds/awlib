@@ -498,16 +498,19 @@ Test(set_limit_caps_address_space) {
 	constexpr uintmax_t limit = 64u << 20;
 	constexpr size_t    ask   = 256u << 20;
 
+	enum { capped, failed, allocated, unsupported };
+
 	auto handle = process::posix::fork([] {
 		using namespace process;
-		if (self::set_limit(resource::address_space, limit) != 0)
-			return 1;
+		std::error_code ec;
+		if (self::set_limit(resource::address_space, limit, ec) != 0)
+			return ec == std::errc::not_supported ? unsupported : failed;
 		try {
 			std::vector<char> big(ask);
 			big.back() = 1;
-			return big.back() == 1 ? 2 : 3;
+			return allocated;
 		} catch (std::bad_alloc&) {
-			return 0;
+			return capped;
 		}
 	}, ec);
 
@@ -519,7 +522,7 @@ Test(set_limit_caps_address_space) {
 
 	Checks {
 		TestAssert( result.status == process::wait_status::finished );
-		TestEqual( result.code, 0 );
+		TestEqualOne( result.code, int(capped), int(unsupported) );
 	}
 }
 

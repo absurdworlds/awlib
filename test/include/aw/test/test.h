@@ -163,6 +163,28 @@ struct equal_v {
 	source_location location = source_location::current();
 };
 
+struct equal_one {
+	template<typename T, typename...Args>
+	bool operator()(T&& arg, Args&&...args)
+	{
+		using aw::to_string;
+		std::vector<std::remove_cvref_t<T>> tmp = {arg, args...};
+
+		values = to_string(tmp);
+		return ( (arg == args) || ... );
+	}
+
+	std::string msg()
+	{
+		using namespace std::string_literals;
+		return vargs + " values: "s + values;
+	}
+
+	char const* vargs;
+	std::string values;
+	source_location location = source_location::current();
+};
+
 struct _assert {
 	bool operator()(bool expr)
 	{
@@ -224,6 +246,8 @@ aw::test::check(aw::test::not_equal{#__VA_ARGS__}, __VA_ARGS__)
 aw::test::check(aw::test::less{#__VA_ARGS__}, __VA_ARGS__)
 #define TestEqualV(...) \
 aw::test::check(aw::test::equal_v{#__VA_ARGS__}, __VA_ARGS__)
+#define TestEqualOne(...) \
+aw::test::check(aw::test::equal_one{#__VA_ARGS__}, __VA_ARGS__)
 #define TestAssert(...) \
 aw::test::check(aw::test::_assert{"assert: " #__VA_ARGS__}, (__VA_ARGS__))
 #define TestFail(msg) \
