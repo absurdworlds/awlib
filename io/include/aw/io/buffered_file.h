@@ -101,10 +101,15 @@ struct buffered_file {
 #endif
 	}
 
+	/*!
+	 * Destructor automatically closes the file.
+	 *
+	 * \note A destructor has no way of reporting a failure. Callers who
+	 *       need to know about a failed close have to manually call close()
+	 */
 	~buffered_file()
 	{
-		if (is_open())
-			close();
+		(void)close();
 	}
 
 	buffered_file(buffered_file&& other) noexcept
@@ -129,10 +134,15 @@ struct buffered_file {
 		swap(static_cast<buffered_file&>(other));
 	}
 
-	void close()
+	/*!
+	 * Flush and close the file. Does nothing if it is not open.
+	 * \return 0 on success, EOF if flushing or closing failed
+	 */
+	int close()
 	{
-		std::fclose(_file);
-		_file = nullptr;
+		if (!is_open())
+			return 0;
+		return std::fclose(std::exchange(_file, nullptr));
 	}
 
 	/*!

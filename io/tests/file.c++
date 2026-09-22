@@ -165,6 +165,24 @@ Test(buffered_file_move_keeps_path) {
 	moved.close();
 };
 
+#if (AW_PLATFORM == AW_PLATFORM_POSIX)
+/*!
+ * Closing a file that is already closed does nothing.
+ */
+Test(buffered_file_close_twice) {
+	temp_file tmp{_context.name};
+	tmp.write("");
+
+	auto const scenario = [&] {
+		io::buffered_file file(tmp.path, io::file_mode::read);
+		file.close();
+		file.close();
+	};
+
+	TestEqual( test::run_sandboxed(scenario), test::outcome::completed );
+}
+#endif
+
 Test(basic_buf_rw) {
 	test::test_round_trip<io::buffered_file>(_context.name);
 };
