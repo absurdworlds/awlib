@@ -72,6 +72,47 @@ Test(native_truncate_without_create) {
 	}
 };
 
+//! Each seek mode seeks exactly as it says, and tell() agrees with it
+Test(native_file_seek_modes) {
+	temp_file tmp{_context.name};
+	tmp.write("0123456789");
+
+	io::native::file file{ tmp.path, io::file_mode::read };
+
+	Preconditions {
+		TestAssert( file.is_open() );
+	}
+
+	char c = 0;
+
+	Checks {
+		TestEqual( file.seek(3, io::seek_mode::set), 3 );
+		TestEqual( file.tell(), 3 );
+		file.read(&c, 1);
+		TestEqual( c, '3' );
+	}
+
+	Checks {
+		// from the position after the read above
+		TestEqual( file.seek(2, io::seek_mode::cur), 6 );
+		file.read(&c, 1);
+		TestEqual( c, '6' );
+	}
+
+	Checks {
+		TestEqual( file.seek(-1, io::seek_mode::end), 9 );
+		file.read(&c, 1);
+		TestEqual( c, '9' );
+	}
+
+	Checks {
+		TestEqual( file.seek(4, io::seek_mode::set), 4 );
+		TestEqual( file.tell(), 4 );
+		file.read(&c, 1);
+		TestEqual( c, '4' );
+	}
+}
+
 Test(native_size_reports_error_on_bad_fd) {
 	std::error_code ec;
 	auto ret = io::native::size(io::invalid_fd, ec);

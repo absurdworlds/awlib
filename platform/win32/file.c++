@@ -50,6 +50,22 @@ int get_openmode( file_mode mode )
 		assert(!"unreachable");
 	};
 }
+
+DWORD get_move_method(seek_mode mode)
+{
+	switch (mode) {
+	case seek_mode::set:
+		return FILE_BEGIN;
+	case seek_mode::end:
+		return FILE_END;
+	case seek_mode::cur:
+		return FILE_CURRENT;
+	}
+
+	assert(!"Invalid seek value");
+	// intentionally invalid value, SetFilePointerEx should fail
+	return DWORD(-1);
+}
 } // namespace
 
 file_descriptor open(fs::path const& path, file_mode fm, std::error_code& ec)
@@ -121,24 +137,13 @@ intmax_t write(file_descriptor fd, char const* buffer, uintmax_t count, std::err
 
 intmax_t seek(file_descriptor fd, intmax_t count, seek_mode mode, std::error_code& ec)
 {
-	int whence;
-	switch (mode) {
-	case seek_mode::set:
-		whence = FILE_BEGIN;
-		break;
-	case seek_mode::end:
-		whence = FILE_END;
-		break;
-	case seek_mode::cur:
-		whence = FILE_CURRENT;
-		break;
-	}
+	const DWORD method = get_move_method(mode);
 
 	LARGE_INTEGER dist;
 	LARGE_INTEGER new_fp;
 	dist.QuadPart = count;
 
-	bool ret = ::SetFilePointerEx(HANDLE(fd), dist, &new_fp, whence);
+	bool ret = ::SetFilePointerEx(HANDLE(fd), dist, &new_fp, method);
 
 	set_error_if(!ret, ec);
 

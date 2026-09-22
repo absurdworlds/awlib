@@ -9,6 +9,8 @@
 #include <aw/io/native_file.h>
 #include "helpers.h"
 
+#include <cassert>
+
 #include <unistd.h>
 #include <fcntl.h>
 #include <sys/file.h>
@@ -92,20 +94,27 @@ intmax_t write(file_descriptor fd, char const* buffer, uintmax_t count, std::err
 	return count - left;
 }
 
-intmax_t seek(file_descriptor fd, intmax_t count, seek_mode mode, std::error_code& ec)
+namespace {
+int get_whence(seek_mode mode)
 {
-	int whence;
 	switch (mode) {
 	case seek_mode::set:
-		whence = SEEK_SET;
-		break;
+		return SEEK_SET;
 	case seek_mode::end:
-		whence = SEEK_END;
-		break;
+		return SEEK_END;
 	case seek_mode::cur:
-		whence = SEEK_CUR;
-		break;
+		return SEEK_CUR;
 	}
+
+	assert(!"Invalid seek value");
+	// intentionally invalid value, lseek should fail with EINVAL
+	return -1;
+}
+} // namespace
+
+intmax_t seek(file_descriptor fd, intmax_t count, seek_mode mode, std::error_code& ec)
+{
+	const int whence = get_whence(mode);
 
 	auto ret = ::lseek(fd, count, whence);
 	set_error_if(ret == -1, ec);
