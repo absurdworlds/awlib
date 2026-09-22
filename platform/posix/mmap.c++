@@ -41,9 +41,7 @@ map_flags get_map_flags( map_perms perms )
 	int prot = get_protection( perms );
 	int flags = MAP_PRIVATE;
 
-	// mmapping large files with MAP_PRIVATE will fail
-	// use MAP_SHARED to enable writeback
-	if (bool(perms & mp::write))
+	if (bool(perms & mp::write) && !bool(perms & mp::copy_on_write))
 		flags = MAP_SHARED;
 
 	return {prot, flags};

@@ -20,7 +20,11 @@ namespace {
 unsigned get_protection( map_perms perms )
 {
 	using mp = map_perms;
-	switch (perms) {
+
+	if (bool(perms & mp::copy_on_write) && bool(perms & mp::write))
+		return bool(perms & mp::execute) ? PAGE_EXECUTE_WRITECOPY : PAGE_WRITECOPY;
+
+	switch (perms & ~mp::copy_on_write) {
 	default:
 	case mp::none:
 		return 0;
@@ -47,7 +51,7 @@ unsigned get_access( map_perms perms )
 		return result;
 
 	if (bool(perms & mp::write))
-		result |= FILE_MAP_WRITE;
+		result |= bool(perms & mp::copy_on_write) ? FILE_MAP_COPY : FILE_MAP_WRITE;
 	if (bool(perms & mp::read))
 		result |= FILE_MAP_READ;
 	if (bool(perms & mp::execute))

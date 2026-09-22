@@ -138,6 +138,37 @@ Test(mmap_write_back) {
 	}
 };
 
+//! Writes to a copy-on-write mapping do not reach the file
+Test(mmap_copy_on_write) {
+	constexpr size_t buf_size = 4096;
+
+	temp_file file{_context.name};
+
+	Preconditions {
+		TestEqual( file.write(std::vector<char>(buf_size, 'a')), intmax_t(buf_size) );
+	}
+
+	std::vector<char> const original(buf_size, 'a');
+	std::vector<char> const changed(buf_size, 'z');
+
+	Checks {
+		using enum io::map_perms;
+		io::mmap_file mapped(file.path, rdwr|copy_on_write);
+
+		TestAssert(mapped.is_open());
+		std::fill(mapped.begin(), mapped.end(), 'z');
+
+		array_view<char> view1(mapped);
+		array_view<char> view2(changed);
+
+		TestAssert( view1 == view2 );
+	}
+
+	Checks {
+		TestAssert( file.read() == original );
+	}
+}
+
 Test(mmap_missing_file) {
 	// constructed and left empty, so nothing is on disk to map
 	temp_file file{_context.name};

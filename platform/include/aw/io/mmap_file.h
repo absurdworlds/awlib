@@ -19,6 +19,11 @@ enum class map_perms : unsigned {
 	read    = 0x1,
 	write   = 0x2,
 	execute = 0x4,
+	/*!
+	 * Writes to the mapping are not visible to other processes and
+	 * are not written back to the file
+	 */
+	copy_on_write = 0x8,
 	// shorthands
 	exec    = execute,
 	rdwr    = read|write,
@@ -32,6 +37,11 @@ constexpr map_perms operator|(map_perms a, map_perms b)
 constexpr map_perms operator&(map_perms a, map_perms b)
 {
 	return map_perms(unsigned(a) & unsigned(b));
+}
+
+constexpr map_perms operator~(map_perms a)
+{
+	return map_perms(~unsigned(a));
 }
 
 constexpr bool operator!(map_perms a)
@@ -94,7 +104,7 @@ inline file_mode get_file_mode(map_perms perms)
 
 	file_mode mode = file_mode::read;
 
-	if (bool(perms & mp::write))
+	if (bool(perms & mp::write) && !bool(perms & mp::copy_on_write))
 		mode = mode|file_mode::write;
 
 	if (bool(perms & mp::exec))
