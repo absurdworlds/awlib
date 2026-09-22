@@ -119,7 +119,6 @@ struct file {
 	file_descriptor descriptor() const noexcept { return fd; }
 
 private:
-	file_mode mode = file_mode::none;
 	bool owns_fd = true;
 	file_descriptor fd = invalid_fd;
 };

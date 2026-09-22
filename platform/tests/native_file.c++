@@ -113,6 +113,29 @@ Test(native_file_seek_modes) {
 	}
 }
 
+//! In append mode a write always goes to the end
+Test(native_file_append_ignores_position) {
+	temp_file tmp{_context.name};
+	tmp.write("ab");
+
+	io::native::file file{ tmp.path, io::file_mode::write|io::file_mode::append };
+
+	Preconditions {
+		TestAssert( file.is_open() );
+	}
+
+	Checks {
+		TestEqual( file.write("cd", 2), 2 );
+		TestEqual( tmp.read(), std::vector<char>({'a', 'b', 'c', 'd'}) );
+	}
+
+	Checks {
+		TestEqual( file.seek(0, io::seek_mode::set), 0 );
+		TestEqual( file.write("ef", 2), 2 );
+		TestEqual( tmp.read(), std::vector<char>({'a', 'b', 'c', 'd', 'e', 'f'}) );
+	}
+}
+
 Test(native_size_reports_error_on_bad_fd) {
 	std::error_code ec;
 	auto ret = io::native::size(io::invalid_fd, ec);

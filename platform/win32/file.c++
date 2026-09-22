@@ -22,8 +22,15 @@ int get_access( file_mode mode )
 	int access = 0;
 	if (bool(mode & fm::read))
 		access |= GENERIC_READ;
-	if (bool(mode & fm::write))
-		access |= GENERIC_WRITE;
+	if (bool(mode & fm::write)) {
+		// For append mode, clear FILE_WRITE_DATA while leaving FILE_APPEND_DATA intact.
+		//
+		// Note: emptying an existing file needs FILE_WRITE_DATA, so
+		// append|truncate appends only while the file pointer is at the end
+		const bool overwrites  = bool(mode & fm::truncate) && !bool(mode & fm::exclusive);
+		const bool append_only = bool(mode & fm::append) && !overwrites;
+		access |= append_only ? (FILE_GENERIC_WRITE & ~FILE_WRITE_DATA) : GENERIC_WRITE;
+	}
 	if (bool(mode & fm::execute))
 		access |= GENERIC_EXECUTE;
 	return access;
