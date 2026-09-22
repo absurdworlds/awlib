@@ -195,8 +195,14 @@ int terminate(process_handle hprocess, std::error_code& ec) noexcept
 	return ret ? 0 : -1;
 }
 
-namespace self {
 // TODO: job objects can cap the memory and the CPU time of a process
+AW_PLATFORM_EXP
+bool is_supported(resource) noexcept
+{
+	return false;
+}
+
+namespace self {
 AW_PLATFORM_EXP
 int set_limit(resource, uintmax_t, std::error_code& ec) noexcept
 {

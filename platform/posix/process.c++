@@ -162,10 +162,17 @@ fs::path path(std::error_code& ec)
 }
 
 namespace {
+//! The rlimit for \a res, or -1 where this system has none for it
 int resource_id(resource res) noexcept
 {
 	switch (res) {
+#if (AW_PLATFORM_SPECIFIC == AW_PLATFORM_APPLE)
+	// XNU has no address space limit: RLIMIT_AS is an alias of
+	// RLIMIT_RSS, and setrlimit() rejects it with EINVAL
+	case resource::address_space: return -1;
+#else
 	case resource::address_space: return RLIMIT_AS;
+#endif
 	case resource::stack:         return RLIMIT_STACK;
 	case resource::core_file:     return RLIMIT_CORE;
 	case resource::cpu_time:      return RLIMIT_CPU;
@@ -188,8 +195,13 @@ uintmax_t from_rlim(rlim_t value) noexcept
 AW_PLATFORM_EXP
 int set_limits(resource res, limit value, std::error_code& ec) noexcept
 {
+	auto id = resource_id(res);
+	if (id < 0) {
+		ec = std::make_error_code(std::errc::not_supported);
+		return -1;
+	}
 	::rlimit native{ to_rlim(value.soft), to_rlim(value.hard) };
-	auto ret = ::setrlimit(resource_id(res), &native);
+	auto ret = ::setrlimit(id, &native);
 	set_error_if(ret < 0, ec);
 	return ret;
 }
@@ -197,8 +209,13 @@ int set_limits(resource res, limit value, std::error_code& ec) noexcept
 AW_PLATFORM_EXP
 limit get_limits(resource res, std::error_code& ec) noexcept
 {
+	auto id = resource_id(res);
+	if (id < 0) {
+		ec = std::make_error_code(std::errc::not_supported);
+		return {};
+	}
 	::rlimit native{};
-	auto ret = ::getrlimit(resource_id(res), &native);
+	auto ret = ::getrlimit(id, &native);
 	set_error_if(ret < 0, ec);
 	if (ret < 0)
 		return {};
@@ -223,6 +240,12 @@ std::chrono::microseconds alarm(std::chrono::microseconds delay) noexcept
 	return seconds(previous.it_value.tv_sec) + microseconds(previous.it_value.tv_usec);
 }
 } // namespace self
+
+AW_PLATFORM_EXP
+bool is_supported(resource res) noexcept
+{
+	return self::resource_id(res) >= 0;
+}
 
 namespace {
 // this one is noexcept unlike std::this_thread::sleep_for

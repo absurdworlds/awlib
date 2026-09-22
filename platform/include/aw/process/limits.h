@@ -36,6 +36,11 @@ struct limit {
 	uintmax_t hard = unlimited;
 };
 
+/*!
+ * \return Whether \a res is supported by set_limit/get_limit
+ */
+AW_PLATFORM_EXP bool is_supported(resource res) noexcept;
+
 namespace self {
 /*!
  * Set both limits on \a res, see setrlimit(2).
@@ -106,6 +111,11 @@ inline uintmax_t get_limit(resource res)
 
 #if defined(AW_SUPPORT_PLATFORM_WIN32)
 namespace win32 {
+/*!
+ * \return Whether \a res is supported set_limit/get_limit
+ */
+AW_PLATFORM_EXP bool is_supported(resource res) noexcept;
+
 namespace self {
 /*!
  * Limits \a res to \a value.
@@ -141,11 +151,13 @@ inline uintmax_t get_limit(resource res)
 #endif
 
 #if   (AW_PLATFORM == AW_PLATFORM_POSIX)
+using posix::is_supported;
 namespace self {
 using posix::self::set_limit;
 using posix::self::get_limit;
 } // namespace self
 #elif (AW_PLATFORM == AW_PLATFORM_WIN32)
+using win32::is_supported;
 namespace self {
 using win32::self::set_limit;
 using win32::self::get_limit;

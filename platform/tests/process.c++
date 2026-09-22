@@ -491,7 +491,10 @@ Test(fork_tells_the_sides_apart) {
 	}
 }
 
-//! An allocation beyond the address space limit fails with bad_alloc
+/*!
+ * An allocation beyond the address space limit fails with bad_alloc
+ * (on platforms that support it)
+ */
 Test(set_limit_caps_address_space) {
 	std::error_code ec;
 
@@ -523,6 +526,35 @@ Test(set_limit_caps_address_space) {
 	Checks {
 		TestAssert( result.status == process::wait_status::finished );
 		TestEqualOne( result.code, int(capped), int(unsupported) );
+	}
+}
+
+Test(is_supported_matches_set_limit) {
+	using namespace process;
+
+	constexpr resource all[] = {
+		resource::address_space, resource::stack, resource::core_file,
+		resource::cpu_time, resource::open_files,
+	};
+
+	for (auto res : all) {
+		std::error_code ec;
+		auto handle = posix::fork([res] {
+			std::error_code ec;
+			auto current = self::get_limit(res, ec);
+			if (ec)
+				return ec == std::errc::not_supported ? 2 : 1;
+			self::set_limit(res, current, ec);
+			if (ec)
+				return ec == std::errc::not_supported ? 2 : 1;
+			return 0;
+		}, ec);
+
+		auto result = wait(handle, ec);
+
+		Checks {
+			TestEqual( result.code, is_supported(res) ? 0 : 2 );
+		}
 	}
 }
 
