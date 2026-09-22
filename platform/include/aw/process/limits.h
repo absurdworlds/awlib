@@ -112,7 +112,7 @@ inline uintmax_t get_limit(resource res)
 #if defined(AW_SUPPORT_PLATFORM_WIN32)
 namespace win32 {
 /*!
- * \return Whether \a res is supported set_limit/get_limit
+ * \return Whether \a res is supported by set_limit/get_limit
  */
 AW_PLATFORM_EXP bool is_supported(resource res) noexcept;
 
