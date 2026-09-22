@@ -7,9 +7,8 @@
  * There is NO WARRANTY, to the extent permitted by law.
  */
 #include <aw/io/native_file.h>
+#include <aw/io/whence.h>
 #include "helpers.h"
-
-#include <cassert>
 
 #include <unistd.h>
 #include <fcntl.h>
@@ -93,24 +92,6 @@ intmax_t write(file_descriptor fd, char const* buffer, uintmax_t count, std::err
 
 	return count - left;
 }
-
-namespace {
-int get_whence(seek_mode mode)
-{
-	switch (mode) {
-	case seek_mode::set:
-		return SEEK_SET;
-	case seek_mode::end:
-		return SEEK_END;
-	case seek_mode::cur:
-		return SEEK_CUR;
-	}
-
-	assert(!"Invalid seek value");
-	// intentionally invalid value, lseek should fail with EINVAL
-	return -1;
-}
-} // namespace
 
 intmax_t seek(file_descriptor fd, intmax_t count, seek_mode mode, std::error_code& ec)
 {
