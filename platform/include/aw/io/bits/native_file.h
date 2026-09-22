@@ -46,8 +46,10 @@ inline ns::file::file(fs::path const& path, file_mode fm) noexcept \
 } \
 inline void ns::file::close(std::error_code& ec) noexcept \
 { \
-	if (!owns_fd) return; \
-	if (is_open()) ns::close(fd, ec); \
+	if (owns_fd && is_open()) \
+		ns::close(fd, ec); \
+	else \
+		ec.clear(); \
 	fd = invalid_fd; \
 } \
 inline intmax_t ns::file::read(char* buffer, uintmax_t count, std::error_code& ec) noexcept \

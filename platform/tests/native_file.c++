@@ -136,6 +136,44 @@ Test(native_file_append_ignores_position) {
 	}
 }
 
+Test(native_file_close) {
+	temp_file tmp{_context.name};
+	tmp.write("");
+
+	io::native::file owner{ tmp.path, io::file_mode::read };
+
+	Preconditions {
+		TestAssert( owner.is_open() );
+	}
+
+	Checks {
+		io::native::file view{ owner.descriptor() };
+
+		std::error_code ec = std::make_error_code(std::errc::io_error);
+		view.close(ec);
+
+		// ec is cleared on success
+		TestAssert( !ec );
+		TestAssert( !view.is_open() );
+
+		// the owner still has a working descriptor
+		TestAssert( owner.size(ec) == 0 && !ec );
+	}
+
+	Checks {
+		std::error_code ec;
+		owner.close(ec);
+		TestAssert( !ec );
+		TestAssert( !owner.is_open() );
+
+		// closing again is not an error either
+		ec = std::make_error_code(std::errc::io_error);
+		owner.close(ec);
+		TestAssert( !ec );
+		TestAssert( !owner.is_open() );
+	}
+}
+
 Test(native_size_reports_error_on_bad_fd) {
 	std::error_code ec;
 	auto ret = io::native::size(io::invalid_fd, ec);
