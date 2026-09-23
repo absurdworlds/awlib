@@ -88,10 +88,10 @@ template<typename T>
 constexpr type type_of = _impl::type_of<T>();
 
 /*!
- * Compare type of a value \a val to the type \a type.
+ * Compare the type of a value \a val to the type \a type.
  */
 template<typename T>
-inline bool operator==(hudf::type type, T const& val)
+inline bool operator==(hudf::type type, T const& /*val*/)
 {
 	return type == type_of<T>;
 }

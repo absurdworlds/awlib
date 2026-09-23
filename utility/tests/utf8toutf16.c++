@@ -90,6 +90,7 @@ Test(invalid_unicode_utf8_with_error)
 		bool error = false;
 		auto utf32_a = unicode::convert<std::u32string>(invalid_utf8, error);
 
+		TestAssert(utf32_a.empty());
 		TestAssert(error);
 	}
 }
@@ -105,6 +106,7 @@ Test(invalid_unicode_utf16_with_error)
 		bool error = false;
 		auto utf32_a = unicode::convert<std::u32string>(invalid_utf16, error);
 
+		TestAssert(utf32_a.empty());
 		TestAssert(error);
 	}
 }

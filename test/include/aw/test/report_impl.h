@@ -226,7 +226,7 @@ public:
 		println(out, "<testsuites>");
 	}
 
-	void end_tests(int total, int failed) override
+	void end_tests(int /*total*/, int /*failed*/) override
 	{
 		println(out, "</testsuites>");
 	}
@@ -279,7 +279,7 @@ public:
 		test_cases.push_back(test_case{true, name, checks});
 	}
 
-	void test_failure(const char* name, const std::vector<check_report>& checks, const char* detail) override
+	void test_failure(const char* name, const std::vector<check_report>& checks, const char* /*detail*/) override
 	{
 		++failed;
 		test_cases.push_back(test_case{false, name, checks});

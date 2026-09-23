@@ -6,8 +6,6 @@
 TestFile( "algorithm::insertion_sort" );
 
 namespace aw {
-using test_sort::unstable;
-
 TestSortAlgorithm(insertion_sort,
 	[](auto& v) { insertion_sort(v.begin(), v.end()); })
 

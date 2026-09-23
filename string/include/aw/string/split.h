@@ -73,7 +73,7 @@ inline size_t delim_size(std::string_view str)
 	return str.size();
 }
 
-inline bool keep(std::string_view substr, keep_empty_t)
+inline bool keep(std::string_view /*substr*/, keep_empty_t)
 {
 	return true;
 }

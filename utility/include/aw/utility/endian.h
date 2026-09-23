@@ -11,6 +11,7 @@
 #include <aw/types/types.h>
 #include <array>
 #include <limits>
+#include <cassert>
 namespace aw {
 // TODO: use reinterpret_memory instead of relying on
 // compiler optimisations on native platform
@@ -87,14 +88,15 @@ constexpr std::array<u8,4> store_be32(u32 tag)
 	return {u8(tag >> 24), u8(tag >> 16), u8(tag >> 8), u8(tag)};
 }
 
-
 constexpr u32 operator""_le32(const char* str, size_t size)
 {
+	assert(size == 4);
 	return read_le32(str[0], str[1], str[2], str[3]);
 }
 
 constexpr u32 operator""_be32(const char* str, size_t size)
 {
+	assert(size == 4);
 	return read_be32(str[0], str[1], str[2], str[3]);
 }
 } // namespace aw

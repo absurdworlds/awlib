@@ -105,7 +105,7 @@ constexpr B convert(A& a, index_sequence<Is...>)
 }
 
 template<typename V, typename Func, size_t...Is>
-constexpr auto apply(V const& vec, Func func, index_sequence<Is...> is)
+constexpr auto apply(V const& vec, Func func, index_sequence<Is...>)
 {
 	using T = decltype( func(vec[0]) );
 	return vector<T,sizeof...(Is)>{ func(vec[Is]) ... };

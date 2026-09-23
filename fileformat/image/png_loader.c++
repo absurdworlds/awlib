@@ -40,7 +40,7 @@ void convert_16_to_8(png_structp png_ptr)
 
 image try_read(io::input_stream& stream)
 {
-	auto warn_fn  = [] (png_structp png_ptr, png_const_charp msg)
+	auto warn_fn  = [] (png_structp /*png_ptr*/, png_const_charp msg)
 	{
 		log.warning( "png", msg );
 	};

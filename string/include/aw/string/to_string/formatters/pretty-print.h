@@ -62,7 +62,7 @@ struct pretty_print {
 		literal(val ? "true"sv : "false"sv);
 	}
 
-	void convert(nullptr_t val)
+	void convert(nullptr_t /*val*/)
 	{
 		using namespace std::string_view_literals;
 		literal("nullptr"sv);

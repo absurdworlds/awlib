@@ -12,11 +12,11 @@
 namespace aw {
 struct true_func {
 	template<typename...Args>
-	bool operator()(Args&&...args) const { return true; }
+	bool operator()(Args&&.../*args*/) const { return true; }
 };
 struct false_func {
 	template<typename...Args>
-	bool operator()(Args&&...args) const { return false; }
+	bool operator()(Args&&.../*args*/) const { return false; }
 };
-}
+} // namespace aw
 #endif//aw_utility_functional_trivial_h
