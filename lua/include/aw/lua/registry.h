@@ -11,13 +11,14 @@
 
 #include <aw/lua/class_def.h>
 
+#include <memory>
 #include <typeindex>
 #include <unordered_map>
 
 namespace aw::lua {
 
 class registry {
-	std::unordered_map<std::type_index, class_def*> class_defs;
+	std::unordered_map<std::type_index, std::unique_ptr<class_def>> class_defs;
 
 	void push_reference(lua_State* L, const std::type_info& ti, void* instance)
 	{
@@ -51,7 +52,7 @@ public:
 	template<typename T, typename Properties = properties<>, typename Methods = methods<>>
 	void register_class(Properties p = Properties{}, Methods m = Methods{})
 	{
-		class_defs[typeid(T)] = new class_def_impl<T, Properties, Methods>();
+		class_defs[typeid(T)] = std::make_unique<class_def_impl<T, Properties, Methods>>();
 	}
 
 	template<typename T>

@@ -21,6 +21,10 @@ class class_def {
 	friend class registry;
 
 	virtual void push_reference(lua_State* L, void* instance ) const = 0;
+
+public:
+	// the registry owns these through a base-class pointer
+	virtual ~class_def() = default;
 };
 
 template<typename T, typename Properties, typename Methods>
