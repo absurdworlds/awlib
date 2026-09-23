@@ -1,10 +1,22 @@
 #include <aw/utility/memory/pool.h>
 #include <aw/test/test.h>
+#include <aw/config.h>
 #include <new>
 #include <cstdint>
 
 TestFile("memory::pool");
 
+/*
+ * ThreadSanitizer's runtime defines the nothrow operator new as a strong
+ * symbol, where ASan's is weak, so replacing it here links everywhere
+ * except under TSan -- and there it is a duplicate definition rather than
+ * an override. The pool has no other way to be told an allocation
+ * failed, so the OOM case sits out that one build; every other
+ * configuration still runs it.
+ */
+#define AW_POOL_CAN_FORCE_OOM (!AW_SANITIZER_THREAD)
+
+#if AW_POOL_CAN_FORCE_OOM
 namespace {
 bool force_oom = false;
 } // namespace
@@ -21,6 +33,7 @@ void* operator new(std::size_t n, std::nothrow_t const&) noexcept
 		return nullptr;
 	}
 }
+#endif
 
 namespace aw {
 using memory::align_up;
@@ -57,6 +70,7 @@ Test(pool_hands_out_distinct_reusable_blocks)
 	p.dealloc(c);
 }
 
+#if AW_POOL_CAN_FORCE_OOM
 Test(pool_returns_null_when_out_of_memory)
 {
 	memory::pool<64, 8> p(4);
@@ -67,6 +81,7 @@ Test(pool_returns_null_when_out_of_memory)
 
 	TestAssert(a == nullptr);
 }
+#endif
 
 /*!
  * Blocks are suitably aligned for the type they hold.
