@@ -56,15 +56,7 @@ public:
 	}
 
 	/*
-	 * Carrying into the high word is meant to wrap: that is what makes
-	 * two words behave as one wider one. For an unsigned T it does, but
-	 * for a signed one overflow is undefined rather than modular, and
-	 * -- for instance -- negating the most negative value reaches it.
-	 *
-	 * Doing the arithmetic in the unsigned domain and converting back
-	 * gives exactly the wrapping the algorithm wants; since C++20 that
-	 * conversion is defined as the two's-complement reinterpretation
-	 * rather than being implementation-defined.
+	 *! Safely carry into the high word, avoiding undefined signed overflow.
 	 */
 	static constexpr T carry_into(T high, U amount)
 	{
@@ -78,9 +70,6 @@ public:
 
 	constexpr auto& operator++()
 	{
-		// If anyone reading this gets annoyed that
-		// I compute (lo + 1) twice: I don't care about that,
-		// that should be optimized away by compiler.
 		hi = carry_into(hi, (lo + 1) < lo);
 		++lo;
 		return *this;
@@ -196,8 +185,6 @@ public:
 	auto operator*(composite_int const& other) const
 	{
 		auto tmp = mul(lo, other.lo);
-		// The cross terms overflow the high word for the same reason the
-		// carries do, and are meant to wrap for the same reason.
 		tmp.hi = carry_into(tmp.hi, (other.lo * U(hi)) + (lo * U(other.hi)));
 		return tmp;
 	}
