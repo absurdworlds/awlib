@@ -53,6 +53,37 @@ struct sandbox {
 };
 
 /*!
+ * Adjust \a limits for the instrumentation the process is carrying.
+ *
+ * A sanitizer changes what these limits mean, in ways no caller can
+ * usefully predict:
+ *
+ * - The runtime reserves terabytes of address space for its shadow
+ *   memory, so any address-space limit small enough to be worth setting
+ *   kills the child on its next mmap rather than on a runaway
+ *   allocation. There is no figure that works; the limit is dropped.
+ * - Instrumented frames are several times larger, so a stack limit
+ *   chosen for the uninstrumented build overflows on the same recursion
+ *   depth.
+ * - Everything runs slower, ThreadSanitizer by an order of magnitude, so
+ *   a time limit meant to catch a hang starts catching a slow success
+ *   instead.
+ *
+ * The limits still do their job after this -- they are just loose enough
+ * that only a genuine runaway reaches them.
+ */
+constexpr sandbox adjust_for_instrumentation(sandbox limits)
+{
+	if (!AW_SANITIZER_ANY)
+		return limits;
+
+	limits.address_space_limit = 0;
+	limits.stack_limit *= 8;
+	limits.time_limit  *= 12;
+	return limits;
+}
+
+/*!
  * Run \a func in a child process, so that any crash is isolated from
  * the rest of the test suite.
  *
@@ -64,6 +95,8 @@ outcome run_sandboxed(Func func, sandbox limits = {})
 	constexpr auto exit_success   = 0;
 	constexpr auto exit_bad_alloc = 3;
 	constexpr auto exit_exception = 4;
+
+	limits = adjust_for_instrumentation(limits);
 
 	// so that the child doesn't flush a copy of the parent's buffers
 	fflush(nullptr);
