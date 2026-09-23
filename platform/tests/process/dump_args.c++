@@ -42,7 +42,7 @@ int main(int, char** argv)
 		// TODO: temp_file
 		std::ofstream f("argv.txt");
 		while (auto str = *argv++)
-			f << str << std::endl;
+			f << str << '\n';
 	}
 
 	if (args.sleep_ms > 0)
