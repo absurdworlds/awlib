@@ -31,6 +31,7 @@ jobs:
       - name: Configure
         run: >
           cmake -S . -B build
+          -GNinja
           -DCMAKE_BUILD_TYPE=Debug
           ${{ matrix.cmake }}
           -DAW_ENABLE_GRAPHICS:BOOL=OFF
