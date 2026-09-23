@@ -574,7 +574,7 @@ end
 local funcPointerMacro = "aw_gl_func_pointer"
 
 function my_style.source.WriteBlockBeginPtrDefs(hFile, spec, options)
-	hFile:fmt("#define %s(x) decltype(x) x = nullptr\n", funcPointerMacro)
+	hFile:fmt("#define %s(x) decltype(x) x = nullptr // NOLINT(bugprone-macro-parentheses): x is a variable name, not an expression\n", funcPointerMacro)
 end
 
 function my_style.source.WriteBlockEndPtrDefs(hFile, spec, options)

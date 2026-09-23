@@ -13,7 +13,7 @@ using aw::string_view;
 namespace ext {
 } //namespace ext
 
-#define aw_gl_func_pointer(x) decltype(x) x = nullptr
+#define aw_gl_func_pointer(x) decltype(x) x = nullptr // NOLINT(bugprone-macro-parentheses): x is a variable name, not an expression
 /* gl version 1.0 */
 aw_gl_func_pointer(blend_func);
 aw_gl_func_pointer(clear);
