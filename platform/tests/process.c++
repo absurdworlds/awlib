@@ -494,7 +494,14 @@ Test(fork_tells_the_sides_apart) {
 /*!
  * An allocation beyond the address space limit fails with bad_alloc
  * (on platforms that support it)
+ *
+ * Not under a sanitizer: its runtime reserves terabytes of address space
+ * for shadow memory, so the child dies on that reservation rather than
+ * on the allocation this is watching for. The limit is still being set
+ * correctly -- there is just no way to demonstrate it from inside an
+ * instrumented process.
  */
+#if !AW_SANITIZER_ANY
 Test(set_limit_caps_address_space) {
 	std::error_code ec;
 
@@ -528,6 +535,7 @@ Test(set_limit_caps_address_space) {
 		TestEqualOne( result.code, int(capped), int(unsupported) );
 	}
 }
+#endif
 
 Test(is_supported_matches_set_limit) {
 	using namespace process;
