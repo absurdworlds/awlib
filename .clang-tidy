@@ -7,4 +7,13 @@ Checks: >
   portability-*,
 
   -bugprone-easily-swappable-parameters,
+  -misc-include-cleaner,
+  -misc-no-recursion,
+  -misc-static-assert,-cert-dcl03-c,
   -misc-non-private-member-variables-in-classes,
+
+# -bugprone-easily-swappable-parameters   style
+# -misc-include-cleaner                   too noisy
+# -misc-no-recursion                      the parsers recurse on purpose
+# -misc-static-assert,-cert-dcl03-c       broken, too many false positives
+# -misc-non-private-member-variables-in-classes   public members are deliberate
