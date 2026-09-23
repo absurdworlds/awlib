@@ -148,4 +148,46 @@ Test(compint_to_string) {
 	CIPrints(std::numeric_limits<i64>::max());
 	CIPrints(std::numeric_limits<i64>::min());
 }
+
+/*!
+ * sign() is -1, 0 or 1 for the whole value, including values
+ * that fit entirely in the low half
+ */
+Test(compint_sign) {
+	TestEqual(to_s(u64(0)).sign(),                     0u);
+	TestEqual(to_s(u64(5)).sign(),                     1u);
+	TestEqual(to_s(u64(0x0000'0001'0000'0000)).sign(), 1u);
+	TestEqual(to_s(~u64(0)).sign(),                    1u);
+
+	TestEqual(to_s(i64(0)).sign(),                       0);
+	TestEqual(to_s(i64(5)).sign(),                       1);
+	TestEqual(to_s(i64(0x0000'0001'0000'0000)).sign(),   1);
+	TestEqual(to_s(i64(-1)).sign(),                     -1);
+	TestEqual(to_s(i64(-0x0000'0001'0000'0000)).sign(), -1);
+}
+
+/*!
+ * !x is true only for zero
+ */
+Test(compint_not) {
+	TestAssert(!to_s(u64(0)));
+	TestAssert(!!to_s(u64(5)));
+	TestAssert(!!to_s(u64(0x0000'0001'0000'0000)));
+	TestAssert(!!to_s(u64(0x0000'0001'0000'0005)));
+
+	TestAssert(!to_s(i64(0)));
+	TestAssert(!!to_s(i64(-1)));
+	TestAssert(!!to_s(i64(5)));
+}
+
+/*!
+ * make_composite_int(hi, lo) takes a sign and magnitude, the sign of hi
+ * applies to the whole value, and the magnitude is |hi|·2ⁿ + lo
+ */
+Test(compint_make) {
+	CIEqual(make_composite_int<i32>(    3, 7u),     0x3'0000'0007);
+	CIEqual(make_composite_int<i32>(   -1, 0u),    -0x1'0000'0000);
+	CIEqual(make_composite_int<i32>(   -1, 1u),    -0x1'0000'0001);
+	CIEqual(make_composite_int<i32>(-0x10, 0xFFu), -0x10'0000'00FF);
+}
 } // namespace aw
