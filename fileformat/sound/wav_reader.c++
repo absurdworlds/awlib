@@ -51,7 +51,7 @@ struct reader {
 private:
 	io::input_stream& stream;
 	wave_data& sample;
-	uintmax_t size_check;
+	uintmax_t size_check = 0;
 };
 
 void reader::skip_chunk( tag id )
@@ -75,7 +75,7 @@ void reader::skip_chunk( tag id )
 void reader::expect_chunk( tag expect, string_view name )
 {
 	using namespace std::string_literals;
-	u32 id;
+	u32 id = 0;
 	read_le(stream, id);
 	if (wav::tag(id) != expect)
 		throw format_error{ "expected "s + std::string(name) + " chunk"s };
@@ -119,7 +119,7 @@ void reader::read_format_chunks()
 
 tag reader::read_misc_chunks( )
 {
-	tag id;
+	tag id = {};
 	while ( auto opt = read_tag() ) {
 		id = *opt;
 		if (id == tag::data)

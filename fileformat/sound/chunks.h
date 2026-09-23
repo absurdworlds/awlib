@@ -103,7 +103,7 @@ struct format_chunk_header : chunk {
 	format_chunk_header( io::input_stream& stream )
 		: chunk{stream}
 	{
-		u16 tmp;
+		u16 tmp = 0;
 		read_le(stream, tmp);
 		id = format(tmp);
 	}
