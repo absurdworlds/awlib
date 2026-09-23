@@ -9,11 +9,12 @@
  */
 #ifndef aw_hudf_document_h
 #define aw_hudf_document_h
+#include <aw/hudf/export.h>
 #include <aw/hudf/node.h>
 namespace aw {
 inline namespace v1 {
 
-struct document {
+struct AW_HUDF_EXP document {
 	explicit document(hudf::node node)
 		: _root(std::move(node))
 	{
