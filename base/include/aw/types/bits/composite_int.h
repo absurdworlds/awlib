@@ -19,27 +19,27 @@ auto composite_int<T>::mul(U a, U b) -> composite_int<T>
 	constexpr auto& to_upper = bit::lower_to_upper<U>;
 
 	// Split integers into lower and upper halves
-	U ah = upper(a);
-	U al = lower(a);
-	U bh = upper(b);
-	U bl = lower(b);
+	U const ah = upper(a);
+	U const al = lower(a);
+	U const bh = upper(b);
+	U const bl = lower(b);
 
 	// Multiply halves together
-	U ah_bh = ah * bh;
-	U ah_bl = ah * bl;
-	U al_bh = al * bh;
-	U al_bl = al * bl;
+	U const ah_bh = ah * bh;
+	U const ah_bl = ah * bl;
+	U const al_bh = al * bh;
+	U const al_bl = al * bl;
 
 	// Compute middle bits
-	U mid_lo = lower(ah_bl) + lower(al_bh);
-	U mid_hi = upper(ah_bl) + upper(al_bh);
+	U const mid_lo = lower(ah_bl) + lower(al_bh);
+	U const mid_hi = upper(ah_bl) + upper(al_bh);
 
 	// Compute carry bit
-	U carry = upper(mid_lo + upper(al_bl));
+	U const carry = upper(mid_lo + upper(al_bl));
 
 	// Add all the bits together
-	U hi = ah_bh + mid_hi + carry;
-	U lo = al_bl + to_upper(mid_lo);
+	U const hi = ah_bh + mid_hi + carry;
+	U const lo = al_bl + to_upper(mid_lo);
 
 	return {T(hi), lo};
 }
@@ -51,16 +51,16 @@ auto div(composite_int<T> const& a, composite_int<T> const& b)
 {
 	using U = make_unsigned<T>;
 
-	bool q_sign = (a.high() < 0) != (b.high() < 0);
-	bool r_sign = (b.high() < 0);
+	bool const q_sign = (a.high() < 0) != (b.high() < 0);
+	bool const r_sign = (b.high() < 0);
 
-	auto aa = a.high() < 0 ? composite_int<U>(-a) : composite_int<U>(a);
-	auto bb = b.high() < 0 ? composite_int<U>(-b) : composite_int<U>(b);
+	auto const aa = a.high() < 0 ? composite_int<U>(-a) : composite_int<U>(a);
+	auto const bb = b.high() < 0 ? composite_int<U>(-b) : composite_int<U>(b);
 
-	auto result = composite_int<U>::div(aa, bb);
+	auto const result = composite_int<U>::div(aa, bb);
 
-	auto& quot = result.first;
-	auto& rem  = result.second;
+	auto const& quot = result.first;
+	auto const& rem  = result.second;
 
 	return {q_sign ? composite_int<T>(-quot) : composite_int<T>(quot),
 	        r_sign ? composite_int<T>(-rem)  : composite_int<T>(rem)};
@@ -70,8 +70,8 @@ template<typename T>
 auto div(composite_int<T> const& a, composite_int<T> const& b)
         -> enable_if<is_unsigned<T>,  std::pair<composite_int<T>, composite_int<T>>>
 {
-	size_t lza = a.leading_zeros();
-	size_t lzb = b.leading_zeros();
+	size_t const lza = a.leading_zeros();
+	size_t const lzb = b.leading_zeros();
 	if (lzb < lza)
 		return {}; // 1 / 2 == 0
 

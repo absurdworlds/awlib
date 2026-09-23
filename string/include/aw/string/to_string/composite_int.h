@@ -33,13 +33,13 @@ std::string to_string(composite_int<T> val, Formatter&& fmt = Formatter{})
 	// TODO: figure out a way to specify base
 	constexpr size_t base = 10;
 	constexpr size_t dg = composite_int<U>::digits;
-	size_t lz = tmp.leading_zeros();
+	const size_t lz = tmp.leading_zeros();
 	tmp <<= lz;
 
 	radix_accumulator<base, dg> result;
 	result.sign = sign;
 	for (size_t i = lz; i < dg; ++i) {
-		bool carry = bit::top_bit(tmp.high());
+		const bool carry = bit::top_bit(tmp.high());
 		tmp <<= 1;
 		result.add_bit(carry);
 	}

@@ -74,7 +74,7 @@ public:
 
 	constexpr auto& operator+=(composite_int const& other)
 	{
-		U carry = (lo + other.lo) < lo;
+		U const carry = (lo + other.lo) < lo;
 		lo += other.lo;
 		hi += other.hi + carry;
 		return *this;
@@ -82,7 +82,7 @@ public:
 
 	constexpr auto& operator+=(U val)
 	{
-		U carry = (lo + val) < lo;
+		U const carry = (lo + val) < lo;
 		lo += val;
 		hi += carry;
 		return *this;
@@ -90,7 +90,7 @@ public:
 
 	constexpr auto& operator-=(composite_int const& other)
 	{
-		U carry = (lo - other.lo) > lo;
+		U const carry = (lo - other.lo) > lo;
 		lo -= other.lo;
 		hi -= other.hi + carry;
 		return *this;
