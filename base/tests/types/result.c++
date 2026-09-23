@@ -2,14 +2,23 @@
 #include <aw/test/test.h>
 #include <aw/test/helpers/lifetime_tracker.h>
 #include <aw/test/helpers/throwing.h>
+#include <aw/test/helpers/copy_move_tracker.h>
+#include <aw/test/helpers/unsafe_move.h>
+
+#include <vector>
 
 TestFile( "result" );
 
 namespace aw {
 using test::lifetime_tracker;
 using test::throwing;
+using test::unsafe_move;
 
 static_assert(std::is_nothrow_move_assignable_v<result<lifetime_tracker, int>>);
+
+static_assert(std::is_nothrow_move_constructible_v<result<lifetime_tracker, int>>);
+static_assert(!std::is_nothrow_move_constructible_v<result<unsafe_move, int>>);
+static_assert(!std::is_nothrow_move_constructible_v<result<int, unsafe_move>>);
 
 Test(result_basic_test)
 {
@@ -103,5 +112,25 @@ Test(result_throwing_assignment_is_safe)
 		TestEqual(throwing::live, 2);
 	}
 	TestEqual(throwing::live, 0);
+}
+
+/*
+ * A vector of results moves its elements when it grows,
+ * rather than copying them.
+ */
+Test(result_vector_growth_moves)
+{
+	using tracker = test::copy_move_tracker<int>;
+
+	std::vector<result<tracker, int>> vec;
+	for (int i = 0; i < 4; ++i)
+		vec.emplace_back(tracker{i});
+
+	vec.reserve(vec.capacity() + 1);
+
+	for (int i = 0; i < 4; ++i) {
+		TestEqual(vec[i].value().value, i);
+		TestEqual(vec[i].value().n_copies, 0u);
+	}
 }
 } // namespace aw

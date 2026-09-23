@@ -4,8 +4,16 @@
 #include <aw/test/test.h>
 #include <aw/test/helpers/copy_move_tracker.h>
 #include <aw/test/helpers/throwing.h>
+#include <aw/test/helpers/unsafe_move.h>
+
+#include <vector>
 
 TestFile( "aw::variant" );
+
+static_assert(std::is_nothrow_move_constructible_v<aw::variant<int, std::string>>);
+static_assert(std::is_nothrow_move_assignable_v<aw::variant<int, std::string>>);
+static_assert(!std::is_nothrow_move_constructible_v<aw::variant<int, aw::test::unsafe_move>>);
+static_assert(!std::is_nothrow_move_assignable_v<aw::variant<int, aw::test::unsafe_move>>);
 
 Test(variant_basic_get) {
 	using namespace std::string_literals;
@@ -306,4 +314,23 @@ Test(variant_construct_throws) {
 
 	// The value was neither constructed nor destroyed
 	TestEqual(throwing::live, 0);
+}
+
+/*
+ * A vector of variants moves its elements when it grows,
+ * rather than copying them.
+ */
+Test(variant_vector_growth_moves) {
+	using tracker = aw::test::copy_move_tracker<int>;
+
+	std::vector<aw::variant<tracker, float>> vec;
+	for (int i = 0; i < 4; ++i)
+		vec.emplace_back(tracker{i});
+
+	vec.reserve(vec.capacity() + 1);
+
+	for (int i = 0; i < 4; ++i) {
+		TestEqual(vec[i].get<tracker>()->value, i);
+		TestEqual(vec[i].get<tracker>()->n_copies, 0u);
+	}
 }

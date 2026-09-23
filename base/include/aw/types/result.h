@@ -110,6 +110,8 @@ struct result {
 	}
 
 	result(result&& other)
+		noexcept(std::is_nothrow_move_constructible_v<T> &&
+		         std::is_nothrow_move_constructible_v<E>)
 		: is_error(other.is_error)
 	{
 		if (!is_error)

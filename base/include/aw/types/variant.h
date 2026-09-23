@@ -10,6 +10,7 @@
 #define aw_types_variant_h
 #include <algorithm>
 #include <cassert>
+#include <type_traits>
 
 #include <aw/types/bits/variant.h>
 #include <aw/types/containers/any_buffer.h>
@@ -48,6 +49,7 @@ public:
 	 * Move value stored in another variant.
 	 */
 	variant(variant&& other)
+		noexcept((std::is_nothrow_move_constructible_v<Ts> && ...))
 	{
 		if (!other.empty()) {
 			other.apply(move_construct_visitor{*this});
@@ -86,6 +88,8 @@ public:
 	}
 
 	variant& operator=(variant&& other)
+		noexcept((std::is_nothrow_move_constructible_v<Ts> && ...) &&
+		         (std::is_nothrow_move_assignable_v<Ts> && ...))
 	{
 		assert(&other != this);
 		move_from(other);

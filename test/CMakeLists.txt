@@ -10,6 +10,7 @@ aw_add_library(awtest INTERFACE
 		include/aw/test/helpers/round_trip.h
 		include/aw/test/helpers/sandbox.h
 		include/aw/test/helpers/temp_file.h
+		include/aw/test/helpers/unsafe_move.h
 		include/aw/test/test_case.h
 		include/aw/test/test_context.h
 		include/aw/test/test.h

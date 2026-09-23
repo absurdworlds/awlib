@@ -10,6 +10,13 @@
 TestFile( "aw::flat_map" );
 
 namespace aw {
+static_assert(std::is_nothrow_move_assignable_v<flat_map<std::string, int>>);
+// Move-assignment might need to allocate if source and target
+// polymorphic_allocators point to different memory resoruces
+static_assert(!std::is_nothrow_move_assignable_v<flat_map<
+	std::string, int, std::less<std::string>,
+	std::pmr::polymorphic_allocator<std::pair<std::string, int>>>>);
+
 Test(flat_map_basic)
 {
 	aw::flat_map<std::string, int> map;

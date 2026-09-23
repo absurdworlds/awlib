@@ -44,7 +44,7 @@ struct array_ref {
 
 	constexpr array_ref& operator=(array_ref const&) = default;
 
-	constexpr void swap(array_ref& other)
+	constexpr void swap(array_ref& other) noexcept
 	{
 		std::swap(_data, other._data);
 		std::swap(_size, other._size);
@@ -109,7 +109,7 @@ template<typename T>
 using array_view = array_ref<T const>;
 
 template<typename T>
-constexpr void swap(array_ref<T>& a, array_ref<T>& b) { return a.swap(b); }
+constexpr void swap(array_ref<T>& a, array_ref<T>& b) noexcept { return a.swap(b); }
 
 template<typename T>
 constexpr auto begin(array_ref<T>& a)   { return a.begin(); }

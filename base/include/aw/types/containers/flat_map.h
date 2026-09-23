@@ -12,6 +12,7 @@
 #include <vector>
 #include <iterator>
 #include <algorithm>
+#include <type_traits>
 #include <aw/types/traits/iterator.h>
 
 namespace aw {
@@ -196,6 +197,8 @@ public:
 	 * Moves contents of \a other's into *this;
 	 */
 	flat_map& operator=(flat_map&& other)
+		noexcept(std::is_nothrow_move_assignable_v<base_container> &&
+		         std::is_nothrow_move_assignable_v<Compare>)
 	{
 		base = std::move(other.base);
 		_key_comp = std::move(other._key_comp);
@@ -337,7 +340,7 @@ public:
 		base.clear();
 	}
 
-	void swap(flat_map& other)
+	void swap(flat_map& other) noexcept
 	{
 		base.swap(other.base);
 		std::swap(_key_comp, other._key_comp);
