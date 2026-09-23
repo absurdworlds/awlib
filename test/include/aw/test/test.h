@@ -231,7 +231,7 @@ struct _catch {
 	void run_test_##name(::aw::test::test_context); \
 	const aw::test::register_test add_test_##name{#name, run_test_##name \
 		__VA_OPT__(,) __VA_ARGS__}; \
-	void run_test_##name(::aw::test::test_context _context)
+	void run_test_##name([[maybe_unused]] ::aw::test::test_context _context)
 #define Setup          if (aw::test::setup())
 #define Preconditions  if (aw::test::preconditions())
 #define Checks         if (aw::test::checks())
