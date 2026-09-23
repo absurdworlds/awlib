@@ -11,8 +11,14 @@
 
 namespace aw::platform {
 namespace {
-// Functions velow should never fail, but there *is* a possibility for them to fail
-const os_name unknown_os{"Unknown", "Unknown", "Unknown", "Unknown"};
+/*!
+ * Returns a fallback value for failed os_version.
+ * Functions below should never fail, but there *is* a possibility for them to fail.
+ */
+os_name unknown_os()
+{
+	return {"Unknown", "Unknown", "Unknown", "Unknown"};
+}
 }
 } // namespace aw::platform
 
@@ -23,7 +29,7 @@ os_name get_os_version()
 {
 	struct utsname un;
 	if (uname(&un) == -1)
-		return unknown_os;
+		return unknown_os();
 
 	return {
 		un.sysname,
@@ -195,7 +201,7 @@ os_name get_os_version()
 			get_build( osvi )
 		};
 
-	return unknown_os;
+	return unknown_os();
 }
 } // namespace win32
 #endif
