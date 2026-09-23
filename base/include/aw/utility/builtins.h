@@ -9,6 +9,7 @@
 #ifndef aw_builtins_h
 #define aw_builtins_h
 #include <aw/config.h>
+#include <utility>
 namespace aw {
 
 [[noreturn]] aw_force_inline void _unreachable()
@@ -16,7 +17,9 @@ namespace aw {
 #if AW_EXT(__builtin_unreachable)
 	__builtin_unreachable();
 #elif AW_EXT(__assume)
-	__assume(0);
+	__assume(false);
+#else
+	std::unreachable();
 #endif
 }
 
