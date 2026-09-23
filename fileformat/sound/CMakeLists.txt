@@ -13,4 +13,8 @@ target_compile_definitions(awsound PRIVATE AW_MODULE_SOUND)
 target_link_libraries(awsound
 	PUBLIC
 		awlog_interface
-		awio)
+		awio
+	PRIVATE
+		awmath
+		awutils
+)

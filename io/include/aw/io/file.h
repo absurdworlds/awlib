@@ -42,15 +42,16 @@ struct file {
 	{
 	}
 
-	/*! Destructor automatically closes the file */
+	/*!
+	 * Destructor automatically closes the file.
+	 *
+	 * \note A destructor has no way of reporting a failure. Callers who
+	 *       need to know about a failed close have to manually call close()
+	 */
 	~file() noexcept
-	try
 	{
-		if (is_open())
-			close();
-	}
-	catch(std::exception& ex)
-	{
+		std::error_code ec;
+		data.close(ec);
 		//log.warning("aw::io", "could not close file " + path.u8string());
 	}
 
@@ -62,13 +63,23 @@ struct file {
 
 	file& operator=(file&& other) noexcept
 	{
-		swap(other);
+		if (this != &other) {
+			std::scoped_lock guard{mutex, other.mutex};
+
+			std::error_code ec;
+			data.close(ec);
+
+			_path = std::move(other._path);
+			data = std::move(other.data);
+		}
 		return *this;
 	}
 
 	void swap(file& other) noexcept
 	{
-		std::lock_guard<std::mutex> guard{mutex};
+		if (this == &other)
+			return;
+		std::scoped_lock guard{mutex, other.mutex};
 		_path.swap(other._path);
 		data.swap(other.data);
 	}
@@ -95,7 +106,8 @@ struct file {
 	/*!
 	 * Read specified number of bytes from file to buffer
 	 * \return
-	 *     number of bytes read, or -1 on failure.
+	 *     number of bytes read, 0 at the end of file
+	 * \throw fs::filesystem_error on failure
 	 */
 	uintmax_t read(char* buffer, uintmax_t count)
 	{
@@ -112,7 +124,8 @@ struct file {
 	/*!
 	 * Write specified number of bytes to file from buffer.
 	 * \return
-	 *     number of bytes written, negative on failure
+	 *     number of bytes written
+	 * \throw fs::filesystem_error on failure
 	 */
 	uintmax_t write(char const* buffer, uintmax_t count)
 	{

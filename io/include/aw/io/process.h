@@ -1,42 +1,23 @@
-/*
- * Copyright (C) 2016  absurdworlds
- *
- * License LGPLv3 or later:
- * GNU Lesser GPL version 3 <http://gnu.org/licenses/lgpl-3.0.html>
- * This is free software: you are free to change and redistribute it.
- * There is NO WARRANTY, to the extent permitted by law.
- */
-#ifndef aw_platform_process_h
-#define aw_platform_process_h
-#include <aw/io/export.h>
-#include <aw/types/array_view.h>
+// This header is obsolete. Please use this one instead:
+#include <aw/process.h>
 
-#if defined(AW_SUPPORT_PLATFORM_WIN32)
-#include "win32/process.h"
-#endif
-#if defined(AW_SUPPORT_PLATFORM_POSIX)
-#include "posix/process.h"
+#if !defined(aw_io_process_h_warned) &&  __cplusplus >= 202302L
+#define aw_io_process_h_warned
+#warning "<aw/io/process.h> is obsolete and will be removed soon. Please use <aw/process.h> instead."
 #endif
 
 namespace aw::io {
-#if   (AW_PLATFORM == AW_PLATFORM_POSIX)
-using posix::process_handle;
-using posix::invalid_process_handle;
-using posix::spawn;
-using posix::kill;
-using posix::terminate;
-using posix::wait;
-using posix::run;
-using posix::executable_name;
-#elif (AW_PLATFORM == AW_PLATFORM_WIN32)
-using win32::invalid_process_handle;
-using win32::process_handle;
-using win32::spawn;
-using win32::kill;
-using win32::terminate;
-using win32::wait;
-using win32::run;
-using win32::executable_name;
+using process::wait_status;
+using process::wait_result;
+using process::timeout_spec_ms;
+#if (AW_PLATFORM == AW_PLATFORM_POSIX) || (AW_PLATFORM == AW_PLATFORM_WIN32)
+using process::process_handle;
+using process::invalid_process_handle;
+using process::spawn;
+using process::kill;
+using process::terminate;
+using process::wait;
+using process::run;
+using process::executable_name;
 #endif
-} // namespace aw::platform
-#endif//aw_platform_process_h
+} // namespace aw::io

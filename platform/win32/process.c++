@@ -1,0 +1,220 @@
+#include <aw/process/win32.h>
+#include <aw/process/limits.h>
+
+#include <aw/types/string_view.h>
+#include <aw/string/escape.h>
+#include <aw/utility/unicode/convert.h>
+#include <aw/algorithm/in.h>
+
+#include "path.h"
+#include "winapi_helpers.h"
+
+#include <cassert>
+#include <csignal>
+#include <vector>
+
+namespace aw::process::win32 {
+using platform::win32::convert_handle;
+using platform::win32::set_error;
+using platform::win32::set_error_if;
+using platform::win32::winapi_path;
+
+namespace self {
+process_handle handle()
+{
+	return convert_handle<process_handle>(GetCurrentProcess());
+}
+
+fs::path path(std::error_code& ec)
+{
+	std::vector<WCHAR> buf(MAX_PATH);
+	while (true) {
+		auto len = ::GetModuleFileNameW(nullptr, buf.data(), DWORD(buf.size()));
+		if (len == 0) {
+			set_error(ec);
+			return {};
+		}
+		if (len < buf.size()) {
+			ec.clear();
+			// wchar_t is 32-bit on winelib, so go through char16_t
+			auto* text = reinterpret_cast<char16_t const*>(buf.data());
+			return fs::path{ std::u16string_view{ text, len } };
+		}
+		buf.resize(buf.size() * 2);
+	}
+}
+} //namespace self
+
+#if defined(AW_PROCESS_HAS_HANDLE_COUNT)
+u32 handle_count(process_handle handle)
+{
+	DWORD count = 0;
+	GetProcessHandleCount(HANDLE(handle), &count);
+	return count;
+}
+#endif
+
+namespace detail {
+void close_handle( uintptr_t handle )
+{
+	CloseHandle(HANDLE(handle));
+}
+} // namespace detail
+
+winapi_path format_command_line(const char* path, aw::array_view<const char*> argv)
+{
+	bool first = true;
+	std::wstring result;
+	for (auto* arg : argv) {
+		if (first)
+			first = false;
+		else
+			result += L' ';
+		result += L'"';
+		result += aw::unicode::widen(string::escape_quotes(arg));
+		result += L'"';
+	}
+	return result;
+}
+
+process_holder spawn(const char* path, aw::array_view<const char*> argv, std::error_code& ec) noexcept
+{
+	// enforce `nullptr` at the end of `argv` for consistency between platforms
+	if (!argv.empty()) {
+		assert( argv.back() == nullptr );
+		argv.remove_suffix(1);
+	}
+
+	STARTUPINFOW startup_info = {};
+	PROCESS_INFORMATION process_info = {};
+
+	GetStartupInfoW(&startup_info);
+
+	auto ret = CreateProcessW(
+		path ? winapi_path(path) : nullptr,
+		format_command_line(path, argv),
+		nullptr, nullptr, false, 0, nullptr, nullptr,
+		&startup_info, &process_info );
+
+	set_error_if(!ret, ec);
+
+	if (process_info.hThread)
+		CloseHandle(process_info.hThread);
+
+	const auto handle = process_info.hProcess;
+	if (handle)
+		return convert_handle<process_handle>(process_info.hProcess);
+
+	return invalid_process_handle;
+}
+
+process_holder spawn(aw::array_view<const char*> argv, std::error_code& ec) noexcept
+{
+	return spawn( nullptr, argv, ec );
+}
+
+process_holder spawn(std::string path, aw::array_view<std::string> argv, std::error_code& ec)
+{
+	std::vector<const char*> args;
+	args.push_back(path.data());
+	for (const auto& arg : argv)
+		args.push_back(arg.data());
+	args.push_back(nullptr);
+
+	return spawn(path.data(), args, ec);
+}
+
+
+wait_result wait(process_handle hprocess, std::error_code& ec, timeout_spec_ms timeout) noexcept
+{
+	// TODO: add is_handle_valid()
+	if( in( hprocess, process_handle(0), process_handle(-1) ) ) {
+		ec = make_error_code( std::errc::invalid_argument );
+		return { .status = wait_status::failed };
+	};
+
+	auto ret = WaitForSingleObject( HANDLE(hprocess), timeout ? timeout->count() : INFINITE );
+
+	set_error_if(ret == WAIT_FAILED, ec);
+
+	switch (ret) {
+	case WAIT_TIMEOUT:
+		return { .status = wait_status::timeout };
+	case WAIT_FAILED:
+		return { .status = wait_status::failed };
+	default:
+	case WAIT_OBJECT_0:
+	case WAIT_ABANDONED:
+		break;
+	}
+
+	DWORD code = 0;
+	if (!GetExitCodeProcess( HANDLE(hprocess), &code )) {
+		set_error( ec );
+		return { .status = wait_status::failed };
+	}
+
+	return { .status = wait_status::finished, .code = int(code) };
+}
+
+int kill(process_handle hprocess, int signal, std::error_code& ec) noexcept
+{
+	// TODO: add is_handle_valid()
+	if( in( hprocess, process_handle(0), process_handle(-1) ) ) {
+		ec = make_error_code( std::errc::invalid_argument );
+		return -1;
+	};
+
+	switch (signal) {
+	// TODO: SIGINT, SIGBREAK, SIGSTOP/SIGCONT
+	case SIGTERM:
+#ifdef SIGKILL
+	// SIGKILL is not defined on MSVC, and mingw defines it only
+	// under _POSIX
+	case SIGKILL:
+#endif
+		return terminate(hprocess, ec);
+	default:
+		ec = make_error_code( std::errc::not_supported );
+		return -1;
+	}
+}
+
+int terminate(process_handle hprocess, std::error_code& ec) noexcept
+{
+	// TODO: add is_handle_valid()
+	if( in( hprocess, process_handle(0), process_handle(-1) ) ) {
+		ec = make_error_code( std::errc::invalid_argument );
+		return -1;
+	};
+
+	auto ret = TerminateProcess( HANDLE(hprocess), 1 );
+
+	set_error_if(!ret, ec);
+
+	return ret ? 0 : -1;
+}
+
+// TODO: job objects can cap the memory and the CPU time of a process
+AW_PLATFORM_EXP
+bool is_supported(resource) noexcept
+{
+	return false;
+}
+
+namespace self {
+AW_PLATFORM_EXP
+int set_limit(resource, uintmax_t, std::error_code& ec) noexcept
+{
+	ec = std::make_error_code(std::errc::not_supported);
+	return -1;
+}
+
+AW_PLATFORM_EXP
+uintmax_t get_limit(resource, std::error_code& ec) noexcept
+{
+	ec = std::make_error_code(std::errc::not_supported);
+	return unlimited;
+}
+} // namespace self
+} // namespace aw::process::win32

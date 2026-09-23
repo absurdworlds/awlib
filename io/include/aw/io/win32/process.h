@@ -1,120 +1,33 @@
-#ifndef aw_io_win32_process_h
-#define aw_io_win32_process_h
+// This header is obsolete. Please use this one instead:
+#include <aw/process/win32.h>
 
-#include "detail/handle_holder.h"
-
-#include <aw/types/array_view.h>
-#include <aw/types/support/enum.h>
-
-#include <aw/io/wait_status.h>
-
-#include <string>
-#include <chrono>
-#include <system_error>
-
-namespace aw::io::win32 {
-enum class process_handle : uintptr_t {};
-constexpr auto invalid_process_handle = process_handle(-1);
-
-// winelib has no GetProcessHandleCount
-#if !defined(AW_WINELIB)
-#define AW_IO_HAS_HANDLE_COUNT 1
-AW_IO_EXP u32 handle_count(process_handle handle);
+#if !defined(aw_io_win32_process_h_warned) &&  __cplusplus >= 202302L
+#define aw_io_win32_process_h_warned
+#warning "<aw/io/win32/process.h> is obsolete and will be removed soon. Please use <aw/process/win32.h> instead."
 #endif
 
-namespace current_process {
-AW_IO_EXP process_handle handle();
-#if defined(AW_IO_HAS_HANDLE_COUNT)
-inline u32 handle_count() { return win32::handle_count( handle() ); }
+#if defined(AW_PROCESS_HAS_HANDLE_COUNT)
+#define AW_IO_HAS_HANDLE_COUNT AW_PROCESS_HAS_HANDLE_COUNT
 #endif
-} // namespace current_process
 
-using process_holder = detail::handle_holder<process_handle>;
-
-static_assert( process_holder::invalid == invalid_process_handle );
-
-inline void close_handle(process_handle handle)
-{
-	detail::close_handle( underlying(handle) );
-}
-
-/*!
- * Spawn a child process with specified \a path and argument list \a argv.
- * Argument list must end with `nullptr`.
- */
-AW_IO_EXP process_holder spawn(const char* path, aw::array_view<const char*> argv, std::error_code& ec) noexcept;
-/*!
- * Spawn a child process with specified argument list \a argv. `argv[0]` is used as path.
- */
-AW_IO_EXP process_holder spawn(aw::array_view<const char*> argv, std::error_code& ec) noexcept;
-
-inline process_holder spawn(const char* path, aw::array_view<const char*> argv)
-{
-	std::error_code ec;
-	return spawn(path, argv, ec);
-}
-inline process_holder spawn(aw::array_view<const char*> argv)
-{
-	std::error_code ec;
-	return spawn(argv, ec);
-}
-
-AW_IO_EXP process_holder spawn(std::string path, aw::array_view<std::string> argv, std::error_code& ec);
-inline process_holder spawn(std::string path, aw::array_view<std::string> argv)
-{
-	std::error_code ec;
-	return spawn(path, argv, ec);
-}
-
-AW_IO_EXP wait_result wait(process_handle pid, std::error_code& ec, timeout_spec_ms timeout = {}) noexcept;
-inline wait_result wait(process_handle pid, timeout_spec_ms timeout = {})
-{
-	std::error_code ec;
-	return wait(pid, ec, timeout);
-}
-
-AW_IO_EXP int kill(process_handle pid, int signal, std::error_code& ec) noexcept;
-inline int kill(process_handle pid, int signal)
-{
-	std::error_code ec;
-	return kill(pid, signal, ec);
-}
-
-/*!
- * Stop a process. On WinAPI platform it unconditionally ends the process.
- */
-AW_IO_EXP int terminate(process_handle pid, std::error_code& ec) noexcept;
-inline int terminate(process_handle pid)
-{
-	std::error_code ec;
-	return terminate(pid, ec);
-}
-
-inline wait_result run(
-	std::string path,
-	aw::array_view<std::string> argv,
-	std::error_code& ec,
-	timeout_spec_ms timeout = {})
-{
-	auto handle = spawn(path, argv, ec);
-	if (handle == invalid_process_handle)
-		return { .status = wait_status::failed };
-
-	return wait(handle, ec, timeout);
-}
-
-inline wait_result run(std::string path, aw::array_view<std::string> argv, timeout_spec_ms timeout = {})
-{
-	std::error_code ec;
-	return run(path, argv, ec, timeout);
-}
-
-inline std::string executable_name(std::string path)
-{
-	if (!path.ends_with(".exe"))
-		path += ".exe";
-	return path;
-}
-} // namespace aw::io::win32
-
-#endif // aw_io_win32_process_h
+namespace aw::io {
+using process::wait_status;
+using process::wait_result;
+using process::timeout_spec_ms;
+namespace win32 {
+using process::win32::process_handle;
+using process::win32::invalid_process_handle;
+using process::win32::process_holder;
+using process::win32::close_handle;
+using process::win32::spawn;
+using process::win32::wait;
+using process::win32::kill;
+using process::win32::terminate;
+using process::win32::run;
+using process::win32::executable_name;
+#if defined(AW_PROCESS_HAS_HANDLE_COUNT)
+using process::win32::handle_count;
+#endif
+namespace current_process = process::win32::self;
+} // namespace win32
+} // namespace aw::io

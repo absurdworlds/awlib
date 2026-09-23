@@ -5,7 +5,7 @@
 
 #include <aw/test/test.h>
 
-#include "temp_file.h"
+#include <aw/test/helpers/temp_file.h>
 
 TestFile("Buffer");
 

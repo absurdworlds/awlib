@@ -3,7 +3,7 @@
 #include <cstring>
 #include <algorithm>
 
-#include "temp_file.h"
+#include <aw/test/helpers/temp_file.h>
 
 TestFile("file_stream");
 

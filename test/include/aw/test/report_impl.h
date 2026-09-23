@@ -105,8 +105,12 @@ public:
 
 		for (auto& check : checks)
 		{
-			if (!check)
+			if (!check) {
 				print(out, bold, red, "check failed: ", reset, check.message, '\n');
+
+				const auto loc = check.location;
+				print(out, bold, "  at ", reset, loc.file_name(), ':', loc.line(), '\n');
+			}
 		}
 	}
 

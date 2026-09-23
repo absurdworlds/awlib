@@ -27,4 +27,4 @@ CMakeLists.txt.user
 .*
 !/.github
 !/.gitignore
-Config.mk
+!/.clang-tidy

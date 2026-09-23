@@ -1,0 +1,775 @@
+#include <aw/process.h>
+#include <aw/process/limits.h>
+#include <aw/io/filesystem.h>
+
+#include <aw/utility/on_scope_exit.h>
+#include <aw/string/trim_if.h>
+#include <aw/string/format.h>
+
+#include <aw/string/to_string/chrono.h>
+#include <aw/test/test.h>
+
+#include <chrono>
+#include <csignal>
+#include <type_traits>
+#include <fstream>
+#include <thread>
+#include <vector>
+
+#include <aw/config.h>
+
+#include <aw/test/helpers/temp_file.h>
+
+#if (AW_PLATFORM == AW_PLATFORM_POSIX)
+#include <aw/process/posix/alarm.h>
+#include <aw/process/posix/fork.h>
+
+#include <errno.h>
+#include <signal.h>
+#include <sys/wait.h>
+#endif
+
+TestFile("process");
+
+namespace aw {
+
+static auto read_all_lines(std::string filename, char delim = '\n') -> std::vector<std::string>
+{
+	std::vector<std::string> args;
+	std::ifstream fs(filename);
+	std::string str;
+	while (std::getline(fs, str, delim)) {
+		const auto pred = [] (char c) { return std::isspace(c); };
+		args.push_back(string::rtrimmed_if(str, pred));
+	}
+	return args;
+}
+
+/*!
+ * Shared helper for the process tests
+ */
+struct process_fixture {
+	explicit process_fixture(test::test_context context)
+		: previous_path{ fs::current_path() }
+	{
+		fs::current_path(context.exe_dir);
+	}
+
+	~process_fixture()
+	{
+		fs::current_path(previous_path);
+	}
+
+	process_fixture(process_fixture const&) = delete;
+	process_fixture& operator=(process_fixture const&) = delete;
+
+	//! Spawn the helper process
+	//! \param lifetime ms to keep it alive for
+	auto spawn(std::chrono::milliseconds lifetime = {})
+	{
+		std::vector<std::string> args;
+		if (lifetime > lifetime.zero())
+			args.push_back( format("--sleep-ms={}", lifetime.count()) );
+
+		return process::spawn(helper, args, ec);
+	}
+
+	//! Populate \a ec with an error
+	void fail()
+	{
+		process::run(missing, no_args, ec);
+	}
+
+	fs::path previous_path;
+
+	std::vector<std::string> no_args;
+
+	std::string helper  = process::executable_name( std::string("dump_args") );
+	std::string missing = process::executable_name( std::string("no_such_executable") );
+
+	std::error_code ec;
+};
+
+Test(process_basic_test) {
+	process_fixture test{_context};
+
+	std::vector<std::string> in_args = { "a", "b", "c" };
+	auto result = process::run(test.helper, in_args);
+
+	TestAssert(result == process::wait_status::finished);
+
+	std::vector<std::string> args_expect{ { test.helper, "a", "b", "c" } };
+	std::vector<std::string> args = read_all_lines("argv.txt");
+
+	TestEqual(args, args_expect);
+}
+
+Test(spawn_without_arguments_reports_error) {
+	std::error_code ec;
+
+	Checks {
+		// reject empty argv
+		aw::array_view<const char*> argv;
+
+		auto handle = process::spawn(argv, ec);
+		TestAssert( handle == process::invalid_process_handle );
+		TestAssert( ec == std::errc::invalid_argument );
+	}
+
+	Checks {
+		// reject argv with only null-terminator in it
+		const char* argv[] = { nullptr };
+
+		auto handle = process::spawn(argv, ec);
+		TestAssert( handle == process::invalid_process_handle );
+		TestAssert( ec == std::errc::invalid_argument );
+	}
+}
+
+Test(terminate_stops_the_child) {
+	using namespace std::chrono;
+
+	process_fixture test{_context};
+
+	// long enough that it cannot have finished on its own
+	constexpr auto child_lifetime = 30s;
+
+	auto handle = test.spawn(child_lifetime);
+
+	Preconditions {
+		TestAssert( handle != process::invalid_process_handle );
+	}
+
+	auto started = steady_clock::now();
+
+	Checks {
+		TestAssert( process::terminate(handle, test.ec) == 0 );
+		TestAssert( !test.ec );
+	}
+
+	Checks {
+		TestAssert( process::wait(handle, test.ec) == process::wait_status::finished );
+		TestAssert( steady_clock::now() - started < child_lifetime );
+	}
+}
+
+/*!
+ * A wait must return at the deadline rather than waiting for the child
+ */
+Test(wait_gives_up_at_the_deadline) {
+	using namespace std::chrono;
+
+	process_fixture test{_context};
+
+	constexpr auto child_lifetime = 500ms;
+	constexpr auto give_up_after  = 50ms;
+
+	auto handle = test.spawn(child_lifetime);
+
+	Preconditions {
+		TestAssert( handle != process::invalid_process_handle );
+	}
+
+	auto started = steady_clock::now();
+	auto status  = process::wait(handle, test.ec, give_up_after);
+	auto waited  = duration_cast<milliseconds>( steady_clock::now() - started );
+
+	/*
+	 * WaitForSingleObject expires on a system timer tick,
+	 * historically ~15.6ms by default
+	 * TODO: revisit this, and maybe strengthen guarantees to match posix
+	 */
+	constexpr auto timer_slack = 16ms;
+
+	Checks {
+		TestAssert( status == process::wait_status::timeout );
+		TestLess( (give_up_after - timer_slack).count(), waited.count() );
+		TestLess( waited.count(), child_lifetime.count() );
+	}
+
+	// the child outlived the wait, so it is still there to collect
+	Checks {
+		TestAssert( process::wait(handle, test.ec) == process::wait_status::finished );
+	}
+}
+
+/*!
+ * A child that beats the deadline is reported as finished, not timed out
+ */
+Test(wait_with_a_deadline_reports_child_as_finished) {
+	using namespace std::chrono;
+
+	process_fixture test{_context};
+
+	constexpr auto child_lifetime = 50ms;
+	constexpr auto give_up_after  = 1s;
+
+	auto handle = test.spawn(child_lifetime);
+
+	Preconditions {
+		TestAssert( handle != process::invalid_process_handle );
+	}
+
+	auto started = steady_clock::now();
+	auto status  = process::wait(handle, test.ec, give_up_after);
+	auto waited  = steady_clock::now() - started;
+
+	Checks {
+		TestAssert( status == process::wait_status::finished );
+		TestAssert( waited < give_up_after );
+	}
+}
+
+/*!
+ * \a ec must be cleared on success, not left untouched
+ */
+Test(success_clears_the_error_code) {
+	process_fixture test{_context};
+
+	Preconditions {
+		test.fail();
+		TestAssert( bool(test.ec) );
+	}
+
+	Checks {
+		auto handle = test.spawn();
+		TestAssert( handle != process::invalid_process_handle );
+		TestAssert( !test.ec ); // "spawn clears ec"
+
+		process::wait(handle, test.ec);
+	}
+
+	Checks {
+		auto handle = test.spawn();
+		test.fail();
+		TestAssert( bool(test.ec) );
+
+		TestAssert( process::wait(handle, test.ec) == process::wait_status::finished );
+		TestAssert( !test.ec ); // "wait clears ec"
+	}
+}
+
+/*!
+ * kill() has to clear the error code on success as well
+ */
+Test(kill_clears_the_error_code) {
+	using namespace std::chrono;
+
+	process_fixture test{_context};
+
+	auto handle = test.spawn(300ms);
+
+	Preconditions {
+		TestAssert( handle != process::invalid_process_handle );
+
+		test.fail();
+		TestAssert( bool(test.ec) );
+	}
+
+	Checks {
+		TestAssert( process::kill(handle, SIGTERM, test.ec) == 0 );
+		TestAssert( !test.ec );
+	}
+
+	process::wait(handle, test.ec);
+}
+
+/*!
+ * Exit code returned by the process is correctly reported back
+ */
+Test(wait_reports_the_exit_code) {
+	process_fixture test{_context};
+
+	constexpr int expected = 42;
+
+	std::vector<std::string> args = { format("--exit={}", expected) };
+	auto handle = process::spawn(test.helper, args, test.ec);
+
+	Preconditions {
+		TestAssert( handle != process::invalid_process_handle );
+	}
+
+	auto result = process::wait(handle, test.ec);
+
+	Checks {
+		TestAssert( result.status == process::wait_status::finished );
+		TestEqual( result.code, expected );
+		TestEqual( result.signal, 0 );
+	}
+}
+
+Test(self_path_is_the_running_executable) {
+	std::error_code ec;
+
+	auto path = process::self::path(ec);
+
+	Checks {
+		TestAssert( !ec );
+		TestAssert( path.is_absolute() );
+		TestAssert( fs::exists(path) );
+		TestAssert( fs::equivalent(path, fs::path(_context.exe_dir) / path.filename()) );
+		TestEqual( path.filename().string(), process::executable_name("test_platform") );
+	}
+}
+
+#if (AW_PLATFORM == AW_PLATFORM_POSIX)
+/*!
+ * Wait correctly reports the signal that killed the process
+ */
+Test(wait_reports_the_signal_that_killed_the_process) {
+	using namespace std::chrono;
+
+	process_fixture test{_context};
+
+	auto handle = test.spawn(30s);
+
+	Preconditions {
+		TestAssert( handle != process::invalid_process_handle );
+		TestEqual( process::kill(handle, SIGKILL, test.ec), 0 );
+	}
+
+	auto result = process::wait(handle, test.ec);
+
+	Checks {
+		TestAssert( result.status == process::wait_status::finished );
+		TestEqual( result.signal, SIGKILL );
+		TestEqual( result.code, 0 );
+	}
+}
+
+/*!
+ * Check whether \a pid is still waiting to be reaped.
+ */
+static bool awaits_reaping(process::process_handle pid)
+{
+	int status = 0;
+	errno = 0;
+	if (waitpid( pid_t(pid), &status, WNOHANG ) >= 0)
+		return true;
+	return errno != ECHILD;
+}
+
+/*!
+ * Signal helper. Replaces the signal handler for SIGALRM and raises
+ * the signal after the specified delay.
+ */
+struct alarm_after {
+	/*!
+	 * Installs a SIGALRM handler without SA_RESTART and
+	 * raises the alarm after \a delay
+	 */
+	explicit alarm_after(std::chrono::microseconds delay)
+	{
+		struct sigaction interrupt = {};
+		interrupt.sa_handler = [] (int) {};
+		interrupt.sa_flags   = 0;
+
+		sigaction(SIGALRM, &interrupt, &previous);
+
+		process::posix::self::alarm(delay);
+	}
+
+	//! Stops the alarm and restores the old signal handler
+	~alarm_after()
+	{
+		process::posix::self::alarm({});
+		sigaction(SIGALRM, &previous, nullptr);
+	}
+
+	alarm_after(alarm_after const&) = delete;
+	alarm_after& operator=(alarm_after const&) = delete;
+
+	struct sigaction previous = {};
+};
+
+/*!
+ * A signal arriving during wait() must not interrupt the wait
+ */
+Test(wait_survives_a_signal) {
+	using namespace std::chrono;
+
+	process_fixture test{_context};
+
+	constexpr auto child_lifetime = 300ms;
+	constexpr auto signal_after   = 50ms;
+
+	auto handle = test.spawn(child_lifetime);
+
+	Preconditions {
+		TestAssert( handle != process::invalid_process_handle );
+	}
+
+	alarm_after alarm{ duration_cast<microseconds>(signal_after) };
+
+	auto started = steady_clock::now();
+	auto status  = process::wait(handle, test.ec);
+	auto waited  = steady_clock::now() - started;
+
+	Checks {
+		TestAssert( status == process::wait_status::finished );
+
+		// the wait ran to the child's exit, not to the signal
+		TestAssert( waited >= child_lifetime );
+
+		// nothing is left to reap
+		TestAssert( !awaits_reaping(handle) );
+	}
+}
+
+/*!
+ * The child exits with return value of the supplied body.
+ * The parent gets a valid handle it can wait on.
+ */
+Test(fork_child_exits_with_body_result) {
+	std::error_code ec;
+
+	constexpr int expected = 42;
+
+	auto handle = process::posix::fork([] { return expected; }, ec);
+
+	Preconditions {
+		TestAssert( !ec );
+		TestAssert( handle != process::invalid_process_handle );
+		TestAssert( handle != process::posix::child_process_handle );
+	}
+
+	auto result = process::wait(handle, ec);
+
+	Checks {
+		TestAssert( result.status == process::wait_status::finished );
+		TestEqual( result.code, expected );
+		TestEqual( result.signal, 0 );
+	}
+}
+
+//! The child exits with 0 if the body does not have a return value.
+Test(fork_void_body_exits_with_zero) {
+	std::error_code ec;
+
+	auto handle = process::posix::fork([] { }, ec);
+
+	Preconditions {
+		TestAssert( handle != process::invalid_process_handle );
+	}
+
+	auto result = process::wait(handle, ec);
+
+	Checks {
+		TestAssert( result.status == process::wait_status::finished );
+		TestEqual( result.code, 0 );
+	}
+}
+
+/*!
+ * The plain fork() tells the two sides apart: the child sees
+ * child_process_handle, and the parent doesn't see whatever the
+ * child is doing.
+ */
+Test(fork_tells_the_sides_apart) {
+	std::error_code ec;
+
+	constexpr int child_code = 7;
+
+	int seen_by_child = 0;
+
+	auto handle = process::posix::fork(ec);
+	if (handle == process::posix::child_process_handle) {
+		seen_by_child = 1;
+		process::posix::self::exit_now(child_code);
+	}
+
+	Preconditions {
+		TestAssert( !ec );
+		TestAssert( handle != process::invalid_process_handle );
+	}
+
+	auto result = process::wait(handle, ec);
+
+	Checks {
+		TestEqual( result.code, child_code );
+		TestEqual( seen_by_child, 0 );
+	}
+}
+
+/*!
+ * An allocation beyond the address space limit fails with bad_alloc
+ * (on platforms that support it)
+ */
+Test(set_limit_caps_address_space) {
+	std::error_code ec;
+
+	constexpr uintmax_t limit = 64u << 20;
+	constexpr size_t    ask   = 256u << 20;
+
+	enum { capped, failed, allocated, unsupported };
+
+	auto handle = process::posix::fork([] {
+		using namespace process;
+		std::error_code ec;
+		if (self::set_limit(resource::address_space, limit, ec) != 0)
+			return ec == std::errc::not_supported ? unsupported : failed;
+		try {
+			std::vector<char> big(ask);
+			big.back() = 1;
+			return allocated;
+		} catch (std::bad_alloc&) {
+			return capped;
+		}
+	}, ec);
+
+	Preconditions {
+		TestAssert( handle != process::invalid_process_handle );
+	}
+
+	auto result = process::wait(handle, ec);
+
+	Checks {
+		TestAssert( result.status == process::wait_status::finished );
+		TestEqualOne( result.code, int(capped), int(unsupported) );
+	}
+}
+
+Test(is_supported_matches_set_limit) {
+	using namespace process;
+
+	constexpr resource all[] = {
+		resource::address_space, resource::stack, resource::core_file,
+		resource::cpu_time, resource::open_files,
+	};
+
+	for (auto res : all) {
+		std::error_code ec;
+		auto handle = posix::fork([res] {
+			std::error_code ec;
+			auto current = self::get_limit(res, ec);
+			if (ec)
+				return ec == std::errc::not_supported ? 2 : 1;
+			self::set_limit(res, current, ec);
+			if (ec)
+				return ec == std::errc::not_supported ? 2 : 1;
+			return 0;
+		}, ec);
+
+		auto result = wait(handle, ec);
+
+		Checks {
+			TestEqual( result.code, is_supported(res) ? 0 : 2 );
+		}
+	}
+}
+
+//! get_limits reads back both limits set_limits set
+Test(get_limits_reads_back_set_limits) {
+	std::error_code ec;
+
+	constexpr uintmax_t soft = 64;
+	constexpr uintmax_t hard = 128;
+
+	auto handle = process::posix::fork([] {
+		using namespace process;
+		if (posix::self::set_limits(resource::open_files, { soft, hard }) != 0)
+			return 1;
+		auto now = posix::self::get_limits(resource::open_files);
+		return now.soft == soft && now.hard == hard ? 0 : 2;
+	}, ec);
+
+	Preconditions {
+		TestAssert( handle != process::invalid_process_handle );
+	}
+
+	auto result = process::wait(handle, ec);
+
+	Checks {
+		TestEqual( result.code, 0 );
+	}
+}
+
+//! Lowering the soft limit alone leaves the hard limit where it was
+Test(set_limits_soft_only_keeps_hard) {
+	std::error_code ec;
+
+	auto handle = process::posix::fork([] {
+		using namespace process;
+		auto before = posix::self::get_limits(resource::open_files);
+		if (before.soft < 2)
+			return 1;
+		auto lowered = before;
+		lowered.soft = before.soft - 1;
+		if (posix::self::set_limits(resource::open_files, lowered) != 0)
+			return 2;
+		auto after = posix::self::get_limits(resource::open_files);
+		// and the portable view reports the enforced limit
+		return after.soft == lowered.soft && after.hard == before.hard
+		    && self::get_limit(resource::open_files) == lowered.soft ? 0 : 3;
+	}, ec);
+
+	Preconditions {
+		TestAssert( handle != process::invalid_process_handle );
+	}
+
+	auto result = process::wait(handle, ec);
+
+	Checks {
+		TestEqual( result.code, 0 );
+	}
+}
+
+//! Replacing an alarm reports how much the previous one had left
+Test(alarm_reports_time_left) {
+	using namespace std::chrono;
+
+	std::error_code ec;
+
+	auto handle = process::posix::fork([] {
+		using process::posix::self::alarm;
+		if (alarm(2s) != 0us)
+			return 1;
+		auto left = alarm({});
+		return left > 1s && left <= 2s ? 0 : 2;
+	}, ec);
+
+	Preconditions {
+		TestAssert( handle != process::invalid_process_handle );
+	}
+
+	auto result = process::wait(handle, ec);
+
+	Checks {
+		TestEqual( result.code, 0 );
+	}
+}
+
+//! An alarm ends the child with SIGALRM once the delay is up
+Test(alarm_ends_child_after_delay) {
+	using namespace std::chrono;
+
+	std::error_code ec;
+
+	constexpr auto delay = 100ms;
+
+	auto handle = process::posix::fork([delay] {
+		process::posix::self::alarm(delay);
+		std::this_thread::sleep_for(10s);
+		return 0;
+	}, ec);
+
+	Preconditions {
+		TestAssert( handle != process::invalid_process_handle );
+	}
+
+	auto started = steady_clock::now();
+	auto result  = process::wait(handle, ec);
+	auto waited  = steady_clock::now() - started;
+
+	Checks {
+		TestAssert( result.status == process::wait_status::finished );
+		TestEqual( result.signal, SIGALRM );
+		TestLess( waited, 1s );
+	}
+}
+#endif
+
+#if (AW_PLATFORM == AW_PLATFORM_WIN32)
+static_assert( std::is_convertible_v<process::win32::process_holder const&,
+                                     process::win32::process_handle> );
+
+/*!
+ * A failure produces a readable error message
+ */
+Test(win32_error_messages_are_readable) {
+	process_fixture test{_context};
+
+	test::temp_file not_a_program{_context.name};
+
+	Preconditions {
+		TestAssert( not_a_program.write("this is not a program") > 0 );
+	}
+
+	std::error_code ec;
+	auto handle = process::spawn(not_a_program.path.string(), test.no_args, ec);
+
+	Preconditions {
+		TestAssert( handle == process::invalid_process_handle );
+		TestAssert( bool(ec) );
+	}
+
+	Checks {
+		auto message = ec.message();
+
+		TestAssert( !message.empty() );
+		TestNEqual( message, std::string("Unknown error") );
+	}
+}
+
+#if defined(AW_PROCESS_HAS_HANDLE_COUNT)
+Test(win32_spawn_does_not_leak_thread_handle) {
+	process_fixture test{_context};
+
+	std::vector<std::string> args = { "x" };
+
+	constexpr int iterations = 25;
+
+	auto before = process::win32::self::handle_count();
+
+	for (int i = 0; i < iterations; ++i)
+		process::run(test.helper, args);
+
+	auto after = process::win32::self::handle_count();
+
+	Checks {
+		TestLess(after, before + iterations);
+	}
+}
+#endif
+
+/*!
+ * A handle holder assigned onto itself still refers to its process
+ */
+Test(win32_self_move_assignment_keeps_the_handle) {
+	using namespace std::chrono;
+
+	process_fixture test{_context};
+
+	auto handle = test.spawn(300ms);
+
+	Preconditions {
+		TestAssert( handle != process::invalid_process_handle );
+	}
+
+	Checks {
+		auto& self = handle;
+		handle = std::move(self);
+
+		TestAssert( handle != process::invalid_process_handle );
+
+		TestAssert( process::wait(handle, test.ec) == process::wait_status::finished );
+		TestAssert( !test.ec );
+	}
+}
+
+/*!
+ * A handle holder that has been moved out of no longer refers to anything
+ */
+Test(win32_moved_from_handle_is_invalid) {
+	using namespace std::chrono;
+
+	process_fixture test{_context};
+
+	auto handle = test.spawn(300ms);
+
+	Preconditions {
+		TestAssert( handle != process::invalid_process_handle );
+	}
+
+	auto moved = std::move(handle);
+
+	Checks {
+		TestAssert( handle == process::invalid_process_handle );
+		TestAssert( moved != process::invalid_process_handle );
+	}
+
+	process::wait(moved, test.ec);
+}
+#endif
+
+} // namespace aw

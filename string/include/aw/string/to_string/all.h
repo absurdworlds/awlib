@@ -13,6 +13,7 @@
 #include "tuple.h"
 #include "optional.h"
 #include "unique_ptr.h"
+#include "chrono.h"
 
 #if __has_include(<aw/math/vector.h>)
 #include "math/vector.h"

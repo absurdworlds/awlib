@@ -13,9 +13,11 @@
 
 #include <aw/io/file_mode.h>
 #include <aw/io/filesystem.h>
+#include <aw/io/whence.h>
 #include <aw/types/types.h>
 
 #include <cstdio>
+#include <utility>
 
 namespace aw {
 namespace io {
@@ -76,8 +78,21 @@ inline const wchar_t* make_wopen_flag(file_mode mode)
 	}
 }
 
-/*! Wrapper for C file streams */
-struct buffered_file {
+/*!
+ * Wrapper for C file streams
+ * \deprecated Use io::file, io::input_file_stream for buffered reads,
+ *   or std::ofstream for buffered writes.
+ *   This class has multiple serious issues:
+ *    - fopen can't express every file_mode, so the open flags
+ *      only approximate what io::file does.
+ *    - unsupported file modes may abort on MSVC.
+ *    - size() fails on a file constructed directly from FILE*.
+ *    - most of the methods (except `close()`) don't check if the file is
+ *      open and will crash if called on a closed file.
+ *    - move-assignment leaves the old file open inside the moved-from
+ *      object.
+ */
+struct [[deprecated("use io::file, or std::fstream")]] buffered_file {
 	/*!
 	 * Construct object not representing a file.
 	 */
@@ -101,10 +116,15 @@ struct buffered_file {
 #endif
 	}
 
+	/*!
+	 * Destructor automatically closes the file.
+	 *
+	 * \note A destructor has no way of reporting a failure. Callers who
+	 *       need to know about a failed close have to manually call close()
+	 */
 	~buffered_file()
 	{
-		if (is_open())
-			close();
+		(void)close();
 	}
 
 	buffered_file(buffered_file&& other) noexcept
@@ -129,10 +149,15 @@ struct buffered_file {
 		swap(static_cast<buffered_file&>(other));
 	}
 
-	void close()
+	/*!
+	 * Flush and close the file. Does nothing if it is not open.
+	 * \return 0 on success, EOF if flushing or closing failed
+	 */
+	int close()
 	{
-		std::fclose(_file);
-		_file = nullptr;
+		if (!is_open())
+			return 0;
+		return std::fclose(std::exchange(_file, nullptr));
 	}
 
 	/*!
@@ -156,20 +181,29 @@ struct buffered_file {
 		return std::fwrite(buffer, 1, count, _file);
 	}
 
-	/*! Set pointer position */
+	/*!
+	 * Set pointer position
+	 * \return new position, or -1 on failure
+	 */
 	intmax_t seek(intmax_t count, seek_mode mode)
 	{
-		int whence;
-		switch (mode) {
-		case seek_mode::set: whence = SEEK_SET; break;
-		case seek_mode::end: whence = SEEK_END; break;
-		case seek_mode::cur: whence = SEEK_CUR; break;
-		}
-		return std::fseek(_file, count, whence);
+#if (AW_PLATFORM == AW_PLATFORM_WIN32)
+		int ret = ::_fseeki64(_file, count, get_whence(mode));
+#else
+		int ret = ::fseeko(_file, count, get_whence(mode));
+#endif
+		return ret == 0 ? tell() : -1;
 	}
 
-	/*! Get pointer position */
-	intmax_t tell() { return std::ftell(_file); }
+	/*! Get pointer position, or -1 on failure */
+	intmax_t tell()
+	{
+#if (AW_PLATFORM == AW_PLATFORM_WIN32)
+		return ::_ftelli64(_file);
+#else
+		return ::ftello(_file);
+#endif
+	}
 
 	/*! Flush file buffer */
 	int flush()     { return std::fflush(_file); }

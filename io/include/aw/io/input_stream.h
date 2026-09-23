@@ -134,10 +134,8 @@ struct input_stream_iterator {
 	using reference         = value_type&;
 	using pointer           = value_type*;
 
-	input_stream_iterator()
-	{
-		cur = traits::eof();
-	}
+	//! Constructs an end iterator, at the end of file, with no stream attached
+	input_stream_iterator() = default;
 
 	input_stream_iterator(input_stream& stream)
 		: stream{&stream}
@@ -201,8 +199,8 @@ struct input_stream_iterator {
 	}
 
 private:
-	input_stream* stream;
-	value_type cur;
+	input_stream* stream = nullptr;
+	value_type cur = traits::eof();
 };
 
 } // namespace io

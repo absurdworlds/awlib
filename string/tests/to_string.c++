@@ -83,6 +83,41 @@ Test(to_string_math_types) {
 	TestAssert(to_string(mat4) == "{{0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}}"s);
 }
 
+Test(to_string_duration) {
+	using namespace std::chrono;
+
+	// standard units get the [time.duration.io] suffix
+	TestEqual(to_string(1500ms), "1500ms"s);
+	TestEqual(to_string(-3s), "-3s"s);
+	TestEqual(to_string(nanoseconds{7}), "7ns"s);
+	TestEqual(to_string(microseconds{7}), "7us"s);
+	TestEqual(to_string(minutes{2}), "2min"s);
+	TestEqual(to_string(hours{24}), "24h"s);
+	TestEqual(to_string(days{1}), "1d"s);
+	TestEqual(to_string(duration<int, std::kilo>{5}), "5ks"s);
+
+	// anything else is converted to seconds, as a reduced fraction
+	TestEqual(to_string(duration<int, std::ratio<7>>{2}), "14s"s);
+	TestEqual(to_string(duration<int, std::ratio<3, 7>>{2}), "[6/7]s"s);
+	TestEqual(to_string(duration<int, std::ratio<3, 7>>{7}), "3s"s);
+	TestEqual(to_string(duration<int, std::ratio<3, 6>>{-1}), "[-1/2]s"s);
+	TestEqual(to_string(duration<int, std::ratio<3, 7>>{0}), "0s"s);
+
+	// unless the numerator would overflow: then it is written as `count*[num/den]`
+	TestEqual(to_string(duration<int64_t, std::ratio<3, 7>>{INT64_MAX}),
+	          "9223372036854775807*[3/7]s"s);
+	TestEqual(to_string(duration<int64_t, std::ratio<7>>{INT64_MIN}),
+	          "-9223372036854775808*[7]s"s);
+	TestEqual(to_string(duration<int64_t, std::ratio<1, 7>>{INT64_MIN}),
+	          "[-9223372036854775808/7]s"s);
+
+	// floating-point duration keeps the formatting of its representation
+	TestEqual(to_string(duration<double>{1.5}), to_string(1.5) + "s");
+	TestEqual(to_string(duration<double, std::ratio<3, 7>>{3.5}), to_string(1.5) + "s");
+
+	TestEqual(to_string(std::vector{1s, 2s}), "{1s, 2s}"s);
+}
+
 Test(to_string_compound) {
 	TestAssert(to_string(optional<int>(100)) == "100"s);
 	TestAssert(to_string(optional<int>()) == ""s);

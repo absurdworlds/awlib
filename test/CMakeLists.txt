@@ -7,6 +7,9 @@ aw_add_library(awtest INTERFACE
 		include/aw/test/segv_handler.h
 		include/aw/test/helpers/lifetime_tracker.h
 		include/aw/test/helpers/copy_move_tracker.h
+		include/aw/test/helpers/round_trip.h
+		include/aw/test/helpers/sandbox.h
+		include/aw/test/helpers/temp_file.h
 		include/aw/test/test_case.h
 		include/aw/test/test_context.h
 		include/aw/test/test.h
@@ -18,7 +21,9 @@ aw_add_library(awtest INTERFACE
 target_link_libraries(awtest
 	INTERFACE
 		awutils
-		awplatform)
+		awplatform
+		awdebug
+)
 
 # so that the reports can name source files relative to the source tree
 target_compile_definitions(awtest

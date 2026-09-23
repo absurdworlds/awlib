@@ -1,47 +1,13 @@
-#ifndef aw_io_wait_status_h
-#define aw_io_wait_status_h
+// This header is obsolete. Please use this one instead:
+#include <aw/process/wait_status.h>
 
-#include <chrono>
-#include <optional>
+#if !defined(aw_io_wait_status_h_warned) &&  __cplusplus >= 202302L
+#define aw_io_wait_status_h_warned
+#warning "<aw/io/wait_status.h> is obsolete and will be removed soon. Please use <aw/process/wait_status.h> instead."
+#endif
 
 namespace aw::io {
-
-enum class wait_status {
-	finished,
-	timeout,
-	failed,
-};
-
-/*!
- * Result of a wait() or run() call.
- */
-struct wait_result {
-	wait_status status = wait_status::failed;
-
-	//! Exit code that the process returned (passed to exit())
-	int code = 0;
-
-	//! Signal that killed the process, or 0 if it exited on its own.
-	//! \note Meaningful only on POSIX. Always 0 on Windows.
-	int signal = 0;
-
-	//! Whether the wait ended with the process gone
-	explicit constexpr operator bool() const
-	{
-		return status == wait_status::finished;
-	}
-
-	//! So that `run(...) == wait_status::finished` keeps working
-	constexpr bool operator==(wait_status other) const
-	{
-		return status == other;
-	}
-};
-
-//! How long to wait for a process; no value means indefinitely
-using timeout_spec_ms = std::optional<std::chrono::milliseconds>;
-
+using process::wait_status;
+using process::wait_result;
+using process::timeout_spec_ms;
 } // namespace aw::io
-
-
-#endif // aw_io_wait_status_h

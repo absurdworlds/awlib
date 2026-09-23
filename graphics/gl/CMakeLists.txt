@@ -49,9 +49,6 @@ if (AW_GL_USE_EGL)
 		PRIVATE
 			OpenGL::EGL)
 elseif (WIN32)
-	target_link_libraries(awgl
-		PRIVATE
-			awplatform)
 elseif (APPLE)
 elseif (UNIX)
 	target_link_libraries(awgl

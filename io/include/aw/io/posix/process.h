@@ -1,94 +1,23 @@
-#ifndef aw_io_posix_process_h
-#define aw_io_posix_process_h
+// This header is obsolete. Please use this one instead:
+#include <aw/process/posix.h>
 
-#include <aw/types/array_view.h>
-#include <aw/types/support/enum.h>
+#if !defined(aw_io_posix_process_h_warned) &&  __cplusplus >= 202302L
+#define aw_io_posix_process_h_warned
+#warning "<aw/io/posix/process.h> is obsolete and will be removed soon. Please use <aw/process/posix.h> instead."
+#endif
 
-#include <aw/io/export.h>
-#include <aw/io/wait_status.h>
-
-#include <string>
-#include <system_error>
-
-namespace aw::io::posix {
-
-enum class process_handle : long {};
-constexpr auto invalid_process_handle = process_handle(-1L );
-
-/*!
- * Spawn a child process with specified \a path and argument list \a argv.
- * Argument list must end with `nullptr`.
- */
-AW_IO_EXP process_handle spawn(const char* path, aw::array_view<const char*> argv, std::error_code& ec) noexcept;
-/*!
- * Spawn a child process with specified argument list \a argv. `argv[0]` is used as path.
- */
-AW_IO_EXP process_handle spawn(aw::array_view<const char*> argv, std::error_code& ec) noexcept;
-
-inline process_handle spawn(const char* path, aw::array_view<const char*> argv)
-{
-	std::error_code ec;
-	return spawn(path, argv, ec);
-}
-inline process_handle spawn(aw::array_view<const char*> argv)
-{
-	std::error_code ec;
-	return spawn(argv, ec);
-}
-AW_IO_EXP process_handle spawn(std::string path, aw::array_view<std::string> argv, std::error_code& ec);
-inline process_handle spawn(std::string path, aw::array_view<std::string> argv)
-{
-	std::error_code ec;
-	return spawn(path, argv, ec);
-}
-
-AW_IO_EXP wait_result wait(process_handle pid, std::error_code& ec, timeout_spec_ms timeout = {}) noexcept;
-inline wait_result wait(process_handle pid, timeout_spec_ms timeout = {})
-{
-	std::error_code ec;
-	return wait(pid, ec, timeout);
-}
-
-AW_IO_EXP int kill(process_handle pid, int signal, std::error_code& ec) noexcept;
-inline int kill(process_handle pid, int signal)
-{
-	std::error_code ec;
-	return kill(pid, signal, ec);
-}
-
-/*!
- * Stop a process. On POSIX platforms it is equivalent to
- * sending a SIGTERM to the process.
- */
-AW_IO_EXP int terminate(process_handle pid, std::error_code& ec) noexcept;
-inline int terminate(process_handle pid)
-{
-	std::error_code ec;
-	return terminate(pid, ec);
-}
-
-inline wait_result run(
-	std::string path,
-	aw::array_view<std::string> argv,
-	std::error_code& ec,
-	timeout_spec_ms timeout = {})
-{
-	auto handle = spawn(path, argv, ec);
-	if (handle == invalid_process_handle)
-		return { .status = wait_status::failed };
-
-	return wait(handle, ec, timeout);
-}
-
-inline wait_result run(std::string path, aw::array_view<std::string> argv, timeout_spec_ms timeout = {})
-{
-	std::error_code ec;
-	return run(path, argv, ec, timeout);
-}
-
-inline std::string executable_name(std::string path)
-{
-	return path;
-}
-} // namespace aw::io::posix
-#endif // aw_io_posix_process_h
+namespace aw::io {
+using process::wait_status;
+using process::wait_result;
+using process::timeout_spec_ms;
+namespace posix {
+using process::posix::process_handle;
+using process::posix::invalid_process_handle;
+using process::posix::spawn;
+using process::posix::wait;
+using process::posix::kill;
+using process::posix::terminate;
+using process::posix::run;
+using process::posix::executable_name;
+} // namespace posix
+} // namespace aw::io
