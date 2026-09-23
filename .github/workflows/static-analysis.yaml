@@ -1,0 +1,43 @@
+name: static-analysis
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  static-analysis:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: clang-tidy
+            deps: clang-tidy
+            cmake: >-
+              -DCMAKE_C_COMPILER=clang
+              -DCMAKE_CXX_COMPILER=clang++
+              -DAW_CLANG_TIDY:BOOL=ON
+    name: ${{ matrix.name }}
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      security-events: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Install dependencies
+        run: sudo apt-get update && sudo apt-get install -y ${{ matrix.deps }} liblua5.4-dev
+
+      - name: Configure
+        run: >
+          cmake -S . -B build
+          -DCMAKE_BUILD_TYPE=Debug
+          ${{ matrix.cmake }}
+          -DAW_ENABLE_GRAPHICS:BOOL=OFF
+          -DAW_ENABLE_ASSERT:BOOL=OFF
+          -DAW_ENABLE_HUDF:BOOL=ON
+          -DAW_ENABLE_LUA:BOOL=ON
+
+      - name: Analyse
+        shell: bash
+        run: cmake --build build -- -k 0 2>&1 | tee build/analyse.log
