@@ -1,0 +1,8 @@
+# UndefinedBehaviorSanitizer suppressions.
+#
+# Only for undefined behaviour inside third-party headers that awlib has
+# no way to fix. Anything reported in awlib's own code is a bug.
+#
+# Syntax:  <check>:<substring of a function name, file name or module name>
+#          e.g. alignment:libfoo, vptr:SomeType
+# Docs:    https://clang.llvm.org/docs/UndefinedBehaviorSanitizer.html#issue-suppression

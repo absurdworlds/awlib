@@ -141,6 +141,11 @@ function(aw_add_test NAME)
 			"AW_TEST_OUTPUT_FILE=${CMAKE_BINARY_DIR}/test-results/${NAME}.xml")
 	endif()
 
+	if (AW_SANITIZER_TEST_ENVIRONMENT)
+		set_property(TEST ${NAME} APPEND
+			PROPERTY ENVIRONMENT ${AW_SANITIZER_TEST_ENVIRONMENT})
+	endif()
+
 	if (ARG_NEGATIVE)
 		set_property(TEST ${NAME} PROPERTY WILL_FAIL true)
 	endif()

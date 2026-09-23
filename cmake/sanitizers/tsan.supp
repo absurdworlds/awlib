@@ -1,0 +1,13 @@
+# ThreadSanitizer suppressions.
+#
+# TSan reports races in any library loaded into the process, including ones
+# built without instrumentation, where its reports are unreliable. Those
+# belong here; races in aw::thread and friends do not.
+#
+# Syntax:  race:<substring>, deadlock:<substring>, called_from_lib:<library>
+# Docs:    https://github.com/google/sanitizers/wiki/ThreadSanitizerSuppressions
+
+# Drivers are not instrumented, so any race TSan claims to see inside one
+# is as likely to be an artefact as real.
+called_from_lib:libGLX_nvidia.so
+called_from_lib:libGLX_mesa.so
