@@ -4,6 +4,13 @@
 
 #include <aw/test/helpers/round_trip.h>
 
+// buffered_file is deprecated, but it is still tested until it's removed
+#if defined(_MSC_VER) && !defined(__clang__)
+#pragma warning(disable: 4996)
+#else
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#endif
+
 TestFile("buffered_file");
 
 namespace aw {

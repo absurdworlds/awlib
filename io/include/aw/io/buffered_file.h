@@ -78,8 +78,21 @@ inline const wchar_t* make_wopen_flag(file_mode mode)
 	}
 }
 
-/*! Wrapper for C file streams */
-struct buffered_file {
+/*!
+ * Wrapper for C file streams
+ * \deprecated Use io::file, io::input_file_stream for buffered reads,
+ *   or std::ofstream for buffered writes.
+ *   This class has multiple serious issues:
+ *    - fopen can't express every file_mode, so the open flags
+ *      only approximate what io::file does.
+ *    - unsupported file modes may abort on MSVC.
+ *    - size() fails on a file constructed directly from FILE*.
+ *    - most of the methods (except `close()`) don't check if the file is
+ *      open and will crash if called on a closed file.
+ *    - move-assignment leaves the old file open inside the moved-from
+ *      object.
+ */
+struct [[deprecated("use io::file, or std::fstream")]] buffered_file {
 	/*!
 	 * Construct object not representing a file.
 	 */
