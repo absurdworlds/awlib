@@ -66,6 +66,7 @@ include(aw-common)
 include(aw-sanitizers)
 include(aw-analyzers)
 include(aw-coverage)
+include(aw-fuzzers)
 
 add_subdirectory(config)
 add_subdirectory(base)

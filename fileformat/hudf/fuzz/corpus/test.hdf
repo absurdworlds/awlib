@@ -1,0 +1,8 @@
+[test=val1
+	[tit=tat]
+	val=1
+	[test
+		val = 2
+		bob = {1,1,2,}
+	]
+]

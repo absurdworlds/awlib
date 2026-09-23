@@ -1,0 +1,16 @@
+[msg [color 
+	red = 100
+	blue = 200
+	green = 200]
+	text = "Starting the endine"]
+[msg [color 
+	red = 80
+	blue = 80
+	green = 240]
+	text = "Success!"]
+[msg [color 
+	red = 80
+	green = 80
+	blue = 240]
+	text = "Reading config..."]
+
