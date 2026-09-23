@@ -36,22 +36,22 @@ T convert( T value, A from, std::ratio<Num2,Den2> )
 */
 
 // TODO: overflow-proofing
-template<typename T, typename A, typename B>
-constexpr T convert( T value, A, B )
+template<typename T, typename From, typename To>
+constexpr T convert( T value, From, To )
 {
-	return value * A::value / B::value;
+	return value * To::value / From::value;
 }
 
-template<typename T, intmax_t Num1, intmax_t Den1, typename B>
-constexpr T convert( T value, ratio<Num1,Den1>, B )
+template<typename T, intmax_t Num1, intmax_t Den1, typename To>
+constexpr T convert( T value, ratio<Num1,Den1>, To )
 {
-	return value * B::value * Den1 / Num1;
+	return value * To::value * Den1 / Num1;
 }
 
-template<typename T, typename A, intmax_t Num2, intmax_t Den2>
-constexpr T convert( T value, A from, ratio<Num2,Den2> )
+template<typename T, typename From, intmax_t Num2, intmax_t Den2>
+constexpr T convert( T value, From, ratio<Num2,Den2> )
 {
-	return value * Num2 / Den2 / A::value;
+	return value * Num2 / Den2 / From::value;
 }
 
 template<typename T, intmax_t Num1, intmax_t Den1, intmax_t Num2, intmax_t Den2>

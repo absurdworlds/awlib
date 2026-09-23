@@ -4,6 +4,7 @@ aw_add_test(test_math
 	float.c++
 	numeric.c++
 	angle.c++
+	units.c++
 	orientation.c++
 	quaternion.c++
 	vector.c++
