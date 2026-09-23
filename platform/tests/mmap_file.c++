@@ -238,7 +238,7 @@ Test(unmap_can_be_retried_after_a_failure) {
 	void* const view = mapping.address;
 
 	// deliberately misaligned, so no platform will accept it
-	mapping.address = reinterpret_cast<void*>(uintptr_t(0x1001));
+	mapping.address = reinterpret_cast<void*>(uintptr_t(0x1001)); // NOLINT(performance-no-int-to-ptr)
 
 	Checks {
 		TestAssert( !io::native::unmap_file(mapping, ec) );

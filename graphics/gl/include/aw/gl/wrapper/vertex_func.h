@@ -215,7 +215,8 @@ inline void vertex_attrib_4usv(GLuint index, const GLushort * v)
 }
 inline void vertex_attrib_pointer(GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, uintptr_t pointer)
 {
-	::gl::vertex_attrib_pointer(index, size, type, normalized, stride, (const void*)pointer);
+	// NOLINTNEXTLINE(performance-no-int-to-ptr): GL takes the buffer offset as a pointer which is not a real pointer
+	::gl::vertex_attrib_pointer(index, size, type, normalized, stride, reinterpret_cast<const void*>(pointer));
 }
 
 //------------------------------------------------------------------------------
