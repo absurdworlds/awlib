@@ -50,8 +50,15 @@ unsigned get_access( map_perms perms )
 	if (!(perms & mp::rdwr)) // MapViewOfFile doesn't have execute-only mode
 		return result;
 
+	if (bool(perms & mp::write) && bool(perms & mp::copy_on_write)) {
+		result = FILE_MAP_COPY;
+		if (bool(perms & mp::execute))
+			result |= FILE_MAP_EXECUTE;
+		return result;
+	}
+
 	if (bool(perms & mp::write))
-		result |= bool(perms & mp::copy_on_write) ? FILE_MAP_COPY : FILE_MAP_WRITE;
+		result |= FILE_MAP_WRITE;
 	if (bool(perms & mp::read))
 		result |= FILE_MAP_READ;
 	if (bool(perms & mp::execute))
