@@ -180,14 +180,48 @@ Test(compint_not) {
 	TestAssert(!!to_s(i64(5)));
 }
 
+// make_composite_int(hi, lo) is deprecated, but it is still tested until it's removed
+#if defined(_MSC_VER) && !defined(__clang__)
+#pragma warning(push)
+#pragma warning(disable: 4996)
+#else
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#endif
 /*!
  * make_composite_int(hi, lo) takes a sign and magnitude, the sign of hi
  * applies to the whole value, and the magnitude is |hi|·2ⁿ + lo
  */
-Test(compint_make) {
+Test(compint_make_deprecated) {
 	CIEqual(make_composite_int<i32>(    3, 7u),     0x3'0000'0007);
 	CIEqual(make_composite_int<i32>(   -1, 0u),    -0x1'0000'0000);
 	CIEqual(make_composite_int<i32>(   -1, 1u),    -0x1'0000'0001);
 	CIEqual(make_composite_int<i32>(-0x10, 0xFFu), -0x10'0000'00FF);
+}
+#if defined(_MSC_VER) && !defined(__clang__)
+#pragma warning(pop)
+#else
+#pragma GCC diagnostic pop
+#endif
+
+/*!
+ * make_composite_int(negative, hi, lo) is ±(hi·2ⁿ + lo) across the whole range
+ */
+Test(compint_make) {
+	CIEqual(make_composite_int<i32>(false, 3,    7),     0x3'0000'0007);
+	CIEqual(make_composite_int<i32>(true,  1,    0),    -0x1'0000'0000);
+	CIEqual(make_composite_int<i32>(true,  1,    1),    -0x1'0000'0001);
+	CIEqual(make_composite_int<i32>(true,  0x10, 0xFF), -0x10'0000'00FF);
+	CIEqual(make_composite_int<i32>(true,  0,    0xFF), -0xFF);
+	CIEqual(make_composite_int<i32>(true,  0,    0),     0);
+	CIEqual(make_composite_int<i32>(true,  0x8000'0000, 0), std::numeric_limits<i64>::min());
+	CIEqual(make_composite_int<i32>(false, 0x7FFF'FFFF, 0xFFFF'FFFF), std::numeric_limits<i64>::max());
+
+	CUEqual(make_composite_int<u32>(false, 0x10, 0xFF), 0x10'0000'00FF);
+	CUEqual(make_composite_int<u32>(false, 0xFFFF'FFFF, 0xFFFF'FFFF), ~u64(0));
+
+	// usable in constant expressions
+	static_assert(make_composite_int<i32>(true, 0, 1).high() == -1);
+	static_assert(make_composite_int<i32>(true, 0, 1).low()  == 0xFFFF'FFFF);
 }
 } // namespace aw

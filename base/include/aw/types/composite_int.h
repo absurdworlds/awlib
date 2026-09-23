@@ -285,12 +285,33 @@ private:
 	T hi {};
 };
 
+/*!
+ * \deprecated Use make_composite_int(negative, hi, lo).
+ *   This overload cannot express negative values between -2ⁿ and 0,
+ *   and negating \a hi overflows for the minimum value of T.
+ */
 template<typename T>
+[[deprecated("use make_composite_int(negative, hi, lo)")]]
 composite_int<T> make_composite_int(T hi, make_unsigned<T> lo)
 {
 	if (hi < 0)
 		return -composite_int<T>{-hi, lo};
 	return {hi, lo};
+}
+
+/*!
+ * Makes a composite from a sign and a magnitude split into halves.
+ * The result is ±(hi·2ⁿ + lo), where `n` is `num_digits<make_unsigned<T>>`.
+ */
+template<typename T>
+constexpr composite_int<T> make_composite_int(bool negative, make_unsigned<T> hi, make_unsigned<T> lo)
+{
+	composite_int<make_unsigned<T>> result{hi, lo};
+	if (negative) {
+		result = ~result;
+		++result;
+	}
+	return {T(result.high()), result.low()};
 }
 
 template<typename T>
