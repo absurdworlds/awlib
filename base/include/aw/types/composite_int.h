@@ -240,7 +240,7 @@ public:
 
 	constexpr bool operator!() const
 	{
-		return !(lo && hi);
+		return !lo && !hi;
 	}
 
 	constexpr auto operator+() const -> composite_int<T>
