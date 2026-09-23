@@ -179,12 +179,36 @@ struct data_chunk : chunk {
 	data_chunk(io::input_stream& stream)
 		: chunk{stream}
 	{
-		samples.resize(size);
-		size_t count = stream.read(samples.data(), samples.size());
+		/*
+		 * `size` is whatever the file says it is, so it cannot be used
+		 * as an allocation size on its own: a header claiming 4 GiB
+		 * inside a 44-byte file would ask for 4 GiB before a single
+		 * sample is read. The check below already catches a file that
+		 * ends early -- it just used to run one allocation too late.
+		 *
+		 * Growing as the data arrives bounds the buffer by what the
+		 * input actually contains. A truncated file therefore yields a
+		 * buffer of the bytes that were really there, rather than the
+		 * declared length zero-padded.
+		 */
+		constexpr size_t step = 64 * 1024;
+
+		size_t count = 0;
+		while (count < size) {
+			size_t const left = size - count;
+			size_t const want = left < step ? left : step;
+
+			samples.resize(count + want);
+			size_t const got = stream.read(samples.data() + count, want);
+			count += got;
+
+			if (got < want) {
+				samples.resize(count);
+				break;
+			}
+		}
 
 		check_equal( count, size, "data is shorter than expected" );
-
-		samples.resize( size );
 	}
 
 	std::vector<char> samples;
