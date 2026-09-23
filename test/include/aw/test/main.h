@@ -49,14 +49,14 @@ test_config parse_parameters(char** begin, char** end)
 	for ( auto iter = begin; iter < end; ++iter )
 	{
 		std::string_view param = *iter;
-		if (param.find(param_output_format) == 0)
+		if (param.starts_with(param_output_format))
 		{
 			param.remove_prefix(param_output_format.size());
 			if (param == "junit"sv)
 				config.use_junit = true;
 		}
 
-		if (param.find(param_output_file) == 0)
+		if (param.starts_with(param_output_file))
 		{
 			param.remove_prefix(param_output_file.size());
 			config.output_file = param;
