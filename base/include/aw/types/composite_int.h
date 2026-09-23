@@ -273,20 +273,11 @@ public:
 
 	constexpr T sign() const
 	{
-		return sign(std::integral_constant<bool,is_signed<T>>{});
-	}
-
-private:
-	constexpr T sign(std::true_type is_signed) const
-	{
-		if (hi < 0)
-			return -1;
+		if constexpr(is_signed<T>) {
+			if (hi < 0)
+				return -1;
+		}
 		return bool(*this);
-	}
-
-	constexpr T sign(std::false_type is_signed) const
-	{
-		return (hi > 0);
 	}
 
 private:
