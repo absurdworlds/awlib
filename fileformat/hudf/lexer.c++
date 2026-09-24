@@ -125,8 +125,7 @@ std::string lexer::read_string() {
 	return val;
 }
 
-
-token lexer::read_token()
+char lexer::read_token_start()
 {
 	char c = peek();
 
@@ -134,6 +133,13 @@ token lexer::read_token()
 		if (is_whitespace(c)) c = skip( is_whitespace );
 		if (c == '/')         c = skip_comment();
 	}
+
+	return c;
+}
+
+token lexer::read_token()
+{
+	const char c = read_token_start();
 
 	tok_kind kind;
 	std::string val;
@@ -155,7 +161,7 @@ token lexer::read_token()
 		val += read(is_num_char);
 		break;
 	case '"':
-		c = next(); // consume '"'
+		next(); // consume '"'
 		return token{token::string, read_string(), pos};
 	case 'A': case 'B': case 'C': case 'D': case 'E': case 'F': case 'G':
 	case 'H': case 'I': case 'J': case 'K': case 'L': case 'M': case 'N':
@@ -175,7 +181,7 @@ token lexer::read_token()
 	case '!':
 		return token{token::bang, {get()}, pos};
 	case '[':
-		c = next(); // consume '['
+		next(); // consume '['
 		return token{token::node_begin, read(is_name_char), pos};
 	case ']':
 		return token{token::node_end, {get()}, pos};

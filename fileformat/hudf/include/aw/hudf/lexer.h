@@ -122,6 +122,7 @@ private:
 	std::string read(Func condition);
 	std::string read_string();
 
+	char read_token_start();
 	token read_token();
 
 private:
