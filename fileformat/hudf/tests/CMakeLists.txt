@@ -6,7 +6,9 @@ aw_add_test(test_hudf
 		hardening.c++
 		reader.c++
 		writer.c++
-	)
+		value.c++
+)
+
 target_link_libraries(test_hudf
 	PRIVATE
 		awlog

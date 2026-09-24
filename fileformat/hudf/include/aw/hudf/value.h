@@ -92,6 +92,12 @@ struct value {
 		return get(tmp) ? tmp : _default;
 	}
 
+	std::string try_get(std::string_view _default) const
+	{
+		std::string tmp;
+		return get(tmp) ? tmp : std::string(_default);
+	}
+
 	//! Returns type of currently held value
 	type get_type() const
 	{
