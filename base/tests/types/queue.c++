@@ -33,7 +33,7 @@ struct fragile {
 		spend();
 	}
 
-	fragile(fragile&& other)
+	fragile(fragile&& other) noexcept(false)
 		: value{ std::exchange(other.value, moved_from) }
 	{
 		spend();
