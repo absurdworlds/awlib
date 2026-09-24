@@ -257,9 +257,17 @@ Test(variant_self_assign) {
 
 	Checks {
 		var1 = var1;
+		TestAssert(!var1.empty());
+		TestEqual(*var1.get<std::string>(), "Test string!"s);
+	}
+
+	Checks {
+		var1 = std::move(var1);
+		TestAssert(!var1.empty());
 		TestEqual(*var1.get<std::string>(), "Test string!"s);
 	}
 }
+
 Test(variant_reassign) {
 	using namespace std::string_literals;
 	aw::variant<int, std::string> var;

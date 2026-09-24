@@ -83,7 +83,8 @@ public:
 
 	variant& operator=(variant const& other)
 	{
-		copy_from(other);
+		if (&other != this)
+			copy_from(other);
 		return *this;
 	}
 
@@ -91,8 +92,8 @@ public:
 		noexcept((std::is_nothrow_move_constructible_v<Ts> && ...) &&
 		         (std::is_nothrow_move_assignable_v<Ts> && ...))
 	{
-		assert(&other != this);
-		move_from(other);
+		if (&other != this)
+			move_from(other);
 		return *this;
 	}
 
