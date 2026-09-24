@@ -1,14 +1,8 @@
 #include <aw/meta/pp/paren.h>
+#include <type_traits>
 #include <tuple>
+#include <utility>
 
-
-//#define APPLY_PAREN(...) APPLY(APPLY_PAREN2, PAD __VA_ARGS__ )
-#define APPLY_PAREN2(MACRO, ...) AW_APPLY(MACRO AW_DEFER, __VA_ARGS__)
-
-#define APPLY_PAREN(MACRO, ...) AW_EXPAND(AW_APPLY(MACRO AW_DEFER, __VA_ARGS__))
-
-void f()
-{
-	std::tuple<AW_REMOVE_PAREN( (int,int) )> tu;
-	std::tuple<AW_REMOVE_PAREN(int)> tu2;
-}
+static_assert( std::is_same_v< std::tuple<AW_REMOVE_PAREN( (int,int) )>, std::tuple<int,int> > );
+static_assert( std::is_same_v< std::tuple<AW_REMOVE_PAREN(int)>, std::tuple<int> > );
+static_assert( std::is_same_v< AW_REMOVE_PAREN( (std::pair<int,int>) ), std::pair<int,int> > );
