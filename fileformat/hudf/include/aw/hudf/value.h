@@ -24,7 +24,7 @@ inline namespace v1 {
 struct value {
 	value() = default;
 	value(value const&) = default;
-	value(value&&) = default;
+	value(value&&) noexcept = default;
 
 	explicit value(bool v)
 		: holder{ v }
@@ -59,7 +59,7 @@ struct value {
 		return *this;
 	}
 
-	value& operator=(value&& other)
+	value& operator=(value&& other) noexcept
 	{
 		holder = std::move(other.holder);
 		return *this;
