@@ -28,6 +28,12 @@ jobs:
       - name: Install dependencies
         run: sudo apt-get update && sudo apt-get install -y ${{ matrix.deps }} liblua5.4-dev
 
+      # .clang-tidy names every check, and clang-tidy skips a name it does
+      # not know without saying so
+      - name: Check .clang-tidy
+        if: matrix.name == 'clang-tidy'
+        run: clang-tidy --verify-config
+
       - name: Configure
         run: >
           cmake -S . -B build
