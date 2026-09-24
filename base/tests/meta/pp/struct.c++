@@ -62,6 +62,7 @@ ASSERT_EQUAL(
 );
 #endif
 
+namespace {
 AW_DEFINE_STRUCT(s, AW_TUPLE(int, x), AW_TUPLE(int, y));
 
 static_assert(std::is_same_v<s::tuple_type, std::tuple<int, int>>);
@@ -73,3 +74,4 @@ void fs()
 		.y = 2,
 	};
 }
+} // namespace

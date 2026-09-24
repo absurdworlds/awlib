@@ -10,19 +10,18 @@
 
 TestFile( "aw::any_buffer" );
 
-constexpr auto buf_size = std::max({ size_t(32), sizeof(std::string) });
-
+namespace aw {
 Test(any_buffer_basic) {
 	using namespace std::string_literals;
+	constexpr auto buf_size = std::max({ size_t(32), sizeof(std::string) });
+
 	aw::any_buffer<buf_size> buf;
 	buf.emplace<std::string>("Test string!"s);
 	TestEqual(buf.get<std::string>(), "Test string!"s);
-}
 
-using m4 = aw::math::matrix<int, 4, 4>;
-struct aligned_matrix {
-	alignas(32) m4 m;
-};
+	buf.emplace<std::string>("Test a longer string!"s);
+	TestEqual(buf.get<std::string>(), "Test a longer string!"s);
+}
 
 //! destroy() must run the destructor of the stored type
 Test(any_buffer_destroy) {
@@ -44,6 +43,13 @@ Test(any_buffer_destroy) {
 	}
 }
 
+namespace {
+using m4 = aw::math::matrix<int, 4, 4>;
+struct aligned_matrix {
+	alignas(32) m4 m;
+};
+} // namespace
+
 Test(any_buffer_aligned) {
 	using namespace std::string_literals;
 	aw::any_buffer<sizeof(aligned_matrix), 32> buf[3];
@@ -60,3 +66,4 @@ Test(any_buffer_aligned) {
 		{4, 2, 3, 4},
 	}});
 }
+} // namespace aw

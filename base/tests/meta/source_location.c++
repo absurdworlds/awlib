@@ -9,7 +9,7 @@ static_assert(source_location::current().line() == 8);
 static_assert(source_location::current().line() == __LINE__);
 static_assert(source_location::current().file_name() == std::string_view(__FILE__));
 
-constexpr auto f(source_location loc = source_location::current())
+static constexpr auto f(source_location loc = source_location::current())
 {
 	return loc.line();
 }

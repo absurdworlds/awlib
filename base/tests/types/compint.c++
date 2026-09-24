@@ -7,6 +7,7 @@
 TestFile( "aw::composite_int" );
 
 namespace aw {
+namespace {
 using s_u64 = aw::composite_int<aw::u32>;
 using s_i64 = aw::composite_int<aw::i32>;
 
@@ -61,6 +62,7 @@ void unsigned_unary(u64 a)
 	CUEqual(-c, -a);
 	CUEqual(-c, -a);
 }
+} // namespace
 
 Test(unsigned_arithmetic) {
 	const u64 uval1 = 0x0000'0002'0000'1000;
@@ -75,6 +77,7 @@ Test(unsigned_arithmetic) {
 	unsigned_unary(8788465464654654);
 }
 
+namespace {
 void signed_binary(i64 a, i64 b)
 {
 	const s_i64 c1 = to_s(a);
@@ -98,6 +101,7 @@ void signed_unary(i64 a)
 	CIEqual(-c, -a);
 	CIEqual(-c, -a);
 }
+} // namespace
 
 Test(signed_arithmetic) {
 	static const i64 ival1 = -0x0000'0002'0000'1000;

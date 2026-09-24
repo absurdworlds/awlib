@@ -115,6 +115,7 @@ Test(shift_identity) {
 	}
 }
 
+namespace {
 template<typename T>
 std::vector<T> reference_shift(std::vector<T> v, size_t from, size_t n, size_t to)
 {
@@ -126,6 +127,7 @@ std::vector<T> reference_shift(std::vector<T> v, size_t from, size_t n, size_t t
 	v.insert(v.begin() + offset, run.begin(), run.end());
 	return v;
 }
+} // namespace
 
 Test(shift_one_positions) {
 	std::vector<int>         ints{ 0, 1, 2, 3, 4, 5 };

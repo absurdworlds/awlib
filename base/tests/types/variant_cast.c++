@@ -26,9 +26,10 @@ Test(variant_cast_perfect_forwarding) {
 	auto v1 = variant_cast<std::variant<MoveMeOnly>>(std::move(sv));
 	auto v2 = variant_cast<std::variant<CopyMeOnly>>(sv);
 
-	// should not compile
-	//auto v3 = variant_cast<std::variant<MoveMeOnly>>(sv);
-	//auto v4 = variant_cast<std::variant<CopyMeOnly>>(std::move(sv));
+#if 0 // should not compile
+	auto v3 = variant_cast<std::variant<MoveMeOnly>>(sv);
+	auto v4 = variant_cast<std::variant<CopyMeOnly>>(std::move(sv));
+#endif
 }
 
 Test(variant_cast_superset) {

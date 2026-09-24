@@ -10,6 +10,7 @@
 
 TestFile( "aw::variant" );
 
+namespace aw {
 static_assert(std::is_nothrow_move_constructible_v<aw::variant<int, std::string>>);
 static_assert(std::is_nothrow_move_assignable_v<aw::variant<int, std::string>>);
 static_assert(!std::is_nothrow_move_constructible_v<aw::variant<int, aw::test::unsafe_move>>);
@@ -78,8 +79,10 @@ Test(variant_basic_copy) {
 	}
 }
 
+namespace {
 template<int> struct dummy{};
 template<int i> float operator*(dummy<i>, int) { return {}; }
+} // namespace
 
 Test(variant_const_variant) {
 	using namespace std::string_literals;
@@ -152,10 +155,9 @@ Test(variant_basic_move) {
 	}
 }
 
-using tracker = aw::test::copy_move_tracker<std::string>;
-
 Test(variant_move_does_not_copy) {
 	using namespace std::string_literals;
+	using tracker = aw::test::copy_move_tracker<std::string>;
 	aw::variant<int, tracker> var1{ tracker{"Test string!"s} };
 	aw::variant<int, tracker> var2;
 
@@ -213,6 +215,7 @@ Test(variant_move_only_value) {
 
 Test(variant_move_subset_does_not_copy) {
 	using namespace std::string_literals;
+	using tracker = aw::test::copy_move_tracker<std::string>;
 	aw::variant<int,        tracker> var1{ tracker{"Test string!"s} };
 	aw::variant<int, float, tracker> var2;
 
@@ -334,3 +337,4 @@ Test(variant_vector_growth_moves) {
 		TestEqual(vec[i].get<tracker>()->n_copies, 0u);
 	}
 }
+} // namespace aw
