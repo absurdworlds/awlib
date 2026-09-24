@@ -57,7 +57,7 @@ template <typename Iterator, typename T, typename D>
 auto join_into(Iterator begin, Iterator end, T sink, D const& delim) ->
 	type_t<T, decltype(sink += delim)>
 {
-	return join_into(begin, end, sink, delim, assign_plus<T,D>{});
+	return join_into(begin, end, std::move(sink), delim, assign_plus<T,D>{});
 }
 
 /*!
