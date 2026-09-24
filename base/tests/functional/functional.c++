@@ -18,6 +18,9 @@ namespace {
 int wrapper_calls = 0;
 void count_call(int*) { ++wrapper_calls; }
 
+int wrapper_target = 0;
+int& get_target() { return wrapper_target; }
+
 template<typename T>
 auto rank_pick(T const& t, rank_tag<1>) -> decltype(t.size(), 1) { return 1; }
 
@@ -92,6 +95,23 @@ Test(wrapper_deleter)
 	TestEqual(wrapper_calls, 0);
 	ptr.reset();
 	TestEqual(wrapper_calls, 1);
+}
+
+//! Function wrapper returns value returned by the wrapped function
+Test(wrapper_return)
+{
+	auto f = [] { return 42; };
+	auto wrapper = function_wrapper<+f>{};
+
+	TestEqual(wrapper(), 42);
+}
+
+//! A reference returned by the wrapped function is passed through, not copied.
+Test(wrapper_return_reference)
+{
+	auto wrapper = function_wrapper<get_target>{};
+
+	TestAssert(&wrapper() == &wrapper_target);
 }
 
 //! A higher rank tag converts to every lower one, and the highest rank

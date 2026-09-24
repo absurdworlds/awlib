@@ -21,9 +21,9 @@ namespace aw {
 template<auto Function>
 struct function_wrapper {
 	template<typename...Args>
-	constexpr void operator()(Args&&... args)
+	constexpr decltype(auto) operator()(Args&&... args) const
 	{
-		std::invoke(Function, std::forward<Args>(args)...);
+		return std::invoke(Function, std::forward<Args>(args)...);
 	}
 };
 }
