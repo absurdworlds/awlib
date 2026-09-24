@@ -67,6 +67,9 @@ Test(overload_transparent_comparator)
 //! true_func and false_func accept any arguments and return a fixed value.
 Test(trivial_predicates)
 {
+	static_assert(true_func{}(1, "x", nullptr));
+	static_assert(!false_func{}(1, "x", nullptr));
+
 	TestAssert(true_func{}());
 	TestAssert(true_func{}(1, "x", nullptr));
 	TestAssert(!false_func{}());

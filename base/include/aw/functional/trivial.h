@@ -10,13 +10,19 @@
 #ifndef aw_utility_functional_trivial_h
 #define aw_utility_functional_trivial_h
 namespace aw {
+/*!
+ * Functor that takes any number of arguments and always returns true.
+ */
 struct true_func {
 	template<typename...Args>
-	bool operator()(Args&&.../*args*/) const { return true; }
+	constexpr bool operator()(Args&&.../*args*/) const { return true; }
 };
+/*!
+ * Functor that takes any number of arguments and always returns false.
+ */
 struct false_func {
 	template<typename...Args>
-	bool operator()(Args&&.../*args*/) const { return false; }
+	constexpr bool operator()(Args&&.../*args*/) const { return false; }
 };
 } // namespace aw
 #endif//aw_utility_functional_trivial_h
