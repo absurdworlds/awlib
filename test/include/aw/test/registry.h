@@ -45,13 +45,13 @@ struct test_failed : std::exception {};
 constexpr struct negative_t {} negative;
 
 struct context {
-	context(char const* filename)
+	context(char const* filename) noexcept
 		: filename(filename)
 	{
 		registry::add(*this);
 	}
 
-	context(char const* filename, negative_t)
+	context(char const* filename, negative_t) noexcept
 		: filename(filename), negative(true)
 	{
 		registry::add(*this);

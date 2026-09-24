@@ -49,7 +49,7 @@ public:
 		const char* test_name,
 		test_case::test_function* test_func,
 		[[maybe_unused]] const char* description = nullptr,
-		source_location loc = source_location::current())
+		source_location loc = source_location::current()) noexcept
 	{
 		add_test(aw::test::test_case{test_name, test_func, loc});
 	}
