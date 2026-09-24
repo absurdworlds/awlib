@@ -21,15 +21,15 @@ namespace aw {
  * Example usage:
  * \code{cpp}
  * template<typename T>
- * auto foo_impl(T,rank_tag<1>) -> void_t<decltype(bar(T))>;
+ * auto foo_impl(T t, rank_tag<1>) -> void_t<decltype(bar(t))>;
  *
  * template<typename T>
- * void foo_impl(T,rank_tag<0>);
+ * void foo_impl(T t, rank_tag<0>);
  *
  * template<typename T>
- * void foo_impl(T t)
+ * void foo(T t)
  * {
- *	foo_impl(t, rank_tag<1>);
+ *	foo_impl(t, rank_tag<1>{});
  * }
  * \endcode
  */
