@@ -18,16 +18,14 @@ ForwardIt try_uninit_move(InputIt begin, InputIt end, ForwardIt output)
 	using T = typename std::iterator_traits<InputIt>::value_type;
 	static_assert(std::is_nothrow_move_constructible<T>::value ||
 	              std::is_copy_constructible<T>::value,
-	              "Remove throw from your move constructor, you doofus!");
+	              "T must be nothrow move constructible or copy constructible, "
+		      "otherwise elements can't be relocated safely.");
 
-	constexpr bool do_move = std::is_nothrow_move_constructible<T>::value;
+	if constexpr(std::is_nothrow_move_constructible_v<T>)
+		return std::uninitialized_move(begin, end, output);
+	else
+		return std::uninitialized_copy(begin, end, output);
 
-	using Iter = conditional<do_move, std::move_iterator<InputIt>, InputIt>;
-
-	auto beg_it = Iter{begin};
-	auto end_it = Iter{end};
-
-	return std::uninitialized_copy(beg_it, end_it, output);
 }
 } // namespace _impl
 } // namespace aw
