@@ -1,0 +1,27 @@
+// cppcheck suppressions for awlib.
+//
+// One suppression per line, "<id>" for everywhere or "<id>:<file>" for a
+// single file. Prefer an inline // cppcheck-suppress comment next to the
+// code when the reason is local to one spot.
+//
+// Docs: https://cppcheck.sourceforge.io/manual.pdf
+
+// cppcheck cannot see through the templates awlib is built out of, so it
+// reports most of the library as unused.
+unusedFunction
+
+// A suppression that did not fire is not interesting; the list below is
+// deliberately broader than any single translation unit.
+unmatchedSuppression
+
+// The tests are written in a macro DSL (Test(...) { Checks { ... } }) and
+// on top of the preprocessor metaprogramming in <aw/meta/pp>, neither of
+// which cppcheck's parser can follow. The library sources parse fine, so
+// this stays scoped to the tests rather than turned off everywhere -- a
+// parse failure anywhere else is worth hearing about.
+syntaxError:*/tests/*
+
+// <aw/config.h> ends its platform detection with #error, and cppcheck
+// walks into that branch while trying preprocessor configurations that
+// no real build uses.
+preprocessorErrorDirective:*/aw/config.h
