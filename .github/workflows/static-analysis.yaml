@@ -38,6 +38,7 @@ jobs:
           -DAW_ENABLE_ASSERT:BOOL=OFF
           -DAW_ENABLE_HUDF:BOOL=ON
           -DAW_ENABLE_LUA:BOOL=ON
+          -DAW_ENABLE_SOUND:BOOL=ON
 
       - name: Analyse
         shell: bash
@@ -53,3 +54,61 @@ jobs:
         with:
           sarif_file: build/${{ matrix.name }}.sarif
           category: ${{ matrix.name }}
+
+  # GCC's analyser and cppcheck have nothing left to report, so rather than
+  # listing findings the way clang-tidy does above, they fail on one: that
+  # is what keeps them at nothing. They are jobs of their own because
+  # tidy-report.py reads clang-tidy's diagnostics specifically.
+  gcc-analyzer:
+    name: gcc -fanalyzer
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Install dependencies
+        run: sudo apt-get update && sudo apt-get install -y liblua5.4-dev
+
+      - name: Configure
+        run: >
+          cmake -S . -B build
+          -GNinja
+          -DCMAKE_BUILD_TYPE=Debug
+          -DCMAKE_C_COMPILER=gcc
+          -DCMAKE_CXX_COMPILER=g++
+          -DAW_GCC_ANALYZER:BOOL=ON
+          -DAW_ANALYZER_WERROR:BOOL=ON
+          -DAW_ENABLE_GRAPHICS:BOOL=OFF
+          -DAW_ENABLE_ASSERT:BOOL=OFF
+          -DAW_ENABLE_HUDF:BOOL=ON
+          -DAW_ENABLE_LUA:BOOL=ON
+          -DAW_ENABLE_SOUND:BOOL=ON
+
+      - name: Analyse
+        run: cmake --build build
+
+  cppcheck:
+    name: cppcheck
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Install dependencies
+        run: sudo apt-get update && sudo apt-get install -y cppcheck liblua5.4-dev
+
+      - name: Configure
+        run: >
+          cmake -S . -B build
+          -GNinja
+          -DCMAKE_BUILD_TYPE=Debug
+          -DAW_CPPCHECK:BOOL=ON
+          -DAW_ANALYZER_WERROR:BOOL=ON
+          -DAW_ENABLE_GRAPHICS:BOOL=OFF
+          -DAW_ENABLE_ASSERT:BOOL=OFF
+          -DAW_ENABLE_HUDF:BOOL=ON
+          -DAW_ENABLE_LUA:BOOL=ON
+          -DAW_ENABLE_SOUND:BOOL=ON
+
+      - name: Analyse
+        run: cmake --build build
