@@ -228,7 +228,7 @@ struct _catch {
 
 #define TestFile(...) namespace aw::test { namespace { context file_context{__VA_ARGS__}; } }
 #define Test(name, ...)     \
-	void run_test_##name(::aw::test::test_context); \
+	static void run_test_##name(::aw::test::test_context); \
 	const aw::test::register_test add_test_##name{#name, run_test_##name \
 		__VA_OPT__(,) __VA_ARGS__}; \
 	void run_test_##name([[maybe_unused]] ::aw::test::test_context _context)
