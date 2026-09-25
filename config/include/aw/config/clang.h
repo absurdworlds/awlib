@@ -25,21 +25,10 @@
 #define AW_COMPILER_FLAVOR AW_COMPILER_GCC
 #endif
 
-#define AW_HAS_warning 1
-#define AW_HAS_type_punning_union 1
-
-#define AW_HAS_EXT__builtin_bswap16 __has_builtin(__builtin_bswap16)
-#define AW_HAS_EXT__builtin_bswap32 __has_builtin(__builtin_bswap32)
-#define AW_HAS_EXT__builtin_bswap64 __has_builtin(__builtin_bswap64)
-
-#define AW_HAS_EXT__builtin_clz   __has_builtin(__builtin_clz)
-#define AW_HAS_EXT__builtin_ctz   __has_builtin(__builtin_ctz)
-#define AW_HAS_EXT__builtin_clzll __has_builtin(__builtin_clzll)
-#define AW_HAS_EXT__builtin_ctzll __has_builtin(__builtin_ctzll)
-#define AW_HAS_EXT__builtin_unreachable __has_builtin(__builtin_unreachable)
+#define AW_HAS_EXTENSION_type_punning_union 1
 
 #ifdef __SIZEOF_INT128__
-#define AW_HAS_EXT__int128 1
+#define AW_HAS_EXTENSION_int128 1
 #endif
 
 #define AW_ATTRIBUTE( ... ) __attribute__((__VA_ARGS__))

@@ -14,9 +14,9 @@ namespace aw {
 
 [[noreturn]] aw_force_inline void _unreachable()
 {
-#if AW_EXT(__builtin_unreachable)
+#if AW_HAS_BUILTIN(__builtin_unreachable)
 	__builtin_unreachable();
-#elif AW_EXT(__assume)
+#elif AW_HAS_BUILTIN(__assume)
 	__assume(false);
 #else
 	std::unreachable();

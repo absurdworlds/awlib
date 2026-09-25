@@ -18,14 +18,14 @@ template <typename T> struct promote;
 template<> struct promote<i8>  { using type = i16; };
 template<> struct promote<i16> { using type = i32; };
 template<> struct promote<i32> { using type = i64; };
-#if AW_FEATURE(SIGNED128)
+#if AW_HAS_EXTENSION(int128)
 template<> struct promote<i64> { using type = i128; };
 #endif
 
 template<> struct promote<u8>  { using type = u16; };
 template<> struct promote<u16> { using type = u32; };
 template<> struct promote<u32> { using type = u64; };
-#if AW_FEATURE(UNSIGNED128)
+#if AW_HAS_EXTENSION(int128)
 template<> struct promote<u64> { using type = u128; };
 #endif
 

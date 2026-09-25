@@ -165,21 +165,21 @@
 
 /**** NON-STANDARD FEATURE TESTING ****/
 
-#define AW_FEATURE(x) AW_HAS_FEATURE_##x
-
+//! Test for a compiler built-in function: AW_HAS_BUILTIN(__builtin_clz)
 #if AW_NO_BUILTINS
-	#define AW_EXT(x) 0
-	#define AW_HAS(x) 0
 	#define AW_HAS_BUILTIN(x) 0
-#else
-	#define AW_EXT(x) AW_HAS_EXT##x
-	#define AW_HAS(x) AW_HAS_##x
-
-	#ifdef __has_builtin
+#elif defined(__has_builtin)
 	#define AW_HAS_BUILTIN(x) __has_builtin(x)
-	#else
-	#define AW_HAS_BUILTIN(x) 0
-	#endif
+#else
+	// No __has_builtin (MSVC): look it up in the compiler's header
+	#define AW_HAS_BUILTIN(x) AW_HAS_BUILTIN##x
+#endif
+
+//! Test for a language extension: AW_HAS_EXTENSION(int128)
+#if AW_NO_EXTENSIONS
+	#define AW_HAS_EXTENSION(x) 0
+#else
+	#define AW_HAS_EXTENSION(x) AW_HAS_EXTENSION_##x
 #endif
 
 #endif//aw_compiler_setup_h

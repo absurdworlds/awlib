@@ -16,3 +16,10 @@ if (AW_NO_BUILTINS)
 		INTERFACE
 			AW_NO_BUILTINS=1)
 endif()
+
+option(AW_NO_EXTENSIONS "Build without compiler language extensions." OFF)
+if (AW_NO_EXTENSIONS)
+	target_compile_definitions(awconfig
+		INTERFACE
+			AW_NO_EXTENSIONS=1)
+endif()

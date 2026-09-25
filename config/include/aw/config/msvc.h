@@ -10,10 +10,9 @@
 	#define AW_ARCH AW_ARCH_i686
 #endif
 
-#define AW_HAS_EXT__assume 1
-#define AW_HAS_warning 0
+#define AW_HAS_BUILTIN__assume 1
 // TODO: this is not documented anywhere but works in practice
-#define AW_HAS_type_punning_union 1
+#define AW_HAS_EXTENSION_type_punning_union 1
 
 #define AW_ATTRIBUTE( ... ) __declspec(__VA_ARGS__)
 

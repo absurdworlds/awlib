@@ -10,7 +10,7 @@
 #define aw_bit_count_h
 #include <aw/config.h>
 #include <aw/types/types.h>
-#if !AW_EXT(__builtin_clzll) || !AW_EXT(__builtin_ctzll)
+#if !AW_HAS_BUILTIN(__builtin_clzll) || !AW_HAS_BUILTIN(__builtin_ctzll)
 #include <aw/bit/manip.h>
 #endif
 namespace aw::bit {
@@ -22,7 +22,7 @@ inline size_t leading_zeros(u32 x)
 
 	size_t n = 0;
 
-#if AW_EXT(__builtin_clz)
+#if AW_HAS_BUILTIN(__builtin_clz)
 	n = __builtin_clz(x);
 #else
 	if (x <= 0x0000ffff) {
@@ -54,7 +54,7 @@ inline size_t leading_zeros(u64 x)
 		return 64;
 
 	size_t n = 0;
-#if AW_EXT(__builtin_clzll)
+#if AW_HAS_BUILTIN(__builtin_clzll)
 	n = __builtin_clzll(x);
 #else
 	if (x <= 0x00000000'ffffffff) {
@@ -76,7 +76,7 @@ inline size_t trailing_zeros(u32 x)
 
 	size_t n = 0;
 
-#if AW_EXT(__builtin_ctz)
+#if AW_HAS_BUILTIN(__builtin_ctz)
 	n = __builtin_ctz(x);
 #else
 	if (x & 0x1)
@@ -112,7 +112,7 @@ inline size_t trailing_zeros(u64 x)
 
 	size_t n = 0;
 
-#if AW_EXT(__builtin_ctzll)
+#if AW_HAS_BUILTIN(__builtin_ctzll)
 	n = __builtin_ctzll(x);
 #else
 	if (x & 0x1)
