@@ -1,4 +1,5 @@
-#pragma once
+#ifndef aw_tests_log_log_tester_h
+#define aw_tests_log_log_tester_h
 
 #include <aw/log/log.h>
 
@@ -52,3 +53,4 @@ struct log_tester : log {
 	queue<std::tuple<log::level, string_view, string_view>> expected;
 };
 } // namespace aw
+#endif // aw_tests_log_log_tester_h
