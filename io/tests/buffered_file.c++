@@ -1,15 +1,11 @@
 #include <aw/io/buffered_file.h>
 #include <aw/test/test.h>
 #include <aw/test/helpers/sandbox.h>
-
 #include <aw/test/helpers/round_trip.h>
+#include <aw/config/warnings.h>
 
 // buffered_file is deprecated, but it is still tested until it's removed
-#if defined(_MSC_VER) && !defined(__clang__)
-#pragma warning(disable: 4996)
-#else
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-#endif
+AW_NOWARN_DEPRECATED_BEGIN
 
 TestFile("buffered_file");
 

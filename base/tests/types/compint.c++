@@ -1,6 +1,7 @@
 #include <aw/types/composite_int.h>
 #include <aw/string/to_string/composite_int.h>
 #include <aw/test/test.h>
+#include <aw/config/warnings.h>
 #include <limits>
 #include <string>
 
@@ -185,13 +186,7 @@ Test(compint_not) {
 }
 
 // make_composite_int(hi, lo) is deprecated, but it is still tested until it's removed
-#if defined(_MSC_VER) && !defined(__clang__)
-#pragma warning(push)
-#pragma warning(disable: 4996)
-#else
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-#endif
+AW_NOWARN_DEPRECATED_BEGIN
 /*!
  * make_composite_int(hi, lo) takes a sign and magnitude, the sign of hi
  * applies to the whole value, and the magnitude is |hi|·2ⁿ + lo
@@ -202,11 +197,7 @@ Test(compint_make_deprecated) {
 	CIEqual(make_composite_int<i32>(   -1, 1u),    -0x1'0000'0001);
 	CIEqual(make_composite_int<i32>(-0x10, 0xFFu), -0x10'0000'00FF);
 }
-#if defined(_MSC_VER) && !defined(__clang__)
-#pragma warning(pop)
-#else
-#pragma GCC diagnostic pop
-#endif
+AW_NOWARN_DEPRECATED_END
 
 /*!
  * make_composite_int(negative, hi, lo) is ±(hi·2ⁿ + lo) across the whole range
