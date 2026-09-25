@@ -5,7 +5,7 @@
 #define AW_CVER_X __GNUC__
 #define AW_CVER_Y __GNUC_MINOR__
 
-#if __GNUC__ < 10
+#if __GNUC__ < 10 && !defined(__clang__)
 #error "GCC 10 or newer is required"
 #endif
 
