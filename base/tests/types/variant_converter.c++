@@ -11,21 +11,28 @@ namespace aw {
 
 Test(variant_converter_perfect_forwarding) {
 	struct MoveMeOnly {
-		MoveMeOnly(std::string&&) {}
+		MoveMeOnly(std::string&& s) : s(std::move(s)) {}
+		std::string s;
 	};
 
 	struct CopyMeOnly {
-		CopyMeOnly(std::string&) {}
+		CopyMeOnly(std::string& s) : s(s) {}
+		std::string s;
 	};
 
-	std::variant<std::string> sv;
+	std::variant<std::string> sv("Test");
 
-	std::variant<MoveMeOnly> v1 = variant_converter{std::move(sv)};
-	std::variant<CopyMeOnly> v2 = variant_converter{sv};
+	std::variant<CopyMeOnly> v1 = variant_converter{sv};
+	std::variant<MoveMeOnly> v2 = variant_converter{std::move(sv)};
 
-	// should not compile
-	//std::variant<MoveMeOnly> v3 = variant_converter{sv};
-	//std::variant<CopyMeOnly> v4 = variant_converter{std::move(sv)};
+	
+#if 0 // should not compile
+	std::variant<MoveMeOnly> v3 = variant_converter{sv};
+	std::variant<CopyMeOnly> v4 = variant_converter{std::move(sv)};
+#endif
+
+	TestAssert(std::get_if<CopyMeOnly>(&v1)->s == "Test");
+	TestAssert(std::get_if<MoveMeOnly>(&v2)->s == "Test");
 }
 
 Test(variant_converter_superset) {

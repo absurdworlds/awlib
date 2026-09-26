@@ -14,22 +14,27 @@ static_assert(!is_std_variant_v<void>);
 
 Test(variant_cast_perfect_forwarding) {
 	struct MoveMeOnly {
-		MoveMeOnly(std::string&&) {}
+		MoveMeOnly(std::string&& s) : s(std::move(s)) {}
+		std::string s;
 	};
 
 	struct CopyMeOnly {
-		CopyMeOnly(std::string&) {}
+		CopyMeOnly(std::string& s) : s(s) {}
+		std::string s;
 	};
 
-	std::variant<std::string> sv;
+	std::variant<std::string> sv("Test");
 
-	auto v1 = variant_cast<std::variant<MoveMeOnly>>(std::move(sv));
-	auto v2 = variant_cast<std::variant<CopyMeOnly>>(sv);
+	auto v1 = variant_cast<std::variant<CopyMeOnly>>(sv);
+	auto v2 = variant_cast<std::variant<MoveMeOnly>>(std::move(sv));
 
 #if 0 // should not compile
 	auto v3 = variant_cast<std::variant<MoveMeOnly>>(sv);
 	auto v4 = variant_cast<std::variant<CopyMeOnly>>(std::move(sv));
 #endif
+
+	TestAssert(std::get_if<CopyMeOnly>(&v1)->s == "Test");
+	TestAssert(std::get_if<MoveMeOnly>(&v2)->s == "Test");
 }
 
 Test(variant_cast_superset) {
