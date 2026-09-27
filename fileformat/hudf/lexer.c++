@@ -77,7 +77,7 @@ char lexer::skip_comment()
 	char c = peek();
 	while (c == '/') {
 		if (next() == '/') {
-			c = skip( line );
+			skip( line );
 			c = get(); // consume '\n'
 		} else {
 			error("unexpected token: "s + c, pos);

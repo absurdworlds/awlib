@@ -9,10 +9,10 @@ namespace string {
 Test(empty) {
 	for (auto s : split_by_iterator("abcd", ""))
 		TestEqual(s, "abcd");
-	for (auto s : split_by_iterator("", "/"))
-		TestAssert(false);
-	for (auto s : split_iterator("", "/"))
-		TestAssert(false);
+	auto split_by = split_by_iterator("", "/");
+	TestAssert(split_by.begin() == split_by.end());
+	auto split = split_iterator("", "/");
+	TestAssert(split.begin() == split.end());
 	for (auto s : cut_iterator("", "/"))
 		TestEqual(s, ""); // TODO: TestOnce
 }

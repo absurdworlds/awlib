@@ -470,7 +470,7 @@ Test(fork_tells_the_sides_apart) {
 
 	constexpr int child_code = 7;
 
-	int seen_by_child = 0;
+	[[maybe_unused]] int seen_by_child = 0;
 
 	auto handle = process::posix::fork(ec);
 	if (handle == process::posix::child_process_handle) {
