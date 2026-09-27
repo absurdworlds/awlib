@@ -10,8 +10,7 @@
 #define aw_graphics_awgl_drawbuffer_func_h
 #include <aw/gl/api/types.h>
 #include <aw/types/string_view.h>
-namespace aw {
-namespace gl {
+namespace aw::gl {
 //------------------------------------------------------------------------------
 inline void clear(GLbitfield mask)
 {
@@ -116,6 +115,5 @@ inline void viewport(GLint x, GLint y, GLsizei width, GLsizei height)
 {
 	::gl::viewport(x, y, width, height);
 }
-} // namespace gl
-} // namespace aw
+} // namespace aw::gl
 #endif//aw_graphics_awgl_drawbuffer_func_h

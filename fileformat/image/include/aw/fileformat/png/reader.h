@@ -12,8 +12,7 @@
 #include <aw/io/input_stream.h>
 #include <aw/types/optional.h>
 #include <vector>
-namespace aw {
-namespace png {
+namespace aw::png {
 struct image {
 	std::vector<std::byte> data;
 	unsigned width, height;
@@ -21,6 +20,5 @@ struct image {
 
 optional<image> read(io::input_stream& stream) noexcept;
 
-} // namespace png
-} // namespace aw
+} // namespace aw::png
 #endif//aw_fileformat_png_reader_h

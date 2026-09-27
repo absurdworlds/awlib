@@ -13,8 +13,7 @@
 #include <aw/io/filesystem.h>
 #include <aw/platform/export.h>
 #include <utility>
-namespace aw {
-namespace io {
+namespace aw::io {
 #if defined(AW_SUPPORT_PLATFORM_POSIX)
 namespace posix {
 AW_PLATFORM_EXP file_descriptor open(fs::path const& path, file_mode fm, std::error_code& ec);
@@ -148,6 +147,5 @@ using win32::file;
 } // namespace native
 
 #include <aw/io/bits/native_file.h>
-} // namespace io
-} // namespace aw
+} // namespace aw::io
 #endif//aw_io_native_file_h

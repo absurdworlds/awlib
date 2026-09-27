@@ -55,11 +55,8 @@ template<size_t I, typename T, size_t M, size_t N>
 constexpr T get(matrix<T,M,N> const&& mat) { return get<I / N, I % N>( mat ); }
 /* \} */
 } // namespace aw::math
-
-
 namespace aw::math {
-namespace _impl {
-namespace mat {
+namespace _impl::mat {
 
 template<class T, size_t M, size_t N, size_t...Is>
 constexpr vector<T,M> mul(matrix<T,M,N> const& mat, vector<T,N> const& vec, index_sequence<Is...>)
@@ -110,9 +107,7 @@ constexpr void for_each(M& mat, Func func, index_sequence<Is...>)
 	(row<Is>(mat).for_each(func), ...);
 }
 
-} // namespace mat
-} // namespace _impl
-
+} // namespace _impl::mat
 
 template<typename T, size_t M, size_t N>
 struct matrix {
@@ -307,17 +302,13 @@ constexpr vector<T,M> col(matrix<T,M,N> const& mat)
 	return _impl::mat::col(mat, Index, mat.row_indices);
 }
 
-
-namespace _impl {
-namespace mat {
+namespace _impl::mat {
 template<typename T, size_t M, size_t N, size_t...Is>
 constexpr void set_col(matrix<T,M,N>& mat, vector<T,M> const& col, size_t j, index_sequence<Is...>)
 {
 	(void(mat[Is][j] = col[Is]), ...);
 }
-} // namespace mat
-} // namespace _impl
-
+} // namespace _impl::mat
 template<typename T, size_t M, size_t N>
 constexpr void set_column(matrix<T,M,N>& mat, vector<T,M> const& col, size_t idx)
 {
@@ -423,6 +414,5 @@ void fill(matrix<T,M,N>& mat, T const value)
 	std::fill(std::begin(mat.rows), std::end(mat.rows), row);
 }
 } // namespace aw::math
-
 #include "bits/square_matrix.h"
 #endif//aw_math_matrix_h

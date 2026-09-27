@@ -13,8 +13,7 @@
 #include <type_traits>
 #include <utility>
 #include <aw/meta/list_ops.h>
-namespace aw {
-inline namespace utility {
+namespace aw::inline utility {
 template <typename...Types>
 class storage {
 	static constexpr size_t size_value = std::max({ size_t(1), sizeof(Types)... });
@@ -63,6 +62,5 @@ public:
 private:
 	alignas(alignment_value) std::byte storage_[size_value];
 };
-} // namespace utility
-} // namespace aw
+} // namespace aw::inline utility
 #endif//aw_utility_storage_h

@@ -14,8 +14,7 @@
 #include <aw/string/to_string.h>
 #include <aw/string/compose.h>
 
-namespace aw::hudf {
-inline namespace v1 {
+namespace aw::hudf::inline v1 {
 std::string to_string(token::position pos)
 {
 	using aw::to_string;
@@ -207,5 +206,4 @@ token lexer::get_token()
 	tok = read_token();
 	return tmp;
 }
-} // inline namespace v1
-} // namespace aw::hudf
+} // namespace aw::hudf::inline v1

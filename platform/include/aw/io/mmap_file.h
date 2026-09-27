@@ -11,8 +11,7 @@
 #include <aw/io/native_file.h>
 
 #include <utility>
-namespace aw {
-namespace io {
+namespace aw::io {
 
 enum class map_perms : unsigned {
 	none    = 0x0,
@@ -238,6 +237,5 @@ struct mmap_view : private mmap_file {
 	char const* begin() const { return mmap_file::begin(); }
 	char const* end()   const { return mmap_file::end(); }
 };
-} // namespace io
-} // namespace aw
+} // namespace aw::io
 #endif//aw_io_native_file_h

@@ -11,9 +11,7 @@
 #define aw_input_stream_utils_h
 #include <aw/io/input_stream.h>
 #include <aw/types/string_view.h>
-
-namespace aw {
-namespace io {
+namespace aw::io {
 /*!
  * Read from stream until charavter is encountered.
  */
@@ -31,6 +29,5 @@ namespace io {
 	return false;*/
 }
 
-} // namespace io
-} // namespace aw
+} // namespace aw::io
 #endif//aw_input_stream_utils_h

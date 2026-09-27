@@ -12,8 +12,7 @@
 #include <numeric>
 #include <aw/types/string_view.h>
 #include <aw/algorithm/join.h>
-namespace aw {
-namespace string {
+namespace aw::string {
 /*!
  * Concatenate \a strings into one string.
  */
@@ -97,6 +96,5 @@ std::string join(Container<StringT> const& source, string_view delim = "")
 	auto end   = source.end();
 	return join(begin, end, delim);
 }
-} // namespace string
-} // namespace aw
+} // namespace aw::string
 #endif//aw_string_join_h

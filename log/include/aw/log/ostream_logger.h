@@ -12,8 +12,7 @@
 #include <ostream>
 #include <aw/log/log.h>
 #include <aw/log/export.h>
-namespace aw {
-inline namespace v1 {
+namespace aw::inline v1 {
 /*!
  * Prints log to ostream.
  */
@@ -33,6 +32,5 @@ struct AW_LOG_EXP ostream_logger : log {
 private:
 	std::ostream& stream;
 };
-} // namespace v1
-} // namespace aw
+} // namespace aw::inline v1
 #endif//aw_log_ostream_logger_h

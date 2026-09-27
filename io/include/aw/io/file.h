@@ -18,9 +18,7 @@
 #include <aw/io/filesystem.h>
 
 #include <aw/io/native_file.h>
-
-namespace aw {
-namespace io {
+namespace aw::io {
 /*!
  * Provides raw unbuffered file IO.
  *
@@ -205,6 +203,5 @@ private:
 	fs::path _path;
 	native::file data;
 };
-} // namespace io
-} // namespace aw
+} // namespace aw::io
 #endif//aw_io_file_h

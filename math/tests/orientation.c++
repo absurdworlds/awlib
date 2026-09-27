@@ -8,9 +8,7 @@
 #include <algorithm>
 
 TestFile("math::orientation");
-
-namespace aw {
-namespace math {
+namespace aw::math {
 // rotate y axis into x axis
 Test(polar_y_to_x) {
 	degrees<double> phi{ 90 };
@@ -100,5 +98,4 @@ Test(inverse_transform)
 	TestEqual( T1 * T, I );
 }
 
-} // namespace math
-} // namespace aw
+} // namespace aw::math

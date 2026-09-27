@@ -8,9 +8,7 @@
  */
 #include "shared.h"
 #include <aw/types/array_view.h>
-
-namespace aw {
-namespace obj {
+namespace aw::obj {
 namespace {
 //! Signifies that normal or texuv is not specified for the vertex
 constexpr unsigned absent = unsigned(-1);
@@ -247,5 +245,4 @@ mesh mesh::parse( io::input_stream& file )
 	obj.parse( file );
 	return obj.result();
 }
-} // namespace obj
-} // namespace aw
+} // namespace aw::obj

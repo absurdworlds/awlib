@@ -12,8 +12,7 @@
 #include <string>
 #include <aw/types/types.h>
 #include <aw/meta/pp/macro.h>
-namespace aw {
-namespace unicode {
+namespace aw::unicode {
 /*!
  * Unsigned integer type capable of holding
  * a single unicode code point.
@@ -66,6 +65,5 @@ public:
 	}
 };
 
-} // namespace unicode
-} // namespace aw
+} // namespace aw::unicode
 #endif//_aw_utf_

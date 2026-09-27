@@ -10,8 +10,7 @@
 #define aw_graphics_glsl_types_h
 #include <aw/math/matrix.h>
 #include <array>
-namespace aw {
-namespace gl3 {
+namespace aw::gl3 {
 template<size_t N, size_t M, typename T>
 using mat = math::matrix<T,M,N>;
 
@@ -30,6 +29,5 @@ auto array(mat<N,M,T> m)
 	transpose(m).for_each(copy_ele);
 	return arr;
 }
-} // namespace gl3
-} // namespace aw
+} // namespace aw::gl3
 #endif//aw_graphics_glsl_vec_h

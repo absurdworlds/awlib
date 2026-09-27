@@ -10,9 +10,7 @@
 
 #include <aw/algorithm/in.h>
 #include <aw/types/containers/flat_map.h>
-
-namespace aw {
-namespace obj {
+namespace aw::obj {
 namespace {
 
 struct parser {
@@ -253,9 +251,7 @@ mtllib mtllib::parse( io::input_stream& file )
 	mat.parse( file );
 	return mat.lib;
 }
-} // namespace obj
-} // namespace aw
-
+} // namespace aw::obj
 #ifdef AW_MTL_MANUAL_TEST
 #include <aw/io/input_file_stream.h>
 #include <iostream>

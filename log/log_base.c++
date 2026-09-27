@@ -8,8 +8,7 @@
  */
 #include <aw/log/log_filter.h>
 #include <aw/log/regex_filter.h>
-namespace aw {
-inline namespace v1 {
+namespace aw::inline v1 {
 void multi_log::message(log::level level, string_view src, string_view msg)
 {
 	for (auto recv : loggers)
@@ -34,5 +33,4 @@ void log_filter::message(log::level level, string_view src, string_view msg)
 		return;
 	multi_log::message(level, src, msg);
 }
-} // namespace v1
-} // namespace aw
+} // namespace aw::inline v1

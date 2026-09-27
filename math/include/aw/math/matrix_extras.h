@@ -11,11 +11,9 @@
 #include <cassert>
 #include <aw/math/matrix.h>
 #include <aw/math/vector_compare.h>
-namespace aw {
-namespace math {
 
 //! Additional syntactic sugar for matrices
-namespace matrix_extras {
+namespace aw::math::matrix_extras {
 struct _transposer {};
 constexpr _transposer T;
 
@@ -37,7 +35,5 @@ auto operator^(matrix<T,M,N> const& mat, int i)
 	assert( i == -1 );
 	return inverse(mat);
 }
-} // namespace matrix_extras
-} // namespace math
-} // namespace aw
+} // namespace aw::math::matrix_extras
 #endif //aw_math_matrix_extras_h

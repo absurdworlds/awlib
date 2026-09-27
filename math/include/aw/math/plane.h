@@ -11,9 +11,7 @@
 #define aw_math_plane_h
 #include <aw/math/vector3d.h>
 #include <aw/math/equals.h>
-
-namespace aw {
-namespace math {
+namespace aw::math {
 
 enum class relation {
 	front,
@@ -71,6 +69,5 @@ private:
 	//! Distance from the origin
 	T           _distance;
 };
-} // namespace math
-} // namespace aw
+} // namespace aw::math
 #endif//aw_math_plane_h

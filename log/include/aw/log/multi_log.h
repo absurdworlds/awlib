@@ -12,8 +12,7 @@
 #include <aw/log/export.h>
 #include <aw/log/log.h>
 #include <vector>
-namespace aw {
-inline namespace v1 {
+namespace aw::inline v1 {
 /*!
  * Redirects message to multiple logs.
  */
@@ -51,6 +50,5 @@ struct AW_LOG_EXP multi_log : log {
 private:
 	std::vector<log*> loggers;
 };
-} // namespace v1
-} // namespace aw
+} // namespace aw::inline v1
 #endif//aw_multi_log_h

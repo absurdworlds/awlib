@@ -9,8 +9,7 @@
 #ifndef aw_utility_utf32_h
 #define aw_utility_utf32_h
 #include <aw/utility/unicode/unicode.h>
-namespace aw::unicode {
-namespace utf32 {
+namespace aw::unicode::utf32 {
 using char_type   = char32_t;
 using string      = std::u32string;
 
@@ -36,6 +35,5 @@ struct codec {
 		return end;
 	}
 };
-} // namespace utf32
-} // namespace aw::unicode
+} // namespace aw::unicode::utf32
 #endif//aw_utility_utf32_h

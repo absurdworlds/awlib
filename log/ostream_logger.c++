@@ -9,8 +9,7 @@
 #include <aw/log/ostream_logger.h>
 #include <aw/string/join.h>
 #include "helpers.h"
-namespace aw {
-inline namespace v1 {
+namespace aw::inline v1 {
 namespace {
 std::string format_message(log::level level, string_view src, string_view msg)
 {
@@ -24,5 +23,4 @@ void ostream_logger::message(log::level level, string_view src, string_view msg)
 {
 	stream << format_message(level, src, msg) << '\n';
 }
-} // namespace v1
-} // namespace aw
+} // namespace aw::inline v1

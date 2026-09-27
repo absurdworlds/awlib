@@ -17,8 +17,7 @@
 #include <cassert>
 #include <cstdio>
 
-namespace aw::hudf {
-inline namespace v1 {
+namespace aw::hudf::inline v1 {
 object parser::read()
 {
 	using namespace std::string_literals;
@@ -357,5 +356,4 @@ void parser::processCommand() {
 		auto val = parse_value<bool>();
 	}
 }
-} // inline namespace v1
-} // namespace aw::hudf
+} // namespace aw::hudf::inline v1

@@ -9,8 +9,7 @@
 #ifndef aw_log_log_provider_h
 #define aw_log_log_provider_h
 #include <aw/log/log.h>
-namespace aw {
-inline namespace v1 {
+namespace aw::inline v1 {
 #if defined(AW_DISABLE_LOGGER)
 constexpr bool disable_logger = true;
 #else
@@ -63,6 +62,5 @@ struct log_provider {
 private:
 	log* logger = nullptr;
 };
-} // namespace log
-} // namespace aw
+} // namespace aw::inline v1
 #endif//aw_log_log_provider_h

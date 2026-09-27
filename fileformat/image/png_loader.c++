@@ -14,9 +14,7 @@
 #include <stdexcept>
 
 #include <png.h>
-
-namespace aw {
-namespace png {
+namespace aw::png {
 
 log_provider log;
 
@@ -202,9 +200,7 @@ optional<image> read(io::input_stream& stream) noexcept
 }
 
 
-} // namespace png
-} // namespace aw
-
+} // namespace aw::png
 #ifdef AW_PNG_MANUAL_TEST
 #include <aw/io/input_file_stream.h>
 #include <aw/log/ostream_logger.h>

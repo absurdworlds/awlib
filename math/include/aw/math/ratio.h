@@ -10,8 +10,7 @@
 #define aw_math_ratio_h
 #include <ratio>
 #include <aw/math/numeric.h>
-namespace aw {
-namespace math {
+namespace aw::math {
 using std::ratio;
 
 template <typename R1, typename R2>
@@ -53,6 +52,5 @@ struct denominator_t< ratio<Num, Den> > { static constexpr auto value = Den; };
 
 template<typename T>
 constexpr intmax_t denominator = denominator_t<T>::value;
-} // namespace math
-} // namespace aw
+} // namespace aw::math
 #endif //aw_math_ratio_h

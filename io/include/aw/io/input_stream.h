@@ -13,9 +13,7 @@
 #include <aw/types/traits/basic_traits.h>
 
 #include <utility>
-
-namespace aw {
-namespace io {
+namespace aw::io {
 /*!
  * Provides interface for sequential character streams.
  */
@@ -203,6 +201,5 @@ private:
 	value_type cur = traits::eof();
 };
 
-} // namespace io
-} // namespace aw
+} // namespace aw::io
 #endif//aw_input_stream_h

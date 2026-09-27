@@ -10,8 +10,7 @@
 #define aw_math_vector_compare_h
 #include <aw/math/equals.h>
 #include <aw/math/vector.h>
-namespace aw {
-namespace math {
+namespace aw::math {
 template<typename T, size_t N>
 auto operator==(vector<T,N> const& a, vector<T,N> const& b) -> enable_if<!is_float<T>,bool>
 {
@@ -35,6 +34,5 @@ bool operator!=(vector<T,N> const& a, vector<T,N> const& b)
 {
 	return !(a == b);
 }
-} // namespace math
-} // namespace aw
+} // namespace aw::math
 #endif //aw_math_vector_compare_h

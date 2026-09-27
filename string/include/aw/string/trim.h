@@ -11,8 +11,7 @@
 #define aw_string_trim_h
 #include <string>
 #include <aw/types/string_view.h>
-namespace aw {
-namespace string {
+namespace aw::string {
 
 constexpr string_view whitespace (" \t\v\f\r\n", 6);
 
@@ -51,6 +50,5 @@ constexpr string_view trim(string_view str, string_view chars = whitespace)
 	if (first == str.npos) return {};
 	return str.substr(first, last - first + 1);
 }
-} // namespace string
-} // namespace aw
+} // namespace aw::string
 #endif//aw_string_trim_h

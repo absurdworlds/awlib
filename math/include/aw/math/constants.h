@@ -10,9 +10,7 @@
 #ifndef aw_math_constants_h
 #define aw_math_constants_h
 #include <aw/types/types.h>
-
-namespace aw {
-namespace math {
+namespace aw::math {
 //! π (mathematical constant)
 constexpr f64 pi = 3.14159265358979323846; //26433832795028841971693993751;
 //! e (mathematical constant)
@@ -24,6 +22,5 @@ constexpr f64 reciprocal_pi = 1.0/pi;
 [[deprecated("use pi/4")]] constexpr f64 quarter_pi    = pi/4.0;
 
 [[deprecated("use 2*pi")]] constexpr f64 double_pi     = 2.0*pi;
-} //namespace math
-} //namespace aw
+} // namespace aw::math
 #endif //aw_math_constants_h

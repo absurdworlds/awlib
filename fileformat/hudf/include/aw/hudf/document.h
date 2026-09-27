@@ -11,8 +11,7 @@
 #define aw_hudf_document_h
 #include <aw/hudf/export.h>
 #include <aw/hudf/node.h>
-namespace aw {
-inline namespace v1 {
+namespace aw::inline v1 {
 
 struct AW_HUDF_EXP document {
 	explicit document(hudf::node node)
@@ -45,7 +44,6 @@ private:
 	hudf::node _root;
 };
 
-} // inline namespace v1
-} // namespace aw
+} // namespace aw::inline v1
 
 #endif//aw_hudf_document_h

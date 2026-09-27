@@ -13,8 +13,7 @@
 #include <aw/log/log.h>
 #include <aw/algorithm/in.h>
 #include <aw/hudf/export.h>
-namespace aw::hudf {
-inline namespace v1 {
+namespace aw::hudf::inline v1 {
 struct token {
 	struct position {
 		unsigned line = 0;
@@ -133,6 +132,5 @@ private:
 	token::position pos{1, 1};
 	bool err = false;
 };
-} // inline namespace v1
-} // namespace aw::hudf
+} // namespace aw::hudf::inline v1
 #endif//aw_fileformat_hudf_lexer_h

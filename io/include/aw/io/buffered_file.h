@@ -18,9 +18,7 @@
 
 #include <cstdio>
 #include <utility>
-
-namespace aw {
-namespace io {
+namespace aw::io {
 
 inline const char* make_fopen_flag(file_mode mode)
 {
@@ -233,6 +231,5 @@ private:
 	fs::path _path;
 	FILE*    _file = nullptr;
 };
-} // namespace io
-} // namespace aw
+} // namespace aw::io
 #endif//aw_io_File_h

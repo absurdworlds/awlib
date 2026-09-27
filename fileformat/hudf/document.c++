@@ -11,8 +11,7 @@
 #include <aw/string/split.h>
 #include <aw/string/lazy_split.h>
 
-namespace aw {
-inline namespace v1 {
+namespace aw::inline v1 {
 hudf::node const* document::node(string_view path) const
 {
 	auto cmpts = aw::string::lazy::split(path, "/");
@@ -38,5 +37,4 @@ hudf::value const* document::value(string_view path) const
 	return &sought_node->value;
 }
 
-} // inline namespace v1
-} // namespace aw
+} // namespace aw::inline v1

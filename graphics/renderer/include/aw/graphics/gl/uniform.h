@@ -13,8 +13,7 @@
 #include <aw/graphics/glsl/vec.h>
 #include <aw/graphics/glsl/mat.h>
 #include <aw/graphics/export.h>
-namespace aw {
-namespace gl3 {
+namespace aw::gl3 {
 using gl::uniform_block_index;
 using gl::uniform_location;
 using gl::invalid_uniform;
@@ -56,6 +55,5 @@ private:
 	uniform_location location = invalid_uniform;
 };
 
-} // namespace gl3
-} // namespace aw
+} // namespace aw::gl3
 #endif//aw_graphics_gl3_uniform_h

@@ -13,8 +13,7 @@
 #include <aw/io/file.h>
 #include <aw/types/optional.h>
 #include <vector>
-namespace aw {
-namespace gl3 {
+namespace aw::gl3 {
 inline optional<shader> compile_shader( gl::shader_type type, string_view contents )
 {
 	shader shd{ type };
@@ -59,6 +58,5 @@ inline optional<program> load_program( string_view v, string_view f )
 
 	return link_program( stages );
 }
-} // namespace gl3
-} // namespace aw
+} // namespace aw::gl3
 #endif//aw_graphics_gl3_shader_file_h

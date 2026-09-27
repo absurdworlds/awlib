@@ -8,7 +8,7 @@
 TestFile( "assert" );
 
 namespace aw {
-
+namespace {
 const string_view expected_assertions[] ={
     "assert",
     "false",
@@ -40,6 +40,7 @@ assert_action test_assert_handler(string_view assertion, source_location locatio
 	}
 	return assert_action::ignore;
 }
+} // namespace
 
 Test(assert_basic_test)
 {

@@ -6,9 +6,7 @@
 #include <limits>
 
 TestFile("math::float");
-
-namespace aw {
-namespace math {
+namespace aw::math {
 namespace {
 //! Move \a value by \a steps ULPs, towards +inf for positive \a steps
 template<typename F>
@@ -144,5 +142,4 @@ Test(equals_float) {
 		TestAssert( !equals(1000000, 1000001) );
 	}
 };
-} // namespace math
-} // namespace aw
+} // namespace aw::math

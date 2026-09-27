@@ -8,9 +8,7 @@
 #if (AW_PLATFORM == AW_PLATFORM_POSIX)
 #include <signal.h>
 #endif
-
-namespace aw {
-namespace debug {
+namespace aw::debug {
 #ifdef AW_SUPPORT_PLATFORM_POSIX
 namespace posix {
 AW_DEBUG_EXP bool is_debugger_present();
@@ -35,9 +33,7 @@ using win32::is_debugger_present;
 #else
 inline bool is_debugger_present() { return false; }
 #endif
-} // namespace debug
-} // namespace aw
-
+} // namespace aw::debug
 // -------------------------------------
 // macros
 

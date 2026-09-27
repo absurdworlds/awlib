@@ -13,8 +13,7 @@
 #include <aw/meta/conditional.h>
 
 namespace aw {
-namespace math {
-namespace units {
+namespace math::units {
 /* TODO: sfinae
 template<typename T, typename A, typename B>
 T convert( T value, A from, B to )
@@ -82,9 +81,7 @@ constexpr T extract = U::value;
 template<typename T, intmax_t Num, intmax_t Den>
 constexpr T extract<T, ratio<Num,Den>> = T(Num)/Den;
 
-} // namespace units
-} // namespace math
-
+} // namespace math::units
 namespace units = math::units;
 } // namespace aw
 #endif //aw_math_units_h

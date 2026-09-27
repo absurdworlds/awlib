@@ -11,8 +11,7 @@
 #include <aw/io/input_stream.h>
 #include <string>
 #include <vector>
-namespace aw {
-namespace obj {
+namespace aw::obj {
 
 struct vert {
 	double points[3];
@@ -95,6 +94,5 @@ struct mtllib {
 	std::vector<material> mtls;
 };
 
-} // namespace obj
-} // namespace aw
+} // namespace aw::obj
 #endif//aw_fileformat_obj_loader_h

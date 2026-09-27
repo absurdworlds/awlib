@@ -11,8 +11,7 @@
 #include <aw/math/float.h>
 #include <aw/math/vector4d.h>
 #include <aw/math/matrix3.h>
-namespace aw {
-namespace math {
+namespace aw::math {
 template<typename T>
 using matrix4 = matrix<T,4,4>;
 
@@ -108,6 +107,5 @@ vector3d<T> rotation_unscaled(matrix4<T> const& mat)
 	static vector3d<T> const scale = {1, 1, 1};
 	return rotation(mat, scale);
 }
-} // namespace math
-} // namespace aw
+} // namespace aw::math
 #endif //aw_math_matrix4_h

@@ -10,8 +10,7 @@
 #define aw_io_write_file_h
 #include <aw/io/file_mode.h>
 #include <aw/io/filesystem.h>
-namespace aw {
-namespace io {
+namespace aw::io {
 /*! Class provides interface for writing into files */
 template<typename File>
 struct write_file : private File {
@@ -33,6 +32,5 @@ struct write_file : private File {
 	using File::path;
 };
 
-} // namespace io
-} // namespace aw
+} // namespace aw::io
 #endif//aw_io_write_file_h

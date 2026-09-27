@@ -11,8 +11,7 @@
 #include <aw/gl/wrapper/texture_enum.h>
 #include <aw/types/array_view.h>
 #include <aw/graphics/export.h>
-namespace aw {
-namespace gl3 {
+namespace aw::gl3 {
 using gl::texture_handle;
 
 struct AW_GRAPHICS_EXP texture {
@@ -48,6 +47,5 @@ private:
 	texture_handle handle;
 	GLenum _type;
 };
-} // namespace gl3
-} // namespace aw
+} // namespace aw::gl3
 #endif//aw_graphics_gl3_texture_h

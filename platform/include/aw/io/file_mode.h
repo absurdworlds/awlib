@@ -10,8 +10,7 @@
 #ifndef aw_io_file_mode_h
 #define aw_io_file_mode_h
 #include <aw/types/support/enum.h>
-namespace aw {
-namespace io {
+namespace aw::io {
 /*! File seek direction */
 enum class seek_mode {
 	set,
@@ -54,6 +53,5 @@ constexpr bool operator!(file_mode a)
 {
 	return !bool(a);
 }
-} // namespace io
-} // namespace aw
+} // namespace aw::io
 #endif//aw_io_file_mode_h

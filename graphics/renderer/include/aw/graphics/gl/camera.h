@@ -11,8 +11,7 @@
 #include <aw/math/matrix4.h>
 #include <aw/math/angle.h>
 #include <aw/math/math.h>
-namespace aw {
-namespace gl3 {
+namespace aw::gl3 {
 struct camera {
 	camera()
 	{
@@ -93,6 +92,5 @@ private:
 	math::matrix4<f32> perspective;
 };
 
-} // namespace gl3
-} // namespace aw
+} // namespace aw::gl3
 #endif//aw_graphics_gl3_camera_h

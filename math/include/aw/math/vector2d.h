@@ -10,8 +10,7 @@
 #ifndef aw_math_vector2d_h
 #define aw_math_vector2d_h
 #include <aw/math/vector.h>
-namespace aw {
-namespace math {
+namespace aw::math {
 //! Geometric object characterized by magnitude and direction
 template<typename T>
 using vector2d = vector<T,2>;
@@ -30,6 +29,5 @@ T planar_angle(vector2d<T> const& vec)
 
 	return yaw;
 }
-} // namespace math
-} // namespace aw
+} // namespace aw::math
 #endif//aw_math_vector2d_h

@@ -20,9 +20,7 @@
 #include <aw/types/traits/basic_traits.h>
 #include <aw/types/traits/common_type.h>
 #include <aw/meta/conditional.h>
-
-namespace aw {
-namespace math {
+namespace aw::math {
 /*!
  * Signum function.
  * Returns value \a x divided by it's modulo if \a x ≠ 0, and zero otherwise.
@@ -137,6 +135,5 @@ auto remainder(T x, U y) -> T
 	return x - extra;
 }
 
-} //namespace math
-} //namespace aw
+} // namespace aw::math
 #endif//aw_math_math_h

@@ -9,11 +9,9 @@
 #ifndef aw_math_vector4d_h
 #define aw_math_vector4d_h
 #include <aw/math/vector.h>
-namespace aw {
-namespace math {
+namespace aw::math {
 //! A 4-dimensional vector
 template<typename T>
 using vector4d = vector<T,4>;
-} // namespace math
-} // namespace aw
+} // namespace aw::math
 #endif//aw_math_vector4d_h

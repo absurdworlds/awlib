@@ -8,8 +8,7 @@
  */
 #include <cassert>
 #include <aw/thread/worker.h>
-namespace aw {
-namespace thread {
+namespace aw::thread {
 worker::worker()
 {
 	thread = std::thread(&worker::loop, this);
@@ -76,5 +75,4 @@ void worker::loop()
 		cond.notify_one();
 	}
 }
-} // namespace thread
-} // namespace aw
+} // namespace aw::thread

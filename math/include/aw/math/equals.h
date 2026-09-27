@@ -11,8 +11,7 @@
 #define aw_math_equals_h
 #include <aw/meta/conditional.h>
 #include <aw/math/float.h>
-namespace aw {
-namespace math {
+namespace aw::math {
 template <typename T>
 auto equals(T const& a, T const& b) -> enable_if<is_float<T>, bool>
 {
@@ -24,6 +23,5 @@ auto equals(T const& a, T const& b) -> enable_if<!is_float<T>, bool>
 {
 	return a == b;
 }
-} //namespace math
-} //namespace aw
+} // namespace aw::math
 #endif//aw_math_equals_h

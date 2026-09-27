@@ -12,8 +12,7 @@
 #include <aw/graphics/export.h>
 #include <aw/types/array_view.h>
 #include <vector>
-namespace aw {
-namespace gl3 {
+namespace aw::gl3 {
 
 enum class element_type {
 	/* integers */
@@ -104,6 +103,5 @@ struct vertex_data {
 	size_t count;
 };
 
-} // namespace gl3
-} // namespace aw
+} // namespace aw::gl3
 #endif//aw_graphics_gl3_vertex_format_h

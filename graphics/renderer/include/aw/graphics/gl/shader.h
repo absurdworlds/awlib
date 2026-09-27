@@ -13,8 +13,7 @@
 #include <aw/types/string_view.h>
 #include <aw/types/optional.h>
 #include <aw/graphics/export.h>
-namespace aw {
-namespace gl3 {
+namespace aw::gl3 {
 using gl::shader_handle;
 
 // TODO: interface is not finalized at this moment, need to make few decisions:
@@ -67,6 +66,5 @@ private:
 	shader_handle _shader = gl::no_shader;
 };
 
-} // namespace gl3
-} // namespace aw
+} // namespace aw::gl3
 #endif//aw_graphics_gl3_shader_h

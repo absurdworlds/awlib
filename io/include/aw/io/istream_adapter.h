@@ -13,8 +13,7 @@
 #include <cassert>
 #include <istream>
 #include <aw/io/bits/istream.h>
-namespace aw {
-namespace io {
+namespace aw::io {
 /*! Adapter for std::streambuf */
 struct istream_buffer : input_buffer {
 	istream_buffer(std::streambuf* buf)
@@ -109,6 +108,5 @@ private:
 	std::streambuf* sb;
 	istream_buffer buffer;
 };
-} // namespace io
-} // namespace aw
+} // namespace aw::io
 #endif//aw_istream_adapter_h

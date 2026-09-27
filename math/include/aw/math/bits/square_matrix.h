@@ -15,8 +15,7 @@ static_assert(false, "Do not include this file directly.");
 #define aw_math_matrixNN_h
 #include <algorithm>
 #include <aw/types/optional.h>
-namespace aw {
-namespace math {
+namespace aw::math {
 namespace _impl {
 template<size_t... Is, typename T, size_t N>
 constexpr matrix<T,N,N>& set_identity(matrix<T,N,N>& mat, index_sequence<Is...>)
@@ -142,6 +141,5 @@ constexpr optional<matrix<T,N,N>> inverse(matrix<T,N,N> const& mat)
 
 	return result;
 }
-} // namespace math
-} // namespace aw
+} // namespace aw::math
 #endif//aw_math_matrixNN_h

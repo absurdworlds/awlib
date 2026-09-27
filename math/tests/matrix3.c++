@@ -8,9 +8,7 @@
 #include <algorithm>
 
 TestFile("Matrix 3x3");
-
-namespace aw {
-namespace math {
+namespace aw::math {
 Test(matrix3_pyr) {
 	auto pitch = pitch_matrix( degrees<float>{ 45.0f } );
 	auto yaw   = yaw_matrix( degrees<float>{ 30.0f } );
@@ -86,5 +84,4 @@ Test(matrix3_rotation)
 	vec = rot * vec;
 	TestEqual(vec, expected);
 }
-} // namespace math
-} // namespace aw
+} // namespace aw::math

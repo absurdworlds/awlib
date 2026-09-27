@@ -15,8 +15,7 @@
 
 #include <type_traits>
 #include <vector>
-namespace aw {
-namespace formatter {
+namespace aw::formatter {
 struct pretty_print {
 	pretty_print() = default;
 	pretty_print(pretty_print const&) = default;
@@ -148,6 +147,5 @@ private:
 	bool in_compound() const { return stack.size() > 1; }
 	bool& first_value() { return stack.back().first_value; }
 };
-} // namespace formatter
-} // namespace aw
+} // namespace aw::formatter
 #endif//aw_to_string_formatters_pretty_print_h

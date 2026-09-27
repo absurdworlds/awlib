@@ -10,8 +10,7 @@
 #ifndef aw_log_log_h
 #define aw_log_log_h
 #include <aw/types/string_view.h>
-namespace aw {
-inline namespace v1 {
+namespace aw::inline v1 {
 /*!
  * Basic logger interface.
  * This interfacce is used by all aw libraries.
@@ -50,6 +49,5 @@ public:
 	 */
 	virtual void message(level lvl, string_view src, string_view msg) = 0;
 };
-} // namespace v1
-} // namespace aw
+} // namespace aw::inline v1
 #endif//aw_Logger_h

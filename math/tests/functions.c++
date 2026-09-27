@@ -5,9 +5,7 @@
 #include <aw/test/test.h>
 
 TestFile("math::functions");
-
-namespace aw {
-namespace math {
+namespace aw::math {
 Test(div_round) {
 	Preconditions {
 		TestEqual( div_round(1,2), 1 ); // or should it be 0?
@@ -75,5 +73,4 @@ Test(lerp_vector_of_double) {
 		TestEqual( lerp(a, b, 0.5), (vec3{2, 3, 5}) );
 	}
 }
-} // namespace math
-} // namespace aw
+} // namespace aw::math

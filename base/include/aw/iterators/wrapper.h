@@ -11,8 +11,7 @@
 #include <cstddef>
 #include <iterator>
 #include <aw/iterators/proxy.h>
-namespace aw {
-namespace iter {
+namespace aw::iter {
 
 template<typename T>
 struct default_converter {
@@ -85,6 +84,5 @@ struct wrapper : Iterator, protected Convert {
 		return copy;
 	}
 };
-} // namespace iter
-} // namespace aw
+} // namespace aw::iter
 #endif//aw_iterators_wrapper_h

@@ -3,9 +3,7 @@
 #include <aw/test/test.h>
 
 TestFile( "string::split_iterator" );
-
-namespace aw {
-namespace string {
+namespace aw::string {
 Test(empty) {
 	for (auto s : split_by_iterator("abcd", ""))
 		TestEqual(s, "abcd");
@@ -46,5 +44,4 @@ Test(split_iter_basic) {
 	for (auto&& [r, e] : aw::paired(result, expected))
 		TestEqual(r, e);
 }
-} // namespace string
-} // namespace aw
+} // namespace aw::string

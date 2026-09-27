@@ -11,8 +11,7 @@
 #define aw_string_substr_iterator_h
 #include <aw/types/string_view.h>
 #include <aw/iterators/proxy.h>
-namespace aw {
-namespace string {
+namespace aw::string {
 struct substring_iterator_base {
 	using value_type = string_view;
 	using iterator_category = std::forward_iterator_tag;
@@ -203,6 +202,5 @@ inline auto cut(string_view source, string_view delim) -> cut_iterator
 	return {source, delim};
 }
 } // namespace lazy
-} // namespace string
-} // namespace aw
+} // namespace aw::string
 #endif//aw_string_substr_iterator_h

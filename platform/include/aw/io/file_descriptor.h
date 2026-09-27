@@ -10,8 +10,7 @@
 #define aw_io_file_descriptor_h
 #include <aw/config.h>
 #include <aw/types/types.h>
-namespace aw {
-namespace io {
+namespace aw::io {
 #if defined(AW_SUPPORT_PLATFORM_POSIX)
 namespace posix {
 using file_descriptor = int;
@@ -35,6 +34,5 @@ using win32::invalid_fd;
 using file_descriptor = int;
 constexpr file_descriptor invalid_fd = -1;
 #endif
-} // namespace io
-} // namespace aw
+} // namespace aw::io
 #endif//aw_io_file_descriptor_h

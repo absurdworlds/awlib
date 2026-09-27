@@ -11,8 +11,7 @@
 #include <aw/types/containers/array_chain.h>
 #include <aw/graphics/gl/program.h>
 #include <aw/types/string_view.h>
-namespace aw {
-namespace gl3 {
+namespace aw::gl3 {
 template<typename Resource>
 struct resource_ref {
 	resource_ref() = default;
@@ -188,6 +187,5 @@ private:
 // note: names are deliberately different from those used in containers,
 // because this is a different kind of beast
 
-} // namespace gl3
-} // namespace aw
+} // namespace aw::gl3
 #endif//aw_graphics_gl3_resource_manager_h

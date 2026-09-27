@@ -9,8 +9,7 @@
 #ifndef aw_math_vector3d_h
 #define aw_math_vector3d_h
 #include <aw/math/vector2d.h>
-namespace aw {
-namespace math {
+namespace aw::math {
 //! Vector in 3D space
 template<typename T>
 using vector3d = vector<T,3>;
@@ -76,6 +75,5 @@ vector2d<T> horizontal_angle(vector3d<T> const& vec)
 {
 	return {yaw(vec), pitch(vec)};
 }
-} // namespace math
-} // namespace aw
+} // namespace aw::math
 #endif//aw_math_vector3d_h

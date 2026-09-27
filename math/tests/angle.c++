@@ -6,9 +6,7 @@
 #include <algorithm>
 
 TestFile("math::angle");
-
-namespace aw {
-namespace math {
+namespace aw::math {
 // Kept trivially copyable; see the note in vector.c++
 static_assert(is_trivially_copyable<radians<float>>);
 static_assert(is_trivially_copyable<degrees<double>>);
@@ -69,5 +67,4 @@ Test(angle_normalize) {
 	TestEqual( degrees<float>{ 360.f }.normalize().count(), 0.f );
 	TestEqual( degrees<float>{ 540.f }.normalize().count(), -180.f );
 }
-} // namespace math
-} // namespace aw
+} // namespace aw::math

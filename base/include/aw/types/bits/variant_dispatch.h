@@ -13,8 +13,7 @@ static_assert(false, "Do not include this file directly.");
 #include <aw/types/strip.h>
 #include <aw/utility/builtins.h>
 
-namespace aw {
-namespace _impl {
+namespace aw::_impl {
 //-------------------------------------
 // Variant visitor dispatch
 //-------------------------------------
@@ -115,5 +114,4 @@ decltype(auto) apply_dispatch(variant<Ts...> const& var, Storage* storage, Funct
 	else
 		return vh_jumptable<Ts...>::dispatch(index, storage, f);
 }
-} // namespace _impl
-} // namespace aw
+} // namespace aw::_impl

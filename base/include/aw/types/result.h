@@ -12,8 +12,7 @@
 #include <type_traits>
 #include <aw/types/types.h>
 #include <aw/types/storage.h>
-namespace aw {
-inline namespace utility {
+namespace aw::inline utility {
 
 /*
 namespace _impl {
@@ -312,6 +311,5 @@ result<T,E> make_error(Args&&... args)
 {
 	return {error_tag{}, std::forward<Args>(args)...};
 }
-} // namespace utility
-} // namespace aw
+} // namespace aw::inline utility
 #endif//aw_utility_result_h

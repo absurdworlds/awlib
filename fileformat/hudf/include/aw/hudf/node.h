@@ -15,8 +15,7 @@
 #include <aw/types/string_view.h>
 #include <aw/types/array_view.h>
 #include <aw/hudf/value.h>
-namespace aw::hudf {
-inline namespace v1 {
+namespace aw::hudf::inline v1 {
 struct parser;
 
 template<typename T>
@@ -114,6 +113,5 @@ struct node {
 	hudf::value value;
 	list<node>  children;
 };
-} // inline namespace v1
-} // namespace aw::hudf
+} // namespace aw::hudf::inline v1
 #endif//aw_fileformat_hudf_node_h

@@ -14,8 +14,7 @@
 #include <aw/io/input_stream.h>
 #include <aw/log/log.h>
 
-namespace aw::hudf {
-inline namespace v1 {
+namespace aw::hudf::inline v1 {
 /*!
  * Nesting limit for parse_node(), which recurses once per level.
  *
@@ -49,6 +48,5 @@ inline bool get_numbers(value const& val, T (&out)[N])
 	return false;
 };
 
-} // namespace v1
-} // namespace aw::hudf
+} // namespace aw::hudf::inline v1
 #endif//aw_hudf_utility_h

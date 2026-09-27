@@ -12,8 +12,7 @@
 #include <aw/types/string_view.h>
 
 #include <string>
-namespace aw {
-namespace string {
+namespace aw::string {
 inline std::string& escape_quotes(string_view src, std::string& dest)
 {
 	dest.reserve(dest.size() + src.size());
@@ -34,6 +33,5 @@ inline std::string escape_quotes(string_view src)
 	escape_quotes(src, dest);
 	return dest;
 }
-} // namespace string
-} // namespace aw
+} // namespace aw::string
 #endif//aw_string_escape_h

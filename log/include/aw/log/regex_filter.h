@@ -11,8 +11,7 @@
 #include <aw/types/string_view.h>
 #include <aw/log/export.h>
 #include <regex>
-namespace aw {
-inline namespace v1 {
+namespace aw::inline v1 {
 struct AW_LOG_EXP regex_filter {
 	/*!
 	 * By default Filter inlcudes everything and excludes nothing
@@ -36,6 +35,5 @@ struct AW_LOG_EXP regex_filter {
 	std::regex include{".?"};
 	std::regex exclude{};
 };
-} // namespace v1
-} // namespace aw
+} // namespace aw::inline v1
 #endif//aw_log_regex_filte_h

@@ -11,8 +11,7 @@
 
 #include <iterator>
 
-namespace aw {
-namespace _impl {
+namespace aw::_impl {
 template <typename T>
 struct cbuffer_data {
 	using pointer         = T*;
@@ -250,6 +249,5 @@ private:
 	pointer p = nullptr;
 };
 
-} // namespace _impl
-} // namespace aw
+} // namespace aw::_impl
 #endif//aw_containers_cbuffer_h

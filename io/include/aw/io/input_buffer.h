@@ -13,8 +13,7 @@
 #include <cstring>
 #include <algorithm>
 #include <aw/types/types.h>
-namespace aw {
-namespace io {
+namespace aw::io {
 /*! Input stream buffer */
 struct input_buffer {
 	input_buffer() = default;
@@ -176,6 +175,5 @@ inline bool input_buffer::scan(std::string& s, char delim)
 		extracted = true;
 	}
 }
-} // namespace io
-} // namespace aw
+} // namespace aw::io
 #endif//aw_io_input_buffer_h

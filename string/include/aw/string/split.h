@@ -12,8 +12,7 @@
 #include <vector>
 #include <algorithm>
 #include <aw/types/string_view.h>
-namespace aw {
-namespace string {
+namespace aw::string {
 /*!
  * Split string into tokens, separated by one of delimiters
  * contained in the string \a delim.
@@ -195,6 +194,5 @@ inline std::vector<string_view> cut(string_view source, string_view delim)
 	return split(source, delim, keep_empty);
 }
 
-} // namespace string
-} // namespace aw
+} // namespace aw::string
 #endif//aw_string_split_h

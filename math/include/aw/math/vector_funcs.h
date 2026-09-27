@@ -10,8 +10,7 @@
 #define aw_math_vector_funcs_h
 #include <aw/math/vector.h>
 #include <aw/math/trigonometry.h>
-namespace aw {
-namespace math {
+namespace aw::math {
 
 template<typename T, size_t N>
 vector<T,N> sin( vector<T,N> vec )
@@ -41,6 +40,5 @@ vector<R,N> cos( vector<angle<R,P>,N> vec )
 	return vec.apply( func );
 }
 
-} // namespace math
-} // namespace aw
+} // namespace aw::math
 #endif//aw_math_vector_funcs_h

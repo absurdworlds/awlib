@@ -10,9 +10,7 @@
 #include <cmath>
 
 TestFile("math::quaternion");
-
-namespace aw {
-namespace math {
+namespace aw::math {
 // Kept trivially copyable; see the note in vector.c++
 static_assert(is_trivially_copyable<quaternion<float>>);
 static_assert(std::is_standard_layout_v<quaternion<float>>);
@@ -269,5 +267,4 @@ Test(quaternion_slerp_of_antipodal) {
 		TestEqual( as_matrix(s), as_matrix(a) );
 	}
 }
-} // namespace math
-} // namespace aw
+} // namespace aw::math

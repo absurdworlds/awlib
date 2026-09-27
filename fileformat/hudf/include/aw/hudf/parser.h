@@ -16,8 +16,7 @@
 
 #include <aw/io/input_stream.h>
 
-namespace aw::hudf {
-inline namespace v1 {
+namespace aw::hudf::inline v1 {
 /*!
  * Object returned by HuDF parser
  */
@@ -104,6 +103,5 @@ private:
 	lexer lex;
 	size_t depth = 0;
 };
-} // inline namespace v1
-} // namespace aw::hudf
+} // namespace aw::hudf::inline v1
 #endif//aw_fileformat_hudf_reader_h

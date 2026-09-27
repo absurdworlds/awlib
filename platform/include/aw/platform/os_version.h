@@ -10,8 +10,7 @@
 #define aw_platform_os_name_h
 #include <string>
 #include <aw/platform/export.h>
-namespace aw {
-namespace platform {
+namespace aw::platform {
 /*!
  * Contains OS version information. Use only to display version to the user.
  */
@@ -49,6 +48,5 @@ using posix::get_os_version;
 #elif (AW_PLATFORM == AW_PLATFORM_WIN32)
 using win32::get_os_version;
 #endif
-} // namespace platform
-} // namespace aw
+} // namespace aw::platform
 #endif//aw_platform_os_name_h

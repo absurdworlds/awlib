@@ -8,10 +8,8 @@
  */
 #ifndef aw_meta_list_h
 #define aw_meta_list_h
-namespace aw {
-namespace meta {
+namespace aw::meta {
 template<typename...Ts>
 struct list {};
-} // namespace meta
-} // namespace aw
+} // namespace aw::meta
 #endif//aw_meta_list_h

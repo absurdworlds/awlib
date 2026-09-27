@@ -8,8 +8,7 @@
  */
 #ifndef aw_iterators_proxy_h
 #define aw_iterators_proxy_h
-namespace aw {
-namespace iter {
+namespace aw::iter {
 /*!
  * Helper class to return a value from overloaded operator->()
  *
@@ -41,6 +40,5 @@ struct proxy {
 		return &_temp;
 	}
 };
-} // namespace iter
-} // namespace aw
+} // namespace aw::iter
 #endif//aw_IteratorWrapper_h

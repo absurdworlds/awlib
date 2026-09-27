@@ -6,6 +6,8 @@ Checks: >
   performance-*,
   portability-*,
 
+  modernize-concat-nested-namespaces,
+
   -bugprone-easily-swappable-parameters,
   -misc-use-anonymous-namespace,
   -misc-include-cleaner,

@@ -12,8 +12,7 @@
 #include <aw/math/vector_funcs.h>
 #include <aw/math/quaternion.h>
 #include <aw/math/matrix.h>
-namespace aw {
-namespace math {
+namespace aw::math {
 template<typename T>
 using matrix3 = matrix<T,3,3>;
 
@@ -180,6 +179,5 @@ quaternion<T> as_quaternion_unscaled(matrix3<T> const& mat)
 	// an unscaled rotation matrix has determinant 1
 	return _impl::to_quaternion( mat, T(1) );
 }
-} // namespace math
-} // namespace aw
+} // namespace aw::math
 #endif //aw_math_matrix3_h

@@ -9,8 +9,7 @@
 #ifndef aw_containers_traits_h
 #define aw_containers_traits_h
 #include <aw/types/traits/iterator.h>
-namespace aw {
-namespace _impl {
+namespace aw::_impl {
 // traits wrapper — used to select const or non-const types
 template <typename Traits>
 struct traits {
@@ -27,6 +26,5 @@ struct const_traits {
 	using reference       = const value_type&;
 	using difference_type = typename Traits::difference_type;
 };
-} // namespace _impl
-} // namespace aw
+} // namespace aw::_impl
 #endif//aw_containers_traits_h

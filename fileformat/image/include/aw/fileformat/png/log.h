@@ -9,9 +9,7 @@
 #ifndef aw_fileformat_png_log_h
 #define aw_fileformat_png_log_h
 #include <aw/log/log_provider.h>
-namespace aw {
-namespace png {
+namespace aw::png {
 extern log_provider log;
-} // namespace png
-} // namespace aw
+} // namespace aw::png
 #endif//aw_fileformat_png_log_h

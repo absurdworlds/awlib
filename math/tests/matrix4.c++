@@ -10,9 +10,7 @@
 #include <algorithm>
 
 TestFile("Matrix");
-
-namespace aw {
-namespace math {
+namespace aw::math {
 Test(matrix4_identity) {
 	matrix<int, 4,4> I {{
 		{1,0,0,0},
@@ -140,5 +138,4 @@ Test(matrix4_rotation_scaled) {
 		TestEqual( rotation(mat), euler );
 	}
 }
-} // namespace math
-} // namespace aw
+} // namespace aw::math

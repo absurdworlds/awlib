@@ -10,8 +10,7 @@
 #define aw_math_matrix_compare_h
 #include <aw/math/matrix.h>
 #include <aw/math/vector_compare.h>
-namespace aw {
-namespace math {
+namespace aw::math {
 template<typename T, size_t N, size_t M>
 bool operator==(matrix<T,N,M> const& a, matrix<T,N,M> const b)
 {
@@ -20,6 +19,5 @@ bool operator==(matrix<T,N,M> const& a, matrix<T,N,M> const b)
 			return false;
 	return true;
 }
-} // namespace math
-} // namespace aw
+} // namespace aw::math
 #endif //aw_math_matrix_compare_h

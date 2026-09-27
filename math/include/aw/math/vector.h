@@ -16,7 +16,6 @@
 #include <aw/meta/conditional.h>
 #include <aw/meta/index_sequence.h>
 #include <aw/meta/list_ops.h>
-
 namespace aw::math {
 template <typename T, size_t N>
 struct vector;
@@ -33,25 +32,20 @@ constexpr T get(vector<T,N>&& vec) { return get<I>( vec ); }
 template<size_t I, typename T, size_t N>
 constexpr T get(vector<T,N> const&& vec) { return get<I>( vec ); }
 } // namespace aw::math
-
 namespace std {
 template<typename T, size_t N>
 class tuple_size< aw::math::vector<T,N> > : public std::integral_constant<size_t, N> {};
 template<size_t I, typename T, size_t N>
 class tuple_element< I, aw::math::vector<T,N> > { public: using type = T; };
 } // namespace std
-
-namespace aw {
-namespace math {
+namespace aw::math {
 namespace axis {
 constexpr size_t x = 0;
 constexpr size_t y = 1;
 constexpr size_t z = 2;
 constexpr size_t w = 3;
 } // namespace axis
-
-namespace _impl {
-namespace vec {
+namespace _impl::vec {
 
 template<typename A, typename B, size_t...Is>
 constexpr void assign(A& a, B const& b, index_sequence<Is...>)
@@ -116,9 +110,7 @@ constexpr void for_each(V& vec, Func func, index_sequence<Is...>)
 {
 	(func(vec[Is]), ...);
 }
-} // namespace vec
-} // namespace _impl
-
+} // namespace _impl::vec
 
 template <typename T, size_t N>
 struct vector {
@@ -400,6 +392,5 @@ void fill(vector<T,N>& vec, T const value)
 
 template<typename...Ts>
 vector(Ts const&...) -> vector<std::common_type_t<Ts...>, sizeof...(Ts)>;
-} // namespace math
-} // namespace aw
+} // namespace aw::math
 #endif//aw_math_vector_h

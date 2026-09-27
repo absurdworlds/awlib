@@ -13,8 +13,7 @@
 #include <condition_variable>
 #include <functional>
 #include <aw/thread/export.h>
-namespace aw {
-namespace thread {
+namespace aw::thread {
 /*!
  * Simple worker thread, which continues running until destroyed or
  * manually killed.
@@ -58,6 +57,5 @@ private:
 
 	std::thread thread;
 };
-} // namespace thread
-} // namespace aw
+} // namespace aw::thread
 #endif//aw_thread_worker_h

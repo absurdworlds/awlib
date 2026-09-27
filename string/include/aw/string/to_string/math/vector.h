@@ -11,8 +11,7 @@
 #define aw_math_vector_to_string_h
 #include <aw/math/vector.h>
 #include <aw/string/to_string.h>
-namespace aw {
-namespace math {
+namespace aw::math {
 /*!
  * Convert math::vector to string
  * \return
@@ -27,6 +26,5 @@ std::string to_string(vector<T,N> const& vec, Formatter&& fmt = Formatter{})
 	fmt.compound_end();
 	return fmt;
 }
-} // namespace math
-} // namespace aw
+} // namespace aw::math
 #endif//aw_math_vector_to_string_h

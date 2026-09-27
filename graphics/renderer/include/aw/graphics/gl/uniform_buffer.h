@@ -12,8 +12,7 @@
 #include <aw/graphics/export.h>
 #include <aw/types/traits/basic_traits.h>
 #include <aw/meta/conditional.h>
-namespace aw {
-namespace gl3 {
+namespace aw::gl3 {
 struct program;
 using gl::program_handle;
 using gl::uniform_block_index;
@@ -65,6 +64,5 @@ private:
 	GLuint index;
 	GLuint ubo;
 };
-} // namespace gl3
-} // namespace aw
+} // namespace aw::gl3
 #endif//aw_graphics_gl3_uniform_h

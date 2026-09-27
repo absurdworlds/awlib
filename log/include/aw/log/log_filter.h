@@ -11,8 +11,7 @@
 #include <aw/log/multi_log.h>
 #include <functional>
 #include <aw/functional/trivial.h>
-namespace aw {
-inline namespace v1 {
+namespace aw::inline v1 {
 /*!
  * log_filter applies an arbitrary filter to messages,
  * and then redirects them to recipients
@@ -73,6 +72,5 @@ private:
 	filter src_filter{ true_func{} };
 	filter msg_filter{ true_func{} };
 };
-} // namespace v1
-} // namespace aw
+} // namespace aw::inline v1
 #endif//aw_LogFilter_h

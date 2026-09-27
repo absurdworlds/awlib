@@ -15,8 +15,7 @@
 #include <cmath>
 #include <utility>
 #include <aw/math/angle.h>
-namespace aw {
-namespace math {
+namespace aw::math {
 namespace _impl {
 template<typename T, bool = is_int<T>>
 struct promote_t { using type = double; };
@@ -84,6 +83,5 @@ T cot( angle<T, U> angle )
 	return sc.second / sc.first;
 }
 
-} // namespace math
-} // namespace aw
+} // namespace aw::math
 #endif//aw_math_trigonometry_h

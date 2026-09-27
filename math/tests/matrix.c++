@@ -15,9 +15,7 @@
 #include <algorithm>
 
 TestFile("Matrix");
-
-namespace aw {
-namespace math {
+namespace aw::math {
 // Kept trivially copyable; see the note in vector.c++
 static_assert(is_trivially_copyable<matrix<float,3,3>>);
 static_assert(is_trivially_copyable<matrix<double,4,4>>);
@@ -363,5 +361,4 @@ Test(matrix_for_each_row) {
 		TestEqual(m.row(1), (vector<int,3>{8, 10, 12}));
 	}
 }
-} // namespace math
-} // namespace aw
+} // namespace aw::math

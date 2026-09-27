@@ -11,8 +11,7 @@
 #define aw_math_matrix_to_string_h
 #include <aw/math/matrix.h>
 #include <aw/string/to_string/math/vector.h>
-namespace aw {
-namespace math {
+namespace aw::math {
 /*!
  * Convert math::matrix to string
  * \return
@@ -28,6 +27,5 @@ std::string to_string(matrix<T,M,N> const& mat, Formatter&& fmt = Formatter{})
 	fmt.compound_end();
 	return fmt;
 }
-} // namespace math
-} // namespace aw
+} // namespace aw::math
 #endif//aw_math_matrix_to_string_h

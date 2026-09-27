@@ -18,8 +18,7 @@
 
 #include <aw/hudf/type.h>
 
-namespace aw::hudf {
-inline namespace v1 {
+namespace aw::hudf::inline v1 {
 //! Class for holding any HuDF value.
 struct value {
 	value() = default;
@@ -199,6 +198,5 @@ inline bool value::get(string_view& v) const
 	return string != nullptr;
 }
 
-} // inline namespace v1
-} // namespace aw::hudf
+} // namespace aw::hudf::inline v1
 #endif//aw_hudf_value_h

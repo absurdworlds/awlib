@@ -12,8 +12,7 @@
 #include <aw/string/split.h>
 #include <cassert>
 #include <fstream>
-namespace aw::hudf {
-inline namespace v1 {
+namespace aw::hudf::inline v1 {
 namespace {
 bool find_node(parser& parser, string_view name)
 {
@@ -123,5 +122,4 @@ document parse_file(io::input_stream& file, log* l)
 	parser parser(file, l);
 	return document{ parse_node(parser) };
 }
-} // inline namespace v1
-} // namespace aw::hudf
+} // namespace aw::hudf::inline v1

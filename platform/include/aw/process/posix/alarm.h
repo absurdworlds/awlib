@@ -3,9 +3,7 @@
 #include <aw/platform/export.h>
 
 #include <chrono>
-
-namespace aw::process::posix {
-namespace self {
+namespace aw::process::posix::self {
 /*!
  * Sets an alarm for the calling process, replacing any alarm set
  * earlier. It delivers SIGALRM after the set \a delay.
@@ -17,6 +15,5 @@ namespace self {
  *       and setting a timeout on child processes.
  */
 AW_PLATFORM_EXP std::chrono::microseconds alarm(std::chrono::microseconds delay) noexcept;
-} // namespace self
-} // namespace aw::process::posix
+} // namespace aw::process::posix::self
 #endif // aw_process_posix_alarm_h

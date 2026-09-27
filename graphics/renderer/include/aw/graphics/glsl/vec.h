@@ -9,8 +9,7 @@
 #ifndef aw_graphics_glsl_vec_h
 #define aw_graphics_glsl_vec_h
 #include <aw/math/vector.h>
-namespace aw {
-namespace gl3 {
+namespace aw::gl3 {
 template<size_t N, typename T>
 using vec = math::vector<T, N>;
 
@@ -33,6 +32,5 @@ using uvec4 = vec<4, unsigned>;
 using dvec2 = vec<2, double>;
 using dvec3 = vec<3, double>;
 using dvec4 = vec<4, double>;
-} // namespace gl3
-} // namespace aw
+} // namespace aw::gl3
 #endif//aw_graphics_glsl_vec_h

@@ -11,9 +11,7 @@
 #define aw_input_memory_stream_h
 #include <aw/io/input_stream.h>
 #include <aw/io/file.h>
-
-namespace aw {
-namespace io {
+namespace aw::io {
 /*! Buffer for input_memory_stream */
 struct input_memory_buffer : input_buffer {
 	input_memory_buffer(char const* _begin, char const* _end)
@@ -104,6 +102,5 @@ struct input_memory_stream : input_stream {
 private:
 	input_memory_buffer buffer;
 };
-} // namespace io
-} // namespace aw
+} // namespace aw::io
 #endif//aw_input_memory_stream_h

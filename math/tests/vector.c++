@@ -6,9 +6,7 @@
 #include <algorithm>
 
 TestFile("Vector");
-
-namespace aw {
-namespace math {
+namespace aw::math {
 /*
  * The math types are plain aggregates of scalars, and both awlib and its
  * users rely on copying them being a memcpy: containers relocate them, and
@@ -131,5 +129,4 @@ Test(vec_cross) {
 	TestEqual(x_y, -y_x);
 	TestEqual(z_y, -x);
 };
-} // namespace math
-} // namespace aw
+} // namespace aw::math

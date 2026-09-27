@@ -11,9 +11,7 @@
 #define aw_input_file_stream_h
 #include <aw/io/input_stream.h>
 #include <aw/io/file.h>
-
-namespace aw {
-namespace io {
+namespace aw::io {
 /*! Buffer for input_file_stream */
 struct input_file_buffer : input_buffer {
 	constexpr static size_t buffer_size = 4096 * 2;
@@ -128,6 +126,5 @@ struct input_file_stream : input_stream {
 private:
 	input_file_buffer buffer;
 };
-} // namespace io
-} // namespace aw
+} // namespace aw::io
 #endif//aw_input_file_stream_h

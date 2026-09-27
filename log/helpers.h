@@ -8,8 +8,7 @@
  */
 #include <aw/types/string_view.h>
 #include <aw/log/log.h>
-namespace aw {
-inline namespace v1 {
+namespace aw::inline v1 {
 constexpr string_view describe(log::level level)
 {
 	switch (level) {
@@ -20,5 +19,4 @@ constexpr string_view describe(log::level level)
 	default:            return {};
 	};
 }
-} // namespace v1
-} // namespace aw
+} // namespace aw::inline v1

@@ -12,8 +12,7 @@
 #include <aw/graphics/gl/uniform.h>
 #include <aw/types/array_view.h>
 #include <aw/graphics/export.h>
-namespace aw {
-namespace gl3 {
+namespace aw::gl3 {
 using gl::program_handle;
 
 struct AW_GRAPHICS_EXP program {
@@ -75,6 +74,5 @@ private:
 	program_handle _program = gl::no_program;
 };
 
-} // namespace gl3
-} // namespace aw
+} // namespace aw::gl3
 #endif//aw_graphics_gl3_program_h

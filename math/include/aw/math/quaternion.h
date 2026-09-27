@@ -14,8 +14,7 @@
 #include <aw/math/vector3d.h>
 #include <aw/math/vector4d.h>
 #include <aw/math/vector_funcs.h>
-namespace aw {
-namespace math {
+namespace aw::math {
 template<typename T>
 struct axis_angle {
 	vector3d<T> axis;
@@ -397,6 +396,5 @@ quaternion<T> slerp(quaternion<T> q0, quaternion<T> const& q1,
 
 	return t1*q0 + t2*q1;
 }
-} // namespace math
-} // namespace aw
+} // namespace aw::math
 #endif//aw_math_quaternion_h
