@@ -77,7 +77,7 @@ winapi_path format_command_line(const char* path, aw::array_view<const char*> ar
 	return result;
 }
 
-process_holder spawn(const char* path, aw::array_view<const char*> argv, std::error_code& ec) noexcept
+process_holder spawn(const char* path, aw::array_view<const char*> argv, spawn_flags flags, std::error_code& ec) noexcept
 {
 	// enforce `nullptr` at the end of `argv` for consistency between platforms
 	if (!argv.empty()) {
@@ -90,10 +90,14 @@ process_holder spawn(const char* path, aw::array_view<const char*> argv, std::er
 
 	GetStartupInfoW(&startup_info);
 
+	DWORD creation_flags = 0;
+	if (!!(flags & spawn_flags::detached))
+		creation_flags |= DETACHED_PROCESS | CREATE_NEW_PROCESS_GROUP;
+
 	auto ret = CreateProcessW(
 		path ? winapi_path(path) : nullptr,
 		format_command_line(path, argv),
-		nullptr, nullptr, false, 0, nullptr, nullptr,
+		nullptr, nullptr, false, creation_flags, nullptr, nullptr,
 		&startup_info, &process_info );
 
 	set_error_if(!ret, ec);
@@ -108,12 +112,12 @@ process_holder spawn(const char* path, aw::array_view<const char*> argv, std::er
 	return invalid_process_handle;
 }
 
-process_holder spawn(aw::array_view<const char*> argv, std::error_code& ec) noexcept
+process_holder spawn(aw::array_view<const char*> argv, spawn_flags flags, std::error_code& ec) noexcept
 {
-	return spawn( nullptr, argv, ec );
+	return spawn( nullptr, argv, flags, ec );
 }
 
-process_holder spawn(std::string path, aw::array_view<std::string> argv, std::error_code& ec)
+process_holder spawn(std::string path, aw::array_view<std::string> argv, spawn_flags flags, std::error_code& ec)
 {
 	std::vector<const char*> args;
 	args.push_back(path.data());
@@ -121,7 +125,7 @@ process_holder spawn(std::string path, aw::array_view<std::string> argv, std::er
 		args.push_back(arg.data());
 	args.push_back(nullptr);
 
-	return spawn(path.data(), args, ec);
+	return spawn(path.data(), args, flags, ec);
 }
 
 

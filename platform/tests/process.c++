@@ -27,6 +27,7 @@
 #include <errno.h>
 #include <signal.h>
 #include <sys/wait.h>
+#include <unistd.h>
 #endif
 
 TestFile("process");
@@ -298,6 +299,31 @@ Test(wait_reports_the_exit_code) {
 	}
 }
 
+/*!
+ * A detached child is still a child: it can be waited on
+ * and its exit code is reported back
+ */
+Test(detached_child_reports_the_exit_code) {
+	process_fixture test{_context};
+
+	constexpr int expected = 42;
+
+	std::vector<std::string> args = { format("--exit={}", expected) };
+	auto handle = process::spawn(test.helper, args, process::spawn_flags::detached, test.ec);
+
+	Preconditions {
+		TestAssert( !test.ec );
+		TestAssert( handle != process::invalid_process_handle );
+	}
+
+	auto result = process::wait(handle, test.ec);
+
+	Checks {
+		TestAssert( result.status == process::wait_status::finished );
+		TestEqual( result.code, expected );
+	}
+}
+
 Test(self_path_is_the_running_executable) {
 	std::error_code ec;
 
@@ -335,6 +361,35 @@ Test(wait_reports_the_signal_that_killed_the_process) {
 		TestEqual( result.signal, SIGKILL );
 		TestEqual( result.code, 0 );
 	}
+}
+
+/*!
+ * A detached child leaves the caller's process group, so that the
+ * signals sent to the group (e.g. Ctrl+C) don't reach it
+ */
+Test(detached_child_leaves_the_process_group) {
+	using namespace std::chrono;
+
+	process_fixture test{_context};
+
+	std::vector<std::string> args = { "--sleep-ms=300" };
+
+	auto attached = process::spawn(test.helper, args, test.ec);
+	auto detached = process::spawn(test.helper, args, process::spawn_flags::detached, test.ec);
+
+	Preconditions {
+		TestAssert( attached != process::invalid_process_handle );
+		TestAssert( detached != process::invalid_process_handle );
+	}
+
+	Checks {
+		TestEqual( getpgid( pid_t(attached) ), getpgrp() );
+		TestNEqual( getpgid( pid_t(detached) ), getpgrp() );
+		TestEqual( getpgid( pid_t(detached) ), pid_t(detached) );
+	}
+
+	process::wait(attached, test.ec);
+	process::wait(detached, test.ec);
 }
 
 /*!

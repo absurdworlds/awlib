@@ -6,10 +6,12 @@
 #include <aw/types/array_view.h>
 #include <aw/types/support/enum.h>
 
+#include <aw/process/spawn_flags.h>
 #include <aw/process/wait_status.h>
 #include <aw/io/filesystem.h>
 
 #include <string>
+#include <utility>
 #include <chrono>
 #include <system_error>
 
@@ -53,28 +55,40 @@ inline void close_handle(process_handle handle)
  * Spawn a child process with specified \a path and argument list \a argv.
  * Argument list must end with `nullptr`.
  */
-AW_PLATFORM_EXP process_holder spawn(const char* path, aw::array_view<const char*> argv, std::error_code& ec) noexcept;
+AW_PLATFORM_EXP process_holder spawn(const char* path, aw::array_view<const char*> argv, spawn_flags flags, std::error_code& ec) noexcept;
 /*!
  * Spawn a child process with specified argument list \a argv. `argv[0]` is used as path.
  */
-AW_PLATFORM_EXP process_holder spawn(aw::array_view<const char*> argv, std::error_code& ec) noexcept;
+AW_PLATFORM_EXP process_holder spawn(aw::array_view<const char*> argv, spawn_flags flags, std::error_code& ec) noexcept;
+AW_PLATFORM_EXP process_holder spawn(std::string path, aw::array_view<std::string> argv, spawn_flags flags, std::error_code& ec);
 
-inline process_holder spawn(const char* path, aw::array_view<const char*> argv)
+inline process_holder spawn(const char* path, aw::array_view<const char*> argv, std::error_code& ec) noexcept
 {
-	std::error_code ec;
-	return spawn(path, argv, ec);
+	return spawn(path, argv, spawn_flags::none, ec);
 }
-inline process_holder spawn(aw::array_view<const char*> argv)
+inline process_holder spawn(aw::array_view<const char*> argv, std::error_code& ec) noexcept
 {
-	std::error_code ec;
-	return spawn(argv, ec);
+	return spawn(argv, spawn_flags::none, ec);
+}
+inline process_holder spawn(std::string path, aw::array_view<std::string> argv, std::error_code& ec)
+{
+	return spawn(std::move(path), argv, spawn_flags::none, ec);
 }
 
-AW_PLATFORM_EXP process_holder spawn(std::string path, aw::array_view<std::string> argv, std::error_code& ec);
-inline process_holder spawn(std::string path, aw::array_view<std::string> argv)
+inline process_holder spawn(const char* path, aw::array_view<const char*> argv, spawn_flags flags = spawn_flags::none)
 {
 	std::error_code ec;
-	return spawn(path, argv, ec);
+	return spawn(path, argv, flags, ec);
+}
+inline process_holder spawn(aw::array_view<const char*> argv, spawn_flags flags = spawn_flags::none)
+{
+	std::error_code ec;
+	return spawn(argv, flags, ec);
+}
+inline process_holder spawn(std::string path, aw::array_view<std::string> argv, spawn_flags flags = spawn_flags::none)
+{
+	std::error_code ec;
+	return spawn(std::move(path), argv, flags, ec);
 }
 
 AW_PLATFORM_EXP wait_result wait(process_handle pid, std::error_code& ec, timeout_spec_ms timeout = {}) noexcept;

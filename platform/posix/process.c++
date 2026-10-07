@@ -34,8 +34,52 @@ namespace aw::process::posix {
 using platform::posix::set_error;
 using platform::posix::set_error_if;
 
+namespace {
+//! Attributes for posix_spawn that carry out \a flags
+struct spawn_attributes {
+	explicit spawn_attributes(spawn_flags flags) noexcept
+	{
+		if (!(flags & spawn_flags::detached))
+			return;
+
+		error = posix_spawnattr_init(&attr);
+		if (error != 0)
+			return;
+		initialized = true;
+
+#if defined(POSIX_SPAWN_SETSID)
+		error = posix_spawnattr_setflags(&attr, POSIX_SPAWN_SETSID);
+#else
+		// without setsid, a new process group is the closest thing
+		error = posix_spawnattr_setflags(&attr, POSIX_SPAWN_SETPGROUP);
+		if (error == 0)
+			error = posix_spawnattr_setpgroup(&attr, 0);
+#endif
+	}
+
+	~spawn_attributes()
+	{
+		if (initialized)
+			posix_spawnattr_destroy(&attr);
+	}
+
+	spawn_attributes(spawn_attributes const&) = delete;
+	spawn_attributes& operator=(spawn_attributes const&) = delete;
+
+	//! Attributes to pass to posix_spawn, or `nullptr` for the defaults
+	const posix_spawnattr_t* get() const noexcept
+	{
+		return initialized ? &attr : nullptr;
+	}
+
+	posix_spawnattr_t attr;
+	bool initialized = false;
+	int error = 0;
+};
+} // namespace
+
 AW_PLATFORM_EXP
-process_handle spawn(const char* path, aw::array_view<const char*> argv, std::error_code& ec) noexcept
+process_handle spawn(const char* path, aw::array_view<const char*> argv, spawn_flags flags, std::error_code& ec) noexcept
 {
 	// enforce `nullptr` at the end of `argv`
 	assert( argv.empty() || argv.back() == nullptr );
@@ -47,13 +91,19 @@ process_handle spawn(const char* path, aw::array_view<const char*> argv, std::er
 	 */
 	auto args = const_cast<char* const*>( argv.data() );
 
+	spawn_attributes attr{ flags };
+	if (attr.error != 0) {
+		ec.assign( attr.error, std::generic_category() );
+		return invalid_process_handle;
+	}
+
 	// look in the PATH first
 	pid_t pid;
-	int rc = posix_spawnp(&pid, path, nullptr, nullptr, args, environ);
+	int rc = posix_spawnp(&pid, path, nullptr, attr.get(), args, environ);
 
 	// try the working directory second
 	if (rc == ENOENT)
-		rc = posix_spawn(&pid, path, nullptr, nullptr, args, environ);
+		rc = posix_spawn(&pid, path, nullptr, attr.get(), args, environ);
 
 	if (rc != 0) {
 		ec.assign( rc, std::generic_category() );
@@ -65,18 +115,18 @@ process_handle spawn(const char* path, aw::array_view<const char*> argv, std::er
 }
 
 AW_PLATFORM_EXP
-process_handle spawn(aw::array_view<const char*> argv, std::error_code& ec) noexcept
+process_handle spawn(aw::array_view<const char*> argv, spawn_flags flags, std::error_code& ec) noexcept
 {
 	if (argv.empty() || argv[0] == nullptr) {
 		ec = make_error_code( std::errc::invalid_argument );
 		return invalid_process_handle;
 	}
 
-	return spawn( argv[0], argv, ec );
+	return spawn( argv[0], argv, flags, ec );
 }
 
 AW_PLATFORM_EXP
-process_handle spawn(std::string path, aw::array_view<std::string> argv, std::error_code& ec)
+process_handle spawn(std::string path, aw::array_view<std::string> argv, spawn_flags flags, std::error_code& ec)
 {
 	std::vector<const char*> args;
 	args.push_back(path.data());
@@ -84,7 +134,7 @@ process_handle spawn(std::string path, aw::array_view<std::string> argv, std::er
 		args.push_back(arg.data());
 	args.push_back(nullptr);
 
-	return spawn(path.data(), args, ec);
+	return spawn(path.data(), args, flags, ec);
 }
 
 AW_PLATFORM_EXP
