@@ -76,10 +76,54 @@ struct spawn_attributes {
 	bool initialized = false;
 	int error = 0;
 };
+
+//! File actions for posix_spawn that redirect the standard streams
+struct spawn_file_actions {
+	explicit spawn_file_actions(stdio const& streams) noexcept
+	{
+		const io::posix::file_descriptor redirects[] = { streams.in, streams.out, streams.err };
+		for (int target = 0; target < 3; ++target) {
+			auto fd = redirects[target];
+			if (fd == io::posix::invalid_fd)
+				continue;
+
+			if (!initialized) {
+				error = posix_spawn_file_actions_init(&actions);
+				if (error != 0)
+					return;
+				initialized = true;
+			}
+
+			// dup2 clears FD_CLOEXEC, so the pipes from io::pipe() survive the exec
+			error = posix_spawn_file_actions_adddup2(&actions, fd, target);
+			if (error != 0)
+				return;
+		}
+	}
+
+	~spawn_file_actions()
+	{
+		if (initialized)
+			posix_spawn_file_actions_destroy(&actions);
+	}
+
+	spawn_file_actions(spawn_file_actions const&) = delete;
+	spawn_file_actions& operator=(spawn_file_actions const&) = delete;
+
+	//! Actions to pass to posix_spawn, or `nullptr` if there are none
+	const posix_spawn_file_actions_t* get() const noexcept
+	{
+		return initialized ? &actions : nullptr;
+	}
+
+	posix_spawn_file_actions_t actions;
+	bool initialized = false;
+	int error = 0;
+};
 } // namespace
 
 AW_PLATFORM_EXP
-process_handle spawn(const char* path, aw::array_view<const char*> argv, spawn_flags flags, std::error_code& ec) noexcept
+process_handle spawn(const char* path, aw::array_view<const char*> argv, stdio const& streams, spawn_flags flags, std::error_code& ec) noexcept
 {
 	// enforce `nullptr` at the end of `argv`
 	assert( argv.empty() || argv.back() == nullptr );
@@ -97,13 +141,19 @@ process_handle spawn(const char* path, aw::array_view<const char*> argv, spawn_f
 		return invalid_process_handle;
 	}
 
+	spawn_file_actions actions{ streams };
+	if (actions.error != 0) {
+		ec.assign( actions.error, std::generic_category() );
+		return invalid_process_handle;
+	}
+
 	// look in the PATH first
 	pid_t pid;
-	int rc = posix_spawnp(&pid, path, nullptr, attr.get(), args, environ);
+	int rc = posix_spawnp(&pid, path, actions.get(), attr.get(), args, environ);
 
 	// try the working directory second
 	if (rc == ENOENT)
-		rc = posix_spawn(&pid, path, nullptr, attr.get(), args, environ);
+		rc = posix_spawn(&pid, path, actions.get(), attr.get(), args, environ);
 
 	if (rc != 0) {
 		ec.assign( rc, std::generic_category() );
@@ -115,18 +165,18 @@ process_handle spawn(const char* path, aw::array_view<const char*> argv, spawn_f
 }
 
 AW_PLATFORM_EXP
-process_handle spawn(aw::array_view<const char*> argv, spawn_flags flags, std::error_code& ec) noexcept
+process_handle spawn(aw::array_view<const char*> argv, stdio const& streams, spawn_flags flags, std::error_code& ec) noexcept
 {
 	if (argv.empty() || argv[0] == nullptr) {
 		ec = make_error_code( std::errc::invalid_argument );
 		return invalid_process_handle;
 	}
 
-	return spawn( argv[0], argv, flags, ec );
+	return spawn( argv[0], argv, streams, flags, ec );
 }
 
 AW_PLATFORM_EXP
-process_handle spawn(std::string path, aw::array_view<std::string> argv, spawn_flags flags, std::error_code& ec)
+process_handle spawn(std::string path, aw::array_view<std::string> argv, stdio const& streams, spawn_flags flags, std::error_code& ec)
 {
 	std::vector<const char*> args;
 	args.push_back(path.data());
@@ -134,7 +184,7 @@ process_handle spawn(std::string path, aw::array_view<std::string> argv, spawn_f
 		args.push_back(arg.data());
 	args.push_back(nullptr);
 
-	return spawn(path.data(), args, flags, ec);
+	return spawn(path.data(), args, streams, flags, ec);
 }
 
 AW_PLATFORM_EXP

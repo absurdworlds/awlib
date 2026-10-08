@@ -1,6 +1,7 @@
 #include <aw/process.h>
 #include <aw/process/limits.h>
 #include <aw/io/filesystem.h>
+#include <aw/io/pipe.h>
 
 #include <aw/utility/on_scope_exit.h>
 #include <aw/string/trim_if.h>
@@ -321,6 +322,89 @@ Test(detached_child_reports_the_exit_code) {
 	Checks {
 		TestAssert( result.status == process::wait_status::finished );
 		TestEqual( result.code, expected );
+	}
+}
+
+/*!
+ * Like popen, but both ways: the parent writes the child's stdin
+ * and reads its stdout.
+ *
+ * Also checks that the child doesn't inherit the parent's ends of the
+ * pipes: if it did, its stdin would never end and the test would hang.
+ */
+Test(spawn_redirects_the_standard_streams) {
+	process_fixture test{_context};
+
+	auto input  = io::native::pipe(test.ec);
+	auto output = io::native::pipe(test.ec);
+
+	Preconditions {
+		TestAssert( input.read.is_open() && input.write.is_open() );
+		TestAssert( output.read.is_open() && output.write.is_open() );
+	}
+
+	std::vector<std::string> args = { "--cat" };
+	process::stdio streams{
+		.in  = input.read.descriptor(),
+		.out = output.write.descriptor(),
+	};
+
+	auto handle = process::spawn(test.helper, args, streams, process::spawn_flags::none, test.ec);
+
+	Preconditions {
+		TestAssert( !test.ec );
+		TestAssert( handle != process::invalid_process_handle );
+	}
+
+	// these are the child's now
+	input.read.close();
+	output.write.close();
+
+	const std::string message = "hello through the pipe";
+	input.write.write(message.data(), message.size());
+	input.write.close();
+
+	std::string received;
+	char buffer[16];
+	while (auto n = output.read.read(buffer, sizeof(buffer), test.ec)) {
+		if (n < 0)
+			break;
+		received.append(buffer, size_t(n));
+	}
+
+	auto result = process::wait(handle, test.ec);
+
+	Checks {
+		TestEqual( received, message );
+		TestAssert( result.status == process::wait_status::finished );
+		TestEqual( result.code, 0 );
+	}
+}
+
+/*!
+ * A pipe hands over what is written into it
+ */
+Test(pipe_passes_data_through) {
+	std::error_code ec;
+
+	auto ends = io::native::pipe(ec);
+
+	Preconditions {
+		TestAssert( !ec );
+		TestAssert( ends.read.is_open() && ends.write.is_open() );
+	}
+
+	const std::string message = "abc";
+	ends.write.write(message.data(), message.size());
+	ends.write.close();
+
+	char buffer[8] = {};
+	auto n = ends.read.read(buffer, sizeof(buffer), ec);
+
+	Checks {
+		TestAssert( !ec );
+		TestEqual( n, intmax_t(message.size()) );
+		TestEqual( std::string(buffer, size_t(n)), message );
 	}
 }
 

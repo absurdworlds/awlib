@@ -7,6 +7,7 @@
  * There is NO WARRANTY, to the extent permitted by law.
  */
 #include <aw/io/native_file.h>
+#include <aw/io/pipe.h>
 #include <aw/io/whence.h>
 #include "helpers.h"
 
@@ -125,5 +126,30 @@ uintmax_t size(file_descriptor fd, std::error_code& ec)
 	}
 #endif
 	return (ret == -1) ? uintmax_t(-1) : info.st_size;
+}
+
+pipe_ends pipe(std::error_code& ec) noexcept
+{
+	int fds[2];
+#if (AW_PLATFORM_SPECIFIC == AW_PLATFORM_APPLE)
+	// no pipe2 on macOS: there is a window where a concurrent
+	// fork() in another thread can inherit the ends
+	int ret = ::pipe(fds);
+	if (ret == 0) {
+		::fcntl(fds[0], F_SETFD, FD_CLOEXEC);
+		::fcntl(fds[1], F_SETFD, FD_CLOEXEC);
+	}
+#else
+	int ret = ::pipe2(fds, O_CLOEXEC);
+#endif
+
+	set_error_if(ret == -1, ec);
+	if (ret == -1)
+		return {};
+
+	return {
+		.read  = file::adopt( fds[0] ),
+		.write = file::adopt( fds[1] ),
+	};
 }
 } // namespace aw::io::posix

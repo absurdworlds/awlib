@@ -7,6 +7,7 @@
  * There is NO WARRANTY, to the extent permitted by law.
  */
 #include <aw/io/native_file.h>
+#include <aw/io/pipe.h>
 #include <cassert>
 #include "winapi_helpers.h"
 #include "path.h"
@@ -110,6 +111,11 @@ intmax_t read(file_descriptor fd, char* buffer, uintmax_t count, std::error_code
 		DWORD toread = clamp_count( left );
 		DWORD nread;
 		ret = ::ReadFile(HANDLE(fd), buffer, toread, &nread, NULL);
+		// a pipe reports its end as an error, but it is just the end
+		if (!ret && GetLastError() == ERROR_BROKEN_PIPE) {
+			ret = true;
+			break;
+		}
 		if (!ret || nread == 0)
 			break;
 
@@ -170,5 +176,22 @@ uintmax_t size(file_descriptor fd, std::error_code& ec)
 	set_error_if(!ret, ec);
 
 	return ret ? sz.QuadPart : uintmax_t(-1);
+}
+
+pipe_ends pipe(std::error_code& ec) noexcept
+{
+	// no security attributes, so neither end is inheritable
+	HANDLE read_end = nullptr;
+	HANDLE write_end = nullptr;
+	bool ret = ::CreatePipe(&read_end, &write_end, nullptr, 0);
+
+	set_error_if(!ret, ec);
+	if (!ret)
+		return {};
+
+	return {
+		.read  = file::adopt( file_descriptor(read_end) ),
+		.write = file::adopt( file_descriptor(write_end) ),
+	};
 }
 } // namespace aw::io::win32

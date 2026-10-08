@@ -11,6 +11,8 @@
 
 #include <cassert>
 #include <csignal>
+#include <memory>
+#include <new>
 #include <vector>
 
 namespace aw::process::win32 {
@@ -77,7 +79,92 @@ winapi_path format_command_line(const char* path, aw::array_view<const char*> ar
 	return result;
 }
 
-process_holder spawn(const char* path, aw::array_view<const char*> argv, spawn_flags flags, std::error_code& ec) noexcept
+namespace {
+//! Inheritable copies of the handles that become the child's standard streams
+struct child_streams {
+	explicit child_streams(stdio const& streams) noexcept
+	{
+		const io::win32::file_descriptor given[] = { streams.in, streams.out, streams.err };
+		for (auto fd : given)
+			redirected |= (fd != io::win32::invalid_fd);
+		if (!redirected)
+			return;
+
+		// a redirected child needs to be told about all three
+		const DWORD std_ids[] = { STD_INPUT_HANDLE, STD_OUTPUT_HANDLE, STD_ERROR_HANDLE };
+		const HANDLE self = GetCurrentProcess();
+		for (int i = 0; i < 3; ++i) {
+			const bool chosen = given[i] != io::win32::invalid_fd;
+			const HANDLE source = chosen ? HANDLE(given[i]) : GetStdHandle(std_ids[i]);
+			if (source == nullptr || source == INVALID_HANDLE_VALUE)
+				continue;
+
+			HANDLE copy = nullptr;
+			if (!DuplicateHandle(self, source, self, &copy, 0, true, DUPLICATE_SAME_ACCESS)) {
+				// the caller's own streams are passed on if they can be
+				if (chosen) {
+					set_error(error);
+					return;
+				}
+				continue;
+			}
+			handles[i] = copy;
+			inherited[count++] = copy;
+		}
+
+		if (count == 0)
+			return;
+
+		// limit the inheritance to these handles, so that the child
+		// doesn't get every inheritable handle the caller has open
+		SIZE_T size = 0;
+		InitializeProcThreadAttributeList(nullptr, 1, 0, &size);
+		buffer.reset(new (std::nothrow) char[size]);
+		if (!buffer) {
+			error = std::make_error_code(std::errc::not_enough_memory);
+			return;
+		}
+
+		auto list = LPPROC_THREAD_ATTRIBUTE_LIST(buffer.get());
+		if (!InitializeProcThreadAttributeList(list, 1, 0, &size)) {
+			set_error(error);
+			return;
+		}
+		attributes = list;
+
+		if (!UpdateProcThreadAttribute(list, 0, PROC_THREAD_ATTRIBUTE_HANDLE_LIST,
+		                               inherited, count * sizeof(HANDLE), nullptr, nullptr))
+			set_error(error);
+	}
+
+	~child_streams()
+	{
+		if (attributes)
+			DeleteProcThreadAttributeList(attributes);
+		// the child has its own copies by now
+		for (DWORD i = 0; i < count; ++i)
+			CloseHandle(inherited[i]);
+	}
+
+	child_streams(child_streams const&) = delete;
+	child_streams& operator=(child_streams const&) = delete;
+
+	//! Whether any of the streams is redirected
+	bool redirected = false;
+	//! Handles for the child's stdin, stdout and stderr; null where it gets none
+	HANDLE handles[3] = {};
+	//! The handles the child inherits
+	HANDLE inherited[3] = {};
+	DWORD count = 0;
+
+	std::unique_ptr<char[]> buffer;
+	LPPROC_THREAD_ATTRIBUTE_LIST attributes = nullptr;
+
+	std::error_code error;
+};
+} // namespace
+
+process_holder spawn(const char* path, aw::array_view<const char*> argv, stdio const& streams, spawn_flags flags, std::error_code& ec) noexcept
 {
 	// enforce `nullptr` at the end of `argv` for consistency between platforms
 	if (!argv.empty()) {
@@ -85,20 +172,41 @@ process_holder spawn(const char* path, aw::array_view<const char*> argv, spawn_f
 		argv.remove_suffix(1);
 	}
 
-	STARTUPINFOW startup_info = {};
+	STARTUPINFOEXW startup_info = {};
 	PROCESS_INFORMATION process_info = {};
 
-	GetStartupInfoW(&startup_info);
+	GetStartupInfoW(&startup_info.StartupInfo);
 
 	DWORD creation_flags = 0;
 	if (!!(flags & spawn_flags::detached))
 		creation_flags |= DETACHED_PROCESS | CREATE_NEW_PROCESS_GROUP;
 
+	child_streams child{ streams };
+	if (child.error) {
+		ec = child.error;
+		return invalid_process_handle;
+	}
+
+	if (child.redirected) {
+		startup_info.StartupInfo.dwFlags   |= STARTF_USESTDHANDLES;
+		startup_info.StartupInfo.hStdInput  = child.handles[0];
+		startup_info.StartupInfo.hStdOutput = child.handles[1];
+		startup_info.StartupInfo.hStdError  = child.handles[2];
+	}
+
+	if (child.attributes) {
+		startup_info.StartupInfo.cb = sizeof(startup_info);
+		startup_info.lpAttributeList = child.attributes;
+		creation_flags |= EXTENDED_STARTUPINFO_PRESENT;
+	}
+
+	const bool inherit = child.count > 0;
+
 	auto ret = CreateProcessW(
 		path ? winapi_path(path) : nullptr,
 		format_command_line(path, argv),
-		nullptr, nullptr, false, creation_flags, nullptr, nullptr,
-		&startup_info, &process_info );
+		nullptr, nullptr, inherit, creation_flags, nullptr, nullptr,
+		&startup_info.StartupInfo, &process_info );
 
 	set_error_if(!ret, ec);
 
@@ -112,12 +220,12 @@ process_holder spawn(const char* path, aw::array_view<const char*> argv, spawn_f
 	return invalid_process_handle;
 }
 
-process_holder spawn(aw::array_view<const char*> argv, spawn_flags flags, std::error_code& ec) noexcept
+process_holder spawn(aw::array_view<const char*> argv, stdio const& streams, spawn_flags flags, std::error_code& ec) noexcept
 {
-	return spawn( nullptr, argv, flags, ec );
+	return spawn( nullptr, argv, streams, flags, ec );
 }
 
-process_holder spawn(std::string path, aw::array_view<std::string> argv, spawn_flags flags, std::error_code& ec)
+process_holder spawn(std::string path, aw::array_view<std::string> argv, stdio const& streams, spawn_flags flags, std::error_code& ec)
 {
 	std::vector<const char*> args;
 	args.push_back(path.data());
@@ -125,7 +233,7 @@ process_holder spawn(std::string path, aw::array_view<std::string> argv, spawn_f
 		args.push_back(arg.data());
 	args.push_back(nullptr);
 
-	return spawn(path.data(), args, flags, ec);
+	return spawn(path.data(), args, streams, flags, ec);
 }
 
 

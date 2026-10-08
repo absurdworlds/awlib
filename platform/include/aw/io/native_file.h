@@ -29,6 +29,13 @@ AW_PLATFORM_EXP uintmax_t size(file_descriptor fd, std::error_code& ec);
 struct file {
 	file() = default;
 	file(file_descriptor fd) : owns_fd{false}, fd{fd} {}
+	//! Take ownership of \a fd: it is closed along with the file
+	static file adopt(file_descriptor fd) noexcept
+	{
+		file result;
+		result.fd = fd;
+		return result;
+	}
 	file(fs::path const& path, file_mode fm, std::error_code& ec) noexcept;
 	file(fs::path const& path, file_mode fm) noexcept;
 	~file() noexcept { close(); }
@@ -84,6 +91,13 @@ AW_PLATFORM_EXP uintmax_t size(file_descriptor fd, std::error_code& ec);
 struct file {
 	file() = default;
 	file(file_descriptor fd) : owns_fd{false}, fd{fd} {}
+	//! Take ownership of \a fd: it is closed along with the file
+	static file adopt(file_descriptor fd) noexcept
+	{
+		file result;
+		result.fd = fd;
+		return result;
+	}
 	file(fs::path const& path, file_mode fm, std::error_code& ec) noexcept;
 	file(fs::path const& path, file_mode fm) noexcept;
 	~file() noexcept { close(); }

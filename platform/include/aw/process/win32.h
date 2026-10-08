@@ -8,6 +8,7 @@
 
 #include <aw/process/spawn_flags.h>
 #include <aw/process/wait_status.h>
+#include <aw/io/file_descriptor.h>
 #include <aw/io/filesystem.h>
 
 #include <string>
@@ -52,15 +53,40 @@ inline void close_handle(process_handle handle)
 }
 
 /*!
+ * Standard streams of a child process. Each is a descriptor
+ * that becomes the stream in the child, or `invalid_fd` to
+ * share the caller's.
+ */
+struct stdio {
+	io::win32::file_descriptor in  = io::win32::invalid_fd;
+	io::win32::file_descriptor out = io::win32::invalid_fd;
+	io::win32::file_descriptor err = io::win32::invalid_fd;
+};
+
+/*!
  * Spawn a child process with specified \a path and argument list \a argv.
  * Argument list must end with `nullptr`.
+ * Its standard streams are redirected to \a streams.
  */
-AW_PLATFORM_EXP process_holder spawn(const char* path, aw::array_view<const char*> argv, spawn_flags flags, std::error_code& ec) noexcept;
+AW_PLATFORM_EXP process_holder spawn(const char* path, aw::array_view<const char*> argv, stdio const& streams, spawn_flags flags, std::error_code& ec) noexcept;
 /*!
  * Spawn a child process with specified argument list \a argv. `argv[0]` is used as path.
  */
-AW_PLATFORM_EXP process_holder spawn(aw::array_view<const char*> argv, spawn_flags flags, std::error_code& ec) noexcept;
-AW_PLATFORM_EXP process_holder spawn(std::string path, aw::array_view<std::string> argv, spawn_flags flags, std::error_code& ec);
+AW_PLATFORM_EXP process_holder spawn(aw::array_view<const char*> argv, stdio const& streams, spawn_flags flags, std::error_code& ec) noexcept;
+AW_PLATFORM_EXP process_holder spawn(std::string path, aw::array_view<std::string> argv, stdio const& streams, spawn_flags flags, std::error_code& ec);
+
+inline process_holder spawn(const char* path, aw::array_view<const char*> argv, spawn_flags flags, std::error_code& ec) noexcept
+{
+	return spawn(path, argv, stdio{}, flags, ec);
+}
+inline process_holder spawn(aw::array_view<const char*> argv, spawn_flags flags, std::error_code& ec) noexcept
+{
+	return spawn(argv, stdio{}, flags, ec);
+}
+inline process_holder spawn(std::string path, aw::array_view<std::string> argv, spawn_flags flags, std::error_code& ec)
+{
+	return spawn(std::move(path), argv, stdio{}, flags, ec);
+}
 
 inline process_holder spawn(const char* path, aw::array_view<const char*> argv, std::error_code& ec) noexcept
 {
@@ -73,6 +99,22 @@ inline process_holder spawn(aw::array_view<const char*> argv, std::error_code& e
 inline process_holder spawn(std::string path, aw::array_view<std::string> argv, std::error_code& ec)
 {
 	return spawn(std::move(path), argv, spawn_flags::none, ec);
+}
+
+inline process_holder spawn(const char* path, aw::array_view<const char*> argv, stdio const& streams, spawn_flags flags = spawn_flags::none)
+{
+	std::error_code ec;
+	return spawn(path, argv, streams, flags, ec);
+}
+inline process_holder spawn(aw::array_view<const char*> argv, stdio const& streams, spawn_flags flags = spawn_flags::none)
+{
+	std::error_code ec;
+	return spawn(argv, streams, flags, ec);
+}
+inline process_holder spawn(std::string path, aw::array_view<std::string> argv, stdio const& streams, spawn_flags flags = spawn_flags::none)
+{
+	std::error_code ec;
+	return spawn(std::move(path), argv, streams, flags, ec);
 }
 
 inline process_holder spawn(const char* path, aw::array_view<const char*> argv, spawn_flags flags = spawn_flags::none)

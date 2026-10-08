@@ -2,6 +2,7 @@
 #include <aw/string/parse.h>
 
 #include <fstream>
+#include <iostream>
 #include <chrono>
 #include <string>
 #include <thread>
@@ -11,6 +12,8 @@ struct arguments {
 	unsigned sleep_ms = 0;
 	//! `--exit=N` sets the exit code of the process
 	unsigned code = 0;
+	//! `--cat` copies stdin to stdout
+	bool cat = false;
 };
 
 static arguments parse_arguments(char** argv)
@@ -28,6 +31,8 @@ static arguments parse_arguments(char** argv)
 			args.sleep_ms = aw::string::parse(arg->value, 0u);
 		else if (arg->name == "exit")
 			args.code = aw::string::parse(arg->value, 0u);
+		else if (arg->name == "cat")
+			args.cat = true;
 	}
 
 	return args;
@@ -44,6 +49,9 @@ int main(int, char** argv)
 		while (auto str = *argv++)
 			f << str << std::endl;
 	}
+
+	if (args.cat)
+		std::cout << std::cin.rdbuf() << std::flush;
 
 	if (args.sleep_ms > 0)
 		std::this_thread::sleep_for( std::chrono::milliseconds(args.sleep_ms) );

@@ -28,6 +28,7 @@ namespace self {}
 #if   (AW_PLATFORM == AW_PLATFORM_POSIX)
 using posix::process_handle;
 using posix::invalid_process_handle;
+using posix::stdio;
 using posix::spawn;
 using posix::kill;
 using posix::terminate;
@@ -40,6 +41,7 @@ using posix::self::path;
 #elif (AW_PLATFORM == AW_PLATFORM_WIN32)
 using win32::invalid_process_handle;
 using win32::process_handle;
+using win32::stdio;
 using win32::spawn;
 using win32::kill;
 using win32::terminate;
