@@ -116,11 +116,17 @@ intmax_t read(file_descriptor fd, char* buffer, uintmax_t count, std::error_code
 			ret = true;
 			break;
 		}
-		if (!ret || nread == 0)
+		if (!ret)
 			break;
 
 		left   -= nread;
 		buffer += nread;
+
+		// return what is available rather than waiting for more, like
+		// read(2): pipes and consoles return as soon as they have data.
+		// The loop is only for counts that don't fit into a DWORD.
+		if (nread < toread)
+			break;
 	} while (left > 0);
 
 	set_error_if(!ret, ec);

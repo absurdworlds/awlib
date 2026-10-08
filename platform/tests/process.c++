@@ -382,6 +382,32 @@ Test(spawn_redirects_the_standard_streams) {
 }
 
 /*!
+ * A read from a pipe returns what is there,
+ * instead of waiting for the buffer to fill up
+ */
+Test(pipe_read_returns_what_is_available) {
+	std::error_code ec;
+
+	auto ends = io::native::pipe(ec);
+
+	Preconditions {
+		TestAssert( ends.read.is_open() && ends.write.is_open() );
+	}
+
+	// the write end stays open, so a read that waits for more would hang
+	const std::string message = "abc";
+	ends.write.write(message.data(), message.size());
+
+	char buffer[64] = {};
+	auto n = ends.read.read(buffer, sizeof(buffer), ec);
+
+	Checks {
+		TestAssert( !ec );
+		TestEqual( std::string(buffer, size_t(n)), message );
+	}
+}
+
+/*!
  * A pipe hands over what is written into it
  */
 Test(pipe_passes_data_through) {
