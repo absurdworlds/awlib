@@ -382,6 +382,69 @@ Test(spawn_redirects_the_standard_streams) {
 }
 
 /*!
+ * A descriptor listed in `inherit` is usable in the child under the
+ * same value, while the pipe ends are otherwise kept from it
+ */
+Test(spawn_passes_inherited_descriptors) {
+	process_fixture test{_context};
+
+	auto passed = io::native::pipe(test.ec);
+	auto kept   = io::native::pipe(test.ec);
+
+	Preconditions {
+		TestAssert( passed.write.is_open() && kept.write.is_open() );
+	}
+
+	auto write_to = [&] (io::native::file& end) {
+		return std::vector<std::string>{ format("--write-to={}", uintmax_t(end.descriptor())) };
+	};
+
+	process::stdio streams;
+	streams.inherit = { passed.write.descriptor() };
+
+	auto args_with    = write_to(passed.write);
+	auto args_without = write_to(kept.write);
+
+	auto with    = process::spawn(test.helper, args_with, streams, process::spawn_flags::none, test.ec);
+	auto without = process::spawn(test.helper, args_without, test.ec);
+
+	Preconditions {
+		TestAssert( with != process::invalid_process_handle );
+		TestAssert( without != process::invalid_process_handle );
+	}
+
+	passed.write.close();
+	kept.write.close();
+
+	auto read_all = [&] (io::native::file& end) {
+		std::string received;
+		char buffer[16];
+		while (auto n = end.read(buffer, sizeof(buffer), test.ec)) {
+			if (n < 0)
+				break;
+			received.append(buffer, size_t(n));
+		}
+		return received;
+	};
+
+	auto received_with    = read_all(passed.read);
+	auto received_without = read_all(kept.read);
+
+	auto result_with    = process::wait(with, test.ec);
+	auto result_without = process::wait(without, test.ec);
+
+	Checks {
+		TestEqual( received_with, std::string("inherited") );
+		TestEqual( result_with.code, 0 );
+	}
+
+	Checks {
+		TestEqual( received_without, std::string() );
+		TestEqual( result_without.code, 3 );
+	}
+}
+
+/*!
  * A read from a pipe returns what is there,
  * instead of waiting for the buffer to fill up
  */

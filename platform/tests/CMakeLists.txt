@@ -25,6 +25,7 @@ target_link_libraries(test_platform
 add_executable(dump_args process/dump_args.c++)
 target_link_libraries(dump_args
 	PRIVATE
+		awplatform
 		awutils
 		awstring
 )

@@ -13,6 +13,7 @@
 #include <csignal>
 #include <memory>
 #include <new>
+#include <utility>
 #include <vector>
 
 namespace aw::process::win32 {
@@ -80,17 +81,55 @@ winapi_path format_command_line(const char* path, aw::array_view<const char*> ar
 }
 
 namespace {
-//! Inheritable copies of the handles that become the child's standard streams
+//! Handles that the child gets: its standard streams and the inherited ones
 struct child_streams {
 	explicit child_streams(stdio const& streams) noexcept
 	{
 		const io::win32::file_descriptor given[] = { streams.in, streams.out, streams.err };
 		for (auto fd : given)
 			redirected |= (fd != io::win32::invalid_fd);
-		if (!redirected)
+
+		if (redirected && !copy_std_handles(given))
 			return;
 
-		// a redirected child needs to be told about all three
+		for (auto fd : streams.inherit) {
+			if (!share(HANDLE(fd)))
+				return;
+		}
+
+		if (!list.empty())
+			make_attributes();
+	}
+
+	~child_streams()
+	{
+		if (attributes)
+			DeleteProcThreadAttributeList(attributes);
+		// the child has its own copies by now
+		for (auto handle : copies)
+			CloseHandle(handle);
+		for (auto [handle, flags] : shared)
+			SetHandleInformation(handle, HANDLE_FLAG_INHERIT, flags);
+	}
+
+	child_streams(child_streams const&) = delete;
+	child_streams& operator=(child_streams const&) = delete;
+
+	//! Whether any of the standard streams is redirected
+	bool redirected = false;
+	//! Handles for the child's stdin, stdout and stderr; null where it gets none
+	HANDLE handles[3] = {};
+	//! All handles that the child inherits
+	std::vector<HANDLE> list;
+
+	LPPROC_THREAD_ATTRIBUTE_LIST attributes = nullptr;
+
+	std::error_code error;
+
+private:
+	//! A redirected child needs to be told about all three
+	bool copy_std_handles(io::win32::file_descriptor const (&given)[3]) noexcept
+	{
 		const DWORD std_ids[] = { STD_INPUT_HANDLE, STD_OUTPUT_HANDLE, STD_ERROR_HANDLE };
 		const HANDLE self = GetCurrentProcess();
 		for (int i = 0; i < 3; ++i) {
@@ -104,19 +143,45 @@ struct child_streams {
 				// the caller's own streams are passed on if they can be
 				if (chosen) {
 					set_error(error);
-					return;
+					return false;
 				}
 				continue;
 			}
+			copies.push_back(copy);
+			list.push_back(copy);
 			handles[i] = copy;
-			inherited[count++] = copy;
+		}
+		return true;
+	}
+
+	/*!
+	 * Make \a handle inheritable for this spawn. It can't be duplicated
+	 * instead, since the child expects the same value.
+	 */
+	bool share(HANDLE handle) noexcept
+	{
+		for (auto& entry : shared) {
+			if (entry.first == handle)
+				return true;
 		}
 
-		if (count == 0)
-			return;
+		DWORD flags = 0;
+		if (!GetHandleInformation(handle, &flags) ||
+		    !SetHandleInformation(handle, HANDLE_FLAG_INHERIT, HANDLE_FLAG_INHERIT)) {
+			set_error(error);
+			return false;
+		}
+		shared.push_back({ handle, flags & HANDLE_FLAG_INHERIT });
+		list.push_back(handle);
+		return true;
+	}
 
-		// limit the inheritance to these handles, so that the child
-		// doesn't get every inheritable handle the caller has open
+	/*!
+	 * Limit the inheritance to the handles in the list, so that the
+	 * child doesn't get every inheritable handle the caller has open
+	 */
+	void make_attributes() noexcept
+	{
 		SIZE_T size = 0;
 		InitializeProcThreadAttributeList(nullptr, 1, 0, &size);
 		buffer.reset(new (std::nothrow) char[size]);
@@ -125,42 +190,24 @@ struct child_streams {
 			return;
 		}
 
-		auto list = LPPROC_THREAD_ATTRIBUTE_LIST(buffer.get());
-		if (!InitializeProcThreadAttributeList(list, 1, 0, &size)) {
+		auto attribute_list = LPPROC_THREAD_ATTRIBUTE_LIST(buffer.get());
+		if (!InitializeProcThreadAttributeList(attribute_list, 1, 0, &size)) {
 			set_error(error);
 			return;
 		}
-		attributes = list;
+		attributes = attribute_list;
 
-		if (!UpdateProcThreadAttribute(list, 0, PROC_THREAD_ATTRIBUTE_HANDLE_LIST,
-		                               inherited, count * sizeof(HANDLE), nullptr, nullptr))
+		if (!UpdateProcThreadAttribute(attribute_list, 0, PROC_THREAD_ATTRIBUTE_HANDLE_LIST,
+		                               list.data(), list.size() * sizeof(HANDLE), nullptr, nullptr))
 			set_error(error);
 	}
 
-	~child_streams()
-	{
-		if (attributes)
-			DeleteProcThreadAttributeList(attributes);
-		// the child has its own copies by now
-		for (DWORD i = 0; i < count; ++i)
-			CloseHandle(inherited[i]);
-	}
-
-	child_streams(child_streams const&) = delete;
-	child_streams& operator=(child_streams const&) = delete;
-
-	//! Whether any of the streams is redirected
-	bool redirected = false;
-	//! Handles for the child's stdin, stdout and stderr; null where it gets none
-	HANDLE handles[3] = {};
-	//! The handles the child inherits
-	HANDLE inherited[3] = {};
-	DWORD count = 0;
+	//! Duplicates of the standard handles, closed afterwards
+	std::vector<HANDLE> copies;
+	//! Handles made inheritable, and their inheritance flags before that
+	std::vector<std::pair<HANDLE, DWORD>> shared;
 
 	std::unique_ptr<char[]> buffer;
-	LPPROC_THREAD_ATTRIBUTE_LIST attributes = nullptr;
-
-	std::error_code error;
 };
 } // namespace
 
@@ -200,7 +247,7 @@ process_holder spawn(const char* path, aw::array_view<const char*> argv, stdio c
 		creation_flags |= EXTENDED_STARTUPINFO_PRESENT;
 	}
 
-	const bool inherit = child.count > 0;
+	const bool inherit = !child.list.empty();
 
 	auto ret = CreateProcessW(
 		path ? winapi_path(path) : nullptr,

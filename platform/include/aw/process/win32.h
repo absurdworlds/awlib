@@ -12,6 +12,7 @@
 #include <aw/io/filesystem.h>
 
 #include <string>
+#include <vector>
 #include <utility>
 #include <chrono>
 #include <system_error>
@@ -53,14 +54,21 @@ inline void close_handle(process_handle handle)
 }
 
 /*!
- * Standard streams of a child process. Each is a descriptor
- * that becomes the stream in the child, or `invalid_fd` to
- * share the caller's.
+ * Descriptors that a child process gets.
+ *
+ * Each of the standard streams is a descriptor that becomes
+ * the stream in the child, or `invalid_fd` to share the caller's.
  */
 struct stdio {
 	io::win32::file_descriptor in  = io::win32::invalid_fd;
 	io::win32::file_descriptor out = io::win32::invalid_fd;
 	io::win32::file_descriptor err = io::win32::invalid_fd;
+
+	/*!
+	 * Other descriptors for the child to inherit, under the same handle value.
+	 * The child has to be told about them, e.g. in its arguments.
+	 */
+	std::vector<io::win32::file_descriptor> inherit;
 };
 
 /*!

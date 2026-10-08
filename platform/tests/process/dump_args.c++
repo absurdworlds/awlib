@@ -1,5 +1,6 @@
 #include <aw/utility/argv_parser.h>
 #include <aw/string/parse.h>
+#include <aw/io/native_file.h>
 
 #include <fstream>
 #include <iostream>
@@ -14,6 +15,8 @@ struct arguments {
 	unsigned code = 0;
 	//! `--cat` copies stdin to stdout
 	bool cat = false;
+	//! `--write-to=N` writes a message to the inherited descriptor N
+	unsigned long long write_to = 0;
 };
 
 static arguments parse_arguments(char** argv)
@@ -33,6 +36,8 @@ static arguments parse_arguments(char** argv)
 			args.code = aw::string::parse(arg->value, 0u);
 		else if (arg->name == "cat")
 			args.cat = true;
+		else if (arg->name == "write-to")
+			args.write_to = aw::string::parse(arg->value, 0ull);
 	}
 
 	return args;
@@ -52,6 +57,16 @@ int main(int, char** argv)
 
 	if (args.cat)
 		std::cout << std::cin.rdbuf() << std::flush;
+
+	if (args.write_to != 0) {
+		// a descriptor on POSIX, a handle value on Windows
+		const auto fd = aw::io::file_descriptor(args.write_to);
+		const std::string message = "inherited";
+		std::error_code ec;
+		aw::io::native::write(fd, message.data(), message.size(), ec);
+		if (ec)
+			return 3;
+	}
 
 	if (args.sleep_ms > 0)
 		std::this_thread::sleep_for( std::chrono::milliseconds(args.sleep_ms) );

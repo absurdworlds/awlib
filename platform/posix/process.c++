@@ -77,7 +77,7 @@ struct spawn_attributes {
 	int error = 0;
 };
 
-//! File actions for posix_spawn that redirect the standard streams
+//! File actions for posix_spawn that hand the descriptors to the child
 struct spawn_file_actions {
 	explicit spawn_file_actions(stdio const& streams) noexcept
 	{
@@ -87,18 +87,41 @@ struct spawn_file_actions {
 			if (fd == io::posix::invalid_fd)
 				continue;
 
-			if (!initialized) {
-				error = posix_spawn_file_actions_init(&actions);
-				if (error != 0)
-					return;
-				initialized = true;
-			}
-
 			// dup2 clears FD_CLOEXEC, so the pipes from io::pipe() survive the exec
-			error = posix_spawn_file_actions_adddup2(&actions, fd, target);
-			if (error != 0)
+			if (!add_dup2(fd, target))
 				return;
 		}
+
+		for (auto fd : streams.inherit) {
+#if (AW_PLATFORM_SPECIFIC == AW_PLATFORM_APPLE)
+			if (!init())
+				return;
+			error = posix_spawn_file_actions_addinherit_np(&actions, fd);
+			if (error != 0)
+				return;
+#else
+			// dup2 onto itself only clears FD_CLOEXEC (POSIX.1-2024)
+			if (!add_dup2(fd, fd))
+				return;
+#endif
+		}
+	}
+
+	bool init() noexcept
+	{
+		if (!initialized) {
+			error = posix_spawn_file_actions_init(&actions);
+			initialized = (error == 0);
+		}
+		return initialized;
+	}
+
+	bool add_dup2(int fd, int target) noexcept
+	{
+		if (!init())
+			return false;
+		error = posix_spawn_file_actions_adddup2(&actions, fd, target);
+		return error == 0;
 	}
 
 	~spawn_file_actions()

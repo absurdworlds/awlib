@@ -11,6 +11,7 @@
 #include <aw/io/filesystem.h>
 
 #include <string>
+#include <vector>
 #include <utility>
 #include <system_error>
 
@@ -20,16 +21,23 @@ enum class process_handle : long {};
 constexpr auto invalid_process_handle = process_handle(-1L );
 
 /*!
- * Standard streams of a child process. Each is a descriptor
- * that becomes the stream in the child, or `invalid_fd` to
- * share the caller's.
+ * Descriptors that a child process gets.
  *
- * They are redirected in order: `in`, `out`, then `err`.
+ * Each of the standard streams is a descriptor that becomes
+ * the stream in the child, or `invalid_fd` to share the caller's.
+ *
+ * Standard streams are redirected in order: `in`, `out`, then `err`.
  */
 struct stdio {
 	io::posix::file_descriptor in  = io::posix::invalid_fd;
 	io::posix::file_descriptor out = io::posix::invalid_fd;
 	io::posix::file_descriptor err = io::posix::invalid_fd;
+
+	/*!
+	 * Other descriptors for the child to inherit, under the same number.
+	 * The child has to be told about them, e.g. in its arguments.
+	 */
+	std::vector<io::posix::file_descriptor> inherit;
 };
 
 /*!
